@@ -1,0 +1,829 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGMVTI2.SCX
+* Data/Hora: 25/09/2026 13:20:18
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigmvtit
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: grdTitulos
+  Parent: sigmvtit
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvtit.grdTitulos.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvtit.grdTitulos.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: sigmvtit
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdSair
+  Parent: sigmvtit
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupos
+  Parent: sigmvtit
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDContas
+  Parent: sigmvtit
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: sigmvtit
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: sigmvtit
+  Class: label
+  BaseClass: label
+
+Objeto: GetEDN
+  Parent: sigmvtit
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: sigmvtit
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  ControlBox = .F.
+  Height = 600
+  Width = 1000
+  AutoCenter = .T.
+  MaxButton = .F.
+  Movable = .T.
+  ClipControls = .F.
+  BorderStyle = 2
+  Caption = "Títulos Gerados"
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGMVTIT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos
+------------------------------------------------------------
+  ColumnCount = 8
+  ScrollBars = 2
+  Top = 5
+  Left = 6
+  Height = 509
+  Width = 884
+  DeleteMark = .F.
+  TabIndex = 2
+  Name = "grdTitulos"
+  Column1.Width = 100
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Movable = .F.
+  Column1.ControlSource = ""
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.Width = 80
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.Width = 120
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.Width = 31
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.Width = 305
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.Width = 90
+  Column6.FontName = "Verdana"
+  Column6.FontSize = 8
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+  Column7.Width = 90
+  Column7.FontName = "Verdana"
+  Column7.FontSize = 8
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Name = "Column7"
+  Column8.Width = 30
+  Column8.FontName = "Verdana"
+  Column8.FontSize = 8
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Título"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Histórico"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column5.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column6.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column6.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column7.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column7.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column8.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "D/C"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.grdTitulos.Column8.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.Shape1
+------------------------------------------------------------
+  Top = 6
+  Left = 899
+  Height = 110
+  Width = 92
+  BackStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.cmdSair
+------------------------------------------------------------
+  Top = 12
+  Left = 905
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "OK"
+  TabIndex = 1
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.getDGrupos
+------------------------------------------------------------
+  Height = 23
+  Left = 6
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Descrição do Grupo"
+  Top = 569
+  Width = 440
+  BorderColor = 136,189,188
+  Name = "getDGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.getDContas
+------------------------------------------------------------
+  Height = 23
+  Left = 450
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Descrição da Conta"
+  Top = 569
+  Width = 440
+  BorderColor = 136,189,188
+  Name = "getDContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição do Grupo"
+  Height = 15
+  Left = 6
+  Top = 554
+  Width = 129
+  ForeColor = 255,255,255
+  TabIndex = 3
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição da Conta"
+  Height = 15
+  Left = 450
+  Top = 554
+  Width = 127
+  ForeColor = 255,255,255
+  TabIndex = 5
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.GetEDN
+------------------------------------------------------------
+  Height = 23
+  Left = 6
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Descrição do Grupo"
+  Top = 531
+  Width = 440
+  BorderColor = 136,189,188
+  Name = "GetEDN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvtit.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Movimentação de Estoque"
+  Height = 15
+  Left = 6
+  Top = 516
+  Width = 172
+  ForeColor = 255,255,255
+  TabIndex = 3
+  Name = "Label2"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigmvtit
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private pDtI, pDtF
+
+pDtI = fDtoSQL(Datetime())
+pDtF = fDtoSQL(Datetime(),[23:59:59])
+
+With Thisform
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.Caption = [Títulos Gerados - Processamento CMV ]
+
+		lcQuery = [Select a.Titulos, a.Vencs, a.Valors, a.Moedas, a.Hists, a.Grupos, ] + ;
+						 [b.Descrs as DGrupos, a.Contas, c.RClis as DContas, a.EmpDopNums, a.Opers ] + ;
+					[From SigMvCcr a ] + ;
+					[Left Join SigCdGcr b On a.Grupos = b.Codigos ] + ;
+					[Left Join SigCdCli c On a.Contas = c.IClis ] + ;
+					[join SigOpCdi d on d.dopes = a.dopes ] + ;
+				   [Where a.Datas between ?pDtI And ?pDtF ] + ; 
+				   [And convert(int,(substring(d.lbltxidCs,24,1))) = 1 ] + ;
+				   [Order By a.Vencs, a.Titulos, a.Grupos, a.Contas]
+
+		If (.poDataMgr.SqlExecute(lcQuery, [LocalTits]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalTits)])
+			Return .f.
+		EndIf
+		Select LocalTits
+		Goto Top In LocalTits
+		With .grdTitulos
+			.RecordSource          = [LocalTits]
+			.Column1.ControlSource = [LocalTits.Titulos]
+			.Column2.ControlSource = [Ttod(LocalTits.Vencs)]
+			.Column3.ControlSource = [LocalTits.Valors]
+			.Column4.ControlSource = [LocalTits.Moedas]
+			.Column5.ControlSource = [LocalTits.Hists]
+			.Column6.ControlSource = [LocalTits.Grupos]
+			.Column7.ControlSource = [LocalTits.Contas]
+			.Column8.ControlSource = [LocalTits.Opers]
+			.Refresh
+			.AfterRowColChange()
+		EndWith
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos
+* Classe: grid (Base: grid)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.getDGrupos.Value = LocalTits.DGrupos
+ThisForm.getDContas.Value = LocalTits.DContas
+ThisForm.getEDN.Value = LocalTits.EmpDopNums
+
+ThisForm.getDGrupos.Refresh
+ThisForm.getDContas.Refresh 
+ThisForm.getEDN.Refresh 
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.grdTitulos.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.getDGrupos
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.getDContas
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvtit.GetEDN
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigmvtit
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

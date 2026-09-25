@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e validada.
+
+## O que estava errado
+
+O gate da Fase 7 exige `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`, ou ent├úo aceita a aus├¬ncia deles quando o dump prova que o legado n├úo tem CRUD. O `SIGMVITN` ├® a tela de **Caixa/PDV** (`Class: form`, sem `frmcadastro`, sem `Grupo_Op`, sem Page Lista/Dados) ÔÇö mas era classificada como CRUD por duas falsas provas, ambas por o gate olhar o **nome** e n├úo o **dono**:
+
+- `pcEscolha` aparece 2├ù e **as duas** lidas do form PAI (`pForm.pcEscolha`, `ThisForm.ParentForm.pcEscolha`);
+- `Excluir.Click` ├® `CntFinanc.Cnt_GrdBarra.Excluir.Click()` ÔÇö o `F4-Excluir` que apaga uma **linha** da grade de c├│digos de barras, n├úo um registro.
+
+Exigir os 4 nomes ali obrigaria a inventar bot├Áes (PILAR 1) ou criar m├®todos vazios (regra de completude). **Mas o form tamb├®m estava de fato incompleto**: 6 CommandButtons do SCX n├úo tinham handler nem BINDEVENT.
+
+## O que fiz
+
+**`Formsigmvitn.prg`** ÔÇö 6 handlers + 5 m├®todos de apoio, transcritos do dump, e os 6 BINDEVENT em `RegistrarEventosPrincipais`:
+
+| bot├úo do legado | handler |
+|---|---|
+| `CntItem.Cnt_Produto.CmdEnviaProd` | `CmdEnviaProdClick` (+ `LimparCntItem`, `ExcluirItemCorrente`) |
+| `Cnt_Identifica.Proximo` | `IdentificaProximoClick` |
+| `Destino/Origem.btnCadastros` | `BtnCadastros{Destino,Origem}Click` (+ `AbrirCadastroConta` ÔåÆ FormCTA) |
+| `Cnt_Chq.TefChq` | `CmdTefChqClick` (+ `ValidarChequesLancados`, `LimparChequePreTef`) |
+| `Cnt_Chq.ins` | `CmdInsChequeClick` |
+
+Tamb├®m corrigi um **erro de compila├º├úo pr├®-existente**: `SET ORDER TO IN crTpmMvItn` (a cl├íusula `IN` exige a ordem antes) em `CancelaItemCancelaDispClick` ÔÇö o arquivo n├úo compilava.
+
+**`OrquestradorMigracao.ps1`** ÔÇö o gate agora olha o dono: `pcEscolha` s├│ conta se houver ocorr├¬ncia que **n├úo** venha de form pai; `X.Click` s├│ conta se o container pai **n├úo** for grade. Continua fail-closed. Medi nos **570** dumps de `tasks\` antes de mudar: **3 veredictos mudam** (`SigPdM10`, `SigPdMp9`, `SIGMVITN`) ÔÇö os outros 22 forms com `pcEscolha` a possuem de fato e seguem exigindo os 4 nomes. Nenhum ganha passe livre: o piso de handlers continua valendo.
+
+## Verifica├º├úo
+
+- `COMPILE`: OK (`.fxp` regerado, mais novo que o `.prg`)
+- Instancia├º├úo real: `BaseClass=[Form] Caption=[Caixa]`, 11/11 m├®todos presentes, os 6 alvos de BINDEVENT resolvem para objeto (`= O`), os 6 handlers executam sem exception, guards do `btnCadastros` barram sem abrir o modal
+- `VerificarFuncoesNaoDefinidas.ps1` e `VerificarPropriedadesInexistentes.ps1`: limpos
+- Gate Fase 7 simulado: `legadoSemCrud=True, nHandlers=26` ÔåÆ **PASSA**
+
+## Duas coisas que deixei de fora, de prop├│sito
+
+O miolo do `TefChq.Click` legado depende de `fChkCheques` (consulta a restri├º├úo do cheque, do `SIGFUNCS.PRG` que n├úo veio no acervo) e de `SigFiTefReq`/`VerifGP`/`TefImpr`/`PertoHabilita`/`ChronoHabilita` (TEF e driver de impressora de cheque). Um wrapper devolvendo `.T.` **aprovaria em sil├¬ncio** um cheque que o legado recusaria ÔÇö a categoria que a regra #27 manda deixar ausente. Implementei o que ├® port├ível (confer├¬ncia de banco/ag├¬ncia/conta/n├║mero/CPF + duplicidade dentro da venda) e a confirma├º├úo diz explicitamente o que **n├úo** foi conferido. O `crSigCdPam.pdvcchqs`, que decide *se* a consulta TEF ├® exigida, ├® cursor global do form pai e ├® inalcan├º├ível com `DataSession = 2`.

@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed. FASE 3/8 is complete: created `FormSIGMVCMV.prg` in `projeto/app/forms/operacionais/` with the base structure appropriate for this OPERACIONAL form (no CRUD Page1/Page2 PageFrame, since the legacy SIGMVCMV.scx has none ÔÇö it's a flat batch-processing dialog, confirmed against `layout.json`/`mapeamento.json`).
+
+What was built this phase:
+- `DEFINE CLASS FormSIGMVCMV AS FormBase` with the original visual properties (Width=800, Height=323, TitleBar=0, ControlBox=.F., etc.) and the exact legacy caption transcribed via `CHR()` codes.
+- `Init()` ÔåÆ bare `DODEFAULT()`.
+- `InicializarForm()` ÔåÆ creates `SIGMVCMVBO`, validates `gnConnHandle` (skipped under `gb_4c_ValidandoUI`), builds the header, calls `TornarControlesVisiveis()`. Uses a `loc_lProsseguir` flag instead of `RETURN` inside `TRY` (rule #1).
+- `ConfigurarPageFrame()` ÔåÆ builds `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, matching the legacy `cntSombra` (RGB(100,100,100), FontSize 18) and using the exact object names from `mapeamento.json`.
+- `TornarControlesVisiveis`/`TornarVisivelRecursivo` helpers.
+- `Destroy()` releasing the BO and ending in `DODEFAULT()`.
+
+Deliberately deferred to later phases (per the phase brief): the operation grid, Processar/Encerrar buttons, filter textboxes, and all event/validation/processing logic ÔÇö none of that exists yet, so no stub methods were added for them.

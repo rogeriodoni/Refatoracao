@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked each of the 64 findings against the actual file before touching anything, since three of the four in-scope categories match known false-positive patterns already recorded in project memory.
+
+**Result: no changes made ÔÇö every finding in this pass's actual scope (CONTAINER-VISIVEL + 3├ù METODO-INEXISTENTE) is a false positive. The other 60 are LAYOUT-POSITION, which isn't part of this pass and isn't safe to fix here.**
+
+**METODO-INEXISTENTE (3 findings) ÔÇö false positive.** All three methods exist:
+```
+5873: PROTECTED FUNCTION HaPagamentoPendente()
+7031: PROTECTED FUNCTION ValidarChequesLancados()
+7453: PROTECTED FUNCTION GravarItensLancados()
+```
+Each call site (`THIS.HaPagamentoPendente()`, `THIS.GravarItensLancados()`, `THIS.ValidarChequesLancados()`) matches its definition exactly. The scanner apparently only looks for `PROCEDURE` declarations and misses `FUNCTION` ÔÇö a scanner gap, not an LLM-invented call.
+
+**CONTAINER-VISIVEL ÔÇö false positive.** Of the 10 containers listed:
+- `CNT_4C__CONSULTA`, `CNT_4C_DESCONTO`, `CNT_4C__CHQ` are already in `TornarControlesVisiveis`'s skip-list (line 2313-2319).
+- `CNT_4C_BARRA_BOTOES`, `CNT_4C_ITEM`, `CNT_4C_CAIXALIVRE`, `CNT_4C__GRDBARRA`, `CNT_4C__PRODUTO` (both instances), `CNT_4C__SUBTOTAL` are all declared `Visible = .T.` at creation ÔÇö they aren't hidden, so forcing them visible is a no-op.
+- `CNT_4C__CREDITO` is declared `.T.` at creation, but `InicializarForm` calls `AlternarTelaOperacao("ITENS")` right after `TornarControlesVisiveis`, which explicitly resets it to `.F.` ÔÇö before the form is ever shown to the user. Same for `cnt_4c_CaixaLivre` via `AtualizarGrades`. No visible defect ever reaches the user.
+
+**LAYOUT-POSITION (60 findings) ÔÇö out of scope for this pass.** The task header says this pass is "Functional Logic (metodos, eventos, containers)," and the correction rules explicitly forbid touching Top/Left outside alignment fixes. These also show the classic generic-name collision pattern already documented in memory (`Say1`, `Label1`, `Label2` are reused by name across `CntItem`, `CntFinanc`, `Cnt_Credito`, `Cnt_Pendencia`, `Cnt_Identifica`, `Cnt_Fpagto` ÔÇö each in its own container scope), which makes a flat top-original-vs-migrated diff pair mismatched controls from different containers.
+
+**One real bug found, not in this review's list** (so left untouched per "corrigir APENAS os problemas listados"): line 5808 binds `CmbTOpersLostFocus` to the `"KeyPress"` event instead of `"LostFocus"` ÔÇö it's a duplicate of the line above it. As written, the combo hides itself on every keystroke instead of on losing focus. Worth a separate fix pass if you want me to take it.

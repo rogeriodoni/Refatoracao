@@ -1,0 +1,1257 @@
+*==============================================================================
+* FormSigMvAte.prg - Atendimentos dos vendedores por documento (OPERACIONAL)
+* Equivale a: SigMvAte.SCX (SIGMVATE)
+* Herda de: FormBase
+* Layout: Flat (sem PageFrame) - popup modal aberto a partir de um documento
+*          de movimento (SigMvCab), para escolher os vendedores que atenderam
+*          o pedido/documento e quantos atendimentos cada um teve.
+*
+* Chamada: CREATEOBJECT("FormSigMvAte", par_cEmpDopNums, par_cEmps, ;
+*              par_cGrVends, par_cModoEscolha)
+*
+* Historico de fases:
+*   Fase 1/2: SigMvAteBO.prg (propriedades + CRUD completo)
+*   Fase 3:   FormSigMvAte.prg - estrutura base (Init, InicializarForm,
+*             ConfigurarPageFrame/ConfigurarCabecalho, TornarControlesVisiveis,
+*             Destroy). Grade + cmg_4c_Botoes (Confirmar/Cancelar) +
+*             cmd_4c_Incluir + cmd_4c_Excluir ficam para a Fase 4.
+*==============================================================================
+DEFINE CLASS FormSigMvAte AS FormBase
+
+    *-- Parametros de entrada recebidos no Init (contexto do documento pai
+    *-- SigMvCab, equivalente a TprMvCab/pcEscolha do legado)
+    this_cEmpDopNums  = ""   && empdopnums do documento pai - FK dos atendimentos
+    this_cEmps        = ""   && empresa do documento pai
+    this_cGrVends     = ""   && grupo de vendedores aceito (grvends do SigMvCab) - usado no lookup fAcessoContas
+    this_cModoEscolha = ""   && modo do documento pai: INSERIR/ALTERAR/CONSULTAR - habilita/desabilita Incluir/Excluir na Fase 4
+
+    *-- Business Object
+    this_oBusinessObject = .NULL.
+
+    *-- Propriedades visuais (PILAR 1 - valores exatos do SCX SIGMVATE)
+    Width        = 618
+    Height       = 348
+    AutoCenter   = .T.
+    TitleBar     = 0
+    WindowType   = 1
+    ShowWindow   = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    Movable      = .F.
+    AlwaysOnTop  = .T.
+    BorderStyle  = 2
+    ClipControls = .F.
+    FontName     = "Verdana"
+    FontSize     = 8
+
+    *--------------------------------------------------------------------------
+    * Init - Armazena o contexto do documento pai, cria o BO e dispara
+    * FormBase.Init() (que chama THIS.InicializarForm() via DODEFAULT).
+    *--------------------------------------------------------------------------
+    PROCEDURE Init(par_cEmpDopNums, par_cEmps, par_cGrVends, par_cModoEscolha)
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_cEmpDopNums  = IIF(VARTYPE(par_cEmpDopNums) = "C", ALLTRIM(par_cEmpDopNums), "")
+            THIS.this_cEmps        = IIF(VARTYPE(par_cEmps)       = "C", ALLTRIM(par_cEmps),       "")
+            THIS.this_cGrVends     = IIF(VARTYPE(par_cGrVends)    = "C", ALLTRIM(par_cGrVends),    "")
+            THIS.this_cModoEscolha = IIF(VARTYPE(par_cModoEscolha) = "C" AND !EMPTY(par_cModoEscolha), ;
+                                          UPPER(ALLTRIM(par_cModoEscolha)), "CONSULTAR")
+
+            THIS.this_oBusinessObject = CREATEOBJECT("SigMvAteBO")
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar Business Object SigMvAteBO." + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
+                    "FormSigMvAte.Init")
+            ELSE
+                *-- DODEFAULT() dispara FormBase.Init() que chama THIS.InicializarForm()
+                loc_lSucesso = DODEFAULT()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.Init")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Monta a estrutura visual base (cabecalho).
+    * Chamado automaticamente por FormBase.Init() via DODEFAULT().
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            *-- Fundo do form (imagem do Framework Fortyus legado)
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
+
+            *-- Caption identico ao legado (sem acentos - dispensa CHR())
+            THIS.Caption = "Registra os atendimentos dos vendedores"
+
+            *-- Cursor placeholder da grade (READWRITE por natureza - CREATE
+            *-- CURSOR sempre eh atualizavel). Precisa existir ANTES de
+            *-- ConfigurarPageFrame (RecordSource do grid). A ORDEM dos campos
+            *-- tem de ser IDENTICA a SigMvAteBO.CarregarAtendimentosDocumento.
+            SET NULL ON
+            IF USED("cursor_4c_LocalVen")
+                USE IN cursor_4c_LocalVen
+            ENDIF
+            CREATE CURSOR cursor_4c_LocalVen ;
+                (CodVends C(10) NULL, DesVends C(40) NULL, NAtends N(4,0) NULL)
+            SET NULL OFF
+
+            THIS.ConfigurarPageFrame()
+
+            *-- Propaga o titulo para os labels do cabecalho
+            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+            *-- Carrega os atendimentos ja gravados para o documento
+            *-- (sem conexao em modo de teste de UI)
+            IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                THIS.CarregarLista()
+            ENDIF
+
+            *-- Torna a arvore de controles visivel (AddObject cria com Visible=.F.)
+            THIS.TornarControlesVisiveis(THIS)
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.InicializarForm")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - Orquestrador de layout base.
+    * SIGMVATE original eh flat OPERACIONAL (sem PageFrame nativo) - popup modal
+    * aberto a partir de SigMvCab. Nome mantido por convencao do orquestrador
+    * multi-fase. Cabecalho + Grade + CommandGroup Confirmar/Cancelar +
+    * botoes standalone Incluir/Excluir, direto sobre o form.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.ConfigurarCabecalho()
+        THIS.ConfigurarPaginaLista()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Cria a faixa cinza superior com o titulo
+    * (cntSombra do legado). Container com Width = THIS.Width: o legado
+    * declara Width=800 num form de 618px (sobra descartada - CLAUDE.md #11).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCab
+
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        loc_oCab = THIS.cnt_4c_Cabecalho
+        WITH loc_oCab
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BorderWidth = 0
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+        ENDWITH
+
+        *-- Labels adicionados FORA do WITH do container: WITH aninhado com
+        *-- AddObject ignora propriedades silenciosamente (CLAUDE.md #33)
+        loc_oCab.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oCab.lbl_4c_Sombra
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 18
+            .WordWrap  = .T.
+            .AutoSize  = .F.
+            .Alignment = 0
+            .BackStyle = 0
+            .Caption   = ""
+            .Height    = 40
+            .Left      = 10
+            .Top       = 18
+            .Width     = 769
+            .ForeColor = RGB(0, 0, 0)
+        ENDWITH
+
+        loc_oCab.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oCab.lbl_4c_Titulo
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 18
+            .WordWrap  = .T.
+            .AutoSize  = .F.
+            .Alignment = 0
+            .BackStyle = 0
+            .Caption   = ""
+            .Height    = 46
+            .Left      = 10
+            .Top       = 17
+            .Width     = 769
+            .ForeColor = RGB(255, 255, 255)
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Cria a grade de atendimentos (Grade do legado),
+    * o CommandGroup Confirmar/Cancelar (cntBotoes) e os botoes standalone
+    * Incluir/Excluir (inserir/excluir), diretamente sobre o form.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oCmg, loc_oGrd, loc_oErro
+
+        TRY
+            *-- CommandGroup Confirmar/Cancelar (cntBotoes do legado)
+            *-- Buttons(1)=Cancelar (Left=80, equivale ao Command1/btnSair),
+            *-- Buttons(2)=Confirmar (Left=5, equivale ao Command2/btnConfirmar)
+            THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+            loc_oCmg = THIS.cmg_4c_Botoes
+            WITH loc_oCmg
+                .Top           = -2
+                .Left          = 462
+                .Width         = 160
+                .Height        = 85
+                .ButtonCount   = 2
+                .AutoSize      = .T.
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .SpecialEffect = 1
+                .BorderColor   = RGB(136, 189, 188)
+                .Themes        = .F.
+                .Value         = 0
+
+                WITH .Buttons(1)
+                    .Top          = 5
+                    .Left         = 80
+                    .Width        = 75
+                    .Height       = 75
+                    .FontName     = "Comic Sans MS"
+                    .FontSize     = 8
+                    .FontBold     = .T.
+                    .FontItalic   = .T.
+                    .WordWrap     = .T.
+                    .Picture      = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                    .Caption      = "Cancelar"
+                    .Cancel       = .T.
+                    .MousePointer = 15
+                    .ToolTipText  = "[Esc] Encerrar"
+                    .SpecialEffect = 0
+                    .ForeColor    = RGB(90, 90, 90)
+                    .BackColor    = RGB(255, 255, 255)
+                    .Themes       = .F.
+                ENDWITH
+
+                WITH .Buttons(2)
+                    .Top          = 5
+                    .Left         = 5
+                    .Width        = 75
+                    .Height       = 75
+                    .FontName     = "Comic Sans MS"
+                    .FontSize     = 8
+                    .FontBold     = .T.
+                    .FontItalic   = .T.
+                    .WordWrap     = .T.
+                    .Picture      = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+                    .Caption      = "Confirmar"
+                    .MousePointer = 15
+                    .ToolTipText  = "Confirmar a Sele" + CHR(231) + CHR(227) + "o"
+                    .ForeColor    = RGB(90, 90, 90)
+                    .BackColor    = RGB(255, 255, 255)
+                    .Themes       = .F.
+                ENDWITH
+            ENDWITH
+            BINDEVENT(loc_oCmg.Buttons(1), "Click", THIS, "BtnCancelarClick")
+            BINDEVENT(loc_oCmg.Buttons(2), "Click", THIS, "BtnConfirmarClick")
+
+            *-- Grade de atendimentos (Grade do legado) - cursor_4c_LocalVen
+            *-- (placeholder ja criado em InicializarForm)
+            THIS.AddObject("grd_4c_Dados", "Grid")
+            loc_oGrd = THIS.grd_4c_Dados
+            WITH loc_oGrd
+                .Top                = 96
+                .Left               = 50
+                .Width              = 463
+                .Height             = 234
+                .ColumnCount        = 3
+                .FontName           = "Verdana"
+                .FontSize           = 8
+                .HeaderHeight       = 22
+                .RowHeight          = 16
+                .ScrollBars         = 2
+                .ReadOnly           = .F.
+                .DeleteMark         = .F.
+                .RecordMark         = .F.
+                .GridLineColor      = RGB(238, 238, 238)
+                .HighlightBackColor = RGB(255, 255, 255)
+                .HighlightForeColor = RGB(15, 41, 104)
+                .HighlightStyle     = 2
+            ENDWITH
+
+            *-- Column1: Vendedor (CodVends)
+            WITH loc_oGrd.Column1
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .Width     = 110
+                .Movable   = .F.
+                .Resizable = .F.
+                .ReadOnly  = .F.
+            ENDWITH
+            loc_oGrd.Column1.Header1.Caption   = "Vendedor"
+            loc_oGrd.Column1.Header1.Alignment = 2
+            WITH loc_oGrd.Column1.Text1
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .BorderStyle = 0
+                .InputMask   = ""
+                .Margin      = 0
+                .ReadOnly    = .F.
+                .ForeColor   = RGB(0, 0, 0)
+                .BackColor   = RGB(255, 255, 255)
+            ENDWITH
+
+            *-- Column2: Descricao (DesVends) - so editavel quando o codigo do
+            *-- vendedor esta vazio. O legado faz isso com o When da coluna
+            *-- ("Return EMPTY(localven.codvends)"); aqui o gate roda em
+            *-- AjustarColunaDescricao, chamado pelo AfterRowColChange da grade
+            *-- - Column NAO tem DynamicReadOnly em VFP9 (medido: "Property
+            *-- DYNAMICREADONLY is not found").
+            WITH loc_oGrd.Column2
+                .FontName = "Verdana"
+                .FontSize = 8
+                .Width    = 250
+                .ReadOnly = .F.
+            ENDWITH
+            loc_oGrd.Column2.Header1.Caption   = "Descricao"
+            loc_oGrd.Column2.Header1.Alignment = 2
+            WITH loc_oGrd.Column2.Text1
+                .BorderStyle = 0
+                .InputMask   = ""
+                .Margin      = 0
+                .ForeColor   = RGB(0, 0, 0)
+                .BackColor   = RGB(255, 255, 255)
+            ENDWITH
+
+            *-- Column3: Atendimentos (NAtends)
+            WITH loc_oGrd.Column3
+                .FontName = "Verdana"
+                .FontSize = 8
+                .Width    = 80
+                .ReadOnly = .F.
+            ENDWITH
+            loc_oGrd.Column3.Header1.Caption   = "Atendimentos"
+            loc_oGrd.Column3.Header1.Alignment = 2
+            WITH loc_oGrd.Column3.Text1
+                .BorderStyle = 0
+                .Format      = "999,999,999.99"
+                .InputMask   = "999"
+                .Margin      = 0
+                .ForeColor   = RGB(0, 0, 0)
+                .BackColor   = RGB(255, 255, 255)
+            ENDWITH
+
+            *-- RecordSource por ultimo (evita reset de Width/Header - regra
+            *-- "Column.Width vai por ultimo")
+            loc_oGrd.ColumnCount = 3
+            loc_oGrd.RecordSource           = "cursor_4c_LocalVen"
+            loc_oGrd.Column1.ControlSource  = "cursor_4c_LocalVen.CodVends"
+            loc_oGrd.Column2.ControlSource  = "cursor_4c_LocalVen.DesVends"
+            loc_oGrd.Column3.ControlSource  = "cursor_4c_LocalVen.NAtends"
+            loc_oGrd.Column1.Header1.Caption = "Vendedor"
+            loc_oGrd.Column2.Header1.Caption = "Descricao"
+            loc_oGrd.Column3.Header1.Caption = "Atendimentos"
+            loc_oGrd.Column1.Width           = 110
+            loc_oGrd.Column2.Width           = 250
+            loc_oGrd.Column3.Width           = 80
+            *-- Gate do When legado da coluna Descricao: "Return EMPTY(
+            *-- localven.codvends)". Column NAO tem DynamicReadOnly em VFP9,
+            *-- entao o ReadOnly da coluna eh alternado por linha no
+            *-- AfterRowColChange da grade - o proprio legado fecha o Init
+            *-- chamando "ThisForm.Grade.AfterRowColChange()".
+            BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GradeAfterRowColChange")
+            THIS.AjustarColunaDescricao()
+
+            BINDEVENT(loc_oGrd.Column1.Text1, "KeyPress", THIS, "ValidarCodVenGrade")
+            BINDEVENT(loc_oGrd.Column2.Text1, "KeyPress", THIS, "ValidarNomVenGrade")
+
+            *-- Botoes standalone Incluir/Excluir - habilitados so em
+            *-- INSERIR/ALTERAR, equivalente ao When legado
+            *-- "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))"
+            THIS.AddObject("cmd_4c_Incluir", "CommandButton")
+            WITH THIS.cmd_4c_Incluir
+                .Top             = 182
+                .Left = 5
+                .Width           = 45
+                .Height          = 45
+                .FontBold        = .T.
+                .FontName        = "Verdana"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .Caption         = ""
+                .ToolTipText     = "Inserir"
+                .ForeColor       = RGB(36, 84, 155)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .T.
+                .Enabled         = INLIST(THIS.this_cModoEscolha, "INSERIR", "ALTERAR")
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+
+            THIS.AddObject("cmd_4c_Excluir", "CommandButton")
+            WITH THIS.cmd_4c_Excluir
+                .Top             = 227
+                .Left = 230
+                .Width           = 45
+                .Height          = 45
+                .FontBold        = .T.
+                .FontName        = "Verdana"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .Caption         = ""
+                .ToolTipText     = "Excluir"
+                .ForeColor       = RGB(36, 84, 155)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .T.
+                .Enabled         = INLIST(THIS.this_cModoEscolha, "INSERIR", "ALTERAR")
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.ConfigurarPaginaLista")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - (Re)carrega os atendimentos ja gravados do documento no
+    * cursor_4c_LocalVen via BO e rebinda a grade (o BO fecha/recria o
+    * cursor, entao RecordSource/ControlSource/Header/Width precisam ser
+    * reaplicados - "Column.Width vai por ultimo").
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        LOCAL loc_lOk, loc_oErro
+        loc_lOk = .F.
+
+        TRY
+            loc_lOk = THIS.this_oBusinessObject.CarregarAtendimentosDocumento( ;
+                THIS.this_cEmpDopNums, THIS.this_cGrVends)
+
+            IF loc_lOk AND USED("cursor_4c_LocalVen") AND PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                THIS.grd_4c_Dados.RecordSource            = "cursor_4c_LocalVen"
+                THIS.grd_4c_Dados.Column1.ControlSource   = "cursor_4c_LocalVen.CodVends"
+                THIS.grd_4c_Dados.Column2.ControlSource   = "cursor_4c_LocalVen.DesVends"
+                THIS.grd_4c_Dados.Column3.ControlSource   = "cursor_4c_LocalVen.NAtends"
+                THIS.grd_4c_Dados.Column1.Header1.Caption = "Vendedor"
+                THIS.grd_4c_Dados.Column2.Header1.Caption = "Descricao"
+                THIS.grd_4c_Dados.Column3.Header1.Caption = "Atendimentos"
+                THIS.grd_4c_Dados.Column1.Width           = 110
+                THIS.grd_4c_Dados.Column2.Width           = 250
+                THIS.grd_4c_Dados.Column3.Width           = 80
+                SELECT cursor_4c_LocalVen
+                GO TOP
+                THIS.grd_4c_Dados.Refresh()
+
+                *-- Gate do When legado da coluna Descricao (Column nao tem
+                *-- DynamicReadOnly em VFP9) - reaplicado para a linha corrente
+                *-- apos o rebind, como o Init legado faz ao chamar
+                *-- "ThisForm.Grade.AfterRowColChange()" depois do GO TOP
+                THIS.AjustarColunaDescricao()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.CarregarLista")
+        ENDTRY
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GradeAfterRowColChange - Handler do AfterRowColChange da grade
+    * (BINDEVENT). Reaplica, a cada troca de linha/coluna, o When da coluna
+    * Descricao do legado. Declara par_nColIndex porque o evento passa esse
+    * parametro - handler ligado por BINDEVENT sem os parametros do evento
+    * falha em runtime (CLAUDE.md #3).
+    *--------------------------------------------------------------------------
+    PROCEDURE GradeAfterRowColChange(par_nColIndex)
+        THIS.AjustarColunaDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarColunaDescricao - Aplica, na linha corrente, o When da coluna
+    * Descricao do legado ("RETURN EMPTY(localven.codvends)"): com o codigo do
+    * vendedor preenchido a Descricao fica somente leitura; em branco, fica
+    * editavel (eh por ela que o usuario procura o vendedor pelo nome).
+    *
+    * Column NAO tem DynamicReadOnly em VFP9 - medido: atribuir a propriedade
+    * estoura "Property DYNAMICREADONLY is not found" (a Column so tem
+    * DynamicAlignment/DynamicBackColor/DynamicCurrentControl/DynamicFont*/
+    * DynamicForeColor/DynamicInputMask). Por isso o gate eh reaplicado por
+    * linha, no AfterRowColChange da grade.
+    *
+    * Column.ReadOnly vai DEPOIS de Grid.ReadOnly (o do grid propaga para as
+    * colunas) - aqui isso vale porque o Grid ja foi configurado.
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarColunaDescricao()
+        LOCAL loc_lCodigoPreenchido
+
+        IF !PEMSTATUS(THIS, "grd_4c_Dados", 5)
+            RETURN
+        ENDIF
+
+        loc_lCodigoPreenchido = .F.
+
+        IF USED("cursor_4c_LocalVen")
+            IF RECCOUNT("cursor_4c_LocalVen") > 0 AND !EOF("cursor_4c_LocalVen")
+                loc_lCodigoPreenchido = !EMPTY(ALLTRIM(NVL(cursor_4c_LocalVen.CodVends, "")))
+            ENDIF
+        ENDIF
+
+        THIS.grd_4c_Dados.Column2.ReadOnly = loc_lCodigoPreenchido
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarCodVenGrade - KeyPress na coluna Vendedor (Column1) da grade.
+    * Enter/Tab: busca exata do vendedor no grupo do documento - achou,
+    * preenche a descricao; nao achou, abre o picker filtrado pelo grupo.
+    * F4: abre o picker direto.
+    * Sempre reverifica duplicidade (equivale ao PROCEDURE Valid de
+    * SIGMVATE.Grade.Column2.Text1, que usa fAcessoContas modo 'C' -
+    * PROIBIDO reusar fAcessoContas como lookup UX, ver licoes aprendidas).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarCodVenGrade(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cVal, loc_cDesc
+
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaVenGrade()
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN
+        ENDIF
+
+        loc_cVal = ALLTRIM(THIS.grd_4c_Dados.Column1.Text1.Value)
+
+        SELECT cursor_4c_LocalVen
+
+        IF EMPTY(loc_cVal)
+            REPLACE CodVends WITH "", DesVends WITH ""
+            THIS.grd_4c_Dados.Refresh()
+            RETURN
+        ENDIF
+
+        REPLACE CodVends WITH loc_cVal
+
+        IF THIS.VerificarVendedorDuplicado()
+            MsgAviso("Vendedor j" + CHR(225) + " inclu" + CHR(237) + "do!", "Aviso")
+            SELECT cursor_4c_LocalVen
+            REPLACE CodVends WITH "", DesVends WITH ""
+            THIS.grd_4c_Dados.Refresh()
+            RETURN
+        ENDIF
+
+        loc_cDesc = THIS.this_oBusinessObject.ObterDescricaoVendedor(THIS.this_cGrVends, loc_cVal)
+
+        IF EMPTY(loc_cDesc)
+            THIS.AbrirBuscaVenGrade()
+        ELSE
+            *-- Linha corrente -> BO (FormParaBO preserva o NAtends ja digitado),
+            *-- aplica o vendedor resolvido e devolve BO -> linha corrente
+            IF THIS.FormParaBO()
+                THIS.this_oBusinessObject.this_cCodVends  = loc_cVal
+                THIS.this_oBusinessObject.this_cDescVends = loc_cDesc
+                THIS.BOParaForm()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarNomVenGrade - KeyPress na coluna Descricao (Column2) da grade.
+    * Ativo apenas quando CodVends esta vazio (DynamicReadOnly da coluna).
+    * Enter/Tab: busca exata pela razao social - achou, preenche o codigo;
+    * nao achou, abre o picker filtrado pelo grupo. F4: abre o picker direto.
+    * (equivale ao PROCEDURE Valid de SIGMVATE.Grade.Column3.Text1, modo 'D')
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarNomVenGrade(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cVal, loc_cSQL, loc_nResultado, loc_oErro
+
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaVenGrade()
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN
+        ENDIF
+
+        loc_cVal = ALLTRIM(THIS.grd_4c_Dados.Column2.Text1.Value)
+
+        IF EMPTY(loc_cVal)
+            SELECT cursor_4c_LocalVen
+            REPLACE CodVends WITH "", DesVends WITH ""
+            THIS.grd_4c_Dados.Refresh()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_VenNomTemp")
+            USE IN cursor_4c_VenNomTemp
+        ENDIF
+
+        TRY
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                SELECT TOP 1 iclis, rclis FROM SigCdCli
+                WHERE grupos = <<EscaparSQL(THIS.this_cGrVends)>>
+                  AND RTRIM(rclis) = <<EscaparSQL(loc_cVal)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_VenNomTemp")
+
+            IF loc_nResultado > 0 AND USED("cursor_4c_VenNomTemp") AND !EOF("cursor_4c_VenNomTemp")
+                *-- Linha corrente -> BO (FormParaBO preserva o NAtends ja
+                *-- digitado), aplica o vendedor resolvido pela razao social
+                *-- e devolve BO -> linha corrente
+                IF THIS.FormParaBO()
+                    THIS.this_oBusinessObject.this_cCodVends  = ALLTRIM(cursor_4c_VenNomTemp.iclis)
+                    THIS.this_oBusinessObject.this_cDescVends = ALLTRIM(cursor_4c_VenNomTemp.rclis)
+                    THIS.BOParaForm()
+                ENDIF
+
+                SELECT cursor_4c_LocalVen
+
+                IF THIS.VerificarVendedorDuplicado()
+                    MsgAviso("Vendedor j" + CHR(225) + " inclu" + CHR(237) + "do!", "Aviso")
+                    SELECT cursor_4c_LocalVen
+                    REPLACE CodVends WITH "", DesVends WITH ""
+                ENDIF
+                THIS.grd_4c_Dados.Refresh()
+            ELSE
+                THIS.AbrirBuscaVenGrade()
+            ENDIF
+
+            IF USED("cursor_4c_VenNomTemp")
+                USE IN cursor_4c_VenNomTemp
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirBuscaVenGrade - Picker de vendedor (SigCdCli) filtrado pelo grupo
+    * de vendedores do documento (this_cGrVends), aplicado a linha corrente
+    * da grade. Segue o padrao canonico AbrirBuscaVen (Formsigatcrp.prg):
+    * pre-popula o cursor via SQLEXEC e passa ja pronto ao FormBuscaAuxiliar
+    * (a API manual do FormBuscaAuxiliar nao popula cursor sozinha).
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirBuscaVenGrade()
+        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResultado, loc_cTitulo, ;
+              loc_lProsseguir, loc_cCodSel, loc_cDescSel, loc_oErro
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(THIS.grd_4c_Dados.Column1.Text1.Value)
+        IF EMPTY(loc_cValor)
+            loc_cValor = ALLTRIM(THIS.grd_4c_Dados.Column2.Text1.Value)
+        ENDIF
+
+        loc_cTitulo = "Sele" + CHR(231) + CHR(227) + "o de Vendedor"
+
+        IF USED("cursor_4c_BuscaVenGrade")
+            USE IN cursor_4c_BuscaVenGrade
+        ENDIF
+
+        loc_lProsseguir = .T.
+        TRY
+            IF EMPTY(loc_cValor)
+                loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE grupos = " + ;
+                    EscaparSQL(THIS.this_cGrVends) + " ORDER BY iclis"
+            ELSE
+                loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE grupos = " + ;
+                    EscaparSQL(THIS.this_cGrVends) + " AND (iclis LIKE " + ;
+                    EscaparSQL(loc_cValor + "%") + " OR RTRIM(rclis) LIKE " + ;
+                    EscaparSQL(loc_cValor + "%") + ") ORDER BY iclis"
+            ENDIF
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaVenGrade")
+
+            IF (loc_nResultado < 1 OR !USED("cursor_4c_BuscaVenGrade") OR RECCOUNT("cursor_4c_BuscaVenGrade") = 0) ;
+                    AND !EMPTY(loc_cValor)
+                IF USED("cursor_4c_BuscaVenGrade")
+                    USE IN cursor_4c_BuscaVenGrade
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, ;
+                    "SELECT iclis, rclis FROM SigCdCli WHERE grupos = " + ;
+                    EscaparSQL(THIS.this_cGrVends) + " ORDER BY iclis", ;
+                    "cursor_4c_BuscaVenGrade")
+            ENDIF
+
+            IF loc_nResultado < 1 OR !USED("cursor_4c_BuscaVenGrade") OR RECCOUNT("cursor_4c_BuscaVenGrade") = 0
+                MsgAviso("Nenhum vendedor encontrado para este grupo.", "Vendedor")
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaVenGrade"
+                    loc_oBusca.this_cTitulo        = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
+                    loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("rclis", "", "Nome")
+                    loc_oBusca.Show()
+
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaVenGrade") AND USED("cursor_4c_LocalVen")
+                        SELECT cursor_4c_BuscaVenGrade
+                        loc_cCodSel  = ALLTRIM(cursor_4c_BuscaVenGrade.iclis)
+                        loc_cDescSel = ALLTRIM(cursor_4c_BuscaVenGrade.rclis)
+
+                        *-- Linha corrente -> BO (FormParaBO preserva o NAtends
+                        *-- ja digitado), aplica o vendedor escolhido no picker
+                        *-- e devolve BO -> linha corrente
+                        IF THIS.FormParaBO()
+                            THIS.this_oBusinessObject.this_cCodVends  = loc_cCodSel
+                            THIS.this_oBusinessObject.this_cDescVends = loc_cDescSel
+                            THIS.BOParaForm()
+                        ENDIF
+
+                        SELECT cursor_4c_LocalVen
+
+                        IF THIS.VerificarVendedorDuplicado()
+                            MsgAviso("Vendedor j" + CHR(225) + " inclu" + CHR(237) + "do!", "Aviso")
+                            REPLACE CodVends WITH "", DesVends WITH ""
+                        ENDIF
+                    ENDIF
+                    loc_oBusca.Release()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaVenGrade")
+            USE IN cursor_4c_BuscaVenGrade
+        ENDIF
+        IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+            THIS.grd_4c_Dados.Refresh()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VerificarVendedorDuplicado - Verifica se o vendedor da linha corrente
+    * do cursor_4c_LocalVen ja foi incluido em outra linha da grade
+    * (equivale a "LOCATE for codvends = lcCodven and RECNO() <> lnReg"
+    * do legado, repetido ao final dos dois PROCEDURE Valid).
+    *--------------------------------------------------------------------------
+    PROCEDURE VerificarVendedorDuplicado()
+        LOCAL loc_nRecAtual, loc_cCodVen, loc_lDuplicado
+
+        loc_lDuplicado = .F.
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN loc_lDuplicado
+        ENDIF
+
+        SELECT cursor_4c_LocalVen
+        loc_nRecAtual = RECNO()
+        loc_cCodVen   = ALLTRIM(CodVends)
+
+        IF !EMPTY(loc_cCodVen)
+            LOCATE FOR ALLTRIM(CodVends) == loc_cCodVen AND RECNO() != loc_nRecAtual
+            loc_lDuplicado = FOUND()
+        ENDIF
+
+        IF BETWEEN(loc_nRecAtual, 1, RECCOUNT("cursor_4c_LocalVen"))
+            GO loc_nRecAtual IN cursor_4c_LocalVen
+        ENDIF
+
+        RETURN loc_lDuplicado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnIncluirClick - Adiciona uma linha vazia na grade e posiciona o foco
+    * no campo do vendedor (equivale ao PROCEDURE Click de SIGMVATE.inserir)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_oErro
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN
+        ENDIF
+
+        *-- Mesmo gate do When de SIGMVATE.inserir. O botao ja nasce
+        *-- desabilitado fora de INSERIR/ALTERAR; a checagem aqui protege as
+        *-- chamadas por codigo (BINDEVENT/harness).
+        IF !THIS.PodeEditarDocumento()
+            MsgAviso("Documento em modo consulta - n" + CHR(227) + "o " + CHR(233) + ;
+                " poss" + CHR(237) + "vel incluir atendimentos.", "Atendimentos")
+            RETURN
+        ENDIF
+
+        TRY
+            THIS.LockScreen = .T.
+
+            SELECT cursor_4c_LocalVen
+            LOCATE FOR EMPTY(ALLTRIM(CodVends))
+            IF !FOUND()
+                APPEND BLANK
+            ENDIF
+
+            REPLACE CodVends WITH "", DesVends WITH "", NAtends WITH 0
+
+            THIS.grd_4c_Dados.Refresh()
+
+            *-- Entra em edicao na linha recem-criada. Como CodVends esta
+            *-- vazio, BtnAlterarClick posiciona o foco na coluna do codigo
+            *-- do vendedor - o mesmo "Thisform.grade.column2.SetFocus" que o
+            *-- legado executa (Column2 do legado = Column1 aqui).
+            THIS.BtnAlterarClick()
+
+            THIS.LockScreen = .F.
+        CATCH TO loc_oErro
+            THIS.LockScreen = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.BtnIncluirClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirClick - Remove a linha corrente da grade (equivale ao
+    * PROCEDURE Click de SIGMVATE.excluir)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_oErro
+
+        IF !USED("cursor_4c_LocalVen")
+            RETURN
+        ENDIF
+
+        IF !THIS.LinhaCorrenteValida()
+            RETURN
+        ENDIF
+
+        *-- Mesmo gate do When de SIGMVATE.excluir (ver BtnIncluirClick)
+        IF !THIS.PodeEditarDocumento()
+            MsgAviso("Documento em modo consulta - n" + CHR(227) + "o " + CHR(233) + ;
+                " poss" + CHR(237) + "vel excluir atendimentos.", "Atendimentos")
+            RETURN
+        ENDIF
+
+        TRY
+            THIS.LockScreen = .T.
+
+            SELECT cursor_4c_LocalVen
+            DELETE
+
+            THIS.grd_4c_Dados.Refresh()
+
+            THIS.LockScreen = .F.
+        CATCH TO loc_oErro
+            THIS.LockScreen = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.BtnExcluirClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PodeEditarDocumento - Reproduz o When dos botoes inserir/excluir do
+    * legado ("Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))"). O modo
+    * vem do documento pai (SigMvCab) e eh fixado uma unica vez no Init, por
+    * isso serve tanto para habilitar os botoes na criacao quanto para barrar
+    * as acoes chamadas por codigo.
+    *--------------------------------------------------------------------------
+    PROCEDURE PodeEditarDocumento()
+        RETURN INLIST(THIS.this_cModoEscolha, "INSERIR", "ALTERAR")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LinhaCorrenteValida - Garante que ha uma linha posicionada no
+    * cursor_4c_LocalVen (equivale ao "If Eof() Or Bof() / Return" que o
+    * legado repete no Click de excluir).
+    *--------------------------------------------------------------------------
+    PROCEDURE LinhaCorrenteValida()
+        LOCAL loc_lOk
+
+        loc_lOk = .F.
+
+        IF USED("cursor_4c_LocalVen")
+            SELECT cursor_4c_LocalVen
+            loc_lOk = (RECCOUNT("cursor_4c_LocalVen") > 0 AND !EOF() AND !BOF())
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnAlterarClick - Entra em edicao na linha corrente da grade.
+    *
+    * SIGMVATE nao tem botao "Alterar": a alteracao acontece digitando direto
+    * na grade, e quem autoriza eh o par de regras do legado - o When de
+    * inserir/excluir (INLIST(pcEscolha,'INSERIR','ALTERAR')) somado ao When da
+    * coluna Descricao (RETURN EMPTY(localven.codvends)). Este metodo concentra
+    * essas duas regras: valida a linha, aplica o mesmo gate e devolve o foco a
+    * celula que o legado deixa editavel para a linha corrente - Codigo quando o
+    * vendedor ainda nao foi informado (Descricao tambem fica liberada pelo
+    * DynamicReadOnly), Atendimentos quando ja esta preenchido.
+    *
+    * NAO cria botao proprio na tela (PILAR 1 - o legado nao tem): eh o ponto
+    * de entrada programatico de alteracao do form, usado por BtnIncluirClick
+    * logo apos criar a linha em branco.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_lOk, loc_oErro
+
+        loc_lOk = .F.
+
+        IF !THIS.LinhaCorrenteValida()
+            MsgAviso("Selecione uma linha da grade antes de alterar.", "Atendimentos")
+            RETURN loc_lOk
+        ENDIF
+
+        IF !THIS.PodeEditarDocumento()
+            MsgAviso("Documento em modo consulta - n" + CHR(227) + "o " + CHR(233) + ;
+                " poss" + CHR(237) + "vel alterar os atendimentos.", "Atendimentos")
+            RETURN loc_lOk
+        ENDIF
+
+        TRY
+            THIS.grd_4c_Dados.SetFocus()
+
+            IF EMPTY(ALLTRIM(NVL(cursor_4c_LocalVen.CodVends, "")))
+                *-- Vendedor em branco: legado libera Codigo e Descricao
+                THIS.grd_4c_Dados.Column1.SetFocus()
+            ELSE
+                *-- Vendedor preenchido: DynamicReadOnly trava a Descricao,
+                *-- resta a quantidade de atendimentos
+                THIS.grd_4c_Dados.Column3.SetFocus()
+            ENDIF
+
+            loc_lOk = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.BtnAlterarClick")
+        ENDTRY
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Exibe os atendimentos como estao GRAVADOS para o
+    * documento (somente leitura): recarrega cursor_4c_LocalVen a partir de
+    * SigMvAte via BO, que tambem reresolve a descricao de cada vendedor em
+    * SigCdCli pelo grupo do documento - exatamente a consulta que o Init do
+    * legado roda linha a linha no SCAN ("Select rclis From SigCdCli where
+    * grupos = <grvends> and iclis = <codvends>").
+    *
+    * Nao grava nada e nao depende do modo do documento (serve em CONSULTAR).
+    * Como recarregar descarta o que ainda nao foi confirmado, pede confirmacao
+    * quando o documento esta editavel e a grade ja tem linhas.
+    *
+    * NAO cria botao proprio na tela (PILAR 1 - o legado nao tem): eh o ponto
+    * de entrada programatico de consulta do form.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lOk, loc_lProsseguir, loc_oErro
+
+        loc_lOk         = .F.
+        loc_lProsseguir = .T.
+
+        IF THIS.PodeEditarDocumento() AND USED("cursor_4c_LocalVen") ;
+                AND RECCOUNT("cursor_4c_LocalVen") > 0
+            loc_lProsseguir = MsgConfirma("Exibir os atendimentos como est" + CHR(227) + "o gravados?" + ;
+                CHR(13) + "As altera" + CHR(231) + CHR(245) + "es ainda n" + CHR(227) + "o confirmadas " + ;
+                "ser" + CHR(227) + "o perdidas.", "Atendimentos")
+        ENDIF
+
+        IF !loc_lProsseguir
+            RETURN loc_lOk
+        ENDIF
+
+        TRY
+            loc_lOk = THIS.CarregarLista()
+
+            IF loc_lOk
+                IF USED("cursor_4c_LocalVen") AND RECCOUNT("cursor_4c_LocalVen") = 0
+                    MsgInfo("Nenhum atendimento gravado para este documento.", "Atendimentos")
+                ENDIF
+            ELSE
+                MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + "vel carregar os atendimentos " + ;
+                    "gravados deste documento.", "Atendimentos")
+            ENDIF
+        CATCH TO loc_oErro
+            loc_lOk = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.BtnVisualizarClick")
+        ENDTRY
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSalvarClick - Apaga os atendimentos ja gravados do documento e
+    * reinsere as linhas atuais da grade com natends <> 0 (delete-all-then-
+    * reinsert, equivalente ao PROCEDURE Click de SIGMVATE.cntBotoes.btnConfirmar:
+    * "DELETE all for empdopnums = pcEDN" + "DELETE ALL for natends = 0" +
+    * SCAN/INSERT). Eh o metodo de gravacao do form - BtnConfirmarClick
+    * (nome do botao do legado, alvo do BINDEVENT) delega para ca.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSalvarClick()
+        LOCAL loc_lSucesso, loc_oErro
+
+        IF !USED("cursor_4c_LocalVen")
+            THIS.Release()
+            RETURN
+        ENDIF
+
+        loc_lSucesso = .F.
+
+        TRY
+            SELECT cursor_4c_LocalVen
+            GO TOP
+            THIS.grd_4c_Dados.Refresh()
+
+            loc_lSucesso = THIS.this_oBusinessObject.ExcluirTodosDoDocumento(THIS.this_cEmpDopNums)
+
+            IF loc_lSucesso
+                SELECT cursor_4c_LocalVen
+                *-- "DELETE ALL for natends = 0" do legado: as linhas zeradas
+                *-- nao sao reinseridas
+                SCAN FOR NAtends != 0
+                    *-- NovoRegistro() antes do mapeamento: LimparDados() zera
+                    *-- this_cPkChaves, senao o 2o INSERT do laco colidiria no
+                    *-- indice unico com a PK da linha anterior
+                    THIS.this_oBusinessObject.NovoRegistro()
+
+                    IF !THIS.FormParaBO()
+                        LOOP
+                    ENDIF
+
+                    IF !THIS.this_oBusinessObject.Salvar()
+                        loc_lSucesso = .F.
+                        EXIT
+                    ENDIF
+                ENDSCAN
+            ENDIF
+        CATCH TO loc_oErro
+            loc_lSucesso = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigMvAte.BtnSalvarClick")
+        ENDTRY
+
+        IF loc_lSucesso
+            THIS.Release()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnConfirmarClick - Alvo do BINDEVENT do botao Confirmar
+    * (cmg_4c_Botoes.Buttons(2), equivalente a cntBotoes.btnConfirmar do
+    * legado). Delega para BtnSalvarClick, que concentra a gravacao.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnConfirmarClick()
+        THIS.BtnSalvarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Encerra sem gravar (equivale ao PROCEDURE Click de
+    * SIGMVATE.cntBotoes.btnSair: ThisForm.Release)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Alias de BtnCancelarClick. SIGMVATE nao tem botao
+    * "Encerrar" separado - cmg_4c_Botoes.Buttons(1) (Cancelar) EH o encerrar
+    * sem gravar do legado (cntBotoes.btnSair). Metodo existe por
+    * compatibilidade com o contrato comum de forms do pipeline (nome
+    * generico de fechamento verificado pelo TesteAutomatico).
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        THIS.BtnCancelarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Transfere a LINHA CORRENTE da grade (cursor_4c_LocalVen)
+    * mais o contexto do documento pai para as propriedades do BO.
+    *
+    * SIGMVATE eh OPERACIONAL flat: a "ficha" editavel nao sao TextBoxes numa
+    * Page2, sao as COLUNAS da grade - uma linha da grade equivale a um
+    * registro de SigMvAte. Por isso o mapeamento eh feito por linha.
+    *
+    * Cobre TODAS as colunas persistidas pelo BO:
+    *   CodVends -> this_cCodVends   (codvends   char(10))
+    *   NAtends  -> this_nAtends     (natends    numeric(4,0))
+    * mais as duas colunas que vem do documento pai (nao tem campo na tela,
+    * mas SAO gravadas - SigMvAte.emps/empdopnums sao NOT NULL):
+    *   this_cEmps       = empresa do SigMvCab
+    *   this_cEmpDopNums = chave do documento pai
+    * e as duas de apoio (nao persistidas, usadas nos lookups):
+    *   DesVends -> this_cDescVends, this_cGrVends = grupo de vendedores
+    *
+    * this_cPkChaves NAO eh mapeado de proposito: quem gera a PK eh o
+    * Inserir() do BO (fUniqueIds()), apos o NovoRegistro()/LimparDados().
+    *
+    * Retorna .F. quando nao ha linha corrente utilizavel (cursor fechado,
+    * grade vazia ou EOF/BOF) - o chamador NAO deve gravar nesse caso.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_lOk
+        loc_lOk = .F.
+
+        IF USED("cursor_4c_LocalVen") AND VARTYPE(THIS.this_oBusinessObject) = "O"
+            SELECT cursor_4c_LocalVen
+
+            IF RECCOUNT("cursor_4c_LocalVen") > 0 AND ;
+               !EOF("cursor_4c_LocalVen") AND !BOF("cursor_4c_LocalVen")
+
+                *-- Colunas da linha corrente da grade
+                THIS.this_oBusinessObject.this_cCodVends  = ALLTRIM(NVL(cursor_4c_LocalVen.CodVends, ""))
+                THIS.this_oBusinessObject.this_cDescVends = ALLTRIM(NVL(cursor_4c_LocalVen.DesVends, ""))
+                THIS.this_oBusinessObject.this_nAtends    = NVL(cursor_4c_LocalVen.NAtends, 0)
+
+                *-- Contexto do documento pai (SigMvCab), recebido no Init
+                THIS.this_oBusinessObject.this_cEmps       = THIS.this_cEmps
+                THIS.this_oBusinessObject.this_cEmpDopNums = THIS.this_cEmpDopNums
+                THIS.this_oBusinessObject.this_cGrVends    = THIS.this_cGrVends
+
+                loc_lOk = .T.
+            ENDIF
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Caminho inverso de FormParaBO: escreve as propriedades do
+    * BO de volta na LINHA CORRENTE da grade (cursor_4c_LocalVen) e repinta a
+    * grade (popular/alterar cursor nao repinta a grade sozinho).
+    *
+    * Usado pelos tres caminhos de lookup de vendedor (Enter/Tab pelo codigo,
+    * Enter/Tab pela razao social e selecao no picker): o handler carrega a
+    * linha no BO com FormParaBO (o que PRESERVA o NAtends ja digitado),
+    * aplica o vendedor resolvido nas propriedades e devolve tudo a grade
+    * por aqui.
+    *
+    * As colunas de contexto (emps/empdopnums) nao voltam para a grade porque
+    * nao existem nela - sao do documento pai e vivem so no form/BO.
+    *
+    * Retorna .F. quando nao ha linha corrente utilizavel.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_lOk
+        loc_lOk = .F.
+
+        IF USED("cursor_4c_LocalVen") AND VARTYPE(THIS.this_oBusinessObject) = "O"
+            SELECT cursor_4c_LocalVen
+
+            IF RECCOUNT("cursor_4c_LocalVen") > 0 AND ;
+               !EOF("cursor_4c_LocalVen") AND !BOF("cursor_4c_LocalVen")
+
+                REPLACE CodVends WITH THIS.this_oBusinessObject.this_cCodVends, ;
+                        DesVends WITH THIS.this_oBusinessObject.this_cDescVends, ;
+                        NAtends  WITH THIS.this_oBusinessObject.this_nAtends ;
+                    IN cursor_4c_LocalVen
+
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+
+                *-- Reaplica o When da coluna Descricao para a linha alterada
+                *-- (com o codigo preenchido ela volta a ser somente leitura)
+                THIS.AjustarColunaDescricao()
+
+                loc_lOk = .T.
+            ENDIF
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - No-op deliberado (form OPERACIONAL sem PageFrame nem
+    * paginas alternaveis - SIGMVATE eh popup modal flat). Metodo existe por
+    * compatibilidade com o contrato comum de forms do pipeline (a base
+    * FormBase.AlternarPagina ja se protege com TYPE()="O", mas o metodo eh
+    * mantido explicito aqui por clareza).
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - No-op deliberado. SIGMVATE nao alterna modos em
+    * runtime: this_cModoEscolha eh fixado uma unica vez no Init (parametro
+    * vindo do documento pai) e ja habilita/desabilita Incluir/Excluir na
+    * criacao (ConfigurarPaginaLista). Metodo existe por compatibilidade
+    * com o contrato comum de forms do pipeline.
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - Torna controles visiveis recursivamente
+    * (AddObject cria controles com Visible=.F. por padrao)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_i, loc_oCtrl
+
+        FOR loc_i = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_i)
+            IF VARTYPE(loc_oCtrl) = "O"
+                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                    loc_oCtrl.Visible = .T.
+                ENDIF
+                IF UPPER(loc_oCtrl.BaseClass) = "PAGEFRAME"
+                    LOCAL loc_p
+                    FOR loc_p = 1 TO loc_oCtrl.PageCount
+                        THIS.TornarControlesVisiveis(loc_oCtrl.Pages(loc_p))
+                    ENDFOR
+                ENDIF
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oCtrl)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera o cursor local de trabalho (equivale a "Use In localVen"
+    * do PROCEDURE Release do legado). DODEFAULT() por ultimo: FormBase.Destroy
+    * restaura os popups do menu principal apos fechar form modal - sem isso
+    * por ultimo, o rendering dos popups fica corrompido (CLAUDE.md).
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF USED("cursor_4c_LocalVen")
+            USE IN cursor_4c_LocalVen
+        ENDIF
+
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

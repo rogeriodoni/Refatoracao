@@ -1,0 +1,1361 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGMVCMV.SCX
+* Data/Hora: 23/09/2026 22:31:04
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVCMV
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGMVCMV
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGMVCMV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGMVCMV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGMVCMV
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cancela
+  Parent: SIGMVCMV
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGMVCMV
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGMVCMV
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGMVCMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGMVCMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGMVCMV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGMVCMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmpresa
+  Parent: SIGMVCMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getEmpresa
+  Parent: SIGMVCMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_moeda
+  Parent: SIGMVCMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGMVCMV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGMVCMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processa
+  Parent: SIGMVCMV
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdOperacaos
+  Parent: SIGMVCMV
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGMVCMV.grdOperacaos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGMVCMV.grdOperacaos.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGMVCMV.grdOperacaos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVCMV.grdOperacaos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdBtnGrade
+  Parent: SIGMVCMV
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 323
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Processamento para o Lançamentos de Centro de Custos não lançados"
+  ControlBox = .F.
+  Closable = .F.
+  TitleBar = 0
+  podatamgr = .F.
+  sigkey = .F.
+  Name = "SIGMVCMV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.Shape1
+------------------------------------------------------------
+  Top = -2
+  Left = 644
+  Height = 37
+  Width = 52
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 724
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 15
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.getDtInicial
+------------------------------------------------------------
+  Height = 23
+  Left = 154
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 88
+  Width = 80
+  BorderColor = 36,84,155
+  ZOrderSet = 2
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.getDtFinal
+------------------------------------------------------------
+  Height = 23
+  Left = 268
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 88
+  Width = 80
+  BorderColor = 36,84,155
+  ZOrderSet = 3
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 99
+  Top = 92
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "até"
+  Left = 242
+  Top = 92
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Left = 154
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 138
+  Width = 31
+  BorderColor = 36,84,155
+  ZOrderSet = 6
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 94
+  Top = 118
+  Width = 50
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.getDEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 187
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 113
+  Width = 339
+  BorderColor = 36,84,155
+  ZOrderSet = 8
+  Name = "getDEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.getEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 23
+  InputMask = "XXX"
+  Left = 154
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 113
+  Width = 31
+  ForeColor = 0,0,0
+  BorderColor = 36,84,155
+  ZOrderSet = 9
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda para Conversão:"
+  Left = 26
+  Top = 142
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Left = 187
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 138
+  Width = 115
+  BorderColor = 36,84,155
+  ZOrderSet = 10
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação :"
+  Left = 88
+  Top = 167
+  Width = 56
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 649
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  TabIndex = 14
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.grdOperacaos
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 0
+  Height = 147
+  Left = 154
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 12
+  Top = 165
+  Width = 247
+  GridLineColor = 238,238,238
+  ZOrderSet = 37
+  Name = "grdOperacaos"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 210
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.grdOperacaos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.grdOperacaos.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.grdOperacaos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.grdOperacaos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCMV.cmdBtnGrade
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 91
+  Left = 406
+  Top = 193
+  Width = 43
+  TabIndex = 13
+  Themes = .F.
+  Name = "cmdBtnGrade"
+  Command1.Top = -1
+  Command1.Left = -1
+  Command1.Height = 45
+  Command1.Width = 45
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Selecionar"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcaTudo"
+  Command2.Top = 45
+  Command2.Left = -1
+  Command2.Height = 45
+  Command2.Width = 45
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Desmarcar"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVCMV
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE fazcontra
+------------------------------------------------------------
+PROCEDURE fazcontra
+local voper,oper,grupo,conta,moed,cot,valor,soper,sgrupo,sconta,smoed,;
+		scot,svalor,data,sdata,hist,shist,docu,sdocu,venc,svenc,noper,;
+		snoper,emp,Dops,nums,edn,dtem,Venc,_Hist
+
+*** INSERIR CONTA MOVIMEN//
+select craltcc
+
+noper   	= craltcc.nopers
+voper   	= craltcc.vopers
+oper    	= craltcc.sopers
+grupo   	= craltcc.sgrupos
+conta   	= craltcc.scontas
+moed   		= craltcc.smoedas
+cot     	= craltcc.scotacaos
+valor   	= craltcc.svalors
+soper   	= craltcc.opers
+sgrupo  	= craltcc.grupos
+sconta  	= craltcc.contas
+smoed   	= craltcc.moedas
+scot    	= craltcc.cotacaos
+svalor  	= craltcc.valors
+nlanc   	= craltcc.nlancs
+vlanc   	= craltcc.vlancs
+usualt  	= craltcc.usualts
+datalt  	= Nvl(craltcc.datalts,Ctod(Space(08)))
+contapg 	= craltcc.contapgs
+cotusu  	= craltcc.cotusus
+Job			= crAltcc.Jobs
+sdata		= Craltcc.Datas
+emp			= Craltcc.Emps
+valpag  	= 0
+Dops		= craltcc.Dopes
+nums		= craltcc.numes
+edn 		= craltcc.empdopnums
+dtem		= craltcc.dtemis
+Venc		= craltcc.Vencs
+_Hist  		= craltcc.Hists
+
+=fRecalculaS( CrAltcc.Grupos, Craltcc.Contas, Craltcc.Datas, Craltcc.Moedas, ThisForm.Podatamgr  )
+
+*** INSERIR CONTRA MOVIMEN//
+select craltcc
+append blank
+
+replace vopers		with voper, ;
+		nopers		with noper, ;
+		nlancs		with nlanc, ;
+		vlancs		with vlanc, ;
+		opers		with oper, ;
+		grupos		with grupo, ;
+		contas  	with conta, ;
+		moedas		with moed, ;
+		cotacaos	with cot, ;
+		valors		with valor, ;
+		valpags		with valpag, ;
+		emps		with emp, ;
+		datas		with sdata, ;
+		DtEmis		With dtem, ;
+		hists		with _Hist , ;
+		hist2s		with [], ;
+		vencs		with Venc, ;
+		docus		with [], ;
+		Nfs			With [], ;
+		autos		with .T., ;
+		usualts		with usualt, ;
+		datalts		with datalt, ;
+		contapgs	with contapg, ;
+		sgrupos		with sgrupo, ;
+		scontas		with sconta, ;
+		smoedas		with smoed, ;
+		scotacaos	with scot, ;
+		svalors		with svalor, ;
+		sopers		with soper, ;
+		cotusus		with cotusu, ;
+		Dopes		With Dops , ;
+		Numes		With Nums , ;
+		EmpDopNums	With edn ,;
+		gruconmoes	with grupo + conta + moed , ;
+		cidchaves	with Dtos(Datas)+Transform(fGerUniqueKey(Dtos(Datas)),"@L 999999") + ThisForm.Sigkey, ;
+		pagos		with Iif(valors=valpags,'0','1'), ;
+		Jobs		with Job
+
+=fRecalculaS( CrAltcc.Grupos, Craltcc.Contas, Craltcc.Datas, Craltcc.Moedas, ThisForm.Podatamgr  )
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE limpatela
+------------------------------------------------------------
+PROCEDURE limpatela
+ThisForm.getDtInicial.Value = Ctod('')
+ThisForm.getDtFinal.Value = Ctod('')
+ThisForm.get_cd_moeda.Value = ''
+ThisForm.get_ds_moeda.Value = ''
+ThisForm.getEmpresa.Value = ''
+ThisForm.getDEmpresa.Value = ''
+
+ThisForm.getDtInicial.Refresh
+ThisForm.getDtFinal.Refresh
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+ThisForm.getEmpresa.Refresh
+ThisForm.getDEmpresa.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+
+Local ldDtIni, ldDtFim, lcEmp, lcMoeda, lcTransacao
+
+Private pDtI, pDtF, lnNopers
+
+ldDtIni = Thisform.getDtInicial.Value
+ldDtFim = Thisform.getDtFinal.Value
+lcEmp	= Thisform.getEmpresa.Value
+lcMoeCV = Thisform.get_cd_moeda.Value
+
+Select CrAltCc
+Zap
+
+If Used([csMovimento])
+	Use In csMovimento
+Endif
+
+Create Cursor csMovimento(Emps c(3), Dopes c(20), DataS T, custofs N(12,3), pcuss N(12,5), moecusfs c(3), moedas c(3), qtds N(10,3),;
+	GrupoEDs c(11), ContaEDs c(11), GrupoECs c(11), ContaECs c(11), MoeOpFin c(3), Cotacaos N(16,7), Numes n(6), EmpDopNums c(29))
+
+Select csMovimento
+Index On Emps + Dopes + Ttoc(DataS) Tag EDD
+
+
+pDtI = fDtoSQL(ldDtIni)
+pDtF = fDtoSQL(ldDtFim,[23:59:59])
+
+lcQuery = [select sigmvcab.valos, sigmvcab.Datas, sigmvcab.Emps, sigmvcab.dopes, sigmvcab.Numes, sigmvcab.empdopnums ] + ;
+	[from sigmvcab ] + ;
+	[join sigcdope on sigcdope.dopes = sigmvcab.Dopes ] + ;
+	[join SigOpCdc on SigOpCdc.dopes = sigcdope.dopes ] + ;
+	[And SigOpCdc.opeinatvs = 0 ] + ;
+	[where sigcdope.vendas=1 and sigcdope.copers in(1,2) and sigcdope.caixas=1 ] + ;
+	[And empdopnums not in ( Select distinct a.empdopnums from sigmvccr a ] + ;
+	[join sigcdope on sigcdope.dopes = a.Dopes ] + ;
+	[and sigcdope.vendas=1 and sigcdope.copers=1 and sigcdope.caixas=1 ] + ;
+	[join SigOpCdc on SigOpCdc.dopes = sigcdope.dopes ] + ;
+	[And SigOpCdc.opeinatvs = 0 ] + ;
+	[join (select GrupoEDs, ContaEDs, GrupoECs, ContaECs, SigOpFin.Dopes, SigOpFin.Moedas ] + ;
+	[from SigOpFin ] + ;
+	[join SigOpCdc on SigOpCdc.dopes = SigOpFin.dopes ] + ;
+	[And SigOpCdc.opeinatvs = 0 ] + ;
+	[where contaeds <> space(11)) b on a.dopes = b.dopes ] + ;
+	[and a.contas = b.contaecs and a.scontas = b.ContaEDs ] + ;
+	[and a.grupos = b.GrupoECs and a.sgrupos = b.GrupoEDs)] + ;
+	[And sigmvcab.Datas BetWeen ?pDtI and ?pDtF ] + ;
+	Iif(Not Empty(lcEmp),[And sigmvcab.Emps = ']+lcEmp+[' ],[])
+
+If Thisform.Podatamgr.SqlExecute(lcQuery,[crTmpMov])<1
+	Messagebox([Favor Reiniciar o Processo!!!],0+16,[])
+	Return .F.
+Endif
+
+Select crTmpMov
+
+Select crTmpMov.* ;
+	From crTmpMov, csOperacaos ;
+	where csOperacaos.Operacaos = crTmpMov.Dopes ;
+	And csOperacaos.Marcas = .T. ;
+	Into Cursor crMov Readwrite
+
+Select crMov
+Index On Dopes Tag Dopes
+Go Top
+
+If Reccount()=0
+	Messagebox([Nenhum registro foi selecionado.],0+64,[Aviso])
+	Return .F.
+Endif
+
+Scan
+
+	lnCustofs = 0
+	lnPcuss   = 0
+
+	lcQuery = [Select distinct a.Emps, a.dopes, a.numes, a.EmpDopnums, a.datas, sum(c.custofs) as custofs, ] + ;
+		[Sum(c.pcuss) as pcuss, c.moecusfs, b.moedas, SUM(b.qtds) as qtds, ] + ;
+		[d.GrupoEDs, d.ContaEDs, d.GrupoECs, d.ContaECs, d.Moedas as MoeOpFin ] + ;
+		[From sigmvcab a ] + ;
+		[join SigMvItn b on b.empdopnums = a.empdopnums ] + ;
+		[join SigCdPro c on c.Cpros = b.Cpros ] + ;
+		[join (select GrupoEDs, ContaEDs, GrupoECs, ContaECs, SigOpFin.Dopes, SigOpFin.Moedas ] + ;
+		[from SigOpFin ] + ;
+		[join SigOpCdc on SigOpCdc.dopes = SigOpFin.dopes ] + ;
+		[And SigOpCdc.opeinatvs = 0 ] + ;
+		[where contaeds <> space(11)) d on d.dopes = a.dopes ] + ;
+		[Where c.pcuss >0 ] + ;
+		[And a.empdopnums = ']+crMov.empdopnums+[' ] + ;
+		[group by a.Emps, a.dopes, c.moecusfs, b.moedas, a.datas, ] + ;
+		[d.GrupoEDs, d.ContaEDs, d.GrupoECs, d.ContaECs, d.Moedas, a.numes, a.EmpDopnums ]
+
+	If Thisform.Podatamgr.SqlExecute(lcQuery,[crMovIt])<1
+		Messagebox([Favor Reiniciar o Processo!!!],0+16,[])
+		Return .F.
+	Endif
+
+	Select crMovIt
+	Scan
+
+		lnCustofs = crMovIt.custofs
+		lnPcuss   = crMovIt.pcuss
+		lcMoeCf	  = Iif(Empty(crMovIt.moecusfs),crMovIt.moedas,crMovIt.moecusfs)
+		lcMoeda	  = Iif(Not Empty(lcMoeCV),lcMoeCV,Iif(Empty(MoeOpFin),lcMoeCf,crMovIt.MoeOpFin))
+
+		lnCotacao = fCarregarCambio(lcMoeCf,crMovIt.DataS)
+		lnCotaMoe = fCarregarCambio(lcMoeda,crMovIt.DataS)
+
+		lnCustofs = Round(lnCustofs * lnCotacao / lnCotaMoe,2)
+		lnPcuss   = Round(lnPcuss 	* lnCotacao / lnCotaMoe,2)
+
+		Select csMovimento
+		Append Blank
+
+		Replace Emps 	With crMovIt.Emps  ,;
+			Dopes 	 	With crMovIt.Dopes ,;
+			Numes	 	With crMovIt.Numes ,;
+			EmpDopNums	With crMovIt.EmpDopNums ,;
+			Datas 	 	With crMovIt.DataS ,;
+			moecusfs 	With crMovIt.moecusfs ,;
+			moedas 	 	With crMovIt.moedas ,;
+			GrupoEDs 	With crMovIt.GrupoEDs ,;
+			ContaEDs 	With crMovIt.ContaEDs ,;
+			GrupoECs 	With crMovIt.GrupoECs ,;
+			ContaECs 	With crMovIt.ContaECs ,;
+			MoeOpFin 	With lcMoeda ,;
+			Cotacaos 	With lnCotaMoe ,;
+			custofs  	With csMovimento.custofs + lnCustofs ,;
+			pcuss 	 	With csMovimento.pcuss + lnPcuss ,;
+			qtds 	 	With csMovimento.qtds + crMovIt.qtds In csMovimento
+
+		Select crMovIt
+	Endscan
+	Select crMov
+Endscan
+
+Select csMovimento
+Go Top
+
+Select Emps, Dopes, DataS, Sum(custofs) As custofs, Sum(pcuss) As pcuss, moecusfs, moedas, Sum(qtds) As qtds, ;
+	GrupoEDs, ContaEDs, GrupoECs, ContaECs, MoeOpFin, Cotacaos, Numes, EmpDopnums ;
+	From csMovimento ;
+	Group By Emps, Dopes, DataS, moecusfs, moedas, GrupoEDs, ContaEDs, GrupoECs, ContaECs, MoeOpFin, Cotacaos, Numes, EmpDopnums ;
+	Into Cursor CrMvCCr Readwrite
+
+
+Select CrMvCCr
+Go Top
+Scan
+
+	Scatter Memvar Memo
+
+	Select CrAltCc
+	Append Blank
+
+	lnNopers = fGerUniqueKey('SigMvCcr')
+
+	Thisform.Podatamgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],m.Dopes,[hists, hist2s])
+	
+	_Hist2s   = []
+	_Hist	  = []
+	
+	If !IsEmpty(crSigCdOpe.Hists)
+		_Hist   = Alltrim( crSigCdOpe.Hists )
+	Else
+		_Hist   = Alltrim( m.EmpDopNums )
+	EndIf 	
+	
+	If !IsEmpty(crSigCdOpe.hist2s)
+		_Hist2s   = Alltrim( crSigCdOpe.hist2s )
+	EndIf 
+	
+	Replace CrAltCc.Grupos	With m.GrupoECs ,;
+		CrAltCc.Contas		With m.ContaECs ,;
+		CrAltCc.sgrupos		With m.GrupoEDs ,;
+		CrAltCc.scontas		With m.ContaEDs ,;
+		CrAltCc.moedas		With m.MoeOpFin ,;
+		CrAltCc.smoedas		With m.MoeOpFin ,;
+		CrAltCc.Cotacaos	With m.Cotacaos ,;
+		CrAltCc.scotacaos	With m.Cotacaos ,;
+		CrAltCc.Vencs		With m.DataS ,;
+		CrAltCc.DtEmis		With m.DataS ,;
+		CrAltCc.opers		With [D] ,;
+		CrAltCc.sopers		With [C] ,;
+		CrAltCc.hists		With _Hist  ,;
+		CrAltCc.hist2s		With _Hist2s ,;
+		CrAltCc.shists		With [] ,;
+		CrAltCc.DataS		With m.DataS  ,;
+		CrAltCc.Nopers		With lnNopers ,;
+		CrAltCc.Vopers		With m.Emps+Alltrim(Str(lnNopers,9)) ,;
+		CrAltCc.Emps		With m.Emps  ,;
+		CrAltCc.svalors		With m.pcuss ,;
+		CrAltCc.valors		With m.pcuss ,;
+		CrAltCc.Contapgs	With 2 	 ,;
+		CrAltCc.Autos 		With .T. ,;
+		CrAltCc.Pagos		With '1' ,;
+		CrAltCc.Valpags		With 0 	 ,;
+		CrAltCc.Usualts 	With usuar ,;
+		CrAltCc.Dopes		With m.Dopes ,;
+		CrAltCc.Numes		With m.Numes ,;
+		CrAltCc.EmpDopNums	With m.EmpDopNums ,;
+		CrAltCc.Gruconmoes	With CrAltCc.Grupos + CrAltCc.Contas + CrAltCc.moedas ,;
+		CrAltCc.Cidchaves	With Dtos(DataS)+Transform(fGerUniqueKey(Dtos(DataS)),"@L 999999") + Thisform.Sigkey In CrAltCc
+
+	=Thisform.FazContra()
+
+	Select CrMvCCr
+Endscan
+
+Select CrAltCc
+Go Top
+
+llOk = .T.
+
+If Thisform.Podatamgr.Update('Craltcc')
+	If Not fRecalculaS( .T., Thisform.Podatamgr )
+		Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão - Craltcc')
+		Thisform.Podatamgr.Rollback()
+		llOk = .F.
+	Else
+		Thisform.Podatamgr.Commit()
+	Endif
+Else
+	Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Thisform.Podatamgr.Rollback()
+	llOk = .F.
+Endif
+
+If llOk
+
+	Select CrAltCc
+	Go Top
+	
+	Scan
+			
+		lnNopers 	= CrAltCc.Nopers
+		lcTransacao = [Processamento CMV ] + AllTrim(craltcc.Emps) + '-' + AllTrim(Str(lnNopers)) + [ - (]+Dtoc(CrAltCc.Vencs)+[)]
+		lcTranLog	= []
+		
+		lnErro0 = Thisform.Podatamgr.SqlExecute([Select Cidchaves as nRecNo From SigMvCcr Where Nopers = ?lnNopers],'CsLog')
+		If lnErro0 > 0
+			Select csLog
+			Scan
+				lcTranLog = lcTranLog + ' #' + Alltrim(csLog.nRecNo)
+			Endscan
+		Endif
+		fGravarLog( 'T', Thisform.Name, [INSERIR], lcTransacao + lcTranLog )
+	EndScan
+	
+	=Messagebox([Processamento realizado com sucesso!!!],0+64)
+	
+EndIf
+
+Select csOperacaos
+Select Dopes, VisTit from csOperacaos Where Marcas = .T. And VisTit = 1 into Cursor csVisTit Readwrite 
+
+Select csVisTit
+If Reccount()>0
+	ThisForm.LockScreen = .t.
+	ThisForm.Enabled = .f.
+
+	Do Form SigMvTi2 
+
+	ThisForm.Enabled = .t.
+ 	ThisForm.LockScreen = .f.
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector',Thisform.Name)
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),[])
+		Return(.F.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigMvCcr', 'CidChaves',  'CrAltcc',    '', '', [Select * From SigMvCcr])
+	Endwith
+
+EndWith
+
+=ThisForm.LimpaTela()
+
+lcQuery = [select distinct SigOpFin.Dopes, convert(int,(substring(lbltxidCs,24,1))) as VisTit ] + ;
+	[from SigOpFin ] + ;
+	[join SigOpCdc on SigOpCdc.dopes = SigOpFin.dopes ] + ;
+	[join SigOpCdi on SigOpCdi.dopes = SigOpFin.dopes ] + ;
+	[And SigOpCdc.opeinatvs = 0 ] + ;
+	[where contaeds <> space(11) ] + ;
+	[order by 1]
+
+Thisform.poDatamgr.SqlExecute(lcQuery,'crSigOpFin')
+Select crSigOpFin
+Index On Dopes Tag Dopes
+Go Top
+
+Thisform.poDatamgr.CursorQuery('SigCdCot', 'crSigCdCot', .F., .F., 'CMoes, Datas, Valos')
+Select crSigCdCot
+Index On CMoes + Dtos(DataS) Tag CMoeData
+Set Order To CMoeData Descending
+
+Thisform.poDatamgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .F., .F., 'CMoes, Cotas')
+Select crSigCdMoe
+Index On CMoes Tag CMoes
+
+Thisform.Sigkey = []
+
+=DoDefault()
+
+Select crSigOpFin
+Scan
+	Insert Into csOperacaos (Marcas, Operacaos, VisTit) Values (.T., crSigOpFin.Dopes, crSigOpFin.VisTit)
+Endscan
+
+Select csOperacaos
+Go Top
+
+With Thisform.grdOperacaos
+	.ColumnCount = 3
+	.RecordSource = 'csOperacaos'
+	.HeaderHeight = 0
+	.DeleteMark = .F.
+	.RecordMark = .F.
+	.ReadOnly = .F.
+	.Width = 247
+	.Height = 148
+	.RowHeight = 18
+	.ScrollBars = 2
+	.AllowHeaderSizing = .F.
+	.AllowRowSizing = .F.
+
+	.Column1.Width = 15
+	.Column1.ControlSource = 'csOperacaos.Marcas'
+	.Column1.FontName = 'Courier New'
+	.Column1.Movable = .F.
+	.Column1.Resizable = .F.
+	.Column1.ReadOnly = .F.
+	.Column1.Sparse = .F.
+	.Column1.Check1.AutoSize = .T.
+
+	.Column2.Width = 210
+	.Column2.ControlSource = 'csOperacaos.Operacaos'
+	.Column2.FontName = 'Courier New'
+	.Column2.Movable = .F.
+	.Column2.Resizable = .F.
+	.Column2.ReadOnly = .T.
+
+Endwith
+
+Thisform.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=DoDefault()
+
+* Criar o Cursor Para Grade de Operações
+Create Cursor csOperacaos (Marcas l(1), Operacaos c(20), VisTit n(1))
+Index on Operacaos Tag Operacaos
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_ds_moeda.Value = ''
+	ThisForm.get_ds_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','CMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.getDEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getEmpresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.getEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_cd_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','DMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.Processa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(Thisform.getDtInicial.Value) Or Empty(Thisform.getDtFinal.Value)
+	Messagebox([Favor Informar o Periodo.],0+48,[Atenção])
+	Thisform.getDtInicial.SetFocus
+	Return .F.
+Endif
+
+Select csOperacaos
+Locate For Marcas = .T.
+If Not Found()
+	Messagebox([Selecione uma Operação.],0+48,[Atenção])
+	Thisform.grdOperacaos.Column1.SetFocus
+	Return .F.
+Endif
+
+If Messagebox([Confirma o Processamento?],4+32,[Atenção])<>6
+	Return .F.
+EndIf
+
+=ThisForm.Processamento()
+=ThisForm.Limpatela()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.grdOperacaos.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Local Marcas
+If m.nKeyCode = 9
+	ThisForm.opt_nr_tipo.Option1.SetFocus
+Endif
+
+If InList(m.nKeyCode,13,32)
+	m.Marcas = (!csOperacaos.Marcas)
+	Select csOperacaos
+	Gather Memvar Fields Marcas
+	This.Parent.Parent.Refresh
+	NoDefault
+Endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LPARAMETERS nButton, nShift, nXCoord, nYCoord
+
+Local Marcas
+m.Marcas = (!csOperacaos.Marcas)
+Select csOperacaos
+
+Gather Memvar Fields Marcas
+This.Parent.Parent.Refresh
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LPARAMETERS nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.grdOperacaos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCMV.cmdBtnGrade
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Case
+   Case This.Value = 1 And This.btnMarcaTudo.Enabled
+		* Marca Tudo
+		Select csOperacaos
+		Replace All Marcas With .t.
+		Go Top
+		ThisForm.grdOperacaos.Refresh
+		 
+   Case This.Value = 2 And This.btnDesmarcar.Enabled
+   		* Desmarcar
+		Select csOperacaos
+		Replace All Marcas With .f.
+		Go Top
+		ThisForm.grdOperacaos.Refresh
+EndCase
+* Fim ********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVCMV
+RESERVED3 (ClassInfo): podatamgr
+sigkey
+*fazcontra 
+*limpatela 
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

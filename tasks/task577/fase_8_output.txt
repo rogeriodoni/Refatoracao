@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files compile cleanly in VFP9 (BO_OK, FORM_OK) ÔÇö no syntax errors. The earlier 120s timeout was in `config.prg`'s full project-wide `ADIR()` dependency load (hundreds of forms/BOs across this large, actively-changing codebase), unrelated to my documentation-only edit, and out of scope for this task.
+
+## Summary
+
+Phase 8 of task577 (`SigMvSbn` ÔåÆ `FormSigMvSbn`) turned out to be **already complete** from phases 3-7:
+
+- `CarregarLista()`, `BtnSairClick()` (the Encerrar-equivalent), and `BtnOficinaClick()` were already fully implemented.
+- The generic Phase 8 checklist (`BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo`) assumes a `frmcadastro` CRUD shape, but SIGMVSBN is a **read-only viewer dialog** ÔÇö the legado has exactly 2 buttons (Sair, BtnOficina), no PageFrame, and every field is `.ReadOnly = .T.`. Inventing those 9 methods would mean fabricating UI the legado never had or writing disguised empty stubs ÔÇö both explicitly prohibited.
+
+What I did:
+1. Read both files completely (1514 + 491 lines) and confirmed functional completeness against the legado dump.
+2. Added a disposition table to the form's header comment, one line per Phase-8-requested method, explaining exactly why each doesn't apply (or where it's already covered) ÔÇö matching the precedent already set by the Phase 7 section, so the decision is auditable rather than looking like an omission.
+3. Confirmed the real-world integration: `Formsigpres2.prg` already calls `CREATEOBJECT("FormSigMvSbn", THIS, csTemporario.Emps, csTemporario.Dopes, csTemporario.Numes, "csTemporario")` matching `Init()`'s signature exactly, with the canonical `.Show()` pattern (no stray `Release()`). No `menu.prg` entry needed since this is a child dialog, not a standalone menu target.
+4. Deleted stale `.fxp` files and verified both `SigMvSbnBO.prg` and `FormSigMvSbn.prg` compile cleanly with no syntax errors.
+
+No functional code changes were needed ÔÇö only the added documentation in `FormSigMvSbn.prg`.

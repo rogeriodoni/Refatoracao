@@ -1,0 +1,314 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 12,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "FROM DBF", "fConfigGeral", "File", "Form SigRePhi With Int"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVSBN",
+      "evento": "Init",
+      "linhas": 90,
+      "codigoOriginal": "LParameters loPForm, pEmp, pDop, pNum, pCursor\n\nThisForm.ParentForm = loPForm\nThisForm.DataSessionId = loPForm.DataSessionId\n\nThisForm.lpCursor = Iif(Type('pCursor')='C', pCursor, [crSigMvCab])\nlcCursor = ThisForm.lpCursor\n\nThisForm.lpEmps   = Iif(Type('pEmp')='C', pEmp, &lcCursor..Emps)\nThisForm.lpDopes  = Iif(Type('pDop')='C', pDop, &lcCursor..Dopes)\nThisForm.lpNumes  = Iif(Type('pNum')='N', pNum, &lcCursor..Numes)\n\nThisForm.Caption = 'SubNiveis - ' + Proper( Alltrim( ThisForm.lpDopes ) ) +;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,FROM DBF",
+        "metodosFormChamados": "lpCursor = Iif,lpEmps   = Iif,lpDopes  = Iif,lpNumes  = Iif,Caption = 'SubNiveis - ' + Proper,SqlExecute,lAcOficina = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Get_items",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Sair",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade",
+      "evento": "Procedure",
+      "linhas": 65,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisform.LockScreen = .T.\n\nThisForm.fwgrade.RecordSource = ''\n\nlcEmpDopNums = TmpSubN.Emps+TmpSubN.Dopes+Str(TmpSubN.Numes,6)\n\nThisForm.Parentform.poDataMgr.SqlExecute([Select * From SigMvItn Where EmpDopNums = ']+lcEmpDopNums+['],'crTpmMvItnSubn')\n\nWith Thisform.fwgrade\n\t.Recordsource             = 'crTpmMvItnSubn'\n\t.Produto.Controlsource    = 'crTpmMvItnSubn.cpros'\n\t.Fator.Controlsource      = 'crTpmMvItnSubn.fators'\n\t.Operacao.Controlsource   = 'crTpmMvItnSubn.opers'\n\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Visible = Not Empty,Picture =",
+        "controlesReferenciados": "Get_descr,Get_Valo,Get_items",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Grade.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.fwgrade",
+      "evento": "Procedure",
+      "linhas": 51,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nSelect crTpmMvItnSubn\n= ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro','crTPro','Cpros',crTpmMvItnSubn.Cpros,'FigJpgs,Dpros')\nIf Not IsNull(crTPro.FigJpgs) And Not IsEmpty(crTPro.FigJpgs)\n\tThisForm.FigJpg.Visible = .F.\n\tThisForm.FigJpg.Picture = ''\n\tSelect crTPro\n\tClear Resources\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(crTPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[d... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Picture =",
+        "controlesReferenciados": "Get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.Get_valo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.FigJpg",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Local lcArquivo\n\nlcArquivo = Sys(2023) + '\\' + Sys(2015) + '.Jpg'\n\n* Figura no Campo Memo\nIf Not Empty(CrTmpPro.FigJpgs) And Not IsNull(CrTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\n\t=StrToFile(lcFoto, lcArquivo)\nEndIf\n\nIf File(lcArquivo)\n\tDo Form SigOpZom With lcArquivo, ;\n\t\t\t\t\t\t'Produto : ' + CrTmpPro.CPros + ' - ' + CrTmpPro.DPros, ;\n\t\t\t\t\t\t'Grupo   : ' + CrTmpPro.Cgrus + ' ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVSBN.BtnOficina",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "lcCursor = ThisForm.lpCursor\n\nLocal Array laParam(3)\nlaParam(1) = 2\nlaParam(2) = &lcCursor..Dopes\nlaParam(3) = &lcCursor..Numes\n\n*--Rafael - 20/03/2017 - Numero da OS \n=ThisForm.ParentForm.poDataMgr.SqlExecute([Select NEmps From SigCdEmp Where Cemps = ']+&lcCursor..Emps+[' ],[LocalEmp])\nlcNEmps = Alltrim(Str(LocalEmp.NEmps))\n\n=ThisForm.ParentForm.poDataMgr.SqlExecute([Select DoppServs From SigCdPam],[LocalParam])\n_DoppServ = LocalParam.DoppServs\n\n=Thisform.ParentForm.Podatamgr.Cursorquery('SigCd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Form SigRePhi With Int",
+        "metodosFormChamados": "SqlExecute,Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVSBN.Grade.Procedure",
+      "queryOriginal": "ThisForm.Parentform.poDataMgr.SqlExecute([Select * From SigMvItn Where EmpDopNums = ']+lcEmpDopNums+['],'crTpmMvItnSubn') ",
+      "tabelas": "SigMvItn",
+      "colunas": "EmpDopNums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVSBN.BtnOficina.Click",
+      "queryOriginal": "=ThisForm.ParentForm.poDataMgr.SqlExecute([Select NEmps From SigCdEmp Where Cemps = ']+&lcCursor..Emps+[' ],[LocalEmp]) lcNEmps = Alltrim(Str(LocalEmp.NEmps))",
+      "tabelas": "SigCdEmp",
+      "colunas": "NEmps,Cemps,Emps+[,lcNEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVSBN.BtnOficina.Click",
+      "queryOriginal": "=ThisForm.ParentForm.poDataMgr.SqlExecute([Select DoppServs From SigCdPam],[LocalParam])",
+      "tabelas": "SigCdPam",
+      "colunas": "DoppServs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvItn", "SigCdEmp", "SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

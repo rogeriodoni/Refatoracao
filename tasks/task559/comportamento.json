@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 4,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fAcessoContas", "FOUND"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVATE",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "RELEASE pcChv, pcEDN, pcItem \nThis.Grade.RecordSource          = []\nThis.Grade.Column2.ControlSource = []\nThis.Grade.Column3.ControlSource = []\nThis.Grade.Column4.ControlSource = []\nUse In localVen\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "lParameters pCnx, pcEscolha\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLOCAL lcGrVen\npublic pcChv, pcEDN\n\npcChv = []\npcEDN = TprMvCab.empdopnums\nlcEmp = TprMvCab.emps\nlcGrVen = TprMvCab.grvends\n\nthisform.pcEscolha = pcEscolha\n\nThis.poDataMgr = pCnx\n\n\nSELECT codvends, SPACE(40) as desVends, nAtends from crSigmvate into cursor LocalVen readwrite\nSELECT localVen\nGO top\n\nSCAN\n\t**** mena - 16/10/2017 - busca nome do vendedor ****\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.cntBotoes",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "ThisForm.Grade.Refresh\nSelect localVen\nGo Top In localVen\nThisForm.Grade.Refresh\n\nSELECT crSigMvAte\nDELETE all for empdopnums = pcEDN\n\nSelect localVen\nDELETE ALL for natends = 0\nGO top\nSCAN\n\tlcIdChave = fUniqueIds()\n\tINSERT into crSigmvAte (codvends, emps, empdopnums, natends, pkchaves) values;\n\t(localven.codvends, TprMvCab.emps, TprMvCab.empdopnums, localven.natends, lcIdChave ) \nENDSCAN\n\nThisForm.Release\n* Fim ************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.Grade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "LOCAL lnReg, lcCodVen\nPRIVATE pcGrVen, pcCdVen, pcDsVen\n\npcGrVen = TprMvCab.grvends\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, pcGrVen, 'C', This.Value, thisform.grade.column2.text1, thisform.grade.column3.text1,.t.)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\treplace codvends with '' in localven\n\t\treplace desvends with '' in localven\n\t\tReturn 0\n\tEndIf\nElse\n\treplace codvends with '' in localven\n\treplace desvends with '' in localven\nEndIf\n\nSELECT loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,FOUND",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVATE.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "LOCAL lnReg, lcCodVen\nPRIVATE pcGrVen, pcCdVen, pcDsVen\n\n*** mena - 16/10/2017 - incluida a busca por nome do vendedor ***\npcGrVen = TprMvCab.grvends\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, pcGrVen, 'D', This.Value, thisform.grade.column2.text1, thisform.grade.column3.text1,.t.)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\treplace codvends with '' in localven\n\t\treplace desvends with '' in localven\n\t\tReturn 0\n\tEndIf\nElse\n\treplace codvends with '' in... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,FOUND",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVATE.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN EMPTY(localven.codvends)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.inserir",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect localVen\nLocate For codvends=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.grade.column2.SetFocus\nreplace localVen.codvends With []\nreplace localVen.desvends With []\nreplace localVen.natends With 0\nThisform.grade.Refresh \nthisform.grade.column2.SetFocus  \nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVATE.excluir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select localVen\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT localVen\nDelete\nThisForm.grade.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVATE.Init",
+      "queryOriginal": "SELECT codvends, SPACE(40) as desVends, nAtends from crSigmvate into cursor LocalVen readwrite",
+      "tabelas": "crSigmvate",
+      "colunas": "codvends,nAtends",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVATE.cntBotoes.Click",
+      "queryOriginal": "\tINSERT into crSigmvAte (codvends, emps, empdopnums, natends, pkchaves) values; \t(localven.codvends, TprMvCab.emps, TprMvCab.empdopnums, localven.natends, lcIdChave )",
+      "tabelas": "crSigmvAte",
+      "colunas": "codvends,emps,empdopnums,natends,pkchaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigmvate"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da: criado `C:\4c\projeto\app\forms\operacionais\FormSigMvSbn.prg` com a estrutura base do form.
+
+**O que foi entregue:**
+- `DEFINE CLASS FormSigMvSbn AS FormBase` com as propriedades visuais pixel-perfect do legado (1000x700, `TitleBar=0`, `ControlBox=.F.`, `Movable=.F.`, modal `WindowType=1`).
+- `Init(par_oFormPai, par_cEmps, par_cDopes, par_nNumes, par_cCursorOrigem)` ÔÇö assinatura equivalente ao `LParameters loPForm, pEmp, pDop, pNum, pCursor` do legado.
+- `InicializarForm()` ÔÇö instancia `SigMvSbnBO`, resolve Emps/Dopes/Numes com fallback para o cursor de origem (replicando `Iif(Type('pEmp')='C', pEmp, &lcCursor..Emps)` via `EVALUATE`), monta o Caption calculado e constr├│i o cabe├ºalho.
+- `ConfigurarCabecalho()` ÔÇö a faixa cinza (`cntSombra` ÔåÆ `cnt_4c_Sombra`), ├║nico container que o legado possui.
+- `Destroy()` ÔÇö libera os cursores do BO e finaliza com `DODEFAULT()`.
+
+**Decis├úo importante:** o legado (`SIGMVSBN.SCX`) ├® um form **FLAT** ÔÇö sem PageFrame, sem Page1/Page2 ÔÇö ent├úo n├úo criei `ConfigurarPageFrame()` nem inventei p├íginas que o original n├úo tem (conforme a li├º├úo j├í registrada sobre o Gate da Fase 3 exigir PageFrame indevidamente).
+
+**Deixado para as pr├│ximas fases** (conforme instru├¡do): grid principal e grid de itens (Fase 4), campos Get_descr/Get_valo/Get_items e imagem FigJpg (Fases 5-6), eventos dos bot├Áes Sair/BtnOficina e carregamento efetivo dos dados (Fases 7-8).
+
+Validado com `vfp9.exe`: compila sem erro, instancia com sucesso (modo teste, sem form pai), o cabe├ºalho aparece com o caption correto, e `Release()` roda limpo.

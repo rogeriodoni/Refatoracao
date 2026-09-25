@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced: 42 WITH/ENDWITH, 8 TRY/ENDTRY, 35 PROCEDURE/ENDPROC, and all 12 TextBox controls (6 from phase 5 + 6 new) are present. Phase 6 is complete.
+
+**Summary of changes to `C:\4c\projeto\app\forms\cadastros\Formsigmvdis.prg`:**
+
+- Added the 6 remaining fields to `ConfigurarPaginaDados()`: `txt_4c_Local` (locals), `txt_4c_EmpDopNum` (empdopnums), `txt_4c_OriDopNum` (oridopnums), `txt_4c_EmpGrupoEstab` (empgruests), `txt_4c_QtdOrigem` (qtdos), `txt_4c_Qtd` (qtds) ÔÇö with labels, positioned below the phase-5 fields, all within the visible page area.
+- Added 5 fully-implemented lookups (BINDEVENT DblClick + KeyPress F4/F5 + LostFocus validation, 3 methods each, per `docs/lookup_implementation.md`) for the FK-style code fields, resolved from the actual legacy code / schema (not guessed):
+  - Produto ÔåÆ `SigCdPro` (cpros/dpros)
+  - Cor ÔåÆ `SigCdCor` (cods/descs)
+  - Tamanho ÔåÆ `SigCdTam` (cods/descs)
+  - Empresa Destino ÔåÆ `SigCdEmp` (cemps/razas ÔÇö per CLAUDE.md rule, not Emps/NComps)
+  - Local ÔåÆ `SigPrLcl` (codigos/descricaos ÔÇö matches the legacy `fwbuscaext('SigPrLcl', ...)` call found in `comportamento.json`)
+- Extended `FormParaBO()`, `BOParaForm()`, and `LimparCampos()` to cover all 12 editable BO properties (previously only 6).
+
+No TODOs/stubs; every lookup method is complete (FormBuscaAuxiliar create ÔåÆ columns ÔåÆ show ÔåÆ selection guard ÔåÆ cursor cleanup ÔåÆ release), matching CLAUDE.md rule #36/#37 on the FormBuscaAuxiliar contract. Next step (Phase 7) would cover the remaining CRUD/save wiring for these fields if not already done.

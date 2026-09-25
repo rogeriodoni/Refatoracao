@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e validada.
+
+## O que estava errado
+
+O `FormSIGMVCTH.prg` j├í estava **correto e completo** ÔÇö o problema era o gate, n├úo o form.
+
+O `SIGMVCTH.SCX` legado ├® um visualizador somente-leitura de hist├│rico de cota├º├Áes com **um ├║nico bot├úo** (`cmdSalva.btnSair`, "Retornar", `Click = ThisForm.Release`). O gate da Fase 7 aceita a aus├¬ncia dos 4 nomes CRUD quando o dump prova que n├úo h├í CRUD, mas exigia em troca `$nHandlers -ge 2`. Com um bot├úo s├│, isso ├® **insatisfaz├¡vel**: s├│ passaria inventando um segundo bot├úo (viola o PILAR 1) ou criando handler vazio (proibido pela regra de completude). Mesma armadilha da Fase 6 com lookup inexistente.
+
+## O que fiz
+
+**`automation/OrquestradorMigracao.ps1`** (backup em `.bak_erro_fase7_umbotao_20260924_052956`) ÔÇö o piso agora sai da contagem de bot├Áes que o dump **prova** existir: objetos `BaseClass: commandbutton` + `ButtonCount` de objetos `commandgroup` (`ButtonCount` de OptionGroup n├úo entra). S├│ baixa para 1 quando a conta d├í **exatamente 1**; **0 mant├®m o piso 2**, porque form REPORT herda os bot├Áes do `frmrelatorio` e o SCX n├úo os declara ÔÇö aus├¬ncia de prova n├úo ├® prova de aus├¬ncia. Medido nos dumps: 18 forms n├úo-CRUD t├¬m 1 bot├úo, 152 t├¬m 0, 95 t├¬m 2+.
+
+Testado contra o c├│digo real extra├¡do do pr├│prio arquivo: alvo passa; REPORT/multi-bot├úo/CRUD inalterados; e os dois casos negativos (1 bot├úo + 0 handlers; 0 bot├Áes + 1 handler) continuam **bloqueando**.
+
+**`automation/test_fase7_sigmvcth.prg`** (novo) ÔÇö prova em runtime, n├úo no papel:
+
+```
+ButtonCount        : 1 (legado: 1)      Buttons(1).Caption : [Retornar]
+bind 1  : evento [CLICK] -> metodo [CMDRETORNARCLICK]
+bind 1  : evento [AFTERROWCOLCHANGE] -> metodo [GRDDADOSAFTERROWCOLCHANGE]
+Click() via evento : disparado sem excecao
+Form apos o Click  : LIBERADO (Release ocorreu - evento chegou ao handler)
+```
+
+Gate final: **`validado = True`**. Form e BO compilam limpos (sem `.ERR`).
+
+## Duas corre├º├Áes no caminho que vale registrar
+
+Meu primeiro harness travou o VFP num di├ílogo modal, e a segunda execu├º├úo rodou o **`.fxp` velho** ÔÇö o `.ERR` ao lado do `.prg` ├® que mostrou a causa (`AEVENTS` com 3 argumentos: *Too many arguments*). Medi a assinatura real: `AEVENTS` tem **2 argumentos** e o nome do evento ├® a **coluna 3** (a 2 ├® objeto). Pior, a vers├úo intermedi├íria deu um **falso positivo**: o `ON ERROR` retoma na linha seguinte, ent├úo a condi├º├úo que estourava ca├¡a dentro do corpo do `IF` e o log declarava `BINDEVENT Click: OK` sem ter lido nada. O resultado acima ├® da vers├úo corrigida, sem nenhum `ERRO NAO TRATADO`.
+
+Salvei as duas li├º├Áes na mem├│ria. N├úo commitei nada ÔÇö me avise se quiser.

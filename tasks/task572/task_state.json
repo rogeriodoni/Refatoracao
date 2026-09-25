@@ -1,0 +1,273 @@
+﻿{
+    "taskId":  "task572",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-25T00:32:02",
+    "atualizadoEm":  "2026-09-25T03:34:22",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-25T00:32:02",
+                                            "fim":  "2026-09-25T00:32:02",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task572\\sigmvits.sct",
+                                            "baseName":  "sigmvits",
+                                            "scxFile":  "C:\\4c\\tasks\\task572\\sigmvits.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-25T00:32:02",
+                                          "fim":  "2026-09-25T00:32:04",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigmvits",
+                                          "txtFile":  "C:\\4c\\tasks\\task572\\sigmvits_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T00:32:04",
+                                              "fim":  "2026-09-25T00:32:05",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task572\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T00:32:07",
+                                              "fim":  "2026-09-25T00:32:07",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task572\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task572\\meta_prompt.md",
+                                              "boClass":  "sigmvitsBO",
+                                              "formClass":  "Formsigmvits",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task572\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T00:32:07",
+                                              "fim":  "2026-09-25T00:32:08",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task572\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-25T00:32:08",
+                                               "fim":  "2026-09-25T00:32:09",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task572\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigmvits_esqueleto.prg",
+                                                                "sigmvitsBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-25T00:32:09",
+                                       "fim":  "2026-09-25T03:07:12",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitsBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  642.26,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvits.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  19938
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-25T03:07:12",
+                                                  "fim":  "2026-09-25T03:08:09",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitsBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvits.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-25T03:08:10",
+                                                 "fim":  "2026-09-25T03:08:11",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-25T03:16:55",
+                                       "fim":  "2026-09-25T03:19:12",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-25T03:19:12",
+                                               "fim":  "2026-09-25T03:29:17",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task572\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-09-25T03:29:20",
+                                        "fim":  "2026-09-25T03:34:22",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T03:34:22",
+                                              "fim":  "2026-09-25T03:34:22",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task572_sigmvits.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-09-25T00:32:04",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-09-25T00:32:04",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task572\\sigmvits_form_codigo_fonte.txt",
+                                              "reducaoPercent":  81.1,
+                                              "tamanhoOriginalKB":  642.26,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task572\\sigmvits_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  121.44
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-25T00:32:05",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-25T00:32:06",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task572\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-25T00:32:06",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-25T00:32:07"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-25T03:08:09",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-25T03:08:10",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigmvits_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvits.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task572\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-25T03:08:11",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-25T03:11:24",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-25T03:11:24",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-25T03:16:38",
+                                          "passes":  2,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DECLARADO\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, DOPES, CITENS, VNITEM, BAIXADO, VALDESCS, LNRET, DESCS, ESTADOS, CUPFIS, LNTENTA, LNLEN, UFS, CODIGO, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, CEMPS, CODIGOS, DESTINOS, LCCNPJ, ICLIS, LCUFO, LCUFD, FKCHAVE, CODCLASFISCAL, GRUPOS, ESTS, CLFISCALS, TPFATS, FORMAS, PNCODST, PDATAIMP, SERIFAB, DATAS, NEMPS, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, EMPDOPNUMS, CDOPES, TIPOS, PRECOPS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, CHKSUBN, NOTAS, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, NDOPES, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, LPRECOS, IFORS, PVENS, ACUMULAS, INFOS, CCUPOMNVS, ALTETIQS, VALUE, CBARS, CODBARRAS, CITEM, EPRECOS, CHKDVAL, QTDS, LNKEY, CHKEDESC, INFORMADO, ESTOQS, OPERS, SITUAS, BARINDIVS, EAN13, BARREFS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, PEANTVALUE, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, NSU, AUTORIZA, TIPOCADS, CNIDTEFS, VALOS, IMPCUPF, HABPENDS, CNIDENTS, CSTATUS, OP_ESCOLHA, C1, QT, CPFS, ENDES, NUMS, BAIRS, CEPS, CIDAS, ESTAS, CGC, SUBNOBRIGS, 0, _TTOP, OBSDESTS, DISPMOVS, BLQDESCS, CGC1, EMPRELEVS, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, UFIBGES, LCP, LCVBP, LCVP, LCTP, CTIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027RECALCULARTOTA\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, DOPES, CITENS, VNITEM, BAIXADO, VALDESCS, LNRET, DESCS, ESTADOS, CUPFIS, LNTENTA, LNLEN, UFS, CODIGO, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, CEMPS, CODIGOS, DESTINOS, LCCNPJ, ICLIS, LCUFO, LCUFD, FKCHAVE, CODCLASFISCAL, GRUPOS, ESTS, CLFISCALS, TPFATS, FORMAS, PNCODST, PDATAIMP, SERIFAB, DATAS, NEMPS, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, EMPDOPNUMS, CDOPES, TIPOS, PRECOPS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, CHKSUBN, NOTAS, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, NDOPES, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, LPRECOS, IFORS, PVENS, ACUMULAS, INFOS, CCUPOMNVS, ALTETIQS, VALUE, CBARS, CODBARRAS, CITEM, EPRECOS, CHKDVAL, QTDS, LNKEY, CHKEDESC, INFORMADO, ESTOQS, OPERS, SITUAS, BARINDIVS, EAN13, BARREFS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, PEANTVALUE, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, NSU, AUTORIZA, TIPOCADS, CNIDTEFS, VALOS, IMPCUPF, HABPENDS, CNIDENTS, CSTATUS, OP_ESCOLHA, C1, QT, CPFS, ENDES, NUMS, BAIRS, CEPS, CIDAS, ESTAS, CGC, SUBNOBRIGS, 0, _TTOP, OBSDESTS, DISPMOVS, BLQDESCS, CGC1, EMPRELEVS, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, UFIBGES, LCP, LCVBP, LCVP, LCTP, CTIPOS; [METODO-INEXISTENTE] Metodo \u0027THIS.HaPagamentoPendente()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.HaFormaPagamentoEmAberto()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.DescontoBloqueadoPorSituacao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ContaBloqueiaDesconto()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.HaSubNivelInformado()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ContarItensLancados()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.HaItemNaoImpresso()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.GravarDocumento()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Pendencia): Top original=0 vs migrado \u0027lbl_4c_Label17\u0027 Top=70 (diff=70px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Pendencia): Left original=0 vs migrado \u0027lbl_4c_Label17\u0027 Left=57 (diff=57px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.CancelaItem): Top original=0 vs migrado \u0027lbl_4c_Label17\u0027 Top=70 (diff=70px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.CancelaItem): Left original=1 vs migrado \u0027lbl_4c_Label17\u0027 Left=57 (diff=56px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITS.CancelaItem): Left original=32 vs migrado \u0027lbl_4c_Label2\u0027 Left=93 (diff=61px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITS.CancelaItem): Top original=58 vs migrado \u0027lbl_4c_Label3\u0027 Top=25 (diff=33px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITS.CancelaItem): Left original=16 vs migrado \u0027lbl_4c_Label3\u0027 Left=85 (diff=69px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGMVITS.CancelaItem): Top original=84 vs migrado \u0027lbl_4c_Label4\u0027 Top=2 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Fpagto): Top original=-1 vs migrado \u0027lbl_4c_Label17\u0027 Top=70 (diff=71px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Fpagto): Left original=13 vs migrado \u0027lbl_4c_Label17\u0027 Left=57 (diff=44px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Mensagem\u0027 (parent: SIGMVITS.Cnt_Mensagem): Top original=2 vs migrado \u0027cnt_4c__Mensagem\u0027 Top=684 (diff=682px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Mensagem\u0027 (parent: SIGMVITS.Cnt_Mensagem): Left original=3 vs migrado \u0027cnt_4c__Mensagem\u0027 Left=97 (diff=94px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027pendencia\u0027 (parent: SIGMVITS.Barra_Botoes): Left original=189 vs migrado \u0027cnt_4c__Pendencia\u0027 Left=403 (diff=214px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027identifica\u0027 (parent: SIGMVITS.Barra_Botoes): Top original=45 vs migrado \u0027cnt_4c__Identifica\u0027 Top=171 (diff=126px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027identifica\u0027 (parent: SIGMVITS.Barra_Botoes): Left original=97 vs migrado \u0027cnt_4c__Identifica\u0027 Left=5 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGMVITS.Barra_Botoes): Left original=449 vs migrado \u0027cnt_4c_CancelaItem\u0027 Left=296 (diff=153px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pagto\u0027 (parent: SIGMVITS.Barra_Botoes): Top original=45 vs migrado \u0027cnt_4c__Fpagto\u0027 Top=175 (diff=130px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pagto\u0027 (parent: SIGMVITS.Barra_Botoes): Left original=189 vs migrado \u0027cnt_4c__Fpagto\u0027 Left=-8 (diff=197px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Identifica): Top original=3 vs migrado \u0027lbl_4c_Label17\u0027 Top=70 (diff=67px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITS.Cnt_Identifica): Left original=0 vs migrado \u0027lbl_4c_Label17\u0027 Left=57 (diff=57px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  30
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-25T03:16:38",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-25T03:16:55",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitsBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvits.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-25T03:29:17",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-25T03:29:20",
+                                             "thresholdPx":  5,
+                                             "unmatched":  44,
+                                             "errors":  44,
+                                             "matched":  167,
+                                             "warnings":  55,
+                                             "reportFile":  "C:\\4c\\tasks\\task572\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

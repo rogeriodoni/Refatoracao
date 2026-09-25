@@ -1,0 +1,460 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 15,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "For", "For Recno", "fAcessoContab", "fAcessoContas", "fChecarInativas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVCOM",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Local lnCal, lnBas, lnRed\n\nlnCal = 0\nlnBas = TmpComiss.Bases\nIf Not Empty(TmpComiss.Impostos)\n\tlnRed = Round(lnBas * TmpComiss.Impostos / 100, 2)\n\tlnBas = lnBas - lnRed\nEndIf\n\nIf Not Empty(TmpComiss.Juros)\n\tlnRed = Round(lnBas * TmpComiss.Juros / 100, 2)\n\tlnBas = lnBas - lnRed\nEndIf\n\nlnCal = Round(lnBas * TmpComiss.Percs / 100, 2)\n\nReturn lnCal\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Thisform.Retorno",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM",
+      "evento": "Init",
+      "linhas": 114,
+      "codigoOriginal": "Lparameters pEdicao, poForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Edicao = pEdicao\nThisForm.Parentform = poForm\n\nWith This.Grade\n\t_Alias = Alltrim( Alias() )\n\n\tThisForm.Areadados = _Alias\n\n\tlcSql = [Select * From SigCcCpe Where Dopes = ']+TprMvCab.Dopes+[']\n\t=Thisform.ParentForm.PodataMgr.Sqlexecute(lcSql,'xCcOpe')\n\tSelect xCcOpe\n\tIndex On Grupos Tag Grupos\n\n\tSelect ( _Alias )\n\tCount to lnTot\n\tIf pEdicao\n\t\tIf Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "LPARAMETERS nColIndex\nlnReg = Recno()\n\nSelect ( ThisForm.Areadados )\nIf CrSigCdOpe.EdComis = 3 And ThisForm.Edicao\n\tSum Comissaos to x For ( Not Empty(Grupos) And Not Empty(Contas) And Not Empty(moedas) And Flags )\n\tThisForm.Container1.Text2.Value = x\n\tLocate For Recno() = lnReg\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For,For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Grupo.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Grupo.Text1",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If !Empty( This.Value ) And This.Value # ThisForm.OldValue\n\t= fAcessoContab(Usuar,'C',This.Value,This)\n\t\n\tIf Not Empty(This.Value) And Seek(This.Value,'xCcOpe','Grupos')\n\t\tSelect ( ThisForm.Areadados )\n\t\tReplace Grupos  With xCcOpe.Grupos,;\n\t\t\t\tGruCads With xCcOpe.GruCads,;\n\t\t\t\tBases   With TprMvCab.Valos,;\n\t\t\t\tCtFils  With xCcOpe.CtFils\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Conta.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Conta.Text1",
+      "evento": "Valid",
+      "linhas": 38,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = .t.\n\nIf This.Value # ThisForm.OldValue And !Empty(Left(This.Value,1))\n\n\tIf Not IsEmpty(Left(crSigCdOpe.MascVens,10))\n\t\t_Mask   = Left(CrSigCdOpe.MascVens,10)\n\t\t_MaxCar = Len(Alltrim(Strtran(_Mask,'/','')))\n\t\tIf Len(Alltrim(this.Value)) >= _MaxCar\n\t\t\t_Mask = \"@L \"+Alltrim(_mask)\n\t\t\tThis.Value = Transform(Val(Substr(This.Value,1,_MaxCar)),_mask)\n\t\t\tThis.Refresh\n\t\tEndif\n\tEndif\n\n\tIf !Empty(GruCads)\n\t\tlcGrupoCad = GruCads\n\t\tlordem = .t.\n\tElse\n\t\tlcGrupoCad = .f.\n\t    lOr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "OldValue And !Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Base.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Base.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !Empty(This.Value) And (TmpComiss.Percs > 0)\n\tReplace Comissaos With ThisForm.Calculos() In TmpComiss\n\tThisForm.Grade.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Comissão.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Moeda.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Moeda.Text1",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loLista\nIf Not Empty(This.Value) And This.Value # ThisForm.OldValue\n\tloLista = CreateObject('fwBuscaExt', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cmoes', This.Value, 'Seleção', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cmoes', '', 'Moe',.t.,'Cmoes')\n\t\tloLista.mAddColuna('Dmoes', '', 'Nome',.t.,'Dmoes')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Cmoes\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf Lastkey()=13\n\tSelect TmpComis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Moeda.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Grade.Grupo.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Linha.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn (ThisForm.Edicao)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Linha.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value) And This.Value # Thisform.OldValue\n\tloLista = CreateObject('fwBuscaExt', ThisForm.ParentForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Linhas',.t.,'Linhas')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição',.t.,'Descs')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Linhas\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Percentual.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Edicao)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.Percentual.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !Empty(This.Value) And (TmpComiss.Bases > 0)\n\tReplace Comissaos With ThisForm.Calculos() In TmpComiss\n\tThisForm.Grade.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.descricao.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Parent.conta.text1.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Grade.descricao.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If !Empty(this.Value)\n\tlcGrupoCad = This.Parent.Parent.grupo.text1.Value\n    lordem  = .f.\n\tlcGrupo = This.Parent.Parent.grupo.text1.Value\n\tllParte   = .f. && Incidência\n\tlcfilCarG = [ ]\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Parent.conta.text1, This, lOrdem, lcGrupoCad,.f.,llParte,.f., (CtFils = 1) )\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThis.Parent.Parent.conta.text1.Value = ' '\n\t\tReturn 0\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Container1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Container1.Text2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Cancela",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Retorno = .f.\nThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.OK",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If ThisForm.Edicao\n\tSelect TmpComiss\n\tIf CrSigCdOpe.cComis = 1 Or ( CrSigCdOpe.EdComis = 3 And Not Empty(CrSigCdOpe.DopCs) )\n\t\tDelete For ( Empty(Grupos) Or  Empty(Contas) Or Empty(moedas) Or Empty(Comissaos)) And Flags\n\tElse\n\t\tIf CrSigCdOpe.EdComis = 3 And Empty(CrSigCdOpe.Dopcs)\n\t\t\tDelete For ( Empty(Grupos) Or  Empty(Contas) ) And Flags\n\t\tEndIf\n\tEndIf\n\tIf CrSigCdOpe.EdComis = 3 And Not Empty(CrSigCdOpe.DopCs)\n\t\tIf ThisForm.Container1.Text1.Value <> ThisForm.Container1.Text2.Value\n\t\t\tMessageBo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.cmdExcluir",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Select TmpComiss\nIf Not Eof()\n\tDelete\n\tSkip\n\tSkip - 1\nEndIf\nCount to nRegistros\nIf nRegistros = 0\n\tAppend Blank\n\tReplace Bases With TprMvCab.Valos,;\n\t\t\tFlags With .t.\nEndIf\nGo Top\nThisform.Grade.Refresh\nThisForm.Grade.Grupo.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOM.Botao1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVCOM.Init",
+      "queryOriginal": "\tlcSql = [Select * From SigCcCpe Where Dopes = ']+TprMvCab.Dopes+['] \t=Thisform.ParentForm.PodataMgr.Sqlexecute(lcSql,'xCcOpe')",
+      "tabelas": "SigCcCpe",
+      "colunas": "Dopes,Dopes+[],SqlexecutelcSql,xCcOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCcCpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

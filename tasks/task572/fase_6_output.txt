@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 conclu├¡da. Resumo do que foi adicionado ao `Formsigmvits.prg`:
+
+**Campos restantes (segunda metade):**
+- `cnt_4c__Fpagto`: Desconto/Acr├®scimo, bloco Observa├º├úo (Get_OBS/GetObs/SayObs transcritos fielmente, inclusive ocultos), Pr├│ximo, os 5 totalizadores (Total/Pagamentos/A Pagar/Saldo Final/Desconto Promocional), `cnt_forma` (forma de pagamento/parcelas/valor/vencimento), e os pain├®is flutuantes ocultos `Cnt_ChequepreTef` e `cntnsu`.
+- `cnt_4c__Identifica`: os 4 blocos id├¬nticos Destino/Respons├ível/Vendedor/Origem (f├íbrica `MontarBlocoIdentificacao`), Tab.Desconto/Lista de Pre├ºos, CodOperacao (Documento/Pedido Cliente) e o t├¡tulo do container.
+
+**Lookups completos (nenhum stub/TODO)**, todos via `FormBuscaAuxiliar` seguindo o contrato can├┤nico (`this_lAchouRegistro`/`this_lSelecionou`, `USE IN` + `Release()`), com tabela/coluna conferidas contra `docs/schema.sql` (n├úo chutadas):
+- Forma de Pagamento ÔåÆ `SigOpFp` (fpags/descrs)
+- Adquirente ÔåÆ `SigCdCad` filtrado por `tipocads='ADQUIRENTE'` (busca por nome, igual ao legado)
+- Tabela de Desconto ÔåÆ `SigOpTdz` (codigos/descrs)
+- Lista de Pre├ºos ÔåÆ `SigCdLpc` (lprecos ÔÇö tabela single-column, sem coluna de descri├º├úo separada)
+- Grupo de Contas ÔåÆ `SigCdGrp` (cgrus/dgrus)
+- Conta ÔåÆ `SigCdCli` por Iclis, preenchendo tamb├®m o Nome (Rclis)
+- Conta por CPF/CNPJ ÔåÆ `SigCdCli` por Cpfs, preenchendo Conta+Nome
+
+Cada handler `KeyPress` ├® `PUBLIC` (exigido por `BINDEVENT`) e dispara em Enter/Tab/F4, delegando para o m├®todo `AbrirLookupXxx` correspondente. A estrutura do arquivo foi validada (PROCEDURE/ENDPROC, WITH/ENDWITH, IF/ENDIF todos balanceados).

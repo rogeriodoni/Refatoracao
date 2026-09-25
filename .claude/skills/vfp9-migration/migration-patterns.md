@@ -12826,3 +12826,231 @@ A raiz eh a mesma da secao **213** (controle fora da area do pai): o **PILAR 3**
 RENOMEAR os objetos no migrado, entao nao ha como casar controle migrado com controle
 legado por nome; sobra casar por geometria, e com centenas de candidatos sempre existe um
 sosia. Script descartado, nao commitado. CLAUDE.md: regra **#39**.
+
+## 226. Quem DESABILITA botao tem de REABILITAR no funil de volta (Erro176 2026-09-24)
+
+`AjustarBotoesPorModo` desabilita os 5 botoes CRUD da pagina Lista
+(Incluir/Visualizar/Alterar/Excluir/Buscar) quando o modo sai de `"LISTA"` — e o
+migrador so o chama ao **ENTRAR** em edicao:
+
+```foxpro
+PROCEDURE BtnIncluirClick()
+    THIS.this_cModoAtual = "INCLUIR"
+    THIS.HabilitarCampos(.T.)
+    THIS.AjustarBotoesPorModo()      && desabilita os 5 da Lista
+    THIS.AlternarPagina(2)
+```
+
+O caminho de **VOLTA** — `BtnSalvarClick` -> `AlternarPagina(1)` e `BtnCancelarClick` —
+troca a pagina e recarrega a lista, e **nunca reabilita**. O usuario grava, volta para a
+Lista e encontra os cinco botoes cinza, so o Encerrar vivo: a tela fica inutilizavel ate
+ser fechada e reaberta.
+
+Sintoma reportado: *"ao realizar a gravacao os botoes ficam desabilitados, isso acontece
+tanto em incluir como em alterar"*.
+
+**Nao estoura, nao entra em log, nao quebra compilacao.** Nao eh erro de codigo: eh
+ESTADO que ninguem restaura. Por isso atravessa compilacao, ValidarUIFidelity e todos os
+gates. E como o sintoma eh igual em Incluir e em Alterar, o diagnostico tende a ir para o
+BO/gravacao — que esta certo; o registro GRAVA.
+
+### O conserto mora no FUNIL, e tem DUAS metades
+
+```foxpro
+PROCEDURE AlternarPagina(par_nPagina)
+    THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+    IF par_nPagina = 1
+        THIS.this_cModoAtual = "LISTA"     && (a) normaliza o modo AQUI
+        THIS.CarregarLista()
+    ENDIF
+    THIS.AjustarBotoesPorModo()            && (b) reabilita
+```
+
+`AlternarPagina` ja eh o funil de TODO caminho de volta (Salvar, Cancelar, Confirmar,
+Exp/ImpXML), por isso uma linha ali cobre o que 3-4 handlers cobririam pela metade.
+
+**A metade (a) nao eh opcional.** Medido no VFP9 em 2026-09-24, instanciando cada form e
+lendo `.Enabled` depois de `this_cModoAtual = "INCLUIR"` + `AlternarPagina(1)`:
+
+| form | so com (b) | com (a)+(b) |
+|---|---|---|
+| Formgpd, FormCAD, FormCNQ, FormLin, FormOCO, FormProduto, FormRPT, FormOrc, FormSigPrCtr | `.T.` | `.T.` |
+| **Formemp, Formsigpdmp7, FormSRV, FormDpi** | **`.F.`** | `.T.` |
+
+Nesses quatro o `AlternarPagina` nao repoe o modo, entao a reabilitacao dependia de CADA
+caller lembrar de trocar antes de chamar. No `FormSET` eh pior: o `BtnSalvarClick` nao
+troca o modo em caminho nenhum.
+
+Repor o modo dentro do proprio `AlternarPagina` eh seguro — conferido nos 15 forms:
+**todo** call site de `AlternarPagina(1)` do projeto eh caminho de volta
+(`BtnSalvarClick`, `BtnCancelarClick`, `BtnConfirmarClick`, `BtnExpXMLClick`,
+`BtnImpXMLClick`). Nenhum quer preservar modo diferente de LISTA.
+
+### Antes de corrigir em massa: FILTRAR pelo lado direito da atribuicao
+
+Grep por `cmd_4c_Incluir.Enabled` acha **55** forms. So **15** tem o defeito. A triagem
+que separa (e que evita o WARNING massivo):
+
+| o que o `AjustarBotoesPorModo` faz | diagnostico |
+|---|---|
+| `= .T.` literal | **nao** eh defeito — o metodo so LIGA botao |
+| metodo definido e **nunca chamado** | **nao** eh defeito em runtime — os botoes nunca chegam a ser desligados |
+| ja chamado em `AlternarPagina` / `BtnSalvarClick` / `CarregarLista` | ja correto (`Formcfi`, `Formcnl`, `FormFNF`, `FormFte`, `FormOcc`, `FormICM`, `FormTop`, `FormTot`) |
+| `= loc_lLista` / `= !loc_lEdicao` / `= (modo = "LISTA")` **e** chamado so nos `Btn*Click` de entrada | **DEFEITO** |
+
+### O detector precisa das TRES guardas - medido
+
+| criterio | acusa |
+|---|---|
+| "desabilita algum botao CRUD com RHS != `.T.`" + `AlternarPagina` nao chama | **43 forms** |
+| + RHS tem de citar `this_cModoAtual` (ou local derivada dela) | descarta 7 - `loc_lTemRegistro` (de RECCOUNT) e `!THIS.InibeAlterar` (permissao) nao sao modo |
+| + tem de ser chamado em `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick` | descarta os que chamam de `InicializarForm`/`LimparCampos`/`BOParaForm`/`BtnBuscarClick` - ali o estado se refaz sozinho |
+| + nao pode ja chamar em `BtnSalvarClick`/`BtnConfirmarClick`/`CarregarLista` | descarta os ja corretos |
+| **resultado** | **15 forms - exatamente os do sweep** |
+
+Metodo DEFINIDO e NUNCA CHAMADO tambem nao eh defeito: os botoes nunca chegam a ser
+desligados, e injetar a chamada faria o metodo passar a RODAR - mudanca de comportamento
+em form que nao tem bug nenhum.
+
+Ha ainda o meio-termo: forms com a chamada no `BtnCancelarClick` mas **nao** no de
+gravacao (`FormDpi`, `FormOrc`, `FormSET`, `FormSigPrCtr`) — quebram so na gravacao, que
+eh exatamente o que o testador reportou.
+
+Sweep 2026-09-24, 15 forms: Formgpd, FormCAD, FormCNQ, Formemp, FormFti, FormLin,
+FormOCO, FormProduto, FormRPT, Formsigpdmp7, FormSRV, FormSET, FormOrc, FormSigPrCtr,
+FormDpi.
+
+### Achado vizinho: `FormSet` eh BASE CLASS do VFP9 — o form nunca abre
+
+Ao testar o `FormSET` o harness devolveu `Property THIS_CMODOATUAL is not found` num form
+que **declara** essa property na linha 25. Medido:
+
+```
+CREATEOBJECT("FormSet")  sem SET PROCEDURE nenhum
+  -> VARTYPE=O  BaseClass=[Formset]  Class=[Formset]  FormCount=0
+```
+
+`formset` (container de forms) eh **base class nativa do VFP9**, e base class vence
+classe de `SET PROCEDURE`. O `CREATEOBJECT("FormSET")` do `menu.prg` devolve o container
+nativo VAZIO — sem nenhuma property/metodo do migrado — e o `Show()` seguinte nao abre
+nada. Nao ha erro: o menu simplesmente "nao faz nada".
+
+Ao nomear a classe de um form migrado, **nunca** usar nome de base class do VFP9: `form`,
+`formset`, `page`, `pageframe`, `grid`, `column`, `header`, `container`, `custom`,
+`control`, `toolbar`, `timer`, `shape`, `line`, `image`, `label`, `textbox`, `editbox`,
+`combobox`, `listbox`, `spinner`, `checkbox`, `optiongroup`, `optionbutton`,
+`commandbutton`, `commandgroup`, `separator`, `cursor`, `relation`, `dataenvironment`,
+`projecthook`, `hyperlink`. Varredura no projeto: `FormSET` era a UNICA colisao, e foi
+RENOMEADA para `FormSetor` em 2026-09-24 - a classe, o arquivo (`FormSetor.prg`), o
+`CREATEOBJECT` do `menu.prg` e o `FormSetor_mapeamento.json` (o `ValidarUIFidelity` monta o
+nome do JSON a partir do nome da CLASSE). Conferido depois da troca: `BaseClass=[Form]`
+e `Caption=[Cadastro de Setores]` - antes vinha `BaseClass=[Formset]` e nenhuma property.
+Para a proxima migracao de SIGCDSET nao regerar o nome ruim, o par foi fixado em
+`automation/class_mapping.json`.
+
+CorretorAutomatico: pattern **#210**. CLAUDE.md: regra **#40**.
+
+## 227. `Column.ControlSource` de cursor inexistente derruba o `Init` (Erro176 2026-09-24)
+
+`ConfigurarPaginaLista` roda **antes** de `CarregarLista`, quando o cursor da grade ainda
+nao existe. Atribuir o bind ali estoura:
+
+```foxpro
+* ConfigurarPaginaLista - chamado por ConfigurarPageFrame, ANTES de CarregarLista
+WITH loc_oPagina.grd_4c_Lista.Column1
+    .ControlSource = "cursor_4c_Dados.cods"    && Alias 'CURSOR_4C_DADOS' is not found
+    .Width         = 50
+ENDWITH
+```
+
+O erro cai **dentro do TRY** do `InicializarForm`, que devolve `.F.`; `CREATEOBJECT`
+devolve `.F.`, o `IF VARTYPE(loForm) = "O"` do `menu.prg` nao entra e o `Show()` nunca
+acontece. O usuario clica no menu e **nada abre** — sem dialogo de erro, porque o
+`MsgErro` do CATCH fica suprimido em modo teste e, em producao, aparece uma unica vez e
+some. Foi assim que o "Cadastro de Feitios" (`FormFti`) ficou inacessivel.
+
+**O bind canonico eh todo no MESMO lugar** (`FormCor.CarregarLista`), com o cursor ja
+populado e nesta ordem:
+
+```foxpro
+loc_oGrid.ColumnCount  = 2
+loc_oGrid.RecordSource = "cursor_4c_Dados"          && 1) fonte
+loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cods"   && 2) bind
+loc_oGrid.Column1.Width = 50                        && 3) Width DEPOIS do RecordSource
+loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"   && 4) caption idem
+```
+
+Em `ConfigurarPaginaLista` ficam so as propriedades que **nao dependem de dado**:
+`Movable`, `Resizable`, fonte, cores, `ScrollBars`, `ReadOnly`.
+
+### O defeito gemeo, silencioso: a Width na ordem errada
+
+`RecordSource` **recalcula as larguras para o default 90**. Largura definida antes dele —
+ou la em `ConfigurarPaginaLista` — eh apagada, e a grade abre com colunas fora do tamanho
+do SCX. Como ninguem reporta "coluna com 90 pixels", isso sobrevive indefinidamente.
+
+**Todo site que re-binda precisa repetir o bloco inteiro.** No `FormFti` eram DOIS:
+`CarregarLista` e `BtnBuscarClick` — o segundo tambem refaz `RecordSource`, entao tambem
+perdia as larguras. Conferido apos o conserto, instanciando o form:
+
+```
+grade: RecordSource=[cursor_4c_Dados] Col1.ControlSource=[cursor_4c_Dados.cods] W1=50 W2=270
+```
+
+**Diagnostico**: form que nao abre e nao mostra erro -> instanciar num harness e olhar o
+retorno de `CREATEOBJECT`. `VARTYPE` devolvendo `"L"` (e nao `"O"`) prova que o `Init`
+devolveu `.F.`, e o `MsgErro` do CATCH do `InicializarForm` diz a linha exata. CLAUDE.md:
+regra **#41**.
+
+## 228. Comentario que EXPLICA "nao implementado" e' um falso positivo do validador de completude, nao um TODO (Erro178 2026-09-25)
+
+`05d_validarCompletude` (`OrquestradorMigracao.ps1`) varre cada `.prg` gerado com o regex
+
+```
+(?im)\*.*?(implementar\s+(depois|later|futur)|pr[oó]xima\s+fase|pendente|nao\s+implement)
+```
+
+procurando TODO/stub deixado para tras. O regex casa **qualquer** linha de comentario `*`
+que contenha a substring "nao implement" — nao diferencia um TODO real de um comentario
+que so' *documenta* por que um metodo continua sem override.
+
+`SIGMVTI2BO.prg` (BO de `FormSIGMVTI2`, form de CONSULTA/visualizador — o legado
+`SIGMVTIT`/`SIGMVTI2.SCX` so' faz `SELECT`, sem `INSERT`/`UPDATE`/`DELETE` em lugar nenhum
+do fonte original) documentava, corretamente, por que `Inserir()`/`Atualizar()`/
+`ExecutarExclusao()` nao sao sobrescritos:
+
+```foxpro
+* por isso Inserir()/Atualizar()/ExecutarExclusao() nao sao sobrescritos
+* (a base ja retorna .F. com mensagem "nao implementado", o que eh o
+* comportamento correto para um BO somente-leitura).
+```
+
+A frase entre aspas — que so' descrevia a mensagem que `BusinessBase` ja devolve por
+heranca — casou com `nao\s+implement` e a Etapa 05d rejeitou o arquivo com "Procedures
+vazias/TODOs encontrados", mesmo o arquivo **nao tendo nenhuma** procedure vazia: as tres
+operacoes simplesmente nao sao sobrescritas, porque o comportamento herdado ja e' o
+correto para um BO somente-leitura.
+
+**NAO adicionar overrides falsos de `Inserir`/`Atualizar`/`ExecutarExclusao`** so' para
+"preencher" o BO e casar com o validador — isso inventaria funcionalidade que o legado
+nao tem (form de consulta nunca grava), violando tanto o PILAR 1 quanto a regra "NUNCA
+inventar". **O conserto e' reescrever o comentario** para nao conter a frase-gatilho, sem
+tocar em nenhuma logica:
+
+```foxpro
+* por isso Inserir()/Atualizar()/ExecutarExclusao() nao sao sobrescritos
+* aqui: o comportamento padrao herdado de BusinessBase (recusar a
+* operacao e reportar via ExibirFalha) ja eh o correto para um BO
+* somente-leitura.
+```
+
+Mesma familia de falso positivo do `feedback_harness_de_auditoria_mede_errado.md` (memoria
+do usuario) — a ferramenta de auditoria, nao o codigo gerado, e' a fonte do "defeito".
+Antes de preencher qualquer procedure em resposta a um erro de `05d_validarCompletude`,
+conferir se o arquivo tem mesmo uma procedure vazia/TODO real, ou se o "indicador de
+pendencia" citado no erro e' so' texto de comentario explicando uma decisao de design
+legitima (BO somente-leitura, metodo intencionalmente nao sobrescrito por heranca ja
+cobrir o caso). Regra de wording adicionada ao prompt de geracao
+(`OrquestradorMigracao.ps1`, secao "REGRA OBRIGATORIA DE COMPLETUDE" + blocos "Regras VFP
+Criticas"): nunca escrever "nao implementado"/"nao implementada" dentro de comentario `*`
+ao documentar essa decisao.

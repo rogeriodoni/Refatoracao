@@ -1,0 +1,209 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvExp.SCX
+* Data/Hora: 24/09/2026 17:51:30
+* Total de registros: 5
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVEXP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Processo
+  Parent: SIGMVEXP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -12
+  Left = -1
+  Width = 1016
+  Height = 622
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVEXP
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 147
+  Width = 337
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (Prompt())
+  ControlBox = .F.
+  Movable = .F.
+  TitleBar = 0
+  AlwaysOnBottom = .T.
+  Themes = .F.
+  pcaixa = .F.
+  grupooper = .F.
+  pmacro = .F.
+  Name = "SIGMVEXP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVEXP.Processo
+------------------------------------------------------------
+  Top = 34
+  Left = 48
+  Height = 73
+  Width = 241
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  Caption = "Aguarde Processando Dados"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Processo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 10, 7, 16, 13, 38, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVEXP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr6.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pDopes, pTipos, pNumes, pEmps, pConsulta, pCaixa, pMacro
+
+ThisForm.poDataMgr6 = CreateObject('fSqlConector', 'SigMvExp')
+
+ThisForm.Erro = .f.
+
+ThisForm.pCaixa = Iif(Type('pCaixa')=[N],pCaixa,0)
+ThisForm.GrupoOper = []
+ThisForm.pMacro = pMacro
+
+* Richard em 06/08/2014 - Alterando Caption Conforme Confguração da Movimentação
+lcMnu = fRetDopMenu([], pDopes, ThisForm.poDataMgr6)
+If Not Empty(lcMnu)
+	ThisForm.pDope = Alltrim(lcMnu)
+Else
+	ThisForm.pDope = pDopes
+EndIf
+
+If (InList(pTipos,'C','A'))
+	ThisForm.pNume = pNumes
+	ThisForm.pEmp  = pEmps
+EndIf
+	
+ThisForm.pTipo = pTipos
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If Not ThisForm.Erro
+	ThisForm.Processo.Click
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVEXP.Processo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Case 
+	Case (ThisForm.pTipo = 'E') And Not WExist('SigMvCab')
+		Do Form SigMvCab With Padr(ThisForm.pDope,20), ThisForm, .F., .F., .F., .F., .f., .f., .f., .f., .f., Iif(ThisForm.pMacro,.F.,Padr(ThisForm.pDope,20))
+
+	Case (ThisForm.pTipo = 'C') And Not WExist('SigMvCab')
+		Do Form SigMvCab With Padr(ThisForm.pDope,20), ThisForm.pNume, ThisForm.pEmp, .t., ThisForm.pCaixa, ThisForm
+	
+	Case (ThisForm.pTipo = 'A') And Not WExist('SigMvCab')
+		Do Form SigMvCab With Padr(ThisForm.pDope,20), ThisForm.pNume, ThisForm.pEmp, .F., ThisForm.pCaixa, ThisForm, .f., .f., .f., .f., .t.
+		
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVEXP
+RESERVED3 (ClassInfo): erro
+pdope
+pemp
+pnume
+podatamgr6
+ptipo
+pcaixa
+grupooper
+pmacro
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

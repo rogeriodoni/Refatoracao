@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6/8 is complete. Summary of changes to `Formsigmvcab.prg`:
+
+**Remaining fields (Page2, parte 2):**
+- Linha 6: Tabela de Desconto (`txt_4c_Tabds`) / Lista de Pre├ºos (`txt_4c_Lprecos`)
+- Linha 7: Job (`txt_4c_Jobs`) / Forma de Publicidade (`txt_4c_Fpubls`)
+- Linha 8: Valor (`txt_4c_Valos`)
+- Linha 9: Observa├º├úo (`txt_4c_Obses`, EditBox)
+
+**Lookups completos (F4/DblClick), sem stubs:**
+- `GrupoOs`/`GrupoDs` ÔåÆ `SigCdGcr` (Codigos/Descrs)
+- `ContaOs`/`ContaDs`/`Vends` ÔåÆ `SigCdCli` (Iclis/Rclis)
+- Implementados via helper ├║nico `AbrirBuscaGrupoConta()` (evita duplica├º├úo entre os 5 campos), cada um com par KeyPress/DblClick p├║blico ligado por `BINDEVENT`.
+
+**Bot├Áes de a├º├úo (`cnt_4c_BotoesAcao`):** `cmd_4c_Confirmar` e `cmd_4c_Cancelar`, com `BtnSalvarClick()`/`BtnCancelarClick()`.
+
+**Data binding:** `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()` ÔÇö agora conectados a `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick` (que antes n├úo populavam nem limpavam os campos ÔÇö bug corrigido nesta fase).
+
+Verifiquei: PROCEDURE/ENDPROC (40/40), WITH/ENDWITH (50/50), TRY/ENDTRY (6/6) balanceados; nenhum `RETURN` dentro de `TRY`; todas as propriedades do BO referenciadas em FormParaBO/BOParaForm existem no `sigmvcabBO.prg`; `MsgInfo`, `this_lErroExibido`, `NovoRegistro`/`EditarRegistro`/`Salvar`/`Excluir` confirmados no `BusinessBase`.

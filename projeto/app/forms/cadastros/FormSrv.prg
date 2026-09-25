@@ -2683,8 +2683,15 @@ DEFINE CLASS FormSRV AS FormBase
             IF VARTYPE(par_nPagina) = "N" AND par_nPagina >= 1 AND par_nPagina <= 2
                 THIS.pgf_4c_Paginas.ActivePage = par_nPagina
                 IF par_nPagina = 1
+                    *-- Erro176: normaliza o modo aqui (padrao canonico) para nao
+                    *-- depender de cada caller lembrar de faze-lo antes de chamar
+                    THIS.this_cModoAtual = "LISTA"
                     THIS.CarregarLista()
                 ENDIF
+
+                *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+                THIS.AjustarBotoesPorModo()
+
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loException

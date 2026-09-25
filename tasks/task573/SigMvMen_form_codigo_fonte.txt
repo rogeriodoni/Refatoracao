@@ -1,0 +1,316 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvMen.SCX
+* Data/Hora: 25/09/2026 03:34:23
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDMEN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDMEN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDMEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDMEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPDMEN
+  Class: shape
+  BaseClass: shape
+
+Objeto: ok
+  Parent: SIGPDMEN
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGPDMEN
+  Class: container
+  BaseClass: container
+
+Objeto: getMemo
+  Parent: SIGPDMEN.Container1
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Label2
+  Parent: SIGPDMEN
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 269
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Mensagens"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGPDMEN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 691
+  Height = 65
+  Width = 65
+  BackStyle = 0
+  BorderStyle = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.ok
+------------------------------------------------------------
+  Top = 2
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "OK"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Container1
+------------------------------------------------------------
+  Top = 98
+  Left = 49
+  Width = 554
+  Height = 150
+  SpecialEffect = 1
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Container1.getMemo
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 145
+  Left = 2
+  ReadOnly = .T.
+  ScrollBars = 0
+  Top = 2
+  Visible = .T.
+  Width = 551
+  BackColor = 212,208,200
+  Name = "getMemo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "[ Texto ]"
+  Height = 16
+  Left = 297
+  Top = 82
+  Width = 55
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDMEN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pDopes
+
+Local llMemo 
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+=Thisform.PodataMgr.Cursorquery('SigOpCdd','CrSigOpCdd','Dopes',pDopes)
+
+ThisForm.Caption = 'Mensagem da Movimentação: '+pDopes
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Container1.GetMemo.Value = Alltrim(Nvl(CrSigOpCdI.Mensagem,[]))
+ThisForm.Ok.SetFocus 
+ThisForm.Container1.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMEN.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Lastkey() # 13
+	ThisForm.Release
+Else
+	MessageBox('Click No Botao Ok Para Sair',0+64,'')
+	Clear Typeahead
+	Keyboard Chr(27)
+Endif
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDMEN
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

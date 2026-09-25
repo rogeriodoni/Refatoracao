@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormSigMvExp.prg` (365 linhas, 19 KB) est├í completo e validado.
+
+## O que aconteceu
+
+A reprova├º├úo anterior **n├úo era do form** ÔÇö era do gate. O ramo DESPACHANTE do `case 8` j├í havia sido escrito em `OrquestradorMigracao.ps1` ├ás **18:56:47**, mas o `RunLoop.ps1` subiu ├ás **17:51:28** e o PowerShell parseia o script inteiro na invoca├º├úo: a valida├º├úo das 19:29 e 19:37 rodou com a c├│pia velha em mem├│ria. ├ë exatamente a armadilha j├í registrada na mem├│ria do projeto.
+
+Medi o gate atual contra os arquivos reais em vez de confiar no veredito do pipeline:
+
+```
+temLista=False  temCampos=False  semCrud=True  nBotoes=1
+AddObject cmd_4c_: True   PROCEDURE Btn*Click: True
+>>> FASE 8 VALIDADO = True      >>> COMPLETUDE OK = True
+```
+
+## O que entreguei de fato
+
+O form j├í tinha `Init`/`Activate`/`BtnProcessoClick`, mas o dump legado tem **5** m├®todos ÔÇö `Load` e `Release` tinham sido descartados sem registro. Completei a consolida├º├úo:
+
+- **Se├º├úo "DISPOSI├ç├âO DOS 5 M├ëTODOS DO SCX LEGADO"** no cabe├ºalho, com a tabela legadoÔåÆmigrado e a justificativa dos dois n├úo-ports: `Load` (`=fConfigGeral()` ÔÇö o wrapper em `utils\` ├® NO-OP e seu pr├│prio cabe├ºalho pro├¡be cham├í-lo de c├│digo nosso) e `Release` (`poDataMgr6` era conex├úo privada do form; a nova arquitetura usa `gnConnHandle` global, que n├úo pode ser liberado ao fechar uma tela ÔÇö e o `DoDefault` j├í vem por heran├ºa via `FormBase.Destroy`).
+- **Removida** a redeclara├º├úo morta de `this_cTituloForm` (j├í existe em `FormBase`, mesmo default).
+
+Verificado no VFP9 real ÔÇö compila e instancia nas tr├¬s formas de chamada (7 args, 1 arg objeto, 0 args), com geometria batendo o dump (337x147, bot├úo 48/34/241/73). Artefatos tempor├írios e `.fxp` removidos. Zero bytes >127.
+
+## Dois pontos para voc├¬ decidir
+
+**1. O loop em execu├º├úo ainda usa o orquestrador velho.** O RunLoop (PID 17088) continua vivo desde 17:51. Se ele revalidar a Fase 8, vai reprovar de novo com o gate de 17:51, apesar do form estar correto. **Precisa ser relan├ºado** para a corre├º├úo valer.
+
+**2. Defeito fora do escopo, em `FormSigPrCtr.prg` (linhas 2374 e 2387).** Esse form chama `DO FORM FormSigMvExp WITH ...` ÔÇö sintaxe de SCX. Medi no VFP9:
+
+```
+CREATEOBJECT -> OK, VARTYPE=O
+DO FORM      -> FALHOU: File 'c:\4c\...\formsigmvexp.scx' does not exist.
+```
+
+Os dois call sites est├úo quebrados em runtime. N├úo mexi porque ├® outro form/outra task e alter├í-lo poderia afetar os gates dele ÔÇö mas ├® o contrato de chamada justamente do form que acabei de finalizar, ent├úo vale corrigir (trocar por `CREATEOBJECT` + `Show()` fora do TRY). Me avise se quiser que eu fa├ºa.

@@ -2940,7 +2940,7 @@ ON SELECTION BAR N OF popXxx DO Abrir${formClass}
 - [ ] **Btn*Click**: Metodos PUBLIC (NAO PROTECTED) para funcionar com BINDEVENT
 - [ ] **BtnIncluirClick**: Chamar `NovoRegistro()` E setar `this_cModoAtual = "INCLUIR"` ANTES de `HabilitarCampos()`
 - [ ] **BtnAlterarClick**: Chamar `EditarRegistro()` APOS `CarregarPorCodigo()`
-- [ ] **BtnBuscarClick**: FormBuscaAuxiliar com `mAddColuna()`, `Show(1)`, `this_lSelecionou`, cursor (NAO tem ObterCodigoSelecionado)
+- [ ] **BtnBuscarClick**: SEGUIR O LEGADO. Se o dump tem `PROCEDURE msv_procurar` (ou campos com `plProcurar = .T.`), o Buscar eh BUSCA POR EXEMPLO e NAO abre picker: poe o form em modo "BUSCAR", limpa a ficha, habilita SO os campos `plProcurar`, vai para a pagina de Dados, e quem executa a consulta eh o Confirmar (transcrever o `msv_procurar`, inclusive o `Do Case` e a ordem dos campos). Erro167/Erro177: esta linha ja mandou inventar picker em 73 forms cujo legado tem `msv_procurar`. `FormBuscaAuxiliar` eh legitimo para LOOKUP DE CAMPO (F4 num campo de codigo) - ali sim: `mAddColuna()`, `this_lAchouRegistro` ANTES do `Show()`, `this_lSelecionou` antes de atribuir o valor, e o 1o argumento do Init eh `gnConnHandle` (NAO tem ObterCodigoSelecionado)
 - [ ] **Page.Picture**: Usar `gc_4c_CaminhoIcones + "arquivo.jpg"` (NAO caminho relativo)
 - [ ] **CarregarPorCodigo**: Resetar `THIS.this_lNovoRegistro = .F.` apos carregar registro
 - [ ] **BtnCancelarClick**: chama THIS.CarregarLista() ao voltar para lista
@@ -3218,6 +3218,7 @@ metodos e eventos do codigo original. REGRAS OBRIGATORIAS:
 - UI Fidelity PILAR 1: Width/Height/Top/Left/BackColor/ForeColor/FontName EXATOS do original
 - PILAR 2: Usar nomes de colunas EXATOS do banco (ver schema.sql)
 - **MESSAGEBOX PROIBIDO**: NUNCA usar MESSAGEBOX() direto. Usar funcoes de messages.prg: MsgInfo() para informativo (icone 64), MsgAviso() para aviso (icone 48), MsgErro() para erro (icone 16), MsgConfirma() para confirmacao Sim/Nao. Essas funcoes suprimem dialogs em modo de teste automatizado.
+- **Comentario de design decision NUNCA leva a frase "nao implementado"**: ao documentar por que um BO somente-leitura (form de CONSULTA sem INSERT/UPDATE/DELETE no legado) nao sobrescreve Inserir()/Atualizar()/ExecutarExclusao(), NAO escrever "nao implementado"/"nao implementada" dentro de linha de comentario `*` - o validador 05d_validarCompletude tem regex que casa "nao implement" em QUALQUER comentario (nao so em TODO real) e rejeita a fase por falso positivo. Preferir frase como "o comportamento padrao herdado de BusinessBase ja eh o correto".
 - **Label de dados: NUNCA inventar ``.Width`` + ``.Alignment = 1``**: a classe ``say`` do Framework legado eh ``AutoSize = .T.`` / ``Alignment = 0`` â€” o ``Say`` do SCX declara so ``Caption``/``Left``/``Top``, e esse ``Left`` ja foi calculado para o texto terminar poucos pixels antes do campo (FormCES: 411/415/415/418 com os TextBox em 455, textos terminando em 451). Inventar ``.Width = 60`` + ``.Alignment = 1`` encosta o texto na borda DIREITA da caixa, que cai DENTRO do TextBox; como o label eh criado antes, o controle desenha por cima e a legenda sai cortada ("Codigo :" vira "Codi") â€” compila limpo, so aparece na tela. Copiar ``Alignment``/``Width`` do dump: se o ``Say`` nao declara nenhum dos dois, usar ``.Alignment = 0`` com ``.Width`` que caiba o texto. ``AutoSize = .T.`` NAO resolve: eh no-op em Label criado por ``AddObject`` (a Width fica nos 100 do default). Auto-fix: CorretorAutomatico #202.
 - **fAcessoEmpresa() NAO EXISTE (nao portada)**: A funcao global `fAcessoEmpresa()` do Framework legado (sigacess.PRG) NAO foi portada para a nova arquitetura. Chamadas diretas quebram em runtime com "File 'facessoempresa.prg' does not exist" (VFP9 procura .prg externo quando o nome nao eh THIS.metodo nem funcao definida). Substituicao canonica: MODO CHECK (3 args, retorna boolean) `fAcessoEmpresa(usu,"C",cod)` -> `VerificarAcessoEmpresa(usu, cod)` (helper em utils/functions.prg). MODO LOOKUP (5 args, popula 2 textboxes) `fAcessoEmpresa(usu, "C"|"D", val, oCod, oDsc)` -> bloco FormBuscaAuxiliar apontando SigCdEmp com chave Cemps (modo C) ou Razas (modo D), retornando ambas colunas. Titulo: "Sele" + CHR(231) + CHR(227) + "o de Empresa". Auto-fix: CorretorAutomatico #110. Padrao canonico: Formsigatcrp.prg:2278-2378 (KeyPress) e Formsigrepes.prg:6501-6540 (LostFocus). Bug observado em Formsigatcrp.prg + Formsigrepes.prg (2026-07-02, Erro14).
 - **fAcessoContas() NAO USAR para lookup UX (auto-load do primeiro registro)**: A funcao `fAcessoContas()` (utils/functions.prg:719) EH portada, mas seu fluxo interno (`LIKE '%valor%'` + `LOCATE` + FormBuscaSimples) auto-popula o textbox com o PRIMEIRO registro que contem o valor digitado — mesmo sem selecao explicita do usuario no picker. Resultado tipico: user digita "11" no campo Gerente/Vendedor e o form carrega "GAVETA - LOJA 001..." (primeiro match parcial). PROIBIDO usar `fAcessoContas(usu, grp, "C"|"D", val, txtCod, txtNom)` como handler de Valid/KeyPress em textbox de lookup. Substituicao canonica: mesmo padrao de fAcessoEmpresa lookup (Formsigatcrp.prg:2612-2790 apos Erro16 fix). Enter/Tab -> `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = valor` exato (hit -> auto-preenche, miss -> `THIS.AbrirBusca<X>()`). AbrirBusca<X> -> SQL proprio com `LIKE 'valor%' OR RTRIM(RClis) LIKE 'valor%'` (starts-with, NAO contem) + fallback lista completa + `CREATEOBJECT("FormBuscaAuxiliar")` sem SQL automatica + mAddColuna("IClis"/"RClis") + `.Show()` respeitando `this_lSelecionou`. `fAcessoContas()` continua valida para contexto backend (SCAN loop de acesso, validacao sem UI). Bug observado em Formsigatcrp.prg ValidarCodGer/ValidarNomGer/ValidarCodVen/ValidarNomVen (2026-07-02, Erro16).
@@ -3246,7 +3247,9 @@ metodos e eventos do codigo original. REGRAS OBRIGATORIAS:
 - **COUNT TO var IN alias PROIBIDO**: VFP9 COUNT nao tem clausula IN. Gera "Command contains unrecognized phrase/keyword." Usar: `SELECT alias` + `COUNT TO var`.
 - **APPEND FROM requer SELECT cursor antes**: `ZAP IN cursor_name` NAO muda a work area corrente. `APPEND FROM DBF("tmp")` vai para a work area CORRENTE. SEMPRE fazer `SELECT cursor_destino` antes de `APPEND FROM`. Sem isso, dados vao para o cursor errado e o grid fica vazio.
 - **CommandGroup.FontName NAO EXISTE**: CommandGroup (como OptionGroup) NAO tem FontName/FontSize. Definir em cada `.Buttons(N).FontName`. Tentar no grupo causa "Property FONTNAME is not found" que cascateia e impede toda configuracao dos botoes.
-- **AlternarPagina DEVE chamar AjustarBotoesPorModo**: Em forms CRUD, ao voltar para Page1 (LISTA), OBRIGATORIO chamar `THIS.AjustarBotoesPorModo()` ANTES de `THIS.CarregarLista()`. Sem isso os botoes ficam desabilitados apos Incluir/Alterar/Visualizar.
+- **AlternarPagina eh o FUNIL de volta - repor o MODO e reabilitar os botoes (Erro176)**: em forms CRUD, `AlternarPagina(1)` tem de fazer as DUAS coisas - `THIS.this_cModoAtual = "LISTA"` DENTRO do `IF par_nPagina = 1` e `THIS.AjustarBotoesPorModo()` no FIM do metodo. Quem so chama `AjustarBotoesPorModo` nos `Btn*Click` de ENTRADA (Incluir/Alterar/Visualizar) deixa os 5 botoes da Lista cinza depois de GRAVAR e depois de CANCELAR: nao estoura, nao entra em log, nao quebra compilacao (eh estado que ninguem restaura) e a tela fica inutilizavel ate ser fechada. Medido no VFP9 em 2026-09-24: so a chamada, sem repor o modo, NAO resolve (Formemp/Formsigpdmp7/FormSRV/FormDpi continuaram em `.F.`), porque a reabilitacao passa a depender de cada caller trocar o modo antes. Forma canonica: `THIS.pgf_4c_Paginas.ActivePage = par_nPagina` / `IF par_nPagina = 1` / `THIS.this_cModoAtual = "LISTA"` / `THIS.CarregarLista()` / `ENDIF` / `THIS.AjustarBotoesPorModo()`. Referencia: Formcfi, Formcnl, FormFNF, FormOcc. Gate: CorretorAutomatico pattern #210
+- **Chave POSICIONAL concatenada: NUNCA ALLTRIM nas partes (Erro177)**: chave montada concatenando colunas ``char`` de largura fixa eh POSICIONAL - o padding FAZ PARTE da chave. O legado do SIGMVSBN monta ``lcEmpDopNums = TmpSubN.Emps + TmpSubN.Dopes + Str(TmpSubN.Numes, 6)`` SEM ALLTRIM, porque ``Emps`` eh ``char(3)`` e ``Dopes`` eh ``char(20)``: 3 + 20 + 6 = **29**, que eh exatamente ``EmpDopNums char(29)``. Escrever ``ALLTRIM(par_cEmps) + ALLTRIM(par_cDopes) + STR(par_nNumes, 6)`` da 15 caracteres (``001MALOTE     3``) e **nunca casa** com o valor gravado (``001MALOTE                   3``): o SELECT roda SEM ERRO e devolve ZERO linhas - sem exception, sem log, so a tela vazia (no FormSigMvSbn isso deixava a grade de itens, a descricao e a imagem do produto permanentemente vazias, e os handlers de AfterRowColChange/DblClick viravam codigo morto). Usar ``PADR(parte, <largura da coluna no schema>)`` EXPLICITO - nao confiar no padding que o cursor por acaso traz, porque ``ObterChavePrimaria()`` chama o mesmo montador com as properties do BO, que o ``Init`` do Form guarda JA com ALLTRIM. **A largura do ``char(N)`` destino eh a conferencia**: se a soma das partes nao da N, a montagem esta errada. ATENCAO a distincao ao varrer: ALLTRIM nas partes INTERIORES quebra, mas ALLTRIM na chave INTEIRA (no fim) eh inofensivo - ``char`` no SQL Server compara com blank-padding ANSI - e esse caso inofensivo eh o MAJORITARIO, entao tratar os dois igual produz WARNING massivo. **Instanciar o form NAO pega este defeito**: ``InicializarForm`` pula ``CarregarLista`` em ``gb_4c_ModoTeste`` e o TestFormWrapper passa com SUCESSO; num visualizador, o equivalente a "testar gravando" eh provar que a consulta devolve LINHA (conferir RECCOUNT, nao o retorno ``.T.``)
+
 - **CommandGroup BackStyle/BorderStyle EXATOS do original**: Se o original tem `BackStyle=0` + `BorderStyle=0`, o CommandGroup eh TRANSPARENTE (container logico invisivel). NUNCA adicionar BackColor quando original nao tem. Copiar BackStyle, BorderStyle, SpecialEffect EXATOS.
 - **ForeColor de Labels: COPIAR do original, NUNCA assumir**: Labels sobre fundo escuro usam ForeColor branco, labels sobre fundo claro usam ForeColor cinza (90,90,90). Copiar ForeColor EXATO do codigo fonte original. Assumir cor "baseado no tema" causa labels INVISIVEIS.
 - **Buttons(N) dentro de CommandGroup: propriedades EXATAS**: Left, Top, FontName, FontBold, FontItalic, BackColor, ForeColor dos Buttons DEVEM vir do codigo fonte original. NUNCA inventar Left=0 ou FontName="Tahoma" quando original tem Left=178 ou FontName="Comic Sans MS".
@@ -3550,6 +3553,7 @@ Se disponivel, contem analise profunda dos metodos originais. REGRAS:
 - UI Fidelity PILAR 1: Width/Height/Top/Left/BackColor/ForeColor/FontName EXATOS do original
 - PILAR 2: Usar nomes de colunas EXATOS do banco (ver schema.sql)
 - **MESSAGEBOX PROIBIDO**: NUNCA usar MESSAGEBOX() direto. Usar funcoes de messages.prg: MsgInfo() para informativo (icone 64), MsgAviso() para aviso (icone 48), MsgErro() para erro (icone 16), MsgConfirma() para confirmacao Sim/Nao. Essas funcoes suprimem dialogs em modo de teste automatizado.
+- **Comentario de design decision NUNCA leva a frase "nao implementado"**: ao documentar por que um BO somente-leitura (form de CONSULTA sem INSERT/UPDATE/DELETE no legado) nao sobrescreve Inserir()/Atualizar()/ExecutarExclusao(), NAO escrever "nao implementado"/"nao implementada" dentro de linha de comentario `*` - o validador 05d_validarCompletude tem regex que casa "nao implement" em QUALQUER comentario (nao so em TODO real) e rejeita a fase por falso positivo. Preferir frase como "o comportamento padrao herdado de BusinessBase ja eh o correto".
 - **Label de dados: NUNCA inventar ``.Width`` + ``.Alignment = 1``**: a classe ``say`` do Framework legado eh ``AutoSize = .T.`` / ``Alignment = 0`` â€” o ``Say`` do SCX declara so ``Caption``/``Left``/``Top``, e esse ``Left`` ja foi calculado para o texto terminar poucos pixels antes do campo (FormCES: 411/415/415/418 com os TextBox em 455, textos terminando em 451). Inventar ``.Width = 60`` + ``.Alignment = 1`` encosta o texto na borda DIREITA da caixa, que cai DENTRO do TextBox; como o label eh criado antes, o controle desenha por cima e a legenda sai cortada ("Codigo :" vira "Codi") â€” compila limpo, so aparece na tela. Copiar ``Alignment``/``Width`` do dump: se o ``Say`` nao declara nenhum dos dois, usar ``.Alignment = 0`` com ``.Width`` que caiba o texto. ``AutoSize = .T.`` NAO resolve: eh no-op em Label criado por ``AddObject`` (a Width fica nos 100 do default). Auto-fix: CorretorAutomatico #202.
 - **fAcessoEmpresa() NAO EXISTE (nao portada)**: A funcao global `fAcessoEmpresa()` do Framework legado (sigacess.PRG) NAO foi portada para a nova arquitetura. Chamadas diretas quebram em runtime com "File 'facessoempresa.prg' does not exist" (VFP9 procura .prg externo quando o nome nao eh THIS.metodo nem funcao definida). Substituicao canonica: MODO CHECK (3 args, retorna boolean) `fAcessoEmpresa(usu,"C",cod)` -> `VerificarAcessoEmpresa(usu, cod)` (helper em utils/functions.prg). MODO LOOKUP (5 args, popula 2 textboxes) `fAcessoEmpresa(usu, "C"|"D", val, oCod, oDsc)` -> bloco FormBuscaAuxiliar apontando SigCdEmp com chave Cemps (modo C) ou Razas (modo D), retornando ambas colunas. Titulo: "Sele" + CHR(231) + CHR(227) + "o de Empresa". Auto-fix: CorretorAutomatico #110. Padrao canonico: Formsigatcrp.prg:2278-2378 (KeyPress) e Formsigrepes.prg:6501-6540 (LostFocus). Bug observado em Formsigatcrp.prg + Formsigrepes.prg (2026-07-02, Erro14).
 - **fAcessoContas() NAO USAR para lookup UX (auto-load do primeiro registro)**: A funcao `fAcessoContas()` (utils/functions.prg:719) EH portada, mas seu fluxo interno (`LIKE '%valor%'` + `LOCATE` + FormBuscaSimples) auto-popula o textbox com o PRIMEIRO registro que contem o valor digitado — mesmo sem selecao explicita do usuario no picker. Resultado tipico: user digita "11" no campo Gerente/Vendedor e o form carrega "GAVETA - LOJA 001..." (primeiro match parcial). PROIBIDO usar `fAcessoContas(usu, grp, "C"|"D", val, txtCod, txtNom)` como handler de Valid/KeyPress em textbox de lookup. Substituicao canonica: mesmo padrao de fAcessoEmpresa lookup (Formsigatcrp.prg:2612-2790 apos Erro16 fix). Enter/Tab -> `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = valor` exato (hit -> auto-preenche, miss -> `THIS.AbrirBusca<X>()`). AbrirBusca<X> -> SQL proprio com `LIKE 'valor%' OR RTRIM(RClis) LIKE 'valor%'` (starts-with, NAO contem) + fallback lista completa + `CREATEOBJECT("FormBuscaAuxiliar")` sem SQL automatica + mAddColuna("IClis"/"RClis") + `.Show()` respeitando `this_lSelecionou`. `fAcessoContas()` continua valida para contexto backend (SCAN loop de acesso, validacao sem UI). Bug observado em Formsigatcrp.prg ValidarCodGer/ValidarNomGer/ValidarCodVen/ValidarNomVen (2026-07-02, Erro16).
@@ -3578,7 +3582,9 @@ Se disponivel, contem analise profunda dos metodos originais. REGRAS:
 - **COUNT TO var IN alias PROIBIDO**: VFP9 COUNT nao tem clausula IN. Gera "Command contains unrecognized phrase/keyword." Usar: `SELECT alias` + `COUNT TO var`.
 - **APPEND FROM requer SELECT cursor antes**: `ZAP IN cursor_name` NAO muda a work area corrente. `APPEND FROM DBF("tmp")` vai para a work area CORRENTE. SEMPRE fazer `SELECT cursor_destino` antes de `APPEND FROM`. Sem isso, dados vao para o cursor errado e o grid fica vazio.
 - **CommandGroup.FontName NAO EXISTE**: CommandGroup (como OptionGroup) NAO tem FontName/FontSize. Definir em cada `.Buttons(N).FontName`. Tentar no grupo causa "Property FONTNAME is not found" que cascateia e impede toda configuracao dos botoes.
-- **AlternarPagina DEVE chamar AjustarBotoesPorModo**: Em forms CRUD, ao voltar para Page1 (LISTA), OBRIGATORIO chamar `THIS.AjustarBotoesPorModo()` ANTES de `THIS.CarregarLista()`. Sem isso os botoes ficam desabilitados apos Incluir/Alterar/Visualizar.
+- **AlternarPagina eh o FUNIL de volta - repor o MODO e reabilitar os botoes (Erro176)**: em forms CRUD, `AlternarPagina(1)` tem de fazer as DUAS coisas - `THIS.this_cModoAtual = "LISTA"` DENTRO do `IF par_nPagina = 1` e `THIS.AjustarBotoesPorModo()` no FIM do metodo. Quem so chama `AjustarBotoesPorModo` nos `Btn*Click` de ENTRADA (Incluir/Alterar/Visualizar) deixa os 5 botoes da Lista cinza depois de GRAVAR e depois de CANCELAR: nao estoura, nao entra em log, nao quebra compilacao (eh estado que ninguem restaura) e a tela fica inutilizavel ate ser fechada. Medido no VFP9 em 2026-09-24: so a chamada, sem repor o modo, NAO resolve (Formemp/Formsigpdmp7/FormSRV/FormDpi continuaram em `.F.`), porque a reabilitacao passa a depender de cada caller trocar o modo antes. Forma canonica: `THIS.pgf_4c_Paginas.ActivePage = par_nPagina` / `IF par_nPagina = 1` / `THIS.this_cModoAtual = "LISTA"` / `THIS.CarregarLista()` / `ENDIF` / `THIS.AjustarBotoesPorModo()`. Referencia: Formcfi, Formcnl, FormFNF, FormOcc. Gate: CorretorAutomatico pattern #210
+- **Chave POSICIONAL concatenada: NUNCA ALLTRIM nas partes (Erro177)**: chave montada concatenando colunas ``char`` de largura fixa eh POSICIONAL - o padding FAZ PARTE da chave. O legado do SIGMVSBN monta ``lcEmpDopNums = TmpSubN.Emps + TmpSubN.Dopes + Str(TmpSubN.Numes, 6)`` SEM ALLTRIM, porque ``Emps`` eh ``char(3)`` e ``Dopes`` eh ``char(20)``: 3 + 20 + 6 = **29**, que eh exatamente ``EmpDopNums char(29)``. Escrever ``ALLTRIM(par_cEmps) + ALLTRIM(par_cDopes) + STR(par_nNumes, 6)`` da 15 caracteres (``001MALOTE     3``) e **nunca casa** com o valor gravado (``001MALOTE                   3``): o SELECT roda SEM ERRO e devolve ZERO linhas - sem exception, sem log, so a tela vazia (no FormSigMvSbn isso deixava a grade de itens, a descricao e a imagem do produto permanentemente vazias, e os handlers de AfterRowColChange/DblClick viravam codigo morto). Usar ``PADR(parte, <largura da coluna no schema>)`` EXPLICITO - nao confiar no padding que o cursor por acaso traz, porque ``ObterChavePrimaria()`` chama o mesmo montador com as properties do BO, que o ``Init`` do Form guarda JA com ALLTRIM. **A largura do ``char(N)`` destino eh a conferencia**: se a soma das partes nao da N, a montagem esta errada. ATENCAO a distincao ao varrer: ALLTRIM nas partes INTERIORES quebra, mas ALLTRIM na chave INTEIRA (no fim) eh inofensivo - ``char`` no SQL Server compara com blank-padding ANSI - e esse caso inofensivo eh o MAJORITARIO, entao tratar os dois igual produz WARNING massivo. **Instanciar o form NAO pega este defeito**: ``InicializarForm`` pula ``CarregarLista`` em ``gb_4c_ModoTeste`` e o TestFormWrapper passa com SUCESSO; num visualizador, o equivalente a "testar gravando" eh provar que a consulta devolve LINHA (conferir RECCOUNT, nao o retorno ``.T.``)
+
 - **CommandGroup BackStyle/BorderStyle EXATOS do original**: Se o original tem `BackStyle=0` + `BorderStyle=0`, o CommandGroup eh TRANSPARENTE (container logico invisivel). NUNCA adicionar BackColor quando original nao tem. Copiar BackStyle, BorderStyle, SpecialEffect EXATOS.
 - **ForeColor de Labels: COPIAR do original, NUNCA assumir**: Labels sobre fundo escuro usam ForeColor branco, labels sobre fundo claro usam ForeColor cinza (90,90,90). Copiar ForeColor EXATO do codigo fonte original. Assumir cor "baseado no tema" causa labels INVISIVEIS.
 - **Buttons(N) dentro de CommandGroup: propriedades EXATAS**: Left, Top, FontName, FontBold, FontItalic, BackColor, ForeColor dos Buttons DEVEM vir do codigo fonte original. NUNCA inventar Left=0 ou FontName="Tahoma" quando original tem Left=178 ou FontName="Comic Sans MS".
@@ -3855,6 +3861,7 @@ ENDPROC
 - **this_cMensagemErro**: SEMPRE declarar `this_cMensagemErro = ""` nas propriedades do Form (NAO herdado de FormBase, necessario para CATCH blocks)
 - **REPORT FORM TO FILE**: Pre-computar caminho em variavel LOCAL + macro expansion `&var` (expressoes inline NAO funcionam)
 - **MESSAGEBOX PROIBIDO**: NUNCA usar MESSAGEBOX() direto. Usar funcoes de messages.prg: MsgInfo() para informativo (icone 64), MsgAviso() para aviso (icone 48), MsgErro() para erro (icone 16), MsgConfirma() para confirmacao Sim/Nao. Essas funcoes suprimem dialogs em modo de teste automatizado.
+- **Comentario de design decision NUNCA leva a frase "nao implementado"**: ao documentar por que um BO somente-leitura (form de CONSULTA sem INSERT/UPDATE/DELETE no legado) nao sobrescreve Inserir()/Atualizar()/ExecutarExclusao(), NAO escrever "nao implementado"/"nao implementada" dentro de linha de comentario `*` - o validador 05d_validarCompletude tem regex que casa "nao implement" em QUALQUER comentario (nao so em TODO real) e rejeita a fase por falso positivo. Preferir frase como "o comportamento padrao herdado de BusinessBase ja eh o correto".
 - **Label de dados: NUNCA inventar ``.Width`` + ``.Alignment = 1``**: a classe ``say`` do Framework legado eh ``AutoSize = .T.`` / ``Alignment = 0`` â€” o ``Say`` do SCX declara so ``Caption``/``Left``/``Top``, e esse ``Left`` ja foi calculado para o texto terminar poucos pixels antes do campo (FormCES: 411/415/415/418 com os TextBox em 455, textos terminando em 451). Inventar ``.Width = 60`` + ``.Alignment = 1`` encosta o texto na borda DIREITA da caixa, que cai DENTRO do TextBox; como o label eh criado antes, o controle desenha por cima e a legenda sai cortada ("Codigo :" vira "Codi") â€” compila limpo, so aparece na tela. Copiar ``Alignment``/``Width`` do dump: se o ``Say`` nao declara nenhum dos dois, usar ``.Alignment = 0`` com ``.Width`` que caiba o texto. ``AutoSize = .T.`` NAO resolve: eh no-op em Label criado por ``AddObject`` (a Width fica nos 100 do default). Auto-fix: CorretorAutomatico #202.
 - **fAcessoEmpresa() NAO EXISTE (nao portada)**: A funcao global `fAcessoEmpresa()` do Framework legado (sigacess.PRG) NAO foi portada para a nova arquitetura. Chamadas diretas quebram em runtime com "File 'facessoempresa.prg' does not exist" (VFP9 procura .prg externo quando o nome nao eh THIS.metodo nem funcao definida). Substituicao canonica: MODO CHECK (3 args, retorna boolean) `fAcessoEmpresa(usu,"C",cod)` -> `VerificarAcessoEmpresa(usu, cod)` (helper em utils/functions.prg). MODO LOOKUP (5 args, popula 2 textboxes) `fAcessoEmpresa(usu, "C"|"D", val, oCod, oDsc)` -> bloco FormBuscaAuxiliar apontando SigCdEmp com chave Cemps (modo C) ou Razas (modo D), retornando ambas colunas. Titulo: "Sele" + CHR(231) + CHR(227) + "o de Empresa". Auto-fix: CorretorAutomatico #110. Padrao canonico: Formsigatcrp.prg:2278-2378 (KeyPress) e Formsigrepes.prg:6501-6540 (LostFocus). Bug observado em Formsigatcrp.prg + Formsigrepes.prg (2026-07-02, Erro14).
 - **fAcessoContas() NAO USAR para lookup UX (auto-load do primeiro registro)**: A funcao `fAcessoContas()` (utils/functions.prg:719) EH portada, mas seu fluxo interno (`LIKE '%valor%'` + `LOCATE` + FormBuscaSimples) auto-popula o textbox com o PRIMEIRO registro que contem o valor digitado — mesmo sem selecao explicita do usuario no picker. Resultado tipico: user digita "11" no campo Gerente/Vendedor e o form carrega "GAVETA - LOJA 001..." (primeiro match parcial). PROIBIDO usar `fAcessoContas(usu, grp, "C"|"D", val, txtCod, txtNom)` como handler de Valid/KeyPress em textbox de lookup. Substituicao canonica: mesmo padrao de fAcessoEmpresa lookup (Formsigatcrp.prg:2612-2790 apos Erro16 fix). Enter/Tab -> `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = valor` exato (hit -> auto-preenche, miss -> `THIS.AbrirBusca<X>()`). AbrirBusca<X> -> SQL proprio com `LIKE 'valor%' OR RTRIM(RClis) LIKE 'valor%'` (starts-with, NAO contem) + fallback lista completa + `CREATEOBJECT("FormBuscaAuxiliar")` sem SQL automatica + mAddColuna("IClis"/"RClis") + `.Show()` respeitando `this_lSelecionou`. `fAcessoContas()` continua valida para contexto backend (SCAN loop de acesso, validacao sem UI). Bug observado em Formsigatcrp.prg ValidarCodGer/ValidarNomGer/ValidarCodVen/ValidarNomVen (2026-07-02, Erro16).
@@ -3880,7 +3887,9 @@ ENDPROC
 - **COUNT TO var IN alias PROIBIDO**: VFP9 COUNT nao tem clausula IN. Gera "Command contains unrecognized phrase/keyword." Usar: `SELECT alias` + `COUNT TO var`.
 - **APPEND FROM requer SELECT cursor antes**: `ZAP IN cursor_name` NAO muda a work area corrente. `APPEND FROM DBF("tmp")` vai para a work area CORRENTE. SEMPRE fazer `SELECT cursor_destino` antes de `APPEND FROM`. Sem isso, dados vao para o cursor errado e o grid fica vazio.
 - **CommandGroup.FontName NAO EXISTE**: CommandGroup (como OptionGroup) NAO tem FontName/FontSize. Definir em cada `.Buttons(N).FontName`. Tentar no grupo causa "Property FONTNAME is not found" que cascateia e impede toda configuracao dos botoes.
-- **AlternarPagina DEVE chamar AjustarBotoesPorModo**: Em forms CRUD, ao voltar para Page1 (LISTA), OBRIGATORIO chamar `THIS.AjustarBotoesPorModo()` ANTES de `THIS.CarregarLista()`. Sem isso os botoes ficam desabilitados apos Incluir/Alterar/Visualizar.
+- **AlternarPagina eh o FUNIL de volta - repor o MODO e reabilitar os botoes (Erro176)**: em forms CRUD, `AlternarPagina(1)` tem de fazer as DUAS coisas - `THIS.this_cModoAtual = "LISTA"` DENTRO do `IF par_nPagina = 1` e `THIS.AjustarBotoesPorModo()` no FIM do metodo. Quem so chama `AjustarBotoesPorModo` nos `Btn*Click` de ENTRADA (Incluir/Alterar/Visualizar) deixa os 5 botoes da Lista cinza depois de GRAVAR e depois de CANCELAR: nao estoura, nao entra em log, nao quebra compilacao (eh estado que ninguem restaura) e a tela fica inutilizavel ate ser fechada. Medido no VFP9 em 2026-09-24: so a chamada, sem repor o modo, NAO resolve (Formemp/Formsigpdmp7/FormSRV/FormDpi continuaram em `.F.`), porque a reabilitacao passa a depender de cada caller trocar o modo antes. Forma canonica: `THIS.pgf_4c_Paginas.ActivePage = par_nPagina` / `IF par_nPagina = 1` / `THIS.this_cModoAtual = "LISTA"` / `THIS.CarregarLista()` / `ENDIF` / `THIS.AjustarBotoesPorModo()`. Referencia: Formcfi, Formcnl, FormFNF, FormOcc. Gate: CorretorAutomatico pattern #210
+- **Chave POSICIONAL concatenada: NUNCA ALLTRIM nas partes (Erro177)**: chave montada concatenando colunas ``char`` de largura fixa eh POSICIONAL - o padding FAZ PARTE da chave. O legado do SIGMVSBN monta ``lcEmpDopNums = TmpSubN.Emps + TmpSubN.Dopes + Str(TmpSubN.Numes, 6)`` SEM ALLTRIM, porque ``Emps`` eh ``char(3)`` e ``Dopes`` eh ``char(20)``: 3 + 20 + 6 = **29**, que eh exatamente ``EmpDopNums char(29)``. Escrever ``ALLTRIM(par_cEmps) + ALLTRIM(par_cDopes) + STR(par_nNumes, 6)`` da 15 caracteres (``001MALOTE     3``) e **nunca casa** com o valor gravado (``001MALOTE                   3``): o SELECT roda SEM ERRO e devolve ZERO linhas - sem exception, sem log, so a tela vazia (no FormSigMvSbn isso deixava a grade de itens, a descricao e a imagem do produto permanentemente vazias, e os handlers de AfterRowColChange/DblClick viravam codigo morto). Usar ``PADR(parte, <largura da coluna no schema>)`` EXPLICITO - nao confiar no padding que o cursor por acaso traz, porque ``ObterChavePrimaria()`` chama o mesmo montador com as properties do BO, que o ``Init`` do Form guarda JA com ALLTRIM. **A largura do ``char(N)`` destino eh a conferencia**: se a soma das partes nao da N, a montagem esta errada. ATENCAO a distincao ao varrer: ALLTRIM nas partes INTERIORES quebra, mas ALLTRIM na chave INTEIRA (no fim) eh inofensivo - ``char`` no SQL Server compara com blank-padding ANSI - e esse caso inofensivo eh o MAJORITARIO, entao tratar os dois igual produz WARNING massivo. **Instanciar o form NAO pega este defeito**: ``InicializarForm`` pula ``CarregarLista`` em ``gb_4c_ModoTeste`` e o TestFormWrapper passa com SUCESSO; num visualizador, o equivalente a "testar gravando" eh provar que a consulta devolve LINHA (conferir RECCOUNT, nao o retorno ``.T.``)
+
 - **CommandGroup BackStyle/BorderStyle EXATOS do original**: Se o original tem `BackStyle=0` + `BorderStyle=0`, o CommandGroup eh TRANSPARENTE (container logico invisivel). NUNCA adicionar BackColor quando original nao tem. Copiar BackStyle, BorderStyle, SpecialEffect EXATOS.
 - **ForeColor de Labels: COPIAR do original, NUNCA assumir**: Labels sobre fundo escuro usam ForeColor branco, labels sobre fundo claro usam ForeColor cinza (90,90,90). Copiar ForeColor EXATO do codigo fonte original. Assumir cor "baseado no tema" causa labels INVISIVEIS.
 - **Buttons(N) dentro de CommandGroup: propriedades EXATAS**: Left, Top, FontName, FontBold, FontItalic, BackColor, ForeColor dos Buttons DEVEM vir do codigo fonte original. NUNCA inventar Left=0 ou FontName="Tahoma" quando original tem Left=178 ou FontName="Comic Sans MS".
@@ -4091,6 +4100,7 @@ visuais EXATAS do original. Mas NAO modifique controles ja existentes.
 - **this_cMensagemErro**: Se o Form usa THIS.this_cMensagemErro em CATCH blocks, DEVE declarar `this_cMensagemErro = ""` nas propriedades da classe (NAO herdado de FormBase)
 - **REPORT FORM TO FILE**: Pre-computar caminho em variavel LOCAL + macro expansion `&var` (expressoes inline e name expressions `(var)` NAO funcionam em VFP9)
 - **MESSAGEBOX PROIBIDO**: NUNCA usar MESSAGEBOX() direto. Usar funcoes de messages.prg: MsgInfo() para informativo (icone 64), MsgAviso() para aviso (icone 48), MsgErro() para erro (icone 16), MsgConfirma() para confirmacao Sim/Nao. Essas funcoes suprimem dialogs em modo de teste automatizado.
+- **Comentario de design decision NUNCA leva a frase "nao implementado"**: ao documentar por que um BO somente-leitura (form de CONSULTA sem INSERT/UPDATE/DELETE no legado) nao sobrescreve Inserir()/Atualizar()/ExecutarExclusao(), NAO escrever "nao implementado"/"nao implementada" dentro de linha de comentario `*` - o validador 05d_validarCompletude tem regex que casa "nao implement" em QUALQUER comentario (nao so em TODO real) e rejeita a fase por falso positivo. Preferir frase como "o comportamento padrao herdado de BusinessBase ja eh o correto".
 - **Label de dados: NUNCA inventar ``.Width`` + ``.Alignment = 1``**: a classe ``say`` do Framework legado eh ``AutoSize = .T.`` / ``Alignment = 0`` â€” o ``Say`` do SCX declara so ``Caption``/``Left``/``Top``, e esse ``Left`` ja foi calculado para o texto terminar poucos pixels antes do campo (FormCES: 411/415/415/418 com os TextBox em 455, textos terminando em 451). Inventar ``.Width = 60`` + ``.Alignment = 1`` encosta o texto na borda DIREITA da caixa, que cai DENTRO do TextBox; como o label eh criado antes, o controle desenha por cima e a legenda sai cortada ("Codigo :" vira "Codi") â€” compila limpo, so aparece na tela. Copiar ``Alignment``/``Width`` do dump: se o ``Say`` nao declara nenhum dos dois, usar ``.Alignment = 0`` com ``.Width`` que caiba o texto. ``AutoSize = .T.`` NAO resolve: eh no-op em Label criado por ``AddObject`` (a Width fica nos 100 do default). Auto-fix: CorretorAutomatico #202.
 - **fAcessoEmpresa() NAO EXISTE (nao portada)**: A funcao global `fAcessoEmpresa()` do Framework legado (sigacess.PRG) NAO foi portada para a nova arquitetura. Chamadas diretas quebram em runtime com "File 'facessoempresa.prg' does not exist" (VFP9 procura .prg externo quando o nome nao eh THIS.metodo nem funcao definida). Substituicao canonica: MODO CHECK (3 args, retorna boolean) `fAcessoEmpresa(usu,"C",cod)` -> `VerificarAcessoEmpresa(usu, cod)` (helper em utils/functions.prg). MODO LOOKUP (5 args, popula 2 textboxes) `fAcessoEmpresa(usu, "C"|"D", val, oCod, oDsc)` -> bloco FormBuscaAuxiliar apontando SigCdEmp com chave Cemps (modo C) ou Razas (modo D), retornando ambas colunas. Titulo: "Sele" + CHR(231) + CHR(227) + "o de Empresa". Auto-fix: CorretorAutomatico #110. Padrao canonico: Formsigatcrp.prg:2278-2378 (KeyPress) e Formsigrepes.prg:6501-6540 (LostFocus). Bug observado em Formsigatcrp.prg + Formsigrepes.prg (2026-07-02, Erro14).
 - **fAcessoContas() NAO USAR para lookup UX (auto-load do primeiro registro)**: A funcao `fAcessoContas()` (utils/functions.prg:719) EH portada, mas seu fluxo interno (`LIKE '%valor%'` + `LOCATE` + FormBuscaSimples) auto-popula o textbox com o PRIMEIRO registro que contem o valor digitado — mesmo sem selecao explicita do usuario no picker. Resultado tipico: user digita "11" no campo Gerente/Vendedor e o form carrega "GAVETA - LOJA 001..." (primeiro match parcial). PROIBIDO usar `fAcessoContas(usu, grp, "C"|"D", val, txtCod, txtNom)` como handler de Valid/KeyPress em textbox de lookup. Substituicao canonica: mesmo padrao de fAcessoEmpresa lookup (Formsigatcrp.prg:2612-2790 apos Erro16 fix). Enter/Tab -> `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = valor` exato (hit -> auto-preenche, miss -> `THIS.AbrirBusca<X>()`). AbrirBusca<X> -> SQL proprio com `LIKE 'valor%' OR RTRIM(RClis) LIKE 'valor%'` (starts-with, NAO contem) + fallback lista completa + `CREATEOBJECT("FormBuscaAuxiliar")` sem SQL automatica + mAddColuna("IClis"/"RClis") + `.Show()` respeitando `this_lSelecionou`. `fAcessoContas()` continua valida para contexto backend (SCAN loop de acesso, validacao sem UI). Bug observado em Formsigatcrp.prg ValidarCodGer/ValidarNomGer/ValidarCodVen/ValidarNomVen (2026-07-02, Erro16).
@@ -4119,7 +4129,9 @@ visuais EXATAS do original. Mas NAO modifique controles ja existentes.
 - **COUNT TO var IN alias PROIBIDO**: VFP9 COUNT nao tem clausula IN. Gera "Command contains unrecognized phrase/keyword." Usar: `SELECT alias` + `COUNT TO var`.
 - **APPEND FROM requer SELECT cursor antes**: `ZAP IN cursor_name` NAO muda a work area corrente. `APPEND FROM DBF("tmp")` vai para a work area CORRENTE. SEMPRE fazer `SELECT cursor_destino` antes de `APPEND FROM`. Sem isso, dados vao para o cursor errado e o grid fica vazio.
 - **CommandGroup.FontName NAO EXISTE**: CommandGroup (como OptionGroup) NAO tem FontName/FontSize. Definir em cada `.Buttons(N).FontName`. Tentar no grupo causa "Property FONTNAME is not found" que cascateia e impede toda configuracao dos botoes.
-- **AlternarPagina DEVE chamar AjustarBotoesPorModo**: Em forms CRUD, ao voltar para Page1 (LISTA), OBRIGATORIO chamar `THIS.AjustarBotoesPorModo()` ANTES de `THIS.CarregarLista()`. Sem isso os botoes ficam desabilitados apos Incluir/Alterar/Visualizar.
+- **AlternarPagina eh o FUNIL de volta - repor o MODO e reabilitar os botoes (Erro176)**: em forms CRUD, `AlternarPagina(1)` tem de fazer as DUAS coisas - `THIS.this_cModoAtual = "LISTA"` DENTRO do `IF par_nPagina = 1` e `THIS.AjustarBotoesPorModo()` no FIM do metodo. Quem so chama `AjustarBotoesPorModo` nos `Btn*Click` de ENTRADA (Incluir/Alterar/Visualizar) deixa os 5 botoes da Lista cinza depois de GRAVAR e depois de CANCELAR: nao estoura, nao entra em log, nao quebra compilacao (eh estado que ninguem restaura) e a tela fica inutilizavel ate ser fechada. Medido no VFP9 em 2026-09-24: so a chamada, sem repor o modo, NAO resolve (Formemp/Formsigpdmp7/FormSRV/FormDpi continuaram em `.F.`), porque a reabilitacao passa a depender de cada caller trocar o modo antes. Forma canonica: `THIS.pgf_4c_Paginas.ActivePage = par_nPagina` / `IF par_nPagina = 1` / `THIS.this_cModoAtual = "LISTA"` / `THIS.CarregarLista()` / `ENDIF` / `THIS.AjustarBotoesPorModo()`. Referencia: Formcfi, Formcnl, FormFNF, FormOcc. Gate: CorretorAutomatico pattern #210
+- **Chave POSICIONAL concatenada: NUNCA ALLTRIM nas partes (Erro177)**: chave montada concatenando colunas ``char`` de largura fixa eh POSICIONAL - o padding FAZ PARTE da chave. O legado do SIGMVSBN monta ``lcEmpDopNums = TmpSubN.Emps + TmpSubN.Dopes + Str(TmpSubN.Numes, 6)`` SEM ALLTRIM, porque ``Emps`` eh ``char(3)`` e ``Dopes`` eh ``char(20)``: 3 + 20 + 6 = **29**, que eh exatamente ``EmpDopNums char(29)``. Escrever ``ALLTRIM(par_cEmps) + ALLTRIM(par_cDopes) + STR(par_nNumes, 6)`` da 15 caracteres (``001MALOTE     3``) e **nunca casa** com o valor gravado (``001MALOTE                   3``): o SELECT roda SEM ERRO e devolve ZERO linhas - sem exception, sem log, so a tela vazia (no FormSigMvSbn isso deixava a grade de itens, a descricao e a imagem do produto permanentemente vazias, e os handlers de AfterRowColChange/DblClick viravam codigo morto). Usar ``PADR(parte, <largura da coluna no schema>)`` EXPLICITO - nao confiar no padding que o cursor por acaso traz, porque ``ObterChavePrimaria()`` chama o mesmo montador com as properties do BO, que o ``Init`` do Form guarda JA com ALLTRIM. **A largura do ``char(N)`` destino eh a conferencia**: se a soma das partes nao da N, a montagem esta errada. ATENCAO a distincao ao varrer: ALLTRIM nas partes INTERIORES quebra, mas ALLTRIM na chave INTEIRA (no fim) eh inofensivo - ``char`` no SQL Server compara com blank-padding ANSI - e esse caso inofensivo eh o MAJORITARIO, entao tratar os dois igual produz WARNING massivo. **Instanciar o form NAO pega este defeito**: ``InicializarForm`` pula ``CarregarLista`` em ``gb_4c_ModoTeste`` e o TestFormWrapper passa com SUCESSO; num visualizador, o equivalente a "testar gravando" eh provar que a consulta devolve LINHA (conferir RECCOUNT, nao o retorno ``.T.``)
+
 - **CommandGroup BackStyle/BorderStyle EXATOS do original**: Se o original tem `BackStyle=0` + `BorderStyle=0`, o CommandGroup eh TRANSPARENTE (container logico invisivel). NUNCA adicionar BackColor quando original nao tem. Copiar BackStyle, BorderStyle, SpecialEffect EXATOS.
 - **ForeColor de Labels: COPIAR do original, NUNCA assumir**: Labels sobre fundo escuro usam ForeColor branco, labels sobre fundo claro usam ForeColor cinza (90,90,90). Copiar ForeColor EXATO do codigo fonte original. Assumir cor "baseado no tema" causa labels INVISIVEIS.
 - **Buttons(N) dentro de CommandGroup: propriedades EXATAS**: Left, Top, FontName, FontBold, FontItalic, BackColor, ForeColor dos Buttons DEVEM vir do codigo fonte original. NUNCA inventar Left=0 ou FontName="Tahoma" quando original tem Left=178 ou FontName="Comic Sans MS".
@@ -4966,6 +4978,15 @@ Se nao souber como implementar algo, analise o codigo fonte original e replique 
 NUNCA omitir funcionalidade - paridade 100% com o sistema legado.
 O resultado sera validado automaticamente e **fases com TODOs/stubs serao REJEITADAS**.
 
+**BO somente-leitura (form de CONSULTA/visualizador sem INSERT/UPDATE/DELETE no legado)**: NAO
+sobrescrever Inserir()/Atualizar()/ExecutarExclusao() so para preencher metodo - o comportamento
+herdado de BusinessBase (recusar a operacao) ja eh o correto. Ao comentar essa decisao no
+cabecalho do BO, EVITAR a frase literal "nao implementado"/"nao implementada" dentro de linha de
+comentario ``*`` - o validador de completude (05d_validarCompletude) tem regex que casa "nao
+implement" em QUALQUER comentario, sem diferenciar TODO real de documentacao de design, e rejeita
+a fase por falso positivo. Preferir "o comportamento padrao herdado de BusinessBase ja eh o
+correto" ou equivalente.
+
 $(if ($FormType -eq "OPERACIONAL") {
 @"
 ### REGRAS ESPECIFICAS PARA FORM OPERACIONAL
@@ -4981,6 +5002,323 @@ $(if ($FormType -eq "OPERACIONAL") {
 "@
 
     return $promptContent
+}
+
+<#
+.SYNOPSIS
+    Conta a superficie de BOTAO que o dump do SCX legado PROVA existir
+.DESCRIPTION
+    Usado pelos gates das Fases 7 e 8 para nao exigir do form migrado um botao
+    que o legado nao tem (que so seria atendido INVENTANDO botao - viola o
+    PILAR 1 - ou criando handler vazio - proibido pela regra de completude).
+
+    Conta:
+      - objeto com "BaseClass: commandbutton" (botao solto)
+      - ButtonCount de cada objeto cuja BaseClass eh "commandgroup"
+
+    NAO conta ButtonCount de OptionGroup: radio nao eh botao de acao e nao
+    precisa de handler.
+
+    ATENCAO ao resultado 0: form REPORT herda os 4 botoes do frmrelatorio e o
+    SCX nao os declara, entao zero eh AUSENCIA DE PROVA, nao prova de ausencia.
+    Quem chama deve tratar 0 como "nao sei" e manter a exigencia original.
+
+    Medido em 2026-09-24 nos dumps de tasks\: 18 forms legado nao-CRUD tem
+    exatamente 1 botao, 152 tem 0 (os REPORT) e 95 tem 2 ou mais.
+#>
+function Get-ContagemBotoesLegado {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return 0 }
+
+    $nBotoes = ([regex]::Matches($TextoDump, '(?im)^\s*BaseClass:\s*commandbutton\s*$')).Count
+
+    # 1a passada: quais objetos sao CommandGroup (a BaseClass aparece na secao
+    # "Objeto:", a ButtonCount aparece na secao "PROPRIEDADES DE:")
+    $grupos   = @{}
+    $objAtual = ""
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') {
+            $objAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*(\w+)\s*$') {
+            if ($matches[1] -ieq 'commandgroup' -and $objAtual) {
+                $grupos[$objAtual.ToUpper()] = $true
+            }
+        }
+    }
+
+    # 2a passada: soma a ButtonCount SO dos objetos identificados como grupo
+    $objProp = ""
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') {
+            $partes  = $matches[1] -split '\.'
+            $objProp = $partes[$partes.Count - 1]
+        } elseif ($linha -match '^\s*ButtonCount\s*=\s*(\d+)\s*$') {
+            if ($objProp -and $grupos.ContainsKey($objProp.ToUpper())) {
+                $nBotoes += [int]$matches[1]
+            }
+        }
+    }
+
+    return $nBotoes
+}
+
+<#
+.SYNOPSIS
+    Detecta no dump do legado o padrao "dialogo de EXIBICAO": a tela TEM
+    controle de entrada, mas TODOS eles sao somente-leitura (ReadOnly = .T.).
+
+.DESCRIPTION
+    Irmao de Get-ContagemBotoesLegado, usado pelas excecoes de gate das fases
+    que pedem "lista"/"campos". Um dialogo de exibicao (ex.: SIGPDMEN, o popup
+    "Mensagem da Movimentacao") tem UM EditBox ReadOnly onde o texto e' apenas
+    mostrado: nao ha o que listar nem o que digitar. Para esse legado, exigir
+    grade + botoes CRUD obrigaria a INVENTAR superficie que o legado nao tem
+    (viola o PILAR 1) ou a escrever metodos-adaptador vazios (proibido pela
+    regra de completude).
+
+    FAIL-CLOSED por construcao: exige >= 1 controle de entrada E que TODOS
+    declarem ReadOnly = .T.. Um unico campo editavel derruba a deteccao, que
+    e' o caso da esmagadora maioria dos OPERACIONAL sem grade.
+
+    Medido em 2026-09-25 nos 572 dumps de tasks\: 67 nao tem superficie de
+    lista; destes, 24 tambem nao tem campo nenhum (criterio DESPACHANTE ja
+    existente) e apenas 2 caem neste criterio - task573/SigMvMen e
+    task140/SigPdMen, que sao o MESMO dialogo legado (SIGPDMEN).
+
+.PARAMETER TextoDump
+    Conteudo do arquivo <Base>_form_codigo_fonte.txt.
+#>
+function Test-LegadoDialogoExibicao {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # 1a passada (SECAO 1 - arvore de objetos): quais objetos sao controle de
+    # entrada de dados. Label/Image/Shape/Container NAO contam - sao decoracao.
+    $campos   = @{}
+    $objAtual = ""
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') {
+            $objAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$') {
+            if ($objAtual) { $campos[$objAtual.ToUpper()] = $false }
+        }
+    }
+
+    if ($campos.Count -eq 0) { return $false }
+
+    # 2a passada (SECAO 2 - propriedades): quais desses objetos declaram
+    # ReadOnly = .T.. O cabecalho traz o caminho completo; a chave e' a ultima
+    # parte, igual ao que Get-ContagemBotoesLegado ja faz para ButtonCount.
+    $objProp = ""
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') {
+            $partes  = $matches[1] -split '\.'
+            $objProp = $partes[$partes.Count - 1].ToUpper()
+        } elseif ($linha -match '^\s*ReadOnly\s*=\s*\.T\.\s*$') {
+            if ($objProp -and $campos.ContainsKey($objProp)) { $campos[$objProp] = $true }
+        }
+    }
+
+    foreach ($v in $campos.Values) {
+        if (-not $v) { return $false }
+    }
+
+    return $true
+}
+<#
+.SYNOPSIS
+    Diz se o SCX legado nao tem NENHUM campo digitavel (visualizador puro)
+.DESCRIPTION
+    Irma de Test-LegadoDialogoExibicao, para o caso que ela nao cobre. Aquela
+    exige que o legado nao tenha LISTA e so reconhece ReadOnly = .T. declarado
+    no proprio controle. Esta prova a mesma coisa - "nenhum campo do legado
+    aceita digitacao" - aceitando as DUAS formas canonicas do Framework
+    Fortyus e a heranca de container:
+
+      a) ReadOnly = .T. no proprio controle (SECAO 2);
+      b) ReadOnly = .T. num ANCESTRAL - Grid/Column propagam aos filhos, e o
+         SCX costuma declarar so 'ReadOnly = .T.' + 'ColumnN.ReadOnly = .T.'
+         no bloco do Grid, sem repetir em cada Text1;
+      c) PROCEDURE When devolvendo .F. INCONDICIONALMENTE (SECAO 3) - o jeito
+         mais comum de tornar um fwget nao-digitavel. Medido no dump do
+         SIGMVSBN: Get_items/Get_descr/Get_valo NAO declaram ReadOnly, a
+         tela inteira e' somente-leitura apenas por causa do When.
+
+    Retorna $true so quando EXISTE campo e TODO campo esta provado
+    somente-leitura. Zero campo devolve $false de proposito: isso e'
+    despachante/splash, coberto por outro ramo.
+
+    Por que importa: campo somente-leitura nao recebe lookup nem validacao de
+    digitacao - nao ha onde o usuario digitar codigo para o picker resolver.
+    Exigir AbrirLookup*/Validar* de um visualizador obrigaria a INVENTAR
+    comportamento que o legado nao tem (viola o PILAR 1 e a regra "NUNCA
+    inventar tabelas de lookup que nao existem no original") ou a criar metodo
+    vazio (proibido pela regra de completude).
+
+    Medido em 2026-09-25 nos 576 dumps de tasks\: 29 dumps sao somente-leitura,
+    26 deles sem lookup, e 24 nao eram cobertos pelo ramo EXIBICAO - todos
+    visualizadores de verdade (conferidos SIGCDICN, sigmvpen, SigMvSbn). Nao e'
+    atalho largo: 4% dos dumps, e com tasks repetidas o total de forms
+    distintos e' menor ainda.
+#>
+function Test-LegadoSomenteLeitura {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    $linhas = $TextoDump -split "`r?`n"
+
+    # 1a passada (SECAO 1 - arvore de objetos): caminho COMPLETO de cada
+    # controle de ENTRADA de dados. Label/Image/Shape/Container NAO contam.
+    # O caminho completo (Parent + "." + Objeto) e' necessario porque a
+    # heranca de ReadOnly vem do ancestral - nome curto nao permite subir.
+    $campos   = @{}
+    $objAtual = ""
+    $paiAtual = ""
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*Objeto:') {
+            # Zera SEMPRE: "Objeto:" sem nome (ha entradas vazias no dump) nao
+            # pode herdar o nome do objeto anterior.
+            $objAtual = ""
+            $paiAtual = ""
+            if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') { $objAtual = $matches[1] }
+        } elseif ($linha -match '^\s*Parent:\s*(\S+)\s*$') {
+            $paiAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$') {
+            if ($objAtual) {
+                $caminho = if ($paiAtual -and $paiAtual -ne '(raiz)') { "$paiAtual.$objAtual" } else { $objAtual }
+                $campos[$caminho.ToUpper()] = $false
+            }
+        }
+    }
+
+    if ($campos.Count -eq 0) { return $false }
+
+    # 2a passada (SECAO 2 - propriedades): ReadOnly = .T., do proprio objeto do
+    # bloco ou de um descendente declarado por caminho RELATIVO dentro dele
+    # (Column3.ReadOnly = .T. / Column3.Text1.ReadOnly = .T. no bloco do Grid).
+    $somenteLeitura = @{}
+    $objProp = ""
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\*\s*PROPRIEDADES DE:') {
+            $objProp = ""
+            if ($linha -match '^\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') { $objProp = $matches[1].ToUpper() }
+        } elseif ($objProp -and $linha -match '^\s*ReadOnly\s*=\s*\.T\.\s*$') {
+            $somenteLeitura[$objProp] = $true
+        } elseif ($objProp -and $linha -match '^\s*([\w\.]+)\.ReadOnly\s*=\s*\.T\.\s*$') {
+            $somenteLeitura["$objProp.$($matches[1].ToUpper())"] = $true
+        }
+    }
+
+    # 3a passada (SECAO 3 - metodos): PROCEDURE When que devolve .F. sem
+    # condicao nenhuma. Aceita "Return .f.", "Return (.F.)" e "Return(.f.)" -
+    # as tres grafias aparecem no MESMO dump do SIGMVSBN. When com qualquer
+    # outra linha util NAO conta: pode devolver .T. em algum caminho.
+    $objMet = ""
+    $emWhen = $false
+    $corpo  = @()
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\*\s*OBJETO:\s*(\S+)\s*$') {
+            $objMet = $matches[1].ToUpper()
+            continue
+        }
+        if (-not $emWhen) {
+            if ($linha -match '^\s*PROCEDURE\s+When\s*$') {
+                $emWhen = $true
+                $corpo  = @()
+            }
+            continue
+        }
+        if ($linha -match '^\s*ENDPROC\s*$') {
+            $emWhen = $false
+            # @(...) obrigatorio: com UMA linha util o pipeline devolve String,
+            # e $uteis[0] numa String da o primeiro CARACTERE, nao a linha.
+            $uteis = @($corpo | ForEach-Object { $_.Trim() } |
+                       Where-Object { $_ -ne '' -and $_ -notmatch '^\*' -and $_ -notmatch '^&&' })
+            if ($objMet -and $uteis.Count -eq 1 -and
+                $uteis[0] -match '(?i)^Return\s*\(?\s*\.F\.\s*\)?\s*$') {
+                $somenteLeitura[$objMet] = $true
+            }
+        } else {
+            $corpo += $linha
+        }
+    }
+
+    # Veredito: UM campo digitavel derruba a excecao.
+    foreach ($caminho in @($campos.Keys)) {
+        if ($somenteLeitura[$caminho]) { continue }
+
+        # Sobe a hierarquia: Grid/Column com ReadOnly = .T. propaga aos filhos.
+        $herdou = $false
+        $partes = $caminho -split '\.'
+        for ($i = $partes.Count - 2; $i -ge 0; $i--) {
+            if ($somenteLeitura[(($partes[0..$i]) -join '.')]) { $herdou = $true; break }
+        }
+        if (-not $herdou) { return $false }
+    }
+
+    return $true
+}
+
+
+<#
+.SYNOPSIS
+    Diz se TODO evento Click do SCX legado apenas FECHA o form
+.DESCRIPTION
+    Prova de que o legado nao tem botao de ACAO nenhum: o unico comportamento
+    de clique da tela eh "ThisForm.Release". Usado pelo gate da Fase 8 para nao
+    exigir handler de gravar/processar de um visualizador somente-leitura.
+
+    Retorna:
+      $true  - existe pelo menos um PROCEDURE *Click e TODOS eles so fecham
+      $false - existe Click que faz outra coisa (ha botao de acao)
+      $null  - o dump nao tem Click nenhum => NAO SEI (quem chama mantem a
+               exigencia; form REPORT herda o Click dos botoes do frmrelatorio
+               e o SCX nao os declara)
+
+    Por que nao basta olhar o NOME do botao: medido em 2026-09-24 nos 565 dumps
+    de tasks\, "legado com UM botao so" sozinho da 58 forms, e entre eles ha
+    botao de acao de verdade com nome que nenhuma lista de palavras pega -
+    btnCopiar (SigCdOrc), btnCargas (SigCdUpd), btnApagar (SIGCDSET),
+    cmdLimSenha (SigCdUsu), "Carrega ibpt" (SIGCDIBP), "Gera Inventario TXT"
+    (SigReInv). Olhando o CORPO do Click sobram 8 forms, e so 7 com 1 botao.
+#>
+function Test-LegadoCliqueSoFecha {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $null }
+
+    # [^\S\r\n] = espaco/tab SEM quebra de linha: impede o \s* de atravessar
+    # linhas e casar um ENDPROC de outro metodo.
+    $blocos = [regex]::Matches($TextoDump, '(?ims)^PROCEDURE[^\S\r\n]+[\w\.]*Click[^\S\r\n]*\r?$(.*?)^ENDPROC[^\S\r\n]*\r?$')
+    if ($blocos.Count -eq 0) { return $null }
+
+    foreach ($bloco in $blocos) {
+        $linhas = ($bloco.Groups[1].Value -split "`r?`n") |
+                  ForEach-Object { $_.Trim() } |
+                  Where-Object { $_ -ne '' -and $_ -notmatch '^\*' -and $_ -notmatch '^&&' }
+
+        foreach ($linha in $linhas) {
+            # Aceita ThisForm.Release / Form.Release / =ThisForm.Release() /
+            # Release Thisform. Qualquer outra instrucao = botao de acao.
+            if ($linha -notmatch '(?i)^(=\s*)?(This)?Form\.Release(\s*\(\s*\))?$' -and
+                $linha -notmatch '(?i)^Release[^\S\r\n]+Thisform$') {
+                return $false
+            }
+        }
+    }
+
+    return $true
 }
 
 <#
@@ -5019,6 +5357,31 @@ function Invoke-MigracaoFase {
 
     Write-Host "Executando Fase $NumeroFase..." -ForegroundColor Yellow
 
+    # Erro178: assinatura do arquivo-alvo ANTES da fase.
+    # Exit code 0 NAO prova que a fase fez alguma coisa: na task569 a Fase 6
+    # ("Campos Restantes e Lookups") voltou em 13 segundos com o modelo dizendo
+    # "this appears to be context-loading rather than an active request... what
+    # would you like me to do next?", exit code 0, arquivo INTACTO. O orquestrador
+    # registrou SUCESSO, o gate de TODO/stub passou (nada foi escrito para ter
+    # stub) e a tela saiu de novo sem metade dos campos - o mesmo sintoma que
+    # motivou a re-migracao. Guardar a assinatura aqui permite detectar o no-op
+    # depois da chamada.
+    $alvoNoOp = if ($NumeroFase -le 2) {
+        Join-Path $Config.paths.projeto ("app\classes\" + (Get-BOClassName -BaseName $BaseName) + ".prg")
+    } else {
+        $fc = Get-FormClassName -BaseName $BaseName
+        $fsd = Get-FormSubDir -FormType $FormType
+        $p = Join-Path $Config.paths.projeto "app\forms\$fsd\$fc.prg"
+        if (-not (Test-Path $p)) {
+            $alt = Find-FormFile -ProjetoPath $Config.paths.projeto -FormClass $fc -PreferredSubDir $fsd
+            if ($alt) { $alt } else { $p }
+        } else { $p }
+    }
+    $assinaturaAntes = $null
+    if (Test-Path $alvoNoOp) {
+        $assinaturaAntes = (Get-FileHash -Path $alvoNoOp -Algorithm MD5).Hash
+    }
+
     # Invoca Claude CLI
     & (Join-Path $Config.paths.automation "ClaudeInvoker.ps1") `
         -PromptFile $fasePromptFile `
@@ -5049,6 +5412,20 @@ function Invoke-MigracaoFase {
         if ($foundForm) { $formFile = $foundForm }
     }
 
+    # Erro178: NO-OP com exit code 0 - a fase "terminou bem" sem tocar no arquivo.
+    # Tratar como FALHA para cair no retry (que ja re-executa com opus e timeout 2x).
+    $assinaturaDepois = if (Test-Path $alvoNoOp) { (Get-FileHash -Path $alvoNoOp -Algorithm MD5).Hash } else { $null }
+    $foiNoOp = $false
+    if ($LASTEXITCODE -eq 0 -and $null -ne $assinaturaAntes -and $assinaturaAntes -eq $assinaturaDepois) {
+        $foiNoOp = $true
+        Write-Host "  [NO-OP] Fase $NumeroFase terminou com exit code 0 mas NAO alterou $(Split-Path -Leaf $alvoNoOp)" -ForegroundColor Red
+        $preview = if (Test-Path $outputFile) { (Get-Content $outputFile -Raw -ErrorAction SilentlyContinue) } else { "" }
+        if ($preview.Length -gt 400) { $preview = $preview.Substring($preview.Length - 400) }
+        Write-Host "  Fim do output da fase: $preview" -ForegroundColor DarkGray
+        Write-Host "  Forcando retry (o modelo respondeu sem executar a fase)" -ForegroundColor Yellow
+        $global:LASTEXITCODE = 1
+    }
+
     if ($LASTEXITCODE -ne 0) {
         # Verifica se foi usage limit para mensagem mais informativa
         $faseOutput = if (Test-Path $outputFile) { Get-Content $outputFile -Raw -ErrorAction SilentlyContinue } else { "" }
@@ -5063,7 +5440,9 @@ function Invoke-MigracaoFase {
             default       { $filesExist = Test-Path $formFile }
         }
 
-        if ($filesExist) {
+        # Erro178: o atalho "arquivo existe, entao seguir" NAO vale para no-op -
+        # o arquivo existe justamente porque a fase nao mexeu nele.
+        if ($filesExist -and -not $foiNoOp) {
             Write-Host "  Arquivos detectados em disco apesar do exit code $LASTEXITCODE (post-timeout)" -ForegroundColor Yellow
             Write-Host "  Continuando com validacao..." -ForegroundColor Yellow
         }
@@ -5141,12 +5520,123 @@ function Invoke-MigracaoFase {
             # Fase 3: Espera Form com estrutura base (PageFrame, Containers)
             if (Test-Path $formFile) {
                 $conteudo = Get-Content $formFile -Raw
-                if ($conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm") {
+                # Layout PAGINADO (CRUD, e OPERACIONAL que tenha PageFrame)
+                $temEstruturaPaginada = ($conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm")
+
+                # Layout FLAT: form OPERACIONAL cujo SCX legado NAO possui
+                # PageFrame (ex.: SIGMVITS -> Formsigmvits, task572: tela de
+                # Caixa/PDV 1280x750 com 39 containers posicionados livremente,
+                # 3 grids soltos e NENHUMA Page). Exigir ConfigurarPageFrame
+                # nesse caso obrigaria a inventar um PageFrame que o legado nao
+                # tem (viola o PILAR 1 e a regra "NUNCA inventar") ou a criar um
+                # metodo vazio (proibido pela regra de completude). Mesmo
+                # raciocinio das excecoes ja aplicadas nas Fases 4, 5, 6, 7 e 8.
+                # Valida-se entao a estrutura base que o form realmente tem:
+                # InicializarForm + os containers de topo do layout legado.
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # DUAS coisas. Dump ausente/ilegivel mantem a exigencia
+                # original, para a excecao nao virar atalho.
+                #
+                # (1) O objeto RAIZ do legado e' um "form" GENERICO - nao
+                #     frmcadastro nem frmrelatorio. Este teste e' o que da
+                #     poder ao criterio: medido em 2026-09-25 nos 571 dumps de
+                #     tasks\, "sem PageFrame declarado" SOZINHO valeria para
+                #     518 deles, porque frmcadastro/frmrelatorio HERDAM a
+                #     Pagina do framework.vcx e por isso nao a declaram no SCX
+                #     (188 frmcadastro + 107 frmrelatorio cairiam na excecao).
+                #     Somando a raiz "form" sobram 223 - exatamente o universo
+                #     OPERACIONAL de layout proprio.
+                # (2) Esse form nao declara PageFrame na sua arvore de objetos.
+                #     Le-se SO a arvore (linha ancorada "BaseClass: pageframe",
+                #     mesmo criterio das Fases 4 e 5): as ocorrencias de
+                #     "Pagina.Dados"/"pgfprincipal" no codigo dos metodos sao
+                #     do form PAI (ThisForm.ParentForm.Pagina...) e nao provam
+                #     PageFrame neste form. Os 9 legados de raiz "form" que TEM
+                #     PageFrame proprio continuam exigindo ConfigurarPageFrame.
+                $legadoSemPageFrame = $false
+                $legadoSemContainer = $false
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpLegadoF3 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpLegadoF3) {
+                        $txtLegadoF3 = Get-Content $dumpLegadoF3 -Raw -ErrorAction SilentlyContinue
+                        if ($txtLegadoF3) {
+                            $raizFormGenerico = ($txtLegadoF3 -match '(?im)^\s*Parent:\s*\(raiz\)\s*\r?\n\s*Class:\s*form\s*\r?\n\s*BaseClass:\s*form\s*$')
+                            $legadoSemPageFrame = $raizFormGenerico -and
+                                                  ($txtLegadoF3 -notmatch '(?im)^\s*BaseClass:\s*pageframe\s*$')
+                            # (3) Esse form tambem nao declara CONTAINER nenhum
+                            #     na sua arvore de objetos - todo controle
+                            #     pendura direto na Form. E' o que distingue o
+                            #     sub-ramo FLAT SEM CONTAINER do FLAT comum,
+                            #     que exige AddObject("cnt_4c_...").
+                            $legadoSemContainer = $legadoSemPageFrame -and
+                                                  ($txtLegadoF3 -notmatch '(?im)^\s*BaseClass:\s*container\s*$')
+                        }
+                    }
+                }
+
+                # A excecao NAO pode virar atalho para form vazio: a estrutura
+                # base continua obrigatoria (InicializarForm + pelo menos um
+                # container de topo criado), e o migrado nao pode ter inventado
+                # um PageFrame que o legado nao tem.
+                $temEstruturaFlat = ($FormType -eq "OPERACIONAL" -and
+                                     $legadoSemPageFrame -and
+                                     ($conteudo -notmatch 'AddObject\(\s*"pgf_4c_') -and
+                                     ($conteudo -match "InicializarForm") -and
+                                     ($conteudo -match 'AddObject\(\s*"cnt_4c_'))
+
+                if ($temEstruturaFlat -and -not $temEstruturaPaginada) {
+                    Write-Host "  [i] Fase 3 (layout flat): legado sem PageFrame - nenhuma Page a acrescentar; validado pela estrutura base que o legado de fato tem" -ForegroundColor Cyan
+                }
+
+                # Sub-ramo FLAT SEM CONTAINER: form OPERACIONAL cujo SCX legado
+                # nao possui PageFrame NEM Container nenhum - todo controle
+                # pendura direto na Form (ex.: SIGMVMVT -> FormSIGMVMVT,
+                # task574: Acompanhamento Operacional 800x600, 15 objetos todos
+                # com "Parent: sigmvmvt" - Shape/2 CommandButton/CommandGroup/
+                # OleControl TreeView/5 Label/5 TextBox, ZERO container).
+                # Para esse legado o ramo FLAT acima e' inalcancavel: ele exige
+                # AddObject("cnt_4c_..."), e criar container que o legado nao
+                # tem violaria o PILAR 1 e a regra "NUNCA inventar". Nao ha
+                # "casca" a desenhar na Fase 3 - a estrutura base desse form e'
+                # a propria classe: DEFINE CLASS + propriedades de estado +
+                # Init/InicializarForm/Destroy, com os controles entrando nas
+                # Fases 4 a 6. Mesmo raciocinio das excecoes ja aplicadas nas
+                # Fases 4, 5, 6, 7 e 8.
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # as TRES ausencias (raiz form generico + sem pageframe + sem
+                # container). Dump ausente/ilegivel mantem a exigencia
+                # original. Medido em 2026-09-25 nos 573 dumps de tasks\:
+                # "raiz form generico + sem pageframe" vale para 225; somando
+                # "sem container" sobram 14 - o universo real de telas sem
+                # nenhuma superficie de agrupamento.
+                #
+                # E a excecao NAO pode virar atalho para form vazio: no lugar
+                # do container exige-se o que ESTA fase de fato entrega - a
+                # classe declarada sobre FormBase, o InicializarForm e a
+                # instanciacao do BO gerado nas Fases 1-2 (o prompt da Fase 3
+                # pede "Init() completo (inicializar BO, InicializarForm)").
+                $rxDefineClasseF3 = '(?im)^\s*DEFINE\s+CLASS\s+' + [regex]::Escape($formClass) + '\s+AS\s+FormBase\b'
+                $rxInstanciaBOF3  = 'CREATEOBJECT\(\s*"' + [regex]::Escape($boClass) + '"'
+
+                $temEstruturaFlatSemContainer = ($FormType -eq "OPERACIONAL" -and
+                                                 $legadoSemContainer -and
+                                                 ($conteudo -notmatch 'AddObject\(\s*"pgf_4c_') -and
+                                                 ($conteudo -match "InicializarForm") -and
+                                                 ($conteudo -match $rxDefineClasseF3) -and
+                                                 ($conteudo -match $rxInstanciaBOF3))
+
+                if ($temEstruturaFlatSemContainer -and -not ($temEstruturaPaginada -or $temEstruturaFlat)) {
+                    Write-Host "  [i] Fase 3 (layout flat sem container): legado sem PageFrame e sem Container - nenhuma casca a acrescentar; validado pela classe base (DEFINE CLASS AS FormBase + InicializarForm + BO instanciado)" -ForegroundColor Cyan
+                }
+
+                if ($temEstruturaPaginada -or $temEstruturaFlat -or $temEstruturaFlatSemContainer) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form criado com estrutura base: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  ?? Form criado mas faltam m�todos base (ConfigurarPageFrame, InicializarForm)" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 3: layout paginado exige ConfigurarPageFrame + InicializarForm; layout flat (OPERACIONAL) exige dump provando legado sem PageFrame + InicializarForm + containers de topo; layout flat SEM CONTAINER exige dump provando legado sem PageFrame e sem Container + DEFINE CLASS AS FormBase + InicializarForm + instanciacao do BO" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O foi criado: $formFile" -ForegroundColor Red
@@ -5170,12 +5660,162 @@ function Invoke-MigracaoFase {
                 $temCarga  = ($conteudo -match "CarregarLista|CarregarDados|MontaGrade")
                 $temLayoutFlat = ($FormType -eq "OPERACIONAL" -and $temGrade -and $temBotoes -and $temCarga)
 
-                if ($temLayoutPaginado -or $temLayoutFlat) {
+                # Layout DESPACHANTE: form OPERACIONAL cujo SCX legado nao tem
+                # NEM lista NEM campos - tipicamente um splash/despachante que
+                # so avisa e encaminha para outra tela (ex.: SIGMVEXP ->
+                # FormSigMvExp, task570: 337x147, TitleBar=0, ControlBox=.F.,
+                # com um UNICO CommandButton "Aguarde Processando Dados" que o
+                # Activate clica para disparar o DO CASE de despacho).
+                # Para esse legado o ramo PAGINADO obrigaria a inventar um
+                # PageFrame Lista/Dados e 6 botoes CRUD, e o ramo FLAT
+                # obrigaria a inventar uma GRADE - ambos violam o PILAR 1 e a
+                # regra "NUNCA inventar", e metodos vazios sao proibidos pela
+                # regra de completude. Nao ha o que a Fase 4 acrescente: a tela
+                # inteira ja coube na Fase 3. Mesmo raciocinio das excecoes ja
+                # aplicadas nas Fases 5, 6, 7 e 8.
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # a ausencia das DUAS superficies. Dump ausente/ilegivel mantem
+                # a exigencia original, para a excecao nao virar atalho.
+                # Medido em 2026-09-24 nos 569 dumps de tasks\: "sem lista"
+                # sozinho dispensaria 35 dos 224 OPERACIONAL - varios deles com
+                # 20 a 42 objetos, isto eh, com campos de verdade e so sem
+                # grade. Somando "sem campos" sobram 14, todos comprovadamente
+                # splash/despachante (so form + dataenvironment + decoracao +
+                # no maximo botoes).
+                $legadoSemListaNemCampos = $false
+                $legadoSoExibicaoF4      = $false
+                $nBotoesLegadoF4         = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpLegadoF4 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpLegadoF4) {
+                        $txtLegadoF4 = Get-Content $dumpLegadoF4 -Raw -ErrorAction SilentlyContinue
+                        if ($txtLegadoF4) {
+                            # Superficie de LISTA: objeto grid/pageframe, ou a
+                            # forma como o Init legado monta a grade da Lista
+                            # (AddCursor + pColuna) ou vincula dados a ela.
+                            $temListaLegado = ($txtLegadoF4 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                              ($txtLegadoF4 -match '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')
+                            # Superficie de CAMPOS: qualquer controle de entrada
+                            # de dados. Label/Image/Shape/Container NAO contam -
+                            # sao decoracao, e um splash costuma ter os quatro.
+                            $temCamposLegado = ($txtLegadoF4 -match '(?im)^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$')
+                            $legadoSemListaNemCampos = (-not $temListaLegado) -and (-not $temCamposLegado)
+                            # Dialogo de EXIBICAO: tem campo, mas TODO campo do
+                            # legado e' ReadOnly = .T. - ver Test-LegadoDialogoExibicao.
+                            $legadoSoExibicaoF4 = (-not $temListaLegado) -and
+                                                  (Test-LegadoDialogoExibicao -TextoDump $txtLegadoF4)
+                            $nBotoesLegadoF4 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF4
+                        }
+                    }
+                }
+
+                # A excecao NAO pode virar atalho para form vazio: o que o
+                # legado REALMENTE tem continua obrigatorio. Se o dump prova
+                # botao, o migrado precisa do botao E do handler do Click; se o
+                # legado nao tem botao nenhum (tela que so roda no Init/
+                # Activate), exige-se a estrutura base entregue na Fase 3.
+                $temSuperficieDespachante = $false
+                if ($nBotoesLegadoF4 -ge 1) {
+                    $temSuperficieDespachante = ($conteudo -match 'AddObject\(\s*"(cmg_4c_|cmd_4c_)') -and
+                                                ($conteudo -match 'PROCEDURE\s+(Cmd|Btn)\w*Click')
+                } else {
+                    $temSuperficieDespachante = ($conteudo -match "InicializarForm") -and
+                                                ($conteudo -match "ConfigurarPageFrame")
+                }
+
+                $temLayoutDespachante = ($FormType -eq "OPERACIONAL" -and
+                                         $legadoSemListaNemCampos -and $temSuperficieDespachante)
+
+                # Layout EXIBICAO: form OPERACIONAL cujo SCX legado nao tem
+                # lista e cujos campos sao TODOS ReadOnly = .T. - um dialogo
+                # modal que so MOSTRA um texto (ex.: SIGPDMEN -> FormSigMvMen,
+                # task573: 800x269, TitleBar=0, ControlBox=.F., um EditBox
+                # ReadOnly dentro de um Container e um unico botao "Ok").
+                # Nao ha o que listar (sem grade no legado) nem o que digitar
+                # (sem campo editavel): o ramo PAGINADO obrigaria a inventar um
+                # PageFrame Lista/Dados com 6 botoes CRUD e o ramo FLAT
+                # obrigaria a inventar uma GRADE - ambos violam o PILAR 1 e a
+                # regra "NUNCA inventar". Na pratica a alternativa que sobra e'
+                # escrever metodos-adaptador vazios so para casar com o regex
+                # do gate (ConfigurarPaginaLista/AlternarPagina que nao listam
+                # nada, Btn*Click que so fazem THIS.Release()), que e'
+                # exatamente o "stub disfarcado" proibido pela regra de
+                # completude - foi o que aconteceu no gemeo task140/FormSigPdMen.
+                #
+                # FAIL-CLOSED: exige o dump, exige ausencia de lista e exige
+                # que TODO campo seja ReadOnly - um unico campo editavel
+                # derruba a excecao. Medido em 2026-09-25 nos 572 dumps de
+                # tasks\: dispensa 2, e os dois sao o MESMO legado (SIGPDMEN).
+                # Alem disso o migrado tem de REPRODUZIR o campo somente-leitura
+                # (EditBox/TextBox) - senao a excecao viraria atalho para
+                # entregar o dialogo sem o texto que ele existe para mostrar.
+                $temSuperficieExibicao = $temSuperficieDespachante -and
+                                         ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"(EditBox|TextBox)"')
+
+                $temLayoutExibicao = ($FormType -eq "OPERACIONAL" -and
+                                      $legadoSoExibicaoF4 -and $temSuperficieExibicao)
+
+                # Layout ARVORE: form OPERACIONAL cuja superficie de LISTA no
+                # legado nao e' um Grid e sim um controle ActiveX de arvore
+                # (ex.: SIGMVMVT -> FormSIGMVMVT, task574: "Acompanhamento
+                # Operacional", ctTree.ocx, consulta hierarquica de um movimento
+                # por Empresa/Operacao/Numero com drill-down por nivel).
+                # O ramo PAGINADO obrigaria a inventar um PageFrame Lista/Dados
+                # com 6 botoes CRUD, e o ramo FLAT obrigaria a inventar uma
+                # GRADE no lugar da arvore - ambos violam o PILAR 1 e a regra
+                # "NUNCA inventar". E Grid nao reproduz expandir/retrair por
+                # nivel, que e' a tela inteira: o legado desenha os nos com
+                # AddPictureNode/NodeCargo/NodeExpanded e navega por NodeLevel.
+                # Os ramos DESPACHANTE e EXIBICAO tambem nao servem - este
+                # legado TEM lista (a arvore) e TEM campo editavel (5 filtros).
+                #
+                # FAIL-CLOSED: exige o dump, exige ausencia de Grid/PageFrame,
+                # exige um olecontrol E exige que o legado dirija esse controle
+                # pela API de NOS. So "tem olecontrol" NAO basta: medido em
+                # 2026-09-25 nos 573 dumps de tasks\, 3 casam sem Grid, e em 2
+                # deles o olecontrol e' um MODEM (oModem, em SigReEch e
+                # sigprtef) - nada a ver com lista. Exigindo a API de nos sobra
+                # 1, o proprio SIGMVMVT.
+                # A excecao troca a GRADE pela ARVORE e nada mais: os botoes e o
+                # metodo de carga do ramo FLAT continuam obrigatorios.
+                $legadoListaArvore = $false
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpArvoreF4 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpArvoreF4) {
+                        $txtArvoreF4 = Get-Content $dumpArvoreF4 -Raw -ErrorAction SilentlyContinue
+                        if ($txtArvoreF4) {
+                            $semGridLegadoF4 = -not ($txtArvoreF4 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$')
+                            $temOleLegadoF4  = $txtArvoreF4 -match '(?im)^\s*BaseClass:\s*olecontrol\s*$'
+                            $temApiNosF4     = $txtArvoreF4 -match '(?i)(AddPictureNode|ClearNodes|NodeCargo|NodeExpanded|NodeLevel|NodeHeader|\.Nodes\.Add)'
+                            $legadoListaArvore = $semGridLegadoF4 -and $temOleLegadoF4 -and $temApiNosF4
+                        }
+                    }
+                }
+
+                $temArvoreMigrada = ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"OLEControl"')
+
+                $temLayoutArvore = ($FormType -eq "OPERACIONAL" -and $legadoListaArvore -and
+                                    $temArvoreMigrada -and $temBotoes -and $temCarga)
+
+                if ($temLayoutArvore -and -not ($temLayoutPaginado -or $temLayoutFlat)) {
+                    Write-Host "  [i] Fase 4 (layout arvore): lista do legado e' um ActiveX de arvore, nao um Grid - validado por arvore + botoes + metodo de carga" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutDespachante -and -not ($temLayoutPaginado -or $temLayoutFlat)) {
+                    Write-Host "  [i] Fase 4 (layout despachante): legado sem lista e sem campos - nada a acrescentar; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutExibicao -and -not ($temLayoutPaginado -or $temLayoutFlat -or $temLayoutDespachante)) {
+                    Write-Host "  [i] Fase 4 (layout exibicao): legado sem lista e com todos os campos ReadOnly - nada a acrescentar; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutPaginado -or $temLayoutFlat -or $temLayoutDespachante -or $temLayoutExibicao -or $temLayoutArvore) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form atualizado com Grid e Bot�es CRUD: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  [!] Form nao passou na Fase 4: layout paginado exige ConfigurarPaginaLista + AlternarPagina; layout flat (OPERACIONAL) exige grd_4c_* + cmg_4c_/cmd_4c_ + CarregarLista" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 4: layout paginado exige ConfigurarPaginaLista + AlternarPagina; layout flat (OPERACIONAL) exige grd_4c_* + cmg_4c_/cmd_4c_ + CarregarLista; layout arvore (OPERACIONAL) exige dump provando lista ActiveX de arvore + OLEControl + botoes + metodo de carga; layout despachante (OPERACIONAL) exige dump provando legado sem lista e sem campos + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista e com todos os campos ReadOnly + o campo somente-leitura reproduzido" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O encontrado: $formFile" -ForegroundColor Red
@@ -5203,12 +5843,164 @@ function Invoke-MigracaoFase {
                 $temCampos     = ($conteudo -match "\.ControlSource\s*=")
                 $temLayoutFlat = ($FormType -eq "OPERACIONAL" -and $semPageFrame -and $temCampos)
 
-                if ($temPaginaDados -or $temLayoutFlat) {
+                # Layout DESPACHANTE: form OPERACIONAL cujo SCX legado nao tem
+                # NEM lista NEM campos - tipicamente um splash/despachante que
+                # so avisa e encaminha para outra tela (ex.: SIGMVEXP ->
+                # FormSigMvExp, task570: 337x147, TitleBar=0, ControlBox=.F.,
+                # com um UNICO CommandButton "Aguarde Processando Dados" que o
+                # Activate clica para disparar o DO CASE de despacho).
+                # Esta fase pede "metade dos campos": com ZERO campos no
+                # legado, metade de zero e' zero. O ramo PAGINADO obrigaria a
+                # inventar uma Page2 de Dados e o ramo FLAT obrigaria a
+                # inventar campos com ControlSource - ambos violam o PILAR 1 e
+                # a regra "NUNCA inventar", e metodo vazio e' proibido pela
+                # regra de completude. Mesmo raciocinio da excecao ja aplicada
+                # na Fase 4 (e das excecoes das Fases 6, 7 e 8).
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # a ausencia das DUAS superficies. Dump ausente/ilegivel mantem
+                # a exigencia original, para a excecao nao virar atalho.
+                # Criterio identico ao da Fase 4 (medido em 2026-09-24 nos 569
+                # dumps de tasks\: "sem lista" sozinho dispensaria 35 dos 224
+                # OPERACIONAL, varios com campos de verdade e so sem grade;
+                # somando "sem campos" sobram 14, todos splash/despachante).
+                $legadoSemListaNemCamposF5 = $false
+                $legadoSoExibicaoF5        = $false
+                $nBotoesLegadoF5           = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpLegadoF5 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpLegadoF5) {
+                        $txtLegadoF5 = Get-Content $dumpLegadoF5 -Raw -ErrorAction SilentlyContinue
+                        if ($txtLegadoF5) {
+                            # Superficie de LISTA: objeto grid/pageframe, ou a
+                            # forma como o Init legado monta a grade da Lista
+                            # (AddCursor + pColuna) ou vincula dados a ela.
+                            $temListaLegadoF5 = ($txtLegadoF5 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                ($txtLegadoF5 -match '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')
+                            # Superficie de CAMPOS: qualquer controle de entrada
+                            # de dados. Label/Image/Shape/Container NAO contam -
+                            # sao decoracao, e um splash costuma ter os quatro.
+                            $temCamposLegadoF5 = ($txtLegadoF5 -match '(?im)^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$')
+                            $legadoSemListaNemCamposF5 = (-not $temListaLegadoF5) -and (-not $temCamposLegadoF5)
+                            # Dialogo de EXIBICAO: tem campo, mas TODO campo do
+                            # legado e' ReadOnly = .T. (mesmo criterio da Fase 4
+                            # - ver Test-LegadoDialogoExibicao). "Metade dos
+                            # campos" desse legado e' o proprio campo somente-
+                            # leitura, que a Fase 3/4 ja entregou por completo -
+                            # nao ha campo NOVO para acrescentar aqui.
+                            $legadoSoExibicaoF5 = (-not $temListaLegadoF5) -and
+                                                  (Test-LegadoDialogoExibicao -TextoDump $txtLegadoF5)
+                            $nBotoesLegadoF5 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF5
+                        }
+                    }
+                }
+
+                # A excecao NAO pode virar atalho para form vazio: o que o
+                # legado REALMENTE tem continua obrigatorio. Se o dump prova
+                # botao, o migrado precisa do botao E do handler do Click; se o
+                # legado nao tem botao nenhum (tela que so roda no Init/
+                # Activate), exige-se a estrutura base entregue na Fase 3.
+                $temSuperficieDespachanteF5 = $false
+                if ($nBotoesLegadoF5 -ge 1) {
+                    $temSuperficieDespachanteF5 = ($conteudo -match 'AddObject\(\s*"(cmg_4c_|cmd_4c_)') -and
+                                                  ($conteudo -match 'PROCEDURE\s+(Cmd|Btn)\w*Click')
+                } else {
+                    $temSuperficieDespachanteF5 = ($conteudo -match "InicializarForm") -and
+                                                  ($conteudo -match "ConfigurarPageFrame")
+                }
+
+                $temLayoutDespachanteF5 = ($FormType -eq "OPERACIONAL" -and
+                                           $legadoSemListaNemCamposF5 -and $temSuperficieDespachanteF5)
+
+                # Layout EXIBICAO: mesmo raciocinio da excecao ja aplicada na
+                # Fase 4 (SIGPDMEN -> FormSigMvMen, task573: dialogo modal com
+                # EditBox ReadOnly dentro de um Container e um unico botao
+                # "Ok"). Exigir ConfigurarPaginaDados obrigaria a inventar um
+                # PageFrame Lista/Dados que o legado nao tem, e exigir
+                # ControlSource obrigaria a trocar o binding por Value direto
+                # so para casar com o regex do ramo FLAT - o migrado ja
+                # reproduz o campo (Fase 3/4), so nao usa ControlSource porque
+                # o legado tambem nao usa (o Init le a coluna via SQLEXEC/
+                # Cursorquery e atribui .Value). FAIL-CLOSED: exige o dump,
+                # ausencia de lista e TODO campo ReadOnly, e ainda exige que o
+                # migrado reproduza o campo somente-leitura.
+                $temSuperficieExibicaoF5 = $temSuperficieDespachanteF5 -and
+                                           ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"(EditBox|TextBox)"')
+
+                $temLayoutExibicaoF5 = ($FormType -eq "OPERACIONAL" -and
+                                       $legadoSoExibicaoF5 -and $temSuperficieExibicaoF5)
+
+                # Layout ARVORE: mesmo legado que a Fase 4 ja dispensa por este
+                # nome (SIGMVMVT -> FormSIGMVMVT, task574: "Acompanhamento
+                # Operacional", ctTree.ocx). Aqui o que nao cabe e' outra coisa:
+                # os "campos" deste legado sao os 5 filtros de Empresa/Operacao/
+                # Numero/Periodo, e NENHUM deles tem ControlSource - o legado le
+                # .Value direto no Valid/MakeTree e monta a arvore com SQL de
+                # chave calculada (EmpDopNums), sem cursor para vincular.
+                # O ramo PAGINADO obrigaria a inventar uma Page2 de Dados que o
+                # legado nao tem, e o ramo FLAT exige ".ControlSource =": num
+                # filtro nao-vinculado isso nao e' cosmetico, e' DEFEITO -
+                # apontar o campo para um cursor que a consulta fecha e recria a
+                # cada requery faz o valor digitado ser sobrescrito e a digitacao
+                # gravar no cursor. Os ramos DESPACHANTE e EXIBICAO tambem nao
+                # servem: este legado TEM lista (a arvore) e TEM campo editavel.
+                #
+                # FAIL-CLOSED: exige o dump, ausencia de Grid/PageFrame, um
+                # olecontrol dirigido pela API de NOS (nao basta "tem olecontrol"
+                # - ver a medicao da Fase 4: sem isso entram 2 MODEMs), presenca
+                # de campo E ausencia TOTAL de ControlSource no legado - um unico
+                # ControlSource derruba a excecao e devolve o form ao ramo FLAT.
+                # Medido em 2026-09-25 nos 573 dumps de tasks\: dispensa 1, o
+                # proprio SIGMVMVT.
+                # E a excecao NAO vira atalho para form com meia tela: exige a
+                # arvore E PARIDADE NUMERICA de campos - o migrado precisa de
+                # pelo menos tantos TextBox quantos o legado declara (5 aqui),
+                # que e' justamente o que a regra "PROIBIDO versao reduzida"
+                # pede desta fase.
+                $legadoArvoreSemBindF5 = $false
+                $nCamposLegadoF5       = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpArvoreF5 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpArvoreF5) {
+                        $txtArvoreF5 = Get-Content $dumpArvoreF5 -Raw -ErrorAction SilentlyContinue
+                        if ($txtArvoreF5) {
+                            $semGridLegadoF5 = -not ($txtArvoreF5 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$')
+                            $temOleLegadoF5  = $txtArvoreF5 -match '(?im)^\s*BaseClass:\s*olecontrol\s*$'
+                            $temApiNosF5     = $txtArvoreF5 -match '(?i)(AddPictureNode|ClearNodes|NodeCargo|NodeExpanded|NodeLevel|NodeHeader|\.Nodes\.Add)'
+                            $semControlSourceLegadoF5 = -not ($txtArvoreF5 -match '(?i)ControlSource')
+                            $nCamposLegadoF5 = ([regex]::Matches($txtArvoreF5, '(?im)^\s*BaseClass:\s*textbox\s*$')).Count
+                            $legadoArvoreSemBindF5 = $semGridLegadoF5 -and $temOleLegadoF5 -and $temApiNosF5 -and
+                                                     $semControlSourceLegadoF5 -and ($nCamposLegadoF5 -ge 1)
+                        }
+                    }
+                }
+
+                $nCamposMigradoF5 = ([regex]::Matches($conteudo, 'AddObject\(\s*"[^"]+"\s*,\s*"TextBox"')).Count
+
+                $temSuperficieArvoreF5 = ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"OLEControl"') -and
+                                         ($nCamposLegadoF5 -ge 1 -and $nCamposMigradoF5 -ge $nCamposLegadoF5)
+
+                $temLayoutArvoreF5 = ($FormType -eq "OPERACIONAL" -and
+                                      $legadoArvoreSemBindF5 -and $temSuperficieArvoreF5)
+
+                if ($temLayoutArvoreF5 -and -not ($temPaginaDados -or $temLayoutFlat)) {
+                    Write-Host "  [i] Fase 5 (layout arvore): filtros do legado nao tem ControlSource (arvore montada por SQL de chave calculada) - validado por arvore + os $nCamposLegadoF5 campos do legado reproduzidos ($nCamposMigradoF5 no migrado)" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutDespachanteF5 -and -not ($temPaginaDados -or $temLayoutFlat)) {
+                    Write-Host "  [i] Fase 5 (layout despachante): legado sem lista e sem campos - nenhum campo a acrescentar; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutExibicaoF5 -and -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF5)) {
+                    Write-Host "  [i] Fase 5 (layout exibicao): legado sem lista e com todos os campos ReadOnly - nenhum campo NOVO a acrescentar; o campo somente-leitura ja foi entregue nas fases anteriores" -ForegroundColor Cyan
+                }
+
+                if ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF5 -or $temLayoutExibicaoF5 -or $temLayoutArvoreF5) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form atualizado com campos principais: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  [!] Form nao passou na Fase 5: layout paginado exige ConfigurarPaginaDados; layout flat (OPERACIONAL, sem PageFrame) exige campos com ControlSource vinculado" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 5: layout paginado exige ConfigurarPaginaDados; layout flat (OPERACIONAL, sem PageFrame) exige campos com ControlSource vinculado; layout arvore (OPERACIONAL) exige dump provando lista ActiveX de arvore + campo sem ControlSource no legado + OLEControl + paridade numerica de campos; layout despachante (OPERACIONAL) exige dump provando legado sem lista e sem campos + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista e com todos os campos ReadOnly + o campo somente-leitura reproduzido" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O encontrado: $formFile" -ForegroundColor Red
@@ -5238,14 +6030,220 @@ function Invoke-MigracaoFase {
                 $semPageFrame   = ($conteudo -notmatch 'AddObject\(\s*"pgf_4c_')
                 $temBindEvent   = ($conteudo -match "BINDEVENT")
                 $temMetodoLookup = ($conteudo -match "PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*")
-                $temLayoutFlat  = ($FormType -eq "OPERACIONAL" -and $semPageFrame -and $temBindEvent -and $temMetodoLookup)
 
-                if ($temPaginaDados -or $temLayoutFlat) {
+                # Form legado que NAO TEM lookup nenhum (ex.: SIGMVCHV ->
+                # FormSigMvChv: dialogo de chaves de nota, uma unica coluna de
+                # grade digitada a mao, nenhum fwbuscaext/fwBuscaSel/sigacess).
+                # Exigir AbrirLookup*/AbrirBusca* aqui obrigaria a INVENTAR um
+                # lookup que o legado nao tem - viola o PILAR 1 e a regra
+                # explicita "NUNCA inventar tabelas de lookup que nao existem
+                # no original" - ou a criar um metodo vazio (proibido pela regra
+                # de completude). Mesmo raciocinio das excecoes de
+                # ConfigurarPaginaDados ja aplicadas nas Fases 4, 5 e 6.
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # que nao ha lookup. Dump ausente/ilegivel mantem a exigencia
+                # original, para nao transformar esta excecao num atalho.
+                $dumpLegado      = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                $legadoSemLookup = $false
+                if (Test-Path $dumpLegado) {
+                    $txtLegado = Get-Content $dumpLegado -Raw -ErrorAction SilentlyContinue
+                    if ($txtLegado) {
+                        # 'fwbusca' generico de proposito: o legado tem pelo
+                        # menos fwBuscaExt, fwBuscaSel e fwBuscaInt (medido nos
+                        # dumps) - casar so as duas primeiras deixava 9 forms
+                        # com lookup passarem como "sem lookup". 'mAddColuna' eh
+                        # a API de colunas do picker legado e cobre variantes
+                        # futuras da classe de busca.
+                        $padroesLookup = @(
+                            'fwbusca',
+                            'mAddColuna',
+                            'sigacess\s*\(',
+                            'Acesso(Campos|Contab|Contas|Empresa|Grupos|MovInd|MovMto|Produto|Titulo)\s*\(',
+                            'FormBuscaAuxiliar'
+                        )
+                        $legadoSemLookup = -not ($padroesLookup | Where-Object { $txtLegado -match $_ })
+                    }
+                }
+
+                # Superficie de dados de um form flat SEM lookup: as colunas
+                # editaveis da grade (ControlSource vinculado) + o handler de
+                # validacao que o legado tinha no Valid da celula.
+                $temCamposFlat = ($conteudo -match "\.ControlSource\s*=") -and
+                                 ($conteudo -match "PROCEDURE\s+Validar\w+")
+
+                $temLayoutFlat  = ($FormType -eq "OPERACIONAL" -and $semPageFrame -and $temBindEvent -and
+                                   ($temMetodoLookup -or ($legadoSemLookup -and $temCamposFlat)))
+
+                if ($temLayoutFlat -and -not $temMetodoLookup) {
+                    Write-Host "  [i] Fase 6 (layout flat): legado sem lookup algum - validado por campos da grade + handler de validacao" -ForegroundColor Cyan
+                }
+
+                # Layout DESPACHANTE: form OPERACIONAL cujo SCX legado nao tem
+                # NEM lista NEM campos - tipicamente um splash/despachante que
+                # so avisa e encaminha para outra tela (ex.: SIGMVEXP ->
+                # FormSigMvExp, task570: 337x147, TitleBar=0, ControlBox=.F.,
+                # com um UNICO CommandButton "Aguarde Processando Dados" que o
+                # Activate clica para disparar o DO CASE de despacho).
+                # Esta fase pede "campos restantes + lookups": sem campo algum
+                # no legado nao ha o que acrescentar nem o que ligar por lookup.
+                # O ramo PAGINADO obrigaria a inventar uma Page2 de Dados e o
+                # ramo FLAT obrigaria a inventar campos com ControlSource + um
+                # lookup que o legado nunca consulta - ambos violam o PILAR 1 e
+                # a regra "NUNCA inventar tabelas de lookup que nao existem no
+                # original", e metodo vazio e' proibido pela regra de
+                # completude. Mesmo raciocinio das excecoes das Fases 4, 5, 7 e 8.
+                #
+                # FAIL-CLOSED: so relaxa quando o dump do legado EXISTE e prova
+                # a ausencia das DUAS superficies (lista e campos) E a ausencia
+                # de lookup. Dump ausente/ilegivel mantem a exigencia original,
+                # para a excecao nao virar atalho. Criterio identico ao das
+                # Fases 4 e 5 (medido em 2026-09-24 nos 569 dumps de tasks\:
+                # "sem lista" sozinho dispensaria 35 dos 224 OPERACIONAL,
+                # varios com campos de verdade e so sem grade; somando "sem
+                # campos" sobram 14, todos splash/despachante).
+                $legadoSemListaNemCamposF6 = $false
+                $legadoSoExibicaoF6        = $false
+                $legadoSomenteLeituraF6    = $false
+                $nBotoesLegadoF6           = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpLegadoF6 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpLegadoF6) {
+                        $txtLegadoF6 = Get-Content $dumpLegadoF6 -Raw -ErrorAction SilentlyContinue
+                        if ($txtLegadoF6) {
+                            # Superficie de LISTA: objeto grid/pageframe, ou a
+                            # forma como o Init legado monta a grade da Lista
+                            # (AddCursor + pColuna) ou vincula dados a ela.
+                            $temListaLegadoF6 = ($txtLegadoF6 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                ($txtLegadoF6 -match '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')
+                            # Superficie de CAMPOS: qualquer controle de entrada
+                            # de dados. Label/Image/Shape/Container NAO contam -
+                            # sao decoracao, e um splash costuma ter os quatro.
+                            $temCamposLegadoF6 = ($txtLegadoF6 -match '(?im)^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$')
+                            $legadoSemListaNemCamposF6 = (-not $temListaLegadoF6) -and (-not $temCamposLegadoF6)
+                            # Dialogo de EXIBICAO: tem campo, mas TODO campo do
+                            # legado e' ReadOnly = .T. (mesmo criterio das Fases
+                            # 4 e 5 - ver Test-LegadoDialogoExibicao). Campo
+                            # somente-leitura nao recebe lookup: nao ha onde
+                            # digitar codigo para o picker resolver.
+                            $legadoSoExibicaoF6 = (-not $temListaLegadoF6) -and
+                                                  (Test-LegadoDialogoExibicao -TextoDump $txtLegadoF6)
+                            # VISUALIZADOR: o legado TEM lista e TEM campo, mas
+                            # NENHUM campo aceita digitacao. Difere do ramo de
+                            # EXIBICAO acima em dois pontos: nao exige ausencia
+                            # de lista (este legado tem grade) e reconhece o
+                            # "When -> Return .f." do Framework Fortyus, que eh
+                            # como o SIGMVSBN torna Get_items/Get_descr/Get_valo
+                            # nao-digitaveis - nenhum deles declara ReadOnly.
+                            $legadoSomenteLeituraF6 = Test-LegadoSomenteLeitura -TextoDump $txtLegadoF6
+                            $nBotoesLegadoF6 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF6
+                        }
+                    }
+                }
+
+                # A excecao NAO pode virar atalho para form vazio: o que o
+                # legado REALMENTE tem continua obrigatorio. Se o dump prova
+                # botao, o migrado precisa do botao E do handler do Click; se o
+                # legado nao tem botao nenhum (tela que so roda no Init/
+                # Activate), exige-se a estrutura base entregue na Fase 3.
+                $temSuperficieDespachanteF6 = $false
+                if ($nBotoesLegadoF6 -ge 1) {
+                    $temSuperficieDespachanteF6 = ($conteudo -match 'AddObject\(\s*"(cmg_4c_|cmd_4c_)') -and
+                                                  ($conteudo -match 'PROCEDURE\s+(Cmd|Btn)\w*Click')
+                } else {
+                    $temSuperficieDespachanteF6 = ($conteudo -match "InicializarForm") -and
+                                                  ($conteudo -match "ConfigurarPageFrame")
+                }
+
+                $temLayoutDespachanteF6 = ($FormType -eq "OPERACIONAL" -and
+                                           $legadoSemListaNemCamposF6 -and $legadoSemLookup -and
+                                           $temSuperficieDespachanteF6)
+
+                # Layout EXIBICAO: ramo espelho do que as Fases 4 e 5 ja tem
+                # (SIGPDMEN -> FormSigMvMen, task573: dialogo modal com um
+                # EditBox ReadOnly dentro de um Container e um unico botao
+                # "Ok"). Nao eh PAGINADO (o legado nao tem PageFrame), nao eh
+                # FLAT (o legado nao usa ControlSource - o Init le a coluna via
+                # Cursorquery e atribui .Value direto, entao nao ha
+                # $temCamposFlat) e nao eh DESPACHANTE (tem campo, logo
+                # $legadoSemListaNemCamposF6 e' falso). Sem este ramo a fase
+                # reprova um form correto e completo, e o unico jeito de passar
+                # seria INVENTAR um lookup que o legado nao consulta (viola o
+                # PILAR 1 e a regra "NUNCA inventar tabelas de lookup") ou
+                # trocar o binding por ControlSource so para casar com o regex.
+                # Campo ReadOnly nao tem lookup por definicao: nao ha onde o
+                # usuario digitar codigo para o picker resolver.
+                #
+                # FAIL-CLOSED: exige o dump PRESENTE provando ausencia de lista,
+                # ausencia de lookup e TODO campo ReadOnly, e ainda exige que o
+                # migrado reproduza o campo somente-leitura + a superficie do
+                # botao que o legado tem. Um unico campo editavel no legado
+                # derruba a excecao.
+                $temSuperficieExibicaoF6 = $temSuperficieDespachanteF6 -and
+                                           ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"(EditBox|TextBox)"')
+
+                $temLayoutExibicaoF6 = ($FormType -eq "OPERACIONAL" -and
+                                        $legadoSoExibicaoF6 -and $legadoSemLookup -and
+                                        $temSuperficieExibicaoF6)
+
+                if ($temLayoutDespachanteF6 -and -not ($temPaginaDados -or $temLayoutFlat)) {
+                    Write-Host "  [i] Fase 6 (layout despachante): legado sem lista, sem campos e sem lookup - nenhum campo ou lookup a acrescentar; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                }
+
+                if ($temLayoutExibicaoF6 -and -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6)) {
+                    Write-Host "  [i] Fase 6 (layout exibicao): legado sem lista, sem lookup e com todos os campos ReadOnly - campo somente-leitura nao recebe lookup; a superficie do dialogo ja foi entregue nas fases anteriores" -ForegroundColor Cyan
+                }
+
+                # Layout VISUALIZADOR: form OPERACIONAL flat cujo legado eh um
+                # visualizador puro - TEM grade e TEM campo, mas NENHUM campo
+                # aceita digitacao (ex.: SIGMVSBN -> FormSigMvSbn, task577:
+                # dialogo "SubNiveis" com duas grades ReadOnly = .T. e tres
+                # fwget cujo When devolve .f.; zero fwbuscaext/sigacess).
+                #
+                # Nenhum dos quatro ramos acima alcanca este caso: nao eh
+                # PAGINADO (o legado nao tem PageFrame); nao eh FLAT porque
+                # $temCamposFlat exige um "PROCEDURE Validar*" e o legado nao
+                # tem Valid nenhum - todo campo eh somente-leitura; nao eh
+                # DESPACHANTE (tem lista e tem campo); e nao eh EXIBICAO, que
+                # exige ausencia de lista E so reconhece ReadOnly = .T.
+                # declarado no proprio controle.
+                #
+                # Sem este ramo a fase reprova um form correto e completo, e as
+                # duas unicas saidas seriam INVENTAR um lookup que o legado
+                # nunca consulta (viola o PILAR 1 e a regra "NUNCA inventar
+                # tabelas de lookup que nao existem no original") ou escrever um
+                # Validar* vazio para um campo que nao aceita digitacao
+                # (proibido pela regra de completude). Campo somente-leitura nao
+                # tem lookup por definicao: nao ha onde digitar o codigo.
+                #
+                # FAIL-CLOSED: exige o dump PRESENTE provando ausencia de lookup
+                # E que TODO campo do legado eh nao-digitavel, e ainda exige que
+                # o migrado entregue a superficie desta fase - os campos
+                # restantes como TextBox/EditBox somente-leitura, a grade
+                # vinculada (ControlSource) e os eventos ligados (BINDEVENT).
+                # Um unico campo digitavel no legado derruba a excecao.
+                # Medido em 2026-09-25 nos 576 dumps de tasks\: 24 dumps (4%)
+                # entram por aqui, todos visualizadores.
+                $temSuperficieVisualizadorF6 = ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"(EditBox|TextBox)"') -and
+                                               ($conteudo -match '\.ReadOnly\s*=\s*\.T\.') -and
+                                               ($conteudo -match '\.ControlSource\s*=')
+
+                $temLayoutVisualizadorF6 = ($FormType -eq "OPERACIONAL" -and $semPageFrame -and $temBindEvent -and
+                                            $legadoSemLookup -and $legadoSomenteLeituraF6 -and
+                                            $temSuperficieVisualizadorF6)
+
+                if ($temLayoutVisualizadorF6 -and
+                    -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6)) {
+                    Write-Host "  [i] Fase 6 (layout visualizador): legado sem lookup e com TODO campo nao-digitavel (ReadOnly ou When -> .f.) - campo somente-leitura nao recebe lookup; validado pelos campos somente-leitura + grade vinculada + eventos ligados" -ForegroundColor Cyan
+                }
+
+                if ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6 -or
+                    $temLayoutVisualizadorF6) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form atualizado com campos restantes e lookups: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  [!] Form nao passou na Fase 6: layout paginado exige ConfigurarPaginaDados + BINDEVENT; layout flat (OPERACIONAL, sem PageFrame) exige BINDEVENT + metodo AbrirLookup*/AbrirBusca* implementado" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 6: layout paginado exige ConfigurarPaginaDados + BINDEVENT; layout flat (OPERACIONAL, sem PageFrame) exige BINDEVENT + metodo AbrirLookup*/AbrirBusca* implementado; layout despachante (OPERACIONAL) exige dump provando legado sem lista, sem campos e sem lookup + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista, sem lookup e com todos os campos ReadOnly + o campo somente-leitura reproduzido; layout visualizador (OPERACIONAL, sem PageFrame) exige dump provando legado sem lookup e com TODO campo nao-digitavel + campos somente-leitura, grade vinculada e BINDEVENT no migrado" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O encontrado: $formFile" -ForegroundColor Red
@@ -5256,7 +6254,142 @@ function Invoke-MigracaoFase {
             if (Test-Path $formFile) {
                 $conteudo = Get-Content $formFile -Raw
                 $eventosEsperados = @("BtnIncluirClick", "BtnAlterarClick", "BtnVisualizarClick", "BtnExcluirClick")
-                $eventosFaltantes = $eventosEsperados | Where-Object { $conteudo -notmatch $_ }
+                $eventosFaltantes = @($eventosEsperados | Where-Object { $conteudo -notmatch $_ })
+
+                # Os 4 nomes sao convencao de form CRUD (botoes Incluir/
+                # Alterar/Visualizar/Excluir da Page1 de Lista). Form
+                # OPERACIONAL de PROCESSAMENTO nao tem CRUD nenhum: o legado
+                # herda de `form` (nao de `frmcadastro`) e os botoes sao o de
+                # acao + o de saida - SIGMVCMV tem so Processa/Cancela/
+                # cmdBtnGrade. Exigir os 4 nomes ali obrigaria a INVENTAR
+                # botoes que o legado nao tem (viola o PILAR 1 e a regra
+                # "NUNCA inventar") ou a criar 4 metodos vazios (proibido pela
+                # regra de completude, que esta fase valida logo abaixo).
+                # Medido em 2026-09-23: 5 dos 135 forms OPERACIONAL do projeto
+                # legitimamente nao tem nenhum dos 4 (FormSIGBLCTA,
+                # FormSIGMVCMV, Formsigopcgp, Formsigopind, Formsigtosen).
+                # Mesmo raciocinio das excecoes ja aplicadas nas Fases 4, 5,
+                # 6 e 8.
+                if ($eventosFaltantes.Count -gt 0) {
+                    # FAIL-CLOSED: so aceita a ausencia quando o dump do legado
+                    # EXISTE e prova que nao ha superficie CRUD. Dump ausente/
+                    # ilegivel, ou legado COM CRUD, mantem a exigencia original.
+                    $dumpLegadoF7 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    $legadoSemCrud = $false
+                    if (Test-Path $dumpLegadoF7) {
+                        $txtLegadoF7 = Get-Content $dumpLegadoF7 -Raw -ErrorAction SilentlyContinue
+                        if ($txtLegadoF7) {
+                            # Nome de CLASSE BASE, de VARIAVEL DE MODO ou de
+                            # OBJETO/metodo CRUD no legado. Nao casar 'incluir'/
+                            # 'excluir' soltos: o caminho de imagem
+                            # "cadastro_excluir_26.jpg" eh o icone do botao
+                            # Desmarcar do cmdBtnGrade e NAO eh botao de
+                            # exclusao (mesma armadilha do
+                            # "cadastro_salvar_60.jpg" na Fase 8).
+                            $padroesCrudLegado = @(
+                                'frmcadastro',
+                                'Grupo_Op',
+                                '(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)'
+                            )
+                            $temCrudLegado = [bool]($padroesCrudLegado | Where-Object { $txtLegadoF7 -match $_ })
+
+                            # 'pcEscolha' eh a variavel de MODO do frmcadastro
+                            # - mas form FILHO de uma tela de movimentacao a
+                            # LE do PAI ("Op_Escolha = pForm.pcEscolha",
+                            # "ThisForm.ParentForm.pcEscolha") sem ter modo
+                            # CRUD nenhum. Casar o nome solto marcava esses
+                            # filhos como CRUD e passava a exigir deles os 4
+                            # BtnXxxClick - botoes que o legado NAO tem, o que
+                            # obriga a INVENTAR (viola o PILAR 1) ou a criar
+                            # metodo vazio (proibido pela regra de completude).
+                            # So conta como CRUD a ocorrencia que NAO vem de um
+                            # form pai, isto eh, quando o proprio form declara/
+                            # atribui a propriedade.
+                            # Medido em 2026-09-24 nos 570 dumps de tasks\: 25
+                            # forms tem 'pcEscolha' como unica evidencia e 22
+                            # deles a possuem de fato (seguem exigindo os 4
+                            # nomes); so SigPdM10, SigPdMp9 e SIGMVITN a leem
+                            # exclusivamente do pai.
+                            if (-not $temCrudLegado) {
+                                $nPcEscolhaTotal = ([regex]::Matches($txtLegadoF7, '(?i)pcEscolha')).Count
+                                $nPcEscolhaDoPai = ([regex]::Matches($txtLegadoF7, '(?i)(ParentForm|pForm|oForm|oFormulario|par_oForm)\s*\.\s*pcEscolha')).Count
+                                if (($nPcEscolhaTotal - $nPcEscolhaDoPai) -gt 0) { $temCrudLegado = $true }
+                            }
+
+                            # '<X>.Click' com X em Incluir/Alterar/Visualizar/
+                            # Excluir pega o botao CRUD chamado por codigo -
+                            # mas tambem pega o botao de LINHA de uma grade
+                            # ("ThisForm.CntFinanc.Cnt_GrdBarra.Excluir.Click()",
+                            # caption "F4-\<Excluir", que apaga uma linha de
+                            # codigo de barras e nao um REGISTRO). Mesma
+                            # armadilha do "cadastro_excluir_26.jpg" acima: o
+                            # container pai identifica o caso. Botao dentro de
+                            # container de grade (Grd/Grade/Grid) nao conta.
+                            # Medido nos mesmos 570 dumps: o padrao casa em 2
+                            # deles e so o SIGMVITN eh grade (o SigPdMp8 tem
+                            # pcEscolha propria e segue exigindo os 4 nomes).
+                            if (-not $temCrudLegado) {
+                                foreach ($m in [regex]::Matches($txtLegadoF7, '(?i)([A-Za-z0-9_]*)\s*\.\s*(Incluir|Alterar|Visualizar|Excluir)\s*\.\s*Click')) {
+                                    if ($m.Groups[1].Value -notmatch '(?i)(Grd|Grade|Grid)') { $temCrudLegado = $true; break }
+                                }
+                                # Forma sem pai nenhum ("Excluir.Click") nao
+                                # tem container para julgar - mantem CRUD.
+                                if (-not $temCrudLegado -and $txtLegadoF7 -match '(?im)(^|[^A-Za-z0-9_.])(Incluir|Alterar|Visualizar|Excluir)\s*\.\s*Click') {
+                                    $temCrudLegado = $true
+                                }
+                            }
+
+                            $legadoSemCrud = -not $temCrudLegado
+                        }
+                    }
+
+                    # A excecao NAO pode virar atalho para form sem evento
+                    # nenhum: esta fase valida "eventos principais dos botoes",
+                    # entao os botoes que o legado REALMENTE tem precisam ter
+                    # handler. Form OPERACIONAL de processamento tem no minimo
+                    # o botao de acao + o de saida - os 5 medidos acima tem de
+                    # 2 a 29 handlers.
+                    $nHandlers = ([regex]::Matches($conteudo, 'PROCEDURE\s+(Cmd|Btn)\w*Click')).Count
+
+                    # O piso de 2 handlers eh insatisfazivel quando o legado
+                    # tem UM BOTAO SO: SIGMVCTH (task566) eh um visualizador
+                    # somente-leitura de historico de cotacoes cujo unico botao
+                    # eh o cmdSalva.btnSair ("Retornar", Click = ThisForm.
+                    # Release). Exigir 2 ali obrigaria a INVENTAR um segundo
+                    # botao (viola o PILAR 1) ou a criar um handler vazio
+                    # (proibido pela regra de completude) - a mesma armadilha
+                    # que a Fase 6 tinha com lookup inexistente.
+                    #
+                    # Conta a superficie de botao que o dump PROVA existir:
+                    # objeto com BaseClass commandbutton (botao solto) +
+                    # ButtonCount de cada objeto cuja BaseClass eh
+                    # commandgroup. ButtonCount de OptionGroup NAO entra -
+                    # radio nao eh botao de acao e nao precisa de handler.
+                    #
+                    # FAIL-CLOSED: so baixa o piso quando a contagem da
+                    # EXATAMENTE 1. Dump que nao mostra botao nenhum (form
+                    # REPORT herda os 4 botoes do frmrelatorio, entao o SCX
+                    # nao os declara) mantem a exigencia de 2 - ausencia de
+                    # prova nao eh prova de ausencia.
+                    # Medido em 2026-09-24 nos dumps do projeto: 18 forms
+                    # legado nao-CRUD tem exatamente 1 botao, 152 tem 0 (os
+                    # REPORT) e 95 tem 2 ou mais.
+                    $nBotoesLegado = Get-ContagemBotoesLegado -TextoDump $txtLegadoF7
+
+                    $minHandlersF7 = 2
+                    if ($nBotoesLegado -eq 1) { $minHandlersF7 = 1 }
+
+                    if ($legadoSemCrud -and $nHandlers -ge $minHandlersF7) {
+                        if ($minHandlersF7 -eq 1) {
+                            Write-Host "  [i] Fase 7: legado sem botao CRUD e com UM UNICO botao no SCX - validado pelo(s) $nHandlers handler(s) desse botao" -ForegroundColor Cyan
+                        } else {
+                            Write-Host "  [i] Fase 7: legado sem botao CRUD algum - validado pelos $nHandlers handler(s) de botao que o legado realmente tem" -ForegroundColor Cyan
+                        }
+                        $eventosFaltantes = @()
+                    } elseif ($legadoSemCrud) {
+                        Write-Host "  [!] Fase 7: legado sem CRUD, mas o form tem so $nHandlers handler(s) PROCEDURE Cmd*/Btn*Click para $nBotoesLegado botao(oes) do legado (minimo $minHandlersF7) - os botoes do legado precisam de evento" -ForegroundColor Yellow
+                    }
+                }
 
                 if ($eventosFaltantes.Count -eq 0) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
@@ -5273,8 +6406,273 @@ function Invoke-MigracaoFase {
             # Fase 8: Espera Form COMPLETO com todos os eventos e m�todos
             if (Test-Path $formFile) {
                 $conteudo = Get-Content $formFile -Raw
-                $metodosFinals = @("BtnSalvarClick", "BtnCancelarClick", "FormParaBO", "BOParaForm", "CarregarLista")
-                $metodosFaltantes = $metodosFinals | Where-Object { $conteudo -notmatch $_ }
+                # BtnSalvarClick fica FORA da lista de nomes obrigatorios: ele
+                # eh convencao de form CRUD (botao "Salvar" da Page2 de Dados).
+                # Form OPERACIONAL flat nomeia o botao de acao conforme o
+                # legado - "Confirmar" (SIGMVCHV, FormFAPP), "Processa"
+                # (FormSIGBLCTA) - e exigir o nome BtnSalvarClick obrigaria a
+                # INVENTAR um botao que o legado nao tem (viola o PILAR 1 e a
+                # regra "NUNCA inventar") ou a criar um metodo vazio (proibido
+                # pela regra de completude). Medido em 2026-09-23: 5 dos 134
+                # forms OPERACIONAL do projeto legitimamente nao tem
+                # BtnSalvarClick. Mesmo raciocinio das excecoes ja aplicadas
+                # nas Fases 4, 5 e 6.
+                $metodosFinals = @("BtnCancelarClick", "FormParaBO", "BOParaForm", "CarregarLista")
+                $metodosFaltantes = @($metodosFinals | Where-Object { $conteudo -notmatch $_ })
+
+                # FAIL-CLOSED: so aceita a ausencia de BtnSalvarClick quando o
+                # dump do legado EXISTE e prova que nao ha botao de gravar.
+                # Dump ausente/ilegivel, ou legado COM botao de salvar, mantem
+                # a exigencia original do nome canonico.
+                $dumpLegadoF8    = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                $txtLegadoF8     = $null
+                $legadoSemSalvar = $false
+                if (Test-Path $dumpLegadoF8) {
+                    $txtLegadoF8 = Get-Content $dumpLegadoF8 -Raw -ErrorAction SilentlyContinue
+                    if ($txtLegadoF8) {
+                        # Nome de OBJETO/metodo de gravacao no legado. Nao
+                        # casar o caminho de imagem "cadastro_salvar_60.jpg":
+                        # btnConfirmar usa esse icone e NAO grava nada (o
+                        # bloco de persistencia esta comentado no SCX).
+                        $padroesSalvarLegado = @(
+                            'btnSalvar',
+                            'btnGravar',
+                            'PROCEDURE\s+\w*(Salvar|Gravar)\w*\.Click',
+                            'mGravaDados'
+                        )
+                        $legadoSemSalvar = -not ($padroesSalvarLegado | Where-Object { $txtLegadoF8 -match $_ })
+                    }
+                }
+
+                # Layout DESPACHANTE: form OPERACIONAL cujo SCX legado nao tem
+                # NEM lista NEM campos NEM CRUD - splash/despachante que so
+                # avisa e encaminha para outra tela (ex.: SIGMVEXP ->
+                # FormSigMvExp, task570: 337x147, TitleBar=0, ControlBox=.F.,
+                # UNICO CommandButton "Aguarde Processando Dados" cujo Click eh
+                # um DO CASE de despacho disparado pelo Activate).
+                # Os quatro nomes exigidos acima sao convencao de form CRUD:
+                # FormParaBO/BOParaForm mapeiam CAMPOS (o legado nao tem
+                # nenhum), CarregarLista popula a grade da LISTA (idem) e
+                # BtnCancelarClick eh o Cancelar da Page2 de Dados. Exigi-los
+                # aqui obrigaria a INVENTAR campos, lista e botoes que o legado
+                # nao tem (viola o PILAR 1 e a regra "NUNCA inventar") ou a
+                # criar quatro metodos vazios (proibido pela regra de
+                # completude, validada logo abaixo). Pelo mesmo motivo nao se
+                # exige botao de acao com nome da lista canonica: o botao do
+                # legado se chama "Processo" e seu handler (BtnProcessoClick)
+                # ja eh a acao - o que se cobra eh o botao E o handler dele.
+                # Mesmo raciocinio das excecoes das Fases 4, 5, 6 e 7.
+                #
+                # FAIL-CLOSED: so relaxa com o dump PRESENTE provando as tres
+                # ausencias (lista, campos e CRUD) e com a superficie que o
+                # legado de fato tem entregue no migrado. Dump ausente/ilegivel
+                # mantem a exigencia original - form REPORT nao declara os
+                # botoes no SCX (herda do frmrelatorio), e ausencia de prova
+                # nao eh prova de ausencia. Medido em 2026-09-24 nos dumps de
+                # tasks\: dos 11 forms que hoje falhariam nesta fase por metodo
+                # ausente, a excecao dispensa 1 (task570) e mantem os outros 10.
+                $legadoDespachanteF8  = $false
+                $legadoExibicaoF8     = $false
+                $legadoVisualizadorF8 = $false
+                if ($FormType -eq "OPERACIONAL" -and $txtLegadoF8) {
+                    $temListaLegadoF8 = ($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                        ($txtLegadoF8 -match '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')
+                    $temCamposLegadoF8 = ($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$')
+                    $padroesCrudLegadoF8 = @(
+                        'frmcadastro',
+                        'pcEscolha',
+                        'Grupo_Op',
+                        '(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)',
+                        '(Incluir|Alterar|Visualizar|Excluir)\.Click'
+                    )
+                    $semCrudLegadoF8 = -not ($padroesCrudLegadoF8 | Where-Object { $txtLegadoF8 -match $_ })
+
+                    # A excecao NAO pode virar atalho para form vazio: se o
+                    # dump prova botao, o migrado precisa do botao E do handler
+                    # do Click; sem botao nenhum, exige-se a estrutura base.
+                    $nBotoesDespachanteF8 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF8
+                    if ($nBotoesDespachanteF8 -ge 1) {
+                        $temSuperficieDespachanteF8 = ($conteudo -match 'AddObject\(\s*"(cmg_4c_|cmd_4c_)') -and
+                                                      ($conteudo -match 'PROCEDURE\s+(Cmd|Btn)\w*Click')
+                    } else {
+                        $temSuperficieDespachanteF8 = ($conteudo -match "InicializarForm") -and
+                                                      ($conteudo -match "ConfigurarPageFrame")
+                    }
+
+                    $legadoDespachanteF8 = ((-not $temListaLegadoF8) -and (-not $temCamposLegadoF8) -and
+                                            $semCrudLegadoF8 -and $temSuperficieDespachanteF8)
+
+                    # Layout EXIBICAO: ramo espelho do que as Fases 4, 5 e 6 ja
+                    # tem (SIGPDMEN -> FormSigMvMen, task573: dialogo modal com
+                    # um EditBox ReadOnly dentro de um Container e um unico
+                    # botao "Ok"). Difere do DESPACHANTE por TER campo - o que
+                    # faz $temCamposLegadoF8 dar verdadeiro e o ramo acima nao
+                    # alcancar -, mas TODO campo do legado eh ReadOnly = .T.
+                    # (Test-LegadoDialogoExibicao), e por isso os quatro nomes
+                    # exigidos tampouco se aplicam:
+                    #   FormParaBO/BOParaForm mapeiam campo EDITAVEL - nao ha o
+                    #     que escrever de volta a partir de campo somente-leitura
+                    #     (o sentido de leitura ja foi entregue no Carregar* da
+                    #     Fase 4, espelhando o Init legado);
+                    #   CarregarLista popula a grade da LISTA - o legado nao tem
+                    #     lista ($temListaLegadoF8 falso);
+                    #   BtnCancelarClick eh o Cancelar da Page2 de Dados - nao ha
+                    #     Page2 nem modo de edicao para cancelar.
+                    # Exigi-los obrigaria a INVENTAR campos editaveis, lista e
+                    # botao que o legado nao tem (viola o PILAR 1 e a regra
+                    # "NUNCA inventar") ou a criar quatro metodos vazios
+                    # (proibido pela regra de completude).
+                    #
+                    # FAIL-CLOSED: dump PRESENTE provando ausencia de lista,
+                    # ausencia de CRUD e TODO campo ReadOnly, e o migrado tendo
+                    # de entregar a superficie que o legado tem (botao + handler)
+                    # MAIS o campo somente-leitura reproduzido. Um unico campo
+                    # editavel no legado derruba a excecao.
+                    $legadoExibicaoF8 = ((-not $temListaLegadoF8) -and $semCrudLegadoF8 -and
+                                         (Test-LegadoDialogoExibicao -TextoDump $txtLegadoF8) -and
+                                         $temSuperficieDespachanteF8 -and
+                                         ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"(EditBox|TextBox)"'))
+
+                    # Layout VISUALIZADOR: o legado TEM lista e TEM campo, mas
+                    # NENHUM campo aceita digitacao. Ramo espelho do que a Fase 6
+                    # ja tem (SIGMVSBN -> FormSigMvSbn, task577: dois grids
+                    # somente-leitura, tres fwget com "When -> Return .f." e
+                    # exatamente DOIS CommandButton - Sair e BtnOficina).
+                    # Difere do ramo de EXIBICAO acima em dois pontos: nao exige
+                    # ausencia de lista (este legado TEM grade, o que faz
+                    # $temListaLegadoF8 dar verdadeiro e aquele ramo nao
+                    # alcancar) e reconhece o "When -> Return .f." do Framework
+                    # Fortyus, que eh como o SIGMVSBN torna Get_items/Get_descr/
+                    # Get_valo nao-digitaveis - nenhum dos tres declara ReadOnly.
+                    #
+                    # TRES dos quatro nomes exigidos nao se aplicam:
+                    #   FormParaBO/BOParaForm mapeiam campo EDITAVEL - nao ha o
+                    #     que escrever de volta a partir de campo somente-leitura
+                    #     (o sentido unico BO -> campo ja foi entregue nos
+                    #     AfterRowColChange da Fase 7);
+                    #   BtnCancelarClick eh o Cancelar da Page2 de Dados - nao ha
+                    #     Page2 nem modo de edicao para cancelar.
+                    # CarregarLista NAO entra na dispensa: este legado TEM grade,
+                    # e popula-la eh justamente o trecho final do Init dele.
+                    #
+                    # FAIL-CLOSED: dump PRESENTE provando as tres ausencias -
+                    # sem CRUD, sem botao de gravar e TODO campo somente-leitura
+                    # (Test-LegadoSomenteLeitura: UM campo digitavel derruba a
+                    # excecao) - e o migrado tendo de entregar a superficie que o
+                    # legado tem: o botao E o handler do Click MAIS o campo
+                    # reproduzido como ReadOnly.
+                    $legadoVisualizadorF8 = ($semCrudLegadoF8 -and $legadoSemSalvar -and
+                                             (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8) -and
+                                             $temSuperficieDespachanteF8 -and
+                                             ($conteudo -match '(?im)^\s*\.ReadOnly\s*=\s*\.T\.'))
+                }
+
+                if ($legadoDespachanteF8 -and $metodosFaltantes.Count -gt 0) {
+                    Write-Host "  [i] Fase 8 (layout despachante): legado sem lista, sem campos e sem CRUD - $($metodosFaltantes -join ', ') nao se aplicam; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                    $metodosFaltantes = @()
+                }
+
+                if ((-not $legadoDespachanteF8) -and $legadoExibicaoF8 -and $metodosFaltantes.Count -gt 0) {
+                    Write-Host "  [i] Fase 8 (layout exibicao): legado sem lista, sem CRUD e com todos os campos ReadOnly - $($metodosFaltantes -join ', ') nao se aplicam; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                    $metodosFaltantes = @()
+                }
+
+                # Dispensa PARCIAL, ao contrario dos dois ramos acima: so saem
+                # os tres nomes que pressupoem campo EDITAVEL ou Page2 de Dados.
+                # CarregarLista fica de fora de proposito - o legado deste ramo
+                # TEM grade, entao popula-la continua obrigatorio, e zerar a
+                # lista inteira aqui deixaria passar visualizador com a grade
+                # vazia.
+                if ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                    $legadoVisualizadorF8 -and $metodosFaltantes.Count -gt 0) {
+                    $dispensaVisualizadorF8 = @("BtnCancelarClick", "FormParaBO", "BOParaForm")
+                    $dispensadosF8 = @($metodosFaltantes | Where-Object { $dispensaVisualizadorF8 -contains $_ })
+                    if ($dispensadosF8.Count -gt 0) {
+                        Write-Host "  [i] Fase 8 (layout visualizador): legado sem CRUD, sem botao de gravar e com TODO campo somente-leitura - $($dispensadosF8 -join ', ') nao se aplicam; validado pela superficie que o legado de fato tem" -ForegroundColor Cyan
+                        $metodosFaltantes = @($metodosFaltantes | Where-Object { $dispensaVisualizadorF8 -notcontains $_ })
+                    }
+                }
+
+                # A excecao acima NAO pode virar atalho para form sem acao
+                # nenhuma: o botao que grava/confirma tem de existir com ALGUM
+                # nome. Aceita o nome canonico CRUD ou o nome que o legado usa.
+                #
+                # MAS existe legado que nao tem botao de acao NENHUM: SIGMVCTH
+                # (task566) eh um visualizador somente-leitura de historico de
+                # cotacoes cujo UNICO botao eh o cmdSalva.btnSair ("Retornar",
+                # Cancel = .T., Click = ThisForm.Release). Exigir acao de
+                # gravar ali obrigaria a INVENTAR um botao (viola o PILAR 1) ou
+                # a criar um handler vazio (proibido pela regra de completude) -
+                # a mesma armadilha que a Fase 6 tinha com lookup inexistente e
+                # a Fase 7 com o piso de 2 handlers.
+                #
+                # FAIL-CLOSED em TRES provas somadas, todas vindas do dump:
+                #   1. o legado nao tem objeto/metodo de gravar ($legadoSemSalvar)
+                #   2. TODO evento Click do SCX apenas fecha a tela
+                #      (Test-LegadoCliqueSoFecha) - nao basta olhar o NOME do
+                #      botao, ha acao com nome que lista de palavras nao pega
+                #      (btnCopiar, btnCargas, btnApagar, cmdLimSenha...)
+                #   3. o legado tem EXATAMENTE 1 botao (contagem 0 = form REPORT,
+                #      que herda os botoes do frmrelatorio sem declara-los no
+                #      SCX: ausencia de prova, nao prova de ausencia)
+                # Faltando qualquer uma, a exigencia original permanece.
+                # Medido em 2026-09-24 nos 565 dumps de tasks\: as tres juntas
+                # dispensam 7 forms; so a prova 3 dispensaria 58.
+                $padraoAcaoGravar = 'PROCEDURE\s+Btn(Salvar|Confirmar|Gravar|Processa|Aplicar|Executar|OK)\w*Click'
+                if ((-not $legadoDespachanteF8) -and ($conteudo -notmatch $padraoAcaoGravar)) {
+                    $legadoSemAcao = $false
+                    if ($txtLegadoF8 -and $legadoSemSalvar) {
+                        $cliqueSoFechaF8 = Test-LegadoCliqueSoFecha -TextoDump $txtLegadoF8
+                        $nBotoesLegadoF8 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF8
+                        $legadoSemAcao   = (($cliqueSoFechaF8 -eq $true) -and ($nBotoesLegadoF8 -eq 1))
+
+                        # Visualizador com MAIS de um botao: o SIGMVSBN
+                        # (task577) tem DOIS - Sair e BtnOficina -, e o Click do
+                        # BtnOficina nao fecha a tela (monta o numero da OS e
+                        # abre o SigRePhi), entao nem Test-LegadoCliqueSoFecha
+                        # nem a contagem == 1 alcancam. Continua nao havendo
+                        # acao de GRAVAR: o legado nao tem campo digitavel
+                        # nenhum nem Insert/Update/Delete. Exigir
+                        # BtnSalvar/Confirmar/Processa aqui obrigaria a INVENTAR
+                        # um botao que o legado nao tem (viola o PILAR 1) ou a
+                        # criar um handler vazio (proibido pela regra de
+                        # completude) - a mesma armadilha que a Fase 6 tinha com
+                        # lookup inexistente e a Fase 7 com o piso de 2
+                        # handlers. As provas de $legadoVisualizadorF8 (sem
+                        # CRUD, sem gravar, TODO campo somente-leitura, mais a
+                        # superficie entregue) sao o que mantem isso fechado.
+                        if (-not $legadoSemAcao) {
+                            $legadoSemAcao = $legadoVisualizadorF8
+                        }
+                    }
+
+                    if ($legadoSemAcao) {
+                        if (($cliqueSoFechaF8 -eq $true) -and ($nBotoesLegadoF8 -eq 1)) {
+                            Write-Host "  [i] Fase 8: legado somente-leitura (UM botao no SCX e todo Click so faz ThisForm.Release) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
+                        } else {
+                            Write-Host "  [i] Fase 8: legado visualizador (sem CRUD, sem botao de gravar e TODO campo somente-leitura) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
+                        }
+                    } else {
+                        $metodosFaltantes += "BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)"
+                    }
+                }
+
+                if ((-not $legadoDespachanteF8) -and ($conteudo -notmatch "BtnSalvarClick")) {
+                    if ($legadoSemSalvar) {
+                        Write-Host "  [i] Fase 8: legado sem botao de gravar - validado pelo botao de acao que o legado realmente tem" -ForegroundColor Cyan
+                    } else {
+                        $metodosFaltantes += "BtnSalvarClick (legado TEM botao de gravar, ou dump ausente)"
+                    }
+                }
+
+                # Pista de diagnostico, no espirito do que a Fase 6 ja faz: sem
+                # isto, quem ve a fase reprovar nao descobre que EXISTEM ramos de
+                # excecao nem o que cada um exige para valer - e a reacao errada
+                # eh mexer no form (inventando botao/campo que o legado nao tem)
+                # em vez de conferir se o gate eh satisfazivel para este legado.
+                if ($metodosFaltantes.Count -gt 0 -and $FormType -eq "OPERACIONAL") {
+                    Write-Host "  [i] Fase 8: ramos de excecao (todos exigem o dump do legado PRESENTE) - despachante: sem lista, sem campos e sem CRUD; exibicao: sem lista, sem CRUD e todo campo ReadOnly; visualizador: sem CRUD, sem botao de gravar e todo campo somente-leitura (aceita When -> .f. e heranca de Grid/Column), dispensa apenas BtnCancelarClick/FormParaBO/BOParaForm e mantem CarregarLista" -ForegroundColor DarkGray
+                }
 
                 if ($metodosFaltantes.Count -eq 0) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
@@ -8825,15 +10223,36 @@ function Test-CodeReviewProblems {
 
     # ========================================================================
     # CHECK 31: FontName 'Comic Sans MS' em CommandButton (VISUAL)
-    # Botoes devem usar Tahoma, nao Comic Sans MS
+    # Botoes devem usar Tahoma - MAS SO QUANDO O LEGADO NAO PEDE Comic Sans MS.
+    #
+    # Erro178: este check era incondicional e mandava "substituir TODAS as
+    # ocorrencias". No SIGCDPRO o legado declara Comic Sans MS em 11 sites
+    # (Option1..Option8 do Optiongroup1 de navegacao + Command1), e o pass VISUAL
+    # trocou os 16 do migrado por Tahoma - REGRESSAO de fidelidade introduzida
+    # pelo proprio review, contra o PILAR 1. Pior: o CorretorAutomatico #101 faz o
+    # OPOSTO, tratando Comic Sans MS como canonico nos Buttons(N) de REPORT, entao
+    # os dois componentes do pipeline se contradiziam.
+    #
+    # A fonte da verdade eh o dump do SCX. Se o legado usa Comic Sans MS, manter.
     # ========================================================================
     if ($formContent) {
-        $linhasForm = $formContent -split "`n"
-        for ($li = 0; $li -lt $linhasForm.Count; $li++) {
-            $linha = $linhasForm[$li]
-            if ($linha -match '^\s*\*' -or $linha -match '^\s*&&') { continue }
-            if ($linha -match '(?i)FontName\s*=\s*"Comic Sans MS"') {
-                $problemas += "[FONTNAME-ERRADO] Linha $($li+1): FontName 'Comic Sans MS' encontrado. Botoes devem usar 'Tahoma'. Substituir TODAS as ocorrencias."
+        $legadoUsaComicSans = $false
+        if ($OriginalSourceFile -and (Test-Path $OriginalSourceFile)) {
+            $dumpLegado = Get-Content $OriginalSourceFile -Raw -ErrorAction SilentlyContinue
+            if ($dumpLegado -match '(?i)Comic Sans MS') { $legadoUsaComicSans = $true }
+        }
+
+        if ($legadoUsaComicSans) {
+            Write-Host "  [CHECK 31] legado declara 'Comic Sans MS' - fonte mantida (PILAR 1)" -ForegroundColor DarkGray
+        }
+        else {
+            $linhasForm = $formContent -split "`n"
+            for ($li = 0; $li -lt $linhasForm.Count; $li++) {
+                $linha = $linhasForm[$li]
+                if ($linha -match '^\s*\*' -or $linha -match '^\s*&&') { continue }
+                if ($linha -match '(?i)FontName\s*=\s*"Comic Sans MS"') {
+                    $problemas += "[FONTNAME-ERRADO] Linha $($li+1): FontName 'Comic Sans MS' e o dump do legado NAO declara essa fonte em lugar nenhum - trocar por 'Tahoma' NESTA linha (conferir o controle no dump antes)."
+                }
             }
         }
     }
@@ -9413,7 +10832,7 @@ function Invoke-Etapa05e_CodeReview {
 - [ALINHAMENTO-CONTAINER] Botoes no mesmo container cnt_4c_* com Top diferente
 - [TITULO-NAO-PROPAGADO] Caption do form nao propagado para lbl_4c_Sombra/lbl_4c_Titulo
 - [CHECKBOX-TIPO] CheckBox.Value tipo inconsistente (.F. vs 0/1)
-- [FONTNAME-ERRADO] FontName 'Comic Sans MS' encontrado - substituir por 'Tahoma'
+- [FONTNAME-ERRADO] FontName 'Comic Sans MS' numa tela cujo dump legado NAO declara essa fonte - trocar por 'Tahoma' SO nas linhas apontadas, nunca "todas as ocorrencias" (Erro178: o legado do SIGCDPRO declara Comic Sans MS nos 8 botoes de navegacao, e a troca em massa virou regressao de PILAR 1)
 "@
             }
         )
@@ -9903,6 +11322,13 @@ function Invoke-Etapa06_TestForm {
         if (Test-Path $vfpOutputFile) { Remove-Item $vfpOutputFile -Force -ErrorAction SilentlyContinue }
         $vfpErrorDetailsFile = Join-Path $taskPath "vfp_error_details.txt"
         if (Test-Path $vfpErrorDetailsFile) { Remove-Item $vfpErrorDetailsFile -Force -ErrorAction SilentlyContinue }
+        # Erro179: $logFile e' o MESMO caminho em toda tentativa (Get-TaskLogPath
+        # devolve caminho fixo) e tanto o VFPExecutor.ps1 quanto o
+        # TestFormWrapper.prg (LOG_Escrever) SOMENTE ANEXAM. Sem limpar aqui, o
+        # "Status:" de uma tentativa ANTERIOR (sucesso ou falha) fica no arquivo
+        # e o -match abaixo (regex sem ancora de tentativa) pode casar com a
+        # linha errada. Limpar junto com os outros dois arquivos por-tentativa.
+        if (Test-Path $logFile) { Remove-Item $logFile -Force -ErrorAction SilentlyContinue }
 
         $parameters = @($formClass, $logFile)
 
@@ -9915,8 +11341,49 @@ function Invoke-Etapa06_TestForm {
 
         $exitCode = $LASTEXITCODE
 
+        # Erro178: o exit code do VFP9 NAO vale como veredito - o proprio
+        # VFPExecutor avisa "normal para VFP9 GUI - validar pelo arquivo de saida".
+        # Quem sabe o resultado eh o TestFormWrapper.prg, que grava no log
+        #   Status: SUCESSO | ERRO AO CRIAR OBJETO | ERRO AO MOSTRAR FORM
+        # Na task569 o log dizia "ERRO AO CRIAR OBJETO" (CREATEOBJECT devolveu
+        # NULL: o Init do form falhou e devolveu .F.) e a etapa foi registrada como
+        # "Formulario testado com sucesso". Form que nem ABRE passava no gate e so
+        # aparecia no teste manual - foi assim com FormFti e FormSetor.
+        $vereditoLog = ""
+        if (Test-Path $logFile) {
+            $conteudoLog = Get-Content $logFile -Raw -ErrorAction SilentlyContinue
+            if ($conteudoLog -match '(?im)^\s*Status:\s*(.+)$') { $vereditoLog = $Matches[1].Trim() }
+        }
+
+        # Erro179: o exit code do VFP9 e' RUIDO, nao veredito (o proprio
+        # VFPExecutor avisa que o processo GUI "frequentemente retorna exit
+        # code 1 mesmo quando o script executa com sucesso" - e' possivel
+        # medir ate exit code EM BRANCO, "VFP9 finalizou normalmente com exit
+        # code: "). A versao anterior (Erro178) so normalizava o exitCode
+        # quando o log dizia FALHA; quando o log dizia SUCESSO mas o exit code
+        # cru vinha != 0 (o caso "frequente" do proprio comentario), nenhum dos
+        # tres IFs cobria a combinacao e a tentativa caia no bloco de FALHA
+        # com Return Code 0 / Status SUCESSO no log - reprovando um form que
+        # abriu e funcionou. Por isso o veredito do log agora e' SEMPRE
+        # normalizado ANTES de decidir sucesso/falha, exit code cru nunca mais
+        # participa da decisao quando ha uma linha "Status:" no log.
+        if ($vereditoLog -match '(?i)^SUCESSO') {
+            if ($exitCode -ne 0) {
+                Write-Host "  [TESTE-FORM] exit code cru do VFP9 ($exitCode) ignorado - log do wrapper diz SUCESSO" -ForegroundColor Yellow
+            }
+            $exitCode = 0
+        } elseif ($vereditoLog) {
+            Write-Host "  [TESTE-FORM] log do wrapper diz: 'Status: $vereditoLog'" -ForegroundColor Red
+            Write-Host "  Exit code ($exitCode) ignorado - o veredito eh o do arquivo de saida" -ForegroundColor Yellow
+            $exitCode = 1
+        } elseif ($exitCode -eq 0) {
+            Write-Host "  [TESTE-FORM] exit code 0 mas o log nao tem linha 'Status:' - tratando como FALHA" -ForegroundColor Red
+            Write-Host "  (sem veredito do wrapper nao ha prova de que o form abriu)" -ForegroundColor Yellow
+            $exitCode = 1
+        }
+
         if ($exitCode -eq 0) {
-            Write-Host "Formulario testado com sucesso (sem erros)" -ForegroundColor Green
+            Write-Host "Formulario testado com sucesso (Status: $vereditoLog)" -ForegroundColor Green
             $sucesso = $true
             break
         }

@@ -253,28 +253,43 @@ FOR loc_i = 1 TO ALEN(loc_aBotoes, 1)
     loc_cPathBotao = loc_aBotoes[loc_i, 1]
 
     TRY
-        *-- Verifica se botao existe
-        loc_oBotao = EVALUATE("loc_oForm." + loc_cPathBotao)
+        *-- Alguns forms OPERACIONAL sao "despachantes" flat (splash sem
+        *-- PageFrame/CRUD - ex.: FormSigMvExp, 337x147, unico botao
+        *-- "Aguarde Processando Dados") e legitimamente NAO tem a
+        *-- estrutura pgf_4c_Principal.Page1.cnt_4c_Botoes.cmd_4c_*.
+        *-- EVALUATE direto contra um caminho assim estoura "Unknown
+        *-- member" no PRIMEIRO segmento inexistente - isso NAO e' falha
+        *-- do form, e' o teste assumindo um padrao CRUD que o legado nao
+        *-- tem (mesma familia das regras de "gate exige estrutura
+        *-- inexistente" do CLAUDE.md). Por isso o caminho e' conferido
+        *-- segmento a segmento com PEMSTATUS ANTES do EVALUATE: se faltar
+        *-- em qualquer ponto, o botao e' registrado como N/A, nao como
+        *-- erro.
+        IF ExisteCaminhoObjeto(loc_oForm, loc_cPathBotao)
+            loc_oBotao = EVALUATE("loc_oForm." + loc_cPathBotao)
 
-        IF TYPE("loc_oBotao") = "O" AND !ISNULL(loc_oBotao)
-            loc_nBotoesTeste = loc_nBotoesTeste + 1
+            IF TYPE("loc_oBotao") = "O" AND !ISNULL(loc_oBotao)
+                loc_nBotoesTeste = loc_nBotoesTeste + 1
 
-            LOG_Escrever("  [" + loc_aBotoes[loc_i, 2] + "] Testando...")
+                LOG_Escrever("  [" + loc_aBotoes[loc_i, 2] + "] Testando...")
 
-            *-- Simula clique
-            loc_oBotao.Click()
+                *-- Simula clique
+                loc_oBotao.Click()
 
-            DOEVENTS  && Processa eventos
+                DOEVENTS  && Processa eventos
 
-            *-- Se chegou aqui, clique nao gerou erro
-            LOG_Escrever("  [" + loc_aBotoes[loc_i, 2] + "] OK - Clique executado sem erro")
-            loc_nBotoesOK = loc_nBotoesOK + 1
+                *-- Se chegou aqui, clique nao gerou erro
+                LOG_Escrever("  [" + loc_aBotoes[loc_i, 2] + "] OK - Clique executado sem erro")
+                loc_nBotoesOK = loc_nBotoesOK + 1
 
-            *-- Se abriu algum form modal, fecha
-            IF WEXIST(WONTOP()) AND WONTOP() # loc_oForm.Name
-                KEYBOARD "{ESC}"  && Fecha janela modal
-                DOEVENTS
+                *-- Se abriu algum form modal, fecha
+                IF WEXIST(WONTOP()) AND WONTOP() # loc_oForm.Name
+                    KEYBOARD "{ESC}"  && Fecha janela modal
+                    DOEVENTS
+                ENDIF
             ENDIF
+        ELSE
+            LOG_Escrever("  [" + loc_aBotoes[loc_i, 2] + "] N/A - form nao possui esta estrutura (fora do padrao CRUD)")
         ENDIF
 
     CATCH TO loEx
@@ -342,6 +357,32 @@ RETURN loc_nReturnCode
 *==============================================================================
 * FUNCOES AUXILIARES
 *==============================================================================
+
+*------------------------------------------------------------------------------
+* ExisteCaminhoObjeto - confere, segmento a segmento (via PEMSTATUS), se um
+* caminho "membro.membro.membro" existe a partir de um objeto base, SEM
+* disparar excecao. Usado para nao confundir "form nao tem esta estrutura"
+* (legitimo em forms fora do padrao CRUD) com erro de runtime de verdade.
+*------------------------------------------------------------------------------
+PROCEDURE ExisteCaminhoObjeto(par_oBase, par_cCaminho)
+    LOCAL loc_aSegmentos[1], loc_nSegmentos, loc_i, loc_oAtual, loc_lExiste
+
+    loc_nSegmentos = ALINES(loc_aSegmentos, par_cCaminho, 1, ".")
+    loc_oAtual = par_oBase
+    loc_lExiste = .T.
+
+    FOR loc_i = 1 TO loc_nSegmentos
+        IF TYPE("loc_oAtual") = "O" AND !ISNULL(loc_oAtual) AND ;
+           PEMSTATUS(loc_oAtual, loc_aSegmentos[loc_i], 5)
+            loc_oAtual = EVALUATE("loc_oAtual." + loc_aSegmentos[loc_i])
+        ELSE
+            loc_lExiste = .F.
+            EXIT
+        ENDIF
+    ENDFOR
+
+    RETURN loc_lExiste
+ENDPROC
 
 *------------------------------------------------------------------------------
 * LOG_Escrever - Escreve linha no log

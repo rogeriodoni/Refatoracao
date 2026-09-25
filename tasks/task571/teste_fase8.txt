@@ -1,0 +1,44 @@
+=== TESTE FASE 8 Formsigmvitn (consolidacao) ===
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+
+--- METODOS DA CONSOLIDACAO (PEMSTATUS) ---
+FormParaBO            : .T.
+BOParaForm            : .T.
+CarregarLista         : .T.
+HabilitarCampos       : .T.
+LimparCampos          : .T.
+AjustarBotoesPorModo  : .T.
+
+--- CHAMADA REAL (PEMSTATUS nao prova escopo) ---
+AjustarBotoesPorModo  : OK
+HabilitarCampos       : OK
+LimparCampos          : FALHA - Property LIMPARCAMPOS is not found. L100
+CarregarLista         : retorno=.T.
+
+--- ESCOPO: PROTECTED herdado do FormBase (regra #3) ---
+FormParaBO de FORA    : bloqueado como esperado - Property FORMPARABO is not found.
+
+--- CAMINHO REAL: BtnConfirmarClick com 1 item e SEM conexao ---
+carrinho              : RECCOUNT=1
+xPar (pagamento)      : RECCOUNT=1
+BtnConfirmarClick     : executou sem excecao
+form ainda vivo       : .T. (esperado T - Confirmar nao fecha quando a gravacao falha)
+
+--- FormParaBO rodou por dentro? (props do BO) ---
+  cCpros      = [PROD000000001] (esperado PROD000000001)
+  nQtds       = 3 (esperado 3)
+  nTotas      = 31.50 (esperado 31.50)
+  nUnits      = 10.500000 (esperado 10.50)
+  cEmps       = [001] (esperado 001)
+  cEmpdopnums len = 29 (max 29)
+
+--- GATE DOS BOTOES ---
+Inicia=T -> Ok.Enabled  = .T. (esperado T)
+Inicia=F -> Ok.Enabled  = .F. (esperado F)
+            Cancela.Ena = .T. (sempre T)
+
+--- ITEM CANCELADO (DELETE logico) NAO pode ser gravado ---
+SET(DELETED) na sessao do form = ON (esperado ON)
+itens gravaveis (2 lancados, 1 cancelado) = 1 (esperado 1)
+=== FIM ===

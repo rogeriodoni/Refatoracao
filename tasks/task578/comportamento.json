@@ -1,0 +1,268 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 11,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigmvtit",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "Private pDtI, pDtF\n\npDtI = fDtoSQL(Datetime())\npDtF = fDtoSQL(Datetime(),[23:59:59])\n\nWith Thisform\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Caption = [Títulos Gerados - Processamento CMV ]\n\n\t\tlcQuery = [Select a.Titulos, a.Vencs, a.Valors, a.Moedas, a.Hists, a.Grupos, ] + ;\n\t\t\t\t\t\t [b.Descrs as DGrupos, a.Contas, c.RClis as DContas, a.EmpDopNums, a.Opers ] + ;\n\t\t\t\t\t[From SigMvCcr a ] + ;\n\t\t\t\t\t[Left Join SigCdGcr b On a.Grupos = b.Codigos ] + ;\n\t\t\t\t\t[Lef... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvtit",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.getDGrupos.Value = LocalTits.DGrupos\nThisForm.getDContas.Value = LocalTits.DContas\nThisForm.getEDN.Value = LocalTits.EmpDopNums\n\nThisForm.getDGrupos.Refresh\nThisForm.getDContas.Refresh \nThisForm.getEDN.Refresh ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.grdTitulos.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.cmdSair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvtit.getDGrupos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.getDContas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvtit.GetEDN",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigmvtit.Init",
+      "queryOriginal": "\t\tlcQuery = [Select a.Titulos, a.Vencs, a.Valors, a.Moedas, a.Hists, a.Grupos, ] + ; \t\t\t\t\t\t [b.Descrs as DGrupos, a.Contas, c.RClis as DContas, a.EmpDopNums, a.Opers ] + ; \t\t\t\t\t[From SigMvCcr a ] + ; \t\t\t\t\t[Left Join SigCdGcr b On a.Grupos = b.Codigos ] + ; \t\t\t\t\t[Lef... [TRUNCADO]",
+      "tabelas": "SigCdGcr",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGcr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

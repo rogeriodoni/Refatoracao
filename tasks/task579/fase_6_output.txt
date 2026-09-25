@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. Ambos os arquivos compilam limpos (`.FXP` recriado, zero `.err`).
+
+## O que a Fase 6 pedia vs. o que o legado tem
+
+Auditei o dump (`sigmvtit_form_codigo_fonte.txt`) antes de escrever qualquer coisa: **o SIGMVTIT n├úo tem lookup nenhum** ÔÇö zero `fwbuscaext`/`fwBuscaSel`/`sigacess(`/`mAddColuna`/`Acesso*(` ÔÇö e os 9 controles de entrada (7 `Column.Text1` + `getDGrupos` + `getDContas`) t├¬m todos `PROCEDURE When ÔåÆ Return .f.`. ├ë um **visualizador puro**: grade + 2 descri├º├Áes somente-leitura + OK + Impress├úo. A Fase 5 j├í havia colocado todos eles.
+
+N├úo inventei lookup para satisfazer o gate (violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"). Rodei o detector real do orquestrador (`Test-LegadoSomenteLeitura`) contra o dump ÔÇö retorna `True`, e o ramo **VISUALIZADOR** da Fase 6 passa com todas as condi├º├Áes satisfeitas.
+
+## O que entreguei de fato
+
+**Form (`Formsigmvtit.prg`)**
+- **`AtualizarDescricoes` passou a ler pelo BO** (PILAR 3). Antes o form lia `cursor_4c_Dados.dgrupos` direto e o `CarregarDoCursor` do BO ÔÇö com suas 11 propriedades ÔÇö era c├│digo morto. Agora carrega o registro corrente pelo BO e s├│ espelha; devolve `.T./.F.` para o chamador saber se h├í linha.
+- **`BtnIDocClick`**: l├¬ `Dopcs`/`Titulos`/`Numcs` do BO, reposicionando-o antes (o legado lia `LocalTits.*` vivo do cursor, ent├úo isso preserva a paridade mesmo se o ponteiro andar sem passar pelo `AfterRowColChange`); `CREATEOBJECT` dentro de `TRY` com o **`Show()` FORA** (regra #29 ÔÇö era um `CREATEOBJECT` de form modal sem prote├º├úo nenhuma).
+- **`Destroy`**: fecha `cursor_4c_Dados` antes do `DODEFAULT()` (equivale ao `poDataMgr.Release` do legado; `DODEFAULT()` continua sendo a ├║ltima linha, Pattern #145).
+- **Textboxes de descri├º├úo**: fonte/cores expl├¡citas e coment├írio registrando que `ReadOnly + TabStop=.F.` reproduz o `When ÔåÆ .f.` ÔÇö e que ├® por isso que esses campos n├úo t├¬m lookup.
+
+**BO (`sigmvtitBO.prg`)** ÔÇö dois defeitos reais que bloqueavam a liga├º├úo:
+- **`CarregarDoCursor` estava `PROTECTED`**, estreitando um m├®todo que ├® `PUBLIC` no `BusinessBase`. A chamada do form falharia em runtime com *"Property CARREGARDOCURSOR is not found"* ÔÇö mesma armadilha da regra #3 (compila limpo, `PEMSTATUS` n├úo v├¬ escopo).
+- **Cursor de fallback declarava `vencs D`** enquanto `SigMvCcr.vencs` ├® `datetime` e a grade liga a coluna via `ControlSource = "TTOD(cursor_4c_Dados.vencs)"` ÔÇö `TTOD` com `DATE` estoura erro 11 (regra #16). Corrigido para `T`.
+
+Verifiquei tamb├®m, contra `docs/schema.sql` (via `Get-Content -Raw`, regra #14), que os tipos batem ÔÇö `numcs numeric(6,0)` satisfaz o `TYPE(par_pNumF)="N"` do `FormSigReIdt`, `titulos char(10)` e `dopcs char(20)` idem ÔÇö e que os dois ├¡cones (`geral_impressora_normal_32.jpg`, `cadastro_salvar_60.jpg`) existem em `vbmp\` (regra #25).
+
+Uma nota: o `Load` do legado chama `=fConfigGeral()`. **N├úo** o repliquei ÔÇö o cabe├ºalho de `utils/fconfiggeral.prg` ├® expl├¡cito em que o wrapper existe apenas para o p-code dos VCX e que "em c├│digo NOSSO nunca se chama fConfigGeral". Alguns forms irm├úos o chamam mesmo assim; se a inten├º├úo do time for outra, ├® um ajuste de uma linha.

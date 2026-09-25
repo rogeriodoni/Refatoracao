@@ -1,0 +1,1701 @@
+﻿================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGMVMVT.SCX
+* Data/Hora: 25/09/2026 05:29:12
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigmvmvt
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: sigmvmvt
+  Class: shape
+  BaseClass: shape
+
+Objeto: btnOperacao
+  Parent: sigmvmvt
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: BtnOficina
+  Parent: sigmvmvt
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Commandgroup1
+  Parent: sigmvmvt
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: TreeView
+  Parent: sigmvmvt
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Label1
+  Parent: sigmvmvt
+  Class: label
+  BaseClass: label
+
+Objeto: GetcEmp
+  Parent: sigmvmvt
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: sigmvmvt
+  Class: label
+  BaseClass: label
+
+Objeto: GetDopes
+  Parent: sigmvmvt
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: sigmvmvt
+  Class: label
+  BaseClass: label
+
+Objeto: GetNumes
+  Parent: sigmvmvt
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label4
+  Parent: sigmvmvt
+  Class: label
+  BaseClass: label
+
+Objeto: GetDtI
+  Parent: sigmvmvt
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDtF
+  Parent: sigmvmvt
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: sigmvmvt
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  ShowTips = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  ControlBox = .F.
+  Closable = .F.
+  Height = 600
+  Width = 800
+  AutoCenter = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .T.
+  ClipControls = .F.
+  BorderStyle = 2
+  Caption = "Acompanhamento Operacional"
+  Themes = .F.
+  lacoficina = .F.
+  pnniveis = 0
+  _memberdata = <VFPData></VFPData>
+  Name = "SIGMVMVT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Shape1
+------------------------------------------------------------
+  Top = 5
+  Left = 698
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.btnOperacao
+------------------------------------------------------------
+  Top = 12
+  Left = 12
+  Height = 100
+  Width = 80
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Cancel = .T.
+  Caption = "Movimento"
+  TabIndex = 8
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  Themes = .F.
+  Name = "btnOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.BtnOficina
+------------------------------------------------------------
+  Top = 12
+  Left = 92
+  Height = 100
+  Width = 80
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_servicos_60.jpg
+  Caption = "Produção"
+  TabIndex = 9
+  ToolTipText = ""
+  Visible = .F.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  Themes = .F.
+  Name = "BtnOficina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Commandgroup1
+------------------------------------------------------------
+  ButtonCount = 6
+  Top = 7
+  Left = 211
+  Height = 110
+  Width = 575
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  TabIndex = 7
+  Name = "Commandgroup1"
+  Command1.AutoSize = .F.
+  Command1.Top = 4
+  Command1.Left = 243
+  Command1.Height = 100
+  Command1.Width = 80
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_seta_bai_60.jpg
+  Command1.Caption = "Expandir"
+  Command1.TabIndex = 1
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.DisabledBackColor = 255,255,255
+  Command1.ToolTipText = "Expandir"
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.AutoSize = .F.
+  Command2.Top = 4
+  Command2.Left = 323
+  Command2.Height = 100
+  Command2.Width = 80
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\geral_seta_cim_60.jpg
+  Command2.Caption = "Retrair"
+  Command2.TabIndex = 2
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.DisabledBackColor = 255,255,255
+  Command2.ToolTipText = "Retrair"
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+  Command3.AutoSize = .F.
+  Command3.Top = 4
+  Command3.Left = 493
+  Command3.Height = 100
+  Command3.Width = 80
+  Command3.FontName = "Verdana"
+  Command3.FontSize = 8
+  Command3.WordWrap = .T.
+  Command3.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command3.Cancel = .T.
+  Command3.Caption = "Encerrar"
+  Command3.TabIndex = 3
+  Command3.ForeColor = 36,84,155
+  Command3.BackColor = 255,255,255
+  Command3.DisabledBackColor = 255,255,255
+  Command3.ToolTipText = "[ESC] Sair"
+  Command3.Themes = .F.
+  Command3.Name = "Command3"
+  Command4.AutoSize = .F.
+  Command4.Top = 4
+  Command4.Left = 83
+  Command4.Height = 100
+  Command4.Width = 80
+  Command4.FontName = "Verdana"
+  Command4.FontSize = 8
+  Command4.WordWrap = .T.
+  Command4.Picture = ..\framework\imagens\geral_seta_esq_60.jpg
+  Command4.Caption = "Anterior"
+  Command4.ForeColor = 36,84,155
+  Command4.BackColor = 255,255,255
+  Command4.DisabledBackColor = 255,255,255
+  Command4.ToolTipText = "Anterior"
+  Command4.Themes = .F.
+  Command4.Name = "Command4"
+  Command5.AutoSize = .F.
+  Command5.Top = 4
+  Command5.Left = 163
+  Command5.Height = 100
+  Command5.Width = 80
+  Command5.FontName = "Verdana"
+  Command5.FontSize = 8
+  Command5.WordWrap = .T.
+  Command5.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command5.Caption = "Imprimir"
+  Command5.ForeColor = 36,84,155
+  Command5.BackColor = 255,255,255
+  Command5.DisabledBackColor = 255,255,255
+  Command5.ToolTipText = "Imprimir"
+  Command5.Themes = .F.
+  Command5.Name = "Command5"
+  Command6.AutoSize = .F.
+  Command6.Top = 4
+  Command6.Left = 4
+  Command6.Height = 100
+  Command6.Width = 80
+  Command6.FontName = "Verdana"
+  Command6.FontSize = 8
+  Command6.WordWrap = .T.
+  Command6.Picture = ..\framework\imagens\geral_seta_dir_60.jpg
+  Command6.Caption = "Próximo"
+  Command6.ForeColor = 36,84,155
+  Command6.BackColor = 255,255,255
+  Command6.DisabledBackColor = 255,255,255
+  Command6.ToolTipText = "Próximo"
+  Command6.Themes = .F.
+  Command6.Name = "Command6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.TreeView
+------------------------------------------------------------
+  Top = 156
+  Left = 33
+  Height = 430
+  Width = 734
+  TabIndex = 1
+  Name = "TreeView"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 42
+  Top = 131
+  Width = 61
+  ForeColor = 36,84,155
+  TabIndex = 10
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.GetcEmp
+------------------------------------------------------------
+  Height = 23
+  Left = 104
+  MaxLength = 3
+  TabIndex = 2
+  Top = 127
+  Width = 39
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetcEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação :"
+  Height = 15
+  Left = 154
+  Top = 131
+  Width = 66
+  ForeColor = 36,84,155
+  TabIndex = 11
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.GetDopes
+------------------------------------------------------------
+  Height = 23
+  Left = 221
+  MaxLength = 20
+  TabIndex = 3
+  Top = 127
+  Width = 178
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetDopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Número :"
+  Height = 15
+  Left = 406
+  Top = 131
+  Width = 56
+  ForeColor = 36,84,155
+  TabIndex = 12
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.GetNumes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "999999"
+  Left = 463
+  MaxLength = 6
+  TabIndex = 4
+  Top = 127
+  Width = 53
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetNumes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Height = 15
+  Left = 540
+  Top = 131
+  Width = 54
+  ForeColor = 231,254,253
+  TabIndex = 13
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.GetDtI
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "999999"
+  Left = 596
+  MaxLength = 6
+  TabIndex = 5
+  Top = 127
+  Width = 75
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetDtI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.GetDtF
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "999999"
+  Left = 692
+  MaxLength = 6
+  TabIndex = 6
+  Top = 127
+  Width = 75
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  Name = "GetDtF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvmvt.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Height = 15
+  Left = 678
+  Top = 131
+  Width = 9
+  ForeColor = 231,254,253
+  TabIndex = 14
+  Name = "Label5"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigmvmvt
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE hinivel
+------------------------------------------------------------
+PROCEDURE hinivel
+Parameters pnNivel, pcEmpDopNums, pccPros
+
+Local lcSqlFile, lcEmpDopNums
+
+m.loTree1 = ThisForm.TreeView
+
+lcSqlFile = 'crHiEstPe'+Alltrim(Str(pnNivel))
+
+If Type('pccPros') = [C]
+	lcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+				 [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigMvPec a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.EmpDopNums = '] + pcEmpDopNums + [' ] + ;
+	             Iif(Type('pccPros') = [C], [And c.Cpros = '] + pccPros + [' ], [And 0 = 1 ]) + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ]+;
+			     [Union all ]+;
+			     [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps As EmpSubns, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+			     [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigOpDev a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.EmpDopNums = '] + pcEmpDopNums + [' ] + ;
+	             Iif(Type('pccPros') = [C] And pnNivel = 3, [ And c.Cpros = '] + pccPros + [' ],[]) + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+				 [Order By b.Datas, b.Datars, b.EmpDopNums, 14]
+Else
+	lcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+				 [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigMvPec a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.EmpDopNums = '] + pcEmpDopNums + [' ] + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+			     [Union all ]+;
+			     [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps As EmpSubns, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+			     [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigOpDev a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.EmpDopNums = '] + pcEmpDopNums + [' ] + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+				 [Order By b.Datas, b.Datars, b.EmpDopNums, 14]
+EndIf 
+
+If Thisform.PoDataMgr.SqlExecute(lcSqlEstPe,lcSqlFile) < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão ' + lcSqlFile)
+	RETURN .F.
+EndIf
+
+Scan
+
+	lnDopes = Alltrim(Str(Codigos/1000000))	
+
+	lcSqlOpe = [Select Dopes From SigCdOpe Where nDopes = ] + lnDopes
+	If Thisform.PoDataMgr.SqlExecute(lcSqlOpe,'crTmpOPe') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpOpe)')
+		Return .F.
+	EndIf
+
+	Select &lcSqlFile.
+
+	lnNumes = Val(Right(Alltrim(Str(Codigos)),6))
+
+	lcEmpDopNums = EmpSubns + crTmpOpe.Dopes + Str(lnNumes,6)
+	
+	nPos = Ascan(ThisForm.pcEmpDopNums, pcEmpDopNums + lcEmpDopNums + Iif(Type('pccPros') = [C], pccPros, Space(14)))
+
+*	If nPos = 0 Or ThisForm.pcEmpDopNums[Int(nPos/2)+1,2] = pnNivel
+	If nPos = 0 And ! lcEmpDopNums = ThisForm.pcEmpDopNums[1,1]
+
+		Declare ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1)+1,2]
+		ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1),1] = pcEmpDopNums + lcEmpDopNums + Iif(Type('pccPros') = [C], pccPros, Space(14))
+		ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1),2] = pnNivel
+
+		lcQryBx = [Select a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.Usuars, a.DtAlts, a. Usuals, ] + ;
+		          [c.EmpDopNums, Sum(c.Qtds) As Qtds ]+;
+		          [From SigMvCab a ] + ;
+		          [Left Join SigMvItn c On a.EmpDopNums = c.EmpDopNums ] + ;
+		          [Where ] + Iif(pnNivel = 3 And Type('pccPros') = [C],;
+		          [c.Cpros = '] + pccPros + [' And ],[]) + ;
+				  [a.EmpDopNums = '] + lcEmpDopNums + [' ]+;
+				  [Group By a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.Usuars, a.DtAlts, a. Usuals, c.EmpDopNums ]
+		
+		If Thisform.PoDataMgr.SqlExecute(lcQryBx,'crTprMvCab') < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão ' + lcSqlFile)
+			RETURN .F.
+		EndIf
+
+		If ! Eof()
+			lcDtt = Left(Ttoc(Nvl(Datas, Ctot(''))), 10) + [ (] + ;
+			Substr(Ttoc(Nvl(Datars, Ctot(''))), 12, 5) + [)]
+
+			lcDados   = '(-) ' + ;
+			            Alltrim(Emps)  + ' - ' + ;
+			            Alltrim(Dopes) + ' - ' + ;
+			            Alltrim(Transform(Numes,'999999')) + ' - ' + ;
+		    		    Alltrim(Notas) + ' - ' + ;
+		    		    lcDtt + ' - ' + ;
+		    		    Alltrim(Usuars) + ;
+		    		    Iif(!IsNull(Qtds),' - Qtde : ' + Alltrim(Transform(Qtds,'999,999.99')),'')  + ' - ' + ;
+		    		    Dtoc(Ttod(Nvl(DtAlts, Ctot('')))) + ' - ' + ;
+		    		    Alltrim(UsuAls)  
+
+			m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, pnNivel, Iif(ChkPagos,3,1), 0, 0)
+			m.loTree1.NodeHeader(m.lnNode1) = .f.
+			m.loTree1.NodeExpanded(m.lnNode1) = .f.
+			m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+			m.loTree1.NodeFontBold(m.lnNode1) = 1
+			m.loTree1.NodeCargo(m.lnNode1) = Nvl(lcEmpDopNums,'')
+			lcDados1 = lcDados
+
+			If ! Upper(Substr(lcEmpDopNums, 4, 20)) = [NF - TRF SIMBOLICA] And ThisForm.pnNiveis <= 50
+				ThisForm.pnNiveis = ThisForm.pnNiveis + 1
+				ThisForm.SubNivel(pnNivel + 1, lcEmpDopNums, pccPros)
+				ThisForm.HiNivel(pnNivel + 1, lcEmpDopNums, pccPros)
+				ThisForm.pnNiveis = ThisForm.pnNiveis - 1
+			EndIf
+		Endif
+	
+	Endif
+
+EndScan
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters plModal, pcEmps, pcDopes, pcNumes
+
+Private lcEmpDopNums, lccPros
+
+Declare ThisForm.paEmpDopNums[1]
+ThisForm.paEmpDopNums[1] = ''
+
+Declare ThisForm.pcEmpDopNums[1,2]
+ThisForm.pcEmpDopNums[1,1] = ''
+
+lcEmpDopNums = ''
+
+ThisForm.GetDtI.Value = Ctod('')
+ThisForm.GetDtF.Value = Ctod('')
+ThisForm.lacoficina = .f.
+
+lcQryEest  = [Select * From SigMvCab Where EmpDopNums = ?lcEmpDopNums]
+lcQryEesti = [Select EmpdopNums, cPros, dPros, Sum(Qtds) As Qtds From SigMvItn Where EmpDopNums = ?lcEmpDopNums ] + ;
+             [Group by EmpdopNums, cPros, dPros Order By EmpdopNums, cPros, dPros]
+
+With ThisForm
+	.poDataMgr  = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDataMgr
+		.AddCursor('SigMvCab',  'cIdChaves', 'crSigMvCab',  '', .f., lcQryEest)
+		.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn', '', .f., lcQryEesti)
+	EndWith
+EndWith
+
+ThisForm.GetCEmp.Value  = []
+ThisForm.GetDopes.Value = []
+ThisForm.GetNumes.Value = 0
+
+ThisForm.WindowType = Iif(plModal,1,0)
+
+ThisForm.Automatico = Not Empty(pcEmps) And Not Empty(pcDopes) And Not Empty(pcNumes)
+
+If ! IsEmpty(pcEmps) 
+	ThisForm.poDatamgr.SqlExecute([Select * From SigCdEmp Where cEmps = ']+Alltrim(pcEmps)+['],'crSigCdEmp')
+	ThisForm.GetCEmp.Value  = Alltrim(pcEmps)
+Endif
+ThisForm.GetCEmp.ReadOnly   = ! IsEmpty(pcEmps) And ! IsEmpty(pcDopes) And ! IsEmpty(pcNumes) 
+
+If ! IsEmpty(pcDopes) 
+	ThisForm.GetDopes.Value = pcDopes
+Endif
+ThisForm.GetDopes.ReadOnly  = ! IsEmpty(pcEmps) And ! IsEmpty(pcDopes) And ! IsEmpty(pcNumes) 
+
+If ! IsEmpty(pcNumes) 
+	ThisForm.GetNumes.Value = pcNumes
+Endif
+ThisForm.GetNumes.ReadOnly  = ! IsEmpty(pcEmps) And ! IsEmpty(pcDopes) And ! IsEmpty(pcNumes) 
+
+Local loTree1
+
+loTree1 = ThisForm.TreeView
+
+loTree1.AddImage(LoadPicture('\vbmp\Form4.Ico'))
+loTree1.AddImage(LoadPicture('\vbmp\depend3.bmp'))
+loTree1.AddImage(LoadPicture('\vbmp\OHist.Ico'))
+
+If ThisForm.Automatico
+	ThisForm.GetCEmp.Enabled  = .f.
+	ThisForm.GetDopes.Enabled = .f.
+	ThisForm.GetNumes.Enabled = .f.
+	ThisForm.GetDtI.Enabled = .F.
+	ThisForm.GetDtF.Enabled = .F.
+	ThisForm.MakeTree()
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE makelist
+------------------------------------------------------------
+PROCEDURE makelist
+Local lcEmp, lcDopes, lcQryEest
+Private  lcDtIni, lcDtFim
+
+lcEmp 	= ThisForm.GetcEmp.Value
+lcDopes = ThisForm.GetDopes.Value
+lcDtIni = fDtoSQL(ThisForm.GetDtI.Value)
+lcDtFim = fDtoSQL(ThisForm.GetDtF.Value,'23:59:59')
+
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.ClearNodes
+m.loTree1.TipsDisplay = .t.
+m.loTree1.ExpandOnDClick 
+m.loTree1.SmallIcons = .t.
+m.loTree1.PicAlign = 0
+m.loTree1.SelectedStyle = 2
+m.loTree1.PictureType = 1
+
+lcQryEest = [Select a.Emps, a.Dopes, a.Numes, a.Notas, a.Datas, a.Datars, a.ChkPagos, Sum(b.qtds) as qtds ] + ;
+			  [From SigMvCab a ] + ;
+		      [Left Join SigMvItn b on a.EmpDopNums = b.EmpDopNums ] + ;
+		     [Where a.Emps = ']+lcEmp+[' And ] + ;
+		    	   [a.Dopes = ']+lcDopes+[' And ] + ;
+		    	   [a.Datas Between ?lcDtIni And ?lcDtFim ] + ;
+		     [Group By a.Datas, a.Datars, a.Emps, a.Dopes, a.Numes, a.Notas, a.ChkPagos ] + ; 
+		     [Order By a.Datas, a.Datars, a.Emps, a.Dopes, a.Numes, a.Notas, a.ChkPagos]
+		  
+ThisForm.poDatamgr.SqlExecute(lcQryEest,'crSigMvCab')
+
+If Eof()
+	MessageBox('Não Foi Localizada Nenhuma Operação',16,'')
+	Return .f.
+Endif
+
+Scan
+
+	lcDados   = Alltrim(Emps)  + ' - ' +Alltrim(Dopes) + ' - ' + Alltrim(Transform(Numes,'999999')) + ' - ' + ;
+    		    Alltrim(Notas) + ' - ' +Dtoc(Ttod(Nvl(Datas, Ctot('')))) + Iif(! isNull(Qtds),' - Qtde : '+Alltrim(Transform(Qtds,'999,999.99')),[])
+	m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, Iif(ChkPagos,3,1), 0, 0)
+	m.loTree1.NodeHeader(m.lnNode1) = .f.
+	m.loTree1.NodeExpanded(m.lnNode1) = .f.
+	m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+	m.loTree1.NodeFontBold(m.lnNode1) = 1
+	m.loTree1.NodeCargo(m.lnNode1) = Nvl(Emps+Dopes+Alltrim(Transform(Numes,'999999')),'')
+ 
+ EndScan 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE maketree
+------------------------------------------------------------
+PROCEDURE maketree
+Local loTree1,lnNode1
+
+Keyboard Chr(32)
+=Inkey(0)
+
+ThisForm.pldblclick = 0
+
+lcEmpDopNums = Padr(ThisForm.GetCEmp.Value,  03) + ;
+			   Padr(ThisForm.GetDopes.Value, 20) + ;
+			   Str(ThisForm.GetNumes.Value , 06)
+
+ThisForm.poDatamgr.Requery('crSigMvCab')
+ThisForm.poDatamgr.Requery('crSigMvItn')
+
+Local lcEmpDopNum 
+
+lcEmpDopNum = lcEmpDopNums
+
+Select crSigMvCab
+Go Top
+
+If  Eof()
+	MessageBox('Operação Não Localizada !!',16,'')
+	Return(.f.)
+EndIf
+
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.ClearNodes
+m.loTree1.TipsDisplay = .t.
+m.loTree1.ExpandOnDClick 
+m.loTree1.SmallIcons = .t.
+m.loTree1.PicAlign = 0
+m.loTree1.SelectedStyle = 2
+m.loTree1.PictureType = 1
+
+lcDados   = Alltrim(crSigMvCab.Emps)   + ' - ' +Alltrim(crSigMvCab.Dopes) + ' - ' + Alltrim(Transform(crSigMvCab.Numes,'999999')) + ' - ' + ;
+            Alltrim(crSigMvCab.Notas) + ' - ' + Nvl(Dtoc(Ttod(crSigMvCab.Datas)),'') + ' - ' + usuars +  ' - ' + Nvl(Dtoc(Ttod(crSigMvCab.DtAlts)),'') +  ' - ' + usuals
+m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 1, Iif(crSigMvCab.ChkPagos,3,1), 0, 0)
+m.loTree1.NodeHeader(m.lnNode1) = .t.
+m.loTree1.NodeExpanded(m.lnNode1) = .t.
+m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+m.loTree1.NodeFontBold(m.lnNode1) = 2
+m.loTree1.NodeCargo(m.lnNode1) = CrSigMvCab.EmpDopNums
+
+Declare ThisForm.pcEmpDopNums[1,2]
+
+ThisForm.pcEmpDopNums[1,1] = crSigMvCab.EmpDopNums 
+ThisForm.pcEmpDopNums[1,2] = 1
+
+Select crSigMvItn
+
+OldOrder = 0
+OldGrupo = Space(10)
+Scan 
+	lcDados   = Alltrim(crSigMvItn.cPros)+' - '+Alltrim(crSigMvItn.dPros)+' - Qtde : '+Alltrim(Transform(crSigMvItn.Qtds,'999,999.99'))
+	m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, 2, 2, 0, 0)
+	m.loTree1.NodeHeader(m.lnNode1) = .f.
+	m.loTree1.NodeExpanded(m.lnNode1) = .f.
+	m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+	m.loTree1.NodeFontBold(m.lnNode1) = 1
+	m.loTree1.NodeCargo(m.lnNode1) = 'PRODUTO'
+    ThisForm.SubNivel(3, lcEmpDopNum, crSigMvItn.cPros)
+	ThisForm.HINivel(3,lcEmpDopNum, crSigMvItn.cPros)
+	Select crSigMvItn
+EndScan 
+
+ThisForm.SubNivel(2, lcEmpDopNum, .F.)
+ThisForm.HiNivel(2, lcEmpDopNum, .F.)
+
+m.loTree1.ReDraw(.t.)
+m.loTree1.Refresh
+ThisForm.pnNodeExp = 1
+
+Return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE nohipro
+------------------------------------------------------------
+PROCEDURE nohipro
+Parameters pnNivel, lcEmps, lcEmpDopNums, pccPros
+
+Local lcBxAlias, lcEsAlias, lcEDN, lnCodigo, lcTmpSub, lcDados, lcDados1
+
+lcBxAlias = 'crSigBxEst'+Alltrim(Str(pnNivel))
+lcTmpSub = 'crTmpSub'+Alltrim(Str(pnNivel))
+
+lcSql = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(lcEmpDopNums,4,20)+[']
+If Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrXOpe)')
+	RETURN .F.
+EndIf
+
+lcCodigo = Alltrim(Str(nDopes))+Transform(Val(Right(lcEmpDopNums,6)),"@L 999999")
+
+m.loTree1 = ThisForm.TreeView
+
+lcQryBx = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns, Sum(c.Qtds) As Qtds ]+;
+          [From SigMvPec a, SigMvCab b, SigMvItn c ]+;
+          [Where a.codigos = ]+lcCodigo+[ And ]+;
+          [a.EmpDopnums = b.EmpDopNums And ]+;
+          [a.EmpDopnums = c.EmpDopNums And ]+;
+          [c.Cpros = ']+pccPros+[']+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns ]+;
+		  [Union all ]+;
+		  [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns, 0 As Qtds ]+;
+	  	  [From SigMvPec a, SigMvCab b ]+;
+		  [Where a.codigos = ]+lcCodigo+[ And ]+;
+		  [a.EmpDopnums = b.EmpDopNums  And ]+;
+		  [a.EmpSubns = ']+lcEmps+[' ]+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns  ]+;
+		  [Union all ]+;
+		  [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.Emps As EmpSubns, Sum(c.Qtds) As Qtds ]+;
+		  [From SigOpDev a, SigMvCab b, SigMvItn c ]+;
+		  [Where a.codigos = ]+lcCodigo+[ And ]+;
+		  [a.EmpDopnums = b.EmpDopNums And ]+;
+		  [a.EmpDopnums = c.EmpDopNums And ]+;
+		  [c.Cpros = ']+pccPros+[']+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums ]
+
+ThisForm.poDatamgr.SqlExecute(lcQryBx ,lcBxAlias)
+
+If Ascan(ThisForm.paOperacoes,EmpdopNums) <> 0
+	Return
+Endif
+
+Select &lcBxAlias
+Select a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns, sum(qtds) as qtds From &lcBxAlias a ;
+	Group By a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns Into Cursor &lcTmpSub ReadWrite
+
+Select &lcTmpSub
+Delete For qtds <> 0
+
+Go Top
+
+lcDados1 = 'Inicio'
+If ! Eof()
+	Scan 
+		lcEDN = EmpDopNums
+
+		lcQryBx = [Select usuars, DtAlts, UsuAls ] + ;
+		          [From SigMvCab ] + ;
+		          [Where EmpDopNums = ']+lcEDN+[']
+
+		ThisForm.poDatamgr.SqlExecute(lcQryBx ,'csSigMvCab')
+			
+		Select &lcTmpSub
+
+		If Ascan(ThisForm.paOperacoes,EmpDopNums)
+			Declare ThisForm.paOperacoes[Len(ThisForm.paOperacoes)+1]
+			ThisForm.paOperacoes[Len(ThisForm.paOperacoes)]=EmpDopNums
+			lcDados   = Alltrim(Emps)  + ' - ' +Alltrim(Dopes) + ' - ' + Alltrim(Transform(Numes,'999999')) + ' - ' + ;
+		    		    Alltrim(Notas) + ' - ' +Dtoc(Ttod(Nvl(Datas, Ctot('')))) + ' - ' + Alltrim(csSigMvCab.Usuars) + ;
+			    		' - ' + Dtoc(Ttod(Nvl(csSigMvCab.DtAlts, Ctot('')))) + ' - ' + Alltrim(csSigMvCab.UsuAls) 
+		   	If lcDados <> lcDados1
+				m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, pnNivel, Iif(ChkPagos,3,1), 0, 0)
+				m.loTree1.NodeHeader(m.lnNode1) = .f.
+				m.loTree1.NodeExpanded(m.lnNode1) = .f.
+				m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+				m.loTree1.NodeFontBold(m.lnNode1) = 1
+				m.loTree1.NodeCargo(m.lnNode1) = lcEDN
+				lcDados1 = lcDados
+			Endif
+	*		ThisForm.SubNivel(pnNivel+1, lcEDN, pccPros)
+	*		Select &lcTmpSub
+			ThisForm.NoHiPro(pnNivel+1, EmpSubns, EmpDopNums, pccPros)
+			If pnNivel <> 3
+				Select &lcTmpSub
+				ThisForm.SubNivel(pnNivel+1, lcEDN, pccPros)
+				Select &lcTmpSub
+				ThisForm.HINivel(pnNivel+1, EmpSubns, Int(codigos/1000000), Val(Right(Alltrim(Str(Codigos)),6)), pccPros)
+				Select &lcTmpSub
+				ThisForm.NoProd(pnNivel+1, EmpSubns, codigos, pccPros)
+			EndIf
+		Endif
+		Select &lcTmpSub
+	EndScan
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE noprod
+------------------------------------------------------------
+PROCEDURE noprod
+Parameters pnNivel, lcEmps, pcCodigo, pccPros
+
+Local lcBxAlias, lcEsAlias, lcEDN, lnCodigo, lcTmpSub, lcDados, lcDados1
+
+lcBxAlias = 'crSigBxEst'+Alltrim(Str(pnNivel))
+lcTmpSub = 'crTmpSub'+Alltrim(Str(pnNivel))
+
+lcSql = [Select Dopes From SigCdOpe Where nDopes = ]+Alltrim(Str(Int(pcCodigo/1000000)))
+If Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrXOpe)')
+	RETURN .F.
+EndIf
+
+lcEmpDopNums = lcEmps+Padr(Dopes,20)+Str(Val(Right(Alltrim(Str(pcCodigo)),6)),6)
+
+m.loTree1 = ThisForm.TreeView
+
+lcQryBx = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns, Sum(c.Qtds) As Qtds ]+;
+          [From SigMvPec a, SigMvCab b, SigMvItn c ]+;
+          [Where a.EmpDopNums = ']+lcEmpDopNums+[' And ]+;
+          [a.EmpDopnums = b.EmpDopNums And ]+;
+          [a.EmpDopnums = c.EmpDopNums And ]+;
+          [c.Cpros = ']+pccPros+[']+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns ]+;
+		  [Union all ]+;
+		  [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns, 0 As Qtds ]+;
+	  	  [From SigMvPec a, SigMvCab b ]+;
+		  [Where a.EmpDopNums = ']+lcEmpDopNums+[' And ]+;
+		  [a.EmpDopnums = b.EmpDopNums  And ]+;
+		  [a.EmpSubns = ']+lcEmps+[' ]+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns  ]+;
+		  [Union all ]+;
+		  [Select a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.Emps As EmpSubns, 0 As Qtds ]+;
+		  [From SigOpDev a, SigMvCab b ]+;
+		  [Where a.EmpDopNums = ']+lcEmpDopNums+[' And ]+;
+		  [a.EmpDopnums = b.EmpDopNums ]+;
+		  [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums ]
+
+ThisForm.poDatamgr.SqlExecute(lcQryBx ,lcBxAlias)
+
+Select &lcBxAlias
+Select a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns, sum(qtds) as qtds From &lcBxAlias a ;
+	Group By a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns Into Cursor &lcTmpSub ReadWrite
+
+Select &lcTmpSub
+Delete For qtds <> 0
+
+Go Top
+
+lcDados1 = 'Inicio'
+If ! Eof()
+	Scan 
+		lcEDN = EmpDopNums
+
+		lcQryBx = [Select usuars, DtAlts, UsuAls ] + ;
+		          [From SigMvCab ] + ;
+		          [Where EmpDopNums = ']+lcEDN+[']
+		ThisForm.poDatamgr.SqlExecute(lcQryBx ,'csSigMvCab')
+
+		Select &lcTmpSub
+
+		If Ascan(ThisForm.paOperacoes,EmpdopNums) = 0
+			Declare ThisForm.paOperacoes[Len(ThisForm.paOperacoes)+1]
+			ThisForm.paOperacoes[Len(ThisForm.paOperacoes)]=EmpDopNums
+			lcDados   = Alltrim(Emps)  + ' - ' +Alltrim(Dopes) + ' - ' + Alltrim(Transform(Numes,'999999')) + ' - ' + ;
+		    		    Alltrim(Notas) + ' - ' +Dtoc(Ttod(Nvl(Datas, Ctot('')))) + ' - ' + Alltrim(csSigMvCab.Usuars) ;
+			    		     + ' - ' + Dtoc(Ttod(Nvl(csSigMvCab.DtAlts, Ctot('')))) + ' - ' + Alltrim(csSigMvCab.UsuAls)  
+		   	If lcDados <> lcDados1
+				m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, pnNivel, Iif(ChkPagos,3,1), 0, 0)
+				m.loTree1.NodeHeader(m.lnNode1) = .f.
+				m.loTree1.NodeExpanded(m.lnNode1) = .f.
+				m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+				m.loTree1.NodeFontBold(m.lnNode1) = 1
+				m.loTree1.NodeCargo(m.lnNode1) = lcEDN
+				lcDados1 = lcDados
+			Endif
+	*		ThisForm.SubNivel(pnNivel+1, lcEDN, pccPros)
+	*		Select &lcTmpSub
+			ThisForm.NoProd(pnNivel+1, EmpSubns, Codigos, pccPros)
+			ThisForm.NoHiPro(pnNivel+1, EmpSubns, EmpDopNums, pccPros)
+			If pnNivel <> 3
+				Select &lcTmpSub
+				ThisForm.SubNivel(pnNivel+1, lcEDN, pccPros)
+				Select &lcTmpSub
+				ThisForm.HINivel(pnNivel+1, EmpSubns, Int(codigos/1000000), Val(Right(Alltrim(Str(Codigos)),6)), pccPros)
+			EndIf
+		Endif
+		Select &lcTmpSub
+	EndScan
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE subnivel
+------------------------------------------------------------
+PROCEDURE subnivel
+Parameters pnNivel, pcEmpDopNums, pccPros
+
+Local lcSqlOpe, lcSqlEstPe, lcCodigo, lcSqlFile
+
+m.loTree1 = ThisForm.TreeView
+
+lcSqlOpe = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(pcEmpDopNums,4,20)+[']
+If Thisform.PoDataMgr.SqlExecute(lcSqlOpe,'crTmpOpe') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpOpe)')
+	RETURN .F.
+EndIf
+
+lcSqlFile = 'crSubEstPe'+Alltrim(Str(pnNivel))
+
+lcCodigo = Alltrim(Str(crTmpOpe.nDopes * 1000000 + Val(Right(pcEmpDopNums,6))))
+
+If Type('pccPros') = [C]
+	lcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+				 [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigMvPec a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.Codigos = ] + lcCodigo + [ And a.EmpSubns = '] + Left(pcEmpDopNums,3) + [' ] + ;
+	             Iif(Type('pccPros') = [C],[And c.Cpros = ']+pccPros+[' ], [And 0 = 1 ]) + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ]+;
+			     [Union all ]+;
+			     [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps As EmpSubns, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+			     [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigOpDev a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.Codigos = ] + lcCodigo + ;
+	             Iif(Type('pccPros') = [C] And pnNivel = 3, [ And c.Cpros = '] + pccPros + [' ],[]) + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+				 [Order By b.Datas, b.Datars, b.EmpDopNums, 14]
+Else
+	lcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+				 [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigMvPec a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.Codigos = ] + lcCodigo + [ And a.EmpSubns = '] + Left(pcEmpDopNums,3) + [' ] + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;
+				 [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+			     [Union all ]+;
+			     [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps As EmpSubns, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;
+			     [Sum(c.Qtds) As Qtds ] + ;
+	             [From SigOpDev a ] + ;
+	             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;
+	             [Left  Join SigMvItn c on a.EmpDopNums = c.EmpDopNums ]+;
+	             [Where a.Codigos = ] + lcCodigo + ;
+			     [Group By a.Codigos, a.Emps, a.Dopes, a.Numes, ] + ;
+			     [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals ] + ;
+				 [Order By b.Datas, b.Datars, b.EmpDopNums, 14]
+Endif
+
+If Thisform.PoDataMgr.SqlExecute(lcSqlEstPe,lcSqlFile) < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão ' + lcSqlFile)
+	RETURN .F.
+EndIf
+
+Scan
+
+	nPos = Ascan(ThisForm.pcEmpDopNums, lcCodigo + EmpDopNums + Iif(Type('pccPros') = [C], pccPros, Space(6)))
+
+	If nPos = 0 And ! EmpDopNums = ThisForm.pcEmpDopNums[1,1]
+
+		Declare ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1)+1,2]
+		ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1),1] = lcCodigo + EmpDopNums + Iif(Type('pccPros') = [C], pccPros, Space(6))
+		ThisForm.pcEmpDopNums[ALen(ThisForm.pcEmpDopNums,1),2] = pnNivel
+
+		If ! Eof()
+			lcDtt = Left(Ttoc(Nvl(Datas, Ctot(''))), 10) + [ (] + ;
+					Substr(Ttoc(Nvl(Datars, Ctot(''))), 12, 5) + [)]
+
+			lcDados   = '(+) ' + ;
+			            Alltrim(Emps)  + ' - ' + ;
+			            Alltrim(Dopes) + ' - ' + ;
+			            Alltrim(Transform(Numes,'999999')) + ' - ' + ;
+		    		    Alltrim(Notas) + ' - ' + ;
+		    		    lcDtt + ' - ' + ;
+		    		    Alltrim(Usuars) + ;
+		    		    Iif(!IsNull(Qtds),' - Qtde : ' + Alltrim(Transform(Qtds,'999,999.99')),'')  + ' - ' + ;
+		    		    Dtoc(Ttod(Nvl(DtAlts, Ctot('')))) + ' - ' + ;
+		    		    Alltrim(UsuAls)  
+
+			m.lnNode1 = m.loTree1.AddPictureNode(lcDados, 0, pnNivel, Iif(ChkPagos,3,1), 0, 0)
+			m.loTree1.NodeHeader(m.lnNode1) = .f.
+			m.loTree1.NodeExpanded(m.lnNode1) = .f.
+			m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+			m.loTree1.NodeFontBold(m.lnNode1) = 1
+			m.loTree1.NodeCargo(m.lnNode1) = EmpDopNums
+
+
+			Select &lcSqlFile.
+
+			If ! Upper(Substr(EmpDopNums, 4, 20)) = [NF - TRF SIMBOLICA] And ThisForm.pnNiveis <= 50
+				ThisForm.pnNiveis = ThisForm.pnNiveis + 1
+				ThisForm.Subnivel(pnNivel + 1, EmpDopNums, pccPros)
+				Select &lcSqlFile.
+				ThisForm.HiNivel(pnNivel + 1, EmpDopNums, pccPros)
+				ThisForm.pnNiveis = ThisForm.pnNiveis - 1
+			EndIf
+			
+		Endif
+
+	Endif
+
+EndScan
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.btnOperacao
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcEmps, lcDopes, lnNumes
+
+lcEmps  = ''
+LcDopes = ''
+lnNumes = 0
+
+If ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'
+	lcEmps  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)
+	lcDopes = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),4,20)
+	lnNUmes = Val(Alltrim(Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),24)))
+Else
+	MessageBox('Produto',16,'')
+	Return
+Endif
+
+If Not Empty(lcEmps) And Not Empty(lcDopes) And Not Empty(lnNumes)
+	Do Form SigMvExp with lcDopes, 'C', lnNumes, lcEmps, .t.
+	ThisForm.Enabled = .T.
+	ThisForm.Enabled = .T.
+	ThisForm.TREEVIEW.Enabled = .T.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.BtnOficina
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcEmps, lcDopes, lnNumes
+Local Array laParam(3)
+
+lcEmps  = ''
+LcDopes = ''
+lnNumes = 0
+
+If ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'
+	lcEmps  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)
+	lcDopes = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),4,20)
+	lnNUmes = Val(Alltrim(Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),24)))
+Else
+	MessageBox('Produto',16,'')
+	Return
+Endif
+
+If Not Empty(lcEmps) And Not Empty(lcDopes) And Not Empty(lnNumes)
+	laParam(1) = 2
+	laParam(2) = lcDopes
+	laParam(3) = lnNumes
+	Do Form SigRePPd With .F.,'SigRePPd',laParam
+	ThisForm.Enabled = .T.
+	ThisForm.TREEVIEW.Enabled = .T.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+loTree1 = ThisForm.TreeView
+llExpande = .f.
+
+For lnNode = 0 To loTree1.lIstCount-1
+	If ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)
+		loTree1.NodeExpanded(lnNode) = .t.
+		llExpande = .t.
+	Endif
+EndFor
+
+If llExpande 
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp + 1
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+If Type('ThisForm.pnNodeExp') = [N] And ThisForm.pnNodeExp > 0
+
+	loTree1 = ThisForm.TreeView
+
+	For lnNode = 0 To loTree1.lIstCount-1
+		If ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)
+			loTree1.NodeExpanded(lnNode) = .f.
+		Endif
+	EndFor
+
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp - 1
+	
+Else 
+
+	ThisForm.pnNodeExp = 0
+
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command3.Click
+------------------------------------------------------------
+PROCEDURE Command3.Click
+Keyboard Chr(32)
+=Inkey(0)
+
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command3.When
+------------------------------------------------------------
+PROCEDURE Command3.When
+Return(.t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command4.Click
+------------------------------------------------------------
+PROCEDURE Command4.Click
+If ! Empty(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)])
+	ThisForm.GetcEmp.Value  = Left(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],3)
+	ThisForm.GetDopes.Value = Substr(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],4,20)
+	ThisForm.GetNumes.Value = Val(Alltrim(Substr(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],24)))
+	If Alen(ThisForm.paEmpDopNums) = 1
+		ThisForm.paEmpDopNums[1] = ''
+	Else
+		Declare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)-1]
+	EndIf 
+	If Empty(ThisForm.paEmpDopNums[1]) And ! ThisForm.plRetorno
+		ThisForm.GetNumes.Value = 0
+		ThisForm.MakeList()
+	Else
+		Declare ThisForm.pcEmpDopNums[1,2]
+		ThisForm.pcEmpDopNums[1] = []
+		ThisForm.Maketree()
+	Endif
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command5.Click
+------------------------------------------------------------
+PROCEDURE Command5.Click
+ThisForm.Enabled = .f.
+DO form SigReMre With ThisForm
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command6.Click
+------------------------------------------------------------
+PROCEDURE Command6.Click
+If ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'
+	If !Empty(ThisForm.paEmpDopNums[1])
+		Declare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)+1]
+	EndIf
+	ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)] = ThisForm.GetcEmp.Value +;
+														 ThisForm.GetDopes.Value +;
+														 Str(ThisForm.GetNumes.Value,6)
+	ThisForm.GetcEmp.Value  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)
+	ThisForm.GetDopes.Value = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),4,20)
+	ThisForm.GetNumes.Value = Val(Alltrim(Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),24)))
+	Declare ThisForm.pcEmpDopNums[1,2]
+	ThisForm.pcEmpDopNums[1] = []
+	ThisForm.Maketree()
+	ThisForm.pldblclick = 0
+Else
+	MessageBox('Produto',16,'')
+	Return
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.TreeView
+* Classe: olecontrol (Base: olecontrol)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+*** ActiveX Control Event ***
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+IF EMPTY(thisform.getcEmp.Value)
+	KEYBOARD '{TAB}'
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+*** ActiveX Control Event ***
+LPARAMETERS keyascii
+
+If KeyAscii = 27
+	Release Windows
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE NodeClick
+------------------------------------------------------------
+PROCEDURE NodeClick
+*** ActiveX Control Event ***
+LPARAMETERS nindex, ncolumn
+
+Thisform.plDblClick = nIndex
+	
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.GetcEmp
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.TreeView.ClearNodes
+ThisForm.GetDopes.Value = ''
+ThisForm.GetNumes.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','csSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('cEmps', '', 'Cod', .t.)
+		xBrox.mAddColuna('RazSocs', '', 'Razão Social', .t.)
+		xBrox.Show()
+	EndIf 
+	This.Value = Iif( LastKey() # 27, Evaluate('csSigCdEmp.cEmps'), '' )
+Else
+	If Lastkey() <> 27
+		MessageBox('Empresa Deve Ser Informada !!!',16,'')
+		Return .f.
+	Endif
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.GetDopes
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+ThisForm.lAcOficina = .f.
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdOpe','csSigCdOpe','Dopes',This.Value,'Operações',.t.,'Dopes')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Dopes', '', 'Operação', .t.)
+		xBrox.Show()
+	EndIf 
+	This.Value = Iif( LastKey() # 27, Evaluate('csSigCdOpe.Dopes'), '' )
+
+	ThisForm.lAcOficina = fChecaAcesso( padl(CsSigCdOpe.nDopes,8,'0'), "OPPEND" )
+
+Else
+	If Lastkey() <> 27
+		MessageBox("Operação Deve ser informada !!!",16,"")
+		Return .f.
+	Endif
+EndIf
+
+ThisForm.BtnOficina.Visible = ThisForm.lAcOficina
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.GetNumes
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Parent.GetDtI.Value = Ctod('')
+This.Parent.GetDtF.Value = Ctod('')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If This.Value <> 0
+	ThisForm.pnNodeExp = 0
+	ThisForm.commandgroup1.Command1.SetFocus
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (Lastkey() = 13 And This.Value <> 0) or Len(Alltrim(Str(This.Value))) = 6
+	With ThisForm
+
+		If ! Empty(.GetCEmp.Value) Or ! Empty(.GetDopes.Value) Or ! Empty(.GetNumes.Value)
+
+			If Empty(.GetCEmp.Value)
+				MessageBox('Empresa Deve ser Informada !!',16,'')
+				Return(.f.)
+			Endif
+
+			If Empty(.GetDopes.Value)
+				MessageBox('Operação Deve ser Informada !!',16,'')
+				Return(.f.)
+			Endif
+
+			If Empty(.GetNumes.Value)
+				MessageBox('Numero da Operação Deve ser Informado !!',16,'')
+				Return(.f.)
+			Endif
+
+			llRetorno = ThisForm.MakeTree()
+			
+			ThisForm.plRetorno = .t.
+			
+			Return(llRetorno)
+			
+		EndIf
+
+	EndWith
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.GetDtI
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Parent.GetNumes.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvmvt.GetDtF
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.pnNodeExp = 0
+This.Parent.GetNumes.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(this.Parent.GetDtI.Value)
+	MessageBox('Data Inicial Invalida !!!',16,'')
+	Return .t.
+EndIf 
+
+If ! Empty(This.Value)
+
+	With ThisForm
+
+		If ! Empty(.GetCEmp.Value) Or ! Empty(.GetDopes.Value)
+
+			If Empty(.GetCEmp.Value)
+				MessageBox('Empresa Deve ser Informada !!',16,'')
+				Return(.f.)
+			Endif
+
+			If Empty(.GetDopes.Value)
+				MessageBox('Operação Deve ser Informada !!',16,'')
+				Return(.f.)
+			Endif
+
+			llRetorno = ThisForm.MakeList()
+			
+			ThisForm.plRetorno = .f.
+
+			Return(llRetorno)
+			
+		EndIf
+
+	EndWith
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigmvmvt
+RESERVED3 (ClassInfo): automatico
+emptypro
+lacoficina
+paoperacoes
+pcsituacao
+pldblclick
+plretorno
+pnniveis
+pnnodeexp
+podatamgr
+^paempdopnums[1,0] 
+^pcempdopnums[1,1] 
+_memberdata XML Metadata for customizable properties
+*hinivel 
+*makelist 
+*maketree 
+*nohipro 
+*noprod 
+*processamento 
+*subnivel 
+
+
+* Objeto: TreeView
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 35
+================================================================================
+

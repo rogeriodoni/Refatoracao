@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigmvcth",
+      "evento": "Procedure",
+      "linhas": 81,
+      "codigoOriginal": "Local lcLet, lnUni, lnTot\n\nlcQuery = [Select a.Codigos, b.DtCotas as Datas, b.Situas, a.QtdAdqs, a.CUnis, a.ValAdqs, a.Marca01, a.Unit01, ] + ;\n\t\t\t\t [a.Tota01, a.Marca02, a.Unit02, a.Tota02, a.Marca03, a.Unit03, a.Tota03, a.Marca04, a.Unit04, ] + ;\n\t\t\t\t [a.Tota04, a.Marca05, a.Unit05, a.Tota05, a.Marca06, a.Unit06, a.Tota06, b.Comprador, b.Aprovador, ] + ;\n\t\t\t\t [b.DtAprovs, b.ObsAprovs ] + ;\n\t\t    [From SigCtTCt a, SigCtTDc b ] + ;\n\t\t   [Where a.CPros = '] + ThisForm.CPros + [' And ] + ;\n\t\t   \t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvcth",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "Lparameters pCnx, pPro, pCod\n\nIf (Type([pCnx]) <> [O])\n\t=Messagebox([O Parâmetro de Conexão Passado Não É Valido...], 0+48, [Parâmetros Inválidos!!!])\n\tReturn .f.\nEndIf\n\nWith ThisForm\n\t.poDataMgr = pCnx\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.CPros = Padr(pPro, 10)\n\t\t.Codigos = pCod\n\n\t\t.grdCotacoes.SetAll([DynamicForeColor],[Iif(crHistPeds.Situas > 0, Rgb(0,0,255), Rgb(0,0,0))], [Column])\n\t\t\n\t\t.CarregaPedidos\t\t\t\t\n\t\t\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvcth",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crHistPeds (Situas n(1), Datas d(8), QtdAdqs n(12,2), CUnis c(3), ValAdqs n(12,2), ;\n\t\t\t\t\t\t  Units n(12,2), Totas n(12,2), IClis c(10), Fornecs c(50), Comprador c(10), ;\n\t\t\t\t\t\t  Aprovador c(10), DtAprovs d(8), ObsAprovs m(4))\n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvcth.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvcth.grdCotacoes",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.getComprador.Refresh \nThisForm.getAprovador.Refresh\nThisForm.getDtAprovs.Refresh\nThisForm.getObsAprovs.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvcth.getAprovador",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvcth.getComprador",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvcth.getDtAprovs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvcth.getObsAprovs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

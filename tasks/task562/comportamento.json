@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 1,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVCHV",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "Lparameters pCnx, pcEscolha, pcEDN\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.pEmpDopNums = pcEDN\nThisform.pcEscolha = pcEscolha\nThisform.poDataMgr = pCnx\n\nSelect crChaves\nGo Top\n\nThis.Grade.RecordSource          = [crChaves]\nThis.Grade.Column1.ControlSource = [crChaves.ChaveNota]\n\nThis.Refresh\n\nThisform.Grade.AfterRowColChange()\n* Fim **********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "This.Grade.RecordSource          = []\nThis.Grade.Column1.ControlSource = []\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.cntBotoes",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "ThisForm.Grade.Refresh\nSelect crChaves\nGo Top In crChaves\nThisForm.Grade.Refresh\n\n*!*\tSELECT crSigMvChv\n*!*\tDELETE all for EmpDopNums = pcEDN\n*!*\tGO top\n*!*\tSCAN\n*!*\t\tlcIdChave = fUniqueIds()\n*!*\t\tINSERT into crSigmvAte (ChaveNota, EmpDopNums, pkChaves) values\t(crChaves.ChaveNota, TprMvCab.EmpDopNums, lcIdChave ) \n*!*\tENDSCAN\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.inserir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select crChaves\n=TableUpdate(.T.)\nLocate For ChaveNota=' '\nIf Eof()\n\tInsert Into crChaves(ChaveNota, EmpDopNums, pkChaves) values ([], ThisForm.pEmpDopNums, Sys(2015)+Sys(2015)) \nEndIf\nThisform.grade.Refresh \nthisform.grade.column1.SetFocus  \n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pEmpDopNums, Sys",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.excluir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crChaves\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crChaves\nDelete\nThisForm.grade.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCHV.grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect crChaves\t\n*!*\t\t=TableUpdate(.T.)\n\tSelect ChaveNota, Count(*) as qt from crChaves where ChaveNota = This.Value Group by ChaveNota Into Cursor csRegDup ReadWrite\n\t\n\tSelect csRegDup\n\tIf Reccount([csRegDup])>0 And csRegDup.qt > 1\n\t\tMessageBox([Registro já Informado.],0+48,[Aviso])\n\t\tReturn .F.\n\tEndIf \n\n*!*\t\tSelect crChaves\n*!*\t\tGo Top In crChaves\n*!*\t\tLocate For (Empty(ChaveNota))\n*!*\t\tIf Eof([crChaves])\n*!*\t\t\tInsert Into crChaves(ChaveNota, EmpDopNums, pkChaves) val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVCHV.inserir.Click",
+      "queryOriginal": "\tInsert Into crChaves(ChaveNota, EmpDopNums, pkChaves) values ([], ThisForm.pEmpDopNums, Sys(2015)+Sys(2015))",
+      "tabelas": "crChaves",
+      "colunas": "ChaveNota,EmpDopNums,pkChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCHV.grade.Column1.Text1.Valid",
+      "queryOriginal": "\tSelect ChaveNota, Count(*) as qt from crChaves where ChaveNota = This.Value Group by ChaveNota Into Cursor csRegDup ReadWrite",
+      "tabelas": "crChaves",
+      "colunas": "ChaveNota,Value,csRegDup,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crChaves"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

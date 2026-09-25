@@ -1,0 +1,43 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+Fase 3 conclu├¡da. `FormProduto.prg` criado, compilado e instanciado com sucesso.
+
+## O que foi entregue
+
+`C:\4c\projeto\app\forms\cadastros\FormProduto.prg` (28,3 KB, 642 linhas, ASCII/CRLF) ÔÇö a vers├úo antiga da task504 estava preservada como `FormProduto.BAK` e foi substitu├¡da.
+
+**Estrutura base:** `Init()` ÔåÆ `DODEFAULT()`, `InicializarForm()`, `ConfigurarPageFrame()`, `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()`, `ConfigurarNavegacaoDivisoes()`, `AlternarDivisao()`, `FormatarGridLista()`, `TornarControlesVisiveis()`, `Destroy()`.
+
+## Erro178 ponto 2 ÔÇö navega├º├úo corrigida
+
+A migra├º├úo anterior tinha `.Tabs = .T.` no PageFrame interno (linha 455 do `.BAK`) e nenhum OptionGroup. Agora:
+
+- `pgf_4c_Divisoes`: 8 abas, `Tabs = .F.`, `Top = 29` (= ÔêÆ58 legado + 58 da barra de abas + 29 do PageFrame externo), `Height = 598` (656 ÔêÆ 58). Medi contra as telas 06/08: com essa compensa├º├úo a origem do conte├║do cai no mesmo pixel do legado, ent├úo os controles das abas nas Fases 5ÔÇæ6 usam o `Top` do `layout.json` **direto**.
+- `opt_4c_Navegacao`: OptionGroup de 8 bot├Áes gr├íficos transcrito do SCX (Left/Picture/tecla de atalho). O `DO CASE` do `InteractiveChange` foi transcrito literalmente ÔÇö inclusive o mapeamento n├úoÔÇæ├│bvio Value 3ÔåÆaba 6 (Custo) e Value 4ÔåÆaba 3 (Fiscal).
+- Ordem dos `AddObject` na Page2 garante o zÔÇæorder: faixa ÔåÆ PageFrame ÔåÆ navega├º├úo ÔåÆ Confirmar/Cancelar, com `ZOrder(0)` nos dois ├║ltimos. Coloquei a faixa **antes** do PageFrame (e n├úo depois como no `Formgpd`) porque a aba `pgDados` tem `cmdProduto`/`cmdArquivos` em `Top=38` ÔÇö a faixa depois os cobriria pela metade.
+
+## Verifica├º├úo executada no VFP9
+
+Compila├º├úo limpa (sem `.err`), e o form instanciado com dump da ├írvore:
+
+- Form 1010├ù600; `pgf_4c_Paginas` Top=ÔêÆ29, Tabs=.F.
+- Page1: `cnt_4c_Cabecalho`(30/0/1010/80), `cnt_4c_Botoes`(29/542/390/85), `cnt_4c_Saida`(29/917/90/85), `cnt_4c_Filtros`(122/31/388/63) ÔÇö todos `Visible=.T.`
+- Page2: faixa, `pgf_4c_Divisoes`, `opt_4c_Navegacao`, `cnt_4c_BotoesAcao`
+- 8 bot├Áes de navega├º├úo, todos com `Style=1` e `Picture` existente em `vbmp\`
+- `AlternarDivisao()` testado nos 8 valores ÔåÆ ActivePage 1,2,6,3,4,5,7,8 Ô£ô
+
+Tamb├®m passaram: `Test-CompletudeCodigo` replicado (0 TODO/stub/procedure vazia), `VerificarPropriedadesInexistentes.ps1` (0 achados), e nenhum `RETURN` dentro de `TRY/CATCH`.
+
+## Um ajuste fora do `.prg`
+
+Corrigi 14 entradas estruturais do `tasks\task569\mapeamento.json` (backup em `.fase3.bak`) ÔÇö nomes decididos nesta fase. Havia colis├úo real: `SIGCDPRO.Pagina` e `...pgframeDados` mapeavam ambos para `pgf_4c_1`, e o `Botoes` lateral do legado ocupava o nome `cnt_4c_Botoes` que o container CRUD usa. Agora apontam para `pgf_4c_Paginas`/`pgf_4c_Divisoes`, `Page1..Page8`, `opt_4c_Navegacao` e `cnt_4c_BotoesLateral`.
+
+## Duas decis├Áes que valem registro para as pr├│ximas fases
+
+1. **`cnt_4c_Saida.Left = 917`** (can├┤nico, regra #10) em vez de 927 do SCX: o CorretorAutomatico for├ºa 917 incondicionalmente, e com 927 ele reescreveria criando sobreposi├º├úo com o Buscar. Com `cnt_4c_Botoes.Left = 542`, Buscar termina em 922 e Encerrar come├ºa em 922 ÔÇö encostam sem sobrepor.
+2. **`cmdAcabado` ("Copiar um Produto") fica fora do `cnt_4c_Botoes`**, como filho direto da Page1 igual ao legado ÔÇö dentro do container ele dispararia o guard de "bot├úo extra" do corretor e suprimiria o auto-fix de `Left`.
+
+As Fases 4ÔÇæ8 ainda precisam preencher os containers (grade + 5 bot├Áes CRUD + Encerrar + filtros), os 176 controles da `pgDados` e as outras seis abas, o `AlternarPagina` com `AjustarBotoesPorModo` (regra #40) e o Buscar por exemplo via `msv_procurar` ÔÇö nada disso est├í no escopo desta fase.

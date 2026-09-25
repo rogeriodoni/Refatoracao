@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada.
+
+## O que foi entregue
+
+`projeto\app\forms\operacionais\Formsigmvcot.prg` ÔÇö **Page2 (`pgDados`) completa**, que ├® a p├ígina de LISTA deste form OPERACIONAL (o legado n├úo tem Page1=Lista/Page2=Dados do padr├úo CRUD; ├® um wizard de 4 abas):
+
+- **`ConfigurarPaginaLista()`** ÔÇö as 2 grades e os 7 CommandGroups, com Top/Left/Width EXATOS do SCX: `grd_4c_Operacoes` (Movimenta├º├Áes, 6 colunas), `grd_4c_CotaPends` (Cota├º├Áes Realizadas, 6 colunas com `DynamicForeColor` da prioridade), Marcar/Desmarcar, Gerar Cota├º├Áes, Cota├º├úo Livre, Visualizar, Alterar/Excluir, Copiar, Retornar aos Filtros, `optFiltro` (Gerar Produtos) e os 3 labels.
+- **`CriarCursoresLista()`** ÔÇö `cursor_4c_Movimentacao` / `cursor_4c_CotasPendentes` com a estrutura literal do `Load` legado (READWRITE, pr├®-requisito do CheckBox da grade).
+- **`CarregarLista()`** ÔÇö transcri├º├úo real do `PROCEDURE processamento`: consulta das movimenta├º├Áes pendentes, desconto do que j├í foi cotado (SigCtTCt), agrupamento por Emp+Opera├º├úo+N├║mero, carga das cota├º├Áes realizadas, cores din├ómicas, `GO TOP` + `Refresh` e o aviso do legado quando n├úo h├í dados (nesse caso **n├úo** avan├ºa de p├ígina).
+- Handlers reais: os 4 do CheckBox de grade (com a regra de "jobs diferentes"), `AfterRowColChange`, marcar/desmarcar todas, retorno aos filtros, e os 6 bot├Áes de cota├º├úo delegando a `GeraCotacao`/`AlteraCotacao`/`CopiaCotacao` com as guardas do legado.
+- **`AlternarPagina()`** j├í existia da fase anterior e continua sendo o ponto de navega├º├úo.
+
+## Dois defeitos reais corrigidos (n├úo eram do meu c├│digo novo)
+
+1. **`PageFrame.BorderWidth` ├® read-only em runtime** ÔÇö estourava `Property BORDERWIDTH is read-only` no `Init`, ou seja **a tela n├úo abria**. Era c├│digo da Fase 3, e o SCX legado n├úo declara essa propriedade. Removido.
+2. **`SigCdAcu` n├úo tem coluna `Acessos`** ÔÇö a checagem de acesso do bot├úo "Cota├º├úo Livre" usava um nome inexistente (a coluna ├® `parametros`, e a permiss├úo tamb├®m vem por grupo via `SigCdAcg`). Agora delega para `fChecaAcesso("SIGMVCOT","COTSEMOPE",.F.)`, a pr├│pria fun├º├úo do Framework j├í carregada pelo `config.prg`.
+
+## Verifica├º├úo
+
+- Compila├º├úo VFP9 limpa (`.fxp` regerado, sem `.err`).
+- `TesteAutomatico.prg` (harness do projeto): **9/9 testes passando, 100%** ÔÇö Instancia├º├úo, ContainersFlutuantes, CarregarDadosReais, NavegacaoPaginas, BtnIncluirNavegacao, BtnEncerrarExiste, GridTemDados, LookupMetodosExistem, Fechar.
+- `VerificarPropriedadesInexistentes.ps1`: sem achados.
+- Sem `RETURN` dentro de TRY/CATCH/FINALLY; 54 `PROCEDURE`/54 `ENDPROC`; sem TODO/stub.
+- Gate da Fase 4 (`ConfigurarPaginaLista` + `AlternarPagina`): **passa**.
+
+## Ponto de aten├º├úo
+
+O auditor `VerificarPropriedadesInexistentes.ps1` **n├úo pega propriedade read-only** ÔÇö ele reportou "OK" sobre o c├│digo que impedia a tela de abrir, porque `BorderWidth` existe em `AMEMBERS()`. S├│ a instancia├º├úo real pegou. Gravei isso na mem├│ria; se quiser, posso rodar `/propagate-lesson` para levar a li├º├úo aos prompts e ao CorretorAutomatico.
+
+Escopo que fica para as fases seguintes (por constru├º├úo do pipeline, n├úo omiss├úo): a Page3 (Cota├º├Áes) e a Page4 (Pedidos) e, com elas, o corpo completo de `GeraCotacao`/`AlteraCotacao`/`CopiaCotacao` ÔÇö hoje eles fazem as valida├º├Áes do legado, carregam o cabe├ºalho no BO e navegam para a Page3.

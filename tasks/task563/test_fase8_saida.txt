@@ -1,0 +1,26 @@
+== TESTE FASE 8 FormSIGMVCMV ==
+Conexao handle: 1
+VARTYPE(loForm) = O
+PEMSTATUS CarregarLista = .T.
+PEMSTATUS AjustarBotoesPorModo = .T.
+PEMSTATUS FormParaBO = .T.
+PEMSTATUS BOParaForm = .T.
+PEMSTATUS HabilitarCampos = .T.
+PEMSTATUS LimparTela = .T.
+CarregarLista(): OK
+AjustarBotoesPorModo(): OK - Processa.Enabled=.F. Cancela.Enabled=.T.
+HabilitarCampos(.F.): OK - DtIni.Enabled=.F. Cancela.Enabled=.T.
+HabilitarCampos(.T.): OK - DtIni.Enabled=.T.
+FormParaBO() de fora: bloqueado como esperado (Property FORMPARABO is not found.)
+Processamento() periodo vazio: OK - QtdProcessada=-1 (esperado -1, ou seja BO nao foi acionado)
+Processamento() periodo invertido: OK - QtdProcessada=-1 (esperado -1)
+Processamento() periodo valido: OK
+  BO.this_dDataInicial = 25/08/2026 (VARTYPE D, esperado D)
+  BO.this_dDataFinal   = 24/09/2026
+  BO.this_cCdMoeda   = [USD]
+  BO.this_cDsMoeda   = [DOLAR]
+  BO.this_cCdEmpresa = [001]
+  BO.this_cDsEmpresa = [EMPRESA TESTE]
+LimparTela(): OK - DtIni=[  /  /    ] moeda=[] empresa=[] dsEmpresa=[]
+  BO.this_cCdMoeda apos limpar = []
+== FIM ==

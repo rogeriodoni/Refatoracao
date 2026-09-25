@@ -1,0 +1,259 @@
+﻿{
+    "taskId":  "task559",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-23T18:03:32",
+    "atualizadoEm":  "2026-09-23T19:32:18",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-23T18:03:32",
+                                            "fim":  "2026-09-23T18:03:32",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task559\\SigMvAte.sct",
+                                            "baseName":  "SigMvAte",
+                                            "scxFile":  "C:\\4c\\tasks\\task559\\SigMvAte.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-23T18:03:32",
+                                          "fim":  "2026-09-23T18:03:32",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigMvAte",
+                                          "txtFile":  "C:\\4c\\tasks\\task559\\SigMvAte_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-23T18:03:33",
+                                              "fim":  "2026-09-23T18:03:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task559\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-23T18:03:34",
+                                              "fim":  "2026-09-23T18:03:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task559\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task559\\meta_prompt.md",
+                                              "boClass":  "SigMvAteBO",
+                                              "formClass":  "FormSigMvAte",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task559\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-23T18:03:34",
+                                              "fim":  "2026-09-23T18:03:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task559\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-23T18:03:34",
+                                               "fim":  "2026-09-23T18:03:35",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task559\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigMvAte_esqueleto.prg",
+                                                                "SigMvAteBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-23T18:03:35",
+                                       "fim":  "2026-09-23T19:16:35",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigMvAteBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  18.84,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvAte.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  724
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-23T19:16:35",
+                                                  "fim":  "2026-09-23T19:16:49",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigMvAteBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvAte.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-23T19:16:49",
+                                                 "fim":  "2026-09-23T19:16:50",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-23T19:23:06",
+                                       "fim":  "2026-09-23T19:25:15",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-23T19:25:15",
+                                               "fim":  "2026-09-23T19:27:15",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task559\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-09-23T19:27:15",
+                                        "fim":  "2026-09-23T19:32:18",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-23T19:32:18",
+                                              "fim":  "2026-09-23T19:32:18",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task559_SigMvAte.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-23T18:03:33",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-23T18:03:33",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task559\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-23T18:03:33",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-23T18:03:34"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-23T19:16:49",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-23T19:16:49",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigMvAte_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvAte.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task559\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-23T19:16:51",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-23T19:16:51",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-23T19:16:51",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-23T19:22:49",
+                                          "passes":  6,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027PKCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: GRUPOS, ICLIS, EMPDOPNUMS, NATENDS, CODVENDS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: GRUPOS, ICLIS, EMPDOPNUMS, NATENDS, CODVENDS; [FONTNAME-ERRADO] Linha 236: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 257: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [LAYOUT-POSITION] Controle \u0027excluir\u0027 (parent: SIGMVATE): Left original=523 vs migrado \u0027cmd_4c_Excluir\u0027 Left=230 (diff=293px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  5
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-23T19:22:49",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-23T19:23:06",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigMvAteBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvAte.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-23T19:27:15",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-23T19:27:15",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  7,
+                                             "warnings":  2,
+                                             "reportFile":  "C:\\4c\\tasks\\task559\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

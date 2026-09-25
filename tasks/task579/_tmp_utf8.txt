@@ -1,0 +1,866 @@
+﻿================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigmvtit.SCX
+* Data/Hora: 25/09/2026 14:32:30
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVTIT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGMVTIT
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGMVTIT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGMVTIT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGMVTIT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdTitulos
+  Parent: SIGMVTIT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTIT.grdTitulos.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTIT.grdTitulos.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGMVTIT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupos
+  Parent: SIGMVTIT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDContas
+  Parent: SIGMVTIT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGMVTIT
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGMVTIT
+  Class: label
+  BaseClass: label
+
+Objeto: iDoc
+  Parent: SIGMVTIT
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Títulos Gerados"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .T.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  empresa = .F.
+  operacao = .F.
+  numero = .F.
+  Name = "SIGMVTIT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.Shape1
+------------------------------------------------------------
+  Top = 0
+  Left = 923
+  Height = 79
+  Width = 75
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1004
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 467
+  Left = 6
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 83
+  Width = 884
+  GridLineColor = 238,238,238
+  Name = "grdTitulos"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 100
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 120
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 31
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 335
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 90
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.Width = 90
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Título"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Histórico"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.grdTitulos.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 923
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "OK"
+  TabIndex = 1
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.getDGrupos
+------------------------------------------------------------
+  Height = 23
+  Left = 6
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Descrição do Grupo"
+  Top = 569
+  Width = 440
+  Name = "getDGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.getDContas
+------------------------------------------------------------
+  Height = 23
+  Left = 450
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Descrição da Conta"
+  Top = 569
+  Width = 440
+  Name = "getDContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição do Grupo"
+  Height = 15
+  Left = 6
+  Top = 554
+  Width = 111
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição da Conta"
+  Height = 15
+  Left = 450
+  Top = 554
+  Width = 110
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTIT.iDoc
+------------------------------------------------------------
+  Top = 3
+  Left = 847
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_impressora_normal_32.jpg
+  Caption = "Im\<pressão"
+  TabIndex = 9
+  ToolTipText = "Impressão"
+  Visible = .T.
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 104
+  Themes = .F.
+  Alignment = 2
+  Name = "iDoc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVTIT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pEDN, pOpe
+
+ThisForm.Empresa = Alltrim(Substr(pEDN, 01, 03))
+ThisForm.Operacao = Alltrim(Substr(pEDN, 04, 20))
+ThisForm.Numero = Alltrim(Substr(pEDN, 24, 06))
+
+With Thisform
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.Caption = [Títulos Gerados - Movimentação : ] + ;
+				   ThisForm.Empresa + [ / ] + ;
+				   ThisForm.Operacao + [ / ] + ;
+				   ThisForm.Numero
+		
+		.cntSombra.lblSombra.Caption = .Caption
+		.cntSombra.lblTitulo.Caption = .Caption
+		
+		lcQuery = [Select a.Titulos, a.Vencs, a.Valors, a.Moedas, a.Hists, a.Grupos, ] + ;
+						 [b.Descrs as DGrupos, a.Contas, c.RClis as DContas, a.Dopcs, a.Numcs ] + ;
+					[From SigMvCcr a ] + ;
+					[Left Join SigCdGcr b On a.Grupos = b.Codigos ] + ;
+					[Left Join SigCdCli c On a.Contas = c.IClis ] + ;
+				   [Where a.EmpDopNums = '] + pEDN + [' And ] + ;
+				   		 [a.Opers = '] + pOpe + [' ] + ;
+				   [Order By a.Vencs, a.Titulos, a.Grupos, a.Contas]
+
+		If (.poDataMgr.SqlExecute(lcQuery, [LocalTits]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalTits)])
+			Return .f.
+		EndIf
+		Select LocalTits
+		Goto Top In LocalTits
+		With .grdTitulos
+			.RecordSource          = [LocalTits]
+			.Column1.ControlSource = [LocalTits.Titulos]
+			.Column2.ControlSource = [Ttod(LocalTits.Vencs)]
+			.Column3.ControlSource = [LocalTits.Valors]
+			.Column4.ControlSource = [LocalTits.Moedas]
+			.Column5.ControlSource = [LocalTits.Hists]
+			.Column6.ControlSource = [LocalTits.Grupos]
+			.Column7.ControlSource = [LocalTits.Contas]
+			.Refresh
+			.AfterRowColChange()
+		EndWith
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos
+* Classe: grid (Base: grid)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.getDGrupos.Value = LocalTits.DGrupos
+ThisForm.getDContas.Value = LocalTits.DContas
+ThisForm.getDGrupos.Refresh
+ThisForm.getDContas.Refresh 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.grdTitulos.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.getDGrupos
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.getDContas
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTIT.iDoc
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !Empty(ThisForm.Empresa) And !Empty(LocalTits.Dopcs) And !Empty(LocalTits.titulos)
+	Do Form SigReIdt With Thisform,ThisForm.Empresa, LocalTits.Dopcs, LocalTits.titulos, LocalTits.Numcs, []
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVTIT
+RESERVED3 (ClassInfo): podatamgr
+empresa
+operacao
+numero
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================
+

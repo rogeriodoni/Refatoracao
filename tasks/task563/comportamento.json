@@ -1,0 +1,316 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fRecalculaS", "fDtoSQL", "fCarregarCambio", "fwBuscaExt", "fAcessoEmpresa", "Found"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVCMV",
+      "evento": "Procedure",
+      "linhas": 85,
+      "codigoOriginal": "local voper,oper,grupo,conta,moed,cot,valor,soper,sgrupo,sconta,smoed,;\n\t\tscot,svalor,data,sdata,hist,shist,docu,sdocu,venc,svenc,noper,;\n\t\tsnoper,emp,Dops,nums,edn,dtem,Venc,_Hist\n\n*** INSERIR CONTA MOVIMEN//\nselect craltcc\n\nnoper   \t= craltcc.nopers\nvoper   \t= craltcc.vopers\noper    \t= craltcc.sopers\ngrupo   \t= craltcc.sgrupos\nconta   \t= craltcc.scontas\nmoed   \t\t= craltcc.smoedas\ncot     \t= craltcc.scotacaos\nvalor   \t= craltcc.svalors\nsoper   \t= craltcc.opers\nsgrupo  \t= craltcc.grupos\nsconta  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "ThisForm.getDtInicial.Value = Ctod('')\nThisForm.getDtFinal.Value = Ctod('')\nThisForm.get_cd_moeda.Value = ''\nThisForm.get_ds_moeda.Value = ''\nThisForm.getEmpresa.Value = ''\nThisForm.getDEmpresa.Value = ''\n\nThisForm.getDtInicial.Refresh\nThisForm.getDtFinal.Refresh\nThisForm.get_cd_moeda.Refresh\nThisForm.get_ds_moeda.Refresh\nThisForm.getEmpresa.Refresh\nThisForm.getDEmpresa.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ctod",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV",
+      "evento": "Procedure",
+      "linhas": 265,
+      "codigoOriginal": "Local ldDtIni, ldDtFim, lcEmp, lcMoeda, lcTransacao\n\nPrivate pDtI, pDtF, lnNopers\n\nldDtIni = Thisform.getDtInicial.Value\nldDtFim = Thisform.getDtFinal.Value\nlcEmp\t= Thisform.getEmpresa.Value\nlcMoeCV = Thisform.get_cd_moeda.Value\n\nSelect CrAltCc\nZap\n\nIf Used([csMovimento])\n\tUse In csMovimento\nEndif\n\nCreate Cursor csMovimento(Emps c(3), Dopes c(20), DataS T, custofs N(12,3), pcuss N(12,5), moecusfs c(3), moedas c(3), qtds N(10,3),;\n\tGrupoEDs c(11), ContaEDs c(11), GrupoECs c(11), ContaECs c(11), M... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fCarregarCambio",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCMV",
+      "evento": "Init",
+      "linhas": 86,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith Thisform\n\t.poDatamgr = Createobject('fSqlConector',Thisform.Name)\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),[])\n\t\tReturn(.F.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigMvCcr', 'CidChaves',  'CrAltcc',    '', '', [Select * From SigMvCcr])\n\tEndwith\n\nEndWith\n\n=ThisForm.LimpaTela()\n\nlcQuery = [select distinct SigOpF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LimpaTela,SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\n* Criar o Cursor Para Grade de Operações\nCreate Cursor csOperacaos (Marcas l(1), Operacaos c(20), VisTit n(1))\nIndex on Operacaos Tag Operacaos\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.Cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "if IsEmpty(ThisForm.get_cd_moeda.Value)\n\tThisForm.get_ds_moeda.Value = ''\n\tThisForm.get_ds_moeda.refresh\n\treturn(.t.)\nendif\n\nloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t   'crListaRemota','CMOES', This.Value, 'Seleção', 1000)\nIf Not loLista.plAchouRegistro\n\tloLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')\n\tloLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')\n\tloLista.Show()\nEndIf\nIf Lastkey() = 27\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_d... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.getDEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.getDEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "if IsEmpty(ThisForm.get_cd_moeda.Value)\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_cd_moeda.refresh\n\treturn(.t.)\nendif\n\nloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t   'crListaRemota','DMOES', This.Value, 'Seleção', 1000)\nIf Not loLista.plAchouRegistro\n\tloLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')\n\tloLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')\n\tloLista.Show()\nEndIf\nIf Lastkey() = 27\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_ds_... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.Processa",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "If Empty(Thisform.getDtInicial.Value) Or Empty(Thisform.getDtFinal.Value)\n\tMessagebox([Favor Informar o Periodo.],0+48,[Atenção])\n\tThisform.getDtInicial.SetFocus\n\tReturn .F.\nEndif\n\nSelect csOperacaos\nLocate For Marcas = .T.\nIf Not Found()\n\tMessagebox([Selecione uma Operação.],0+48,[Atenção])\n\tThisform.grdOperacaos.Column1.SetFocus\n\tReturn .F.\nEndif\n\nIf Messagebox([Confirma o Processamento?],4+32,[Atenção])<>6\n\tReturn .F.\nEndIf\n\n=ThisForm.Processamento()\n=ThisForm.Limpatela()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "Value) Or Empty,Processamento,Limpatela",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.grdOperacaos.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.grdOperacaos.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 16,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nLocal Marcas\nIf m.nKeyCode = 9\n\tThisForm.opt_nr_tipo.Option1.SetFocus\nEndif\n\nIf InList(m.nKeyCode,13,32)\n\tm.Marcas = (!csOperacaos.Marcas)\n\tSelect csOperacaos\n\tGather Memvar Fields Marcas\n\tThis.Parent.Parent.Refresh\n\tNoDefault\nEndif\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_nr_tipo,Option1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.grdOperacaos.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "LPARAMETERS nButton, nShift, nXCoord, nYCoord\n\nLocal Marcas\nm.Marcas = (!csOperacaos.Marcas)\nSelect csOperacaos\n\nGather Memvar Fields Marcas\nThis.Parent.Parent.Refresh\nNoDefault",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.grdOperacaos.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.grdOperacaos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCMV.cmdBtnGrade",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Do Case\n   Case This.Value = 1 And This.btnMarcaTudo.Enabled\n\t\t* Marca Tudo\n\t\tSelect csOperacaos\n\t\tReplace All Marcas With .t.\n\t\tGo Top\n\t\tThisForm.grdOperacaos.Refresh\n\t\t \n   Case This.Value = 2 And This.btnDesmarcar.Enabled\n   \t\t* Desmarcar\n\t\tSelect csOperacaos\n\t\tReplace All Marcas With .f.\n\t\tGo Top\n\t\tThisForm.grdOperacaos.Refresh\nEndCase\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVCMV.Init",
+      "queryOriginal": "\t\t.AddCursor('SigMvCcr', 'CidChaves',  'CrAltcc',    '', '', [Select * From SigMvCcr])",
+      "tabelas": "SigMvCcr",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCcr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

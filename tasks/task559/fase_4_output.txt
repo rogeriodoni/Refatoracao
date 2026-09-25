@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Both files pass structural balance checks, have no RETURN-inside-TRY violations, and no literal accented characters. The Fase 4 implementation is complete.
+
+## Summary
+
+Updated **`FormSigMvAte.prg`** (Fase 4/8) to add:
+- **`ConfigurarPaginaLista()`**: builds `cmg_4c_Botoes` (Confirmar/Cancelar CommandGroup, pixel-exact from the legacy `cntBotoes`), `grd_4c_Dados` (3-column grid: Vendedor/Descri├º├úo/Atendimentos bound to `cursor_4c_LocalVen`), and standalone `cmd_4c_Incluir`/`cmd_4c_Excluir` buttons (enabled only in INSERIR/ALTERAR, matching the legacy `When`).
+- **Lookup handlers** (`ValidarCodVenGrade`, `ValidarNomVenGrade`, `AbrirBuscaVenGrade`, `VerificarVendedorDuplicado`): replicate the legacy vendor lookup/duplicate-check logic without the prohibited `fAcessoContas()` UX call, using the canonical exact-match-then-picker pattern filtered by the document's vendor group.
+- **CRUD handlers**: `BtnIncluirClick`/`BtnExcluirClick` (add/remove grid rows), `BtnConfirmarClick` (delete-all-then-reinsert into `SigMvAte`, matching the legacy Confirm flow), `BtnCancelarClick` (release without saving).
+- **`CarregarLista()`**: loads existing document attendances on open.
+- No-op `AlternarPagina`/`AjustarBotoesPorModo` stubs for pipeline contract compatibility.
+
+Also extended **`SigMvAteBO.prg`** (needed for the grid to function, since no listing method existed yet): added `LimparDados()` (fixes a latent PK-collision bug in the Confirm loop), `CarregarAtendimentosDocumento()`, and `ObterDescricaoVendedor()`.
+
+Both files pass block-balance checks (PROCEDURE/ENDPROC, TRY/ENDTRY, WITH/ENDWITH, IF/ENDIF, etc. all matched) and have no RETURN-inside-TRY or literal-accent violations.

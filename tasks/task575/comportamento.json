@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVPDT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Podatamgr6.Release\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVPDT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVPDT",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "lParameters pDopps, pTipos ,pNumps , pEmps, pConsulta\n\nThisForm.podatamgr6  = CreateObject('fSqlConector')\n\nThisForm.Erro = .f.\n\nThisform.pDope = pDopps\n\npTipos = Iif(Type('pTipos')='C',pTipos,' ')\n\nIf (pTipos = 'C')\n\tThisForm.pNume = pNumps\n\tThisForm.pEmp  = pEmps\nEndIf\n\nThisForm.pTipo = pTipos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "podatamgr6  = CreateObject",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVPDT",
+      "evento": "Activate",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Processo.Click",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVPDT.Processo",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "ThisForm.Podatamgr6.cursorquery('SigCdOpd','CrSigCdOpd','Dopps',Upper(ThisForm.pDope),[Dopps,Pccs])\n\nIf (ThisForm.pTipo <> 'C') And Not WExist('SigPdMp6')\n\tDO form SigPdMp6 with ThisForm.pDope,ThisForm\nElse\n\tIf (ThisForm.pTipo = 'C') And Not WExist('SigPdMp6')\n\t\tDO form SigPdMp6 with ThisForm.pDope,ThisForm,Thisform.pNume,ThisForm.pEmp,.t.\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,pTipo <> 'C') And Not WExist,pTipo = 'C') And Not WExist",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+menu.prg is balanced and correctly wired. Phase 8 for **Formsigmvits** (Caixa/PDV) is complete.
+
+## Summary
+
+This form is an OPERACIONAL "Caixa" (POS) screen, not a CRUD cadastro, so the generic Phase 8 checklist items map to functional equivalents that were already built in phases 3ÔÇô7 (`BtnConfirmarClick`/`GravarDocumento` Ôëê Salvar, `BtnCancelarClick`, `BtnEncerrarClick`, `AjustarBotoesPorModo`, `LimparCamposItem`). What Phase 8 actually needed to finish:
+
+1. **`FormParaBO()`** ÔÇö was called by `GravarDocumento()` but never defined (guaranteed "Property FORMPARABO is not found" crash on every Confirmar). Implemented it, mapping all header fields the Caixa screen actually owns (identifica├º├úo Destino/Respons├ível/Vendedor/Origem, Documento/Pedido Cliente, Tabela de Desconto/Lista de Pre├ºos, totais/desconto/acr├®scimo reusing the exact formula already in `RecalcularTotais()`) into the BO's declared properties.
+2. **`NovoRegistro()`** wiring in `InicializarForm` ÔÇö without it, `this_lEmEdicao` stays `.F.` and `BusinessBase.Salvar()` fails silently on the first check.
+3. **Menu integration** ÔÇö added bar 135 to `popMovimentos` ("Caixa") and the canonical `AbrirFormsigmvits()` procedure in `menu.prg`, following the exact pattern used by sibling forms (VARTYPE check, `Show()` outside `TRY`, no `Release()`).
+4. Removed stale `.fxp` files for both files so the next compile picks up the changes.
+
+Verified brace/block balance (WITH/ENDWITH, PROCEDURE/ENDPROC, FUNCTION/ENDFUNC, IF/ENDIF, DEFINE CLASS/ENDDEFINE) across both files ÔÇö all matched, no stub/TODO markers left.

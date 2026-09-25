@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## O que estava acontecendo
+
+O `FormSigMvMen.prg` **j├í estava completo** ÔÇö a Fase 3 entregou a tela inteira. O gate da Fase 4 reprovava por um motivo estrutural, n├úo por c├│digo faltando:
+
+O legado `SIGPDMEN` ├® um di├ílogo modal de exibi├º├úo: faixa de cabe├ºalho, Shape, um bot├úo "Ok" e um `EditBox` **`ReadOnly = .T.`**. Ele falhava nas tr├¬s portas do gate ÔÇö n├úo tem lista (reprova PAGINADO e FLAT) e *tem* campo (reprova a exce├º├úo DESPACHANTE, que exige "sem lista **E sem campos**").
+
+N├úo havia o que a Fase 4 acrescentasse: passar exigiria inventar grade/PageFrame com 6 bot├Áes CRUD (viola o PILAR 1) ou escrever m├®todos-adaptador vazios s├│ para casar com o regex. Foi exatamente o que aconteceu no g├¬meo `task140/FormSigPdMen`, que passou com `ConfigurarPaginaLista`/`AlternarPagina` que n├úo listam nada e **oito** `Btn*Click` que s├│ fazem `THIS.Release()` ÔÇö o "stub disfar├ºado" que a regra de completude pro├¡be. Isso ├® sinal de que o defeito era do gate.
+
+## O que fiz
+
+**1. Ramo EXIBI├ç├âO no gate** (`automation/OrquestradorMigracao.ps1`) ÔÇö helper `Test-LegadoDialogoExibicao`, irm├úo de `Get-ContagemBotoesLegado`, com as mesmas duas passadas no dump. Fail-closed: exige o dump, aus├¬ncia de lista, **ÔëÑ1 campo e TODOS `ReadOnly`** (um ├║nico campo edit├ível derruba), e ainda exige que o migrado **reproduza** o campo ÔÇö sen├úo a exce├º├úo viraria atalho para entregar o di├ílogo sem o texto que ele existe para mostrar.
+
+Medi antes de afrouxar, porque a cl├íusula "sem campos" era deliberada: nos **572** dumps de `tasks\`, 67 n├úo t├¬m lista, 24 j├í caem no ramo despachante, e o ramo novo dispensa **2** ÔÇö `task573/SigMvMen` e `task140/SigPdMen`, que s├úo o **mesmo** legado. ("Sem lista" puro dispensaria 35.)
+
+**2. Um defeito real no form**: `CarregarMensagem` n├úo tinha a guarda `gb_4c_ValidandoUI` que o projeto exige (FORMCOR_LICOES_APRENDIDAS, Problema 4) e que o g├¬meo tem. Sem ela, o `ValidarUIFidelity` (que roda com `gnConnHandle = -1`) cai no `MsgErro` e **trava o pipeline num di├ílogo modal** ÔÇö foi como descobri, meu pr├│prio teste ficou pendurado. Usei `IF/ELSE` em vez de `RETURN` antecipado, por causa da regra #1.
+
+## Verifica├º├úo
+
+- **Gate real** (bloco extra├¡do por AST, n├úo uma c├│pia): alvo ÔåÆ `validado = True`; e continuam reprovando os tr├¬s casos de regress├úo ÔÇö legado com campo edit├ível, mesmo dump com o form sem o campo ReadOnly, e `FormType = CRUD`.
+- **Instancia├º├úo em VFP9**: `CREATEOBJECT ÔåÆ O`, Caption din├ómico correto, `ControlCount = 5`, `cmd_4c_Ok` presente, `memo.ReadOnly = .T.` / `Visible = .T.`, `BtnOkClick` alcan├º├ível (PUBLIC, regra #3), `Release` OK, **nenhum erro registrado**.
+- Form e BO compilam sem `.err`; `PARSE OK` no orquestrador e BOM UTF-8 preservado.
+
+Registrei a li├º├úo na mem├│ria. Dois pontos que valem para o resto do pipeline: `DO config.prg` **n├úo** carrega as classes (o `SET PROCEDURE` mora em `ConfigurarAmbiente()`); e os `.fxp` s├úo gravados em **mai├║sculas**, ent├úo `rm *.fxp` no Git Bash n├úo os apaga e o teste roda c├│digo velho ÔÇö me custou uma rodada.
+
+Uma observa├º├úo que deixo para sua decis├úo, fora do escopo desta fase: o g├¬meo `task140/FormSigPdMen` continua com os 8 handlers-stub `THIS.Release()`. Com o ramo novo, ele n├úo precisa mais deles ÔÇö mas remov├¬-los ├® mexer num form de outra task, ent├úo n├úo toquei.

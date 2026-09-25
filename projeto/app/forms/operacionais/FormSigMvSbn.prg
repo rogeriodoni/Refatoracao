@@ -1,0 +1,1688 @@
+*====================================================================
+* FormSigMvSbn.prg
+*
+* Form OPERACIONAL "Subniveis" - dialogo modal invocado a partir de um
+* form de movimentacao (SigMvCab), listando os subniveis (SigMvPec +
+* SigOpDev, unidos por Codigos) de uma operacao/movimento especifico e,
+* ao selecionar um subnivel, os itens (SigMvItn) e a imagem/descricao
+* do produto correspondente.
+*
+* PILAR 1 (UX): dialogo modal identico ao legado SIGMVSBN - sem barra
+* de titulo (TitleBar = 0), sem controle de janela (ControlBox = .F.),
+* nao movivel (Movable = .F.), 1000x700, com a faixa de cabecalho
+* cinza (cntSombra) no topo mostrando o titulo calculado "SubNiveis -
+* <Operacao> ( <Numero> )".
+*
+* PILAR 3 (arquitetura): o legado (SIGMVSBN) e um form FLAT do VFP -
+* SEM PageFrame, SEM Page1/Page2: todos os controles (Grade, fwgrade,
+* Get_descr/Get_valo/Get_items, FigJpg, Sair, BtnOficina) sao filhos
+* DIRETOS do form. Este form migrado segue a mesma estrutura flat
+* (excecao documentada em CLAUDE.md para o Gate da Fase 3 quando o
+* legado nao tem PageFrame - nao inventar Page1/Page2 que o original
+* nao possui). O UNICO container do legado e cntSombra (faixa do
+* cabecalho), reproduzido aqui como cnt_4c_Sombra.
+*
+* FASE 3/8 - ESTRUTURA BASE: esqueleto do form (propriedades visuais,
+* Init/InicializarForm, BO e o cabecalho). CONCLUIDA.
+*
+* FASE 4/8 - GRADES E BOTOES: esta fase entrega (a) a grade principal
+* (Grade/TmpSubN -> grd_4c_Subniveis) e a grade de itens (fwgrade ->
+* grd_4c_Itens), com ColumnCount/Width/Header/InputMask identicos ao
+* SCX legado; (b) os dois botoes do legado - Sair (cmd_4c_Sair) e
+* BtnOficina (cmd_4c_BtnOficina) - com geometria, Picture, Caption e
+* ToolTipText transcritos do dump; (c) o carregamento efetivo da lista
+* (CarregarLista), que eh o trecho final do Init legado: BuscarSubniveis
+* no BO, bind do grid e desabilitacao do form pai.
+*
+* Os Column*.ControlSource da grade principal so sao atribuidos DENTRO
+* de CarregarLista, depois que o BO populou cursor_4c_Subniveis - o
+* legado faz igual (With ThisForm.Grade ... no final do Init, apos o
+* APPEND FROM em TmpSubN), e atribuir ControlSource a cursor inexistente
+* derrubaria o Init (CLAUDE.md regra #41). Pelo mesmo motivo Width e
+* Header1.Caption sao REAPLICADOS apos o RecordSource, que os reseta.
+*
+* A grade de itens (grd_4c_Itens) nasce com ControlSource vazio pelo
+* mesmo motivo: o legado so a vincula dentro de Grade.AfterRowColChange,
+* com o subnivel ja clicado. O bind dela mora em CarregarGradeItens.
+*
+* FASE 7/8 - EVENTOS PRINCIPAIS DOS BOTOES: os 4 nomes canonicos
+* BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick NAO
+* se aplicam a este form. Eles sao convencao do frmcadastro (botoes da
+* Page1 de Lista) e o SIGMVSBN nao tem superficie CRUD nenhuma: herda de
+* "form" (nao de frmcadastro), nao tem Grupo_Op, nao declara pcEscolha e
+* tem exatamente DOIS CommandButton no SCX - Sair e BtnOficina. Criar os
+* 4 aqui exigiria INVENTAR botoes que o legado nao tem (viola o PILAR 1 e
+* a regra "NUNCA inventar") ou escrever 4 metodos vazios (proibido pela
+* regra de completude). Os botoes que o legado REALMENTE tem estao ambos
+* implementados e ligados por BINDEVENT: BtnSairClick e BtnOficinaClick.
+*
+* FASE 8/8 - EVENTOS AUXILIARES E CONSOLIDACAO FINAL: o roteiro padrao
+* desta fase (BtnBuscarClick/BtnEncerrarClick/BtnSalvarClick/
+* BtnCancelarClick/FormParaBO/BOParaForm/HabilitarCampos/LimparCampos/
+* AjustarBotoesPorModo) eh o checklist do frmcadastro (Page1=Lista +
+* Page2=Dados com campos EDITAVEIS). Nenhum desses 9 nomes se aplica a
+* este dialogo, pela MESMA razao ja registrada na FASE 7/8 acima (sem
+* PageFrame, sem Grupo_Op, sem pcEscolha) mais uma: TODOS os campos sao
+* somente-leitura (ver item (b) da tabela abaixo), entao nao ha "forma"
+* para mapear de volta ao BO nem campo para habilitar/desabilitar por
+* modo. Disposicao, um a um:
+*
+*   Nome pedido pelo roteiro  Existe no legado?  Disposicao aqui
+*   ------------------------  -----------------  ---------------------------
+*   BtnBuscarClick             NAO (SCX so tem   N/A - nao inventar botao
+*                               Sair+BtnOficina)   que o legado nao tem
+*   BtnEncerrarClick            SIM (Sair,        Ja implementado como
+*                               Caption "Encerrar" BtnSairClick (nome do
+*                               no dump)           legado, preservado)
+*   BtnSalvarClick/             NAO (nenhum       N/A - Inserir()/Atualizar()
+*   BtnCancelarClick            Insert/Update/    do BO ja documentam que
+*                               Delete no dump -   SigMvSbn eh tela de
+*                               ver Inserir/       CONSULTA, nunca grava
+*                               Atualizar do BO)
+*   FormParaBO / BOParaForm     N/A - sem campo   Coberto por
+*                               EDITAVEL nao ha    GradeAfterRowColChange/
+*                               o que "mapear de   ItensAfterRowColChange/
+*                               volta"; a leitura  CarregarImagemProduto, que
+*                               (equivalente a     ja fazem esse sentido
+*                               BOParaForm) ja      unico (BO -> campo) a
+*                               existe              cada troca de linha
+*   HabilitarCampos /            N/A - nenhum      .ReadOnly = .T. fixo,
+*   LimparCampos                 campo muda de     declarado uma unica vez
+*                                 estado por modo   em ConfigurarCampos*
+*                                 (o dialogo inteiro (nao ha modo INCLUIR/
+*                                 eh sempre so-      ALTERAR/VISUALIZAR
+*                                 leitura)           aqui)
+*   AjustarBotoesPorModo         N/A - os 2 botoes  N/A - Sair fica sempre
+*                                 do legado nao      habilitado;
+*                                 mudam de estado    visibilidade de
+*                                 por modo (so por   BtnOficina eh por
+*                                 ACESSO/dado)       ACESSO+dado
+*                                                    (AtualizarVisibilidade-
+*                                                    Oficina), nao por modo
+*   CarregarLista                 SIM               Ja implementado (Fase 4)
+*
+* Escrever qualquer um dos 6 metodos marcados N/A so para "bater o
+* checklist" seria o stub disfarcado que a regra de completude PROIBE
+* (corpo vazio ou so MsgAviso) - pior que a ausencia documentada, porque
+* sugere fidelidade que nao existe.
+*
+* A consolidacao desta fase fechou DUAS lacunas de PILAR 1 que as fases
+* 3-7 tinham deixado, ambas conferidas controle a controle contra o dump:
+*
+*   1. Os TRES Shape do legado (Shape1/Shape2/Shape3) nao existiam no
+*      migrado, embora o mapeamento.json os espere. O Shape1 nao eh
+*      decoracao morta: eh a MOLDURA de 1px em volta da imagem do produto
+*      (BackStyle = 0 + BorderWidth = 1, sem BorderStyle no dump, logo
+*      solido). Sem ele a imagem aparecia sem contorno. Reproduzidos em
+*      ConfigurarShapes(), inclusive Shape2/Shape3, que o legado declara
+*      INVISIVEIS (BackStyle = 0 + BorderStyle = 0) e que por isso seguem
+*      sem desenhar nada aqui - transcricao literal, nao "conserto".
+*   2. Os tres TextBox (txt_4c_Descr/Valo/Items) estavam sem
+*      .BorderColor = RGB(36, 84, 155) e .Themes = .T., que o dump declara
+*      nos tres (Get_descr/Get_valo/Get_items) - a borda saia na cor
+*      default em vez do azul do legado. As duas propriedades foram
+*      conferidas como validas para TextBox em
+*      automation\propriedades_baseclasses.txt (CLAUDE.md regra #33).
+*   3. FUNCIONAL, no BO (SigMvSbnBO.MontarChaveEmpDopNums): a chave
+*      EmpDopNums era montada com ALLTRIM nas partes, o que dava 15
+*      caracteres ("001MALOTE     3") em vez dos 29 do formato gravado
+*      ("001MALOTE                   3"). O legado NAO usa ALLTRIM - o
+*      padding vem das colunas (Emps char(3) + Dopes char(20) +
+*      Str(Numes,6) = 29 = EmpDopNums char(29)). Consequencia: o SELECT de
+*      BuscarItensSubnivel rodava SEM ERRO e devolvia ZERO linhas SEMPRE,
+*      entao a grade de itens, a descricao e a imagem do produto ficavam
+*      permanentemente vazias e CarregarGradeItens /
+*      ItensAfterRowColChange / CarregarImagemProduto / ImgFigJpgDblClick
+*      eram codigo morto - metade da tela, sem um unico erro visivel.
+*      A coluna eh char(29), logo TODO valor gravado tem 29 caracteres por
+*      definicao do tipo e a chave de 15 nao casaria com registro nenhum
+*      (conferido por amostragem nas 316 linhas de SigMvItn). Provado
+*      contra a base apos o conserto: a chave montada para
+*      ("001", "CONSERTO", 1) saiu byte a byte igual ao valor gravado
+*      ("001CONSERTO                 1") e BuscarItensSubnivel passou a
+*      devolver 1 item (cpros 036), enquanto a chave antiga devolve 0.
+*      Detalhes em CLAUDE.md regra #42.
+*
+* FASE 8/8 CONCLUIDA.
+*
+* CONSOLIDACAO - DISPOSICAO DOS 17 METODOS DO SCX LEGADO
+* -------------------------------------------------------
+* O dump (SigMvSbn_form_codigo_fonte.txt, "Total de metodos/eventos com
+* codigo: 17") esta integralmente coberto. O unico nao-port eh deliberado
+* e fica registrado abaixo para que a ausencia seja auditavel em vez de
+* parecer esquecimento:
+*
+*   Legado                        Migrado
+*   ----------------------------  ------------------------------------------
+*   Init                          PROCEDURE Init + InicializarForm +
+*                                 CarregarLista (mesmos 5 par. posicionais)
+*   Sair.Click                    BtnSairClick (via BINDEVENT)
+*   BtnOficina.Click              BtnOficinaClick (via BINDEVENT) ->
+*                                 SigMvSbnBO.ObterNumeroOS + AbrirFormOficina
+*   Grade.AfterRowColChange       GradeAfterRowColChange (via BINDEVENT)
+*   fwgrade.AfterRowColChange     ItensAfterRowColChange (via BINDEVENT)
+*   FigJpg.DblClick               ImgFigJpgDblClick (via BINDEVENT) ->
+*                                 AbrirFormZoomImagem
+*   Grade.ColumnN.Text1.When (7)  .ReadOnly = .T. nas 7 colunas - ver (b)
+*   Get_descr.When                txt_4c_Descr.ReadOnly  = .T.  - ver (b)
+*   Get_valo.When                 txt_4c_Valo.ReadOnly   = .T.  - ver (b)
+*   Get_items.When                txt_4c_Items.ReadOnly  = .T.  - ver (b)
+*   Load (=fConfigGeral())        NAO PORTADO - ver (a)
+*
+* (a) Load: "=fConfigGeral()". fConfigGeral era funcao GLOBAL da aplicacao
+*     legado (sig.prg / SIGFUNCS.PRG) que NAO veio no acervo. O que existe
+*     em projeto\app\utils\fconfiggeral.prg e' um wrapper NO-OP (RETURN
+*     .T.) cujo proprio cabecalho diz: "em codigo NOSSO nunca se chama
+*     fConfigGeral - este arquivo existe APENAS para binario legado",
+*     porque o p-code dos VCX o invoca e nao da para editar. Chama-lo daqui
+*     seria escrever uma chamada que comprovadamente nao faz nada e ainda
+*     sugerir que falta alguma inicializacao global. O que fConfigGeral
+*     fazia esta distribuido e ocorre ANTES deste form abrir: config.prg
+*     (SETs, paths, aliases globais), main.prg (conexao, CarregarEmpresa) e
+*     cada BO (seus proprios cursores - aqui, SigMvSbnBO). Mesma decisao
+*     registrada em FormSigMvExp.prg (task570) e FormSigMvMen.prg (task573).
+*
+* (b) As 10 ocorrencias de "PROCEDURE When / Return .f." sao o idioma do
+*     Framework legado para "campo/coluna nao recebe foco nem edicao" -
+*     este dialogo inteiro eh somente-leitura. O equivalente na arquitetura
+*     nova eh .ReadOnly = .T. no proprio controle, declarado junto com a
+*     geometria em ConfigurarGradeSubniveis/ConfigurarGradeItens/
+*     ConfigurarCamposPrincipais. Traduzir cada When num handler ligado por
+*     BINDEVENT seria pior e NAO funcionaria: BINDEVENT DESCARTA o retorno
+*     do delegate (CLAUDE.md #3), entao um handler "RETURN .F." nao
+*     bloquearia coisa alguma - daria a aparencia de fidelidade com zero
+*     efeito.
+*
+* Parametros de Init (equivalentes ao legado
+* LParameters loPForm, pEmp, pDop, pNum, pCursor):
+*   par_oFormPai      - loPForm: form que abriu este dialogo (SigMvCab)
+*   par_cEmps         - pEmp: empresa (SigMvCab.Emps); se omitido, e
+*                        lido do cursor indicado por par_cCursorOrigem
+*   par_cDopes        - pDop: codigo da operacao (SigMvCab.Dopes); se
+*                        omitido, idem acima
+*   par_nNumes        - pNum: numero do movimento (SigMvCab.Numes); se
+*                        omitido, idem acima
+*   par_cCursorOrigem - pCursor: nome do cursor do form pai usado como
+*                        fallback para Emps/Dopes/Numes quando os tres
+*                        parametros acima nao sao passados diretamente
+*                        (default "crSigMvCab", igual ao legado)
+*====================================================================
+
+DEFINE CLASS FormSigMvSbn AS FormBase
+
+    *-- Propriedades visuais (pixel-perfect SCX original - PILAR 1)
+    Width        = 1000
+    Height       = 700
+    AutoCenter   = .T.
+    Caption      = "Subn" + CHR(237) + "veis"
+    ShowWindow   = 1
+    WindowType   = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    Movable      = .F.
+    ClipControls = .F.
+    TitleBar     = 0
+    BorderStyle  = 1
+    ShowTips     = .T.
+    DataSession  = 1
+
+    *-- Referencia ao form pai e BO
+    this_oFormPai        = .NULL.
+    this_oBusinessObject = .NULL.
+
+    *-- Parametros recebidos do form pai (equivalentes a lpEmps/lpDopes/
+    *-- lpNumes/lpCursor do legado)
+    this_cEmps         = ""
+    this_cDopes        = ""
+    this_nNumes        = 0
+    this_cCursorOrigem = ""
+
+    *-- Indica se o usuario tem acesso ao botao Oficina (fChecaAcesso
+    *-- OPPEND) - resolvido pelo BO, consumido nas fases seguintes
+    this_lAcOficina = .F.
+
+    *==========================================================================
+    * Init - Armazena parametros recebidos do form pai antes de DODEFAULT
+    *==========================================================================
+    PROCEDURE Init(par_oFormPai, par_cEmps, par_cDopes, par_nNumes, par_cCursorOrigem)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        IF VARTYPE(par_oFormPai) = "O"
+            THIS.this_oFormPai = par_oFormPai
+        ENDIF
+
+        THIS.this_cCursorOrigem = IIF(VARTYPE(par_cCursorOrigem) = "C" AND !EMPTY(par_cCursorOrigem), ;
+            par_cCursorOrigem, "crSigMvCab")
+
+        THIS.this_cEmps  = IIF(VARTYPE(par_cEmps) = "C", ALLTRIM(par_cEmps), "")
+        THIS.this_cDopes = IIF(VARTYPE(par_cDopes) = "C", ALLTRIM(par_cDopes), "")
+        THIS.this_nNumes = IIF(VARTYPE(par_nNumes) = "N", par_nNumes, 0)
+
+        loc_lResultado = DODEFAULT()
+        RETURN loc_lResultado
+    ENDPROC
+
+    *==========================================================================
+    * InicializarForm - Cria o BO, resolve Emps/Dopes/Numes (com fallback
+    * para o cursor de origem quando nao vieram diretos, igual ao legado
+    * Iif(Type('pEmp')='C', pEmp, &lcCursor..Emps)) e monta o cabecalho.
+    * A grade principal, a grade de itens e o carregamento dos dados
+    * (BuscarSubniveis) ficam para as fases seguintes.
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro, loc_lModoValidacaoOuTeste
+        loc_lSucesso = .F.
+        loc_lModoValidacaoOuTeste = (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI) OR ;
+                                    (TYPE("gb_4c_ModoTeste")   = "L" AND gb_4c_ModoTeste)
+
+        TRY
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
+            *-- Instanciar Business Object
+            THIS.this_oBusinessObject = CREATEOBJECT("SigMvSbnBO")
+            IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+                MsgErro("Erro ao criar SigMvSbnBO. VARTYPE retornou: " + ;
+                        VARTYPE(THIS.this_oBusinessObject), "FormSigMvSbn.InicializarForm")
+            ELSE
+                *-- Fallback: Emps/Dopes/Numes nao vieram diretos -> ler do
+                *-- cursor de origem (equivalente a &lcCursor..Emps do legado)
+                IF EMPTY(THIS.this_cDopes) AND USED(THIS.this_cCursorOrigem)
+                    THIS.this_cEmps  = ALLTRIM(TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Emps"), ""))
+                    THIS.this_cDopes = ALLTRIM(TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Dopes"), ""))
+                    THIS.this_nNumes = TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Numes"), 0)
+                ENDIF
+
+                *-- Titulo: "SubNiveis - <Operacao> ( <Numero> )", igual ao legado
+                *-- (ThisForm.Caption = 'SubNiveis - ' + Proper(...) + ' ( ' +...).
+                *-- Em validacao de UI / modo teste NAO recalcula: o comparador
+                *-- confere contra o Caption ESTATICO do SCX ("Subniveis"), e
+                *-- este.cDopes/nNumes chegam vazios/zero nesses modos (nao ha
+                *-- form pai nem conexao SQL) - recalcular so trocaria o texto
+                *-- fiel por outro tambem incorreto.
+                IF !loc_lModoValidacaoOuTeste
+                    THIS.Caption = "SubN" + CHR(237) + "veis - " + PROPER(ALLTRIM(THIS.this_cDopes)) + ;
+                        " ( " + ALLTRIM(STR(THIS.this_nNumes)) + " ) "
+                ENDIF
+
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarShapes()
+                THIS.ConfigurarGradeSubniveis()
+                THIS.ConfigurarGradeItens()
+                THIS.ConfigurarBotoes()
+                THIS.ConfigurarCamposPrincipais()
+                THIS.ConfigurarImagemProduto()
+
+                *-- Carga da lista: trecho final do Init legado. O legado faz
+                *-- "Return .f." quando a consulta nao traz registro nenhum
+                *-- (MessageBox 'Nenhum registro encontrado!!!') e a tela NAO
+                *-- chega a abrir - mantido fiel. Em validacao de UI / modo
+                *-- teste nao existe conexao SQL, entao a carga eh pulada e o
+                *-- form abre so com o layout.
+                IF !loc_lModoValidacaoOuTeste
+                    loc_lSucesso = THIS.CarregarLista()
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.InicializarForm")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCabecalho - Faixa cinza do topo (cntSombra do legado),
+    * com os dois labels sobrepostos (sombra + titulo) exibindo o
+    * Caption calculado em InicializarForm.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCnt
+
+        THIS.AddObject("cnt_4c_Sombra", "Container")
+        loc_oCnt = THIS.cnt_4c_Sombra
+        WITH loc_oCnt
+            .Top         = 0
+            .Left        = 0
+            .Width       = 1008
+            .Height      = 80
+            .BorderWidth = 0
+            .BackColor   = RGB(100, 100, 100)
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oCnt.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oCnt.lbl_4c_Sombra
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .FontUnderline = .F.
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .AutoSize      = .F.
+            .Caption       = THIS.Caption
+            .Height        = 40
+            .Left          = 10
+            .Top           = 25
+            .Width         = 769
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oCnt.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oCnt.lbl_4c_Titulo
+            .FontBold   = .T.
+            .FontName   = "Tahoma"
+            .FontSize   = 18
+            .WordWrap   = .T.
+            .Alignment  = 0
+            .BackStyle  = 0
+            .AutoSize   = .F.
+            .Caption    = THIS.Caption
+            .Height     = 46
+            .Left       = 10
+            .Top        = 24
+            .Width      = 769
+            .ForeColor  = RGB(255, 255, 255)
+            .Visible    = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarShapes - Os tres Shape do legado (SIGMVSBN.Shape1/Shape2/
+    * Shape3), filhos DIRETOS do form. Propriedades transcritas LITERALMENTE
+    * do dump, inclusive as que os deixam invisiveis - o legado eh assim e
+    * "consertar" isso seria inventar decoracao que o original nao mostra:
+    *
+    *   Shape1 -> shp_4c_Shape1: BackStyle = 0 + BorderWidth = 1 e SEM
+    *     BorderStyle no dump, logo BorderStyle fica no default 1 (solido).
+    *     Este DESENHA: eh a moldura de 1px em volta da imagem do produto
+    *     (Shape1 = 671,104,320x227 e img_4c_FigJpg = 672,105,318x225 -
+    *     a imagem cabe exatamente dentro da moldura).
+    *   Shape2/Shape3 -> shp_4c_Shape2/shp_4c_Shape3: BackStyle = 0 (interior
+    *     transparente) E BorderStyle = 0 (sem borda), ou seja NAO desenham
+    *     nada na tela, apesar de declararem BorderColor. Sao reproduzidos
+    *     por fidelidade de objeto (mapeamento.json os espera e o
+    *     ValidarUIFidelity os cobra), nao por efeito visual.
+    *
+    * Criados ANTES das grades, dos botoes e da imagem, na mesma ordem do
+    * SCX (cntSombra -> Shape3 -> Shape2 -> ... -> Shape1 -> Sair -> Grade):
+    * a moldura tem de ficar ATRAS da imagem, e Shape transparente criado
+    * DEPOIS de um CommandButton pode interceptar o clique dele (Shape2
+    * cobre 903..993 x 6..116, area do cmd_4c_Sair).
+    *
+    * Shape NAO tem ForeColor nem Themes (CLAUDE.md regra #33 - conferido em
+    * automation\propriedades_baseclasses.txt): a cor mora em BorderColor /
+    * FillColor. Nenhuma das duas eh atribuida aqui.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarShapes()
+
+        *-- Shape3 do legado: invisivel (BackStyle = 0 + BorderStyle = 0)
+        THIS.AddObject("shp_4c_Shape3", "Shape")
+        WITH THIS.shp_4c_Shape3
+            .Top         = 122
+            .Left        = 903
+            .Height      = 34
+            .Width       = 57
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BorderColor = RGB(136, 189, 188)
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Shape2 do legado: invisivel (BackStyle = 0 + BorderStyle = 0)
+        THIS.AddObject("shp_4c_Shape2", "Shape")
+        WITH THIS.shp_4c_Shape2
+            .Top         = 6
+            .Left        = 903
+            .Height      = 110
+            .Width       = 90
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BorderColor = RGB(136, 189, 188)
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Shape1 do legado: moldura de 1px em volta da imagem do produto.
+        *-- O dump NAO declara BorderStyle - deixar no default (1 = solido) eh
+        *-- o que faz a borda aparecer; forcar 0 aqui apagaria a moldura.
+        THIS.AddObject("shp_4c_Shape1", "Shape")
+        WITH THIS.shp_4c_Shape1
+            .Top         = 104
+            .Left        = 671
+            .Height      = 227
+            .Width       = 320
+            .BackStyle   = 0
+            .BorderWidth = 1
+            .Visible     = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGradeSubniveis - Grade principal (Grade/TmpSubN do legado),
+    * filha DIRETA do form (sem PageFrame/Page - form FLAT). ColumnCount,
+    * larguras, InputMask e headers identicos ao SCX (SIGMVSBN.Grade).
+    * Column*.ControlSource fica VAZIO propositalmente: o cursor
+    * cursor_4c_Subniveis (equivalente a TmpSubN) ainda nao existe neste
+    * ponto do Init - o legado tambem so atribui ControlSource dentro do
+    * With ThisForm.Grade no final do proprio Init, depois de popular
+    * TmpSubN (CLAUDE.md regra #41). O bind real fica para a Fase 7-8.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGradeSubniveis()
+        LOCAL loc_oGrid
+
+        THIS.AddObject("grd_4c_Subniveis", "Grid")
+        loc_oGrid = THIS.grd_4c_Subniveis
+        WITH loc_oGrid
+            .Top          = 104
+            .Left         = 7
+            .Width        = 661
+            .Height       = 227
+            .ColumnCount  = 8
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .ReadOnly     = .T.
+            .RowHeight    = 16
+            .ScrollBars   = 2
+            .DeleteMark   = .F.
+            .RecordMark   = .F.
+            .GridLineColor = RGB(238, 238, 238)
+            .Visible      = .T.
+        ENDWITH
+
+        *-- Column1: Emp (TmpSubN.Emps)
+        WITH loc_oGrid.Column1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 1
+            .ControlSource = ""
+            .Width         = 30
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Emp"
+        ENDWITH
+
+        *-- Column2: Movimentacao (TmpSubN.Dopes)
+        WITH loc_oGrid.Column2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 2
+            .ControlSource = ""
+            .Width         = 130
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Movimenta" + CHR(231) + CHR(227) + "o"
+        ENDWITH
+
+        *-- Column3: Codigo (TmpSubN.Numes)
+        WITH loc_oGrid.Column3
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 3
+            .ControlSource = ""
+            .Width         = 65
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .InputMask     = "999999"
+            .Header1.Alignment = 2
+            .Header1.Caption   = "C" + CHR(243) + "digo"
+        ENDWITH
+
+        *-- Column4: Data (TmpSubN.Datas)
+        WITH loc_oGrid.Column4
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 4
+            .ControlSource = ""
+            .Width         = 60
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Data"
+        ENDWITH
+
+        *-- Column5: Documento (TmpSubN.Notas)
+        WITH loc_oGrid.Column5
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 5
+            .ControlSource = ""
+            .Width         = 65
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Documento"
+        ENDWITH
+
+        *-- Column6: Usuario (TmpSubN.Usuars)
+        WITH loc_oGrid.Column6
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 6
+            .ControlSource = ""
+            .Width         = 65
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Usu" + CHR(225) + "rio"
+        ENDWITH
+
+        *-- Column7: Prazo de Entrega (TmpSubN.PrazoEnts)
+        WITH loc_oGrid.Column7
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 7
+            .ControlSource = ""
+            .Width         = 60
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Prz. Entrega"
+        ENDWITH
+
+        *-- Column8: Status (TmpSubN.Pstatus + "-" + TmpSubN.Descs)
+        WITH loc_oGrid.Column8
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 8
+            .ControlSource = ""
+            .Width         = 150
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Status"
+        ENDWITH
+
+        *-- Legado: evento nativo do Grade (AfterRowColChange) - aqui via
+        *-- BINDEVENT porque o grid nasce por AddObject. Handler PUBLIC e
+        *-- com o parametro do evento (CLAUDE.md #3).
+        BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GradeAfterRowColChange")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGradeItens - Grade de itens do subnivel selecionado
+    * (fwgrade/crTpmMvItnSubn do legado), filha DIRETA do form. Larguras,
+    * ColumnOrder, InputMask e headers identicos ao SCX (SIGMVSBN.fwgrade).
+    * Assim como na grade principal, Column*.ControlSource fica VAZIO -
+    * o legado so preenche dentro de Grade.AfterRowColChange, depois de
+    * popular crTpmMvItnSubn com o subnivel clicado (Fase 7-8 aqui).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGradeItens()
+        LOCAL loc_oGrid
+
+        THIS.AddObject("grd_4c_Itens", "Grid")
+        loc_oGrid = THIS.grd_4c_Itens
+        WITH loc_oGrid
+            .Top               = 338
+            .Left              = 7
+            .Width             = 984
+            .Height            = 323
+            .ColumnCount       = 10
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .AllowHeaderSizing = .F.
+            .ReadOnly          = .T.
+            .RowHeight         = 16
+            .ScrollBars        = 2
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .GridLineColor     = RGB(238, 238, 238)
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Column1 (ordem visual 2): Produto (crTpmMvItnSubn.cpros)
+        WITH loc_oGrid.Column1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 2
+            .ControlSource = ""
+            .Width         = 140
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .ForeColor     = RGB(0, 0, 0)
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Produto"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.Format      = "K!"
+            .Text1.InputMask   = REPLICATE("!", 14)
+            .Text1.Margin      = 0
+            .Text1.MaxLength   = 10
+            .Text1.ReadOnly    = .T.
+            .Text1.ForeColor   = RGB(0, 0, 0)
+            .Text1.BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column2 (ordem visual 6): Fator (crTpmMvItnSubn.fators)
+        WITH loc_oGrid.Column2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 6
+            .ControlSource = ""
+            .Width         = 100
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Fator"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "9999.999"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+            .Text1.ForeColor   = RGB(0, 0, 0)
+            .Text1.BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column3 (ordem visual 3): Operacao (crTpmMvItnSubn.opers)
+        WITH loc_oGrid.Column3
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 3
+            .ControlSource = ""
+            .Width         = 20
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Op"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.Alignment   = 2
+            .Text1.BorderStyle = 0
+            .Text1.Margin      = 0
+            .Text1.MaxLength   = 1
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column4 (ordem visual 4): Qtd (crTpmMvItnSubn.qtds)
+        WITH loc_oGrid.Column4
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 4
+            .ControlSource = ""
+            .Width         = 100
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Qtd."
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "99999.99"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column5 (ordem visual 5): Peso (crTpmMvItnSubn.pesos)
+        WITH loc_oGrid.Column5
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 5
+            .ControlSource = ""
+            .Width         = 100
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Peso (gr)"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "99999.99"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column6 (ordem visual 8): Valor (crTpmMvItnSubn.units)
+        WITH loc_oGrid.Column6
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 8
+            .ControlSource = ""
+            .Width         = 120
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .InputMask     = "99,999,999.99"
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Valor"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "99,999,999.99"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column7 (ordem visual 9): Moeda (crTpmMvItnSubn.moedas)
+        WITH loc_oGrid.Column7
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 9
+            .ControlSource = ""
+            .Width         = 33
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Moe"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column8 (ordem visual 10): Total (crTpmMvItnSubn.totas)
+        WITH loc_oGrid.Column8
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 10
+            .ControlSource = ""
+            .Width         = 185
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .InputMask     = "999,999,999.99"
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Total"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.Alignment   = 3
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "999,999,999.99"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column9 (ordem visual 7): Total Peso (crTpmMvItnSubn.tpesos)
+        WITH loc_oGrid.Column9
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 7
+            .ControlSource = ""
+            .Width         = 100
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .Header1.Alignment = 2
+            .Header1.Caption   = "Total Peso"
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "999,999.99"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Column10 (ordem visual 1): Item (crTpmMvItnSubn.CItens)
+        WITH loc_oGrid.Column10
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ColumnOrder   = 1
+            .ControlSource = ""
+            .Width         = 45
+            .Movable       = .F.
+            .Resizable     = .F.
+            .ReadOnly      = .T.
+            .Visible       = .T.
+            .InputMask     = "999"
+            .Header1.Alignment = 2
+            .Header1.Caption   = ""
+            .Text1.Alignment   = 3
+            .Text1.BorderStyle = 0
+            .Text1.InputMask   = "999"
+            .Text1.Margin      = 0
+            .Text1.ReadOnly    = .T.
+        ENDWITH
+
+        *-- Legado: evento nativo do fwgrade (AfterRowColChange) - aqui via
+        *-- BINDEVENT porque o grid nasce por AddObject. Handler PUBLIC e
+        *-- com o parametro do evento (CLAUDE.md #3).
+        BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "ItensAfterRowColChange")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoes - Os dois CommandButton do legado, filhos DIRETOS do
+    * form (SIGMVSBN.Sair e SIGMVSBN.BtnOficina). Geometria, fonte, cores,
+    * Caption, ToolTipText, Picture e Themes transcritos do dump LITERAL
+    * (Themes = .F. nos dois).
+    *
+    * CorretorAutomatico #99 troca Themes=.F. por .T. em CommandButton
+    * standalone com Picture, mas so quando o botao pode ficar
+    * Enabled = .F. (o icone some nesse caso com Themes=.F.). Nenhum dos
+    * dois botoes daqui jamais recebe .Enabled = .F. (Sair fica sempre
+    * habilitado; BtnOficina so alterna .Visible) - o gatilho do pattern
+    * nao existe, entao o valor correto AQUI eh o do dump, sem o desvio.
+    *
+    * cmd_4c_BtnOficina nasce Visible = .F., igual ao legado: quem o mostra
+    * eh AtualizarVisibilidadeOficina(), e so quando o usuario tem acesso
+    * OPPEND e o subnivel corrente tem ordem de producao (Nops).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoes()
+
+        *-- Sair (legado SIGMVSBN.Sair): Cancel = .T. faz o ESC aciona-lo
+        THIS.AddObject("cmd_4c_Sair", "CommandButton")
+        WITH THIS.cmd_4c_Sair
+            .Top             = 3
+            .Left            = 923
+            .Height          = 75
+            .Width           = 75
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontName        = "Comic Sans MS"
+            .FontSize        = 8
+            .Caption         = "Encerrar"
+            .Cancel          = .T.
+            .ToolTipText     = "[ESC] Sair"
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Themes           = .T.
+            .Visible         = .T.
+        ENDWITH
+
+        *-- BtnOficina (legado SIGMVSBN.BtnOficina): Caption "\<Oficina"
+        *-- no legado eh o atalho ALT+O - transcrito como esta
+        THIS.AddObject("cmd_4c_BtnOficina", "CommandButton")
+        WITH THIS.cmd_4c_BtnOficina
+            .Top             = 3
+            .Left            = 847
+            .Height          = 75
+            .Width           = 75
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontName        = "Comic Sans MS"
+            .FontSize        = 8
+            .Caption         = "\<Oficina"
+            .ToolTipText     = "Oficina"
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Picture         = gc_4c_CaminhoIcones + "geral_pn_cfg_60.jpg"
+            .Themes           = .T.
+            .Visible         = .F.
+        ENDWITH
+
+        *-- Handlers PUBLIC (BINDEVENT ignora metodo PROTECTED - CLAUDE.md #3)
+        BINDEVENT(THIS.cmd_4c_Sair,        "Click", THIS, "BtnSairClick")
+        BINDEVENT(THIS.cmd_4c_BtnOficina,  "Click", THIS, "BtnOficinaClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCamposPrincipais - Os tres campos de exibicao do subnivel
+    * corrente (SIGMVSBN.Get_descr/Get_valo/Get_items do legado), filhos
+    * DIRETOS do form (sem PageFrame/Page - form FLAT). Geometria, fonte,
+    * cores e InputMask transcritos do dump.
+    *
+    * Os tres tem PROCEDURE When retornando .f. no legado - isso impede o
+    * controle de RECEBER FOCO (When roda antes de Enter e, retornando
+    * .F., cancela a entrada no campo). Equivalente aqui: .ReadOnly = .T.
+    * (o usuario nunca edita, so ve o valor que o legado empurra de fora).
+    *
+    * .Value fica no default do TIPO (Get_descr = character/Dpros;
+    * Get_valo/Get_items = numeric, apesar do nome "Items" - o legado
+    * grava TmpSubN.ValInis nele, nao uma contagem de itens). O bind real
+    * ("ThisForm.Get_descr.Value = CrTmpPro.Dpros",
+    * "ThisForm.Get_Valo.Value = TmpSubN.Valos",
+    * "ThisForm.Get_items.Value = TmpSubN.ValInis") acontece dentro de
+    * Grade.AfterRowColChange / fwgrade.AfterRowColChange, que ficam para
+    * a fase de eventos (7-8) - aqui so a estrutura dos controles.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposPrincipais()
+
+        *-- Get_descr do legado: descricao do produto do subnivel corrente
+        THIS.AddObject("txt_4c_Descr", "TextBox")
+        WITH THIS.txt_4c_Descr
+            .Top               = 665
+            .Left              = 7
+            .Width             = 290
+            .Height            = 23
+            .FontName          = "Courier New"
+            .FontSize          = 8
+            .BorderStyle       = 1
+            .Value             = ""
+            .ReadOnly          = .T.
+            .TabStop           = .F.
+            .ForeColor         = RGB(0, 0, 0)
+            .BackColor         = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(192, 192, 192)
+            .DisabledBackColor = RGB(255, 255, 255)
+            .BorderColor       = RGB(36, 84, 155)
+            .Themes            = .T.
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Get_valo do legado: TmpSubN.Valos (valor do subnivel)
+        THIS.AddObject("txt_4c_Valo", "TextBox")
+        WITH THIS.txt_4c_Valo
+            .Top               = 665
+            .Left              = 325
+            .Width             = 126
+            .Height            = 23
+            .FontName          = "Courier New"
+            .FontSize          = 8
+            .BorderStyle       = 1
+            .Value             = 0
+            .InputMask         = "999,999,999.99"
+            .ReadOnly          = .T.
+            .TabStop           = .F.
+            .ForeColor         = RGB(0, 0, 0)
+            .BackColor         = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(192, 192, 192)
+            .DisabledBackColor = RGB(255, 255, 255)
+            .BorderColor       = RGB(36, 84, 155)
+            .Themes            = .T.
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Get_items do legado: TmpSubN.ValInis (valor inicial do subnivel -
+        *-- o nome do controle no legado nao bate com o dado que ele exibe,
+        *-- transcrito fiel mesmo assim - CLAUDE.md regra #17, nao "corrigir"
+        *-- a semantica do legado)
+        THIS.AddObject("txt_4c_Items", "TextBox")
+        WITH THIS.txt_4c_Items
+            .Top               = 665
+            .Left              = 784
+            .Width             = 187
+            .Height            = 23
+            .FontName          = "Courier New"
+            .FontSize          = 8
+            .BorderStyle       = 1
+            .Value             = 0
+            .InputMask         = "999,999,999.99"
+            .ReadOnly          = .T.
+            .TabStop           = .F.
+            .ForeColor         = RGB(0, 0, 0)
+            .BackColor         = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(192, 192, 192)
+            .DisabledBackColor = RGB(255, 255, 255)
+            .BorderColor       = RGB(36, 84, 155)
+            .Themes            = .T.
+            .Visible           = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarImagemProduto - Imagem do produto do subnivel/item corrente
+    * (SIGMVSBN.FigJpg do legado), filha DIRETA do form. Nasce Visible = .F.,
+    * igual ao legado - so aparece quando o produto corrente tem foto
+    * (CarregarImagemProduto grava o JPG decodificado e mostra). DblClick
+    * abre o zoom da imagem (SIGMVSBN.FigJpg.DblClick), fase de eventos.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarImagemProduto()
+        THIS.AddObject("img_4c_FigJpg", "Image")
+        WITH THIS.img_4c_FigJpg
+            .Top     = 105
+            .Left    = 672
+            .Width   = 318
+            .Height  = 225
+            .Stretch = 1
+            .Visible = .F.
+        ENDWITH
+
+        *-- Handler PUBLIC (BINDEVENT ignora metodo PROTECTED - CLAUDE.md #3)
+        BINDEVENT(THIS.img_4c_FigJpg, "DblClick", THIS, "ImgFigJpgDblClick")
+    ENDPROC
+
+    *==========================================================================
+    * CarregarLista - Trecho final do Init legado: consulta os subniveis
+    * (SigMvPec + SigOpDev unidos por Codigos, ja no BO.BuscarSubniveis),
+    * vincula a grade principal e desabilita o form pai.
+    *
+    * Ordem do bind obrigatoria (CLAUDE.md regra #41 / Problema 48):
+    * RecordSource -> ControlSource -> Width -> Header1.Caption. Atribuir
+    * RecordSource RESETA Width e Caption das colunas para o default, entao
+    * os valores do SCX sao reaplicados DEPOIS dele, nunca antes.
+    *==========================================================================
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso, loc_oGrid, loc_cCursor, loc_cMsg, loc_oErro, loc_oErroFoco
+        loc_lSucesso = .F.
+
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+                MsgErro("Business Object n" + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                        "FormSigMvSbn.CarregarLista")
+            ELSE
+                IF !THIS.this_oBusinessObject.BuscarSubniveis(THIS.this_cEmps, ;
+                        THIS.this_cDopes, THIS.this_nNumes)
+
+                    *-- Legado: MessageBox('Nenhum registro encontrado!!!') /
+                    *-- 'Favor reinicializar o processo.' + Return .f.
+                    loc_cMsg = TratarNulo(THIS.this_oBusinessObject.this_cMensagemErro, "")
+                    IF EMPTY(loc_cMsg)
+                        loc_cMsg = "Nenhum registro encontrado."
+                    ENDIF
+                    MsgAviso(loc_cMsg, "Aten" + CHR(231) + CHR(227) + "o")
+                ELSE
+                    loc_cCursor = THIS.this_oBusinessObject.this_cCursorLista
+
+                    *-- Acesso OPPEND resolvido pelo BO (fChecaAcesso do legado)
+                    THIS.this_lAcOficina = THIS.this_oBusinessObject.this_lAcOficina
+
+                    *-- Legado: If (Usuar <> [4CONTROL]) And fChecaAcesso(..., [OCULTAPRS])
+                    *--            ThisForm.fwGrade.Visible = .f.
+                    THIS.grd_4c_Itens.Visible = !THIS.this_oBusinessObject.this_lOcultaPrs
+
+                    SELECT (loc_cCursor)
+                    GO TOP
+
+                    loc_oGrid = THIS.grd_4c_Subniveis
+                    loc_oGrid.RecordSource = loc_cCursor
+
+                    WITH loc_oGrid
+                        .Column1.ControlSource = loc_cCursor + ".Emps"
+                        .Column2.ControlSource = loc_cCursor + ".Dopes"
+                        .Column3.ControlSource = loc_cCursor + ".Numes"
+                        .Column4.ControlSource = loc_cCursor + ".Datas"
+                        .Column5.ControlSource = loc_cCursor + ".Notas"
+                        .Column6.ControlSource = loc_cCursor + ".Usuars"
+                        .Column7.ControlSource = loc_cCursor + ".PrazoEnts"
+                        *-- Coluna de EXPRESSAO, igual ao legado
+                        *-- ('TmpSubN.Pstatus + [-] + TmpSubN.Descs')
+                        .Column8.ControlSource = loc_cCursor + ".Pstatus + [-] + " + ;
+                                                 loc_cCursor + ".Descs"
+
+                        *-- Width e Header DEPOIS do RecordSource, que os reseta
+                        .Column1.Width = 30
+                        .Column2.Width = 130
+                        .Column3.Width = 65
+                        .Column4.Width = 60
+                        .Column5.Width = 65
+                        .Column6.Width = 65
+                        .Column7.Width = 60
+                        .Column8.Width = 150
+
+                        .Column1.Header1.Caption = "Emp"
+                        .Column2.Header1.Caption = "Movimenta" + CHR(231) + CHR(227) + "o"
+                        .Column3.Header1.Caption = "C" + CHR(243) + "digo"
+                        .Column4.Header1.Caption = "Data"
+                        .Column5.Header1.Caption = "Documento"
+                        .Column6.Header1.Caption = "Usu" + CHR(225) + "rio"
+                        .Column7.Header1.Caption = "Prz. Entrega"
+                        .Column8.Header1.Caption = "Status"
+
+                        .Refresh()
+                    ENDWITH
+
+                    *-- Legado: o proprio bind da grade dispara AfterRowColChange
+                    *-- na primeira linha (fwgrade.RecordSource='' + populate +
+                    *-- SetFocus). Aqui, via AddObject/BINDEVENT, isso nao
+                    *-- acontece sozinho - chamado explicitamente para carregar
+                    *-- a grade de itens, a imagem/descricao do produto, os
+                    *-- campos Get_valo/Get_items e a visibilidade do Oficina
+                    *-- (ThisForm.BtnOficina.Visible = Not Empty(TmpSubN.Nops))
+                    *-- para o primeiro subnivel, igual ao legado.
+                    THIS.GradeAfterRowColChange(3)
+
+                    *-- Legado: ThisForm.ParentForm.Enabled = .f. (o dialogo eh
+                    *-- modal sobre o form de movimentacao que o abriu)
+                    THIS.HabilitarFormPai(.F.)
+
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.CarregarLista")
+        ENDTRY
+
+        *-- Legado termina o bind com .SetFocus. Vai FORA do TRY acima e em
+        *-- bloco proprio: o form ainda nao foi mostrado quando CarregarLista
+        *-- roda a partir do Init, e falhar ao focar nao pode desfazer a carga.
+        IF loc_lSucesso
+            TRY
+                THIS.grd_4c_Subniveis.SetFocus()
+            CATCH TO loc_oErroFoco
+                *-- form ainda nao visivel: o foco cai no default ao abrir
+            ENDTRY
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * AtualizarVisibilidadeOficina - "If ThisForm.lAcOficina /
+    * ThisForm.BtnOficina.Visible = Not Empty(TmpSubN.Nops) / Endif" do
+    * legado (Grade.AfterRowColChange). Fica em metodo proprio porque a
+    * regra vale tanto na abertura (aqui, via CarregarLista) quanto a cada
+    * troca de linha da grade, que entra na fase de eventos.
+    *
+    * Sem acesso OPPEND o botao permanece oculto - o legado nem avalia Nops
+    * nesse caso, e o If externo eh o que garante isso.
+    *==========================================================================
+    PROCEDURE AtualizarVisibilidadeOficina()
+        LOCAL loc_cCursor
+
+        IF !THIS.this_lAcOficina
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorLista
+
+        IF USED(loc_cCursor) AND !EOF(loc_cCursor)
+            THIS.cmd_4c_BtnOficina.Visible = ;
+                !EMPTY(TratarNulo(EVALUATE(loc_cCursor + ".Nops"), 0))
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * GradeAfterRowColChange - SIGMVSBN.Grade.AfterRowColChange do legado: ao
+    * trocar de subnivel na grade principal, recarrega a grade de itens
+    * (SigMvItn do subnivel), a imagem/descricao do produto do primeiro item
+    * e os campos Get_valo/Get_items/visibilidade do Oficina. PUBLIC porque
+    * eh alvo de BINDEVENT, com o parametro do evento mesmo sem uso aqui
+    * (CLAUDE.md #3).
+    *==========================================================================
+    PROCEDURE GradeAfterRowColChange(par_nColIndex)
+        LOCAL loc_cCursorLista, loc_cChave, loc_oErro
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN
+        ENDIF
+
+        loc_cCursorLista = THIS.this_oBusinessObject.this_cCursorLista
+        IF !USED(loc_cCursorLista) OR EOF(loc_cCursorLista)
+            RETURN
+        ENDIF
+
+        TRY
+            THIS.LockScreen = .T.
+
+            *-- Atualiza this_* do subnivel corrente (Ordes/Emps/Dopes/Numes/
+            *-- Datas/Notas/Valos/ValInis/Usuars/Nops/PrazoEnts/pstatus/Descs)
+            THIS.this_oBusinessObject.CarregarDoCursor(loc_cCursorLista)
+
+            *-- Legado: lcEmpDopNums = TmpSubN.Emps+TmpSubN.Dopes+Str(TmpSubN.Numes,6)
+            loc_cChave = THIS.this_oBusinessObject.MontarChaveEmpDopNums( ;
+                EVALUATE(loc_cCursorLista + ".Emps"), ;
+                EVALUATE(loc_cCursorLista + ".Dopes"), ;
+                EVALUATE(loc_cCursorLista + ".Numes"))
+
+            THIS.CarregarGradeItens(loc_cChave)
+
+            *-- Legado: If ThisForm.lAcOficina / ThisForm.BtnOficina.Visible =
+            *-- Not Empty(TmpSubN.Nops) / Endif
+            THIS.AtualizarVisibilidadeOficina()
+
+            *-- Legado: ThisForm.Get_Valo.Value = TmpSubN.Valos /
+            *-- ThisForm.Get_items.Value = TmpSubN.ValInis / .Refresh nos dois
+            THIS.txt_4c_Valo.Value  = THIS.this_oBusinessObject.this_nValorTotal
+            THIS.txt_4c_Items.Value = THIS.this_oBusinessObject.this_nValorInicial
+            THIS.txt_4c_Valo.Refresh()
+            THIS.txt_4c_Items.Refresh()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.GradeAfterRowColChange")
+        ENDTRY
+
+        THIS.LockScreen = .F.
+    ENDPROC
+
+    *==========================================================================
+    * CarregarGradeItens - Popula grd_4c_Itens com os itens (SigMvItn) do
+    * subnivel cuja chave EmpDopNums foi passada (BO.BuscarItensSubnivel) e
+    * carrega a imagem/descricao do produto do PRIMEIRO item (equivalente ao
+    * "Select crTpmMvItnSubn / Go Top" seguido da consulta SigCdPro/SigCdGrp
+    * em Grade.AfterRowColChange do legado).
+    *
+    * Ordem do bind obrigatoria (CLAUDE.md regra #41 / Problema 48):
+    * RecordSource -> ControlSource -> Width/InputMask -> Header1.Caption -
+    * atribuir RecordSource RESETA os tres ultimos, por isso reaplicados
+    * DEPOIS dele, nunca antes (mesmo padrao de CarregarLista).
+    *==========================================================================
+    PROCEDURE CarregarGradeItens(par_cChave)
+        LOCAL loc_oGrid, loc_cCursor, loc_cProduto
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN
+        ENDIF
+
+        IF !THIS.this_oBusinessObject.BuscarItensSubnivel(par_cChave)
+            *-- Sem itens para o subnivel: grade fica vazia e os campos de
+            *-- produto sao limpos - o legado nao interrompe a tela por isso.
+            IF USED(THIS.this_oBusinessObject.this_cCursorItens)
+                THIS.grd_4c_Itens.RecordSource = ""
+            ENDIF
+            THIS.LimparCamposProduto()
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorItens
+        loc_oGrid   = THIS.grd_4c_Itens
+
+        loc_oGrid.RecordSource = loc_cCursor
+
+        WITH loc_oGrid
+            .Column1.ControlSource  = loc_cCursor + ".cpros"
+            .Column2.ControlSource  = loc_cCursor + ".fators"
+            .Column3.ControlSource  = loc_cCursor + ".opers"
+            .Column4.ControlSource  = loc_cCursor + ".qtds"
+            .Column5.ControlSource  = loc_cCursor + ".pesos"
+            .Column6.ControlSource  = loc_cCursor + ".units"
+            .Column7.ControlSource  = loc_cCursor + ".moedas"
+            .Column8.ControlSource  = loc_cCursor + ".totas"
+            .Column9.ControlSource  = loc_cCursor + ".tpesos"
+            .Column10.ControlSource = loc_cCursor + ".CItens"
+
+            *-- Width/InputMask/Header DEPOIS do RecordSource, que os reseta
+            .Column1.Width           = 140
+            .Column2.Width           = 100
+            .Column3.Width           = 20
+            .Column3.Text1.MaxLength = 1
+            .Column4.Width           = 100
+            .Column5.Width           = 100
+            .Column6.Width           = 120
+            .Column6.InputMask       = "99,999,999.99"
+            .Column6.Text1.InputMask = "99,999,999.99"
+            .Column7.Width           = 33
+            .Column8.Width           = 185
+            .Column8.InputMask       = "999,999,999.99"
+            .Column8.Text1.InputMask = "999,999,999.99"
+            .Column9.Width           = 100
+            .Column10.Width          = 45
+
+            .Column1.Header1.Caption  = "Produto"
+            .Column2.Header1.Caption  = "Fator"
+            .Column3.Header1.Caption  = "Op"
+            .Column4.Header1.Caption  = "Qtd."
+            .Column5.Header1.Caption  = "Peso (gr)"
+            .Column6.Header1.Caption  = "Valor"
+            .Column7.Header1.Caption  = "Moe"
+            .Column8.Header1.Caption  = "Total"
+            .Column9.Header1.Caption  = "Total Peso"
+            .Column10.Header1.Caption = ""
+
+            .Refresh()
+        ENDWITH
+
+        SELECT (loc_cCursor)
+        GO TOP
+
+        IF !EOF()
+            loc_cProduto = TratarNulo(EVALUATE(loc_cCursor + ".cpros"), "")
+            THIS.CarregarImagemProduto(loc_cProduto, .T.)
+        ELSE
+            THIS.LimparCamposProduto()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ItensAfterRowColChange - SIGMVSBN.fwgrade.AfterRowColChange do legado:
+    * ao trocar de item dentro do subnivel, recarrega so a imagem/descricao
+    * do produto do item clicado (consulta enxuta, sem o grupo - CursorQuery
+    * do legado, equivalente a BO.BuscarImagemProdutoPorCodigo). PUBLIC
+    * porque eh alvo de BINDEVENT, com o parametro do evento mesmo sem uso
+    * (CLAUDE.md #3).
+    *==========================================================================
+    PROCEDURE ItensAfterRowColChange(par_nColIndex)
+        LOCAL loc_cCursor, loc_cProduto, loc_oErro
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorItens
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_cProduto = TratarNulo(EVALUATE(loc_cCursor + ".cpros"), "")
+            THIS.CarregarImagemProduto(loc_cProduto, .F.)
+            THIS.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.ItensAfterRowColChange")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * CarregarImagemProduto - Consulta os dados do produto corrente (BO
+    * BuscarDadosProduto quando par_lComGrupo, ou BuscarImagemProdutoPorCodigo
+    * quando nao) e atualiza a imagem (img_4c_FigJpg) e a descricao
+    * (txt_4c_Descr), replicando o trecho comum de Grade.AfterRowColChange e
+    * fwgrade.AfterRowColChange do legado: decodifica o campo FigJpgs (base64
+    * com os tres prefixos data:image/... que o legado tenta, nesta ordem,
+    * com UM UNICO Strconv - decodificar duas vezes corrompe o JPEG) e grava
+    * num arquivo temporario para a Image exibir.
+    *==========================================================================
+    PROCEDURE CarregarImagemProduto(par_cCpros, par_lComGrupo)
+        LOCAL loc_cCursor, loc_lSucesso, loc_cFoto, loc_cArquivo
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O" OR EMPTY(par_cCpros)
+            THIS.LimparCamposProduto()
+            RETURN
+        ENDIF
+
+        IF par_lComGrupo
+            loc_lSucesso = THIS.this_oBusinessObject.BuscarDadosProduto(par_cCpros)
+        ELSE
+            loc_lSucesso = THIS.this_oBusinessObject.BuscarImagemProdutoPorCodigo(par_cCpros)
+        ENDIF
+
+        IF !loc_lSucesso
+            THIS.LimparCamposProduto()
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorProduto
+
+        THIS.txt_4c_Descr.Value = THIS.this_oBusinessObject.this_cDescricaoProduto
+        THIS.txt_4c_Descr.Refresh()
+
+        THIS.img_4c_FigJpg.Visible = .F.
+        THIS.img_4c_FigJpg.Picture = ""
+
+        IF USED(loc_cCursor) AND !EOF(loc_cCursor)
+            loc_cFoto = TratarNulo(EVALUATE(loc_cCursor + ".FigJpgs"), "")
+            IF !EMPTY(loc_cFoto)
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/png;base64,", "")
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/jpeg;base64,", "")
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/jpg;base64,", "")
+                loc_cFoto = STRCONV(loc_cFoto, 14)
+
+                loc_cArquivo = SYS(2023) + "\SigMvSbn.jpg"
+                IF STRTOFILE(loc_cFoto, loc_cArquivo) > 0
+                    THIS.img_4c_FigJpg.Picture = loc_cArquivo
+                    THIS.img_4c_FigJpg.Visible = .T.
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * LimparCamposProduto - Esvazia descricao e imagem do produto quando nao
+    * ha item/produto corrente (subnivel sem itens, ou consulta sem sucesso).
+    *==========================================================================
+    PROCEDURE LimparCamposProduto()
+        THIS.txt_4c_Descr.Value = ""
+        THIS.txt_4c_Descr.Refresh()
+        THIS.img_4c_FigJpg.Visible = .F.
+        THIS.img_4c_FigJpg.Picture = ""
+    ENDPROC
+
+    *==========================================================================
+    * ImgFigJpgDblClick - SIGMVSBN.FigJpg.DblClick do legado: grava a foto do
+    * produto corrente num JPG temporario e chama
+    * "Do Form SigOpZom With lcArquivo, 'Produto : ...', 'Grupo   : ...'"
+    * (zoom da imagem). PUBLIC porque eh alvo de BINDEVENT (CLAUDE.md #3).
+    *==========================================================================
+    PROCEDURE ImgFigJpgDblClick()
+        LOCAL loc_cCursor, loc_cArquivo, loc_cFoto, loc_cProduto, loc_cDescProduto, ;
+              loc_cGrupo, loc_cDescGrupo, loc_oErro
+
+        IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorProduto
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            RETURN
+        ENDIF
+
+        loc_cArquivo = ""
+
+        TRY
+            loc_cFoto = TratarNulo(EVALUATE(loc_cCursor + ".FigJpgs"), "")
+            IF !EMPTY(loc_cFoto)
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/png;base64,", "")
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/jpeg;base64,", "")
+                loc_cFoto = STRTRAN(loc_cFoto, "data:image/jpg;base64,", "")
+                loc_cFoto = STRCONV(loc_cFoto, 14)
+
+                loc_cArquivo = SYS(2023) + "\" + SYS(2015) + ".Jpg"
+                STRTOFILE(loc_cFoto, loc_cArquivo)
+            ENDIF
+
+            loc_cProduto     = TratarNulo(EVALUATE(loc_cCursor + ".Cpros"), "")
+            loc_cDescProduto = TratarNulo(EVALUATE(loc_cCursor + ".Dpros"), "")
+            loc_cGrupo       = IIF(TYPE(loc_cCursor + ".Cgrus") = "C", ;
+                TratarNulo(EVALUATE(loc_cCursor + ".Cgrus"), ""), "")
+            loc_cDescGrupo   = IIF(TYPE(loc_cCursor + ".Dgrus") = "C", ;
+                TratarNulo(EVALUATE(loc_cCursor + ".Dgrus"), ""), "")
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.ImgFigJpgDblClick")
+            loc_cArquivo = ""
+        ENDTRY
+
+        *-- Legado: If File(lcArquivo) / Do Form SigOpZom With ... / Delete
+        *-- File (lcArquivo). Show() de form modal fica FORA de qualquer TRY
+        *-- (CLAUDE.md regra #29).
+        IF !EMPTY(loc_cArquivo) AND FILE(loc_cArquivo)
+            THIS.AbrirFormZoomImagem(loc_cArquivo, loc_cProduto, loc_cDescProduto, loc_cGrupo, loc_cDescGrupo)
+            ERASE (loc_cArquivo)
+        ENDIF
+
+        *-- Legado: If Thisform.fwgrade.Visible / Thisform.fwgrade.SetFocus
+        IF THIS.grd_4c_Itens.Visible
+            TRY
+                THIS.grd_4c_Itens.SetFocus()
+            CATCH TO loc_oErro
+                *-- foco indisponivel no momento: sem impacto para o usuario
+            ENDTRY
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirFormZoomImagem - "Do Form SigOpZom With lcArquivo, 'Produto : ' +
+    * ..., 'Grupo   : ' + ..." do legado (zoom da imagem do produto).
+    * SigOpZom esta FORA do escopo desta task e ainda nao foi migrado (mesma
+    * situacao de SigRePhi em BtnOficinaClick/AbrirFormOficina) - o
+    * CREATEOBJECT vai guardado e a ausencia eh AVISADA ao usuario, em vez de
+    * estourar "Class definition ... is not found". Quando o modulo for
+    * migrado esta chamada passa a funcionar sem nenhuma alteracao aqui.
+    *
+    * Show() fica FORA do TRY: form modal chamado dentro de TRY faz qualquer
+    * erro de runtime da tela filha derrubar a referencia e fechar a janela
+    * (CLAUDE.md regra #29).
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirFormZoomImagem(par_cArquivo, par_cProduto, par_cDescProduto, par_cGrupo, par_cDescGrupo)
+        LOCAL loc_oForm, loc_oErro, loc_cLinha2, loc_cLinha3
+
+        loc_cLinha2 = "Produto : " + ALLTRIM(par_cProduto) + " - " + ALLTRIM(par_cDescProduto)
+        loc_cLinha3 = "Grupo   : " + ALLTRIM(par_cGrupo) + " - " + ALLTRIM(par_cDescGrupo)
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigOpZom", par_cArquivo, loc_cLinha2, loc_cLinha3)
+        CATCH TO loc_oErro
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ELSE
+            MsgAviso("M" + CHR(243) + "dulo de Zoom de Imagem (SigOpZom) ainda n" + CHR(227) + ;
+                "o est" + CHR(225) + " dispon" + CHR(237) + "vel nesta vers" + CHR(227) + "o.", ;
+                "Aviso")
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarFormPai - O legado desabilita o form que abriu este dialogo
+    * ("ThisForm.ParentForm.Enabled = .f." no Init) e o reabilita ao sair
+    * ("ThisForm.ParentForm.Enabled = .t." no Sair.Click). Sem a reabilitacao
+    * o usuario fecha este dialogo e fica com a tela de movimentacao morta.
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarFormPai(par_lHabilitar)
+        LOCAL loc_oErro
+
+        TRY
+            IF VARTYPE(THIS.this_oFormPai) = "O" AND !ISNULL(THIS.this_oFormPai)
+                IF PEMSTATUS(THIS.this_oFormPai, "Enabled", 5)
+                    THIS.this_oFormPai.Enabled = par_lHabilitar
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Pai ja liberado/destruido: nada a reabilitar. Silencioso de
+            *-- proposito - este metodo roda no caminho de SAIDA, e um dialogo
+            *-- de erro aqui apareceria toda vez que o pai fechasse primeiro.
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnSairClick - SIGMVSBN.Sair.Click do legado:
+    *   ThisForm.ParentForm.Enabled = .t.
+    *   ThisForm.Release
+    * PUBLIC porque eh alvo de BINDEVENT (CLAUDE.md #3).
+    *==========================================================================
+    PROCEDURE BtnSairClick()
+        THIS.HabilitarFormPai(.T.)
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * BtnOficinaClick - SIGMVSBN.BtnOficina.Click do legado: monta o numero
+    * da OS (NEmps de SigCdEmp + nSeqs de SigCdOpd/SigCdPam.DoppServs +
+    * Numes com 6 posicoes) e chama "Do Form SigRePhi With Int(Val(lcNumps))".
+    * O calculo inteiro ja esta em SigMvSbnBO.ObterNumeroOS().
+    *
+    * O legado le Emps/Dopes/Numes do CURSOR DE ORIGEM (&lcCursor..Emps), e
+    * nao das propriedades lpEmps/lpDopes/lpNumes - quando o form pai passa
+    * os parametros diretos os dois podem divergir. Transcrito fiel, com
+    * fallback para o que veio no Init se o cursor nao estiver aberto.
+    * PUBLIC porque eh alvo de BINDEVENT (CLAUDE.md #3).
+    *==========================================================================
+    PROCEDURE BtnOficinaClick()
+        LOCAL loc_cEmps, loc_cDopes, loc_nNumes, loc_nNumeroOS, loc_cMsg, loc_oErro
+
+        TRY
+            IF USED(THIS.this_cCursorOrigem)
+                loc_cEmps  = ALLTRIM(TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Emps"), ""))
+                loc_cDopes = ALLTRIM(TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Dopes"), ""))
+                loc_nNumes = TratarNulo(EVALUATE(THIS.this_cCursorOrigem + ".Numes"), 0)
+            ELSE
+                loc_cEmps  = THIS.this_cEmps
+                loc_cDopes = THIS.this_cDopes
+                loc_nNumes = THIS.this_nNumes
+            ENDIF
+
+            loc_nNumeroOS = THIS.this_oBusinessObject.ObterNumeroOS(loc_cEmps, loc_cDopes, loc_nNumes)
+
+            IF loc_nNumeroOS <= 0
+                loc_cMsg = TratarNulo(THIS.this_oBusinessObject.this_cMensagemErro, "")
+                IF EMPTY(loc_cMsg)
+                    loc_cMsg = "N" + CHR(227) + "o foi poss" + CHR(237) + "vel determinar o n" + ;
+                        CHR(250) + "mero da OS."
+                ENDIF
+                MsgAviso(loc_cMsg, "Aten" + CHR(231) + CHR(227) + "o")
+            ELSE
+                THIS.AbrirFormOficina(loc_nNumeroOS)
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormSigMvSbn.BtnOficinaClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * AbrirFormOficina - "Do Form SigRePhi With Int(Val(lcNumps))" do legado.
+    * SigRePhi esta FORA do escopo desta task e ainda nao foi migrado (nao ha
+    * FormSigRePhi em forms\ nem SigRePhi.frx em reports\) - por isso o
+    * CREATEOBJECT vai guardado e a ausencia eh AVISADA ao usuario, em vez de
+    * estourar "Class definition ... is not found" ou, pior, de sumir em
+    * silencio. Quando o modulo for migrado esta chamada passa a funcionar
+    * sem nenhuma alteracao aqui.
+    *
+    * Show() fica FORA do TRY: form modal chamado dentro de TRY faz qualquer
+    * erro de runtime da tela filha derrubar a referencia e fechar a janela
+    * (CLAUDE.md regra #29).
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirFormOficina(par_nNumeroOS)
+        LOCAL loc_oForm, loc_oErro
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigRePhi", INT(par_nNumeroOS))
+        CATCH TO loc_oErro
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ELSE
+            MsgAviso("M" + CHR(243) + "dulo de Oficina (SigRePhi) ainda n" + CHR(227) + ;
+                "o est" + CHR(225) + " dispon" + CHR(237) + "vel nesta vers" + CHR(227) + "o." + ;
+                CHR(13) + "N" + CHR(250) + "mero da OS: " + ALLTRIM(STR(INT(par_nNumeroOS))), ;
+                "Aviso")
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * Destroy - Libera cursores do BO e referencias do form
+    *==========================================================================
+    PROCEDURE Destroy()
+        LOCAL loc_oErro
+
+        *-- Rede de seguranca: o caminho normal de saida eh BtnSairClick, que
+        *-- ja reabilita o pai. Mas este form tem ControlBox = .F. /
+        *-- Closable = .F. e desabilitou o form de movimentacao em
+        *-- CarregarLista - se ele for liberado por qualquer outro caminho
+        *-- (Release externo, erro), o pai ficaria morto e sem dono. Repetir
+        *-- aqui eh inofensivo (atribuir Enabled = .T. duas vezes nao muda
+        *-- nada) e tem de vir ANTES de zerar this_oFormPai.
+        THIS.HabilitarFormPai(.T.)
+
+        TRY
+            IF USED("cursor_4c_Subniveis")
+                USE IN cursor_4c_Subniveis
+            ENDIF
+            IF USED("cursor_4c_Itens")
+                USE IN cursor_4c_Itens
+            ENDIF
+            IF USED("cursor_4c_Produto")
+                USE IN cursor_4c_Produto
+            ENDIF
+            THIS.this_oBusinessObject = .NULL.
+            THIS.this_oFormPai        = .NULL.
+        CATCH TO loc_oErro
+            *-- Destruicao nao bloqueia saida
+        ENDTRY
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

@@ -1,0 +1,19 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+No duplicate method names ÔÇö every method appears exactly once. Phase 4 is complete.
+
+## Summary
+
+I completed **FASE 4/8** for `FormProduto.prg` ÔÇö Grid and CRUD buttons on Page1 (Lista):
+
+- **`ConfigurarPaginaLista()`** now builds: 5 CRUD buttons in `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) + Encerrar in `cnt_4c_Saida` (6 total), the filter container `cnt_4c_Filtros` (grupo code/description with lookup, date range, Geral/Ativos/Inativos radio), and the 7-column `grd_4c_Dados` grid (Produto/Descri├º├úo/Grupo/Subgrp./Ref. Fornecedor/Usu├írio/checkbox "I"=Inativo per CLAUDE.md regra #18).
+- **`CarregarLista()`**: calls `ProdutoBO.BuscarLista()` with the current filter values, rebinds columns/headers *after* `RecordSource` (regra #2/#32/#48), updates the "Produtos Selecionados" counter.
+- **`AlternarPagina()`**: switches Page1ÔåöPage2, reloads the list on return (regra #40).
+- Click handlers (`BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnEncerrarClick`) call the real BO methods (`NovoRegistro`/`CarregarPorCodigo`/`EditarRegistro`/`Excluir`).
+- **`BtnBuscarClick`**: per the task's explicit instructions (Erro178 adendo), this does **not** open a picker ÔÇö it opens the Dados page in modo BUSCAR, matching the legacy "busca por exemplo" (`msv_procurar`) behavior; the actual field-driven search executes once the Dados Principais fields/Confirmar button exist in a later phase.
+- Fixed a real bug along the way: `CTOD("12/31/2900")` would have broken under `SET DATE BRITISH` (month "31" is invalid) ÔÇö replaced both date defaults with the locale-independent `{^YYYY-MM-DD}` literal form.
+
+Verified structural integrity: PROCEDURE/ENDPROC (23/23), WITH/ENDWITH (43/43), TRY/ENDTRY (7/7), IF/ENDIF (35/35) all balanced, no duplicate method names, and all grid columns map to real columns from `ObterColunasLista()`.

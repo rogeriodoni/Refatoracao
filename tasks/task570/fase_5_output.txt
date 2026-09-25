@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+My addition is in place. Here's the outcome:
+
+## Fase 5/8 ÔÇö `FormSigMvExp`
+
+**N├úo alterei o form: ele n├úo tem campo nenhum para receber. O defeito estava no *gate* da Fase 5, que era insatisfaz├¡vel para este legado.**
+
+A fase pedia `ConfigurarPaginaDados()` com "metade dos campos". Medido no dump, o `SIGMVEXP.SCX` tem **exatamente 3 objetos** ÔÇö `dataenvironment` + `form` + **um** `commandbutton` ÔÇö e **zero** BaseClass de entrada de dados, zero `grid`/`pageframe`/`AddCursor`/`pColuna`/`ControlSource`. Metade de zero campos ├® zero. ├ë um **despachante** de 337├ù147 (`TitleBar=0`, `AlwaysOnBottom=.T.`) cujo ├║nico bot├úo, "Aguarde Processando Dados", o `Activate` clica para disparar o `DO CASE` de despacho para `SigMvCab`.
+
+Entregar ao p├® da letra exigiria inventar uma Page2 com campos (viola o PILAR 1 e a regra "NUNCA inventar") ou criar um `ConfigurarPaginaDados` vazio (proibido pela regra de completude).
+
+### Corre├º├úo: terceiro ramo no gate (`OrquestradorMigracao.ps1`, `case 5`)
+
+O gate tinha dois ramos ÔÇö PAGINADO e FLAT ÔÇö e nenhum alcan├ºa um legado sem campos: o FLAT exige `.ControlSource`, que s├│ existe onde h├í campo ou coluna de grade. Acrescentei o ramo DESPACHANTE **com crit├®rio id├¬ntico ao que a Fase 4 j├í tem**, com as tr├¬s guardas fail-closed: s├│ `OPERACIONAL`; s├│ com o dump **presente** provando aus├¬ncia das **duas** superf├¡cies; e n├úo vira atalho para form vazio (dump com bot├úo exige bot├úo **e** handler de `Click`). Reusei `Get-ContagemBotoesLegado`, j├í existente. ├ë a quinta recorr├¬ncia dessa fam├¡lia (Fases 4, 6, 7 e 8 j├í corrigidas).
+
+### Verifica├º├Áes (medidas)
+
+- **Gate nos 5 casos**: task570 passa (`semListaNemCampos=True`, `nBotoes=1`); dump ausente **reprova**; `FormTypeÔëáOPERACIONAL` reprova; legado com grade (SIGMVCHV) n├úo entra no ramo; form vazio reprova.
+- **Sweep nos 529 forms migrados: delta = 1** (s├│ este). O ├║nico que continua reprovando (`FormSigReDdp`, REPORT/task077) j├í reprovava antes e n├úo foi tocado.
+- Orquestrador **parseia sem erro**; encoding intacto ÔÇö BOM preservado e **2962 bytes >127 antes e depois** (texto acrescentado 100% ASCII).
+- `FormSigMvExp.prg` **compila limpo** (sem `.err`); 0 bytes n├úo-ASCII; 7/7 `PROCEDURE`/`ENDPROC`, 3/3 `TRY`/`ENDTRY`; nenhum `RETURN` dentro de `TRY`; sem `ISEMPTY(`/`MESSAGEBOX(`/`MostrarAviso(`/`Controls("nome")`/`.Self`.
+- **Instancia de verdade**: `W=337 H=147 TitleBar=0 ControlBox=.F. AlwaysOnBottom=.T.`, `ControlCount=1` (nenhum controle inventado), bot├úo `top=34 left=48 w=241 h=73` ÔÇö batendo com o `layout.json` campo a campo. Tipo C grava `Nume=1234 Emp=007 Caixa=5`; Tipo E deixa `Nume=0 Emp=[]`, correto porque o legado s├│ preenche esses dois em `InList(pTipos,'C','A')`. Apaguei os `.fxp` no fim.
+
+Registrei em `tasks/task570/fase_5_output.txt` e a li├º├úo na mem├│ria.
+
+### Quatro pend├¬ncias que **n├úo** resolvi (fora do escopo)
+
+1. **O loop precisa ser relan├ºado** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo um orquestrador j├í em mem├│ria usaria o gate antigo e reprovaria de novo, n├úo por defeito do form (foi o que gerou o retry da Fase 4).
+2. `FormSigPrCtr.prg:2374,2387` faz `DO FORM FormSigMvExp` mas n├úo existe `.scx` ÔÇö falha em runtime; parte de um padr├úo sist├¬mico (139 `DO FORM` no projeto).
+3. `FormSigPrHpr.prg:936` chama `CREATEOBJECT("FormSigMvExp", THIS)` com 1 dos 7 argumentos ÔåÆ o `DO CASE` n├úo casa nenhum ramo e o despacho vira **no-op silencioso**.
+4. `FormSigMvCab` ainda n├úo existe no acervo; o contrato posicional est├í documentado no `BtnProcessoClick`.

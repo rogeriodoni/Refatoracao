@@ -1873,14 +1873,20 @@ DEFINE CLASS Formsigpres2 AS FormBase
     * BtnSubNiveisClick - Abre form SigMvSbn para sub-niveis do pedido
     *--------------------------------------------------------------------------
     PROCEDURE BtnSubNiveisClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_oFormSbn
         TRY
             IF !USED("csTemporario") OR EOF("csTemporario")
                 MsgAviso("Nenhum pedido selecionado!", "")
             ELSE
                 SELECT csTemporario
-                DO FORM SigMvSbn WITH THIS, csTemporario.Emps, csTemporario.Dopes, ;
-                    csTemporario.Numes, "csTemporario"
+                loc_oFormSbn = CREATEOBJECT("FormSigMvSbn", THIS, csTemporario.Emps, ;
+                    csTemporario.Dopes, csTemporario.Numes, "csTemporario")
+                IF VARTYPE(loc_oFormSbn) = "O"
+                    loc_oFormSbn.Show()
+                ELSE
+                    MsgErro("Erro ao criar formul" + CHR(225) + "rio de Subn" + CHR(237) + ;
+                        "veis" + CHR(13) + "VARTYPE retornou: " + VARTYPE(loc_oFormSbn), "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada no VFP9.
+
+## O que bloqueava
+
+O gate da Fase 4 n├úo tinha ramo que coubesse neste legado. O `SIGMVMVT` ├® OPERACIONAL **sem PageFrame e sem Grid**: a superf├¡cie de lista dele ├® um ActiveX de ├írvore (`ctTree.ocx`), e ele tem 5 campos edit├íveis. Os quatro ramos existentes exigiam, cada um, inventar algo que o legado n├úo tem (PageFrame+CRUD, uma grade, "sem campos", ou "campos todos ReadOnly"). O conserto ├® no gate, n├úo no form.
+
+**Ramo novo `temLayoutArvore`**, fail-closed como os vizinhos: exige o dump provando aus├¬ncia de Grid/PageFrame **+** um `olecontrol` **+** o legado dirigindo esse controle pela API de n├│s (`AddPictureNode`/`NodeCargo`/`NodeExpanded`). Bot├Áes e m├®todo de carga continuam obrigat├│rios ÔÇö a exce├º├úo troca a grade pela ├írvore e nada mais.
+
+Medido nos 573 dumps: "tem olecontrol" sozinho pegaria 3, e em 2 deles o controle ├® um **modem** (`oModem`, em `SigReEch`/`sigprtef`). Exigindo a API de n├│s sobra **1**, o pr├│prio SIGMVMVT.
+
+## No form
+
+Acrescentei o m├®todo de carga (`CarregarDados`, equivalente ao `MakeTree`), com `PopularArvore`/`PrepararArvore`/`ArvoreDisponivel`/`ObterFiltro`. Texto dos n├│s, ├¡cones e `Iif(ChkPagos,3,1)` transcritos do dump. Roda sozinho no Init quando `Automatico = .T.`, como no legado.
+
+## Dois achados medidos
+
+**1. `cttree.ocx` n├úo existe em lugar nenhum** ÔÇö nem na m├íquina, nem no acervo. Testei o substituto ├│bvio e **ele ├® pior**:
+
+| ProgID | Resultado |
+|---|---|
+| `RICHTEXT.RichtextCtrl.1` (controle do teste) | OK |
+| `cttree.cttreeview` (legado) | CATCH pega ÔÇö `0x800401f3`, tela abre sem a ├írvore |
+| `MSComctlLib.TreeCtrl` | **trava** o VFP9 em modal de licen├ºa, TRY/CATCH n├úo pega |
+
+Mantive o ProgID do legado guardado em TRY/CATCH e deixei isso no cabe├ºalho do arquivo.
+
+**2. Defeito real na cadeia de carga:** `SQLEXEC` com handle inv├ílido **dispara exce├º├úo** em vez de devolver `-1`, ent├úo o `IF loc_nResultado < 0` do BO nunca roda e o erro subia cru. Blindei `CarregarDados` com TRY/CATCH + `MsgErro` (linha/procedure), RETURN s├│ depois do ENDTRY.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (form e BO, sem `.err`); form instancia; os 5 m├®todos presentes; `CarregarDados` sem filtro ÔåÆ `.F.` com aviso; com conex├úo morta ÔåÆ `.F.` com erro tratado; abertura em modo autom├ítico OK. Os controles da fase anterior seguem intactos. Rodei o bloco **real** do gate (extra├¡do do arquivo, n├úo redigitado) contra este form: passa.
+
+Duas ressalvas que ficam com voc├¬:
+
+- O **ProgID `cttree.cttreeview` ├® palpite** do run anterior ÔÇö o SCX s├│ preserva `OLEObject = c:\windows\syswow64\cttree.ocx`, n├úo o ProgID. Precisa ser confirmado numa m├íquina com o OCX registrado. Enquanto o OCX n├úo existir, a tela abre sem a ├írvore (com aviso), o que ├® o comportamento correto pela regra #27, mas **├® a tela inteira** ÔÇö essa depend├¬ncia precisa de decis├úo sua.
+- A recurs├úo profunda da ├írvore (`SubNivel`/`HiNivel`, n├¡veis 3+) fica nas Fases 7-8, junto com os eventos dos bot├Áes; as consultas j├í est├úo portadas no BO.
+
+Durante o diagn├│stico perdi tempo com um `.FXP` velho do harness rodando c├│digo antigo ÔÇö exatamente a nota da regra #29. Apaguei os `.fxp` antes das medi├º├Áes finais.

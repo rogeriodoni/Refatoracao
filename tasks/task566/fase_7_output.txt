@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o pedido da Fase 7 contra o c├│digo-fonte legado (`SIGMVCTH_form_codigo_fonte.txt`) e o estado atual de `FormSIGMVCTH.prg`/`SIGMVCTHBO.prg`, e a Fase 7 **n├úo se aplica** a este form.
+
+**Por qu├¬**: o prompt da Fase 7 ├® o template gen├®rico do pipeline ("adicionar BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick"), mas o `SIGMVCTH.SCX` legado ├® um **visualizador somente-leitura** de hist├│rico de cota├º├Áes. Conferido na extra├º├úo do SCX (`Section 1: Arvore de Objetos` + `Section 3: Metodos`):
+
+- O ├║nico bot├úo do form ├® `cmdSalva.Buttons(1)` ("Retornar"), com `Click = ThisForm.Release` ÔÇö n├úo existe nenhum bot├úo Incluir/Alterar/Visualizar/Excluir no legado.
+- O ├║nico CRUD que o legado faz s├úo os 3 `SELECT` de `CarregaPedidos` (leitura de `SigCtTCt`/`SigCtTDc`/`SigCtTFn`) ÔÇö n├úo h├í `INSERT`/`UPDATE`/`DELETE`.
+
+O `FormSIGMVCTH.prg` atual j├í porta **100%** da funcionalidade do legado (confirmado lendo o arquivo inteiro):
+- `Init`/`InicializarForm`/`ValidarParametros` ÔÇö guardas de conex├úo do `Init` legado
+- `ConfigurarGrid`/`VincularGridDados` ÔÇö grid `grdCotacoes` com as 8 colunas exatas
+- `ConfigurarCamposAprovacao` ÔÇö campos espelho (Comprador/Aprovador/Data/Observa├º├úo)
+- `ConfigurarBotoes` + `CmdRetornarClick` ÔÇö o ├║nico bot├úo real, j├í implementado (`THIS.Release()`)
+- `CarregarLista` (BO `CarregarHistorico`) ÔÇö porta fiel de `CarregaPedidos`, inclusive o `DO CASE` das 6 marcas e o lookup de fornecedor vencedor
+- `GrdDadosAfterRowColChange`/`AtualizarCamposAprovacao` ÔÇö porta do `AfterRowColChange` legado
+- `Destroy` ÔÇö fecha o cursor + `DODEFAULT()`
+
+Criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` aqui seria fabricar funcionalidade que n├úo existe no legado ÔÇö violaria o PILAR 1 (UX fidelity, CLAUDE.md) e a regra "NUNCA criar stubs" (n├úo haveria comportamento real de neg├│cio para implementar, j├í que n├úo h├í bot├Áes correspondentes na tela nem l├│gica de INSERT/UPDATE/DELETE a portar).
+
+N├úo fiz nenhuma altera├º├úo no arquivo. Se quiser, posso seguir para a Fase 8 (o que quer que ela cubra) ou confirmar com voc├¬ se a Fase 7 deveria ser pulada/marcada como N/A no `task_state.json` deste task566.

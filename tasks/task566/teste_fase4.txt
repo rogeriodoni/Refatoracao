@@ -1,0 +1,22 @@
+=== TESTE FASE 4 FormSIGMVCTH ===
+COMPILE           : OK
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+grd_4c_Dados      : .T.
+cmg_4c_Botoes     : .T.
+Grid.ColumnCount  : 8
+Grid.RecordSource : [cursor_4c_HistPeds]
+Grid.Visible      : .T.
+Col1 [Data] W=75 src=cursor_4c_HistPeds.Datas
+Col8 [Fornecedor] W=315 src=cursor_4c_HistPeds.Fornecs
+Botao Caption     : [Retornar]
+Botao Picture FILE: .T.
+Botao Visible     : .T.
+CarregarLista()   : retorno .T.
+  pos RecordSource: [cursor_4c_HistPeds]
+  pos Col1        : [Data] W=75
+  pos Col8        : [Fornecedor] W=315
+  pos ColumnCount : 8
+AfterRowColChange : OK
+CmdRetornarClick  : OK
+=== FIM ===

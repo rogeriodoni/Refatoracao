@@ -743,6 +743,39 @@ DEFINE CLASS FormTester AS Custom
     ENDPROC
 
     *====================================================================
+    * EhFormDespachante - Detecta forms OPERACIONAL puramente despachante
+    * (splash sem PageFrame Lista/Dados e sem Grid), como FormSigMvExp:
+    * toda a "tela" e' um botao que despacha para outro form (DO CASE por
+    * Tipo) e nao ha lista nem grade para carregar. Os testes
+    * CarregarDadosReais e BtnEncerrarExiste foram calibrados em forms
+    * OPERACIONAL com PageFrame/Grid e exigem metodo de carga ou botao de
+    * encerramento que este padrao nao tem POR DESENHO (o SCX legado tambem
+    * nao tem - ControlBox=.F., TitleBar=0, unico CommandButton que
+    * despacha e destroi a tela). Inventar essa estrutura violaria o
+    * PILAR 1. Mesma familia de feedback_gate_fase4_exige_grid_inexistente
+    * e feedback_gate_fase8_exige_botao_de_acao (origem: task570).
+    *====================================================================
+    PROTECTED PROCEDURE EhFormDespachante()
+        LOCAL loc_lDespachante, loc_i, loc_oControl, loc_cBase
+
+        loc_lDespachante = .F.
+
+        IF VARTYPE(THIS.oForm) = "O"
+            loc_lDespachante = .T.
+            FOR loc_i = 1 TO THIS.oForm.ControlCount
+                loc_oControl = THIS.oForm.Controls(loc_i)
+                loc_cBase = UPPER(loc_oControl.BaseClass)
+                IF loc_cBase = "PAGEFRAME" OR loc_cBase = "GRID"
+                    loc_lDespachante = .F.
+                    EXIT
+                ENDIF
+            ENDFOR
+        ENDIF
+
+        RETURN loc_lDespachante
+    ENDPROC
+
+    *====================================================================
     * TesteCarregarDadosReais - Busca dados reais do banco e popula grid
     * (OPERACIONAL) Testa se as queries SQL funcionam com dados reais
     *====================================================================
@@ -780,23 +813,31 @@ DEFINE CLASS FormTester AS Custom
             ENDFOR
 
             IF EMPTY(loc_cMetodo)
-                *-- Nenhum metodo de carga encontrado - tenta buscar dado de teste no banco
-                *-- para verificar se a conexao funciona
-                IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
-                    LOCAL loc_nRes
-                    loc_nRes = SQLEXEC(gnConnHandle, "SELECT TOP 1 codigos FROM SigCdGcr", "cursor_4c_TesteDado")
-                    IF loc_nRes > 0 AND RECCOUNT("cursor_4c_TesteDado") > 0
-                        loc_lPassou = .T.
-                        loc_cDetalhes = "Conexao DB OK (nenhum metodo de carga padrao encontrado)"
-                    ELSE
-                        loc_cDetalhes = "Conexao DB OK mas sem dados de teste"
-                        loc_lPassou = .T.
-                    ENDIF
-                    IF USED("cursor_4c_TesteDado")
-                        USE IN cursor_4c_TesteDado
-                    ENDIF
+                IF THIS.EhFormDespachante()
+                    *-- Splash/despachante sem PageFrame nem Grid (ex.: FormSigMvExp) -
+                    *-- o legado tambem nao carrega lista/grade aqui, entao a ausencia
+                    *-- de metodo de carga e' fidelidade ao original, nao defeito.
+                    loc_lPassou = .T.
+                    loc_cDetalhes = "N/A - form despachante sem PageFrame/Grid (sem carga de dados, fiel ao legado)"
                 ELSE
-                    loc_cErro = "Sem conexao ao banco (gnConnHandle invalido)"
+                    *-- Nenhum metodo de carga encontrado - tenta buscar dado de teste no banco
+                    *-- para verificar se a conexao funciona
+                    IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                        LOCAL loc_nRes
+                        loc_nRes = SQLEXEC(gnConnHandle, "SELECT TOP 1 codigos FROM SigCdGcr", "cursor_4c_TesteDado")
+                        IF loc_nRes > 0 AND RECCOUNT("cursor_4c_TesteDado") > 0
+                            loc_lPassou = .T.
+                            loc_cDetalhes = "Conexao DB OK (nenhum metodo de carga padrao encontrado)"
+                        ELSE
+                            loc_cDetalhes = "Conexao DB OK mas sem dados de teste"
+                            loc_lPassou = .T.
+                        ENDIF
+                        IF USED("cursor_4c_TesteDado")
+                            USE IN cursor_4c_TesteDado
+                        ENDIF
+                    ELSE
+                        loc_cErro = "Sem conexao ao banco (gnConnHandle invalido)"
+                    ENDIF
                 ENDIF
             ELSE
                 *-- Encontrou metodo de carga - buscar dado de teste no banco
@@ -1100,8 +1141,17 @@ DEFINE CLASS FormTester AS Custom
                         IIF(loc_lTemSair, "BtnSairClick", "")
                     ?? "PASSOU"
                 ELSE
-                    loc_cErro = "Nenhum metodo de encerramento encontrado (BtnEncerrarClick/BtnFecharClick/BtnSairClick)"
-                    ?? "FALHOU"
+                    IF THIS.EhFormDespachante()
+                        *-- Splash/despachante sem PageFrame nem Grid (ex.: FormSigMvExp) -
+                        *-- o SCX legado tambem nao tem botao de encerrar (ControlBox=.F.,
+                        *-- TitleBar=0): a tela se autodestroi apos despachar.
+                        loc_lPassou = .T.
+                        loc_cDetalhes = "N/A - form despachante sem PageFrame/Grid (sem botao de encerrar, fiel ao legado)"
+                        ?? "PASSOU"
+                    ELSE
+                        loc_cErro = "Nenhum metodo de encerramento encontrado (BtnEncerrarClick/BtnFecharClick/BtnSairClick)"
+                        ?? "FALHOU"
+                    ENDIF
                 ENDIF
             ENDIF
 

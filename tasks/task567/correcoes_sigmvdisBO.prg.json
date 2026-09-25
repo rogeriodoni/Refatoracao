@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigmvdisBO.prg",
+    "timestamp":  "2026-09-24T07:26:35",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-189-LISTA-SELECT-DISTINCT",
+                          "Linha":  283,
+                          "Original":  "                loc_cSQL = \"SELECT DISTINCT codigos, datas FROM SigPrDis\"",
+                          "Corrigido":  "(REVISAR MANUAL)",
+                          "Descricao":  "Pattern #189-B: Buscar() do BO monta a lista do CRUD com SELECT DISTINCT. No legado a lista costuma vir de Select * From \u003ctabela\u003e (UMA linha por registro) com as colunas do .pfSqlTabela(1).pColuna(...) do Init. DISTINCT de um subconjunto esconde colunas e tira a PK do cursor — sem a PK, Alterar/Excluir passam a operar por chave secundaria e o Excluir vira exclusao em massa (apaga linhas que o usuario nao selecionou). Conferir o Init do SCX legado; se o DISTINCT for mesmo necessario, garantir que o Excluir use a chave certa. Origem: Erro148 (2026-09-08 FormSIGPRLNC)."
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

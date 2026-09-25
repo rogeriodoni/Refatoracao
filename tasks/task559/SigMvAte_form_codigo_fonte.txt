@@ -1,0 +1,724 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvAte.SCX
+* Data/Hora: 23/09/2026 18:03:32
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVATE
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGMVATE
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGMVATE.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGMVATE.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGMVATE
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGMVATE
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVATE.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVATE.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVATE.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVATE.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVATE.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVATE.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: inserir
+  Parent: SIGMVATE
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: excluir
+  Parent: SIGMVATE
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 348
+  Width = 618
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Registra os atendimentos dos vendedores"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  podatamgr = .F.
+  pcescolha = .F.
+  Name = "SIGMVATE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 462
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Verdana"
+  FontSize = 8
+  HeaderHeight = 22
+  Height = 234
+  Left = 50
+  Panel = 1
+  ReadOnly = .F.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 96
+  Visible = .T.
+  Width = 463
+  Name = "Grade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 110
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = ""
+  Column1.Name = "Column2"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 250
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "Column3"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 80
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.Format = ""
+  Column3.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vendedor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descricao"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  InputMask = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Atendimentos"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.Grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Format = "999,999,999.99"
+  InputMask = "999"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.inserir
+------------------------------------------------------------
+  Top = 182
+  Left = 523
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  TabIndex = 2
+  ToolTipText = "Inserir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 52
+  Themes = .F.
+  Name = "inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVATE.excluir
+------------------------------------------------------------
+  Top = 227
+  Left = 523
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 53
+  Themes = .F.
+  Name = "excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 1, 8, 6, 13, 11, 25, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVATE
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+RELEASE pcChv, pcEDN, pcItem 
+This.Grade.RecordSource          = []
+This.Grade.Column2.ControlSource = []
+This.Grade.Column3.ControlSource = []
+This.Grade.Column4.ControlSource = []
+Use In localVen
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pCnx, pcEscolha
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+LOCAL lcGrVen
+public pcChv, pcEDN
+
+pcChv = []
+pcEDN = TprMvCab.empdopnums
+lcEmp = TprMvCab.emps
+lcGrVen = TprMvCab.grvends
+
+thisform.pcEscolha = pcEscolha
+
+This.poDataMgr = pCnx
+
+
+SELECT codvends, SPACE(40) as desVends, nAtends from crSigmvate into cursor LocalVen readwrite
+SELECT localVen
+GO top
+
+SCAN
+	**** mena - 16/10/2017 - busca nome do vendedor ****
+	If (Thisform.Podatamgr.SqlExecute([Select rclis From SigCdCli where grupos = ']+lcGrVen+[' and iclis =']+localVen.codVends+['], [crAuxVen]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (sigMvAte)])
+		Return 0
+	Endif
+	SELECT localVen
+	replace desVends with crAuxVen.rclis in localVen
+ENDSCAN
+
+GO top
+This.Grade.RecordSource          = [localVen]
+This.Grade.Column2.ControlSource = [localVen.codVends]
+This.Grade.Column3.ControlSource = [localVen.desVends]
+This.Grade.Column4.ControlSource = [localVen.natends]
+
+This.Refresh
+
+ThisForm.Grade.AfterRowColChange()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+ThisForm.Grade.Refresh
+Select localVen
+Go Top In localVen
+ThisForm.Grade.Refresh
+
+SELECT crSigMvAte
+DELETE all for empdopnums = pcEDN
+
+Select localVen
+DELETE ALL for natends = 0
+GO top
+SCAN
+	lcIdChave = fUniqueIds()
+	INSERT into crSigmvAte (codvends, emps, empdopnums, natends, pkchaves) values;
+	(localven.codvends, TprMvCab.emps, TprMvCab.empdopnums, localven.natends, lcIdChave ) 
+ENDSCAN
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL lnReg, lcCodVen
+PRIVATE pcGrVen, pcCdVen, pcDsVen
+
+pcGrVen = TprMvCab.grvends
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, pcGrVen, 'C', This.Value, thisform.grade.column2.text1, thisform.grade.column3.text1,.t.)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		replace codvends with '' in localven
+		replace desvends with '' in localven
+		Return 0
+	EndIf
+Else
+	replace codvends with '' in localven
+	replace desvends with '' in localven
+EndIf
+
+SELECT localVen
+lnReg = RECNO()
+lcCodVen = codvends
+LOCATE for codvends = lcCodven and RECNO() <> lnReg
+IF FOUND()
+	=Messagebox('Vendedor já incluido!!!', 0+48, 'Aviso')
+	GO lnReg
+	RETURN .f.
+ENDIF
+GO lnReg
+RETURN .t.
+ 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL lnReg, lcCodVen
+PRIVATE pcGrVen, pcCdVen, pcDsVen
+
+*** mena - 16/10/2017 - incluida a busca por nome do vendedor ***
+pcGrVen = TprMvCab.grvends
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, pcGrVen, 'D', This.Value, thisform.grade.column2.text1, thisform.grade.column3.text1,.t.)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		replace codvends with '' in localven
+		replace desvends with '' in localven
+		Return 0
+	EndIf
+Else
+	replace codvends with '' in localven
+	replace desvends with '' in localven
+EndIf
+
+SELECT localVen
+lnReg = RECNO()
+lcCodVen = codvends
+LOCATE for codvends = lcCodven and RECNO() <> lnReg
+IF FOUND()
+	=Messagebox('Vendedor já incluido!!!', 0+48, 'Aviso')
+	GO lnReg
+	RETURN .f.
+ENDIF
+GO lnReg
+RETURN .t.
+
+&&this.Parent.Parent.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN EMPTY(localven.codvends)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.inserir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.LockScreen = .t.
+Select localVen
+Locate For codvends=' '
+If Eof()
+	Append Blank
+ENDIF
+Thisform.grade.column2.SetFocus
+replace localVen.codvends With []
+replace localVen.desvends With []
+replace localVen.natends With 0
+Thisform.grade.Refresh 
+thisform.grade.column2.SetFocus  
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVATE.excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select localVen
+If Eof() Or Bof()
+	Return
+EndIf
+ThisForm.LockScreen = .t.
+
+SELECT localVen
+Delete
+ThisForm.grade.Refresh
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVATE
+RESERVED3 (ClassInfo): podatamgr
+pcescolha
+*calcdesc 
+*calctots 
+*chkdesc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

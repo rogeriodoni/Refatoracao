@@ -277,64 +277,73 @@ function Validate-SelectColumns {
 
     $problemas = @()
 
-    # Extrair tabela(s) do FROM/JOIN com alias
-    # Pattern: FROM TableName alias | JOIN TableName alias
-    $aliasMap = @{}  # alias -> tablename_lower
+    # Um mesmo alias (ex.: "a") pode ser reaproveitado para tabelas DIFERENTES em
+    # segmentos diferentes de um UNION ALL (SELECT ... FROM X a ... UNION ALL
+    # SELECT ... FROM Y a ...). Resolver o alias->tabela na string INTEIRA
+    # contaminaria o segmento errado (Erro163_Aba1/17, Erro177 - SigMvSbnBO):
+    # o alias precisa ser resolvido POR SEGMENTO do UNION [ALL].
+    $segments = [regex]::Split($SQL, '(?i)\bUNION\s+(?:ALL\s+)?')
 
-    $fromPattern = '(?i)\bFROM\s+(\w+)\s+(\w+)'
-    $fromMatches = [regex]::Matches($SQL, $fromPattern)
-    foreach ($m in $fromMatches) {
-        $table = $m.Groups[1].Value
-        $alias = $m.Groups[2].Value
-        if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
-            $aliasMap[$alias.ToLower()] = $table.ToLower()
+    foreach ($segment in $segments) {
+        # Extrair tabela(s) do FROM/JOIN com alias
+        # Pattern: FROM TableName alias | JOIN TableName alias
+        $aliasMap = @{}  # alias -> tablename_lower
+
+        $fromPattern = '(?i)\bFROM\s+(\w+)\s+(\w+)'
+        $fromMatches = [regex]::Matches($segment, $fromPattern)
+        foreach ($m in $fromMatches) {
+            $table = $m.Groups[1].Value
+            $alias = $m.Groups[2].Value
+            if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
+                $aliasMap[$alias.ToLower()] = $table.ToLower()
+            }
         }
-    }
 
-    # JOIN TableName alias (LEFT JOIN, INNER JOIN, RIGHT JOIN, CROSS JOIN)
-    $joinPattern = '(?i)\bJOIN\s+(\w+)\s+(\w+)'
-    $joinMatches = [regex]::Matches($SQL, $joinPattern)
-    foreach ($m in $joinMatches) {
-        $table = $m.Groups[1].Value
-        $alias = $m.Groups[2].Value
-        if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
-            $aliasMap[$alias.ToLower()] = $table.ToLower()
+        # JOIN TableName alias (LEFT JOIN, INNER JOIN, RIGHT JOIN, CROSS JOIN)
+        $joinPattern = '(?i)\bJOIN\s+(\w+)\s+(\w+)'
+        $joinMatches = [regex]::Matches($segment, $joinPattern)
+        foreach ($m in $joinMatches) {
+            $table = $m.Groups[1].Value
+            $alias = $m.Groups[2].Value
+            if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
+                $aliasMap[$alias.ToLower()] = $table.ToLower()
+            }
         }
-    }
 
-    # FROM TableName sem alias (tabela direta)
-    $fromDirectPattern = '(?i)\bFROM\s+(\w+)\b(?!\s+\w+\s*(?:WHERE|SET|ORDER|JOIN|,))'
-    $fromDirectMatches = [regex]::Matches($SQL, $fromDirectPattern)
-    foreach ($m in $fromDirectMatches) {
-        $table = $m.Groups[1].Value.ToLower()
-        # Verificar se tabela existe no schema (file ou DB)
-        $directTableCols = Get-SchemaForTable -TableName $table -FileSchema $Schema
-        if ($directTableCols.Count -gt 0 -and -not $aliasMap.ContainsKey($table)) {
-            $aliasMap[$table] = $table
+        # FROM TableName sem alias (tabela direta)
+        $fromDirectPattern = '(?i)\bFROM\s+(\w+)\b(?!\s+\w+\s*(?:WHERE|SET|ORDER|JOIN|,))'
+        $fromDirectMatches = [regex]::Matches($segment, $fromDirectPattern)
+        foreach ($m in $fromDirectMatches) {
+            $table = $m.Groups[1].Value.ToLower()
+            # Verificar se tabela existe no schema (file ou DB)
+            $directTableCols = Get-SchemaForTable -TableName $table -FileSchema $Schema
+            if ($directTableCols.Count -gt 0 -and -not $aliasMap.ContainsKey($table)) {
+                $aliasMap[$table] = $table
+            }
         }
-    }
 
-    # Extrair colunas referenciadas: alias.coluna ou tabela.coluna
-    $colRefPattern = '(?i)\b(\w+)\.(\w+)\b'
-    $colMatches = [regex]::Matches($SQL, $colRefPattern)
+        # Extrair colunas referenciadas: alias.coluna ou tabela.coluna
+        $colRefPattern = '(?i)\b(\w+)\.(\w+)\b'
+        $colMatches = [regex]::Matches($segment, $colRefPattern)
 
-    foreach ($cm in $colMatches) {
-        $prefix = $cm.Groups[1].Value.ToLower()
-        $column = $cm.Groups[2].Value.ToLower()
+        foreach ($cm in $colMatches) {
+            $prefix = $cm.Groups[1].Value.ToLower()
+            $column = $cm.Groups[2].Value.ToLower()
 
-        # Ignorar prefixos conhecidos que nao sao alias de tabela
-        if ($prefix -in @('cursor_4c','dbo','loc','this','par','thisform','sys')) { continue }
-        # Ignorar propriedades VFP
-        if ($column -in @('value','caption','controlsource','enabled','visible','click','init')) { continue }
+            # Ignorar prefixos conhecidos que nao sao alias de tabela
+            if ($prefix -in @('cursor_4c','dbo','loc','this','par','thisform','sys')) { continue }
+            # Ignorar propriedades VFP
+            if ($column -in @('value','caption','controlsource','enabled','visible','click','init')) { continue }
 
-        # Verificar se o prefixo eh um alias mapeado a uma tabela
-        if ($aliasMap.ContainsKey($prefix)) {
-            $tableName = $aliasMap[$prefix]
-            $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+            # Verificar se o prefixo eh um alias mapeado a uma tabela NESTE segmento
+            if ($aliasMap.ContainsKey($prefix)) {
+                $tableName = $aliasMap[$prefix]
+                $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
 
-            if ($tableColumns.Count -gt 0) {
-                if (-not $tableColumns.ContainsKey($column)) {
-                    $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: Coluna '$column' NAO EXISTE na tabela '$tableName' (referenciada como $($cm.Groups[1].Value).$($cm.Groups[2].Value))"
+                if ($tableColumns.Count -gt 0) {
+                    if (-not $tableColumns.ContainsKey($column)) {
+                        $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: Coluna '$column' NAO EXISTE na tabela '$tableName' (referenciada como $($cm.Groups[1].Value).$($cm.Groups[2].Value))"
+                    }
                 }
             }
         }

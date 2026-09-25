@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleanup confirmed ÔÇö only `Formsigmvitn.prg` remains as the deliverable.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\Formsigmvitn.prg` (Fase 3/8 ÔÇö Estrutura Base) for the Caixa (SIGMVITN) operational form:
+
+- **`DEFINE CLASS Formsigmvitn AS FormBase`** with native properties copied from the legacy dump (Width=1300, Height=1400, modal WindowType=1, DataSession=2, etc.)
+- **This form does NOT use the generic PageFrame/Page1-Page2 CRUD pattern** ÔÇö the legacy SIGMVITN has no PageFrame at all; it's a single form with many toggled containers. I followed the task's explicit OPERACIONAL guidance over the generic phase template, since that's what actually matches the source (confirmed via `layout.json`/`mapeamento.json`).
+- **~86 legacy form-level state properties** transcribed 1:1 (this_ prefixed, type inferred from actual usage in `comportamento.json` where possible) so later phases (4-8) can bind directly without "Property not found" errors. Documented the deliberate omission of `podatamgr`/`pocalculator` (legacy DataManager/calculator objects ÔÇö replaced by direct `SQLEXEC(gnConnHandle,...)` in the BO per PILAR 3).
+- **Init()** ÔÇö accepts optional `par_oParentForm`/`par_nDataSes` (mirrors the `FormDCC.prg` precedent), disables the parent form while open.
+- **InicializarForm()** ÔÇö creates `sigmvitnBO`, builds the two genuinely structural pieces for this form: `lbl_4c_TxtCaption` (flat title bar) and empty `cnt_4c_Barra_Botoes` container (buttons come in Fase 4).
+- **TornarControlesVisiveis()** ÔÇö recursive helper with a skip-list for the legacy's floating containers (Cnt_Consulta, CntFinanc, Cnt_ChequepreTef, etc.) that must start hidden.
+- **Destroy()** ÔÇö re-enables the parent form, then `DODEFAULT()` for FormBase's cleanup.
+
+Caught and fixed one real bug during verification: `BackColor = 255,255,255` isn't valid as a class-level PEM default in VFP9 (only single literals allowed there) ÔÇö moved it to `THIS.BackColor = RGB(255,255,255)` in `Init()`.
+
+Verified with actual VFP9 (`vfp9.exe -c`): clean `COMPILE` (no `.err`), and a headless instantiation test (gnConnHandle=-1, gb_4c_ModoTeste) confirmed the form creates, the BO wires up (`Classe BO: Sigmvitnbo`), and both structural controls exist and render (`Visible=.T.`).

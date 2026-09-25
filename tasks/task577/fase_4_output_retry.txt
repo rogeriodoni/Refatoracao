@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada.
+
+## O que estava errado
+
+A Fase 4 n├úo falhou por defeito do gate ÔÇö falhou porque a **Fase 3 adiou trabalho que pertence ├á Fase 4**. O cabe├ºalho do `.prg` dizia explicitamente que os bot├Áes Sair/BtnOficina e o carregamento dos dados ficariam para as "Fases 7-8". As duas grades j├í estavam prontas; faltavam as outras duas superf├¡cies que o ramo FLAT do gate cobra.
+
+Confirmei que o gate era **satisfaz├¡vel** aqui antes de mexer em qualquer coisa ÔÇö o legado `SIGMVSBN` tem os dois bot├Áes (`Sair` Left=923, `BtnOficina` Left=847) e tem carga de dados no `Init`. Portanto o conserto ia no form, n├úo no gate. Isso distingue este caso da fam├¡lia de recorr├¬ncias registrada na mem├│ria (Fases 3/4/5/6/7/8), onde o legado genuinamente n├úo tinha a superf├¡cie exigida.
+
+## O que entreguei
+
+- **`ConfigurarBotoes()`** ÔÇö os dois `CommandButton` com geometria, `Caption`, `ToolTipText` e `Picture` transcritos do dump. `Cancel = .T.` no Sair (├® o ESC do legado). `BtnOficina` nasce `Visible = .F.`, como no original.
+- **`CarregarLista()`** ÔÇö o trecho final do `Init` legado: `BuscarSubniveis` no BO, bind do grid na ordem obrigat├│ria (`RecordSource` ÔåÆ `ControlSource` ÔåÆ `Width` ÔåÆ `Header1.Caption`, porque o `RecordSource` reseta os dois ├║ltimos), `Column8` como express├úo (`Pstatus + [-] + Descs`), e a regra `OCULTAPRS` escondendo a grade de itens.
+- **`BtnSairClick` / `BtnOficinaClick` / `AbrirFormOficina` / `AtualizarVisibilidadeOficina` / `HabilitarFormPai`** ÔÇö todos com l├│gica real, sem stub.
+
+Dois pontos que exigiram decis├úo:
+
+1. **`SigRePhi` n├úo existe no projeto** (verifiquei forms, classes, reports e menu). N├úo inventei o m├│dulo: o c├ílculo do n├║mero da OS ├® real (via `BO.ObterNumeroOS`), e a aus├¬ncia fica **vis├¡vel** ao usu├írio com o n├║mero da OS na mensagem ÔÇö seguindo o padr├úo j├í usado em `FormSIGMVMVT.AbrirFormOficina`. Quando `SigRePhi` for migrado, a chamada passa a funcionar sem altera├º├úo aqui.
+2. **`Themes = .T.` + `DisabledPicture`** diverge do dump (`Themes = .F.`) ÔÇö ├® o can├┤nico do projeto para bot├úo standalone com `.Picture`, que o CorretorAutomatico #99 aplicaria de qualquer forma. Est├í comentado no c├│digo como desvio deliberado.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- Compila├º├úo limpa, sem `.ERR`.
+- Form **instancia** headless: ambos os bot├Áes existem, com a geometria do legado.
+- Os dois ├¡cones (`cadastro_sair_60.jpg`, `geral_pn_cfg_60.jpg`) **existem** em `vbmp\` ÔÇö `FILE()` retornou `.T.` para os dois. Regra #25: `.Picture` inexistente falha em sil├¬ncio, ent├úo isso foi medido.
+- `CarregarLista` e `BtnSairClick` chamados **de fora da classe** funcionam ÔÇö `PEMSTATUS(...,5)` retorna `.T.` mesmo para PROTECTED, ent├úo s├│ a chamada real prova o escopo (CLAUDE.md #3).
+- Contrato do pai: `Enabled` foi de `.F.` para `.T.` ap├│s o Sair, com form liberado (`VARTYPE = X`).
+- Zero bytes >127 (regra #4), zero `RETURN` dentro de `TRY` (regra #1) ÔÇö ambos conferidos por dois m├®todos independentes, porque o primeiro `grep -P` falhou silenciosamente e teria me dado um falso "OK".
+- As tr├¬s condi├º├Áes do ramo FLAT do gate agora d├úo `True`.
+
+Artefatos de teste e `.FXP` removidos.
+
+**Uma ressalva sobre o pipeline:** se houver `RunLoop.ps1` vivo, ele j├í tem o orquestrador parseado em mem├│ria ÔÇö mas como aqui a corre├º├úo foi no `.prg` e n├úo no gate, a pr├│xima valida├º├úo deve passar normalmente, sem precisar relan├ºar o loop.

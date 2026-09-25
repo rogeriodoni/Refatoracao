@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced: 17 PROCEDURE/ENDPROC, 18 WITH/ENDWITH, 8 TRY/ENDTRY, 1 DEFINE CLASS/ENDDEFINE. Phase 4 is complete.
+
+## Summary
+
+Updated `C:\4c\projeto\app\forms\cadastros\Formsigmvdis.prg` for Fase 4/8:
+
+- **`ConfigurarPaginaLista()`**: added the 5 CRUD buttons to `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) at canonical positions, a new `cnt_4c_Saida` container with `cmd_4c_Encerrar` (per CLAUDE.md regra #10, which overrides the legacy layout), and `grd_4c_Lista` with canonical grid styling.
+- **`CarregarLista()`**: binds the grid to `cursor_4c_Dados` (populated by `sigmvdisBO.Buscar()`, which mirrors the legacy `SELECT DISTINCT codigos, datas FROM SigPrDis`), with headers set after `RecordSource` (regra #2/#32).
+- **`AlternarPagina()`**: switches between Page1/Page2, reloading the list on return to Page1.
+- **`FormatarGridLista()`** and **`HabilitarCampos()`**: generic helpers (the latter safely iterates Page2 controls, which don't exist yet ÔÇö later phases will populate them).
+- **Btn*Click handlers**: wired via `BINDEVENT` to the buttons, using the BO methods already built in earlier phases ÔÇö `NovoRegistro()`/`BuscarItensPorLote()`/`ExcluirPorCodigo()` ÔÇö since this form's grid lists *lotes* (batches) keyed by `codigos`, not the `cidchaves` PK.
+- **`InicializarForm()`**: now also propagates the caption to Page2's header and calls `CarregarLista()` guarded by `gb_4c_ValidandoUI`.
+
+Structural balance verified (PROCEDURE/ENDPROC, WITH/ENDWITH, TRY/ENDTRY, DEFINE CLASS/ENDDEFINE all match). Page2's data fields and the legacy's internal 3-page `Pageframe1` remain for later phases, as scoped.

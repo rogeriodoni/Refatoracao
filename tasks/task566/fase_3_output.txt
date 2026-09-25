@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 delivered: `C:\4c\projeto\app\forms\operacionais\FormSIGMVCTH.prg` created with the base structure for this OPERACIONAL form.
+
+Key design decisions (this form has no Lista/Dados PageFrame ÔÇö the legacy SCX is a single flat modal viewer with a grid + read-only detail fields, unlike CRUD forms):
+
+- `Width=1000, Height=590, Caption` transcribed exactly from the legacy SCX (with `CHR()` for accents).
+- `Init(par_cCPros, par_nCodigos)` replaces the legacy `Init(pCnx, pPro, pCod)` ÔÇö the connection param is dropped since the new architecture uses the global `gnConnHandle` instead of a passed-in connection object.
+- `InicializarForm()` creates `SIGMVCTHBO`, forwards the two params into the BO's `this_cCPros`/`this_nCodigos` properties, and calls `ConfigurarPageFrame()`.
+- `ConfigurarPageFrame()` currently only sets the background `Picture` (matching the legacy `new_background.jpg`) ÔÇö grid, "Retornar" button, and approval-detail fields are intentionally deferred to fases 4ÔÇô6 per the phase plan.
+- `TornarControlesVisiveis()` and `Destroy()` (closes `cursor_4c_HistPeds`, then `DODEFAULT()` per the menu-restore rule) round out the base scaffold.
+
+Next up is Fase 4 (grid + bot├úo Retornar).

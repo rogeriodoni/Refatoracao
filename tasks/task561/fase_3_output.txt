@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Estrutura base do formul├írio criada em `C:\4c\projeto\app\forms\cadastros\Formsigmvccr.prg`:
+
+- `DEFINE CLASS Formsigmvccr AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="Conta Corrente Geral") conforme layout.json
+- `Init()` apenas com `RETURN DODEFAULT()`
+- `InicializarForm()` que cria o `sigmvccrBO`, chama `ConfigurarPageFrame()` e propaga o Caption para os labels do cabe├ºalho nas duas p├íginas
+- `ConfigurarPageFrame()` com PageFrame `pgf_4c_Paginas` (Top=-29, Tabs=.F., 2 p├íginas)
+- `ConfigurarPaginaLista()` (Page1): cabe├ºalho cinza (cnt_4c_Cabecalho + labels) e container vazio `cnt_4c_Botoes` (posi├º├úo can├┤nica Left=542/Top=29/390x85)
+- `ConfigurarPaginaDados()` (Page2): mesmo cabe├ºalho (regra #11 do CLAUDE.md ÔÇö faixa nas duas p├íginas) e container vazio `cnt_4c_BotoesAcao` (posi├º├úo can├┤nica do Grupo_Salva)
+- `TornarControlesVisiveis()` recursivo e `Destroy()` com libera├º├úo do BO
+
+Grid, bot├Áes CRUD e campos de dados ficam para as Fases 4-6, conforme escopo desta fase.

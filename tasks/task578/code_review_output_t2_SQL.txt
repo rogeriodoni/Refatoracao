@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked the flagged `SQL-FILTRO-INVENTADO` against both files ÔÇö this is a **false positive**, same family as case #16/#19 already in memory for this exact file pair.
+
+The only `LITERA` matches in `SIGMVTI2BO.prg` and `FormSIGMVTI2.prg` are inside comment words like "transcri**├º├úo literal**", "**literais** formatados", "**LITERALMENTE**" ÔÇö never inside a SQL string. The actual WHERE clause is:
+
+```foxpro
+"WHERE a.Datas BETWEEN " + FormatarDataSQL(THIS.this_dDtI) + " AND " + FormatarDataSQL(THIS.this_dDtF) + " "
+```
+
+which uses `a.Datas` ÔÇö exactly the column the pass itself says the original uses. There is no `LITERA` column, filter, or reference anywhere in either file. Made no code changes, since "fixing" this would mean altering a WHERE clause that's already a faithful transcription of the legacy query.
+
+Updated the existing memory entry (`feedback_harness_de_auditoria_mede_errado.md`) with this as case #20, since it's the SQL-validation pass's comment-substring-matching bug recurring on the same file already flagged by a different tool (05d_validarCompletude) for the same root cause.

@@ -1,0 +1,21 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+Both grid-header fixes applied correctly; the remaining `"Total "` at line 2880 is a `Label.Caption`, not a grid header, so it's out of scope for this rule and untouched (visual property change is prohibited anyway).
+
+## Summary
+
+Audited all 23 reported findings against the actual code and legacy transcription comments already in the file. Only 2 were real:
+
+**Fixed:**
+- `[GRID-HEADER]` ÔÇö `grd_4c_GradeGrupo.Column2` and `grd_4c_GradeGrupo2.Column2` had `Header1.Caption = "Total "` (trailing space) instead of `"Total"` matching the legacy header list. Both corrected.
+
+**Not fixed ÔÇö confirmed false positives (verified against the code, not just the report):**
+- `[CONTAINER-VISIVEL]` ÔÇö `cnt_4c_Cabecalho` (both pages) already declares `.Visible = .T.` explicitly; nothing to filter. Known recurring auditor bug (per memory).
+- `[OPTIONGROUP-LEFT]` ÔÇö `opt_4c_Navegacao` already has `.Left` set on all 8 `Buttons(N)` (5/80/155/230/305/380/455/530).
+- `[GRID-SQLEXEC]` (├ù2) ÔÇö `AplicarResultadoBusca` already follows the canonical safe pattern (`USE IN cursor_4c_Dados` before each `SQLEXEC`, then `VincularGradeLista()` rebinds after). The "fix" the report suggests (temp cursor + `ZAP`/`APPEND FROM DBF`) is the exact anti-pattern that caused Erro138 ÔÇö applying it would have reintroduced that bug.
+- `[LAYOUT-POSITION]` (├ù17, 8 controls) ÔÇö every one compares the migrated control against a *different*, same-named legacy control living in another page/container (hidden `Lista` panels like `cntMensagem`/`CntAcabado`/`CntQtMin`, or a sibling tab). In each case the correctly-positioned counterpart already exists elsewhere in the file (e.g. `lbl_4c_LblProduto` exactly matches legacy `Label2`; `grd_4c_GradeGrupo` exactly matches legacy `GradeGRUPO`; `chk_4c_Fwoption1` exactly matches legacy `fwoption1` Top=308). Applying the suggested Top/Left would have corrupted already-correct transcriptions.
+
+Updated two memory files (`feedback_harness_de_auditoria_mede_errado.md`, `feedback_layout_position_colisao_nome_generico.md`) documenting this reincidence so future passes on this or similar forms don't re-flag the same false positives.

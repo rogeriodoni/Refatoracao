@@ -1,0 +1,4161 @@
+{
+  "resumo": {
+    "totalMetodos": 250,
+    "metodosComSQL": 82,
+    "metodosComValidacao": 149,
+    "totalQueries": 20,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Recno", "fLimpaTexto", "fChkCheques", "fTotalizarItn", "For Empty", "fDtoSQL", "fChkFeriado", "fDecriptografar", "fChecaAcesso", "fAcessoMovmto", "fLerSettings", "fConfigGeral", "fVerificarBarras", "fVerEst", "For nBarra1 = Val", "fAcessoContab", "fAcessoContas", "fChecarInativas", "fwBuscaExt", "From SigCdCli Where ]+Iif", "fwBuscaSel", "For Not IsEmpty", "From SigCdLpc Where ]+Iif", "fRetornaInt", "For Not Empty", "fLerFiscal", "for !Empty", "fGravarLog", "fValidarCPF", "fValidarCNPJ", "fChkDigitos", "fMensagemFixa", "for Valos > 0 and not Empty", "for !IsEmpty", "For ImpCupFis And Not Empty", "for ! Deleted", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "Lparameters oFormulario\n\nLocal llRetorno\n\nIf CrSigOpCdd.PafEcfs = 1 And Used('CrSigFiMpf') And InList(crSigFiFis.Imps,'BEMA8501','DARUMA','NSWEDA','EPSON')\n\tIf ! thisform.parentform.AtuaGt(0,.f.,.t.)\n\t\tReturn .f.\n\tEndIf\nEndif\n\nlcCliente = (TprMvCab.Contads)\n=ThisForm.PoDataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',lcCliente,[Cpfs,Rclis,paises,Endes,Nums,cidas,Estas,Rgs,Compls])\n\nlcCpf = ''\nlcNom = ''\nlcEnd = ''\nIf InList(crSigCdOpe.ImpClis,[S],[O]) && mena - 04/04/2014 para nao sair cnpj, de... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaGt,CursorQuery",
+        "controlesReferenciados": "Get_cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 137,
+      "codigoOriginal": "Lparameters vTipo,vnItem\n\nLocal LnCodBarra,lcDescr\n\nThisform.CaixaLivre.Visible = .F.\n\nIf Not vTipo\n\n\tlcDescr = crTpmMvItn.Dpros\n\tlcSql = [Select Cpros,Cbars,DescFis,DescEcfs From SigCdPro Where Cpros = ']+crTpmMvItn.Cpros+[']\n\t=Thisform.Podatamgr.SqlExecute(lcSql,'xPro')\n\n\tIf CrSigOpCdd.IdentPro = 1 And CrSigCdOpe.OpCrs <> 4\n\t\t_Memo = Set( 'Memo' )\n\t\tSet Memo To 40\n\t\tlcDescr = Padr(fLimpaTexto( Mline( xPro.DescFis, 1 ) ),40)\n\t\tSet Memo To _Memo\n\tElse\n\t\tIf Not IsEmpty( crTpmMvItn.CodBarras)\n\t\t\tL... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_totLiquido",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "ctotal=0\nSelect xPar\nScan\n\t=ThisForm.Parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',xPar.Fpags)\n\tcotacao = ThisForm.ParentForm.Cotacao( xpar.moefpgs )\n\tcotoper = 1\n\tIf crSigOpFp.Trocos = 1\n\t\tctotal = Round( ctotal - ( xpar.valos * xpar.cotfpgs / cotoper ), 2 )\n\tElse\n\t\tctotal = Round( ctotal + ( xpar.valos * xpar.cotfpgs / cotoper ), 2 )\n\tEndif\nEndscan\nWith Thisform.Cnt_Fpagto\n\tThisForm.CalculaDesconto()\n\t_Enc = 0\n\tlnvTot = ThisForm.AtuaTotal() + .Acrescimo.Get_TotVariação.Value -... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,Cotacao,CalculaDesconto,AtuaTotal",
+        "controlesReferenciados": "Get_TotVariação,Get_Tvariacao,Get_TotLiquido,Get_TotForma,Get_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local _Valos\n\n_valos   = TprMvCab.valinis + CrSigMvNfi.VlFretes + CrSigMvNfi.Vlseguros + CrSigMvNfi.DespAces\nReturn (_Valos)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 55,
+      "codigoOriginal": "Lparameters pSubNivel\n\nLocal ValDsc, lnReg\n\nWith ThisForm.Cnt_Fpagto\n\n\tIf CrSigOpCdd.Varps = 1\n\n\t\tSelect xPar\n\t\tSum ValDescs to ValDsc\n\t\tGo Bottom\n\n\t\t.Get_tvariacao.Value = ValDsc\n\t\tReplace ValVarPs With ValDsc * -1 in TprMvCab\n\n\t\tlnvVar = .Acrescimo.Get_TotVariação.Value - .Desconto.Get_TotVariação.Value - .Get_tvariacao.Value\n\t\t_Total = ThisForm.AtuaTotal()\n\t\t_Varia = IIf(_Total=0,0,Round( Abs(lnvVar) / _Total * 100, 4 ))\n\n\t\tIf lnvVar < 0\n\t\t\tReplace ValVars With -Abs(lnvVar) ,;\n\t\t\t\t\tVars    Wi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "AtuaTotal",
+        "controlesReferenciados": "Get_tvariacao,Get_TotVariação,Get_TotLiquido,Get_Saldo,Get_totforma",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=ThisForm.ParentForm.Calc_ValIte()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calc_ValIte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.Subtotac = .t.\noFormulario = Thisform.Parentform.oModemEest\nThisForm.Cnt_mensagem.Mensagem.Caption = 'Verificando Totalização...'\n_ValCupFis = VerSubt(oFormulario)\nThisForm.Cnt_mensagem.Mensagem.Caption = ' '\nIf _ValcupFis = TprMvCab.Valinis\n\tReturn .f.\nElse\n\tReturn .t.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "If Thisform.CntItem.Cnt_subtotal.Get_Valor.Value # 0\n\tThisForm.Cnt_mensagem.Mensagem.Caption = 'Imprimindo Itens...'\n\t\n\tIf Not Thisform.ItemFiscal()\n\t\tIf ThisForm.CancelCupom()\n\t\t\tThisform.mExcluiItem()\n\t\t\tThisForm.Total_item()\n\t\tElse\n\t\t\tSelect crTpmMvItn\n\t\t\tReplace ImpCupFis with .t.\n\t\t\tThisForm.AtuaCupom()\n\t\t\tThisForm.ParentForm.CancelaItem = .T.\n\t\t\tThisForm.Barra_Botoes.Apaga.Enabled = .T.\n\t\tEndif\n\tElse\n\t\tSelect crTpmMvItn\n\t\tReplace ImpCupFis with .t.\n\t\tThisForm.AtuaCupom()\n\t\tThisForm.ParentF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ItemFiscal,CancelCupom,mExcluiItem,Total_item,AtuaCupom,mLimpaCntItem,MontaTela",
+        "controlesReferenciados": "Get_Valor,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 86,
+      "codigoOriginal": "Local lnTenta, lcNocupom, lcNoCcf, lnNoCcf, lnNoCupom\n\noFormulario = Thisform.Parentform.oModemEest\n\nlnTenta = 2\nDO While lnTenta > 0\n\tlcNoCupom = ''\n\tlcNoCupom = LeituraNoCupom(oFormulario)\n\tIf type('lcNoCupom')='C' And Not Empty(lcNoCupom)\n\t\tDo Case\n\t\t\tCase  Inlist(crSigFiFis.Imps,'SWEDA','NSWEDA','BEMATECH','ELGIN','BEMA8501','DARUMA','S/IMPRESSORA','EPSON')\n\t\t\t\tlnNoCupom = val(lcNoCupom)\n\t\t\t\tIf InList(crSigFiFis.Imps,'BEMATECH','BEMA8501','EPSON') And crSigCdOpe.CupFis=3\n\t\t\t\t\tlnNoCupom = lnN... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 83,
+      "codigoOriginal": "If ! crSigFiMpF.Pertos\n\t=ThisForm.Podatamgr.cursorquery('SigCdEmp','CrTmpEmp','Cemps',_Empr,[Cidas,razsocs])\n\n\tfMensagemFixa( \"Posicione o cheque na impressora...\", 48, \"IMPRIME CHEQUE\", .F., .t., \"\\VBMP\\a_print4.bmp\" )\n\n\tlcCidade = fLimpaTexto(Alltrim( CrTmpEmp.Cidas ))\n\tlcFavo = Iif(CrSigFiMpf.Nominal,fLimpaTexto(Alltrim(CrTmpEmp.Razsocs)),'')\n\tldData = Iif(Gomonth(Date(),CrSigCdPac.MesVencs) < xPar.Vencs Or CrSigCdPac.MesVencs = 0,xPar.Vencs,Date())\n\n\tRetImpChe = ImpChe(xpar.Bancos,xpar.Valos... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "cursorquery,pImpcheque And !Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 102,
+      "codigoOriginal": "*** homologação paf - 09/2012 imprime e cancela item cancelado no DAV ***\nSELECT crTpmMvItn\nGO top\n\n=ThisForm.PoDataMgr.CursorQuery('SigExMvi','crTpmMvItne','empdopnums',crTpmMvItn.empdopnums,[*])\n\nImpVen=.T.\nSelect crTpmMvItnE\nGo Top\nDo While !eof() And ImpVen\n\tIf CrSigCdOpe.CupFis = 1 And crSigCdOpe.digitens = 1 And crSigFiFis.Imps <> 'BEMATECH'\n\t\tThisForm.SubTotac = .t.\n\tEndif\n\t=ThisForm.PoDataMgr.CursorQuery('SigCdPro','CrTmpPro','Cpros',crTpmMvItnE.cpros,[Cpros,Cbars,Icms,Cgrus,tptribs,SitT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "CursorQuery,Atuacupom",
+        "controlesReferenciados": "ChkEDesc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "Thisform.Leitor = .F.\nThisform.ReadComm.leitura()\nThisform.LeituraSerial=Thisform.readcomm.campo\n\nThisform.Cnt_fpagto.Cnt_Serial.get_bco.valid\nif Thisform.leitor\n\tif not empty(xpar.bancos)\n\t\tif not fChkCheques(xpar.bancos,xpar.agencias,xpar.contas,xpar.numeros,.f.,.t.,xpar.Dopes)\n\t\t\treplace bancos with '', agencias with '', contas with '', numeros with ''\n\t\t\tThisform.Cnt_fpagto.Cnt_Serial.get_bco.value = ''\n\t\t\tThisform.Cnt_fpagto.Cnt_Serial.get_age.value = ''\n\t\t\tThisform.Cnt_fpagto.Cnt_Serial.ge... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChkCheques",
+        "metodosFormChamados": "leitura",
+        "controlesReferenciados": "get_bco,ChkCheques(xpar,get_age,get_conta,get_num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 59,
+      "codigoOriginal": "If InList(crSigCdOpe.ImpClis,[O])\n\tcgc = ThisForm.Cnt_Identifica.Destino.Get_cpf.Value\n\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\tIf Empty(CGC)\n\t\tMessageBox('Obrigatório Informar uma Conta com CPF/CNPJ.',0+64,'')\n\t\tReturn .f.\n\tEndif\nEndif\n\nIf Not ThisForm.VerStatus()  &&Checar Status da Impressora\n\tThisForm.Barra_Botoes.Impfiscal.Visible = .T.\n\tReturn .f.\nEndif\n\nThisForm.ParentForm.Checkstat = .f.\n\n*** Tiago - 21/12/2010 - Comentado pq a função ainda não existe, mas não esque... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "VerStatus,SqlExecute,AbreCupom,Inicia=AbrirCupomNF",
+        "controlesReferenciados": "Get_cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local llRetorno\n\nIf CrSigCdOpe.CupFis = 1 And crSigCdOpe.digitens = 1 And crSigFiFis.Imps <> 'BEMATECH'\n\tThisForm.SubTotac = .t.\nEndif\n\nllRetorno = Thisform.ParentForm.ItemFiscal()\nReturn (llRetorno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ItemFiscal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "with Thisform.Cnt_fpagto.Cnt_ChequepreTef.cnt_chq\n\t.get_bco.value=space(3)\n\t.get_age.value=space(4)\n\t.get_agendc.value=space(1)\n\t.get_conta.value=space(10)\n\t.get_contadc.value=space(1)\n\t.get_num.value=space(6)\n\t.get_numdc.value=space(6)\n\t.get_Pca.Value = Space(34)\n\t.Refresh\nEndwith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_bco,get_age,get_agendc,get_conta,get_contadc,get_num,get_numdc,get_Pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lnRecNo\n\nSelect crTpmMvItn\n_cIt = cItens\nDelete\n\nThisform.CItem = Thisform.CItem - 1\nThisform.ParentForm.TotIte = fTotalizarItn(ThisForm.parentform.Podatamgr)\nThisform.cntItem.Get_Total.Value = Thisform.Parentform.TotIte\n\nSelect crTpmMvItnC\nIf Seek(Str(_cIt,4))\n\tDelete While cItens = _cIt\nEndIf\n\nThisform.GrdCupom.Refresh\n\nSelect crTpmMvItn\nGoto Bottom\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fTotalizarItn",
+        "metodosFormChamados": "TotIte = fTotalizarItn",
+        "controlesReferenciados": "Get_Total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "LcQuery = [Select a.Fpags, a.Descrs, a.MoeFpgs, a.Fparcs, 0 as Obrigs, a.cCupomNvs, a.Situas, a.nCodFinzs, ]+;\n\t\t  [a.nFpags, a.Trocos, a.Infos, a.Acumulas, a.libcsens, o.autos, a.ChkBins, a.BlqTabDs From SigOpFp a, SigOpFpo o ]+;\n\t\t  [Where a.Fpags = o.Fpags And a.nCodFinzs > 0 and o.dopes = ']+TprMvCab.Dopes+[']\nIf Thisform.Parentform.PoDataMgr.SqlExecute(lcQuery,'CrTmpFpag') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tOk = .f.\nEndIf\nSelect CrTmpFpag\n\nIf Reccount(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkBins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "LParameters plInsere\n\nIf plInsere\n\tSelect crTpmMvItn\n\tGo Top\n\tDelete For Empty(Cpros)\n\tIf Not Seek( Spac( 14 ), 'crTpmMvItn', 'Cpros' )\n\t\tSelect [ ] as Agrupar, Max(Citens) as Citens From crTpmMvItn Where cpros <> ' ' Into Cursor ItenEesti group by 1\n\t\tSelect ItenEesti\n\t\tGo top\n\t\tThisForm.Citem = Iif(ThisForm.UltimoCancel>itenEesti.cItens,ThisForm.UltimoCancel,itenEesti.cItens) + 1\n\t\tInsert Into crTpmMvItn(emps,dopes,numes,citens ) ;\n\t\t\tValue (TprMvCab.emps,TprMvCab.dopes,TprMvCab.numes, Thisfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "Citem = Iif",
+        "controlesReferenciados": "Get_Produto,Get_Qtds,Get_Valor,Get_UniVal,Get_ValDesc,Get_PValDesc,Get_ValAcre,Get_PValAcre",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 76,
+      "codigoOriginal": "lnTop = 102\nWith ThisForm.CntItem\n\tIf .Cnt_Desconto.Visible\n\t\t.Cnt_Desconto.Top = lnTop\n\t\tlnTop = .Cnt_Desconto.top + .Cnt_Desconto.Height + 2\n\tEndIf\n\tIf .Cnt_SubTotal.Visible\n\t\t.Cnt_SubTotal.Top = lnTop\n\t\tlnTop = .Cnt_SubTotal.Top + .Cnt_SubTotal.Height + 2\n\tEndIf\nEndWith\n\nWith ThisForm.Cnt_identifica\n\tThisForm.Barra_Botoes.identifica.Enabled = .f.\n\tlnTop = 41\n\t.CodOperacao.Visible  = InList(crSigCdOpe.Numeras,3,4) Or InList(CrSigCdOpe.PedClis,1,3)\n\n\t.TabDesconto.Get_listaPreco.Visible = (CrSig... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_listaPreco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 61,
+      "codigoOriginal": "Lparameters lNewFpg\n\nLocal Info, FPag\n\nFPag = xPar.FPags\n=ThisForm.parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',xPar.Fpags)\nInfo = crSigOpFp.Infos\n\nWith ThisForm.Cnt_fpagto\n\t.GetObs.Visible = ( crSigOpFp.Obs = 1 )\n\t.SayObs.Visible = ( crSigOpFp.Obs = 1 )\n\t.get_obs.Visible=.F.\n\t.say9.Visible=.F.\n\t*!*.Cnt_ChequepreTef.Visible = .f.\n\t.Cnt_ChequepreTef.cnt_chq.visible = .f.\n\n\tIf Not lNewFpg\n\n\t\tSelect xPar\n\t\tIf (CrSigOpFp.EmiVales = 3) Or (crSigCdOpe.DigObs = 1)\n\t\t\tWith .Get_Obs\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "get_obs,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local lnValor, lnValorUnitario, lnQtde, lnValorTotal\n\nWith Thisform.CntItem\n\tlnValor = .Cnt_Subtotal.Get_Valor.Value\n\tlnValorUnitario = .Cnt_Desconto.Get_UniVal.Value\n\tlnQtde = .Cnt_Produto.Get_Qtds.Value\n\tlnValorTotal = lnValorUnitario * lnQtde\nEndWith\n\nIf lnValor # lnValorTotal\n\tMessageBox('Valor Total Informado Está Incorreto.', 48, ;\n\t\t\t   'Quantidade x Valor Unitário # Valor Informado' )\n\tReturn( .F. )\nElse\n\tReturn( .T. )\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Valor,Get_UniVal,Get_Qtds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "Lparameters pTotaliza\n\nSelect crTpmMvItn\n_cit = crTpmMvItn.Citens\n=ThisForm.ParentForm.Calc_ValIte()\nThisform.ParentForm.TotIte = fTotalizarItn(ThisForm.parentform.Podatamgr)\nIf ptotaliza && PAF - Tiago - 11/03/2011 - Atualizava sempre o total\n\tThisform.CntItem.Get_Total.Value = Thisform.ParentForm.TotIte\nEndIf\nThisform.parentform.Atuatot()\nWith ThisForm.Mensagems\n\tSelect crTpmMvItn\n\tLocate for cItens = _cit\n\txTexto1 = ''\n\txTexto2 = ''\n\tIf not Empty(crTpmMvItn.Cpros)\n\t\txTexto1 = Padl(crTpmMvItn.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fTotalizarItn",
+        "metodosFormChamados": "Calc_ValIte,TotIte = fTotalizarItn,Atuatot",
+        "controlesReferenciados": "Get_Total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Valid",
+      "linhas": 52,
+      "codigoOriginal": "Lparameters pDataImp, pSeriFab\n\nIf ThisForm.ParentForm.Libera24hs\n\tReturn .t.\nEndif\n\nlcDtEcf = Ttoc(pDataImp)\npDiaAnt = ( Ttod(pDataImp) - 1 )\nlcHora  = Substr(lcDtEcf,12,2)\npDtMcr  = fDtoSQL(Date(),'23:55:00')\n\nIf ( Ttod(pDtMcr) = Ttod(pDataImp) And pDataImp > pDtMcr ) Or InList(lcHora,'00','01')\n\n\tlcSql = [Select Top 1 Serifab,dtredzs From SigFiRx Where SeriFab = ']+pSeriFab+[' Order by DtRedZs Desc ]\n\tIf ThisForm.PoDataMgr.SqlExecute(lcSql,'LocalRelx') < 1\n\t\tMessageBox('Favor reinicializar o ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Valid",
+      "linhas": 51,
+      "codigoOriginal": "Lparameters pSta, pCnx\nLocal lcRet, llFec, ldDat, lnErr, lcQry\nlcRet = []\nllFec = .f.\nIf (Type([pSta])=[C]) And Not Empty(pSta) \n\tldDat = pCnx.GetDatetime()\n\tlnDia = Dow(ldDat)\n\tlnErr = pCnx.SqlExecute([Select * From SigCdSts Where Cods = '] + Padr(pSta, 3) + ['], [crAr1])\n\tIf (lnErr < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!! Falha na Conexão (ValidaCertificado)], 0+16, [Erro!!! ])\n\t\tReturn []\n\tElse\n\t\tGo Top In crAr1\n\t\tIf Not Eof([crAr1])\n\t\t\tlcStr = crAr1.ddVals\n\t\t\tIf (Substr(lcStr, l... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkFeriado(pCnx",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "Local llOK, llError1, lcOnError1\n\nIf ThisForm.Subtotac And Not InList(crSigFiFis.Imps,'S/IMPRESSORA')\n\tClear Typeahead\n\tKeyboard '{BACKSPACE}' \n\tm.llError1 = .f.\n\tm.lcOnError1 = On('Error')\n\tOn Error m.llError1 = .t.\n\tllOk = Inkey(.5, 'MH')\n\tOn Error &lcOnError1.\n\tIf ThisForm.CancelCupom()\n\t\tllOk = 7\n\t\tDO While llOk = 7\n\t\t\tllOk = MessageBox('O Total do Cupom não Confere Com Total de Itens do Sistema. '+Chr(13)+;\n\t\t\t\t\t\t'Por Favor Tente outra Vez ou Cancele o Cupom!!!'+Chr(13)+;\n\t\t\t\t\t\t'Aperte SIM ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Subtotac And Not InList,CancelCupom",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 190,
+      "codigoOriginal": "Local llRet\n\nlcCaption = Thisform.cnt_mensagem.menSAGEM.Caption\n\nlcNoCaixa  = ''\nlcNoInterv = ''\n\noFormulario = Thisform.Parentform.oModemEest\nllRet = .f.\n\nIf CrSigCdOpe.CupFis = 1 And Not ThisForm.Parentform.CheckStat\n\tllRet = .t.\nElse\n\tThisform.cnt_mensagem.menSAGEM.Caption = 'Verificando status!!!'\n\tDO Case\n\t\tCase InList(crSigFiFis.Imps,'BEMATECH','BEMA8501','EPSON')\n\t\t\tVerStatus = RotStatus(' ',oFormulario)\n\t\t\tIf Type('VerStatus')<>'L' And Not Empty(VerStatus)\n\t\t\t\tllRet = .t.\n\t\t\tEndIf\n\t\t\n\t\tC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDecriptografar",
+        "metodosFormChamados": "SqlExecute,TemAutentica =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Init",
+      "linhas": 402,
+      "codigoOriginal": "LParameters pForm, pnDatSes\n\nLocal lnLeft, llOk, lnDeslocTop\nPublic _OldCodG\n\n_oldCodG = 0\nSet DataSession to pnDatSes\npForm.Enabled = .F.\n\nSelect crSigFiFis\nGoto Top\nIf CrSigFiFis.Imps = 'S/IMPRESSORA'\n\tThisform.CaixaLivre.CaixaLivre.Caption = 'CAIXA LIVRE'\n\tThisform.CaixaLivre.CaixaLivre2.Caption = Thisform.CaixaLivre.CaixaLivre.Caption\nEndIf\n\nWith Thisform\n\t.Top = 0\n\t.Left = 0\n\t.Enabled = .t.\n\t.OldCodigo = 0\n\t.Inicia = .f.\n\t.ParentForm = pForm\n\t.Op_Escolha = pForm.pcEscolha\n\t.nControle = 0\n\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fAcessoMovmto,fLerSettings",
+        "metodosFormChamados": "Cursorquery,SqlExecute,AddItem",
+        "controlesReferenciados": "get_pca",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "KeyPress",
+      "linhas": 130,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nLoBotoes = ThisForm.Barra_Botoes\nlcItem = ThisForm.CntItem.Cnt_Produto.Get_Produto.Value\n\nIf Not ThisForm.Cnt_fpagto.Cnt_ChequepreTef.Visible And Not ThisForm.CancelaItem.Visible\n\tDo Case\n\t\tCase nKeyCode = -2 And ThisForm.Cnt_pendencia.Visible And ThisForm.Cnt_Pendencia.Bot_Pendentes.Enabled && F3\n\t\t\tNoDefault\n\t\t\tThisForm.Cnt_pendencia.Bot_Pendentes.Click()\n\n\t\tCase nKeyCode = -2 And ThisForm.Cnt_Credito.Visible And ThisForm.Cnt_Credito.Bot_Pendentes.Enabled &... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click,lAlteraqtd And Empty",
+        "controlesReferenciados": "Get_Produto,Get_valinic",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "* executa os parâmetros Set iniciais\n=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta",
+      "evento": "LostFocus",
+      "linhas": 28,
+      "codigoOriginal": "With ThisForm.Cnt_Consulta\n\t.Cnt_Produto.Get_Produto.Value = ' '\n\t.Cnt_Produto.Get_Produto.Visible = .f.\n\t.Cnt_Resultado.Mensage1.Visible = .f.\n\t.Cnt_Resultado.Mensage2.Visible = .f.\n\t.Cnt_Resultado.Visible = .f.\n\t.Cnt_Produto.visible = .f.\n\t.Get_Unit.Visible = .f.\nEndWith\n\t\nlcSql = [Select Logos From SigCdPac ]\nIf Thisform.ParentForm.Podatamgr.SqlExecute(lcSql,'TmpLogo') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn 0\nEndif\nlcArquivo3 = Sys(2023)+'\\'+Alltrim(S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Produto,Get_Unit",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Cnt_Produto.Get_Produto",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Set Confirm Off\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Cnt_Produto.Get_Produto",
+      "evento": "Valid",
+      "linhas": 211,
+      "codigoOriginal": "Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe,;\n\t\tfcusto,fvenda,llProducao, lcArquivo3, lnFator\n\nIf !Empty(This.Value)\n\tGo Top in CrSigCdPam\n\toper   = CrSigCdOpe.Opers\n\tprecop = CrSigCdOpe.PrecoPs\n\t\n\tSelect * From crTpmMvItn Where 0=1 Into Cursor crTpmMvItnPro ReadWrite\n\n\tSelect crTpmMvItnPro\n\tAppend Blank\n\n\tSNumero = fVerificarBarras( This.Value )\n\n\tIf snumero\n\t\tck=.t.\n\t\tSet decimals to 0\n\t\tlcSql = [Select cBars,Contas,Empos,Cpros,Qtds,Pesos,codCors,codTams From SigOpEtq... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificarBarras",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Command1",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "With ThisForm.Cnt_Consulta\n\t.Cnt_Produto.Get_Produto.Value = ' '\n\t.Cnt_Produto.Get_Produto.Visible = .f.\n\t.Cnt_Resultado.Mensage1.Visible = .f.\n\t.Cnt_Resultado.Mensage2.Visible = .f.\n\t.Cnt_Resultado.Visible = .f.\n\t.Cnt_Produto.visible = .f.\n\t.Get_Unit.Visible = .f.\nEndWith\n\nlcSql = [Select Logos From SigCdPac ]\nIf Thisform.ParentForm.Podatamgr.SqlExecute(lcSql,'TmpLogo') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn 0\nEndif\nlcArquivo3 = Sys(2023)+'\\'+Alltrim(Sy... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Produto,Get_Unit",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Get_Unit",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Proximo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Cnt_Consulta.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'\nThisForm.Cnt_Consulta.Proximo.Refresh\nThisForm.Cnt_Consulta.Cnt_Produto.Get_Produto.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Proximo",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Cnt_Consulta.Proximo.Picture ='\\VBMP\\B_ARROW4.BMP'\nThisForm.Cnt_Consulta.Cnt_Produto.Get_Produto.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Consulta.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Cnt_Consulta.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Get_total",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return(.f.)\n\t\t\t\n\t\t\t\n\t\t\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Produto",
+      "evento": "LostFocus",
+      "linhas": 8,
+      "codigoOriginal": "Set Confirm Off\nIf Not Empty(This.Value)\n\tThisForm.lalteraqtd = .f.\nEndif\nIf Empty(This.Value) And Lastkey() = 13\n\tThisForm.CntItem.proximo.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Produto",
+      "evento": "Valid",
+      "linhas": 531,
+      "codigoOriginal": "Local lcod,lfan,codcor,xobj,oper,precop,cuni,moec,moev,pcus,pven,cmoe,;\n\t\tfcusto,fvenda,llProducao, lcArquivo3, lnFator\n\nDeclare laCampo(2,2)\nIf !Empty(This.Value)\n\tGo Top in CrSigCdPam\n\toper   = CrSigCdOpe.Opers\n\tprecop = CrSigCdOpe.PrecoPs\n\tcpro   = ''\n\tdpro   = ''\n\tpeso   = 0\n\tqtd    = 0 \n\n\tIf Thisform.CntItem.cnt_produto.Get_Qtds.Value = 0\n\t\tThisform.CntItem.cnt_produto.Get_qtds.Value = 1\n\t\tThisForm.Preencheu = .t.\n\tEndIf\n\tqtd = Thisform.CntItem.cnt_produto.Get_qtds.Value\n\tThisform.CntItem.c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificarBarras",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "Get_Qtds,Get_Valor,Get_UniVal,Get_ValDesc,Get_PValDesc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Produto",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Local lRetorno\nThisForm.Preencheu = .f.\nThisform.AntCPro = crTpmMvItn.Cpros\nThisform.AntValu = crTpmMvItn.Units\nThisForm.CntItem.Cnt_produto.cmdenviaprod.Visible = .f.\nSet Confirm on\nThisform.Barra_Botoes.Altpreço.Visible = .f.\nlRetorno = ( InList( ThisForm.Op_Escolha, 'INSERIR', 'ALTERAR' ) And Empty( This.Value ) )\n\t\t\nReturn (lRetorno)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Qtds",
+      "evento": "LostFocus",
+      "linhas": 31,
+      "codigoOriginal": "Local llCntrlFrom\n\nIf This.Value <= 0\n\tIf Not Empty(Thisform.CntItem.cnt_produto.Get_Produto.Value)\n\t\tMessagebox('Quantidade Inválida !!',0+48,'')\n\tEndif\n\tThisform.mExcluiItem()\n\tThisform.mLimpaCntItem( .T. )\n\tThisform.CntItem.cnt_produto.Get_Produto.SetFocus\nElse\n\tIf ThisForm.lAlteraqtd\n\t\tThisForm.CntItem.Cnt_produto.Get_Produto.SetFocus\n\tElse\n\t\tIf CrSigCdOpe.EFators # 1 And CrSigCdOpe.EPrecos # 1 And CrSigCdOpe.EPesos # 1 And CrSigCdOpe.chkDVal # 1\n\t\t\tllCntrlFrom = This.Value > 0 And Thisform.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mExcluiItem,mLimpaCntItem,Visible =",
+        "controlesReferenciados": "Get_Produto,chkDVal,Get_Valor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Qtds",
+      "evento": "Valid",
+      "linhas": 116,
+      "codigoOriginal": "Local RecN, Ord, Totite, Cotacao, Cotcv, ValAU, _SubNiv, CPro\n\nIf Lastkey() <> 13\n\tReturn .f.\nEndif\n\nIf ( CrSigCdOpe.OpCrs = 4 ) And Mod(This.Value, 1) # 0\n\tMessageBox('Essa Operação Somente Permite Quantidade Inteira.', 48, 'Quantidade Incorreta')\n\tThis.Value = Thisform.AntQtd\n\tReturn 0\nEndIf\n\nIf This.Value > 0 And Not ThisForm.lAlteraqtd\n\tSelect crTpmMvItn\n\t_cIt = crTpmMvItn.citens\n\tIf ( CrSigCdOpe.EPesos # 1 ) And crTpmMvItn.EtiEsps And CrSigCdOpe.OpCrs # 4 And Not InList(CrSigOpCdc.AltEtiqs,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fVerEst,fTotalizarItn",
+        "metodosFormChamados": "SqlExecute,Total_Item,podatamgr,,TotIte = fTotalizarItn,ItemFiscal,Cancelcupom,mExcluiItem,Atuacupom,mLimpaCntItem",
+        "controlesReferenciados": "Get_Total,Get_Valor,chkDVal",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.Get_Qtds",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "Local llOk\nThisform.AntQtd = This.Value\nThisform.AntQtd = Iif(ThisForm.Preencheu,0,This.Value)\n\nClear Typeahead\nllOk = ( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ( ThisForm.lalteraqtd Or (Not crTpmMvItn.EtiEsps And Not Empty(crTpmMvItn.cpros)) Or ;\n\t\tCrSigCdOpe.Opcrs = 4 Or InList(CrSigOpCdc.AltEtiqs,3,4)) )\nIf llOk\n\tKeyboard Chr(24)\nEndif\nReturn ( llOk )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntQtd = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.CmdEnviaProd",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.CmdEnviaProd()\nThis.Visible = .f.\nThisForm.CntItem.Cnt_produto.Get_Produto.Setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CmdEnviaProd",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.CmdEnviaProd",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n_Ok=LASTKEY()\nIF _Ok # 13 AND _Ok # -4 AND _Ok # 19\n\tNODEFAULT\n\tMessageBox('Tecla Invalida!!!', 48, '')\n\tThisForm.cntItem.cnt_Produto.cmdenviaprod.SetFocus\t\nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Produto.CmdEnviaProd",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "If This.Visible\n\tThisform.Barra_Botoes.Altpreço.Visible = (ThisForm.lAlteraPreco)\nEndif\nThisForm.lAlteraQtd = .f.\nReturn( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tThisform.lAlteraPreco And This.Visible )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Subtotal.Get_valor",
+      "evento": "LostFocus",
+      "linhas": 68,
+      "codigoOriginal": "If InList( Thisform.op_escolha, 'INSERIR', 'ALTERAR' ) And This.Value > 0\n\tWith Thisform.CntItem\n\t\t.Cnt_desconto.Get_ValDesc.Value  = Iif( .Cnt_Desconto.Get_Unival.Value > .cnt_subtotal.Get_Valor.Value, .Cnt_Desconto.Get_Unival.Value - .Cnt_SubTotal.Get_Valor.Value, 0 )\n\t\t.Cnt_desconto.Get_PValDesc.Value = iif( .Cnt_Desconto.Get_Unival.Value = 0 Or .Cnt_Desconto.Get_Unival.Value <= .cnt_subtotal.Get_Valor.Value , 0, (( .Cnt_Desconto.Get_Unival.Value - .Cnt_subtotal.Get_Valor.Value ) / .Cnt_Desco... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fTotalizarItn",
+        "metodosFormChamados": "Total_Item,TotIte = fTotalizarItn,ItemFiscal,Cancelcupom,mExcluiItem,AtuaCupom,mLimpaCntItem,MontaTela",
+        "controlesReferenciados": "Get_ValDesc,Get_Unival,Get_Valor,Get_PValDesc,Get_ValAcre,Get_PValAcre,chkDVal,Get_Total,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Subtotal.Get_valor",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lnValorTotal, lnValorUnitario\n\nIF ThisForm.lAlteraValor And Not ThisForm.ParentForm.Chklimite(This.Value,Thisform.nAntValor,0,0,.t.)\t&& mena 22/03/2016 - trocada a ordem dos parametros\n\tSelect crTpmMvItn\n\tThis.value = Thisform.nAntValor\n\tRETURN 0\nEndIf\nSelect crTpmMvItn\nIf CrSigCdPam.LimValIts > 0 And This.Value > crSigCdPam.LimValIts\n\tMessageBox('Valor Informado > Que Valor Limite por Item!!!',0+48,'')\n\tThis.Value = 0\n\tThis.Refresh\n\tReturn 0\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chklimite(This",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Subtotal.Get_valor",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Thisform.nAntValor = This.Value\n\nReturn( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' ) And ;\n\t\tNot Empty(Thisform.CntItem.Cnt_Produto.Get_Qtds.Value) And ;\n\t\t( Thisform.lAlteraValor Or CrSigCdOpe.EPrecos = 1 Or ( CrSigCdOpe.Eprecos # 1 And ;\n\t\t  CrSigCdOpe.chkDVal = 1 And Thisform.CntItem.Cnt_Desconto.Get_UniVal.Value = 0 ) ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Qtds,Get_UniVal,chkDVal",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_valdesc",
+      "evento": "LostFocus",
+      "linhas": 101,
+      "codigoOriginal": "Local llOk, Rec\n\nllOk = .t.\n\nIf !(InList(crSigFiFis.Imps,'DATAREGIS','NDATAREGIS') And CrSigCdOpe.ChkEDesc = 1 And CrSigCdOpe.chkDVal = 1)\n\tIf InList( Thisform.op_escolha, 'INSERIR', 'ALTERAR' ) And This.Value => 0 And This.Value < Thisform.CntItem.Cnt_Desconto.Get_Unival.Value \n\t\tWith Thisform.CntItem.cnt_subtotal.Get_valor\n\t\t\t.Value = Thisform.CntItem.Cnt_Desconto.Get_Unival.Value - This.Value\n\t\t\t.Refresh\n\t\t\tReplace crTpmMvItn.Units With .Value in crTpmMvItn\n\t\tEndWith\n\t\tIF CrSigCdOpe.ChkEDesc ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fTotalizarItn",
+        "metodosFormChamados": "Total_Item,TotIte = fTotalizarItn,ItemFiscal,Cancelcupom,mExcluiItem,AtuaCupom,mLimpaCntItem",
+        "controlesReferenciados": "ChkEDesc,chkDVal,Get_Unival,Get_valor,Get_pvaldesc,Get_Total,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_valdesc",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If Lastkey() <> 13\n\tReturn .f.\nEndif\nIf This.Value < 0\n\tThis.Value = 0\n\tReturn 0\nEndif\nIf This.Value > 0 And This.Value # ThisForm.AntValue\n\tnAntValor = Thisform.CntItem.Cnt_Desconto.Get_Unival.Value - This.Value\n\tIF Not ThisForm.ParentForm.Chklimite(crTpmMvItn.Units,nAntValor,0,0,.t.) \t&& mena - 22/03/2016 foi trocada a ordem dos parametros\n\t\tSelect crTpmMvItn\n\t\tThis.value = 0\n\t\tRETURN 0\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Chklimite",
+        "controlesReferenciados": "Get_Unival,Chklimite(crTpmMvItn",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_valdesc",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "Local llOk\nThisForm.AntValue = This.Value\nllOk = ( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR') And Not Thisform.lAlteraValor And ;\n\t\tNot Empty( Thisform.CntItem.cnt_produto.Get_qtds.Value ) And ;\n\t\tCrSigCdOpe.ChkDVal = 1 And CrSigCdOpe.OpCrs # 4 And ;\n\t\tEmpty(This.parent.Get_ValAcre.Value) )\nIf llOk\n\tKeyboard Chr(24)\nEndif\nReturn llOk\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_qtds,ChkDVal,Get_ValAcre",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_pvaldesc",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Barra_Botoes.Altpreço.Visible = .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_pvaldesc",
+      "evento": "Valid",
+      "linhas": 53,
+      "codigoOriginal": "Local lnValor\nlnKey = Lastkey()\nIf Not ( lnKey = 13 Or lnKey = -2 Or lnKey = -4 )\n\tReturn .f.\nEndif\nIf This.Value < 0 && PAF - Tiago - 15/03/2011 - Não pode ter valor negativo\n\tThis.Value = 0\n\tReturn .F.\nEndIf\n\nIf !(InList(crSigFiFis.Imps,'DATAREGIS','NDATAREGIS') And CrSigCdOpe.ChkEDesc = 1 And CrSigCdOpe.chkDVal = 1)\n\tIf Thisform.CntItem.Cnt_Desconto.Get_Unival.Value > 0\n\t\tIf This.Value > 0\n\t\t\tlnValor = Round((Thisform.CntItem.Cnt_Desconto.Get_Unival.Value * This.Value) /100,2 )\n\t\t\tnAntValor =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Chklimite",
+        "controlesReferenciados": "ChkEDesc,chkDVal,Get_Unival,Chklimite(crTpmMvItn,Get_valdesc,Get_valor",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_pvaldesc",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Thisform.Barra_Botoes.Altpreço.Visible = (ThisForm.lAlteraPreco)\nllOk = ( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' ) And Not Thisform.lAlteraValor And ;\n\t\tNot Empty( Thisform.CntItem.cnt_produto.Get_qtds.Value) And ;\n\t\tCrSigCdOpe.ChkDVal = 1 And CrSigCdOpe.OpCrs # 4  And ;\n\t\tEmpty(This.parent.Get_ValAcre.Value) )\nIf llOk\n\tKeyboard Chr(24)\nEndif\nReturn llOk\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =",
+        "controlesReferenciados": "Get_qtds,ChkDVal,Get_ValAcre",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_unival",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_ValAcre",
+      "evento": "LostFocus",
+      "linhas": 94,
+      "codigoOriginal": "Local llOk, Rec\n\nllOk = .t.\n\nWith ThisForm.CntItem.Cnt_Desconto\n\tIf !(InList(crSigFiFis.Imps,'DATAREGIS','NDATAREGIS') And CrSigCdOpe.ChkEDesc = 1 And CrSigCdOpe.chkDVal = 1)\n\t\tIf This.Value => 0 And This.Value < .Get_Unival.Value \n\t\t\tWith Thisform.CntItem.cnt_subtotal.Get_valor\n\t\t\t\t.Value = ThisForm.CntItem.Cnt_Desconto.Get_Unival.Value + This.Value\n\t\t\t\t.Refresh\n\t\t\t\tReplace crTpmMvItn.Units With .Value in crTpmMvItn\n\t\t\tEndWith\n\t\t\tWith .Get_pvalAcre\n\t\t\t\t.Value = iif(ThisForm.CntItem.Cnt_Desconto... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fTotalizarItn",
+        "metodosFormChamados": "Total_Item,TotIte = fTotalizarItn,ItemFiscal,Cancelcupom,mExcluiItem,AtuaCupom,mLimpaCntItem",
+        "controlesReferenciados": "ChkEDesc,chkDVal,Get_Unival,Get_valor,Get_pvalAcre,Get_Total,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_ValAcre",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If Lastkey() <> 13\n\tReturn .f.\nEndif\nIf This.Value < 0\n\tThis.Value = 0\n\tReturn 0\nEndif\nIf This.Value > 0 And This.Value # ThisForm.AntValue\n\tnAntValor = Thisform.CntItem.Cnt_Desconto.Get_Unival.Value + This.Value\n\tIF Not ThisForm.ParentForm.Chklimite(crTpmMvItn.Units,nAntValor,0,0,.t.)\t&& mena - 22/03/2016 - foi trocada a ordem dos parametros\n\t\tSelect crTpmMvItn\n\t\tThis.value = 0\n\t\tRETURN 0\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Chklimite",
+        "controlesReferenciados": "Get_Unival,Chklimite(crTpmMvItn",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.Get_ValAcre",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "Local llOk\nThisForm.AntValue = This.Value\nllOk = ( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR') And Not Thisform.lAlteraValor And ;\n\t\tNot Empty( Thisform.CntItem.cnt_produto.Get_qtds.Value ) And ;\n\t\tCrSigCdOpe.ChkDVal = 1 And CrSigCdOpe.OpCrs # 4 And ;\n\t\tEmpty(This.parent.Get_ValDesc.Value) )\n\nIf llOk\n\tKeyboard Chr(24)\nEndif\nReturn llOk\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_qtds,ChkDVal,Get_ValDesc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.get_pValAcre",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Barra_Botoes.Altpreço.Visible = .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.get_pValAcre",
+      "evento": "Valid",
+      "linhas": 53,
+      "codigoOriginal": "Local lnValor\nlnKey = Lastkey()\nIf Not ( lnKey = 13 Or lnKey = -2 Or lnKey = -4 )\n\tReturn .f.\nEndif\nIf This.Value < 0 && PAF - Tiago - 15/03/2011 - Não pode ter valor negativo\n\tThis.Value = 0\n\tReturn .F.\nEndIf\n\nIf !(InList(crSigFiFis.Imps,'DATAREGIS','NDATAREGIS') And CrSigCdOpe.ChkEDesc = 1 And CrSigCdOpe.chkDVal = 1)\n\tIf Thisform.CntItem.Cnt_Desconto.Get_Unival.Value > 0\n\t\tIf This.Value > 0\n\t\t\tlnValor = Round((Thisform.CntItem.Cnt_Desconto.Get_Unival.Value * This.Value) /100,2 )\n\t\t\tnAntValor =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Chklimite",
+        "controlesReferenciados": "ChkEDesc,chkDVal,Get_Unival,Chklimite(crTpmMvItn,Get_valAcre,Get_valor",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Cnt_Desconto.get_pValAcre",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Thisform.Barra_Botoes.Altpreço.Visible = (ThisForm.lAlteraPreco)\nllOk = ( InList( Thisform.Op_Escolha, 'INSERIR', 'ALTERAR' ) And Not Thisform.lAlteraValor And ;\n\t\tNot Empty( Thisform.CntItem.cnt_produto.Get_qtds.Value) And ;\n\t\tCrSigCdOpe.ChkDVal = 1 And CrSigCdOpe.OpCrs # 4 And ;\n\t\tEmpty(This.parent.Get_ValDesc.Value) )\nIf llOk\n\tKeyboard Chr(24)\nEndif\nReturn llOk\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =",
+        "controlesReferenciados": "Get_qtds,ChkDVal,Get_ValDesc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Proximo",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.CntItem.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'\nThisForm.CntItem.Proximo.Refresh\nIf ThisForm.CntItem.Cnt_Produto.Get_Produto.Enabled\n\tThisForm.TotChamada = 0\n\tThisForm.Barra_Botoes.Pagto.SetFocus\n\tThisForm.Barra_Botoes.pagto.Click()\nElse\n\tThis.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Proximo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CntItem.Proximo.Picture ='\\VBMP\\B_ARROW4.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntItem.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CntItem.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.Excluir",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpBarFin\nDelete\nGo Top\nThisForm.parentForm.Atuatot()\nThisForm.CntFinanc.Get_total.Refresh()\nThisForm.CntFinanc.Cnt_GrdBarra.Grade.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Atuatot,Refresh",
+        "controlesReferenciados": "Get_total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.ok",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.CntFinanc.Cnt_Barras.Get_Barra_1.SetFocus()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Barra_1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.Inserir",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.CntFinanc.cnt_GrdBarra.Grade.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column1.Text1",
+      "evento": "Destroy",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column2.Text1",
+      "evento": "Destroy",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column3.Text1",
+      "evento": "Destroy",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column4.Text1",
+      "evento": "Destroy",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(This.Value) And Lastkey() = 13\n\tThisForm.CntFinanc.Proximo.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlcCodigo = Left(This.Value,16)\n\tlcCodigo = lcCodigo + CalcDv(lcCodigo)\n\tlcCodigo = lcCodigo + CalcDv(lcCodigo)\n\n\tIf Not lcCodigo = Alltrim(This.Value)\n\t\tMessageBox('Barra Inválido !!!', 16, [])\n\t\tReturn(.F.)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_2",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.CntFinanc.Cnt_Barras.Get_Barra_1.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Barra_1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_2",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "If Not Empty(This.Value)\n\n\tlcBarraA = Alltrim(This.parent.Get_Barra_1.Value)\n\tlnParcA  = Val(Substr(lcBarraA,9,2))\n\tlcCodigo = Left(This.Value,16)\n\tlcCodigo = lcCodigo + CalcDv(lcBarraA + lcCodigo)\n\tlcCodigo = lcCodigo + CalcDv(lcBarraA + lcCodigo)\n\n\tlnEmp  = Val(Left(lcBarraA,3))\n\tlnDop  = Val(Substr(lcBarraA,4,5))\n\tlnNum  = Val(Substr(lcBarraA,11,6))\n\tlnParc = Val(Left(This.Value, 2))\n\tldVenc = Ctod(Sys(10, Val(Substr(This.Value, 3, 7))))\n\tlnValo = Val(Substr(This.Value, 10, 7)) / 100\n\t\n\tIf No... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For nBarra1 = Val",
+        "metodosFormChamados": "Atuatot",
+        "controlesReferenciados": "Get_Barra_1,Get_Barra_2,Get_total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Proximo",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "ThisForm.CntFinanc.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'\nThisForm.CntFinanc.Proximo.Refresh\nIf ThisForm.cntFinanc.Visible\n\tThisForm.TotChamada = 0\n\tThisForm.cntFinanc.Visible = .F.\n\tThisForm.Barra_Botoes.Pagto.SetFocus\n\tThisForm.Barra_Botoes.pagto.Click()\nElse\n\tThis.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Proximo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CntFinanc.Proximo.Picture ='\\VBMP\\B_ARROW4.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CntFinanc.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CntFinanc.Get_total",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.Proximo",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Thisform.Cnt_credito.Proximo.picture = '\\vbmp\\b_arrow2.bmp'\nThisForm.Cnt_credito.Proximo.Refresh\nIf ThisForm.Barra_Botoes.Itens.Visible\n\tThisForm.Barra_Botoes.Itens.Click()\nElse\n\tThisForm.Barra_Botoes.Pagto.SetFocus\n\tThisForm.Barra_Botoes.Pagto.Click()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.Proximo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Cnt_credito.Proximo.picture = '\\vbmp\\b_arrow4.bmp'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Cnt_credito.Proximo.picture = '\\vbmp\\b_arrow2.bmp'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.GradeDevol.Column1.get_Devol",
+      "evento": "LostFocus",
+      "linhas": 8,
+      "codigoOriginal": "Set Confirm Off\nIf This.Value = 0 And Thisform.peantvalue = 0 And Lastkey() = 13 And TmpDevol.Saida\n\tlcFoco = 'ThisForm.Cnt_Credito.Proximo.SetFocus'\n\t&lcFoco.\nElse\n\tThis.SetFocus\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "peantvalue = 0 And Lastkey",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.GradeDevol.Column1.get_Devol",
+      "evento": "Valid",
+      "linhas": 374,
+      "codigoOriginal": "Local nDope, Nume, CodConf, _Posicao, NOpCr, lcNotas, lcProcura, lnCfgOpCrs, lnBxVlOpCrs, lnCfgChkCt\nLocal _ValDev, _ValNDev, lcFpagOpCrs, lnCotOpe, lnCotPar, lcCMoeOpCrs, llNovaLinha, lnRecNo\nLocal lcOutros, llRecalcula, llRetorno, lcMsg, lcCaption, _nddVal\n\nThisForm.Validado = .t.\nThis.Refresh\nIf This.Value # Thisform.peantvalue\n\tIf This.Value # 0\n\t\tIf Thisform.peantvalue # 0\n\t\t\tThis.Value = Thisform.peantvalue\n\t\t\tReturn .t.\n\t\tEndif\n\t\tSkip\n\t\tSkip -1\n\t\tSelect sum(1) as Qt, Codigos From TmpDevol... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,SqlExecute",
+        "controlesReferenciados": "ChkCt,ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.GradeDevol.Column1.get_Devol",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Set Confirm on\nThisForm.Validado = .f.\nThisForm.peantvalue = This.Value\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.GradeDevol.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Credito.GradeDevol.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.Proximo",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "ThisForm.Barra_Botoes.Pagto.Enabled = .t.\nThisForm.Cnt_pendencia.Proximo.picture = '\\vbmp\\b_arrow2.bmp'\nThisForm.Cnt_pendencia.Proximo.refresh\nIf ThisForm.Barra_Botoes.Itens.Visible Or CrSigCdOpe.SubNObrigs = 1 \n\tThisForm.Barra_Botoes.Itens.Click()\nElse\n\tThisForm.Barra_Botoes.Pagto.SetFocus\n\tThisForm.Barra_Botoes.Pagto.Click()\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.Proximo",
+      "evento": "GotFocus",
+      "linhas": 7,
+      "codigoOriginal": "Select [ ] as Agrupar, sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1\nIf TotEestv.Qt > 0\n\tThisForm.Cnt_identifica.Vendedor.Get_conta.Value = ' '\n\tThisForm.Cnt_identifica.Vendedor.get_cpf.Value = ' '\n\tThisForm.Cnt_identifica.Vendedor.get_dconta.Value = ' '\nEndIf\nThisForm.Cnt_pendencia.Proximo.picture = '\\vbmp\\b_arrow4.bmp'",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_conta,get_cpf,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Cnt_pendencia.Proximo.picture = '\\vbmp\\b_arrow2.bmp'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.Bot_Pendentes",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpOperacao\nDelete For Codigos = 0\nGoto Top\nThisform.Enabled = .F.\n\ndo Form SigOpPen with Thisform.parentform, Thisform.parentform.DatasessionId, ThisForm\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos.Text1",
+      "evento": "LostFocus",
+      "linhas": 12,
+      "codigoOriginal": "If This.Value = 0 And _OldCodG = 0 And Lastkey() = 13 And TmpOperacao.Saida\n\tSelect TmpOperacao\n\tlcFoco = 'ThisForm.Cnt_Pendencia.Proximo.SetFocus'\n\t&lcFoco.\nElse\n\tIf This.Value > 0 And Lastkey() = 13\n\t\tKeyboard '{DNARROW}'\n\tElse\n\t\tThis.SetFocus\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos.Text1",
+      "evento": "Valid",
+      "linhas": 1257,
+      "codigoOriginal": "Local NDope, Nume, OpeAtu, lnRecOld, _PuxaOrigem, _PuxaDestino, lcItOrdem\nLocal lnCOpers, lnCaixas, lnCheqs, lnParcs, lnParContas, lcCheque, lcMoeSubNs, lnCasas\nLocal _MoePadrao, _PrecoPs, lcMsg, lnCodigos, llLiberaConta, _puxaValVars, _pCupFis\n\n_MaxSubNivel  = Iif(CrSigOpCdc.MaxSubns <= 0, 9999, CrSigOpCdc.MaxSubns )\n\nThisForm.validado = .t.\nThis.Refresh\nllLiberaConta = .f.\nIf This.Value # _OldCodg \n\tIf This.Value # 0\n\t\tIf _OldCodG # 0\n\t\t\tThis.Value = _oldCodG\n\t\t\tReturn .t.\n\t\tEndif\n\t\tIf Empty(T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,MGOpe And Type",
+        "controlesReferenciados": "chkAgends,ChkEntregaSN",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos.Text1",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Set Confirm On\n_OldCodg = This.Value\nThisForm.validado = .f.\nReturn( .t. )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Notas.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Valor.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_grupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoContab( Usuar, 'C', This.Value, This , '',This.Parent.Get_Conta.Value,ThisForm.Podatamgr,TprMvCab.Datas)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_grupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Not CrSigCdOpe.FixGDests )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_conta",
+      "evento": "Valid",
+      "linhas": 137,
+      "codigoOriginal": "Local lcGrupo, lordem, lcTpFat, lcGrupoCad\n\nIf !Empty( This.Value )\n\tlcTpFat = ''\n\tlcGrupo = This.Parent.Get_grupo.Value\n\tIf !IsEmpty(crSigCdOpe.GruCadDs)\n\t\tlcGrupoCad = crSigCdOpe.GruCadDs\n\t\tlordem  = .t.\n\tElse\n\t\tlcGrupoCad = This.Parent.Get_grupo.Value\n\t    lordem  = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, This.Parent.Get_DConta,lordem, lcGrupoCad)\n\t\tthis.parent.Get_DConta.Value = ''\n\t\tthis.parent.Get_cpf.Value = ''\n\t\tMessageBox( 'Acesso Negado...', 32, '' )\n\t\tth... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery,MudaTabDescs =,MostraPends",
+        "controlesReferenciados": "Get_grupo,Get_DConta,Get_cpf,get_conta,Get_ListaPreco,OpTdz',Get_Tabd",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_conta",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "This.peantvalue = This.Value\nIf Not (crSigCdOpe.Vendes=5) And InList(crSigCdOpe.ImpClis,[S],[O]) And ThisForm.Inicia And Not Empty(This.Value)\n\tReturn .f.\nElse\n\tReturn (crSigCdOpe.Vendes=5) Or (Not CrSigCdOpe.FixCDests And !IsEmpty( This.Parent.Get_Grupo.Value ) And ThisForm.EditaDestino)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Inicia And Not Empty",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_dconta",
+      "evento": "Valid",
+      "linhas": 138,
+      "codigoOriginal": "Local lcGrupo, lordem, lcTpFat\n\nIf !Empty( This.Value ) \n\n\tlcTpFat = ''\n\n\tIf !IsEmpty(crSigCdOpe.GruCadDs)\n\t\tlcGrupo = crSigCdOpe.GruCadDs\n\t\tlordem  = .t.\n\tElse\n\t\tlcGrupo = This.Parent.Get_grupo.Value\n\t    lordem  = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Get_Conta, This, lOrdem,,ThisForm.Podatamgr )\n\t\tthis.parent.Get_Conta.Value = ''\n\t\tthis.parent.Get_cpf.Value = ''\n\t\tMessageBox( 'Acesso Negado...', 32, '' )\n\t\tthis.Value = ''\n\t\tReturn 0\n\tEndif\n\n\tlcCliente = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery,MudaTabDescs =,MostraPends",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_cpf,get_dconta,Get_ListaPreco,OpTdz',Get_Tabd",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_dconta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn ( Not CrSigCdOpe.FixCDests And !IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\tIsEmpty( This.Parent.Get_Conta.Value ) And IsEmpty( This.Parent.Get_Cpf.Value ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_cpf",
+      "evento": "LostFocus",
+      "linhas": 235,
+      "codigoOriginal": "Local lcTpFat, lcCadGrupo, lcGruCadDs, laGrupo\n\nlcTpFat = ''\nCgc  = This.Value\nCgc1 = ''\nRetCli = ''\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',_Dope)\n=ThisForm.Podatamgr.cursorquery('SigOpCdc','LocalDcOpe','dopes',_Dope,[FixCadOs,FixCadDs])\n\nlcGruCadDs = Iif(Not IsEmpty(crSigCdOpe.GruCadDs), crSigCdOpe.GruCadDs, ' ' )\n\nIf !Empty(This.Value)\n\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt,From SigCdCli Where ]+Iif",
+        "metodosFormChamados": "cursorquery,SqlExecute,mCadAutomatico",
+        "controlesReferenciados": "get_conta,get_dconta,get_cpf,get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.Get_cpf",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn ( Not CrSigCdOpe.FixCDests And !IsEmpty( This.Parent.Get_Grupo.Value ) And IsEmpty( This.Parent.Get_Conta.Value ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Destino.btnCadastros",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcCpf, lcGru\nIf Empty(This.Parent.Get_Conta.Value) Or Empty(This.Parent.get_cpf.Value) \n\t=MessageBox('É Necessário o Preenchimento Da Conta e Que a Mesma Possua Um CPF/CNPJ!!!', 0+48, 'Dados Incompletos') \n\tThis.Parent.Get_Conta.SetFocus\n\tReturn 0\nEndIf\n\nIf (INLIST(Thisform.op_Escolha,'INSERIR','ALTERAR'))\n\tlcCpf = This.Parent.get_cpf.Value\n\tlcCli = This.Parent.Get_conta.Value\n\tlcGru = Iif(Not Empty(crSigCdOpe.GruCadDs), crSigCdOpe.GruCadDs, This.Parent.get_Grupo.Value)\n\n\tDo Form SIGCDCTA ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,get_cpf,get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_conta",
+      "evento": "Valid",
+      "linhas": 84,
+      "codigoOriginal": "Local lcGrupo, lordem, llEmpRelevs, lcEmps, lcGrupoCad\n\nlcEmps = ''\nllEmpRelevs = .T.\nlcGrupo = This.Parent.Get_grupo.Value\n\nIf This.Value <> This.peantvalue\n\tIf !Empty(Left(This.Value,1)) \n\t\tIf !IsEmpty(Right(crSigCdOpe.MascVens,10))\n\t\t\t_Mask   = Right(crSigCdOpe.MascVens,10)\n\t\t\t_MaxCar = Len(Alltrim(Strtran(_Mask,'/','')))\n\t\t\tIf Len(Alltrim(this.Value)) >= _MaxCar\n\t\t\t\t_Mask = \"@L \"+Alltrim(_mask)\n\t\t\t\tThis.Value = Transform(Val(Substr(This.Value,1,_MaxCar)),_mask)\n\t\t\t\tThis.Refresh\n\t\t\tEndif\n\t\tEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_dConta,Get_Cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_conta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn( Not IsEmpty( This.Parent.Get_Grupo.Value ) And InList( crSigCdOpe.ComisDivs, 1, 3, 4, 5 ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_dconta",
+      "evento": "Valid",
+      "linhas": 68,
+      "codigoOriginal": "Local lcGrupo, lordem, llEmpRelevs, lcEmps, lcGrupoCad\n\nlcEmps = ''\nllEmpRelevs = .T.\nlcGrupo = This.Parent.Get_grupo.Value\n\nIf !Empty(This.Value)\n\tIf !Empty(Right(crSigCdOpe.GruCadVs,10))\n\t\tlcGrupoCad = Right(crSigCdOpe.GruCadVs,10)\n\t\tlordem  = .t.\n\tElse\n\t\tlcGrupoCad = This.Parent.Get_grupo.Value\n\t    lordem  = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta, lOrdem, lcGrupoCad )\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Par... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_dConta,Get_Cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_dconta",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn( Not IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\t\tIsEmpty( Left(This.Parent.Get_Conta.Value,1) ) And IsEmpty( This.Parent.Get_Cpf.Value ) And ;\n\t\tInList( crSigCdOpe.ComisDivs, 1, 3, 4, 5 ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_cpf",
+      "evento": "Valid",
+      "linhas": 92,
+      "codigoOriginal": "Local llEmpRelevs, lcEmps\n\nlcEmps = ''\nllEmpRelevs = .T.\nCgc  = This.Value\nCgc1 = ''\nIf !Empty( This.Value )\n\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\tElse\n\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/9999-99\" )\n\tEndIf\n\t\n\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\tlnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrTmpCli')\n\t\n\tIf lnErro < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt,fChecarInativas",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "get_conta,get_dconta,get_grupo,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_cpf",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn( !IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\t\tIsEmpty( Left(This.Parent.Get_Conta.Value,1) ) And InList ( crSigCdOpe.ComisDivs, 1, 3, 4, 5 ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_grupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'C', This.Value, This,.f.,.f., ThisForm.Podatamgr, TprMvCab.Datas )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Responsavel.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not CrSigCdOpe.FixGVen2s )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_conta",
+      "evento": "Valid",
+      "linhas": 82,
+      "codigoOriginal": "Local lcGrupo, lordem, llEmpRelevs, lcEmps, lcGrupoCad\n\nlcEmps = ''\nllEmpRelevs = .T.\nlcGrupo = This.Parent.Get_grupo.Value\n\nIf This.Value <> This.peantvalue\n\tIf !Empty(Left(This.Value,1)) \n\t\tIf !IsEmpty(Left(crSigCdOpe.MascVens,10))\n\t\t\t_Mask   = Left(CrSigCdOpe.MascVens,10)\n\t\t\t_MaxCar = Len(Alltrim(Strtran(_Mask,'/','')))\n\t\t\tIf Len(Alltrim(this.Value)) >= _MaxCar\n\t\t\t\t_Mask = \"@L \"+Alltrim(_mask)\n\t\t\t\tThis.Value = Transform(Val(Substr(This.Value,1,_MaxCar)),_mask)\n\t\t\t\tThis.Refresh\n\t\t\tEndif\n\t\tEndi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_dConta,Get_Cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_conta",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1\nThis.peantvalue = This.Value\nReturn !IsEmpty( This.Parent.Get_Grupo.Value ) And InList(crSigCdOpe.Vendes, 1, 2) And TotEestv.Qt = 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_dconta",
+      "evento": "Valid",
+      "linhas": 70,
+      "codigoOriginal": "Local lcGrupo, lordem, llEmpRelevs, lcEmps, lcGrupoCad\n\nlcEmps = ''\nllEmpRelevs = .T.\nlcGrupo = This.Parent.Get_grupo.Value\n\nIf !Empty(This.Value)\n\tIf !Empty(Left(crSigCdOpe.GruCadVs,10))\n\t\tlcGrupoCad = Left(crSigCdOpe.GruCadVs,10)\n\t\tlordem  = .t.\n\tElse\n\t\tlcGrupoCad = This.Parent.Get_grupo.Value\n\t    lordem  = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta, lOrdem, lcGrupoCad )\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Paren... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_dConta,Get_Cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_dconta",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1\nThis.peantvalue = This.Value\nReturn Inlist( Thisform.op_escolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\tIsEmpty( Left(This.Parent.Get_Conta.Value,1) ) And IsEmpty( This.Parent.Get_Cpf.Value ) And ;\n\tInList(crSigCdOpe.Vendes,1,2) And TotEestV.Qt = 0",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_cpf",
+      "evento": "Valid",
+      "linhas": 93,
+      "codigoOriginal": "Local llEmpRelevs, lcEmps\n\nlcEmps = ''\nllEmpRelevs = .T.\nCgc  = This.Value\nCgc1 = ''\nIf !Empty( This.Value )\n\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\tElse\n\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/9999-99\" )\n\tEndIf\n\t\n\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\tlnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrTmpCli')\n\t\n\tIf lnErro < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt,fChecarInativas",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "get_conta,get_dconta,get_grupo,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_cpf",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1\nThis.peantvalue = This.Value\nReturn( !IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\t\tIsEmpty( Left(This.Parent.Get_Conta.Value,1) ) And InList(crSigCdOpe.Vendes, 1, 2) ) And TotEestv.Qt = 0\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_grupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'C', This.Value, This, .f., .f., ThisForm.Podatamgr, TprMvCab.Datas )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Vendedor.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not CrSigCdOpe.FixGVends ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.TabDesconto.Get_tabd",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\tIf Not Seek( This.Value, 'csSigOpTdz', 'Codigos' )\n\t\tloBrowse = CreateObject( 'fwBuscaSel', 'csSigOpTdz', 'Codigos', This.Value, 'Cadastro de Tabelas' )\n\t\tloBrowse.AddColuna( 'Codigos', '', 'Código', .t., 'Codigos' )\n\t\tloBrowse.AddColuna( 'Descrs', '', 'Descrição' )\n\t\tloBrowse.Show\n\t\tThis.Value = csSigOpTdz.Codigos\n\tEndif\n\tIf csSigOpTdz.ChkAcTb = 1 And CsSigOpTdz.Descos <> 0\n\t\tIf Not ThisForm.parentForm.Chklimite(0,0,0,CsSigOpTdz.Descos)\n\t\t\tThis.Value = ' '\n\t\t\tReturn .... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Chklimite",
+        "controlesReferenciados": "OpTdz',ChkAcTb,Chklimite(0",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.TabDesconto.Get_tabd",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "llRetWhen = Inlist( Thisform.op_Escolha, 'INSERIR', 'ALTERAR' ) And crSigCdOpe.Confes # 1 And CrSigCdOpe.TabDescs # 6\nIf llRetWhen\n\tSelect crTpmMvItn\n\tCount to lnContaItems For Not IsEmpty( crTpmMvItn.Cpros )\n\tllRetWhen = ( lnContaItems = 0 ) \nEndIf\nReturn( llRetWhen )\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Not IsEmpty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.TabDesconto.Get_ListaPreco",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If !Empty( This.Value )\n\tlcSql = [Select * From SigCdLpc Where ]+Iif(CrSigCdOpe.tplprecs=2,[Tipos = 'C' ],[Tipos <> 'C'])\n\tIf ThisForm.PoDatamgr.SqlExecute(lcSql,'CsSigCdLpc') < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CsSigCdLpc)')\n\t\tReturn .f.\n\tEndIf\n\tSelect CsSigCdLpc\n\tIndex On lprecos tag lprecos\n\tIf Not Seek( This.Value, 'csSigCdLpc', 'lPrecos' )\n\t\tloBrowse = CreateObject( 'fwBuscaSel', 'csSigCdLpc', 'lPrecos', This.Value, 'Listas de Preço' )\n\t\tloBrowse.AddColu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,From SigCdLpc Where ]+Iif",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.TabDesconto.Get_ListaPreco",
+      "evento": "When",
+      "linhas": 14,
+      "codigoOriginal": "Local llRetWhen, lnContaItems\n\nThis.peantvalue = This.Value\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\nllRetWhen = InList(Thisform.OP_Escolha, 'INSERIR', 'ALTERAR') And InList( crSigCdOpe.LPrecos, 1, 2, 5 )\n\nIf llRetWhen\n\tSelect crTpmMvItn\n\tCount to lnContaItems For Not IsEmpty( crTpmMvItn.Cpros )\n\tllRetWhen = ( lnContaItems = 0 ) \nEndIf\n\nReturn( llRetWhen )\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Not IsEmpty",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Proximo",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.Cnt_identifica.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'\nIf ThisForm.Barra_Botoes.Itens.Visible\n\tIf Not ThisForm.Barra_Botoes.Itens.Click()\n\t\tThisForm.Barra_Botoes.Identifica.Click()\n\tEndif\nElse\n\tThisForm.Barra_Botoes.Pagto.SetFocus\n\tIf Not ThisForm.Barra_Botoes.Pagto.Click()\n\t\tThisForm.Barra_Botoes.Identifica.Click()\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Proximo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Cnt_Identifica.Proximo.Picture ='\\VBMP\\B_ARROW4.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Cnt_identifica.Proximo.Picture ='\\VBMP\\B_ARROW2.BMP'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.CodOperacao.Get_codigo",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If InList(crSigCdOpe.Numeras,3,4)\n\tIf Empty(This.Value) And ThisForm.Qtdvalid > 0\n\t\tMessageBox('Número de Documento Invalido!!!',0+48,'')\n\t\tReturn 0\n\tEndif\n\tlnNume = fRetornaInt( This.Value )\n\tIf ThisForm.PoDataMgr.ChkRegister('SigMvCab','EmpDopNums',TprMvCab.Emps + TprMvCab.Dopes + Str(lnNume,6))\n\t\tMessageBox('Este Número de Documento já existe !!!',0+48,'')\n\t\tReturn 0\n\tElse\n\t\tSelect TprMvCab\n\t\tGo Top\n\t\tReplace TprMvCab.Numes with fRetornaInt( This.Value )\n\t\tThisform.Qtdvalid = 1\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRetornaInt",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigMvCab'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.CodOperacao.Get_codigo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(crSigCdOpe.Numeras,3,4))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_grupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoContab( Usuar, 'C', This.Value, This , '',This.Parent.Get_Conta.Value, ThisForm.Podatamgr, TprMvCab.Datas )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not CrSigCdOpe.FixGOrigs )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_conta",
+      "evento": "Valid",
+      "linhas": 137,
+      "codigoOriginal": "Local lcGrupo, lordem, lcGrupoCad\n\nlcGrupo = This.Parent.Get_grupo.Value\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',_Dope)\n\nIf !Empty( This.Value )\n\n\tIf !Empty(crSigCdOpe.GruCadOs)\n\t\tlcGrupoCad = crSigCdOpe.GruCadOs\n\t\tlordem = .t.\n\tElse\n\t\tlcGrupoCad = This.Parent.Get_grupo.Value\n\t    lOrdem = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, This.Parent.Get_DConta,lordem, lcGrupoCad)\n\t\tthis.parent.Get_DConta.Value = ''\n\t\tthis.parent.Get_cpf.Value = ''\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "cursorquery,op_escolha = 'INSERIR' Or,MudaTabDescs =,MostraPends",
+        "controlesReferenciados": "Get_grupo,Get_DConta,Get_cpf,get_conta,Get_ListaPreco,OpTdz',Get_Tabd",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_conta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn ( Not CrSigCdOpe.FixCOrigs And !IsEmpty( This.Parent.Get_Grupo.Value ) And Thisform.EditaOrigem )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_dconta",
+      "evento": "Valid",
+      "linhas": 137,
+      "codigoOriginal": "Local lcGrupo, lordem, lcGrupoCad\n\nlcGrupo = This.Parent.Get_grupo.Value\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',_Dope)\n\nIf !Empty( This.Value ) \n\n\tIf !Empty(crSigCdOpe.GruCadOs)\n\t\tlcGrupoCad = crSigCdOpe.GruCadOs\n\t\tlordem  = .t.\n\tElse\n\t\tlcGrupoCad = This.Parent.Get_grupo.Value\n\t    lordem  = .f.\n\tEndIf\n\n\tIf !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Get_Conta, This, lOrdem, lcGrupoCad )\n\t\tthis.parent.Get_Conta.Value = ''\n\t\tthis.parent.Get_cpf.Value = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "cursorquery,MudaTabDescs =,MostraPends",
+        "controlesReferenciados": "Get_grupo,Get_Conta,Get_cpf,get_dconta,Get_ListaPreco,OpTdz',Get_Tabd",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn ( Not CrSigCdOpe.FixCOrigs And !IsEmpty( This.Parent.Get_Grupo.Value ) And ;\n\tIsEmpty( This.Parent.Get_Conta.Value ) And IsEmpty( This.Parent.Get_Cpf.Value ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_cpf",
+      "evento": "LostFocus",
+      "linhas": 240,
+      "codigoOriginal": "Local lcTpFat, lcCadGrupo, lcGruCadOs\n\nlcTpFat = ''\nCgc  = This.Value\nCgc1 = ''\nRetCli = ''\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',_Dope)\n=ThisForm.Podatamgr.cursorquery('SigOpCdc','LocalDcOpe','dopes',_Dope,[FixCadOs,FixCadDs])\nlcGruCadOs = Iif(Not IsEmpty(crSigCdOpe.GruCados), crSigCdOpe.GruCados, ' ' )\n\nIf !Empty(This.Value)\n\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\tElse\n\t\tC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt,From SigCdCli Where ]+Iif",
+        "metodosFormChamados": "cursorquery,SqlExecute,mCadAutomatico",
+        "controlesReferenciados": "get_conta,get_dconta,get_cpf,get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.Get_cpf",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn ( Not CrSigCdOpe.FixCOrigs And !IsEmpty( This.Parent.Get_Grupo.Value ) And IsEmpty( This.Parent.Get_Conta.Value ) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Identifica.Origem.btnCadastros",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Local lcCpf, lcGru\nIf Empty(This.Parent.Get_Conta.Value) Or Empty(This.Parent.get_cpf.Value) \n\t=MessageBox('É Necessário o Preenchimento Da Conta e Que a Mesma Possua Um CPF/CNPJ!!!', 0+48, 'Dados Incompletos') \n\tThis.Parent.Get_Conta.SetFocus\n\tReturn 0\nEndIf\nIf (INLIST(Thisform.op_Escolha,'INSERIR','ALTERAR'))\n\tlcCpf = This.Parent.get_cpf.Value\n\tlcCli = This.Parent.Get_conta.Value\n\tlcGru = Iif(Not Empty(crSigCdOpe.GruCadOs), crSigCdOpe.GruCadOs, This.Parent.get_Grupo.Value)\n\n\tDo Form SIGCDCTA W... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,get_cpf,get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_TotVariação",
+      "evento": "LostFocus",
+      "linhas": 29,
+      "codigoOriginal": "Local _Total,_Varia,_Value\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = IIf(_Total=0,0,Round( This.Value / _Total * 100, 4 ))\n_Value = IIf(_Total=0,0,This.Value)\n\nSelect TprMvCab\nReplace TprMvCab.valvars With _Value\nReplace TprMvCab.vars With _Varia\n\nSelect crSigMvNfi\nGo top\n\nWith ThisForm.Cnt_Fpagto\n\tThisForm.parentform.pagina.dados.pgfprincipal.pgoperacional.GetValTos.Value = _Total + This.Value \n\t.Get_TotLiquido.Value = _Total + This.Value \n\t.Get_Saldo.Value = ThisForm.Cnt_Fpagt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal,CalculaDesconto",
+        "controlesReferenciados": "Get_TotLiquido,Get_Saldo,Get_totforma,Get_PorcVariação,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_TotVariação",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "If This.Value < 0\n\tThis.Value = -This.Value\nEndif\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = IIf(_Total=0,0,Round( This.Value / _Total * 100, 4 ))\n_Value = IIf(_Total=0,0,This.Value)\n\nIf ABS(_Value) >= _Total And This.Value <> 0\n\tMessageBox('Variação Invalida!!!',0+48,'')\n\tReturn .f.\nEndif\n\nIF CrSigCdOpe.DeAcrs = 1 And ThisForm.Validadesconto And This.Value <> 0 And NOT ThisForm.parentform.Chklimite(_Total,_Total + _Value,.f.,.f.,.f.,ThisForm.Aplicoutabd )\n\tThis.value = 0\n\tRETURN... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal",
+        "controlesReferenciados": "Chklimite(_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_TotVariação",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (Empty(ThisForm.Cnt_Fpagto.acrescimo.Get_PorcVariação.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_PorcVariação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_PorcVariação",
+      "evento": "LostFocus",
+      "linhas": 28,
+      "codigoOriginal": "Local _Total,_Varia,_Value\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = Round( _Total * This.Value / 100, 2 ) \n_Value = IIf( _Total = 0,0,This.Value )\n\nSelect TprMvCab\nReplace TprMvCab.valvars With _Varia\nReplace TprMvCab.vars With _Value\n\nSelect crSigMvNfi\nGo top\n\nWith ThisForm.Cnt_Fpagto\n\tThisForm.parentform.pagina.dados.pgfprincipal.pgoperacional.GetValTos.Value = _Total + _Varia\n\t.Get_TotLiquido.Value = _Total + _Varia\n\t.Acrescimo.Get_TotVariação.Value = _Varia\n\t.Get_Saldo.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal,CalculaDesconto",
+        "controlesReferenciados": "Get_TotLiquido,Get_TotVariação,Get_Saldo,Get_totforma,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_PorcVariação",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If This.Value < 0\n\tThis.Value = -This.Value\nEndIf\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = Round( _Total * This.Value / 100, 2 ) \n\nIf _Varia >= _Total And This.Value <> 0\n\tMessageBox('Variação Invalida!!!',0+48,'')\n\tReturn .f.\nEndif\n\nIF CrSigCdOpe.DeAcrs = 1 And ThisForm.Validadesconto And This.Value <> 0 And NOT ThisForm.parentform.Chklimite(_Total,_Total - _Varia,.f.,.f.,.f.,ThisForm.Aplicoutabd )\n\tThis.value = 0\n\tRETURN .f.\nElse\n\tIf This.Value = 0 And CrSigCdOpe.DeAcrs = 1 A... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal",
+        "controlesReferenciados": "Chklimite(_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Acrescimo.Get_PorcVariação",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_TotVariação",
+      "evento": "LostFocus",
+      "linhas": 26,
+      "codigoOriginal": "Local _Total,_Varia,_Value\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = IIf(_Total=0,0,Round( This.Value / _Total * 100, 4 ))\n_Value = IIf(_Total=0,0,-This.Value)\n\nSelect TprMvCab\nReplace TprMvCab.valvars with _Value\nReplace TprMvCab.vars with -_Varia\n\nSelect crSigMvNfi\nGo top\n\nThisForm.parentform.pagina.dados.pgfprincipal.pgoperacional.GetValTos.Value = _Total - This.Value \nThisForm.Cnt_Fpagto.Get_TotLiquido.Value = _Total - This.Value \nThisform.Cnt_Fpagto.Get_Saldo.Value = ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal,CalculaDesconto",
+        "controlesReferenciados": "Get_TotLiquido,Get_Saldo,Get_totforma,Get_PorcVariação,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_TotVariação",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "If This.Value < 0\n\tThis.Value = -This.Value\nEndif\n\n_Total = ThisForm.Atuatotal() &&TprMvCab.Valinis\n_Varia = IIf(_Total=0,0,Round( This.Value / _Total * 100, 4 ))\n_Value = IIf(_Total=0,0,-This.Value)\n\nIf ABS(_Value) >= _Total And This.Value <> 0\n\tMessageBox('Variação Invalida!!!',0+48,'')\n\tReturn .f.\nEndif\n\nIF CrSigCdOpe.DeAcrs = 1 And ThisForm.Validadesconto And This.Value <> 0 And NOT ThisForm.parentform.Chklimite(_Total,_Total + _Value,.f.,.f.,.f.,ThisForm.Aplicoutabd )\n\tThis.value = 0\n\tRETUR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Atuatotal",
+        "controlesReferenciados": "Chklimite(_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_TotVariação",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (Empty(ThisForm.Cnt_Fpagto.Desconto.Get_PorcVariação.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_PorcVariação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_PorcVariação",
+      "evento": "LostFocus",
+      "linhas": 26,
+      "codigoOriginal": "Local _Total,_Varia,_Value\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = Round( _Total * This.Value / 100, 2 ) \n_Value = IIf( _Total = 0,0,-This.Value )\n\nSelect TprMvCab\nReplace TprMvCab.valvars with -_Varia\nReplace TprMvCab.vars with _Value\n\nSelect crSigMvNfi\nGo top\n\nThisForm.parentform.pagina.dados.pgfprincipal.pgoperacional.GetValTos.Value = _Total - _Varia\nThisForm.Cnt_Fpagto.Get_TotLiquido.Value = _Total - _Varia \nThisForm.Cnt_Fpagto.Desconto.Get_TotVariação.Value = _Varia\nThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal,CalculaDesconto",
+        "controlesReferenciados": "Get_TotLiquido,Get_TotVariação,Get_Saldo,Get_totforma,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_PorcVariação",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If This.Value < 0\n\tThis.Value = -This.Value\nEndIf\n\n_Total = ThisForm.AtuaTotal() &&TprMvCab.Valinis\n_Varia = Round( _Total * This.Value / 100, 2 ) \n\nIf _Varia >= _Total And This.Value <> 0\n\tMessageBox('Variação Invalida!!!',0+48,'')\n\tReturn .f.\nEndif\n\nIF CrSigCdOpe.DeAcrs = 1 And ThisForm.Validadesconto And This.Value <> 0 And NOT ThisForm.parentform.Chklimite(_Total,_Total - _Varia,.f.,.f.,.f.,ThisForm.ApliCouTabd)\n\tThis.value = 0\n\tRETURN .f.\nElse\n\tIf This.Value = 0 And CrSigCdOpe.DeAcrs = 1 An... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtuaTotal",
+        "controlesReferenciados": "Chklimite(_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Desconto.Get_PorcVariação",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_OBS",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If crSigOpFp.EmiVales = 3\n\tThisform.Cnt_Fpagto.Get_Fpg.Setfocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_OBS",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Local lcValor\n\n=ThisForm.parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',xPar.Fpags)\nlcValor = Iif( This.InputMask = '999-9-99999', StrTran( This.Value, '-', '' ), This.Value )\n\nIf Empty( lcValor ) And ( crSigOpFp.EmiVales = 3 )\n\tMessagebox( 'Obrigatório Informar # do Crédito Utilizado', 48, 'Informação Obrigatória' )\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_fpg",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Thisform.pcnIdent = ''\n*** mena - 21/11/2016 - cCupomNvs =TEF ou <> TEF ***\nIf Empty(This.Value) And Lastkey() = 13\n\tIf ThisForm.Cnt_Fpagto.Get_Saldo.Value <= 0\n\t\tThisForm.Barra_Botoes.Ok.SetFocus\n\tElse\n\t\tThisForm.Cnt_Fpagto.Get_Fpg.Setfocus\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Saldo,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_fpg",
+      "evento": "Valid",
+      "linhas": 200,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,nKeyCode\n\nIf !Empty( This.Value ) \n\tIf ( Val(This.Value) > 0 And !Seek(Val(This.Value),'CcSigOpFp','nfpags')) Or Val(This.Value) = 0\n\t\tIf !Seek( This.Value, 'ccSigOpFp', 'FPags' )\n\t\t\tThis.Value = Upper(This.Value)\n\t\t\tloBrowse = CreateObject( 'fwBuscaSel', 'ccSigOpFp', 'FPags', This.Value, 'Cadastro de Forma de Pagamento' )\n\t\t\tloBrowse.AddColuna( 'FPags', '', 'Código', .t., 'FPags' )\n\t\t\tloBrowse.AddColuna( 'FParcs', '99', 'Parc' )\n\t\t\tloBrowse.Show\n\t\t\tThis.Value = Iif( ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,For Not Empty",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "Get_Saldo,chkcpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_fpg",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.parcDesconto = 0\nThisForm.DigPar = .f.\nThisForm.Mostraobs(.t.)\nThisForm.UsuLibs = ' '\nReturn (Not ThisForm.Tempartef)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Mostraobs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_npar",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.parcDesconto = 0\n\tThisForm.Cnt_Fpagto.Get_fpg.Value = ' '\n\tThisForm.Cnt_Fpagto.Get_fpg.Refresh\n\tThisForm.Cnt_Fpagto.Get_fpg.Setfocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_npar",
+      "evento": "Valid",
+      "linhas": 32,
+      "codigoOriginal": "If !Empty(This.Value)\n\tIf Empty(crSigCdOpe.Cmoes)\n\t\tlnValor = TprMvCab.Valos\n\tElse\n\t\tlnCotOper = ThisForm.ParentForm.Cotacao( crSigCdOpe.Cmoes ) \n\t\tlnCotfpag = ThisForm.ParentForm.Cotacao( crSigOpFp.moefpgs ) \n\t\tlnValor = TprMvCab.Valos * lnCotOper / lnCotFpag\n\tEndif\n\tDeclare LaCampo(2,2)\n\tLaCampo(1,1)='Fpags'\n\tLaCampo(2,1)='nParcs'\n\tLaCampo(1,2)=CrSigOpFp.Fpags\n\tLaCampo(2,2)=This.Value\n\tIf ThisForm.Parentform.PoDataMgr.Cursorquery('SigOpFpi','CrSigOpFpi',@LaCampo)\n\t\tIf CrSigOpFpi.ValMins > lnVa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cotacao,Cursorquery",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_npar",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return !Empty( Thisform.Cnt_Fpagto.Get_fpg.Value) And Thisform.Digpar And (Not ThisForm.Tempartef)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_vpar",
+      "evento": "LostFocus",
+      "linhas": 218,
+      "codigoOriginal": "Local llOkTef, lnIdent, lcNSus, ImpFin, RetImpr, lcTipo, lnValor, lcTipoOK, SendTef, lcIdents\n\nThisform.pcnIdent = ''\nThisForm.Pcbandeira = ''\nThisForm.pcRede = ''\nImpfin = .t.\nllOkTef = .t.\nlnIdent = 0\nRetImpr = .t.\nlctipo = ''\nlnValor = 0\nlcTipoOK = '   '\nThisForm.parcDesconto = 0\n\n=fLerFiscal(CrSigOpCdd.NomEcfs)\n\nIf Empty(crSigCdOpe.Cmoes)\n\tlnValor = TprMvCab.Valos\nElse\n\tlnCotOper = ThisForm.ParentForm.Cotacao( crSigCdOpe.Cmoes ) \n\tlnCotfpag = ThisForm.ParentForm.Cotacao( crSigOpFp.moefpgs ) ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fLerFiscal",
+        "metodosFormChamados": "Cotacao,Sqlexecute,cursorquery,NoCaixa,2)+SYS",
+        "controlesReferenciados": "Get_npar,Get_VPar,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_vpar",
+      "evento": "Valid",
+      "linhas": 178,
+      "codigoOriginal": "Local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart,lcFpag,lnP,lnValP\nLocal lnTroco,lcTipo,lnOrdem\n\nIf Lastkey() = 5\n\tReturn .f.\nEndIf\nlcFpag = ThisForm.Cnt_fpagto.Get_Fpg.value\nlnP    = ThisForm.Cnt_Fpagto.Get_npar.Value\n\n=ThisForm.Parentform.Podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',ThisForm.Cnt_fpagto.Get_Fpg.value)\n\noFormulario = Thisform.Parentform.oModemEest\n\nCotOper = ThisForm.ParentForm.Cotacao( crSigCdOpe.Cmoes ) \nCotacao = ThisForm.ParentForm.Cotacao( crSigOpFp.mo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,Cotacao",
+        "controlesReferenciados": "Get_Fpg,Get_npar,Get_TotForma,Get_pVaria,Get_TotLiquido",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_vpar",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.value\nReturn !Empty( Thisform.Cnt_Fpagto.Get_fpg.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.fweditdata_venc",
+      "evento": "LostFocus",
+      "linhas": 23,
+      "codigoOriginal": "If crSigOpFp.EmiVales = 3\n\tThisform.Cnt_Fpagto.Get_Obs.SetFocus\nElse\n\tIf ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible\n\t\tSELECT xpar\n\t\tlcFPag = FPags\n\t\tlnChv  = nChaves\n\t\tDO WHILE lcFpag = FPags And nChaves = lnChv AND ! BOF()\n\t\t\tSKIP -1\n\t\tENDdo\n\t\tIF !BOF()\n\t\t\tSKIP\n\t\tEndif\n\t\tThisForm.Cnt_Fpagto.Cnt_ChequepreTef.cnt_chq.Get_Cpf.SetFocus\n\t\treturn\t\t&& mena - 27/01/2014 - retorna para não executar o click abaixo quando fp total\n\tEndIf \nEndIf\nIf (Thisform.Cnt_Fpagto.get_totliquido.value = Thisform.Cnt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Obs,Get_Cpf,get_totliquido,get_totforma",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.fweditdata_venc",
+      "evento": "Valid",
+      "linhas": 224,
+      "codigoOriginal": "Local valtot,nparc,anttot,ndia,tven,total,valpar,ncarne,x,dcart, lnParcs, lnParTef\n\nIf !Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value) And ThisForm.Cnt_Fpagto.Get_VPar.Value <> 0\n\tIf (fVerificaVencimento(This.Value, ThisForm.ParentForm.poDataMgr) <> 0)\n\t\tMessagebox( 'Vencimento Bloqueado !!!',0+48,'')\n\t\tThis.Value = Date()\n\t\tReturn .f.\n\tEndif\n\n\t=ThisForm.Parentform.Podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\n\tlnParTef = 0\n\tndia = crSigOpFp.dias\n\ttven = crSig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for !Empty",
+        "metodosFormChamados": "cursorquery,Cotacao,value =  val",
+        "controlesReferenciados": "Get_fpg,Get_VPar,get_npar,Get_totforma",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.fweditdata_venc",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.Cnt_mENSAGEM.Mensagem.Caption = '' \nIf Empty( This.Value ) And Not Empty(Thisform.Cnt_Fpagto.Get_fpg.Value)\n\tThis.Value = Dtot(Ttod(TprMvCab.Datas) + crSigOpFp.Entradas)\nEndif\nReturn !Empty( Thisform.Cnt_Fpagto.Get_fpg.Value) And (Not ThisForm.Tempartef)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_valinic",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_TotLiquido",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_Saldo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_TotForma",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Proximo",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "ThisForm.Cnt_Fpagto.Proximo.Picture = '\\vbmp\\b_arrow1.bmp'\nThisForm.Cnt_Fpagto.Proximo.Refresh\nIf Thisform.Cnt_Fpagto.Get_fpg.Enabled = .f.\n\tThis.SetFocus\nElse\n\tIf ThisForm.Cnt_Fpagto.Get_Saldo.Value <=0\n\t\tThisForm.Barra_Botoes.Ok.SetFocus\n\tElse\n\t\tThisForm.Cnt_Fpagto.Get_Fpg.Setfocus\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg,Get_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Proximo",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "If ThisForm.Cnt_Fpagto.Get_Saldo.Value <= 0\n\tThisForm.Cnt_Fpagto.Proximo.Picture = '\\vbmp\\b_arrow4.bmp'\nElse\n\tThisForm.Cnt_Fpagto.Proximo.Picture = '\\vbmp\\b_arrow3.bmp'\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Proximo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Cnt_Fpagto.Proximo.Picture = '\\vbmp\\b_arrow1.bmp'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Get_tvariacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "this.cnt_Chq.tefChq.Click() \n\nRETURN .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisform.MostraObs()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostraObs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.fpagto.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor.Text1",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "LOCAL lnRec, ctotal\n\nSELECT xpar\nlnRec = RECNO()\n\nctotal=0\nGO top\nScan\n\t=ThisForm.Parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',xPar.Fpags)\n\tcotacao = ThisForm.ParentForm.Cotacao( xpar.moefpgs )\n\tcotoper = 1\n\tIf crSigOpFp.Trocos = 1\n\t\tctotal = Round( ctotal - ( xpar.valos * xpar.cotfpgs / cotoper ), 2 )\n\tElse\n\t\tctotal = Round( ctotal + ( xpar.valos * xpar.cotfpgs / cotoper ), 2 )\n\tEndif\nEndscan\nThisForm.Cnt_Fpagto.Get_TotForma.Value = ctotal\nWith Thisform.Cnt_Fpagto\n\t.Get_Totfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,Cotacao",
+        "controlesReferenciados": "Get_TotForma,Get_Saldo,Get_TotLiquido",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .T.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc.Text1",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If This.Value < TprMvCab.Datas\n\tIf (Type([ThisForm.Parentform.ChecouVencs]) = [L]) And Not ThisForm.ParentForm.ChecouVencs\n\t\tIf (MessageBox([O Vencimento Está Menor Que a Data da Movimentação!] + Chr(13) + ;\n\t\t\t\t\t   [Confirma o Lançamento Mesmo Com Essa Inconsistência?], 4+32+256, [Vencimento Menor Que o Movimento]) = 6)\n\t\t\tlcMsg = [O Usuário Confirmou a Gravação da Movimentação Com Vencimento Menor Que o Movimento]\n\t\t\t=fGravarLog([X], TprMvCab.Dopes, ThisForm.ParentForm.pcEscolha, lcMsg)\n\t\t\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN (.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "this.tefChq.Valid \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.TefChq",
+      "evento": "Click",
+      "linhas": 349,
+      "codigoOriginal": "Lparameters plTefChq\n\nLocal llOkTef,lnIdent,lcTipo,SendTef,lcNSus,lnOrdem,RetImpr,_RetAprov,_RetcChep,lcErro\n\n\nWith Thisform.Cnt_Fpagto.Cnt_ChequepreTef.cnt_chq\nSelect xpar\nGO top\n\n*** mena 19/04/2016 - varre xpar para verificar se os numeros dos cheques estão ok - incluido o objeto Thisform.Cnt_Fpagto.cnt_ChequepreTef.grade para tratar os numeros dos cheques ***\nscan\t\n\t=ThisForm.Parentform.podatamgr.cursorquery('SigOpFp','CrOpFp','Fpags',xPar.Fpags)\n\tIF crOpFp.infos = 'C'\n\t\tIf Empty(bancos) Or ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery,SqlExecute,pcIdcheque = Alltrim",
+        "controlesReferenciados": "ChkCheques(,get_bco,get_age,get_conta,get_num,get_cpf,get_agendc,get_contadc,get_numdc,Get_npar",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.TefChq",
+      "evento": "KeyPress",
+      "linhas": 9,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDO Case\n\tCase nKeyCode = 19\n\tCase nKeyCode = 13\n\tOtherwise\n\t\tNodefault\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Opc_cpf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_cpf",
+      "evento": "Valid",
+      "linhas": 32,
+      "codigoOriginal": "Local lcCpfs\n\nIf Lastkey() <> 13\n\tReturn .f.\nEndIf\n\nlcCpfs = StrTran(StrTran(StrTran(This.Value,'.',''),'-',''),'/','')\nlcCpf2 = Strtran(Strtran(Strtran(ThisForm.AntValue,'.',''),'-',''),'/','')\n\nIf lcCpfs # lcCpf2\n\tThisForm.Consultaexecutada = .f.\nEndIf\n\nThis.Parent.opc_cpf.Value = 2\nIf Len(Alltrim(lcCpfs))<>14\n\tThis.Parent.opc_cpf.Value = 1\nEndIf\nThis.Parent.Opc_cpf.Refresh\nIf Not IsEmpty(lcCpfs)\n\tIf (This.Parent.opc_cpf.Value = 1) && CPF\n\t\tIf Not fValidarCPF(Alltrim(lcCpfs))\n\t\t\t=MessageBox('C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValidarCPF,fValidarCNPJ",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_cpf",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\nReturn(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_agendc",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_agendc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_contadc",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_contadc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_numdc",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nElse\n\tIf Lastkey() <> 19\n\t\tThis.Parent.ins.SetFocus\n\t\tReturn .t.\n\tEndif\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_conta",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_conta",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "This.Value = Transform(Val(This.Value),'@L 9999999999')\nif not empty(this.value)\n\tif not fChkDigitos(xpar.contas) \n\t\tmessagebox('Conta Inválida !',0+48,'')\n\t\tthis.value = ''\n\t\treturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_age",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_age",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "if not empty(this.value)\n\tif not fChkDigitos(xpar.agencias) \n\t\tmessagebox('Agencia Inválida !',0+48,'')\n\t\tthis.value = ''\n\t\treturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_age",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_bco",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "If ( Empty(This.Parent.Get_pca.Value) Or Empty(This.Parent.Get_cpf.Value) ) And Not ThisForm.LiberaPca\n\tThis.Parent.Get_pca.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_pca,Get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_bco",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_bco",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Local Leitura, Tecla, Contador\n\nif not empty(this.value)\n\tif not fChkDigitos(xpar.bancos) \n\t\tmessagebox('Banco Inválido !',0+48,'')\n\t\tthis.value = ''\n\t\treturn .F.\n\tendif\nendif\n\nSelect xpar\nset order to\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xpar",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_bco",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_num",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Lastkey() = 27\n\tThisform.Limpa_cheptef()\n\tThis.Parent.Get_pca.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef",
+        "controlesReferenciados": "Get_pca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_num",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "if not empty(this.value)\n\tif not fChkDigitos(xpar.numeros) \n\t\tmessagebox('Número Inválido !',0+48,'')\n\t\tthis.value =''\n\t\treturn 0\n\tendif\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_num",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "this.peantvalue = this.value\nReturn(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_Pca",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.cmc7=''\nThisForm.Leitor=.f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_Pca",
+      "evento": "LostFocus",
+      "linhas": 86,
+      "codigoOriginal": "If Lastkey() = 05\n\tThis.Parent.Get_Cpf.SetFocus\nElse\n\tIf Lastkey() = 27\n\t\tThisform.Limpa_cheptef()\n\t\tThis.Parent.Get_pca.SetFocus\n\tEndIf\n\tIf ThisForm.Leitor And Not Empty(This.Parent.Get_Cpf.Value)\n\t\tThis.Parent.TefChq.SetFocus\n\t\tllTefChe = This.Parent.TefChq.Valid(.t.)\n\t\tIf ! llTefChe\n\t\t\tThisForm.Leituranova = .t.\n\t\tEndif\n\tEndif\n\tIf Empty(This.Value)\n\t\tIf CrSigOpFp.Dadchqs = [S]\n\t\t\tSelect xPar\n\t\t\tIf Not Eof() And (Empty(Bancos) Or Empty(Agencias) Or Empty(Contas) Or Empty(numeros))\n\t\t\t\tIf Messa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Limpa_cheptef,Leitor And Not Empty,cursorquery,Cotacao,Atuacupom,AtualizaTotal",
+        "controlesReferenciados": "Get_Cpf,Get_pca,Get_TotForma,Get_Saldo,Get_TotLiquido,Get_fpg",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_Pca",
+      "evento": "Valid",
+      "linhas": 114,
+      "codigoOriginal": "Local Leitura, Tecla, Contador, lcMsg, lcCaption, lcBanco, lcAgencia, lcConta, lcNumero\nLocal lnLeTeclado\n\nGoto Top In crSigCdPam\nLeitura     = ''\nlcMsg       = ''\nlcPraca = substr(this.value,1,3)\nlnLeTeclado = Iif( InList(crCfComItc.TpLeChqs,'C','K','H'), 19, 33)\n\nIf CrCfComItc.TpLeChqs # 'M' and Lastkey() <> 13 and LastKey() <> 27 And Lastkey() <> 05 And Not Empty(This.Parent.Get_Cpf.Value)\n\tIf Not Thisform.Leitor\n\t\tIf Thisform.TipoLeitora = 'S'\n\t\t\tIf IsEmpty(Thisform.LeituraSerial)\n\t\t\t\tIf !Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cpf,Get_Pca,Get_Bco,Get_Age,Get_Conta,Get_Num",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_Pca",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Set Confirm Off\nReturn(!(crSigCdOpe.confes=1) and empty(xpar.nidcheps) And Not Thisform.LiberaPca )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.ins",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "*** mena - 19/04/2016 - botao incluido para fazer sequencia do numero do cheque ***\nLocal llOkTef,lnIdent,lcTipo,SendTef,lcNSus,lnOrdem,RetImpr,_RetAprov,_RetcChep,lcErro\nSELECT xpar\nwBco = Bancos\nwAgc = Agencias\nwCta = Contas\nwdAgc= DigAgencs\nwdcta= DigContas\nwcpf = Cpfs\nwpca = pracas\nwnch = numeros\n\nSkip\nThis.Parent.Get_num.Value = \"\"\nThis.Parent.Get_numdc.Value = \"\"\nIf Not Eof()\n\t*** mena 11/04/2016 - gera numero sequencial de cheque - DVie ***\n\tdo while not EOF()\n\t\twnch = VAL(wnch)+1 \n\t\twnch... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_num,Get_numdc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.cmbTOpers",
+      "evento": "LostFocus",
+      "linhas": 16,
+      "codigoOriginal": "Local lnCodigo, lcCodDope\n\nIf Lastkey() = 13\n\tThis.Visible = .f.\n\tlcDopCx = Substr(ThisForm.CmbTOpers.ListItem(ThisForm.CmbTOpers.ListIndex), 3)\n\tlcSql = [Select Dopes From SigCdOpe Where Dopes = ']+lcDopCx+[']\n\tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'TempoOpe') > 0 And Reccount('TempoOpe') > 0\n\n\t\tThisForm.Cnt_mensagem.Mensagem.Caption = 'Aguarde... Reconfigurando '\n\t\t\n\t\tThisForm.parentform.AciomudaOpe(Padr(lcDopCx,20))\n\tEndif\nElse\n\tThis.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ListItem,Sqlexecute,AciomudaOpe",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Timer1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "txtTime = Time()\n=ThisForm.Podatamgr.Cursorquery('SigCdUsu','CrUsu','Usuarios',goSistema.Operador,[nComps])\nThisform.TxtCaption.Caption = '   [ '+Dtoc(Date())+' '+txttime+' ]   '+AllTrim( TprMvCab.Dopes ) + '   [ No : '+Str(TprMvCab.Numes,6)+' ] '+Space(10)+'Caixa: '+;\n\t\t\tIif(Used('crSigFiMpf'),crSigFiMpf.cnCaixas,'')+Space(10)+'Operador(a) : '+goSistema.Operador+' '+;\n\t\t\tAlltrim(crUsu.nComps)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery,Caption = '   [ '+Dtoc",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Alteraqtd",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If Empty(ThisForm.CntItem.Cnt_Produto.Get_produto.Value)\n\tSelect crTpmMvItn\n\tThisForm.lAlteraqtd = .t.\n\tThisForm.CntItem.Cnt_produto.Get_qtds.SetFocus\nElse\n\tThisForm.CntItem.Cnt_produto.Get_Produto.SetFocus\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_produto,Get_qtds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Alteraqtd",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (Empty(Thisform.CntItem.Cnt_Produto.Get_Produto.Value) And ;\n\t\tThisForm.CntItem.Visible And ThisForm.CntItem.cnt_Produto.Get_Produto.Enabled )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Desconto",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "Local llOk\n\nllOk = .t.\n=ThisForm.PoDataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',TprMvCab.Contads,[Situas])\nIf ThisForm.parentform.PodataMgr.Cursorquery('SigCdCst','CrTmpScli','Codigos',CrTmpCli.Situas) And ;\n\tCrTmpScli.BlqDescs = 1\n\tlcdSit = Iif(Empty(CrTmpScli.Descr2s),CrTmpScli.Descrs,CrTmpScli.Descr2s)\n\t_Msg = '' + CrtmpCli.Situas + ' - ' + Alltrim(lcdSit) + chr(13) + ;\n           ' Desconto Bloqueado Pela Situação da Conta '\n\n    =fMensagemFixa(_msg, 48, 'SITUAÇÃO',.F.,.F.,\"\\VBMP\\DESCON... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fMensagemFixa",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_TotVariação,Get_totLiquido,get_PorcVariação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.credito",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "If Not Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\tReturn 0\nEndif\n\nThisForm.CaixaLivre.Visible = .f.\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\nIf crSigCdOpe.AcioSens = 3 And Not ThisForm.Senhaautoins &&Acionamento de Senha\n\tDO Form SigPrScn\n\tThisForm.Senhaautoins = .t.\nEndif\n\nSelect xPar\nCount to wxpar for Valos > 0 and not Empty(fpags) And Not xPar.InsChs\n\nIf wxpar > 0\n\tMessageBox('Favor Excluir as Condições de Pagamento!!!',0+48,'')\n\tReturn 0\nEndif\n\nThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Valos > 0 and not Empty",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.credito",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible ) And ThisForm.Inicia",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.AltPreço",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If Not IsEmpty(crTpmMvItn.CPros)\n\tThisform.lAlteraValor = .t.\n\tWith Thisform.CntItem.Cnt_Desconto \n\t\t.Get_ValDesc.Value = 0\n\t\t.Get_PValDesc.Value = 0\n\tEndWith\n\tThisform.CntItem.Cnt_Subtotal.Get_Valor.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ValDesc,Get_PValDesc,Get_Valor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Itens",
+      "evento": "Click",
+      "linhas": 288,
+      "codigoOriginal": "Local cgc\n\nSelect xPar\nCount to wxpar for Valos > 0 and not Empty(fpags) And Not xPar.InsChs\n\nIf wxpar > 0\n\tMessageBox('Favor Excluir as Condições de Pagamento!!!',0+48,'')\n\tReturn .f.\nEndIf\n\nIf Not Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\tReturn .f.\nEndif\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n=ThisForm.Podatamgr.cursorquery('SigOpCdc','CrSigOpCdc','dopes',TprMvCab.Dopes)\nSelect TmpOperacao\nllSubNivel = .f.\nScan for !IsEmpty( Codigos ) and CrSigCdOpe.I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Valos > 0 and not Empty,for !IsEmpty,fLerFiscal",
+        "metodosFormChamados": "cursorquery,IniciarCupom,GerarCupom,DataAbertura = Datetime,Caption = Substr,SubNivelFiscal =,VerIcms",
+        "controlesReferenciados": "Get_fpg,Get_Produto",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Itens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.MudaOpe",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "Select xPar\nCount to wxpar for Valos > 0 and not Empty(fpags)\nIf wxpar > 0\n\tMessageBox('Condições de Pagamento já lançada!!!',0+48,'')\n\tReturn 0\nEndif\nIf ThisForm.ParentForm.AbriuCupom\n\tMessageBox('Cupom Fiscal já Aberto!!!',0+48,'')\n\tReturn 0\nEndIf\nSelect TmpOperacao\nCount to WxOp For Codigos > 0\nIf WxOp > 0\n\tMessageBox('Operações de SubNíveis já lançada!!!',0+48,'')\n\tReturn 0\nEndif\nSelect TmpDevol\nCount to WxOp For Codigos > 0\nIf WxOp > 0\n\tMessageBox('Operações de Crédito já lançada!!!',0+48,'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Valos > 0 and not Empty",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.ok",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "Select TmpOperacao\nllSubNivel = .f.\nScan for !IsEmpty( Codigos )\n\tllSubNivel = .t.\nEndScan\nIf CrSigCdOpe.ItAutos = 8 And llsubNivel\n\tSelect crTpmMvItn\n\tLocate For Not ImpCupFis And Not Empty(Cpros)\n\tIf Not Eof() And ThisForm.Barra_Botoes.Itens.Visible \n\t\tMessageBox('Obrigatório Impressão dos Itens... Click <F2>',0+48,'')\n\t\tReturn .f.\n\tEndif\nEndif\nIf !llSubNivel\n\tIf InList(CrSigCdOpe.SubnObrigs,1,3)\n\t\tMessageBox( 'Não foi informado nenhum sub-nível', 48, 'Obrigatório' )\n\t\tReturn .f.\n\tEndif\nEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for !IsEmpty",
+        "metodosFormChamados": "AcioSalva",
+        "controlesReferenciados": "get_TotVariação",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.ok",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Inicia)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.identifica",
+      "evento": "Click",
+      "linhas": 163,
+      "codigoOriginal": "If Not Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\tReturn 0\nEndif\n\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\nIf crSigCdOpe.AcioSens = 3 And Not ThisForm.Senhaautoins &&Acionamento de Senha\n\tDO Form SigPrScn\n\tThisForm.Senhaautoins = .t.\nEndif\n\nThisForm.CntFinanc.Visible = .f.\nThisForm.CntItem.Visible = .f.\nThisForm.Cnt_Credito.Visible = .f.\nThisform.Cnt_pendencia.Visible = .f.\nThisForm.Cnt_fpagto.Visible = .f.\n\nWith ThisForm\n\t.cnt_Pendencia.GradeMultiSubN.Visi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Not IsEmpty",
+        "metodosFormChamados": "cursorquery,SqlExecute",
+        "controlesReferenciados": "Get_fpg,get_dconta,get_cpf,Get_Codigo,Get_PedCli,Get_ListaPreco,get_tabd",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.identifica",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible ) And (ThisForm.Inicia Or ThisForm.LiberaIdent)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Cancela",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Select TmpOperacao\n\nIf Wexist('SIGPRDFT')\n\tSIGPRDFT.Release\nEndIf\nIf Wexist('SigCrTef')\n\tSigCrTef.Release\nEndIf\n\nIf Not Empty(ThisForm.CntItem.Cnt_Produto.Get_Produto.Value)\n\tReturn .f.\nEndif\n\nllSubNivel = .f.\nScan for !IsEmpty( Codigos )\n\tllSubNivel = .t.\nEndScan\nIf CrSigCdOpe.ItAutos = 8 And llsubNivel\n\tSelect crTpmMvItn\n\tLocate For Not ImpCupFis And Not Empty(Cpros)\n\tIf Not Eof() And ThisForm.Barra_Botoes.Itens.Visible \n\t\tMessageBox('Obrigatório Impressão dos Itens... Click <F2>',0+48,'')\n\t\tR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for !IsEmpty",
+        "metodosFormChamados": "AcioCancela",
+        "controlesReferenciados": "Get_Produto,get_TotVariação",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Pagto",
+      "evento": "Click",
+      "linhas": 425,
+      "codigoOriginal": "Lparameters pAbertura\n\nLocal lnContaItems, cgc\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\nIf crSigCdOpe.AcioSens = 3 And Not ThisForm.Senhaautoins &&Acionamento de Senha\n\tDO Form SigPrScn\n\tThisForm.Senhaautoins = .t.\nEndif\nThisForm.Bcds = 0\nSelect TmpOperacao\nllSubNivel = .f.\nScan for !IsEmpty( Codigos )\n\tllSubNivel = .t.\nEndScan\n\n=fLerFiscal(CrSigOpCdd.NomEcfs)\n\nIf CrSigCdOpe.ItAutos = 8 And llsubNivel\n\tSelect crTpmMvItn\n\tLocate For Not ImpCupFis And Not Em... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for !IsEmpty,fLerFiscal",
+        "metodosFormChamados": "cursorquery,VerifSubTotal,Visible Or,Click,VerStatus,SqlExecute,AbreCupom,GerarCupom,DataAbertura = Datetime",
+        "controlesReferenciados": "Get_cpf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Pagto",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "If !Thisform.parentform.naowhen\n\tIf crSigCdOpe.parcs<>1\t\n\t\treturn(.f.)\n\tEndIf\n\tReturn ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible )\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.VerPreco",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm.Cnt_Consulta\n\tIf Not .Visible\n\t\t.Visible = .t.\n\t\t.ZOrder(0)\n\t\t.Cnt_Produto.visible = .t.\n\t\t.Get_Unit.Visible = .t.\n\t\t.Cnt_Resultado.Mensage1.Caption = ''\n\t\t.Cnt_Resultado.Mensage2.Caption = ''\n\t\t.Get_Unit.Value = 0\n\t\t.Cnt_Produto.Get_Produto.Visible = .t.\n\t\t.Cnt_Resultado.Mensage1.Visible = .t.\n\t\t.Cnt_Resultado.Mensage2.Visible = .t.\n\t\t.Cnt_Resultado.Visible = .t.\n\tEndif\n\t.Cnt_Produto.Get_Produto.Value = ' '\n\t.Cnt_Produto.Get_Produto.SetFocus\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Unit,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.impfiscal",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not Wexist('SIGMEFIS')\n\tDO Form SIGMEFIS\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.impfiscal",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (Empty(Thisform.CntItem.Cnt_Produto.Get_Produto.Value) And ;\n\t\tNot ThisForm.Cnt_Fpagto.cnt_ChequepreTef.Visible And Lastkey() # 13 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Financia",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "If Not Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\tReturn 0\nEndif\n\nThisForm.CaixaLivre.Visible = .f.\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\nSelect xPar\nCount to wxpar for Valos > 0 and not Empty(fpags) And Not xPar.InsChs\n\nIf wxpar > 0\n\tMessageBox('Favor Excluir as Condições de Pagamento!!!',0+48,'')\n\tReturn 0\nEndIf\n\nThisForm.CntFinanc.Visible = .f.\nThisform.Cnt_Credito.Visible = .f.\nThisForm.CntItem.Visible = .f.\nThisForm.Cnt_identifica.Visible = .f.\nThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Valos > 0 and not Empty",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "Get_fpg,Get_Barra_1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Financia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible ) And ThisForm.Inicia",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.pendencia",
+      "evento": "Click",
+      "linhas": 70,
+      "codigoOriginal": "If Not Empty(ThisForm.Cnt_Fpagto.Get_fpg.Value)\n\tReturn 0\nEndif\n\nThisForm.CaixaLivre.Visible = .f.\n=ThisForm.Podatamgr.cursorquery('SigCdOpe','CrSigCdOpe','dopes',TprMvCab.Dopes)\n\nIf crSigCdOpe.AcioSens = 3 And Not ThisForm.Senhaautoins &&Acionamento de Senha\n\tDO Form SigPrScn\n\tThisForm.Senhaautoins = .t.\nEndIf\n\nSelect xPar\nCount to wxpar for Valos > 0 and not Empty(fpags) And Not xPar.InsChs\n\nIf wxpar > 0\n\tMessageBox('Favor Excluir as Condições de Pagamento!!!',0+48,'')\n\tReturn 0\nEndIf\nIf Thisf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Valos > 0 and not Empty,for !IsEmpty,For ImpCupFis And Not Empty",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.pendencia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible ) And ThisForm.Inicia",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.CancPagto",
+      "evento": "Click",
+      "linhas": 151,
+      "codigoOriginal": "Local _pcnIdTef, lctipo\nSelect xPar\nGo Bott\n_pcnIdTef = xPar.cnIdTefs\nlnChv     = xPar.nChaves\n\n=ThisForm.Parentform.podatamgr.cursorquery('SigOpFp','CrSigOpFp','Fpags',xPar.Fpags)\nSelect xPar\n*!*21/11/2016If Eof() Or Not(Empty(crSigOpFp.cCupomnvs) or crSigOpFp.infos = 'C') Or xPar.InsChs\n*!*21/11/2016\tIf Not Empty(CrSigOpFp.cCupomNvs) And CrSigOpFp.Infos <> 'C' And CrSigFiFis.Imps <> 'S/IMPRESSORA'\nIf Eof() Or Not(crSigOpFp.cCupomnvs<>'TEF' or crSigOpFp.infos = 'C') Or xPar.InsChs\n\tIf CrSigOpFp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for ! Deleted",
+        "metodosFormChamados": "cursorquery,SqlExecute,Commit,DeleteSigTef,Limpa_cheptef,Cotacao",
+        "controlesReferenciados": "Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.CancPagto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( ThisForm.Cnt_Fpagto.Visible And Not ThisForm.Cnt_Fpagto.Cnt_ChequepreTef.Visible )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.apaga",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "Select crTpmMvItn\nIf CrSigCdOpe.CupFis = 1\n\tThisForm.CntItem.Enabled = .f.\n\t\n\tWith ThisForm.Cancelaitem\n\t\t.Visible = .t.\n\t\t.zorder\n\t\t.Refresh\n\t\t.Get_item.Value = ThisForm.Citem - 1\n\t\tSelect crTpmMvItn\n\t\tLocate For citens = ThisForm.CancelaItem.Get_item.Value\n\t\tIf Eof()\n\t\t\t.Get_Item.Value = 0\n\t\tEndif\n\t\t.Get_Produto.Value = crTpmMvItn.Cpros\n\t\t.Get_dpro.value    = crTpmMvItn.Dpros\n\t\t.Get_cbarra.Value  = crTpmMvItn.CodBarras\n\t\t.Get_Item.SetFocus\n\tEndWith\n\nElse\n\tSelect crTpmMvItn\n\tIf Not Empty(crTpmM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_item,Get_Produto,Get_dpro,Get_cbarra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.apaga",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRetWhen = (Empty(Thisform.CntItem.Cnt_Produto.Get_Produto.Value) And ThisForm.CntItem.Visible )\nReturn( llRetWhen )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.Barra_Botoes.Acrescimo",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "Local llOk\n\nllOk = .t.\n\nIf ThisForm.Cnt_Fpagto.Desconto.Get_TotVariação.Value > 0\n\tMessageBox('Desconto Informado. Não pode haver Acréscimo !!!',0+16,'')\n\tllOk = .f.\nEndIf\nIf ThisForm.Cnt_Fpagto.Desconto.Visible\n\tllOk = .f.\nEndif\n\nIf llOk\n\tThisForm.Validadesconto = .t.\n\t*!*ThisForm.parentform.validadesconto = .t.\n\tWith ThisForm.Cnt_Fpagto\n\t\t.Acrescimo.Visible = .t.\n\t\t.Acrescimo.enabled = .t.\n\t\t.Get_totLiquido.Visible = .t.\n\t\t.Say15.Visible = .t.\n\t\t.Acrescimo.get_PorcVariação.Setfocus\n\tEndWith\nEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_TotVariação,Get_totLiquido,get_PorcVariação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.Get_Produto",
+      "evento": "Valid",
+      "linhas": 92,
+      "codigoOriginal": "If !Empty(This.Value)\n\n\tSNumero = fVerificarBarras( This.Value )\n\tIf snumero\n\t\tSelect crTpmMvItn\n\t\tSet Order to CodBarras\n\t\tIf ! Seek( Val( This.Value ) ) \n\t\t\tThis.Parent.Ok.Enabled = .f.\n\t\t\tMessagebox( 'Código de Barras não digitado nesta Operação...', 48, '' )\n\t\t\tSet Order to\n\t\t\tGo bott\n\t\t\tReturn 0\n\t\tEndIf\n\tElse\n\t\tcpro=This.Value\n\t\tIf fVerificarBarras(cpro,9)\n\t\t\tlcSql = [Select Cpros From SigCdPro Where Ean13 = ]+Str(Val(Cpro),13)\n\t\t\tIf ThisForm.Parentform.PodataMgr.SqlExecute(lcSql,'CrTmpPro'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt,fwBuscaSel,fVerificarBarras",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Item,Get_dpro,Get_cbarra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (This.Parent.Get_item.Value = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_item",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.Get_item",
+      "evento": "Valid",
+      "linhas": 35,
+      "codigoOriginal": "With This.Parent\n\tIf This.Value > 0\n\t\tIf This.Value < ( ThisForm.citem - 101 )\n\t\t\tMessageBox('Cancelamento somente dos ultimos 100 Itens',0+48,'')\n\t\t\tThis.Value = 0\n\t\t\tThis.Refresh\n\t\t\tReturn .f.\n\t\tEndIf\n\t\tSelect crTpmMvItn\n\t\tSet Order To Citens\n\t\tLocate For Citens = This.Value\n\t\tIf Eof() Or Empty(crTpmMvItn.Cpros)\n\t\t\tMessageBox('Item não encontrado!!!',0+48,'')\n\t\t\tReturn .f.\n\t\tElse\n\t\t\tIf Not Empty(crTpmMvItn.EmpDopNums)\n\t\t\t\tMessageBox('Itens do Sub-Nivel não podem ser cancelados!!!',0+48,'')\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto,Get_Dpro,Get_cbarra",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.Get_item",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.Get_Cbarra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.get_dpro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.ok",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "Do Form SigOpSen With 'CANCITEM', 'Cancelamento de Item', '' To _Retorno\nllOk = ( Left( _Retorno, 1 ) = \"*\" )\nIf !llOk\n\tMessageBox('Cancelamento não autorizado!!!',0+48,'')\n\tReturn .f.\nElse\n\tItemCancelado = Thisform.ParentForm.Cancel_Item_Gen(This.Parent.Get_item.Value)\n\tIf Not ItemCancelado\n\t\tIf ThisForm.CancelCupom()\n\t\t\tItemCancelado = .t.\n\t\tEndIf\n\tEndif\n\tIf ItemCancelado\n\t\tSelect CQSigExMvi\n\t\tZap\n\t\tSelect TprMvCab\n\t\tGoto Top\n\t\tScatter Memvar\n\t\tSelect CQSigExMvc\n\t\tIf Reccount() = 0\n\t\t\tInsert I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Cancel_Item_Gen,CancelCupom,Update,commit,Atuacupom,Total_item,UltimoCancel = Iif",
+        "controlesReferenciados": "Get_item,Get_Produto",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVITN.CancelaItem.CancelaDisp",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select crTpmMvItn\nSet Order To \nThisForm.CntItem.Enabled = .T.\nThisForm.CancelaItem.Visible = .f.\nThisForm.Enabled = .T.\nThisForm.CntItem.Cnt_Produto.Get_Produto.Setfocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVITN.Procedure",
+      "queryOriginal": "\tlcSql = [Select Cpros,Cbars,DescFis,DescEcfs From SigCdPro Where Cpros = ']+crTpmMvItn.Cpros+['] \t=Thisform.Podatamgr.SqlExecute(lcSql,'xPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "Cpros,Cbars,DescFis,DescEcfs,Cpros+[],SqlExecutelcSql,xPro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Procedure",
+      "queryOriginal": "LcQuery = [Select a.Fpags, a.Descrs, a.MoeFpgs, a.Fparcs, 0 as Obrigs, a.cCupomNvs, a.Situas, a.nCodFinzs, ]+; \t\t  [a.nFpags, a.Trocos, a.Infos, a.Acumulas, a.libcsens, o.autos, a.ChkBins, a.BlqTabDs From SigOpFp a, SigOpFpo o ]+; \t\t  [Where a.Fpags = o.Fpags And a.nCodFinzs > 0 and o.dopes = ']+TprMvCab.Dopes+['] If Thisform.Parentform.PoDataMgr.SqlExecute(lcQuery,'CrTmpFpag') < 1",
+      "tabelas": "SigOpFp",
+      "colunas": "Fpags,Descrs,MoeFpgs,Fparcs,cCupomNvs,Situas,nCodFinzs,nFpags,Trocos,Infos,Acumulas,libcsens,autos,ChkBins,BlqTabDs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Procedure",
+      "queryOriginal": "\t\tSelect [ ] as Agrupar, Max(Citens) as Citens From crTpmMvItn Where cpros <> ' ' Into Cursor ItenEesti group by 1",
+      "tabelas": "crTpmMvItn",
+      "colunas": "cpros,ItenEesti",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Procedure",
+      "queryOriginal": "\t\tInsert Into crTpmMvItn(emps,dopes,numes,citens ) ; \t\t\tValue (TprMvCab.emps,TprMvCab.dopes,TprMvCab.numes, Thisfor... [TRUNCADO]",
+      "tabelas": "crTpmMvItn",
+      "colunas": "emps,dopes,numes,citens",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Valid",
+      "queryOriginal": "\tlcSql = [Select Top 1 Serifab,dtredzs From SigFiRx Where SeriFab = ']+pSeriFab+[' Order by DtRedZs Desc ] \tIf ThisForm.PoDataMgr.SqlExecute(lcSql,'LocalRelx') < 1",
+      "tabelas": "SigFiRx",
+      "colunas": "dtredzs,SeriFab,SqlExecutelcSql,LocalRelx",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Valid",
+      "queryOriginal": "\tlnErr = pCnx.SqlExecute([Select * From SigCdSts Where Cods = '] + Padr(pSta, 3) + ['], [crAr1])",
+      "tabelas": "SigCdSts",
+      "colunas": "Cods,PadrpSta",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Consulta.LostFocus",
+      "queryOriginal": "lcSql = [Select Logos From SigCdPac ]",
+      "tabelas": "SigCdPac",
+      "colunas": "Logos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Consulta.Cnt_Produto.Get_Produto.Valid",
+      "queryOriginal": "\tSelect * From crTpmMvItn Where 0=1 Into Cursor crTpmMvItnPro ReadWrite",
+      "tabelas": "crTpmMvItn",
+      "colunas": "crTpmMvItnPro,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Consulta.Cnt_Produto.Get_Produto.Valid",
+      "queryOriginal": "\t\tlcSql = [Select cBars,Contas,Empos,Cpros,Qtds,Pesos,codCors,codTams From SigOpEtq... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "cBars,Contas,Empos,Cpros,Qtds,Pesos,codCors,codTams",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Consulta.Command1.Click",
+      "queryOriginal": "lcSql = [Select Logos From SigCdPac ]",
+      "tabelas": "SigCdPac",
+      "colunas": "Logos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Credito.GradeDevol.Column1.get_Devol.Valid",
+      "queryOriginal": "\t\tSelect sum(1) as Qt, Codigos From TmpDevol... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Pendencia.Proximo.GotFocus",
+      "queryOriginal": "Select [ ] as Agrupar, sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1",
+      "tabelas": "TprMvCabV",
+      "colunas": "TotEestV",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.Responsavel.Get_cpf.Valid",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Cpfs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.Vendedor.Get_conta.When",
+      "queryOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1",
+      "tabelas": "TprMvCabV",
+      "colunas": "TotEestV",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.Vendedor.Get_dconta.When",
+      "queryOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1",
+      "tabelas": "TprMvCabV",
+      "colunas": "TotEestV",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.Vendedor.Get_cpf.Valid",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Cpfs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.Vendedor.Get_cpf.When",
+      "queryOriginal": "Select [ ] as Agrupar,sum(1) as Qt From TprMvCabV Where Not Empty(Contas) Into Cursor TotEestV group by 1",
+      "tabelas": "TprMvCabV",
+      "colunas": "TotEestV",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.Cnt_Identifica.TabDesconto.Get_ListaPreco.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigCdLpc Where ]+Iif(CrSigCdOpe.tplprecs=2,[Tipos = 'C' ],[Tipos <> 'C']) \tIf ThisForm.PoDatamgr.SqlExecute(lcSql,'CsSigCdLpc') < 1",
+      "tabelas": "SigCdLpc",
+      "colunas": "tplprecs,SqlExecutelcSql,CsSigCdLpc",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.cmbTOpers.LostFocus",
+      "queryOriginal": "\tlcSql = [Select Dopes From SigCdOpe Where Dopes = ']+lcDopCx+['] \tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'TempoOpe') > 0 And Reccount('TempoOpe') > 0",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,SqlexecutelcSql,TempoOpe,ReccountTempoOpe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVITN.CancelaItem.Get_Produto.Valid",
+      "queryOriginal": "\t\t\tlcSql = [Select Cpros From SigCdPro Where Ean13 = ]+Str(Val(Cpro),13) \t\t\tIf ThisForm.Parentform.PodataMgr.SqlExecute(lcSql,'CrTmpPro'... [TRUNCADO]",
+      "tabelas": "SigCdPro",
+      "colunas": "Cpros,Ean13",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPro", "SigOpFp", "crTpmMvItn", "SigFiRx", "SigCdSts", "SigCdPac", "TprMvCabV", "SigCdCli", "SigCdLpc", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

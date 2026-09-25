@@ -1,0 +1,37 @@
+=== TESTE FASE 5 FormSIGMVMVT ===
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+
+--- CAMPOS DE FILTRO (Fase 5) x DUMP DO SCX LEGADO ---
+OK  txt_4c_CEmp    : Top=127 Left=104 Width=39 Height=23 MaxLen=3 | VARTYPE(Value)=C | Enabled=.T. | ReadOnly=.F. | InputMask=[]
+OK  txt_4c_Dopes   : Top=127 Left=221 Width=178 Height=23 MaxLen=20 | VARTYPE(Value)=C | Enabled=.T. | ReadOnly=.F. | InputMask=[]
+OK  txt_4c_Numes   : Top=127 Left=463 Width=53 Height=23 MaxLen=6 | VARTYPE(Value)=N | Enabled=.T. | ReadOnly=.F. | InputMask=[999999]
+OK  txt_4c_DtI     : Top=127 Left=596 Width=75 Height=23 MaxLen=6 | VARTYPE(Value)=D | Enabled=.T. | ReadOnly=.F. | InputMask=[99/99/9999]
+OK  txt_4c_DtF     : Top=127 Left=692 Width=75 Height=23 MaxLen=6 | VARTYPE(Value)=D | Enabled=.T. | ReadOnly=.F. | InputMask=[99/99/9999]
+
+--- LABELS DO FILTRO ---
+lbl_4c_Label1  : Caption=[Empresa :] Top=131 Left=42 ForeColor=10179620 Visible=.T.
+lbl_4c_Label2  : Caption=[Operação :] Top=131 Left=154 ForeColor=10179620 Visible=.T.
+lbl_4c_Label3  : Caption=[Número :] Top=131 Left=406 ForeColor=10179620 Visible=.T.
+lbl_4c_Label4  : Caption=[Período :] Top=131 Left=540 ForeColor=10179620 Visible=.T.
+lbl_4c_Label5  : Caption=[à] Top=131 Left=678 ForeColor=10179620 Visible=.T.
+
+this_lAutomatico (sem params, esperado .F.) = .F.
+
+--- Automatico com SO a Empresa (legado: .F.) ---
+  this_lAutomatico    = .F.  OK
+  txt_4c_CEmp Enabled = .T. (esperado .T. - filtro segue editavel)
+  txt_4c_Dopes Enabled= .T.
+  txt_4c_CEmp Value   = [001] (pre-preenchido)
+  txt_4c_CEmp ReadOnly= .F. (esperado .F.)
+
+--- Automatico com os TRES params (legado: .T.) ---
+  this_lAutomatico     = .T.  OK
+  txt_4c_CEmp  ReadOnly=.T. Enabled=.F.
+  txt_4c_Dopes ReadOnly=.T. Enabled=.F.
+  txt_4c_Numes ReadOnly=.T. Enabled=.F.
+  txt_4c_DtI   Enabled =.F.
+  txt_4c_DtF   Enabled =.F.
+  Values: CEmp=[001] Dopes=[MONTAGEM] Numes=123
+
+--- FIM ---

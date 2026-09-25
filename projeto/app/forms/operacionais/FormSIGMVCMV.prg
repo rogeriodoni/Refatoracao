@@ -1,0 +1,1337 @@
+*==============================================================================
+* FormSIGMVCMV.prg - Processamento para Lancamentos de Centro de Custos
+*                     nao lancados
+* Origem: SIGMVCMV.SCX
+* Herda de: FormBase
+* Tipo: OPERACIONAL (form de processamento em lote, SEM PageFrame Lista/Dados -
+*       layout customizado: cabecalho + filtros de periodo/moeda/empresa +
+*       grade de selecao de operacoes + botao Processar/Encerrar)
+*
+* FASE 4/8 - Grid de selecao de operacoes (grd_4c_Dados, espelha grdOperacaos
+* + cursor csOperacaos do legado) e botoes Processar/Encerrar/Marcar-Desmarcar.
+* Campos de filtro (Fases 5-6) e a logica pesada de processamento/validacao
+* (Fases 7-8) sao adicionados nas fases seguintes - THIS.Processamento() e
+* THIS.LimparTela() (equivalentes a ThisForm.Processamento/Limpatela do
+* legado) sao chamados a partir daqui mas implementados so na Fase 7/8.
+*
+* FASE 5/8 - Primeira metade dos campos de filtro (grupo Periodo: getDtInicial/
+* getDtFinal/Say1/Say6 + grupo Moeda: get_cd_moeda/lbl_moeda/get_ds_moeda),
+* espelhando as posicoes exatas do SIGMVCMV.SCX original (form OPERACIONAL sem
+* PageFrame - controles direto no form, sem compensacao de +29). Os handlers
+* Valid com lookup (fwBuscaExt de moeda) e fAcessoEmpresa ficam para a Fase
+* 7/8, junto com Processamento()/LimparTela() - nesta fase os campos apenas
+* existem e aceitam digitacao livre.
+*
+* FASE 7/8 - LimparTela() (transcricao direta do PROCEDURE limpatela legado)
+* e Processamento() (delega ao motor SIGMVCMVBO.ProcessarLancamentos, que
+* implementa o PROCEDURE processamento + fazcontra legado - geracao dos
+* pares de lancamento D/C em SigMvCcr a partir do custo das operacoes
+* financeiras marcadas, com conversao de moeda). O BO ja reporta sucesso/
+* erro/aviso em cada caminho (regra #20 CLAUDE.md); o form so trata o aviso
+* das operacoes que pedem visualizacao de titulos (VisTit = 1; a tela
+* SigMvTi2 do legado esta fora do acervo desta migracao).
+*==============================================================================
+
+DEFINE CLASS FormSIGMVCMV AS FormBase
+
+    *-- Propriedades visuais (copiadas EXATAS do original SIGMVCMV.SCX)
+    Height       = 323
+    Width        = 800
+    AutoCenter   = .T.
+    TitleBar     = 0
+    ShowWindow   = 1
+    WindowType   = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    BorderStyle  = 2
+    FontName     = "Tahoma"
+    FontSize     = 8
+    Caption      = "Processamento para o Lan" + CHR(231) + "amentos de Centro de Custos n" + CHR(227) + "o lan" + CHR(231) + "ados"
+
+    *==========================================================================
+    * Init - apenas DODEFAULT (FormBase.Init ja chama InicializarForm)
+    *==========================================================================
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *==========================================================================
+    * InicializarForm - cria o Business Object, valida a conexao e monta a
+    * estrutura visual base (cabecalho). Grid, botoes e campos de filtro sao
+    * adicionados nas fases seguintes.
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_lProsseguir, loc_oErro
+        loc_lSucesso = .F.
+        loc_lProsseguir = .T.
+
+        TRY
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
+            THIS.this_oBusinessObject = CREATEOBJECT("SIGMVCMVBO")
+
+            IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                IF gnConnHandle <= 0
+                    MsgErro("Imposs" + CHR(237) + "vel Efetuar Conex" + CHR(227) + ;
+                        "o com Servidor de Banco de Dados.", ;
+                        "Conex" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                THIS.CriarCursorOperacoes()
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarBotoesAcao()
+                THIS.ConfigurarCamposPeriodoMoeda()
+                THIS.ConfigurarCamposEmpresaOperacao()
+                THIS.ConfigurarBotoesGrade()
+                THIS.ConfigurarGrid()
+                THIS.CarregarLista()
+                THIS.TornarControlesVisiveis()
+                THIS.AjustarBotoesPorModo()
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro InicializarForm")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPageFrame - Monta o cabecalho cinza (cntSombra do legado).
+    * Form OPERACIONAL sem PageFrame Lista/Dados: o cabecalho e um container
+    * direto no form, equivalente ao SIGMVCMV.cntSombra original.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Sombra", "Container")
+            WITH THIS.cnt_4c_Sombra
+                .Top         = 0
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BackColor   = RGB(100, 100, 100)
+                .BackStyle   = 1
+                .BorderWidth = 0
+
+                .AddObject("lbl_4c_LblSombra", "Label")
+                WITH .lbl_4c_LblSombra
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontBold  = .T.
+                    .FontName  = "Tahoma"
+                    .FontSize  = 18
+                    .AutoSize  = .F.
+                    .WordWrap  = .T.
+                    .Alignment = 0
+                    .BackStyle = 0
+                    .ForeColor = RGB(0, 0, 0)
+                    .Caption   = THIS.Caption
+                ENDWITH
+
+                .AddObject("lbl_4c_LblTitulo", "Label")
+                WITH .lbl_4c_LblTitulo
+                    .Top       = 17
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontBold  = .T.
+                    .FontName  = "Tahoma"
+                    .FontSize  = 18
+                    .AutoSize  = .F.
+                    .WordWrap  = .T.
+                    .Alignment = 0
+                    .BackStyle = 0
+                    .ForeColor = RGB(255, 255, 255)
+                    .Caption   = THIS.Caption
+                ENDWITH
+
+                .Visible = .T.
+            ENDWITH
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro ConfigurarPageFrame")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * TornarControlesVisiveis - Torna visiveis os controles criados via
+    * AddObject (que nascem com Visible = .F. por padrao)
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.TornarVisivelRecursivo(THIS)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro TornarControlesVisiveis")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * TornarVisivelRecursivo - Percorre o container recursivamente
+    *==========================================================================
+    PROTECTED PROCEDURE TornarVisivelRecursivo(par_oContainer)
+        LOCAL loc_nI, loc_oCtrl
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oCtrl) = "O"
+                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                    loc_oCtrl.Visible = .T.
+                ENDIF
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarVisivelRecursivo(loc_oCtrl)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * CriarCursorOperacoes - Cria o cursor de trabalho da grade de selecao de
+    * operacoes (espelha "Create Cursor csOperacaos (Marcas l(1), Operacaos
+    * c(20), VisTit n(1))" + "Index on Operacaos Tag Operacaos" do PROCEDURE
+    * Load do legado). Estrutura fixa, reaproveitada em todas as fases
+    * seguintes que popularem o cursor - a ORDEM dos campos NUNCA muda.
+    *==========================================================================
+    PROTECTED PROCEDURE CriarCursorOperacoes()
+        LOCAL loc_cCursor
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+
+        CREATE CURSOR (loc_cCursor) (Marcas L(1), Operacaos C(20), VisTit N(1))
+        SELECT (loc_cCursor)
+        INDEX ON Operacaos TAG Operacaos
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoesAcao - Shape decorativo + botoes Processar/Encerrar,
+    * posicionados diretamente no form (fora de container), EXATAMENTE como
+    * no SIGMVCMV.SCX original (Shape1/Processa/Cancela).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoesAcao()
+        THIS.AddObject("shp_4c_Shape1", "Shape")
+        WITH THIS.shp_4c_Shape1
+            .Top           = -2
+            .Left          = 644
+            .Height        = 37
+            .Width         = 52
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 1
+            .BorderColor   = RGB(136, 189, 188)
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("cmd_4c_Processa", "CommandButton")
+        WITH THIS.cmd_4c_Processa
+            .Top             = 3
+            .Left            = 649
+            .Height          = 75
+            .Width           = 75
+            .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .Caption         = "\<Processar"
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .T.
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .TabIndex        = 14
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Processa, "Click", THIS, "BtnProcessaClick")
+
+        THIS.AddObject("cmd_4c_Cancela", "CommandButton")
+        WITH THIS.cmd_4c_Cancela
+            .Top             = 3
+            .Left            = 724
+            .Height          = 75
+            .Width           = 75
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Cancel          = .T.
+            .Caption         = "Encerrar"
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .T.
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .TabIndex        = 15
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Cancela, "Click", THIS, "BtnEncerrarClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCamposPeriodoMoeda - Primeira metade dos campos de filtro
+    * (Fase 5/8): grupo Periodo (getDtInicial/getDtFinal/Say1/Say6) e grupo
+    * Moeda para Conversao (get_cd_moeda/lbl_moeda/get_ds_moeda). Controles
+    * direto no form (sem container/PageFrame), posicoes EXATAS do SCX
+    * original - form OPERACIONAL nao usa a compensacao de +29 do PageFrame
+    * de forms CRUD. Handlers de Valid/lookup (fwBuscaExt de moeda) sao
+    * implementados na Fase 7/8, junto com Processamento()/LimparTela().
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposPeriodoMoeda()
+        *-- Say1 "Periodo :"
+        THIS.AddObject("lbl_4c_Label1", "Label")
+        WITH THIS.lbl_4c_Label1
+            .Top       = 92
+            .Left      = 99
+            .Width     = 60
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Per" + CHR(237) + "odo :"
+            .TabIndex  = 1
+            .Visible   = .T.
+        ENDWITH
+
+        *-- getDtInicial
+        THIS.AddObject("txt_4c_DtInicial", "TextBox")
+        WITH THIS.txt_4c_DtInicial
+            .Top           = 88
+            .Left          = 154
+            .Width         = 80
+            .Height        = 23
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = {}
+            .TabIndex      = 2
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Say6 "ate"
+        THIS.AddObject("lbl_4c_Label6", "Label")
+        WITH THIS.lbl_4c_Label6
+            .Top       = 92
+            .Left      = 242
+            .Width     = 25
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "at" + CHR(233)
+            .TabIndex  = 3
+            .Visible   = .T.
+        ENDWITH
+
+        *-- getDtFinal
+        THIS.AddObject("txt_4c_DtFinal", "TextBox")
+        WITH THIS.txt_4c_DtFinal
+            .Top           = 88
+            .Left          = 268
+            .Width         = 80
+            .Height        = 23
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = {}
+            .TabIndex      = 4
+            .Visible       = .T.
+        ENDWITH
+
+        *-- lbl_moeda "Moeda para Conversao:"
+        THIS.AddObject("lbl_4c_Lbl_moeda", "Label")
+        WITH THIS.lbl_4c_Lbl_moeda
+            .Top       = 142
+            .Left      = 26
+            .Width     = 155
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Moeda para Convers" + CHR(227) + "o:"
+            .TabIndex  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        *-- get_cd_moeda (codigo da moeda de conversao, lookup F4 na Fase 7/8)
+        THIS.AddObject("txt_4c__cd_moeda", "TextBox")
+        WITH THIS.txt_4c__cd_moeda
+            .Top           = 138
+            .Left          = 154
+            .Width         = 31
+            .Height        = 23
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .MaxLength     = 3
+            .Format        = "K!"
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = ""
+            .TabIndex      = 9
+            .Visible       = .T.
+        ENDWITH
+
+        *-- get_ds_moeda (descricao da moeda, preenchida pelo lookup na Fase 7/8)
+        THIS.AddObject("txt_4c__ds_moeda", "TextBox")
+        WITH THIS.txt_4c__ds_moeda
+            .Top           = 138
+            .Left          = 187
+            .Width         = 115
+            .Height        = 23
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .MaxLength     = 15
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = ""
+            .TabIndex      = 10
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Lookup de moeda (F4/Enter/Tab) - espelha o Valid original de
+        *-- get_cd_moeda/get_ds_moeda (fwBuscaExt por CMOES/DMOES em SigCdMoe)
+        BINDEVENT(THIS.txt_4c__cd_moeda, "KeyPress", THIS, "ValidarMoeda")
+        BINDEVENT(THIS.txt_4c__ds_moeda, "KeyPress", THIS, "ValidarMoedaDesc")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCamposEmpresaOperacao - Segunda metade dos campos de filtro
+    * (Fase 6/8): grupo Empresa (lbl_empresa/getEmpresa/getDEmpresa) e o
+    * label lbl_operacao ("Operacao :") que antecede a grade de selecao.
+    * Posicoes EXATAS do SIGMVCMV.SCX original. O legado usa fAcessoEmpresa()
+    * (funcao global Fortyus NAO portada) para os Valid de getEmpresa/
+    * getDEmpresa - substituido pelo lookup canonico em SigCdEmp (cemps/
+    * razas), implementado em ValidarEmpresa/ValidarDEmpresa/AbrirBuscaEmpresa.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposEmpresaOperacao()
+        *-- lbl_empresa "Empresa :"
+        THIS.AddObject("lbl_4c_Lbl_empresa", "Label")
+        WITH THIS.lbl_4c_Lbl_empresa
+            .Top       = 118
+            .Left      = 94
+            .Width     = 50
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Empresa :"
+            .TabIndex  = 5
+            .Visible   = .T.
+        ENDWITH
+
+        *-- getEmpresa (codigo da empresa, lookup em SigCdEmp.cemps)
+        THIS.AddObject("txt_4c_Empresa", "TextBox")
+        WITH THIS.txt_4c_Empresa
+            .Top           = 113
+            .Left          = 154
+            .Width         = 31
+            .Height        = 23
+            .FontName      = "Courier New"
+            .FontSize      = 9
+            .Alignment     = 0
+            .MaxLength     = 3
+            .Format        = "K!"
+            .InputMask     = "XXX"
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = ""
+            .TabIndex      = 6
+            .Visible       = .T.
+        ENDWITH
+
+        *-- getDEmpresa (razao social da empresa, preenchida pelo lookup)
+        THIS.AddObject("txt_4c_DEmpresa", "TextBox")
+        WITH THIS.txt_4c_DEmpresa
+            .Top           = 113
+            .Left          = 187
+            .Width         = 339
+            .Height        = 23
+            .FontName      = "Courier New"
+            .FontSize      = 8
+            .MaxLength     = 40
+            .SpecialEffect = 1
+            .BorderColor   = RGB(36, 84, 155)
+            .Value         = ""
+            .TabIndex      = 7
+            .Visible       = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.txt_4c_Empresa, "KeyPress", THIS, "ValidarEmpresa")
+        BINDEVENT(THIS.txt_4c_DEmpresa, "KeyPress", THIS, "ValidarDEmpresa")
+
+        *-- lbl_operacao "Operacao :" (antecede a grade de selecao)
+        THIS.AddObject("lbl_4c_Lbl_operacao", "Label")
+        WITH THIS.lbl_4c_Lbl_operacao
+            .Top       = 167
+            .Left      = 88
+            .Width     = 56
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
+            .TabIndex  = 11
+            .Visible   = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoesGrade - CommandGroup "Selecionar/Desmarcar" ao lado da
+    * grade (espelha cmdBtnGrade.Command1=btnMarcaTudo / Command2=btnDesmarcar
+    * do legado).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoesGrade()
+        THIS.AddObject("obj_4c_CmdBtnGrade", "CommandGroup")
+        WITH THIS.obj_4c_CmdBtnGrade
+            .Top         = 193
+            .Left        = 406
+            .Width       = 43
+            .Height      = 91
+            .ButtonCount = 2
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Themes      = .F.
+            .Value       = 1
+            .TabIndex    = 13
+
+            WITH .Buttons(1)
+                .Top         = -1
+                .Left        = -1
+                .Height      = 45
+                .Width       = 45
+                .Picture     = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+                .Caption     = ""
+                .ToolTipText = "Selecionar"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes      = .F.
+                .TabIndex    = 1
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Top         = 45
+                .Left        = -1
+                .Height      = 45
+                .Width       = 45
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .Caption     = ""
+                .ToolTipText = "Desmarcar"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes      = .F.
+                .TabIndex    = 2
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.obj_4c_CmdBtnGrade, "Click", THIS, "CmdBtnGradeClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGrid - Grade de selecao de operacoes (espelha o With
+    * Thisform.grdOperacaos do PROCEDURE Init original). ColumnCount=3 e
+    * RecordSource sao setados ANTES das propriedades de Column1/Column2,
+    * exatamente na ordem do legado - evita o reset de Width/CurrentControl
+    * que uma reatribuicao POSTERIOR de RecordSource causaria.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGrid()
+        LOCAL loc_cCursor
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+
+        THIS.AddObject("grd_4c_Dados", "Grid")
+        THIS.grd_4c_Dados.ColumnCount  = 3
+        THIS.grd_4c_Dados.RecordSource = loc_cCursor
+
+        WITH THIS.grd_4c_Dados
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .ReadOnly          = .F.
+            .Top               = 165
+            .Left              = 154
+            .Width             = 247
+            .Height            = 148
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .RowHeight         = 18
+            .ScrollBars        = 2
+            .GridLineColor     = RGB(238, 238, 238)
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .TabIndex          = 12
+            *-- Atribuido POR ULTIMO: mudar FontName/FontSize DEPOIS recalcula
+            *-- HeaderHeight para caber a fonte, sobrescrevendo o 0 explicito.
+            .HeaderHeight      = 0
+
+            .Column1.Width        = 15
+            .Column1.ControlSource = loc_cCursor + ".Marcas"
+            .Column1.FontName     = "Courier New"
+            .Column1.Movable      = .F.
+            .Column1.Resizable    = .F.
+
+            .Column1.AddObject("chk_4c_Check1", "CheckBox")
+            WITH .Column1.chk_4c_Check1
+                .Top       = 9
+                .Left      = 2
+                .Height    = 17
+                .Width     = 22
+                .FontName  = "Tahoma"
+                .Alignment = 0
+                .Caption   = ""
+                .Visible   = .T.
+                .AutoSize  = .T.
+            ENDWITH
+            .Column1.CurrentControl = "chk_4c_Check1"
+            .Column1.Sparse         = .F.
+            .Column1.ReadOnly       = .F.
+
+            .Column2.Width         = 210
+            .Column2.ControlSource = loc_cCursor + ".Operacaos"
+            .Column2.FontName      = "Courier New"
+            .Column2.Movable       = .F.
+            .Column2.Resizable     = .F.
+            .Column2.ReadOnly      = .T.
+            .Column2.Text1.ForeColor   = RGB(0, 0, 0)
+            .Column2.Text1.BorderStyle = 1
+            .Column2.Text1.Margin      = 0
+
+            .Visible = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "Click", THIS, "ChkMarcasClick")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "KeyPress", THIS, "ChkMarcasKeyPress")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "MouseDown", THIS, "ChkMarcasMouseDown")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "MouseUp", THIS, "ChkMarcasMouseUp")
+    ENDPROC
+
+    *==========================================================================
+    * CarregarLista - PUBLIC (o harness de teste chama direto no oForm, e o
+    * metodo tambem e' acionado pela propria tela). Popula a grade de selecao de
+    * operacoes, espelhando o bloco do PROCEDURE Init legado:
+    *
+    *   Select crSigOpFin
+    *   Scan
+    *       Insert Into csOperacaos (Marcas, Operacaos, VisTit) ;
+    *           Values (.T., crSigOpFin.Dopes, crSigOpFin.VisTit)
+    *   Endscan
+    *   Select csOperacaos
+    *   Go Top
+    *
+    * Todas as linhas nascem MARCADAS (.T.), exatamente como no legado - o
+    * usuario desmarca o que nao quer processar. O cursor da grade e' ZAPado
+    * (nunca fechado/recriado): fechar quebraria o RecordSource do grid e
+    * resetaria Column.Width/CurrentControl/Sparse ja configurados.
+    *==========================================================================
+    PROCEDURE CarregarLista()
+        LOCAL loc_cCursor, loc_cOrigem, loc_nArea, loc_cDopes, loc_nVisTit, loc_oErro
+
+        TRY
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+            loc_cOrigem = THIS.this_oBusinessObject.this_cCursorSigOpFin
+            loc_nArea   = SELECT()
+
+            IF !USED(loc_cCursor)
+                THIS.CriarCursorOperacoes()
+            ENDIF
+
+            SELECT (loc_cCursor)
+            ZAP
+
+            *-- Sem conexao (modo de validacao de UI) a grade fica vazia, mas
+            *-- o form abre normalmente - nao ha SQL para executar
+            IF (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI) ;
+                    AND THIS.this_oBusinessObject.CarregarOperacoes() ;
+                    AND USED(loc_cOrigem)
+
+                SELECT (loc_cOrigem)
+                GO TOP
+                DO WHILE !EOF(loc_cOrigem)
+                    loc_cDopes  = EVALUATE(loc_cOrigem + ".Dopes")
+                    loc_nVisTit = NVL(EVALUATE(loc_cOrigem + ".VisTit"), 0)
+
+                    INSERT INTO (loc_cCursor) (Marcas, Operacaos, VisTit) ;
+                        VALUES (.T., loc_cDopes, loc_nVisTit)
+
+                    SELECT (loc_cOrigem)
+                    SKIP
+                ENDDO
+            ENDIF
+
+            *-- Popular o cursor NAO repinta a grade: o legado sempre fecha com
+            *-- "Select csOperacaos / Go Top" + Refresh (regra #21 CLAUDE.md)
+            SELECT (loc_cCursor)
+            GO TOP
+            IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+
+            IF loc_nArea > 0
+                SELECT (loc_nArea)
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro CarregarLista")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ChkMarcasClick / ChkMarcasKeyPress / ChkMarcasMouseDown / ChkMarcasMouseUp
+    * PUBLIC (BINDEVENT exige metodo publico - regra #3 CLAUDE.md). Espelham
+    * SIGMVCMV.grdOperacaos.Column1.Check1 do legado: o toggle acontece no
+    * KeyPress (Enter/Espaco) e no MouseDown; Click e MouseUp apenas suprimem
+    * o comportamento nativo (NoDefault) para nao alternar em duplicidade.
+    * NAO transcrito: o ramo "If nKeyCode = 9 -> ThisForm.opt_nr_tipo.Option1.
+    * SetFocus" do KeyPress legado - opt_nr_tipo nao existe neste form (nao
+    * consta na arvore de objetos do SIGMVCMV.SCX), e' codigo morto herdado
+    * de copy-paste de outro form; reproduzi-lo quebraria com "Property
+    * OPT_NR_TIPO is not found" ao pressionar Tab.
+    *==========================================================================
+    PROCEDURE ChkMarcasClick()
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkMarcasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cCursor, loc_nAreaAnterior
+
+        IF INLIST(par_nKeyCode, 13, 32)
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+            IF USED(loc_cCursor)
+                loc_nAreaAnterior = SELECT()
+                SELECT (loc_cCursor)
+                IF !EOF()
+                    REPLACE Marcas WITH !Marcas
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+                SELECT (loc_nAreaAnterior)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ChkMarcasMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        LOCAL loc_cCursor, loc_nAreaAnterior
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+        IF USED(loc_cCursor)
+            loc_nAreaAnterior = SELECT()
+            SELECT (loc_cCursor)
+            IF !EOF()
+                REPLACE Marcas WITH !Marcas
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+            SELECT (loc_nAreaAnterior)
+        ENDIF
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkMarcasMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * CmdBtnGradeClick - PUBLIC (BINDEVENT). Marca/desmarca TODAS as linhas
+    * da grade (espelha SIGMVCMV.cmdBtnGrade.Click: Value=1 -> btnMarcaTudo,
+    * Value=2 -> btnDesmarcar).
+    *==========================================================================
+    PROCEDURE CmdBtnGradeClick()
+        LOCAL loc_cCursor, loc_nAreaAnterior
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+        IF !USED(loc_cCursor)
+            RETURN
+        ENDIF
+
+        loc_nAreaAnterior = SELECT()
+        SELECT (loc_cCursor)
+
+        DO CASE
+            CASE THIS.obj_4c_CmdBtnGrade.Value = 1
+                REPLACE ALL Marcas WITH .T.
+                GO TOP
+                THIS.grd_4c_Dados.Refresh()
+            CASE THIS.obj_4c_CmdBtnGrade.Value = 2
+                REPLACE ALL Marcas WITH .F.
+                GO TOP
+                THIS.grd_4c_Dados.Refresh()
+        ENDCASE
+
+        SELECT (loc_nAreaAnterior)
+    ENDPROC
+
+    *==========================================================================
+    * BtnEncerrarClick - PUBLIC (BINDEVENT). Espelha SIGMVCMV.Cancela.Click
+    * ("Thisform.Release").
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * BtnProcessaClick - PUBLIC (BINDEVENT). Espelha SIGMVCMV.Processa.Click:
+    * valida periodo informado + pelo menos uma operacao marcada + confirma,
+    * depois delega para THIS.Processamento() e limpa a tela com
+    * THIS.LimparTela(), na MESMA ordem do legado ("=ThisForm.Processamento()"
+    * seguido de "=ThisForm.Limpatela()").
+    *
+    * FASE 8/8: a tela e' TRAVADA (HabilitarCampos(.F.)) durante o lote e
+    * destravada logo apos - o processamento percorre todas as operacoes
+    * marcadas gravando pares D/C em SigMvCcr e, sem o travamento, o usuario
+    * consegue acionar Processar/marcar a grade no meio da gravacao. O
+    * destravamento nao depende do resultado: Processamento() trata o proprio
+    * erro no CATCH e nunca propaga, entao a linha seguinte sempre executa.
+    *==========================================================================
+    PROCEDURE BtnProcessaClick()
+        LOCAL loc_cCursor, loc_lConfirmou
+
+        IF EMPTY(THIS.txt_4c_DtInicial.Value) OR EMPTY(THIS.txt_4c_DtFinal.Value)
+            MsgAviso("Favor Informar o Per" + CHR(237) + "odo.", "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.txt_4c_DtInicial.SetFocus()
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+        IF !USED(loc_cCursor)
+            RETURN
+        ENDIF
+
+        SELECT (loc_cCursor)
+        LOCATE FOR Marcas = .T.
+        IF !FOUND()
+            MsgAviso("Selecione uma Opera" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.grd_4c_Dados.Column1.SetFocus()
+            RETURN
+        ENDIF
+
+        loc_lConfirmou = MsgConfirma("Confirma o Processamento?", "Aten" + CHR(231) + CHR(227) + "o")
+        IF !loc_lConfirmou
+            RETURN
+        ENDIF
+
+        THIS.HabilitarCampos(.F.)
+        THIS.Processamento()
+        THIS.HabilitarCampos(.T.)
+
+        THIS.LimparTela()
+
+        *-- HabilitarCampos(.T.) reabilita tudo sem olhar a grade; este
+        *-- AjustarBotoesPorModo devolve o estado REAL (grade vazia volta a
+        *-- desabilitar Processar/Marcar). A grade NAO e' recarregada: no
+        *-- legado csOperacaos e' montado UMA vez no Init (lista de operacoes
+        *-- financeiras do cadastro, que o processamento nao altera), e
+        *-- recarregar aqui remarcaria tudo com .T., jogando fora a selecao
+        *-- que o usuario acabou de fazer.
+        THIS.AjustarBotoesPorModo()
+    ENDPROC
+
+    *==========================================================================
+    * LimparTela - PUBLIC (chamado por BtnProcessaClick e pelo harness de
+    * teste). Espelha o PROCEDURE limpatela do legado: limpa os campos de
+    * filtro (periodo, moeda, empresa) apos o processamento.
+    *==========================================================================
+    PROCEDURE LimparTela()
+        LOCAL loc_oBO
+
+        *-- Os seis filtros vivem no BO (fonte unica): zerar la' e deixar
+        *-- BOParaForm escrever na tela reproduz exatamente o legado, que
+        *-- atribui "" / Ctod('') aos seis campos e chama Refresh em cada um.
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_oBO = THIS.this_oBusinessObject
+            loc_oBO.this_dDataInicial = {}
+            loc_oBO.this_dDataFinal   = {}
+            loc_oBO.this_cCdMoeda     = ""
+            loc_oBO.this_cDsMoeda     = ""
+            loc_oBO.this_cCdEmpresa   = ""
+            loc_oBO.this_cDsEmpresa   = ""
+        ENDIF
+
+        THIS.BOParaForm()
+    ENDPROC
+
+    *==========================================================================
+    * Processamento - PUBLIC (chamado por BtnProcessaClick e pelo harness de
+    * teste). Delega a geracao dos lancamentos D/C ao BO
+    * (SIGMVCMVBO.ProcessarLancamentos) - que ja exibe MsgInfo/MsgErro/
+    * MsgAviso em cada caminho de sucesso/falha (regra #20 CLAUDE.md: BO ja
+    * reporta, o form nao precisa de ELSE duplicando a mensagem). So resta
+    * ao form avisar sobre as operacoes que pedem visualizacao de titulos
+    * (VisTit = 1): a tela SigMvTi2 do legado esta fora do acervo desta
+    * migracao (ver SIGMVCMVBO.ContarOperacoesVisTit).
+    *==========================================================================
+    PROCEDURE Processamento()
+        LOCAL loc_lSucesso, loc_oErro
+
+        TRY
+            *-- FormParaBO transfere os seis filtros da tela para o BO e
+            *-- valida o periodo; sem ele o lote rodaria com os valores da
+            *-- execucao anterior (o form OPERACIONAL nao fecha entre um
+            *-- processamento e outro).
+            IF THIS.FormParaBO()
+                loc_lSucesso = THIS.this_oBusinessObject.ProcessarLancamentos( ;
+                    THIS.this_oBusinessObject.this_dDataInicial, ;
+                    THIS.this_oBusinessObject.this_dDataFinal, ;
+                    THIS.this_oBusinessObject.this_cCdEmpresa, ;
+                    THIS.this_oBusinessObject.this_cCdMoeda)
+            ENDIF
+
+            IF loc_lSucesso AND THIS.this_oBusinessObject.this_nQtdVisTit > 0
+                MsgAviso("Existem " + ALLTRIM(STR(THIS.this_oBusinessObject.this_nQtdVisTit)) + ;
+                    " opera" + CHR(231) + CHR(245) + "o(" + CHR(245) + "es) marcada(s) que exige(m) " + ;
+                    "visualiza" + CHR(231) + CHR(227) + "o de t" + CHR(237) + "tulos - tela ainda " + ;
+                    "n" + CHR(227) + "o migrada (SigMvTi2). Consulte os t" + CHR(237) + "tulos " + ;
+                    "diretamente no m" + CHR(243) + "dulo financeiro.", "Aten" + CHR(231) + CHR(227) + "o")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro Processamento")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ValidarMoeda - PUBLIC (BINDEVENT KeyPress em txt_4c__cd_moeda). Espelha
+    * o Valid original de get_cd_moeda: campo vazio limpa a descricao; digitado
+    * tenta match exato em SigCdMoe.cmoes e, sem achar, delega para
+    * AbrirBuscaMoeda (fwBuscaExt do legado ja mostrava o picker sempre que
+    * nao achava registro exato).
+    *==========================================================================
+    PROCEDURE ValidarMoeda(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado
+
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(UPPER(THIS.txt_4c__cd_moeda.Value))
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c__ds_moeda.Value = ""
+            THIS.txt_4c__ds_moeda.Refresh()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_LkpMoeda")
+            USE IN cursor_4c_LkpMoeda
+        ENDIF
+
+        loc_cSQL = "SELECT cmoes, dmoes FROM SigCdMoe WHERE cmoes = " + EscaparSQL(loc_cValor)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LkpMoeda")
+
+        IF loc_nResultado > 0 AND USED("cursor_4c_LkpMoeda") AND ;
+                RECCOUNT("cursor_4c_LkpMoeda") > 0
+            THIS.txt_4c__cd_moeda.Value = ALLTRIM(cursor_4c_LkpMoeda.cmoes)
+            THIS.txt_4c__ds_moeda.Value = ALLTRIM(cursor_4c_LkpMoeda.dmoes)
+            USE IN cursor_4c_LkpMoeda
+        ELSE
+            IF USED("cursor_4c_LkpMoeda")
+                USE IN cursor_4c_LkpMoeda
+            ENDIF
+            THIS.AbrirBuscaMoeda(loc_cValor)
+        ENDIF
+
+        THIS.txt_4c__cd_moeda.Refresh()
+        THIS.txt_4c__ds_moeda.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarMoedaDesc - PUBLIC (BINDEVENT KeyPress em txt_4c__ds_moeda).
+    * Espelha o Valid original de get_ds_moeda: campo vazio limpa o codigo;
+    * digitado tenta match exato em SigCdMoe.dmoes e, sem achar, delega para
+    * AbrirBuscaMoeda.
+    *==========================================================================
+    PROCEDURE ValidarMoedaDesc(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado
+
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(UPPER(THIS.txt_4c__ds_moeda.Value))
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c__cd_moeda.Value = ""
+            THIS.txt_4c__cd_moeda.Refresh()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_LkpMoeda")
+            USE IN cursor_4c_LkpMoeda
+        ENDIF
+
+        loc_cSQL = "SELECT cmoes, dmoes FROM SigCdMoe WHERE dmoes = " + EscaparSQL(loc_cValor)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LkpMoeda")
+
+        IF loc_nResultado > 0 AND USED("cursor_4c_LkpMoeda") AND ;
+                RECCOUNT("cursor_4c_LkpMoeda") > 0
+            THIS.txt_4c__cd_moeda.Value = ALLTRIM(cursor_4c_LkpMoeda.cmoes)
+            THIS.txt_4c__ds_moeda.Value = ALLTRIM(cursor_4c_LkpMoeda.dmoes)
+            USE IN cursor_4c_LkpMoeda
+        ELSE
+            IF USED("cursor_4c_LkpMoeda")
+                USE IN cursor_4c_LkpMoeda
+            ENDIF
+            THIS.AbrirBuscaMoeda(loc_cValor)
+        ENDIF
+
+        THIS.txt_4c__cd_moeda.Refresh()
+        THIS.txt_4c__ds_moeda.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaMoeda - PROTECTED. Abre o picker canonico (FormBase.
+    * AbrirLookupCanonico) filtrado pelo valor digitado (codigo OU
+    * descricao). Sem selecao (ESC), limpa os dois campos - espelha o ramo
+    * "If Lastkey() = 27" do Valid original.
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirBuscaMoeda(par_cValorDigitado)
+        LOCAL loc_lSelecionou
+
+        loc_lSelecionou = THIS.AbrirLookupCanonico("SigCdMoe", "cmoes", "dmoes", ;
+            "Sele" + CHR(231) + CHR(227) + "o de Moeda", par_cValorDigitado, ;
+            THIS.txt_4c__cd_moeda, THIS.txt_4c__ds_moeda)
+
+        IF !loc_lSelecionou
+            THIS.txt_4c__cd_moeda.Value = ""
+            THIS.txt_4c__ds_moeda.Value = ""
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ValidarEmpresa - PUBLIC (BINDEVENT KeyPress em txt_4c_Empresa). O
+    * legado usa fAcessoEmpresa(Usuar, "C", This.Value, GetEmpresa, GetDEmpresa)
+    * - funcao global Fortyus NAO portada para a nova arquitetura (ver
+    * CLAUDE.md/skill vfp9-migration). Substituido pelo lookup canonico em
+    * SigCdEmp.cemps: campo vazio limpa a razao social; digitado tenta match
+    * exato e, sem achar, delega para AbrirBuscaEmpresa.
+    *==========================================================================
+    PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado
+
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(UPPER(THIS.txt_4c_Empresa.Value))
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_DEmpresa.Value = ""
+            THIS.txt_4c_DEmpresa.Refresh()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_LkpEmpresa")
+            USE IN cursor_4c_LkpEmpresa
+        ENDIF
+
+        loc_cSQL = "SELECT cemps, razas FROM SigCdEmp WHERE cemps = " + EscaparSQL(loc_cValor)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LkpEmpresa")
+
+        IF loc_nResultado > 0 AND USED("cursor_4c_LkpEmpresa") AND ;
+                RECCOUNT("cursor_4c_LkpEmpresa") > 0
+            THIS.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_LkpEmpresa.cemps)
+            THIS.txt_4c_DEmpresa.Value = ALLTRIM(cursor_4c_LkpEmpresa.razas)
+            USE IN cursor_4c_LkpEmpresa
+        ELSE
+            IF USED("cursor_4c_LkpEmpresa")
+                USE IN cursor_4c_LkpEmpresa
+            ENDIF
+            THIS.AbrirBuscaEmpresa(loc_cValor)
+        ENDIF
+
+        THIS.txt_4c_Empresa.Refresh()
+        THIS.txt_4c_DEmpresa.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarDEmpresa - PUBLIC (BINDEVENT KeyPress em txt_4c_DEmpresa).
+    * Espelha o When original ("Return Empty(ThisForm.getEmpresa.Value)") -
+    * so processa a digitacao quando o codigo da empresa esta vazio; caso
+    * contrario o campo Descricao fica so como espelho do lookup por codigo.
+    *==========================================================================
+    PROCEDURE ValidarDEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado
+
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        IF !EMPTY(ALLTRIM(THIS.txt_4c_Empresa.Value))
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(UPPER(THIS.txt_4c_DEmpresa.Value))
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_Empresa.Value = ""
+            THIS.txt_4c_Empresa.Refresh()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_LkpEmpresa")
+            USE IN cursor_4c_LkpEmpresa
+        ENDIF
+
+        loc_cSQL = "SELECT cemps, razas FROM SigCdEmp WHERE razas = " + EscaparSQL(loc_cValor)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LkpEmpresa")
+
+        IF loc_nResultado > 0 AND USED("cursor_4c_LkpEmpresa") AND ;
+                RECCOUNT("cursor_4c_LkpEmpresa") > 0
+            THIS.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_LkpEmpresa.cemps)
+            THIS.txt_4c_DEmpresa.Value = ALLTRIM(cursor_4c_LkpEmpresa.razas)
+            USE IN cursor_4c_LkpEmpresa
+        ELSE
+            IF USED("cursor_4c_LkpEmpresa")
+                USE IN cursor_4c_LkpEmpresa
+            ENDIF
+            THIS.AbrirBuscaEmpresa(loc_cValor)
+        ENDIF
+
+        THIS.txt_4c_Empresa.Refresh()
+        THIS.txt_4c_DEmpresa.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaEmpresa - PROTECTED. Abre o picker canonico (FormBase.
+    * AbrirLookupCanonico) em SigCdEmp filtrado pelo valor digitado (codigo
+    * OU razao social). Sem selecao, limpa os dois campos.
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirBuscaEmpresa(par_cValorDigitado)
+        LOCAL loc_lSelecionou
+
+        loc_lSelecionou = THIS.AbrirLookupCanonico("SigCdEmp", "cemps", "razas", ;
+            "Sele" + CHR(231) + CHR(227) + "o de Empresa", par_cValorDigitado, ;
+            THIS.txt_4c_Empresa, THIS.txt_4c_DEmpresa)
+
+        IF !loc_lSelecionou
+            THIS.txt_4c_Empresa.Value  = ""
+            THIS.txt_4c_DEmpresa.Value = ""
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - PROTECTED (escopo HERDADO de FormBase, que declara
+    * "PROTECTED PROCEDURE FormParaBO"; em VFP9 o override de metodo
+    * PROTECTED continua PROTECTED, e chamar de fora estoura "Property
+    * FORMPARABO is not found" mesmo com PEMSTATUS devolvendo .T. - regra #3
+    * CLAUDE.md). So e' chamado por THIS.Processamento(), que esta' dentro da
+    * classe, entao o escopo herdado e' o correto aqui.
+    *
+    * Transfere os SEIS filtros da tela para o Business Object e valida o
+    * periodo. Retorna .T. quando o BO ficou apto a processar, .F. quando
+    * falta dado obrigatorio (ja exibindo o aviso e devolvendo o foco ao
+    * campo, como o Processa.Click legado).
+    *
+    * As datas passam por ConverterParaData(): o TextBox nasce com .Value = {}
+    * (DATE) mas o mesmo campo recebe DATETIME quando vem de coluna do SQL
+    * Server - ProcessarLancamentos monta DATETIME(YEAR(..),MONTH(..),DAY(..))
+    * e quebraria com o tipo errado (regra #16 CLAUDE.md).
+    *
+    * O periodo INVERTIDO (inicial > final) tambem e' barrado aqui: o legado
+    * nunca chega a esse caso porque o usuario preenche em ordem, mas o
+    * Between do processamento devolveria silenciosamente ZERO lancamentos e
+    * a tela anunciaria "processado" sem gravar nada.
+    *==========================================================================
+    PROTECTED FUNCTION FormParaBO()
+        LOCAL loc_lValido, loc_dIni, loc_dFim, loc_oBO
+
+        loc_lValido = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) != "O"
+            MsgErro("Business Object n" + CHR(227) + "o inicializado.", "FormParaBO")
+        ELSE
+            loc_oBO  = THIS.this_oBusinessObject
+            loc_dIni = ConverterParaData(THIS.txt_4c_DtInicial.Value)
+            loc_dFim = ConverterParaData(THIS.txt_4c_DtFinal.Value)
+
+            DO CASE
+                CASE EMPTY(loc_dIni) OR EMPTY(loc_dFim)
+                    MsgAviso("Favor Informar o Per" + CHR(237) + "odo.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.txt_4c_DtInicial.SetFocus()
+
+                CASE loc_dIni > loc_dFim
+                    MsgAviso("Data inicial maior que a data final.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.txt_4c_DtInicial.SetFocus()
+
+                OTHERWISE
+                    loc_oBO.this_dDataInicial = loc_dIni
+                    loc_oBO.this_dDataFinal   = loc_dFim
+                    loc_oBO.this_cCdMoeda     = ALLTRIM(THIS.txt_4c__cd_moeda.Value)
+                    loc_oBO.this_cDsMoeda     = ALLTRIM(THIS.txt_4c__ds_moeda.Value)
+                    loc_oBO.this_cCdEmpresa   = ALLTRIM(THIS.txt_4c_Empresa.Value)
+                    loc_oBO.this_cDsEmpresa   = ALLTRIM(THIS.txt_4c_DEmpresa.Value)
+                    loc_lValido = .T.
+            ENDCASE
+        ENDIF
+
+        RETURN loc_lValido
+    ENDFUNC
+
+    *==========================================================================
+    * BOParaForm - PROTECTED (escopo HERDADO de FormBase, igual ao FormParaBO
+    * acima). Chamado por THIS.LimparTela(), de dentro da classe.
+    *
+    * Caminho inverso do FormParaBO: escreve os seis filtros guardados no BO
+    * de volta nos TextBox e da' Refresh em cada um, reproduzindo o bloco de
+    * Refresh do PROCEDURE limpatela legado.
+    *
+    * E' o UNICO ponto do form que escreve nesses seis campos a partir do
+    * estado do BO - LimparTela zera as propriedades e chama este metodo, em
+    * vez de repetir doze atribuicoes. Com o BO ausente (falha de conexao no
+    * InicializarForm) os campos sao apenas esvaziados, sem estourar.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oBO
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_oBO = THIS.this_oBusinessObject
+            THIS.txt_4c_DtInicial.Value = ConverterParaData(loc_oBO.this_dDataInicial)
+            THIS.txt_4c_DtFinal.Value   = ConverterParaData(loc_oBO.this_dDataFinal)
+            THIS.txt_4c__cd_moeda.Value = loc_oBO.this_cCdMoeda
+            THIS.txt_4c__ds_moeda.Value = loc_oBO.this_cDsMoeda
+            THIS.txt_4c_Empresa.Value   = loc_oBO.this_cCdEmpresa
+            THIS.txt_4c_DEmpresa.Value  = loc_oBO.this_cDsEmpresa
+        ELSE
+            THIS.txt_4c_DtInicial.Value = {}
+            THIS.txt_4c_DtFinal.Value   = {}
+            THIS.txt_4c__cd_moeda.Value = ""
+            THIS.txt_4c__ds_moeda.Value = ""
+            THIS.txt_4c_Empresa.Value   = ""
+            THIS.txt_4c_DEmpresa.Value  = ""
+        ENDIF
+
+        THIS.txt_4c_DtInicial.Refresh()
+        THIS.txt_4c_DtFinal.Refresh()
+        THIS.txt_4c__cd_moeda.Refresh()
+        THIS.txt_4c__ds_moeda.Refresh()
+        THIS.txt_4c_Empresa.Refresh()
+        THIS.txt_4c_DEmpresa.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos - PUBLIC. Trava (.F.) / destrava (.T.) os controles de
+    * entrada durante o processamento em lote. O form OPERACIONAL nao tem
+    * modo INCLUIR/ALTERAR: o unico estado em que a tela fica somente-leitura
+    * e' o intervalo em que ProcessarLancamentos percorre as operacoes
+    * marcadas gravando os pares D/C em SigMvCcr.
+    *
+    * "Encerrar" NUNCA e' desabilitado - o legado deixa o Cancela sempre
+    * acionavel, e desabilitar um CommandButton com icone faz o icone sumir
+    * na tela (botao vira retangulo cinza).
+    *==========================================================================
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHab
+
+        loc_lHab = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+
+        THIS.txt_4c_DtInicial.Enabled = loc_lHab
+        THIS.txt_4c_DtFinal.Enabled   = loc_lHab
+        THIS.txt_4c__cd_moeda.Enabled = loc_lHab
+        THIS.txt_4c__ds_moeda.Enabled = loc_lHab
+        THIS.txt_4c_Empresa.Enabled   = loc_lHab
+        THIS.txt_4c_DEmpresa.Enabled  = loc_lHab
+
+        THIS.grd_4c_Dados.Enabled          = loc_lHab
+        THIS.obj_4c_CmdBtnGrade.Enabled    = loc_lHab
+        THIS.cmd_4c_Processa.Enabled       = loc_lHab
+
+        THIS.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - PUBLIC (o harness de teste chama direto no oForm,
+    * de FORA da classe - por isso NAO pode ser PROTECTED, regra #3
+    * CLAUDE.md). Reavalia os botoes conforme o estado REAL da grade: com a
+    * grade sem nenhuma linha (RECCOUNT do cursor de operacoes igual a zero),
+    * Processar e Marcar/Desmarcar ficam desabilitados, porque nao ha o que
+    * marcar nem o que processar; com a grade contendo linhas, os dois ficam
+    * habilitados normalmente.
+    *
+    * "Encerrar" permanece sempre habilitado (unica saida da tela, que e'
+    * modal com ControlBox = .F. - desabilitar prenderia o usuario).
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_cCursor, loc_lTemLinhas
+
+        loc_lTemLinhas = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+            IF !EMPTY(loc_cCursor) AND USED(loc_cCursor)
+                loc_lTemLinhas = (RECCOUNT(loc_cCursor) > 0)
+            ENDIF
+        ENDIF
+
+        THIS.cmd_4c_Processa.Enabled    = loc_lTemLinhas
+        THIS.obj_4c_CmdBtnGrade.Enabled = loc_lTemLinhas
+        THIS.grd_4c_Dados.Enabled       = loc_lTemLinhas
+
+        THIS.cmd_4c_Cancela.Enabled = .T.
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Destroy()
+    *==========================================================================
+        LOCAL loc_cCursor, loc_cOrigem
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorOperacoes
+            IF !EMPTY(loc_cCursor) AND USED(loc_cCursor)
+                USE IN (loc_cCursor)
+            ENDIF
+
+            loc_cOrigem = THIS.this_oBusinessObject.this_cCursorSigOpFin
+            IF !EMPTY(loc_cOrigem) AND USED(loc_cOrigem)
+                USE IN (loc_cOrigem)
+            ENDIF
+
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

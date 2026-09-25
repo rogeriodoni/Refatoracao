@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH counts balance at 194 each. All edits are structurally sound.
+
+## Summary
+
+Fixed 14 of the 16 listed problems in `Formsigmvcot.prg`:
+
+**NULL-CURSOR (8/8 fixed)** ÔÇö Added `SET NULL ON` / `SET NULL OFF` around each `CREATE CURSOR` in `CriarCursoresLista`, `CriarCursoresCotacao`, and `CriarCursoresPedidos` (cursor_4c_Movimentacao, CotasPendentes, Produtos, Fornecedores, Pedidos, CabOperas, ItnOperas, Subniveis).
+
+**GRID-WITH (6/6 fixed)** ÔÇö In all six grid setup methods (`ConfigurarGridFornecs`, `ConfigurarGridCotacoes`, `ConfigurarGridCabOperas`, `ConfigurarGridItnOperas`, `ConfigurarGridOperacoes`, `ConfigurarGridCotaPends`), moved `.ColumnCount` before the `WITH` block and `.RecordSource`/`.ColumnN.ControlSource` assignments after `ENDWITH`, using explicit `loc_oGrid.` references as instructed.
+
+**LAYOUT-POSITION (0/2 ÔÇö not changed, false positive)** ÔÇö `obj_4c_OptFiltro` already has `Top=277`/`Left=875`, exactly matching the "original" legado values the finding itself cites. The finding's "migrado" values (Top=5/Left=5) actually match `.Buttons(1)`'s relative offset inside the OptionGroup, which is correct by design (member positions are relative to the container). Changing the group's Top/Left would have broken a control that's already correct, so I left it untouched ÔÇö consistent with the known false-positive pattern for this checker (comparing group position against an internal member's relative offset).
+
+Verified WITH/ENDWITH blocks remain balanced (194/194) after all edits.

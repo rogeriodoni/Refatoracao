@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e **verificada em execu├º├úo real** (n├úo s├│ compilada).
+
+## Entregue
+
+**`projeto\app\forms\operacionais\FormSigMvMen.prg`** (538 linhas)
+- **`BOParaForm()`** ÔÇö override do hook `PROTECTED` de `FormBase`, mapeando o ├║nico campo do di├ílogo (`SigMvMenBO.this_cMensagem` ÔåÆ `obj_4c_GetMemo`). `CarregarMensagem()` passou a us├í-lo, ent├úo o mapeamento BOÔåÆtela vive num lugar s├│.
+- **`CarregarLista()`** ÔÇö PUBLIC (regra #3), rel├¬ a mensagem no banco e repinta o painel; ├® o hook que o `TesteAutomatico.prg` exercita.
+- **`Activate()`** endurecido com `TRY` + guarda `Visible`/`Enabled` ÔÇö sem isso um `SetFocus` em estado inesperado mostraria o *Program Error* cru do VFP (regra #38).
+- Removido o `SetAll("FontName",...)` morto (rodava antes de existir controle). **Medi no VFP9**: controle criado por `AddObject` **n├úo** herda fonte do form ÔÇö com `THIS.FontName = "Tahoma"` o EditBox continuou `Arial/9`. E `Arial/9` ├® justamente o default do legado (o SCX n├úo declara fonte em `getMemo`; a tabela de fontes do dump registra s├│ `Arial, 0, 9` e `Comic Sans MS, 3, 8`). Ent├úo n├úo h├í nada a declarar ÔÇö declarar Tahoma divergiria do PILAR 1 sem mudar nada na tela.
+
+## Bug real encontrado e corrigido no BO
+
+O di├ílogo exibia a letra **`C`** no painel em vez de ficar em branco. Causa: `TratarNulo(puValor, puPadrao)` recebe o **valor padr├úo**, n├úo um c├│digo de tipo ÔÇö `TratarNulo(mensagem, "C")` devolve a string `"C"` quando a coluna ├® NULL, e `SigOpCdI.mensagem` ├® NULL nas **38 linhas** da tabela. Corrigido para `TratarNulo(col, "")`; re-testado contra o banco: painel agora vazio, igual ao `Nvl(...,[])` do legado.
+
+ÔÜá´©Å **Isto ├® sist├¬mico, e deixei fora do escopo:** `4.492` de `4.822` chamadas de `TratarNulo` em **293 arquivos** passam c├│digo de tipo (`"C"` 2.653, `"N"` 1.621, `"D"` 202). S├│ morde quando a coluna vem NULL ÔÇö da├¡ ter sobrevivido a centenas de tasks. Com `"N"` o dano ├® pior (string numa property `this_n*`). Corrigi apenas o BO desta task; o sweep dos outros 292 ├® decis├úo sua (posso rodar `/propagate-lesson` para virar pattern do CorretorAutomatico). J├í registrei na mem├│ria.
+
+## Verifica├º├Áes
+
+| Checagem | Resultado |
+|---|---|
+| Compila├º├úo (`ValidarCompilacao.prg`) | `sucesso: true`, sem `.err` |
+| `TestFormWrapper` (etapa 06 can├┤nica) | **`Status: SUCESSO`** ÔÇö objeto criado, vis├¡vel 800x269, fechado, banco conectado/desconectado |
+| Teste contra banco real (3 casos: dopes real / inexistente / vazio) | painel correto, acentos OK, `ReadOnly=.T.`, sem vazamento de `cursor_4c_SigMvMen`, `Release` limpo |
+| Gate da Fase 8 (simulado com as fun├º├Áes do pr├│prio orquestrador) | **PASSA** ÔÇö `legadoExibicaoF8=True` |
+| `VerificarPropriedadesInexistentes` | OK |
+| `VerificarFuncoesNaoDefinidas` (├írvore inteira) | nenhuma chamada ├│rf├ú |
+| TODO/stub/m├®todo vazio | zero |
+
+Transpar├¬ncia sobre o gate: `BOParaForm` e `CarregarLista` est├úo implementados de verdade; `FormParaBO` e `BtnCancelarClick` **n├úo existem** ÔÇö aparecem s├│ nos coment├írios (o gate casa texto no arquivo inteiro). A dispensa leg├¡tima vem do ramo `legadoExibicaoF8`, que avalia `True` de forma independente: legado sem lista, sem CRUD e com todo campo `ReadOnly`.
+
+## O que n├úo fiz, e por qu├¬
+
+- **Sem entrada em `menu.prg`.** O chamador real ├® `SIGMVCAB` (task560): `If crSigOpCdd.EmitMen = 1 And Not IsEmpty(crSigOpCdI.Mensagem) / Do Form SigMvMen With TprMvCab.Dopes` ÔÇö sempre **com** o c├│digo da opera├º├úo. Pelo menu ele abriria em branco, tela que o legado nunca teve.
+- **Liga├º├úo a partir de `Formsigmvcab.prg` n├úo feita**: aquele bloco de valida├º├úo (`crSigOpCdd.EmitMen`) n├úo existe no form migrado e pertence ├á task560. Registrado no cabe├ºalho do arquivo.
+- **`Load` legado (`=fConfigGeral()`) n├úo portado**, seguindo o precedente j├í documentado em `FormSigMvExp.prg` (task570).
+
+Nota operacional: `ConfigurarAmbiente()` leva **~129s** (os ~570 `SET PROCEDURE`). Cabe no `vfp.timeout` de 300s do pipeline ÔÇö meu primeiro teste falhou porque eu passei `-Timeout 120` ├á m├úo, n├úo por problema do ambiente.

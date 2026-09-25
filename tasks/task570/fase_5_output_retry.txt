@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 ÔÇö `FormSigMvExp`: nada a acrescentar no form; o gate j├í foi corrigido, o loop ├® que est├í com a c├│pia velha
+
+**N├úo alterei o form.** Ele n├úo tem campo nenhum para receber ÔÇö e, diferente da tentativa anterior, isso agora est├í **medido**, n├úo argumentado.
+
+### Por que a fase reprovou de novo
+
+O gate da Fase 5 **j├í foi corrigido em disco** (`OrquestradorMigracao.ps1`, mtime **18:37:22**), com o ramo DESPACHANTE. Mas o `RunLoop.ps1` (PID **17088**) subiu ├ás **17:51:28** ÔÇö antes disso. Como `& script.ps1` parseia o arquivo inteiro na invoca├º├úo, ele re-validou ├ás 18:44 com o gate de 17:51 e gerou o `fase_5_prompt_force.md` que me chamou. A reprova├º├úo ├® do c├│digo velho, n├úo do form.
+
+### Medi├º├Áes
+
+Rodei as condi├º├Áes do ramo novo (`case 5`) contra o form e o dump, em vez de confiar no veredito do pipeline:
+
+| condi├º├úo | valor |
+|---|---|
+| `temLista` (legado) | `False` |
+| `temCampos` (legado) | `False` |
+| `semListaNemCampos` | **`True`** |
+| `temBotao` + `temHandlerClick` (migrado) | `True` / `True` |
+| **DESPACHANTE OK** | **`True`** |
+
+O `SIGMVEXP.SCX` tem 3 objetos: `dataenvironment` + `form` + 1 `commandbutton`. Metade de zero campos ├® zero ÔÇö os ramos PAGINADO e FLAT exigiriam inventar uma Page2 ou campos com `ControlSource` (viola o PILAR 1), e m├®todo vazio ├® proibido pela regra de completude.
+
+Orquestrador: **0 erros de parse**, BOM preservado, **2962 bytes >127** (encoding intacto), `Get-ContagemBotoesLegado` presente.
+
+### Form instanciado de verdade no VFP9
+
+```
+W=337 H=147 TitleBar=0 ControlBox=.F. AlwaysOnBottom=.T.
+ControlCount=1
+BOTAO top=34 left=48 w=241 h=73 cap=[Aguarde Processando Dados] vis=.T.
+Tipo C -> Nume=1234 Emp=[007] Caixa=5
+Tipo E -> Nume=0    Emp=[]    Caixa=7
+```
+
+Bate campo a campo com o `layout.json`; `ControlCount=1` prova que nenhum controle foi inventado. Tipo `E` deixa `Nume`/`Emp` no default, correto porque o legado s├│ os preenche sob `InList(pTipos,'C','A')`. Sem `.err` de compila├º├úo, 0 bytes n├úo-ASCII, 7/7 `PROCEDURE`/`ENDPROC`, nenhum `RETURN` dentro de `TRY`. Apaguei os `.fxp` e os scripts de teste.
+
+### O que voc├¬ precisa fazer
+
+**Relan├ºar o `RunLoop.ps1`** (PID 17088). Enquanto ele viver, a Fase 5 reprova de novo pelo mesmo motivo ÔÇö e vai parecer que o fix n├úo funcionou. Foi exatamente o que aconteceu na Fase 4 (custo: um ciclo de retry, ~8 min, com o form j├í correto).
+
+Tr├¬s pend├¬ncias herdadas, **fora do escopo desta fase** e n├úo tocadas: `FormSigPrCtr.prg:2374,2387` usa `DO FORM FormSigMvExp` sem `.scx` existir; `FormSigPrHpr.prg:936` chama `CREATEOBJECT("FormSigMvExp", THIS)` com 1 dos 7 argumentos (o `DO CASE` n├úo casa nenhum ramo ÔåÆ despacho vira no-op silencioso); e `FormSigMvCab` ainda n├úo existe no acervo ÔÇö o contrato posicional est├í documentado no `BtnProcessoClick`.

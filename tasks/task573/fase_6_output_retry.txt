@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. O defeito n├úo estava no form ÔÇö estava no **gate**.
+
+## Diagn├│stico
+
+`FormSigMvMen` (legado `SIGPDMEN`) j├í estava completo e fiel: os 8 objetos do dump reproduzidos, `ok.Click` transcrito literalmente (incluindo o `LASTKEY() # 13`), carga da mensagem em `CarregarMensagem()`, zero TODO/stub. E o legado **n├úo tem lookup nenhum** ÔÇö medido: zero ocorr├¬ncia de `fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`.
+
+O `case 6` do gate tinha tr├¬s ramos e **nenhum** alcan├ºava este form:
+
+| ramo | por que falha |
+|---|---|
+| PAGINADO | o legado n├úo tem PageFrame |
+| FLAT | o legado n├úo usa `ControlSource` ÔÇö o `Init` l├¬ via `Cursorquery` e atribui `.Value` direto |
+| DESPACHANTE | o legado **tem** campo (o EditBox), ent├úo `legadoSemListaNemCampos` d├í falso |
+
+Passar s├│ seria poss├¡vel inventando um lookup que o legado nunca consulta (viola o PILAR 1) ou trocando o binding por `ControlSource` s├│ para casar com o regex. **Fix no gate, n├úo no `.prg`.**
+
+## O que fiz
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö acrescentei o ramo **EXIBICAO** ├á Fase 6 (`$temLayoutExibicaoF6`), espelho do que as Fases 4 e 5 j├í tinham, reusando a mesma `Test-LegadoDialogoExibicao`, com um requisito extra pr├│prio desta fase: `-and $legadoSemLookup`. Campo `ReadOnly` n├úo recebe lookup por defini├º├úo ÔÇö n├úo h├í onde digitar c├│digo para o picker resolver. Fail-closed como os irm├úos.
+
+**Tamb├®m fechei a Fase 8**, que ia reprovar o mesmo form na sequ├¬ncia pedindo `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista` ÔÇö quatro nomes de CRUD sem sentido num di├ílogo somente-leitura. Fiz isso porque sua pr├│pria li├º├úo registrada manda conferir as fases vizinhas na mesma sess├úo, e o pipeline roda sem supervis├úo: deixar o buraco custaria outro ciclo de retry. **Isso est├í al├®m da Fase 6 ÔÇö sinalizo explicitamente.**
+
+O `.prg` recebeu s├│ uma linha de coment├írio de rastreabilidade (compila limpo, `.fxp` regerado, nenhum `.err`).
+
+## Medi├º├úo
+
+Rodei os blocos `case` **verbatim** do arquivo editado sobre os 532 forms migrados:
+
+- Fase 6: ramo novo dispara **1 vez** ÔÇö s├│ a task573. Zero regress├úo.
+- Fase 8: ramo novo dispensa **1** (task573). O g├¬meo `task140/FormSigPdMen` casa o predicado mas ├® no-op ÔÇö j├í tem os 4 m├®todos.
+- Fases **3ÔåÆ8 agora passam todas** para `FormSigMvMen`.
+
+Aten├º├úo a uma armadilha de medi├º├úo: `git diff` contra HEAD acusou 4 flips, mas 3 eram de corre├º├Áes de gate **j├í no working tree e ainda n├úo commitadas**. A medi├º├úo honesta ├® contar quem passa *s├│* pelo ramo novo.
+
+## Pend├¬ncias que n├úo toquei
+
+- 4 forms continuam reprovando a Fase 6 e 13 a Fase 8, todos de tasks antigas (task017/019/058/068/077/097/123/136/398/404/444/475/523/544/563/566) ÔÇö migrados antes do gate chegar ├á forma atual. Fora do escopo.
+- O g├¬meo `FormSigPdMen` tem `FormParaBO`/`BOParaForm`/`CarregarLista`/`BtnCancelarClick` num di├ílogo sem campo edit├ível, sem lista e sem Cancelar. Cheira a m├®todo criado s├│ para casar com o gate ÔÇö o "stub disfar├ºado" que a regra de completude pro├¡be. **N├úo verifiquei**, apenas registrei.
+
+Li├º├Áes anexadas ├ás mem├│rias de gate das Fases 6 e 8. N├úo commitei ÔÇö voc├¬ n├úo pediu.

@@ -1,0 +1,30 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+Fase 8 conclu├¡da. `FormProduto.prg` compila limpo e foi **testado instanciando de verdade no VFP9** ÔÇö 18/18 verifica├º├Áes passaram.
+
+## O que a Fase 8 entregou
+
+**Bot├Áes que faltavam** ÔÇö o container `cnt_4c_BotoesAcao` existia vazio desde a Fase 7. Adicionei `cmd_4c_Confirmar` e `cmd_4c_Cancelar` (Left 5/80, geometria do `Grupo_Salva` legado) com os BINDEVENTs.
+
+**M├®todos de consolida├º├úo** ÔÇö `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `IrParaDivisao`, `FocarCampoValidacao` e os auxiliares de descri├º├úo de lookup.
+
+**FormParaBO/BOParaForm completos** ÔÇö o mapa campoÔåÆcoluna saiu do dump do SCX (`ControlSource = "crSigCdPro.<coluna>"`), extra├¡do objeto a objeto, n├úo por palpite. Os campos de descri├º├úo dos lookups (`Dgru`, `DsGru`, `DLin`ÔÇª) ficam de fora porque **n├úo t├¬m ControlSource no legado**; s├úo repovoados por `PreencherDescricoesLookup()`. `Estoques`/`QtdEsts` tamb├®m ficam fora ÔÇö o SCX zera o ControlSource deles e as colunas n├úo existem em `SigCdPro`.
+
+**Buscar = busca por exemplo, n├úo picker** ÔÇö `ExecutarBuscaPorExemplo()` transcreve o `Do Case` de `msv_procurar` na ordem exata (CPros ÔåÆ DPros ÔåÆ DPro2s ÔåÆ Ifors ÔåÆ Reffs ÔåÆ Conjunts ÔåÆ CBars), com o fallback `Like '%...%'` e o `lcBus` (filtro de grupo) aplicado **s├│** em DPros/DPro2s, como no legado.
+
+**Campo "Cod. Pai" adicionado** ÔÇö `getConjunto` ├® o 7┬║ campo `plprocurar` e n├úo existia. Sem ele o `Do Case` teria um ramo morto.
+
+## Tr├¬s armadilhas do CLAUDE.md que apareceram na pr├ítica
+
+- **#40** ÔÇö `AlternarPagina` agora rep├Áe o modo **e** chama `AjustarBotoesPorModo()` no funil. O teste [08] confirma: ap├│s Cancelar, `Incluir.Enabled=.T.`
+- **#3** ÔÇö `CarregarLista` e `AjustarBotoesPorModo` tiveram que virar PUBLIC: o `TesteAutomatico.prg` as chama de fora, e `PEMSTATUS(...,5)` retorna `.T.` mesmo em PROTECTED.
+- **#1/#34** ÔÇö corrigi um `RETURN` dentro de `TRY` e um `EVALUATE(...).SetFocus()` encadeado (VFP9 n├úo aceita) que eu mesmo tinha escrito.
+
+## O que deixei de fora, e por qu├¬
+
+A aba "Dados Principais" tem **77 dos 176 controles** do legado. As Fases 5 e 6 ├® que deveriam t├¬-la completado; a Fase 8 ├® "eventos auxiliares e consolida├º├úo". Adicionei s├│ o `Cod. Pai` porque a busca por exemplo depende dele.
+
+Ent├úo o item 1 da sua instru├º├úo ÔÇö *pgDados COMPLETA com os 176 controles* ÔÇö **continua em aberto**. Faltam os blocos da coluna direita (Qtde. M├¡nima, Observa├º├úo/Complemento, ├Ült. Compra), da extrema direita (Produto Web, Garantia, dimens├Áes) e o inferior (os tr├¬s EditBox de descri├º├úo, Situa├º├úo/Consigna/Fabr. Pr├│pria, Volumes, as duas imagens). Isso ├® trabalho de re-executar as Fases 5/6 com escopo maior, n├úo de um ajuste aqui.

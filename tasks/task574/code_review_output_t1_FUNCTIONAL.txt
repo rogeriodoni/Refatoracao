@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verified all 7 flagged methods against the full file (not just the excerpted "trechos relevantes"):
+
+| M├®todo apontado como inexistente | Realidade |
+|---|---|
+| `THIS.ArvoreDisponivel()` | `PROTECTED FUNCTION ArvoreDisponivel()` definido na linha 1090 |
+| `THIS.ObterTextoDataHora()` | `PROTECTED FUNCTION ObterTextoDataHora(par_uValor)` definido na linha 1104 |
+| `THIS.ObterTextoHora()` | `PROTECTED FUNCTION ObterTextoHora(par_uValor)` definido na linha 1118 |
+| `THIS.ObterFiltro()` | `PROTECTED FUNCTION ObterFiltro(par_cControle, par_uPadrao)` definido na linha 1137 |
+| `THIS.ObterCargoAtual()` | `PROTECTED FUNCTION ObterCargoAtual()` definido na linha 1900 |
+| `THIS.MontarChaveAtual()` | `PROTECTED FUNCTION MontarChaveAtual()` definido na linha 1922 |
+| `THIS.Controls()` | N├úo ├® chamada a m├®todo nenhum ÔÇö ├® `par_oContainer.Controls(loc_nI)`, o array nativo `Controls` do VFP9 indexado por N├ÜMERO (linha 2553, `TornarControlesVisiveis`), exatamente o padr├úo correto da regra #34 do CLAUDE.md |
+
+Os 7 achados s├úo **falsos positivos**: o pass FUNCTIONAL recebeu s├│ os "TRECHOS RELEVANTES" do form (2578 linhas, com faixas de linha selecionadas) e essas seis defini├º├Áes `PROTECTED FUNCTION` caem fora das faixas mostradas ÔÇö o detector concluiu aus├¬ncia por n├úo ter visto o arquivo inteiro. Nenhuma corre├º├úo ├® necess├íria; n├úo vou alterar `FormSIGMVMVT.prg` nem `SIGMVMVTBO.prg`.
+
+Isso ├® uma reincid├¬ncia do padr├úo j├í registrado em mem├│ria (`feedback_metodo_inexistente_nao_checa_formbase.md` / `feedback_harness_de_auditoria_mede_errado.md`), mas com uma causa nova: aqui o problema n├úo ├® heranca de FormBase ÔÇö ├® que o pr├│prio pass opera sobre excertos truncados do arquivo-alvo. Vale propagar essa li├º├úo se voc├¬ quiser (o pass METODO-INEXISTENTE precisaria ler o `.prg` inteiro, ou pelo menos grepar `PROCEDURE|FUNCTION <nome>` no arquivo completo antes de acusar aus├¬ncia). Quer que eu rode `/propagate-lesson` para isso?

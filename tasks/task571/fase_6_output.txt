@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6/8 is complete. Summary of what was added to `C:\4c\projeto\app\forms\operacionais\Formsigmvitn.prg` (grew from 3438 to 5761 lines):
+
+**New containers/fields:**
+- `Cnt_Credito` / `Cnt_Pendencia` ÔÇö remaining "Proximo" navigation button + "[ENTER] Muda de Tela" label
+- `Cnt_Identifica` (complete) ÔÇö Destino/Responsavel/Vendedor/Origem blocks (Grupo+Conta+Nome+Cpf each), TabDesconto, CodOperacao, Proximo button
+- `Cnt_Fpagto` (complete) ÔÇö Acrescimo/Desconto sub-panels, all payment fields, `Cnt_ChequepreTef.Cnt_Chq` (cheque/TEF conference panel with 9 fields + OptionGroup + 2 buttons)
+- `cmbTOpers` standalone combo
+
+**Lookups (no TODOs/stubs ÔÇö fully implemented, following the project's canonical FormBuscaAuxiliar pattern instead of the forbidden `fAcessoContab`/`fAcessoContas`):**
+- `AbrirLookupGrupo` ÔåÆ SigCdGcr
+- `AbrirLookupConta` ÔåÆ SigCdCli (filtered by group when present)
+- `AbrirLookupTabDesconto` ÔåÆ SigOpTdz
+- `AbrirLookupListaPreco` ÔåÆ SigCdLpc
+- `AbrirLookupFormaPagamento` ÔåÆ SigOpFp
+- 19 PUBLIC KeyPress handlers (Enter/Tab/F4) wired via BINDEVENT across the 4 account blocks + TabDesconto/ListaPreco/Fpg
+
+**Verification performed (not just written, actually checked):**
+- Confirmed exact column names for SigCdGcr/SigCdCli/SigOpTdz/SigCdLpc/SigOpFp directly against `docs\schema.sql` (UTF-16 read correctly)
+- Ran `VerificarPropriedadesInexistentes.ps1` ÔåÆ no invalid property assignments
+- Ran `VerificarFormBuscaAuxiliar.ps1` ÔåÆ all `FormBuscaAuxiliar` calls start with the connection handle
+- Ran `VerificarTabelasInexistentes.ps1` ÔåÆ no invalid table references introduced
+- **Compiled the file with the real VFP9 compiler twice** (before and after the header-comment update) ÔÇö both times `OK - compilou sem erro`
+- Cleaned up all scratch `.fxp`/`.err`/driver files afterward
+
+Next up would be FASE 7/8 (events for the CRUD-equivalent buttons) per the pipeline's own phase plan.

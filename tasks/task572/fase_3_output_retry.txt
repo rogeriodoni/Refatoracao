@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da e validada.
+
+## O que estava errado
+
+O `Formsigmvits.prg` gerado na tentativa anterior **estava correto** ÔÇö quem reprovava era o gate. A valida├º├úo da Fase 3 no `OrquestradorMigracao.ps1` exigia `ConfigurarPageFrame`, mas o **SIGMVITS legado n├úo tem PageFrame nenhum**: ├® uma tela de Caixa/PDV 1280x750 com 39 containers posicionados livremente, 3 grids soltos e **zero Page** (confirmado no dump: `BaseClass: pageframe` = 0 ocorr├¬ncias).
+
+Cumprir o gate exigiria inventar um PageFrame que o legado n├úo tem (viola o PILAR 1) ou criar um m├®todo vazio (proibido pela regra de completude). Mesmo padr├úo j├í resolvido nas Fases 4, 5, 7 e 8 ÔÇö o conserto ├® no gate.
+
+## Corre├º├úo no gate (`automation/OrquestradorMigracao.ps1`)
+
+Ramo **FLAT** fail-closed, s├│ para `OPERACIONAL`, exigindo prova no dump **e** a estrutura real no migrado (`InicializarForm` + ao menos um `cnt_4c_` + nenhum `pgf_4c_` inventado).
+
+Um detalhe que mediu errado na primeira vers├úo e precisou ser apertado: testar s├│ "sem `BaseClass: pageframe`" **n├úo discrimina nada** ÔÇö vale para **518 dos 571** dumps, porque `frmcadastro` (188) e `frmrelatorio` (107) *herdam* a `Pagina` do `framework.vcx` e n├úo a declaram no SCX. Somando a exig├¬ncia de o objeto raiz ser `Class: form` gen├®rico, sobram **223** ÔÇö exatamente o universo OPERACIONAL de layout pr├│prio, e os 9 legados de raiz `form` que t├¬m PageFrame continuam exigindo `ConfigurarPageFrame`.
+
+Matriz de regress├úo (todos como esperado): task572 ÔåÆ passa; mesmo form como CRUD ÔåÆ reprova; dump ausente ÔåÆ reprova; legado `frmcadastro` ÔåÆ reprova; form sem containers ÔåÆ reprova; form que inventou `pgf_4c_` ÔåÆ reprova.
+
+## Entreg├ível
+
+`projeto/app/forms/operacionais/Formsigmvits.prg` (14,5 KB) ÔÇö **compila limpo no VFP9** (verificado). Cont├®m `DEFINE CLASS`, propriedades de estado, `Init`/`InicializarForm`/`Destroy` (com `DODEFAULT()`), e 12 dos 14 objetos de topo do legado.
+
+Acrescentei coment├írio registrando os 2 diferidos, para n├úo se perderem em sil├¬ncio: `GrdFP` (grid ÔåÆ Fase 4) e `READCOMM` (container VCX da leitora serial de cheque ÔåÆ Fases 7/8).
+
+## Ressalvas
+
+- **N├úo instanciei o form.** A sonda travou num di├ílogo modal do `config.prg` (matei o processo). Instancia├º├úo ├® da ETAPA 6, depois das 8 fases ÔÇö um form 3/8 falharia legitimamente. A prova que tenho ├® compila├º├úo limpa, n├úo execu├º├úo.
+- O `Formsigmvits` ainda **n├úo est├í registrado no `menu.prg`** (a integra├º├úo ├® de fase posterior); o `config.prg` j├í varre `operacionais\Form*.prg` automaticamente.
+- Ao editar o `OrquestradorMigracao.ps1` (UTF-8 com BOM + CRLF), a Edit tool normalizou o arquivo inteiro para LF; reconverti para CRLF e confirmei BOM intacto e `ParseFile` sem erros. O `git diff --stat` ficou id├¬ntico antes e depois, ent├úo nada vazou para o diff.

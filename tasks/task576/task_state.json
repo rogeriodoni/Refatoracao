@@ -1,0 +1,267 @@
+﻿{
+    "taskId":  "task576",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-09-25T09:53:17",
+    "atualizadoEm":  "2026-09-25T15:35:33",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-25T09:53:17",
+                                            "fim":  "2026-09-25T09:53:17",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task576\\sigmvpen.sct",
+                                            "baseName":  "sigmvpen",
+                                            "scxFile":  "C:\\4c\\tasks\\task576\\sigmvpen.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-25T09:53:17",
+                                          "fim":  "2026-09-25T09:53:17",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigmvpen",
+                                          "txtFile":  "C:\\4c\\tasks\\task576\\sigmvpen_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T09:53:17",
+                                              "fim":  "2026-09-25T09:53:18",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task576\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T09:53:19",
+                                              "fim":  "2026-09-25T09:53:19",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task576\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task576\\meta_prompt.md",
+                                              "boClass":  "sigmvpenBO",
+                                              "formClass":  "Formsigmvpen",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task576\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T09:53:20",
+                                              "fim":  "2026-09-25T09:53:20",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task576\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-25T09:53:20",
+                                               "fim":  "2026-09-25T09:53:21",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task576\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigmvpen_esqueleto.prg",
+                                                                "sigmvpenBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-25T09:53:21",
+                                       "fim":  "2026-09-25T10:22:58",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvpenBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  23.09,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvpen.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  879
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-25T10:22:58",
+                                                  "fim":  "2026-09-25T10:23:01",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvpenBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvpen.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-25T10:23:02",
+                                                 "fim":  "2026-09-25T10:23:03",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-25T10:32:09",
+                                       "fim":  "2026-09-25T10:34:36",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-09-25T10:34:36",
+                                               "fim":  "2026-09-25T10:42:08",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task576\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-09-25T10:42:08",
+                                        "fim":  "2026-09-25T10:50:40",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 0 erros (limite 4), 4 diferencas visuais (limite 0), 128 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigmvpen_20260925104500.html",
+                                        "diferencas":  4,
+                                        "erros":  0,
+                                        "totalProblemas":  132,
+                                        "avisos":  128,
+                                        "recoveredAt":  "2026-09-25T15:35:33",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-25T09:53:18",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-25T09:53:19",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task576\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-25T09:53:19",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-25T09:53:19"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-25T10:23:01",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-25T10:23:02",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigmvpen_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvpen.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task576\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-25T10:23:03",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-25T10:30:57",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-25T10:30:57",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-25T10:31:52",
+                                          "passes":  1,
+                                          "problemas":  "Nenhum",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  0
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-25T10:31:52",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-25T10:32:09",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvpenBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvpen.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-25T10:42:08",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-25T10:42:08",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  5,
+                                             "warnings":  2,
+                                             "reportFile":  "C:\\4c\\tasks\\task576\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

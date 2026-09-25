@@ -1,0 +1,186 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvPdt.SCX
+* Data/Hora: 25/09/2026 08:17:31
+* Total de registros: 5
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVPDT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Processo
+  Parent: SIGMVPDT
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -12
+  Left = -1
+  Width = 1016
+  Height = 622
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVPDT
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 147
+  Width = 337
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (Prompt())
+  ControlBox = .F.
+  Movable = .F.
+  TitleBar = 0
+  AlwaysOnBottom = .T.
+  Themes = .F.
+  Name = "SIGMVPDT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVPDT.Processo
+------------------------------------------------------------
+  Top = 34
+  Left = 48
+  Height = 73
+  Width = 241
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  Caption = "Aguarde Processando Dados"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Processo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 10, 7, 16, 13, 38, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVPDT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.Podatamgr6.Release
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pDopps, pTipos ,pNumps , pEmps, pConsulta
+
+ThisForm.podatamgr6  = CreateObject('fSqlConector')
+
+ThisForm.Erro = .f.
+
+Thisform.pDope = pDopps
+
+pTipos = Iif(Type('pTipos')='C',pTipos,' ')
+
+If (pTipos = 'C')
+	ThisForm.pNume = pNumps
+	ThisForm.pEmp  = pEmps
+EndIf
+
+ThisForm.pTipo = pTipos
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+Thisform.Processo.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVPDT.Processo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Podatamgr6.cursorquery('SigCdOpd','CrSigCdOpd','Dopps',Upper(ThisForm.pDope),[Dopps,Pccs])
+
+If (ThisForm.pTipo <> 'C') And Not WExist('SigPdMp6')
+	DO form SigPdMp6 with ThisForm.pDope,ThisForm
+Else
+	If (ThisForm.pTipo = 'C') And Not WExist('SigPdMp6')
+		DO form SigPdMp6 with ThisForm.pDope,ThisForm,Thisform.pNume,ThisForm.pEmp,.t.
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVPDT
+RESERVED3 (ClassInfo): erro
+pdope
+pemp
+pnume
+podatamgr6
+ptipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

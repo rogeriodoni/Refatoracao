@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete and verified.
+
+## O que aconteceu
+
+O `.prg` da Fase 3 **j├í estava correto** ÔÇö a execu├º├úo anterior gerou `C:\4c\projeto\app\forms\operacionais\FormSIGMVMVT.prg` no caminho certo. O que reprovou foi o **gate**, n├úo o form.
+
+O ramo FLAT da Fase 3 (que criei na task572 para legado sem PageFrame) exige `AddObject("cnt_4c_...")` como prova de estrutura base. O SIGMVMVT n├úo tem **Container nenhum**: os 15 objetos do dump t├¬m todos `Parent: sigmvmvt` ÔÇö Shape, 2 CommandButton, CommandGroup, OleControl (TreeView), 5 Label, 5 TextBox. Cumprir o gate exigiria inventar um container que o legado n├úo tem (viola o PILAR 1). **O conserto ├® no gate.**
+
+## Corre├º├úo ÔÇö `automation/OrquestradorMigracao.ps1`
+
+Sub-ramo **FLAT SEM CONTAINER**, fail-closed, s├│ para `OPERACIONAL`, exigindo do dump as tr├¬s aus├¬ncias (raiz `Class: form` gen├®rico + sem `pageframe` + sem `container`). No lugar do container exige o que a fase de fato entrega: `DEFINE CLASS <FormClass> AS FormBase` + `InicializarForm` + `CREATEOBJECT("<BOClass>")`, e continua proibindo `pgf_4c_` inventado.
+
+Medi antes de afrouxar, nos 573 dumps de `tasks\`: "raiz form gen├®rico + sem pageframe" vale para **225**; somando "sem container" sobram **14**. Os outros 211 continuam obrigados ao `cnt_4c_`.
+
+Testei extraindo o **corpo real do `case 3`** (`[scriptblock]::Create`), n├úo uma r├®plica ÔÇö 8/8, incluindo os negativos (form casca, sem BO, sem `InicializarForm`, dump ausente, `FormType=CRUD`, legado *com* container) e os ramos antigos intactos. Arquivo continua UTF-8+BOM/CRLF, `Parser::ParseFile` limpo.
+
+## Verifica├º├úo do form
+
+Compila limpo e **instancia de verdade** (headless, VFP9) ÔÇö n├úo s├│ "parece certo":
+
+```
+CREATEOBJECT vartype = O      BO = O (SIGMVMVTBO)
+Caption = [Acompanhamento Operacional]   800 x 600
+DataSession = 2   SET DATE = BRITISH   CENTURY = ON
+```
+
+As 16 propriedades do form raiz batem **exatamente** com o dump legado (`DataSession`, `ShowTips`, `Picture`, `ControlBox`, `Closable`, `AutoCenter`, `Verdana 8`, `MaxButton`/`MinButton`, `ClipControls`, `BorderStyle`, `Themes`), com `DoCreate` ÔÇö propriedade s├│ do Designer ÔÇö corretamente omitida. Sem acentos literais, sem TODO/stub, `new_background.jpg` existe.
+
+Dois trope├ºos que vale registrar: perdi um ciclo com um **`.fxp` velho** rodando c├│digo antigo (o log n├úo batia com o script), e o bootstrap completo trava porque `ConfigurarAmbiente()` tenta conectar no SQL Server ÔÇö usei harness enxuto carregando s├│ as classes necess├írias.
+
+Gravei a li├º├úo em mem├│ria (`feedback_gate_fase3_exige_container_inexistente`), ligada ├á irm├ú da task572.
+
+N├úo commitei ÔÇö `OrquestradorMigracao.ps1` j├í tinha altera├º├Áes n├úo-commitadas de antes desta sess├úo, ent├úo deixei a ├írvore como estava para voc├¬ decidir o recorte do commit.

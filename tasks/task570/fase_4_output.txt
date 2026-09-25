@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4/8 ÔÇö `FormSigMvExp`
+
+**N├úo alterei o form: ele j├í est├í completo. O defeito estava no *gate* da Fase 4, que era insatisfaz├¡vel para este legado.**
+
+A fase pedia `ConfigurarPaginaLista()` com Grid + `cnt_4c_Botoes` com 6 bot├Áes CRUD + `AlternarPagina()`. O `SIGMVEXP.SCX` n├úo tem nada disso ÔÇö medido no dump, a ├írvore tem **exatamente 3 objetos** (`dataenvironment` + `form` + 1 `commandbutton`), com **zero** ocorr├¬ncias de grid/pageframe, `AddCursor`/`pColuna` e `RecordSource`/`ControlSource`. ├ë um **despachante** de 337├ù147 (`TitleBar=0`, `AlwaysOnBottom=.T.`) cujo ├║nico bot├úo, "Aguarde Processando Dados", o `Activate` clica para disparar o `DO CASE` de despacho para `SigMvCab`.
+
+Entregar ao p├® da letra exigiria inventar a superf├¡cie ÔÇö violando o PILAR 1 e a regra "NUNCA inventar" ÔÇö ou criar m├®todos vazios, proibidos pela regra de completude. Os bot├Áes CRUD can├┤nicos ficam em `Left=542..932` num form de `Width=337`: seriam invis├¡veis e mortos.
+
+### Corre├º├úo: terceiro ramo no gate (`OrquestradorMigracao.ps1`, `case 4`)
+
+├ë a **quarta recorr├¬ncia** da mesma fam├¡lia j├í corrigida nas Fases 5, 6, 7 e 8 ÔÇö gate calibrado numa amostra vira exig├¬ncia de inventar quando o legado est├í fora dela. Segui o padr├úo fail-closed dessas corre├º├Áes, com tr├¬s guardas: s├│ `OPERACIONAL`; s├│ com o dump **presente** provando a aus├¬ncia das **duas** superf├¡cies (sem lista **e** sem campos); e n├úo vira atalho para form vazio ÔÇö dump com bot├úo exige o bot├úo **e** o handler de `Click`.
+
+**"Sem lista" sozinho n├úo bastava** ÔÇö dispensaria 35 dos 224 OPERACIONAL, v├írios com 20 a 42 objetos (campos de verdade, s├│ sem grade). Somando "sem campos" sobram 14, todos comprovadamente splash/despachante. Foi essa medi├º├úo que definiu o crit├®rio.
+
+### Verifica├º├Áes
+- Gate testado nos 5 casos: task570 passa; **dump ausente reprova**, `FormType` Ôëá OPERACIONAL reprova, legado com grade (SIGMVCHV) n├úo entra no ramo, form vazio reprova.
+- Varredura dos forms migrados: **delta = 1** (s├│ este). 521 continuam passando, 7 continuam reprovando.
+- `OrquestradorMigracao.ps1` faz parse sem erro; encoding intacto (BOM + 2962 bytes >127, id├¬ntico ao antes).
+- `FormSigMvExp.prg` compila limpo no VFP9 (sem `.err`); apaguei o `.fxp` para o pipeline n├úo rodar c├│digo velho. Sem TODO/stub, 0 bytes n├úo-ASCII, blocos balanceados, nenhum `RETURN` dentro de `TRY`.
+
+Registrei o resultado em `tasks/task570/fase_4_output.txt` e a li├º├úo na mem├│ria.
+
+Dois pontos que **n├úo** resolvi:
+
+1. **O orquestrador est├í em execu├º├úo agora** (processo PowerShell de 17:51, o mesmo hor├írio da extra├º├úo do dump). O PowerShell parseia o script inteiro na invoca├º├úo, ent├úo a corre├º├úo vale para a **pr├│xima** execu├º├úo ÔÇö se esta fase for revalidada pelo processo ainda em mem├│ria, vai reprovar de novo at├® ele ser relan├ºado.
+2. **Pend├¬ncia herdada da Fase 3**: `FormSigPrHpr.prg` chama `CREATEOBJECT("FormSigMvExp", THIS)` com um argumento s├│, incompat├¡vel com a assinatura de 7 par├ómetros fiel ao legado. Est├í fora do escopo desta fase e n├úo toquei.

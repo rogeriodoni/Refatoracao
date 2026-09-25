@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei os 4 achados contra o fonte legado (`tasks\task561\sigmvccr_form_codigo_fonte.txt`) antes de tocar no c├│digo ÔÇö e os quatro s├úo falsos positivos da auditoria, n├úo defeitos reais:
+
+**GRID-HEADER (2 itens)** ÔÇö O legado tem, linha por linha:
+- `Column7.Header1.Caption = ""` (linha 885)
+- `Column8.Header1.Caption = " "` (linha 907)
+
+O migrado (`Formsigmvccr.prg:473` e `:480-481`) tem exatamente `Column7.Header1.Caption = ""` e `Column8.Header1.Caption = " "` ÔÇö **id├¬ntico ao legado, caractere por caractere**. A ferramenta de auditoria simplesmente n├úo conseguiu casar essas duas colunas em branco/espa├ºo contra a lista de headers que ela extraiu do legado (provavelmente colapsou ambas num s├│ item vazio ao exibir a lista). N├úo h├í nada para corrigir aqui.
+
+**LAYOUT-POSITION (2 itens)** ÔÇö O achado compara `Label1` (parent `SIGMVCCR.Pagina.Lista.cntFiltros.Cnt_periodo`, legado Top=10/Left=17) contra `lbl_4c_Label17` no migrado ÔÇö mas `lbl_4c_Label17` ├® o label **"Job :"** da P├ígina 2 (Dados), em `Top=220/Left=84` (`Formsigmvccr.prg:783-796`), um controle completamente diferente, sem rela├º├úo com o filtro de per├¡odo da Lista.
+
+O label correto do filtro de per├¡odo j├í existe no migrado como `lbl_4c_Label1` dentro de `cnt_4c__periodo` (`Formsigmvccr.prg:345-358`): `Caption="Per├¡odo : "`, `Top=10`, `Left=17` ÔÇö **tamb├®m id├¬ntico ao legado**. Este ├® exatamente o padr├úo j├í registrado na mem├│ria do projeto (colis├úo de nome gen├®rico `Label1` entre p├íginas fazendo o comparador casar o controle errado).
+
+Como os 4 problemas listados j├í est├úo corretos e fi├®is ao legado, **nenhuma altera├º├úo foi feita** ÔÇö mudar qualquer uma dessas propriedades quebraria o PILAR 1 (fidelidade pixel-perfect) introduzindo uma regress├úo onde hoje n├úo h├í bug.

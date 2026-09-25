@@ -1054,6 +1054,9 @@ DEFINE CLASS FormSigPrCtr AS FormBase
                 THIS.CarregarLista()
             ENDIF
 
+            *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+            THIS.AjustarBotoesPorModo()
+
             loc_lResultado = .T.
         CATCH TO loc_oErro
             MsgErro("Erro em FormSigPrCtr.AlternarPagina: " + loc_oErro.Message, "Erro")

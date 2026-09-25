@@ -1,0 +1,55 @@
+=== TESTE FASE 8 FormSIGMVMVT (adaptadores CRUD) ===
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+
+--- EXISTENCIA DOS ADAPTADORES ---
+FormParaBO              : EXISTE
+BOParaForm              : EXISTE
+CarregarLista           : EXISTE
+BtnCancelarClick        : EXISTE
+BtnExecutarClick        : EXISTE
+BtnBuscarClick          : EXISTE
+HabilitarCampos         : EXISTE
+LimparCampos            : EXISTE
+AjustarBotoesPorModo    : EXISTE
+DefinirFiltroPorChave   : EXISTE
+
+--- ESCOPO (FormParaBO/BOParaForm devem ser PROTECTED) ---
+FormParaBO externo: RECUSADO (PROTECTED ok) - Property FORMPARABO is not found.
+BOParaForm externo: RECUSADO (PROTECTED ok) - Property BOPARAFORM is not found.
+
+--- CarregarLista() com filtro VAZIO (caminho do harness) ---
+CarregarLista()   : retornou .T. (OK)
+
+--- TRANSFERENCIA filtro -> BO (FormParaBO) ---
+CarregarLista()   : retornou .T.
+BO.this_cEmps     : [001] OK
+BO.this_cDopes    : [CORTE] OK
+BO.this_cEmpDopNums len: 29 OK (3+20+6)
+
+--- BOParaForm via DefinirFiltroPorChave (Anterior/Proximo) ---
+txt_4c_CEmp      : [002] OK
+txt_4c_Dopes     : [MONTAGEM] OK
+txt_4c_Numes     : [77] OK
+
+--- BtnCancelarClick() limpa e NAO fecha ---
+form ainda vivo   : SIM (OK)
+txt_4c_CEmp vazio : SIM (OK)
+txt_4c_Dopes vazio: SIM (OK)
+txt_4c_Numes zero : SIM (OK)
+pilha reiniciada  : SIM (OK)
+
+--- CHAMADA REAL dos demais adaptadores ---
+AjustarBotoesPorModo : OK
+HabilitarCampos(.F.) : OK (CEmp.Enabled=.F.)
+HabilitarCampos(.T.) : OK (CEmp.Enabled=.T.)
+BtnExecutarClick()   : OK (retornou .T.)
+BtnBuscarClick()     : OK (retornou .T.)
+LimparCampos externo : RECUSADO (PROTECTED ok) - Property LIMPARCAMPOS is not found.
+
+--- Automatico = .T. (drill direto): filtro fica TRAVADO ---
+CREATEOBJECT(auto)   : OK (Automatico=.T.)
+HabilitarCampos(.T.) em Automatico -> CEmp.Enabled=.F. OK (continua travado)
+BtnCancelarClick() em Automatico -> CEmp=[003] OK (preservado)
+
+=== RESULTADO: TODOS OS TESTES PASSARAM ===

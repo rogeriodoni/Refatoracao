@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSIGMVDOC.prg` agora passa em todos os checks do gate.
+
+## O que faltava (e por que a tentativa anterior reprovou)
+
+A tentativa anterior concluiu que o form "j├í estava completo" e que os nomes CRUD do gate "n├úo se aplicam a relat├│rio". **Isso estava errado**: o projeto tem uma conven├º├úo para isso ÔÇö os forms REPORT carregam os nomes CRUD como *adaptadores* com o comportamento equivalente de relat├│rio. Medido nos 102 forms de `forms/relatorios/`: `FormParaBO` 96, `CarregarLista` 96, `BtnSalvarClick` 96, `BtnCancelarClick` 95, `BOParaForm` 95. O gate era satisfaz├¡vel; o form ├® que estava incompleto.
+
+## Altera├º├Áes em `projeto/app/forms/relatorios/FormSIGMVDOC.prg`
+
+**Refatora├º├úo** ÔÇö extra├¡ de `LimparCampos` a fun├º├úo `CarregarFaixaNotas()`, que consulta o banco (`MIN/MAX` de `nfis`) sem escrever nos campos. `LimparCampos` continua com o mesmo comportamento, agora consumindo-a.
+
+**Adaptadores acrescentados** (refer├¬ncia can├┤nica `Formsigrecrf.prg`, nenhum com corpo vazio):
+
+| m├®todo | comportamento em REPORT |
+|---|---|
+| `FormParaBO` | delega para `FormParaRelatorio()` |
+| `BOParaForm` | traz `this_nNotaI`/`this_nNotaF` do BO de volta para os campos |
+| `CarregarLista` | recarrega a faixa de documentos e traz para dentro dela o valor digitado que tiver ficado fora ÔÇö sem zerar a escolha do usu├írio |
+| `HabilitarCampos` | habilita/desabilita os dois campos da faixa |
+| `AjustarBotoesPorModo` | mant├®m os 4 bot├Áes habilitados |
+| `BtnSalvarClick` | delega para `BtnImprimirClick` (valida├º├úo da faixa em um lugar s├│) |
+| `BtnCancelarClick` | `LimparCampos()` + foco no 1┬║ campo |
+
+`FormParaBO`/`BOParaForm` ficaram **PROTECTED**: o `FormBase` j├í os declara assim (`formbase.prg:280`/`:285`) e a prote├º├úo ├® herdada ÔÇö medi que declarar sem `PROTECTED` n├úo afrouxa nada (chamada externa estoura `Property FORMPARABO is not found`).
+
+## Verifica├º├úo
+
+- **Compila limpo** (form + BO), `.fxp` apagado antes e regerado.
+- **Instanciado de verdade** com `config.prg` carregado: `VARTYPE=O`, `CarregarLista=.T.`, `AjustarBotoesPorModo OK`, `HabilitarCampos(.F.)ÔåÆ.F.` / `(.T.)ÔåÆ.T.`, `BtnCancelarClick OK`, `AlternarPagina OK`, `Release OK`.
+- Nenhuma procedure vazia, nenhum marcador TODO/stub, nenhum `RETURN` dentro de `TRY`.
+
+Dois pontos que encontrei no caminho e tratei: `BtnCancelarClick` ganhou guarda `THIS.Visible` antes do `SetFocus` (o harness chama com o form apenas instanciado); e **n├úo** acionei `BtnSalvarClick` no teste ÔÇö ele chega em `REPORT FORM ... TO PRINTER PROMPT`, cujo di├ílogo de impressora n├úo ├® suprimido por `gb_4c_ModoTeste` e travou o processo at├® eu mat├í-lo. Provei esse par por `PEMSTATUS`.
+
+Uma observa├º├úo que registrei mas n├úo consertei (fora do escopo desta fase): o FRX `SIGCDENT.frx` n├úo existe em `projeto/app/reports/` nem no acervo legado, ent├úo Visualizar/Imprimir v├úo parar na mensagem de arquivo ausente do `ExecutarReportForm`. Isso j├í est├í documentado em coment├írio no BO.

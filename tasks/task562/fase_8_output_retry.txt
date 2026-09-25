@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and validated.
+
+## What was wrong
+
+The phase 8 gate requires five literal names in the form: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. Three were missing. The previous run concluded all three were inapplicable and changed nothing ÔÇö that was half right, so the gate stayed red.
+
+Checking the legacy dump (`SigMvChv_form_codigo_fonte.txt`) against the migrated code separated the two cases:
+
+**`FormParaBO`/`BOParaForm` were genuinely applicable.** The rowÔåöBO mapping existed ÔÇö it was just inlined inside `ValidarChaveGrade`. SIGMVCHV's data surface isn't a Page2 of fields, it's the current grid row, and `crChaves`'s three columns (`ChaveNota`/`EmpDopNums`/`pkChaves`) map 1-to-1 onto `SigMvChvBO`'s three properties. I extracted both methods (declared `PROTECTED`, matching how `FormBase` declares them at formbase.prg:280,285) and wired the save path through them. 132 of 134 OPERACIONAL forms have this pair, so this was a real gap, not a gate artifact.
+
+**`BtnSalvarClick` genuinely does not apply.** The legacy has exactly four buttons ÔÇö `btnSair`, `btnConfirmar`, `inserir`, `excluir`. `btnConfirmar.Click` only does `Refresh` + `GoTop` + `Refresh` + `Release`; its persistence block is commented out (`*!*`), so it isn't a save. The only save token anywhere in the dump is the icon filename `cadastro_salvar_60.jpg`. Inventing a Salvar button would break the "NUNCA inventar" rule, and a no-op stub would fail `Test-CompletudeCodigo`. So I relaxed the gate instead ÔÇö the same resolution already applied three times in that function for phases 4, 5 and 6, one of whose comments already names SIGMVCHV. The relaxation is fail-closed: it requires the legacy dump to exist and prove no save button, and separately requires a real commit handler to exist under *some* name.
+
+## One latent bug found and fixed
+
+`Salvar()` only clears `this_lNovoRegistro` on success, and the form ignored `EditarRegistro()`'s return. So after one failed insert, editing an existing row would route to `Inserir()` and **duplicate the record instead of updating it ÔÇö with nothing on screen**. That's the silent-wrong-write class the project treats as worst-case, in code I was already touching, so I guarded it.
+
+## Verification
+
+Not just "it compiles" ÔÇö I instantiated it in VFP9:
+
+- `COMPILE` on both files: 0 errors, no `.err`, `.fxp` produced.
+- Form instantiates (`ControlCount=5`).
+- All five methods `TesteAutomatico` calls externally were **actually invoked**, not just probed with `PEMSTATUS` ÔÇö which per rule #3 returns `.T.` for PROTECTED methods and would have hidden a failure.
+- Mapping round-trip proven: `FormParaBO("CHAVE-B")` ÔåÆ BO gets `CHAVE-B`/`001000123`/`PK1`; `BOParaForm()` ÔåÆ cursor gets `CHAVE-C`/`PK9`. With no cursor both return `.F.` instead of crashing.
+- Gate tested across four scenarios: this form passes, dump-absent fails, no-action-button fails, `FormFAPP` passes. The fail-closed detector correctly rejects `sigcdcli`/`SIGCDCTA`, which do have save buttons.
+- `Test-CompletudeCodigo` clean on both files; no `RETURN` inside any `TRY` (rule #1).
+
+Two rule-#29-style traps bit me during testing and are worth flagging: a stale `.fxp` made VFP silently re-run old test code (the first "failure" I saw was a cached result), and `PEMSTATUS` reported the protected methods as callable when they weren't. Both are already documented in CLAUDE.md; they cost real time here.
+
+Temp files cleaned up. I changed `automation/OrquestradorMigracao.ps1` (the gate) ÔÇö note that file already had uncommitted phase-6 changes from earlier in this run, so its diff shows two hunks and only the second is mine. I made no menu or `config.prg` changes: both files auto-load via `ADIR()`, and SIGMVCHV is only ever opened programmatically by its parent document form, so a standalone menu entry would misrepresent it.

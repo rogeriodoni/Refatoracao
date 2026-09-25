@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada. Resumo do que foi feito:
+
+## O que faltava (a Fase 8 anterior reportou "j├í estava completo" ÔÇö n├úo estava)
+
+Tr├¬s m├®todos exigidos pelo gate da fase n├úo existiam: `FormParaBO`, `BOParaForm` e `BtnCancelarClick`.
+
+## Implementa├º├Áes (l├│gica real, transcrita do legado ÔÇö sem stub)
+
+**`FormParaBO()`** ÔÇö `Formsigmvcot.prg:8930` ÔÇö corrigiu um defeito real, n├úo s├│ o gate. No legado cada campo do cabe├ºalho tem `ControlSource` ligado a `crSigCtTDc`, ent├úo o digitado j├í est├í no cursor quando `btnGravaDados` dispara. No migrado s├│ os `Validar<X>` escreviam no BO, e **apenas ao sair do campo**: quem digitasse Departamento / Data de Cota├º├úo / Validade / Pagamento / Prioridade e clicasse Gravar direto perdia o valor em sil├¬ncio. Agora `GravaDados` chama o m├®todo antes do `Salvar()` (`:4780`).
+
+Ficaram **deliberadamente de fora**, com o motivo no coment├írio: `Codigos`/`CidChaves` (gerados pelo BO), `Copias`, `Situas`, `LocalEnts` e `ChkAprovs` ÔÇö este ├║ltimo porque `AprovarCotacao` zera a flag no BO e s├│ **depois** de `GravaDados` zera o CheckBox (ordem do legado); recolh├¬-la ali gravaria como aprovada uma cota├º├úo que a valida├º├úo recusou.
+
+**`BOParaForm()`** ÔÇö `:8992` ÔÇö caminho inverso; o corpo veio de `PopularCamposCotacaoNoFormulario`, que virou o wrapper que delega (os chamadores existentes n├úo mudaram).
+
+Ambos s├úo override dos hooks **PROTECTED** de `FormBase` (`formbase.prg:280/285`) ÔÇö o escopo ├® herdado da classe pai, ent├úo declarei `PROTECTED` explicitamente para o fonte n├úo mentir sobre isso.
+
+**`BtnCancelarClick()`** ÔÇö `:9056` ÔÇö despacha pela p├ígina corrente para o `btnSair` que o legado tem em cada uma (4ÔåÆ3, 3ÔåÆ2, 2ÔåÆ1, 1ÔåÆencerra).
+
+## Defeito bloqueante encontrado e corrigido no caminho
+
+O form **n├úo abria**: `Property MAXLENGTH is not found` em `ConfigurarGridFornecs`. `Column` n├úo tem `MaxLength` (├® do TextBox) ÔÇö regra #33. Eram **9 sites** em `grdFornecs` e `grdCotacoes`, todos corrigidos para `.Text1.MaxLength`. Isso vinha das fases 6/7 e o `COMPILE` limpo da fase 7 n├úo pegava.
+
+## Verifica├º├úo
+
+- Compila├º├úo VFP9: `OK sem erros`.
+- `TesteAutomatico.prg`: **9/9, 100%** (instancia├º├úo, 4/4 p├íginas, `CarregarLista`, fechamento) ÔÇö antes da corre├º├úo do MaxLength era 0/1.
+- Smoke test dedicado (`tasks/task565/fase8_smoke.prg`), instanciando o form real: `BOParaForm` propagou BOÔåÆcontroles; `FormParaBO` recolheu `DPT99`, `23/11/2026`, prioridade 2, `APR77`; `ChkAprovs` e `Codigos` preservados; `BtnCancelarClick` em Page2 ÔåÆ Page1.
+- Auditorias: `VerificarPropriedadesInexistentes` limpo; `VerificarFuncoesNaoDefinidas` no projeto inteiro `OK - nenhuma chamada orfa`; completude sem TODO/procedure vazia/stub.
+- Gate da Fase 8 simulado: `VALIDADO=True`.
+
+Menu (`popMovimentos` bar 131 + `AbrirFormsigmvcot`) j├í estava l├í da tentativa anterior, com `Show()` fora do TRY (regra #29) ÔÇö conferido, n├úo mexi.
+
+Uma ressalva honesta: `BtnCancelarClick` hoje n├úo est├í ligado a nenhum bot├úo ÔÇö cada bot├úo continua no seu handler espec├¡fico, porque o foco que cada um d├í ├® o do legado. Ele ├® o ponto de entrada can├┤nico (e o que o harness procura), delegando para l├│gica real; se preferir que os bot├Áes passem a rotear por ele, ├® uma linha por `BINDEVENT`.

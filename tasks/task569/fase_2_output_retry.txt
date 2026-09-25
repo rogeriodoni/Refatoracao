@@ -1,0 +1,36 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+**FASE 2 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\ProdutoBO.prg` (1696 linhas) agora tem o CRUD completo.
+
+## O que foi entregue
+
+| M├®todo | Conte├║do |
+|---|---|
+| `CarregarDoCursor` | as **181** colunas, com `SELECT (alias)` antes (regra #9) |
+| `MontarSQLInclusao` / `Inserir` | INSERT com as **181** colunas |
+| `MontarSQLAlteracao` / `Atualizar` | UPDATE das 181, `WHERE` pela chave **original** (suporta troca de c├│digo) |
+| `ExecutarExclusao` | os 15 DELETEs do `msv_excluir` legado, na mesma ordem e com as mesmas chaves |
+| `ValidarDados` | transcri├º├úo do `obrigatorios` (14 regras vindas de `SigCdGrp`), + `GerarCompoPorFaixa` (SigCdCpo) |
+| `CarregarPorCodigo`, `Buscar`, `BuscarLista`, `ExisteProduto`, `ObterChavePrimaria`, `LimparDados`, `InicializarValoresPadrao`, carimbos | ÔÇö |
+
+`RegistrarAuditoria` ├® chamado em INSERT/UPDATE/DELETE.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- **Schema**: as 181 propriedades da Fase 1 batem 1ÔÇæparaÔÇæ1 com `SigCdPro` ÔÇö nenhuma coluna ausente, nenhuma inventada. `docs/schema.sql` lido com `Get-Content -Raw` (regra #14).
+- **Compila** no VFP9 real, sem `.err`.
+- **Roda**: instanciei a classe e executei os m├®todos. O INSERT gerado tem **181 colunas = 181 valores**, sem duplicatas, e **0 diverg├¬ncias** de tipo/casas decimais nos 181 pares; o UPDATE tem 181 atribui├º├Áes + `WHERE`. `SET cpros='TESTE999' WHERE cpros='TESTE123'` confirma o rename. Escape de aspas, truncamento por tamanho de coluna e `datetime` vazio ÔåÆ `NULL` conferidos.
+- **Gates do projeto**: `ValidadorSQLSchema` (bloqueante) passou; `VerificarInsertNotNull`, `VerificarCamposCursorBO` e `VerificarFuncoesNaoDefinidas` n├úo acusam nada em ProdutoBO.
+- Regras #1 (sem `RETURN` em TRY), #4 (zero bytes acentuados), #8 (`THIS.` em toda chamada), #9, #13, #20 conferidas.
+
+## Duas decis├Áes que valem registro
+
+1. **Falha de grava├º├úo n├úo ├® exibida em `Inserir`/`Atualizar`/`ExecutarExclusao`** ÔÇö s├│ preenchem `this_cMensagemErro`; quem mostra ├® `BusinessBase.Salvar()` via `ExibirFalha()`. `ExibirFalha` **n├úo** checa `this_lErroExibido`, ent├úo exibir ali tamb├®m duplicaria a mensagem (regra #20). Est├í comentado no c├│digo para ningu├®m "consertar" depois.
+2. **`dtalts`/`usuaalts` s├úo carimbados no `Atualizar`.** O SCX n├úo escreve esses dois em `SigCdPro` (ele carimba a tabela de hist├│rico), mas as colunas existem, s├úo lidas pela tela e pelo pr├│prio legado (`pUsA = crSigCdPro.UsuaAlts`) ÔÇö n├úo carimbar deixaria o bloco "Altera├º├úo" permanentemente desatualizado. Segui a conven├º├úo dos BOs irm├úos (`sigprccpBO`/`sigprimaBO`). ├ë o ├║nico ponto em que me afastei da transcri├º├úo literal.
+
+Sobre `idpro`: ├® `NOT NULL` e **n├úo** ├® IDENTITY ÔÇö gerado com `fGerUniqueKey("IDPRO")`, como no legado. Nos testes sem banco ele sai 0, que ├® o retorno documentado da fun├º├úo sem conex├úo.
+
+Nada de `config.prg`: o `ADIR()` carrega `classes\*BO.prg` automaticamente. O form e a entrada de menu pertencem ├ás fases seguintes.

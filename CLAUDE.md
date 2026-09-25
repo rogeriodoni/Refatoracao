@@ -832,6 +832,69 @@ A raiz eh a mesma da regra **#30**: o PILAR 3 manda RENOMEAR os objetos, entao n
 
 Origem: Erro175 (2026-09-23, abas Estoque/Fiscal e Configuracao do `Formgpd`).
 
+### 40. Quem DESABILITA botao tem de REABILITAR no funil de volta — `AlternarPagina`, nunca so no botao que entra
+`AjustarBotoesPorModo` desabilita os 5 botoes CRUD da pagina Lista quando o modo sai de `"LISTA"`, mas o migrador so o chama ao **ENTRAR** em edicao (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`). O caminho de **VOLTA** (`BtnSalvarClick` -> `AlternarPagina(1)`, e `BtnCancelarClick`) troca a pagina e recarrega a lista **sem nunca reabilitar**: o usuario grava, volta para a Lista e ve Incluir/Visualizar/Alterar/Excluir/Buscar cinza, so o Encerrar vivo — a tela fica inutilizavel ate ser fechada e reaberta.
+
+**Nao estoura, nao entra em log, nao quebra compilacao** — eh estado que ninguem restaura, por isso passa por todos os gates. E o sintoma eh identico em Incluir e em Alterar, o que manda o diagnostico para o BO/gravacao.
+
+```foxpro
+* CERTO - a chamada mora no FUNIL, nao em cada botao
+PROCEDURE AlternarPagina(par_nPagina)
+    THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+    IF par_nPagina = 1
+        THIS.this_cModoAtual = "LISTA"     && normaliza AQUI, nao em cada caller
+        THIS.CarregarLista()
+    ENDIF
+    THIS.AjustarBotoesPorModo()            && <- sem isto os botoes ficam cinza
+```
+
+**As DUAS metades sao necessarias.** Medido no VFP9 em 2026-09-24: injetar so a chamada deixou `Formemp`, `Formsigpdmp7`, `FormSRV` e `FormDpi` ainda em `.F.`, porque o `AlternarPagina` deles nao repoe o modo e a reabilitacao passava a depender de **cada caller** lembrar de trocar antes. Pior no `FormSET`, cujo `BtnSalvarClick` nao troca o modo em caminho nenhum. Repor o modo dentro do proprio `AlternarPagina` eh seguro: **todo** call site de `AlternarPagina(1)` do projeto eh caminho de volta (Salvar/Cancelar/Confirmar/Exp-ImpXML) — conferido nos 15 forms.
+
+**Forms cujo `AjustarBotoesPorModo` so atribui `.T.` literal nao tem este defeito** — filtrar por isso antes de corrigir em massa (regra do WARNING massivo): dos 55 forms que mexem em `cmd_4c_Incluir.Enabled`, so **15** desabilitavam por modo sem reabilitar; o resto ou liga incondicionalmente, ou nunca chama o metodo, ou ja chama no caminho de volta.
+
+Auto-fix: CorretorAutomatico **#210** (injeta a chamada no fim de `AlternarPagina`; WARNING quando o metodo nao repoe o modo, ou quando nao ha ancora deterministica). Referencia: `Formcfi`, `Formcnl`, `FormFNF`, `FormOcc`. Origem: Erro176 (2026-09-24, `Formgpd`).
+
+**Achado vizinho (nao eh o mesmo defeito)**: `FormSet` eh **BASE CLASS nativa do VFP9** (container de forms) e vence o `DEFINE CLASS FormSET` carregado por `SET PROCEDURE`. Medido: `CREATEOBJECT("FormSET")` devolve o container nativo — `BaseClass=[Formset]`, `FormCount=0`, **sem nenhuma** property do migrado — e o `Show()` nao abre nada. Ao nomear a classe de um form migrado, nunca usar nome de base class do VFP9 (`form`, `formset`, `page`, `pageframe`, `grid`, `column`, `header`, `container`, `custom`, `control`, `toolbar`, `timer`, `shape`, `line`, `image`, `label`, `textbox`, `editbox`, `combobox`, `listbox`, `spinner`, `checkbox`, `optiongroup`, `optionbutton`, `commandbutton`, `commandgroup`, `separator`, `cursor`, `relation`, `dataenvironment`, `projecthook`, `hyperlink`).
+
+Era a unica colisao do projeto e foi **renomeada para `FormSetor`** (2026-09-24): classe, arquivo, `CREATEOBJECT` do `menu.prg` e `FormSetor_mapeamento.json` — o `ValidarUIFidelity` monta o nome do JSON a partir do nome da **CLASSE** (`par_cClasseForm + "_mapeamento.json"`), entao renomear a classe sem renomear o JSON quebra a validacao. O par `SIGCDSET -> FormSetor` ficou fixado em `automation\class_mapping.json` para a proxima migracao nao regerar o nome ruim. Depois da troca: `BaseClass=[Form]`, `Caption=[Cadastro de Setores]`.
+
+### 41. `Column.ControlSource` de cursor que ainda NAO existe derruba o `Init` — a tela nao abre
+`ConfigurarPaginaLista` roda **antes** de `CarregarLista`, quando `cursor_4c_Dados` ainda nao foi criado. Atribuir `Column1.ControlSource = "cursor_4c_Dados.cods"` ali estoura `Alias 'CURSOR_4C_DADOS' is not found` **dentro do TRY** do `InicializarForm`, que devolve `.F.` — dai `CREATEOBJECT` devolve `.F.`, o `IF VARTYPE(loForm) = "O"` do `menu.prg` nao entra e o usuario clica no menu e **nada acontece**, sem erro visivel.
+
+O bind canonico (`FormCor.CarregarLista`) eh todo no MESMO lugar, com o cursor ja populado e nesta ordem: `ColumnCount` -> `RecordSource` -> `ControlSource` -> **`Width`** -> `Header1.Caption`. Em `ConfigurarPaginaLista` ficam so as propriedades que nao dependem de dado (`Movable`, `Resizable`, fonte, cores).
+
+A `Width` na ordem errada eh o defeito gemeo e silencioso: `RecordSource` **recalcula as larguras para o default 90**, entao largura definida antes dele (ou em `ConfigurarPaginaLista`) eh apagada e a grade abre com colunas fora do tamanho do SCX. Todo site que re-binda precisa repetir o bloco — no `FormFti` eram **dois** (`CarregarLista` e `BtnBuscarClick`).
+
+Origem: Erro176 (2026-09-24, `FormFti` — "Cadastro de Feitios" nunca abria).
+
+### 42. Chave POSICIONAL concatenada: `ALLTRIM` nas partes devolve ZERO linhas em silencio
+Chave montada concatenando colunas `char` de largura fixa eh **posicional** — o padding FAZ PARTE da chave. `ALLTRIM` nas partes encurta a chave, ela nunca casa, e o `SELECT` roda **sem erro** devolvendo **ZERO linhas**: nada no log, nenhuma exception, so a tela vazia.
+
+```foxpro
+* Legado (SIGMVSBN:1353) - sem ALLTRIM, o padding vem das COLUNAS
+lcEmpDopNums = TmpSubN.Emps + TmpSubN.Dopes + Str(TmpSubN.Numes, 6)
+
+* ERRADO -> 15 chars "001MALOTE     3"
+RETURN ALLTRIM(par_cEmps) + ALLTRIM(par_cDopes) + STR(par_nNumes, 6)
+* CERTO  -> 29 chars "001MALOTE                   3"
+RETURN PADR(par_cEmps, 3) + PADR(par_cDopes, 20) + STR(par_nNumes, 6)
+```
+
+`SigMvCab`/`SigMvItn`/`SigMvPec`: `Emps` char(3) + `Dopes` char(20) + `Str(Numes,6)` = **29** = `EmpDopNums char(29)`. **A largura do `char(N)` destino eh a conferencia**: se a soma das partes nao da N, a montagem esta errada.
+
+Usar `PADR` explicito, **nunca** confiar no padding que o cursor por acaso traz — `ObterChavePrimaria()` chama o mesmo montador com as properties do BO, que o `Init` do Form guarda **ja com `ALLTRIM`**.
+
+| forma | efeito |
+|---|---|
+| `ALLTRIM` nas partes INTERIORES | **QUEBRA** — perde o padding no meio da chave |
+| `ALLTRIM` na chave inteira, no fim | inofensivo — `char` no SQL Server compara com blank-padding ANSI |
+
+A 2a linha eh o caso MAJORITARIO (`ALLTRIM(<coluna lida>)` guardado numa property) — **nao confundir os dois ao varrer**, senao o sweep vira WARNING massivo. Ainda assim, preferir passar o valor CRU ao `EscaparSQL` no consumidor, como o legado faz.
+
+**Instanciar o form NAO pega este defeito**: `InicializarForm` pula `CarregarLista` em `gb_4c_ModoTeste`, e o `TestFormWrapper` deu `Status: SUCESSO`. Num visualizador, o equivalente a "testar gravando" eh provar que a consulta devolve **LINHA** — conferir `RECCOUNT`, nao o retorno `.T.` (o metodo devolve `.T.` com zero linhas, e esta certo em fazer isso).
+
+Origem: Erro177 (2026-09-25, `SigMvSbnBO.MontarChaveEmpDopNums` / `FormSigMvSbn` — grade de itens, descricao e imagem do produto sempre vazias). Sweep: 116 arquivos citam `EmpDopNums`; com a forma perigosa so ha **1 outro** site (`PGRBO.prg:237,294`), que ESCREVE a chave e nao foi verificado.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

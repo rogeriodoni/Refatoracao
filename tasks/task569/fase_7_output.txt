@@ -1,0 +1,26 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+No `RETURN` statements found inside any TRY/CATCH block ÔÇö the critical VFP9 rule (#1) is respected throughout the file. The four Fase 7/8 target methods are already fully implemented and wired correctly:
+
+- **`BtnIncluirClick()`** (line 820) ÔÇö calls `NovoRegistro()`, sets modo, navigates to Page2. Real logic, no stub.
+- **`BtnAlterarClick()`** (line 853) ÔÇö reads selected row from `cursor_4c_Dados`, `CarregarPorCodigo()`, `EditarRegistro()`, navigates.
+- **`BtnVisualizarClick()`** (line 830) ÔÇö same pattern in read-only mode.
+- **`BtnExcluirClick()`** (line 877) ÔÇö confirms via `MsgConfirma()` (used correctly as boolean, not `= 6`), calls `THIS.this_oBusinessObject.Excluir()` (public wrapper, not `ExecutarExclusao()` directly).
+
+All four are `PUBLIC` (required for `BINDEVENT`, rule #3) and are already wired to their buttons:
+```
+BINDEVENT(...cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+BINDEVENT(...cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+BINDEVENT(...cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+BINDEVENT(...cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+BINDEVENT(grd_4c_Dados, "DblClick", THIS, "BtnVisualizarClick")
+```
+
+`BtnBuscarClick()` and `BtnEncerrarClick()` are also present and correctly implemented (Buscar follows the "busca por exemplo" pattern from the task's special instructions, not a picker ÔÇö matching the legado's `msv_procurar`).
+
+No stubs, no TODOs, no placeholder messages ÔÇö everything has functional logic. This phase's objective (adding the 4 CRUD click events) was already satisfied by prior work in this file, so no edits were needed this pass.
+
+One gap I confirmed is **out of scope for this phase**: `BtnSalvarClick()`, `BtnCancelarClick()`, `HabilitarCampos()`, and `AjustarBotoesPorModo()` don't exist yet ÔÇö the `cnt_4c_BotoesAcao` container on Page2 was created but has no Confirmar/Cancelar buttons inside it yet. That's Fase 8 territory (Confirmar/Cancelar wiring + FormParaBO/BOParaForm), not this phase's "eventos principais" (Incluir/Alterar/Visualizar/Excluir).

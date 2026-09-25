@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5/8 conclu├¡da: adicionei a primeira metade dos campos principais da Page2 (identifica├º├úo do movimento) em `ConfigurarPaginaDados()` do `Formsigmvcab.prg`:
+
+- **Linha 1**: `txt_4c_Emps` (Empresa), `txt_4c_Dopes` (Opera├º├úo, readonly), `txt_4c_Numes` (N├║mero, readonly)
+- **Linha 2**: `txt_4c_Datas` (Data)
+- **Linha 3**: `txt_4c_GrupoOs` / `txt_4c_ContaOs` (Origem)
+- **Linha 4**: `txt_4c_GrupoDs` / `txt_4c_ContaDs` (Destino)
+- **Linha 5**: `txt_4c_Vends` (Vendedor)
+
+Cada campo segue o padr├úo can├┤nico do projeto (labels `ForeColor RGB(90,90,90)`, `AutoSize=.T.` sem Width/Alignment inventados ÔÇö regra #23; TextBoxes com `SpecialEffect=1`, `Tahoma 8`), respeitando a compensa├º├úo +29 do PageFrame (campos a partir de Top=118, abaixo da faixa do cabe├ºalho que ocupa at├® Top=109). Adicionei tamb├®m a chamada obrigat├│ria `THIS.TornarControlesVisiveis(loc_oPagina)` ao final do m├®todo, que estava faltando.
+
+Dado o tamanho colossal do form original (SIGMVCAB tem ~300 controles distribu├¡dos em PageFrames aninhados ÔÇö pgContas/pgOperacional/pgInformacoes ÔÇö e sub-grades como GradeMobra/GradeTotal/cntObs), optei por um layout simplificado direto na Page2 para os campos de identifica├º├úo nesta fase, documentando essa decis├úo de escopo no cabe├ºalho do arquivo. Os demais campos (valores, observa├º├úo, tabelas), `FormParaBO`/`BOParaForm`, bot├Áes Confirmar/Cancelar e lookups ficam para as pr├│ximas fases, conforme j├í indicado no plano de 8 fases.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is clean. Phase 4 is complete.
+
+## Summary
+
+Completed Fase 4/8 for `Formsigmvcot.prg`. Since SIGMVCOT is an **OPERACIONAL** form (a 4-page wizard: Filtros ÔåÆ Dados ÔåÆ Cota├º├Áes ÔåÆ Pedidos), not a CRUD form, the generic "Page1 = Lista + CRUD buttons" template didn't apply ÔÇö I built what Page1 (`pgFiltros`) actually is in the legacy: the filter screen with its own navigation buttons, per CLAUDE.md's explicit override for OPERACIONAL forms.
+
+**Added to `Formsigmvcot.prg`:**
+- `ConfigurarPaginaFiltros()` ÔÇö builds the real Page1 controls with exact SCX coordinates: grouping Shape, Per├¡odo (2 dates), Opera├º├úo (`SigCdOpe.Dopes`), Empresa (`SigCdEmp.Cemps`/`Razas`), Job/Conta (`SigCdCli.IClis`/`RClis`), and the `obj_4c_CmdBotoes` CommandGroup (Processar / Encerrar, with the legacy icons).
+- Keyboard handlers (`TeclaCEmps`, `TeclaDEmps`, `TeclaDopes`, `TeclaJob`, `TeclaDjob`) ÔÇö F4 opens the lookup, Enter/Tab validates (per CLAUDE.md's KeyPress-not-Valid rule).
+- Lookup/validation pairs for Empresa, Opera├º├úo and Job/Conta, using the canonical `FormBuscaAuxiliar` pattern (handle-first args, `this_lAchouRegistro` guard before `Show()`) since `fAcessoEmpresa`/`fAcessoContas` aren't ported.
+- `BtnProcessarClick()` / `BtnSairClick()` ÔÇö transcribes the legacy date/operation validation and confirmation exactly.
+- `AlternarPagina(par_nPagina)` and `Processamento()` ÔÇö general page-navigation helper and the transition from Filtros to Dados.
+- `CarregarPadroesFiltros()` ÔÇö seeds today's date and the current company (guarded by `gb_4c_ModoTeste` so headless tests don't need a live DB connection).
+
+Verified by compiling the file with the actual VFP9 compiler in this environment (`VFP9.EXE -T`) ÔÇö it produced a fresh `.fxp` with no errors, and I also confirmed every VFP9 block keyword pairs correctly (PROCEDURE/ENDPROC, IF/ENDIF, WITH/ENDWITH, etc.).

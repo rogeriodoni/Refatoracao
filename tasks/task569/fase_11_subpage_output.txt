@@ -1,0 +1,22 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+This looks correct and matches the legacy control set exactly (28 objects: label + textbox + checkbox + 9-column grid with headers/columns + label + 2-column grid with headers/columns). The form compiles cleanly under VFP9.
+
+## Summary
+
+FASE 11 complete ÔÇö added `ConfigurarPgPgDadosConsP()` to `FormProduto.prg` for the "Consumo" tab (Page5 of `pgf_4c_Divisoes`), wired into `ConfigurarPaginaDados()` right after `ConfigurarPgpgCusto()`.
+
+**What was implemented** (all 28 legacy objects from `PgDadosConsP`):
+- `txt_4c_Qtcpnt` + label (Qtde. Componentes, read-only display of `crSigCdPro.qtdcpnts`)
+- `chk_4c_ChkFund` (N├úo Checar Cadastro de Fundi├º├úo)
+- `grd_4c_Dados`: 9-column grid mirroring the legacy `GrdCons` ÔÇö same `crSigPrCpo` cursor as the Composi├º├úo/Custo grids, showing consumption columns (Fase/Grupo, Descri├º├úo, Ordem, Consumo, Categoria). Reproduced the legacy `.ColumnOrder` reshuffle so columns display in the same visual sequence as the reference screenshot (Componente, Descri├º├úo, Qtde., Uni, Fase, Descri├º├úo, Ord., Consumo, Cat.), plus per-column `ReadOnly`/`Movable`/`Resizable`/`Sparse` flags copied from the source dump.
+- Label + `grd_4c_Tempos`: 2-column grid for "Tempo Produ├º├úo por Agrupamento" (Agrupamento/Tempo %)
+
+**Fixed a real defect while implementing**: `mapeamento.json` mapped *both* grids on this page (`GrdCons` and `grDTEMP`) to the same internal name `grd_4c_Dados` ÔÇö an `AddObject` collision that would have crashed at runtime. Renamed the second grid to `grd_4c_Tempos` in both the `.prg` and `mapeamento.json`, matching the same fix pattern already applied in FASE 10 for `pgCusto`.
+
+**Scope match with sibling phases**: consistent with `ConfigurarPgpgComposicao`/`ConfigurarPgpgCusto`, this is visual/structure only ÔÇö no `RecordSource`/`ControlSource` binding, since the shared `crSigPrCpo` cursor and its refresh logic (`FiltrarCompo`, `PgDadosConsP.Activate`) belong to a later data-wiring phase, not this sub-page migration.
+
+Verified: `PROCEDURE`/`ENDPROC` balanced (84/84) after the edit, my new method's `WITH`/`ENDWITH` balanced (6/6), and the full form compiles cleanly under VFP9 (`COMPILE_OK`).

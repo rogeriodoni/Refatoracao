@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4/8 ÔÇö `FormSigMvExp`
+
+**A reprova├º├úo anterior foi artefato de processo obsoleto, n├úo defeito do form.** O gate da Fase 4 j├í havia sido corrigido no disco ├ás **18:16:51**, mas o `RunLoop.ps1` (PID 17088) subiu ├ás **17:51:28** ÔÇö e `& script.ps1` faz o PowerShell parsear o arquivo inteiro na invoca├º├úo. A valida├º├úo das 18:19:40 usou o gate de 17:51 e gerou este retry com o form j├í correto.
+
+Medi as condi├º├Áes do ramo despachante uma a uma contra o form e o dump atuais: **todas passam** (`legadoSemListaNemCampos=True`, bot├úo + handler `Click` presentes, `nBotoesLegadoF4=1`, `FormType=OPERACIONAL`). N├úo inventei Grid nem bot├Áes CRUD ÔÇö o `SIGMVEXP.SCX` tem exatamente 3 objetos e os bot├Áes can├┤nicos ficam em `Left=542..932` num form de `Width=337`.
+
+### Um defeito real que encontrei e corrigi
+
+O `Show()` estava **dentro do `TRY`** ÔÇö viola├º├úo da regra #29. `FormSigMvCab` ser├í modal (equivale ao `Do Form` legado, que bloqueia), ent├úo todo o uso daquela tela viveria dentro do bloco; como o `TRY/CATCH` tem preced├¬ncia sobre `ON ERROR` em qualquer ponto da pilha, um erro de runtime l├í dentro saltaria para o `CATCH`, derrubaria a refer├¬ncia `LOCAL` e **destruiria a tela no meio do uso**. Reestruturei: o `TRY` cobre s├│ os tr├¬s `CREATEOBJECT`, o `Show()` saiu para depois do `ENDTRY`. O `DO CASE` e a fidelidade dos argumentos ficaram intactos.
+
+### Verifica├º├Áes (medidas, n├úo presumidas)
+
+- **Compila limpo** no VFP9, sem `.err`; 0 bytes n├úo-ASCII; 7/7 `PROCEDURE`/`ENDPROC`; sem TODO/stub, sem m├®todo vazio, sem `PUBLIC` em `DEFINE CLASS`, nenhum `RETURN` dentro de `TRY`.
+- **Instancia de verdade** (harness m├¡nimo): `W=337 H=147 TitleBar=0 AlwaysOnBottom=.T.`; bot├úo `top=34 left=48 w=241 h=73` com caption "Aguarde Processando Dados" e `Visible=.T.` ÔÇö batendo com o `layout.json` campo a campo. `BtnProcessoClick` retorna sem erro e `Release()` limpo.
+- **Fidelidade do despacho**: 12/6/11 argumentos nos ramos E/C/A, id├¬nticos ao `Do Form SigMvCab With ...` legado. Testado: Tipo C grava `nume=1234 emp=007 caixa=5 macro=.T.`; Tipo E deixa `nume=0 emp=[]` ÔÇö correto, o legado s├│ preenche esses dois em `InList(pTipos,'C','A')`.
+- `gc_4c_CaminhoIcones + "new_background.jpg"` confere (arquivo existe em `vbmp\`, e o legado declara `..\framework\imagens\new_background.jpg`). `MostrarErro(loException, ...)` no BO **est├í correto** ÔÇö a fun├º├úo aceita objeto Exception.
+- Removi os `.fxp` no fim: o `SET PROCEDURE` do harness recompila e recria, e c├│digo velho no `.fxp` falseia o teste seguinte.
+
+### Tr├¬s pend├¬ncias que n├úo resolvi (fora do escopo da Fase 4)
+
+1. **O loop precisa ser relan├ºado.** A corre├º├úo do gate s├│ vale da pr├│xima invoca├º├úo do orquestrador em diante. Se esta fase for revalidada pelo processo de 17:51 ainda em mem├│ria, reprova de novo ÔÇö n├úo por defeito do form.
+2. **`FormSigPrCtr.prg:2374,2387`** faz `DO FORM FormSigMvExp WITH ...`, mas **n├úo existe `FormSigMvExp.scx`** (o form ├® classe em `.prg`) ÔÇö falha em runtime. ├ë um caso de um padr├úo sist├¬mico: 139 `DO FORM` no projeto, a maioria apontando para nomes SCX legado. Pede sweep pr├│prio.
+3. **`FormSigPrHpr.prg:936`** chama `CREATEOBJECT("FormSigMvExp", THIS)` com 1 argumento dos 7. `par_cDopes` recebe um objeto ÔåÆ `this_cDope=""`, `this_cTipo=""` ÔåÆ o `DO CASE` n├úo casa nenhum ramo e **o despacho vira no-op silencioso**.
+
+Registrei na mem├│ria a li├º├úo que custou este ciclo: corrigir gate n├úo desbloqueia execu├º├úo em curso, e como provar que a tela abre com harness m├¡nimo (`DO config.prg` sozinho n├úo carrega nada, e `ConfigurarAmbiente()` trava headless).

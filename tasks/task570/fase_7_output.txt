@@ -1,0 +1,62 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## FASE 7/8 conclu├¡da ÔÇö `FormSigMvExp.prg`
+
+### Os 4 eventos CRUD pedidos n├úo existem neste legado ÔÇö e o gate j├í aceita isso
+
+A ├írvore do `SIGMVEXP.SCX` tem **exatamente 3 objetos**: `dataenvironment` + `form` + **um** `commandbutton` ("Aguarde Processando Dados"). ├ë um **despachante/splash**: o `Activate` clica o bot├úo, que roda um `DO CASE` por Tipo e abre o `SigMvCab`. N├úo h├í Incluir/Alterar/Visualizar/Excluir para migrar ÔÇö ger├íÔÇælos seria inventar bot├Áes (viola o PILAR 1) ou criar m├®todos vazios (proibido pela regra de completude).
+
+Medi o `case 7` real do `OrquestradorMigracao.ps1` contra os arquivos finais, rodando o helper `Get-ContagemBotoesLegado` extra├¡do do pr├│prio script:
+
+```
+eventosFaltantes CRUD : 4
+legadoSemCrud         : True
+botoes no dump legado : 1   -> minHandlersF7 = 1
+handlers no form      : 1        (BtnProcessoClick)
+RESULTADO GATE FASE 7 : VALIDADO (carve-out de 1 botao)
+```
+
+Sexta recorr├¬ncia da fam├¡lia j├í conhecida (Fases 4, 5, 6 desta mesma task precisaram de retry pelo mesmo motivo) ÔÇö mas aqui **o carveÔÇæout j├í estava no lugar e passa**. Nada a mexer no gate.
+
+### Encontrei e corrigi dois defeitos reais de evento ÔÇö os dois medidos no VFP9
+
+Como a fase ├® "eventos principais" e n├úo havia CRUD a acrescentar, auditei os eventos que o form realmente tem. Dois estavam quebrados:
+
+**1. `Activate` redisparava em LOOP INFINITO.** `Activate` n├úo ├® "abriu a tela": dispara a cada vez que o form ganha foco ÔÇö inclusive quando a tela de destino **fecha**. Harness com pai + filho modal:
+
+```
+[pai] Activate #1 -> despacho #1 -> [filho] fecha
+[pai] Activate #2 -> despacho #2 -> [filho] fecha
+[pai] Activate #3 -> despacho #3 -> [filho] fecha
+[pai] Activate #4 -> CORTANDO em 3 - seria LOOP INFINITO
+```
+
+O teste teve de **cortar artificialmente**; sozinho n├úo parava. O usu├írio fecharia a movimenta├º├úo e ela reabriria para sempre ÔÇö e este form tem `ControlBox = .F.` e `TitleBar = 0`, **sem como fechar**. No legado isso n├úo acontece porque quem encerra o splash ├® o pr├│prio `SigMvCab`, que recebe `ThisForm` justamente para isso. Trava `this_lDespachouAuto` no caminho **autom├ítico** apenas; o clique **manual** segue despachando como no legado. Validado: 5 `Activate` ÔåÆ **1** despacho.
+
+**2. `Init` derrubava a tela com par├ómetro ausente.** Medido: `INLIST(<arg ausente>, "C", "A")` ÔåÆ **"Operator/operand type mismatch"** (par├ómetro n├úo passado chega como l├│gico `.F.`), idem com objeto. O erro ca├¡a no CATCH do `Init` ÔåÆ `CREATEOBJECT` devolvia `.F.` ÔåÆ **a tela n├úo abria**. ├ë caminho alcan├º├ível de verdade: `FormSigPrHpr.prg:936` chama `CREATEOBJECT("FormSigMvExp", THIS)` com um argumento s├│, e objeto.
+
+Provei o antes/depois reconstruindo a vers├úo pr├®ÔÇæfix (classe renomeada) e instanciando as duas:
+
+| chamada | antes do fix | depois |
+|---|---|---|
+| 1 arg objeto (`FormSigPrHpr:936`) | `VARTYPE=L` ÔåÆ **n├úo abre** | `VARTYPE=O` ÔåÆ abre |
+| 5 args (`FormCNF:2655`) | ÔÇö | `VARTYPE=O` |
+| 7 args (normal) | `VARTYPE=O` | `VARTYPE=O`, `TIPO=C NUME=42 EMP=001 CAIXA=7`, 337x147 |
+
+Medi tamb├®m que o VFP9 **faz** short-circuit no `AND` (ao contr├írio do `OR`, regra #27), ent├úo o guard de uma linha ├® seguro. Arquivo segue **ASCII puro** (0 bytes >127); zero TODO/stub; `.fxp` do form e do BO apagados.
+
+Duas notas de m├®todo que custaram tempo e valem para as pr├│ximas fases: em VFP o **programa principal termina no primeiro `FUNCTION`/`DEFINE CLASS`** (c├│digo execut├ível vem antes), e um **`.fxp` velho ├® executado em vez do `.prg` novo** ÔÇö dois harnesses meus "falharam" por isso, n├úo pelo que mediam. E `ConfigurarAmbiente()` travou headless (como a mem├│ria avisa): usei o harness m├¡nimo.
+
+### Fora do escopo desta task, mas precisa de decis├úo sua
+
+Ao rastrear os chamadores achei **8 call sites defeituosos em 6 outros forms**, que v├úo falhar em runtime independentemente deste form estar correto:
+
+- `DO FORM SigMvExp` / `DO FORM FormSigMvExp` em `FormCNF:2655`, `FormSigPrCtr:2374,2387`, `Formsigopind:3946`, `FormSIGPRNSE:927,1179`, `FormSigReCsp:640` ÔÇö **n├úo existe `.SCX`** na arquitetura nova (PILAR 3); o certo ├® `CREATEOBJECT` + `Show()`.
+- `FormSigPrHpr:936` ÔÇö passa `THIS` (objeto) onde vai o `Dopes`; com meu fix a tela **abre**, mas `this_cTipo` fica vazio e o `DO CASE` n├úo despacha nada, em sil├¬ncio.
+
+N├úo toquei nesses arquivos: s├úo migra├º├Áes de outros forms, com gates pr├│prios. Se quiser, corrijo num passe separado.
+
+Uma coisa que **n├úo** consertei de prop├│sito: depois que a movimenta├º├úo fecha, o splash continua na tela sem bot├úo de fechar. Isso depende do contrato de `FormSigMvCab` (que ainda n├úo existe no acervo) liberar o splash que recebe em `THIS` ÔÇö o cabe├ºalho do arquivo documenta esse contrato. Inventar aqui um `Release` pr├│prio derrubaria a refer├¬ncia `LOCAL` da tela filha (armadilha da regra #29), ent├úo preferi deixar expl├¡cito a arriscar.

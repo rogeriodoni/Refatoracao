@@ -1,0 +1,16 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+Os 4 achados do pass GRID-SQL s├úo falsos positivos ÔÇö nenhuma corre├º├úo foi aplicada.
+
+O verificador autom├ítico aparentemente s├│ enxergou o SQL declarado dentro de `FormProduto.prg`, mas `cursor_4c_Dados` ├® populado majoritariamente por `ProdutoBO.BuscarLista()`/`Buscar()` (em `ProdutoBO.prg`), via `ObterColunasLista()` (linhas 1542-1546):
+
+```
+"cpros, dpros, dpro2s, cgrus, sgrus, reffs, colecoes, impetiqs, situas, encoms, cbars, cproeqs, compos, codcors, usuaalts, dtalts"
+```
+
+Os quatro campos apontados como ausentes (`cpros`, `dpros`, `reffs`, `usuaalts`) j├í est├úo nessa lista. O ├║nico caminho dentro do pr├│prio form que tamb├®m popula `cursor_4c_Dados` ÔÇö `AplicarResultadoBusca` via `ObterColunasBusca()` (linha 8141-8145) ÔÇö usa exatamente a mesma lista de colunas. Ou seja, n├úo h├í diverg├¬ncia real entre o `ControlSource` de `VincularGradeLista` e nenhum dos dois SELECTs que alimentam o cursor.
+
+Nada foi alterado nos arquivos, conforme a regra de n├úo "corrigir" a partir de premissa falsa.

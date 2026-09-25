@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei as 7 ocorr├¬ncias contra o fonte legado real (`tasks/task560/sigmvcab_form_codigo_fonte.txt`) antes de mexer em qualquer arquivo ÔÇö e nenhuma delas ├® um defeito real. Todas se encaixam nos padr├Áes j├í documentados na mem├│ria (`feedback_harness_de_auditoria_mede_errado.md` casos #5/#6 e `feedback_layout_position_colisao_nome_generico.md`): a pr├│pria auditoria mediu errado.
+
+**GRID-HEADER (itens 1-4) ÔÇö falso positivo, caso #5 j├í catalogado**
+O grid da Lista do `SIGMVCAB` n├úo tem headers fixos no SCX ÔÇö eles v├¬m de `pColuna()` dentro de `AddCursor` (regra #35b do CLAUDE.md), que o audit n├úo reconhece:
+```
+sigmvcab_form_codigo_fonte.txt:39720-39727
+.pfSqlTabela(1).pColuna('Emps',...,'Emp',31,.f.)
+.pfSqlTabela(1).pColuna('Datas',...,'Data',75,.t.)
+.pfSqlTabela(1).pColuna('Contaos',...,'Origem',75,.t.)
+.pfSqlTabela(1).pColuna('Contads',...,'Destino',75,.t.)
+```
+Os captions migrados `Emp`, `Data`, `Origem`, `Destino` (linhas 969-974 do form migrado) batem **exatamente** com o legado. A lista "headers legado encontrados" que o audit citou pertence a grids de OUTROS forms (Lista de Pre├ºo, Tab.Desconto etc. n├úo t├¬m nada a ver com movimenta├º├úo). Nada a corrigir.
+
+**LAYOUT-POSITION 'Botoes' (itens 5-6) ÔÇö colis├úo de nome gen├®rico**
+`SIGMVCAB.pagina.lista.Botoes` (linha 2368) ├® uma legenda de 7 quadradinhos coloridos (119├ù17px, sem CommandButtons de CRUD/salvar) ÔÇö nada a ver com `cnt_4c_BotoesAcao` (container com Confirmar/Cancelar, que s├│ existe na p├ígina **Dados**, n├úo na Lista). O audit casou os dois s├│ pelo nome parecido, ignorando o `Parent:` diferente.
+
+**LAYOUT-POSITION 'job' (item 7) ÔÇö mesma colis├úo**
+`SIGMVCAB.pagina.dados.pgfPrincipal.pgContas.job` (linha 4891) ├® um **container inteiro** (422├ù70px) com v├írios campos internos (Conta, Nome, bot├Áes de pasta), dentro de uma aba interna que n├úo foi migrada nesta vers├úo simplificada. `lbl_4c_Jobs` ├® apenas o label do campo "Job" simples na Page2. Comparar Top de um container com o Top de um label solto n├úo faz sentido ÔÇö n├úo ├® o mesmo controle.
+
+Nenhuma altera├º├úo foi feita em `Formsigmvcab.prg`: aplicar as "corre├º├Áes" sugeridas teria introduzido regress├Áes reais (ex.: mudar `Top`/`Left` de `cnt_4c_BotoesAcao` para os valores da legenda de cores quebraria o layout correto atual).

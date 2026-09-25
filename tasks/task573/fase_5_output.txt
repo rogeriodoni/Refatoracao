@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö nenhuma altera├º├úo necess├íria em `FormSigMvMen.prg`
+
+A fase pede "metade dos campos da Page2". Medi o legado: **`SIGPDMEN` n├úo tem campo de digita├º├úo nenhum.** A ├írvore completa do dump (`tasks/task573/SigMvMen_form_codigo_fonte.txt`) tem 9 objetos reais ÔÇö 1 form, 2 containers, 3 labels, 1 shape, 1 commandbutton e **1 ├║nico EditBox, `ReadOnly = .T.`** (linha 191). Zero TextBox. ├ë o di├ílogo modal "Mensagens": s├│ exibe texto.
+
+Os 8 controles j├í est├úo implementados e batem **1:1** com `mapeamento.json` ÔÇö as Fases 3/4 entregaram 100% da superf├¡cie. Acrescentar campo aqui seria inventar contra o PILAR 1, ou gerar `ConfigurarPaginaDados` vazio ÔÇö o "stub disfar├ºado" que a regra de completude pro├¡be.
+
+Isto j├í era conhecido: `MEMORY.md` registra este caso exato (task573/SigMvMen), e o conserto foi feito **no gate**, n├úo no form. Confirmei que o ramo EXIBICAO est├í presente em `automation/OrquestradorMigracao.ps1:5680` e rodei os predicados dele contra os arquivos reais:
+
+| predicado | valor |
+|---|---|
+| `temListaLegadoF5` | `False` (sem grid/pageframe) |
+| `Test-LegadoDialogoExibicao` | `True` (todo campo ├® ReadOnly) |
+| `legadoSoExibicaoF5` | `True` |
+| migrado reproduz `AddObject(..., "EditBox")` | `True` |
+| `cmd_4c_` + `PROCEDURE BtnOkClick` | `True` |
+| ÔåÆ `temLayoutExibicaoF5` | **`True` ÔÇö Fase 5 aprova** |
+
+Verifica├º├Áes adicionais que rodei:
+
+- **Compila├º├úo**: `FormSigMvMen.prg` e `SigMvMenBO.prg` compilam limpos (`sucesso: true`, nenhum `.err`).
+- **Props do BO** (regra do naming mismatch): `CarregarPorCodigo` e `this_cMensagem` existem no BO; `this_cMensagemErro` vem de `BusinessBase:16`. Nada resolvendo em property fantasma.
+- **`.Picture`** (regra #25, falha silenciosa): `new_background.jpg` e `cadastro_salvar_60.jpg` existem em `vbmp\`, e `gc_4c_CaminhoIcones` aponta para l├í ÔÇö ambos carregam.
+- **Completude**: nenhum `TODO`/`FIXME`/`ser├í implementado` no arquivo.
+
+Duas ressalvas honestas:
+
+1. **N├úo consegui instanciar o form em VFP9.** `DO config.prg` + `ConfigurarAmbiente()` carrega os ~570 forms por `SET PROCEDURE ADDITIVE` e estourou o timeout de 110s duas vezes (matei o processo; nenhum temp ficou para tr├ís). Compila├º├úo limpa n├úo prova que o `Init` roda ÔÇö pela li├º├úo "instanciar ├® a ├║nica prova", isso fica para a fase de teste do pipeline, que tem or├ºamento de tempo pr├│prio.
+2. **N├úo editei o arquivo**, ao contr├írio do que o prompt da fase manda ("EXECUTE A FASE 5 AGORA"). Qualquer edi├º├úo aqui seria campo inventado. O gate j├í dispensa esta fase para este form.
+
+N├úo gravei mem├│ria nova: a li├º├úo j├í existe e cobre o caso sem lacuna. `OrquestradorMigracao.ps1` aparece como `M` no git de antes desta sess├úo ÔÇö eu n├úo toquei nele.

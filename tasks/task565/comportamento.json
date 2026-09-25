@@ -1,0 +1,4226 @@
+{
+  "resumo": {
+    "totalMetodos": 251,
+    "metodosComSQL": 30,
+    "metodosComValidacao": 83,
+    "totalQueries": 27,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGravarLog", "fDtoSQL", "fUniqueIds", "fGerUniqueKey", "fCanUniqueKey", "Frete", "From crSigCtTCt Where Empty", "fBuscarCotacao", "fEndEntrega", "fChecaAcesso", "MontaGrade", "fConfigGeral", "Fretes c", "fAcessoEmpresa", "fwBuscaInt", "fAcessoMovmto", "fAcessoContas", "fwBuscaExt", "For Fretes = Padr", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 192,
+      "codigoOriginal": "Local lnPas, loDad, loEmp, loLin, loFxa, lnCod\n\nSelect crCotaPends\nIf Eof([crCotaPends]) Or (crCotaPends.Codigos < 1)\n\t=MessageBox([Nenhuma Cotação Foi Selecionada na Grade!!!], 0+16, [Atenção!!!])\n\tThisForm.pgfPagina.pgDados.grdCotaPends.Column1.SetFocus\n\tReturn .f.\nEndIf\n\nlnPas = 4\n\noTop = CreateObject([fwprogressbar], [Carregando Cotações de Produtos], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Montando Telas]\noTop.Updat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 177,
+      "codigoOriginal": "Local loApr\n\nloApr = ThisForm.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao\n\nloApr.getAprovador.Refresh\nloApr.getDtAprovs.Refresh\nloApr.getObsAprovs.Refresh\nloApr.ChkAprovador.Refresh\n\nIf Empty(crSigCtTDc.Aprovador)\n\t=MessageBox([O Aprovador Final Não Foi Informado!!!], 0+16, [Atenção!!!])\n\tReplace ChkAprovs With 0 In crSigCtTDc\n\tIf Not ThisForm.GravaDados()\n\t\tReturn .f.\n\tEndIf\n\tloApr.ChkAprovador.Value = 0\n\tloApr.ChkAprovador.Refresh\n\tloApr.getAprovador.SetFocus\n\tReturn .f.\nEndIf\n\nIf IsEmpty(cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "GravaDados,CursorQuery",
+        "controlesReferenciados": "ChkAprovador,ChkAprovs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "Lparameters pPro, pCot, pQtd\n\nPrivate pDat\n\npDat = fDtoSQL(pCot)\n\nlcQuery = [Select a.Codigos, a.CItens, a.CPros, a.EmpDopNums, a.QtdAdqs, a.ValAdqs, a.Justificas, a.Obs, ] + ;\n\t\t\t\t [b.DtCotas, b.DtValids, b.Situas, b.DtAprovs, b.Aprovador, b.ChkAprovs, ] + ;\n\t\t\t\t [a.Marca01, a.Marca02, a.Marca03, a.Marca04, a.Marca05, a.Marca06, ] + ;\n\t\t\t\t [a.Tota01, a.Tota02, a.Tota03, a.Tota04, a.Tota05, a.Tota06, ] + ;\n\t\t\t\t [a.Unit01, a.Unit02, a.Unit03, a.Unit04, a.Unit05, a.Unit06 ] + ;\n\t\t\t[From SigCtTCt a... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 131,
+      "codigoOriginal": "Private pTru\nLocal lnPas, loDad, loEmp, loLin, loFxa, lnCod, llCli, lcLet\n\npTru = .t.\n\nlnPas = 2\n\noTop = CreateObject([fwprogressbar], [Carregando Pedidos], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Montando Telas]\noTop.Update(.t.)\n\nloFil = ThisForm.PgfPagina.pgFiltros\nloDad = ThisForm.PgfPagina.pgDados\nloCot = ThisForm.PgfPagina.pgCotacoes\nloPed = ThisForm.PgfPagina.pgPedidos\n\nZap In crPedidos\nZap In crCabOperas\nZap In cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 192,
+      "codigoOriginal": "Local lnPas, loDad, loEmp, loLin, loFxa, lnCod\n\nSelect crCotaPends\nIf Eof([crCotaPends]) Or (crCotaPends.Codigos < 1)\n\t=MessageBox([Nenhuma Cotação Foi Selecionada na Grade!!!], 0+16, [Atenção!!!])\n\tThisForm.pgfPagina.pgDados.grdCotaPends.Column1.SetFocus\n\tReturn .f.\nEndIf\n\nIf Not ThisForm.loObj.LibSolics And (IsEmpty(crCotaPends.DtSolics) Or Empty(crCotaPends.Solicitas))\n\t=MessageBox([A Cotação Ainda Não Passou Pela Aprovação do Solicitante!!!], 0+16, [Atenção!!!])\n\tThisForm.pgfPagina.pgDados.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "LibSolics And,SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 67,
+      "codigoOriginal": "Private pNot\nLocal lcEdn, lcIds, lnRec, lnCod\n\nSelect crSigCtTCt\nIf Eof([crSigCtTCt])\n\t=MessageBox([Não Há Nenhum Produto Selecionado Na Grade!!!], 0+48, [Atenção!!!])\n\tReturn .f.\nEndIf\n\nSelect CPros ;\n  From crSigCtTCt ;\n  Into Cursor crChecagem\n\nIf (Reccount([crChecagem]) = 1)\n\t=MessageBox([Só Há Um Produto Na Grade!!! Não é Possível Efetuar a Exclusão!!!], 0+48, [Atenção!!!])\n\tReturn .f.\nEndIf\n\npNot = .f.\n\nlcEdn = crSigCtTCt.EmpDopNums\nlcIds = crSigCtTCt.cIdChaves\nlnCod = crSigCtTCt.Codigos\nl... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 289,
+      "codigoOriginal": "Lparameters pEdn\n\nPrivate pTru\nLocal lnPas, loDad, loEmp, loLin, loFxa, lnCod\n\nIf pEdn\n\tSelect EmpDopNums, Jobs ;\n\t  From crOperacoes ;\n\t Where Marcas ;\n\t  Into Cursor crCotarProds\n\n\tSelect crCotarProds\n\tGo Top In crCotarProds\n\tIf Eof([crCotarProds])\n\t\t=MessageBox([Nenhuma Operação Foi Selecionada Para Gerar Cotações!!!], 0+16, [Atenção!!!])\n\t\tReturn .f.\n\tEndif\n\tthisform.loObj.Jobs = crCotarProds.Jobs\nEndIf\n\npTru = .t.\n\nlnPas = 2\n\noTop = CreateObject([fwprogressbar], [Processando Cotações de Pro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fCanUniqueKey",
+        "metodosFormChamados": "SqlExecute,RollBack",
+        "controlesReferenciados": "optFiltro",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 331,
+      "codigoOriginal": "Lparameters pChk\n\nPrivate pTru\nLocal lnPas, loDad, loEmp, loLin, loFxa, lnCod, llCli, lcLet\n\npTru = .t.\n\nlnPas = 2\n\noTop = CreateObject([fwprogressbar], [Processando Cotações Informadas], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Montando Telas]\noTop.Update(.t.)\n\nloFil = ThisForm.PgfPagina.pgFiltros\nloDad = ThisForm.PgfPagina.pgDados\nloCot = ThisForm.PgfPagina.pgCotacoes\nloPed = ThisForm.PgfPagina.pgPedidos\n\nIf Empty(loCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Frete",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 145,
+      "codigoOriginal": "Private pNot\nLocal loCot, lnPas, llOks, lcEdn\n\nloCot = ThisForm.PgfPagina.pgCotacoes\npNot  = .f.\nlnPas = 3\n\noTop = CreateObject([fwprogressbar], [Gravando Cotações de Produtos], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Validando Dados Informados]\noTop.Update(.t.)\n\nSelect crSigCtTDc\nGo Top In crSigCtTDc\nlnCod = crSigCtTDc.Codigos\n\noTop.SubTitulo.Caption = [Apagando os Dados Anteriores]\noTop.Update(.t.)\n\nllOks = (lnCod > 0)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey,From crSigCtTCt Where Empty",
+        "metodosFormChamados": "SqlExecute,RollBack,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 440,
+      "codigoOriginal": "Private pNot\nLocal loCot, lnPas, llOks, lcEdn, llOks, lnENF\n\nloPed = ThisForm.PgfPagina.pgPedidos\n\npNot  = .f.\nlnPas = Reccount([crCabOperas]) + 2\nllOks = .t.\n\noTop = CreateObject([fwprogressbar], [Gravando Operações de Pedidos], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Validando Dados Informados]\noTop.Update(.t.)\n\nlcEmp = loPed.cntOperacao.getEmps.Value\nIf Empty(lcEmp)\n\t=MessageBox([A Empresa de Lançamento Não Foi Inform... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkLimOps",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 130,
+      "codigoOriginal": "Local lcCpo, lcPri, lcTip, lcNmc\n\nZap In crCabecalho\nZap In crDetalhe\n\nlcPri = Iif(crSigCtTDc.Prioris = 3, [Alta], Iif(crSigCtTDc.Prioris = 2, [Média], [Normal]))\nlcTip = Iif(crSigCtTDc.Situas > 0, [Pedido Gerado], [em Cotação])\n\nlcNmc = []\nIf Not Empty(crSigCtTDc.Comprador)\n\tThisForm.poDataMgr.CursorQuery([SigCdUsu], [LocalUsua], [Usuarios], crSigCtTDc.Comprador, [NComps])\n\tIf Not Used([LocalUsua])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalUsua... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "Lparameters _ValTit, _MoeTit, _DatTit\n\nIf crSubniveis.ChkLimOps <> 1\n\tReturn .t.\nEndIf\n\nlcSql = [Select CCargs From SigCdUsu Where Usuarios = ']+Usuar+[']\nIf ThisForm.poDataMgr.Sqlexecute(lcSql,'CrSigCdUsu') < 1\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrSigCdUsu)')\n\tReturn .f.\nEndIf\n\nlcSql = [Select VlLibOpes From SigCdCrg Where CCargs = ']+CrSigCdUsu.cCargs+[']\nIf ThisForm.poDataMgr.Sqlexecute(lcSql,'CrTmpCarg') < 1\n\t=MessageBox('Favor Reinicializar o Processo!!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "Sqlexecute,Cotacao",
+        "controlesReferenciados": "ChkLimOps",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "* Adicionando os Cursores as Grades\nWith ThisForm.pgfPagina.pgCotacoes.grdFornecs\n\t.RecordSource \t   \t    = [crSigCtTFn]\n\t.Column1.ControlSource  = [crSigCtTFn.Grades]\n\t.Column2.ControlSource  = [crSigCtTFn.IClis]\n\t.Column3.ControlSource  = [crSigCtTFn.Fornecs]\n\t.Column5.ControlSource  = [crSigCtTFn.Contatos]\n\t.Column6.ControlSource  = [crSigCtTFn.Tel1s]\n\t.Column7.ControlSource  = [crSigCtTFn.FPags]\n\t.Column8.ControlSource  = [crSigCtTFn.DtEnts]\n\t.Column9.ControlSource  = [crSigCtTFn.Fretes]\n\t.C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 184,
+      "codigoOriginal": "Private pTru, pNot, pDtI, pDtF\nLocal lnPas, loDad, loEmp, loLin, loFxa\n\npTru = .t.\npNot = .f.\npDtI = fDtoSQL(ThisForm.loObj.DtPerI)\npDtF = fDtoSQL(ThisForm.loObj.DtPerF, [23:59:59])\n\nlnPas = 4\n\noTop = CreateObject([fwprogressbar], [Processando Cotações de Produtos], lnPas)\noTop.Top = oTop.Top - Int(oTop.Height/2) - 1\noTop.Titulo.FontBold = .t.\noTop.Show\n\noTop.SubTitulo.Caption = [Montando Telas]\noTop.Update(.t.)\n\nloFil = ThisForm.PgfPagina.pgFiltros\nloDad = ThisForm.PgfPagina.pgDados\nloCot = Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Emps, 3) + Padr,SqlExecute",
+        "controlesReferenciados": "ChkBxParcs,ChkPagos,ChkSubn",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Lparameters P1, P2, P3 && Rotina Criada Apenas Para Não Gerar Erro Nas Chamadas do SigMvCab.\nReturn .t.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Init",
+      "linhas": 124,
+      "codigoOriginal": "Local loFil, loDad, loCot, loPed\n\nloFil = ThisForm.PgfPagina.pgFiltros\nloDad = ThisForm.PgfPagina.pgDados\nloCot = ThisForm.PgfPagina.pgCotacoes\nloPed = ThisForm.PgfPagina.pgPedidos\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\t.poDataNew = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCtTDc], [cIdChaves], [crSigCtTDc])\n\t\t\t.AddCursor([SigCtTFn], [cIdChaves], [crSigCtTFn])\n\t\t\t.AddCursor([SigCtTCt], [cIdChaves], [crSigCtTC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,MontaGrade",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 48,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crOperacoes (Marcas l(1), Emps c(3), Dopes c(20), Numes n(6), Datas d(8), Itens n(6), EmpDopNums c(29), ;\n\t\t\t\t\t\t   Nops n(6), ChkSubn l(1), LCancelas l(1), ChkBxParcs l(1), ChkPagos l(1), ProcBals l(1), ;\n\t\t\t\t\t\t   ProcDBal l(1), Destinos n(1), EstDests n(1), EstOrigs n(1), Origems n(1), Produc n(1), Jobs c(10))\nIndex On Dtos(Datas) + EmpDopNums Tag Ordem\n\nCreate Cursor crCotaPends (Situas n(1), Codigos n(6), DtSolics d(8), Solicitas c(10), Deptos c(10), Prioris c(1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,Fretes c",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkSubn,ChkBxParcs,ChkPagos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nThisForm.poDataNew.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina",
+      "evento": "Activate",
+      "linhas": 1,
+      "codigoOriginal": "This.Refresh ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getCEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.pgfPagina.pgFiltros.getCEmps, ThisForm.pgfPagina.pgFiltros.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.pgfPagina.pgFiltros.getCEmps, ThisForm.pgfPagina.pgFiltros.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.pgfPagina.pgFiltros.getCEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getDopes",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nSelect crCotReq\nIf Reccount([crCotReq])>0\n\tIf Not Empty(This.Value)\n\t\tIf Not Seek(Padr(This.Value, 20), [crCotReq], [Dopes])\n\t\t\tloLista = CreateObject([fwBuscaInt], [crCotReq], [Dopes], Padr(This.Value, 20), [Operações], .t.)\n\t\t\tloLista.mAddColuna([Dopes], [], [Operação])\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\tIf (Lastkey()=27)\n\t\t\tThis.Value = []\n\t\tElse\n\t\t\tThis.Value = crCotReq.Dopes\n\t\tEndIf\n\tEndIf\nElse\n\t=fAcessoMovmto(Usuar, This.Value, This)\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.cmdBotoes",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "Local loFil\n\nloFil = ThisForm.pgfPagina.pgFiltros\n\n* Checando a Consistência dos Dados Para Processamento\nIf Empty(loFil.getDtPerI.Value)\n\t=MessageBox([Data Inicial Inválida!!!], 48, [Dados Inválidos...])\n\tloFil.getDtPerI.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(loFil.getDtPerF.Value)\n\t=MessageBox([Data Final Inválida!!!], 48, [Dados Inválidos...])\n\tloFil.getDtPerF.SetFocus\n\tReturn 0\nEndIf\n\nIf (loFil.getDtPerI.Value > loFil.getDtPerF.Value)\n\t=MessageBox([Data Inicial Não Pode Ser Maior Que a Final!!!]... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.cmdBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getDjob",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.pgfPagina.pgFiltros.getjob, ThisForm.pgfPagina.pgFiltros.getdjob, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThisForm.pgfPagina.pgFiltros.getjob.Value = ''\n\t\tReturn .f.\n\tEndIf\nElse\n\tThisForm.pgfPagina.pgFiltros.getjob.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getDjob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.pgfPagina.pgFiltros.getJob.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgFiltros.getJob",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.pgfPagina.pgFiltros.getjob, ThisForm.pgfPagina.pgFiltros.getdjob, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThisForm.pgfPagina.pgFiltros.getdjob.Value = ''\n\t\tReturn .f.\n\tEndIf\nElse\n\tThisForm.pgfPagina.pgFiltros.getdjob.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "Lparameters nColIndex\n\nWith ThisForm.pgfPagina.pgDados.cmdCotacoes\n\t.btnAlterar.Enabled = (crCotaPends.Situas = 0)\n\t.btnExcluir.Enabled = (crCotaPends.Situas = 0)\nEndWith\n\nWith ThisForm.pgfPagina.pgDados.cmdCopiar\n\tIf .Visible\n\t\t.btnCopiar.Enabled = Not IsEmpty(crCotaPends.DtAprovs) And Not Empty(crCotaPends.Aprovador) And ;\n\t\t\t\t\t\t\t Not IsEmpty(crCotaPends.DtSolics) And Not Empty(crCotaPends.Solicitas) And ;\n\t\t\t\t\t\t\t Empty(crCotaPends.Copias)\n\tEndIf\nEndWith\n* Fim *********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdCotaPends.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotacoes1.btnConsultar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdCotar.btnProcessar.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdBotoes",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "* Indo Para a Página de Dados\nThisForm.poDataMgr.RollBack()\n\nWith ThisForm.PgfPagina\n\t.pgFiltros.Enabled  = .t.\n\t.pgDados.Enabled    = .f.\n\t.pgCotacoes.Enabled = .f.\n\t.pgPedidos.Enabled  = .f.\n\t\n\t.ActivePage = 1\n\t.Refresh\n\n\t.pgFiltros.getDtPerI.SetFocus\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdMarcaDesmarca",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Update crOperacoes Set Marcas = (This.Value = 1)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCotar",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [INSERIR]\nThisForm.loObj.Copiando  = .f.\n\nThisForm.GeraCotacao(.t.)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GeraCotacao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCotacoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Update crOperacoes Set Marcas = (This.Value = 1)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCotacoes",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [ALTERAR]\nThisForm.loObj.Copiando  = .f.\n\nThisForm.AlteraCotacao\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCotacoes",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [EXCLUIR]\nThisForm.loObj.Copiando  = .f.\n\nThisForm.AlteraCotacao\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCotacoes1",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [CONSULTAR]\nThisForm.loObj.Copiando  = .f.\n\nThisForm.AlteraCotacao\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 17,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 13, 32)\n\t\tReplace Marcas With Not Marcas In crOperacoes\n\t\tThisForm.pgfPagina.pgDados.grdOperacoes.Refresh \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim *****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace Marcas With Not Marcas In crOperacoes\nThisForm.pgfPagina.pgDados.grdOperacoes.Refresh()\n\nIf crOperacoes.Marcas And !Empty(crOperacoes.Jobs)\n\tlcJob = crOperacoes.Jobs\n\tSelect EmpDopNums From crOperacoes Where Marcas And Jobs <> lcJob into cursor TmpMarca\n\tIf !Eof([TmpMarca])\n\t\tMessagebox([Não é permitido marcar movimentação de jobs diferentes.],48,[Aviso])\n\t\tReplace Marcas With Not Marcas In crOperacoes\n\t\tThisForm.pgfPagina.pgDados.grdOperaco... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdCopiar",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [ALTERAR]\nThisForm.loObj.Copiando  = .t.\n\nThisForm.CopiaCotacao\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgDados.cmdProblemas",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.loObj.pcEscolha = [INSERIR]\nThisForm.loObj.Copiando  = .f.\n\nThisForm.GeraCotacao(.f.)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GeraCotacao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getContaEs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais\n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, [], [C], .getContaEs.Value, .getContaEs, .getDContaEs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaEs.Value  = []\n\t\t\t.getDContaEs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaEs.Value  = []\n\t\t.getDContaEs.Value = []\n\tEndIf\n\t.getContaEs.Refresh\n\t.getDContaEs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getContaEs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getDContaEs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais\n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, [], [D], .getDContaEs.Value, .getContaEs, .getDContaEs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaEs.Value  = []\n\t\t\t.getDContaEs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaEs.Value  = []\n\t\t.getDContaEs.Value = []\n\tEndIf\n\t.getContaEs.Refresh\n\t.getDContaEs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getDContaEs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Empty(ThisForm.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getContaEs.Value) And ;\n\t   InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.getJustGeral",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAdicionais.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local lcEnt\n\nlcEnt = crSigCtTDc.ContaEs\n\nIf Not Empty(lcEnt)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli], [crCompCli], [IClis], lcEnt, [Grupos, IClis, RClis])\n\tIf Not Used([crCompCli])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (cmdEntrega - crCompCli)])\n\t\tReturn .f.\n\tEndIf\n\tGo Top In crCompCli\n\tIf Not Eof([crCompCli])\n\t\tlcEsc = Iif(crSigCtTDc.ChkAprovs = 0, ThisForm.loObj.pcEscolha, [CONSULTAR])\n\t\t\n\t\tDo Form SigCdEnd With crCompCli.Grupos, crCompCli.IClis, crCompCli... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.getAprovador",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nDeclare laFil[1,2]\nlaFil[1,1] = [CAtivos]\nlaFil[1,2] = [S]\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;\n\t\t\t\t\t\t   [crListaRemota], [Usuarios], This.Value, [Seleção], .t., [Usuarios], @laFil)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Usuarios], [XXXXXXXXXXX], [Aprovador])\n\t\tloLista.mAddColuna([NComps],   [], [Nome])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)\n\tUse In ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.getAprovador",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) And ;\n\t   ((Not Empty(crSigCtTDc.AprSols) And Not IsEmpty(crSigCtTDc.DtAprSols)) Or ThisForm.loObj.LibSolics)) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.getDtAprovs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) And ;\n\t   ((Not Empty(crSigCtTDc.AprSols) And Not IsEmpty(crSigCtTDc.DtAprSols)) Or ThisForm.loObj.LibSolics)) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.getObsAprovs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) And ;\n\t   ((Not Empty(crSigCtTDc.AprSols) And Not IsEmpty(crSigCtTDc.DtAprSols)) Or ThisForm.loObj.LibSolics)) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.chkAprovador",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not ThisForm.GravaDados()\n\tReturn .f.\nEndIf\n\nThisForm.AprovarCotacao()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GravaDados,AprovarCotacao",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgAprovacao.chkAprovador",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ;\n\t   (crSigCtTDc.ChkAprovs = 1 Or ((Not Empty(crSigCtTDc.AprSols) And ;\n\t   Not IsEmpty(crSigCtTDc.DtAprSols)) Or ThisForm.loObj.LibSolics))) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgSolicitas.getAprSols",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgSolicitas.getDtAprSols",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ;\n\t   (crCotaPends.Situas = 0) And (Usuar = crSigCtTDc.AprSols) And (crSigCtTDc.ChkAprovs = 0))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.pgfComplCots.pgSolicitas.getObsAprSols",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ;\n\t   (crCotaPends.Situas = 0) And (Usuar = crSigCtTDc.AprSols) And (crSigCtTDc.ChkAprovs = 0))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.pgfPagina.pgCotacoes.getDPros.Refresh \nThisForm.pgfPagina.pgCotacoes.getObs.Refresh \nThisForm.pgfPagina.pgCotacoes.getJustificas.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf IsNull(ThisForm.loObj.Consulta)\n\t\tDo Form SigOpCgp.Scx Name ThisForm.loObj.Consulta Linked With [SIGOPCGP] NoShow\n\tEndIf\n\n\tIf (Type([ThisForm.loObj.Consulta])=[O])\n\t\tWith ThisForm.loObj.Consulta\n\t\t\t.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()\n\t\t\t.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 14)\n\t\t\t.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 14)\n\t\t\t.fld_principal.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_produto_inicial,get_produto_final,cmd_consulta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(crSigCtTCt.EmpDopNums)\n\tThis.Value = This.Tag\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "If Empty(crSigCtTCt.EmpDopNums)\n\tLocal loLista\n\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdPro], ;\n\t\t\t\t\t\t\t   [crListaRemota], [CPros], This.Value, [Seleção], 500)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna([CPros], [], [Código])\n\t\t\tloLista.mAddColuna([DPros], [], [Descrição])\n\t\t\tloLista.mAddColuna([CUnis], [], [Uni])\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tThis.Value = crListaRemota.CPros\n\n\t\tReplace Codigos   With crSigCtTCt.Codigos, ;... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt,fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nIf (crSigCtTCt.Unit01 > 0)\n\tReplace Tota01 With crSigCtTCt.Unit01 * This.Value In crSigCtTCt\nEndIf\nIf (crSigCtTCt.Unit02 > 0)\n\tReplace Tota02 With crSigCtTCt.Unit02 * This.Value In crSigCtTCt\nEndIf\nIf (crSigCtTCt.Unit03 > 0)\n\tReplace Tota03 With crSigCtTCt.Unit03 * This.Value In crSigCtTCt\nEndIf\nIf (crSigCtTCt.Unit04 > 0)\n\tReplace Tota04 With crSigCtTCt.Unit04 * This.Value In crSigCtTCt\nEndIf\nIf (crSigCtTCt.Unit05 > 0)\n\tReplace Tota05 With... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ((crSigCtTDc.ChkAprovs = 0) Or ThisForm.loObj.Copiando) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUni], ;\n\t\t\t\t\t\t   [crListaRemota], [CUnis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([CUnis], [], [Uni])\n\t\tloLista.mAddColuna([DUnis], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CUnis\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf Not Empty(This.Value)\n\tlcQuery = [Select CUnis ] + ;\n\t\t\t    [From SigCdPro ] + ;\n\t\t\t   [Wh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column5.Header1",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "Local llRet\n\nllRet = .t.\nIf InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tllRet = MessageBox([Deseja Realizar a Seleção Automática de Valores?], 4+32+256, [Atenção!!!]) = 6\nEndIf\n\nIf llRet\n\tSelect crSigCtTCt\n\tScan\n\t\tFor I = 1 To 6\n\t\t\tlcCol = Padl(I, 2, [0])\n\t\t\tIf Not Empty(crSigCtTCt.Tota&lcCol.) And (Empty(crSigCtTCt.ValAdqs) Or (crSigCtTCt.ValAdqs > crSigCtTCt.Tota&lcCol.))\n\t\t\t\tReplace Marca01 With .f., ;\n\t\t\t\t\t\tMarca02 With .f., ;\n\t\t\t\t\t\tMarca03 With .f., ;\n\t\t\t\t\t\tMarca04 With .f., ;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca01 = .t. Where Not Empty(Tota01)\n\tUpdate crSigCtTCt Set ValAdqs = Tota01 Where Marca01\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca02 = .f., ;\n\t   \t   Marca03 = .f., ;\n\t   \t   Marca04 = .f., ;\n\t   \t   Marca05 = .f., ;\n\t   \t   Marca06 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca01\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .t., ;\n\t\t\t\tMarca02 With .f., ;\n\t\t\t\tMarca03 With .f., ;\n\t\t\t\tMarca04 With .f., ;\n\t\t\t\tMarca05 With .f., ;\n\t\t\t\tMarca06 With .f., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota01 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca01\n\tReplace Marca01 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .t., ;\n\t\t\tMarca02 With .f., ;\n\t\t\tMarca03 With .f., ;\n\t\t\tMarca04 With .f., ;\n\t\t\tMarca05 With .f., ;\n\t\t\tMarca06 With .f., ;\n\t\t\tValAdqs With crSigCtTCt.Tota01 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit01 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota01 <> lnTot)\n\tReplace Tota01 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column8.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota01 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit01 <> lnUni)\n\tReplace Unit01 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca02 = .t. Where Not Empty(Tota02)\n\tUpdate crSigCtTCt Set ValAdqs = Tota02 Where Marca02\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca01 = .f., ;\n\t   \t   Marca03 = .f., ;\n\t   \t   Marca04 = .f., ;\n\t   \t   Marca05 = .f., ;\n\t   \t   Marca06 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca02\n\t\tReplace Marca02 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tMarca02 With .t., ;\n\t\t\t\tMarca03 With .f., ;\n\t\t\t\tMarca04 With .f., ;\n\t\t\t\tMarca05 With .f., ;\n\t\t\t\tMarca06 With .f., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota02 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca02\n\tReplace Marca02 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .f., ;\n\t\t\tMarca02 With .t., ;\n\t\t\tMarca03 With .f., ;\n\t\t\tMarca04 With .f., ;\n\t\t\tMarca05 With .f., ;\n\t\t\tMarca06 With .f., ;\n\t\t\tValAdqs With crSigCtTCt.Tota02 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column10.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit02 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota02 <> lnTot)\n\tReplace Tota02 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column11.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column11.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota02 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit02 <> lnUni)\n\tReplace Unit02 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column11.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca03 = .t. Where Not Empty(Tota03)\n\tUpdate crSigCtTCt Set ValAdqs = Tota03 Where Marca03\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca01 = .f., ;\n\t   \t   Marca02 = .f., ;\n\t   \t   Marca04 = .f., ;\n\t   \t   Marca05 = .f., ;\n\t   \t   Marca06 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca03\n\t\tReplace Marca03 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tMarca02 With .f., ;\n\t\t\t\tMarca03 With .t., ;\n\t\t\t\tMarca04 With .f., ;\n\t\t\t\tMarca05 With .f., ;\n\t\t\t\tMarca06 With .f., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota03 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca03\n\tReplace Marca03 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .f., ;\n\t\t\tMarca02 With .f., ;\n\t\t\tMarca03 With .t., ;\n\t\t\tMarca04 With .f., ;\n\t\t\tMarca05 With .f., ;\n\t\t\tMarca06 With .f., ;\n\t\t\tValAdqs With crSigCtTCt.Tota03 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column13.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column13.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit03 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota03 <> lnTot)\n\tReplace Tota03 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column13.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column14.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column14.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota03 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit03 <> lnUni)\n\tReplace Unit03 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column14.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca04 = .t. Where Not Empty(Tota04)\n\tUpdate crSigCtTCt Set ValAdqs = Tota04 Where Marca04\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca01 = .f., ;\n\t   \t   Marca02 = .f., ;\n\t   \t   Marca03 = .f., ;\n\t   \t   Marca05 = .f., ;\n\t   \t   Marca06 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca04\n\t\tReplace Marca04 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tMarca02 With .f., ;\n\t\t\t\tMarca03 With .f., ;\n\t\t\t\tMarca04 With .t., ;\n\t\t\t\tMarca05 With .f., ;\n\t\t\t\tMarca06 With .f., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota04 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca04\n\tReplace Marca04 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .f., ;\n\t\t\tMarca02 With .f., ;\n\t\t\tMarca03 With .f., ;\n\t\t\tMarca04 With .t., ;\n\t\t\tMarca05 With .f., ;\n\t\t\tMarca06 With .f., ;\n\t\t\tValAdqs With crSigCtTCt.Tota04 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column16.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column16.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit04 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota04 <> lnTot)\n\tReplace Tota04 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column16.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column17.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column17.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota04 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit04 <> lnUni)\n\tReplace Unit04 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column17.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca05 = .t. Where Not Empty(Tota05)\n\tUpdate crSigCtTCt Set ValAdqs = Tota05 Where Marca05\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca01 = .f., ;\n\t   \t   Marca02 = .f., ;\n\t   \t   Marca03 = .f., ;\n\t   \t   Marca04 = .f., ;\n\t   \t   Marca06 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca05\n\t\tReplace Marca05 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tMarca02 With .f., ;\n\t\t\t\tMarca03 With .f., ;\n\t\t\t\tMarca04 With .f., ;\n\t\t\t\tMarca05 With .t., ;\n\t\t\t\tMarca06 With .f., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota05 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca05\n\tReplace Marca05 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .f., ;\n\t\t\tMarca02 With .f., ;\n\t\t\tMarca03 With .f., ;\n\t\t\tMarca04 With .f., ;\n\t\t\tMarca05 With .t., ;\n\t\t\tMarca06 With .f., ;\n\t\t\tValAdqs With crSigCtTCt.Tota05 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column19.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column19.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit05 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota05 <> lnTot)\n\tReplace Tota05 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column19.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column20.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column20.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota05 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit05 <> lnUni)\n\tReplace Unit05 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column20.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tUpdate crSigCtTCt Set Marca06 = .t. Where Not Empty(Tota06)\n\tUpdate crSigCtTCt Set ValAdqs = Tota06 Where Marca06\n\n\tUpdate crSigCtTCt ;\n\t   Set Marca01 = .f., ;\n\t   \t   Marca02 = .f., ;\n\t   \t   Marca03 = .f., ;\n\t   \t   Marca04 = .f., ;\n\t   \t   Marca05 = .f.\n\tGo Top In crSigCtTCt\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Check1",
+      "evento": "KeyPress",
+      "linhas": 29,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tIf crSigCtTCt.Marca06\n\t\tReplace Marca06 With .f., ;\n\t\t\t\tValAdqs With 0 In crSigCtTCt\n\tElse\n\t\tReplace Marca01 With .f., ;\n\t\t\t\tMarca02 With .f., ;\n\t\t\t\tMarca03 With .f., ;\n\t\t\t\tMarca04 With .f., ;\n\t\t\t\tMarca05 With .f., ;\n\t\t\t\tMarca06 With .t., ;\n\t\t\t\tValAdqs With crSigCtTCt.Tota06 In crSigCtTCt\n\tEndIf\n\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\n\tNoDefault\nElse\n\tDo Case\n\t\tCase InList(nKeyCode, 9) && TAB\n\t\t\tThisForm.pgfPagina.pgCot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Check1",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nIf crSigCtTCt.Marca06\n\tReplace Marca06 With .f., ;\n\t\t\tValAdqs With 0 In crSigCtTCt\nElse\n\tReplace Marca01 With .f., ;\n\t\t\tMarca02 With .f., ;\n\t\t\tMarca03 With .f., ;\n\t\t\tMarca04 With .f., ;\n\t\t\tMarca05 With .f., ;\n\t\t\tMarca06 With .t., ;\n\t\t\tValAdqs With crSigCtTCt.Tota06 In crSigCtTCt\nEndIf\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column22.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column22.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnTot = crSigCtTCt.Unit06 * crSigCtTCt.QtdAdqs\n\nIf (crSigCtTCt.Tota06 <> lnTot)\n\tReplace Tota06 With lnTot In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column22.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column23.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.getDPros.SetFocus \n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column23.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\tThis.Value = 0\n\tThis.Refresh\nEndIf\n\nlnUni = crSigCtTCt.Tota06 / Iif(crSigCtTCt.QtdAdqs=0, 1, crSigCtTCt.QtdAdqs)\n\nIf (crSigCtTCt.Unit06 <> lnUni)\n\tReplace Unit06 With lnUni In crSigCtTCt\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column23.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 45,
+      "codigoOriginal": "Local loLista\n\nIf Padr(this.Tag,40) = Padr(this.Value,40)\n\tReturn .t.\nEndif\n\nWith ThisForm.pgfPagina.pgCotacoes.grdFornecs\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], 1000)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna([RClis],   [], [Nome])\n\t\t\tloLista.mAddColuna([IClis],   [], [Código])\n\t\t\tloLista.mAddColuna([Contato], [], [Contato])\n\t\t\tloLista.mAddColuna([Tel1s],... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "this.Tag = Padr(this.Value,40)\nReturn InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigOpFp], ;\n\t\t\t\t\t\t   [crListaRemota], [FPags], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([FPags],   [], \t   [Código])\n\t\tloLista.mAddColuna([Descrs],  [], \t   [Descrição])\n\t\tloLista.mAddColuna([MoeFPgs], [XXXXX], [Moeda])\n\t\tloLista.mAddColuna([FParcs],  [999],   [ # ])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.FPags)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column8.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column8.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ((crSigCtTDc.ChkAprovs = 0) Or ThisForm.loObj.Copiando) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 43,
+      "codigoOriginal": "Local loLista\n\nIf this.tag = Padr(this.Value,10)\n\tReturn .t.\nEndif\nWith ThisForm.pgfPagina.pgCotacoes.grdFornecs\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], 1000)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna([IClis],   [], [Código])\n\t\t\tloLista.mAddColuna([RClis],   [], [Nome])\n\t\t\tloLista.mAddColuna([Contato], [], [Contato])\n\t\t\tloLista.mAddColuna([Tel1s],   [], [Te... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "this.tag = Padr(this.Value,10)\nReturn InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column9.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tSelect crFretes\n\tGo Top In crFretes\n\tLocate For Fretes = Padr(This.Value, 12)\n\tIf Eof([crFretes])\n\t\tloLista = CreateObject([fwBuscaInt], [crFretes], [Fretes], This.Value, [Fretes], .t.)\n\t\tloLista.mAddColuna([Fretes], [], [Fretes])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = Iif(LastKey()=27, [], crFretes.Fretes)\nEndIf\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For Fretes = Padr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column10.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.Text1.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgCotacoes.cmbPrioris.SetFocus \n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.grdFornecs.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getJustificas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmbPrioris",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "This.ForeColor = Iif(This.Value=3, Rgb(185,0,0), Iif(This.Value=2, Rgb(255,128,64), Rgb(0,0,0)))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmbPrioris",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ((crSigCtTDc.ChkAprovs = 0) Or ThisForm.loObj.Copiando) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDPros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getSolicitas",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nDeclare laFil[1,2]\nlaFil[1,1] = [CAtivos]\nlaFil[1,2] = [S]\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;\n\t\t\t\t\t\t   [crListaRemota], [Usuarios], This.Value, [Seleção], .t., [Usuarios], @laFil)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Usuarios], [XXXXXXXXXXX], [Solicitante])\n\t\tloLista.mAddColuna([NComps],   [], [Nome])\n\t\tloLista.mAddColuna([Deptos],   [XXXXXXXXXXX], [Departamento])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getSolicitas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDeptos",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdDpt], ;\n\t\t\t\t\t\t   [crListaRemota], [Codigos], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Codigos], [XXXXXXXXXXXX], [Departamento])\n\t\tloLista.mAddColuna([Descricaos], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.Codigos)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDeptos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDtSolics",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDtCotas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) And Empty(crCotaPends.Copias) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDtValids",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And ((crSigCtTDc.ChkAprovs = 0) Or ThisForm.loObj.Copiando) And Empty(crCotaPends.Copias) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getDtPagtos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getComprador",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nDeclare laFil[1,2]\nlaFil[1,1] = [CAtivos]\nlaFil[1,2] = [S]\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;\n\t\t\t\t\t\t   [crListaRemota], [Usuarios], This.Value, [Seleção], .t., [Usuarios], @laFil)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Usuarios], [XXXXXXXXXXX], [Solicitante])\n\t\tloLista.mAddColuna([NComps],   [], [Nome])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)\n\tUse I... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getComprador",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getAprovador",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.getCopias",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ExcluiProduto",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdEscolha",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR]) And (crSigCtTDc.ChkAprovs = 0) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkAprovs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdEscolha",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not Eof([crSigCtTCt]) And Not Empty(crSigCtTCt.CPros)\n\tDo Form SigMvCth With ThisForm.poDataMgr, crSigCtTCt.CPros, crSigCtTCt.Codigos\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdBotoes",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Local llRet\n\nllRet = .t.\nIf InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tllRet = MessageBox([Deseja Realmente Abandonar as Alterações?], 4+32+256, [Atenção!!!]) = 6\nEndIf\n\nIf llRet\n\tThisForm.poDataMgr.RollBack()\n\n\tWith ThisForm.PgfPagina\n\t\t.pgFiltros.Enabled  = .f.\n\t\t.pgDados.Enabled    = .t.\n\t\t.pgCotacoes.Enabled = .f.\n\t\t.pgPedidos.Enabled  = .f.\n\t\t\n\t\t.ActivePage = 2\n\t\t.Refresh\n\n\t\t.pgDados.grdOperacoes.Column1.SetFocus\n\tEndWith\nElse\n\tThisForm.pgfPagina.pgCotacoes.cmdGravar.btnGravaDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdGravar",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If Not ThisForm.GravaDados()\n\tReturn .f.\nEndIf\n\nThisForm.Processamento\n\n* Voltando Para a Página de Dados\nWith ThisForm.PgfPagina\n\t.pgFiltros.Enabled  = .f.\n\t.pgDados.Enabled    = .t.\n\t.pgCotacoes.Enabled = .f.\n\t.pgPedidos.Enabled  = .f.\n\t\n\t.ActivePage = 2\n\t.Refresh\n\n\t.pgDados.grdOperacoes.Column1.SetFocus\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GravaDados",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdGravar",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "If InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n*!*\t\tIf Not ThisForm.loObj.LibSolics And (IsEmpty(crSigCtTDc.DtSolics) Or Empty(crSigCtTDc.Solicitas))\n*!*\t\t\t=MessageBox([A Cotação Ainda Não Passou Pela Aprovação do Solicitante!!!] + Chr(13) + ;\n*!*\t\t\t\t\t\t[Não é Possível Gerar Um Pedido à Partir Dela!!!], 0+16, [Atenção!!!])\n*!*\t\t\tThisForm.pgfPagina.pgCotacoes.pgfComplCots.ActivePage = 2\n*!*\t\t\tThisForm.pgfPagina.pgCotacoes.pgfComplCots.pgSolicitas.getAprSols.SetFocus\n*!*\t\t\tReturn .f.\n*!*... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GravaDados,GeraPedidos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdGravar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Impressao\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdProdutos",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lnItn\n\nlnItn = 1\nSelect crSigCtTCt\nScan\n\tReplace CItens With lnItn In crSigCtTCt\n\tIf Empty(crSigCtTCt.CPros)\n\t\tDelete In crSigCtTCt\n\tElse\n\t\tlnItn = lnItn + 1\n\tEndIf\nEndScan\n\nInsert Into crSigCtTCt (Codigos, CItens, CPros, DPros, Obs, Qtds, CUnis, QtdAdqs, cIdChaves) ;\n\t\t\t\tValues (crSigCtTDc.Codigos, lnItn, [], [], [], 0, [], 0, fUniqueIds())\n\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.SetFocus \n* Fim ***********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgCotacoes.cmdProdutos",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local lnItn\n\nDelete In crSigCtTCt\n\nlnItn = 1\nSelect crSigCtTCt\nScan\n\tReplace CItens With lnItn In crSigCtTCt\n\tIf Empty(crSigCtTCt.CPros)\n\t\tDelete In crSigCtTCt\n\tElse\n\t\tlnItn = lnItn + 1\n\tEndIf\nEndScan\n\nInsert Into crSigCtTCt (Codigos, CItens, CPros, DPros, Obs, Qtds, CUnis, QtdAdqs, cIdChaves) ;\n\t\t\t\tValues (crSigCtTDc.Codigos, lnItn, [], [], [], 0, [], 0, fUniqueIds())\n\nThisForm.pgfPagina.pgCotacoes.grdCotacoes.Column1.SetFocus \n* Fim *************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes",
+      "evento": "Activate",
+      "linhas": 7,
+      "codigoOriginal": "Select crItnOperas\nSet Order To Ordem\nSet Key To Str(crCabOperas.Numes, 6) In crItnOperas\nGo Top In crItnOperas\nThisForm.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Refresh \nThisForm.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column1.SetFocus\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column8.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgOperacoes.grdCabOperas.Column9.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.pgOperacoes.pgItens.grdItnOperas.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cmdBotoes",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Local llRet\n\nllRet = .t.\nIf InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n\tllRet = MessageBox([Deseja Realmente Abandonar as Alterações?], 4+32+256, [Atenção!!!]) = 6\nEndIf\n\nIf llRet\n\tThisForm.poDataMgr.RollBack()\n\n\tWith ThisForm.PgfPagina\n\t\t.pgFiltros.Enabled  = .f.\n\t\t.pgDados.Enabled    = .f.\n\t\t.pgCotacoes.Enabled = .t.\n\t\t.pgPedidos.Enabled  = .f.\n\t\t\n\t\t.ActivePage = 3\n\t\t.Refresh\n\n\t\t.pgCotacoes.cmdGravar.btnGeraPedidos.SetFocus\n\tEndWith\nElse\n\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnS... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cmdProcessar",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If Not ThisForm.GravaPedidos()\n\tReturn .f.\nEndIf\n\nThisForm.Processamento\n\n* Voltando Para a Página de Dados\nWith ThisForm.PgfPagina\n\t.pgFiltros.Enabled  = .f.\n\t.pgDados.Enabled    = .t.\n\t.pgCotacoes.Enabled = .f.\n\t.pgPedidos.Enabled  = .f.\n\t\n\t.ActivePage = 2\n\t.Refresh\n\n\t.pgDados.grdOperacoes.Column1.SetFocus\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GravaPedidos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getGrupoDs",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, [C], Padr(This.Value, 10), This)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getGrupoDs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getContaDs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgPedidos.cntOperacao\n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, .getGrupoDs.Value, [C], .getContaDs.Value, .getContaDs, .getDContaDs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaDs.Value  = []\n\t\t\t.getDContaDs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaDs.Value  = []\n\t\t.getDContaDs.Value = []\n\tEndIf\n\t.getContaDs.Refresh\n\t.getDContaDs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getContaDs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.pgfPagina.pgPedidos.cntOperacao.getGrupoDs.Value) And InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDContaDs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgPedidos.cntOperacao\n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, .getGrupoDs.Value, [D], .getDContaDs.Value, .getContaDs, .getDContaDs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaDs.Value  = []\n\t\t\t.getDContaDs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaDs.Value  = []\n\t\t.getDContaDs.Value = []\n\tEndIf\n\t.getContaDs.Refresh\n\t.getDContaDs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDContaDs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Empty(ThisForm.pgfPagina.pgPedidos.cntOperacao.getContaDs.Value) And ;\n       Not Empty(ThisForm.pgfPagina.pgPedidos.cntOperacao.getGrupoDs.Value) And ;\n       InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getContaEs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgPedidos.cntOperacao\n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, [], [C], .getContaEs.Value, .getDContaEs, .getDContaEs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaEs.Value  = []\n\t\t\t.getDContaEs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaEs.Value  = []\n\t\t.getDContaEs.Value = []\n\tEndIf\n\t.getContaEs.Refresh\n\t.getDContaEs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getContaEs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDContaEs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm.pgfPagina.pgPedidos.cntOperacao \n\tIf Not Empty(This.Value)\n\t\tIf Not fAcessoContas(Usuar, [], [D], .getDContaEs.Value, .getDContaEs, .getDContaEs)\n\t\t\t=MessageBox([Acesso Negado!!!], 0+48, [Atenção!!!])\n\t\t\t.getContaEs.Value  = []\n\t\t\t.getDContaEs.Value = []\n\t\tEndIf\n\tElse\n\t\t.getContaEs.Value  = []\n\t\t.getDContaEs.Value = []\n\tEndIf\n\t.getContaEs.Refresh\n\t.getDContaEs.Refresh\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDContaEs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Empty(ThisForm.pgfPagina.pgPedidos.cntOperacao.getContaEs.Value) And ;\n\t   InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "Local lcEnt\n\nlcEnt = crSigCtTDc.ContaEs\n\nIf Not Empty(lcEnt)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli], [crCompCli], [IClis], lcEnt, [Grupos, IClis, RClis])\n\tIf Not Used([crCompCli])\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (cmdEntrega - crCompCli)])\n\t\tReturn .f.\n\tEndIf\n\tGo Top In crCompCli\n\tIf Not Eof([crCompCli])\n\t\tDo Form SigCdEnd With crCompCli.Grupos, crCompCli.IClis, crCompCli.RClis, ;\n\t\t\t\t\t\t\t  ThisForm.loObj.pcEscolha, ThisForm.poDataMgr, crSigCtTDc.LocalE... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, This)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDatas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDopes",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "Local loPed\n\nloPed = ThisForm.PgfPagina.pgPedidos\n\nIf Not Empty(This.Value)\n\tIf Not Seek(Padr(This.Value, 20), [crSubniveis], [Dopes])\n\t\tloLista = CreateObject([fwBuscaInt], [crSubniveis], [Dopes], Padr(This.Value, 20), [Operações], .t.)\n\t\tloLista.mAddColuna([Dopes], [], [Operação])\n\t\tloLista.Show()\n\tEndIf\n\n\tIf (Lastkey()=27)\n\t\tloPed.cntOperacao.getDopes.Value = []\n\tElse\n\t\tloPed.cntOperacao.getDopes.Value    = crSubniveis.Dopes\n\t\tloPed.cntOperacao.getCMoes.Value    = crSubniveis.CMoes\n\t\tloPed.cn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDopes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getCMoes",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdMoe], ;\n\t\t\t\t\t\t   [crListaRemota], [CMoes], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([CMoes], [], [Cod])\n\t\tloLista.mAddColuna([DMoes], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.CMoes)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getCMoes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.loObj.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getDjob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVCOT.pgfPagina.pgPedidos.cntOperacao.getJob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVCOT.Procedure",
+      "queryOriginal": "Select CPros ; From crSigCtTCt ; Into Cursor crChecagem",
+      "tabelas": "crSigCtTCt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.Procedure",
+      "queryOriginal": "\tSelect EmpDopNums, Jobs ; \t  From crOperacoes ; \t Where Marcas ; \t  Into Cursor crCotarProds",
+      "tabelas": "crOperacoes",
+      "colunas": "EmpDopNums,Marcas,crCotarProds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.Procedure",
+      "queryOriginal": "lcSql = [Select CCargs From SigCdUsu Where Usuarios = ']+Usuar+['] If ThisForm.poDataMgr.Sqlexecute(lcSql,'CrSigCdUsu') < 1",
+      "tabelas": "SigCdUsu",
+      "colunas": "CCargs,Usuarios,SqlexecutelcSql,CrSigCdUsu",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.Procedure",
+      "queryOriginal": "lcSql = [Select VlLibOpes From SigCdCrg Where CCargs = ']+CrSigCdUsu.cCargs+['] If ThisForm.poDataMgr.Sqlexecute(lcSql,'CrTmpCarg') < 1",
+      "tabelas": "SigCdCrg",
+      "colunas": "VlLibOpes,CCargs,cCargs+[],SqlexecutelcSql,CrTmpCarg",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgDados.cmdMarcaDesmarca.Click",
+      "queryOriginal": "Update crOperacoes Set Marcas = (This.Value = 1)",
+      "tabelas": "crOperacoes",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgDados.cmdCotacoes.Click",
+      "queryOriginal": "Update crOperacoes Set Marcas = (This.Value = 1)",
+      "tabelas": "crOperacoes",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgDados.grdOperacoes.Column1.Check1.Procedure",
+      "queryOriginal": "\tSelect EmpDopNums From crOperacoes Where Marcas And Jobs <> lcJob into cursor TmpMarca",
+      "tabelas": "crOperacoes",
+      "colunas": "EmpDopNums,Marcas,Jobs,lcJob,TmpMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca01 = .t. Where Not Empty(Tota01)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota01 Where Marca01",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column6.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca02 = .f., ; \t   \t   Marca03 = .f., ; \t   \t   Marca04 = .f., ; \t   \t   Marca05 = .f., ; \t   \t   Marca06 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca02",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca02 = .t. Where Not Empty(Tota02)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca02",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota02 Where Marca02",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column9.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca01 = .f., ; \t   \t   Marca03 = .f., ; \t   \t   Marca04 = .f., ; \t   \t   Marca05 = .f., ; \t   \t   Marca06 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca03 = .t. Where Not Empty(Tota03)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca03",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota03 Where Marca03",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column12.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca01 = .f., ; \t   \t   Marca02 = .f., ; \t   \t   Marca04 = .f., ; \t   \t   Marca05 = .f., ; \t   \t   Marca06 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca04 = .t. Where Not Empty(Tota04)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca04",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota04 Where Marca04",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column15.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca01 = .f., ; \t   \t   Marca02 = .f., ; \t   \t   Marca03 = .f., ; \t   \t   Marca05 = .f., ; \t   \t   Marca06 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca05 = .t. Where Not Empty(Tota05)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca05",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota05 Where Marca05",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column18.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca01 = .f., ; \t   \t   Marca02 = .f., ; \t   \t   Marca03 = .f., ; \t   \t   Marca04 = .f., ; \t   \t   Marca06 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set Marca06 = .t. Where Not Empty(Tota06)",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca06",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt Set ValAdqs = Tota06 Where Marca06",
+      "tabelas": "crSigCtTCt",
+      "colunas": "ValAdqs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.grdCotacoes.Column21.Header1.Click",
+      "queryOriginal": "\tUpdate crSigCtTCt ; \t   Set Marca01 = .f., ; \t   \t   Marca02 = .f., ; \t   \t   Marca03 = .f., ; \t   \t   Marca04 = .f., ; \t   \t   Marca05 = .f.",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Marca01",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.cmdProdutos.Valid",
+      "queryOriginal": "Insert Into crSigCtTCt (Codigos, CItens, CPros, DPros, Obs, Qtds, CUnis, QtdAdqs, cIdChaves) ; \t\t\t\tValues (crSigCtTDc.Codigos, lnItn, [], [], [], 0, [], 0, fUniqueIds())",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Codigos,CItens,CPros,DPros,Obs,Qtds,CUnis,QtdAdqs,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVCOT.pgfPagina.pgCotacoes.cmdProdutos.Valid",
+      "queryOriginal": "Insert Into crSigCtTCt (Codigos, CItens, CPros, DPros, Obs, Qtds, CUnis, QtdAdqs, cIdChaves) ; \t\t\t\tValues (crSigCtTDc.Codigos, lnItn, [], [], [], 0, [], 0, fUniqueIds())",
+      "tabelas": "crSigCtTCt",
+      "colunas": "Codigos,CItens,CPros,DPros,Obs,Qtds,CUnis,QtdAdqs,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCtTCt", "crOperacoes", "SigCdUsu", "SigCdCrg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

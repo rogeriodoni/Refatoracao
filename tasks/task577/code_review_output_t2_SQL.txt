@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado do pass SQL
+
+**Nenhuma corre├º├úo aplicada.** O ├║nico achado listado (`SQL-FILTRO-INVENTADO` ÔÇö coluna `DOPPS` no `WHERE`) ├® falso positivo.
+
+**Verifica├º├úo:**
+- `SigMvSbnBO.ObterNumeroOS` monta `SELECT nSeqs FROM SigCdOpd WHERE Dopps = ...` (`SigMvSbnBO.prg`, dentro de `ObterNumeroOS`).
+- O legado (`tasks\task577\SigMvSbn_form_codigo_fonte.txt:1662`, `BtnOficina.Click`) faz exatamente isso via helper: `Thisform.ParentForm.Podatamgr.Cursorquery('SigCdOpd','CrSigCdOpd','Dopps',_DoppServ,[nSeqs])`.
+- Conferi a assinatura de `CursorQuery` em `Framework\sigacess.PRG` (`fAcessoGrupos`: `pCnx.CursorQuery([SigCdGcr],[crAr1],[Codigos],pCod,[...])`) ÔÇö ├® `CursorQuery(tabela, cursorAlias, campoChave, valorChave, listaCampos)`, que gera internamente `SELECT <listaCampos> FROM <tabela> WHERE <campoChave> = <valorChave>`.
+
+Ou seja, o `WHERE Dopps = ...` no BO migrado ├® transcri├º├úo fiel do `CursorQuery` legado, n├úo uma condi├º├úo inventada. O extrator do pass SQL s├│ varre strings SQL literais (`[Select ... Where ...]`) e n├úo reconhece o WHERE impl├¡cito que `CursorQuery()` produz ÔÇö por isso a coluna `DOPPS` n├úo aparece na lista curada "WHERE original usa: ...". Remover o filtro faria `ObterNumeroOS` trazer todas as linhas de `SigCdOpd` em vez de uma s├│, quebrando o c├ílculo do n├║mero da OS usado pelo bot├úo Oficina.
+
+Registrei esse caso (18┬║) na mem├│ria de falsos positivos do harness de auditoria, para as pr├│ximas passadas do pass SQL n├úo repetirem o erro.

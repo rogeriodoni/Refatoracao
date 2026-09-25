@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files are clean. Phase 8 is complete.
+
+## Summary
+
+`FormSigMvAte.prg` was already functionally complete through phases 1-7 (BO + Form with full CRUD-equivalent behavior: `CarregarLista`, `BtnIncluirClick`, `BtnExcluirClick`, `BtnConfirmarClick` = salvar, `BtnCancelarClick` = encerrar, lookup validation, duplicate-vendor guard, `AjustarBotoesPorModo`/`AlternarPagina` as documented no-ops since this is a flat OPERACIONAL popup, not a Page1/Page2 CRUD form).
+
+For phase 8 I:
+1. Verified structural integrity: 25 `PROCEDURE`/`ENDPROC` pairs, 11 `TRY`/`ENDTRY`, 60 `IF`/`ENDIF`, 1 `DEFINE CLASS`/`ENDDEFINE` ÔÇö all balanced.
+2. Confirmed no `RETURN` inside any `TRY` block (CLAUDE.md rule #1) and no literal accented characters (rule #4) in either the form or the BO.
+3. Cross-checked against `TesteAutomatico.prg`'s generic pipeline checks for OPERACIONAL forms and found one gap: it looks for `BtnEncerrarClick`/`BtnFecharClick`/`BtnSairClick` as the generic "close" method, but this form only had `BtnCancelarClick`. Added `BtnEncerrarClick()` as a thin alias to `BtnCancelarClick()` (the legado's `btnSair` equivalent) to satisfy that contract without duplicating logic.
+4. Deliberately did **not** add `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos` stubs ÔÇö those are CRUD Page1/Page2 concepts that don't apply to this flat grid-only popup (the fieldÔåöBO mapping already happens directly, per-row, inside `BtnConfirmarClick`'s `SCAN`). Adding empty stubs would have violated the no-placeholder rule.
+5. Left the menu.prg/`popMovimentos` integration out: `FormSigMvAte` is a modal sub-dialog that requires document context (`par_cEmpDopNums`/`par_cGrVends` from an open `SigMvCab` document) to be meaningful ÔÇö the legado doesn't expose it as a standalone menu item either, and no `SigMvCab` caller exists yet in the migrated codebase to wire it to.
+
+No code changes were needed in `SigMvAteBO.prg` ÔÇö it was already complete.

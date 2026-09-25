@@ -1,0 +1,17 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+Investiguei os 4 achados do pass SQL. Nenhum ├® defeito real ÔÇö ├® o mesmo caso j├í documentado na mem├│ria (`feedback_harness_de_auditoria_mede_errado.md`, item #4: "Pass SQL de code-review que s├│ olha o Form, nunca o BO").
+
+**Evid├¬ncia:**
+
+A grade da Lista (`VincularGradeLista`, linhas 8154-8185) liga `cursor_4c_Dados.cpros`, `.dpros`, `.reffs`, `.usuaalts` ÔÇö e esse cursor ├® populado pelo BO, n├úo por SQL inline no Form. Chequei `ProdutoBO.prg`:
+
+- `BuscarLista()` (linha 1565) monta `"SELECT " + THIS.ObterColunasLista() + " FROM SigCdPro..."`
+- `ObterColunasLista()` (linha 1542) retorna: `"cpros, dpros, dpro2s, cgrus, sgrus, reffs, colecoes, impetiqs, situas, encoms, cbars, cproeqs, compos, codcors, usuaalts, dtalts"`
+
+Os quatro campos apontados como "ausentes" (`cpros`, `dpros`, `reffs`, `usuaalts`) **est├úo** nessa lista. O pass GRID-SQL s├│ varre o texto do Form e n├úo resolve a chamada indireta `THIS.ObterColunasLista()` ÔÇö por isso n├úo "viu" as colunas no SELECT e acusou algo que j├í est├í correto.
+
+N├úo fiz nenhuma altera├º├úo nos arquivos: aplicar a "corre├º├úo" sugerida (acrescentar campos que j├í existem, ou pior, tentar reescrever o SELECT) reintroduziria exatamente o padr├úo de falso positivo j├í catalogado. `FormProduto.prg` e `ProdutoBO.prg` seguem como est├úo.

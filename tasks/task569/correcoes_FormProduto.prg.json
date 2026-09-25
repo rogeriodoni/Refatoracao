@@ -1,0 +1,91 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+    "timestamp":  "2026-09-24T16:33:23",
+    "correcoes":  [
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  193,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_Botoes (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  335,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_Saida (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  1130,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_BotoesAcao (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  193,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoes sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  335,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_saida sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  1130,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoesacao sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "WARN-184-CURSOR-SQLEXEC-READONLY",
+                          "Linha":  8162,
+                          "Original":  "loc_oGrid.RecordSource = \"cursor_4c_Dados\"",
+                          "Corrigido":  "(no BO: converter \u0027cursor_4c_Dados\u0027 para READWRITE via SELECT ... INTO CURSOR cursor_4c_Dados READWRITE)",
+                          "Descricao":  "Pattern #184 (Erro145-v2): grid \u0027grd_4c_dados\u0027 tem coluna EDITAVEL (CurrentControl = \u0027chk_4c_Marcado\u0027) ligada ao cursor \u0027cursor_4c_Dados\u0027, que em ProdutoBO.prg eh criado direto por SQLEXEC() sem conversao READWRITE. Cursor de SQL pass-through nasce SOMENTE-LEITURA no VFP: o CheckBox/ComboBox RENDERIZA em todas as linhas mas a celula NUNCA entra em edicao (clicar nao faz nada) — o sintoma parece bug de Enabled/ReadOnly, que estao corretos. REVISAR MANUAL no BO: SQLEXEC em alias TEMPORARIO + IF USED(\u0027cursor_4c_Dados\u0027) / USE IN cursor_4c_Dados / ENDIF + SELECT * FROM cursor_4c_DadosTmp INTO CURSOR cursor_4c_Dados READWRITE + USE IN cursor_4c_DadosTmp (template CCJBO.prg:214). Depois garantir restauracao de .Sparse/.CurrentControl no rebind (ver WARN-184-REBIND-SEM-CURRENTCONTROL)."
+                      },
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  3549,
+                          "Original":  "par_oPagina.grd_4c_SubCp.Column9.AddObject(\"chk_4c_EtiquetaSubCp\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_etiquetasubcp\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: keypress, mouseup, mousedown, click). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      },
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  3763,
+                          "Original":  "par_oPagina.grd_4c_Compo.Column9.AddObject(\"chk_4c_Etiqueta\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_etiqueta\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: keypress, mouseup, mousedown, click). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      },
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  552,
+                          "Original":  "loc_oPagina.grd_4c_Dados.Column7.AddObject(\"chk_4c_Inativo\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_inativo\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: keypress, mouseup, mousedown, click). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      },
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  6289,
+                          "Original":  "par_oPagina.grd_4c_Dados.Column3.AddObject(\"chk_4c_Marcado\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_marcado\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: keypress, mouseup, mousedown, click). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      },
+                      {
+                          "Tipo":  "WARN-186-ADDOBJECT-DUPLICADO",
+                          "Linha":  3763,
+                          "Original":  "par_oPagina.grd_4c_Compo.Column9.AddObject(\"chk_4c_Etiqueta\", \"CheckBox\")",
+                          "Corrigido":  "(remover — objeto ja adicionado na linha 2460)",
+                          "Descricao":  "Pattern #186-A: AddObject(\"chk_4c_etiqueta\") aparece 2x no MESMO alvo (grd_4c_compo|9) — linhas 2460, 3763. VFP dispara \"Object chk_4c_etiqueta is already defined\" e o Init do form quebra. REVISAR MANUAL: manter apenas o primeiro AddObject (com a configuracao do controle) e remover os demais. Se as duas copias configuram propriedades diferentes, consolidar num bloco so. Origem: sweep Pattern #185 (2026-09-04, FormLin grd_4c_Fases.Column4 com dois Check1 identicos)."
+                      }
+                  ],
+    "totalCorrecoes":  12
+}

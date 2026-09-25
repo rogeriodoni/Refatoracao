@@ -1008,6 +1008,12 @@ DEFINE CLASS FormGpd AS FormBase
                     THIS.CarregarLista()
                 ENDIF
 
+                *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista.
+                *-- AjustarBotoesPorModo so era chamado ao ENTRAR em edicao
+                *-- (Incluir/Alterar/Visualizar), entao apos gravar ou cancelar
+                *-- os botoes ficavam desabilitados na pagina Lista.
+                THIS.AjustarBotoesPorModo()
+
                 loc_lResultado = .T.
             ENDIF
 
@@ -1137,48 +1143,117 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_oBusca, loc_cCodigo
-        loc_cCodigo = ""
+        *-- Erro177: o legado NAO tem picker. "Procurar" eh a opcao 5 do Grupo_op e
+        *-- faz busca POR EXEMPLO: abre a ficha em BRANCO, deixa editaveis apenas os
+        *-- campos marcados com plProcurar = .T. no SCX (Get_Codigo e Get_desc) e
+        *-- quem executa a consulta eh o Confirmar (msv_procurar -> LocateCursor).
+        *--   Do Case
+        *--     Case InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+        *--         ...Get_Codigo.Value = []
+        *--         ...Get_Codigo.SetFocus
+        LOCAL loc_oPg1, loc_cGde
 
         TRY
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGrp", "cursor_4c_BuscaGpd", "cgrus", "", ;
-                "Buscar Grupo de Produto")
-
-            IF VARTYPE(loc_oBusca) = "O"
-                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
-                IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
+            *-- Legado (Grupo_op.Click, vale para TODAS as opcoes): sem Grande Grupo
+            *-- escolhido a acao nem comeca.
+            loc_cGde = ""
+            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
+                    loc_cGde = ALLTRIM(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.Value)
                 ENDIF
-
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpd")
-                    SELECT cursor_4c_BuscaGpd
-                    loc_cCodigo = ALLTRIM(cursor_4c_BuscaGpd.cgrus)
-                ENDIF
-
-                loc_oBusca.Release()
             ENDIF
 
-            IF USED("cursor_4c_BuscaGpd")
-                USE IN cursor_4c_BuscaGpd
-            ENDIF
+            IF EMPTY(loc_cGde)
+                MsgAviso("Grande Grupo Inv" + CHR(225) + "lido !!!", "Campo Obrigat" + CHR(243) + "rio")
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
+                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
+                        THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.SetFocus()
+                    ENDIF
+                ENDIF
+            ELSE
+                THIS.this_oBusinessObject.NovoRegistro()
+                THIS.LimparCampos()
+                THIS.this_cModoAtual = "BUSCAR"
 
-            IF !EMPTY(loc_cCodigo) AND USED("cursor_4c_Dados")
-                SELECT cursor_4c_Dados
-                LOCATE FOR ALLTRIM(cgrus) == loc_cCodigo
-                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Grade", 5)
-                    THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Refresh()
+                *-- mobjenabled do framework: em PROCURAR tudo fica desabilitado,
+                *-- MENOS os controles com plProcurar = .T.
+                THIS.HabilitarCampos(.F.)
+
+                loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1
+                IF PEMSTATUS(loc_oPg1, "txt_4c_Cgrus", 5)
+                    loc_oPg1.txt_4c_Cgrus.Enabled  = .T.
+                    loc_oPg1.txt_4c_Cgrus.ReadOnly = .F.
+                ENDIF
+                IF PEMSTATUS(loc_oPg1, "txt_4c_Dgrus", 5)
+                    loc_oPg1.txt_4c_Dgrus.Enabled  = .T.
+                    loc_oPg1.txt_4c_Dgrus.ReadOnly = .F.
+                ENDIF
+
+                THIS.AjustarBotoesPorModo()
+                THIS.pgf_4c_Paginas.Page2.opt_4c_Navegacao.Value = 1
+                THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.ActivePage = 1
+                THIS.AlternarPagina(2)
+
+                IF PEMSTATUS(loc_oPg1, "txt_4c_Cgrus", 5)
+                    loc_oPg1.txt_4c_Cgrus.SetFocus()
                 ENDIF
             ENDIF
 
         CATCH TO loc_oErro
             MostrarErro("Erro na busca:" + CHR(13) + loc_oErro.Message, "FormGpd.BtnBuscarClick")
-            IF USED("cursor_4c_BuscaGpd")
-                USE IN cursor_4c_BuscaGpd
-            ENDIF
         ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ExecutarProcura - msv_procurar do legado, disparado pelo Confirmar
+    * Transcrito do legado (os dois IF sao INDEPENDENTES, nao IF/ELSE):
+    *   If !Empty(Get_Codigo.Value)
+    *       poDataMgr.LocateCursor('CrSigCdGrp','cgrus', Alltrim(Get_Codigo.Value))
+    *   EndIf
+    *   If !Empty(Get_Desc.Value)
+    *       poDataMgr.LocateCursor('CrSigCdGrp','dgrus', Alltrim(Get_Desc.Value))
+    *   EndIf
+    * PUBLIC: chamado pelo BtnSalvarClick
+    *==========================================================================
+    PROCEDURE ExecutarProcura()
+        LOCAL loc_oPg1, loc_cCodigo, loc_cDescricao
+        loc_cCodigo    = ""
+        loc_cDescricao = ""
+
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1
+        IF PEMSTATUS(loc_oPg1, "txt_4c_Cgrus", 5)
+            loc_cCodigo = ALLTRIM(loc_oPg1.txt_4c_Cgrus.Value)
+        ENDIF
+        IF PEMSTATUS(loc_oPg1, "txt_4c_Dgrus", 5)
+            loc_cDescricao = ALLTRIM(loc_oPg1.txt_4c_Dgrus.Value)
+        ENDIF
+
+        *-- Volta para a Lista ANTES de localizar: AlternarPagina(1) chama
+        *-- CarregarLista, que refaz o cursor e reposiciona o ponteiro no topo.
+        THIS.AlternarPagina(1)
+
+        IF USED("cursor_4c_Dados")
+            SELECT cursor_4c_Dados
+            IF !EMPTY(loc_cCodigo)
+                LOCATE FOR ALLTRIM(cgrus) = loc_cCodigo
+            ENDIF
+            IF !EMPTY(loc_cDescricao)
+                LOCATE FOR UPPER(ALLTRIM(dgrus)) = UPPER(loc_cDescricao)
+            ENDIF
+
+            IF EOF("cursor_4c_Dados")
+                MsgAviso("Nenhum grupo encontrado.", "Procurar")
+                GO TOP IN cursor_4c_Dados
+            ENDIF
+
+            *-- Mover o ponteiro NAO repinta a grade nem dispara AfterRowColChange:
+            *-- Refresh para a linha selecionada aparecer e CarregarSubgrupos para a
+            *-- grade da direita acompanhar o grupo localizado.
+            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Grade", 5)
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Refresh()
+            ENDIF
+            THIS.CarregarSubgrupos(ALLTRIM(cursor_4c_Dados.cgrus))
+        ENDIF
     ENDPROC
 
     *==========================================================================
@@ -1196,6 +1271,13 @@ DEFINE CLASS FormGpd AS FormBase
     PROCEDURE BtnSalvarClick()
         LOCAL loc_lResultado
         loc_lResultado = .F.
+
+        *-- Erro177: em PROCURAR o Confirmar NAO grava - ele executa a busca por
+        *-- exemplo (msv_procurar do legado) e volta para a Lista posicionada.
+        IF THIS.this_cModoAtual = "BUSCAR"
+            THIS.ExecutarProcura()
+            RETURN
+        ENDIF
 
         IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             RETURN
@@ -3090,7 +3172,10 @@ DEFINE CLASS FormGpd AS FormBase
         IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "cnt_4c_Salva", 5)
             WITH THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva
                 IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva, "cmd_4c_Confirmar", 5)
-                    .cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
+                    *-- Erro177: em BUSCAR o Confirmar eh quem EXECUTA a procura,
+                    *-- entao tem de estar habilitado tambem nesse modo.
+                    .cmd_4c_Confirmar.Enabled = loc_lEditar OR ;
+                        INLIST(THIS.this_cModoAtual, "EXCLUIR", "BUSCAR")
                 ENDIF
                 .Visible     = .T.
             ENDWITH

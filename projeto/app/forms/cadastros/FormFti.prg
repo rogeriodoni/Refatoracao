@@ -302,20 +302,21 @@ DEFINE CLASS FormFti AS FormBase
             .ReadOnly          = .T.
             .Visible           = .T.
         ENDWITH
+        *-- ControlSource/Width/Caption das colunas NAO ficam aqui: este metodo roda
+        *-- ANTES de CarregarLista, quando "cursor_4c_Dados" ainda nao existe, e
+        *-- atribuir ControlSource de alias inexistente estoura
+        *-- "Alias 'CURSOR_4C_DADOS' is not found" DENTRO do TRY de InicializarForm -
+        *-- que entao devolve .F., CREATEOBJECT devolve .F. e a TELA NAO ABRE.
+        *-- O bind canonico (RecordSource -> ControlSource -> Width -> Caption) esta
+        *-- em CarregarLista, que roda com o cursor ja populado.
         WITH loc_oPagina.grd_4c_Lista.Column1
-            .ControlSource = "cursor_4c_Dados.cods"
-            .Width         = 50
             .Movable       = .F.
             .Resizable     = .F.
         ENDWITH
-        loc_oPagina.grd_4c_Lista.Column1.Header1.Caption = "C" + CHR(243) + "digo"
         WITH loc_oPagina.grd_4c_Lista.Column2
-            .ControlSource = "cursor_4c_Dados.descs"
-            .Width         = 270
             .Movable       = .F.
             .Resizable     = .F.
         ENDWITH
-        loc_oPagina.grd_4c_Lista.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
         THIS.FormatarGridLista(loc_oPagina.grd_4c_Lista)
 
         *-- Botoes CRUD dentro de cnt_4c_Botoes (Left=5/80/155/230/305, Top=5, W=75, H=75)
@@ -1389,6 +1390,10 @@ DEFINE CLASS FormFti AS FormBase
                     loc_oGrid.RecordSource = "cursor_4c_Dados"
                     loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cods"
                     loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descs"
+                    *-- Width APOS o RecordSource: ele recalcula as larguras para o
+                    *-- default 90 e apagaria os valores do SCX legado (50/270)
+                    loc_oGrid.Column1.Width = 50
+                    loc_oGrid.Column2.Width = 270
                     loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
                     loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
                     loc_oGrid.Refresh()
@@ -1421,6 +1426,10 @@ DEFINE CLASS FormFti AS FormBase
                 THIS.this_cModoAtual = "LISTA"
                 THIS.CarregarLista()
             ENDIF
+
+            *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+            THIS.AjustarBotoesPorModo()
+
             loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro em FormFti.AlternarPagina:" + CHR(13) + loException.Message, "Erro")
@@ -2013,6 +2022,10 @@ DEFINE CLASS FormFti AS FormBase
                     loc_oGrid.RecordSource = "cursor_4c_Dados"
                     loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cods"
                     loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descs"
+                    *-- Width APOS o RecordSource: ele recalcula as larguras para o
+                    *-- default 90 e apagaria os valores do SCX legado (50/270)
+                    loc_oGrid.Column1.Width = 50
+                    loc_oGrid.Column2.Width = 270
                     loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
                     loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
                     loc_oGrid.Refresh()

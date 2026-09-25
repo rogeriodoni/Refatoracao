@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Done. Summary of this VISUAL pass on `Formsigmvcab.prg`:
+
+**Fixed (3 of 8):** grid column headers didn't match the legacy `pColuna` captions from `sigmvcab.sct` ÔÇö `Column3` "N├║mero"ÔåÆ"C├│digo", `Column5` "Conta Origem"ÔåÆ"Origem", `Column6` "Conta Destino"ÔåÆ"Destino" (using `CHR(243)` for the ├│, per CLAUDE.md rule #4).
+
+**Left unchanged (5 of 8), all false positives confirmed against the legacy dump:**
+- 'Emp' / 'Data' headers already matched the legacy captions ÔÇö the audit's "not found" list came from an unrelated grid elsewhere in the source file.
+- The two 'Botoes' Top/Left findings compared `cnt_4c_BotoesAcao` (Confirmar/Cancelar) against an unrelated legacy element: a tiny 119├ù17 color-swatch legend with 7 tooltip-only boxes, not a button bar.
+- The 'job' Top finding compared `lbl_4c_Jobs` against a control buried in `pgfPrincipal.pgContas`, a nested tab explicitly marked out-of-scope for this simplified migration.
+
+Repositioning based on those three would have corrupted an already-correct layout, so per CLAUDE.md's ban on unnecessary visual-property changes and the project's known "audit tool cross-page name collision" failure mode, I left them as-is.

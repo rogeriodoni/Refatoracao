@@ -1,0 +1,29 @@
+=== TESTE FASE 4 Formsigmvitn ===
+COMPILE           : OK
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+--- GRADES ---
+grd_4c_Cupom      : .T. | cols=1 | src=[crTpmMvItnC] | C1=345 [crTpmMvItnC.Texto]
+grd_4c_Barras     : .T. | cols=4 | src=[TmpBarFin] | C1=120 [Código de Barra]
+grd_4c_Devolucao  : .T. | cols=3 | src=[TmpDevol] | CurrCtl=[TXT_4C__DEVOL] | Sparse=.F. | C2=180
+grd_4c_SubNiveis  : .T. | cols=3 | src=[TmpOperacao] | C1=80 [Pendências]
+grd_4c_Parcelas   : .T. | cols=4 | src=[xPar] | C3=78 [Vencimento]
+--- CURSORES (dentro da DataSession do form) ---
+crTpmMvItn        : .T. | FCOUNT=25
+crTpmMvItnC       : .T. | FCOUNT=4
+TmpOperacao       : .T. | FCOUNT=11
+TmpDevol          : .T. | FCOUNT=6
+TmpBarFin         : .T. | FCOUNT=8
+xPar              : .T. | FCOUNT=36
+--- BOTOES DAS GRADES ---
+cmd_4c_Inserir    : [F2-\<Selec] pic=.T.
+cmd_4c_Excluir    : [F4-\<Excluir] pic=.T.
+cmd_4c_OkBarra    : [F5-\<Barra] pic=.T.
+cmd_4c_BotPendent : [[F3]Pend.] pic=.T.
+--- METODOS PUBLICOS ---
+CarregarDados()   : retorno .T.
+  pos src Cupom   : [crTpmMvItnC] C1 W=345
+  pos src Parcelas: [xPar] C1 W=120
+AtualizarGrades() : OK | CaixaLivre.Visible=.T.
+Release()         : OK (Destroy fechou os cursores da sessao privada)
+=== FIM ===

@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## O que faltava
+
+O log anterior mostrava exit code 0, mas o gate da Fase 4 reprovava: para form OPERACIONAL **flat** o orquestrador exige `grd_4c_*` + `cmd_4c_/cmg_4c_` + **um m├®todo de carga** (`CarregarLista|CarregarDados|MontaGrade`). O form tinha as duas primeiras coisas (fase 3) e **nenhum m├®todo de carga** ÔÇö e, junto com ele, faltavam 4 das 5 grades do legado.
+
+## O que foi feito
+
+**`Formsigmvitn.prg`** (53 KB ÔåÆ 101 KB):
+- `ConfigurarGradesOperacao()` ÔÇö as 4 grades restantes com geometria/cores exatas do dump, os 2 containers que as hospedam (`cnt_4c__GrdBarra`, `cnt_4c__ChequepreTef`) e os 4 bot├Áes de a├º├úo colados a elas (F2ÔÇæSelec, F4ÔÇæExcluir, F5ÔÇæBarra, [F3]Pend.)
+- `CriarCursoresGrades()` ÔÇö os 6 cursores que no legado vinham prontos da datasession compartilhada do form pai; como o migrado usa `DataSession = 2`, nascem aqui (`SET NULL ON`, estruturas transcritas do uso real no dump)
+- `MontaGrade()` ÔÇö o bind das 5 grades transcrito do Init legado (linhas 7427ÔÇæ7518 e 16528ÔÇæ16532), na ordem `RecordSource ÔåÆ CurrentControl/Sparse ÔåÆ ControlSource ÔåÆ props ÔåÆ Width ÔåÆ Header`
+- `CarregarDados()` / `MontarLinhasCupom()` / `AtualizarGrades()` ÔÇö carga via BO em cursor tempor├írio + `ZAP`/`APPEND FROM DBF`, remontagem das linhas do cupom com a formata├º├úo do `AtuaCupom`, e `GO TOP` + `Refresh` em todas as grades
+- `Destroy()` agora fecha os cursores (sen├úo a pr├│xima abertura do Caixa reaproveitaria a venda anterior); 3 propriedades de contexto (`this_cEmps/cDopes/nNumes`) lidas do form pai no `Init`
+
+**`sigmvitnBO.prg`** ÔÇö `CarregarItensMovimento()` (com LEFT JOIN em `SigCdPro` para os campos que o legado buscava item a item) e `CarregarParametrosOperacao()`.
+
+**`tasks/task571/mapeamento.json`** ÔÇö as 5 grades estavam todas mapeadas para o mesmo `grd_4c_Dados`, o que faria duas delas virarem irm├ús hom├┤nimas. Corrigido no JSON, n├úo no `.prg`.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (form + BO) e **instancia├º├úo real** (`automation/test_fase4_sigmvitn.prg`, log em `tasks/task571/teste_fase4.txt`):
+
+```
+CREATEOBJECT      : OK (form instanciado)
+grd_4c_Cupom      : src=[crTpmMvItnC] C1=345
+grd_4c_Barras     : src=[TmpBarFin]   C1=120 [C├│digo de Barra]
+grd_4c_Devolucao  : src=[TmpDevol]    CurrCtl=[TXT_4C__DEVOL] Sparse=.F.
+grd_4c_SubNiveis  : src=[TmpOperacao] C1=80  [Pend├¬ncias]
+grd_4c_Parcelas   : src=[xPar]        C3=78  [Vencimento]
+cursores: 25/4/11/6/8/36 campos    bot├Áes: 4/4 com Picture existente
+CarregarDados()   : .T.  (larguras preservadas ap├│s o re-bind)
+```
+
+Gate da Fase 4 rodado com a l├│gica do pr├│prio orquestrador: **FLAT = True ÔåÆ VALIDADA (100,73 KB)**. Auditoria de propriedades inexistentes: limpa. Sem `TODO`/stub, sem `RETURN` dentro de `TRY`, sem `MESSAGEBOX` direto.
+
+Duas ressalvas factuais: (1) `VerificarFuncoesNaoDefinidas.ps1` acusa `MsgErro`/`MostrarErro` ÔÇö falso positivo, o script s├│ varre `functions.prg` e essas vivem em `messages.prg:75` e `FormErro.prg:198`; os apontamentos s├úo anteriores ├ás minhas mudan├ºas. (2) N├úo commitei nada ÔÇö os arquivos seguem untracked.

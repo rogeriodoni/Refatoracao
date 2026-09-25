@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Causa raiz das 4 diferen├ºas visuais em `FormSigMvSbn.prg`:
+
+1. **`Caption` do form** ÔÇö `InicializarForm()` sobrescrevia incondicionalmente o `Caption` est├ítico ("Subn├¡veis") pelo t├¡tulo din├ómico do legado ("SubN├¡veis - X ( N )"), inclusive durante a valida├º├úo de UI (onde `this_cDopes`/`this_nNumes` chegam vazios/zero por n├úo haver form pai nem conex├úo SQL). Corrigido com o mesmo guard j├í usado para `CarregarLista()` (`gb_4c_ValidandoUI`/`gb_4c_ModoTeste`), reaproveitado numa vari├ível ├║nica `loc_lModoValidacaoOuTeste`.
+
+2. **`cmd_4c_Sair.Themes`** e **`cmd_4c_BtnOficina.Themes`** ÔÇö estavam em `.T.` (desvio do Pattern #99 do CorretorAutomatico), mas esse pattern s├│ ├® necess├írio quando o bot├úo pode ficar `Enabled = .F.` (o ├¡cone some nesse caso com `Themes=.F.`). Nenhum dos dois bot├Áes deste form jamais recebe `.Enabled = .F.` ÔÇö Sair fica sempre habilitado, BtnOficina s├│ alterna `.Visible`. Revertido para `Themes = .F.`, fiel ao dump legado (removidos os `.DisabledPicture` que s├│ faziam sentido junto do desvio).
+
+A `cntSombra.Width` (1008) j├í estava correta, n├úo precisou de ajuste.
+
+Revalidei rodando `ValidarUIFidelity.prg` via VFP9 real: **0 erros, 0 diferen├ºas visuais, 273 avisos (n├úo-bloqueantes)** ÔÇö a etapa `07_validarUI` deve passar agora.

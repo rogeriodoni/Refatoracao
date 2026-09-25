@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `projeto\app\forms\operacionais\FormSigMvAte.prg` (970 linhas, 46,6 KB).
+
+## O que foi entregue
+
+**Os 4 eventos principais exigidos pela fase, todos com l├│gica real (sem stub):**
+
+| M├®todo | Origem no legado |
+|---|---|
+| `BtnIncluirClick` | `SIGMVATE.inserir.Click` ÔÇö j├í existia; ganhou o gate do `When` e passou a delegar o foco |
+| `BtnExcluirClick` | `SIGMVATE.excluir.Click` ÔÇö j├í existia; ganhou o gate do `When` |
+| `BtnAlterarClick` | **novo** ÔÇö entra em edi├º├úo na linha corrente |
+| `BtnVisualizarClick` | **novo** ÔÇö exibe os atendimentos como est├úo gravados (somente leitura) |
+
+O SCX legado **n├úo tem** bot├Áes Alterar/Visualizar: a altera├º├úo acontece digitando na grade, e quem autoriza ├® o `When` de inserir/excluir (`INLIST(pcEscolha,'INSERIR','ALTERAR')`) somado ao `When` da coluna Descri├º├úo (`RETURN EMPTY(localven.codvends)`). Em vez de inventar bot├Áes (violaria o PILAR 1), os dois m├®todos novos concentram essas regras: `BtnAlterarClick` valida a linha, aplica o gate e p├Áe o foco na c├®lula que o legado deixa edit├ível (C├│digo quando vazio, Atendimentos quando preenchido) ÔÇö e ├® chamado por `BtnIncluirClick`, substituindo o `SetFocus` duplicado. `BtnVisualizarClick` recarrega do banco via BO (a mesma consulta do `SCAN` do `Init` legado), com `MsgConfirma` quando h├í edi├º├Áes pendentes. Dois helpers d├úo suporte: `PodeEditarDocumento()` e `LinhaCorrenteValida()`.
+
+## Defeito pr├®-existente encontrado e corrigido
+
+O teste de runtime acusou **`Property DYNAMICREADONLY is not found`** na linha 338 de `ConfigurarPaginaLista` ÔÇö `Column` n├úo tem `DynamicReadOnly` em VFP9 (medido: a Column s├│ tem `DynamicAlignment/BackColor/CurrentControl/Font*/ForeColor/InputMask`). Isso ├® a regra #33 do CLAUDE.md. O erro era engolido pelo `CATCH`, ent├úo o form "abria", mas **todo o resto do m├®todo era abortado**: `RecordSource`, os 3 `ControlSource`, headers, larguras, os `BINDEVENT` de KeyPress e os bot├Áes `cmd_4c_Incluir`/`cmd_4c_Excluir` nunca eram criados ÔÇö ou seja, os eventos desta fase n├úo teriam onde ser acionados. Eram 3 sites (2 em `ConfigurarPaginaLista`, 1 em `CarregarLista`).
+
+Troquei pelo gate por linha em `AfterRowColChange` (`GradeAfterRowColChange` + `AjustarColunaDescricao`) ÔÇö que ├® o que o pr├│prio legado sugere, j├í que o `Init` dele termina chamando `ThisForm.Grade.AfterRowColChange()`.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (sem `.err`) e instancia├º├úo real no VFP9 (`gb_4c_ModoTeste`/`gb_4c_ValidandoUI`):
+
+- `CREATEOBJECT` ÔåÆ `VARTYPE=O`; grade com `RecordSource`/`ControlSource`/headers/larguras corretos; `cmd_4c_Incluir` e `cmd_4c_Excluir` existem.
+- `BtnIncluirClick` cria a linha (RECCOUNT=1) ÔåÆ `BtnAlterarClick()` = `.T.` ÔåÆ `BtnExcluirClick` remove.
+- Gate da Descri├º├úo: c├│digo vazio ÔåÆ `Column2.ReadOnly = .F.`; preenchido ÔåÆ `.T.`
+- Modo CONSULTAR: `PodeEditarDocumento()` = `.F.`, bot├úo Incluir desabilitado, `BtnAlterarClick()` recusa com aviso.
+
+Validadores da fase: 4 eventos presentes, 0 problemas de completude. Arquivos de teste tempor├írios e `.fxp` removidos.
+
+Uma ressalva honesta: `BtnVisualizarClick` n├úo tem ponto de entrada na UI (n├úo criei bot├úo, pelo PILAR 1) ÔÇö fica como contrato program├ítico do form, cham├ível pelo harness e pelo documento pai. Se preferir que ele seja acion├ível pelo usu├írio, o caminho seria uma tecla na grade, mas isso j├í seria acr├®scimo de UX que o legado n├úo tem.

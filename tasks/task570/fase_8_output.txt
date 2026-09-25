@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## FASE 8/8 ÔÇö `FormSigMvExp.prg` j├í est├í completo; **n├úo alterei o arquivo**, e provei isso medindo
+
+### Por que nada a acrescentar
+
+Os m├®todos que a Fase 8 pede (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`/`BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`) s├úo conven├º├úo de **CRUD**. A ├írvore inteira do `SIGMVEXP.SCX` tem **3 objetos**: `dataenvironment` + `form` + **um** `commandbutton`. Zero campo, zero grade, zero CRUD ÔÇö `FormParaBO`/`BOParaForm` mapeiam CAMPOS, `CarregarLista` popula a LISTA, `HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo` operam campos e modos que n├úo existem. Ger├í-los seria inventar UI (PILAR 1) ou criar stubs vazios (proibido).
+
+### Verifica├º├úo por medi├º├úo (n├úo por afirma├º├úo) ÔÇö VFP9, agora
+
+```
+A1/A2 compilacao: BO.fxp=.T.  FORM.fxp=.T.      A3/A4 .err: NENHUM  -> compila limpo
+C1 TIPO=E  337x147  BOtipo=[E] NUME=0  EMP=[]     botao=.T. L/T/W/H=48/34/241/73
+C2 TIPO=C  337x147  BOtipo=[C] NUME=42 EMP=[001]  cap=[Aguarde Processando Dados] vis=.T.
+C3 TIPO=A  337x147  BOtipo=[A] NUME=42 EMP=[001]
+D0 flag=.F.  ->  D1 apos 5 Activate flag=.T.      (trava anti-loop da Fase 7 segura)
+```
+
+Geometria id├¬ntica ao SCX (337x147; bot├úo 48/34/241/73), e o `If InList(pTipos,'C','A')` do legado confere: em `E` o Nume/Emp ficam no default; em `C`/`A` recebem os valores. Ambos os arquivos s├úo **ASCII puro** (0 bytes >127), sem TODO/stub. `.fxp` gerados pelo harness apagados.
+
+Integra├º├úo conferida: `config.prg` varre `forms\operacionais\Form*.prg` (autoload OK). **Menu: nada a adicionar** ÔÇö este form exige 7 par├ómetros posicionais e ├® chamado por outras telas, nunca pelo menu; criar um bar em `popMovimentos` obrigaria a inventar os argumentos. `fConfigGeral` do `Load` legado **n├úo** deve ser chamada: o wrapper (`utils\fconfiggeral.prg`) ├® no-op declarado e diz explicitamente "em codigo NOSSO nunca se chama".
+
+### Por que esta invoca├º├úo existiu ÔÇö e o que ainda vai atrapalhar
+
+Dois mecanismos distintos, n├úo um:
+
+**1. Detector NO-OP (Erro178).** A tentativa anterior (sonnet, 19:29ÔåÆ19:33) n├úo tocou no arquivo, exit 0, hash igual ÔåÆ `"Forcando retry (o modelo respondeu sem executar a fase)"` ÔåÆ re-invoca├º├úo com opus = eu. Para form despachante isso dispara **sempre** numa fase que legitimamente n├úo tem o que acrescentar. Depois do retry o c├│digo s├│ checa `Test-Path`, ent├úo este bloqueio se resolve sozinho.
+
+**2. Gate em mem├│ria DESATUALIZADO ÔÇö este ainda vai reprovar.** Medi o `case 8` **do disco** contra os arquivos atuais:
+
+```
+temLista=False  temCampos=False  semCrud=True  temSuperficieDespachante=True
+legadoDespachanteF8 = True   -> metodosFaltantes zerado -> VALIDA
+```
+
+Mas o `RunLoop.ps1` vivo ├® **PID 17088, iniciado 17:51:28**, e o orquestrador foi gravado **18:56:47** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo o loop valida com a c├│pia de 17:51, anterior ao ramo despachante (`legadoDespachanteF8` n├úo existe nem no ├║ltimo commit). Ele vai cobrar os 4 nomes CRUD incondicionalmente, jogar na retry `fase_8_prompt_force.md`, e a├¡ passar s├│ por `Test-Path`. **A corre├º├úo do gate s├│ vale relan├ºando o loop** ÔÇö ├® a mesma armadilha que j├í custou um ciclo nas Fases 4, 5 e 6 desta task. N├úo matei o processo: ├® pipeline noturno seu, a decis├úo ├® sua.
+
+### Fora do escopo desta task (decis├úo sua)
+
+**8 call sites em 6 outros forms** v├úo falhar em runtime mesmo com este form correto. Confirmei que **n├úo existe `.scx`** em `projeto\` (s├│ um `xxxx.scx` sem rela├º├úo), ent├úo `DO FORM` quebra:
+
+- `DO FORM SigMvExp` / `DO FORM FormSigMvExp` ÔÇö `FormCNF:2655`, `FormSigPrCtr:2374,2387`, `Formsigopind:3946`, `FormSIGPRNSE:927,1179`, `FormSigReCsp:640`. Correto: `CREATEOBJECT` + `Show()`.
+- `FormSigPrHpr:936` ÔÇö passa `THIS` (objeto) onde vai o `Dopes`. Com o fix da Fase 7 a tela **abre**, mas `this_cTipo` fica vazio e o `DO CASE` n├úo despacha nada, **em sil├¬ncio**.
+
+N├úo toquei neles: s├úo migra├º├Áes de outras tasks, com gates pr├│prios. Posso corrigir num passe separado se quiser.

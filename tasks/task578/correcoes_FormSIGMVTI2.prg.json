@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGMVTI2.prg",
+    "timestamp":  "2026-09-25T14:29:20",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-191-FORECOLOR-BRANCO-INVISIVEL",
+                          "Linha":  580,
+                          "Original":  "3 controle(s) com .ForeColor = RGB(255,255,255): lbl_4c_Label2@580, lbl_4c_Label3@615, lbl_4c_Label1@649",
+                          "Corrigido":  "(REVISAR MANUAL - canonico RGB(90, 90, 90))",
+                          "Descricao":  "Pattern #191: label/checkbox/optionbutton de DADOS com ForeColor branco criado direto na Page (ou em container transparente/claro). As Pages recebem .Picture = fundo_cad_1003.jpg (textura CLARA) POR CIMA do .BackColor = RGB(100,100,100), entao o texto branco fica INVISIVEL - o usuario clica Incluir, cai na aba Dados e ve as caixas de texto sem legenda. Cor certa: se o objeto do SCX legado NAO declara ForeColor (classe say do Framework), usar RGB(90, 90, 90); se declara, copiar o valor EXATO (36,84,155 nos titulos de secao em Verdana, 255,0,0 nas notas de rodape). Ao procurar o objeto no dump do legado, conferir os DOIS nomes: Say\u003cN\u003e do legado costuma virar lbl_4c_Label\u003cN\u003e no migrado. Branco continua correto em lbl_4c_Titulo/lbl_4c_Sombra do cabecalho, em label dentro de container opaco escuro (BackStyle=1 + BackColor RGB(100,100,100)/RGB(90,90,90)) e nas propriedades HighlightForeColor/SelectedForeColor/SelectedItemForeColor. Origem: Erro153 (2026-09-09, FormARV; sweep de 217 sites em 23 forms)."
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

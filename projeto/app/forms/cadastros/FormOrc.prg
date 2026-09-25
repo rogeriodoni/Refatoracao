@@ -902,6 +902,10 @@ DEFINE CLASS FormOrc AS FormBase
                     THIS.this_cModoAtual = "LISTA"
                     THIS.CarregarLista()
                 ENDIF
+
+                *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+                THIS.AjustarBotoesPorModo()
+
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loException

@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 11,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVTIT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTIT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTIT",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "LParameters pEDN, pOpe\n\nThisForm.Empresa = Alltrim(Substr(pEDN, 01, 03))\nThisForm.Operacao = Alltrim(Substr(pEDN, 04, 20))\nThisForm.Numero = Alltrim(Substr(pEDN, 24, 06))\n\nWith Thisform\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Caption = [Títulos Gerados - Movimentação : ] + ;\n\t\t\t\t   ThisForm.Empresa + [ / ] + ;\n\t\t\t\t   ThisForm.Operacao + [ / ] + ;\n\t\t\t\t   ThisForm.Numero\n\t\t\n\t\t.cntSombra.lblSombra.Caption = .Caption\n\t\t.cntSombra.lblTitulo.Caption = .Capti... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Empresa = Alltrim,Operacao = Alltrim,Numero = Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.getDGrupos.Value = LocalTits.DGrupos\nThisForm.getDContas.Value = LocalTits.DContas\nThisForm.getDGrupos.Refresh\nThisForm.getDContas.Refresh ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.grdTitulos.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.cmdSair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.getDGrupos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.getDContas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTIT.iDoc",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If !Empty(ThisForm.Empresa) And !Empty(LocalTits.Dopcs) And !Empty(LocalTits.titulos)\n\tDo Form SigReIdt With Thisform,ThisForm.Empresa, LocalTits.Dopcs, LocalTits.titulos, LocalTits.Numcs, []\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Empresa) And !Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

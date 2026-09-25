@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Structure balances correctly. Phase 3 delivered `FormSIGMVDOC.prg` with:
+
+- `DEFINE CLASS FormSIGMVDOC AS FormBase` with dimensions matching the legacy SCX exactly (Width=800, Height=130) and the `this_oRelatorio`/`this_cMensagemErro` properties.
+- `Init()` delegating to `DODEFAULT()`.
+- `InicializarForm()` instantiating `SIGMVDOCBO`, setting Caption/Picture, and wiring the header + button group + page-frame containers.
+- `ConfigurarCabecalho()` ÔÇö full cnt_4c_Cabecalho with lbl_4c_Sombra/lbl_4c_Titulo (faixa cinza canonica).
+- `ConfigurarBotoes()` ÔÇö cmg_4c_Botoes CommandGroup with the 4 canonical buttons (Visualizar/Imprimir/Arquivos Email/Encerrar), geometry taken straight from the legacy `btnReport` overrides (Left=495/Width=310, buttons Width=75 inc. 75).
+- `ConfigurarPageFrame()` ÔÇö single-page `pgf_4c_Paginas` ("Filtros"), left empty for the next phase to populate with the Nota Inicial/Final textboxes.
+- `Destroy()` releasing the BO reference correctly (no `.Release()`, since `RelatorioBase` inherits from Custom).
+
+Per the phase scope, no grid/buttons-CRUD, no filter textboxes, and no event bindings were added yet ÔÇö those are reserved for phases 4ÔÇô8. File is syntactically balanced (WITH/ENDWITH, TRY/ENDTRY, IF/ENDIF, PROCEDURE/ENDPROC all match).

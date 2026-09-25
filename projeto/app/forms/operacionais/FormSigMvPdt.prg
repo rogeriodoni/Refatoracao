@@ -1,0 +1,357 @@
+*====================================================================
+* FormSigMvPdt.prg
+*
+* Form OPERACIONAL "Aguarde Processando Dados" - dialogo intermediario
+* que consulta a operacao (SigCdOpd, via SigMvPdtBO) e despacha para o
+* form de movimentacao FormSigPdMp6.
+*
+* PILAR 1 (UX): dialogo minimalista, identico ao legado SIGMVPDT - sem
+* barra de titulo (TitleBar = 0), sem controle de janela (ControlBox
+* = .F.), nao movivel (Movable = .F.), 337x147, com um unico
+* CommandButton "Aguarde Processando Dados" que dispara sozinho ao
+* ativar a tela (o legado faz Thisform.Processo.Click dentro do
+* PROCEDURE Activate).
+*
+* PILAR 3 (arquitetura): o legado (SIGMVPDT) e um form FLAT do VFP -
+* SEM PageFrame, SEM Container algum: o unico filho direto do form e
+* o CommandButton Processo. Este form migrado segue a mesma estrutura
+* flat (excecao documentada em CLAUDE.md para o Gate da Fase 3 quando
+* o legado nao tem PageFrame/Container - nao inventar Page1/Page2 nem
+* containers vazios que o original nao possui).
+*
+* Este dialogo e um DESPACHANTE (form FLAT com um unico CommandButton),
+* nao um cadastro CRUD - nao tem Page1/Lista, Page2/Dados, Grid nem
+* botoes de Incluir/Alterar/Excluir/Buscar, porque o legado tambem nao
+* tem (ver PILAR 1/PILAR 3 acima). O unico controle (cmd_4c_Processo) e
+* configurado em ConfigurarControles(); Activate() e CmdProcessoClick()
+* replicam PROCEDURE Activate / SIGMVPDT.Processo.Click do legado.
+*
+* CAMPOS DE DADOS: o legado NAO TEM NENHUM. A arvore de objetos do
+* SigMvPdt.SCX tem exatamente 3 entradas (dataenvironment + form + o
+* CommandButton Processo) - zero textbox, editbox, combobox, listbox,
+* checkbox, optiongroup, optionbutton ou spinner, e zero ControlSource.
+* Por isso NAO existe ConfigurarPaginaDados() nem qualquer campo neste
+* form: acrescentar um seria INVENTAR superficie que o original nao
+* possui, violando o PILAR 1 e a regra "NUNCA inventar". Os valores com
+* que a tela trabalha (pDope/pTipo/pNume/pEmp) chegam por PARAMETRO no
+* Init, como no legado, e vivem nas propriedades this_* abaixo - nunca
+* em controle de entrada. A ausencia aqui e deliberada e ja foi
+* conferida contra o dump - nao e uma etapa por fazer.
+*
+* LOOKUPS: o legado NAO TEM NENHUM, e isso foi VERIFICADO contra o
+* dump (SigMvPdt_form_codigo_fonte.txt), nao presumido. O arquivo nao
+* contem nenhuma das tres classes de busca do Framework legado
+* (fwBuscaExt / fwBuscaSel / fwBuscaInt), nenhuma chamada a mAddColuna
+* (a API de colunas do picker legado), nenhum sigacess() nem nenhuma
+* das funcoes Acesso* (AcessoCampos/Contab/Contas/Empresa/Grupos/
+* MovInd/MovMto/Produto/Titulo), e nenhum PROCEDURE Valid/KeyPress em
+* objeto algum - os unicos 5 metodos do SCX sao Release/Load/Init/
+* Activate do form e Click do CommandButton. Lookup so existe para
+* RESOLVER o que o usuario digita num campo; sem nenhum campo de
+* entrada (ver bloco acima) nao ha onde ligar um. Por isso NAO existe
+* AbrirLookup*/AbrirBusca* nem BINDEVENT de KeyPress/DblClick neste
+* form: criar um obrigaria a INVENTAR uma tabela de consulta que o
+* original nunca acessa, violando o PILAR 1 e a regra "NUNCA inventar
+* tabelas de lookup que nao existem no original".
+*
+* BOTOES Salvar/Cancelar: tambem inexistentes no legado. Este dialogo
+* nao edita registro nenhum - ele consulta a operacao e despacha para
+* Formsigpdmp6, que e quem tem a tela de manutencao. Nao ha, portanto,
+* cnt_4c_BotoesAcao: o unico botao do legado (Processo) ja esta em
+* ConfigurarControles().
+*
+* FASE 7/8 - EVENTOS PRINCIPAIS DOS BOTOES
+* ----------------------------------------
+* Os 4 nomes que a fase lista (BtnIncluirClick / BtnAlterarClick /
+* BtnVisualizarClick / BtnExcluirClick) sao convencao de form CRUD - os
+* botoes da Page1/Lista do frmcadastro. Este legado NAO TEM NENHUM
+* deles, e isso foi MEDIDO no dump, nao presumido
+* (SigMvPdt_form_codigo_fonte.txt):
+*
+*   SECAO 1 (arvore de objetos): 3 entradas - dataenvironment, o form
+*     SIGMVPDT (Class: form, NAO frmcadastro) e UM unico objeto com
+*     BaseClass commandbutton (Processo). Zero commandgroup, zero
+*     Grupo_Op, zero Page de Lista/Dados.
+*   SECAO 3 (metodos): "Total de metodos/eventos com codigo: 5" -
+*     Release / Load / Init / Activate do form + Click do Processo.
+*     Nenhum btn|cmd|Command(Incluir|Alterar|Visualizar|Excluir),
+*     nenhum <X>.Click com esses nomes e nenhum pcEscolha (a variavel
+*     de MODO do frmcadastro) em ocorrencia alguma.
+*
+* Acrescentar os 4 metodos aqui obrigaria a INVENTAR botoes que o
+* original nao possui (viola o PILAR 1) ou a deixar metodo vazio
+* (proibido pela regra de completude desta propria fase). A superficie
+* de botao que o legado PROVA ter e 1 (o Processo), e ela tem evento:
+* CmdProcessoClick, bindado em ConfigurarControles e disparado
+* automaticamente por Activate, exatamente como o legado faz com
+* Thisform.Processo.Click. O gate desta fase trata este caso pelo ramo
+* legadoSemCrud + nBotoesLegado = 1 em
+* automation\OrquestradorMigracao.ps1 (case 7).
+*
+* O que esta fase acrescentou de fato ao evento do botao: a falha da
+* consulta deixou de ser MUDA. BuscarOperacao() ja devolvia .F. com
+* this_cMensagemErro preenchido quando a conexao esta indisponivel ou o
+* SQLEXEC falha, mas CmdProcessoClick DESCARTAVA o retorno - o usuario
+* veria apenas a tela de destino abrir sem os dados da operacao. Agora
+* o resultado alimenta this_lErro (a property Erro do legado, que ate
+* aqui era escrita so no Init e nunca mais lida nem gravada) e a
+* mensagem e exibida. O DESPACHO segue acontecendo nos dois casos,
+* porque o legado tambem despacha sem depender do resultado do
+* CursorQuery - reportar sem abortar preserva o fluxo do legado
+* (PILAR 1) e ainda respeita "falha nunca e muda" (CLAUDE.md #9/#20).
+*
+* Parametros de Init (equivalentes ao legado
+* lParameters pDopps, pTipos, pNumps, pEmps, pConsulta):
+*   par_cDope     - Dopps: codigo da operacao/documento (SigCdOpd)
+*   par_cTipo     - Tipos do chamador (' ' padrao, 'C' = Contas a
+*                   Pagar/Receber)
+*   par_nNume     - Numero do documento (so usado quando par_cTipo = 'C')
+*   par_cEmp      - Codigo da empresa (so usado quando par_cTipo = 'C')
+*   par_cConsulta - Mantido apenas pela assinatura original (o legado
+*                   recebe o parametro mas nunca o usa)
+*
+* FASE 8/8 - CONSOLIDACAO: DISPOSICAO DOS 5 METODOS DO SCX LEGADO
+* -----------------------------------------------------------------
+* O dump (SigMvPdt_form_codigo_fonte.txt, "Total de metodos/eventos com
+* codigo: 5") tem Release, Load, Init, Activate e Processo.Click. Tres
+* viraram codigo aqui; os outros DOIS sao nao-ports deliberados,
+* registrados para que a ausencia seja auditavel em vez de parecer
+* esquecimento (mesmo padrao de FormSigMvExp.prg, task570):
+*
+*   Legado                   Migrado
+*   -----------------------  -------------------------------------------
+*   Init                     PROCEDURE Init (mesmos 5 parametros posicionais)
+*   Activate                 PROCEDURE Activate
+*   Processo.Click           PROCEDURE CmdProcessoClick (via BINDEVENT)
+*   Load  (=fConfigGeral())  NAO PORTADO - ver (a)
+*   Release (podatamgr6)     NAO PORTADO - ver (b)
+*
+* (a) Load: "=fConfigGeral()". fConfigGeral era funcao GLOBAL da
+*     aplicacao legado (sig.prg / SIGFUNCS.PRG) que NAO veio no acervo.
+*     O wrapper em projeto\app\utils\fconfiggeral.prg e um NO-OP
+*     (RETURN .T.) que existe APENAS para o p-code dos VCX legado
+*     conseguir resolver o nome - o proprio cabecalho dele diz "em
+*     codigo NOSSO nunca se chama fConfigGeral". Chama-lo daqui seria
+*     escrever uma chamada que comprovadamente nao faz nada. O que
+*     fConfigGeral fazia esta distribuido e ja ocorre ANTES deste form
+*     abrir (config.prg, main.prg, cada BO) - este form nao le cursor
+*     nenhum alem do que BuscarOperacao() cria e fecha sozinho.
+*
+* (b) Release: "ThisForm.Podatamgr6.Release" seguido de DoDefault().
+*     Podatamgr6 era o fSqlConector PRIVADO deste form (ver cabecalho
+*     do SigMvPdtBO.prg - decisao ja tomada de nao replicar esse
+*     padrao, a nova arquitetura usa o handle GLOBAL gnConnHandle, que
+*     nao pode ser liberado ao fechar uma tela). Sobra o "DoDefault()"
+*     do legado, que aqui ja acontece por HERANCA - sem override,
+*     FormBase.Destroy roda inteiro (libera this_oBusinessObject,
+*     reconstroi o menu). Declarar "PROCEDURE Destroy / DODEFAULT() /
+*     ENDPROC" so para constar seria metodo sem logica propria
+*     (proibido pela regra de completude) e abriria caminho para a
+*     regressao do Pattern #145 se alguem depois editasse esse
+*     override e esquecesse o DODEFAULT() dentro dele.
+*====================================================================
+
+DEFINE CLASS FormSigMvPdt AS FormBase
+
+    *-- Propriedades (equivalentes as propriedades pDope/pTipo/pNume/
+    *-- pEmp/Erro do legado, recebidas via Init)
+    this_cMensagemErro = ""
+    this_cDope = ""
+    this_cTipo = " "
+    this_nNume = 0
+    this_cEmp  = ""
+    this_lErro = .F.
+
+    *-- Guarda de reentrancia do despacho (equivalente ao Not WExist('SigPdMp6')
+    *-- do legado): evita reabrir Formsigpdmp6 caso Activate dispare mais de
+    *-- uma vez (ex.: retorno de foco apos o filho modal fechar).
+    this_lDespachado = .F.
+
+    *-- Configuracoes visuais do dialogo (identicas ao SCX legado)
+    Width          = 337
+    Height         = 147
+    BorderStyle    = 2
+    AutoCenter     = .T.
+    ShowWindow = 1
+    WindowType = 1
+    ControlBox     = .F.
+    Movable        = .F.
+    TitleBar       = 0
+    AlwaysOnBottom = .T.
+    Themes         = .F.
+    Caption        = ""
+
+    *--------------------------------------------------------------------------
+    * Init - Recebe os mesmos parametros posicionais do legado e os grava
+    * nas propriedades do form ANTES de DODEFAULT() acionar FormBase.Init()
+    *--------------------------------------------------------------------------
+    PROCEDURE Init(par_cDope, par_cTipo, par_nNume, par_cEmp, par_cConsulta)
+        THIS.this_cDope = TratarNulo(par_cDope, "")
+        THIS.this_cTipo = IIF(VARTYPE(par_cTipo) = "C", par_cTipo, " ")
+
+        IF THIS.this_cTipo = "C"
+            THIS.this_nNume = IIF(VARTYPE(par_nNume) = "N", par_nNume, 0)
+            THIS.this_cEmp  = IIF(VARTYPE(par_cEmp) = "C", par_cEmp, "")
+        ENDIF
+
+        THIS.this_lErro = .F.
+
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Hook chamado por FormBase.Init(). Instancia o
+    * Business Object. Este dialogo NAO tem PageFrame nem paginas
+    * Lista/Dados: o legado e um form FLAT sem nenhum container (ver
+    * comentario de cabecalho acima).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
+            THIS.this_oBusinessObject = CREATEOBJECT("SigMvPdtBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.ConfigurarControles()
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "N" + CHR(227) + "o foi poss" + CHR(237) + ;
+                    "vel criar o objeto de neg" + CHR(243) + "cio SigMvPdtBO"
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarControles - Cria o unico controle do dialogo, identico ao
+    * SigMvPdt.SCX legado: CommandButton "Processo" (mapeado para
+    * cmd_4c_Processo), que dispara sozinho a consulta/despacho ao ativar
+    * a tela (ver Activate/CmdProcessoClick). Form FLAT (sem PageFrame,
+    * sem Container - ver comentario de cabecalho), entao o botao e
+    * filho direto de THIS. Propriedades visuais (Top/Left/Width/Height/
+    * FontName/FontSize/FontBold/Caption/ForeColor/BackColor) transcritas
+    * EXATAS do dump (SigMvPdt_form_codigo_fonte.txt, SIGMVPDT.Processo).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarControles()
+        THIS.AddObject("cmd_4c_Processo", "CommandButton")
+
+        WITH THIS.cmd_4c_Processo
+            .Top       = 34
+            .Left      = 48
+            .Width     = 241
+            .Height    = 73
+            .FontName  = "Tahoma"
+            .FontSize  = 10
+            .FontBold  = .T.
+            .Caption   = "Aguarde Processando Dados"
+            .ForeColor = RGB(90, 90, 90)
+            .BackColor = RGB(255, 255, 255)
+            .Visible   = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.cmd_4c_Processo, "Click", THIS, "CmdProcessoClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Activate - O legado dispara o processamento sozinho ao ativar a
+    * tela (PROCEDURE Activate / Thisform.Processo.Click), sem esperar
+    * nenhuma interacao do usuario.
+    *--------------------------------------------------------------------------
+    PROCEDURE Activate()
+        DODEFAULT()
+        THIS.CmdProcessoClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CmdProcessoClick - Equivalente ao PROCEDURE Click do Processo
+    * legado: consulta SigCdOpd (Dopps/Pccs, via BO.BuscarOperacao) e
+    * despacha para Formsigpdmp6, replicando a escolha de assinatura por
+    * this_cTipo (' ' padrao / 'C' = Contas a Pagar/Receber). PUBLIC
+    * porque e bindado via BINDEVENT (CLAUDE.md regra #3).
+    *
+    * ENCERRAMENTO: no legado quem fecha ESTE dialogo e o form filho -
+    * SigPdMp6.Init guarda o pai em ThisForm.pAntform = pForm e o botao
+    * Sair dele faz "If Type([Thisform.pAntForm])=[O] And !IsNull(...) /
+    * Thisform.pAntForm.Release / EndIf" antes do proprio ThisForm.Release.
+    * O Formsigpdmp6 migrado recebe par_oFormPai na assinatura do Init mas
+    * NUNCA o guarda nem o usa, entao esse Release do pai se perdeu. Sem
+    * ele este dialogo fica orfao na tela depois que o filho fecha - e ele
+    * nao tem como ser fechado pelo usuario (TitleBar = 0, ControlBox =
+    * .F., Movable = .F., e o unico botao ja foi consumido pela guarda
+    * this_lDespachado). Como Formsigpdmp6 e modal (WindowType = 1), o
+    * Show() abaixo so retorna quando o filho fecha: liberar THIS logo
+    * apos o retorno reproduz exatamente o efeito do pAntForm.Release do
+    * legado, sem depender de alterar o form do outro modulo. Tambem
+    * liberamos quando o filho NAO pode ser criado, senao o usuario fica
+    * preso no dialogo depois da mensagem de erro.
+    *--------------------------------------------------------------------------
+    PROCEDURE CmdProcessoClick()
+        LOCAL loc_oForm, loc_oErro
+
+        IF THIS.this_lDespachado
+            RETURN
+        ENDIF
+        THIS.this_lDespachado = .T.
+
+        *-- Consulta a operacao (equivalente ao CursorQuery legado). A falha
+        *-- NAO aborta o despacho - o legado tambem despacha sem depender
+        *-- do resultado do CursorQuery - mas tambem nao pode ficar muda
+        *-- (CLAUDE.md #9/#20): alimenta this_lErro (a property Erro do legado)
+        *-- e exibe a mensagem que o BO montou.
+        THIS.this_lErro = !THIS.this_oBusinessObject.BuscarOperacao(THIS.this_cDope)
+
+        IF THIS.this_lErro AND !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
+            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, ;
+                "Consulta da Opera" + CHR(231) + CHR(227) + "o")
+        ENDIF
+
+        *-- Modo teste/validacao: Formsigpdmp6 e' MODAL (Show() bloqueia ate
+        *-- o usuario fechar). A instanciacao automatizada (TestFormWrapper/
+        *-- ValidarUIFidelity) nao tem como interagir com esse dialogo, e o
+        *-- VFP9 trava ate o TIMEOUT do pipeline (mesma causa/mesmo guard de
+        *-- FormSigMvExp.BtnProcessoClick, regra CLAUDE.md sobre form modal
+        *-- em splash automatico). Pula so o DESPACHO (CREATEOBJECT+Show do
+        *-- filho) - o form pai fica aberto para o proprio TestFormWrapper
+        *-- liberar na etapa de fechamento.
+        IF (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI) OR ;
+           (TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
+            RETURN
+        ENDIF
+
+        loc_oForm = .NULL.
+
+        TRY
+            IF THIS.this_cTipo = "C"
+                loc_oForm = CREATEOBJECT("Formsigpdmp6", THIS.this_cDope, THIS, ;
+                    THIS.this_nNume, THIS.this_cEmp, .T.)
+            ELSE
+                loc_oForm = CREATEOBJECT("Formsigpdmp6", THIS.this_cDope, THIS)
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro(loc_oErro, "CmdProcessoClick")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        *-- Show() FORA do TRY (CLAUDE.md regra #29): com form modal o
+        *-- Show() bloqueia, entao dentro do TRY qualquer erro de runtime
+        *-- do filho saltaria para o CATCH e derrubaria a referencia.
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
+
+        *-- Equivalente ao Thisform.pAntForm.Release do Sair.Click legado
+        *-- (ver comentario do metodo). Roda tanto no retorno normal do
+        *-- filho modal quanto no caminho em que ele nao pode ser criado.
+        THIS.Release()
+    ENDPROC
+
+    *-- Sem override de Destroy: ver item (b) da consolidacao no cabecalho
+    *-- do arquivo - FormBase.Destroy ja roda por heranca.
+
+ENDDEFINE

@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. O resultado n├úo ├® o que o prompt da fase pedia literalmente, e a raz├úo importa:
+
+**Os 4 eventos CRUD pedidos (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) n├úo existem neste legado.** Medi no dump antes de decidir: SIGMVSBN herda de `form` (n├úo de `frmcadastro`), n├úo tem `Grupo_Op`, n├úo declara `pcEscolha`, e tem exatamente **dois** CommandButton ÔÇö `Sair` e `BtnOficina`. Cri├í-los seria inventar bot├Áes que o original n├úo tem (viola o PILAR 1) ou escrever 4 m├®todos vazios (proibido pela regra de completude).
+
+**Os eventos de bot├úo que o legado realmente tem j├í estavam implementados e fi├®is** (entregues nas fases 5/6):
+
+| Legado | Migrado | Conferido |
+|---|---|---|
+| `Sair.Click` | `BtnSairClick` | reabilita o pai + `Release()` ÔÇö transcri├º├úo literal |
+| `BtnOficina.Click` | `BtnOficinaClick` ÔåÆ `SigMvSbnBO.ObterNumeroOS` | c├ílculo do n┬║ da OS (`NEmps`+`nSeqs`+`PADL(Numes,6,'0')`) transcrito linha a linha, inclusive a leitura de `Emps/Dopes/Numes` do **cursor de origem** como o legado faz |
+
+O que **de fato** entreguei nesta fase: o cabe├ºalho do arquivo ainda afirmava que os eventos "entram na fase 7-8" e que a grade de itens seguia sem bind ÔÇö ambos falsos, o c├│digo j├í os tinha. Substitu├¡ por um invent├írio de consolida├º├úo dos **17 m├®todos** do SCX, no mesmo estilo das tasks irm├ús (`FormSigMvExp` task570, `FormSigMvMen` task573), mapeando cada um ao destino e registrando o ├║nico n├úo-port deliberado:
+
+- **`Load (=fConfigGeral())` ÔÇö N├âO PORTADO.** `projeto\app\utils\fconfiggeral.prg` ├® um wrapper NO-OP que existe s├│ para o p-code dos VCX; cham├í-lo daqui seria uma chamada comprovadamente inerte sugerindo inicializa├º├úo faltante.
+- **As 10 ocorr├¬ncias de `When / Return .f.`** viraram `.ReadOnly = .T.` nos controles. Registrei por que traduzi-las em handlers seria pior *e n├úo funcionaria*: `BINDEVENT` descarta o retorno do delegate (CLAUDE.md #3), ent├úo um `RETURN .F.` ali n├úo bloquearia nada ÔÇö daria apar├¬ncia de fidelidade com efeito zero.
+
+Verifica├º├Áes executadas (n├úo assumidas):
+- **Compila├º├úo**: apaguei os `.FXP` antes, recompilei form e BO ÔÇö `ERROS: nenhum`, `.FXP` regerado ├ás 12:02:52 (a armadilha do `.FXP` velho rodando c├│digo antigo).
+- **Gate da Fase 7**: repliquei a l├│gica real do `OrquestradorMigracao.ps1` ÔåÆ `legadoSemCrud = True`, `nBotoesLegado = 2`, `nHandlers = 2`, m├¡nimo 2 ÔåÆ **PASSA** pela exce├º├úo legado-sem-CRUD j├í existente. N├úo foi preciso mexer no gate desta vez.
+
+Um ponto para voc├¬ decidir: `AbrirFormOficina` e `AbrirFormZoomImagem` chamam `FormSigRePhi` e `FormSigOpZom`, que **ainda n├úo existem no acervo** (fora do escopo desta task). Hoje avisam o usu├írio em vez de estourar; quando esses m├│dulos forem migrados passam a funcionar sem altera├º├úo aqui.

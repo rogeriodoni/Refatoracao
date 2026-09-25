@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fRetDopMenu", "Form SigMvCab With Padr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVEXP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr6.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVEXP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVEXP",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "Lparameters pDopes, pTipos, pNumes, pEmps, pConsulta, pCaixa, pMacro\n\nThisForm.poDataMgr6 = CreateObject('fSqlConector', 'SigMvExp')\n\nThisForm.Erro = .f.\n\nThisForm.pCaixa = Iif(Type('pCaixa')=[N],pCaixa,0)\nThisForm.GrupoOper = []\nThisForm.pMacro = pMacro\n\n* Richard em 06/08/2014 - Alterando Caption Conforme Confguração da Movimentação\nlcMnu = fRetDopMenu([], pDopes, ThisForm.poDataMgr6)\nIf Not Empty(lcMnu)\n\tThisForm.pDope = Alltrim(lcMnu)\nElse\n\tThisForm.pDope = pDopes\nEndIf\n\nIf (InList(pTipos,'C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRetDopMenu",
+        "metodosFormChamados": "poDataMgr6 = CreateObject,pCaixa = Iif,pDope = Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVEXP",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "If Not ThisForm.Erro\n\tThisForm.Processo.Click\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVEXP.Processo",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Do Case \n\tCase (ThisForm.pTipo = 'E') And Not WExist('SigMvCab')\n\t\tDo Form SigMvCab With Padr(ThisForm.pDope,20), ThisForm, .F., .F., .F., .F., .f., .f., .f., .f., .f., Iif(ThisForm.pMacro,.F.,Padr(ThisForm.pDope,20))\n\n\tCase (ThisForm.pTipo = 'C') And Not WExist('SigMvCab')\n\t\tDo Form SigMvCab With Padr(ThisForm.pDope,20), ThisForm.pNume, ThisForm.pEmp, .t., ThisForm.pCaixa, ThisForm\n\t\n\tCase (ThisForm.pTipo = 'A') And Not WExist('SigMvCab')\n\t\tDo Form SigMvCab With Padr(ThisForm.pDope,20), ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Form SigMvCab With Padr",
+        "metodosFormChamados": "pTipo = 'E') And Not WExist,pTipo = 'C') And Not WExist,pTipo = 'A') And Not WExist",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

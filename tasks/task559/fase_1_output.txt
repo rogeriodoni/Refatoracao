@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da. Criado `C:\4c\projeto\app\classes\SigMvAteBO.prg` com:
+
+- `DEFINE CLASS SigMvAteBO AS BusinessBase`
+- Propriedades mapeando a tabela `SigMvAte` (codvends, emps, empdopnums, natends, pkchaves ÔÇö confirmadas contra `docs/schema.sql`)
+- `this_cDescVends`: propriedade de exibi├º├úo (n├úo persistida) para a descri├º├úo do vendedor vinda do lookup em `SigCdCli.rclis`
+- `this_cGrVends`: contexto do documento pai (`TprMvCab.grvends` no legado), necess├írio para validar/filtrar vendedores nas pr├│ximas fases
+- `Init()` chamando `DODEFAULT()` e configurando `this_cTabela = "SigMvAte"` / `this_cCampoChave = "pkchaves"`, com TRY/CATCH e `MostrarErro()` (sem RETURN dentro do TRY, conforme regra cr├¡tica).
+
+Pr├│ximo: Fase 2/8 vai completar o BO com `CarregarDoCursor`, `Inserir`, `Atualizar` etc. Aguardando o prompt da pr├│xima fase.

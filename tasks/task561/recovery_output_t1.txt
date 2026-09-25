@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+**Causa raiz**: `Formsigmvccr.prg` ÔÇö 41 propriedades divergentes do legado (`sigmvccr_form_codigo_fonte.txt`), n├úo os 53 `Top` (esses s├úo o falso-positivo conhecido do offset +29 do PageFrame, per `[[feedback_comparadorui_naoconta_offset_pageframe]]` ÔÇö n├úo mexi neles).
+
+Corre├º├Áes aplicadas em `Formsigmvccr.prg`:
+- **`SpecialEffect = 1`** ausente em ~27 TextBox/Get (`Nota`, `DOCU`, `OPER`, `VALOR`, `Grupo`, `Dgrupo`, `Conta`, `Dconta`, `COTACAO`, `Usuario`, `Hist`, `Hist2`, `SOPER`, `SGRUPO`, `Sdgrupo`, `SCONTA`, `SDCONTA`, `SVALOR`, `Smoeda`, `SCOTACAO`, `MOEDA`, `Fweditdata_DATA/VENC`, `DtEmis`, `Job`, `DJob`, `Dt_inicial`, `Dt_final`) ÔÇö legado usa borda 3D (`SpecialEffect=1`), migrado ficou com borda plana (default `0`).
+- **`SpecialEffect = 0`** ausente no container `cnt_4c__periodo` (legado usa `0`, migrado herdava o default `2` do Container).
+- **`FontBold = .T.`** ausente nos labels `lbl_4c_Label1`/`lbl_4c_Label2` do filtro de per├¡odo.
+- **`InputMask`** de `COTACAO`/`SCOTACAO` corrigido de `"999,999.9999999"` para `"99,999.9999999"` (m├íscara divergia do legado, aceitava um d├¡gito a mais).
+- **`InputMask = "99/99/9999"`** ausente em `Fweditdata_DATA`, `Fweditdata_VENC`, `DtEmis`.
+- **`FontSize = 12`** e **`BackColor = RGB(255,255,255)`** nos bot├Áes `$` (`cmd_4c_Alteracotacao`/`cmd_4c_Alterascotacao`), que estavam com `FontSize=8` e sem `BackColor` (herdando cinza padr├úo do Windows).
+
+BO (`sigmvccrBO.prg`) n├úo referencia nenhuma dessas propriedades ÔÇö n├úo precisou de altera├º├úo. `.FXP` apagados para for├ºar recompila├º├úo.

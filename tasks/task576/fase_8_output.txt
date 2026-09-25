@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. Resumo do que foi feito:
+
+**An├ílise**: `Formsigmvpen.prg` e `sigmvpenBO.prg` j├í estavam funcionalmente completos desde a Fase 7 ÔÇö os 11 m├®todos do legado (comportamento.json) j├í tinham equivalente implementado: `Init`/`Load`/`montagrades`/`Release`/`selecionadados` no BO, e `ok.Click`, `grdItens.AfterRowColChange`, `grdRodape.Column1/2.Text1.GotFocus/LostFocus` no Form.
+
+**Por que o template gen├®rico da Fase 8 n├úo se aplica**: SIGMVPEN ├® um di├ílogo de consulta somente-leitura (├║nico bot├úo "Encerrar", sem Page2/Dados, sem grava├º├úo ÔÇö confirmado no `sigmvpenBO.prg`, que documenta que `Inserir/Atualizar/ExecutarExclusao` nunca s├úo sobrescritos porque o legado nunca grava). `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO/BOParaForm`, `HabilitarCampos/LimparCampos` e `AjustarBotoesPorModo` n├úo t├¬m correspondente real; `BtnEncerrarClick`/`CarregarLista` j├í existiam com outros nomes (`CmdEncerrarClick`/`CarregarPendentes`), consistentes com os handlers j├í bindados no mesmo arquivo.
+
+**A├º├Áes**:
+1. Documentei essa decis├úo no cabe├ºalho do arquivo (seguindo o mesmo padr├úo de justificativa j├í usado nas Fases 5/6/7).
+2. Verifiquei as colunas SQL usadas (`SigMvCab.grupods/contads/prazoents/iclis`, `SigCdCli.iclis/rclis`) contra `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14) ÔÇö todas existem.
+3. Compilei ambos os arquivos no VFP9 (ap├│s apagar os `.fxp`) ÔÇö sem erros.
+4. Confirmei que formul├írios irm├úos do mesmo padr├úo (`FormSigMvPdt`, `FormSigMvChv`) tamb├®m n├úo t├¬m entrada em `menu.prg` ÔÇö SIGMVPEN ├® um di├ílogo invocado por par├ómetro (`Fk_chave`) por uma tela de movimenta├º├úo ainda n├úo migrada (`ProximasMigracoes/`), ent├úo n├úo criei item de menu fict├¡cio.
+
+Migra├º├úo da task576 (Formsigmvpen) est├í completa e compilando limpo.

@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked both findings against the actual code and the legacy reference, and both are false positives from the automated SQL auditor ÔÇö no fix should be applied.
+
+**CONTROLCOUNT** ÔÇö this isn't SQL at all. The only occurrences are in `FormSigMvAte.prg:1224` and `:1236`, inside `TornarControlesVisiveis()`:
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+...
+IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+That's a recursive "make all controls visible" helper walking the VFP object tree (`Controls`/`ControlCount` are native container properties), completely unrelated to any WHERE clause. The detector mismatched an unrelated identifier.
+
+**PKCHAVES** ÔÇö this one is real SQL, but it's correct. It appears only in `SigMvAteBO.prg`'s `Atualizar()` (line 158) and `ExecutarExclusao()` (line 188):
+```foxpro
+UPDATE SigMvAte SET ... WHERE pkchaves = <<EscaparSQL(THIS.this_cPkChaves)>>
+DELETE FROM SigMvAte WHERE pkchaves = <<EscaparSQL(THIS.this_cPkChaves)>>
+```
+These are the mandatory `BusinessBase` CRUD overrides (`ObterChavePrimaria()` returns `this_cPkChaves` ÔÇö see `SigMvAteBO.prg` line ~90), required by the architecture regardless of whether the legacy form used row-level UPDATE/DELETE. The legacy `SIGMVATE` reference indeed never does a single-row update/delete (it does delete-all-by-document + reinsert, which is exactly what `ExcluirTodosDoDocumento`/`Inserir` implement using `EMPDOPNUMS`/`GRUPOS`/`ICLIS`/etc.). But `Atualizar()`/`ExecutarExclusao()` are the generic single-record contract every BO must implement per `BusinessBase`, and the *only* correct WHERE for a single-record update/delete is the primary key. Filtering by `GRUPOS`/`ICLIS`/`EMPDOPNUMS`/`NATENDS`/`CODVENDS` instead (as the finding implies) would be wrong there, and removing the WHERE entirely would update/delete every row in `SigMvAte` ÔÇö a destructive regression, not a fix.
+
+I'm leaving both files unchanged. Recommend marking these two findings as false positives in the review pipeline (same pattern as the other auditor-invents-defects cases already in memory).

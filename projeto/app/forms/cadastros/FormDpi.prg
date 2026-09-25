@@ -600,8 +600,14 @@ DEFINE CLASS FormDpi AS FormBase
             THIS.pgf_4c_Paginas.ActivePage = par_nPagina
 
             IF par_nPagina = 1
+                *-- Erro176: normaliza o modo aqui (padrao canonico) para nao
+                *-- depender de cada caller lembrar de faze-lo antes de chamar
+                THIS.this_cModoAtual = "LISTA"
                 THIS.CarregarLista()
             ENDIF
+
+            *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+            THIS.AjustarBotoesPorModo()
 
             loc_lResultado = .T.
         CATCH TO loc_oErro

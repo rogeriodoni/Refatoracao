@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei os 3 achados do pass SQL ÔÇö nenhum procede.
+
+As colunas apontadas (`PLACEHOLDER`, `IGUA`, `CONTROLCOUNT`) n├úo existem em nenhum WHERE do c├│digo migrado:
+
+- `PLACEHOLDER` e `IGUA` n├úo aparecem em lugar nenhum dos dois arquivos (grep literal, zero ocorr├¬ncias).
+- `CONTROLCOUNT` s├│ aparece como a property nativa `.ControlCount` de um loop gen├®rico (linhas 818/825, `TornarControlesVisiveis`-like), sem rela├º├úo com SQL.
+
+Os dois WHERE reais do BO (`SIGMVCTHBO.CarregarHistorico`) usam exatamente `CPros`, `Codigos` e `Grades` ÔÇö igual ├á refer├¬ncia do legado listada no prompt:
+
+```
+WHERE a.CPros = ... AND a.Codigos <> ... AND a.Codigos = b.Codigos
+WHERE a.Codigos = ... AND a.Grades = ...
+```
+
+Isso ├® o mesmo padr├úo descrito em `feedback_harness_de_auditoria_mede_errado.md`: o auditor inventou o defeito. N├úo h├í nada para corrigir neste pass ÔÇö n├úo alterei nenhum arquivo.

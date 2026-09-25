@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+├ìcone confere (regra #25 ÔÇö nunca inventar nome de arquivo). A Fase 4 est├í completa.
+
+**Resumo da Fase 4 (FormSIGMVCTH.prg):**
+
+Como este ├® um form OPERACIONAL "flat" (visualizador de hist├│rico, sem Page1/Page2 nem bot├Áes CRUD ÔÇö o legado tem s├│ um bot├úo "Retornar"), adaptei o objetivo gen├®rico da fase ├á estrutura real do SCX:
+
+- **`ConfigurarGrid()`**: cria `grd_4c_Dados` (8 colunas: Data/Adquirida/Uni/Valor Adq./Unit├írio/Total/C├│digo/Fornecedor) ligado a `cursor_4c_HistPeds`, com Width/Format/InputMask/Header transcritos exatamente do dump do legado, incluindo o `SetAll("DynamicForeColor", ...)` que pinta de azul as linhas j├í aprovadas (`Situas > 0`). Segue a ordem correta (ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width/Header, regra do CLAUDE.md sobre reset de cabe├ºalhos) e faz `GO TOP` + `Refresh()` depois de popular o cursor.
+- **`ConfigurarBotoes()`**: cria `obj_4c_CmdSalva` (CommandGroup de 1 bot├úo "Retornar", ├¡cone `cadastro_salvar_60.jpg`, posi├º├úo/cores id├¬nticas ao SCX) com `BINDEVENT` para `CmdRetornarClick` (PUBLIC, chama `THIS.Release()` ÔÇö equivalente ao `ThisForm.Release` do legado).
+- `InicializarForm()` agora chama `THIS.this_oBusinessObject.CarregarHistorico()` antes de montar a grade, para o cursor j├í existir quando o `RecordSource` for definido.
+
+Os campos de aprova├º├úo (Comprador/Aprovador/Data/Observa├º├úo) ficaram para as fases 5-6, como j├í indicado no coment├írio original do arquivo.

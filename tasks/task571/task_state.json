@@ -1,0 +1,273 @@
+﻿{
+    "taskId":  "task571",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-24T20:32:32",
+    "atualizadoEm":  "2026-09-25T00:32:02",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-24T20:32:32",
+                                            "fim":  "2026-09-24T20:32:32",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task571\\sigmvitn.sct",
+                                            "baseName":  "sigmvitn",
+                                            "scxFile":  "C:\\4c\\tasks\\task571\\sigmvitn.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-24T20:32:32",
+                                          "fim":  "2026-09-24T20:32:33",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigmvitn",
+                                          "txtFile":  "C:\\4c\\tasks\\task571\\sigmvitn_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-24T20:32:33",
+                                              "fim":  "2026-09-24T20:32:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task571\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-24T20:32:36",
+                                              "fim":  "2026-09-24T20:32:36",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task571\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task571\\meta_prompt.md",
+                                              "boClass":  "sigmvitnBO",
+                                              "formClass":  "Formsigmvitn",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task571\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-24T20:32:36",
+                                              "fim":  "2026-09-24T20:32:37",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task571\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-24T20:32:37",
+                                               "fim":  "2026-09-24T20:32:37",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task571\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigmvitn_esqueleto.prg",
+                                                                "sigmvitnBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-24T20:32:37",
+                                       "fim":  "2026-09-24T23:33:16",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitnBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  569.36,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvitn.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  18727
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-24T23:33:16",
+                                                  "fim":  "2026-09-24T23:34:57",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitnBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvitn.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-24T23:34:58",
+                                                 "fim":  "2026-09-24T23:35:00",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-25T00:03:36",
+                                       "fim":  "2026-09-25T00:17:48",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  3
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-25T00:17:48",
+                                               "fim":  "2026-09-25T00:26:53",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task571\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-09-25T00:26:59",
+                                        "fim":  "2026-09-25T00:32:02",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-25T00:32:02",
+                                              "fim":  "2026-09-25T00:32:02",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task571_sigmvitn.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-09-24T20:32:33",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-09-24T20:32:33",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task571\\sigmvitn_form_codigo_fonte.txt",
+                                              "reducaoPercent":  75.1,
+                                              "tamanhoOriginalKB":  569.36,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task571\\sigmvitn_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  142.01
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-24T20:32:34",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-24T20:32:35",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task571\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-24T20:32:35",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-24T20:32:36"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-24T23:34:57",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-24T23:34:58",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigmvitn_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvitn.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task571\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-24T23:35:00",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-24T23:40:06",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-24T23:40:07",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-25T00:03:19",
+                                          "passes":  6,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_BARRA_BOTOES, CNT_4C__CONSULTA, CNT_4C_ITEM, CNT_4C__CREDITO, CNT_4C_CAIXALIVRE, CNT_4C__GRDBARRA, CNT_4C__PRODUTO, CNT_4C__SUBTOTAL, CNT_4C_DESCONTO, CNT_4C__CHQ. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [ALINHAMENTO] Botao \u0027cmd_4c_Proximo\u0027 tem Top=319 mas grupo usa Top=308 (diferenca de 11px); [ALINHAMENTO] Botao \u0027cmd_4c_Proximo\u0027 tem Top=370 mas grupo usa Top=382 (diferenca de 12px); [ALINHAMENTO] Botao \u0027cmd_4c_BtnCadastros\u0027 tem Top=56 mas grupo usa Top=52 (diferenca de 4px); [ALINHAMENTO] Botao \u0027cmd_4c_Proximo\u0027 tem Top=394 mas grupo usa Top=400 (diferenca de 6px); [ALINHAMENTO] Botao \u0027cmd_4c_BotPendentes\u0027 tem Top=9 mas grupo usa Top=1 (diferenca de 8px); [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NUMES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, CITENS, VNITEM, BAIXADO, VALDESCS, CUPFIS, LNTENTA, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, DOPES, PDATAIMP, SERIFAB, DATAS, NEMPS, CODS, LCSTR, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, CDOPES, TIPOS, ICLIS, PRECOPS, 0, CBARS, EAN13, LPRECOS, IFORS, PVENS, CODBARRAS, ALTETIQS, ESTOQS, OPERS, SITUAS, BARINDIVS, CODIGOS, BARREFS, QTDS, EPRECOS, CHKDVAL, VALUE, CITEM, INFORMADO, CHKEDESC, LNKEY, LNPARCA, NBARRA1, NBARRA2, PEANTVALUE, NDOPES, EMPDOPNUMS, NOTAS, CIDCHAVES, LNBXVLOPCRS, SUBNOBRIGS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, LCANCELAS, CHKSUBN, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, ACUMULAS, INFOS, CCUPOMNVS, OBSDESTS, DISPMOVS, BLQDESCS, CPFS, GRUPOS, CGC1, OP_ESCOLHA, EMPRELEVS, QT, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, DESCS, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, VALOS, CGC, _TTOP, IMPCUPF, HABPENDS, CSTATUS, CNIDENTS, CNIDTEFS, CTIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DECLARADO\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, CITENS, VNITEM, BAIXADO, VALDESCS, CUPFIS, LNTENTA, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, DOPES, PDATAIMP, SERIFAB, DATAS, NEMPS, CODS, LCSTR, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, CDOPES, TIPOS, ICLIS, PRECOPS, 0, CBARS, EAN13, LPRECOS, IFORS, PVENS, CODBARRAS, ALTETIQS, ESTOQS, OPERS, SITUAS, BARINDIVS, CODIGOS, BARREFS, QTDS, EPRECOS, CHKDVAL, VALUE, CITEM, INFORMADO, CHKEDESC, LNKEY, LNPARCA, NBARRA1, NBARRA2, PEANTVALUE, NDOPES, EMPDOPNUMS, NOTAS, CIDCHAVES, LNBXVLOPCRS, SUBNOBRIGS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, LCANCELAS, CHKSUBN, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, ACUMULAS, INFOS, CCUPOMNVS, OBSDESTS, DISPMOVS, BLQDESCS, CPFS, GRUPOS, CGC1, OP_ESCOLHA, EMPRELEVS, QT, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, DESCS, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, VALOS, CGC, _TTOP, IMPCUPF, HABPENDS, CSTATUS, CNIDENTS, CNIDTEFS, CTIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027TMPBARF\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, CITENS, VNITEM, BAIXADO, VALDESCS, CUPFIS, LNTENTA, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, DOPES, PDATAIMP, SERIFAB, DATAS, NEMPS, CODS, LCSTR, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, CDOPES, TIPOS, ICLIS, PRECOPS, 0, CBARS, EAN13, LPRECOS, IFORS, PVENS, CODBARRAS, ALTETIQS, ESTOQS, OPERS, SITUAS, BARINDIVS, CODIGOS, BARREFS, QTDS, EPRECOS, CHKDVAL, VALUE, CITEM, INFORMADO, CHKEDESC, LNKEY, LNPARCA, NBARRA1, NBARRA2, PEANTVALUE, NDOPES, EMPDOPNUMS, NOTAS, CIDCHAVES, LNBXVLOPCRS, SUBNOBRIGS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, LCANCELAS, CHKSUBN, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, ACUMULAS, INFOS, CCUPOMNVS, OBSDESTS, DISPMOVS, BLQDESCS, CPFS, GRUPOS, CGC1, OP_ESCOLHA, EMPRELEVS, QT, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, DESCS, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, VALOS, CGC, _TTOP, IMPCUPF, HABPENDS, CSTATUS, CNIDENTS, CNIDTEFS, CTIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, CITENS, VNITEM, BAIXADO, VALDESCS, CUPFIS, LNTENTA, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, DOPES, PDATAIMP, SERIFAB, DATAS, NEMPS, CODS, LCSTR, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, CDOPES, TIPOS, ICLIS, PRECOPS, 0, CBARS, EAN13, LPRECOS, IFORS, PVENS, CODBARRAS, ALTETIQS, ESTOQS, OPERS, SITUAS, BARINDIVS, CODIGOS, BARREFS, QTDS, EPRECOS, CHKDVAL, VALUE, CITEM, INFORMADO, CHKEDESC, LNKEY, LNPARCA, NBARRA1, NBARRA2, PEANTVALUE, NDOPES, EMPDOPNUMS, NOTAS, CIDCHAVES, LNBXVLOPCRS, SUBNOBRIGS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, LCANCELAS, CHKSUBN, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, ACUMULAS, INFOS, CCUPOMNVS, OBSDESTS, DISPMOVS, BLQDESCS, CPFS, GRUPOS, CGC1, OP_ESCOLHA, EMPRELEVS, QT, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, DESCS, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, VALOS, CGC, _TTOP, IMPCUPF, HABPENDS, CSTATUS, CNIDENTS, CNIDTEFS, CTIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ALIGNMENT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CPROS, OPCRS, CITENS, VNITEM, BAIXADO, VALDESCS, CUPFIS, LNTENTA, MESVENCS, VENCS, DIGITENS, IMPS, IF, ORDEMS, FPAGS, NCODFINZS, DOPES, PDATAIMP, SERIFAB, DATAS, NEMPS, CODS, LCSTR, LLERROR1, CIMPFABS, EMPS, VERSTATUS, CNCAIXAS, CODOPERS, OPERADOR, CDOPES, TIPOS, ICLIS, PRECOPS, 0, CBARS, EAN13, LPRECOS, IFORS, PVENS, CODBARRAS, ALTETIQS, ESTOQS, OPERS, SITUAS, BARINDIVS, CODIGOS, BARREFS, QTDS, EPRECOS, CHKDVAL, VALUE, CITEM, INFORMADO, CHKEDESC, LNKEY, LNPARCA, NBARRA1, NBARRA2, PEANTVALUE, NDOPES, EMPDOPNUMS, NOTAS, CIDCHAVES, LNBXVLOPCRS, SUBNOBRIGS, _OLDCODG, EMPSUBNS, VALVARS, VARPS, NCARBXS, LCANCELAS, CHKSUBN, CHKPAGOS, DTAGENDS, PQTDES, PVALORS, NDEBITOS, _CHECAAGENDA, SUBNS, OPEATU, CHECPAGOS, UTILIZADOS, _NDDVAL, GRVENDS, GRRESPS, NCARDSCS, PARAUTOS, _OPERITENS, ACUMULAS, INFOS, CCUPOMNVS, OBSDESTS, DISPMOVS, BLQDESCS, CPFS, GRUPOS, CGC1, OP_ESCOLHA, EMPRELEVS, QT, DESCOS, TABDOBRIGS, QTDVALID, OBSORIGS, DEACRS, PARCS, ACVCHQS, FPARCS, NPARCS, PARCDES, SISTEF, CNNSUS, CHEADERS, SENDTEF, LCTIPO, LCTIPOOK, TVENS, TROCOS, LNVALP, DESCS, LNVPAR, VALPRES, GRUCONMOES, NCHAVES, LNTPAR, CARAUTS, VALOS, CGC, _TTOP, IMPCUPF, HABPENDS, CSTATUS, CNIDENTS, CNIDTEFS, CTIPOS; [TITULO-NAO-PROPAGADO] Form define Caption mas NAO propaga para lbl_4c_Sombra/lbl_4c_Titulo. O titulo na tela ficara incorreto (ex: \u0027Cadastro de Testes\u0027 ao inves do titulo real). CORRIGIR: No InicializarForm, APOS ConfigurarPageFrame, adicionar: THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption (e idem para lbl_4c_Titulo); [METODO-INEXISTENTE] Metodo \u0027THIS.HaPagamentoPendente()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.GravarItensLancados()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ValidarChequesLancados()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Consulta): Top original=277 vs migrado \u0027lbl_4c_Say1\u0027 Top=94 (diff=183px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Consulta): Left original=34 vs migrado \u0027lbl_4c_Say1\u0027 Left=66 (diff=32px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.Cnt_Consulta): Top original=14 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=94px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Top original=67 vs migrado \u0027lbl_4c_label202\u0027 Top=1 (diff=66px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Left original=324 vs migrado \u0027lbl_4c_label202\u0027 Left=8 (diff=316px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Top original=40 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=68px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Left original=324 vs migrado \u0027lbl_4c_Label15\u0027 Left=40 (diff=284px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Top original=126 vs migrado \u0027lbl_4c_Label3\u0027 Top=25 (diff=101px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Left original=324 vs migrado \u0027lbl_4c_Label3\u0027 Left=72 (diff=252px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Top original=97 vs migrado \u0027lbl_4c_label43\u0027 Top=2 (diff=95px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGMVITN.CntItem.Cnt_Desconto): Left original=324 vs migrado \u0027lbl_4c_label43\u0027 Left=10 (diff=314px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Proximo\u0027 (parent: SIGMVITN.CntItem): Top original=370 vs migrado \u0027cmd_4c_Proximo\u0027 Top=308 (diff=62px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Excluir\u0027 (parent: SIGMVITN.CntFinanc.Cnt_GrdBarra): Left original=82 vs migrado \u0027cmd_4c_Excluir\u0027 Left=230 (diff=148px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Proximo\u0027 (parent: SIGMVITN.CntFinanc): Top original=353 vs migrado \u0027cmd_4c_Proximo\u0027 Top=308 (diff=45px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CntFinanc): Top original=11 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=97px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CntFinanc): Left original=134 vs migrado \u0027lbl_4c_Label15\u0027 Left=40 (diff=94px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Proximo\u0027 (parent: SIGMVITN.Cnt_Credito): Top original=394 vs migrado \u0027cmd_4c_Proximo\u0027 Top=308 (diff=86px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Credito): Top original=422 vs migrado \u0027lbl_4c_label202\u0027 Top=1 (diff=421px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Credito): Left original=194 vs migrado \u0027lbl_4c_label202\u0027 Left=8 (diff=186px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Proximo\u0027 (parent: SIGMVITN.Cnt_Pendencia): Top original=382 vs migrado \u0027cmd_4c_Proximo\u0027 Top=308 (diff=74px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Pendencia): Top original=413 vs migrado \u0027lbl_4c_label202\u0027 Top=1 (diff=412px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Pendencia): Left original=168 vs migrado \u0027lbl_4c_label202\u0027 Left=8 (diff=160px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Identifica.TabDesconto): Top original=4 vs migrado \u0027lbl_4c_Say1\u0027 Top=94 (diff=90px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Identifica.TabDesconto): Left original=10 vs migrado \u0027lbl_4c_Say1\u0027 Left=66 (diff=56px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Proximo\u0027 (parent: SIGMVITN.Cnt_Identifica): Top original=400 vs migrado \u0027cmd_4c_Proximo\u0027 Top=308 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Identifica.CodOperacao): Top original=8 vs migrado \u0027lbl_4c_Say1\u0027 Top=94 (diff=86px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Identifica.CodOperacao): Left original=9 vs migrado \u0027lbl_4c_Say1\u0027 Left=66 (diff=57px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Acrescimo): Top original=4 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Acrescimo): Left original=96 vs migrado \u0027lbl_4c_Label15\u0027 Left=40 (diff=56px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Fpagto.Acrescimo): Left original=96 vs migrado \u0027lbl_4c_label202\u0027 Left=8 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Desconto): Top original=4 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Desconto): Left original=89 vs migrado \u0027lbl_4c_Label15\u0027 Left=40 (diff=49px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.Cnt_Fpagto.Desconto): Left original=89 vs migrado \u0027lbl_4c_label202\u0027 Left=8 (diff=81px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Fpagto): Top original=160 vs migrado \u0027lbl_4c_Say1\u0027 Top=94 (diff=66px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq): Top original=25 vs migrado \u0027lbl_4c_Say1\u0027 Top=94 (diff=69px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq): Left original=5 vs migrado \u0027lbl_4c_Say1\u0027 Left=66 (diff=61px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ins\u0027 (parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq): Top original=36 vs migrado \u0027cmd_4c_Inserir\u0027 Top=131 (diff=95px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ins\u0027 (parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq): Left original=330 vs migrado \u0027cmd_4c_Inserir\u0027 Left=3 (diff=327px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Mensagem\u0027 (parent: SIGMVITN.Cnt_Mensagem): Top original=2 vs migrado \u0027cnt_4c__Mensagem\u0027 Top=620 (diff=618px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027credito\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cnt_4c__Credito\u0027 Top=124 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027credito\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=377 vs migrado \u0027cnt_4c__Credito\u0027 Left=32 (diff=345px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ok\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cmd_4c_OkBarra\u0027 Top=131 (diff=130px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ok\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=677 vs migrado \u0027cmd_4c_OkBarra\u0027 Left=161 (diff=516px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027identifica\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cnt_4c__Identifica\u0027 Top=124 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027identifica\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=302 vs migrado \u0027cnt_4c__Identifica\u0027 Left=32 (diff=270px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cmd_4c_CancelaDisp\u0027 Top=89 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=752 vs migrado \u0027cmd_4c_CancelaDisp\u0027 Left=414 (diff=338px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pagto\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cnt_4c__Fpagto\u0027 Top=124 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pagto\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=602 vs migrado \u0027cnt_4c__Fpagto\u0027 Left=32 (diff=570px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027pendencia\u0027 (parent: SIGMVITN.Barra_Botoes): Top original=1 vs migrado \u0027cnt_4c__Pendencia\u0027 Top=124 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027pendencia\u0027 (parent: SIGMVITN.Barra_Botoes): Left original=452 vs migrado \u0027cnt_4c__Pendencia\u0027 Left=32 (diff=420px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CancelaItem): Top original=2 vs migrado \u0027lbl_4c_Label15\u0027 Top=108 (diff=106px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGMVITN.CancelaItem): Left original=1 vs migrado \u0027lbl_4c_Label15\u0027 Left=40 (diff=39px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGMVITN.CancelaItem): Top original=33 vs migrado \u0027lbl_4c_label202\u0027 Top=1 (diff=32px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITN.CancelaItem): Top original=58 vs migrado \u0027lbl_4c_Label3\u0027 Top=25 (diff=33px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGMVITN.CancelaItem): Left original=12 vs migrado \u0027lbl_4c_Label3\u0027 Left=72 (diff=60px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGMVITN.CancelaItem): Top original=84 vs migrado \u0027lbl_4c_label43\u0027 Top=2 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ok\u0027 (parent: SIGMVITN.CancelaItem): Top original=89 vs migrado \u0027cmd_4c_OkBarra\u0027 Top=131 (diff=42px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ok\u0027 (parent: SIGMVITN.CancelaItem): Left original=368 vs migrado \u0027cmd_4c_OkBarra\u0027 Left=161 (diff=207px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027CaixaLivre\u0027 (parent: SIGMVITN.CaixaLivre): Left original=67 vs migrado \u0027cnt_4c_CaixaLivre\u0027 Left=407 (diff=340px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  75
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-25T00:03:19",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-25T00:03:36",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigmvitnBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvitn.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-25T00:26:53",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-25T00:26:59",
+                                             "thresholdPx":  5,
+                                             "unmatched":  15,
+                                             "errors":  15,
+                                             "matched":  226,
+                                             "warnings":  98,
+                                             "reportFile":  "C:\\4c\\tasks\\task571\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

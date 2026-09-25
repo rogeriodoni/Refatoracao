@@ -1,0 +1,623 @@
+{
+  "resumo": {
+    "totalMetodos": 35,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 16,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fwBuscaExt", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 133,
+      "codigoOriginal": "Parameters pnNivel, pcEmpDopNums, pccPros\n\nLocal lcSqlFile, lcEmpDopNums\n\nm.loTree1 = ThisForm.TreeView\n\nlcSqlFile = 'crHiEstPe'+Alltrim(Str(pnNivel))\n\nIf Type('pccPros') = [C]\n\tlcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ;\n\t\t\t\t [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ;\n\t\t\t\t [Sum(c.Qtds) As Qtds ] + ;\n\t             [From SigMvPec a ] + ;\n\t             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ;\n\t      ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,pcEmpDopNums[ALen",
+        "controlesReferenciados": "ChkPagos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Init",
+      "linhas": 68,
+      "codigoOriginal": "Parameters plModal, pcEmps, pcDopes, pcNumes\n\nPrivate lcEmpDopNums, lccPros\n\nDeclare ThisForm.paEmpDopNums[1]\nThisForm.paEmpDopNums[1] = ''\n\nDeclare ThisForm.pcEmpDopNums[1,2]\nThisForm.pcEmpDopNums[1,1] = ''\n\nlcEmpDopNums = ''\n\nThisForm.GetDtI.Value = Ctod('')\nThisForm.GetDtF.Value = Ctod('')\nThisForm.lacoficina = .f.\n\nlcQryEest  = [Select * From SigMvCab Where EmpDopNums = ?lcEmpDopNums]\nlcQryEesti = [Select EmpdopNums, cPros, dPros, Sum(Qtds) As Qtds From SigMvItn Where EmpDopNums = ?lcEmpDopN... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ctod,WindowType = Iif,Automatico = Not Empty,SqlExecute,Value  = Alltrim,ReadOnly   = ! IsEmpty,ReadOnly  = ! IsEmpty,MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 46,
+      "codigoOriginal": "Local lcEmp, lcDopes, lcQryEest\nPrivate  lcDtIni, lcDtFim\n\nlcEmp \t= ThisForm.GetcEmp.Value\nlcDopes = ThisForm.GetDopes.Value\nlcDtIni = fDtoSQL(ThisForm.GetDtI.Value)\nlcDtFim = fDtoSQL(ThisForm.GetDtF.Value,'23:59:59')\n\nm.loTree1 = ThisForm.TreeView\n\nm.loTree1.ClearNodes\nm.loTree1.TipsDisplay = .t.\nm.loTree1.ExpandOnDClick \nm.loTree1.SmallIcons = .t.\nm.loTree1.PicAlign = 0\nm.loTree1.SelectedStyle = 2\nm.loTree1.PictureType = 1\n\nlcQryEest = [Select a.Emps, a.Dopes, a.Numes, a.Notas, a.Datas, a.Data... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkPagos,ChkPagos]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 76,
+      "codigoOriginal": "Local loTree1,lnNode1\n\nKeyboard Chr(32)\n=Inkey(0)\n\nThisForm.pldblclick = 0\n\nlcEmpDopNums = Padr(ThisForm.GetCEmp.Value,  03) + ;\n\t\t\t   Padr(ThisForm.GetDopes.Value, 20) + ;\n\t\t\t   Str(ThisForm.GetNumes.Value , 06)\n\nThisForm.poDatamgr.Requery('crSigMvCab')\nThisForm.poDatamgr.Requery('crSigMvItn')\n\nLocal lcEmpDopNum \n\nlcEmpDopNum = lcEmpDopNums\n\nSelect crSigMvCab\nGo Top\n\nIf  Eof()\n\tMessageBox('Operação Não Localizada !!',16,'')\n\tReturn(.f.)\nEndIf\n\nm.loTree1 = ThisForm.TreeView\n\nm.loTree1.ClearNodes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,SubNivel,HINivel",
+        "controlesReferenciados": "ChkPagos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 100,
+      "codigoOriginal": "Parameters pnNivel, lcEmps, lcEmpDopNums, pccPros\n\nLocal lcBxAlias, lcEsAlias, lcEDN, lnCodigo, lcTmpSub, lcDados, lcDados1\n\nlcBxAlias = 'crSigBxEst'+Alltrim(Str(pnNivel))\nlcTmpSub = 'crTmpSub'+Alltrim(Str(pnNivel))\n\nlcSql = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(lcEmpDopNums,4,20)+[']\nIf Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrXOpe)')\n\tRETURN .F.\nEndIf\n\nlcCodigo = Alltrim(Str(nDopes))+Transform(Val(Rig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,paOperacoes[Len,SubNivel,NoHiPro,HINivel,NoProd",
+        "controlesReferenciados": "ChkPagos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 92,
+      "codigoOriginal": "Parameters pnNivel, lcEmps, pcCodigo, pccPros\n\nLocal lcBxAlias, lcEsAlias, lcEDN, lnCodigo, lcTmpSub, lcDados, lcDados1\n\nlcBxAlias = 'crSigBxEst'+Alltrim(Str(pnNivel))\nlcTmpSub = 'crTmpSub'+Alltrim(Str(pnNivel))\n\nlcSql = [Select Dopes From SigCdOpe Where nDopes = ]+Alltrim(Str(Int(pcCodigo/1000000)))\nIf Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrXOpe)')\n\tRETURN .F.\nEndIf\n\nlcEmpDopNums = lcEmps+Padr(Dopes,20)+Str(Val(Rig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,paOperacoes[Len,SubNivel,NoProd,NoHiPro,HINivel",
+        "controlesReferenciados": "ChkPagos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt",
+      "evento": "Procedure",
+      "linhas": 117,
+      "codigoOriginal": "Parameters pnNivel, pcEmpDopNums, pccPros\n\nLocal lcSqlOpe, lcSqlEstPe, lcCodigo, lcSqlFile\n\nm.loTree1 = ThisForm.TreeView\n\nlcSqlOpe = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(pcEmpDopNums,4,20)+[']\nIf Thisform.PoDataMgr.SqlExecute(lcSqlOpe,'crTmpOpe') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crTmpOpe)')\n\tRETURN .F.\nEndIf\n\nlcSqlFile = 'crSubEstPe'+Alltrim(Str(pnNivel))\n\nlcCodigo = Alltrim(Str(crTmpOpe.nDopes * 1000000 + Val(Right(pcEmpDopNums,6))))\n\nIf T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,pcEmpDopNums[ALen",
+        "controlesReferenciados": "ChkPagos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt.btnOperacao",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Local lcEmps, lcDopes, lnNumes\n\nlcEmps  = ''\nLcDopes = ''\nlnNumes = 0\n\nIf ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'\n\tlcEmps  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)\n\tlcDopes = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),4,20)\n\tlnNUmes = Val(Alltrim(Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),24)))\nElse\n\tMessageBox('Produto',16,'')\n\tReturn\nEndif\n\nIf Not Empty(lcEmps) And Not Empty(lcDopes) And Not Empty(lnNumes)\n\tDo Form SigMvExp with... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeCargo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.BtnOficina",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "Local lcEmps, lcDopes, lnNumes\nLocal Array laParam(3)\n\nlcEmps  = ''\nLcDopes = ''\nlnNumes = 0\n\nIf ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'\n\tlcEmps  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)\n\tlcDopes = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),4,20)\n\tlnNUmes = Val(Alltrim(Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),24)))\nElse\n\tMessageBox('Produto',16,'')\n\tReturn\nEndif\n\nIf Not Empty(lcEmps) And Not Empty(lcDopes) And Not Empty(lnNumes)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeCargo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "loTree1 = ThisForm.TreeView\nllExpande = .f.\n\nFor lnNode = 0 To loTree1.lIstCount-1\n\tIf ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)\n\t\tloTree1.NodeExpanded(lnNode) = .t.\n\t\tllExpande = .t.\n\tEndif\nEndFor\n\nIf llExpande \n\tThisForm.pnNodeExp = ThisForm.pnNodeExp + 1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If Type('ThisForm.pnNodeExp') = [N] And ThisForm.pnNodeExp > 0\n\n\tloTree1 = ThisForm.TreeView\n\n\tFor lnNode = 0 To loTree1.lIstCount-1\n\t\tIf ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)\n\t\t\tloTree1.NodeExpanded(lnNode) = .f.\n\t\tEndif\n\tEndFor\n\n\tThisForm.pnNodeExp = ThisForm.pnNodeExp - 1\n\t\nElse \n\n\tThisForm.pnNodeExp = 0\n\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Keyboard Chr(32)\n=Inkey(0)\n\nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "If ! Empty(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)])\n\tThisForm.GetcEmp.Value  = Left(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],3)\n\tThisForm.GetDopes.Value = Substr(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],4,20)\n\tThisForm.GetNumes.Value = Val(Alltrim(Substr(ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)],24)))\n\tIf Alen(ThisForm.paEmpDopNums) = 1\n\t\tThisForm.paEmpDopNums[1] = ''\n\tElse\n\t\tDeclare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)-1]\n\tEndIf \n\tIf Empty(Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "paEmpDopNums[Alen,Value  = Left,Value = Substr,Value = Val,MakeList,Maketree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Enabled = .f.\nDO form SigReMre With ThisForm",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.Commandgroup1",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If ThisForm.TreeView.NodeCargo(ThisForm.pldblclick) <> 'PRODUTO'\n\tIf !Empty(ThisForm.paEmpDopNums[1])\n\t\tDeclare ThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)+1]\n\tEndIf\n\tThisForm.paEmpDopNums[Alen(ThisForm.paEmpDopNums)] = ThisForm.GetcEmp.Value +;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t ThisForm.GetDopes.Value +;\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t Str(ThisForm.GetNumes.Value,6)\n\tThisForm.GetcEmp.Value  = Left(ThisForm.TreeView.NodeCargo(ThisForm.pldblclick),3)\n\tThisForm.GetDopes.Value = Substr(ThisForm.TreeView.NodeCargo(ThisForm.pldbl... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeCargo,paEmpDopNums[Alen,Value  = Left,Value = Substr,Value = Val,Maketree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.TreeView",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "*** ActiveX Control Event ***\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.TreeView",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "IF EMPTY(thisform.getcEmp.Value)\n\tKEYBOARD '{TAB}'\nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.TreeView",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS keyascii\n\nIf KeyAscii = 27\n\tRelease Windows\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.TreeView",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS nindex, ncolumn\n\nThisform.plDblClick = nIndex\n\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetcEmp",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.TreeView.ClearNodes\nThisForm.GetDopes.Value = ''\nThisForm.GetNumes.Value = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetcEmp",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','csSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('cEmps', '', 'Cod', .t.)\n\t\txBrox.mAddColuna('RazSocs', '', 'Razão Social', .t.)\n\t\txBrox.Show()\n\tEndIf \n\tThis.Value = Iif( LastKey() # 27, Evaluate('csSigCdEmp.cEmps'), '' )\nElse\n\tIf Lastkey() <> 27\n\t\tMessageBox('Empresa Deve Ser Informada !!!',16,'')\n\t\tReturn .f.\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetcEmp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDopes",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "LOCAL xBrox\n\nThisForm.lAcOficina = .f.\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdOpe','csSigCdOpe','Dopes',This.Value,'Operações',.t.,'Dopes')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Dopes', '', 'Operação', .t.)\n\t\txBrox.Show()\n\tEndIf \n\tThis.Value = Iif( LastKey() # 27, Evaluate('csSigCdOpe.Dopes'), '' )\n\n\tThisForm.lAcOficina = fChecaAcesso( padl(CsSigCdOpe.nDopes,8,'0'), \"OPPEND\" )\n\nElse\n\tIf Lastkey() <> 27\n\t\tMessageBox(\"Operação ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fwBuscaExt",
+        "metodosFormChamados": "lAcOficina = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDopes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetNumes",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "This.Parent.GetDtI.Value = Ctod('')\nThis.Parent.GetDtF.Value = Ctod('')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetNumes",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value <> 0\n\tThisForm.pnNodeExp = 0\n\tThisForm.commandgroup1.Command1.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetNumes",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "If (Lastkey() = 13 And This.Value <> 0) or Len(Alltrim(Str(This.Value))) = 6\n\tWith ThisForm\n\n\t\tIf ! Empty(.GetCEmp.Value) Or ! Empty(.GetDopes.Value) Or ! Empty(.GetNumes.Value)\n\n\t\t\tIf Empty(.GetCEmp.Value)\n\t\t\t\tMessageBox('Empresa Deve ser Informada !!',16,'')\n\t\t\t\tReturn(.f.)\n\t\t\tEndif\n\n\t\t\tIf Empty(.GetDopes.Value)\n\t\t\t\tMessageBox('Operação Deve ser Informada !!',16,'')\n\t\t\t\tReturn(.f.)\n\t\t\tEndif\n\n\t\t\tIf Empty(.GetNumes.Value)\n\t\t\t\tMessageBox('Numero da Operação Deve ser Informado !!',16,'')\n\t\t\t\tRetur... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetNumes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDtI",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.GetNumes.Value = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDtI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDtF",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.pnNodeExp = 0\nThis.Parent.GetNumes.Value = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDtF",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "If Empty(this.Parent.GetDtI.Value)\n\tMessageBox('Data Inicial Invalida !!!',16,'')\n\tReturn .t.\nEndIf \n\nIf ! Empty(This.Value)\n\n\tWith ThisForm\n\n\t\tIf ! Empty(.GetCEmp.Value) Or ! Empty(.GetDopes.Value)\n\n\t\t\tIf Empty(.GetCEmp.Value)\n\t\t\t\tMessageBox('Empresa Deve ser Informada !!',16,'')\n\t\t\t\tReturn(.f.)\n\t\t\tEndif\n\n\t\t\tIf Empty(.GetDopes.Value)\n\t\t\t\tMessageBox('Operação Deve ser Informada !!',16,'')\n\t\t\t\tReturn(.f.)\n\t\t\tEndif\n\n\t\t\tllRetorno = ThisForm.MakeList()\n\t\t\t\n\t\t\tThisForm.plRetorno = .f.\n\n\t\t\tReturn(llRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MakeList",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigmvmvt.GetDtF",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigmvmvt.Procedure",
+      "queryOriginal": "\tlcSqlEstPe = [Select a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, ] + ; \t\t\t\t [b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, ] + ; \t\t\t\t [Sum(c.Qtds) As Qtds ] + ; \t             [From SigMvPec a ] + ; \t             [Inner Join SigMvCab b on a.EmpDopNums = b.EmpDopNums ] + ; \t      ... [TRUNCADO]",
+      "tabelas": "SigMvCab",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigmvmvt.Init",
+      "queryOriginal": "lcQryEest  = [Select * From SigMvCab Where EmpDopNums = ?lcEmpDopNums]",
+      "tabelas": "SigMvCab",
+      "colunas": "EmpDopNums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigmvmvt.Init",
+      "queryOriginal": "lcQryEesti = [Select EmpdopNums, cPros, dPros, Sum(Qtds) As Qtds From SigMvItn Where EmpDopNums = ?lcEmpDopN... [TRUNCADO]",
+      "tabelas": "SigMvItn",
+      "colunas": "EmpdopNums,cPros,dPros",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigmvmvt.Procedure",
+      "queryOriginal": "lcSql = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(lcEmpDopNums,4,20)+['] If Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1",
+      "tabelas": "SigCdOpe",
+      "colunas": "nDopes,SqlExecutelcSql,CrxOpe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigmvmvt.Procedure",
+      "queryOriginal": "lcSql = [Select Dopes From SigCdOpe Where nDopes = ]+Alltrim(Str(Int(pcCodigo/1000000))) If Thisform.PoDataMgr.SqlExecute(lcSql,'CrxOpe') < 1",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,nDopes,SqlExecutelcSql,CrxOpe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigmvmvt.Procedure",
+      "queryOriginal": "lcSqlOpe = [Select nDopes From SigCdOpe Where Dopes = ']+Substr(pcEmpDopNums,4,20)+['] If Thisform.PoDataMgr.SqlExecute(lcSqlOpe,'crTmpOpe') < 1",
+      "tabelas": "SigCdOpe",
+      "colunas": "nDopes,SqlExecutelcSqlOpe,crTmpOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCab", "SigMvItn", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

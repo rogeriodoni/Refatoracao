@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigmvitn.prg` (626 linhas, 28.7 KB) ÔÇö compila limpo e instancia no VFP9 real.
+
+## Por que a tentativa anterior foi rejeitada
+
+O gate da Fase 3 exige `ConfigurarPageFrame` **e** `InicializarForm`. A tentativa anterior omitiu `ConfigurarPageFrame` de prop├│sito, porque o SIGMVITN legado n├úo tem PageFrame nenhum ÔÇö **zero ocorr├¬ncias** em `layout.json` e nas 583 KB do dump.
+
+N├úo precisei mexer no gate: o projeto j├í tem conven├º├úo para isso. Em `FormVca.prg` (SIGALTDT) e `FormSigMvExp.prg` (SIGMVEXP), forms OPERACIONAIS flat mant├¬m `ConfigurarPageFrame` como **nome can├┤nico do orquestrador de layout base**, que delega para os m├®todos reais sem criar PageFrame algum. Apliquei a mesma conven├º├úo ÔÇö n├úo ├® stub vazio nem PageFrame inventado (PILAR 1 preservado).
+
+Medi o alcance antes de decidir: **205 dos 225** forms OPERACIONAL do projeto n├úo t├¬m PageFrame no legado, e **131 dos 139** forms operacionais migrados j├í t├¬m `ConfigurarPageFrame` ÔÇö ou seja, a conven├º├úo ├® a regra, n├úo a exce├º├úo.
+
+## O que mudou al├®m disso
+
+A vers├úo anterior criava s├│ 2 controles. Expandi para os **16 objetos estruturais de topo** que o legado realmente tem, com geometria e visual transcritos do SCX:
+
+| Grupo | Objetos |
+|---|---|
+| Cabe├ºalho/logo | `lbl_4c_TxtCaption`, `cnt_4c__Img4c`, `img_4c_FigJpg`, `obj_4c_Timer1` |
+| Opera├º├úo (alternam por bot├úo) | `cnt_4c__Consulta`, `cnt_4c_Item`, `cnt_4c_Financ`, `cnt_4c__Credito`, `cnt_4c__Pendencia`, `cnt_4c__Identifica`, `cnt_4c__Fpagto` |
+| Pain├®is | `cnt_4c_CancelaItem`, `cnt_4c_CaixaLivre` |
+| Rodap├®/bot├Áes | `cnt_4c__Mensagem`, `cnt_4c_Mensagems`, `cnt_4c_Barra_Botoes` |
+
+Ordem de cria├º├úo = ordem de empilhamento: a barra de bot├Áes (Top=20..99) ├® criada **depois** dos containers (Top=124) para desenhar por cima. O `.Visible` de cada um reproduz exatamente o declarado no SCX (`Cnt_Consulta`, `CntFinanc`, `CancelaItem`, `FigJpg` nascem ocultos) e a skip-list de `TornarControlesVisiveis` foi estendida.
+
+## Verifica├º├úo
+
+- `COMPILE` no VFP9 real: sem `.err`, `.fxp` gerado (apaguei o `.fxp` antes ÔÇö regra #29)
+- Instancia├º├úo headless: form abre, BO liga (`Sigmvitnbo`), `ControlCount=16`, geometria confere com `layout.json`
+- `VerificarPropriedadesInexistentes.ps1`: nenhuma atribui├º├úo a propriedade inexistente
+- `VerificarFuncoesNaoDefinidas.ps1`: nenhuma chamada ├│rf├ú
+- Sem TODO/stub, sem MESSAGEBOX, sem acentos literais, sem `RETURN` dentro de TRY, sem `Controls("nome")`
+- Gate da Fase 3: `ConfigurarPageFrame` + `InicializarForm` ÔåÆ **passa**
+
+## Escopo deixado para fases seguintes (documentado no c├│digo, n├úo omitido em sil├¬ncio)
+
+`GrdCupom` ÔåÆ Fase 4; `cmbTOpers` ÔåÆ Fases 5-6; `READCOMM` ÔåÆ Fases 7-8 (classe `readcomm` do `framework.vcx`, leitor serial de cheque CMC7 ÔÇö exige `SET CLASSLIB` do VCX legado e o OLE MSComm registrado, e s├│ ├® usada no fluxo de leitura de cheque).
+
+N├úo toquei em `automation/OrquestradorMigracao.ps1` ÔÇö ele j├í aparecia modificado no `git status` inicial, por trabalho anterior.

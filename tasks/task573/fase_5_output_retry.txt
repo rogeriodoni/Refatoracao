@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+A Fase 5 n├úo precisa de mudan├ºa no `.prg` ÔÇö o defeito era do **gate**, e o gate j├í foi consertado. Verifiquei os dois lados antes de concluir.
+
+## O que o legado tem
+
+`SIGPDMEN` (dump `tasks\task573`) ├® um di├ílogo modal com exatamente 9 objetos visuais: `cntSombra` (+2 labels), `Shape1`, `ok`, `Container1` (+`getMemo`), `Label2`. **Um ├║nico campo** ÔÇö `getMemo`, um EditBox `ReadOnly = .T.`. N├úo h├í lista, n├úo h├í PageFrame, n├úo h├í campo edit├ível. "Metade dos campos" desse legado ├® o pr├│prio campo somente-leitura, que as Fases 3/4 j├í entregaram por inteiro. Acrescentar qualquer coisa aqui seria inventar controle que o legado n├úo tem (viola o PILAR 1) ou escrever m├®todo vazio para casar com o regex ÔÇö o "stub disfar├ºado" que a regra de completude pro├¡be.
+
+## O gate
+
+O ramo **EXIBICAO** j├í est├í na Fase 5 do `automation\OrquestradorMigracao.ps1` (linhas 5618ÔÇô5691), espelhando o da Fase 4 e reusando `Test-LegadoDialogoExibicao`. Rodei a l├│gica do gate contra os arquivos reais:
+
+| condi├º├úo | resultado |
+|---|---|
+| `temListaLegadoF5` | `False` (sem grid/pageframe/AddCursor/pColuna) |
+| `Test-LegadoDialogoExibicao` | `True` (o ├║nico campo ├® ReadOnly) |
+| migrado: `AddObject("cmd_4c_ÔÇª")` + `PROCEDURE BtnÔÇªClick` | `True` / `True` |
+| migrado: `AddObject(ÔÇª, "EditBox")` | `True` |
+
+ÔåÆ `temLayoutExibicaoF5 = True`, a Fase 5 passa. O log `05_migracao_fase5.log` ├® de uma corrida anterior ao conserto do gate.
+
+## Instancia├º├úo verificada
+
+Provei que a tela abre (VFP9, `gb_4c_ValidandoUI = .T.`, sem conex├úo):
+
+```
+BaseClass=[Form]  Caption=[Mensagem da Movimenta├º├úo: 000001]
+ControlCount=5    Memo.ReadOnly=.T.  Memo.Visible=.T.
+Ok.Visible=.T.    Sombra.Caption=[Mensagem da Movimenta├º├úo: 000001]
+```
+
+`ControlCount=5` bate com os 5 filhos diretos de `SIGPDMEN` no dump. Sem TODO/FIXME/stub no form nem no BO; `this_cMensagem`, `this_cMensagemErro` e `CarregarPorCodigo` existem no `SigMvMenBO`; `new_background.jpg` e `cadastro_salvar_60.jpg` existem em `vbmp\`.
+
+Uma nota sobre o harness, que registrei na mem├│ria: `ConfigurarAmbiente()` travou o VFP9 headless por 4+ min sem progresso, nas duas tentativas (mem├│ria parada em ~22 MB, `ON ERROR` n├úo registrou nada) ÔÇö causa-raiz n├úo confirmada. Para provar que **um** form abre, carreguei s├│ a cadeia dele (`functions/messages/validators` + `dataaccess/businessbase/formbase/FormErro` + o BO + o Form); roda em segundos. Os arquivos tempor├írios do teste foram removidos.

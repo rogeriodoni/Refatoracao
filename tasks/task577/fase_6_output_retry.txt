@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 est├í completa. O defeito n├úo estava no form ÔÇö estava no **gate**.
+
+## O que eu encontrei
+
+`FormSigMvSbn.prg` j├í estava **correto e completo** para a Fase 6: os tr├¬s campos restantes (`txt_4c_Descr`, `txt_4c_Valo`, `txt_4c_Items`), a `img_4c_FigJpg`, os handlers de troca de linha das duas grades, o decode base64 da foto e o zoom ÔÇö tudo transcrito do dump, sem TODO/stub, com todos os m├®todos e properties do BO existindo de fato, handlers PUBLIC com os par├ómetros do evento.
+
+O que reprovava era a exig├¬ncia de **lookup**. Medi no dump: `SIGMVSBN` tem **zero** `fwbusca`/`mAddColuna`/`sigacess`, e ├® um **visualizador puro** ÔÇö todo controle de entrada ├® n├úo-digit├ível. Passar exigiria inventar um lookup ou escrever um `Validar*` vazio, as duas coisas proibidas (PILAR 1 + regra de completude).
+
+Nenhum dos 4 ramos do `case 6` alcan├ºava o caso: n├úo ├® PAGINADO (sem PageFrame), n├úo ├® FLAT (`$temCamposFlat` pede `PROCEDURE Validar\w+`, e n├úo h├í `Valid` nenhum), n├úo ├® DESPACHANTE (tem lista e campos), e n├úo ├® EXIBICAO por **dois** motivos ÔÇö aquele ramo exige aus├¬ncia de grade (aqui h├í duas) e `Test-LegadoDialogoExibicao` s├│ reconhece `ReadOnly = .T.` no pr├│prio controle.
+
+O achado que importa: **`ReadOnly = .T.` n├úo ├® a ├║nica forma de o legado travar um campo.** Os tr├¬s `fwget` n├úo declaram `ReadOnly` ÔÇö a tela ├® somente-leitura s├│ por `When ÔåÆ Return .f.`. E as grades declaram `ReadOnly` no n├¡vel do Grid, sem repetir em cada `Text1`, ent├úo o crit├®rio precisa aceitar heran├ºa de ancestral.
+
+## O que eu fiz
+
+Criei `Test-LegadoSomenteLeitura` (soma as tr├¬s provas sobre o caminho completo de cada controle) e um ramo VISUALIZADOR no `case 6`, fail-closed. `automation/OrquestradorMigracao.ps1` ├® a ├║nica altera├º├úo; s├│ 2 linhas substitu├¡das, o resto ├® adi├º├úo.
+
+Verifica├º├úo: gate passa para task577 e **reprova** nos tr├¬s controles negativos (dump com campo digit├ível, dump ausente, `FormType=CRUD`). Form e BO recompilam no VFP9 com zero erro, `.fxp` apagado antes e recriado depois. Sintaxe OK, CRLF+BOM preservados.
+
+Duas coisas que vale voc├¬ saber:
+
+- **Um bug meu quase passou.** A primeira medi├º├úo dizia "9 dumps somente-leitura" e o `When ÔåÆ .f.` dava zero ÔÇö em PS 5.1 o pipeline filtrado devolve `String` quando sobra uma linha, e `$uteis[0]` pegava o caractere `R`. S├│ notei porque o pr├│prio form-alvo n├úo apareceu no resultado. Corrigido: 29 dumps. O ramo dispara em **24 de 576** (4%; ~15 forms distintos com as tasks repetidas), todos visualizadores ÔÇö conferi `SIGCDICN`, `sigmvpen` e `SigMvSbn` ├á m├úo.
+
+- **Conferi as fases vizinhas** (a mem├│ria avisava, 3 recorr├¬ncias). **Fase 7 passa.** Fase 8 acusa `FormParaBO`/`BOParaForm`/`BtnSalvarClick` ausentes, que ├® o veredito **correto agora** ÔÇö s├úo exatamente os m├®todos que ela gera. Mas se ela reprovar com o form completo, a causa ser├í a mesma: um visualizador somente-leitura n├úo tem o que gravar. N├úo relaxei preventivamente.
+
+Registrei tudo na mem├│ria `feedback_gate_fase6_exige_lookup_inexistente`, incluindo a armadilha do PowerShell.

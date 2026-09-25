@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í completa e validada. Resumo do que fiz e por qu├¬:
+
+## Diagn├│stico
+
+A Fase 8 reprovava porque o `FormSIGMVMVT.prg` n├úo tinha `BtnCancelarClick`, `FormParaBO`, `BOParaForm` nem handler de a├º├úo.
+
+A leitura tentadora era "gate calibrado em CRUD, insatisfaz├¡vel num visualizador de ├írvore". **Medi antes de concluir isso** ÔÇö nos 142 forms OPERACIONAL do projeto: `CarregarLista` 140, `FormParaBO` 139, `BOParaForm` 139, `BtnCancelarClick` 135, handler de a├º├úo 134. ├ë a conven├º├úo de adaptadores do projeto, n├úo um gate quebrado. O form estava incompleto.
+
+## O que implementei
+
+Adaptadores com comportamento **real**, cada um mapeado para o equivalente nesta tela ÔÇö sem corpo vazio e **sem inventar bot├úo** (o SCX tem exatamente 8):
+
+| nome | comportamento real |
+|---|---|
+| `FormParaBO` | filtro da tela ÔåÆ properties do BO, montando `EmpDopNums`; virou fonte **├║nica** (refatorei `CarregarDados`/`CarregarListaPeriodo`, que duplicavam a leitura) |
+| `BOParaForm` | filtro do BO ÔåÆ campos; usado pela navega├º├úo Anterior/Pr├│ximo via `DefinirFiltroPorChave` |
+| `CarregarLista` | despacha `CarregarDados` (MakeTree) ou `CarregarListaPeriodo` (MakeList) |
+| `BtnExecutarClick` | a a├º├úo que no legado mora no `Valid` de GetNumes/GetDtF |
+| `BtnCancelarClick` | limpa filtro/├írvore, **n├úo** fecha a tela |
+
+**N├úo criei `BtnSalvarClick`**: conferi no dump que o legado tem zero `Insert/Update/Delete/TableUpdate`, o gate j├í o dispensa por `legadoSemSalvar`, e inventar grava├º├úo numa tela somente-leitura violaria o PILAR 1.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (BO + Form, `.fxp` apagado antes) e **teste de runtime instanciando o form** ÔÇö compilar n├úo prova nada aqui. Todos passaram, incluindo o round-trip filtroÔåÆBOÔåÆtela e o caso "drill direto preserva o filtro travado".
+
+Dois ajustes vieram de **medir em vez de supor**:
+- `LimparCampos` ├® PROTECTED herdado do `FormBase` ÔÇö meu teste o chamava de fora e acusava falha inexistente; era o teste que estava errado.
+- Medi que `SetFocus()` nunca estoura (form n├úo mostrado, `Enabled=.F.`, `Visible=.F.`), ent├úo **removi o TRY/CATCH** em vez de deixar um CATCH silencioso violando a regra #9.
+
+## Duas ressalvas que valem registro
+
+1. O gate reporta "form tem BtnSalvarClick: True" ÔÇö est├í casando com o **coment├írio** que explica a aus├¬ncia dele, n├úo com um handler. O resultado n├úo muda (a dispensa real ├® `legadoSemSalvar`, independentemente verdadeira), mas uma auditoria futura por grep pode se confundir.
+2. Perdi tempo num travamento que era do **meu harness**, n├úo do form: `gb_4c_ModoTeste` sozinho n├úo suprime di├ílogo ÔÇö `EscreverErroParaArquivo` exige tamb├®m `gc_4c_ArquivoErroTeste`, sen├úo `MsgErro` cai num `MESSAGEBOX` real e o teste headless trava sem produzir arquivo. N├úo estava documentado em lugar nenhum; salvei na mem├│ria e estendi a mem├│ria dos adaptadores para cobrir OPERACIONAL e o escopo de `LimparCampos`.
+
+Menu (`bar 137` em `popMovimentos` + `AbrirFormSIGMVMVT`) e carga din├ómica no `config.prg` j├í estavam prontos das fases anteriores. Artefatos de teste ficaram em `automation/vfp_helpers/` seguindo o padr├úo das fases 4/5; removi os arquivos de rascunho.

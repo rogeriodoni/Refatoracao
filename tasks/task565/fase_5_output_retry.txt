@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da e verificada.
+
+## O que foi entregue
+
+**`projeto/app/forms/operacionais/Formsigmvcot.prg`** ÔÇö `ConfigurarPaginaDados()` monta a **Page4 (`pgPedidos`)**, que ├® a p├ígina de campos de dados deste wizard (a ├║nica com campos edit├íveis de cabe├ºalho). As Pages 1ÔÇô3 j├í tinham sido feitas nas Fases 3ÔÇô4.
+
+- **`cnt_4c_Operacao`** (Container 564├ù172, transparente) com os **22 filhos do SCX**: Empresa, Data, Opera├º├úo, Moeda, Job/Descri├º├úo do Job, Destino (Grupo + Conta + Nome), Entrega (Conta + Nome), bot├úo "Local de Entrega", C├│d. Obs. e a observa├º├úo (EditBox) ÔÇö Top/Left/Format/MaxLength/cores **transcritos do dump**, sem `+29` (o PageFrame deste form tem `Top = -1`, abas vis├¡veis).
+- **3 CommandGroups** da p├ígina (`P├ígina de Dados` / `Processar Pedidos` / `Alterar Pedidos`), com os ├¡cones que o legado declara.
+- **`AjustarCamposPedidos()`** ÔÇö reproduz os `PROCEDURE When` do legado (gate por `pcEscolha` + depend├¬ncia GrupoÔåÆContaÔåÆNome), via `ReadOnly` e n├úo `Enabled`, porque o `When` bloqueia a edi├º├úo sem acinzentar o controle. Chamado em `AlternarPagina(4)` e nos `LostFocus` dos campos dos quais os outros dependem.
+- **`BtnRetornarCotacoesClick()`** ÔÇö o `btnSair.Click` legado (confirma├º├úo em modo de edi├º├úo ÔåÆ `CancelarEdicao()` ÔåÆ volta para a p├ígina de Cota├º├Áes).
+- `InicializarForm()` passou a chamar `ConfigurarPaginaDados()`; hist├│rico de fases atualizado no cabe├ºalho.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+- `COMPILE`: **0 erros**, `.fxp` gerado.
+- `TesteAutomatico.prg` (OPERACIONAL): **9/9 testes, 100%** ÔÇö instancia, navega as **4 p├íginas**, fecha.
+- Instancia├º├úo dirigida: Page4 com 4 filhos diretos, container com **22** controles vis├¡veis; gate de edi├º├úo confere (`INSERIR` sem grupo ÔåÆ Conta travada; com grupo ÔåÆ libera; com conta ÔåÆ Nome trava; `CONSULTAR` ÔåÆ tudo travado; Job/DJob sempre travados); tipos `CodObs`=N, `Datas`=D, `Emps`=C.
+- `VerificarPropriedadesInexistentes.ps1` e `VerificarFuncoesNaoDefinidas.ps1`: limpos. Sem literais acentuados, `WITH/ENDWITH` e `PROCEDURE/ENDPROC` balanceados, nenhum nome de objeto duplicado.
+
+## Dois pontos que deixei expl├¡citos no c├│digo
+
+1. **Nome do m├®todo**: a Page2 tamb├®m se chama "Dados" no caption legado, mas ├® a p├ígina de **lista** (fica em `ConfigurarPaginaLista`). `ConfigurarPaginaDados` ├® a Page4, e isso est├í documentado no cabe├ºalho do m├®todo para n├úo confundir quem mexer depois.
+2. **Fica para as fases seguintes** (n├úo s├úo stubs ÔÇö simplesmente n├úo existem ainda): o PageFrame interno `pgOperacoes` com as grades `grdCabOperas`/`grdItnOperas` e os lookups dos campos (`Valid` do legado) ÔåÆ Fase 6; `GravaPedidos` e o BINDEVENT do bot├úo "Processar Pedidos" ÔåÆ Fase 7. N├úo liguei esse bot├úo agora porque apontar para um m├®todo inexistente s├│ estoura em runtime (regra #13). O bot├úo "Alterar Pedidos" **n├úo tem c├│digo nenhum no SCX legado** ÔÇö foi migrado s├│ visualmente, de prop├│sito.
+
+Uma curiosidade transcrita como est├í: o bot├úo de retorno tem Caption "P├ígina de Dados", mas o `Click` legado vai para a p├ígina de **Cota├º├Áes**. Mantive texto e comportamento id├¬nticos ao legado e registrei a diverg├¬ncia em coment├írio.

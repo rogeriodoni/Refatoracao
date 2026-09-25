@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both are untracked (new to git), as expected since this is a fresh migration task. No stray temp files leaked into the repo.
+
+## Summary
+
+I completed **Fase 4/8** of the `Formsigmvits` migration (SIGMVITS = "Caixa", the frente-de-loja/POS screen). Since this is an OPERACIONAL form with no `Page1(Lista)/Page2(Dados)` and no CRUD semantics in the legacy source (confirmed against the sibling form `Formsigmvitn.prg`, migrated from the near-identical `SIGMVITN.SCX`), I adapted the phase to what the legacy screen actually has instead of inventing Incluir/Alterar/Excluir/Buscar/Encerrar buttons or a fake `AlternarPagina()`:
+
+- **3 grids**, transcribed from the dump: `grd_4c_SubNiveis` (pend├¬ncias, bound to `TmpOperacao`), `grd_4c_Cupom` (linhas do cupom, bound to `crTpmMvItnC`), `grd_4c_FormasPag` (grade oculta/legada, bind adiado pois seu cursor `xParC` s├│ existe dentro do handler `Confirmar`, na fase de eventos).
+- **`CriarCursoresGrades()` / `MontaGrade()`**, following the same two-step pattern (and identical cursor structures) already established in the sibling form, respecting the rule that `RecordSource` resets `Column.Width`/`Header1.Caption`.
+- The **16 CommandButtons** of `cnt_4c_Barra_Botoes` with exact Picture/Caption/position/tooltip from the dump.
+- The action buttons glued to the grids (`cmd_4c_Proximo`, `cmd_4c_Bot_Pendentes`) and the cupom totals (Subtotal/Total Geral).
+- Disambiguated the three grids in `mapeamento.json` (all three collided on the generic `grd_4c_Dados`), mirroring the same fix already applied in the sibling task.
+
+Verified by compiling the file directly with `vfp9.exe` (no `.err` produced). Click handlers, TextBoxes/labels, and lookups remain deferred to Fases 5ÔÇô8, as noted in the file's header.

@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvChv.prg",
+    "timestamp":  "2026-09-24T09:06:10",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "AUTO-182-BOTAO-LEFT-ABSOLUTO",
+                          "Linha":  336,
+                          "Original":  ".Left = 401 (provavel Left absoluto do container — botao invisivel)",
+                          "Corrigido":  ".Left = 5 (Left relativo canonico para cmd_4c_Incluir)",
+                          "Descricao":  "Pattern #182 (Erro143): cmd_4c_Incluir.Left = 401 parece ser Left absoluto do container pai (\u003e50, deve ser relativo). Corrigido para Left canonico RELATIVO = 5. Botao com Left absoluto fica em posicao 401 + offset_container, fora do form (Width=1000), INVISIVEL. Sweep 2026-09-03: 32 forms afetados."
+                      },
+                      {
+                          "Tipo":  "AUTO-182-BOTAO-LEFT-ABSOLUTO",
+                          "Linha":  356,
+                          "Original":  ".Left = 401 (provavel Left absoluto do container — botao invisivel)",
+                          "Corrigido":  ".Left = 230 (Left relativo canonico para cmd_4c_Excluir)",
+                          "Descricao":  "Pattern #182 (Erro143): cmd_4c_Excluir.Left = 401 parece ser Left absoluto do container pai (\u003e50, deve ser relativo). Corrigido para Left canonico RELATIVO = 230. Botao com Left absoluto fica em posicao 401 + offset_container, fora do form (Width=1000), INVISIVEL. Sweep 2026-09-03: 32 forms afetados."
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

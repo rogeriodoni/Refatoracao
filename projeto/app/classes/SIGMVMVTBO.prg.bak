@@ -1,0 +1,717 @@
+*==============================================================================
+* SIGMVMVTBO.PRG
+* Business Object - Acompanhamento Operacional (SIGMVMVT)
+* Consulta hierarquica (TreeView) de movimentos por Empresa/Operacao/Numero,
+* percorrendo SigMvCab / SigMvItn / SigMvPec / SigOpDev / SigCdOpe.
+* Heranca: BusinessBase
+*
+* NOTA IMPORTANTE (paridade com o legado): o SIGMVMVT eh um formulario de
+* CONSULTA (drill-down em arvore) - o codigo fonte original (Init, MakeTree,
+* MakeList, HiNivel, SubNivel, NoHiPro, NoProd) faz SOMENTE SELECT nas tabelas
+* de movimento. Nao existe, em lugar nenhum do legado, INSERT/UPDATE/DELETE em
+* SigMvCab/SigMvItn/SigMvPec/SigOpDev disparado por este formulario - por isso
+* Inserir()/Atualizar()/ExecutarExclusao() ficam sobrescritos abaixo apenas
+* para documentar essa regra de negocio (BO somente-leitura), e os metodos
+* reais adicionados nesta fase sao os de CONSULTA hierarquica que o Form
+* (Fase 3) vai usar para montar a arvore.
+*==============================================================================
+
+DEFINE CLASS SIGMVMVTBO AS BusinessBase
+
+    *-- Filtro de selecao da operacao (espelha GetcEmp/GetDopes/GetNumes do legado)
+    this_cEmps  = ""     && SigMvCab.emps  char(3)  - empresa
+    this_cDopes = ""     && SigMvCab.dopes char(20) - codigo da operacao (FK SigCdOpe.Dopes)
+    this_nNumes = 0      && SigMvCab.numes numeric(6,0) - numero da operacao
+
+    *-- Filtro de periodo (usado em MakeList - GetDtI/GetDtF do legado)
+    this_dDtI = {}       && Data inicial do periodo
+    this_dDtF = {}       && Data final do periodo
+
+    *-- Chave composta usada em todas as consultas hierarquicas (WHERE EmpDopNums = ...)
+    * Formato: PADR(Emps,3) + PADR(Dopes,20) + STR(Numes,6)
+    this_cEmpDopNums = ""
+
+    *-- Dados do registro-raiz carregado (SigMvCab), preenchidos por CarregarDoCursor
+    this_cCidChaves = ""    && SigMvCab.cidchaves char(20) - PK
+    this_cNotas     = ""    && SigMvCab.notas     char(6)
+    this_dDatas     = {}    && SigMvCab.datas     datetime
+    this_dDatars    = {}    && SigMvCab.datars    datetime
+    this_lChkPagos  = .F.   && SigMvCab.chkpagos  bit
+    this_cUsuars    = ""    && SigMvCab.usuars    char(10)
+    this_dDtAlts    = {}    && SigMvCab.dtalts    datetime
+    this_cUsuals    = ""    && SigMvCab.usuals    char(10)
+
+    *-- Flags de controle (espelham propriedades do form legado)
+    this_lAcOficina  = .F.   && ThisForm.lacoficina - acesso a producao/oficina (fChecaAcesso)
+    this_lAutomatico = .F.   && ThisForm.Automatico - form aberto ja com Emps/Dopes/Numes definidos
+    this_nNiveis     = 0     && ThisForm.pnNiveis - contador de profundidade da recursao da arvore
+
+    *-- Mensagem tecnica devolvida por SQLEXEC quando a conexao/consulta falha
+    this_cMensagemSQL = ""
+
+    *--------------------------------------------------------------------------
+    * INIT - Construtor
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        DODEFAULT("SigMvCab")
+
+        THIS.this_cCampoChave = "EmpDopNums"
+
+        THIS.this_cEmps  = ""
+        THIS.this_cDopes = ""
+        THIS.this_nNumes = 0
+
+        THIS.this_dDtI = {}
+        THIS.this_dDtF = {}
+
+        THIS.this_cEmpDopNums = ""
+
+        THIS.this_cCidChaves = ""
+        THIS.this_cNotas     = ""
+        THIS.this_dDatas     = {}
+        THIS.this_dDatars    = {}
+        THIS.this_lChkPagos  = .F.
+        THIS.this_cUsuars    = ""
+        THIS.this_dDtAlts    = {}
+        THIS.this_cUsuals    = ""
+
+        THIS.this_lAcOficina  = .F.
+        THIS.this_lAutomatico = .F.
+        THIS.this_nNiveis     = 0
+
+        THIS.this_cMensagemSQL = ""
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega dados do cursor (registro de SigMvCab) para
+    * as propriedades this_. Segue o padrao canonico: SELECT (alias) antes de
+    * acessar os campos diretamente (nunca campo).
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        IF VARTYPE(par_cAliasCursor) != "C" OR !USED(par_cAliasCursor)
+            RETURN .F.
+        ENDIF
+
+        SELECT (par_cAliasCursor)
+
+        THIS.this_cCidChaves  = ALLTRIM(TratarNulo(cidchaves, ""))
+        THIS.this_cEmps       = ALLTRIM(TratarNulo(emps, ""))
+        THIS.this_cDopes      = ALLTRIM(TratarNulo(dopes, ""))
+        THIS.this_nNumes      = TratarNulo(numes, 0)
+        THIS.this_cEmpDopNums = ALLTRIM(TratarNulo(empdopnums, ""))
+        THIS.this_cNotas      = ALLTRIM(TratarNulo(notas, ""))
+        THIS.this_dDatas      = ConverterParaData(TratarNulo(datas, {}))
+        THIS.this_dDatars     = ConverterParaData(TratarNulo(datars, {}))
+        THIS.this_lChkPagos   = TratarNulo(chkpagos, .F.)
+        THIS.this_cUsuars     = ALLTRIM(TratarNulo(usuars, ""))
+        THIS.this_dDtAlts     = ConverterParaData(TratarNulo(dtalts, {}))
+        THIS.this_cUsuals     = ALLTRIM(TratarNulo(usuals, ""))
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - chave de negocio usada nesta tela (EmpDopNums),
+    * consistente com o que o legado usa em TODAS as consultas hierarquicas.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN THIS.this_cEmpDopNums
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir / Atualizar / ExecutarExclusao - o Acompanhamento Operacional eh
+    * consulta pura (drill-down); o legado nunca grava nem exclui a partir
+    * desta tela. Mantidos sobrescritos apenas para deixar a regra explicita -
+    * nenhum botao do form (Fase 3) chama Salvar()/Excluir() deste BO.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Inserir()
+        THIS.this_cMensagemErro = "Acompanhamento Operacional " + CHR(233) + ;
+            " tela de consulta - n" + CHR(227) + "o grava registros."
+        RETURN .F.
+    ENDPROC
+
+    PROTECTED PROCEDURE Atualizar()
+        THIS.this_cMensagemErro = "Acompanhamento Operacional " + CHR(233) + ;
+            " tela de consulta - n" + CHR(227) + "o grava registros."
+        RETURN .F.
+    ENDPROC
+
+    PROTECTED PROCEDURE ExecutarExclusao()
+        THIS.this_cMensagemErro = "Acompanhamento Operacional " + CHR(233) + ;
+            " tela de consulta - n" + CHR(227) + "o exclui registros."
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarEmpresa - equivalente ao lookup de GetcEmp.Valid (fwBuscaExt) e ao
+    * "Select * From SigCdEmp Where cEmps = ?" do Init legado.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarEmpresa(par_cEmps)
+        LOCAL loc_cSQL, loc_nResultado, loc_lAchou
+
+        loc_lAchou = .F.
+        THIS.this_cMensagemErro = ""
+        THIS.this_cMensagemSQL  = ""
+
+        IF EMPTY(ALLTRIM(TratarNulo(par_cEmps, "")))
+            RETURN .F.
+        ENDIF
+
+        IF USED("cursor_4c_Emp")
+            USE IN cursor_4c_Emp
+        ENDIF
+
+        loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(ALLTRIM(par_cEmps))
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emp")
+
+        IF loc_nResultado > 0 AND !EOF("cursor_4c_Emp")
+            loc_lAchou = .T.
+            THIS.this_cEmps = ALLTRIM(cursor_4c_Emp.Cemps)
+        ELSE
+            THIS.this_cMensagemSQL  = CapturarErroSQL()
+            THIS.this_cMensagemErro = "Empresa n" + CHR(227) + "o encontrada."
+        ENDIF
+
+        RETURN loc_lAchou
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarOperacao - equivalente ao lookup de GetDopes.Valid (fwBuscaExt).
+    * O acesso a producao/oficina (fChecaAcesso) permanece responsabilidade do
+    * Form, que grava o resultado em THIS.this_lAcOficina apos chamar este
+    * metodo (mesma divisao do legado, onde a checagem fica no proprio Valid).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarOperacao(par_cDopes)
+        LOCAL loc_cSQL, loc_nResultado, loc_lAchou
+
+        loc_lAchou = .F.
+        THIS.this_cMensagemErro = ""
+        THIS.this_cMensagemSQL  = ""
+
+        IF EMPTY(ALLTRIM(TratarNulo(par_cDopes, "")))
+            RETURN .F.
+        ENDIF
+
+        IF USED("cursor_4c_Ope")
+            USE IN cursor_4c_Ope
+        ENDIF
+
+        loc_cSQL = "SELECT Dopes, nDopes FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(par_cDopes))
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ope")
+
+        IF loc_nResultado > 0 AND !EOF("cursor_4c_Ope")
+            loc_lAchou = .T.
+            THIS.this_cDopes = ALLTRIM(cursor_4c_Ope.Dopes)
+        ELSE
+            THIS.this_cMensagemSQL  = CapturarErroSQL()
+            THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada."
+        ENDIF
+
+        RETURN loc_lAchou
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterCodigoOperacao - Select nDopes From SigCdOpe Where Dopes = ?
+    * Retorna -1 quando nao encontra (o codigo nDopes real eh sempre >= 0).
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterCodigoOperacao(par_cDopes)
+        LOCAL loc_cSQL, loc_nResultado, loc_nCodigo
+
+        loc_nCodigo = -1
+
+        IF USED("cursor_4c_Ope")
+            USE IN cursor_4c_Ope
+        ENDIF
+
+        loc_cSQL = "SELECT nDopes FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(par_cDopes))
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ope")
+
+        IF loc_nResultado > 0 AND !EOF("cursor_4c_Ope")
+            loc_nCodigo = cursor_4c_Ope.nDopes
+        ELSE
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+        ENDIF
+
+        RETURN loc_nCodigo
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterDopesPorCodigo - Select Dopes From SigCdOpe Where nDopes = ?
+    * (caminho inverso de ObterCodigoOperacao, usado por NoProd)
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterDopesPorCodigo(par_nCodigoOperacao)
+        LOCAL loc_cSQL, loc_nResultado, loc_cDopes
+
+        loc_cDopes = ""
+
+        IF USED("cursor_4c_Ope")
+            USE IN cursor_4c_Ope
+        ENDIF
+
+        loc_cSQL = "SELECT Dopes FROM SigCdOpe WHERE nDopes = " + FormatarNumeroSQL(par_nCodigoOperacao, 0)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ope")
+
+        IF loc_nResultado > 0 AND !EOF("cursor_4c_Ope")
+            loc_cDopes = ALLTRIM(cursor_4c_Ope.Dopes)
+        ELSE
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+        ENDIF
+
+        RETURN loc_cDopes
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarOperacao - equivalente ao Init (AddCursor crSigMvCab) + trecho
+    * inicial do MakeTree (Requery + Go Top + Eof = "Operacao Nao Localizada").
+    * Monta this_cEmpDopNums a partir de Emps/Dopes/Numes e busca o registro.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarOperacao(par_cEmps, par_cDopes, par_nNumes)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
+        THIS.this_cMensagemSQL  = ""
+
+        THIS.this_cEmps  = ALLTRIM(TratarNulo(par_cEmps, ""))
+        THIS.this_cDopes = ALLTRIM(TratarNulo(par_cDopes, ""))
+        THIS.this_nNumes = TratarNulo(par_nNumes, 0)
+
+        THIS.this_cEmpDopNums = PADR(THIS.this_cEmps, 3) + PADR(THIS.this_cDopes, 20) + STR(THIS.this_nNumes, 6)
+
+        IF USED("cursor_4c_Cab")
+            USE IN cursor_4c_Cab
+        ENDIF
+
+        loc_cSQL = "SELECT * FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(THIS.this_cEmpDopNums)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cab")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL  = CapturarErroSQL()
+            THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o N" + CHR(227) + "o Localizada !!"
+        ELSE
+            SELECT cursor_4c_Cab
+            GO TOP
+            IF EOF("cursor_4c_Cab")
+                THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o N" + CHR(227) + "o Localizada !!"
+            ELSE
+                THIS.CarregarDoCursor("cursor_4c_Cab")
+                loc_lSucesso = .T.
+            ENDIF
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarItens - equivalente a lcQryEesti do Init / trecho de MakeTree que
+    * percorre crSigMvItn (nivel 2 da arvore: produto/quantidade).
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarItens(par_cEmpDopNums)
+        LOCAL loc_cSQL, loc_nResultado, loc_cChave
+
+        loc_cChave = ALLTRIM(TratarNulo(par_cEmpDopNums, THIS.this_cEmpDopNums))
+        THIS.this_cMensagemSQL = ""
+
+        IF USED("cursor_4c_Itens")
+            USE IN cursor_4c_Itens
+        ENDIF
+
+        loc_cSQL = "SELECT EmpDopNums, cPros, dPros, SUM(Qtds) AS Qtds " + ;
+            "FROM SigMvItn WHERE EmpDopNums = " + EscaparSQL(loc_cChave) + " " + ;
+            "GROUP BY EmpDopNums, cPros, dPros " + ;
+            "ORDER BY EmpDopNums, cPros, dPros"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Itens")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL  = CapturarErroSQL()
+            THIS.this_cMensagemErro = "Erro ao carregar itens da opera" + CHR(231) + CHR(227) + "o."
+            RETURN .F.
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarPorPeriodo - equivalente a MakeList: lista as operacoes de uma
+    * Empresa+Operacao dentro do periodo informado (nivel 1 da arvore, quando
+    * o form nao abre ja "Automatico" com Emps/Dopes/Numes definidos).
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarPorPeriodo(par_cEmps, par_cDopes, par_dDtIni, par_dDtFim)
+        LOCAL loc_cSQL, loc_nResultado, loc_cDtIniSQL, loc_cDtFimSQL
+
+        THIS.this_cEmps  = ALLTRIM(TratarNulo(par_cEmps, ""))
+        THIS.this_cDopes = ALLTRIM(TratarNulo(par_cDopes, ""))
+        THIS.this_dDtI   = ConverterParaData(par_dDtIni)
+        THIS.this_dDtF   = ConverterParaData(par_dDtFim)
+        THIS.this_cMensagemSQL = ""
+
+        loc_cDtIniSQL = FormatarDataSQL(THIS.this_dDtI)
+
+        * Fim do periodo com hora 23:59:59 (fDtoSQL(..., '23:59:59') do legado)
+        loc_cDtFimSQL = FormatarDataSQL(THIS.this_dDtF)
+        IF loc_cDtFimSQL != "NULL"
+            loc_cDtFimSQL = LEFT(loc_cDtFimSQL, LEN(loc_cDtFimSQL) - 1) + " 23:59:59'"
+        ENDIF
+
+        IF USED("cursor_4c_Lista")
+            USE IN cursor_4c_Lista
+        ENDIF
+
+        loc_cSQL = "SELECT a.Emps, a.Dopes, a.Numes, a.Notas, a.Datas, a.Datars, a.ChkPagos, SUM(b.Qtds) AS Qtds " + ;
+            "FROM SigMvCab a " + ;
+            "LEFT JOIN SigMvItn b ON a.EmpDopNums = b.EmpDopNums " + ;
+            "WHERE a.Emps = " + EscaparSQL(THIS.this_cEmps) + " " + ;
+            "AND a.Dopes = " + EscaparSQL(THIS.this_cDopes) + " " + ;
+            "AND a.Datas BETWEEN " + loc_cDtIniSQL + " AND " + loc_cDtFimSQL + " " + ;
+            "GROUP BY a.Datas, a.Datars, a.Emps, a.Dopes, a.Numes, a.Notas, a.ChkPagos " + ;
+            "ORDER BY a.Datas, a.Datars, a.Emps, a.Dopes, a.Numes, a.Notas, a.ChkPagos"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Lista")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL  = CapturarErroSQL()
+            THIS.this_cMensagemErro = "Erro ao buscar opera" + CHR(231) + CHR(245) + "es no per" + CHR(237) + "odo."
+            RETURN .F.
+        ENDIF
+
+        IF EOF("cursor_4c_Lista")
+            THIS.this_cMensagemErro = "N" + CHR(227) + "o Foi Localizada Nenhuma Opera" + CHR(231) + CHR(227) + "o"
+            RETURN .F.
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterDetalheNivel - equivalente a lcQryBx dentro de HiNivel: dados de
+    * cabecalho (SigMvCab) + quantidade (SigMvItn) de UM EmpDopNums, usados
+    * para montar o texto do no da arvore.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterDetalheNivel(par_cEmpDopNums, par_nNivel, par_cCPros)
+        LOCAL loc_cSQL, loc_nResultado, loc_lTemProduto
+
+        loc_lTemProduto = (VARTYPE(par_cCPros) = "C" AND !EMPTY(par_cCPros) AND par_nNivel = 3)
+        THIS.this_cMensagemSQL = ""
+
+        IF USED("cursor_4c_Detalhe")
+            USE IN cursor_4c_Detalhe
+        ENDIF
+
+        loc_cSQL = "SELECT a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.Usuars, a.DtAlts, a.Usuals, " + ;
+            "c.EmpDopNums, SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigMvCab a " + ;
+            "LEFT JOIN SigMvItn c ON a.EmpDopNums = c.EmpDopNums " + ;
+            "WHERE " + IIF(loc_lTemProduto, "c.Cpros = " + EscaparSQL(par_cCPros) + " AND ", "") + ;
+            "a.EmpDopNums = " + EscaparSQL(par_cEmpDopNums) + " " + ;
+            "GROUP BY a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.Usuars, a.DtAlts, a.Usuals, c.EmpDopNums"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Detalhe")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN "cursor_4c_Detalhe"
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterHistoricoNivel - equivalente a HiNivel: historico de baixa/producao
+    * (SigMvPec + SigMvCab + SigMvItn, UNION ALL SigOpDev + SigMvCab + SigMvItn)
+    * de um EmpDopNums. Retorna o NOME do cursor (cursor_4c_HiEstPe<nivel>)
+    * para o Form fazer SELECT/SCAN, ou "" se falhar.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterHistoricoNivel(par_nNivel, par_cEmpDopNums, par_cCPros)
+        LOCAL loc_cSQL, loc_cCursor, loc_nResultado, loc_lTemProduto
+
+        loc_cCursor = "cursor_4c_HiEstPe" + TRANSFORM(par_nNivel)
+        loc_lTemProduto = (VARTYPE(par_cCPros) = "C" AND !EMPTY(par_cCPros))
+        THIS.this_cMensagemSQL = ""
+
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+
+        loc_cSQL = "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, " + ;
+            "SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigMvPec a " + ;
+            "INNER JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums " + ;
+            "LEFT JOIN SigMvItn c ON a.EmpDopNums = c.EmpDopNums " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(par_cEmpDopNums) + " " + ;
+            IIF(loc_lTemProduto, "AND c.Cpros = " + EscaparSQL(par_cCPros) + " ", "AND 0 = 1 ") + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps AS EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, " + ;
+            "SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigOpDev a " + ;
+            "INNER JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums " + ;
+            "LEFT JOIN SigMvItn c ON a.EmpDopNums = c.EmpDopNums " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(par_cEmpDopNums) + " " + ;
+            IIF(loc_lTemProduto AND par_nNivel = 3, "AND c.Cpros = " + EscaparSQL(par_cCPros) + " ", "") + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals " + ;
+            "ORDER BY b.Datas, b.Datars, b.EmpDopNums, 14"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN loc_cCursor
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterSubNivel - equivalente a SubNivel: mesma consulta de HiNivel, mas
+    * filtrando por a.Codigos (nDopes*1000000 + numero) em vez de EmpDopNums.
+    * Retorna o NOME do cursor (cursor_4c_SubEstPe<nivel>), ou "" se falhar.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterSubNivel(par_nNivel, par_cEmpDopNums, par_cCPros)
+        LOCAL loc_nCodOpe, loc_nCodigo, loc_cCursor, loc_cSQL, loc_nResultado, loc_lTemProduto
+
+        THIS.this_cMensagemSQL = ""
+
+        loc_nCodOpe = THIS.ObterCodigoOperacao(SUBSTR(par_cEmpDopNums, 4, 20))
+        IF loc_nCodOpe < 0
+            RETURN ""
+        ENDIF
+
+        loc_nCodigo = loc_nCodOpe * 1000000 + VAL(RIGHT(par_cEmpDopNums, 6))
+        loc_cCursor = "cursor_4c_SubEstPe" + TRANSFORM(par_nNivel)
+        loc_lTemProduto = (VARTYPE(par_cCPros) = "C" AND !EMPTY(par_cCPros))
+
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+
+        loc_cSQL = "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, " + ;
+            "SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigMvPec a " + ;
+            "INNER JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums " + ;
+            "LEFT JOIN SigMvItn c ON a.EmpDopNums = c.EmpDopNums " + ;
+            "WHERE a.Codigos = " + FormatarNumeroSQL(loc_nCodigo, 0) + " " + ;
+            "AND a.EmpSubns = " + EscaparSQL(LEFT(par_cEmpDopNums, 3)) + " " + ;
+            IIF(loc_lTemProduto, "AND c.Cpros = " + EscaparSQL(par_cCPros) + " ", "AND 0 = 1 ") + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, a.EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, a.Emps AS EmpSubns, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals, " + ;
+            "SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigOpDev a " + ;
+            "INNER JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums " + ;
+            "LEFT JOIN SigMvItn c ON a.EmpDopNums = c.EmpDopNums " + ;
+            "WHERE a.Codigos = " + FormatarNumeroSQL(loc_nCodigo, 0) + " " + ;
+            IIF(loc_lTemProduto AND par_nNivel = 3, "AND c.Cpros = " + EscaparSQL(par_cCPros) + " ", "") + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, " + ;
+            "b.Datas, b.Datars, b.Notas, b.ChkPagos, b.EmpDopNums, b.Usuars, b.DtAlts, b.Usuals " + ;
+            "ORDER BY b.Datas, b.Datars, b.EmpDopNums, 14"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN loc_cCursor
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DeduplicarSaldo - equivalente ao trecho comum de NoHiPro/NoProd:
+    *   Select ... Sum(qtds) As qtds From <cursor origem> Group By ...
+    *       Into Cursor crTmpSub<nivel> ReadWrite
+    *   Delete For qtds <> 0
+    * (mantem so as combinacoes cujo saldo agregado eh ZERO). PROTECTED: eh
+    * detalhe interno de ObterNoHiPro/ObterNoProd, nao chamado pelo Form.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE DeduplicarSaldo(par_cCursorOrigem, par_nNivel)
+        LOCAL loc_cCursorDedup
+
+        loc_cCursorDedup = "cursor_4c_TmpSub" + TRANSFORM(par_nNivel)
+
+        IF USED(loc_cCursorDedup)
+            USE IN (loc_cCursorDedup)
+        ENDIF
+
+        SELECT a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns, SUM(qtds) AS qtds ;
+            FROM (par_cCursorOrigem) a ;
+            GROUP BY a.codigos, a.Emps, a.Dopes, a.Numes, a.Datas, a.Datars, a.Notas, a.ChkPagos, a.EmpDopNums, EmpSubns ;
+            INTO CURSOR (loc_cCursorDedup) READWRITE
+
+        SELECT (loc_cCursorDedup)
+        DELETE FOR qtds <> 0
+        GO TOP
+
+        RETURN loc_cCursorDedup
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterCabecalhoOperacao - equivalente a csSigMvCab dentro de NoHiPro/
+    * NoProd: Usuars/DtAlts/Usuals de UM EmpDopNums, usados no texto do no.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterCabecalhoOperacao(par_cEmpDopNums)
+        LOCAL loc_cSQL, loc_nResultado
+
+        THIS.this_cMensagemSQL = ""
+
+        IF USED("cursor_4c_CabInfo")
+            USE IN cursor_4c_CabInfo
+        ENDIF
+
+        loc_cSQL = "SELECT Usuars, DtAlts, Usuals FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(par_cEmpDopNums)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CabInfo")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN "cursor_4c_CabInfo"
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterNoHiPro - equivalente a NoHiPro: baixas de estoque/producao ligadas
+    * ao CODIGO (nDopes*1000000 + numero) do EmpDopNums informado, com o
+    * agrupamento+filtro de saldo zero (DeduplicarSaldo). Retorna o NOME do
+    * cursor deduplicado (cursor_4c_TmpSub<nivel>), ou "" se falhar.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterNoHiPro(par_nNivel, par_cEmps, par_cEmpDopNums, par_cCPros)
+        LOCAL loc_nCodOpe, loc_cCodigo, loc_cCursor, loc_cSQL, loc_nResultado
+
+        THIS.this_cMensagemSQL = ""
+
+        loc_nCodOpe = THIS.ObterCodigoOperacao(SUBSTR(par_cEmpDopNums, 4, 20))
+        IF loc_nCodOpe < 0
+            RETURN ""
+        ENDIF
+
+        loc_cCodigo = FormatarNumeroSQL(loc_nCodOpe * 1000000 + VAL(RIGHT(par_cEmpDopNums, 6)), 0)
+        loc_cCursor = "cursor_4c_BxEst" + TRANSFORM(par_nNivel)
+
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+
+        loc_cSQL = "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns, SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigMvPec a, SigMvCab b, SigMvItn c " + ;
+            "WHERE a.Codigos = " + loc_cCodigo + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "AND a.EmpDopNums = c.EmpDopNums " + ;
+            "AND c.Cpros = " + EscaparSQL(par_cCPros) + " " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns, 0 AS Qtds " + ;
+            "FROM SigMvPec a, SigMvCab b " + ;
+            "WHERE a.Codigos = " + loc_cCodigo + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "AND a.EmpSubns = " + EscaparSQL(par_cEmps) + " " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.Emps AS EmpSubns, SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigOpDev a, SigMvCab b, SigMvItn c " + ;
+            "WHERE a.Codigos = " + loc_cCodigo + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "AND a.EmpDopNums = c.EmpDopNums " + ;
+            "AND c.Cpros = " + EscaparSQL(par_cCPros) + " " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN THIS.DeduplicarSaldo(loc_cCursor, par_nNivel)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterNoProd - equivalente a NoProd: mesma logica de ObterNoHiPro, mas
+    * filtrando por EmpDopNums reconstruido a partir do codigo do produto/
+    * operacao (par_nCodigo). Retorna o NOME do cursor deduplicado
+    * (cursor_4c_TmpSub<nivel>), ou "" se falhar.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterNoProd(par_nNivel, par_cEmps, par_nCodigo, par_cCPros)
+        LOCAL loc_nCodOpe, loc_cDopes, loc_nNumero, loc_cEmpDopNums, loc_cCursor, loc_cSQL, loc_nResultado
+
+        THIS.this_cMensagemSQL = ""
+
+        loc_nCodOpe = INT(par_nCodigo / 1000000)
+        loc_cDopes  = THIS.ObterDopesPorCodigo(loc_nCodOpe)
+        IF EMPTY(loc_cDopes)
+            RETURN ""
+        ENDIF
+
+        loc_nNumero     = MOD(par_nCodigo, 1000000)
+        loc_cEmpDopNums = par_cEmps + PADR(loc_cDopes, 20) + STR(loc_nNumero, 6)
+        loc_cCursor     = "cursor_4c_BxEstProd" + TRANSFORM(par_nNivel)
+
+        IF USED(loc_cCursor)
+            USE IN (loc_cCursor)
+        ENDIF
+
+        loc_cSQL = "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns, SUM(c.Qtds) AS Qtds " + ;
+            "FROM SigMvPec a, SigMvCab b, SigMvItn c " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(loc_cEmpDopNums) + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "AND a.EmpDopNums = c.EmpDopNums " + ;
+            "AND c.Cpros = " + EscaparSQL(par_cCPros) + " " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, c.EmpDopNums, a.EmpSubns " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns, 0 AS Qtds " + ;
+            "FROM SigMvPec a, SigMvCab b " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(loc_cEmpDopNums) + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "AND a.EmpSubns = " + EscaparSQL(par_cEmps) + " " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.EmpSubns " + ;
+            "UNION ALL " + ;
+            "SELECT a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums, a.Emps AS EmpSubns, 0 AS Qtds " + ;
+            "FROM SigOpDev a, SigMvCab b " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(loc_cEmpDopNums) + " " + ;
+            "AND a.EmpDopNums = b.EmpDopNums " + ;
+            "GROUP BY a.Codigos, a.Emps, a.Dopes, a.Numes, b.Datas, b.Datars, b.Notas, b.ChkPagos, a.EmpDopNums"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemSQL = CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        RETURN THIS.DeduplicarSaldo(loc_cCursor, par_nNivel)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DESTROY - fecha os cursores auxiliares de escopo fixo (os numerados por
+    * nivel de recursao sao fechados pelo proprio Form conforme a arvore eh
+    * percorrida, ja que o nivel maximo eh dinamico - ate 50, igual ao legado).
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        LOCAL loc_aCursores[6], loc_nI
+
+        loc_aCursores[1] = "cursor_4c_Cab"
+        loc_aCursores[2] = "cursor_4c_Itens"
+        loc_aCursores[3] = "cursor_4c_Lista"
+        loc_aCursores[4] = "cursor_4c_Ope"
+        loc_aCursores[5] = "cursor_4c_Emp"
+        loc_aCursores[6] = "cursor_4c_CabInfo"
+
+        FOR loc_nI = 1 TO ALEN(loc_aCursores)
+            IF USED(loc_aCursores[loc_nI])
+                USE IN (loc_aCursores[loc_nI])
+            ENDIF
+        ENDFOR
+
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

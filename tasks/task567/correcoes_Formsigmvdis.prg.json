@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formsigmvdis.prg",
+    "timestamp":  "2026-09-24T07:26:33",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  1028,
+                          "Original":  "loc_oGrid.Column1.AddObject(\"chk_4c_Marca\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_marca\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: mouseup). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

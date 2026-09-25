@@ -1285,10 +1285,18 @@ function Corrigir-OptionGroupFontName {
     #>
     param([string[]]$Linhas)
 
+    # NOTA (Erro177_Corretor, 2026-09-25): a versao anterior usava um unico
+    # bool $insideGroupWith que virava .F. no PRIMEIRO ENDWITH encontrado -
+    # inclusive o ENDWITH de um WITH .Buttons(N) ANINHADO dentro do WITH do
+    # grupo. Resultado: FontName/FontSize eram removidos so do Buttons(1)
+    # (falso positivo - CommandButton/OptionButton individual TEM FontName/
+    # FontSize; quem nao tem eh o GRUPO) e os demais botoes ficavam intactos
+    # so por acidente de ordem. Corrigido para pilha: cada WITH aninhado tem
+    # o proprio estado "remover ou nao", suspenso ao entrar num WITH que nao
+    # seja o do grupo (ex.: .Buttons(N)) e restaurado ao fechar esse ENDWITH.
     $resultado = @()
     $groupNames = [System.Collections.Generic.HashSet[string]]@()
-    $insideGroupWith = $false
-    $currentGroupType = ""
+    $withStack = [System.Collections.Generic.Stack[bool]]::new()
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
@@ -1300,17 +1308,34 @@ function Corrigir-OptionGroupFontName {
             [void]$groupNames.Add($Matches[1])
         }
 
-        # Detecta WITH block que termina com nome de grupo
+        $insideGroupWith = ($withStack.Count -gt 0) -and $withStack.Peek()
+
         if ($linha -match '^\s*WITH\s+') {
+            $ehGroupWith = $false
             foreach ($name in $groupNames) {
                 if ($linha -match "\.$([regex]::Escape($name))\s*$") {
-                    $insideGroupWith = $true
+                    $ehGroupWith = $true
                     break
                 }
             }
+
+            if ($ehGroupWith) {
+                $withStack.Push($true)
+            }
+            elseif ($insideGroupWith) {
+                # WITH aninhado dentro do grupo (tipicamente .Buttons(N)) -
+                # suspende a remocao: o membro individual TEM FontName/FontSize.
+                $withStack.Push($false)
+            }
+            else {
+                $withStack.Push($false)
+            }
+
+            $insideGroupWith = ($withStack.Count -gt 0) -and $withStack.Peek()
         }
 
-        # Dentro de WITH de OptionGroup/CommandGroup, remover FontName/FontSize
+        # Dentro do WITH direto do grupo (nao de um Buttons(N) aninhado),
+        # remover FontName/FontSize.
         if ($insideGroupWith) {
             if ($linha -match '^\s*\.FontName\s*=') {
                 $remover = $true
@@ -1320,10 +1345,10 @@ function Corrigir-OptionGroupFontName {
                 $remover = $true
                 Add-Correcao -Tipo "GROUP_FONTSIZE" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido "(removido)" -Descricao "OptionGroup/CommandGroup NAO tem FontSize - definir nas Buttons individuais"
             }
+        }
 
-            if ($linha -match '^\s*ENDWITH\b') {
-                $insideGroupWith = $false
-            }
+        if ($linha -match '^\s*ENDWITH\b' -and $withStack.Count -gt 0) {
+            [void]$withStack.Pop()
         }
 
         if (-not $remover) {
@@ -15376,6 +15401,249 @@ function Corrigir-SelfDentroDeWith {
     return $Linhas
 }
 
+function Corrigir-BotoesCrudNaoReabilitadosNaVolta {
+    # Pattern #210 (Erro176, 2026-09-24) - AUTO-FIX + WARNING.
+    #
+    # `AjustarBotoesPorModo` DESABILITA os botoes CRUD da pagina Lista
+    # (Incluir/Visualizar/Alterar/Excluir/Buscar) quando o modo sai de "LISTA",
+    # mas so eh chamado ao ENTRAR em edicao (BtnIncluirClick / BtnAlterarClick /
+    # BtnVisualizarClick). O caminho de VOLTA - BtnSalvarClick -> AlternarPagina(1)
+    # e BtnCancelarClick - troca a pagina e recarrega a lista SEM nunca reabilitar
+    # os botoes: o usuario grava, volta para a Lista e a tela fica inutilizavel,
+    # com os 5 botoes cinza e so o Encerrar vivo.
+    #
+    # NAO estoura, NAO aparece em log e NAO quebra compilacao - o defeito eh um
+    # estado que ninguem restaura. Por isso passa por todos os gates.
+    #
+    # O ponto canonico do conserto eh o FIM de `AlternarPagina`, que ja eh o funil
+    # de TODO caminho de volta (Salvar, Cancelar, Confirmar, Exp/ImpXML). Forms de
+    # referencia que ja nascem certos: Formcfi, Formcnl, FormFNF, FormFte, FormOcc.
+    #
+    # Medido no VFP9 em 2026-09-24 (Formgpd, harness instanciando o form):
+    #   MODO INCLUIR : Incluir=.F. ... Buscar=.F.
+    #   VOLTA LISTA  : Incluir=.T. ... Buscar=.T.   <- so DEPOIS da chamada injetada
+    #
+    # So muta quando ha certeza:
+    #   - o AjustarBotoesPorModo do arquivo realmente DESABILITA por modo (RHS
+    #     diferente de `.T.` literal). Form que so liga botao nao tem este defeito;
+    #   - existe `PROCEDURE AlternarPagina` e ela ainda NAO chama o metodo;
+    #   - ha ancora deterministica para a injecao (o ENDIF do bloco
+    #     `IF par_nPagina = 1`, o ENDCASE do DO CASE, ou a linha do ActivePage).
+    #
+    # WARNING (sem mutar o modo) quando o bloco de volta NAO faz
+    # `this_cModoAtual = "LISTA"`: nesse caso a reabilitacao depende de CADA caller
+    # lembrar de trocar o modo ANTES de chamar - foi o caso de FormSET (cujo
+    # BtnSalvarClick nao trocava) e de Formemp/Formsigpdmp7/FormSRV/FormDpi.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo
+    )
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # ---- 1) O AjustarBotoesPorModo deste arquivo desabilita botao CRUD por modo?
+    $idxAjustar = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+AjustarBotoesPorModo\b') {
+            $idxAjustar = $i
+            break
+        }
+    }
+    if ($idxAjustar -lt 0) { return $Linhas }
+
+    $fimAjustar = $Linhas.Count - 1
+    for ($i = $idxAjustar + 1; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*ENDPROC\b') { $fimAjustar = $i; break }
+    }
+
+    # O `Enabled` tem de depender do MODO, nao de outra coisa. Medido em 2026-09-24:
+    # aceitar "qualquer RHS diferente de .T." acusa 7 forms que NAO tem este defeito -
+    # neles o botao depende de TER REGISTRO (`loc_lTemRegistro`, de RECCOUNT) ou de
+    # PERMISSAO (`!THIS.InibeAlterar`), e eh recalculado sempre que a lista muda.
+    # Por isso: coletar as locais derivadas de `this_cModoAtual` e exigir que o RHS
+    # cite a property ou uma dessas locais.
+    $varsDeModo = New-Object System.Collections.Generic.HashSet[string]
+    for ($i = $idxAjustar; $i -le $fimAjustar; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$') {
+            $var = $matches[1]
+            $val = $matches[2]
+            if ($val -match '(?i)this_cModoAtual') { [void]$varsDeModo.Add($var.ToLowerInvariant()) }
+        }
+    }
+
+    $desabilitaPorModo = $false
+    for ($i = $idxAjustar; $i -le $fimAjustar; $i++) {
+        if ($Linhas[$i] -match '(?i)cmd_4c_(Incluir|Visualizar|Alterar|Excluir|Buscar)\s*\.\s*Enabled\s*=\s*(.+)$') {
+            $rhs = ($matches[2] -replace '&&.*$', '').Trim()
+            if ($rhs -match '(?i)^\.[TF]\.$') { continue }
+            if ($rhs -match '(?i)this_cModoAtual') { $desabilitaPorModo = $true; break }
+            foreach ($v in $varsDeModo) {
+                if ($rhs -match ('(?i)\b' + [regex]::Escape($v) + '\b')) { $desabilitaPorModo = $true; break }
+            }
+            if ($desabilitaPorModo) { break }
+        }
+    }
+    if (-not $desabilitaPorModo) { return $Linhas }
+
+    # ---- 1b) O metodo eh mesmo CHAMADO ao entrar em edicao?
+    #
+    # Sem esta checagem o pattern eh LARGO DEMAIS. Medido em 2026-09-24 sobre os
+    # forms do projeto: o criterio "desabilita por modo + AlternarPagina nao chama"
+    # acusa 43 arquivos, contra os 15 que realmente tem o defeito. A diferenca sao
+    # dois grupos que NAO devem ser mutados:
+    #   - metodo DEFINIDO e NUNCA CHAMADO (FormACE, FormBAL, FormClf, Formcmp,
+    #     FormMun, FormOrg, ...): os botoes nunca chegam a ser desligados, e injetar
+    #     a chamada faria o metodo passar a RODAR - mudanca de comportamento em form
+    #     que nao tem bug nenhum;
+    #   - metodo ja chamado em OUTRO ponto do caminho de volta - BtnSalvarClick /
+    #     BtnConfirmarClick / CarregarLista (FormICM, FormTop, FormTot, FormObs,
+    #     FormMPD, FormSigPrCtc, FormSIGPRLNC): ja correto, a injecao so duplicaria.
+    #
+    # `BtnCancelarClick` sozinho NAO conta como caminho de volta coberto: quem so
+    # chama de la continua quebrado na GRAVACAO, que eh o sintoma reportado
+    # (FormDpi, FormOrc, FormSET, FormSigPrCtr).
+    # Alem disso, a chamada tem de estar nos handlers que ENTRAM em edicao. Eh a
+    # assinatura exata do defeito, e eh o que separa dos 7 falsos positivos acima:
+    # neles o metodo eh chamado de InicializarForm/LimparCampos/BOParaForm/
+    # BtnBuscarClick, que rodam quando a lista muda - ali o estado ja se refaz.
+    $nChamadas    = 0
+    $entraEmEdicao = $false
+    $cobreRetorno = $false
+    $procAtual    = ''
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+([A-Za-z0-9_]+)') {
+            $procAtual = $matches[3]
+        }
+        if ($i -ge $idxAjustar -and $i -le $fimAjustar) { continue }
+        if ($Linhas[$i] -match '(?i)AjustarBotoesPorModo\s*\(') {
+            $nChamadas++
+            if ($procAtual -match '(?i)^(BtnIncluirClick|BtnAlterarClick|BtnVisualizarClick)$') { $entraEmEdicao = $true }
+            if ($procAtual -match '(?i)^(BtnSalvarClick|BtnConfirmarClick|CarregarLista)$')     { $cobreRetorno  = $true }
+        }
+    }
+    if ($nChamadas -eq 0 -or -not $entraEmEdicao -or $cobreRetorno) { return $Linhas }
+
+    # ---- 2) Existe AlternarPagina e ela ainda nao chama o metodo?
+    $idxAlternar = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+AlternarPagina\b') {
+            $idxAlternar = $i
+            break
+        }
+    }
+    if ($idxAlternar -lt 0) {
+        Write-Host "[Pattern #210 WARN] AjustarBotoesPorModo desabilita botao CRUD e o form nao tem AlternarPagina" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-210-SEM-ALTERNARPAGINA" -Linha ($idxAjustar + 1) -Original $Linhas[$idxAjustar].Trim() -Corrigido "(nao mutado - sem AlternarPagina)" `
+            -Descricao ("Pattern #210 WARNING: este form DESABILITA os botoes CRUD da Lista conforme o modo, mas nao tem " +
+                        "``PROCEDURE AlternarPagina`` para servir de funil de volta. Conferir a mao que o caminho de VOLTA " +
+                        "(BtnSalvarClick / BtnCancelarClick) chama ``THIS.AjustarBotoesPorModo()`` depois de repor o modo " +
+                        "para LISTA - senao, apos gravar, os botoes ficam cinza. Origem: Erro176 (2026-09-24).")
+        return $Linhas
+    }
+
+    $fimAlternar = $Linhas.Count - 1
+    for ($i = $idxAlternar + 1; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*ENDPROC\b') { $fimAlternar = $i; break }
+    }
+
+    for ($i = $idxAlternar; $i -le $fimAlternar; $i++) {
+        if ($Linhas[$i] -match '(?i)AjustarBotoesPorModo\s*\(') { return $Linhas }
+    }
+
+    # ---- 3) Ancora de injecao, em ordem de preferencia
+    $idxAncora = -1
+    $blocoVoltaInicio = -1
+    $blocoVoltaFim    = -1
+
+    for ($i = $idxAlternar; $i -le $fimAlternar; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*IF\s+par_nPagina\s*={1,2}\s*1\s*(&&.*)?$') {
+            $nivel = 1
+            for ($j = $i + 1; $j -le $fimAlternar; $j++) {
+                $tj = $Linhas[$j].Trim()
+                if ($tj -match '(?i)^IF\b')    { $nivel++ }
+                if ($tj -match '(?i)^ENDIF\b') {
+                    $nivel--
+                    if ($nivel -eq 0) { $idxAncora = $j; $blocoVoltaInicio = $i; $blocoVoltaFim = $j; break }
+                }
+            }
+            break
+        }
+    }
+
+    if ($idxAncora -lt 0) {
+        for ($i = $idxAlternar; $i -le $fimAlternar; $i++) {
+            if ($Linhas[$i] -match '(?i)^\s*ENDCASE\b') { $idxAncora = $i; break }
+        }
+    }
+    if ($idxAncora -lt 0) {
+        for ($i = $idxAlternar; $i -le $fimAlternar; $i++) {
+            if ($Linhas[$i] -match '(?i)ActivePage\s*=\s*par_nPagina') { $idxAncora = $i; break }
+        }
+    }
+
+    if ($idxAncora -lt 0) {
+        Write-Host "[Pattern #210 WARN] AlternarPagina sem ancora deterministica - nao mutado" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-210-SEM-ANCORA" -Linha ($idxAlternar + 1) -Original $Linhas[$idxAlternar].Trim() -Corrigido "(nao mutado - sem ancora)" `
+            -Descricao ("Pattern #210 WARNING: os botoes CRUD sao desabilitados por modo e ``AlternarPagina`` nunca chama " +
+                        "``AjustarBotoesPorModo``, mas o corpo do metodo nao tem ancora segura (nem bloco " +
+                        "``IF par_nPagina = 1``, nem ``ENDCASE``, nem a atribuicao de ``ActivePage``) para injetar a chamada. " +
+                        "Acrescentar a mao no FIM do caminho de sucesso. Origem: Erro176 (2026-09-24).")
+        return $Linhas
+    }
+
+    # ---- 4) O bloco de volta repoe o modo para LISTA?
+    $repoeModo = $false
+    if ($blocoVoltaInicio -ge 0) {
+        for ($i = $blocoVoltaInicio; $i -le $blocoVoltaFim; $i++) {
+            if ($Linhas[$i] -match '(?i)this_cModoAtual\s*=\s*"LISTA"') { $repoeModo = $true; break }
+        }
+    } else {
+        for ($i = $idxAlternar; $i -le $fimAlternar; $i++) {
+            if ($Linhas[$i] -match '(?i)this_cModoAtual\s*=\s*"LISTA"') { $repoeModo = $true; break }
+        }
+    }
+
+    if (-not $repoeModo) {
+        Write-Host "[Pattern #210 WARN] linha $($idxAncora + 1): AlternarPagina nao repoe this_cModoAtual = LISTA" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-210-MODO-NAO-REPOSTO" -Linha ($idxAncora + 1) -Original $Linhas[$idxAncora].Trim() -Corrigido "(chamada injetada - conferir o modo)" `
+            -Descricao ("Pattern #210 WARNING: a chamada a ``THIS.AjustarBotoesPorModo()`` foi injetada no fim de " +
+                        "``AlternarPagina``, mas este metodo NAO repoe ``THIS.this_cModoAtual = `"LISTA`"`` no caminho de " +
+                        "volta - a reabilitacao passa a depender de CADA caller trocar o modo ANTES de chamar. Conferir " +
+                        "BtnSalvarClick/BtnCancelarClick e, no padrao canonico, repor o modo dentro do proprio " +
+                        "``AlternarPagina``. No Erro176 o FormSET gravava sem trocar o modo e continuaria com os botoes " +
+                        "cinza mesmo com a chamada. Origem: Erro176 (2026-09-24).")
+    }
+
+    # ---- 5) Injeta a chamada logo APOS a ancora, com a indentacao da ancora
+    $indent = ''
+    if ($Linhas[$idxAncora] -match '^(\s*)') { $indent = $matches[1] }
+
+    $novas = New-Object System.Collections.ArrayList
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        [void]$novas.Add($Linhas[$i])
+        if ($i -eq $idxAncora) {
+            [void]$novas.Add('')
+            [void]$novas.Add($indent + '*-- Pattern #210 (Erro176): reabilita os botoes CRUD ao VOLTAR para a Lista')
+            [void]$novas.Add($indent + 'THIS.AjustarBotoesPorModo()')
+        }
+    }
+
+    Write-Host "[Pattern #210] chamada a AjustarBotoesPorModo injetada no fim de AlternarPagina (linha $($idxAncora + 1))" -ForegroundColor Green
+    Add-Correcao -Tipo "BOTOES_CRUD_NAO_REABILITADOS" -Linha ($idxAncora + 1) -Original $Linhas[$idxAncora].Trim() -Corrigido "THIS.AjustarBotoesPorModo()" `
+        -Descricao ("Pattern #210: ``AjustarBotoesPorModo`` DESABILITA os botoes CRUD da pagina Lista quando o modo sai de " +
+                    "LISTA, mas so era chamado ao ENTRAR em edicao (BtnIncluir/BtnAlterar/BtnVisualizar). O caminho de " +
+                    "VOLTA (BtnSalvarClick -> AlternarPagina(1), BtnCancelarClick) nunca reabilitava: o usuario grava, " +
+                    "volta para a Lista e ve Incluir/Visualizar/Alterar/Excluir/Buscar cinza, so o Encerrar vivo. NAO " +
+                    "estoura, NAO entra em log e NAO quebra compilacao - eh estado que ninguem restaura, por isso passa " +
+                    "por todos os gates. A chamada foi injetada no FIM de ``AlternarPagina``, que ja eh o funil de todo " +
+                    "caminho de volta. Medido no VFP9 em 2026-09-24 (Formgpd): antes, VOLTA LISTA = .F. nos 5 botoes; " +
+                    "depois, .T. Sweep 2026-09-24: 15 forms (Formgpd, FormCAD, FormCNQ, Formemp, FormFti, FormLin, " +
+                    "FormOCO, FormProduto, FormRPT, Formsigpdmp7, FormSRV, FormSET, FormOrc, FormSigPrCtr, FormDpi). " +
+                    "Referencia: Formcfi, Formcnl, FormFNF, FormOcc. Origem: Erro176 (2026-09-24).")
+
+    return $novas.ToArray()
+}
+
 function Corrigir-FormBuscaAuxiliarSemHandle {
     # Pattern #208 (Erro172, 2026-09-23) - WARNING-only.
     #
@@ -16193,6 +16461,9 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ControlsIndexadoPorNome -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-FormBuscaAuxiliarSemHandle -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-SelfDentroDeWith -Linhas $linhas -Arquivo $Arquivo
+    # #210 so na lista de forms/BO: AjustarBotoesPorModo/AlternarPagina so existem
+    # em form CRUD - em classe base/utilitario o pattern nao teria o que casar.
+    $linhas = Corrigir-BotoesCrudNaoReabilitadosNaVolta -Linhas $linhas -Arquivo $Arquivo
 
     }
 

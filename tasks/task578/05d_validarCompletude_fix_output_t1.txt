@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Syntax verified clean. Summary of the propagation:
+
+| Artefato | Status | Detalhes |
+|---|---|---|
+| BO corrigido | OK | `SIGMVTI2BO.prg` ÔÇö coment├írio reescrito, zero mudan├ºa de l├│gica |
+| Prompt (New-PromptFase, ativo p/ TODAS as fases/tipos) | OK | Linha ~4975, se├º├úo "REGRA OBRIGATORIA DE COMPLETUDE" |
+| Prompt (Etapa03, 4 blocos "Regras VFP Criticas") | OK | 4 ocorr├¬ncias (REPORT/OPERACIONAL/Fase A/Fase B) |
+| migration-patterns.md | OK | Nova se├º├úo `## 228` |
+| CorretorAutomatico.ps1 | N/A | Reescrita de texto livre em coment├írio n├úo ├® segura via regex autom├ítico (risco de falso-negativo/positivo) ÔÇö mesmo tratamento dado aos demais casos desta fam├¡lia |
+| corretor-patterns.md | N/A | Sem novo pattern automatizado |
+| MEMORY.md + feedback_harness_de_auditoria_mede_errado.md | OK | Caso #19 documentado, ├¡ndice atualizado |
+| Sweep retroativo | N/A | N├úo necess├írio (CorretorAutomatico n├úo mudou) |
+
+**Resumo**: o erro n├úo era um TODO real ÔÇö `SIGMVTI2BO.prg` n├úo tem nenhuma procedure vazia. O validador `05d_validarCompletude` disparou num falso positivo porque seu regex casa a substring "nao implement" em **qualquer** coment├írio, e o cabe├ºalho do BO usava essa frase s├│ para explicar por que o BO (form de consulta, somente leitura) n├úo sobrescreve `Inserir`/`Atualizar`/`ExecutarExclusao`. Corrigi reescrevendo apenas o coment├írio, e propaguei a li├º├úo para o gerador de prompts e para a skill/mem├│ria, para que a pr├│xima migra├º├úo de um BO somente-leitura n├úo caia na mesma armadilha.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is wired correctly: each new method is defined exactly once and called exactly once, `WITH`/`ENDWITH` and `PROCEDURE`/`ENDPROC` counts balance, and no `AddObject` name collisions exist within any single parent container. 
+
+Phase 5/8 is complete. Summary of what was added to `C:\4c\projeto\app\forms\operacionais\Formsigmvitn.prg`:
+
+- **`ConfigurarCamposParte1`** ÔÇö new orchestrator, wired into `ConfigurarPageFrame`, covering the first half of the data fields per the layout/mapping dumps.
+- **`ConfigurarCamposLogotipo`** ÔÇö the logo image inside `cnt_4c__Img4c`.
+- **`ConfigurarCamposMensagens`** ÔÇö labels for the two footer message strips (`cnt_4c__Mensagem`, `cnt_4c_Mensagems`).
+- **`ConfigurarCamposCaixaLivre`** ÔÇö the two overlapping "CAIXA LIVRE" shadow labels.
+- **`ConfigurarCamposCancelaItem`** ÔÇö item-cancel panel fields (labels, item/product/barcode textboxes, confirm/cancel buttons).
+- **`ConfigurarCamposConsulta`** ÔÇö the Ctrl+P price-lookup panel (product code, price, result labels).
+- **`ConfigurarCamposItem`** ÔÇö the main item-entry panel (product/quantity, subtotal, discount/surcharge block, total).
+- **`ConfigurarCamposFinanc`** ÔÇö the credi├írio/barcode panel (barcode pair fields, total).
+
+Two name collisions present in the auto-generated `mapeamento.json` (duplicate `Say1`/`Label1` in `Cnt_Consulta`, duplicate `Say8` in `CntItem`) were resolved with distinct names and documented inline, per CLAUDE.md rule #11's caution about generic-name collisions. Remaining fields (`Cnt_Identifica`, `Cnt_Fpagto`, leftover `Cnt_Credito`/`Cnt_Pendencia` labels, `cmbTOpers`) are deferred to Phase 6 as noted in the new header comment block.

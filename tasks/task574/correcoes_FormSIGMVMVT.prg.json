@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGMVMVT.prg",
+    "timestamp":  "2026-09-25T08:00:30",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-001-RETURN-NO-TRY",
+                          "Linha":  1394,
+                          "Original":  "RETURN",
+                          "Corrigido":  "",
+                          "Descricao":  "Pattern #1 WARNING: 5 RETURN dentro de TRY/CATCH/FINALLY. Medido no VFP9: TODO RETURN executado dentro de TRY...ENDTRY dispara \u0027RETURN/RETRY statement not allowed in TRY/CATCH\u0027 em RUNTIME (o .prg compila limpo) -- vale para RETURN bare e com valor, no TRY, no CATCH e no FINALLY, com ou sem clausula FINALLY, em procedure solta e em metodo de classe. Guarda de early-exit so quebra quando a condicao e atingida (validacao falha, campo vazio, SQLEXEC falha), por isso o caminho feliz passa nos testes. FIX MANUAL (nao automavel por regex, exige entender o escopo): declarar LOCAL loc_lProsseguir = .T.; trocar cada RETURN por loc_lProsseguir = .F.; envolver o codigo seguinte em IF loc_lProsseguir ... ENDIF; deixar o RETURN unico DEPOIS do ENDTRY. NUNCA trocar \u0027RETURN \u003cvalor\u003e\u0027 por \u0027\u003cvar\u003e = \u003cvalor\u003e\u0027 sem envolver o resto do bloco -- isso descarta o early-exit e troca um erro visivel por gravacao errada silenciosa. EXIT e LOOP dentro do TRY sao seguros (medidos). Sites: L1394 em HiNivel (bloco TRY); L1490 em SubNivel (bloco TRY); L1497 em SubNivel (bloco TRY); L1599 em NoHiPro (bloco TRY); L1720 em NoProd (bloco TRY). Origem: Erro159 (2026-09-16, FormCEP.ValidarEstadosLista ao filtrar pela UF)."
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

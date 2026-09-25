@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stub markers found, and the file is clean. Phase 3/8 is complete: created `FormSigMvChv.prg` (208 lines) with the flat OPERACIONAL structure (no PageFrame, matching the legacy SIGMVCHV which has no Page1/Page2), containing:
+
+- `DEFINE CLASS FormSigMvChv AS FormBase` with visual properties matching the legacy SCX (Width=500, Height=350, modal WindowType=1, TitleBar=0, etc.)
+- `Init()` receiving `par_cEscolha`/`par_cEmpDopNums` (legacy `pcEscolha`/`pEmpDopNums`, dropping `pCnx` since `gnConnHandle` is global)
+- `InicializarForm()` instantiating `SigMvChvBO`
+- `ConfigurarPageFrame()` as the visual-assembly orchestrator (architectural role only, no real PageFrame) calling `ConfigurarCabecalho()`
+- `ConfigurarCabecalho()` building `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo` per the legacy `cntSombra` dump
+- `TornarControlesVisiveis()` and `Destroy()` (with mandatory `DODEFAULT()` per the menu-shrink rule)
+
+Grid, CommandGroup buttons (`cnt_4c_Botoes`), and the standalone `cmd_4c_Incluir`/`cmd_4c_Excluir` buttons are deferred to Fase 4 as instructed.

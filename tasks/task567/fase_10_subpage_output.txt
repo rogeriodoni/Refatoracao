@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö these files are new/untracked from earlier phases of this same migration (not something I need to commit myself); the working tree is clean of any stray scratch artifacts from my work. The implementation is complete.
+
+## Summary
+
+I implemented **FASE 10** ÔÇö migrating the "Distribui├º├úo" sub-page (original `SIGMVDIS.Pagina.Dados.Pageframe1.Page2`) into `Formsigmvdis.prg`.
+
+**Important correction to the task brief:** the prompt's `ACESSO A PAGINA` snippet pointed at `pgf_4c_DadosInternos.Page1`, but that page is deliberately reserved (per the docstring left by the prior phase, and `BtnProcessarDistribuicaoClick` already does `.ActivePage = 3`). Following the task's literal instruction would have overwritten the reserved page and contradicted code already shipped. I placed the new content in `pgf_4c_DadosInternos.Page3` ("Distribui├º├úo"), consistent with the established convention.
+
+What was added:
+- **`ConfigurarPgPage2()`**: all 41 direct controls from the legacy dump (two grids with their 11 columns total, filter fields for Grupo/Subgrupo, product-search field, and the full read-only "product detail" block), with exact `Top/Left/Width/Height` from the source and label `ForeColor` corrected from the legacy's near-white `RGB(231,254,253)` to `RGB(36,84,155)` (regra #12 ÔÇö matches sibling labels `Say9`/`Say11`).
+- Wired into `ConfigurarPaginaDados()` right after `ConfigurarPgPage1()`.
+- **Handlers** (all `PUBLIC` per BINDEVENT rules): `GrdDisponivelAfterRowColChange` (product detail + photo, mirroring the precedent already in `FormSigPrCtr.prg`), `ImgFotoDblClick` (zoom with `FILE()` guard + ShellExecute fallback ÔÇö never calls the unported `SigOpZom` blindly), Grupo/Subgrupo dual-field lookups, `BtnFiltrarDisponivelClick`, `ValidarProdutoInicial`, and the Distribu├¡do/Local grid-column handlers.
+- All handlers touching `cursor_4c_Disponivel`/`cursor_4c_Distribui` are `USED()`-guarded, since populating those cursors is deferred to a future phase (matching how `cursor_4c_Estoque` was left in Phase 9).
+- Added cleanup for the new cursors in `Destroy()`.
+
+Verified the result actually compiles: ran VFP9 headlessly (`COMPILE "Formsigmvdis.prg"`) and confirmed the `.fxp` was produced with no errors, then cleaned up the scratch check files.

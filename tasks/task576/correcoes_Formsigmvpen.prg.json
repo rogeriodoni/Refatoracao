@@ -1,0 +1,42 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvpen.prg",
+    "timestamp":  "2026-09-25T15:33:29",
+    "correcoes":  [
+                      {
+                          "Tipo":  "ENCERRAR-CANONICO",
+                          "Linha":  465,
+                          "Original":  "(auto-fix)",
+                          "Corrigido":  "(auto-fix)",
+                          "Descricao":  "cmd_4c_Encerrar.Height=100 -\u003e 75 (padrao FormCor)"
+                      },
+                      {
+                          "Tipo":  "ENCERRAR-CANONICO",
+                          "Linha":  466,
+                          "Original":  "(auto-fix)",
+                          "Corrigido":  "(auto-fix)",
+                          "Descricao":  "cmd_4c_Encerrar.Width=80 -\u003e 75 (padrao FormCor)"
+                      },
+                      {
+                          "Tipo":  "STANDALONE-BTN-THEMES-F",
+                          "Linha":  474,
+                          "Original":  "(.Themes=.F. em standalone CommandButton com Picture)",
+                          "Corrigido":  ".Themes=.T.",
+                          "Descricao":  "Standalone CommandButton com Picture+Themes=.F. nao renderiza icone (Pattern #99)"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "AUTO-182-BOTAO-LEFT-ABSOLUTO",
+                          "Linha":  464,
+                          "Original":  ".Left = 660 (provavel Left absoluto do container — botao invisivel)",
+                          "Corrigido":  ".Left = 5 (Left relativo canonico para cmd_4c_Encerrar)",
+                          "Descricao":  "Pattern #182 (Erro143): cmd_4c_Encerrar.Left = 660 parece ser Left absoluto do container pai (\u003e10, deve ser relativo). Corrigido para Left canonico RELATIVO = 5. Botao com Left absoluto fica em posicao 660 + offset_container, fora do form (Width=1000), INVISIVEL. Sweep 2026-09-03: 32 forms afetados."
+                      }
+                  ],
+    "totalCorrecoes":  5
+}

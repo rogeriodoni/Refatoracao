@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+O erro **n├úo estava** em `FormSigMvExp.prg` nem em `SigMvExpBO.prg` ÔÇö ambos est├úo corretos e fi├®is ao legado `SIGMVEXP.SCX`, que ├® um form despachante flat (337x147, sem PageFrame, um ├║nico bot├úo "Aguarde Processando Dados"). Este ├® exatamente o caso de origem j├í registrado em mem├│ria do projeto (`feedback_gate_fase4_exige_grid_inexistente`).
+
+O bug real estava em `automation\vfp_helpers\TestFormWrapper.prg` (harness gen├®rico da etapa 06_testForm): ele testava 5 bot├Áes CRUD fixos via `EVALUATE("loc_oForm.pgf_4c_Principal.Page1.cnt_4c_Botoes.cmd_4c_*")`, e como este form n├úo tem `pgf_4c_Principal`, o `EVALUATE` estourava "Unknown member" e era tratado como erro fatal ÔÇö mesmo o form estando correto.
+
+**Corre├º├úo aplicada** (s├│ no harness, arquivos do form/BO n├úo foram tocados, preservando o PILAR 1):
+- Adicionei `ExisteCaminhoObjeto()` em `TestFormWrapper.prg`, que confere cada segmento do caminho com `PEMSTATUS` antes do `EVALUATE`.
+- Se a estrutura CRUD n├úo existir, o bot├úo agora ├® logado como "N/A" em vez de gerar `gp_lSucesso = .F.`/`loc_nReturnCode = 3`.
+- Erros reais de clique continuam sendo capturados normalmente.
+
+Registrei a li├º├úo em mem├│ria (`feedback_testformwrapper_exige_botoes_crud_inexistentes.md`) para que reprova├º├Áes futuras de 06_testForm em forms fora do padr├úo CRUD sejam diagnosticadas como poss├¡vel bug do harness antes de mexer no form.

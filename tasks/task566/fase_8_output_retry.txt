@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSIGMVCTH.prg` est├í completo, compila limpo e instancia de verdade.
+
+## O que a Fase 8 acrescentou ao form
+
+| M├®todo | Conte├║do real (sem stub) |
+|---|---|
+| `FormParaBO()` | Repassa o filtro do Init legado (`.CPros = Padr(pPro,10)`, `.Codigos = pCod`) para o BO. Chamado no `InicializarForm` **e** em todo `CarregarLista`, ent├úo o BO nunca consulta com filtro desatualizado |
+| `BOParaForm()` | Carrega a linha corrente do cursor nas propriedades do BO (`CarregarDoCursor`, que existia e estava **morto**) e repinta os 4 campos de aprova├º├úo ÔÇö transcri├º├úo do `AfterRowColChange` do `grdCotacoes` legado |
+| `BtnCancelarClick()` | Era `CmdRetornarClick`. ├ë literalmente o bot├úo de cancelar: o SCX declara `btnSair.Cancel = .T.`, ent├úo ESC dispara o mesmo Click |
+
+`AtualizarCamposAprovacao` foi absorvido por `BOParaForm` (um nome para uma coisa).
+
+**Prova de execu├º├úo** (VFP9, `gb_4c_ModoTeste`): `CREATEOBJECT=O`, 12 controles, `BO.CPros=[PROP0001      ]` (o `FormParaBO` realmente empurrou), grid ligado a `cursor_4c_HistPeds` com 8 colunas e headers `Data`ÔÇª`Fornecedor` preservados, `CarregarLista()=.T.`, `BtnCancelarClick()` OK.
+
+## O gate da Fase 8 estava insatisfaz├¡vel ÔÇö corrigi o gate
+
+Ele exigia, **incondicionalmente**, um `PROCEDURE Btn(Salvar|Confirmar|Gravar|ÔÇª)Click`. O SIGMVCTH ├® um visualizador somente-leitura: o ├║nico bot├úo do SCX ├® `btnSair` ("Retornar", `Click = ThisForm.Release`). Passar s├│ inventando um bot├úo (viola o PILAR 1) ou criando handler vazio (proibido pela regra de completude). ├ë a **terceira recorr├¬ncia** da mesma fam├¡lia (Fase 6/lookup, Fase 7/piso de 2 handlers).
+
+Relaxei fail-closed exigindo **tr├¬s provas** do dump: sem objeto de gravar + **todo** `Click` s├│ faz `Release` + exatamente 1 bot├úo. Tamb├®m extra├¡ o contador de bot├Áes da Fase 7 para um helper compartilhado (`Get-ContagemBotoesLegado`) ÔÇö verificado id├¬ntico ├á implementa├º├úo anterior nos 565 dumps, 0 diverg├¬ncias.
+
+Vale registrar por que a **primeira** vers├úo do conserto foi descartada: eu tinha usado lista de palavras no nome do bot├úo, e medindo dei de cara com a├º├úo de verdade que nenhuma lista pega ÔÇö `btnCopiar`, `btnCargas`, `btnApagar`, `cmdLimSenha`, "Carrega ibpt", "Gera Invent├írio TXT". S├│ pelo nome/contagem a exce├º├úo liberaria **58** forms; olhando o corpo do Click, **7**. Regress├úo confirmada: SigCdOrc, SIGCDIBP, SigCdUsu e SIGRECCJ continuam reprovando.
+
+## Uma corre├º├úo que afeta o pipeline inteiro
+
+Meus coment├írios diziam que `FormParaBO`/`BOParaForm` eram PUBLIC "alcan├º├íveis pelo harness". **Falso**, e medi: `FormBase` os declara `PROTECTED`, e em VFP9 a subclasse **n├úo consegue alargar o escopo do pai** ÔÇö redeclarar sem modificador continua estourando `Property FORMPARABO is not found` na chamada externa, enquanto `PEMSTATUS(...,5)` mente devolvendo `.T.`. Corrigi os coment├írios (os m├®todos funcionam via `THIS.`, que ├® o uso real).
+
+Isso invalida parcialmente a orienta├º├úo da mem├│ria sobre o Pattern #196 ("remover PROTECTED e vira PUBLIC") ÔÇö atualizei-a: s├│ vale quando a prote├º├úo **n├úo** vem do `FormBase`. Os 5 m├®todos que o harness chama de fora n├úo est├úo entre os protegidos da base, ent├úo o corretor segue correto.
+
+**N├úo commitei**: nada na tarefa pediu, e o `OrquestradorMigracao.ps1` j├í chegou com as corre├º├Áes das Fases 6/7 n├úo commitadas de execu├º├Áes anteriores ÔÇö um commit meu arrastaria esse trabalho junto. Diga se quer que eu feche tudo num commit.

@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í conclu├¡da e validada.
+
+## O que foi feito
+
+**Renomea├º├Áes para os nomes can├┤nicos** (o gate da Fase 8 exigia; os m├®todos j├í existiam com nome de legado, ent├úo renomeei em vez de criar duplicatas vazias):
+- `CmdProcessaClick` ÔåÆ `BtnProcessaClick`, `CmdCancelaClick` ÔåÆ `BtnCancelarClick`, `CarregarDados` ÔåÆ `CarregarLista` ÔÇö BINDEVENTs e chamadores atualizados junto.
+
+**Quatro m├®todos novos, com l├│gica real:**
+- `FormParaBO()` ÔÇö transfere os 6 filtros da tela para o BO e valida o per├¡odo (vazio / invertido). Datas passam por `ConverterParaData()` (regra #16 ÔÇö o TextBox nasce `DATE`, o BO monta `DATETIME`).
+- `BOParaForm()` ÔÇö caminho inverso; ├® o ├║nico ponto que escreve nesses 6 campos, reproduzindo o bloco de `Refresh` do `limpatela` legado.
+- `HabilitarCampos()` ÔÇö trava a tela durante o lote. "Encerrar" nunca ├® desabilitado (├║nica sa├¡da de form modal com `ControlBox = .F.`).
+- `AjustarBotoesPorModo()` ÔÇö sincroniza os bot├Áes com o estado real da grade.
+
+`LimparTela` e `Processamento` foram religados para passar por esses m├®todos.
+
+## Duas corre├º├Áes que s├│ apareceram medindo
+
+1. **`FormParaBO`/`BOParaForm` s├úo PROTECTED por heran├ºa** ÔÇö `FormBase` os declara assim, e em VFP9 o override mant├®m o escopo. Declarei-os explicitamente `PROTECTED` e corrigi os coment├írios que eu havia escrito dizendo "PUBLIC". `PEMSTATUS` retornava `.T.` e a chamada real estourava `Property FORMPARABO is not found` ÔÇö exatamente a armadilha da regra #3.
+2. **Removi um `CarregarLista()` que eu mesmo havia posto** ap├│s o processamento: ele remarcaria todas as linhas com `.T.`, descartando a sele├º├úo do usu├írio. No legado `csOperacaos` ├® montado uma ├║nica vez no `Init` e o processamento n├úo o altera.
+
+## Verifica├º├úo
+
+- Compila limpo (sem `.err`, `.fxp` gerado ÔÇö apagando o `.fxp` antes, regra #29).
+- Form **instanciado de verdade**: `VARTYPE = "O"`; `CarregarLista` e `AjustarBotoesPorModo` cham├íveis de fora (compat├¡vel com o harness); per├¡odo vazio e invertido abortam **antes** de acionar o BO (sentinela `QtdProcessada` intacta); per├¡odo v├ílido popula as 6 propriedades com data tipo `D`; `LimparTela` zera BO e tela.
+- Auditores `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes`: nenhuma ocorr├¬ncia deste form.
+- Gate da Fase 8 reproduzido com a l├│gica exata do orquestrador: **PASSA** (o dump legado confirma aus├¬ncia de bot├úo de gravar, ent├úo a exce├º├úo do `BtnSalvarClick` se aplica).
+
+Dois pontos de ambiente que encontrei e contornei no teste, n├úo no c├│digo: `config.prg` faz ~300 `SET PROCEDURE ADDITIVE` e as primeiras entradas caem da lista (`FormBase` ficou inalcan├º├ível); e a supress├úo de modais exige `gb_4c_ModoTeste` **e** `gc_4c_ArquivoErroTeste` ÔÇö sem o segundo, o teste trava num di├ílogo.

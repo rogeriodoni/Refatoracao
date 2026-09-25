@@ -1,0 +1,22 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+The file structure is intact and the new method is correctly wired in. Phase 5/8 is complete.
+
+## Summary
+
+I implemented Phase 5/8 of the SIGCDPRO ÔåÆ FormProduto migration: the first half of the "Dados Principais" tab (`pgDados`), which was previously completely empty (0 of 176 legacy controls).
+
+**Added to `FormProduto.prg`:**
+- `ConfigurarAbaDadosPrincipais()` ÔÇö creates ~45 controls (labels, textboxes, image/shape, option group, command groups) covering product identification, EAN/barcode, equivalent product, grupo/subgrupo/linha/cole├º├úo, classifica├º├úo, fornecedor, modelo, unidades (1)/(2), local, situa├º├úo, observa├º├Áes, custo/venda values with currency codes, estoque, and inclus├úo/altera├º├úo audit fields ÔÇö all positioned using the exact `layout.json` coordinates per the established "no extra offset" rule for this inner PageFrame.
+- `ExecutarLookupGenerico()` ÔÇö a real, reusable FormBuscaAuxiliar-based lookup engine (not a stub) supporting an optional SQL filter, used by 15 thin wrapper validators for the FK lookups (grupo, subgrupo filtered by grupo, linha, cole├º├úo, classifica├º├úo filtered by grupo, fornecedor, modelo, unidade ├ù2, local, produto equivalente, and 3 moeda fields).
+
+**Fixed along the way:** a genuine name collision in `mapeamento.json` (`Label2` "Produto :" and `Say2` "Equivalente :" both mapped to `lbl_4c_Label2`) ÔÇö renamed `Label2` ÔåÆ `lbl_4c_LblProduto` and updated the .prg to match, per the project's rule that collisions get fixed at the mapping source.
+
+**Caught and reverted my own mistake:** I initially wrote a fabricated rule auto-copying the grupo code into the "Grande Grupo" field ÔÇö no source evidence supports that, so I removed it and left a comment explaining why (CLAUDE.md rule against inventing business logic).
+
+Verified WITH/ENDWITH (128/128), PROCEDURE/ENDPROC (48/48), and TRY/ENDTRY (8/8) all balance, and there are no duplicate `AddObject` names.
+
+**Not done in this phase** (per the phase split): the second half of `pgDados` (memos, dimensions, site/segmento checkboxes, lan├ºamento block) ÔÇö that's Phase 6 ÔÇö plus `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`, which don't exist yet anywhere in the file and appear to be a later phase's job. Image/label/zoom command-group buttons were created structurally but left without Click handlers, since their target subsystems (image capture, label printing) don't exist in this codebase yet.

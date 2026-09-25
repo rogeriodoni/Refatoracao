@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Checked `Formsigmvccr.prg` before editing, since the previous phase notes indicated a lot had already landed.
+
+**Finding**: Phase 7's deliverable is already fully present and correctly wired ÔÇö no edit needed, and forcing one would just duplicate code and break compilation.
+
+Verified in the file (2291 lines):
+- `BtnIncluirClick()` (line 2137), `BtnVisualizarClick()` (2148), `BtnAlterarClick()` (2169), `BtnExcluirClick()` (2191) all exist with real logic, not stubs.
+- Each is bound via `BINDEVENT` to its button in `ConfigurarPaginaLista()` (lines 197, 219, 241, 263).
+- They call the correct BO contract: `NovoRegistro()`/`EditarRegistro()` before `Salvar()`-related state, `CarregarPorCodigo()` (confirmed it exists in `sigmvccrBO.prg:559`, not `CarregarPorId`), `THIS.this_oBusinessObject.Excluir()` (not `ExecutarExclusao` ÔÇö respects the PUBLIC/PROTECTED split), and `MsgConfirma()` used as logical, not numeric.
+- Order follows the known pitfalls: `this_cModoAtual` is set before `HabilitarCampos()`, guard checks for empty grid selection use `MsgAviso`, no `RETURN` sits inside a `TRY/CATCH`.
+- Structural balance check on the whole file: PROCEDURE/FUNCTION vs ENDPROC/ENDFUNC (41/41), WITH/ENDWITH (80/80), IF/ENDIF (110/110), TRY/ENDTRY (2/2), FOR/ENDFOR (2/2), DEFINE CLASS/ENDDEFINE (1/1) ÔÇö all balanced.
+
+The only intentionally deferred pieces are `LimparCampos()`, `HabilitarCampos()`, `FormParaBO()`, `BOParaForm()` (currently no-ops with an explanatory comment) and the Confirmar/Cancelar buttons in `cnt_4c_BotoesAcao` ÔÇö those are correctly scoped to Phase 8, which adds the Salvar/Cancelar flow that actually needs FormÔåöBO data transfer.
+
+No changes made to the file; Phase 7 was already satisfied by prior work.

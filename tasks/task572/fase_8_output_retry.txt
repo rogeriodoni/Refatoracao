@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O gate agora passa.
+
+## O que fazia a Fase 8 falhar
+
+O gate exige quatro nomes no `Formsigmvits.prg`. **Dois estavam ausentes**: `CarregarLista` (nenhuma ocorr├¬ncia) e `BOParaForm` (s├│ uma men├º├úo em coment├írio). `BtnSalvarClick` n├úo ├® exigido aqui ÔÇö o dump legado n├úo tem `btnSalvar`/`btnGravar`/`mGravaDados`, e `BtnConfirmarClick` j├í satisfaz o padr├úo de bot├úo de a├º├úo.
+
+## O que foi implementado (l├│gica real, sem stub)
+
+**`CarregarLista()`** ÔÇö transcri├º├úo do `AtuaCupom(vTipo, vnItem)` do legado, o ├║nico m├®todo que escreve as linhas da grade do cupom. Reconstr├│i `crTpmMvItnC` a partir do carrinho (`crTpmMvItn`) e das parcelas (`xPar`): duas linhas por item, e o rodap├® completo (separador, `TI:`, TOTAL, uma linha por forma de pagamento agrupada + linha de desconto, Valor Recebido, TROCO). Numera├º├úo de `cItens` (1001..1003 / 1004+ / 2000 / 3000) e ├¡ndices de `Cores` transcritos ÔÇö ├® a numera├º├úo que d├í a ordem das linhas. `SET SAFETY` salvo/restaurado em volta do `ZAP` (DataSession=2 nasce com SAFETY ON e o ZAP abriria di├ílogo modal).
+
+**`BOParaForm()`** ÔÇö inverso sim├®trico de `FormParaBO`, mesmo par controle/propriedade na mesma ordem. `valvars` ├® um campo do banco para duas caixas na tela: negativo volta como Desconto, positivo como Acr├®scimo ÔÇö a inversa exata da conta j├í existente, sem reescrever f├│rmula.
+
+Adicionadas duas propriedades que o legado tem e faltavam: `this_lLibTroco` (condi├º├úo do TROCO) e `this_nBcds`.
+
+## Bug real encontrado e corrigido durante a verifica├º├úo
+
+A primeira execu├º├úo estourou `Variable 'TROCOS' is not found`. Causa: **`INSERT INTO <cursor>` troca a ├írea de trabalho corrente** ÔÇö depois do primeiro INSERT, os campos sem alias passavam a resolver contra `crTpmMvItnC`. Afetava os dois la├ºos (`qtds/cunis/units/totas` no dos itens, `Trocos/ValDescs/Bcds/pDescs` no das formas). Corrigido lendo cada campo para vari├ível local antes do primeiro INSERT.
+
+## Verifica├º├úo executada
+
+- **Compila├º├úo VFP9**: BO e Form, `.fxp` gerados, zero erros (`.err` n├úo gerado).
+- **Instancia├º├úo** (`TestFormWrapper`): objeto criado, form vis├¡vel 1280x750, fechado ÔÇö `Return Code: 0`, `Status: SUCESSO`, nenhum erro capturado.
+- **Execu├º├úo dos dois m├®todos** com carrinho de 2 itens e 2 parcelas: `CarregarLista` devolveu `.T.` e 13 linhas no layout do legado (inclusive `..CARTAO (03x) 5.00 / 15.00`, `Desconto 5.0000% / 1.50`, `..TROCO / 0.67`); `BOParaForm` devolveu `.T.` e trouxe Documento `4321`, Grupo `GRP01`, Conta `CLI99`, Lista `TABELA A`, e `valvars = -7.25` ÔåÆ Desconto `7.25` / Acr├®scimo `0`.
+- Blocos balanceados (PROC 86/86, FUNC 10/10, WITH 179/179, TRY 4/4, SCAN 4/4, IF 160/160), sem TODO/stub, sem acento literal.
+
+Um ponto que vale registrar: `BOParaForm` ficou **PROTECTED por heran├ºa** ÔÇö `formbase.prg:280` declara `PROTECTED PROCEDURE BOParaForm()` e o VFP9 n├úo deixa a subclasse alargar o escopo. Medido: `PEMSTATUS` devolve `.T.` e a chamada externa estoura `Property BOPARAFORM is not found`. Esse ├® o escopo correto (quem chama ├® o pr├│prio `FormBase`, linha 235), e o coment├írio no c├│digo documenta isso; a prova de execu├º├úo foi feita por subclasse de teste. `CarregarLista` ficou PUBLIC, como a regra #3 exige para o que o harness chama de fora.
+
+A integra├º├úo de menu (bar 135 em `popMovimentos` + `AbrirFormsigmvits`) j├í estava no `menu.prg` da tentativa anterior e foi conferida; o `config.prg` carrega o form pelo ADIR de `operacionais\Form*.prg`. Os `.fxp` de `projeto\app` foram apagados e os scripts auxiliares que criei em `vfp_helpers` foram removidos.

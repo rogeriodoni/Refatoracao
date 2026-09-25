@@ -1,0 +1,539 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvChv.SCX
+* Data/Hora: 23/09/2026 21:22:54
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVCHV
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGMVCHV
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGMVCHV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGMVCHV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntBotoes
+  Parent: SIGMVCHV
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: inserir
+  Parent: SIGMVCHV
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: excluir
+  Parent: SIGMVCHV
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grade
+  Parent: SIGMVCHV
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGMVCHV.grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVCHV.grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 350
+  Width = 500
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Chaves"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  podatamgr = .F.
+  pcescolha = .F.
+  pempdopnums = .F.
+  Name = "SIGMVCHV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 344
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 80
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.inserir
+------------------------------------------------------------
+  Top = 171
+  Left = 401
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  TabIndex = 2
+  ToolTipText = "Inserir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 52
+  Themes = .F.
+  Name = "inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.excluir
+------------------------------------------------------------
+  Top = 216
+  Left = 401
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 3
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 53
+  Themes = .F.
+  Name = "excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.grade
+------------------------------------------------------------
+  ColumnCount = 1
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 259
+  Left = 56
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 6
+  Top = 86
+  Width = 342
+  GridLineColor = 238,238,238
+  Name = "grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.Width = 310
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Chave"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVCHV.grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  MaxLength = 44
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 1, 8, 6, 13, 11, 25, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVCHV
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCnx, pcEscolha, pcEDN
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.pEmpDopNums = pcEDN
+Thisform.pcEscolha = pcEscolha
+Thisform.poDataMgr = pCnx
+
+Select crChaves
+Go Top
+
+This.Grade.RecordSource          = [crChaves]
+This.Grade.Column1.ControlSource = [crChaves.ChaveNota]
+
+This.Refresh
+
+Thisform.Grade.AfterRowColChange()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+This.Grade.RecordSource          = []
+This.Grade.Column1.ControlSource = []
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCHV.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+ThisForm.Grade.Refresh
+Select crChaves
+Go Top In crChaves
+ThisForm.Grade.Refresh
+
+*!*	SELECT crSigMvChv
+*!*	DELETE all for EmpDopNums = pcEDN
+*!*	GO top
+*!*	SCAN
+*!*		lcIdChave = fUniqueIds()
+*!*		INSERT into crSigmvAte (ChaveNota, EmpDopNums, pkChaves) values	(crChaves.ChaveNota, TprMvCab.EmpDopNums, lcIdChave ) 
+*!*	ENDSCAN
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCHV.inserir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crChaves
+=TableUpdate(.T.)
+Locate For ChaveNota=' '
+If Eof()
+	Insert Into crChaves(ChaveNota, EmpDopNums, pkChaves) values ([], ThisForm.pEmpDopNums, Sys(2015)+Sys(2015)) 
+EndIf
+Thisform.grade.Refresh 
+thisform.grade.column1.SetFocus  
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCHV.excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crChaves
+If Eof() Or Bof()
+	Return
+EndIf
+ThisForm.LockScreen = .t.
+
+SELECT crChaves
+Delete
+ThisForm.grade.Refresh
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVCHV.grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select crChaves	
+*!*		=TableUpdate(.T.)
+	Select ChaveNota, Count(*) as qt from crChaves where ChaveNota = This.Value Group by ChaveNota Into Cursor csRegDup ReadWrite
+	
+	Select csRegDup
+	If Reccount([csRegDup])>0 And csRegDup.qt > 1
+		MessageBox([Registro já Informado.],0+48,[Aviso])
+		Return .F.
+	EndIf 
+
+*!*		Select crChaves
+*!*		Go Top In crChaves
+*!*		Locate For (Empty(ChaveNota))
+*!*		If Eof([crChaves])
+*!*			Insert Into crChaves(ChaveNota, EmpDopNums, pkChaves) values	([], ThisForm.pEmpDopNums, Sys(2015)+Sys(2015)) 
+*!*		EndIf
+*!*		Keyboard '{DNARROW}'
+*!*		This.parent.parent.Refresh 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVCHV
+RESERVED3 (ClassInfo): podatamgr
+pcescolha
+pempdopnums
+*calcdesc 
+*calctots 
+*chkdesc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

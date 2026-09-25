@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e **verificada em execu├º├úo real no VFP9** (n├úo apenas por inspe├º├úo de c├│digo).
+
+## Por que a tentativa anterior falhou
+
+O gate da Fase 4 no `OrquestradorMigracao.ps1:5156-5182` aceita layout FLAT (OPERACIONAL) quando existem **tr├¬s** coisas. O form tinha s├│ uma:
+
+| Condi├º├úo do gate | Antes | Agora |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£à `grd_4c_Dados` | Ô£à |
+| `AddObject("cmg_4c_`/`cmd_4c_` | ÔØî `obj_4c_CmdSalva` | Ô£à `cmg_4c_Botoes` |
+| `CarregarLista`/`CarregarDados`/`MontaGrade` | ÔØî s├│ `CarregarHistorico` no BO | Ô£à `CarregarLista()` |
+
+## O que mudei
+
+**`CarregarLista()` (PUBLIC)** ÔÇö n├úo ├® fachada para o gate: o `SIGMVCTHBO.CarregarHistorico()` faz `USE IN` + `CREATE CURSOR`, ou seja **quebra o v├¡nculo do Grid a cada carga**. Antes s├│ havia carga ├║nica no `Init` e nenhum caminho de recarga. Agora ├® o equivalente migrado do `PROCEDURE CarregaPedidos` do legado.
+
+**`VincularGridDados()`** ÔÇö extra├¡ toda a configura├º├úo das 8 colunas do `ConfigurarGrid`, porque reatribuir `RecordSource`/`ControlSource` reseta `Column.Width` e `Header1.Caption` (Problema 48). O `ColumnCount = 8` ├® reatribu├¡do com o **mesmo** valor (nenhuma coluna usa `AddObject`, ent├úo ├® inofensivo) para impedir o Grid de auto-expandir para os 13 campos do cursor.
+
+**`GrdDadosAfterRowColChange(par_nColIndex)`** + BINDEVENT ÔÇö transcrito do `AfterRowColChange` do `grdCotacoes` legado; declara o par├ómetro do evento (regra #3). Os 4 campos de aprova├º├úo s├úo das fases 5-6, ent├úo o refresh ├® guardado por `PEMSTATUS` e usa `EVALUATE` para obter a **refer├¬ncia** do controle (n├úo para executar o `.Refresh()` dentro da string ÔÇö `EVALUATE` avalia express├úo, n├úo executa comando).
+
+`InicializarForm` passou a montar a estrutura **antes** de carregar, espelhando a ordem do `Init` legado (`SetAll` no grid ÔåÆ `.CarregaPedidos`). Atualizei tamb├®m `mapeamento.json` (`cmdSalva` ÔåÆ `cmg_4c_Botoes`) para o ValidarUIFidelity continuar resolvendo.
+
+## Resultado do teste no VFP9
+
+```
+COMPILE           : OK          CarregarLista()   : retorno .T.
+CREATEOBJECT      : OK            pos Col1        : [Data] W=75
+Grid.ColumnCount  : 8             pos Col8        : [Fornecedor] W=315
+Grid.RecordSource : [cursor_4c_HistPeds]   pos ColumnCount : 8
+Col1 [Data] W=75   Col8 [Fornecedor] W=315
+Botao Caption     : [Retornar]  AfterRowColChange : OK
+Botao Picture FILE: .T.         CmdRetornarClick  : OK
+```
+
+As larguras e captions **sobrevivem ├á recarga** (75/315 id├¬nticos antes e depois) ÔÇö ├® a prova de que o rebind funciona, que era exatamente o bug latente da estrutura anterior. O ├¡cone `cadastro_salvar_60.jpg` confere com o dump do SCX (`FILE()` = `.T.`).
+
+Dois pontos que valem registro: o `ConfigurarAmbiente()` do `config.prg` **trava indefinidamente** em execu├º├úo desatendida (abre conex├úo SQL), por isso o harness usa bootstrap m├¡nimo ÔÇö relevante para o pipeline noturno. E o `COMPILE` n├úo reescreveu o `.fxp` existente do pr├│prio script de teste, fazendo a primeira rodada executar c├│digo velho e dar um falso negativo; apagar o `.fxp` antes resolveu.
+
+Ficou de fora, por ser escopo das fases 5-6: os TextBoxes `Comprador`/`Aprovador`/`DtAprovs`/`ObsAprovs` e os labels.

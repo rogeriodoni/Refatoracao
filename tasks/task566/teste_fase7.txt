@@ -1,0 +1,22 @@
+=== TESTE FASE 7 FormSIGMVCTH (eventos dos botoes) ===
+COMPILE            : OK
+FXP form regravado : .T.
+SET PROCEDURE      : OK
+CREATEOBJECT       : OK
+cmg_4c_Botoes      : .T.
+ButtonCount        : 1 (legado: 1)
+Buttons(1).Name    : [cmd_4c_Retornar]
+Buttons(1).Caption : [Retornar] (legado: Retornar)
+Buttons(1).Cancel  : .T. (ESC fecha - legado .T.)
+Picture existe     : .T.
+Botao Visible      : .T.
+AEVENTS(Buttons(1)): 1 binding(s)
+  bind 1        : evento [CLICK] -> metodo [CMDRETORNARCLICK]
+BINDEVENT Click    : OK (Click -> CmdRetornarClick)
+AEVENTS(grade)     : 1 binding(s)
+  bind 1        : evento [AFTERROWCOLCHANGE] -> metodo [GRDDADOSAFTERROWCOLCHANGE]
+BINDEVENT Grid     : OK (AfterRowColChange ligado)
+CmdRetornarClick   : PEMSTATUS=.T.
+Click() via evento : disparado sem excecao
+Form apos o Click  : LIBERADO (Release ocorreu - evento chegou ao handler)
+=== FIM ===

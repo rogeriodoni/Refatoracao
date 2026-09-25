@@ -1,0 +1,54 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 executada ÔÇö FormSigMvPdt
+
+**O legado n├úo tem campo nenhum. N├úo havia campo a acrescentar, e nada foi inventado.**
+
+### Medi├º├úo (n├úo presun├º├úo)
+
+A ├írvore de objetos do `SigMvPdt.SCX` tem **exatamente 3 entradas**:
+
+| Objeto | BaseClass |
+|---|---|
+| Dataenvironment | dataenvironment |
+| SIGMVPDT | form |
+| Processo | commandbutton |
+
+Zero `textbox/editbox/combobox/listbox/checkbox/optiongroup/optionbutton/spinner`, zero `ControlSource`, zero `pageframe`, zero `grid`. Os valores com que a tela trabalha (`pDope`/`pTipo`/`pNume`/`pEmp`) chegam por **par├ómetro no `Init`**, como no legado, e vivem nas propriedades `this_*` ÔÇö nunca em controle de entrada.
+
+A fase pede "metade dos campos": metade de zero ├® zero. Criar `ConfigurarPaginaDados()` com campos violaria o PILAR 1 e a regra "NUNCA inventar"; cri├í-lo vazio ├® proibido pela regra de completude.
+
+### Gate ÔÇö j├í satisfeito, medido diretamente
+
+O ramo **DESPACHANTE** do `case 5` do `OrquestradorMigracao.ps1` j├í cobre este legado (foi adicionado na task570/`SIGMVEXP`, caso id├¬ntico). Rodei as condi├º├Áes dele contra este dump e este form:
+
+```
+FormType                 = OPERACIONAL      Ô£ô
+legadoSemListaNemCampos  = True             Ô£ô
+nBotoesLegado            = 1  ÔåÆ exige bot├úo + handler
+temSuperficieDespachante = True             Ô£ô (AddObject "cmd_4c_Processo" + PROCEDURE CmdProcessoClick)
+>>> temLayoutDespachanteF5 = True
+```
+
+**Nenhuma altera├º├úo no orquestrador foi necess├íria** ÔÇö diferente das recorr├¬ncias anteriores (Fases 3, 4, 6, 7, 8), o gate desta fase j├í estava corrigido.
+
+### Altera├º├úo aplicada
+
+`projeto/app/forms/operacionais/FormSigMvPdt.prg` ÔÇö bloco no cabe├ºalho registrando a constata├º├úo **CAMPOS DE DADOS**, com a contagem verificada contra o dump, para que a aus├¬ncia fique leg├¡vel como deliberada e n├úo como etapa pendente. Nenhuma linha execut├ível foi tocada.
+
+### Verifica├º├Áes
+
+- **Compila├º├úo VFP9**: `.fxp` gerado, nenhum `.err` (artefatos tempor├írios removidos).
+- **Encoding preservado**: 0 bytes >127 (acentos por `CHR()`), LF puro, sem BOM.
+- **Anti-inven├º├úo**: 0 controles de entrada no migrado; 0 `TODO`/`FIXME`/`HACK`/`PLACEHOLDER`.
+
+### Verifica├º├Áes colaterais que n├úo viraram defeito
+
+- `MostrarErro(loc_oErro, "CmdProcessoClick")` ÔÇö passar objeto ├® overload suportado (`FormErro.prg:198` trata `VARTYPE = "O"`).
+- `Picture = gc_4c_CaminhoIcones + "new_background.jpg"` ÔÇö o arquivo existe em `vbmp\` **e** em `Framework\imagens\`; resolve para arquivo real, n├úo ├® o caso silencioso da regra #25.
+- `PROCEDURE Load` do legado chama `=fConfigGeral()` ÔÇö o wrapper `utils\fconfiggeral.prg` existe e diz explicitamente "em c├│digo NOSSO nunca se chama fConfigGeral; existe APENAS para bin├írio legado". N├úo cham├í-lo no migrado est├í correto.
+
+**Nota:** esta ├® a sexta ocorr├¬ncia da fam├¡lia "gate calibrado numa amostra exige INVENTAR quando o legado est├í fora dela". Aqui a preven├º├úo funcionou ÔÇö o ramo despachante da task570 pegou o caso sem custo de retry.

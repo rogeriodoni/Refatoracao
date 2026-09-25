@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced. Fase 4/8 is complete.
+
+**Summary of changes:**
+
+`C:\4c\projeto\app\forms\cadastros\Formsigmvcab.prg` (Page1 completed):
+- `ConfigurarPaginaLista()`: added 5 CRUD buttons in `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar), a new `cnt_4c_Saida` container with the canonical `cmd_4c_Encerrar` button (CLAUDE.md regra #10), and `grd_4c_Lista` (7 columns: Emp/Opera├º├úo/N├║mero/Data/Conta Origem/Conta Destino/Valor), all wired via `BINDEVENT`.
+- Added `CarregarLista()`, `AlternarPagina()`, `FormatarGridLista()`, `TornarControlesVisiveis()`, `ObterChaveSelecionada()`, `LocalizarNaLista()`, and the six `Btn*Click` handlers.
+- `InicializarForm()` now calls `CarregarLista()` (guarded by `gb_4c_ValidandoUI`); `Destroy()` releases the new search cursor.
+
+`C:\4c\projeto\app\classes\sigmvcabBO.prg`: the earlier phases had left `Buscar()`, `CarregarPorCodigo()`, and `ExecutarExclusao()` unimplemented ÔÇö since the new Grid/CRUD buttons genuinely need them, I added all three (list query bounded with `TOP 300 ORDER BY Datas DESC` since `SigMvCab` has no default filter yet and is a very large table; a future filtros phase can narrow this).
+
+Page2 fields, lookups, and Confirmar/Cancelar remain for later phases as scoped.

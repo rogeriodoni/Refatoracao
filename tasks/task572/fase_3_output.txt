@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. The Fase 3/8 deliverable is complete.
+
+**Summary**: Created `C:\4c\projeto\app\forms\operacionais\Formsigmvits.prg` ÔÇö the base structure for the Caixa (PDV) OPERACIONAL form.
+
+Key decisions:
+- **No PageFrame/Lista-Dados**: SIGMVITS is a flat OPERACIONAL layout (no Page1/Page2 in the legacy SCX), so per the OPERACIONAL-specific rules I built a single-surface form with top-level floating containers instead of forcing the CRUD PageFrame template.
+- `DEFINE CLASS Formsigmvits AS FormBase` with legacy-identical dimensions/behavior (1280x750, BorderStyle=0, TitleBar=0, ControlBox=.F., DataSession=2, etc.) and three core state properties mirroring the legacy `Op_Escolha`/`CItem`/`Inicia` flags.
+- `Init()` ÔåÆ `DODEFAULT()`; `InicializarForm()` creates `sigmvitsBO` and calls `ConfigurarContainerPrincipal()`.
+- Ten empty containers/objects matching `mapeamento.json` positions exactly (cabe├ºalho/logo/t├¡tulo, ├írea do item, pend├¬ncias, cancelamento, pagamento, identifica├º├úo, barra de bot├Áes, grade do cupom, mensagens, timer) ÔÇö floating panels (`cnt_4c_CancelaItem`, `cnt_4c_Grade`) correctly start `Visible = .F.`, matching the legacy dump.
+- Framework background images use `gc_4c_CaminhoFramework` + `FILE()` guard (never `gc_4c_CaminhoBase + "Framework\..."`, per the pipeline's path rules).
+- No grids, textboxes, buttons, or event handlers were added ÔÇö reserved for Fases 4-8 as instructed.
+- Verified the file compiles cleanly in VFP9 (`COMPILE`, no `.err` generated).

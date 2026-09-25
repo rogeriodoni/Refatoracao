@@ -1,0 +1,20 @@
+﻿[33mPermission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+[33mPermission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.[39m
+FASE 14 is complete. Summary of what was done in `FormProduto.prg`:
+
+**Added `ConfigurarPgpgDesigner()`** ÔÇö wired to `pgf_4c_Divisoes.Page7` (the prompt's generic template said `pgf_4c_DadosInternos`, but this codebase's actual internal PageFrame is `pgf_4c_Divisoes`, same as the other 6 already-migrated pages). Implemented all 21 top-level objects from the legacy `pgDesigner` page:
+- Decorative shape frame, "Observa├º├úo da Tarefa" label + editbox, the 4-column designer-task grid, Iniciar/Encerrar Tarefa buttons
+- 1-column attached-files grid, Inserir/Abrir/Excluir Arquivo buttons, image preview
+- "Inspira├º├úo" label + editbox, "Dados do Lan├ºamento" section (label + line), Data Apr. Amostra field
+- Desenvolvido por / Criado por fields with real lookups
+
+I pulled exact `Top/Left/Width/Height/Picture/ToolTipText` values straight out of the raw `.sct` binary (which stores readable property+method text) rather than guessing icons ÔÇö confirmed `geral_adicao_26.jpg`, `geral_datas_26.jpg`, `geral_arquivo_26.jpg`, `geral_pasta_26.jpg`, `cadastro_excluir_26.jpg` are the real files (present in the SCT's icon-reference list), avoiding the CLAUDE.md #25 icon-guessing trap.
+
+**Two real lookups wired** (`ValidarDesenvolvidoPorLacto`/`ValidarCriadoPorLacto`) via the existing `ExecutarLookupGenerico` engine, transcribing the legacy filter `cAtivos <> 'N' AND deptos IN (SELECT codigos FROM sigcddpt WHERE UtiLacto = 1)` against `SigCdUsu`.
+
+**Deferred per rule #41**: the two grids' `RecordSource`/`ControlSource`, and every Click/`AfterRowColChange`/`DblClick` that touches `crSigPrTar`/`crSigPrArq` ÔÇö neither cursor exists in any BO yet (verified via grep), matching the exact precedent set by `ConfigurarPgPgDadosFaseP`/`ConfigurarPgPgDadosConsP`. Resolved the `grd_4c_Dados` name collision between `grdDesigner`/`grdArquivos` the same way `grd_4c_Tempos` was resolved earlier (`grd_4c_Arquivos` for the files grid).
+
+Verified via a real VFP9 `COMPILE` run ÔÇö produced a clean `.fxp` with no `.err` file.

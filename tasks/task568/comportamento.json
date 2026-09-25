@@ -1,0 +1,161 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVDOC",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Local lcRep\n\nlcRep = Alltrim(ThisForm.NomeRepo)\n\nIf (Type([ThisForm.pcRep])=[C]) And (ThisForm.pcRep = [SIGCDENT])\n\tSelect * From crDados Where nFis Between ThisForm.GetNotaI.Value And ThisForm.GetNotaF.Value Into Cursor crDados1\n\tSelect crDados\n\tUse\n\tSelect * From crDados1 Into Cursor crDados\n\tGo Top\nEndIf \n\nReport Form &lcRep. To Printer Prompt NoConsole\n**********************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcRep])=[C]) And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVDOC",
+      "evento": "Init",
+      "linhas": 45,
+      "codigoOriginal": "LParameters pRep, pTit\n\nLocal lnOldW, lnBotW\n\nThisForm.pcRep = pRep\n\nIf (Type([pRep]) <> [C]) Or (pRep <> [SIGCDENT])\n\tThisForm.label1.Visible   = .f.\n\tThisForm.label2.Visible   = .f.\n\tThisForm.Shape1.Visible   = .f.\n\tThisform.GetNotaI.Visible = .f.\n\tThisform.GetNotaF.Visible = .f.\n\tThisForm.btnReport.Top = 4\nElse\n\tThisForm.label1.Visible   = .t.\n\tThisForm.label2.Visible   = .t.\n\tThisForm.Shape1.Visible   = .t.\n\tThisform.GetNotaI.Visible = .t.\n\tThisform.GetNotaF.Visible = .t.\n\tGo Top \n\tThisform.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NomeRepo = Iif,Caption  = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVDOC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Thisform.AlwaysOnTop = .f.\n\nGo Top\n\n=DoDefault()\n**********************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVDOC",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Local lcRep\n\nlcRep = Alltrim(ThisForm.NomeRepo)\n\nIf (Type([ThisForm.pcRep])=[C]) And (ThisForm.pcRep = [SIGCDENT])\n\tSelect * From crDados Where NFis Between ThisForm.GetNotaI.Value And ThisForm.GetNotaF.Value Into Cursor crDados1\n\tSelect crDados\n\tUse\n\tSelect * from crDados1 Into Cursor crDados\n\tGo Top\nEndIf \n\nReport Form &lcRep. Preview NoConsole\n**********************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcRep])=[C]) And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVDOC",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "If (This.Value <> 3) And (Type([ThisForm.pcRep])=[C]) And (ThisForm.pcRep = [SIGCDENT])\n\tIf Empty(ThisForm.GetNotaI.Value)\n\t\tMessageBox('Nota Inicial Invalida !!!',16,'')\n\t\tReturn .f.\n\tEndIf\n\tIf Empty(ThisForm.GetNotaF.Value)\n\t\tMessageBox('Nota Final Invalida !!!',16,'')\n\t\tReturn .f.\n\tEndIf\nEndIf\n\n=DoDefault()\n**********************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcRep])=[C]) And",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVDOC.GetNotaI",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "This.Value = Transform(Val(this.Value),'@L 999999')\n\nSelect crDados \nGo Top\nIf This.Value < nFis\n\tMessageBox('Nota Menor Que Inicial !!!',16,'')\n\tThis.Value = nFis\nEndIf\n\nSelect crDados \nGo Bott\nIf This.Value > nFis\n\tMessageBox('Nota Maior Que Final !!!',16,'')\n\tThis.Value = nFis\nEndIf\n**********************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVDOC.GetNotaF",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "This.Value = Transform(Val(this.Value),'@L 999999')\n\nSelect crDados \nGo Top\nIf This.Value < nFis\n\tMessageBox('Nota Menor Que Inicial !!!',16,'')\n\tThis.Value = nFis\nEndIf\n\nSelect crDados \nGo Bott\nIf This.Value > nFis\n\tMessageBox('Nota Maior Que Final !!!',16,'')\n\tThis.Value = nFis\nEndIf\n**********************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMVDOC.Procedure",
+      "queryOriginal": "\tSelect * From crDados Where nFis Between ThisForm.GetNotaI.Value And ThisForm.GetNotaF.Value Into Cursor crDados1",
+      "tabelas": "crDados",
+      "colunas": "nFis,Value,crDados1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVDOC.Procedure",
+      "queryOriginal": "\tSelect * From crDados1 Into Cursor crDados",
+      "tabelas": "crDados1",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVDOC.Procedure",
+      "queryOriginal": "\tSelect * From crDados Where NFis Between ThisForm.GetNotaI.Value And ThisForm.GetNotaF.Value Into Cursor crDados1",
+      "tabelas": "crDados",
+      "colunas": "NFis,Value,crDados1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGMVDOC.Procedure",
+      "queryOriginal": "\tSelect * from crDados1 Into Cursor crDados",
+      "tabelas": "crDados1",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crDados", "crDados1"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

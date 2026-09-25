@@ -1,0 +1,914 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGMVCTH.SCX
+* Data/Hora: 24/09/2026 04:22:26
+* Total de registros: 32
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigmvcth
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cmdSalva
+  Parent: sigmvcth
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grdCotacoes
+  Parent: sigmvcth
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigmvcth.grdCotacoes.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigmvcth.grdCotacoes.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say12
+  Parent: sigmvcth
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape6
+  Parent: sigmvcth
+  Class: shape
+  BaseClass: shape
+
+Objeto: getAprovador
+  Parent: sigmvcth
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getComprador
+  Parent: sigmvcth
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: sigmvcth
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: sigmvcth
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtAprovs
+  Parent: sigmvcth
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: sigmvcth
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: sigmvcth
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getObsAprovs
+  Parent: sigmvcth
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth
+------------------------------------------------------------
+  DataSession = 1
+  DoCreate = .T.
+  ShowTips = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  ControlBox = .F.
+  Closable = .F.
+  Height = 590
+  Width = 1000
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Histórico de Cotações"
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGMVCTH"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.cmdSalva
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  Top = 5
+  Left = 908
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  TabIndex = 11
+  Name = "cmdSalva"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 100
+  Command1.Width = 80
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Retornar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.ToolTipText = "Sair "
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes
+------------------------------------------------------------
+  ColumnCount = 8
+  ScrollBars = 2
+  Top = 7
+  Left = 9
+  Height = 499
+  Width = 891
+  FontSize = 8
+  ReadOnly = .F.
+  RecordMark = .F.
+  RecordSource = "crHistPeds"
+  RowHeight = 16
+  TabIndex = 1
+  GridLineColor = 128,128,128
+  Name = "grdCotacoes"
+  Column1.Width = 75
+  Column1.FontSize = 8
+  Column1.Movable = .F.
+  Column1.Alignment = 2
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = "crHistPeds.Datas"
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+  Column2.Width = 88
+  Column2.FontSize = 8
+  Column2.Movable = .F.
+  Column2.ControlSource = "crHistPeds.QtdAdqs"
+  Column2.Resizable = .F.
+  Column2.Format = "999,999.99"
+  Column2.InputMask = "999,999.99"
+  Column2.ReadOnly = .F.
+  Column2.Name = "Column2"
+  Column3.Width = 35
+  Column3.FontSize = 8
+  Column3.Movable = .F.
+  Column3.ControlSource = "crHistPeds.CUnis"
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Name = "Column3"
+  Column4.Width = 87
+  Column4.FontSize = 8
+  Column4.Movable = .F.
+  Column4.ControlSource = "crHistPeds.ValAdqs"
+  Column4.Resizable = .F.
+  Column4.Format = "999,999.99"
+  Column4.InputMask = "999,999.99"
+  Column4.ReadOnly = .F.
+  Column4.Name = "Column4"
+  Column5.Width = 87
+  Column5.FontSize = 8
+  Column5.Movable = .F.
+  Column5.ControlSource = "crHistPeds.Units"
+  Column5.Resizable = .F.
+  Column5.Format = "999,999.99"
+  Column5.InputMask = "999,999.99"
+  Column5.ReadOnly = .F.
+  Column5.Name = "Column5"
+  Column6.Width = 85
+  Column6.FontSize = 8
+  Column6.Movable = .F.
+  Column6.ControlSource = "crHistPeds.Totas"
+  Column6.Resizable = .F.
+  Column6.Format = "999,999.99"
+  Column6.InputMask = "999,999.99"
+  Column6.ReadOnly = .F.
+  Column6.Name = "Column6"
+  Column7.Width = 90
+  Column7.FontSize = 8
+  Column7.Movable = .F.
+  Column7.ControlSource = "crHistPeds.IClis"
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Name = "Column7"
+  Column8.Width = 315
+  Column8.FontSize = 8
+  Column8.Movable = .F.
+  Column8.ControlSource = "crHistPeds.Fornecs"
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .F.
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Adquirida"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Format = "999,999.99"
+  InputMask = "999,999.99"
+  Margin = 0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Uni"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Adq."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Format = "999,999.99"
+  InputMask = "999,999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column5.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unitário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Format = "999,999.99"
+  InputMask = "999,999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column6.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column6.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Format = "999,999.99"
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column7.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column7.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column8.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Fornecedor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.grdCotacoes.Column8.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Say12
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Pedidos Gerados"
+  Height = 15
+  Left = 34
+  Top = 565
+  Width = 111
+  ForeColor = 224,235,235
+  TabIndex = 10
+  ZOrderSet = 27
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Shape6
+------------------------------------------------------------
+  Top = 562
+  Left = 9
+  Height = 19
+  Width = 19
+  BackStyle = 1
+  BorderStyle = 1
+  SpecialEffect = 0
+  BackColor = 0,0,255
+  BorderColor = 224,235,235
+  Name = "Shape6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.getAprovador
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  ControlSource = "crHistPeds.Aprovador"
+  Format = "K"
+  Height = 20
+  Left = 93
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 532
+  Width = 80
+  BorderColor = 0,0,128
+  ZOrderSet = 24
+  Name = "getAprovador"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.getComprador
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  ControlSource = "crHistPeds.Comprador"
+  Format = "K"
+  Height = 20
+  Left = 9
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 532
+  Width = 80
+  BorderColor = 0,0,128
+  ZOrderSet = 24
+  Name = "getComprador"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Aprovador"
+  Height = 15
+  Left = 93
+  Top = 516
+  Width = 71
+  ForeColor = 224,235,235
+  TabIndex = 4
+  ZOrderSet = 25
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Comprador"
+  Height = 15
+  Left = 9
+  Top = 516
+  Width = 74
+  ForeColor = 224,235,235
+  TabIndex = 2
+  ZOrderSet = 25
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.getDtAprovs
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  ControlSource = "crHistPeds.DtAprovs"
+  Format = "K"
+  Height = 20
+  Left = 177
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 532
+  Width = 80
+  BorderColor = 0,0,128
+  ZOrderSet = 24
+  Name = "getDtAprovs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Data"
+  Height = 15
+  Left = 177
+  Top = 516
+  Width = 32
+  ForeColor = 224,235,235
+  TabIndex = 6
+  ZOrderSet = 25
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Observação"
+  Height = 15
+  Left = 261
+  Top = 516
+  Width = 79
+  ForeColor = 224,235,235
+  TabIndex = 8
+  ZOrderSet = 25
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigmvcth.getObsAprovs
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Format = "K!"
+  Height = 20
+  Left = 261
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 532
+  Width = 640
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  BorderColor = 0,0,128
+  ControlSource = "crHistPeds.ObsAprovs"
+  Name = "getObsAprovs"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigmvcth
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregapedidos
+------------------------------------------------------------
+PROCEDURE carregapedidos
+Local lcLet, lnUni, lnTot
+
+lcQuery = [Select a.Codigos, b.DtCotas as Datas, b.Situas, a.QtdAdqs, a.CUnis, a.ValAdqs, a.Marca01, a.Unit01, ] + ;
+				 [a.Tota01, a.Marca02, a.Unit02, a.Tota02, a.Marca03, a.Unit03, a.Tota03, a.Marca04, a.Unit04, ] + ;
+				 [a.Tota04, a.Marca05, a.Unit05, a.Tota05, a.Marca06, a.Unit06, a.Tota06, b.Comprador, b.Aprovador, ] + ;
+				 [b.DtAprovs, b.ObsAprovs ] + ;
+		    [From SigCtTCt a, SigCtTDc b ] + ;
+		   [Where a.CPros = '] + ThisForm.CPros + [' And ] + ;
+		   		 [Not a.Codigos = ] + Str(ThisForm.Codigos, 6) + [ And ] + ;
+		   		 [a.Codigos = b.Codigos ] + ;
+		   [Order By b.DtCotas Desc, a.Codigos Asc] 
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCotCt]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CarregaPedidos - LocalCotCt)])
+	Return .f.
+EndIf
+
+Select LocalCotCt
+Scan
+	lcLet = [ ]
+	lnUni = 0
+	lnTot = 0
+	Do Case
+		Case LocalCotCt.Marca01
+			lcLet = [A]
+			lnUni = LocalCotCt.Unit01
+			lnTot = LocalCotCt.Tota01
+		Case LocalCotCt.Marca02
+			lcLet = [B]
+			lnUni = LocalCotCt.Unit02
+			lnTot = LocalCotCt.Tota02
+		Case LocalCotCt.Marca03
+			lcLet = [C]
+			lnUni = LocalCotCt.Unit03
+			lnTot = LocalCotCt.Tota03
+		Case LocalCotCt.Marca04
+			lcLet = [D]
+			lnUni = LocalCotCt.Unit04
+			lnTot = LocalCotCt.Tota04
+		Case LocalCotCt.Marca05
+			lcLet = [E]
+			lnUni = LocalCotCt.Unit05
+			lnTot = LocalCotCt.Tota05
+		Case LocalCotCt.Marca06
+			lcLet = [F]
+			lnUni = LocalCotCt.Unit06
+			lnTot = LocalCotCt.Tota06
+	EndCase
+
+	If Not Empty(lcLet)
+		Scatter Memvar Memo
+		m.Datas 	= Nvl(m.Datas, 	   Ctod([]))
+		m.DtAprovs	= Nvl(m.DtAprovs,  Ctod([]))
+		m.ObsAprovs = Nvl(m.ObsAprovs, [])
+		Insert Into crHistPeds From Memvar
+		
+		lcQuery = [Select a.IClis, a.Fornecs ] + ;
+				    [From SigCtTFn a ] + ;
+				   [Where a.Codigos = ] + Alltrim(Str(m.Codigos, 6)) + [ And ] + ;
+				   		 [a.Grades = '] + lcLet + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCotFn]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CarregaPedidos - LocalCotFn)])
+			Return .f.
+		EndIf
+		Select LocalCotFn
+		Go Top In LocalCotFn
+		If Not Eof([LocalCotFn])
+			Replace IClis   With LocalCotFn.IClis, ;
+					Fornecs With LocalCotFn.Fornecs, ;
+					Units   With lnUni, ;
+					Totas   With lnTot In crHistPeds
+		EndIf
+	EndIf
+EndScan
+
+Select crHistPeds
+Go Top In crHistPeds
+
+ThisForm.grdCotacoes.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCnx, pPro, pCod
+
+If (Type([pCnx]) <> [O])
+	=Messagebox([O Parâmetro de Conexão Passado Não É Valido...], 0+48, [Parâmetros Inválidos!!!])
+	Return .f.
+EndIf
+
+With ThisForm
+	.poDataMgr = pCnx
+	If (.poDataMgr.pnIdconn > 0)
+		.CPros = Padr(pPro, 10)
+		.Codigos = pCod
+
+		.grdCotacoes.SetAll([DynamicForeColor],[Iif(crHistPeds.Situas > 0, Rgb(0,0,255), Rgb(0,0,0))], [Column])
+		
+		.CarregaPedidos				
+		
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crHistPeds (Situas n(1), Datas d(8), QtdAdqs n(12,2), CUnis c(3), ValAdqs n(12,2), ;
+						  Units n(12,2), Totas n(12,2), IClis c(10), Fornecs c(50), Comprador c(10), ;
+						  Aprovador c(10), DtAprovs d(8), ObsAprovs m(4))
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.cmdSalva
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.grdCotacoes
+* Classe: fwgrade (Base: grid)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.getComprador.Refresh 
+ThisForm.getAprovador.Refresh
+ThisForm.getDtAprovs.Refresh
+ThisForm.getObsAprovs.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.getAprovador
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.getComprador
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.getDtAprovs
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigmvcth.getObsAprovs
+* Classe: fwmemo (Base: editbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigmvcth
+RESERVED3 (ClassInfo): codigos
+cpros
+podatamgr
+*carregapedidos 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

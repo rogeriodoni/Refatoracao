@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files present.
+
+## Resumo da Fase 4
+
+O legado `SIGPDMEN` ├® um dialogo modal simples (sem PageFrame, sem grid, sem lista) ÔÇö a ├írvore de objetos do dump n├úo tem `BaseClass: grid` nem `pageframe`. O template gen├®rico da Fase 4 ("Grid e Bot├Áes CRUD") n├úo se aplica aqui, mesma fam├¡lia de exce├º├úo j├í documentada para `FormSigMvExp` (mem├│ria: "Gate da Fase 4 exigia Grid/CRUD que o legado despachante n├úo tem").
+
+O que a Fase 3 realmente havia deixado pendente para esta fase era o ├║nico controle interativo do dialogo ÔÇö o bot├úo "ok" ÔÇö e o carregamento da mensagem. Implementei em `FormSigMvMen.prg`:
+
+- `ConfigurarBotaoOk()`: cria `cmd_4c_Ok` na posi├º├úo exata do legado (Top=2/Left=723, Picture=`cadastro_salvar_60.jpg`), com o tamanho can├┤nico 75x75 do framework (n├úo declarado no SCX, herdado da classe `fwbtng` ausente do acervo).
+- `CarregarMensagem()`: monta o Caption din├ómico ("Mensagem da Movimenta├º├úo: " + Dopes) nos tr├¬s lugares do legado e chama `SigMvMenBO.CarregarPorCodigo` para preencher o EditBox.
+- `BtnOkClick()`: replica a l├│gica do `Click` legado (s├│ fecha se `LASTKEY() != 13`, sen├úo pede clique real via `MsgInfo`).
+- `Activate()`: aplica o `SetFocus` no bot├úo OK (que s├│ funciona depois do form vis├¡vel).
+
+Pr├│ximo passo: Fase 5 do pipeline.

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 5 is complete and verified.
+
+## What was wrong
+
+The Phase 5 gate (`OrquestradorMigracao.ps1:5302`) requires a `ConfigurarPaginaDados` method. Its flat-layout exception only applies to `FormType -eq "OPERACIONAL"`, and `FormSIGMVDOC` is a **REPORT** form with a PageFrame ÔÇö so it fell through to the paginated branch and failed.
+
+A REPORT form has no "Page2 de Dados". The established convention for this case (96 of 233 REPORT forms in the project, e.g. `Formsigrecrf.prg:762`) is that `ConfigurarPaginaDados` wires the Page1 filter controls to their handlers. The prior attempt had those `BINDEVENT`s inline in `InicializarForm`, so the method never existed.
+
+## What I changed in `projeto/app/forms/relatorios/FormSIGMVDOC.prg`
+
+- **`ConfigurarPaginaDados()`** ÔÇö moved the event wiring out of `InicializarForm` into the canonical method. Switched the 4 report buttons from one group-level `Click` dispatcher to per-button `Buttons(N)` bindings (CLAUDE.md rule for `cmg_4c_Botoes`), and removed the now-dead `CmgBotoesClick` ÔÇö keeping both would have double-fired each click.
+- **`LimparCampos()`** ÔÇö recovered behaviour the prior attempt dropped. The legacy `Init` does *not* open with blank fields; it does `Go Top / GetNotaI.Value = nFis` and `Go Bott / GetNotaF.Value = nFis`. Since the legacy `crDados` was filled by the external caller, the equivalent limits now come from `MIN(nfis)/MAX(nfis)` on the current company, stored in new properties `this_nNotaMin` / `this_nNotaMax`. Guarded for no-connection (UI validation / automated test), where the form opens with zeros and the BO already refuses a zeroed range.
+- **`TxtNotaILostFocus` / `TxtNotaFLostFocus`** ÔÇö the legacy `Valid` clamped against the real data range with the messages `Nota Menor Que Inicial !!!` / `Nota Maior Que Final !!!`; only the field-vs-field check had been migrated. Both clamps are now transcribed, with the original message text.
+
+## Verification (not just static checks)
+
+- **Compiles clean** in VFP9 ÔÇö `.err` empty, fresh `.fxp` (deleted the stale one first).
+- **Instantiates** ÔÇö `CREATEOBJECT` returns an object, BO created, `this_cMensagemErro` empty, `AlternarPagina(1)` and `Release()` OK.
+- **Bindings resolve correctly** ÔÇö via `AEVENTS`: `LOSTFOCUSÔåÆTXTNOTAILOSTFOCUS`, `LOSTFOCUSÔåÆTXTNOTAFLOSTFOCUS`, and `CLICKÔåÆBTNVISUALIZARCLICK/BTNIMPRIMIRCLICK/BTNEMAILCLICK/BTNENCERRARCLICK`.
+- **Clamps produce expected values** ÔÇö 50ÔåÆ100 (below min), 999ÔåÆ200 (above max), 180ÔåÆ120 (above the final typed).
+- **Schema checked** with `Get-Content -Raw` (682 tables, so no UTF-16 zero trap): `SigMvNfi.nfis char(6)`, `emps char(3)` ÔÇö confirming the `VAL(TratarNulo(...))` charÔåÆnumeric conversion.
+- Audits `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas`, `VerificarFormBuscaAuxiliar`, `VerificarTabelasInexistentes`: no findings for this form. Temp test scripts removed.
+
+Two things worth flagging:
+
+1. **The live-SQL path of `LimparCampos` was not exercised** ÔÇö the DB at 192.168.200.10 is unreachable from here, and the connection attempt blocks on a modal dialog. The query and conversion are verified against the schema, but the actual round-trip is untested.
+2. **This gate will keep failing for REPORT forms.** It's the fourth gate in this pipeline with the same shape as the Fases 6/7/8 cases already in memory: a REPORT form has no data page, so the gate is only satisfiable via the `ConfigurarPaginaDados` convention. Extending the Phase 5 flat exception to cover `FormType -eq "REPORT"` would stop the retries ÔÇö I haven't touched the orchestrator, since that's beyond this phase's scope.

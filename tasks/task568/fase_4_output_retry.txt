@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and passing. Here's what I did and why.
+
+## The gate was right; the previous run's diagnosis was wrong
+
+The prior attempt concluded that Phase 4's gate ("Grid e Bot├Áes CRUD") doesn't apply to a REPORT form and instead created a method named `ConfigurarFiltros()`. I checked the three canonical REPORT forms in the project ÔÇö `Formsigrecrf.prg`, `FormSigReAac.prg`, `Formsigrecnt.prg` ÔÇö and all three **do** have `ConfigurarPaginaLista()` and `AlternarPagina()`. In a REPORT form, `ConfigurarPaginaLista` is the filter block on `pgf_4c_Paginas.Page1` (this is exactly what the orchestrator's own rule text about subtracting `PageFrame.Top` in "fase 4" describes). So the method existed under a non-canonical name ÔÇö a naming deviation, not a gate mismatch.
+
+## Changes to `projeto/app/forms/relatorios/FormSIGMVDOC.prg`
+
+1. **`ConfigurarFiltros()` ÔåÆ `ConfigurarPaginaLista()`** (definition, call site at line 74, and the stale comment in `ConfigurarPageFrame` that still said the filters came "in a later phase").
+2. **Added `AlternarPagina(par_nPagina)`** with real logic matching the canonical REPORT pattern: clamps out-of-range indexes to Page1, re-shows the PageFrame, and returns focus to the first filter field. PUBLIC (no `PROTECTED`) because the test harness calls it from outside the class. `SetFocus` is guarded by `THIS.Visible` so calling it before `Show()` doesn't fall into the CATCH.
+3. **Fidelity fixes against the SCX dump** (`tasks/task568/SIGMVDOC_form_codigo_fonte.txt` lines 148ÔÇô228), which the previous pass had partly invented:
+   - `Shape1`: legacy is `BorderStyle=0` + `BorderColor=136,189,188`; the migration had invented a black 1px border (`BorderColor=RGB(0,0,0)`, `BorderWidth=1`) ÔÇö a visible black rectangle the legacy doesn't draw.
+   - `Label1`/`Label2`: added the missing `FontBold = .T.`
+   - `Label2` caption: the dump byte is octal `340` = **CHR(224)** (`├á`), not `"a"` ÔÇö now `CHR(224)` per the no-literal-accents rule.
+   - Both TextBoxes: added `SpecialEffect = 1`, `BorderColor = RGB(100,100,100)`, and the legacy `TabIndex` values.
+
+4. **Removed a UTF-8 BOM** that was on the file. This was a real pre-existing compile error, not cosmetic ÔÇö VFP9 reported `Error in line 1: Unrecognized command verb`, because the BOM bytes precede the `*` comment marker. The canonical forms have no BOM (`2a 3d 3d` vs this file's `ef bb bf`).
+
+## Verification
+
+- Compiled with VFP9: exit 0, `.fxp` produced, `.err` empty. Before the BOM strip the same compile produced the line-1 error, so that fix is confirmed by the before/after.
+- Gate simulated in PowerShell with the orchestrator's exact predicate: `True`.
+- Structural balance checked: WITH/ENDWITH 14/14, TRY/ENDTRY 2/2, PROCEDURE/ENDPROC 16/16.
+- No non-ASCII characters, no `RETURN` inside TRY, no `PUBLIC PROCEDURE` in the class, no leftover `ConfigurarFiltros`.
+- Temp compile script and build artifacts removed.
+
+One thing I left alone deliberately: the TextBoxes are numeric (`.Value = 0`) while the legacy `GetNotaI/F` were character (`Transform(Val(this.Value),'@L 999999')`). The BO compensates with `PADL(ALLTRIM(STR(...,6,0)),6,"0")`, which reproduces `@L 999999` against the `nfis char(6)` column, so behavior is preserved. Changing the type would mean reworking the already-validated Phase 2 BO contract ÔÇö out of Phase 4 scope, flagging it here rather than churning it silently.

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `projeto/app/forms/operacionais/FormSigMvPdt.prg`.
+
+## O que a Fase 6 pedia vs. o que o legado tem
+
+O `SIGMVPDT` ├® um **despachante**: a ├írvore de objetos do SCX tem **3 entradas** (dataenvironment + form + 1 CommandButton). Verifiquei o dump contra todos os padr├Áes de lookup do legado ÔÇö `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, `mAddColuna`, `sigacess(`, as 9 fun├º├Áes `Acesso*`, e `PROCEDURE Valid`/`KeyPress`: **zero ocorr├¬ncias**. Zero campos de entrada, zero `ControlSource`.
+
+Ent├úo os tr├¬s entreg├íveis nominais da fase ÔÇö campos restantes, lookups com BINDEVENT, e `cnt_4c_BotoesAcao` (Salvar/Cancelar) ÔÇö **n├úo existem no original**. Cri├í-los seria inventar tabela de consulta que o legado nunca acessa (PILAR 1). Confirmei que o gate da Fase 6 tem o ramo DESPACHANTE exatamente para esta forma, e rodei os predicados dele: `FASE6_DESPACHANTE_PASSA=True`.
+
+Documentei essa aus├¬ncia no cabe├ºalho, com a lista do que foi verificado ÔÇö para n├úo parecer etapa pendente.
+
+## Defeito real encontrado e corrigido
+
+Ao auditar o despacho achei um bug que n├úo ├® de layout. No legado, quem fecha este di├ílogo ├® o **filho**:
+
+- `SigPdMp6.Init` ÔåÆ `ThisForm.pAntform = pForm`
+- `SigPdMp6.<Sair>.Click` ÔåÆ `Thisform.pAntForm.Release` e depois `ThisForm.Release`
+
+O `Formsigpdmp6` migrado declara `Init(par_cDopp, par_oFormPai, ...)` e **`par_oFormPai` aparece uma ├║nica vez no arquivo inteiro: na pr├│pria assinatura**. Nunca ├® guardado nem usado. Como o `FormSigMvPdt` tem `TitleBar = 0`, `ControlBox = .F.`, `Movable = .F.` e o ├║nico bot├úo j├í foi consumido pela guarda de reentr├óncia, quando o filho fechava o usu├írio ficava com um ret├óngulo "Aguarde Processando Dados" **sem nenhuma forma de fechar**. N├úo estoura, n├úo entra em log, e o form instancia perfeito ÔÇö o defeito s├│ aparece *depois* que o filho fecha.
+
+Corrigi pelo lado do pai (arquivo desta fase, sem mexer no form da task147): como `Formsigpdmp6` ├® modal (`WindowType = 1`), o `Show()` s├│ retorna quando ele fecha, ent├úo `THIS.Release()` logo ap├│s reproduz o `pAntForm.Release`. Libero tamb├®m quando o filho n├úo p├┤de ser criado, sen├úo o usu├írio fica preso ap├│s a mensagem de erro. O `Show()` continua fora do `TRY` (regra #29).
+
+## Verifica├º├úo
+
+- **Instancia├º├úo**: geometria (337x147; bot├úo 34/48/241/73), fonte (Tahoma 10 bold), cores (`5921370`=RGB(90,90,90), `16777215`=RGB(255,255,255)) e flags batem **exatos** com o dump. `Picture` resolve para arquivo existente (`FILE=.T.`) ÔÇö regra #25. `ControlCount=1`. Zero di├ílogos suprimidos.
+- **Despacho real**: trace `ANTES-CREATE ÔåÆ FORM-OK ÔåÆ ANTES-DISPATCH`, e ent├úo bloqueia no `Show()` ÔÇö prova de que o filho modal abriu.
+- **Mec├ónica do `Release()`** dentro da cadeia `Activate`: testada isolada no VFP9 ÔÇö trace `pai-despachar; filho-activate; pos-show-filho; pos-release-pai;` e a refer├¬ncia do pai vira `X` (liberada).
+- Sem `RETURN` dentro de `TRY`; sem TODO/stub (os dois hits do grep s├úo o substring "todo" dentro de "m├®**todo**s").
+
+Gravei a li├º├úo em mem├│ria ÔÇö o padr├úo se repete em qualquer despachante cujo filho fa├ºa `pAntForm.Release`.
+
+Uma pend├¬ncia que **deixei de fora de prop├│sito**: o `Formsigpdmp6` (task147) continua descartando `par_oFormPai`. Meu fix cobre a chamada vinda do `FormSigMvPdt`, mas se outro form despachar para ele esperando o mesmo contrato, o problema reaparece l├í. Corrigir na origem ├® altera├º├úo no form de outra task, fora do escopo desta fase ÔÇö vale abrir separado se quiser.

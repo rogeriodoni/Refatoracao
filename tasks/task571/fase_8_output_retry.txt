@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada. O gate passa.
+
+## O que estava errado
+
+A tentativa anterior respondeu a Fase 8 com um **bloco de coment├írio** argumentando que os m├®todos do template (`FormParaBO`/`BOParaForm`/`CarregarLista`/etc.) "n├úo se aplicam". Nenhum existia de fato ÔÇö o gate s├│ n├úo reprovou por texto porque os nomes apareciam no pr├│prio coment├írio. E o argumento era falso no ponto central: o legado **tem** os bot├Áes `ok` (Caption "Confirmar") e `Cancela` (Caption "Cancelar").
+
+## O que entreguei
+
+- **`BtnConfirmarClick` / `BtnCancelarClick`** ÔÇö renomeados de `CmdOkClick`/`CmdCancelaClick`. Nenhum bot├úo inventado.
+- **`FormParaBO` / `BOParaForm`** ÔÇö transfer├¬ncia real carrinho Ôåö BO. Mapeiam s├│ as colunas que a tela tem; as ~100 props fiscais ficam no default da Fase 2 (preench├¬-las seria inventar imposto ÔÇö regra #27).
+- **`GravarItensLancados`** + wiring no Confirmar, `CarregarLista`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` (no funil `AlternarTelaOperacao`, regra #40).
+
+## Tr├¬s defeitos reais que apareceram no caminho
+
+1. **Confirmar anunciava "venda validada" sem gravar nada.** Com `DataSession = 2` o carrinho ├® invis├¡vel ao form pai (que no legado gravava tudo), ent├úo os itens morriam na mem├│ria. Agora o Confirmar grava via BO e, **falhando, n├úo anuncia sucesso nem fecha a tela**.
+2. **`sigmvitnBO` n├úo conseguia gravar** ÔÇö `IIF(this_lEtiesps, 1, 0)` concatenava num├®rico em string: *Operator/operand type mismatch* antes do SQLEXEC. 10 sites (5 no `Inserir`, 5 no `Atualizar`): INSERT **e** UPDATE estavam quebrados. Corrigido para `"1"`/`"0"` (forma usada por 34 outros BOs).
+3. **Item cancelado seria cobrado.** Medido: `DataSession = 2` nasce com `SET DELETED` **OFF** (o `config.prg` p├Áe ON, mas a sess├úo privada usa o default do VFP ÔÇö mesma armadilha da regra #9.4 com DATE/CENTURY). Linha soft-deleted por `ExcluirItemCorrente` ficava vis├¡vel: 2 lan├ºados com 1 cancelado contavam **2**. Com `SET DELETED ON` no Init + guardas `!DELETED()`, contam **1**.
+
+Tamb├®m documentei no c├│digo por que `FormParaBO`/`BOParaForm`/`LimparCampos` s├úo `PROTECTED`: o `FormBase` os declara assim e o VFP9 **herda** a prote├º├úo ÔÇö `PEMSTATUS` devolve `.T.` mas a chamada de fora estoura (regra #3). S├úo hooks que o pr├│prio `FormBase` invoca (`Novo`/`Salvar`/`Excluir`/`Cancelar`).
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (BO + form, `.fxp` novos, sem `.err`); form instancia; os m├®todos rodam; o ├║nico erro residual ├® `Connection handle is invalid`, esperado com `gnConnHandle = -1`. Harness em `automation/test_fase8_sigmvitn.prg`, evid├¬ncia em `tasks/task571/teste_fase8.txt`.
+
+## Dois pontos para voc├¬ decidir (n├úo mexi)
+
+- **`SIGMVCMVBO` (4), `sigmvcabBO` (20), `sigmvccrBO` (4)** t├¬m o **mesmo** bug do `IIF` num├®rico ÔÇö 28 sites. S├úo de outras tasks; n├úo toquei para n├úo interferir nos pipelines delas, mas hoje essas grava├º├Áes est├úo quebradas.
+- **`SET DELETED ON` no `FormBase.Init`** seria o conserto sist├¬mico (ao lado de DATE/CENTURY). Apliquei s├│ neste form ÔÇö mudar o `FormBase` afeta 300+ telas e n├úo me pareceu decis├úo para tomar sozinho numa fase 8.
+
+N├úo commitei (os arquivos seguem como `??` no git) ÔÇö o prompt pedia a fase, n├úo o commit.

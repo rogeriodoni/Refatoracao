@@ -1,0 +1,49 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 6 ÔÇö nada a acrescentar no form; o gate j├í foi consertado e agora passa
+
+**N├úo modifiquei `FormSigMvExp.prg`** ÔÇö medi que esse ├® o resultado correto, n├úo omiss├úo.
+
+### Por que n├úo h├í o que acrescentar
+
+O `SIGMVEXP.SCX` ├® um **despachante**. Varri o dump (`tasks/task570/SigMvExp_form_codigo_fonte.txt`) pelos pr├│prios padr├Áes do gate:
+
+| superf├¡cie | padr├úo buscado | achados |
+|---|---|---|
+| lista | `AddCursor\|pColuna\|RecordSource\|ControlSource\|Grade\|grd` | **0** |
+| campos | `BaseClass: textbox\|editbox\|combobox\|listbox\|checkbox\|optiongroup\|optionbutton\|spinner` | **0** |
+| lookup | `fwbusca\|mAddColuna\|sigacess(\|Acesso*(\|FormBuscaAuxiliar` | **0** |
+
+A ├írvore inteira ├® `Dataenvironment` + `SIGMVEXP` + um `commandbutton` ("Aguarde Processando Dados"). A Fase 6 pede "campos restantes + lookups": sem campo n├úo h├í o que ligar. Cumprir o gate literalmente exigiria inventar campo e tabela de lookup (viola o PILAR 1 e a regra "NUNCA inventar tabelas de lookup") ou gerar m├®todo vazio (proibido pela regra de completude, que o pr├│prio gate valida).
+
+### O gate j├í tem o ramo despachante ÔÇö e ele passa
+
+O agente da execu├º├úo anterior (18:48ÔÇô18:59) corrigiu `case 6` em `automation/OrquestradorMigracao.ps1`. Extra├¡ o bloco `case 6` real do arquivo (linhas 5505ÔÇô5653) e executei contra este form:
+
+```
+[i] Fase 6 (layout despachante): legado sem lista, sem campos e sem lookup
+    - validado pela superficie que o legado de fato tem
+RESULTADO GATE FASE 6: validado = True
+```
+
+**A falha que disparou este retry ├® de processo, n├úo de c├│digo**: `& script.ps1` parseia o arquivo inteiro na invoca├º├úo, ent├úo o loop em andamento ainda roda o gate antigo em mem├│ria. **O loop da task570 precisa ser relan├ºado** para a Fase 6 (e a 8) passarem.
+
+### Entreg├ível verificado instanciando, n├úo s├│ compilando
+
+Rodei o harness no VFP9 real agora (log fresco, processo encerrado sozinho):
+
+```
+VARTYPE=O  BASECLASS=Form  W/H=337x147
+BOTAO=SIM  BTN_VISIBLE=.T. CAPTION=[Aguarde Processando Dados] T/L/W/H=34/48/241/73
+BO=O TIPO=[E] DOPE=[OPERACAO01]
+ACTIVATE_OK (modo teste nao despacha)
+```
+
+Geometria e caption id├¬nticos ao SCX. Ambos os `.fxp` geraram sem nenhum `.err`. Confirmei tamb├®m que `new_background.jpg` existe (regra #25), que `FormBase` n├úo tem `Activate`/`TornarControlesVisiveis` para colidir com os overrides, e que `Destroy` n├úo foi sobrescrito (o rebuild do menu do `FormBase.Destroy` continua valendo). Apaguei os `.fxp` de teste.
+
+### Um ponto ainda pendente da sua decis├úo
+
+O `case 8` foi alterado na mesma sess├úo anterior como **trabalho adjacente** (a fase era a 6), para a task570 n├úo travar l├í na mesma noite. Est├í medido e fail-closed, mas continua sem sua aprova├º├úo e ├® revers├¡vel isoladamente. As duas mudan├ºas em `OrquestradorMigracao.ps1` seguem **n├úo commitadas**.

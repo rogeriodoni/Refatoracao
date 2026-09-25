@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigMvAte.prg` passa na valida├º├úo do orquestrador.
+
+## O que causou a falha anterior
+
+A valida├º├úo da Fase 8 exige cinco m├®todos no form: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. A tentativa anterior entregou s├│ dois deles e **decidiu deliberadamente n├úo criar** `FormParaBO`/`BOParaForm`/`BtnSalvarClick`, argumentando que s├úo conceitos de CRUD Page1/Page2 que n├úo se aplicam a um popup flat.
+
+O racioc├¡nio estava certo sobre n├úo criar stubs vazios, mas errado sobre a conclus├úo: num OPERACIONAL flat a "ficha" edit├ível **s├úo as colunas da grade** ÔÇö uma linha de `cursor_4c_LocalVen` equivale a um registro de `SigMvAte`. O mapeamento FormÔåöBO existe, s├│ estava escrito inline dentro do `BtnConfirmarClick`.
+
+## O que foi feito
+
+**`FormParaBO()` / `BOParaForm()`** (`PROTECTED`, como o can├┤nico do `FormBase` e do `FormCor`) ÔÇö mapeiam a **linha corrente** da grade contra o BO, cobrindo todas as colunas: `CodVends`/`NAtends` da tela, `this_cEmps`/`this_cEmpDopNums` (contexto do documento pai, `NOT NULL` no schema e sem campo na tela) e `this_cDescVends`/`this_cGrVends` de apoio. `this_cPkChaves` fica de fora de prop├│sito ÔÇö quem gera ├® o `Inserir()` via `fUniqueIds()`. Ambos retornam `.F.` sem linha utiliz├ível.
+
+**`BtnSalvarClick()`** ÔÇö passou a ser o m├®todo de grava├º├úo (o corpo que estava em `BtnConfirmarClick`), agora usando `FormParaBO()` no `SCAN`. `BtnConfirmarClick()` virou delegador, preservando o nome do bot├úo do legado que ├® alvo do `BINDEVENT`.
+
+**Tr├¬s caminhos de lookup** (Enter/Tab por c├│digo, por raz├úo social, sele├º├úo no picker) foram roteados por `FormParaBO()` ÔåÆ altera as props ÔåÆ `BOParaForm()`, em vez do `REPLACE` direto. Isso deu aos dois m├®todos chamadores reais, e o `FormParaBO()` carregar a linha antes **preserva o `NAtends` j├í digitado**.
+
+## Verifica├º├úo executada no VFP9
+
+- **Compila├º├úo**: `COMPILE_OK=SIM`, sem arquivo `.err` (`.fxp` apagado antes, conforme a regra do `COMPILE` que n├úo reescreve).
+- **Instancia├º├úo real**: `CREATEOBJECT("FormSigMvAte", ...)` ÔåÆ `INSTANCIA=OK`.
+- **Round-trip medido**: grade vazia ÔåÆ ambos `.F.`; com linha ÔåÆ `FormParaBO()` preencheu as 6 propriedades (`CodVends=0001`, `NAtends=7`, `Emps=001`, `EmpDopNums=TESTE001`, `GrVends=VEN`); ap├│s trocar o vendedor no BO, `BOParaForm()` devolveu `0002`/`VENDEDOR DOIS` com **`NAtends=7` preservado**.
+- Blocos balanceados (28 `PROCEDURE`/`ENDPROC`, 11 `TRY`/`ENDTRY`, 69 `IF`/`ENDIF`), nenhum `RETURN` dentro de `TRY`, nenhum caractere n├úo-ASCII, nenhum TODO/stub real.
+
+Dois pontos que encontrei no caminho e que valem registro: o `.fxp` obsoleto do script de teste fez o VFP rodar c├│digo velho por tr├¬s execu├º├Áes seguidas (exatamente o sintoma da regra #29), e `FormParaBO`/`BOParaForm` s├úo `PROTECTED` no `FormBase` ÔÇö declarar sem `PROTECTED` na subclasse **n├úo amplia** o escopo, o `PEMSTATUS` retorna `.T.` e a chamada externa falha com `Property FORMPARABO is not found` (mesma armadilha da regra #3).
+
+Os artefatos tempor├írios de teste foram removidos; n├úo commitei nada.

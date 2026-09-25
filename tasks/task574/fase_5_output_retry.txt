@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 est├í entregue e validada.
+
+## O que estava acontecendo
+
+A Fase 5 do `FormSIGMVMVT` **j├í tinha sido escrita** pela execu├º├úo anterior (`ConfigurarFiltros()` + `AplicarParametrosAbertura()`, fi├®is ao dump). O que reprovou foi o **gate**, n├úo o form: a Fase 5 tem 4 ramos (paginado / flat / despachante / exibi├º├úo) e nenhum serve para este legado ÔÇö
+
+- **paginado** exige `ConfigurarPaginaDados` ÔåÆ o SCX n├úo tem PageFrame;
+- **flat** exige `.ControlSource =` ÔåÆ o dump tem **zero** ControlSource (medido): os 5 filtros s├úo desvinculados, a ├írvore ├® montada por SQL de chave calculada (`EmpDopNums`);
+- **despachante/exibi├º├úo** exigem legado sem lista ou com tudo ReadOnly ÔåÆ este tem ├írvore ActiveX *e* campo edit├ível.
+
+A Fase 4 j├í havia recebido um ramo **ARVORE** para exatamente este form; a Fase 5 ficou sem o equivalente. Inventar `ControlSource` aqui n├úo seria cosm├®tico ÔÇö apontar filtro para um cursor que a consulta fecha e recria a cada requery sobrescreve o valor digitado. Ent├úo corrigi o **gate**, n├úo o form.
+
+## Mudan├ºas
+
+**1. `automation/OrquestradorMigracao.ps1`** ÔÇö ramo ARVORE na Fase 5, fail-closed: exige o dump, aus├¬ncia de Grid/PageFrame, olecontrol *dirigido pela API de n├│s*, aus├¬ncia **total** de ControlSource no legado, e **paridade num├®rica de campos** (migrado ÔëÑ legado) para a exce├º├úo n├úo virar atalho para meia tela.
+
+**2. `projeto/app/forms/operacionais/FormSIGMVMVT.prg`** ÔÇö um defeito real que encontrei ao conferir o `Init` legado: `this_lAutomatico` estava como **OR** dos par├ómetros, e o legado ├® **AND dos tr├¬s**. Com OR, receber s├│ a Empresa ligava o modo autom├ítico, desabilitava os 5 campos e disparava a carga ÔÇö o usu├írio ficaria com a tela **travada e vazia**, sem como completar Opera├º├úo/N├║mero. No legado o `ReadOnly` ├® a *mesma* express├úo do `Automatico`, ent├úo unifiquei numa fonte ├║nica.
+
+## Medi├º├Áes (n├úo palpites)
+
+- **Sweep do ramo novo**: 573 dumps ÔåÆ relaxa **1**, o pr├│prio `SIGMVMVT`.
+- **Regress├úo**: executei o bloco *real* da Fase 5 sobre **1070 pares** (dump ├ù FormType), antes e depois. Exatamente **1** resultado mudou: `task574|SIGMVMVT` FalseÔåÆTrue. Zero regress├Áes.
+- **Instancia├º├úo** (`test_fase5_sigmvmvt.prg`, mantido junto ao harness de Fase 4): form instancia sem falha em cadeia; os 5 campos batem com o dump em Top/Left/Width/Height/MaxLength; tipos C/C/N/D/D; s├│-Empresa ÔåÆ `Automatico=.F.` com campo pr├®-preenchido e edit├ível; tr├¬s params ÔåÆ `.T.`, ReadOnly + Enabled=.F.
+- Compila├º├úo limpa (form e BO, sem `.err`); arquivo 100% ASCII (acentos via `CHR()`).
+
+Uma suspeita minha **n├úo se confirmou** e a registro por honestidade: achei que `InputMask = "999999"` nos campos de data bloquearia o ano sob `SET CENTURY ON`. Medido no VFP9 ÔÇö o pr├│prio VFP **reescreve** o mask para `99/99/9999` quando o `.Value` passa a ser DATE. Transcrever o mask do SCX est├í correto; n├úo troquei nada ali, e deixei a medi├º├úo comentada no header para ningu├®m "consertar" isso depois.
+
+Um detalhe fora do meu escopo: no meu teste inicial usei o par `task573/SIGPDMEN`, cujo dump n├úo existe nesse caminho ÔÇö era bug do meu harness, n├úo do gate (o fail-closed agiu certo com dump ausente). Descartei o caso e troquei pela varredura completa, que ├® evid├¬ncia melhor.

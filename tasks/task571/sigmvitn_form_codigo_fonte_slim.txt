@@ -1,0 +1,6027 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigmvitn.SCX
+* Data/Hora: 24/09/2026 20:32:32
+* Total de registros: 261
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVITN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Cnt_Consulta
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_Produto
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: container
+  BaseClass: container
+
+Objeto: Get_Produto
+  Parent: SIGMVITN.Cnt_Consulta.Cnt_Produto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGMVITN.Cnt_Consulta.Cnt_Produto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_Resultado
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: container
+  BaseClass: container
+
+Objeto: Mensage1
+  Parent: SIGMVITN.Cnt_Consulta.Cnt_Resultado
+  Class: label
+  BaseClass: label
+
+Objeto: Mensage2
+  Parent: SIGMVITN.Cnt_Consulta.Cnt_Resultado
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: label
+  BaseClass: label
+
+Objeto: Command1
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Unit
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Proximo
+  Parent: SIGMVITN.Cnt_Consulta
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CntItem
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Get_total
+  Parent: SIGMVITN.CntItem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_Produto
+  Parent: SIGMVITN.CntItem
+  Class: container
+  BaseClass: container
+
+Objeto: Get_Produto
+  Parent: SIGMVITN.CntItem.Cnt_Produto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Qtds
+  Parent: SIGMVITN.CntItem.Cnt_Produto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGMVITN.CntItem.Cnt_Produto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGMVITN.CntItem.Cnt_Produto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CmdEnviaProd
+  Parent: SIGMVITN.CntItem.Cnt_Produto
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cnt_Subtotal
+  Parent: SIGMVITN.CntItem
+  Class: container
+  BaseClass: container
+
+Objeto: Get_valor
+  Parent: SIGMVITN.CntItem.Cnt_Subtotal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGMVITN.CntItem.Cnt_Subtotal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_Desconto
+  Parent: SIGMVITN.CntItem
+  Class: container
+  BaseClass: container
+
+Objeto: Get_valdesc
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_pvaldesc
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_unival
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Get_ValAcre
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_pValAcre
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGMVITN.CntItem.Cnt_Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Proximo
+  Parent: SIGMVITN.CntItem
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say8
+  Parent: SIGMVITN.CntItem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntFinanc
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Cnt_GrdBarra
+  Parent: SIGMVITN.CntFinanc
+  Class: container
+  BaseClass: container
+
+Objeto: Excluir
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: ok
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Inserir
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grade
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape4
+  Parent: SIGMVITN.CntFinanc
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cnt_Barras
+  Parent: SIGMVITN.CntFinanc
+  Class: container
+  BaseClass: container
+
+Objeto: Image1
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: image
+  BaseClass: image
+
+Objeto: Image2
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: image
+  BaseClass: image
+
+Objeto: Say2
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Barra_1
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Barra_2
+  Parent: SIGMVITN.CntFinanc.Cnt_Barras
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Proximo
+  Parent: SIGMVITN.CntFinanc
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGMVITN.CntFinanc
+  Class: label
+  BaseClass: label
+
+Objeto: Say2
+  Parent: SIGMVITN.CntFinanc
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_total
+  Parent: SIGMVITN.CntFinanc
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_Credito
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Proximo
+  Parent: SIGMVITN.Cnt_Credito
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label2
+  Parent: SIGMVITN.Cnt_Credito
+  Class: label
+  BaseClass: label
+
+Objeto: GradeDevol
+  Parent: SIGMVITN.Cnt_Credito
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: get_Devol
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Credito.GradeDevol.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Cnt_Pendencia
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Proximo
+  Parent: SIGMVITN.Cnt_Pendencia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label2
+  Parent: SIGMVITN.Cnt_Pendencia
+  Class: label
+  BaseClass: label
+
+Objeto: Bot_Pendentes
+  Parent: SIGMVITN.Cnt_Pendencia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: GradeMultiSubN
+  Parent: SIGMVITN.Cnt_Pendencia
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Notas
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Notas
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Cnt_Identifica
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Destino
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say8
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_dConta
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCadastros
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say4
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Line1
+  Parent: SIGMVITN.Cnt_Identifica.Destino
+  Class: line
+  BaseClass: line
+
+Objeto: Responsavel
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say8
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_dConta
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Line1
+  Parent: SIGMVITN.Cnt_Identifica.Responsavel
+  Class: line
+  BaseClass: line
+
+Objeto: Vendedor
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say8
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_dConta
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Line1
+  Parent: SIGMVITN.Cnt_Identifica.Vendedor
+  Class: line
+  BaseClass: line
+
+Objeto: TabDesconto
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGMVITN.Cnt_Identifica.TabDesconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_tabd
+  Parent: SIGMVITN.Cnt_Identifica.TabDesconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ListaPreco
+  Parent: SIGMVITN.Cnt_Identifica.TabDesconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_ListaPreco
+  Parent: SIGMVITN.Cnt_Identifica.TabDesconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Proximo
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CodOperacao
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGMVITN.Cnt_Identifica.CodOperacao
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGMVITN.Cnt_Identifica.CodOperacao
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Identifica.CodOperacao
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_PedCli
+  Parent: SIGMVITN.Cnt_Identifica.CodOperacao
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Origem
+  Parent: SIGMVITN.Cnt_Identifica
+  Class: container
+  BaseClass: container
+
+Objeto: Say8
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_dConta
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCadastros
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say4
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Line1
+  Parent: SIGMVITN.Cnt_Identifica.Origem
+  Class: line
+  BaseClass: line
+
+Objeto: Cnt_Fpagto
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Acrescimo
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: container
+  BaseClass: container
+
+Objeto: Get_TotVariação
+  Parent: SIGMVITN.Cnt_Fpagto.Acrescimo
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGMVITN.Cnt_Fpagto.Acrescimo
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_PorcVariação
+  Parent: SIGMVITN.Cnt_Fpagto.Acrescimo
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGMVITN.Cnt_Fpagto.Acrescimo
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGMVITN.Cnt_Fpagto.Acrescimo
+  Class: label
+  BaseClass: label
+
+Objeto: Desconto
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: container
+  BaseClass: container
+
+Objeto: Get_TotVariação
+  Parent: SIGMVITN.Cnt_Fpagto.Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGMVITN.Cnt_Fpagto.Desconto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_PorcVariação
+  Parent: SIGMVITN.Cnt_Fpagto.Desconto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGMVITN.Cnt_Fpagto.Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGMVITN.Cnt_Fpagto.Desconto
+  Class: label
+  BaseClass: label
+
+Objeto: Say9
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_OBS
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_fpg
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_npar
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_vpar
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fweditdata_venc
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say23
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say24
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_valinic
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetObs
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SayObs
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_TotLiquido
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Saldo
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_TotForma
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Proximo
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_tvariacao
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say18
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say17
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cnt_ChequepreTef
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: container
+  BaseClass: container
+
+Objeto: Grade
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.fpagto
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.fpagto
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.moeda
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.moeda
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Cnt_Chq
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef
+  Class: container
+  BaseClass: container
+
+Objeto: TefChq
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Opc_cpf
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_agendc
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_contadc
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_numdc
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_age
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_bco
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_num
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Pca
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ins
+  Parent: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Shape4
+  Parent: SIGMVITN.Cnt_Fpagto
+  Class: shape
+  BaseClass: shape
+
+Objeto: FigJpg
+  Parent: SIGMVITN
+  Class: image
+  BaseClass: image
+
+Objeto: READCOMM
+  Parent: SIGMVITN
+  Class: readcomm
+  BaseClass: container
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdCupom
+  Parent: SIGMVITN
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGMVITN.GrdCupom.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVITN.GrdCupom.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Cnt_Mensagem
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Mensagem
+  Parent: SIGMVITN.Cnt_Mensagem
+  Class: label
+  BaseClass: label
+
+Objeto: Abertura
+  Parent: SIGMVITN.Cnt_Mensagem
+  Class: label
+  BaseClass: label
+
+Objeto: cmbTOpers
+  Parent: SIGMVITN
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Timer1
+  Parent: SIGMVITN
+  Class: timer
+  BaseClass: timer
+
+Objeto: Barra_Botoes
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Alteraqtd
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Desconto
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: credito
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: AltPreço
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Itens
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: MudaOpe
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: ok
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: identifica
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cancela
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Pagto
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: VerPreco
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: impfiscal
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Financia
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: pendencia
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CancPagto
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: apaga
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Acrescimo
+  Parent: SIGMVITN.Barra_Botoes
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: mensagems
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Mensage1
+  Parent: SIGMVITN.mensagems
+  Class: label
+  BaseClass: label
+
+Objeto: Mensage2
+  Parent: SIGMVITN.mensagems
+  Class: label
+  BaseClass: label
+
+Objeto: TxtCaption
+  Parent: SIGMVITN
+  Class: label
+  BaseClass: label
+
+Objeto: CancelaItem
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGMVITN.CancelaItem
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Produto
+  Parent: SIGMVITN.CancelaItem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGMVITN.CancelaItem
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGMVITN.CancelaItem
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGMVITN.CancelaItem
+  Class: label
+  BaseClass: label
+
+Objeto: Get_item
+  Parent: SIGMVITN.CancelaItem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Cbarra
+  Parent: SIGMVITN.CancelaItem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_dpro
+  Parent: SIGMVITN.CancelaItem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: ok
+  Parent: SIGMVITN.CancelaItem
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CancelaDisp
+  Parent: SIGMVITN.CancelaItem
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CaixaLivre
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: CaixaLivre
+  Parent: SIGMVITN.CaixaLivre
+  Class: label
+  BaseClass: label
+
+Objeto: CaixaLivre2
+  Parent: SIGMVITN.CaixaLivre
+  Class: label
+  BaseClass: label
+
+Objeto: Cnt_Img4c
+  Parent: SIGMVITN
+  Class: container
+  BaseClass: container
+
+Objeto: figjpg
+  Parent: SIGMVITN.Cnt_Img4c
+  Class: image
+  BaseClass: image
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 0
+  Top = 0
+  Left = 0
+  Height = 1400
+  Width = 1300
+  DoCreate = .T.
+  ShowTips = .T.
+  Picture = 
+  Caption = "Caixa"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  BackColor = 255,255,255
+  antcp = 
+  antvalor = 
+  aplicoutabd = .F.
+  bcds = 
+  editajob = .F.
+  fatredutor = 
+  gerouncupom = .F.
+  itsembonus = 
+  lancaacrescimo = 
+  liberaident = 
+  parcdesconto = 
+  parentform = thisform.parentformthisform.parentform
+  pcbandeira = .F.
+  pcrede = .F.
+  temacrescimo = 
+  totchamada = 
+  ultimocancel = 
+  usulibs = 
+  _memberdata =     1211<VFPData>
+  <memberdata name="itemfiscal" type="method" display="ItemFiscal"/>
+  <memberdata name="verifsubtotal" type="method" display="VerifSubTotal"/>
+  <memberdata name="totchamada" type="property" display="TotChamada"/>
+  <memberdata name="calculadesconto" type="method" display="CalculaDesconto"/>
+  <memberdata name="antvalor" type="property" display="AntValor"/>
+  <memberdata name="antcp" type="property" display="AntCp"/>
+  <memberdata name="liberaident" type="property" display="LiberaIdent"/>
+  <memberdata name="abrecupom" type="method" display="AbreCupom"/>
+  <memberdata name="ultimocancel" type="property" display="UltimoCancel"/>
+  <memberdata name="parcdesconto" type="property" display="parcDesconto"/>
+  <memberdata name="atualizatotal" type="method" display="AtualizaTotal"/>
+  <memberdata name="usulibs" type="property" display="UsuLibs"/>
+  <memberdata name="itsembonus" type="property" display="ItSemBonus"/>
+  <memberdata name="fatredutor" type="property" display="FatRedutor"/>
+  <memberdata name="bcds" type="property" display="Bcds"/>
+  <memberdata name="temacrescimo" type="property" display="TemAcrescimo"/>
+  <memberdata name="lancaacrescimo" type="property" display="LancaAcrescimo"/>
+  </VFPData>
+  Name = "SIGMVITN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 495
+  BackStyle = 1
+  BorderWidth = 0
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 5
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Cnt_Consulta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 25
+  Caption = "Preço Unitário"
+  Left = 34
+  Top = 277
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Produto
+------------------------------------------------------------
+  Top = 62
+  Left = 7
+  Width = 361
+  Height = 64
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  Name = "Cnt_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Produto.Get_Produto
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 15
+  Format = "K!"
+  Height = 30
+  InputMask = "!!!!!!!!!!!!!"
+  Left = 39
+  TabIndex = 1
+  Top = 28
+  Width = 178
+  DisabledBackColor = 128,128,128
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Produto.Say7
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Caption = "Produto"
+  Left = 40
+  Top = 4
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Resultado
+------------------------------------------------------------
+  Top = 142
+  Left = 7
+  Width = 361
+  Height = 123
+  BackStyle = 1
+  BorderWidth = 2
+  SpecialEffect = 2
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "Cnt_Resultado"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Resultado.Mensage1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  BackStyle = 0
+  Caption = ""
+  Height = 31
+  Left = 4
+  Top = 6
+  Width = 353
+  ForeColor = 90,90,90
+  Name = "Mensage1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Cnt_Resultado.Mensage2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 16
+  WordWrap = .T.
+  BackStyle = 0
+  Caption = ""
+  Height = 64
+  Left = 4
+  Top = 49
+  Width = 353
+  ForeColor = 90,90,90
+  Name = "Mensage2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 16
+  FontStrikethru = .F.
+  FontUnderline = .F.
+  BackStyle = 0
+  Caption = "Consulta Preço do Produto"
+  Height = 27
+  Left = 32
+  Top = 14
+  Width = 281
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Command1
+------------------------------------------------------------
+  Top = 399
+  Left = 227
+  Height = 39
+  Width = 91
+  Cancel = .T.
+  Caption = "Sair"
+  Style = 1
+  Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Get_Unit
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 23
+  Alignment = 3
+  Value = 0
+  Height = 46
+  InputMask = "9,999,999.99"
+  Left = 37
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 318
+  Width = 249
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Get_Unit"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Consulta.Proximo
+------------------------------------------------------------
+  Top = 319
+  Left = 319
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  ToolTipText = "Avança Para a Póxima Tela"
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 494
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 5
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "CntItem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Get_total
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 22
+  Alignment = 3
+  Value = 0
+  Height = 46
+  InputMask = "9,999,999.99"
+  Left = 62
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 369
+  Width = 249
+  BackColor = 255,255,255
+  Name = "Get_total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto
+------------------------------------------------------------
+  Top = 8
+  Left = 7
+  Width = 360
+  Height = 92
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  Name = "Cnt_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto.Get_Produto
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Format = "K!"
+  Height = 30
+  InputMask = "!!!!!!!!!!!!!!"
+  Left = 24
+  TabIndex = 1
+  Top = 26
+  Width = 178
+  ForeColor = 90,90,90
+  DisabledBackColor = 128,128,128
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto.Get_Qtds
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 30
+  InputMask = "999.999"
+  Left = 203
+  TabIndex = 2
+  Top = 26
+  Width = 104
+  ForeColor = 90,90,90
+  Name = "Get_Qtds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto.Say7
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Produto"
+  Left = 25
+  Top = 4
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Quantidade"
+  Left = 201
+  Top = 4
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Produto.CmdEnviaProd
+------------------------------------------------------------
+  Top = 58
+  Left = 203
+  Height = 29
+  Width = 104
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\b_print2.bmp
+  Caption = "\<Confirmar"
+  TabIndex = 3
+  ToolTipText = "Confirma o Produto Informado"
+  Visible = .F.
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdEnviaProd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Subtotal
+------------------------------------------------------------
+  Top = 266
+  Left = 7
+  Width = 360
+  Height = 46
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 6
+  BackColor = 255,255,255
+  Name = "Cnt_Subtotal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Subtotal.Get_valor
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "9,999,999.99"
+  Left = 160
+  TabIndex = 8
+  Top = 8
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "Get_valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Subtotal.Say11
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Valor Unitário"
+  Left = 37
+  Top = 11
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto
+------------------------------------------------------------
+  Top = 106
+  Left = 7
+  Width = 360
+  Height = 154
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 5
+  BackColor = 255,255,255
+  Name = "Cnt_Desconto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Get_valdesc
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "999,999.99"
+  Left = 160
+  TabIndex = 3
+  Top = 62
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "Get_valdesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Get_pvaldesc
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "99.99"
+  Left = 160
+  TabIndex = 2
+  Top = 33
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "Get_pvaldesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Say15
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Desconto"
+  Left = 73
+  Top = 36
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Get_unival
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "9999,999.99"
+  Left = 160
+  TabIndex = 1
+  Top = 4
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "Get_unival"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Say12
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Original"
+  Left = 87
+  Top = 6
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "($)"
+  Height = 16
+  Left = 324
+  Top = 67
+  Width = 20
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "(%)"
+  Height = 16
+  Left = 324
+  Top = 40
+  Width = 26
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Get_ValAcre
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "999,999.99"
+  Left = 160
+  TabIndex = 5
+  Top = 120
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "Get_ValAcre"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.get_pValAcre
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 28
+  InputMask = "99.99"
+  Left = 160
+  TabIndex = 4
+  Top = 91
+  Width = 161
+  ForeColor = 90,90,90
+  Name = "get_pValAcre"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Acréscimo"
+  Left = 66
+  Top = 94
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "($)"
+  Height = 16
+  Left = 324
+  Top = 126
+  Width = 20
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Cnt_Desconto.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "(%)"
+  Height = 16
+  Left = 324
+  Top = 97
+  Width = 26
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Proximo
+------------------------------------------------------------
+  Top = 370
+  Left = 323
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  ToolTipText = "Avança Para a Póxima Tela"
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntItem.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 25
+  Caption = "TOTAL"
+  Left = 61
+  Top = 330
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 498
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 5
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "CntFinanc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra
+------------------------------------------------------------
+  Top = 183
+  Left = 4
+  Width = 368
+  Height = 164
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "Cnt_GrdBarra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.Excluir
+------------------------------------------------------------
+  Top = 131
+  Left = 82
+  Height = 30
+  Width = 80
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Picture = ..\vbmp\a_delete1.bmp
+  Caption = "F4-\<Excluir"
+  TabIndex = 77
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  Name = "Excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.ok
+------------------------------------------------------------
+  Top = 131
+  Left = 161
+  Height = 30
+  Width = 80
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Picture = ..\vbmp\smmail.bmp
+  Caption = "F5-\<Barra"
+  TabIndex = 40
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.Inserir
+------------------------------------------------------------
+  Top = 131
+  Left = 3
+  Height = 30
+  Width = 80
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Picture = ..\vbmp\a_misc7.bmp
+  Caption = "F2-\<Selec"
+  TabIndex = 77
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  Name = "Inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade
+------------------------------------------------------------
+  ColumnCount = 4
+  Height = 129
+  Left = 2
+  Top = 4
+  Width = 364
+  Name = "grade"
+  Column1.Width = 120
+  Column1.Name = "Column1"
+  Column2.Width = 50
+  Column2.Name = "Column2"
+  Column3.Width = 80
+  Column3.Name = "Column3"
+  Column4.Width = 80
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column1.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Código de Barra"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column2.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Parcela"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column3.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column4.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_GrdBarra.grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Shape4
+------------------------------------------------------------
+  Top = 349
+  Left = 0
+  Height = 3
+  Width = 370
+  SpecialEffect = 0
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras
+------------------------------------------------------------
+  Top = 57
+  Left = 4
+  Width = 368
+  Height = 125
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  Name = "Cnt_Barras"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Image1
+------------------------------------------------------------
+  Picture = ..\vbmp\b_arrow2.bmp
+  BackStyle = 0
+  Height = 25
+  Left = 14
+  Top = 34
+  Width = 25
+  Name = "Image1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Image2
+------------------------------------------------------------
+  Picture = ..\vbmp\b_arrow2.bmp
+  BackStyle = 0
+  Height = 25
+  Left = 12
+  Top = 94
+  Width = 25
+  Name = "Image2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 15
+  Caption = "Primeiro Código de Barras"
+  Left = 39
+  Top = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 15
+  Caption = "Segundo Código de Barras"
+  Left = 39
+  Top = 65
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 15
+  Height = 30
+  Left = 38
+  SpecialEffect = 1
+  Top = 31
+  Width = 240
+  DisabledBackColor = 128,128,128
+  Name = "Get_Barra_1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Cnt_Barras.Get_Barra_2
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 15
+  Height = 30
+  Left = 38
+  SpecialEffect = 1
+  Top = 91
+  Width = 240
+  DisabledBackColor = 128,128,128
+  Name = "Get_Barra_2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Proximo
+------------------------------------------------------------
+  Top = 353
+  Left = 320
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  TabIndex = 4
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 16
+  FontStrikethru = .F.
+  BackStyle = 0
+  Caption = "Crediário"
+  Height = 27
+  Left = 134
+  Top = 11
+  Width = 97
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 20
+  Caption = "Total"
+  Left = 8
+  Top = 360
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CntFinanc.Get_total
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 20
+  Alignment = 3
+  Value = 0
+  ControlSource = "TprMvCab.ValInis"
+  Height = 45
+  InputMask = "9,999,999.99"
+  Left = 92
+  SpecialEffect = 1
+  Top = 354
+  Width = 218
+  BackColor = 188,225,245
+  Name = "Get_total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 494
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 6
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Cnt_Credito"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.Proximo
+------------------------------------------------------------
+  Top = 394
+  Left = 325
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  TabIndex = 1
+  ToolTipText = "Avança Para a Póxima Tela"
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "[ENTER] Muda de Tela"
+  Height = 16
+  Left = 194
+  Top = 422
+  Width = 135
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Courier New"
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 325
+  Left = 10
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 64
+  Width = 355
+  BackColor = 254,255,232
+  ZOrderSet = 3
+  Name = "GradeDevol"
+  Column1.FontName = "Courier New"
+  Column1.Width = 82
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = "9999999999"
+  Column1.BackColor = 254,255,232
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.Width = 180
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.BackColor = 254,255,232
+  Column2.Name = "Column2"
+  Column3.FontName = "Courier New"
+  Column3.Width = 70
+  Column3.BackColor = 254,255,232
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Op. Crédito"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column1.get_Devol
+------------------------------------------------------------
+  FontName = "Courier New"
+  InputMask = "9999999999"
+  Margin = 0
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 254,255,232
+  Name = "get_Devol"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 254,255,232
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column3.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Documento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Credito.GradeDevol.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 254,255,232
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 497
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Cnt_Pendencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.Proximo
+------------------------------------------------------------
+  Top = 382
+  Left = 311
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  TabIndex = 5
+  ToolTipText = "Avança Para a Póxima Tela"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "[ENTER] Muda de Tela"
+  Height = 16
+  Left = 168
+  Top = 413
+  Width = 135
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.Bot_Pendentes
+------------------------------------------------------------
+  Top = 9
+  Left = 300
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\vbmp\date2.ico
+  Caption = "[F3]Pend."
+  TabIndex = 4
+  ToolTipText = "Abre Tela de Pendências"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 33
+  RightToLeft = .T.
+  Themes = .F.
+  Name = "Bot_Pendentes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Verdana"
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 397
+  Left = 14
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 3
+  Top = 8
+  Visible = .T.
+  Width = 274
+  ForeColor = 36,84,155
+  BackColor = 254,255,232
+  ZOrderSet = 3
+  Name = "GradeMultiSubN"
+  Column1.FontName = "Verdana"
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = "9999999999"
+  Column1.ForeColor = 36,84,155
+  Column1.BackColor = 254,255,232
+  Column1.Name = "Codigos"
+  Column2.FontName = "Verdana"
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Visible = .T.
+  Column2.ForeColor = 36,84,155
+  Column2.BackColor = 254,255,232
+  Column2.Name = "Notas"
+  Column3.FontName = "Verdana"
+  Column3.Width = 90
+  Column3.Visible = .T.
+  Column3.ForeColor = 36,84,155
+  Column3.BackColor = 254,255,232
+  Column3.Name = "Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pendências"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Codigos.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  Margin = 0
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 254,255,232
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Notas.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Notas"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Notas.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  BorderStyle = 0
+  Margin = 0
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 254,255,232
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Valor.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Pendencia.GradeMultiSubN.Valor.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  BorderStyle = 0
+  Margin = 0
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 254,255,232
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 496
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 4
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Cnt_Identifica"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino
+------------------------------------------------------------
+  Top = 168
+  Left = 2
+  Width = 371
+  Height = 94
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 4
+  BackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "Destino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo"
+  Left = 10
+  Top = 18
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 93
+  Top = 18
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Height = 15
+  Left = 176
+  Top = 18
+  Width = 56
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Height = 15
+  Left = 10
+  Top = 51
+  Width = 29
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Get_grupo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Alignment = 1
+  ControlSource = "TprMvCab.grupods"
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 41
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.contads"
+  Height = 21
+  Left = 93
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 42
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 65
+  Width = 304
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 43
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Get_cpf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 176
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 32
+  Width = 139
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.btnCadastros
+------------------------------------------------------------
+  Top = 56
+  Left = 325
+  Height = 32
+  Width = 34
+  FontName = "Tahoma"
+  FontSize = 7
+  Picture = ..\vbmp\binder03.ico
+  Caption = ""
+  TabIndex = 5
+  ToolTipText = "<F3> Acessa o Cadastro Desta Conta"
+  SpecialEffect = 2
+  ForeColor = 90,90,90
+  Name = "btnCadastros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Destino"
+  Height = 15
+  Left = 10
+  Top = 2
+  Width = 45
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Destino.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 0
+  Left = 10
+  Top = 17
+  Width = 323
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel
+------------------------------------------------------------
+  Top = 356
+  Left = 2
+  Width = 371
+  Height = 94
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 6
+  BackColor = 255,255,255
+  ZOrderSet = 50
+  Name = "Responsavel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo"
+  Left = 10
+  Top = 18
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 93
+  Top = 18
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Left = 176
+  Top = 18
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Left = 10
+  Top = 51
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.Resps"
+  Height = 21
+  Left = 93
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 42
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 65
+  Width = 305
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 43
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Get_cpf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 176
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 32
+  Width = 139
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Get_grupo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Alignment = 1
+  ControlSource = "TprMvCab.GrResps"
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 41
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Responsável"
+  Height = 15
+  Left = 10
+  Top = 2
+  Width = 74
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Responsavel.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 0
+  Left = 10
+  Top = 17
+  Width = 320
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor
+------------------------------------------------------------
+  Top = 262
+  Left = 2
+  Width = 371
+  Height = 94
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 5
+  BackColor = 255,255,255
+  ZOrderSet = 51
+  Name = "Vendedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo"
+  Left = 10
+  Top = 18
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 93
+  Top = 18
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Left = 176
+  Top = 18
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Left = 10
+  Top = 51
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.vends"
+  Height = 21
+  Left = 93
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 42
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 65
+  Width = 304
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 43
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Get_cpf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 176
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 32
+  Width = 139
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Get_grupo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Alignment = 1
+  ControlSource = "TprMvCab.grvends"
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 41
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Vendedor"
+  Height = 15
+  Left = 10
+  Top = 2
+  Width = 56
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Vendedor.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 0
+  Left = 10
+  Top = 17
+  Width = 315
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.TabDesconto
+------------------------------------------------------------
+  Top = 33
+  Left = 2
+  Width = 371
+  Height = 41
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "TabDesconto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.TabDesconto.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Caption = "Tab. Desconto"
+  Left = 10
+  Top = 4
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.TabDesconto.Get_tabd
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.tabds"
+  Height = 20
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 18
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 65
+  Name = "Get_tabd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.TabDesconto.Get_ListaPreco
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.LPrecos"
+  Format = "K"
+  Height = 20
+  Left = 123
+  Margin = 0
+  MaxLength = 30
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 17
+  Width = 220
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,220
+  ZOrderSet = 13
+  RightToLeft = .T.
+  Name = "Get_ListaPreco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.TabDesconto.Say_ListaPreco
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Lista de Preços"
+  Left = 124
+  Top = 5
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 41
+  Name = "Say_ListaPreco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Proximo
+------------------------------------------------------------
+  Top = 400
+  Left = 324
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  TabIndex = 7
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.CodOperacao
+------------------------------------------------------------
+  Top = 2
+  Left = 2
+  Width = 371
+  Height = 31
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "CodOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.CodOperacao.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Caption = "Documento : "
+  Left = 9
+  Top = 8
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.CodOperacao.Get_codigo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  ControlSource = "TprMvCab.mascnum"
+  Height = 23
+  Left = 94
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 4
+  Width = 61
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.CodOperacao.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Caption = "Pedido Cliente: "
+  Left = 160
+  Top = 8
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.CodOperacao.Get_PedCli
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  ControlSource = "TprMvCab.nPedClis"
+  Height = 23
+  Left = 260
+  SpecialEffect = 1
+  TabIndex = 1
+  ToolTipText = "Entrar com o numero da NF manual."
+  Top = 4
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "Get_PedCli"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem
+------------------------------------------------------------
+  Top = 74
+  Left = 2
+  Width = 371
+  Height = 94
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 3
+  BackColor = 255,255,255
+  ZOrderSet = 49
+  Name = "Origem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo"
+  Left = 10
+  Top = 18
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 93
+  Top = 18
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " "
+  Height = 15
+  Left = 175
+  Top = 3
+  Width = 5
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Height = 15
+  Left = 10
+  Top = 51
+  Width = 29
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Height = 15
+  Left = 176
+  Top = 18
+  Width = 56
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Get_grupo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Alignment = 1
+  ControlSource = "TprMvCab.grupoos"
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 41
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "TprMvCab.contaos"
+  Height = 21
+  Left = 93
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 32
+  Width = 80
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 42
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 10
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 65
+  Width = 304
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 43
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Get_cpf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 176
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 32
+  Width = 139
+  ForeColor = 90,90,90
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.btnCadastros
+------------------------------------------------------------
+  Top = 52
+  Left = 325
+  Height = 32
+  Width = 34
+  FontSize = 7
+  Picture = ..\vbmp\binder03.ico
+  Caption = ""
+  TabIndex = 6
+  ToolTipText = "<F2> Acessa o Cadastro Desta Conta"
+  SpecialEffect = 2
+  Name = "btnCadastros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Origem"
+  Height = 15
+  Left = 10
+  Top = 2
+  Width = 43
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Identifica.Origem.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 0
+  Left = 10
+  Top = 17
+  Width = 321
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto
+------------------------------------------------------------
+  Top = 124
+  Left = 32
+  Width = 850
+  Height = 504
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 3
+  BackColor = 255,255,255
+  BorderColor = 0,0,0
+  Name = "Cnt_Fpagto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo
+------------------------------------------------------------
+  Top = 31
+  Left = 17
+  Width = 303
+  Height = 52
+  BackStyle = 1
+  BorderWidth = 1
+  Visible = .F.
+  TabIndex = 3
+  BackColor = 255,255,255
+  Name = "Acrescimo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo.Get_TotVariação
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "999,999,999.99"
+  Left = 117
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 43
+  Top = 25
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Get_TotVariação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo.Say20
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  BackStyle = 0
+  Caption = "Acréscimo:"
+  Height = 23
+  Left = 8
+  Top = 1
+  Width = 85
+  TabIndex = 55
+  ForeColor = 90,90,90
+  ZOrderSet = 54
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo.Get_PorcVariação
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "9999.9999"
+  Left = 178
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 42
+  ToolTipText = ""
+  Top = 0
+  Width = 124
+  ForeColor = 90,90,90
+  ZOrderSet = 60
+  Name = "Get_PorcVariação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "(%)"
+  Height = 15
+  Left = 96
+  Top = 4
+  Width = 25
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Acrescimo.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "($)"
+  Height = 15
+  Left = 96
+  Top = 29
+  Width = 19
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto
+------------------------------------------------------------
+  Top = 31
+  Left = 17
+  Width = 303
+  Height = 52
+  BackStyle = 1
+  BorderWidth = 1
+  Visible = .F.
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "Desconto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto.Get_TotVariação
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "999,999,999.99"
+  Left = 116
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 43
+  Top = 25
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Get_TotVariação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto.Say20
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Desconto:"
+  Height = 23
+  Left = 8
+  Top = 1
+  Width = 78
+  TabIndex = 55
+  ForeColor = 90,90,90
+  ZOrderSet = 54
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto.Get_PorcVariação
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "9999.9999"
+  Left = 177
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 42
+  ToolTipText = ""
+  Top = 0
+  Width = 124
+  ForeColor = 90,90,90
+  ZOrderSet = 60
+  Name = "Get_PorcVariação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "(%)"
+  Height = 15
+  Left = 89
+  Top = 4
+  Width = 25
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Desconto.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "($)"
+  Height = 15
+  Left = 89
+  Top = 28
+  Width = 19
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say9
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Observação"
+  Left = 55
+  Top = 339
+  TabIndex = 16
+  ForeColor = 36,84,155
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_OBS
+------------------------------------------------------------
+  ControlSource = "xpar.outros"
+  Height = 20
+  Left = 130
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 337
+  Width = 150
+  BorderColor = 36,84,155
+  Name = "Get_OBS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_fpg
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  ControlSource = ""
+  Height = 29
+  Left = 134
+  MaxLength = 12
+  SpecialEffect = 1
+  TabIndex = 8
+  ToolTipText = "Condição de pagamento"
+  Top = 191
+  Width = 185
+  ForeColor = 90,90,90
+  Name = "Get_fpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_npar
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Height = 29
+  InputMask = "99"
+  Left = 134
+  SpecialEffect = 1
+  TabIndex = 9
+  ToolTipText = "Número de Parcelas"
+  Top = 221
+  Width = 41
+  ForeColor = 90,90,90
+  Name = "Get_npar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_vpar
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 3
+  Value = 0
+  Height = 29
+  InputMask = "999,999,999.99"
+  Left = 134
+  SpecialEffect = 1
+  TabIndex = 10
+  ToolTipText = "Valor de cada Parcela"
+  Top = 251
+  Width = 185
+  ForeColor = 90,90,90
+  Name = "Get_vpar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.fweditdata_venc
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Height = 29
+  Left = 134
+  SpecialEffect = 1
+  TabIndex = 11
+  ToolTipText = "Data de Vencimento"
+  Top = 281
+  Width = 138
+  ForeColor = 90,90,90
+  Name = "fweditdata_venc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say23
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Pagamentos:"
+  Left = 34
+  Top = 134
+  TabIndex = 23
+  ForeColor = 90,90,90
+  Name = "Say23"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say15
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Saldo Final :"
+  Left = 40
+  Top = 108
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 54
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say24
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Total : "
+  Left = 77
+  Top = 6
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 56
+  Name = "Say24"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_valinic
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  Height = 25
+  InputMask = "999,999,999.99"
+  Left = 134
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 5
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 57
+  Name = "Get_valinic"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.GetObs
+------------------------------------------------------------
+  Height = 38
+  Left = 2
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 321
+  Visible = .F.
+  Width = 314
+  ControlSource = "xPar.Obs"
+  Name = "GetObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.SayObs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Observação"
+  Height = 15
+  Left = 5
+  Top = 308
+  Visible = .F.
+  Width = 60
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "SayObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_TotLiquido
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 25
+  InputMask = "999,999,999.99"
+  Left = 134
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 107
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Get_TotLiquido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_Saldo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = "999,999,999.99"
+  Left = 134
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 159
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 33
+  Name = "Get_Saldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_TotForma
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = "999,999,999.99"
+  Left = 134
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 133
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 33
+  Name = "Get_TotForma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "A Pagar :"
+  Left = 62
+  Top = 160
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Proximo
+------------------------------------------------------------
+  Top = 308
+  Left = 324
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow1.bmp
+  Caption = ""
+  TabIndex = 26
+  ToolTipText = "Avança Para a Póxima Tela"
+  SpecialEffect = 0
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Proximo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Desc.Prom.:"
+  Left = 40
+  Top = 82
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 54
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Get_tvariacao
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 25
+  InputMask = "999,999,999.99"
+  Left = 134
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 81
+  Width = 185
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Get_tvariacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say18
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Vencimento :"
+  Left = 33
+  Top = 284
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say18"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say13
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Parcelas :"
+  Left = 58
+  Top = 224
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say17
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Valor :"
+  Left = 82
+  Top = 254
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say17"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 13
+  Caption = "Forma Pagto:"
+  Left = 31
+  Top = 194
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef
+------------------------------------------------------------
+  Top = 358
+  Left = 2
+  Width = 371
+  Height = 139
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 13
+  BackColor = 255,255,255
+  Name = "Cnt_ChequepreTef"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  ChildOrder = ""
+  DeleteMark = .F.
+  HeaderHeight = 12
+  Height = 79
+  Left = 5
+  ReadOnly = .F.
+  RecordMark = .F.
+  RecordSource = "XPAR"
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 11
+  Top = 58
+  Width = 362
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 120
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "fpagto"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 110
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.InputMask = "999999,999.99"
+  Column2.Name = "valor"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 78
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Name = "venc"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 30
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.Name = "moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.fpagto.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Condição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.fpagto.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "xpar.fpags"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.valor.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "xpar.valos"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.venc.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  StrictDateEntry = 0
+  BorderStyle = 0
+  ControlSource = "xpar.vencs"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.moeda.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Grade.moeda.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 371
+  Height = 60
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 13
+  BackColor = 255,255,255
+  Name = "Cnt_Chq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.TefChq
+------------------------------------------------------------
+  Top = 5
+  Left = 259
+  Height = 20
+  Width = 108
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\users\4control\documents\visual foxpro projects\
+  Caption = "Consulta C\<heque"
+  TabIndex = 12
+  TabStop = .F.
+  ToolTipText = "Verifica e Confirma se a numeração dos cheques está OK."
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "TefChq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Opc_cpf
+------------------------------------------------------------
+  AutoSize = .F.
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 17
+  Left = 3
+  Top = 5
+  Width = 108
+  TabIndex = 18
+  BorderColor = 192,192,192
+  Name = "Opc_cpf"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "CPF"
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 1
+  Option1.Width = 44
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "CNPJ"
+  Option2.Left = 57
+  Option2.Top = 1
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_cpf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.cpfs"
+  Height = 20
+  Left = 112
+  Margin = 0
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 4
+  Width = 140
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_agendc
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xPar.DigAgencs"
+  Height = 22
+  Left = 110
+  MaxLength = 1
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 36
+  Width = 22
+  ForeColor = 0,0,0
+  Name = "Get_agendc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_contadc
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.digcontas"
+  Height = 22
+  Left = 213
+  MaxLength = 1
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 36
+  Width = 23
+  ForeColor = 0,0,0
+  Name = "Get_contadc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_numdc
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.digchqs"
+  Height = 22
+  Left = 290
+  MaxLength = 1
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 36
+  Width = 22
+  ForeColor = 0,0,0
+  Name = "Get_numdc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.contas"
+  Height = 22
+  Left = 133
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 36
+  Width = 79
+  ForeColor = 0,0,0
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Banco"
+  Left = 40
+  Top = 25
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Agencia  Dv"
+  Left = 72
+  Top = 25
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Conta                            Dv"
+  Left = 134
+  Top = 25
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_age
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.agencias"
+  Height = 22
+  Left = 73
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 36
+  Width = 36
+  ForeColor = 0,0,0
+  Name = "Get_age"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_bco
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BackStyle = 1
+  ControlSource = "xpar.bancos"
+  Height = 22
+  Left = 40
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 36
+  Width = 32
+  ForeColor = 0,0,0
+  Name = "Get_bco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "N.Cheque     Dv"
+  Left = 241
+  Top = 25
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_num
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "xpar.numeros"
+  Height = 22
+  Left = 237
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 36
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_num"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Pca"
+  Left = 5
+  Top = 25
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.Get_Pca
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BackStyle = 1
+  ControlSource = ""
+  Height = 22
+  Left = 5
+  MaxLength = 34
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 36
+  Width = 34
+  ForeColor = 0,0,0
+  Name = "Get_Pca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Cnt_ChequepreTef.Cnt_Chq.ins
+------------------------------------------------------------
+  Top = 36
+  Left = 330
+  Height = 22
+  Width = 37
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\users\4control\documents\visual foxpro projects\
+  Caption = "Ins"
+  Enabled = .T.
+  TabIndex = 10
+  TabStop = .F.
+  ToolTipText = "insere a sequencia dos numeros dos cheques e mostra na grade"
+  Visible = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "ins"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Fpagto.Shape4
+------------------------------------------------------------
+  Top = 186
+  Left = 2
+  Height = 2
+  Width = 369
+  BorderWidth = 1
+  SpecialEffect = 1
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.FigJpg
+------------------------------------------------------------
+  Stretch = 1
+  BackStyle = 1
+  Height = 211
+  Left = 882
+  Top = 124
+  Visible = .F.
+  Width = 282
+  Name = "FigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.READCOMM
+------------------------------------------------------------
+  Top = 427
+  Left = 487
+  BackStyle = 0
+  BackColor = 255,255,255
+  Name = "READCOMM"
+  Ole_Comm.Top = 0
+  Ole_Comm.Left = 2
+  Ole_Comm.Height = 100
+  Ole_Comm.Width = 100
+  Ole_Comm.Name = "Ole_Comm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.GrdCupom
+------------------------------------------------------------
+  ColumnCount = 1
+  Enabled = .F.
+  GridLines = 0
+  HeaderHeight = 0
+  Height = 312
+  Left = 407
+  ReadOnly = .T.
+  RecordMark = .F.
+  ScrollBars = 0
+  Top = 127
+  Width = 340
+  Name = "GrdCupom"
+  Column1.FontBold = .F.
+  Column1.FontName = "Verdana"
+  Column1.Enabled = .F.
+  Column1.Width = 345
+  Column1.Movable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,255
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.GrdCupom.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.GrdCupom.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,255
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Mensagem
+------------------------------------------------------------
+  Top = 620
+  Left = 31
+  Width = 1195
+  Height = 26
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 9
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Cnt_Mensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Mensagem.Mensagem
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = ""
+  Height = 18
+  Left = 3
+  Top = 2
+  Width = 2
+  ForeColor = 36,84,155
+  Name = "Mensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Mensagem.Abertura
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = ""
+  Height = 19
+  Left = 317
+  Top = 3
+  Width = 55
+  ForeColor = 36,84,155
+  Name = "Abertura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.cmbTOpers
+------------------------------------------------------------
+  FontName = "Verdana"
+  RowSourceType = 1
+  Height = 22
+  Left = 39
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 594
+  Visible = .F.
+  Width = 277
+  Name = "cmbTOpers"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Timer1
+------------------------------------------------------------
+  Top = 547
+  Left = 655
+  Height = 26
+  Width = 27
+  Interval = 1000
+  Name = "Timer1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes
+------------------------------------------------------------
+  Top = 20
+  Left = 470
+  Width = 831
+  Height = 79
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 8
+  Name = "Barra_Botoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Alteraqtd
+------------------------------------------------------------
+  Top = 1
+  Left = 77
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_calculadora_60.jpg
+  Caption = "[F3]Qtde"
+  TabIndex = 2
+  ToolTipText = "[F3] Quantidades"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "Alteraqtd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Desconto
+------------------------------------------------------------
+  Top = 1
+  Left = 77
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_calculadora_60.jpg
+  Caption = "[F3]Descon."
+  TabIndex = 3
+  ToolTipText = "[F3] Descontos"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "Desconto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.credito
+------------------------------------------------------------
+  Top = 1
+  Left = 377
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_vizualizar_60.jpg
+  Caption = "[F7]Créd."
+  TabIndex = 8
+  ToolTipText = "[F7] Créditos"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "credito"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.AltPreço
+------------------------------------------------------------
+  Top = 1
+  Left = 227
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_cambio_60.jpg
+  Caption = "[F5]Alt.$"
+  TabIndex = 6
+  ToolTipText = "[F5] Alteração de Preços"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "AltPreço"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Itens
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 1
+  Left = 2
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_palete_60.jpg
+  Caption = "[F2]Itens"
+  MousePointer = 15
+  TabIndex = 1
+  ToolTipText = "[F2] Tela de Itens"
+  Visible = .T.
+  SpecialEffect = 0
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  ZOrderSet = 47
+  Themes = .F.
+  Name = "Itens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.MudaOpe
+------------------------------------------------------------
+  Top = 1
+  Left = 602
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "[Ctrl+F11]Op"
+  TabIndex = 11
+  ToolTipText = "[Ctrl + F11] Trocar Operação"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  ZOrderSet = 48
+  Themes = .F.
+  Name = "MudaOpe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.ok
+------------------------------------------------------------
+  Top = 1
+  Left = 677
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "Confirmar"
+  TabIndex = 13
+  ToolTipText = "Confirmar"
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.identifica
+------------------------------------------------------------
+  Top = 1
+  Left = 302
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_contatos_60.jpg
+  Caption = "[F6]Identif"
+  TabIndex = 7
+  ToolTipText = "[F6] Identificação de Contas"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "identifica"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Cancela
+------------------------------------------------------------
+  Top = 1
+  Left = 752
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 12
+  ToolTipText = "[ESC] Cancelar"
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Pagto
+------------------------------------------------------------
+  Top = 1
+  Left = 602
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\geral_calculadora_60.jpg
+  Caption = "[F11]Pagto"
+  TabIndex = 11
+  ToolTipText = "[F11] Tela de Formas de Pagamentos"
+  Visible = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  ZOrderSet = 48
+  Themes = .F.
+  Name = "Pagto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.VerPreco
+------------------------------------------------------------
+  Top = 1
+  Left = 527
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_lupa_60.jpg
+  Caption = "<Ctrl+P>"
+  TabIndex = 11
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  ZOrderSet = 48
+  Themes = .F.
+  Name = "VerPreco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.impfiscal
+------------------------------------------------------------
+  Top = 1
+  Left = 527
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_boleto_60.jpg
+  Caption = "[F9]Fiscal"
+  TabIndex = 10
+  ToolTipText = "[F9] Impressora Fiscal"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "impfiscal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Financia
+------------------------------------------------------------
+  Top = 1
+  Left = 452
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_lapis_60.jpg
+  Caption = "[F8]Crediario"
+  TabIndex = 9
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "Financia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.pendencia
+------------------------------------------------------------
+  Top = 1
+  Left = 452
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_adicao_60.jpg
+  Caption = "[F8]Pend"
+  TabIndex = 9
+  ToolTipText = "[F8] Pendências"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "pendencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.CancPagto
+------------------------------------------------------------
+  Top = 1
+  Left = 152
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Caption = "[F4]Canc"
+  TabIndex = 5
+  ToolTipText = "[F4] Cancelar Forma de Pagamento"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "CancPagto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.apaga
+------------------------------------------------------------
+  Top = 1
+  Left = 152
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Caption = "[F4]Canc"
+  TabIndex = 4
+  ToolTipText = "[F4] Cancelar Operação"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Barra_Botoes.Acrescimo
+------------------------------------------------------------
+  Top = 1
+  Left = 77
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_datas_60.jpg
+  Caption = "[Ctrl+F3] +"
+  TabIndex = 3
+  ToolTipText = "[Ctrl + F3] Acréscimos"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 109,109,109
+  DisabledBackColor = 240,240,240
+  Themes = .F.
+  Name = "Acrescimo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.mensagems
+------------------------------------------------------------
+  Top = 645
+  Left = 31
+  Width = 1195
+  Height = 46
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 9
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "mensagems"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.mensagems.Mensage1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 13
+  BackStyle = 0
+  Caption = "teste"
+  Height = 23
+  Left = 6
+  Top = 1
+  Width = 709
+  ForeColor = 90,90,90
+  Name = "Mensage1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.mensagems.Mensage2
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 16
+  BackStyle = 0
+  Caption = "teste"
+  Height = 26
+  Left = 6
+  Top = 19
+  Width = 709
+  ForeColor = 90,90,90
+  Name = "Mensage2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.TxtCaption
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 1
+  Caption = "  Caixa"
+  Height = 19
+  Left = -1
+  Top = 0
+  Width = 1300
+  ForeColor = 255,255,255
+  BackColor = 90,90,90
+  Name = "TxtCaption"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem
+------------------------------------------------------------
+  Top = 310
+  Left = 120
+  Width = 468
+  Height = 141
+  BorderWidth = 1
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "CancelaItem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  FontUnderline = .F.
+  Alignment = 2
+  Caption = "CANCELAMENTO DE ITEM"
+  Height = 19
+  Left = 1
+  Top = 2
+  Width = 467
+  TabIndex = 8
+  ForeColor = 255,255,255
+  BackColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Get_Produto
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 23
+  InputMask = "!!!!!!!!!!!!!!"
+  Left = 78
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 56
+  Width = 105
+  ForeColor = 90,90,90
+  BackColor = 255,255,185
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "ITEM :"
+  Height = 15
+  Left = 38
+  Top = 33
+  Width = 36
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "PRODUTO :"
+  Height = 15
+  Left = 12
+  Top = 58
+  Width = 62
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "BARRA :"
+  Height = 15
+  Left = 27
+  Top = 84
+  Width = 47
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Get_item
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999"
+  Left = 78
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 31
+  Width = 31
+  ForeColor = 90,90,90
+  BackColor = 255,255,185
+  Name = "Get_item"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.Get_Cbarra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "99999999"
+  Left = 78
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 81
+  Width = 79
+  ForeColor = 90,90,90
+  BackColor = 255,255,185
+  Name = "Get_Cbarra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.get_dpro
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 183
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 56
+  Width = 281
+  ForeColor = 90,90,90
+  BackColor = 255,255,185
+  Name = "get_dpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.ok
+------------------------------------------------------------
+  Top = 89
+  Left = 368
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\mouse4.ico
+  Cancel = .F.
+  Caption = ""
+  TabIndex = 9
+  ToolTipText = "Confirmar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CancelaItem.CancelaDisp
+------------------------------------------------------------
+  Top = 89
+  Left = 414
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\shut down.ico
+  Cancel = .T.
+  Caption = ""
+  TabIndex = 10
+  ToolTipText = "Cancelar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CancelaDisp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CaixaLivre
+------------------------------------------------------------
+  Top = 126
+  Left = 407
+  Width = 475
+  Height = 447
+  BackStyle = 1
+  BorderWidth = 0
+  TabIndex = 11
+  BackColor = 255,255,255
+  Name = "CaixaLivre"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CaixaLivre.CaixaLivre
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 60
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "CAIXA LIVRE"
+  Height = 216
+  Left = 67
+  Top = 117
+  Width = 336
+  ForeColor = 255,128,64
+  Name = "CaixaLivre"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.CaixaLivre.CaixaLivre2
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 60
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "CAIXA LIVRE"
+  Height = 216
+  Left = 64
+  Top = 120
+  Width = 336
+  ForeColor = 0,64,183
+  Name = "CaixaLivre2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Img4c
+------------------------------------------------------------
+  Top = 21
+  Left = 34
+  Width = 291
+  Height = 101
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 13
+  ForeColor = 255,255,255
+  Name = "Cnt_Img4c"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVITN.Cnt_Img4c.figjpg
+------------------------------------------------------------
+  Picture = ..\framework\imagens\4control_logo2.png
+  Stretch = 1
+  BackStyle = 1
+  Height = 218
+  Left = -22
+  Top = -59
+  Visible = .T.
+  Width = 331
+  BorderColor = 36,84,155
+  Name = "figjpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 15, 10, 24, 20, 58, 4, 0
+  Tahoma, 1, 23, 16, 37, 31, 90, 6, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 1, 22, 16, 35, 29, 65, 6, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 1, 20, 14, 33, 27, 78, 6, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Arial, 1, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Verdana, 1, 8, 6, 13, 11, 25, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 7, 4, 11, 9, 22, 2, 0
+  Tahoma, 1, 10, 7, 16, 13, 38, 3, 0
+  Arial, 0, 7, 4, 12, 9, 24, 3, 0
+  Tahoma, 1, 14, 10, 23, 19, 55, 4, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+
+
+================================================================================
+=================================================================================
+* SECAO 3: METODOS (REDUZIDA - ver arquivo original para codigo completo)
+=================================================================================
+
+*-- SECAO REDUZIDA PARA EVITAR 'Prompt is too long'
+*-- O arquivo mapeamento.json contem informacoes sobre os objetos
+*-- Use as SECAO 1 e 2 para estrutura e propriedades
+
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVITN
+RESERVED3 (ClassInfo): altpartef
+altvalor
+antcp
+antcpro
+antqtd
+antvalor
+antvalu
+antvalue
+aplicoutabd
+bcds
+buscaproduto
+cancelouitem
+checkstat
+citem
+cmc7
+consultaexecutada
+cotusu
+cpfcheque
+cpro
+digpar
+editadestino
+editajob
+editaorigem
+fatredutor
+gerouncupom
+inichq
+inicia
+itsembonus
+laltcontrole
+lalterapreco
+lalteraqtd
+lalteravalor
+lancaacrescimo
+lcfoco
+lcontrole
+leitor
+leituranova
+leituraserial
+libacumula
+liberaident
+liberapca
+libtroco
+llacrescimo
+lldataget_venc
+lldesconto
+llget_fpg
+llget_npar
+llget_vpar
+llreadcomm
+nantvalor
+ncontrole
+newchv
+noklostche
+oldcodigo
+op_escolha
+parcdesconto
+parentform
+pcbandeira
+pcidcheque
+pcnident
+pcrede
+peantvalue
+pocalculator
+podatamgr
+preencheu
+primeira
+produto
+qtdvalid
+retchpsa
+senhaautoins
+subtotac
+tef
+temacrescimo
+tempartef
+tipocons
+tipoleitora
+total
+totalgeral
+totchamada
+totpartef
+ultimocancel
+usulibs
+validadesconto
+validado
+validapend
+validok
+_memberdata XML Metadata for customizable properties
+*abrecupom 
+*atuacupom 
+*atualizatotal 
+*atuatotal 
+*calculadesconto 
+*calc_valite 
+*cancelcupom 
+*cmdenviaprod 
+*gerarcupom busca número do cupom gerado no ecf
+*impcheque 
+*impitemcan 
+*inchequeserial 
+*iniciarcupom 
+*itemfiscal 
+*liberadevolucao 
+*limpa_cheptef 
+*mexcluiitem 
+*mgetfpag 
+*mlimpacntitem 
+*montatela 
+*mostraobs 
+*mvalidavalor 
+*total_item 
+*valida24hs 
+*validacertficado 
+*verifsubtotal 
+*verstatus 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 250
+================================================================================

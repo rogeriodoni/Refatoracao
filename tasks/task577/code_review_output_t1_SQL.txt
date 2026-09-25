@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O ├║nico problema apontado (SQL-FILTRO-INVENTADO na coluna `DOPPS`) ├® um falso positivo. Investiguei o c├│digo legado antes de alterar qualquer coisa:
+
+**Evid├¬ncia (`tasks\task577\SigMvSbn_form_codigo_fonte.txt:1662`):**
+```foxpro
+=Thisform.ParentForm.Podatamgr.Cursorquery('SigCdOpd','CrSigCdOpd','Dopps',_DoppServ,[nSeqs])
+```
+
+`CursorQuery(tabela, cursor, campo, valor, campos)` ├® o helper do Framework legado (confirmado tamb├®m em `Framework\sigacess.PRG:870`) que monta `SELECT <campos> FROM <tabela> WHERE <campo> = <valor>` ÔÇö ou seja, o legado **j├í filtra por `Dopps`**, s├│ que via chamada de m├®todo em vez de uma string `SELECT...WHERE` literal. O detector autom├ítico s├│ varre WHERE literais, por isso n├úo viu esse filtro e listou `Dopps` como "inventado".
+
+Confirmei ainda que a coluna existe de fato: `docs\schema.sql` tem `SigCdOpd.dopps char(20) NOT NULL`.
+
+O c├│digo migrado em `SigMvSbnBO.prg` (`ObterNumeroOS`):
+```foxpro
+loc_cSQL = "SELECT nSeqs FROM SigCdOpd WHERE Dopps = " + ;
+    EscaparSQL(ALLTRIM(TratarNulo(cursor_4c_SbnPamTmp.DoppServs, "")))
+```
+est├í **fiel ao legado** (PILAR 2). Remover o `WHERE Dopps = ...` faria o SELECT trazer uma linha arbitr├íria de `SigCdOpd` em vez da opera├º├úo de servi├ºo correta, corrompendo o c├ílculo do n├║mero da OS (`lcNumps`/`this_nOrdes`) ÔÇö uma regress├úo de neg├│cio.
+
+**Nenhuma altera├º├úo foi feita** nos arquivos. N├úo sinalizarei mais nada deste pass j├í que era o ├║nico problema listado e ele n├úo se confirmou.

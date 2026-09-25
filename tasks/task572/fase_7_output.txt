@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `projeto\app\forms\operacionais\Formsigmvits.prg` (3.637 ÔåÆ 5.453 linhas).
+
+**Uma diverg├¬ncia do enunciado, deliberada:** a fase pede `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. O SIGMVITS.SCX **n├úo tem CRUD nenhum** ÔÇö herda de `form` (n├úo de `frmcadastro`), n├úo tem `Grupo_Op`, n├úo tem `pcEscolha` (0 ocorr├¬ncias no dump) e n├úo tem p├ígina de Lista. Criar esses 4 nomes exigiria inventar bot├Áes (viola o PILAR 1) ou gerar m├®todos vazios (proibido). Implementei os eventos principais que o legado **realmente tem** ÔÇö ├® o caminho que o pr├│prio gate da Fase 7 prev├¬ para form sem CRUD (m├¡n. 2 handlers `Cmd*/Btn*Click`; o arquivo tem **18**).
+
+**O que entrou**
+- **16 Click da Barra_Botoes**: Itens(F2), Qtde(F3), Desconto(F3), Acr├®scimo(Ctrl+F3), CancPagto(F4), Apaga(F4), AltPre├ºo(F5), Identifica(F6), Cr├®dito(F7), Credi├írio(F8), Pend├¬ncia(F8), VerPre├ºo, Impfiscal(F9), Pagto(F11), Confirmar, Cancelar ÔÇö mais `BtnEncerrarClick` (alias do Cancelar, que ├® a sa├¡da no legado; nenhum bot├úo novo criado).
+- **`KeyPress` do form** (KeyPreview=.T.) transcrevendo os 143 linhas do legado, com os c├│digos dele (F2=-1 ÔÇª F11=133, Ctrl+F3=96). F7/Ctrl+P/Ctrl+K ficaram sem atalho porque **est├úo comentados no legado**.
+- **Bot├Áes das telas de opera├º├úo**: `Bot_Pendentes`, os 4 `Proximo`, e o painel CancelaItem (Ok/CancelaDisp).
+- **Timer** da barra de t├¡tulo (o Interval 1000 do legado).
+- Helpers com as guardas transcritas (`HaPagamentoPendente`, `HaItemNaoImpresso`, `HaSubNivelInformado`, ÔÇª), `AlternarTelaOperacao` e `AjustarBotoesPorModo` ÔÇö o gate dos bot├Áes mora no **funil** de troca de tela, n├úo em cada Click (regra #40).
+
+**Corre├º├Áes de fases anteriores que a fase exigiu**
+- `crTpmMvItn` (carrinho) e `xPar` (parcelas) n├úo existiam: sem eles todo handler seria um no-op preso no `IF !USED(...)`.
+- Os 4 labels de mensagem (`Cnt_Mensagem`/`Cnt_mensagems`) n├úo tinham sido criados.
+- `SET DELETED ON` na datasession privada ÔÇö `DataSession = 2` nasce com o default OFF, e item cancelado continuaria somando nos totais.
+- Os 4 containers de opera├º├úo abriam **empilhados** (todos `Visible = .T.`); `AlternarTelaOperacao("ITENS")` no Init reproduz o estado inicial do legado.
+
+**Verifica├º├úo** (n├úo s├│ compila├º├úo ÔÇö instanciei e exercitei):
+
+| | |
+|---|---|
+| Compila├º├úo | limpa, sem `.err` |
+| `CREATEOBJECT` | abre; Caption "Caixa", s├│ ITENS+Grade vis├¡veis |
+| Cursores (na datasession 2 do form) | `crTpmMvItn`/`xPar`/`TmpOperacao`/`crTpmMvItnC` = .T., DELETED=ON |
+| Fluxo com 2 itens + 1 forma | Subtotal 25,50 / Total 25,50 / Pagos 25,50 / A Pagar 0 |
+| Apaga (caminho n├úo-fiscal) | item exclu├¡do, renumerado, CItem=2, totais ÔåÆ 20,00 |
+| Guarda "Favor Excluir as Condi├º├Áes de Pagamento" | disparou ao voltar para Itens com pagamento lan├ºado |
+| Os 18 handlers + KeyPress F2..F11 + Timer | rodam sem exce├º├úo |
+
+**O que ficou fora, por depend├¬ncia de hardware** (documentado no c├│digo, n├úo ├® pend├¬ncia oculta): emiss├úo/abertura de cupom fiscal (`VenFis`/`RotStatus`/`VerSubt`/`GerarCupom`), cancelamento no gateway TEF e leitora serial de cheque ÔÇö continuam na tela de movimenta├º├úo. N├úo criei stub para nenhum: stub que devolve "impresso" marcaria `ImpCupFis = .T.` sem nada impresso. Nos tr├¬s bot├Áes cujo painel o pr├│prio SCX removeu em 2015 (Cr├®dito, Credi├írio, VerPre├ºo) as guardas do legado foram transcritas e a aus├¬ncia do painel ├® avisada ao operador ÔÇö reproduzir o legado literalmente deixaria a tela em branco e sem volta.

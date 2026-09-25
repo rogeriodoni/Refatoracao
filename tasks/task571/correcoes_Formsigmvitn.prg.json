@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigmvitn.prg",
+    "timestamp":  "2026-09-25T00:24:19",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  7234,
+                          "Original":  "\" IIF(NVL(xPar.nIdCheps, 0) = 0, IIF(NVL(xPar.Trocos, 0) = 1, RGB(0,0,160), RGB(0,0,0)), RGB(0,0,255)))\", ;",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-191-FORECOLOR-BRANCO-INVISIVEL",
+                          "Linha":  1279,
+                          "Original":  "2 controle(s) com .ForeColor = RGB(255,255,255): cnt_4c__Img4c@1279, lbl_4c_Label1@2608",
+                          "Corrigido":  "(REVISAR MANUAL - canonico RGB(90, 90, 90))",
+                          "Descricao":  "Pattern #191: label/checkbox/optionbutton de DADOS com ForeColor branco criado direto na Page (ou em container transparente/claro). As Pages recebem .Picture = fundo_cad_1003.jpg (textura CLARA) POR CIMA do .BackColor = RGB(100,100,100), entao o texto branco fica INVISIVEL - o usuario clica Incluir, cai na aba Dados e ve as caixas de texto sem legenda. Cor certa: se o objeto do SCX legado NAO declara ForeColor (classe say do Framework), usar RGB(90, 90, 90); se declara, copiar o valor EXATO (36,84,155 nos titulos de secao em Verdana, 255,0,0 nas notas de rodape). Ao procurar o objeto no dump do legado, conferir os DOIS nomes: Say\u003cN\u003e do legado costuma virar lbl_4c_Label\u003cN\u003e no migrado. Branco continua correto em lbl_4c_Titulo/lbl_4c_Sombra do cabecalho, em label dentro de container opaco escuro (BackStyle=1 + BackColor RGB(100,100,100)/RGB(90,90,90)) e nas propriedades HighlightForeColor/SelectedForeColor/SelectedItemForeColor. Origem: Erro153 (2026-09-09, FormARV; sweep de 217 sites em 23 forms)."
+                      },
+                      {
+                          "Tipo":  "WARN-199-MAXLENGTH-IGUAL-AO-WIDTH",
+                          "Linha":  5430,
+                          "Original":  ".MaxLength = 34 com .Width = 34 (linha 5426)",
+                          "Corrigido":  "(REVISAR MANUAL - usar a largura da coluna em docs\\schema.sql)",
+                          "Descricao":  "Pattern #199: MaxLength igual ao Width eh a assinatura do migrador ter copiado a largura em PIXEL para o limite em CARACTERE. O usuario digita mais do que cabe na coluna e o SQL Server recusa o INSERT com \u0027String or binary data would be truncated\u0027 - a tela simplesmente nao grava. Conferir a coluna em docs\\schema.sql (UTF-16: ler com Get-Content -Raw) e usar a largura real no MaxLength E no LEFT() do INSERT/UPDATE do BO. Origem: Erro158 (2026-09-10, FormCco: .MaxLength 80 e 220 para colunas char(30))."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

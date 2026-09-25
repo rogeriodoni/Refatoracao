@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e validada.
+
+## O que foi feito
+
+O arquivo `projeto/app/forms/operacionais/FormSigMvChv.prg` recebeu os **4 eventos principais** exigidos pela fase. `BtnIncluirClick` e `BtnExcluirClick` j├í existiam das fases anteriores; adicionei os dois que faltavam ÔÇö e ├® por eles que a tentativa anterior falhou no gate.
+
+**Por que os dois novos n├úo s├úo inven├º├úo.** A tentativa anterior recusou-se a criar `BtnAlterarClick`/`BtnVisualizarClick` alegando que o legado n├úo os tem. ├ë verdade que o SCX n├úo tem esses *bot├Áes*, mas tem as duas *regras*: o `pcEscolha` do `SIGMVCHV` gateia INSERIR/ALTERAR contra PROCURAR em tr├¬s `When` (linhas 441/472/486 do dump), e a altera├º├úo acontece digitando direto na grade. Existe precedente direto no projeto: o form irm├úo da mesma fam├¡lia, `FormSigMvAte.prg` (linhas 907-1010), resolve exatamente esse caso. Segui a conven├º├úo dele:
+
+- **`BtnAlterarClick()`** ÔÇö valida linha posicionada, aplica o gate de modo e devolve o foco ├á coluna Chave (a ├║nica edit├ível). ├ë o mesmo `thisform.grade.column1.SetFocus` do `Click` legado de `inserir`.
+- **`BtnVisualizarClick()`** ÔÇö recarrega as chaves como est├úo gravadas em `SigMvChv` via BO. N├úo grava nada e serve em modo PROCURAR. Pede confirma├º├úo (`MsgConfirma`, tratado como l├│gico ÔÇö regra #7) quando h├í linhas e o documento ├® edit├ível, porque recarregar descarta a linha em branco ainda n├úo digitada.
+- **`LinhaCorrenteValida()`** ÔÇö extrai o `If Eof() Or Bof() / Return` que o legado repete.
+
+Nenhum dos dois cria bot├úo vis├¡vel (PILAR 1 ÔÇö o legado n├úo tem); s├úo pontos de entrada program├íticos, que ├® como o harness os chama. Tamb├®m roteei o foco do `BtnIncluirClick` por `BtnAlterarClick`, eliminando a duplica├º├úo.
+
+## Verifica├º├Áes
+
+- **Compila limpo** no VFP9 real, com `.fxp` novo gerado (apaguei o anterior antes ÔÇö `COMPILE` pode n├úo reescrever um `.fxp` existente).
+- **Gate da Fase 7** executado com a l├│gica real do `OrquestradorMigracao.ps1`: `FASE 7 VALIDADA (34,4 KB)`.
+- Blocos balanceados (20/20 `PROCEDURE`, 39/39 `IF`, 10/10 `TRY`, 11/11 `WITH`); zero `RETURN` dentro de `TRY` (regra #1); arquivo 100% ASCII, acentos via `CHR()` (regra #4); m├®todos PUBLIC, pois o harness os chama de fora (regra #3); todo `CATCH` reporta `Message` + `LineNo` + `Procedure` (regra #9); sem `MESSAGEBOX`/`ISEMPTY`/`.Self`.
+- Helpers chamados todos existem (regra #13), incluindo o `MsgConfirmaExclusao` que o c├│digo pr├®-existente usava. A cadeia de heran├ºa resolve `NovoRegistro`/`EditarRegistro`/`Salvar`/`Excluir` em `BusinessBase`, com o BO sobrecarregando corretamente `Inserir`/`Atualizar`/`ExecutarExclusao`.
+- Sem TODOs nem stubs.
+
+Dois pontos que deixo registrados, ambos **fora do escopo da Fase 7** e j├í aprovados nos gates das fases anteriores, caso voc├¬ queira decidir sobre eles: `AlternarPagina` e `AjustarBotoesPorModo` s├úo no-ops documentados (o form ├® modal plano, sem PageFrame, e o modo ├® fixado uma ├║nica vez no `Init`). E vale notar que a mensagem de "falha" no log da Fase 7 anterior est├í polu├¡da por cinco avisos de regra de permiss├úo em `.claude/settings.local.json` (wildcards antes do resto do comando, em regras de `grep`/`cp`) ÔÇö n├úo t├¬m rela├º├úo com a migra├º├úo, mas atrapalham a leitura dos logs do pipeline.

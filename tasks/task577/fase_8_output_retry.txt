@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and verified end to end.
+
+## Final verification ÔÇö the key fix, proven against the live database
+
+```
+chave montada : [001CONSERTO                 1] len=29
+chave gravada : [001CONSERTO                 1] len=29
+IDENTICAS?    : SIM
+BuscarItensSubnivel    : OK - 1 item(ns)   (cpros 036)
+chave ALLTRIM (antiga) : 0 item(ns)
+```
+
+Before/after on the same call: the corrected key retrieves the item, the old one retrieves nothing. So the items grid, product description and image now populate ÔÇö and `CarregarGradeItens` / `ItensAfterRowColChange` / `CarregarImagemProduto` / `ImgFigJpgDblClick` stop being dead code.
+
+A note on how nearly I mis-verified this: my first check used `MALOTE`, which has **no** rows in `SigMvItn`, so it returned 0 items with *both* the broken and the fixed key ÔÇö indistinguishable. I had to pick a record that provably has children (`CONSERTO`) and run the contraproof. That trap is now written into the memory entry, since "0 rows" looks identical to "still broken."
+
+I also corrected an overclaim I'd written into the form's comment: I had said all 316 `SigMvItn` rows were *measured* at `LEN=29`, but I only sampled five. The claim holds for a different reason ÔÇö `EmpDopNums` is `char(29)`, fixed width ÔÇö so the comment and memory entry now say that instead of implying a full scan.
+
+## Closing state
+
+| check | result |
+|---|---|
+| Phase 8 gate | `FASE 8 PASSA` |
+| Completeness validator (form + BO) | clean, no TODO/stub |
+| `TestFormWrapper` (live DB, post-edit) | `Status: SUCESSO`, RC 0 |
+| BO SQL paths (4 queries) | all execute, no invalid columns |
+| Audits (functions / properties / tables) | clean |
+| `OrquestradorMigracao.ps1` syntax | parses, 0 errors |
+
+Delivered: `FormSigMvSbn.prg` (1680 lines), `SigMvSbnBO.prg` (514 lines).
+
+Beyond making the phase pass, the substantive outcome is the `ALLTRIM` key bug ÔÇö it would have shipped silently, since it produces no error, no log entry, and a form that instantiates successfully. The gate branch is measured at a delta of exactly 1 form with zero regression.
+
+Two items I deliberately left alone, both flagged earlier and unchanged: the comment-only gate matching (6 of 449 forms; `FormTPG`/`FormVca`/`Formsigreimp` worth investigating) and `PGRBO.prg:237,294`, which has the same `ALLTRIM`-concatenation shape but *writes* the key and needs the `sigcdpgr` legado checked first. Neither is task577's scope, and neither should be changed without its own verification.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Corre├º├Áes aplicadas com sucesso. Resumo da causa raiz e do fix:
+
+**Causa raiz**: comparando `tasks\task562\SigMvChv_form_codigo_fonte.txt` (legado) com o form migrado, 6 das 8 diferen├ºas eram bugs reais de transcri├º├úo:
+
+1. **Propriedades de fonte/janela do form ausentes**: legado declara `FontName="Verdana"`, `FontSize=8`, `AlwaysOnTop=.T.` no n├¡vel do form ÔÇö a migra├º├úo tinha esquecido as tr├¬s. Adicionadas em `FormSigMvChv.prg:38-40`.
+2. **`cmd_4c_Incluir.Left = 5`** ÔåÆ devia ser **401** (o pr├│prio coment├írio do c├│digo, linha 190, j├í documentava `inserir Top=171 Left=401`, mas o `WITH` usava 5). Corrigido.
+3. **`cmd_4c_Excluir.Left = 230`** ÔåÆ devia ser **401** (mesmo padr├úo, `excluir Top=216 Left=401`). Corrigido. Os dois bot├Áes ficam empilhados verticalmente ├á direita da grade (56+342=398), como no legado ÔÇö n├úo lado a lado como estava.
+
+**Deixado como est├í (falso positivo do validador)**:
+- `cntSombra.Width = 800 vs 500`: j├í documentado no coment├írio do pr├│prio arquivo (linhas 122-124) como desvio intencional ÔÇö 800 ├® o default da classe do framework legado, maior que o form (500px); usar `THIS.Width` ├® a regra #11 do CLAUDE.md.
+- `Themes = .F. vs .T.` nos dois bot├Áes: tamb├®m intencional ÔÇö mem├│ria do projeto (`feedback_standalone_commandbutton_themes.md`) exige `Themes = .T.` em `CommandButton` standalone com `.Picture`, sen├úo o ├¡cone n├úo renderiza. Reverter para `.F.` reintroduziria esse bug.
+
+N├úo toquei no `SigMvChvBO.prg` ÔÇö o problema era s├│ de layout/propriedades no form.
