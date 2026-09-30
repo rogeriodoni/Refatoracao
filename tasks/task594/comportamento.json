@@ -1,0 +1,257 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 7,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fDtoSQL", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCOT",
+      "evento": "Init",
+      "linhas": 35,
+      "codigoOriginal": "Parameters ThisParent, _DataSession\n\nThisForm.ThisParent = ThisParent\nSet DataSession to _DataSession\n\nThis.Caption = 'Cotação do ' + Alltrim(CrSigCdMoe.cmoes)\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSelect * From CrSigCdCot Into Cursor TmpCot ReadWrite\nIndex On cidchaves Tag CidChaves\nIndex On cmoes + Dtos(datas) + horas Tag Cotacaos\nGo Bottom\n\nZap In CrSigCdCot\n\nThis.fwgrade_Cotacao.RecordSource = 'TmpCot'\nThis.fwgrade_C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Visible = fChecaAcesso,Visible  = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nColIndex\n\nIf Recno() <> ThisForm.Incluir\n\tThisForm.Incluir = 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "This.ReadOnly = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.data.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(This.Value)\n\tWait Window 'Informe a data da Cotação...' NoWait\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.data.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Value) Or ThisForm.Incluir = Recno())",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Incluir = Recno",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.cotacao.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Select TmpCot\nGo Bottom\nThisForm.fwgrade_Cotacao.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.cotacao.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Value) Or ThisForm.Incluir = Recno())",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Incluir = Recno",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.hora.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "Select TmpCot\nSet Order To Cotacaos\n_Data = This.Parent.Parent.Data.Text1.Value\nIf Seek(CrSigCdMoe.cmoes + Dtos(_data) + This.Value)\n\tSkip\nEndIf\nIf cmoes + Dtos(datas) + horas = CrSigCdMoe.cmoes + Dtos(_data) + This.Value\n\tMessagebox('Cotação já cadastrada !!!',0+48,'')\n\tThis.Value = '  :  '\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.fwgrade_cotacao.hora.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Value) Or ThisForm.Incluir = Recno())",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Incluir = Recno",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.inserir",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Select TmpCot\nSet Order To Cotacaos\nSeek(CrSigCdMoe.cmoes + Dtos({}))\nIf Eof()\n\tSet Order To\n\tlcMoes    = CrSigCdMoe.cmoes\n\tldDatas   = Date()\n\tlcDatas   = fDtoSQL(ldDatas)\n\tlcHoras   = Time()\n\tlcIdChave = fUniqueIds()\n\tldDtAlts  = Date()\n\tlcDtAlts  = fDtoSQL(ldDtAlts)\n\tlcUsuars  = Usuar\n\tInsert Into TmpCot (cmoes,datas,horas,cidchaves,dtalts,usuars) ;\n\t\t\t\t\tValue (lcMoes,ldDatas,lcHoras,lcIdChave,ldDtAlts,lcUsuars)\n\tThisForm.Incluir = Recno()\n\tInsert Into CrSigCdCot (cmoes,datas,horas,cidchaves,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,fUniqueIds",
+        "metodosFormChamados": "Incluir = Recno",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.delete",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Select TmpCot\nIf !Eof()\n\tlcIdChave = TmpCot.cidchaves\n\tIf ThisForm.ThisParent.poDataMgr.SqlExecute([Delete From SigCdCot Where cidchaves = ']+lcIdChave+[' ],'') < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\tReturn(.F.)\n\tEndIf\n\tThisForm.ThisParent.poDataMgr.Commit()\n\tSelect TmpCot\n\tDelete\n\tIf Seek(lcIdChave,'CrSigCdCot','CidChaves')\n\t\tDelete In CrSigCdCot\n\tEndIf\n\tSet Order To Cotacaos\n\tSet Near On\n\tSeek cmoes + Dtos(datas)\n\tSet Near Off\nEndIf\n\nThisForm.fwgrade_Cotaca... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOT.sair",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Select TmpCot\nScan\n\tIf Empty(TmpCot.datas) Or Empty(TmpCot.valos)\n\t\tDelete\n\t\tIf Seek(TmpCot.cidchaves,'CrSigCdCot','CidChaves')\n\t\t\tDelete In CrSigCdCot\n\t\tEndIf\n\tEndIf\n\tSelect TmpCot\nEndScan\n\nSelect CrSigCdCot\nGo Top\nScan\n\tIf Seek(CrSigCdCot.cidchaves,'TmpCot','CidChaves')\n\t\tReplace CrSigCdCot.datas With TmpCot.datas\n\t\tReplace CrSigCdCot.horas With TmpCot.horas\t\n\t\tReplace CrSigCdCot.valos With TmpCot.valos\n\tEndIf\nEndScan\n\nThisForm.ThisParent.poDataMgr.Update('CrSigCdCot')\nThisForm.ThisParent.poDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCOT.Init",
+      "queryOriginal": "Select * From CrSigCdCot Into Cursor TmpCot ReadWrite",
+      "tabelas": "CrSigCdCot",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOT.inserir.Click",
+      "queryOriginal": "\tInsert Into TmpCot (cmoes,datas,horas,cidchaves,dtalts,usuars) ; \t\t\t\t\tValue (lcMoes,ldDatas,lcHoras,lcIdChave,ldDtAlts,lcUsuars)",
+      "tabelas": "TmpCot",
+      "colunas": "cmoes,datas,horas,cidchaves,dtalts,usuars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOT.inserir.Click",
+      "queryOriginal": "\tInsert Into CrSigCdCot (cmoes,datas,horas,cidchaves,... [TRUNCADO]",
+      "tabelas": "CrSigCdCot",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOT.delete.Click",
+      "queryOriginal": "\tIf ThisForm.ThisParent.poDataMgr.SqlExecute([Delete From SigCdCot Where cidchaves = ']+lcIdChave+[' ],'') < 1 \t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')",
+      "tabelas": "SigCdCot",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigCdCot", "TmpCot", "SigCdCot"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

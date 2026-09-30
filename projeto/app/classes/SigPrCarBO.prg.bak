@@ -1,431 +1,241 @@
 *====================================================================
 * SigPrCarBO.prg
-* Business Object: Caracteristicas do Produto (sigprcar)
-* Tabela principal: sigprcar
-* Sub-form: aberto pelo form de produto (SigPrApr/SigPrAop)
+*
+* Business Object para SigPrCar (Caracteristicas do Produto)
+* Tabela: SigPrCar (codigos char(20), cpros char(14), pkchaves char(20) - PK)
+* Sub-formulario modal chamado de dentro do Cadastro de Produtos (SigCdPro)
+* para gerenciar as caracteristicas vinculadas ao produto corrente.
+* A descricao (Descrs) nao existe na tabela SigPrCar - vem do lookup em
+* SigCrRap (tabela de caracteristicas) filtrado pelo Cgrus do produto.
+* Herda de: BusinessBase
 *====================================================================
 
 DEFINE CLASS SigPrCarBO AS BusinessBase
 
-    *-- Campos da tabela sigprcar
-    this_cCodigos  = ""    && char(20) - codigo da caracteristica (FK SIGCRRAP)
-    this_cCpros    = ""    && char(14) - codigo do produto (FK SigCdPro)
-    this_cPkChaves = ""    && char(20) - chave primaria
+    *-- Propriedades da entidade (mapeamento para tabela SigPrCar)
+    this_cPkChaves = ""    && pkchaves char(20) - PK (fUniqueIds())
+    this_cCpros    = ""    && cpros char(14) - FK para SigCdPro.CPros
+    this_cCodigos  = ""    && codigos char(20) - FK para SigCrRap.Codigos
 
-    *-- Campo de exibicao: vem de SIGCRRAP.descrs, NAO armazenado em sigprcar
-    this_cDescrs   = ""    && char(40) - descricao da caracteristica
-
-    *-- Contexto do produto pai (passado pelo form chamador)
-    this_cCgrus    = ""    && char(3) - grupo do produto (filtro de lookup SigCrRap)
-
-    *-- Flags de controle de sessao (consultados pelo form pai apos fechar)
-    this_lHouveIncl = .F.  && houve insercao nesta sessao
-    this_lHouveExcl = .F.  && houve exclusao nesta sessao
+    *-- Propriedade de apoio (NAO persistida em SigPrCar - vem do JOIN com SigCrRap)
+    this_cDescrs   = ""    && descrs - descricao da caracteristica (SigCrRap.Descrs)
 
     *====================================================================
     * Init - Inicializa Business Object
     *====================================================================
     PROCEDURE Init()
-        DODEFAULT()
-        THIS.this_cTabela     = "sigprcar"
-        THIS.this_cCampoChave = "pkchaves"
-        RETURN .T.
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigPrCar"
+            THIS.this_cCampoChave = "pkchaves"
+            loc_lSucesso = .T.
+        CATCH TO loException
+            MostrarErro(loException, "SigPrCarBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
     *====================================================================
-    * CarregarDoCursor - Carrega propriedades do BO a partir de um cursor
-    * par_cAliasCursor: alias do cursor (crSigPrCar ou outro)
+    * ObterChavePrimaria - Retorna chave primaria para auditoria
     *====================================================================
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cCodigos  = TratarNulo(codigos,  "C")
-            THIS.this_cCpros    = TratarNulo(cpros,    "C")
-            THIS.this_cPkChaves = TratarNulo(pkchaves, "C")
-            IF TYPE("descrs") != "U"
-                THIS.this_cDescrs = TratarNulo(descrs, "C")
-            ENDIF
-            RETURN .T.
-        ENDIF
-        RETURN .F.
-    ENDPROC
-
-    *====================================================================
-    * ObterChavePrimaria - Retorna valor da chave primaria (pkchaves)
-    *====================================================================
-    PROTECTED FUNCTION ObterChavePrimaria()
+    FUNCTION ObterChavePrimaria()
         RETURN THIS.this_cPkChaves
     ENDFUNC
 
     *====================================================================
-    * Inserir - SQL INSERT INTO sigprcar
+    * CarregarDoCursor - Carrega propriedades do BO a partir de cursor
+    * REGRA CRITICA: SELECT (par_cAliasCursor) ANTES de acessar campos
+    *====================================================================
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cPkChaves = TratarNulo(pkchaves, "C")
+                THIS.this_cCpros    = TratarNulo(cpros,    "C")
+                THIS.this_cCodigos  = TratarNulo(codigos,  "C")
+
+                *-- descrs so existe se o cursor veio de um JOIN com SigCrRap
+                IF TYPE(par_cAliasCursor + ".descrs") = "C"
+                    THIS.this_cDescrs = TratarNulo(descrs, "C")
+                ELSE
+                    THIS.this_cDescrs = ""
+                ENDIF
+
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "SigPrCarBO.CarregarDoCursor")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * ValidarDados - Valida dados antes de salvar
+    *====================================================================
+    PROTECTED PROCEDURE ValidarDados()
+        LOCAL loc_lValido
+        loc_lValido = .T.
+
+        IF EMPTY(THIS.this_cCpros)
+            MsgAviso("Produto n" + CHR(227) + "o informado!")
+            loc_lValido = .F.
+        ENDIF
+
+        IF loc_lValido AND EMPTY(THIS.this_cCodigos)
+            MsgAviso("Caracter" + CHR(237) + "stica n" + CHR(227) + "o pode ficar em branco!")
+            loc_lValido = .F.
+        ENDIF
+
+        RETURN loc_lValido
+    ENDPROC
+
+    *====================================================================
+    * Inserir - Insere novo registro na tabela SigPrCar
     *====================================================================
     PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-        loc_lResultado = .F.
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_cSQL = "INSERT INTO sigprcar (codigos, cpros, pkchaves) VALUES (" + ;
-                       EscaparSQL(THIS.this_cCodigos) + ", " + ;
-                       EscaparSQL(THIS.this_cCpros)   + ", " + ;
-                       EscaparSQL(THIS.this_cPkChaves) + ")"
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("INSERIR")
-                loc_lResultado = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Erro ao inserir caracter" + CHR(237) + "stica do produto."
+            IF EMPTY(THIS.this_cPkChaves)
+                THIS.this_cPkChaves = fUniqueIds()
             ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao inserir: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigPrCar (codigos, cpros, pkchaves)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cCodigos)>>,
+                    <<EscaparSQL(THIS.this_cCpros)>>,
+                    <<EscaparSQL(THIS.this_cPkChaves)>>
+                )
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao inserir caracter" + CHR(237) + "stica:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "SigPrCarBO.Inserir")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *====================================================================
-    * Atualizar - SQL UPDATE sigprcar
+    * Atualizar - Atualiza registro existente na tabela SigPrCar
     *====================================================================
     PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-        loc_lResultado = .F.
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_cSQL = "UPDATE sigprcar SET codigos = " + ;
-                       EscaparSQL(THIS.this_cCodigos) + ;
-                       " WHERE pkchaves = " + EscaparSQL(THIS.this_cPkChaves)
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("ATUALIZAR")
-                loc_lResultado = .T.
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigPrCar
+                SET codigos = <<EscaparSQL(THIS.this_cCodigos)>>,
+                    cpros   = <<EscaparSQL(THIS.this_cCpros)>>
+                WHERE pkchaves = <<EscaparSQL(THIS.this_cPkChaves)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao atualizar caracter" + CHR(237) + "stica do produto."
+                MostrarErro("Erro ao atualizar caracter" + CHR(237) + "stica:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao atualizar: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "SigPrCarBO.Atualizar")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *====================================================================
-    * ExecutarExclusao - SQL DELETE FROM sigprcar
+    * ExecutarExclusao - Exclui registro da tabela SigPrCar
     *====================================================================
     PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-        loc_lResultado = .F.
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_cSQL = "DELETE FROM sigprcar WHERE pkchaves = " + ;
-                       EscaparSQL(THIS.this_cPkChaves)
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("EXCLUIR")
-                loc_lResultado = .T.
+            loc_cSQL = "DELETE FROM SigPrCar WHERE pkchaves = " + EscaparSQL(THIS.this_cPkChaves)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("DELETE")
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao excluir caracter" + CHR(237) + "stica do produto."
+                MostrarErro("Erro ao excluir caracter" + CHR(237) + "stica:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao excluir: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+
+        CATCH TO loException
+            MostrarErro("Erro ao excluir:" + CHR(13) + loException.Message, "SigPrCarBO.ExecutarExclusao")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *====================================================================
-    * InserirNovaLinha - Insere linha vazia no cursor local
-    * Equivalente a cmdInserir.Click do legado
-    * par_cCursorCarac: alias do cursor local (ex: "crSigPrCar")
-    * par_cCpros: codigo do produto pai
+    * Buscar - Busca as caracteristicas vinculadas a um produto (par_cCpros)
+    * Retorna cursor_4c_Dados com pkchaves, cpros, codigos, descrs
+    * (descrs vem do JOIN com SigCrRap)
     *====================================================================
-    PROCEDURE InserirNovaLinha(par_cCursorCarac, par_cCpros)
-        LOCAL loc_lResultado, loc_cPkChaves, loc_oErro
-        loc_lResultado = .F.
+    PROCEDURE Buscar(par_cCpros)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            IF !USED(par_cCursorCarac)
-                THIS.this_cMensagemErro = "Cursor " + par_cCursorCarac + ;
-                    " n" + CHR(227) + "o est" + CHR(225) + " aberto."
-            ELSE
-                *-- Verifica se ja existe linha vazia para este produto
-                SELECT (par_cCursorCarac)
-                LOCATE FOR RTRIM(cpros) == RTRIM(par_cCpros) AND EMPTY(codigos) AND !DELETED()
-                IF !EOF()
-                    loc_lResultado = .T.
-                ELSE
-                    *-- Obtem chave unica do SQL Server
-                    IF SQLEXEC(gnConnHandle, "SELECT CAST(NEWID() AS CHAR(36)) AS nid", "cursor_4c_PrCarNewid") > 0
-                        SELECT cursor_4c_PrCarNewid
-                        loc_cPkChaves = LEFT(ALLTRIM(nid), 20)
-                        USE IN cursor_4c_PrCarNewid
-                    ELSE
-                        loc_cPkChaves = LEFT(SYS(2015) + SYS(2015), 20)
-                    ENDIF
+            IF USED("cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+            IF USED("cursor_4c_DadosTmp")
+                USE IN cursor_4c_DadosTmp
+            ENDIF
 
-                    *-- Insere linha vazia no cursor local
-                    SELECT (par_cCursorCarac)
-                    INSERT INTO (par_cCursorCarac) (cpros, pkchaves, codigos, descrs) ;
-                        VALUES (par_cCpros, loc_cPkChaves, "", "")
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                SELECT a.pkchaves, a.cpros, a.codigos, b.descrs
+                FROM SigPrCar a
+                INNER JOIN SigCrRap b ON b.codigos = a.codigos
+                WHERE a.cpros = <<EscaparSQL(par_cCpros)>>
+                ORDER BY b.descrs
+            ENDTEXT
 
-                    THIS.this_lHouveIncl = .T.
-                    loc_lResultado = .T.
+            *-- SQLEXEC cria cursor SOMENTE-LEITURA - a grade precisa inserir
+            *-- (Inserir) e apagar (Excluir) linhas localmente, entao o
+            *-- resultado eh copiado para um cursor READWRITE (CLAUDE.md:
+            *-- "Grid com coluna EDITAVEL exige cursor READWRITE")
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+
+            IF loc_nResultado >= 0
+                SELECT * FROM cursor_4c_DadosTmp INTO CURSOR cursor_4c_Dados READWRITE
+                IF USED("cursor_4c_DadosTmp")
+                    USE IN cursor_4c_DadosTmp
                 ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao inserir nova linha: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *====================================================================
-    * ExcluirLinhaAtual - Remove o registro corrente do cursor local
-    * Equivalente a cmdExcluir.Click do legado
-    * par_cCursorCarac: alias do cursor local
-    * par_cCpros: codigo do produto (verificacao de seguranca)
-    *====================================================================
-    PROCEDURE ExcluirLinhaAtual(par_cCursorCarac, par_cCpros)
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-        TRY
-            IF !USED(par_cCursorCarac)
-                THIS.this_cMensagemErro = "Cursor " + par_cCursorCarac + ;
-                    " n" + CHR(227) + "o est" + CHR(225) + " aberto."
+                loc_lSucesso = .T.
             ELSE
-                SELECT (par_cCursorCarac)
-                IF !EOF() AND RTRIM(cpros) == RTRIM(par_cCpros)
-                    DELETE
-                    SKIP
-                    SKIP -1
-                    THIS.this_lHouveExcl = .T.
-                    loc_lResultado = .T.
-                ENDIF
+                THIS.this_cMensagemErro = CapturarErroSQL()
+                MostrarErro("Erro ao buscar caracter" + CHR(237) + "sticas:" + CHR(13) + THIS.this_cMensagemErro, "Erro SQL")
             ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao excluir linha: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+
+        CATCH TO loException
+            THIS.this_cMensagemErro = loException.Message
+            MostrarErro("Erro ao buscar:" + CHR(13) + loException.Message, "SigPrCarBO.Buscar")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
 
-    *====================================================================
-    * LimparLinhasVazias - Remove linhas sem codigo do cursor local
-    * Chamado antes de fechar o form (cmdSair.Click do legado)
-    * par_cCursorCarac: alias do cursor local
-    *====================================================================
-    PROCEDURE LimparLinhasVazias(par_cCursorCarac)
-        LOCAL loc_oErro
-        TRY
-            IF USED(par_cCursorCarac)
-                SELECT (par_cCursorCarac)
-                SCAN WHILE !EOF()
-                    IF EMPTY(codigos)
-                        DELETE
-                    ENDIF
-                ENDSCAN
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao limpar linhas vazias: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *====================================================================
-    * BuscarCodigoExato - Busca codigo exato em SIGCRRAP
-    * Retorna .T. se encontrado, cursor par_cCursorDestino tem 1 linha
-    * par_cCodigos: valor a buscar
-    * par_cCgrus: grupo do produto (filtro)
-    * par_cCursorDestino: cursor a popular com resultado
-    *====================================================================
-    PROCEDURE BuscarCodigoExato(par_cCodigos, par_cCgrus, par_cCursorDestino)
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-        loc_lResultado = .F.
-        TRY
-            IF USED(par_cCursorDestino)
-                USE IN (par_cCursorDestino)
-            ENDIF
-
-            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SIGCRRAP " + ;
-                       "WHERE codigos = " + EscaparSQL(par_cCodigos) + ;
-                       " AND cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ')"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, par_cCursorDestino) > 0
-                SELECT (par_cCursorDestino)
-                loc_lResultado = !EOF()
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao buscar c" + CHR(243) + "digo: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *====================================================================
-    * BuscarDescricaoExata - Busca descricao exata em SIGCRRAP
-    * Retorna .T. se encontrado, cursor par_cCursorDestino tem 1 linha
-    *====================================================================
-    PROCEDURE BuscarDescricaoExata(par_cDescrs, par_cCgrus, par_cCursorDestino)
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-        loc_lResultado = .F.
-        TRY
-            IF USED(par_cCursorDestino)
-                USE IN (par_cCursorDestino)
-            ENDIF
-
-            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SIGCRRAP " + ;
-                       "WHERE descrs = " + EscaparSQL(par_cDescrs) + ;
-                       " AND cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ')"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, par_cCursorDestino) > 0
-                SELECT (par_cCursorDestino)
-                loc_lResultado = !EOF()
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao buscar descri" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *====================================================================
-    * BuscarCaracteristicasPorCodigo - Lista para picker (Column1)
-    * Busca registros em SIGCRRAP por LIKE no campo codigos
-    * par_cValor: prefixo digitado
-    * par_cCgrus: grupo do produto (filtro)
-    * par_cCursorDestino: cursor a popular
-    *====================================================================
-    PROCEDURE BuscarCaracteristicasPorCodigo(par_cValor, par_cCgrus, par_cCursorDestino)
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro, loc_cLike
-        loc_lResultado = .F.
-        TRY
-            IF USED(par_cCursorDestino)
-                USE IN (par_cCursorDestino)
-            ENDIF
-
-            IF EMPTY(par_cValor)
-                loc_cSQL = "SELECT codigos, descrs FROM SIGCRRAP " + ;
-                           "WHERE cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ') " + ;
-                           "ORDER BY codigos"
-            ELSE
-                loc_cLike = EscaparSQL(RTRIM(par_cValor) + "%")
-                loc_cSQL = "SELECT codigos, descrs FROM SIGCRRAP " + ;
-                           "WHERE codigos LIKE " + loc_cLike + ;
-                           " AND cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ') " + ;
-                           "ORDER BY codigos"
-            ENDIF
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, par_cCursorDestino) > 0
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao buscar caracter" + CHR(237) + "sticas: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *====================================================================
-    * BuscarCaracteristicasPorDescricao - Lista para picker (Column2)
-    * Busca registros em SIGCRRAP por LIKE no campo descrs
-    *====================================================================
-    PROCEDURE BuscarCaracteristicasPorDescricao(par_cValor, par_cCgrus, par_cCursorDestino)
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro, loc_cLike
-        loc_lResultado = .F.
-        TRY
-            IF USED(par_cCursorDestino)
-                USE IN (par_cCursorDestino)
-            ENDIF
-
-            IF EMPTY(par_cValor)
-                loc_cSQL = "SELECT codigos, descrs FROM SIGCRRAP " + ;
-                           "WHERE cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ') " + ;
-                           "ORDER BY descrs"
-            ELSE
-                loc_cLike = EscaparSQL(RTRIM(par_cValor) + "%")
-                loc_cSQL = "SELECT codigos, descrs FROM SIGCRRAP " + ;
-                           "WHERE descrs LIKE " + loc_cLike + ;
-                           " AND cgrus IN (" + EscaparSQL(par_cCgrus) + ", '   ') " + ;
-                           "ORDER BY descrs"
-            ENDIF
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, par_cCursorDestino) > 0
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao buscar caracter" + CHR(237) + "sticas: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *====================================================================
-    * VerificarDuplicidade - Checa se codigo ja existe no cursor local
-    * para o mesmo produto (exceto o registro corrente)
-    * Retorna .T. se duplicado
-    * par_cCodigos: codigo a verificar
-    * par_cPkChaveAtual: pkchaves do registro corrente (excluido da busca)
-    * par_cCursorCarac: alias do cursor local
-    *====================================================================
-    PROCEDURE VerificarDuplicidade(par_cCodigos, par_cPkChaveAtual, par_cCursorCarac)
-        LOCAL loc_lDuplicado, loc_oErro
-        loc_lDuplicado = .F.
-        TRY
-            IF USED(par_cCursorCarac) AND !EMPTY(par_cCodigos)
-                SELECT codigos FROM (par_cCursorCarac) ;
-                    WHERE RTRIM(codigos) == RTRIM(par_cCodigos) ;
-                    AND RTRIM(pkchaves) != RTRIM(par_cPkChaveAtual) ;
-                    AND !DELETED() ;
-                    INTO CURSOR cursor_4c_PrCarDupCheck
-                SELECT cursor_4c_PrCarDupCheck
-                loc_lDuplicado = !EOF()
-                USE IN cursor_4c_PrCarDupCheck
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao verificar duplicidade: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lDuplicado
-    ENDPROC
-
-    *====================================================================
-    * SalvarTodasCaracteristicas - Persiste cursor local no SQL Server
-    * Chamado pelo form pai (SigPrAop/SigPrApr) ao salvar o produto
-    * Estrategia: DELETE todas as do produto + INSERT das validas
-    * par_cCursorCarac: alias do cursor local
-    * par_cCpros: codigo do produto pai
-    *====================================================================
-    PROCEDURE SalvarTodasCaracteristicas(par_cCursorCarac, par_cCpros)
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro, loc_lOk
-        loc_lResultado = .F.
-        TRY
-            *-- Remove todas as caracteristicas anteriores do produto
-            loc_cSQL = "DELETE FROM sigprcar WHERE cpros = " + EscaparSQL(par_cCpros)
-            IF SQLEXEC(gnConnHandle, loc_cSQL) >= 0
-                loc_lOk = .T.
-                *-- Reinsere todas as linhas validas do cursor local
-                IF USED(par_cCursorCarac)
-                    SELECT (par_cCursorCarac)
-                    GO TOP
-                    SCAN WHILE !EOF() AND loc_lOk
-                        IF !DELETED() AND !EMPTY(codigos)
-                            loc_cSQL = "INSERT INTO sigprcar (codigos, cpros, pkchaves) VALUES (" + ;
-                                       EscaparSQL(codigos) + ", " + ;
-                                       EscaparSQL(par_cCpros) + ", " + ;
-                                       EscaparSQL(pkchaves) + ")"
-                            IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
-                                THIS.this_cMensagemErro = "Erro ao salvar caracter" + ;
-                                    CHR(237) + "stica: " + ALLTRIM(codigos)
-                                loc_lOk = .F.
-                            ENDIF
-                        ENDIF
-                    ENDSCAN
-                ENDIF
-                IF loc_lOk
-                    loc_lResultado = .T.
-                ENDIF
-            ELSE
-                THIS.this_cMensagemErro = "Erro ao excluir caracter" + CHR(237) + ;
-                    "sticas anteriores do produto."
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao salvar caracter" + CHR(237) + ;
-                "sticas: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

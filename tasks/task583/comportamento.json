@@ -1,0 +1,268 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 9,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRAOP",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'DoppPads, MascNums')\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim *************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRAOP",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor Temp_DivOp (Qtds n(12,3), QtdDivs n(12,3), Dopes c(20), Numes n(6), Dataes D(8) NULL, ;\n\t\t\t\t\t\t  Obss m NULL, Nops n(10), SeqDivs n(3), Cpros c(10), CodCors c(4), CodTams c(4), cItens n(10))\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.Get_obss.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_obss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault && Colocado Para Não Passar Pela Classe",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "On Key Label 'ENTER'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grupo_Conf",
+      "evento": "Click",
+      "linhas": 87,
+      "codigoOriginal": "Private lnOp, pQtd, pSeq\n\nlnOp = Val(ThisForm.get_OP.Value)\nSet Step On \nIf (lnOp = 0)\n\tReturn 0\nEndIf\n\nThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', lnOp, 'Nops, cIdChaves, Dopes, Numes, SeqDivs, Qtds, Citens')\nSelect crSigOpPic\nIndex On Str(Nops, 10) + Str(Citens,10) + cIdChaves Tag Nops\nSet Order to Nops\nSeek Str(lnOp, 10)\nScan While Nops = lnOp\n\tReplace SeqDivs With 0 In crSigOpPic\n\t\n\tlcQuery = [Update SigOpPic Set SeqDivs = 0 Where cIdChaves = '] + crSigOpPic.cIdChaves + ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Commit",
+        "controlesReferenciados": "get_OP,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Grupo_Conf",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.Release\n\nOn Key Label ENTER\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Get_OP",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Eof('Temp_divOp')\n\tThisForm.Grade.Column2.Text1.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Get_OP",
+      "evento": "Valid",
+      "linhas": 45,
+      "codigoOriginal": "Zap In Temp_DivOp\n\nIf Empty(This.Value)\n\tReturn\nEndIf\n\nIf (Len(Alltrim(This.Value)) > 10)\n\tThis.Value = Right(This.Value, 10)\nEndIf\n\nlnOp = Val( This.Value )\npEdn = _Empr + crSigCdPam.DoppPads + Str(lnOP, 10)\nSet Step On \nThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNps', pEdn, 'ChkSubn')\nSelect crSigCdNec\nIf Not Eof('crSigCdNec') And Not Empty(lnOP) And Not crSigCdNec.ChkSubn\n\tThisForm.poDataMgr.CursorQuery('SigPdMvf', 'crSigPdMvf', 'EmpDNps', pEdn, 'CodPds')\n\tSelect crSigPdMvf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "ChkSubn',Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Get_OP",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Grupo_Conf.Salva.Enabled = .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAOP.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRAOP.Grupo_Conf.Click",
+      "queryOriginal": "\tlcQuery = [Update SigOpPic Set SeqDivs = 0 Where cIdChaves = '] + crSigOpPic.cIdChaves + ... [TRUNCADO]",
+      "tabelas": "SigOpPic",
+      "colunas": "SeqDivs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpPic"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

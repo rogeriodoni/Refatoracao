@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O erro reportado n├úo ├® um bug do form/BO: ├® o mesmo problema recorrente j├í documentado em mem├│ria ÔÇö a m├íquina que roda o pipeline n├úo tem rota para `192.168.200.10:1433` (SQL Server DB_MBAHIA). Confirmei agora mesmo:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False   PingSucceeded: False
+```
+
+O log mostra a falha em **ETAPA 1B** ("Conectando ao banco de dados..."), ou seja, dentro do pr├®-flight `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg` ÔÇö **antes** de qualquer `CREATEOBJECT("FormSigPrEtq")`/`CREATEOBJECT("SigPrEtqBO")`. O form e o BO nunca chegam a ser instanciados, ent├úo n├úo h├í como um defeito de c├│digo estar causando isso.
+
+Revisei novamente `FormSigPrEtq.prg` e `SigPrEtqBO.prg` por inteiro (mesmo conte├║do j├í revisado na tentativa 1/10, segundo a mem├│ria do projeto) e n├úo h├í mudan├ºa nem defeito: cursor criado antes do `ControlSource` da grade (regra #41), chave posicional `EmpDopNums` montada com `PADR` nas partes (regra #42), `BOParaForm`/`FormParaBO` sim├®tricos, handlers `BINDEVENT` p├║blicos, `HabilitarCampos` nunca mexe em `THIS.Enabled`, `OptionGroup.Value` sempre com guard `BETWEEN`.
+
+N├úo fiz nenhuma edi├º├úo ÔÇö alterar o c├│digo n├úo resolveria um problema de rede da m├íquina do pipeline. Esse mesmo padr├úo j├í se repetiu em 100+ tasks desde 2026-08-02 (task603, 605, 606, 607, 608 e agora 609). Registrei a reincid├¬ncia na mem├│ria do projeto. Isso precisa ser resolvido na infraestrutura (rota de rede at├® `192.168.200.0/24`), n├úo no c├│digo VFP9.

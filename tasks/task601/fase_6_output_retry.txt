@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrDsc.prg` (28.364 ÔåÆ 41.478 bytes).
+
+## Por que a tentativa anterior falhou
+
+O gate da Fase 6 para form **OPERACIONAL flat** exige quatro coisas; tr├¬s j├í passavam. A quarta ├® `PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*` ÔÇö e a tentativa anterior nomeou os m├®todos `ValidarCProsI/F/CGrus`, delegando ao `AbrirLookupCanonico` herdado do `FormBase`. Nenhum `PROCEDURE AbrirLookup*` existia no arquivo, ent├úo o regex nunca casou. O `exit code 0` do log mentiu: o Claude CLI terminou bem, foi a valida├º├úo seguinte que reprovou.
+
+Corrigi renomeando/reestruturando (o handler ├® que estava errado, n├úo o gate).
+
+## O que mudou
+
+**`AbrirLookupProduto()` / `AbrirLookupGrupo()`** ÔÇö pickers reais pela API manual do `FormBuscaAuxiliar` (Pattern A). Usei Pattern A em vez do helper por um motivo medido: o picker de produto do legado declara **tr├¬s** `mAddColuna` (`CPros`/`DPros`/`CGrus`) e o `AbrirLookupCanonico` s├│ exp├Áe duas (`Cods`/`Descs`) ÔÇö a coluna Grupo seria perdida. Cada um reproduz o contrato do legado (`If Not plAchouRegistro`: match exato de 1 registro n├úo abre o picker), com match exato ÔåÆ prefixo em c├│digo OU descri├º├úo ÔåÆ fallback SHOW-ALL.
+
+**Desvio deliberado, documentado no c├│digo:** o legado faz `This.Value = crListaRemota.CPros` **fora** de qualquer guarda de sele├º├úo, ent├úo cancelar o picker sobrescrevia o campo com a linha em que o cursor por acaso estava e propagava esse valor aos outros filtros. Pus a atribui├º├úo dentro da guarda de sele├º├úo (regra #37).
+
+**`AtualizarExclusividadeFiltros()`** ÔÇö funcionalidade que **faltava por inteiro**: os tr├¬s `PROCEDURE When` do legado (faixa de produto **ou** grupo, nunca os dois). Como n├úo h├í subclasse onde declarar `When` em controle criado por `AddObject`, o equivalente funcional ├® `Enabled` ÔÇö o campo j├í preenchido continua habilitado, ent├úo n├úo trava.
+
+Colunas conferidas no `docs/schema.sql` com `Get-Content -Raw` (UTF-16, regra #14): `SigCdPro.cpros char(14)`, `dpros char(65)`, `cgrus char(3)`; `SigCdGrp.cgrus char(3)`, `dgrus char(20)`.
+
+## Verifica├º├úo
+
+Compila limpo (`.fxp` novo, sem `.err`), blocos balanceados (24 PROC, 22 WITH, 47 IF, 4 TRY), zero `RETURN` dentro de TRY/CATCH, ASCII puro. Instanciei o form headless (`automation\ProbeSigPrDscF6.prg`, sem `ConfigurarAmbiente()`):
+
+```
+CProsI L=233 T=135 W=108 MaxL=14 | CProsF L=370 | CGrus L=614 MaxL=3   <- iguais ao SCX
+vazio -> CProsI=.T. CProsF=.T. CGrus=.T.
+grupo -> CProsI=.F. CProsF=.F. CGrus=.T.
+faixa -> CProsI=.T. CProsF=.T. CGrus=.F.
+lookupProduto/.Grupo(handle -1) -> .F.   this_lEmLookup=.F.   cursores abertos: nenhum
+```
+
+Os dois di├ílogos suprimidos s├úo `Connection handle is invalid` ÔÇö esperado com `gnConnHandle = -1` (esta m├íquina n├úo alcan├ºa 192.168.200.10), n├úo defeito do form. O script ter terminado ├® a prova de que nenhum picker modal abriu.
+
+Duas ressalvas honestas: o `AbrirLookup*` nunca exercitou o caminho com banco real (sem rota para o SQL Server daqui), e mantive `cmd_4c_BtnSelecionar` sem `Click` ÔÇö ele depende do dicion├írio `SigCdDic`/`crSigCdDic` carregado no `Init` legado, que ├® escopo da Fase 7 (Eventos), como a Fase 5 j├í havia registrado.

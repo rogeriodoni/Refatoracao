@@ -1,0 +1,22 @@
+A: inicio
+B: config.prg OK
+C: deps carregadas
+D: Init OK Width=1000 Height=600 BaseClass=Form Caption=[Análise de Produção]
+E: BOTOES Visualizar=.T. Imprimir=.T. Processar=.T. Sair=.T. Shape1=.T. Shape2=.T.
+F: SAIR Left=925 Top=3 W=75 Cancel=.T. Visible=.T. Cap=[Encerrar] PicOK=.T.
+G: PICTURES Video=.T. Impr=.T. Proc=.T. VideoCap=[\<Vídeo] ImprCap=[\<Impressora]
+H: CURSORES SaldoAnt=.T. Entradas=.T. Saidas=.T. Saldos=.T. Falhas=.T. Resumo=.T.
+I: GRIDS ColCount=3 Resultado.Visible=.F. Detalhe.Visible=.F. Resumo.Visible=.T.
+J1: SaldoAnt populado
+J2: Entradas populado
+J3: Saidas populado
+J4: Saldos populado
+J5: Falhas populado
+J: cursores populados SaldoAnt=1 Entradas=1 Falhas=1
+K: CarregarDados OK Resultado.Visible=.T.
+L: BIND Detalhe RS=[cursor_4c_SaldoAnt] C1=[cursor_4c_SaldoAnt.Grupos] H1=[Fase] H2=[Qtde] H3=[Emp] W=110/80/40
+M: BIND Detalhe2 RS=[cursor_4c_Entradas] C1=[cursor_4c_Entradas.TpOps] H1=[Operação]
+N: BIND Detalhe5 RS=[cursor_4c_Falhas] H1=[Fase] H2=[Falha] H3=[Emp] Visible=.T.
+O: RESUMO Saldoi=11.111 SaldoAnt=22.222 Entradas=33.333 TEntradas=44.444 Saidas=55.555 Pesagem=66.666 Saldo=77.777 SaldoFunc=88.888 FalhaFunc=99.999 SaldoT=12.345
+P: Release OK
+Z: fim

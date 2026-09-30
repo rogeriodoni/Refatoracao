@@ -1,0 +1,22 @@
+INSTANCIA: OK  BaseClass=Form  Caption=[Estoque Máximo]
+Modo inicial=[LISTA]
+cursor_4c_Itens USED=.T.  FCOUNT=7  tipo_cidchaves=[C]
+LISTA     -> Incluir=.T. Alterar=.T. Buscar=.T. Cancelar=.F.
+INCLUIR   -> Incluir=.F. Alterar=.F. Cancelar=.T.
+AlternarPagina(1) -> Modo=[LISTA] Incluir=.T. Excluir=.T. Buscar=.T.
+HabilitarCampos(.F.) -> Grade.ReadOnly=.T. Confirmar=.F.
+HabilitarCampos(.T.) -> Grade.ReadOnly=.F. Confirmar=.T.
+BtnBuscarClick -> Modo=[BUSCAR] Confirmar=.T. Ifor.ReadOnly=.F. Refs.ReadOnly=.F.
+BtnConfirmarClick(VISUALIZAR): retornou sem gravar
+BtnConfirmarClick(Produto vazio): recusou
+FormParaBO -> CPros=[PROD000001] Emps=[001] QMaxs=12,50 CodTams=[M] CodCores=[AZ] Deptos=[DEP01] Ordems=[1] PKgerada=.T.
+BtnCancelarClick -> Modo=[LISTA] Produto=[] BO.EmEdicao=.F. Incluir=.T.
+ExcluirItensRemovidos(2 chaves)=.F.  (lista vazia)=.F.
+--- ERROS CAPTURADOS ---
+[27/09/2026 03:40:20] sigprcomBO.Buscar: Connection handle is invalid.
+[27/09/2026 03:40:20] sigprcomBO.Buscar: Connection handle is invalid.
+[27/09/2026 03:40:20] Atenção: Produto inválido !!!
+[27/09/2026 03:40:20] Erro: Erro ao inserir estoque máximo:Connection handle is invalid.
+[27/09/2026 03:40:20] sigprcomBO.Buscar: Connection handle is invalid.
+[27/09/2026 03:40:20] sigprcomBO.ExcluirItensRemovidos: Connection handle is invalid.
+[27/09/2026 03:40:20] sigprcomBO.ExcluirItensRemovidos: Connection handle is invalid.

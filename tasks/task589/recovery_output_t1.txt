@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+**Causa raiz**: `FormSigPrCfn.ConfigurarShellSaida()` usava o padr├úo can├┤nico `cnt_4c_Saida.Left = 917` (regra #10 do CLAUDE.md), mas este form ├® um di├ílogo **OPERACIONAL pequeno** (`Width = 600`, `BorderStyle = 2`, `ControlBox = .F.`) ÔÇö com `Left=917 + Width=90 = 1007`, o bot├úo Encerrar (├║nico jeito de fechar o di├ílogo, j├í que n├úo h├í `ControlBox`) ficava **inteiramente fora da ├írea vis├¡vel** do form. Mesma classe de defeito j├í documentada em mem├│ria para forms CRUD pequenos (Erro141), aqui reincidindo num form OPERACIONAL. O container tamb├®m tinha perdido o `SpecialEffect = 1` expl├¡cito do `Commandgroup3` legado.
+
+**Corre├º├úo aplicada** em `C:\4c\projeto\app\forms\operacionais\FormSigPrCfn.prg` (`ConfigurarShellSaida`):
+- `cnt_4c_Saida.Left`: `917` ÔåÆ `505` (valor literal do legado, cabe dentro dos 600px do form)
+- Adicionado `cnt_4c_Saida.SpecialEffect = 1` (copiado do `Commandgroup3` legado, que estava ausente)
+
+Os demais diffs do relat├│rio (`cntSombra.Width = THIS.Width`, `Caption = "Encerrar"`, posi├º├úo centralizada do bot├úo dentro do container) s├úo padr├Áes j├í estabelecidos e confirmados como corretos/intencionais em outros forms do projeto (regra #11, conven├º├úo "Encerrar", regra #28/#30) ÔÇö n├úo foram alterados.
+
+Registrei o padr├úo em mem├│ria para evitar reincid├¬ncia em outros di├ílogos OPERACIONAIS pequenos que usem o bloco can├┤nico de sa├¡da.

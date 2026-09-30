@@ -1,0 +1,13 @@
+OK W=800 H=600
+edt_ObsOperacao(T=82,CS=TmpCabec.Obs)
+txt_Cliente(T=313,RO=.T.,CS=TmpCabec.DConta)
+edt_ObsItens(T=548,CS=TmpItens.Obs)
+lbl_Cliente=[Cliente :] lbl_ObsItens=[Observação do Item : ]
+Validar(grade vazia)=.F. marcadas=0 msg=[Nenhuma Operação Foi Selecionada!!!]
+Validar(2 linhas, 0 marcadas)=.F. marcadas=0 msg=[Nenhuma Operação Foi Selecionada!!!]
+Validar(2 marcadas, Jobs difs)=.F. marcadas=2 msg=[Não é permitido gerar OPs de operações com Jobs diferentes.]
+Validar(2 marcadas, mesmo Job)=.T. marcadas=2 msg=[]
+--- DIALOGOS CAPTURADOS ---
+[29/09/2026 04:22:37 AM] Atenção: Nenhuma Operação Foi Selecionada!!!
+[29/09/2026 04:22:37 AM] Atenção: Nenhuma Operação Foi Selecionada!!!
+[29/09/2026 04:22:38 AM] Atenção: Não é permitido gerar OPs de operações com Jobs diferentes.

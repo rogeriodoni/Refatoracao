@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\Formsigprdft.prg` ÔÇö 2144 linhas, 37 m├®todos, compila limpo e instancia.
+
+## O que a Fase 8 acrescentou
+
+Ao varrer o dump contra o `.prg`, **tr├¬s `PROCEDURE` do legado nunca tinham sido migradas** ÔÇö e a mais importante era o resultado da tela:
+
+| Legado | Migrado |
+|---|---|
+| `SIGPRDFT.Unload` | `MontarRetornoTef()` + `Unload()` + `this_cRetornoTef` |
+| `SIGPRDFT.Move` | `Move()` com dispatch por `PCOUNT()` |
+| `Optiongroup1.When` / `GetDigitos.When` (o `RETURN`) | `this_lTipoVendaLiberado` + guards nos 4 handlers |
+
+- **`Unload` ├® o `RETURN` da tela**, n├úo cerim├┤nia de fechamento: `lcSaque+"/"+lnParcs+"/"+DTOC(ldData)+pcBandeira+lsCartao`. Medido: `0,00/03/27/09/20260000000000`. Como o `Unload` dispara **depois** do `Destroy` (BO j├í solto), o valor ├® calculado no `Destroy` e cacheado ÔÇö atende `DO FORM ... TO var` e `CREATEOBJECT + Show()`.
+- **`lnParcs`/`ldData` viraram properties, n├úo leitura de controle**: `Text1.LostFocus` reformata `Value` ("3"ÔåÆ"03") *depois* do `Valid` gravar `lnParcs`, e `InteractiveChange` zera `GetDatas.Value` sem tocar `ldData`. Alimentadas nos mesmos 3 pontos do legado.
+- **Corrigi um coment├írio errado da Fase 7**: dizia que `pctvenda` "n├úo ├® consumido em nenhum handler". ├ë ÔÇö `Optiongroup1.When` o retorna. Sem isso o usu├írio voltava a trocar o Tipo de Venda depois de o SiTef j├í ter negociado.
+- **`GetDigitos.When ÔåÆ Return(EMPTY(Value))` era um gate, n├úo decora├º├úo**: sem ele, dar TAB de volta num campo preenchido chamava `ConectarSiTef`/`IniciarSiTef` outra vez e **reiniciava transa├º├úo j├í autorizada**.
+- **`FormParaBO`/`BOParaForm`** (`PROTECTED`, como o `FormBase` declara): o BO j├í declarava as 6 properties de captura e **nenhuma era preenchida**.
+
+N├úo criei `CarregarLista`, `AjustarBotoesPorModo`, `HabilitarCampos`, `LimparCampos`, `BtnSalvarClick`, `BtnEncerrarClick` nem `BtnBuscarClick`: o legado n├úo tem lista, grade, modo, nem bot├úo de gravar ÔÇö o ├║nico bot├úo ├® o Cancelar. Isso est├í documentado no cabe├ºalho com os nomes grafados com o miolo elidido, para a tabela n├úo satisfazer um gate por substring.
+
+## O gate da Fase 8 reprovaria o form correto
+
+Medi os predicados: `metodosFaltantes = [CarregarLista]` + exig├¬ncia de bot├úo de a├º├úo. Os dois faltam porque **n├úo existem no legado**, e nenhum dos 6 ramos de exce├º├úo alcan├ºava ÔÇö um deles por **falso positivo**: `temListaLegadoF8` dava `$true` s├│ por causa de `SAIDA.ControlSource = "OPSENHA"` num **CommandGroup**.
+
+Seguindo a regra j├í estabelecida no repo (consertar o gate, nunca inventar stub), adicionei um **7┬║ ramo `$legadoProtocoloF8`**, fail-closed, reusando `Test-LegadoAddCursorLigaGrade` + `Test-LegadoControlSourceLigaLista` (helpers que a Fase 4/5/6 j├í tem) em vez de predicado paralelo ÔÇö `temListaLegadoF8` fica intocado. Prova positiva que mant├®m o ramo estreito: `DECLARE ... IN "<x>.DLL"` no SCX.
+
+**Delta medido (599 dumps):** lado-dump casa 10 dumps / 3 forms; filtrando por "o `.prg` hoje falha", muda o veredicto em **1 form** ÔÇö este. `FormSIGPRTFH` e `Formsigproer` s├úo NO-OP. Sintaxe PS validada.
+
+Duas ressalvas que preciso declarar:
+1. **A corre├º├úo do gate n├úo vale para este run** ÔÇö o PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo. Se a Fase 8 for re-invocada agora, ainda reprova; a partir da pr├│xima execu├º├úo do orquestrador, passa (simulei o `case 8` inteiro com o c├│digo novo: `metodosFaltantes = []` ÔåÆ PASSA).
+2. **N├úo executei o `TestFormWrapper` da pipeline** (`ConfigurarAmbiente()` custa ~146 s e estoura timeout ad-hoc). Usei uma sonda dedicada que carrega o mesmo ambiente e exercita os caminhos novos ÔÇö est├í em `automation\InstantiateCheckSigPrDftF8.prg`, junto do `CompileCheckSigPrDftF8.prg`.
+
+Registrei a 7┬¬ recorr├¬ncia desta fam├¡lia de gate em `feedback_gate_fase8_exige_botao_de_acao.md`, com a li├º├úo de procurar helper existente antes de escrever predicado novo.

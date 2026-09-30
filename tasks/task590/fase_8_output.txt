@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrChr.prg` est├í completo (3800 linhas, 79 m├®todos), compila limpo e instancia sem erro.
+
+## O que a Fase 8 acrescentou
+
+| M├®todo | Escopo | L├│gica real (origem no legado) |
+|---|---|---|
+| `CarregarLista(par_lPosiciona)` | PUBLIC | **Funil ├║nico de carga**: `FormParaBO()` ÔåÆ garante o cursor ÔåÆ `MontaGrade()` (o `PROCEDURE montachq`) |
+| `FormParaBO()` | PROTECTED | Filtros/descri├º├Áes/Favorecido/justificativa ÔåÆ BO. **N├úo** toca as properties `Ant*` (AntDtIni/AntCdGrupoÔÇª), que s├úo o que `BtnProcessarClick` compara para decidir a recarga |
+| `BOParaForm()` | PROTECTED | BO ÔåÆ campos; chamado no `InicializarForm` (semeia o per├¡odo, como o `Dt_Inicial.Value = Date()` do Init legado) |
+| `LimparCampos()` | PROTECTED | Volta ao estado do Init: filtros, pain├®is, justificativa e ZAP da grade (`Zap In CsSigCqChi`) |
+| `HabilitarCampos(par_lHabilitar)` | PUBLIC | Exatamente o conjunto que o `cntProcurar.Init` legado alterna (Conta/Descri├º├úo/grade/Favorecido/CmdGok) ÔÇö Grupo, per├¡odo e Processar ficam intocados, como no original |
+| `AjustarBotoesPorModo(par_cModo)` | PUBLIC | Funil de ida **e de volta** dos 4 modos (LISTA/PROCURAR/IMPCHMAT/JUSTIFICATIVA) ÔÇö regra #40 |
+| `BtnCancelarClick(par_cPainel)` | PUBLIC | Os 3 bot├Áes Cancelar dos pain├®is flutuantes; sem par├ómetro detecta o painel aberto |
+
+Os abre/fecha dos pain├®is e os 3 dispatchers passaram a usar esses funis em vez de repetir os `Enabled = .F./.T.` espalhados.
+
+**N├úo** criei `BtnSalvarClick`/`BtnBuscarClick`/`BtnEncerrarClick`: o SIGPRCHR n├úo tem bot├úo de gravar nem CRUD (confirmei no dump ÔÇö nenhum `btnSalvar`/`btnGravar`/`mGravaDados`), e Encerrar j├í ├® `BtnSairClick` (`cmdSair`). Invent├í-los violaria o PILAR 1; m├®todos vazios seriam stub. O gate da Fase 8 aceita: os 4 m├®todos exigidos est├úo presentes e o bot├úo de a├º├úo ├® reconhecido em `BtnProcessarClick`.
+
+## Verifica├º├úo executada (VFP9 real)
+
+`automation\InstantiateCheckSigPrChrF8.prg` instancia o form e exercita os 7 m├®todos ÔÇö todos passaram: `HabilitarCampos(.F.)` desliga s├│ os 5 controles do legado; modo IMPCHMAT deixa a grade habilitada (fiel ao original); `BtnCancelarClick()` sem painel retorna `.F.` sem fechar a tela; `CarregarLista` retorna `.F.` sem derrubar o form. Compila├º├úo de form+BO sem nenhum `.err`; gate de completude com 0 problemas; auditorias de fun├º├Áes/propriedades inexistentes sem achados neste arquivo.
+
+**Bug pr├®-existente corrigido no caminho**: `ExibirCheques` fazia `SET ORDER TO NCopias/Contas` num cursor criado vazio sem TAG nenhuma ÔåÆ *"Table has no index order set."* ao usar Procurar/Chq. Matric. **antes** de Processar (no legado o cursor nem existia ali). `CriarCursorCheques` agora cria os ├¡ndices junto com o cursor.
+
+Duas ressalvas honestas:
+- A mensagem `Variable 'GNCONNHANDLE' is not found` no log ├® ambiental ÔÇö esta m├íquina n├úo alcan├ºa o SQL Server 192.168.200.10; o BO reporta corretamente. A carga real da grade n├úo foi validada contra o banco.
+- `ImprimirChequeManualClick`/`BtnImpChqClick` seguem sem o posicionamento f├¡sico na folha do cheque (rotina de ~180 linhas que depende de `fValorExtenso`/`fwBuscaInt`, n├úo portadas) ÔÇö ressalva herdada das fases anteriores, documentada no c├│digo, n├úo introduzida agora.

@@ -1,268 +1,106 @@
-*==============================================================================
-* SigPrGf2BO.prg - Business Object: Grafico de Falha X Recuperacao Mensal
+*============================================================================
+* SigPrGf2BO.prg - Business Object para "Grafico de Falha X Recuperacao
+* Mensal" (SIGPRGF2)
+*
+* Form OPERACIONAL (SIGPRGF2 / FormSigPrGf2): tela de EXIBICAO de grafico
+* (MSGraph.Chart via OleBoundControl), aberta pelo form pai (equivalente ao
+* SIGPRGF1/FormSigPrGf1) que ja processou e deixou pronto um cursor agregado
+* por mes (crRel1 no legado; normalmente SigPrGf1BO.this_cCursorResultado no
+* sistema novo). O SIGPRGF2 nao processa dados novos contra o banco - ele so
+* agrupa/formata o que ja veio no cursor de origem, monta as series do
+* grafico (Falha/Recuperacao) por mes e mantem um cache por chave (empresa)
+* para nao recalcular ao trocar no combo.
+*
+* Nao existe tabela proprietaria (this_cTabela fica vazio): este BO nao faz
+* INSERT/UPDATE/DELETE contra o SQL Server, so agrega o cursor de origem.
+*
 * Herda de: BusinessBase
-* Tipo: OPERACIONAL - Visualizacao de grafico OLE (MSGraph)
-* Sem tabela de banco - dados vem do cursor crRel1 do form pai
-*==============================================================================
+* Criado em: Fase 1 - Propriedades e Init
+*============================================================================
+
 DEFINE CLASS SigPrGf2BO AS BusinessBase
 
-    *-- Identificacao da entidade (sem tabela CRUD)
-    this_cTabela     = ""
-    this_cCampoChave = ""
+    *==========================================================================
+    * Cursor de origem (crRel1 do legado) - resultado agregado por mes,
+    * fornecido pelo form pai. NAO e populado por este BO; apenas consultado
+    * (Select Distinct .../ Scan While ... do mGeraGrafico legado).
+    *==========================================================================
+    this_cCursorOrigem = ""
 
-    *-- Cursores utilizados
-    this_cCursorOrigem  = "crRel1"      && Cursor com dados do form pai
-    this_cCursorGrafico = "crGrafico1"  && Cursor de cache do grafico OLE
+    *==========================================================================
+    * Cursor com as chaves distintas do cursor de origem, para popular o
+    * combo "Grupo / Vendedor :" (cmbChave1 - equivalente a "Select Distinct
+    * a.cEmps From crRel1 a Order By 1 Into Array laVendedor" do legado).
+    * Usamos cursor em vez de ARRAY para nao depender de escopo de m.array.
+    *==========================================================================
+    this_cCursorChaves = ""
 
-    *-- Configuracao do grafico
-    this_nNumGrafico = 0    && Numero do grafico (pnnumgrf)
-    this_cCaption    = ""   && Titulo exibido no cabecalho e no grafico
+    *==========================================================================
+    * Cursor cache dos graficos ja gerados por chave (equivalente a
+    * crGrafico1: gGrafico1s g(4)/cChave1s c(100)/cempresas c(254)/
+    * ctitulo1s c(128)). A parte binaria do OLE (Append General ... Class
+    * 'MSGraph.Chart') e responsabilidade do Form (glue com o OleBoundControl);
+    * este BO cuida so da chave/titulos/series text-based.
+    *==========================================================================
+    this_cCursorGrafico = ""
 
-    *-- Chave de selecao atual (cmbChave1 - Grupo/Vendedor)
-    this_cChave1 = ""       && Valor selecionado no ComboBox (cEmps)
+    *==========================================================================
+    * Chave (empresa) atualmente selecionada no combo (cChave1s do legado)
+    *==========================================================================
+    this_cChaveAtual = ""
 
-    *-- Dados de titulo extraidos de crRel1
-    this_cTitulo1   = ""    && Titulo linha 1 (crRel1.cTitulo1s)
-    this_cTitulo2   = ""    && Titulo linha 2 (crRel1.cTitulo2s)
-    this_cEmpresa   = ""    && Nome da empresa (crRel1.cEmpresas)
+    *==========================================================================
+    * Titulos do grafico da chave atual (cTitulo1s/ctitulo2s do cursor de
+    * origem - mGeraGrafico monta m.lcTitulo1 = AllTrim(cTitulo1s) + Chr(13)
+    * + AllTrim(ctitulo2s))
+    *==========================================================================
+    this_cTitulo1      = ""
+    this_cTitulo2      = ""
+    this_cEmpresaAtual = ""
 
-    *-- Series de dados (strings TAB-delimitadas para MSGraph)
-    this_cStranomes  = ""   && Nomes dos meses (crRel1.cStranomes, TAB-sep)
-    this_cStrFalhas  = ""   && Contagem de falhas (crRel1.nFalhas, TAB-sep)
-    this_cStrPesoccb = ""   && Contagem de recuperacoes (crRel1.nPesoccbs, TAB-sep)
+    *==========================================================================
+    * Series do grafico (lnNgrupos fixo = 2: Falha e Recuperacao) e a
+    * contagem de meses agregados na chave atual (lnNmeses)
+    *==========================================================================
+    this_nTotalGrupos = 2
+    this_nTotalMeses  = 0
 
-    *-- Dimensoes das series
-    this_nNmeses  = 0       && Numero de periodos/meses encontrados
-    this_nNgrupos = 2       && Numero de series no grafico (Falha + Recuperacao)
+    *==========================================================================
+    * Strings TAB-separadas com rotulos de mes e valores das duas series
+    * (lcStrg1/lcStrg2/lcStrg3 do mGeraGrafico legado). O Form usa essas
+    * strings para montar o Data() do Append General no OleBoundControl.
+    *==========================================================================
+    this_cLabelsMeses      = ""
+    this_cSerieFalha       = ""
+    this_cSerieRecuperacao = ""
 
-    *--------------------------------------------------------------------------
-    * Init - Inicializa o BO
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Flags de estado
+    *==========================================================================
+    this_lChaveEmCache  = .F.  && .T. quando a chave ja tinha grafico no cache (Locate achou)
+    this_lGraficoGerado = .F.  && .T. quando ha dados validos para desenhar o grafico
+
+    *==========================================================================
+    * Init - Nao ha tabela proprietaria (form so exibe/agrega o que o form
+    * pai processou), entao this_cTabela/this_cCampoChave ficam vazios.
+    * Inicializa os nomes canonicos dos cursores de trabalho deste BO.
+    *==========================================================================
     PROCEDURE Init()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_oErro
         loc_lResultado = .F.
 
         TRY
-            this_cTabela     = ""
-            this_cCampoChave = ""
-            this_cCaption    = "Gr" + CHR(225) + "fico de Falha X Recupera" + CHR(231) + CHR(227) + "o Mensal"
-            this_nNgrupos    = 2
+            DODEFAULT()
 
-            loc_lResultado = DODEFAULT()
+            THIS.this_cTabela     = ""
+            THIS.this_cCampoChave = ""
 
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
+            THIS.this_cCursorChaves  = "cursor_4c_Chaves"
+            THIS.this_cCursorGrafico = "cursor_4c_Grafico"
 
-        RETURN loc_lResultado
-    ENDPROC
+            THIS.this_nTotalGrupos = 2
+            THIS.this_nTotalMeses  = 0
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna a chave do grafico (cEmps do vendedor/grupo)
-    * Sem tabela SQL persistente: chave logica eh o valor selecionado no ComboBox
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        RETURN ALLTRIM(THIS.this_cChave1)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Mapeia colunas do cursor para propriedades do BO
-    *   par_cAliasCursor - Nome do alias (crRel1 ou crGrafico1)
-    *   Se omitido, usa this_cCursorOrigem (crRel1)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado, loc_cAlias
-        loc_lResultado = .F.
-
-        loc_cAlias = IIF(VARTYPE(par_cAliasCursor) = "C" AND !EMPTY(par_cAliasCursor), ;
-                         par_cAliasCursor, THIS.this_cCursorOrigem)
-
-        TRY
-            IF !USED(loc_cAlias)
-                THIS.this_cMensagemErro = "Cursor " + loc_cAlias + " n" + CHR(227) + "o est" + CHR(225) + " aberto"
-            ELSE
-                SELECT (loc_cAlias)
-
-                DO CASE
-                CASE UPPER(loc_cAlias) == UPPER(THIS.this_cCursorOrigem)
-                    *-- Mapeia crRel1 (cursor do form pai)
-                    IF TYPE(loc_cAlias + ".cEmps") != "U"
-                        THIS.this_cChave1 = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cEmps"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".cTitulo1s") != "U"
-                        THIS.this_cTitulo1 = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cTitulo1s"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".cTitulo2s") != "U"
-                        THIS.this_cTitulo2 = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cTitulo2s"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".cEmpresas") != "U"
-                        THIS.this_cEmpresa = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cEmpresas"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".cStranomes") != "U"
-                        THIS.this_cStranomes = NVL(EVALUATE(loc_cAlias + ".cStranomes"), "")
-                    ENDIF
-                    loc_lResultado = .T.
-                CASE UPPER(loc_cAlias) == UPPER(THIS.this_cCursorGrafico)
-                    *-- Mapeia crGrafico1 (cursor de cache do grafico OLE)
-                    IF TYPE(loc_cAlias + ".cChave1s") != "U"
-                        THIS.this_cChave1 = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cChave1s"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".ctitulo1s") != "U"
-                        THIS.this_cTitulo1 = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".ctitulo1s"), ""))
-                    ENDIF
-                    IF TYPE(loc_cAlias + ".cempresas") != "U"
-                        THIS.this_cEmpresa = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".cempresas"), ""))
-                    ENDIF
-                    loc_lResultado = .T.
-                OTHERWISE
-                    THIS.this_cMensagemErro = "Alias n" + CHR(227) + "o suportado: " + loc_cAlias
-                ENDCASE
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao carregar cursor: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Insere registro de cache no cursor crGrafico1
-    * Nao ha tabela persistente em SQL Server: cache eh mantido em memoria
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lResultado, loc_cChave
-        loc_lResultado = .F.
-
-        TRY
-            loc_cChave = ALLTRIM(THIS.this_cChave1)
-
-            IF EMPTY(loc_cChave)
-                THIS.this_cMensagemErro = "Chave do gr" + CHR(225) + "fico n" + CHR(227) + "o informada"
-            ELSE
-                THIS.InicializarCursorGrafico()
-
-                SELECT crGrafico1
-                LOCATE FOR crGrafico1.cChave1s == PADR(loc_cChave, 100)
-
-                IF !EOF("crGrafico1")
-                    THIS.this_cMensagemErro = "Cache do gr" + CHR(225) + "fico j" + CHR(225) + " existe: " + loc_cChave
-                ELSE
-                    INSERT INTO crGrafico1 (cChave1s, ctitulo1s, cempresas) ;
-                        VALUES (PADR(loc_cChave, 100), ;
-                                PADR(THIS.this_cTitulo1, 128), ;
-                                PADR(THIS.this_cEmpresa, 254))
-
-                    THIS.RegistrarAuditoria("INSERT")
-                    loc_lResultado = .T.
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao inserir cache do gr" + CHR(225) + "fico: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza registro de cache do grafico
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lResultado, loc_cChave
-        loc_lResultado = .F.
-
-        TRY
-            loc_cChave = ALLTRIM(THIS.this_cChave1)
-
-            DO CASE
-            CASE EMPTY(loc_cChave)
-                THIS.this_cMensagemErro = "Chave do gr" + CHR(225) + "fico n" + CHR(227) + "o informada"
-            CASE !USED("crGrafico1")
-                THIS.this_cMensagemErro = "Cursor crGrafico1 n" + CHR(227) + "o est" + CHR(225) + " aberto"
-            OTHERWISE
-                SELECT crGrafico1
-                LOCATE FOR crGrafico1.cChave1s == PADR(loc_cChave, 100)
-
-                IF EOF("crGrafico1")
-                    THIS.this_cMensagemErro = "Cache do gr" + CHR(225) + "fico n" + CHR(227) + "o encontrado: " + loc_cChave
-                ELSE
-                    REPLACE crGrafico1.ctitulo1s WITH PADR(THIS.this_cTitulo1, 128), ;
-                            crGrafico1.cempresas  WITH PADR(THIS.this_cEmpresa, 254)
-
-                    THIS.RegistrarAuditoria("UPDATE")
-                    loc_lResultado = .T.
-                ENDIF
-            ENDCASE
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao atualizar cache do gr" + CHR(225) + "fico: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Registra visualizacao do grafico em LogAuditoria
-    *   par_cOperacao - "INSERT", "UPDATE" ou "VIEW"
-    * Grafico OLE nao possui tabela persistente; auditoria usa "SigPrGf2" como
-    *   tabela virtual e a chave selecionada como ChaveRegistro
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_cChave, loc_cUsuario, loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            loc_cChave = THIS.ObterChavePrimaria()
-
-            DO CASE
-            CASE EMPTY(loc_cChave)
-                *-- Sem chave: nao ha o que auditar
-            CASE TYPE("gnConnHandle") != "N" OR gnConnHandle < 0
-                *-- Sem conexao ativa: pula auditoria silenciosamente
-            OTHERWISE
-                loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")
-
-                loc_cSQL = "INSERT INTO LogAuditoria (Tabela, Operacao, ChaveRegistro, Usuario, DataHora) " + ;
-                           "VALUES (" + EscaparSQL("SigPrGf2") + ", " + ;
-                           EscaparSQL(par_cOperacao) + ", " + ;
-                           EscaparSQL(loc_cChave) + ", " + ;
-                           EscaparSQL(loc_cUsuario) + ", GETDATE())"
-
-                SQLEXEC(gnConnHandle, loc_cSQL)
-                loc_lResultado = .T.
-            ENDCASE
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao registrar auditoria: " + loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * InicializarCursorGrafico - Cria cursor crGrafico1 se nao existir
-    *--------------------------------------------------------------------------
-    PROCEDURE InicializarCursorGrafico()
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            IF !USED("crGrafico1")
-                SET NULL ON
-                CREATE CURSOR crGrafico1 ;
-                    (gGrafico1s G(4), cChave1s C(100), cempresas C(254), ctitulo1s C(128))
-                SET NULL OFF
-            ENDIF
             loc_lResultado = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -271,130 +109,86 @@ DEFINE CLASS SigPrGf2BO AS BusinessBase
         RETURN loc_lResultado
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavesGrafico - Retorna array de valores distintos de cEmps no crRel1
-    *   par_aChaves - array BYREF que recebera as chaves
-    *   Retorna: numero de chaves encontradas (0 se falhar)
-    *--------------------------------------------------------------------------
-    PROCEDURE ObterChavesGrafico(par_aChaves)
-        LOCAL loc_nCount
-        loc_nCount = 0
+    *==========================================================================
+    * Decisao de arquitetura (Fase 2 - CRUD): SIGPRGF2 eh um VISUALIZADOR de
+    * grafico (Falha X Recuperacao Mensal) que so agrega/formata o cursor de
+    * origem (crRel1 no legado, this_cCursorOrigem aqui) recebido do form pai
+    * (equivalente ao SigPrGf1). O dump do legado nao tem NENHUM Insert
+    * Into/Update/Delete From contra tabela do SQL Server: o unico Insert Into
+    * do metodo mgeragrafico grava no cursor LOCAL crGrafico1 (cache de
+    * graficos ja montados por chave), que aqui vira THIS.this_cCursorGrafico
+    * dentro de GerarGrafico(). CarregarDoCursor() mapeia as colunas desse
+    * cache; Inserir()/Atualizar()/ExecutarExclusao() NAO sao sobrescritos
+    * neste BO porque o comportamento padrao herdado de BusinessBase (recusar
+    * a operacao) ja eh o correto para um BO sem tabela proprietaria.
+    *==========================================================================
 
-        IF !USED(THIS.this_cCursorOrigem)
-            RETURN 0
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Mapeia uma linha do cursor de cache de graficos
+    * (this_cCursorGrafico, layout identico ao crGrafico1 legado) para as
+    * propriedades do BO. Usado apos LOCATE/SEEK em GerarGrafico() ou por
+    * quem precisar inspecionar uma linha ja posicionada do cache.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lResultado
+
+        loc_lResultado = .F.
+
+        IF !EMPTY(par_cAliasCursor) AND USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+
+            THIS.this_cChaveAtual      = ALLTRIM(TratarNulo(cChave1s, ""))
+            THIS.this_cEmpresaAtual    = TratarNulo(cEmpresas, "")
+            THIS.this_cTitulo1         = TratarNulo(cTitulo1s, "")
+            THIS.this_cLabelsMeses     = TratarNulo(cLabelsMeses, "")
+            THIS.this_cSerieFalha      = TratarNulo(cSerieFalha, "")
+            THIS.this_cSerieRecuperacao = TratarNulo(cSerieRecuperacao, "")
+            THIS.this_nTotalMeses      = OCCURS(CHR(9), THIS.this_cLabelsMeses)
+
+            loc_lResultado = .T.
         ENDIF
 
-        TRY
-            DIMENSION par_aChaves(1)
-            par_aChaves = .F.
-
-            SELECT DISTINCT cEmps ;
-                FROM (THIS.this_cCursorOrigem) ;
-                ORDER BY 1 ;
-                INTO ARRAY par_aChaves
-
-            loc_nCount = ALEN(par_aChaves, 1)
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_nCount = 0
-        ENDTRY
-
-        RETURN loc_nCount
+        RETURN loc_lResultado
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDadosGrafico - Prepara crGrafico1 para a chave selecionada
-    *   par_nLinha    - Indice (1-based) da chave no array de chaves
-    *   par_aChaves   - Array com os valores de cEmps disponiveis
-    *   Retorna .T. se os dados foram preparados com sucesso
-    *   Efeito colateral: popula this_cChave1, this_cTitulo1, this_cEmpresa,
-    *     this_cStranomes, this_cStrFalhas, this_cStrPesoccb, this_nNmeses
-    *     e insere/garante registro em crGrafico1 (APPEND GENERAL gGrafico1s)
+    * ObterChavePrimaria - Chave do grafico atualmente selecionado (equivalente
+    * ao cChave1s do cache legado). Nao ha tabela proprietaria neste BO; a
+    * chave existe so para identificar a linha do cache de graficos.
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarDadosGrafico(par_nLinha, par_aChaves)
-        LOCAL loc_lResultado, loc_nLinha, loc_cChave1
-        LOCAL loc_cTitulo1, loc_cEmpresa
-        LOCAL loc_cStrg1, loc_cStrg2, loc_cStrg3, loc_nNmeses
-        LOCAL loc_cTAB, loc_cCRLF
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cChaveAtual)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PopularChaves - Monta THIS.this_cCursorChaves com as chaves distintas do
+    * cursor de origem (equivalente a "Select Distinct a.cEmps From crRel1
+    * Order By 1 Into Array laVendedor" do mGeraGrafico legado). O Form usa
+    * este cursor para popular o combo "Grupo / Vendedor :" (cmbChave1).
+    *--------------------------------------------------------------------------
+    PROCEDURE PopularChaves()
+        LOCAL loc_lResultado, loc_oErro
 
         loc_lResultado = .F.
-        loc_cTAB  = CHR(9)
-        loc_cCRLF = CHR(13) + CHR(10)
-
-        *-- Validacoes pre-TRY (NUNCA RETURN dentro de TRY/CATCH)
-        IF !USED(THIS.this_cCursorOrigem)
-            RETURN .F.
-        ENDIF
-
-        loc_nLinha = IIF(VARTYPE(par_nLinha) = "N" .AND. par_nLinha > 0, par_nLinha, 1)
-
-        IF VARTYPE(par_aChaves) != "A" OR ALEN(par_aChaves, 1) < loc_nLinha
-            RETURN .F.
-        ENDIF
 
         TRY
-            loc_cChave1 = ALLTRIM(par_aChaves(loc_nLinha))
-
-            THIS.InicializarCursorGrafico()
-
-            *-- Verificar cache
-            SELECT crGrafico1
-            LOCATE FOR crGrafico1.cChave1s == PADR(loc_cChave1, 100)
-
-            IF EOF("crGrafico1")
-                *-- Preparar series de dados a partir do cursor de origem
-                loc_nNmeses = 0
-                loc_cStrg2  = "Falha"
-                loc_cStrg3  = "Recupera" + CHR(231) + CHR(227) + "o"
-                loc_cStrg1  = ""
-                loc_cTitulo1 = ""
-                loc_cEmpresa = ""
-
-                SELECT crRel1
-                SET ORDER TO ("") IN crRel1
-                LOCATE FOR crRel1.cEmps == loc_cChave1
-
-                IF !EOF("crRel1")
-                    loc_cTitulo1 = ALLTRIM(crRel1.cTitulo1s) + CHR(13) + ALLTRIM(crRel1.cTitulo2s)
-                    loc_cEmpresa = crRel1.cEmpresas
-
-                    SCAN WHILE crRel1.cEmps == loc_cChave1
-                        loc_nNmeses = loc_nNmeses + 1
-                        loc_cStrg1  = loc_cStrg1 + loc_cTAB + ALLTRIM(crRel1.cStranomes)
-                        loc_cStrg2  = loc_cStrg2 + loc_cTAB + ;
-                            ALLTRIM(TRANSFORM(crRel1.nFalhas, "999,999,999.99"))
-                        loc_cStrg3  = loc_cStrg3 + loc_cTAB + ;
-                            ALLTRIM(TRANSFORM(crRel1.nPesoccbs, "999,999,999.99"))
-                    ENDSCAN
+            IF !USED(THIS.this_cCursorOrigem)
+                THIS.this_cMensagemErro = "Cursor de origem n" + CHR(227) + "o dispon" + CHR(237) + "vel."
+            ELSE
+                IF USED(THIS.this_cCursorChaves)
+                    USE IN (THIS.this_cCursorChaves)
                 ENDIF
 
-                *-- APPEND GENERAL abre dialog COM se sem dados (SYS(2335) nao suprime OS)
-                IF loc_nNmeses > 0
-                    SELECT crGrafico1
-                    INSERT INTO crGrafico1 (cChave1s, ctitulo1s, cempresas) ;
-                        VALUES (loc_cChave1, loc_cTitulo1, loc_cEmpresa)
-                    APPEND GENERAL gGrafico1s CLASS "MSGraph.Chart" ;
-                        DATA (loc_cStrg1 + loc_cCRLF + loc_cStrg2 + loc_cCRLF + loc_cStrg3)
+                SELECT DISTINCT ALLTRIM(cEmps) AS Chaves ;
+                    FROM (THIS.this_cCursorOrigem) ;
+                    ORDER BY 1 ;
+                    INTO CURSOR (THIS.this_cCursorChaves) READWRITE
 
-                    *-- Atualizar propriedades do BO
-                    THIS.this_cChave1     = loc_cChave1
-                    THIS.this_cEmpresa    = loc_cEmpresa
-                    THIS.this_cTitulo1    = loc_cTitulo1
-                    THIS.this_cStranomes  = loc_cStrg1
-                    THIS.this_cStrFalhas  = loc_cStrg2
-                    THIS.this_cStrPesoccb = loc_cStrg3
-                    THIS.this_nNmeses     = loc_nNmeses
+                IF RECCOUNT(THIS.this_cCursorChaves) > 0
+                    GO TOP IN (THIS.this_cCursorChaves)
                     loc_lResultado = .T.
                 ENDIF
-            ELSE
-                *-- Recuperar titulo/empresa do cache
-                THIS.this_cChave1  = ALLTRIM(crGrafico1.cChave1s)
-                THIS.this_cTitulo1 = ALLTRIM(crGrafico1.ctitulo1s)
-                THIS.this_cEmpresa = ALLTRIM(crGrafico1.cempresas)
-                loc_lResultado = .T.
             ENDIF
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
             loc_lResultado = .F.
@@ -404,12 +198,129 @@ DEFINE CLASS SigPrGf2BO AS BusinessBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * LimparCursorGrafico - Fecha cursor de cache do grafico
+    * GerarGrafico - Equivalente ao mGeraGrafico legado (parte de dados: o
+    * desenho do OLE/MSGraph.Chart fica por conta do Form). Se a chave ja
+    * esta no cache (this_cCursorGrafico), so recarrega as propriedades a
+    * partir dele (LOCATE, igual ao "Locate For crGrafico1.cChave1s==..." do
+    * legado). Senao, varre this_cCursorOrigem (equivalente ao "Scan While
+    * crRel1.cEmps==m.lcChave1" do legado), monta os rotulos de mes e as duas
+    * series (Falha/Recuperacao) separados por TAB e grava a linha nova no
+    * cache - so entao Insert Into acontece, e sempre no cursor LOCAL, nunca
+    * no SQL Server.
     *--------------------------------------------------------------------------
-    PROCEDURE LimparCursorGrafico()
-        IF USED("crGrafico1")
-            USE IN crGrafico1
+    PROCEDURE GerarGrafico(par_cChave)
+        LOCAL loc_lResultado, loc_oErro, loc_cChavePad, loc_cTitulo1, ;
+              loc_cEmpresa, loc_cLabelsMeses, loc_cSerieFalha, ;
+              loc_cSerieRecuperacao, loc_nMeses, loc_cPointAntigo, ;
+              loc_cSeparAntigo
+
+        loc_lResultado           = .F.
+        THIS.this_lChaveEmCache  = .F.
+        THIS.this_lGraficoGerado = .F.
+
+        TRY
+            IF EMPTY(par_cChave) OR !USED(THIS.this_cCursorOrigem)
+                THIS.this_cMensagemErro = "Chave n" + CHR(227) + "o informada ou cursor de origem n" + CHR(227) + "o dispon" + CHR(237) + "vel."
+            ELSE
+                loc_cChavePad = PADR(ALLTRIM(par_cChave), 100)
+                THIS.this_cChaveAtual = ALLTRIM(par_cChave)
+
+                IF !USED(THIS.this_cCursorGrafico)
+                    CREATE CURSOR (THIS.this_cCursorGrafico) ;
+                        (cChave1s C(100), cEmpresas C(254), cTitulo1s M, ;
+                         cLabelsMeses M, cSerieFalha M, cSerieRecuperacao M)
+                    INDEX ON cChave1s TAG cChave1s
+                ENDIF
+
+                SELECT (THIS.this_cCursorGrafico)
+                LOCATE FOR cChave1s == loc_cChavePad
+
+                IF FOUND()
+                    THIS.this_lChaveEmCache     = .T.
+                    THIS.this_cEmpresaAtual     = TratarNulo(cEmpresas, "")
+                    THIS.this_cTitulo1          = TratarNulo(cTitulo1s, "")
+                    * cTitulo2s nao existe no cache (crGrafico1 legado so guarda
+                    * o titulo ja concatenado) - fica vazio ate a proxima geracao
+                    THIS.this_cTitulo2          = ""
+                    THIS.this_cLabelsMeses      = TratarNulo(cLabelsMeses, "")
+                    THIS.this_cSerieFalha       = TratarNulo(cSerieFalha, "")
+                    THIS.this_cSerieRecuperacao = TratarNulo(cSerieRecuperacao, "")
+                    THIS.this_nTotalMeses       = OCCURS(CHR(9), THIS.this_cLabelsMeses)
+                    THIS.this_lGraficoGerado    = .T.
+                    loc_lResultado = .T.
+                ELSE
+                    SELECT (THIS.this_cCursorOrigem)
+                    LOCATE FOR ALLTRIM(cEmps) == ALLTRIM(par_cChave)
+
+                    IF !FOUND()
+                        THIS.this_cMensagemErro = "Nenhum registro encontrado para a chave [" + ALLTRIM(par_cChave) + "]."
+                    ELSE
+                        loc_cTitulo1 = ALLTRIM(cTitulo1s) + CHR(13) + ALLTRIM(cTitulo2s)
+                        THIS.this_cTitulo2 = ALLTRIM(TratarNulo(cTitulo2s, ""))
+                        loc_cEmpresa = TratarNulo(cEmpresas, "")
+
+                        loc_cLabelsMeses      = ""
+                        loc_cSerieFalha       = "Falha"
+                        loc_cSerieRecuperacao = "Recupera" + CHR(231) + CHR(227) + "o"
+                        loc_nMeses = 0
+
+                        * Isolamento de locale igual ao mGeraGrafico legado -
+                        * TRANSFORM abaixo usa picture fixa "999,999,999.99"
+                        loc_cPointAntigo = SET("POINT")
+                        loc_cSeparAntigo = SET("SEPARATOR")
+                        SET POINT TO ","
+                        SET SEPARATOR TO "."
+
+                        TRY
+                            SCAN WHILE ALLTRIM(cEmps) == ALLTRIM(par_cChave)
+                                loc_nMeses = loc_nMeses + 1
+                                loc_cLabelsMeses      = loc_cLabelsMeses + CHR(9) + ALLTRIM(TratarNulo(cStranomes, ""))
+                                loc_cSerieFalha       = loc_cSerieFalha + CHR(9) + ALLTRIM(TRANSFORM(NVL(nFalhas, 0), "999,999,999.99"))
+                                loc_cSerieRecuperacao = loc_cSerieRecuperacao + CHR(9) + ALLTRIM(TRANSFORM(NVL(nPesoccbs, 0), "999,999,999.99"))
+                            ENDSCAN
+                        FINALLY
+                            SET POINT TO (loc_cPointAntigo)
+                            SET SEPARATOR TO (loc_cSeparAntigo)
+                        ENDTRY
+
+                        SELECT (THIS.this_cCursorGrafico)
+                        INSERT INTO (THIS.this_cCursorGrafico) ;
+                            (cChave1s, cEmpresas, cTitulo1s, cLabelsMeses, cSerieFalha, cSerieRecuperacao) ;
+                            VALUES (loc_cChavePad, loc_cEmpresa, loc_cTitulo1, loc_cLabelsMeses, loc_cSerieFalha, loc_cSerieRecuperacao)
+
+                        THIS.this_cTitulo1          = loc_cTitulo1
+                        THIS.this_cEmpresaAtual     = loc_cEmpresa
+                        THIS.this_cLabelsMeses      = loc_cLabelsMeses
+                        THIS.this_cSerieFalha       = loc_cSerieFalha
+                        THIS.this_cSerieRecuperacao = loc_cSerieRecuperacao
+                        THIS.this_nTotalMeses       = loc_nMeses
+                        THIS.this_lChaveEmCache     = .F.
+                        THIS.this_lGraficoGerado    = .T.
+                        loc_lResultado = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+            loc_lResultado = .F.
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera os cursores locais deste BO (nunca tocam SQL Server)
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF !EMPTY(THIS.this_cCursorChaves) AND USED(THIS.this_cCursorChaves)
+            USE IN (THIS.this_cCursorChaves)
         ENDIF
+
+        IF !EMPTY(THIS.this_cCursorGrafico) AND USED(THIS.this_cCursorGrafico)
+            USE IN (THIS.this_cCursorGrafico)
+        ENDIF
+
+        DODEFAULT()
     ENDPROC
 
 ENDDEFINE

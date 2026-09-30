@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is complete and verified in VFP9.
+
+**File:** `C:\4c\projeto\app\forms\operacionais\FormSigPrGlp.prg` ÔÇö 4730 linhas, ASCII, compila limpo (`COMPILE_OK`, `.ERR` vazios para Form e BO).
+
+## O que entrou
+
+Sete funis de consolida├º├úo, todos ligados a caminhos reais (nenhum m├®todo ├│rf├úo):
+
+| M├®todo | Escopo | Conte├║do real |
+|---|---|---|
+| `CarregarLista` | PUBLIC | rebind + `GO TOP` + `Refresh` do `grd_4c_Itens`/`TmpFinal` (regra #21a); chamado no fim do `InicializarForm` |
+| `LigarGradeItens` | PROTECTED | rebind na ordem can├┤nica `RecordSource ÔåÆ ControlSource ÔåÆ ColumnOrder ÔåÆ Width ÔåÆ Header` (Problema 48) |
+| `FormParaBO` | PROTECTED | `_Prev`/`_DtGera`/`_lcTpGOp`/`GerPorTp` do form av├┤ + `SigKey`; `BtnProcessarClick` agora **aborta** se ele recusar |
+| `BOParaForm` | PROTECTED | Caption + totais do rodap├® com `RECNO()` preservado; funil ├║nico dos 3 pontos onde o legado repetia o `Sum` |
+| `HabilitarCampos` | PUBLIC | bloco liga/desliga do legado; 4 call sites antes duplicados passaram a us├í-lo |
+| `AjustarBotoesPorModo` | PUBLIC | regras do `Init` legado (Pedras pelas 4 ops do SigCdPam + n├úo-Reserva; Estoques por `fChecaAcesso`; grade read-only sem `TransfRes`) |
+| `LimparCampos` | PROTECTED | zera s├│ os campos de exibi├º├úo ÔÇö n├úo toca nos cursores da DataSession compartilhada |
+
+**Escopo medido, n├úo presumido:** `FormParaBO`/`BOParaForm`/`LimparCampos` s├úo PROTECTED em `FormBase` e VFP9 n├úo permite alargar heran├ºa ÔÇö sem o `PROTECTED` expl├¡cito, `PEMSTATUS` devolvia `.T.` e a chamada externa estourava `Property BOPARAFORM is not found`. Documentado no arquivo.
+
+## Verifica├º├úo em runtime (`InstantiateCheckGlpF8.prg`)
+
+Instanciado com os cursores do form pai: grid liga em `TmpFinal`, totais `150/0/150`; ap├│s limpar o `RecordSource`, `CarregarLista` rep├Áe ControlSource, larguras (115/150/38) e headers; `BOParaForm` preserva `RECNO=2`; `AjustarBotoesPorModo` liga/desliga corretamente com e sem itens (`Sair` sempre ativo); `FormParaBO` recusa sem o av├┤ e o `Processar` n├úo grava; `LimparCampos` zera a tela com `TmpSaldG` intacto. Dois di├ílogos capturados em arquivo ÔÇö nenhum modal bloqueou.
+
+## Ressalvas
+
+- **`BtnBuscarClick`/`BtnEncerrarClick`/`BtnSalvarClick` n├úo foram criados.** O SCX legado n├úo tem esses bot├Áes (o dump n├úo cita `btnSalvar`/`btnGravar`/`mGravaDados`); a a├º├úo ├® "Processar" e a sa├¡da ├® "Sair". Cri├í-los seria inventar superf├¡cie (PILAR 1) ou gerar m├®todo vazio. O gate da Fase 8 dispensa `BtnSalvarClick` exatamente nesse caso, e a decis├úo est├í comentada no arquivo.
+- **`Pedras=.F.` no probe** ├® o esperado: o `SigCdPam` deste ambiente n├úo tem as 4 opera├º├Áes de transfer├¬ncia preenchidas ÔÇö ├® a regra do legado funcionando, n├úo defeito.
+- O caminho de grava├º├úo real (`SigPrGlpBO.Processar`) n├úo foi exercitado de ponta a ponta: o SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina (limita├º├úo de ambiente j├í registrada).

@@ -1,0 +1,13 @@
+FASE8 CHECK referencia do filho - inicio 28/09/2026 23:41:51
+0 SETUP: OK
+1 pai instanciado: VARTYPE=O DataSessionId=2
+2 crRel1 montado na sessao do pai: RECCOUNT=2
+3 CASO A (retorno descartado): FormCount antes=1 depois=1  [igual = o filho morreu na propria linha]
+4 CASO B (guardada em property): FormCount antes=1 depois=2  VARTYPE(prop)=O  [+1 e VARTYPE=O = o filho sobreviveu]
+4a filho: Visible=.T. Enabled=.T. DataSessionId=2 [DataSessionId tem de ser igual a do pai: 2]
+5 antes do Release do filho: pai.Enabled=.F.
+5a depois do Release do filho: pai.Enabled=.T. [tem de voltar a .T. - quem reabilita eh o Destroy do filho]  VARTYPE(prop)=X [X = pendurada]
+6 LiberarFormGrafico sobre referencia pendurada: OK, VARTYPE=X
+7 Release do pai: VARTYPE=X
+DIALOGOS SUPRIMIDOS: nenhum
+FIM 28/09/2026 23:41:51

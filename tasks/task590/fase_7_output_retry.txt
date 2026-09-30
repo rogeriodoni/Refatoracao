@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Killed the hung process. Phase 7 is now passing. Here's the summary.
+
+## Phase 7 ÔÇö resolved, and the form was never the problem
+
+**The form was already correct and complete.** The failure was in the gate.
+
+### Root cause
+The Phase 7 gate's CRUD-name pattern had no trailing identifier boundary:
+
+```
+'(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)'
+```
+
+That matched `btnExcluir` **inside** `btnExcluirChq` ÔÇö a button in `SIGPRCHR` ("Reimpress├úo de Cheques") that deletes the *cancelled cheque on the current row*, not a record. With no `Incluir`/`Alterar`/`Visualizar`/`Inserir` sibling anywhere, the legacy has no CRUD bar at all (`Class: form`, no `frmcadastro`, no `Grupo_Op`, zero `pcEscolha`). The gate concluded "CRUD" and demanded four `BtnXxxClick` methods ÔÇö unsatisfiable without inventing buttons (PILAR 1) or writing empty stubs (completeness rule).
+
+This is the **fourth recurrence** of the same gate family ÔÇö the three prior fixes all attacked *whose* the name was (parent form, grid container, child dialog). None looked at where the identifier *ends*.
+
+I first ruled out the mid-run-edit false alarm: the `.ps1` was last written 18:20, the run started 19:40 ÔÇö so the on-disk gate genuinely rejected it.
+
+### Verified the deliverable before touching the gate
+- **All 20 legacy `Click` procedures** map to migrated handlers (16 `Cmd*/Btn*Click` for the legacy's 18 buttons, plus grid header/checkbox and panel handlers)
+- **Compiles clean** ÔÇö fresh `.fxp` generated, 0 errors, no `.err`
+- **`Test-CompletudeCodigo` (the real validator): PASS** ÔÇö no TODOs/stubs/empty procedures
+
+### The fix ÔÇö one functional line
+`automation/OrquestradorMigracao.ps1`, Phase 7 gate: added `(?![A-Za-z0-9_])`. Measured across **590 dumps** before committing:
+
+| check | result |
+|---|---|
+| distinct forms whose verdict changes | **1** (`SigPrChr`, tasks 162/265/590) |
+| forms that *gain* CRUD status | **0** |
+| `SigPrCtr` (also has `btnExcluirSis`/`btnExcluirArq`) | stays CRUD via structural evidence |
+| regression: SIGCDCOR, SigCdGrp, SIGCDCAR, sigcdcli, SigCdMoe, SIGCDSET, SigCdTam | all stay CRUD |
+
+Then I extracted the **real `case 7` block** from the edited file and ran it standalone:
+
+```
+[i] Fase 7: legado sem botao CRUD algum - validado pelos 16 handler(s)...
+validado = True
+```
+
+Script parses clean; lesson recorded in memory + `MEMORY.md`.
+
+### Two things you should know
+
+**1. Instantiation is unverified ÔÇö environmental, not the form.** `TestFormWrapper` died at ETAPA 1B with SQL error **1526** ("SQL Server inexistente"), never reaching `CREATEOBJECT`. That's the documented missing route to 192.168.200.0/24 on this machine. Note the wrapper's `Status: ERRO AO CRIAR OBJETO` is misleading ÔÇö it's the generic label for return code 1, printed even when the connection failed before the form was touched. Log at `tasks/task590/logs/test_f7_chr.log`. So the compile is clean but a cascading-`Init` failure can't be excluded here.
+
+**2. Phase 8 still carries the same defect.** `$padroesCrudLegadoF8` uses the raw list ÔÇö no trailing boundary, no owner check. It won't hit `SigPrChr` (its exception branches all require *no* grid or *no* editable field, and this legacy has both), so I left it alone rather than widen scope without measuring. It will bite the next list-less legacy with a suffixed CRUD verb.
+
+I did not modify `FormSigPrChr.prg`. The large diff on `OrquestradorMigracao.ps1` is mostly pre-existing uncommitted work from the prior session; my change is the one `if` line plus its comment block.

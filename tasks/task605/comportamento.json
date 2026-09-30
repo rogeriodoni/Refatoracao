@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 0,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPREOP",
+      "evento": "Init",
+      "linhas": 48,
+      "codigoOriginal": "LParameters pFrm, lcCabData\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = pFrm\n\nThisForm.ParentForm.Enabled = .f.\n\nSelect 1 as Selecionada, * from crTprMvCab into cursor crOperacoes readwrite\n\nThisForm.get_Operacao.ControlSource = [crOperacoes.Dopes] \nThisForm.get_Numes.ControlSource = [crOperacoes.Numes] \n\nWith ThisForm.grdOperacoes\n\t.ColumnCount  \t   = 7\n\t.RecordSource      = [crOperacoes]\n\t.HeaderHeight ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Operacao,get_Numes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.grdOperacoes",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.get_Operacao.Refresh() \nThisForm.get_Numes.Refresh()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "get_Operacao,get_Numes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.grdOperacoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.grdOperacoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Selecionada\n\nIf InList(nKeyCode, 13, 32)\n\tm.Selecionada = Iif(Selecionada = 0, 1, 0)\n\n\tSelect crOperacoes\n\tGather Memvar Fields Selecionada\n\tThisForm.grdOperacoes.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Selecionada\n\nm.Selecionada = Iif(crOperacoes.Selecionada = 0, 1, 0)\n\nSelect crOperacoes\nGather Memvar Fields Selecionada\nThisForm.grdOperacoes.Refresh\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.ck_Marca",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Replace All Selecionada with This.Value in crOperacoes\nThisForm.grdOperacoes.Refresh()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.get_Operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.get_Numes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREOP.cmdSair",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Zap in crFilOper\n\nSelect crOperacoes\nLocate for .F.\nGo Top in crOperacoes\n\nScan\n\tIf crOperacoes.Selecionada == 1\n\t\tInsert into crFilOper Values(Padr(crOperacoes.Emps,3)+Padr(crOperacoes.Dopes,20)+Padl(Str(crOperacoes.Numes,6),6))\n\tEndif\t\t\nEndScan\n\n\nThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPREOP.Init",
+      "queryOriginal": "Select 1 as Selecionada, * from crTprMvCab into cursor crOperacoes readwrite",
+      "tabelas": "crTprMvCab",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPREOP.cmdSair.Click",
+      "queryOriginal": "\t\tInsert into crFilOper Values(Padr(crOperacoes.Emps,3)+Padr(crOperacoes.Dopes,20)+Padl(Str(crOperacoes.Numes,6),6))",
+      "tabelas": "crFilOper",
+      "colunas": "Padr(crOperacoes.Emps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crTprMvCab", "crFilOper"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

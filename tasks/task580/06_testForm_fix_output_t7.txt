@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo
+
+Investiguei o erro antes de tocar nos arquivos, e a causa **n├úo est├í** em `FormSigMvTta.prg` nem `SigMvTtaBO.prg`.
+
+**Evid├¬ncia:**
+- O erro (`Codigo: 1526`, `SQL Server inexistente ou acesso negado`) acontece na **ETAPA 1B** de `TestFormWrapper.prg` ÔÇö o `SQLSTRINGCONNECT()` contra `192.168.200.10` roda **antes** do form/BO sequer serem tocados (`CREATEOBJECT` s├│ vem na ETAPA 2).
+- Testei conectividade agora: `Test-NetConnection 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded: False`, `PingSucceeded: False`. A m├íquina s├│ tem rotas para `192.168.100.x` (VPN) e `192.168.199.x` (Ethernet) ÔÇö **sem rota nenhuma para `192.168.200.0/24`**.
+- `grep -l "Codigo: 1526" task*/logs/06_testForm.log` bateu em **77 tasks diferentes**, com timestamps de 2026-08-02 at├® hoje ÔÇö n├úo ├® uma falha pontual desta task.
+- As 6 tentativas anteriores de fix (t1ÔÇôt6) j├í chegaram exatamente a essa mesma conclus├úo, cada uma investigando do zero.
+
+Editar os `.prg` n├úo corrigiria nada ÔÇö n├úo h├í caminho de c├│digo neles que participe dessa conex├úo, e a string de conex├úo em `config.prg` est├í correta e id├¬ntica ├á usada por qualquer form que passa no teste. Por isso **n├úo modifiquei os arquivos**.
+
+Salvei uma mem├│ria de projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`) documentando isso, para que a pr├│xima tentativa autom├ítica (ou humana) reconhe├ºa o padr├úo de imediato em vez de reinvestigar do zero e queimar mais uma das 10 tentativas do pipeline.
+
+**Recomenda├º├úo**: isso precisa de aten├º├úo na infraestrutura (rota/VPN at├® `192.168.200.0/24`), n├úo em mais retries de c├│digo.

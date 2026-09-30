@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+13 procedures, 13 ENDPROC ÔÇö balanced (my earlier grep just missed the `PROTECTED PROCEDURE` line). All blocks (TRY/ENDTRY, IF/ENDIF, SCAN/ENDSCAN, WITH/ENDWITH, DO CASE/ENDCASE, PROCEDURE/ENDPROC) are balanced. The file is structurally sound.
+
+## Summary
+
+Completed Phase 2/8 for `sigpremaBO.prg`. After reading the full legacy source, I confirmed this form has **no persistent CRUD table** ÔÇö it's a batch email-processing screen (matches the project's documented "BO somente-leitura" pattern), so I didn't force fake `Inserir()`/`Atualizar()` SQL. Instead I implemented the real data/business methods the legacy `Init` and button handlers need:
+
+- `ObterChavePrimaria()` / `CarregarDoCursor()` ÔÇö row-identity and cursor-row loading
+- `MontarChaveEmpDopNums()` ÔÇö positional `EmpDopNums` key builder (per the Erro177 lesson: `PADR`, never `ALLTRIM` on the parts)
+- `BuscarDadosProcessamento()` ÔÇö full transcription of the legacy `Init`'s cursor-building logic (SigMvCab+SigCdCli, SigCdPam group recipients, SigClJob filtering, SigOpLog exclusion)
+- `MarcarTodos()` / `DesmarcarTodos()` / `OrdenarPorColuna()` ÔÇö SelTudo/apaga/column-header-sort equivalents
+- `ObterDadosContaEmail()` ÔÇö SigCdEmp SMTP lookup (using `go_4c_Sistema.cCodEmpresa`, never legacy `_Empr`)
+- `EnviarEmail()` ÔÇö literal transcription of the legacy `memail` CDO.Message send routine
+- `RegistrarLogEnvio()` / `EnviarEmailSelecionados()` ÔÇö btnEmail.Click orchestration
+
+I documented (via header comments, not TODOs) that PDF-attachment generation (`ImpDocto`) depends on legacy forms `SigPrIdc`/`SigReIfx`/`SigOpIgm` that aren't part of this migration, leaving that to the Form layer in a later phase ÔÇö consistent with the project's rule against inventing unconfirmed business logic. Verified the file's block structure (TRY/IF/SCAN/WITH/PROCEDURE all balanced).

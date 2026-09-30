@@ -1,0 +1,21 @@
+FORM OK  W=500 H=370
+LASTKEY() no probe = 0
+this_lAbandona existe = .T.  valor=.F.
+
+--- ValidarDigitos (esperado F / F+limpa / T) ---
+  vazio      -> .F.  (esperado .F.)
+  '12'       -> .F.  (esperado .F.)  campo apos=[] (esperado vazio)
+  '1234'     -> .T.  (esperado .T.)
+
+--- ValidarParcelas (esperado F / T) ---
+  vazio      -> .F.  (esperado .F.)
+  '03'       -> .T.  (esperado .T.)
+
+--- ValidarDataVencimento ---
+  opt=2 data passada -> .F.  (esperado .F.)
+  opt=2 vazio        -> .T.  (esperado .T.)  campo apos=27/10/2026  (esperado 27/10/2026)
+  opt=1 data hoje    -> .T.  (esperado .T.)
+  opt=2 data futura  -> .T.  (esperado .T.)
+
+DIALOGOS: [27/09/2026 18:13:46] Erro na Transação: Quantidade de Digitos Invalida
+[27/09/2026 18:13:46] Erro na Transação: Data Invalida

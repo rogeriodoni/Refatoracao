@@ -1,0 +1,790 @@
+{
+  "resumo": {
+    "totalMetodos": 48,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 46,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVVDE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector])\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo0",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta0",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta0.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta0.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta0,get_dconta0,get_grupo0",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta0",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta0.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta0",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta0",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta0.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta0.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta0,get_dconta0,get_grupo0",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta5.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta5",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta5",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta5.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta5.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta5,get_dconta5,get_grupo5",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta4.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta4",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta4",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta4.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta4.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta4,get_dconta4,get_grupo4",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta3.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta3",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta3.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta3.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta3,get_dconta3,get_grupo3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta2.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta2",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta2.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta2.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta2,get_dconta2,get_grupo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta5",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta5.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta5.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta5,get_dconta5,get_grupo5",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.Get_dconta1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta1.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.Get_dconta1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta1.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta1.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta1,get_dconta1,get_grupo1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta4",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta4.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta4.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta4,get_dconta4,get_grupo4",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta3",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta3.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta3.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta3,get_dconta3,get_grupo3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta2",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta2.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta2.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta2,get_dconta2,get_grupo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.Get_conta1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta1.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta1.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta1,get_dconta1,get_grupo1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.Get_grupo1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta6",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta6.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta6.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta6,get_dconta6,get_grupo6",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta7",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta7.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta7.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta7,get_dconta7,get_grupo7",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta8",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta8.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta8.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta8,get_dconta8,get_grupo8",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta6.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta6",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta6",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta6.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta6.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta6,get_dconta6,get_grupo6",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo9",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta9",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta9.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta9.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta9,get_dconta9,get_grupo9",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta7.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta7",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta7",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta7.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta7.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta7,get_dconta7,get_grupo7",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_grupo10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_conta10",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta10.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta10.Value = crListaRemota.RClis\n\tThis.Parent... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta10,get_dconta10,get_grupo10",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta8.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta8",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta8",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta8.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta8.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta8,get_dconta8,get_grupo8",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta9",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta9.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta9",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta9",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta9.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta9.Value = crListaRemota.RClis\n\tThis.Parent.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta9,get_dconta9,get_grupo9",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_conta10.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta10",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.get_dconta10",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis],  [], [Descrição])\n\t\tloLista.mAddColuna([IClis],  [], [Código])\n\t\tloLista.mAddColuna([Grupos], [], [Grupo])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_conta10.Value  = crListaRemota.IClis\n\tThis.Parent.get_dconta10.Value = crListaRemota.RClis\n\tThis.Parent... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta10,get_dconta10,get_grupo10",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVVDE.btnSair",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "If Not Empty(This.Parent.get_conta0.Value)\n\t*** Tiago - 17/05/2011\n\tDo Form SigOpSen With 'LIBLEILAO', 'Libera Leilão', '' To _Retorno\n\tllOk = ( Left( _Retorno, 1 ) = \"*\" )\n\tIf !llOk\n\t\tMessageBox('Autorização não confirmada!!',0+48,'Libera Leilão')\n\t\tgoVendedor.Vendedor00 = Replicate(Chr(254), 10)\n\n\t\tThisForm.Release()\n\t\tReturn .f.\n\tEndIf\n\t***\n\tgoVendedor.Vendedor00 = This.Parent.get_conta0.Value\n\tgoVendedor.Vendedor01 = This.Parent.get_conta1.Value\n\tgoVendedor.Vendedor02 = This.Parent.get_conta... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "get_conta0,get_conta1,get_conta2,get_conta3,get_conta4,get_conta5,get_conta6,get_conta7,get_conta8,get_conta9,get_conta10",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

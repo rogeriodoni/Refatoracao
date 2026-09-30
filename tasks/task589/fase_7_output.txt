@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete and verified.
+
+## What I found
+
+The phase template asks for `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **SIGPRCFN has no CRUD surface at all** ÔÇö I checked the whole dump: base class is `form` (not `frmcadastro`), no `Grupo_Op`, no `pcEscolha`, no `btn/cmd Incluir|Alterar|Visualizar|Excluir`, no table/cursor/grid (`comportamento.json`: `totalQueries=0`). It's a modal calculator with exactly **one** button, `btnOK` ("Sair"), already handled by `BtnSairClick` from Phase 4. The other two `commandgroup`s have `ButtonCount = 0` ÔÇö one is the 1px divider, the other the frame around `btnOK`.
+
+Writing those four methods would mean inventing buttons (violates PILAR 1) or emitting empty methods (blocked by the completeness rule). So I swept all 37 legacy methods against the migrated file to find what was *genuinely* missing.
+
+## What I delivered
+
+**1. `TxtDiasGotFocus` ÔÇö a real gap, silent in production.** Of the six legacy `When` handlers, five reduce to `Not Empty(getValorBase.Value)` and are already covered by `Enabled = .F.` + `ValidarValorBase`. `getDias.When` is the exception ÔÇö it also requires one of the two dates. That half existed nowhere. With both dates blank the user could enter "Dias" and typing did nothing useful: `ValidarDias` falls into the empty-DataBase branch and computes `DataBase = DataFinal - Dias`. I measured in VFP9 that `{} - 5` returns an **empty date with no error** ÔÇö so the failure was completely mute. Reproduced via `GotFocus`, the same technique already documented for `VencGotFocus`.
+
+**2. Documented the `Load` decision.** Legacy `Load` is `=fConfigGeral()`, deliberately not ported (that role is `start\config.prg` now; `utils\fconfiggeral.prg` exists only for legacy VCX p-code, regra #27). This followed the convention already set in `FormSigMvExp`/`FormSigMvMen` ÔÇö it was just undocumented here.
+
+**3. Recorded the CRUD-absence reasoning in the header**, with the evidence, so Phase 8 and reviewers don't re-add invented CRUD.
+
+## Verification (measured, not read)
+
+Compiled clean, then instantiated and exercised the event chain (`automation/InstantiateCheckPrCfn.prg`, log in `instantiate_prcfn_result.txt`):
+
+- Form instantiates, 600x300, correct caption
+- `Init` seeds params and runs the initial calc: JurosDia derived 3%ÔåÆ0.1, Juros 30, Total 1030
+- Initial `Enabled` reproduces legacy `llEnable = .f.` exactly (5 fields + optCalculo off, optDias on)
+- New handler reachable and non-throwing in all three `When` states
+- Enable cascade, negative-ValorBase rejection (dialog fired), 2 vencimentos ÔåÆ Juros 150 / Total 1150 / Parcela 575, composto ÔåÆ 155.93, `BtnSairClick` releases the form
+- Only one suppressed dialog, the expected validation message
+
+Phase 7 gate re-checked: `legadoSemCrud=True`, 1 legacy button ÔåÆ `min=1`, `nHandlers=1` ÔåÆ **PASSA**. Completeness validator patterns all zero.
+
+One note: while verifying, I caught that my own new header line `* Proxima fase: 8` matched the completeness validator's `laterPattern` (`pr[o├│]xima\s+fase`) and would have failed the gate ÔÇö the prior wording "Proximas fases" escaped it only because of the plural. Reworded. Also, `0 AMBIENTE FALHOU: Variable 'GNCONNHANDLE' is not found` in the log is the known environment artifact (no route to the SQL host); this form needs no connection.

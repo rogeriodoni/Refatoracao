@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete and verified. `FormSigMvTta.prg` (968 lines) now passes the gate.
+
+## What the phase actually needed
+
+The previous run had already added the two description fields and the row-change handler, but the gate still rejected it. The blocker was **not** a missing field ÔÇö it was the FLAT branch requiring a `PROCEDURE Validar*`, and the form had none.
+
+I confirmed against the dump before changing anything:
+- `legadoSemLookup = True` ÔÇö the legacy has **zero** `fwBuscaExt` / `fwBuscaSel` / `sigacess` / `mAddColuna`. There is no F4 picker to migrate, and both description fields have `PROCEDURE When` returning `.f.` unconditionally. Inventing a lookup here would have violated PILAR 1 and the "never invent lookup tables" rule.
+- `Test-LegadoSomenteLeitura = False` ÔÇö so the visualizador branch correctly does *not* apply: grid columns 7/8 (Valor T├¡tulo / Vencimento) **are** editable in INSERIR/ALTERAR.
+
+## Changes
+
+**1. Extracted `ValidarTitulosVencimentos()`** ÔÇö the ValTits/Vencs scan was buried inline in `CmdSairClick`. It's the screen's only validation and it's real business logic (it decides whether a tax becomes a t├¡tulo to post), so it belongs in its own method (PILAR 3). The legacy kept both in one `Click` because it had no layer to separate them. Logic transcribed unchanged; `CmdSairClick` is now 8 lines that call it and branch on the result.
+
+**2. Fixed a work-area leak in `GrdDadosAfterRowColChange`** ÔÇö it did `SELECT cursor_4c_BuscaGrupo` / `GO TOP` / unqualified `EOF()`. The legacy deliberately uses `Go Top In crfOpFin_Bus` with alias-qualified field reads, precisely so the current work area stays on the caller's grid cursor. Since this method **closes** those lookup cursors on exit, the migrated version was leaving the current work area pointing at a closed cursor. Now matches the legacy.
+
+## Verification
+
+- **Compiles clean** ÔÇö `.FXP` deleted first and confirmed recreated, empty `.ERR` for both BO and Form (per CLAUDE.md #29, `COMPILE` can silently skip an existing `.FXP`).
+- **Instantiates** ÔÇö `CREATEOBJECT` returns an object, so the whole `Init` chain runs; all 6 phase-6 members present on the live object; both description fields `ReadOnly = .T.`
+- **Validation loop proven with real data** ÔÇö a 3-row cursor: the complete row passes untouched, while `ValTits = 0` (IPI) and `Vencs = .NULL.` (PIS) both raise the legacy prompt. The NULL case confirms the `ISNULL` guard earns its place ÔÇö native `EMPTY(.NULL.)` returns `.F.` and would have waved that row through.
+- Rule sweep clean: no `RETURN` inside TRY, no `PUBLIC PROCEDURE`, no real `MESSAGEBOX`, no `.Self`, no `Controls("nome")`, no `TTOD`, no literal accents; all externally-called methods are PUBLIC.
+
+Two notes, neither affecting the deliverable: the object names I used already match `mapeamento.json` exactly, so no mapping change was needed. And the earlier "Fase 6 failed" log was polluted by `settings.local.json` permission-rule warnings printed into `fase_6_output.txt` ÔÇö worth knowing when reading those logs, since it obscures the real gate message.
+
+Harness scripts left in `automation/` alongside the existing `CompileCheckSbn.prg` convention: `CompileCheckTta.prg` and `TestTta.prg`. Throwaway diagnostics removed.

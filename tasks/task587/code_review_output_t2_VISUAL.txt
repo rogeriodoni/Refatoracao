@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este exato caso j├í est├í documentado na minha mem├│ria: ├® a quarta reincid├¬ncia do mesmo falso positivo do pass VISUAL neste form espec├¡fico (`Formsigprccp.prg`).
+
+Conferindo o c├│digo fornecido (linhas 119-123):
+
+```foxpro
+THIS.ConfigurarPageFrame()
+THIS.ConfigurarCabecalho()
+
+THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.this_cTituloForm
+THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.this_cTituloForm
+```
+
+A propaga├º├úo **j├í existe** ÔÇö logo ap├│s `ConfigurarCabecalho()`, ambos os labels recebem `THIS.this_cTituloForm` (o t├¡tulo din├ómico setado no `Init`). Duas coisas na sugest├úo do achado est├úo erradas:
+
+1. O path sugerido (`THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra`) n├úo existe neste form ÔÇö ├® um form OPERACIONAL flat, sem PageFrame; o container real ├® `cnt_4c_Cabecalho` direto em `THIS`.
+2. Aplicar a linha sugerida quebraria o form em runtime com `Property PGF_4C_PAGINAS is not found`.
+
+N├úo vou aplicar nenhuma altera├º├úo neste arquivo ÔÇö o ├║nico achado do pass ├® falso positivo confirmado (propaga├º├úo j├í existe, s├│ que via `this_cTituloForm` em vez de `THIS.Caption` direto, e fora do `WITH` de cria├º├úo em vez de dentro dele).

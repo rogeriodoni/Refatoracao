@@ -1,354 +1,244 @@
-*==============================================================================
-* SigPrDscBO.prg - Business Object para Montagem de Descricao de Produtos
-* Herda de BusinessBase
-* Tabela principal: SigCdPro (atualiza DscCompras/ObsCompras/DPros)
-* Tabelas auxiliares: SigCdDic (dicionario), SigCdGrp, SigCdCor, SigPrPrt
-*==============================================================================
+*====================================================================
+* SigPrDscBO.prg
+*
+* Business Object para SigPrDsc (Montagem de Descricao de Produtos)
+* Tabela principal atualizada: SigCdPro (DscCompras, ObsCompras, DPros)
+* Tabelas auxiliares: SigCdGrp, SigCdCor, SigCdDic, SigPrPrt
+*
+* Form OPERACIONAL: processa produtos sem traducao (fila em SigPrPrt),
+* monta a descricao concatenando Grupo + Cor, traduz via dicionario
+* (SigCdDic) e grava DscCompras/ObsCompras/DPros de volta em SigCdPro.
+*====================================================================
 
 DEFINE CLASS SigPrDscBO AS BusinessBase
 
-    *--------------------------------------------------------------------------
-    * Configuracao da entidade
-    *--------------------------------------------------------------------------
-    this_cTabela     = "SigCdPro"
-    this_cCampoChave = "CPros"
+	*-- Tabela principal e chave (para auditoria/BusinessBase)
+	this_cTabela = "SigCdPro"
+	this_cCampoChave = "CPros"
 
-    *--------------------------------------------------------------------------
-    * Filtros de selecao de produtos
-    *--------------------------------------------------------------------------
-    this_cCProsI = ""  && produto inicial do intervalo C(14)
-    this_cCProsF = ""  && produto final do intervalo   C(14)
-    this_cCGrus  = ""  && grupo de produto (filtro alternativo) C(3)
+	*-- Filtro de faixa de produtos (telas getCProsI / getCProsF)
+	this_cCProsI = ""
+	this_cCProsF = ""
 
-    *--------------------------------------------------------------------------
-    * Controle de processamento e gravacao
-    *--------------------------------------------------------------------------
-    this_nTotalProcessados = 0
-    this_nTotalGravados    = 0
-    this_lGravadoOk        = .F.
+	*-- Filtro de grupo de produtos (tela getCGrus)
+	this_cCGrus = ""
 
-    *--------------------------------------------------------------------------
-    * Init
-    *--------------------------------------------------------------------------
-    PROCEDURE Init()
-        THIS.this_cTabela     = "SigCdPro"
-        THIS.this_cCampoChave = "CPros"
-        RETURN DODEFAULT()
-    ENDPROC
+	*-- Produto corrente sendo processado/gravado (crProdutos.CPros)
+	this_cCPros = ""
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - retorna chave para auditoria
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        RETURN THIS.this_cCProsI + "-" + THIS.this_cCProsF
-    ENDPROC
+	*-- Descricao em portugues montada (Grupo + Cor) - crProdutos.Portugues
+	this_cPortugues = ""
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - mapeia campos do cursor para propriedades do BO
-    * Cursor esperado: alias de SigCdPro com ao menos CPros/CGrus
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
-                THIS.this_cCProsI = TratarNulo(CPros, "C")
-                THIS.this_cCProsF = TratarNulo(CPros, "C")
-                THIS.this_cCGrus  = TratarNulo(CGrus, "C")
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+	*-- Descricao traduzida (ingles) - crProdutos.Traduzido
+	this_cTraduzido = ""
 
-    *--------------------------------------------------------------------------
-    * BuscarDicionario - carrega dicionario de traducoes de SigCdDic
-    * Popula cursor_4c_Dicionario (Expressao/Traducao, ordenado por tamanho desc)
-    *--------------------------------------------------------------------------
-    PROCEDURE BuscarDicionario()
-        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_Dicionario")
-                USE IN cursor_4c_Dicionario
-            ENDIF
-            loc_cSQL = "SELECT Expressao, Traducao " + ;
-                       "FROM SigCdDic " + ;
-                       "WHERE Idioma = 'INGLES    ' " + ;
-                       "ORDER BY LEN(Expressao) DESC, Expressao"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dicionario") < 1
-                MsgErro("Falha ao carregar dicion" + CHR(225) + "rio de tradu" + CHR(231) + CHR(245) + "es.", "Erro")
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+	*-- Campos gravados de volta em SigCdPro.DscCompras / ObsCompras
+	this_cDscCompras = ""
+	this_cObsCompras = ""
 
-    *--------------------------------------------------------------------------
-    * BuscarProdutos - SELECT de produtos baseado nos filtros do BO
-    * Popula cursor_4c_ProdTemp (CPros apenas - lista de codigos)
-    * Pre-requisito: this_cCProsI/F e this_cCGrus ja setados pelo form
-    *--------------------------------------------------------------------------
-    PROCEDURE BuscarProdutos()
-        LOCAL loc_lSucesso, loc_cSQL, loc_cPrI, loc_cPrF, loc_cGru, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            loc_cPrI = PADR(THIS.this_cCProsI, 14)
-            loc_cPrF = PADR(THIS.this_cCProsF, 14)
-            loc_cGru = PADR(THIS.this_cCGrus, 3)
+	*-- Descricao final formatada gravada em SigCdPro.DPros
+	this_cDPros = ""
 
-            IF !EMPTY(ALLTRIM(loc_cGru))
-                loc_cSQL = "SELECT CPros FROM SigCdPro " + ;
-                           "WHERE CGrus = " + EscaparSQL(ALLTRIM(loc_cGru)) + " " + ;
-                           "ORDER BY CPros"
-            ELSE
-                loc_cSQL = "SELECT CPros FROM SigCdPro " + ;
-                           "WHERE CPros BETWEEN " + EscaparSQL(loc_cPrI) + " AND " + EscaparSQL(loc_cPrF) + " " + ;
-                           "ORDER BY CPros"
-            ENDIF
+	*-- Total de produtos processados/gravados (para mensagens de resumo)
+	this_nTotalProcessados = 0
 
-            IF USED("cursor_4c_ProdTemp")
-                USE IN cursor_4c_ProdTemp
-            ENDIF
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ProdTemp") < 1
-                MsgErro("Falha ao buscar produtos.", "Erro")
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+	*====================================================================
+	* Init - Inicializa Business Object
+	*====================================================================
+	PROCEDURE Init()
+		DODEFAULT()
 
-    *--------------------------------------------------------------------------
-    * ProcessarTraducoes - processa produtos e preenche cursor_4c_Produtos
-    * Equivalente ao PROCEDURE processamento do legado (SIGPRDSC.processamento)
-    * Pre-requisito: cursor_4c_Dicionario carregado via BuscarDicionario()
-    * Pre-requisito: cursor_4c_Produtos criado pelo form (CREATE CURSOR)
-    * Pos-execucao: cursor_4c_Produtos contem (CPros/Portugues/Traduzido/DscCompras/ObsCompras)
-    *--------------------------------------------------------------------------
-    PROCEDURE ProcessarTraducoes()
-        LOCAL loc_lSucesso, loc_cSQL, loc_cPro, loc_cDes, loc_cIni
-        LOCAL loc_cIng, loc_nGrD, loc_oProg, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            *-- Busca lista de produtos no SQL Server
-            IF !THIS.BuscarProdutos()
-                loc_lSucesso = .F.
-            ENDIF
+		THIS.this_cTabela = "SigCdPro"
+		THIS.this_cCampoChave = "CPros"
 
-            IF !USED("cursor_4c_ProdTemp") OR RECCOUNT("cursor_4c_ProdTemp") = 0
-                MsgAviso("Nenhum produto encontrado para os filtros informados.", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_lSucesso = .F.
-            ENDIF
+		THIS.this_cCProsI = ""
+		THIS.this_cCProsF = ""
+		THIS.this_cCGrus = ""
+		THIS.this_cCPros = ""
+		THIS.this_cPortugues = ""
+		THIS.this_cTraduzido = ""
+		THIS.this_cDscCompras = ""
+		THIS.this_cObsCompras = ""
+		THIS.this_cDPros = ""
+		THIS.this_nTotalProcessados = 0
 
-            *-- Zera cursor de resultado do form
-            IF USED("cursor_4c_Produtos")
-                SELECT cursor_4c_Produtos
-                ZAP
-            ENDIF
+		RETURN .T.
+	ENDPROC
 
-            THIS.this_nTotalProcessados = 0
+	*====================================================================
+	* CarregarDoCursor - Carrega as propriedades do produto corrente a
+	* partir de uma linha do cursor crProdutos (estrutura do legado:
+	* CPros c(14), Portugues c(254), Traduzido c(254), DscCompras m,
+	* ObsCompras m). THIS.this_cDPros e recalculado aqui pela MESMA
+	* formula do PROCEDURE gravacao legado (Padr(Alltrim(Portugues),40)),
+	* pois DPros nao existe como coluna no cursor - e sempre derivado.
+	*====================================================================
+	PROCEDURE CarregarDoCursor(par_cAliasCursor)
+		LOCAL loc_lSucesso
+		loc_lSucesso = .F.
 
-            loc_oProg = CREATEOBJECT("fwprogressbar", ;
-                "Processando Tradu" + CHR(231) + CHR(245) + "es...", ;
-                RECCOUNT("cursor_4c_ProdTemp"))
-            loc_oProg.Show
+		IF USED(par_cAliasCursor)
+			SELECT (par_cAliasCursor)
 
-            SELECT cursor_4c_ProdTemp
-            GO TOP
-            SCAN
-                loc_cPro = ALLTRIM(cursor_4c_ProdTemp.CPros)
+			THIS.this_cCPros      = ALLTRIM(TratarNulo(CPros, ""))
+			THIS.this_cPortugues  = TratarNulo(Portugues, "")
+			THIS.this_cTraduzido  = TratarNulo(Traduzido, "")
+			THIS.this_cDscCompras = TratarNulo(DscCompras, "")
+			THIS.this_cObsCompras = TratarNulo(ObsCompras, "")
+			THIS.this_cDPros      = PADR(ALLTRIM(THIS.this_cPortugues), 40)
 
-                loc_oProg.SubTitulo.Caption = "Produto : " + loc_cPro
-                loc_oProg.Update(.T.)
+			loc_lSucesso = .T.
+		ENDIF
 
-                IF !EMPTY(loc_cPro)
-                    loc_cDes = ""
+		RETURN loc_lSucesso
+	ENDPROC
 
-                    *-- Busca dados complementares: grupo + cor do produto
-                    loc_cSQL = "SELECT a.CPros, a.CGrus, a.CodCors, " + ;
-                               "b.DGrus, b.Mercs, b.MontaGrDs, c.Descs " + ;
-                               "FROM SigCdPro a " + ;
-                               "LEFT JOIN SigCdGrp b ON b.CGrus = a.CGrus " + ;
-                               "LEFT JOIN SigCdCor c ON c.Cods = a.CodCors " + ;
-                               "WHERE a.CPros = " + EscaparSQL(loc_cPro)
+	*====================================================================
+	* TemFiltro - .T. quando ao menos um dos tres filtros da tela foi
+	* informado. Eh o criterio da primeira guarda do PROCEDURE Click do
+	* btnSelecionar legado:
+	*
+	*   If Empty(getCProsI.Value) And Empty(getCProsF.Value) And
+	*      Empty(getCGrus.Value) ... Return .f.
+	*
+	* So o CRITERIO vem para ca - a mensagem e o SetFocus continuam no
+	* Form, que eh onde moram (sao UI).
+	*====================================================================
+	FUNCTION TemFiltro()
+		RETURN !EMPTY(ALLTRIM(THIS.this_cCProsI)) OR ;
+		       !EMPTY(ALLTRIM(THIS.this_cCProsF)) OR ;
+		       !EMPTY(ALLTRIM(THIS.this_cCGrus))
+	ENDFUNC
 
-                    IF USED("cursor_4c_LocalPro")
-                        USE IN cursor_4c_LocalPro
-                    ENDIF
-                    IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro") >= 1
-                        SELECT cursor_4c_LocalPro
-                        GO TOP
-                        loc_nGrD = NVL(cursor_4c_LocalPro.MontaGrDs, 0)
-                        IF loc_nGrD = 1
-                            *-- MontaGrDs=1: incluir descricao do grupo (DGrus) + cor (Descs)
-                            loc_cDes = ALLTRIM(;
-                                ALLTRIM(NVL(cursor_4c_LocalPro.DGrus, "")) + " " + ;
-                                ALLTRIM(NVL(cursor_4c_LocalPro.Descs, "")))
-                        ELSE
-                            *-- MontaGrDs=0: apenas descricao de cor (Descs)
-                            loc_cDes = ALLTRIM(NVL(cursor_4c_LocalPro.Descs, ""))
-                        ENDIF
+	*====================================================================
+	* NormalizarFiltros - completa a faixa de produto quando o usuario
+	* digitou apenas uma das pontas. TRANSCRICAO LITERAL do PROCEDURE
+	* Click do btnSelecionar legado (regra #17 - criterio do legado nao
+	* se reescreve):
+	*
+	*   If Not Empty(getCProsI.Value) And Empty(getCProsF.Value)
+	*       getCProsF.Value = getCProsI.Value
+	*   If Empty(getCProsI.Value) And Not Empty(getCProsF.Value)
+	*       getCProsI.Value = getCProsF.Value
+	*
+	* NAO mexe no grupo: a exclusividade faixa-x-grupo eh feita pelos
+	* PROCEDURE Valid dos campos (Form.ValidarCProsI/ValidarCProsF/
+	* ValidarCGrus), NAO pelo botao Selecionar - o legado tambem nao a
+	* aplica aqui, e aplicar limparia filtro que o usuario informou.
+	*
+	* Guarda os valores SEM padding de proposito: quem monta o SQL aplica
+	* o Padr(...,14) / Padr(...,3) do legado. Padded aqui, o BOParaForm
+	* devolveria espacos a direita para dentro dos TextBox da tela.
+	*====================================================================
+	PROCEDURE NormalizarFiltros()
+		THIS.this_cCProsI = ALLTRIM(THIS.this_cCProsI)
+		THIS.this_cCProsF = ALLTRIM(THIS.this_cCProsF)
+		THIS.this_cCGrus  = ALLTRIM(THIS.this_cCGrus)
 
-                        IF !EMPTY(loc_cDes)
-                            loc_cIng = loc_cDes
+		*-- legado: If Not Empty(getCProsI.Value) And Empty(getCProsF.Value)
+		IF !EMPTY(THIS.this_cCProsI) AND EMPTY(THIS.this_cCProsF)
+			THIS.this_cCProsF = THIS.this_cCProsI
+		ENDIF
 
-                            *-- Aplica substituicoes do dicionario portugues->ingles
-                            IF USED("cursor_4c_Dicionario")
-                                SELECT cursor_4c_Dicionario
-                                GO TOP
-                                SCAN
-                                    loc_cIng = STRTRAN(loc_cIng, ;
-                                        ALLTRIM(cursor_4c_Dicionario.Expressao), ;
-                                        ALLTRIM(cursor_4c_Dicionario.Traducao))
-                                ENDSCAN
-                            ENDIF
+		*-- legado: If Empty(getCProsI.Value) And Not Empty(getCProsF.Value)
+		IF EMPTY(THIS.this_cCProsI) AND !EMPTY(THIS.this_cCProsF)
+			THIS.this_cCProsI = THIS.this_cCProsF
+		ENDIF
+	ENDPROC
 
-                            *-- Remove aspas simples e duplas (protecao SQL)
-                            loc_cDes = STRTRAN(STRTRAN(loc_cDes, "'", " "), '"', " ")
-                            loc_cIng = STRTRAN(STRTRAN(loc_cIng, "'", " "), '"', " ")
+	*====================================================================
+	* ObterChavePrimaria - Chave primaria do produto em processamento
+	* (usada por RegistrarAuditoria).
+	*====================================================================
+	FUNCTION ObterChavePrimaria()
+		RETURN ALLTRIM(THIS.this_cCPros)
+	ENDFUNC
 
-                            *-- Insere no cursor de produtos (DscCompras=traduzido, ObsCompras=portugues)
-                            SELECT cursor_4c_Produtos
-                            INSERT INTO cursor_4c_Produtos ;
-                                (CPros, Portugues, Traduzido, DscCompras, ObsCompras) ;
-                                VALUES (loc_cPro, loc_cDes, loc_cIng, loc_cIng, loc_cDes)
+	*====================================================================
+	* Inserir - Este form OPERACIONAL nunca cria produto novo em SigCdPro
+	* (o cadastro de produtos e feito em outra tela; aqui so se traduz e
+	* regrava a descricao de um produto JA existente, apontado pela fila
+	* SigPrPrt). "Gravar" e sempre um UPDATE - o proprio PROCEDURE
+	* gravacao do legado roda o mesmo par Update/Delete em qualquer
+	* contexto -, entao Inserir delega para Atualizar.
+	*====================================================================
+	PROTECTED PROCEDURE Inserir()
+		RETURN THIS.Atualizar()
+	ENDPROC
 
-                            THIS.this_nTotalProcessados = THIS.this_nTotalProcessados + 1
-                        ENDIF
+	*====================================================================
+	* Atualizar - Grava a descricao (portugues/traduzido) de volta em
+	* SigCdPro e remove o produto da fila SigPrPrt. Espelha
+	* literalmente o PROCEDURE gravacao do legado:
+	*
+	*   Update SigCdPro Set DscCompras = ..., ObsCompras = ..., DPros = ...
+	*                   Where CPros = ...
+	*   Delete From SigPrPrt Where CPros = ...
+	*
+	* tratando as duas instrucoes como uma unidade: se o Delete falhar
+	* apos o Update ter sido aplicado, o legado reverte tudo (RollBack).
+	* Conexao nasce em modo transacional manual (Transactions=2, memoria
+	* feedback_conexao_sql_transactions_2_sem_commit) - commit/rollback
+	* explicitos, no mesmo padrao de SigPrChrBO.ExecutarExclusao.
+	*====================================================================
+	PROTECTED PROCEDURE Atualizar()
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
+		loc_lSucesso = .F.
 
-                        IF USED("cursor_4c_LocalPro")
-                            USE IN cursor_4c_LocalPro
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDSCAN
+		IF EMPTY(ALLTRIM(THIS.this_cCPros))
+			THIS.this_cMensagemErro = "Produto sem c" + CHR(243) + "digo (CPros) para grava" + CHR(231) + CHR(227) + "o."
+			RETURN .F.
+		ENDIF
 
-            loc_oProg.Complete
+		THIS.this_cDPros = PADR(ALLTRIM(THIS.this_cPortugues), 40)
 
-            SELECT cursor_4c_Produtos
-            GO TOP
-            loc_lSucesso = .T.
+		TRY
+			TEXT TO loc_cSQL TEXTMERGE NOSHOW
+				UPDATE SigCdPro
+				SET DscCompras = <<EscaparSQL(THIS.this_cDscCompras)>>,
+					ObsCompras = <<EscaparSQL(THIS.this_cObsCompras)>>,
+					DPros = <<EscaparSQL(THIS.this_cDPros)>>
+				WHERE CPros = <<EscaparSQL(THIS.this_cCPros)>>
+			ENDTEXT
 
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
-    *--------------------------------------------------------------------------
-    * GravarDescricoes - grava descricoes nos produtos (UPDATE SigCdPro)
-    * Equivalente ao PROCEDURE gravacao do legado (SIGPRDSC.gravacao)
-    * Pre-requisito: cursor_4c_Produtos populado por ProcessarTraducoes()
-    * Cada produto: UPDATE SigCdPro + DELETE SigPrPrt com commit individual
-    *--------------------------------------------------------------------------
-    PROCEDURE GravarDescricoes()
-        LOCAL loc_lSucesso, loc_lOks, loc_cSQL, loc_cPro
-        LOCAL loc_oProg, loc_nTotal, loc_oErro
-        loc_lSucesso = .F.
-        loc_lOks     = .T.
-        TRY
-            IF !USED("cursor_4c_Produtos")
-                MsgAviso("Nenhum produto para gravar.", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_lSucesso = .F.
-            ENDIF
+			IF loc_nResultado >= 0
+				loc_cSQL = "DELETE FROM SigPrPrt WHERE CPros = " + EscaparSQL(THIS.this_cCPros)
+				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
-            loc_nTotal = RECCOUNT("cursor_4c_Produtos")
-            IF loc_nTotal = 0
-                MsgAviso("Nenhum produto para gravar.", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_lSucesso = .F.
-            ENDIF
+				IF loc_nResultado >= 0
+					SQLCOMMIT(gnConnHandle)
+					THIS.RegistrarAuditoria("UPDATE")
+					THIS.this_nTotalProcessados = THIS.this_nTotalProcessados + 1
+					loc_lSucesso = .T.
+				ELSE
+					SQLROLLBACK(gnConnHandle)
+					*-- legado: =fGravarLog([T], Upper(ThisForm.Name), Usuar,
+					*-- [Falha na Conexao (Traducao)]) - wrapper no-op
+					*-- (utils\fgravarlog.prg, Erro163_Aba1); retorno descartado
+					*-- igual ao original, so para reproduzir a chamada.
+					=fGravarLog("T", "SIGPRDSC", gc_4c_UsuarioLogado, ;
+						"Falha na Conex" + CHR(227) + "o (Traducao)")
+					*-- this_cMensagemErro fica preenchida; quem EXIBE eh
+					*-- BusinessBase.Salvar()->ExibirFalha() - MsgErro aqui
+					*-- duplicaria a mensagem (regra: falha nunca eh muda, mas
+					*-- tambem nunca eh mostrada duas vezes)
+					THIS.this_cMensagemErro = "Falha ao remover o produto " + ALLTRIM(THIS.this_cCPros) + ;
+						" da fila de tradu" + CHR(231) + CHR(227) + "o (SigPrPrt):" + CHR(13) + CapturarErroSQL()
+				ENDIF
+			ELSE
+				SQLROLLBACK(gnConnHandle)
+				THIS.this_cMensagemErro = "Falha ao gravar a descri" + CHR(231) + CHR(227) + "o do produto " + ;
+					ALLTRIM(THIS.this_cCPros) + " em SigCdPro:" + CHR(13) + CapturarErroSQL()
+			ENDIF
 
-            THIS.this_nTotalGravados = 0
-            THIS.this_lGravadoOk     = .F.
+		CATCH TO loc_oErro
+			SQLROLLBACK(gnConnHandle)
+			THIS.this_cMensagemErro = loc_oErro.Message
+		ENDTRY
 
-            loc_oProg = CREATEOBJECT("fwprogressbar", "Gravando Produtos...", loc_nTotal)
-            loc_oProg.Show
-
-            SELECT cursor_4c_Produtos
-            GO TOP
-            SCAN WHILE loc_lOks
-                loc_cPro = ALLTRIM(cursor_4c_Produtos.CPros)
-
-                loc_oProg.SubTitulo.Caption = "Produto : " + loc_cPro
-                loc_oProg.Update(.T.)
-
-                *-- UPDATE SigCdPro: DscCompras, ObsCompras, DPros
-                loc_cSQL = "UPDATE SigCdPro " + ;
-                           "SET DscCompras = " + EscaparSQL(cursor_4c_Produtos.DscCompras) + ", " + ;
-                               "ObsCompras = " + EscaparSQL(cursor_4c_Produtos.ObsCompras) + ", " + ;
-                               "DPros = " + EscaparSQL(PADR(ALLTRIM(cursor_4c_Produtos.Portugues), 40)) + " " + ;
-                           "WHERE CPros = " + EscaparSQL(loc_cPro)
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                    MsgErro("Falha ao atualizar produto " + loc_cPro + " em SigCdPro.", "Erro")
-                    loc_lOks = .F.
-                ENDIF
-
-                IF loc_lOks
-                    *-- DELETE FROM SigPrPrt: remove produto enviado
-                    loc_cSQL = "DELETE FROM SigPrPrt WHERE CPros = " + EscaparSQL(loc_cPro)
-                    IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                        MsgErro("Falha ao excluir produto " + loc_cPro + " de SigPrPrt.", "Erro")
-                        loc_lOks = .F.
-                    ENDIF
-                ENDIF
-
-                IF loc_lOks
-                    SQLCOMMIT(gnConnHandle)
-                    THIS.this_nTotalGravados = THIS.this_nTotalGravados + 1
-                ELSE
-                    SQLROLLBACK(gnConnHandle)
-                ENDIF
-            ENDSCAN
-
-            loc_oProg.Complete
-
-            IF loc_lOks
-                THIS.this_lGravadoOk = .T.
-                THIS.RegistrarAuditoria("ATUALIZAR")
-                loc_lSucesso = .T.
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - grava as descricoes traduzidas (equivalente a UPDATE em lote)
-    * Form OPERACIONAL: unico caminho de persistencia disponivel.
-    * Espelha o botao btnAtualizar do legado -> chama gravacao/GravarDescricoes.
-    * RegistrarAuditoria eh disparada dentro de GravarDescricoes ao final do lote.
-    *--------------------------------------------------------------------------
-    PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            loc_lSucesso = THIS.GravarDescricoes()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - nao aplicavel a este form OPERACIONAL (nao cria produtos novos)
-    * O form atualiza descricoes de produtos ja existentes em SigCdPro.
-    * Delegamos a Atualizar para manter contrato de BusinessBase e evitar
-    * insercao acidental de registros pelo fluxo padrao Salvar().
-    *--------------------------------------------------------------------------
-    PROCEDURE Inserir()
-        RETURN THIS.Atualizar()
-    ENDPROC
+		RETURN loc_lSucesso
+	ENDPROC
 
 ENDDEFINE

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigPrEs1.prg`.
+
+## O que a fase entregou
+
+A alega├º├úo da execu├º├úo anterior ("completo, nada a fazer") **n├úo se sustentou**. Verificando controle a controle contra o dump legado, achei um defeito real e o corrigi:
+
+**`BOParaForm()` ÔÇö NOVO (o bug).** O bloco `With .Container1 ... EndWith` do `Init` legado nunca foi migrado. Ele ├® quase todo limpeza de campo (`''`/`Space(N)`), mas a ├║ltima linha ├® `.get_cd_empresa.Value = _empr`. Sem ela a Empresa abria **vazia**, e como `consulta.Click` come├ºa com `If Empty(get_cd_empresa.Value) ÔåÆ 'Empresa Inv├ílida!!!'`, **todo primeiro Consultar batia na valida├º├úo** ÔÇö o usu├írio teria de digitar a empresa a cada abertura. Migrado lendo do BO (`this_cCodigoEmpresa`, que j├í resolveu `_empr` ÔåÆ `go_4c_Sistema.cCodEmpresa`), n├úo da global.
+
+**`SincronizarFiltrosComBO` ÔåÆ `FormParaBO`.** Mesmo comportamento, nome can├┤nico do hook de `FormBase` (`PROTECTED PROCEDURE`, sem par├ómetro ÔÇö subclasse n├úo alarga escopo).
+
+**Deliberadamente ausentes** (documentado no cabe├ºalho): `CarregarLista`, `BtnSalvarClick`, `BtnCancelarClick`, `HabilitarCampos`, `AjustarBotoesPorModo`. O SCX n├úo tem Grid nem PageFrame ÔÇö os 7 `ControlSource` do dump s├úo **todos string vazia** em TextBox de filtro ÔÇö e n├úo h├í `INSERT/UPDATE/DELETE` em tabela alguma. Cri├í-los seria inventar superf├¡cie ou deixar m├®todo vazio.
+
+## Verifica├º├úo (medida, n├úo presumida)
+
+| Checagem | Resultado |
+|---|---|
+| `COMPILE` BO + Form | `COMPILE_OK`, `.err` vazios |
+| Instancia├º├úo headless | `Init OK Caption=[Posi├º├úo Por Movimenta├º├úo]` |
+| `BOParaForm` | `txt_cd_empresa=[01]` (antes `[]`); datas = hoje, tipo `D` |
+| `FormParaBO` via `BtnConsultarClick` | `BO.this_cNomeOperacao=[TESTE-OP]`, `this_nOpcaoPeriodo=2` |
+| Validador 05d (regexes reais) | 0 problemas ÔÇö tive de reescrever 2 coment├írios que davam falso positivo (`* todo ÔÇª` e `(o) Pendentes`) |
+| Blocos balanceados / `RETURN` em TRY | 42/42 PROC, 51/51 WITH, 2/2 TRY, 71/71 IF; zero `RETURN` dentro de TRY |
+
+Tamb├®m medi no VFP9 o `REPLACE <coluna datetime> WITH CTOD("")` do BO, que eu suspeitava ser type mismatch: **funciona**, devolve DateTime vazio. Fiel ao legado, sem altera├º├úo.
+
+## Um ponto que precisa da sua decis├úo
+
+O **gate da Fase 8 vai reprovar este form**, e n├úo por defeito dele:
+
+1. `$temListaLegadoF8` (linha 7309) casa o token `ControlSource` **sem olhar o valor** ÔÇö os 7 `ControlSource = ""` fazem o form parecer ter lista, o que derruba os ramos DESPACHANTE e EXIBICAO. Os helpers estritos j├í exigem valor n├úo-vazio; o predicado largo n├úo.
+2. `$padraoAcaoGravar` n├úo contempla **`Consultar`**. O legado *tem* bot├úo de a├º├úo (`Command1`, "\<Consultar") e o migrado *tem* o handler (`BtnConsultarClick`) ÔÇö a lista de palavras ├® que n├úo o alcan├ºa. ├ë a terceira recorr├¬ncia da armadilha j├í registrada ("`Processa` na lista, mas o bot├úo se chama `Processo`").
+
+N├úo mexi no `OrquestradorMigracao.ps1`: alterar predicado consumido por 6 ramos exige medi├º├úo de blast radius nos ~600 dumps, e isso est├í fora de "executar a Fase 8". Registrei os dois achados na mem├│ria do gate. Se quiser, fa├ºo o conserto fail-closed com a medi├º├úo de delta.

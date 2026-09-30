@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+A Fase 8 n├úo falhou por c├│digo: **falhou no gate de nomes de m├®todo**. Compila├º├úo estava OK e o probe funcional passou (combo carregado, s├®ries do BO corretas, troca de item, Encerrar reabilitando o pai).
+
+**N├úo modifiquei `FormSigPrGf2.prg`** ÔÇö contrariando a instru├º├úo literal da fase ÔÇö porque ele j├í estava completo e fiel: 21 m├®todos, zero TODO/stub, transcri├º├úo integral da formata├º├úo do MSGraph do legado, e um isolamento cuidadoso da falha de OLE (inclusive apagando a linha de cache no CATCH, sen├úo o `LOCATE` seguinte trataria como cache hit e nunca mais tentaria desenhar). Mtime segue em 01:52 (Fase 7).
+
+O gate exigia `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` + bot├úo de gravar. `SIGPRGF2` **├® um gr├ífico**: 1 `oleboundcontrol`, 1 ComboBox somente-sele├º├úo, 2 bot├Áes (imprimir/encerrar) ÔÇö sem grade, sem CRUD, sem persist├¬ncia (confirmado no dump: zero `BaseClass: grid`, zero TextBox/EditBox). Satisfazer o gate exigiria inventar grade e bot├úo de gravar (viola o PILAR 1) ou criar 4 m├®todos vazios (proibido pela regra de completude).
+
+Verifiquei que **nenhum** dos 9 ramos de exce├º├úo alcan├ºava, por 3 motivos medidos: (1) os predicados de "campo n├úo-digit├ível" s├│ leem `ReadOnly` na SE├ç├âO 2, e o legado marca o combo em runtime na SE├ç├âO 3; (2) `$temListaLegadoF8` d├í falso positivo casando `ControlSource`, que aqui ├® o do OLE do gr├ífico; (3) CALCULADORA exige um ├║nico bot├úo que s├│ fecha, e aqui s├úo dois e um imprime.
+
+**Corre├º├úo no gate** (`automation/OrquestradorMigracao.ps1`):
+- `Test-LegadoSomenteLeitura` passou a aceitar `ComboBox Style = 2` como 3┬¬ forma can├┤nica de campo n├úo-digit├ível. Medido no VFP9: com `Style = 0` digitar "Zebra" cai em `DisplayValue`; com `Style = 2` a digita├º├úo ├® **descartada** e at├® atribui├º├úo por c├│digo de valor fora da lista ├® recusada.
+- Novo ramo `$legadoGraficoF8`, fail-closed em 7 provas, usando predicados **pr├│prios e estreitos** (reusa `Test-LegadoAddCursorLigaGrade`/`Test-LegadoControlSourceLigaLista`) ÔÇö deixando `$temListaLegadoF8` e `$temSuperficieDespachanteF8` intocados, disciplina dos ramos PROTOCOLO/FILTRO-DESPACHO.
+
+Cheguei a fazer 3 edi├º├Áes mais largas e **revert├¡ todas** para minimizar raio de alcance. Medido nos 612 dumps de `tasks\`: as mudan├ºas afetam **3 dumps, todos o mesmo form** (SigPrGf2 em task185/288/613). Zero colateral.
+
+Gate agora passa; ambos os arquivos recompilam com zero erros.
+
+**Dois pontos que precisam da sua decis├úo:**
+
+1. **A corre├º├úo do `.ps1` n├úo desbloqueia a execu├º├úo em curso** ÔÇö o PowerShell j├í tem o script carregado. O orquestrador precisa ser re-executado para a Fase 8 passar.
+2. O erro `OLE 0x800401f3` capturado ├® **ambiente, n├úo defeito**: esta m├íquina n├úo tem nenhum ProgID `MSGraph*` registrado (`REGDB_E_CLASSNOTREG`), e nossa string de classe ├® id├¬ntica ├á do legado (dump linha 511). O `MsgAviso` que o form emite ├® o comportamento correto (regra #27). Se quiser o gr├ífico renderizando de fato, ├® preciso Office/MSGraph na m├íquina do pipeline.
+
+Registrei duas mem├│rias (o 10┬║ ramo do gate + a aus├¬ncia do MSGraph) e deixei em `automation/`: `VerificarGateFase8Task613.ps1` (avalia os predicados extraindo fun├º├Áes via **AST** ÔÇö dot-source dispararia migra├º├úo real), `SweepGateFase8Grafico.ps1` e `medir_combo_style2.prg`.

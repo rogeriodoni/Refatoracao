@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\operacionais\FormSIGPREST.prg` com a estrutura base do form OPERACIONAL:
+
+- `DEFINE CLASS FormSIGPREST AS FormBase` com layout do legado (600x191, sem TitleBar/ControlBox, modal)
+- `Init()` com guarda de `WindowType`/`ShowWindow` para n├úo travar em modo teste/valida├º├úo de UI
+- `InicializarForm()` instanciando `SIGPRESTBO` (j├í existente das Fases 1-2) e chamando `ConfigurarPageFrame()`
+- `ConfigurarPageFrame()` / `ConfigurarCabecalho()` criando `cnt_4c_Sombra` com `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, seguindo o mesmo padr├úo de `FormSIGPRCIC` (outro dialogo OPERACIONAL flat, sem PageFrame CRUD) e a nomenclatura j├í fixada em `mapeamento.json`
+- `TornarControlesVisiveis()` recursivo e `Destroy()` liberando o BO + `DODEFAULT()`
+
+N├úo inclu├¡ ainda Commandgroup3/Shape1/OK/Cancela (Fase 4), os checkboxes GeraArquivos/GeraIndices e o label Mensagem1 (Fase 5), nem os eventos (Fases 6-8), conforme escopo desta fase.
+
+Validei compilando com o VFP9 real (`vfp9.exe ... -T`) ÔÇö gerou o `.fxp` sem erro ÔÇö e removi os artefatos tempor├írios de teste.

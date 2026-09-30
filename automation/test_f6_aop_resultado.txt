@@ -1,0 +1,17 @@
+=== FASE 6 FormSigPrAop - campos restantes + eventos do Get_OP ===
+[1] VARTYPE(loForm)=O
+[2] txt_4c_Produto=.T.  ReadOnly=.T.  edt_4c_Obss=.T.  ObssCtrlSrc=[cursor_4c_DivOp.Obss]
+[3] RAISEEVENT GotFocus -> Confirmar.Enabled=.F. (esperado .F. = binding vivo)
+[4] TxtOPGotFocus OK - Confirmar.Enabled=.F.
+[5] ValidarOP(vazio) ret=.T.
+[6] apos ValidarOP(12 digitos) txt_4c_OP.Value=[3456789012] (legado limpa no insucesso)
+[7] USED(cursor_4c_DivOp)=.T.  FCOUNT=12  RECCOUNT=0
+    Grid.RecordSource=[cursor_4c_DivOp]  Col5.CtrlSrc=[cursor_4c_DivOp.QtdDivs]  Col5.Header=[Quantidade]  Col5.Width=80
+[8] TxtOPKeyPress(65/13/9) OK
+[9] TxtOPLostFocus OK
+[10] form vivo no fim=.T.
+ERROS VFP: [26/09/2026 12:33:34 AM] Erro em CarregarDados: Não foi possível carregar os itens da O.P.Connection handle is invalid.
+[26/09/2026 12:33:34 AM] Erro em CarregarDados: Não foi possível carregar os itens da O.P.Connection handle is invalid.
+[26/09/2026 12:33:34 AM] Erro em CarregarDados: Não foi possível carregar os itens da O.P.Connection handle is invalid.
+
+=== FIM ===

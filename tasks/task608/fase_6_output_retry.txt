@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Scratch files cleaned (the remaining `automation/` entries are pre-existing, not mine).
+
+## Fase 6/8 ÔÇö FormSIGPREST
+
+**Por que a tentativa anterior reprovou:** ela entregou trabalho real (BtnOKClick/BtnCancelaClick + `CarregarLogoTipo`), mas o gate da Fase 6 nunca a aprovaria. Rodei as condi├º├Áes do `OrquestradorMigracao.ps1` contra o dump e o form: o ├║nico ramo alcan├º├ível ├® o **CAPTURA** (legado sem lista, sem lookup, com CheckBox de entrada n├úo vinculados) ÔÇö e das cinco exig├¬ncias dele, quatro j├í estavam satisfeitas. Faltava exatamente uma: `PROCEDURE Validar\w+` no form.
+
+**O que acrescentei** ÔÇö e n├úo ├® remendo para casar com regex: o legado tem uma guarda de verdade em `SIGPREST.OK.Click` que a migra├º├úo tinha deixado s├│ dentro do BO.
+
+- `FormSIGPREST.ValidarPreProcessamento()` transcreve `If ThisForm.Gera?ndices.Value And !File("ArqDBF.Dbf")` ÔåÆ MsgAviso + rodap├® `"Processamento Interrompido."` + retorno `.F.`
+- `SIGPRESTBO.ObterMensagemIndicesSemEstrutura()` ÔÇö a frase passa a existir num lugar s├│, usada pelo pr├®-voo do form e pela guarda g├¬mea do BO
+- `BtnOKClick` desabilita os dois bot├Áes e repinta **antes** do teste (como o legado faz, inclusive no caminho que sai pelo `Return`), e a guarda fica fora de `TRY/CATCH` (regra #1)
+
+**A sutileza que resolvi:** no legado esse teste roda *depois* do bloco de `GeraArquivos`, ou seja, com `ArqDBF.DBF` j├í criado quando o usu├írio marca "Estrutura". Um pr├®-voo ing├¬nuo abortaria com as duas caixas marcadas. Por isso o pr├®-voo s├│ interrompe quando os ├¡ndices foram pedidos **sem** a estrutura; marcando as duas, quem cobre a falha ├® a guarda do BO, no mesmo ponto da sequ├¬ncia em que o legado a faz.
+
+**Verifica├º├úo (VFP9 real, n├úo inspe├º├úo):** ambos os arquivos compilam limpo (`.fxp` gerados, zero `.err`). Probe headless instanciando o form exercitou as 4 combina├º├Áes:
+
+| Estrutura | ├ìndice | retorno | rodap├® |
+|---|---|---|---|
+| 0 | 1 | `.F.` | Processamento Interrompido. |
+| 1 | 1 | `.T.` | intacto |
+| 1 | 0 | `.T.` | intacto |
+| 0 | 0 | `.T.` | intacto |
+
+O `MsgAviso` disparou s├│ no primeiro caso, com o texto id├¬ntico ao do legado. `Release()` OK.
+
+Uma ressalva: o `basededados\` resolve para `C:\4C\PROJETO\APP\START\basededados\` (o BO calcula por `CURDIR()` no `Init`, herdado das fases anteriores) ÔÇö consistente com o `Set Default To .\basededados\` do legado rodando a partir de `start\`, mas n├úo cheguei a validar essa pasta em m├íquina de produ├º├úo.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í bug de c├│digo para corrigir aqui. O erro 1526 ("SQL Server inexistente ou acesso negado") ocorre no pr├®-flight `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg` (ETAPA 1B), **antes** de qualquer `CREATEOBJECT("FormSigPrGlo")`/`CREATEOBJECT("SigPrGloBO")` ÔÇö ou seja, antes do nosso c├│digo sequer ser instanciado.
+
+Esta ├® a **6┬¬ tentativa consecutiva** no mesmo task615/FormSigPrGlo com exatamente este erro, e ├® um padr├úo recorrente documentado em mem├│ria h├í 100+ tasks desde 2026-08-02: a m├íquina que roda o pipeline n├úo tem rota de rede para `192.168.200.10:1433` (SQL Server DB_MBAHIA), n├úo ├® uma falha introduzida pelo c├│digo migrado.
+
+Reconferi `FormSigPrGlo.prg`/`SigPrGloBO.prg` linha a linha contra as regras do CLAUDE.md (mesmas checadas nas 5 tentativas anteriores) e n├úo encontrei nenhum defeito:
+- Nenhum `RETURN` dentro de `TRY/CATCH`
+- M├®todos `PROTECTED` sempre chamados com `THIS.`
+- Todos os handlers de `BINDEVENT` s├úo `PUBLIC` com os par├ómetros do evento declarados
+- `CommandButton` standalone com `Picture` usa `Themes = .T.`
+- Todo `CATCH` reporta `MsgErro`
+- `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL` usados sem aspas extras
+- Nenhum `EVALUATE` para atribui├º├úo, `Controls("nome")` por string ou `.Self` dentro de `WITH`
+
+Nenhuma edi├º├úo foi feita nos arquivos ÔÇö alter├í-los n├úo resolveria o erro, j├í que ele acontece antes do form ser alcan├ºado. Registrei essa reincid├¬ncia na mem├│ria do projeto para rastrear o padr├úo. Restam 4 tentativas no or├ºamento desta task; a causa raiz ├® infraestrutura (conectividade de rede da m├íquina do pipeline), n├úo c├│digo.

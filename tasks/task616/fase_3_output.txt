@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 3 ÔÇö j├í entregue; auditei em vez de regerar. N├úo escrevi nada no `.prg`.
+
+**Por que n├úo usei `Write`:** o alvo `projeto\app\forms\operacionais\FormSigPrGloT.prg` **j├í existe com 1781 linhas e 51 m├®todos**, cobrindo as Fases 3 a 8. Usar `Write` com o esqueleto da Fase 3 (como diz a se├º├úo "Uso de Ferramentas" do prompt) apagaria tudo das Fases 4-8. A se├º├úo "A├ç├âO OBRIGAT├ôRIA" do mesmo prompt manda o oposto ÔÇö `Read + Edit` sobre o arquivo existente ÔÇö e ├® essa que vale.
+
+**Evid├¬ncias de que ├® re-execu├º├úo de uma migra├º├úo j├í conclu├¡da:**
+- `SigPrGloT.scx` de task616, task188 e task291 t├¬m `md5sum` **id├¬ntico** (`4e5cf515ÔÇª`); task188/task291 est├úo `COMPLETED`.
+- A SCX ├® um **placeholder vazio**: `Form1`, 375x250, `TitleBar=0`, zero controles, **zero m├®todos** (normal em OPERACIONAL ÔÇö a l├│gica mora em `.PRG` externo). Por isso `layout.json` e `analise.json` da task nasceram vazios: a Fase 3 gerada a partir deles n├úo teria como reproduzir o que o form j├í tem.
+
+**Auditoria do escopo da Fase 3 no arquivo existente ÔÇö tudo conforme:**
+
+| Item | Situa├º├úo |
+|---|---|
+| Gate `case 3` (ramo PAGINADO) | **passa** ÔÇö `ConfigurarPageFrame` + `InicializarForm` presentes |
+| `DEFINE CLASS FormSigPrGloT AS FormBase` + props de estado | ok |
+| `Init()` s├│ com `DODEFAULT()` | ok ÔÇö n├úo rechama `InicializarForm` (Problema 8) |
+| `InicializarForm()` | cria BO via `CREATEOBJECT("SigPrGloTBO")`, carrega par├ómetros, monta estrutura |
+| `RETURN` dentro de `TRY/ENDTRY` | **nenhum** ÔÇö usa flag `loc_lSucesso`, `RETURN` ap├│s `ENDTRY` (regra #1) |
+| `Destroy()` | libera 9 cursores e termina em `DODEFAULT()` (Pattern #145) |
+| Acentos | via `CHR()` |
+| `CATCH` | `MsgErro` com `Message` + `LineNo` (regra #9) |
+| Balanceamento | `IF/ENDIF` 119/119 ┬À `PROC/ENDPROC` 51/51 ┬À `TRY/ENDTRY` 5/5 ┬À `WITH/ENDWITH` 60/60 ┬À `DEFINE/ENDDEFINE` 1/1 |
+| `.Picture` do `ConfigurarPageFrame` | `new_background.jpg` **existe** em `vbmp\` ÔÇö n├úo ├® o caso silencioso da regra #25 |
+
+N├úo encontrei defeito no escopo da Fase 3, ent├úo n├úo havia o que editar.
+
+**Uma pend├¬ncia separada, herdada da Fase 2:** `SigPrGloTBO.prg` est├í com altera├º├úo n├úo commitada no working tree (limpeza de um `IF VARTYPE()="L"` aninhado 9 vezes, artefato de auto-fix anterior). N├úo ├® da Fase 3 e n├úo mexi nela.
+
+Gravei em mem├│ria o risco do re-run destrutivo (`feedback_task_rerun_sobre_form_ja_migrado`), porque a instru├º├úo de ferramenta do prompt vai repetir esse convite em qualquer task re-enfileirada.
+
+**Decis├úo sua:** (a) marcar task616 como duplicada e seguir para as fases seguintes s├│ validando; (b) descartar `tasks/task616/` inteira; ou (c) se houver escopo novo em task616 que task188/task291 n├úo cobrem, me diga qual ÔÇö a├¡ eu edito o form existente pontualmente, sem regerar.

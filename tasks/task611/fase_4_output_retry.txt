@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da. O form passa no gate e compila limpo.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 (ramo **FLAT**, correto para este OPERACIONAL) exige tr├¬s coisas. Duas j├í estavam l├í ÔÇö `grd_4c_*` (2 grids) e `cmd_4c_*` (7 bot├Áes). Faltava a terceira: **`temCarga`** (`CarregarLista|CarregarDados|MontaGrade`) ÔÇö zero ocorr├¬ncias.
+
+N├úo era falso positivo do gate. O legado tem carga de dados real, e a tentativa anterior tinha deixado `MontaContainer`/`Transferir`/`Receber` como **stubs guardados por `PEMSTATUS`** chamando m├®todos que nunca foram criados (`PopularListaRecebimentoFtp`, `ObterQtdArquivosEnvio`ÔÇª) ÔÇö exatamente o "stub disfar├ºado" que a regra de completude pro├¡be.
+
+## O que implementei
+
+**Carga de dados real** (transcrita do dump legado, linha a linha):
+- `CarregarDados` ÔåÉ `getftpdirectory`: WinInet completo (`InternetOpen` ÔåÆ `InternetConnect` ÔåÆ `FtpSetCurrentDirectory` ÔåÆ `FtpFindFirstFile`/`InternetFindNextFile`), populando `cursor_4c_FtpServer`. Inclui o ramo `lManual` do legado (diret├│rio remoto vazio ÔåÆ entrada fict├¡cia ".").
+- `CrackFile`, `CrackDate`, `CrackAttributes` ÔåÉ parsers de `WIN32_FIND_DATA`. `CrackAttributes` mant├®m o `DO CASE` do legado (devolve s├│ o **primeiro** atributo que casa ÔÇö n├úo concatena).
+- `InErrorCase` ÔåÉ os ~70 c├│digos WinInet/Win32 com o formato final `[ <cod> : <nome> ]`.
+- `Processa` ÔåÉ alimenta o grid de progresso nos 3 est├ígios `I`/`A`/`C`; `SecToHour` para os tempos.
+
+**Stubs removidos:** `MontaContainer` chama `CarregarDados` de verdade; `Transferir`/`Receber` contam pelas **mesmas fontes que o legado** (`ADIR` na pasta local; `cursor_4c_FtpServer` filtrando `tipo` = "A"), reproduzindo o guard de lista vazia.
+
+Adicionei `lbl_4c_Progresso` (era "Fase 5-6") porque `Processa` escreve nele ÔÇö preferi cri├í-lo a deixar mais um guard, e `Destroy` agora fecha os tr├¬s cursores.
+
+## Diverg├¬ncia deliberada que voc├¬ precisa saber
+
+O legado chama `ThisForm.FileCtrlUp(...)` dentro de `processa`, mas **`ThisForm.FileControl` n├úo existe no SCX** ÔÇö n├úo consta da lista de objetos do dump, s├│ das linhas `With ThisForm.FileControl` do pr├│prio `filectrlup`. O ActiveX de progresso foi removido do form e o c├│digo ficou. Reproduzir essas chamadas daria `Unknown member FILECONTROL` em runtime, ent├úo **deixei de fora** e documentei no cabe├ºalho do m├®todo. O percentual continua vis├¡vel na coluna Status do grid e no `lbl_4c_Progresso`, como no legado. O mesmo vale para `StatCtrlUp`/`StatControl`.
+
+## Verifica├º├úo
+
+- `COMPILE` com o `vfp9.exe` real, apagando o `.fxp` antes e conferindo que foi regenerado (29.462 bytes) ÔÇö `.err` vazio, **COMPILE_OK**.
+- **Probe de runtime** das propriedades dos blocos novos (Label + Grid + Columns + `DynamicForeColor`/`DynamicBackColor`) ÔÇö `PROBE_OK`, nenhuma propriedade inexistente (regra #33, que compila├º├úo n├úo pega).
+- **Probe da aritm├®tica transcrita**: `SecToHour(3661)` = `1 h, 1 m, 1 s`; `CrackAttributes(16)` = `D`; `(32)` = `A`; `CToWord` = 16; formato do `InErrorCase` conferido.
+- Checagens est├íticas: zero acentos literais, zero `RETURN` dentro de `TRY`, zero `.Self`, zero `Controls("nome")`, `LOCAL ARRAY` para os dois `ADIR`, sem `PUBLIC` em `DEFINE CLASS`.
+
+Uma limita├º├úo honesta: `CarregarDados` n├úo foi exercitado contra um servidor FTP ÔÇö s├│ compilado e revisado contra o dump. A rota de rede para o ambiente n├úo est├í dispon├¡vel nesta m├íquina (mesmo motivo do `192.168.200.10`).
+
+**Restante para as Fases 5-8:** os 4 ListBox dos PageFrames (que distribuem `cursor_4c_FtpServer` e a listagem local), os bot├Áes de browse, `CboProvedor`, e os loops de transfer├¬ncia `rasftpput`/`rasftpget` (~195 linhas cada) que percorrem o ListBox de origem e chamam o `Processa` j├í pronto.

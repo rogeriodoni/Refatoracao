@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both flagged problems are false positives ÔÇö verified against the actual current source, not just the excerpt:
+
+**1. `THIS.EstaEmModoValidacaoOuTeste()` ÔÇö already defined.**
+It's declared at line 347 as `PROTECTED FUNCTION EstaEmModoValidacaoOuTeste()` (lines 347-350), returning a boolean based on `gb_4c_ValidandoUI`/`gb_4c_ModoTeste`. It's called correctly with the `THIS.` prefix from `InicializarForm` (lines 292, 313) and `CarregarLista` (line 591), satisfying rule #8. The detector apparently only pattern-matches `PROCEDURE <name>` and doesn't recognize `FUNCTION <name>` as a valid method definition ÔÇö a scanner limitation, not a real bug. Nothing to fix.
+
+**2. `WITH .grdTitulos` combining `.RecordSource` and `.Column` ÔÇö doesn't exist in code.**
+I grepped the whole file for `.grdTitulos`: all 3 hits (lines 308, 560, 931) are inside comments quoting the *legacy* SCX pseudocode for documentation purposes. The actual grid object is `grd_4c_Dados` (`loc_oGrid`). Checking the real code:
+- `ConfigurarGrid` (lines 418-550): the `WITH loc_oGrid` block only sets geometry/appearance props ÔÇö no `.RecordSource`. Column setup uses separate `WITH loc_oGrid.ColumnN` blocks per column, never combined with RecordSource.
+- `CarregarLista` (lines 581-661): `loc_oGrid.RecordSource = ...` and every `loc_oGrid.ColumnN.ControlSource = ...` are plain statements, not inside any `WITH` block at all.
+
+There is no site where `.RecordSource` and `.Column` are set inside the same `WITH`. This finding also appears to be the detector matching comment text, not real code.
+
+Since both problems don't reproduce in the actual file, I'm not making any changes ÔÇö editing correct, working code to satisfy a false-positive detector would violate the "don't alter business logic / don't break what works" constraint. No files were modified.

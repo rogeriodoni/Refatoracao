@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks good ÔÇö clean, compiles, and instantiates correctly. Fase 3/8 for FormSIGPRCOT is complete.
+
+**Summary of what was built** (`C:\4c\projeto\app\forms\operacionais\FormSIGPRCOT.prg`):
+
+- Recognized that SIGPRCOT is an OPERACIONAL modal child dialog (537├ù377 popup, opened from FormMoe's "C├ómbio" button), **not** a CRUD Page1/Page2 form ÔÇö the generic Fase 3 template didn't apply, so I followed the same canonical pattern used by `FormSigPrCar.prg` (small modal dialog, no PageFrame).
+- `DEFINE CLASS FormSIGPRCOT AS FormBase` with the legacy dimensions/window properties (BorderStyle=2, TitleBar=0, ControlBox=.F., DataSession=2, etc.), `par_oFormPai`, `this_cMoeda` (replaces the legacy's shared `CrSigCdMoe.cmoes` cursor with an explicit parameter, since this form has its own DataSession), and `this_nIncluir` (mirrors legacy `ThisForm.Incluir`, for later phases).
+- `Init()` capturing `par_oFormPai`/`par_cMoeda` before `DODEFAULT()`.
+- `InicializarForm()` ÔÇö builds the caption ("Cota├º├úo do <moeda>"), creates the `SIGPRCOTBO`, wires `this_cMoedaFiltro`, and calls `ConfigurarDecoracao`/`ConfigurarCabecalho`. Guards the "moeda ausente" error path against test/validation mode (avoids hanging the pipeline on a modal, per the known regra #29 pitfall).
+- `ConfigurarCabecalho()` ÔÇö faithful transcription of the legacy `cntSombra`/`lblSombra`/`lblTitulo`.
+- `TornarControlesVisiveis()` and `Destroy()` (re-enables the parent form).
+
+Grid, action buttons, and all event/business logic are deliberately deferred to Fases 4 and 7-8, per this phase's scope.
+
+**Verified**: both `SIGPRCOTBO.prg` and `FormSIGPRCOT.prg` compile cleanly in VFP9 with zero `.err` output, and a headless instantiation test (`gb_4c_ModoTeste`/`gb_4c_ValidandoUI`) confirms the form builds successfully ÔÇö caption, header labels, and `ForeColor` all come out correct, with no captured errors.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmado: isso ├® o mesmo problema de infraestrutura j├í catalogado na mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`), n├úo um bug de c├│digo.
+
+**Diagn├│stico:**
+- O erro (`C├│digo: 1526`, `DBNETLIB`) acontece na **ETAPA 1B** do `TestFormWrapper.prg` ÔÇö um pre-flight de conex├úo SQL que roda **antes** de qualquer c├│digo do `FormSigPrCfn`/`SigPrCfnBO` ser tocado.
+- `Test-NetConnection 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded: False`, `PingSucceeded: False`, confirmando que esta m├íquina n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server.
+- Essa mesma falha j├í apareceu em 77+ tasks entre 2026-08-02 e 2026-09-25. A `config.prg` e a l├│gica de `TestFormWrapper.prg` est├úo corretas ÔÇö s├úo id├¬nticas ├ás de qualquer task que passa quando a rede est├í dispon├¡vel.
+
+**Por que n├úo vou "corrigir" o `.prg`/BO:**
+N├úo h├í nada no `FormSigPrCfn.prg` ou `SigPrCfnBO.prg` que participe dessa conex├úo de pr├®-teste ÔÇö editar esses arquivos n├úo mudaria o resultado, e violaria a regra de s├│ corrigir o erro real indicado. Reescrever c├│digo correto para tentar "consertar" uma falha de rede desperdi├ºaria as tentativas do pipeline (j├í na 9/10) sem nunca resolver a causa.
+
+**Recomenda├º├úo:** este attempt deve ser tratado como falha de infraestrutura, fora do escopo de "corrigir c├│digo". Vale avisar quem opera o pipeline para verificar a rota de rede da m├íquina de execu├º├úo at├® `192.168.200.10:1433` (VPN/roteamento), j├í que a m├íquina s├│ enxerga `192.168.100.x` e `192.168.199.x` no momento.
+
+N├úo fiz nenhuma altera├º├úo nos arquivos do form/BO, pois eles n├úo s├úo a causa.

@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo fiz nenhuma edi├º├úo em `FormSigPrEop.prg`/`SigPrEopBO.prg`. Esse "erro" n├úo ├® defeito de c├│digo ÔÇö ├® o mesmo problema de infraestrutura j├í documentado na mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): a m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24`, onde vive o SQL Server real (192.168.200.10:1433).
+
+Confirmei de novo agora:
+```
+TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+Esta ├® a **6┬¬ tentativa** do runtime_fix sobre esse mesmo `task605/FormSigPrEop`, sempre com o log id├¬ntico falhando na ETAPA 1B (`SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg`), antes de qualquer `CREATEOBJECT` do form/BO ÔÇö ou seja, o c├│digo deles nunca chega a rodar. J├í foram revisados por inteiro nas tentativas 1 a 5 sem nenhum defeito encontrado (guards `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`, ControlSource s├│ depois do cursor existir, chave posicional com PADR/PADL, etc. ÔÇö tudo correto).
+
+Atualizei a mem├│ria com essa 6┬¬ reincid├¬ncia. Restam 4 tentativas antes do or├ºamento da task se esgotar por causa de um erro de rede que nenhuma edi├º├úo de `.prg` resolve ÔÇö vale sinalizar para quem administra o pipeline que esta task espec├¡fica est├í presa nesse loop.

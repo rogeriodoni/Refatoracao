@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced. Phase 3/8 is complete.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSigMvTta.prg` with the base structure:
+
+- **`DEFINE CLASS FormSigMvTta AS FormBase`** ÔÇö this is a **flat OPERACIONAL dialog**, not a CRUD form: the legacy `SIGMVTTA.SCX` has no PageFrame/Page1/Page2 (all controls ÔÇö grid, buttons, textboxes ÔÇö are direct children of the form), so per CLAUDE.md's documented gate exceptions I did not invent a PageFrame or Page1/Page2.
+- Visual properties transcribed exactly from the SCX dump (Width=1000, Height=600, BorderStyle=2, ControlBox=.F., TitleBar=0, Movable=.T., WindowType=1, DataSession=1).
+- `Init(par_cArquivo, par_cEscolha)` ÔÇö stores the two params the legacy `LParameters pArq, pEsc, pObj` passed (cursor alias + mode). The 3rd legacy param (`poDataMgr`, used only for `SqlExecute`) has no equivalent here since the new architecture uses the global `gnConnHandle` instead.
+- `InicializarForm()` ÔÇö creates `SigMvTtaBO`, recalculates the dynamic Caption from `EmpDopNums` (Emps/Dopes/Numes split, positional per rule #42), skipped safely in test/validation mode, and builds the header (`ConfigurarCabecalho`).
+- `ConfigurarCabecalho()` ÔÇö the gray header container + two overlapping labels (`lbl_4c_LblSombra`/`lbl_4c_LblTitulo`), using the exact object names from `mapeamento.json`.
+- `Destroy()` ÔÇö releases only the BO reference. Deliberately does **not** close `this_cArquivo`: that cursor belongs to the caller (populated before this dialog opens), matching the legacy `Release` (a bare `DoDefault()`).
+
+Left out for later phases as instructed: the impostos grid, the OK button, and the two description textboxes (Grupo/Conta).

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e **validada** para `Formsigprdft.prg`.
+
+## Diagn├│stico
+
+A tentativa anterior acertou o racioc├¡nio (o legado n├úo tem CRUD) mas parou antes da causa real da reprova├º├úo. Medindo os dois lados do gate (`case 7` do `OrquestradorMigracao.ps1`):
+
+| medi├º├úo | valor |
+|---|---|
+| `frmcadastro` / `Grupo_Op` / `pcEscolha` / nome de bot├úo CRUD / `X.Click` | todos **0** ÔåÆ `legadoSemCrud = .T.` |
+| `nBotoesLegado` (SAIDA = commandgroup, `ButtonCount = 1`) | **1** ÔåÆ piso cai para **1** |
+| `nHandlers` = `PROCEDURE\s+(Cmd\|Btn)\w*Click` | **0** ÔåÉ a reprova├º├úo |
+
+O handler do ├║nico bot├úo do legado **existia, completo e fiel** ÔÇö s├│ estava nomeado pelo objeto legado: `PROCEDURE CancelaClick()`, de `SIGPRDFT.SAIDA.CANCELA.Click`. Sem o prefixo `Btn`/`Cmd`, o gate n├úo o enxergava.
+
+Aqui o gate est├í **certo** ÔÇö ao contr├írio das quatro reprova├º├Áes anteriores desta fase, em que ele estava mal calibrado. O conserto ├® renomear o handler, n├úo afrouxar o gate.
+
+## Mudan├ºa aplicada
+
+`CancelaClick` ÔåÆ **`BtnCancelarClick`** (defini├º├úo, `BINDEVENT` do bot├úo, chamada do `KeyPress`/ESC), nomeado pela **a├º├úo** (cancela a transa├º├úo SiTef e libera a tela) ÔÇö que ├® tamb├®m o nome que a Fase 8 exige nominalmente, ent├úo a mesma renomea├º├úo paga as duas fases. Acrescentei ao coment├írio do m├®todo o registro de que este ├® o ├║nico bot├úo do SCX e por que os quatro `BtnXxxClick` n├úo se aplicam.
+
+Diff total: 4 linhas de c├│digo + bloco de coment├írio. Nenhuma outra refer├¬ncia ao nome antigo no projeto (os `BtnCancelaClick` do `FormBAL` s├úo de outro form).
+
+## Verifica├º├úo
+
+- **Gate da Fase 7**: replicado num script pr├│prio contra o dump real ÔåÆ `>>> FASE 7 VALIDADA`
+- **Compila├º├úo** (BO + Form, com `.FXP` apagado antes): `COMPILE_OK`, `.err` vazios
+- **`Test-CompletudeCodigo`** (o validador real, extra├¡do do orquestrador): OK nos dois arquivos ÔÇö sem TODO/stub/procedure vazia
+
+## Uma ressalva sobre o escopo
+
+Os quatro `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` que a fase nomeia **n├úo foram criados**, e n├úo devem ser: o `SIGPRDFT` ├® um di├ílogo de captura de pagamento SiTef que herda de `form` (n├úo de `frmcadastro`) e n├úo tem barra CRUD nenhuma ÔÇö cri├í-los violaria o PILAR 1 e a regra de completude. A fase passa pelo ramo de exce├º├úo do pr├│prio gate, que ├® feito exatamente para isso.
+
+Registrei a li├º├úo em mem├│ria (`feedback_gate_fase7_handler_sem_prefixo_btn_cmd`), com a tabela que separa "gate errado" de "nome fora da conven├º├úo" de "fase incompleta" ÔÇö porque depois de quatro casos seguidos de gate mal calibrado, o reflexo passa a ser afrouxar o gate, e neste caso isso teria mascarado o defeito.

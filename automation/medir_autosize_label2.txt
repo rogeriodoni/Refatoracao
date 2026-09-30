@@ -1,0 +1,16 @@
+=== ORDEM EXATA do ConfigurarControles() do FormSIGPRALE ===
+Dump SCX: mensagem 97x25 T=4 | mensagem2 221x25 T=32 | mensagem3 248x48 T=62
+
+--- AutoSize = .T. (como esta hoje) ---
+  label1 esperado 97x25  obtido 97x25  T=4   OK
+  label2 esperado 221x25  obtido 221x25  T=32   OK
+  label3 esperado 248x48  obtido 248x25  T=62   DIVERGE
+  label3 apos trocar Caption em runtime: 248x25
+
+--- AutoSize = .F. (proposto) ---
+  label1 esperado 97x25  obtido 97x25  T=4   OK
+  label2 esperado 221x25  obtido 221x25  T=32   OK
+  label3 esperado 248x48  obtido 248x48  T=62   OK
+  label3 apos trocar Caption em runtime: 248x48
+
+FIM

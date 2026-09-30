@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da.
+
+## O que estava errado
+
+O `.prg` **j├í estava correto** ÔÇö a Fase 5 reprovou por um defeito no **gate**, n├úo no c├│digo gerado.
+
+`SIGPRALE.SCX` ├® um di├ílogo "Aguarde..." *flat sem container*: s├│ `Image` + 3 `Label` penduradas direto na Form, **zero** TextBox/Grid/PageFrame/CommandButton, e o ├║nico c├│digo do form inteiro ├® um `Init` de 4 par├ómetros. O ramo DESPACHANTE da Fase 5 (`OrquestradorMigracao.ps1:6061`) exigia literalmente `ConfigurarPageFrame` quando o legado n├úo tem bot├úo ÔÇö e a **Fase 4 j├í tinha a exce├º├úo para exatamente este legado** (`$temEstruturaSemPageFrameF4`, que cita o SIGPRALE nominalmente). A Fase 5 ficou para tr├ís. Passar no gate como estava exigiria inventar um PageFrame (viola o PILAR 1) ou escrever m├®todo vazio (stub disfar├ºado, proibido).
+
+## Corre├º├Áes
+
+**1. Gate da Fase 5** (`automation/OrquestradorMigracao.ps1`) ÔÇö copiei o crit├®rio que a Fase 4 j├í usa: `$temEstruturaSemPageFrameF5` (`DEFINE CLASS ... AS FormBase` + `InicializarForm` + `CREATEOBJECT("SIGPRALEBO")` + aus├¬ncia de `AddObject("pgf_4c_`), OR-ado com o `ConfigurarPageFrame` original. FAIL-CLOSED preservado. Verificado: script parseia, e a simula├º├úo do gate contra o form agora d├í `temSuperficieDespachanteF5 : True`.
+
+**2. Defeito real de fidelidade no form** (`FormSIGPRALE.prg`) ÔÇö este eu encontrei durante a revis├úo. O `Init` legado testa `Type("_BitMap") = "C"` / `Type('_Msg1')='C'`, ou seja **presen├ºa** do par├ómetro, n├úo conte├║do. O migrado usava `!EMPTY(...)`: um chamador que passa string vazia **n├úo** apagava as Captions padr├úo do SCX, enquanto o legado apaga. Como property de texto n├úo distingue "n├úo informado" de "informado vazio", adicionei os flags `this_lTemBitmap`/`this_lTemMensagem`, setados no `Init` a partir do `VARTYPE`, e passei os dois `IF` a us├í-los ÔÇö transcri├º├úo literal do legado (regra #17).
+
+Tamb├®m entreguei a primeira metade dos 4 objetos visuais (`img_4c_Imagem` + `lbl_4c_Mensagem`) com as propriedades exatas do dump; `mensagem2`/`mensagem3` ficam para a Fase 6, como o desenho multi-fase prev├¬.
+
+## Verifica├º├úo
+
+- **Compila limpo** no VFP9, com `.FXP` recriado do zero (apaguei antes, conferi o timestamp ÔÇö n├úo rodou c├│digo velho) e removido depois para o teste do pipeline.
+- **Blast radius medido** nos 581 dumps de `tasks\`: 18 forms legado distintos casam "sem lista E sem campos", e o ramo ainda exige `FormType -eq "OPERACIONAL"`, ent├úo os `SigRe*` (REPORT) nunca entram.
+- Sem colis├úo de propriedades com `FormBase`; `FormBase.Init()` n├úo recebe par├ómetros, ent├úo `RETURN DODEFAULT()` sem argumentos est├í correto (corrigi um coment├írio que afirmava o contr├írio).
+
+Registrei a li├º├úo em mem├│ria. Uma observa├º├úo para o pipeline: esta ├® a quarta ocorr├¬ncia da mesma fam├¡lia de gate ÔÇö vale considerar extrair o crit├®rio "estrutura sem PageFrame" para uma fun├º├úo ├║nica compartilhada pelas Fases 3ÔÇô8, em vez de replicar o bloco a cada fase que descobre o problema.

@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigprcpdBO.prg",
+    "timestamp":  "2026-09-29T17:20:26",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  193,
+                          "Original":  "ConverterSegundosParaMinutos(IIF(NVL(c.Minutos, 0) = 0, 0, (a.Minutos * 60) / (c.Minutos * 60) * (b.Minutos * 60))) AS TempoReal ;",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

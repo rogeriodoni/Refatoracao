@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I reviewed all 9 findings against the actual file and every one appears to be a **false positive** from the review scanner. Here's the evidence:
+
+**5 "METODO-INEXISTENTE" findings (FTP methods)** ÔÇö all five methods are defined and correctly called:
+- `VerificarArquivoFtp` ÔÇö defined line 1859, called lines 1860, 2429
+- `RenomearArquivoFtp` ÔÇö defined line 1936, called line 2154
+- `ExcluirArquivoFtp` ÔÇö defined line 1992, called line 1707
+- `EnviarArquivoFtp` ÔÇö defined line 2069, called line 2341
+- `ReceberArquivoFtp` ÔÇö defined line 2179, called line 2432
+
+All are `PROTECTED FUNCTION` in this same file, called via `THIS.`. The scanner simply didn't see the full 2843-line file (it likely only sampled excerpts). Implementing/removing these per the instructions would delete working FTP transfer logic.
+
+**4 "NAVEGACAO-PAGINA" findings** ÔÇö these apply a CRUD ListaÔåÆDados rule ("Page2 must load the selected grid row") to a form that doesn't have that shape. `Formsigprftp` is an OPERACIONAL FTP-transfer screen with two synchronized PageFrames (`pgf_4c_Loc`/`pgf_4c_Ftp`), each with two pages representing transfer *direction* (Enviar/Receber), not master-detail. There is no grid on "Page1" whose row feeds "Page2":
+- `ConfigurarPaginaDados` runs once during `InicializarForm` (not on navigation) ÔÇö it disables whichever direction lacks a configured folder and puts `ActivePage` on the valid direction, mirroring the legacy Init's `.zOrder` guard block.
+- `PagLocRecebidosActivate`/`PagFtpAReceberActivate` only keep the *other* PageFrame's `ActivePage` in sync (as the legacy `zOrder` calls do) ÔÇö the four ListBoxes are populated together by `CarregarLista`ÔåÆ`MontaContainer`, independent of which page is active, so there's no "cursor to load" per page.
+
+Applying the suggested fix would mean inventing a `CarregarHistorico`/`CarregarDados` call that doesn't correspond to any real legacy behavior ÔÇö exactly the kind of invented logic CLAUDE.md's PILAR 2/3 rules warn against, and matches the known pattern of the METODO-INEXISTENTE/NAVEGACAO-PAGINA checkers not accounting for non-CRUD OPERACIONAL form shapes or full-file scope.
+
+**Conclusion**: no code changes made. All 9 findings are false positives; the file is correct as-is. Let me know if you'd like me to log this as a scanner false-positive pattern via the propagate-lesson skill so future FUNCTIONAL passes on OPERACIONAL forms don't re-flag it.

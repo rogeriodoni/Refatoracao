@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `TcpTestSucceeded: False`, `PingSucceeded: False` ÔÇö same "sem rota" pattern documented across the prior 5 attempts of this exact task (task611/Formsigprftp).
+
+**Diagn├│stico**: este N├âO ├® um bug de c├│digo. O erro 1526 ("SQL Server inexistente ou acesso negado") ocorre na ETAPA 1B, dentro do pr├®-flight `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT("Formsigprftp")`/`CREATEOBJECT("sigprftpBO")` ÔÇö o form e o BO nunca chegam a ser instanciados. `Formsigprftp.prg`/`sigprftpBO.prg` fornecidos no prompt t├¬m conte├║do id├¬ntico ao j├í revisado nas 5 tentativas anteriores desta mesma task, e a revis├úo completa (novamente confirmada agora) n├úo encontra defeito:
+
+- `InicializarForm` retorna `.T.` cedo em `gb_4c_ModoTeste`, sem tocar SQL/BO
+- `ConfigurarGrids` com `ColumnCount`/`RecordSource` fora do `WITH` (regra GRID-WITH)
+- `ConfigurarPaginaDados` cria os controles antes de `BOParaForm`
+- `BOParaForm`/`FormParaBO` sim├®tricos e `PROTECTED`
+- `CarregarLista`/`HabilitarCampos` `PUBLIC` (harness `TesteAutomatico.prg` os chama de fora)
+- `BINDEVENT` s├│ em m├®todos `PUBLIC`
+- nenhum `RETURN` dentro de `TRY/CATCH`
+
+A m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24` (mesma falha registrada em 79+ tasks desde 2026-08-02). N├úo fiz nenhuma edi├º├úo nos arquivos ÔÇö mudar c├│digo para um problema de rede seria uma corre├º├úo sem efeito e violaria a regra de "corrigir APENAS o erro indicado". Atualizei a mem├│ria do projeto com esta 6┬¬ reincid├¬ncia. Restam 4 tentativas antes do or├ºamento do pipeline se esgotar nesta task por causa deste erro de infraestrutura ÔÇö recomendo que algu├®m verifique a conectividade de rede/VPN da m├íquina do pipeline at├® `192.168.200.10:1433`.

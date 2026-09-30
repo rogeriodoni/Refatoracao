@@ -1,0 +1,29 @@
+[1] inicio
+[2] config.prg OK
+[3] SET PROCEDURE OK
+[4] pos CREATEOBJECT
+INSTANCIA: OK  BaseClass=Form  Caption=[ALERTA - Email]
+Column4.ReadOnly=.F.
+Column4.Text1.ReadOnly=.F.
+Column4.Text1.MaxLength=50
+Column4.ControlSource=[cursor_4c_Dados.emails]
+ValidarEnvio existe=.T.
+ValidarEmailCelula existe=.T.
+AEVENTS(Column4.Text1)=1 [KEYPRESS]
+cursor_4c_Dados USED=.T.  RECCOUNT=0
+A) grade vazia    -> ValidarEnvio=.F.
+B) nao marcada    -> ValidarEnvio=.F.
+C) marcada s/mail -> ValidarEnvio=.F.
+D) marcada c/mail -> ValidarEnvio=.T.
+E) acao invalida  -> ValidarEnvio=.F.
+F) normalizacao   -> cursor.emails=[novo@dominio.com] len=16
+G) tecla comum    -> cursor.emails=[digitando] (esperado antes@dominio.com)
+H) recno antes=2 depois=2
+J) enter s/arroba -> avisou
+I) handlers fases 4/5: OK
+--- ERROS CAPTURADOS ---
+[28/09/2026 02:44:14] Processamento de Email: Nenhum destinatário de alerta foi localizado para esta movimentação.
+[28/09/2026 02:44:14] Processamento de Email: Nenhum destinatário selecionado.Marque ao menos um e-mail antes de enviar.
+[28/09/2026 02:44:14] Processamento de Email: A primeira linha marcada está sem e-mail.Preencha a coluna Email dessa linha ou desmarque-a.
+[28/09/2026 02:44:14] Processamento de Email: Ação do alerta inválida: [XPTO].Esperado INSERIR, ALTERAR ou EXCLUIR.
+[28/09/2026 02:44:14] Processamento de Email: Endereço de e-mail inválido: [sem-arroba].Um endereço de e-mail precisa conter o caractere @.

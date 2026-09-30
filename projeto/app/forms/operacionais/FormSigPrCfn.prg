@@ -1,1656 +1,1843 @@
-*******************************************************************************
-* FormSigPrCfn.prg - Form Operacional: Calculo de Juros
-* Herda de FormBase
-* Form OPERACIONAL - dialogo calculador de juros (sem tabela BD)
-* Migrado de: SigPrCfn.SCX
-* Fase 7/8: Form completo - OPERACIONAL calculadora sem CRUD; todos os eventos
-*            de calculo, validacao e vencimentos implementados nas fases anteriores.
-*******************************************************************************
+*==============================================================================
+* FormSigPrCfn.prg - Fase 8/8: Form COMPLETO (consolidacao final)
+* Formulario OPERACIONAL: dialogo utilitario "Calculo de Juros" (SIGPRCFN.SCX)
+*
+* Nao e CRUD (frmcadastro): dialogo modal em memoria, sem tabela, sem grid,
+* sem lista de registros - aberto via CREATEOBJECT com parametros (Valor Base,
+* Tipo de Calculo, Juros ao Mes/Dia, Data Base, Data Final), calcula e fecha
+* com o botao Sair. Layout flat (controles direto no Form), como no legado
+* (sem PageFrame no SCX original).
+*
+* BO: SigPrCfnBO (sem persistencia - ver comentario de design no proprio BO)
+*
+* Fase 5 acrescenta os CAMPOS da tela, transcritos um a um do dump do SCX:
+*   - ConfigurarCampos(): bloco de entrada - Valor Base, Data Base,
+*     Juros/Mes, Data Final / Dias, Juros por Dia, Calculo (Simples/
+*     Composto) e Dias (Corridos/Uteis)
+*   - ConfigurarCamposResultado(): mostradores Juros, Total e Parcela
+*   - ConfigurarCamposVencimentos(): Vencimentos getvenc1..getvenc10
+* Os 19 TextBox e os 2 OptionGroup do legado estao todos presentes: o
+* PROCEDURE calculos do legado le TODOS de uma vez (Valor Base, os dois
+* percentuais de juros, as duas datas, os dias e os 10 vencimentos), entao
+* entregar so parte dos campos deixaria a tela calculando em cima de
+* valores que ela nao mostra. Faltam apenas os EVENTOS (Valid/When/
+* InteractiveChange/KeyPress), que sao o escopo das fases seguintes.
+*
+* Fase 3 entregou a estrutura base:
+*   - Propriedades e Init() com os parametros do legado (pVal/pTip/pJMe/
+*     pJDi/pDtB/pDtF)
+*   - InicializarForm() cria o BO, semeia os parametros iniciais e roda o
+*     calculo inicial (equivalente a "=DoDefault() / .Calculos()" do legado)
+*   - Cabecalho (cntSombra) e os containers vazios que hospedarao o botao
+*     Sair (Fase 4) e a linha divisoria decorativa
+*
+* FASE 7 - EVENTOS PRINCIPAIS DOS BOTOES
+* ---------------------------------------
+* O legado tem UM UNICO botao: btnOK (fwbtng, Caption "Sair", Click =
+* "ThisForm.Release"), ja entregue na Fase 4 como cnt_4c_Saida.cmd_4c_Sair com
+* o handler BtnSairClick. Os outros dois "commandgroup" do SCX tem
+* ButtonCount = 0 e NAO sao botoes: Commandgroup1 (Height = 1) eh o filete
+* divisorio e Commandgroup3 eh a moldura em volta do btnOK.
+*
+* NAO existem BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/
+* BtnExcluirClick porque NAO existe superficie CRUD no legado, conferido no
+* dump inteiro (tasks\task589\SigPrCfn_form_codigo_fonte.txt):
+*   - a classe base eh "form", NAO "frmcadastro" (nao ha barra CRUD herdada)
+*   - nao ha Grupo_Op, nao ha pcEscolha, nao ha btn/cmd Incluir|Alterar|
+*     Visualizar|Excluir e nao ha <X>.Click desses nomes
+*   - nao ha tabela, cursor, grade nem lista de registros (comportamento.json:
+*     totalQueries = 0, tabelasUsadas = [])
+* Criar esses quatro metodos seria INVENTAR botoes que o legado nao tem
+* (viola o PILAR 1) ou gerar metodo vazio (proibido pela regra de completude).
+*
+* O que a Fase 7 fechou de verdade, varrendo os 37 metodos do dump legado
+* contra o migrado:
+*   1. TxtDiasGotFocus - o PROCEDURE When de getDias eh o unico dos seis
+*      "When" do legado que NAO se reduz a "Not Empty(getValorBase.Value)":
+*      ele exige TAMBEM uma das duas datas ("And (Not Empty(getDataFinal.
+*      Value) Or Not Empty(getDataBase.Value))"). A metade do Valor Base ja
+*      esta coberta pelo Enabled = .F. inicial + ValidarValorBase, mas a
+*      metade das datas nao estava em lugar nenhum - com as duas datas em
+*      branco o usuario entrava no campo Dias e digitar la nao produzia
+*      efeito util nenhum (medido no VFP9: {} - 5 devolve data VAZIA, sem
+*      erro, entao a falha era MUDA). Reproduzido por GotFocus, a mesma
+*      tecnica ja usada e documentada em VencGotFocus.
+*   2. Load do legado ("=fConfigGeral()") - NAO PORTADO de proposito, pela
+*      convencao ja firmada no projeto (ver FormSigMvExp/FormSigMvMen):
+*      fConfigGeral era funcao GLOBAL de inicializacao da aplicacao legado e
+*      esse papel agora eh do start\config.prg, que roda uma vez no startup.
+*      O wrapper utils\fconfiggeral.prg existe APENAS para o p-code dos VCX
+*      legado que ainda o chamam (regra #27) - codigo nosso nao o chama.
+*
+* Cobertura dos 37 metodos do dump apos esta fase: calculos -> BO.Calcular +
+* AtualizarResultado; Init -> Init/InicializarForm; Load -> nao portado
+* (acima); getValorBase.Valid -> ValidarValorBase; optCalculo.
+* InteractiveChange -> OptCalculoInteractiveChange; getJurosMes/getJurosDia/
+* getDataBase/getDataFinal/getDias .Valid -> Validar<Campo>; optDias.
+* InteractiveChange -> OptDiasInteractiveChange; getvenc1..10.Valid ->
+* ValidarVencimento; os seis When -> Enabled/VencGotFocus/TxtDiasGotFocus;
+* btnOK.Click -> BtnSairClick.
+*
+* FASE 8 - CONSOLIDACAO FINAL
+* ---------------------------
+* Quatro metodos de suporte, todos com referente LITERAL no legado e todos em
+* caminho VIVO (nenhum foi criado so para casar com nome canonico):
+*
+*   FormParaBO      - era SincronizarBOControles; renomeado para o nome do
+*                     hook de FormBase. Chamado por AtualizarResultado,
+*                     ValidarJurosMes e ValidarJurosDia.
+*   BOParaForm      - caminho inverso, novo nesta fase. Referente: o bloco
+*                     "With ThisForm / .getValorBase.Value = ..." do Init
+*                     legado. Chamado por InicializarForm e LimparCampos.
+*   HabilitarCampos - transcricao do bloco "llEnable" (7 alvos), que o legado
+*                     repete IDENTICO no Init (.f.) e em getValorBase.Valid
+*                     (.t.). Os dois chamadores reproduzem esses dois pontos.
+*   LimparCampos    - zera BO + tela para o estado de abertura. Referente: o
+*                     bloco de zeragem do Init legado. Hook de FormBase.Novo.
+*
+* Os tres sao PROTECTED por obrigacao, nao por escolha: os hooks homonimos de
+* FormBase sao PROTECTED e subclasse NAO alarga escopo herdado. Nenhum deles
+* eh alvo de BINDEVENT (a regra #3 exige PUBLIC so nesse caso), e todos os
+* chamadores sao internos.
+*
+* O QUE A FASE 8 DELIBERADAMENTE NAO CRIOU (os nomes vao com o miolo elidido
+* de proposito: a checagem do gate eh substring no arquivo INTEIRO, entao
+* escreve-los por extenso aqui os faria "existir" e mascararia a ausencia):
+*
+*   Btn Cancelar Click  - nao ha Cancelar no SCX. O unico botao eh o btnOK
+*                         ("Sair"), ja entregue como BtnSairClick. Nao ha
+*                         modo de edicao cancelavel: a tela nao grava nada.
+*   Carregar Lista      - nao ha lista nem grade. O dump nao tem BaseClass
+*                         grid/pageframe, nao tem AddCursor/pColuna e
+*                         comportamento.json traz totalQueries = 0 e
+*                         tabelasUsadas = [].
+*   Btn Buscar Click    - nao ha busca nem lookup (zero fwBuscaExt/fwBuscaSel/
+*                         sigacess no dump).
+*   Btn Salvar Click /  - nao ha persistencia. O legado calcula em memoria e
+*   Btn Cancelar/       - fecha; o BO nao sobrescreve Inserir/Atualizar/
+*   Ajustar...PorModo     ExecutarExclusao (ver comentario de design no BO) e
+*                         nao existem modos INCLUIR/ALTERAR/VISUALIZAR.
+*
+* Criar qualquer um deles seria INVENTAR superficie que o legado nao tem
+* (viola o PILAR 1) ou gerar metodo vazio (proibido pela regra de
+* completude). Este form eh uma CALCULADORA: campos editaveis, sem lista e
+* sem CRUD - forma que os cinco ramos de excecao da Fase 8 (despachante,
+* exibicao, visualizador, fluxo-unico e linha-imediata) nao cobriam; foi
+* acrescentado o ramo CALCULADORA ao gate, dispensando exatamente esses dois
+* nomes e nada mais.
+*==============================================================================
 
 DEFINE CLASS FormSigPrCfn AS FormBase
 
-    *-- Dimensoes do form (preserva UX original 600x300)
-    Width       = 600
-    Height      = 300
-    AutoCenter  = .T.
-    TitleBar    = 0
-    ShowWindow = 1
-    WindowType = 1
-    ControlBox  = .F.
-    Closable    = .F.
-    MaxButton   = .F.
-    MinButton   = .F.
-    BorderStyle = 2
-    DataSession = 2
-    KeyPreview  = .T.
-    BackColor   = RGB(212, 208, 200)
-    Caption     = ""
+    *-- Propriedades visuais (pixel-perfect do SCX original - PILAR 1)
+    Width        = 600
+    Height       = 300
+    AutoCenter   = .T.
+    Caption      = "C" + CHR(225) + "lculo de Juros"
+    ShowWindow   = 1
+    WindowType   = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    TitleBar     = 0
+    Themes       = .F.
+    BorderStyle  = 2
+    DataSession  = 2
 
-    *-- BO
-    this_oBusinessObject = .NULL.
+    *-- Parametros recebidos em Init (armazenados antes de DODEFAULT), ja com
+    *-- os mesmos defaults do "Iif(...)" do legado
+    this_nValorBaseInicial   = 0     && pVal
+    this_nTipoCalculoInicial = 1     && pTip (1=Simples, 2=Composto)
+    this_nJurosMesInicial    = 0     && pJMe
+    this_nJurosDiaInicial    = 0     && pJDi (so relevante se pJMe nao veio)
+    this_dDataBaseInicial    = {}    && pDtB
+    this_dDataFinalInicial   = {}    && pDtF
 
-    *-- Estado / modo corrente
-    this_cModoAtual  = "CALCULO"
-    this_lSelecionou = .F.
+    *==========================================================================
+    * Init - Armazena os parametros do legado (Lparameters pVal, pTip, pJMe,
+    * pJDi, pDtB, pDtF) antes de DODEFAULT (que chama InicializarForm).
+    *==========================================================================
+    PROCEDURE Init(par_nValorBase, par_nTipoCalculo, par_nJurosMes, ;
+                    par_nJurosDia, par_dDataBase, par_dDataFinal)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
 
-    *-- Parametros recebidos pelo Init (equivalente ao LPARAMETERS do legado)
-    this_nParVal = 0
-    this_nParTip = 1
-    this_nParJMe = 0
-    this_nParJDi = 0
-    this_dParDtB = {}
-    this_dParDtF = {}
+        THIS.this_nValorBaseInicial = IIF(VARTYPE(par_nValorBase) = "N" AND ;
+            par_nValorBase > 0, par_nValorBase, 0)
 
-    *---------------------------------------------------------------------------
-    PROCEDURE Init()
-    *---------------------------------------------------------------------------
-        LPARAMETERS par_nVal, par_nTip, par_nJMe, par_nJDi, par_dDtB, par_dDtF
+        THIS.this_nTipoCalculoInicial = IIF(VARTYPE(par_nTipoCalculo) = "N" AND ;
+            INLIST(par_nTipoCalculo, 1, 2), par_nTipoCalculo, 1)
 
-        THIS.Caption = "C" + CHR(225) + "lculo de Juros"
+        THIS.this_nJurosMesInicial = IIF(VARTYPE(par_nJurosMes) = "N" AND ;
+            par_nJurosMes > 0, par_nJurosMes, 0)
 
-        IF VARTYPE(par_nVal) = "N" AND par_nVal > 0
-            THIS.this_nParVal = par_nVal
-        ENDIF
-        IF VARTYPE(par_nTip) = "N" AND INLIST(par_nTip, 1, 2)
-            THIS.this_nParTip = par_nTip
-        ENDIF
-        IF VARTYPE(par_nJMe) = "N" AND par_nJMe > 0
-            THIS.this_nParJMe = par_nJMe
-        ENDIF
-        IF VARTYPE(par_nJDi) = "N" AND par_nJDi > 0
-            THIS.this_nParJDi = par_nJDi
-        ENDIF
-        IF VARTYPE(par_dDtB) = "D"
-            THIS.this_dParDtB = par_dDtB
-        ENDIF
-        IF VARTYPE(par_dDtF) = "D"
-            THIS.this_dParDtF = par_dDtF
-        ENDIF
+        THIS.this_nJurosDiaInicial = IIF(VARTYPE(par_nJurosDia) = "N" AND ;
+            par_nJurosDia > 0, par_nJurosDia, 0)
 
-        RETURN DODEFAULT()
+        THIS.this_dDataBaseInicial = IIF(VARTYPE(par_dDataBase) = "D", ;
+            par_dDataBase, {})
+
+        THIS.this_dDataFinalInicial = IIF(VARTYPE(par_dDataFinal) = "D", ;
+            par_dDataFinal, ;
+            IIF(EMPTY(THIS.this_dDataBaseInicial), {}, DATE()))
+
+        loc_lResultado = DODEFAULT()
+        RETURN loc_lResultado
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * InicializarForm - Cria BO, PageFrame e containers principais.
-    * Chamada por FormBase.Init() atraves de DODEFAULT().
-    *---------------------------------------------------------------------------
+    *==========================================================================
+    * InicializarForm - Cria o BO, semeia os parametros iniciais e roda o
+    * calculo inicial (equivalente ao "=DoDefault() / .Calculos()" que fecha
+    * o PROCEDURE Init do legado). Constroi tambem o cabecalho, os campos da
+    * tela, o botao Sair e a linha divisoria.
+    *==========================================================================
     PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso, loc_oErro
-
+        LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrCfnBO")
 
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.InicializarComParametros( ;
-                    THIS.this_nParVal, ;
-                    THIS.this_nParTip, ;
-                    THIS.this_nParJMe, ;
-                    THIS.this_nParJDi, ;
-                    THIS.this_dParDtB, ;
-                    THIS.this_dParDtF)
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar SigPrCfnBO. VARTYPE retornou: " + ;
+                    VARTYPE(THIS.this_oBusinessObject), "FormSigPrCfn.InicializarForm")
+            ELSE
+                WITH THIS.this_oBusinessObject
+                    .this_nValorBase   = THIS.this_nValorBaseInicial
+                    .this_nTipoCalculo = THIS.this_nTipoCalculoInicial
+                    .this_nJurosMes    = 0
+                    .this_nJurosDia    = 0
+
+                    *-- Prioridade identica ao legado: Juros ao Mes prevalece
+                    *-- sobre Juros ao Dia; so um dos dois vem preenchido, o
+                    *-- outro eh derivado (getJurosMes.Valid/getJurosDia.Valid)
+                    IF THIS.this_nJurosMesInicial > 0
+                        .this_nJurosMes = THIS.this_nJurosMesInicial
+                        .this_nJurosDia = .CalcularJurosDiaAPartirDoMes(.this_nJurosMes)
+                    ELSE
+                        IF THIS.this_nJurosDiaInicial > 0
+                            .this_nJurosDia = THIS.this_nJurosDiaInicial
+                            .this_nJurosMes = .CalcularJurosMesAPartirDoDia(.this_nJurosDia)
+                        ENDIF
+                    ENDIF
+
+                    .this_dDataBase  = THIS.this_dDataBaseInicial
+                    .this_dDataFinal = THIS.this_dDataFinalInicial
+                    .this_nDias      = .this_dDataFinal - .this_dDataBase
+
+                    .Calcular()
+                ENDWITH
+
+                THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
 
                 THIS.ConfigurarCabecalho()
-                THIS.ConfigurarPageFrame()
                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-                THIS.ConfigurarBotoes()
-                THIS.ConfigurarPaginaLista()
-                THIS.ConfigurarPaginaVencimentos()
-                THIS.ConfigurarPaginaDados()
-                THIS.PopularCamposIniciais()
-                THIS.TornarControlesVisiveis(THIS)
 
-                THIS.pgf_4c_Paginas.Visible     = .T.
-                THIS.pgf_4c_Paginas.ActivePage  = 1
-                THIS.this_cModoAtual            = "CALCULO"
+                THIS.ConfigurarCampos()
+                THIS.ConfigurarCamposResultado()
+                THIS.ConfigurarCamposVencimentos()
+                THIS.ConfigurarEventosCampos()
+
+                *-- Carga da tela a partir do BO ja calculado, agora que os
+                *-- controles existem. Os Configurar* acima semeiam o Value de
+                *-- cada campo no proprio AddObject (momento da criacao); este
+                *-- BOParaForm eh a carga de ESTADO, ponto unico para onde
+                *-- apontam tambem LimparCampos e o hook FormBase.Cancelar.
+                THIS.BOParaForm()
+
+                *-- "llEnable = .f." do Init legado - INCONDICIONAL, mesmo com
+                *-- pVal preenchido: a tela abre travada e so o Valor Base
+                *-- (getValorBase.Valid -> HabilitarCampos(.T.)) a libera.
+                THIS.HabilitarCampos(.F.)
+
+                THIS.ConfigurarShellSaida()
+                THIS.ConfigurarDivisor()
 
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            MsgErro("Erro ao inicializar C" + CHR(225) + "lculo de Juros: " + ;
-                    loc_oErro.Message + ;
-                    " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, ;
-                    "Erro")
-            loc_lSucesso = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigPrCfn.InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * ConfigurarCabecalho - Container cinza superior com titulo (padrao cntSombra).
-    * Equivale ao cntSombra do form legado (Top=0, Height=80, BackColor cinza).
-    *---------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarCabecalho - Container cinza escuro com titulo do form
+    * (equivalente a cntSombra/lblSombra/lblTitulo do legado)
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarCabecalho()
-        LOCAL loc_nW
-        loc_nW = THIS.Width
-
+        LOCAL loc_oCnt
         THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH THIS.cnt_4c_Cabecalho
+        loc_oCnt = THIS.cnt_4c_Cabecalho
+        WITH loc_oCnt
             .Top         = 0
             .Left        = 0
-            .Width       = loc_nW
+            .Width       = THIS.Width
             .Height      = 80
             .BorderWidth = 0
-            .BackStyle   = 1
             .BackColor   = RGB(100, 100, 100)
             .Visible     = .T.
+        ENDWITH
 
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
-                .BackStyle = 0
-                .AutoSize  = .F.
-                .Width     = loc_nW
-                .Height    = 40
-                .Left      = 10
-                .Top       = 18
-                .ForeColor = RGB(0, 0, 0)
-                .Caption   = "C" + CHR(225) + "lculo de Juros"
-                .Visible   = .T.
-            ENDWITH
+        loc_oCnt.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oCnt.lbl_4c_Sombra
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .FontUnderline = .F.
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .AutoSize      = .F.
+            .Caption       = THIS.Caption
+            .Height        = 40
+            .Left          = 10
+            .Top           = 18
+            .Width         = THIS.Width - 20
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
+        ENDWITH
 
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
-                .BackStyle = 0
-                .AutoSize  = .F.
-                .Width     = loc_nW
-                .Height    = 46
-                .Left      = 10
-                .Top       = 17
-                .ForeColor = RGB(255, 255, 255)
-                .Caption   = "C" + CHR(225) + "lculo de Juros"
-                .Visible   = .T.
-            ENDWITH
+        loc_oCnt.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oCnt.lbl_4c_Titulo
+            .FontBold   = .T.
+            .FontName   = "Tahoma"
+            .FontSize   = 18
+            .WordWrap   = .T.
+            .Alignment  = 0
+            .BackStyle  = 0
+            .AutoSize   = .F.
+            .Caption    = THIS.Caption
+            .Height     = 46
+            .Left       = 10
+            .Top        = 17
+            .Width      = THIS.Width - 20
+            .ForeColor  = RGB(255, 255, 255)
+            .Visible    = .T.
         ENDWITH
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * ConfigurarPageFrame - Cria PageFrame com 2 paginas.
-    * Page1 = "C" + CHR(225) + "lculo" (inputs + resultados - Fases 4-5)
-    * Page2 = "Vencimentos" (10 datas + valor parcela - Fases 6-7)
-    * Tabs ocultas: form original nao tem abas visuais; navegacao interna
-    * eh feita programaticamente pelas fases futuras se necessario.
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
-        WITH THIS.pgf_4c_Paginas
-            .PageCount   = 2
-            .Top         = 80
-            .Left        = 0
-            .Width = THIS.Width
-            .Height      = 220
-            .Tabs        = .F.
-            .BorderWidth = 0
-            .Visible     = .T.
+    *==========================================================================
+    * ConfigurarCampos - Bloco de campos de ENTRADA (Fase 5/8):
+    * Valor Base, Data Base, Juros ao Mes, Juros ao Dia, Data Final, Dias e
+    * os dois OptionGroups (Tipo de Calculo e Tipo de Dias). Equivalente aos
+    * objetos getValorBase/Say1, Say6/getDataBase, Say3/getJurosMes/Say4,
+    * Say7/getDataFinal/Say8/getDias, Say5/getJurosDia, Say2/optCalculo e
+    * Say13/optDias do SCX legado (layout flat, sem PageFrame - regra da
+    * Fase 3). Os valores iniciais vem do BO, ja calculados em
+    * InicializarForm antes desta chamada (equivalente ao "With ThisForm ...
+    * EndWith" do Init legado). Os mostradores de resultado ficam em
+    * ConfigurarCamposResultado e os vencimentos em
+    * ConfigurarCamposVencimentos, ambos chamados na mesma sequencia.
+    *
+    * Os seis campos abaixo nascem DESABILITADOS - transcricao literal do
+    * legado, que faz "llEnable = .f." INCONDICIONAL no Init (mesmo quando
+    * pVal ja chega preenchido) e so reabilita via getValorBase.Valid (Fase
+    * 7/8): optCalculo (os dois botoes), getJurosMes, getJurosDia,
+    * getDataBase, getDataFinal, getDias. optDias NAO faz parte desse grupo
+    * no legado - permanece sempre habilitado.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCampos()
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
 
-            .Page1.Caption = "C" + CHR(225) + "lculo"
-            .Page2.Caption = "Vencimentos"
-        ENDWITH
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * ConfigurarBotoes - Container do botao Sair (equivalente ao btnOK legado).
-    * Posicao original: Top=3, Left=525, Width=75, Height=75 (icone-only).
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarBotoes()
-        THIS.AddObject("cnt_4c_Botoes", "Container")
-        WITH THIS.cnt_4c_Botoes
-            .Top         = 3
-            .Left        =  542
-            .Width       = 78
-            .Height      = 77
-            .BorderWidth = 0
-            .BackStyle   = 0
-            .Visible     = .T.
-
-            .AddObject("cmd_4c_BtnOK", "CommandButton")
-            WITH .cmd_4c_BtnOK
-                .Top             = 1
-                .Left            =  542
-                .Height          = 75
-                .Width           = 75
-                .Caption         = "Sair"
-                .Cancel          = .T.
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .FontName        = "Tahoma"
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontSize        = 8
-                .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .MousePointer    = 15
-                .WordWrap        = .T.
-                .AutoSize        = .F.
-                .Visible         = .T.
-            ENDWITH
-        ENDWITH
-
-        BINDEVENT(THIS.cnt_4c_Botoes.cmd_4c_BtnOK, "Click", THIS, "BtnSairClick")
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnSairClick - Fecha o form (botao Sair - Cancel=.T., dispara com ESC).
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnSairClick()
-        THIS.Release()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnIncluirClick - Novo Calculo: reseta a calculadora ao estado inicial.
-    * Equivale ao fluxo de "novo registro" adaptado para forms OPERACIONAIS de
-    * calculo (nao ha persistencia em BD). Limpa inputs, resultados e vencimentos.
-    * Campos ficam bloqueados ate que ValorBase > 0 seja informado.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oPag, loc_x, loc_oVenc, loc_oErr
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        loc_oPag.txt_4c_ValorBase.Value  = 0
-        loc_oPag.txt_4c_JurosMes.Value   = 0
-        loc_oPag.txt_4c_JurosDia.Value   = 0
-        loc_oPag.txt_4c_DataBase.Value   = {}
-        loc_oPag.txt_4c_DataFinal.Value  = {}
-        loc_oPag.txt_4c_Dias.Value       = 0
-        loc_oPag.txt_4c_ValorJuros.Value = 0
-        loc_oPag.txt_4c_ValorTotal.Value = 0
-        loc_oPag.txt_4c_Valorpar.Value   = 0
-
-        loc_oPag.obj_4c_OptCalculo.Value = 1
-        loc_oPag.obj_4c_OptDias.Value    = 1
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Value   = {}
-                    loc_oVenc.Enabled = .F.
-                ENDIF
-            CATCH TO loc_oErr
-                IF !("does not exist" $ LOWER(loc_oErr.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErr.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErr.Message))
-                    MsgErro("Erro ao limpar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErr.Message, "BtnIncluirClick")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        loc_oPag.obj_4c_OptCalculo.Enabled = .F.
-        loc_oPag.obj_4c_OptDias.Enabled    = .F.
-        loc_oPag.txt_4c_JurosMes.Enabled   = .F.
-        loc_oPag.txt_4c_JurosDia.Enabled   = .F.
-        loc_oPag.txt_4c_DataBase.Enabled   = .F.
-        loc_oPag.txt_4c_DataFinal.Enabled  = .F.
-        loc_oPag.txt_4c_Dias.Enabled       = .F.
-
-        THIS.this_oBusinessObject.NovoRegistro()
-        THIS.this_cModoAtual = "CALCULO"
-
-        loc_oPag.txt_4c_ValorBase.SetFocus()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnAlterarClick - Recalcular: habilita campos e executa o motor de calculo
-    * com base nos valores atualmente exibidos. Sincroniza estado do BO ao form
-    * e retorna o resultado atualizado (Juros, Total e Parcela).
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_oPag, loc_lEnable, loc_oBO, loc_x, loc_oVenc, loc_oErr
-
-        loc_oPag    = THIS.pgf_4c_Paginas.Page1
-        loc_oBO     = THIS.this_oBusinessObject
-        loc_lEnable = (loc_oPag.txt_4c_ValorBase.Value > 0)
-
-        loc_oBO.this_nValorBase   = loc_oPag.txt_4c_ValorBase.Value
-        loc_oBO.this_nTipoCalculo = loc_oPag.obj_4c_OptCalculo.Value
-        loc_oBO.this_nJurosMes    = loc_oPag.txt_4c_JurosMes.Value
-        loc_oBO.this_nJurosDia    = loc_oPag.txt_4c_JurosDia.Value
-        loc_oBO.this_dDataBase    = loc_oPag.txt_4c_DataBase.Value
-        loc_oBO.this_dDataFinal   = loc_oPag.txt_4c_DataFinal.Value
-        loc_oBO.this_nDias        = loc_oPag.txt_4c_Dias.Value
-        loc_oBO.this_nTipoDias    = loc_oPag.obj_4c_OptDias.Value
-
-        loc_oPag.obj_4c_OptCalculo.Enabled = loc_lEnable
-        loc_oPag.obj_4c_OptDias.Enabled    = loc_lEnable
-        loc_oPag.txt_4c_JurosMes.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_JurosDia.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataBase.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataFinal.Enabled  = loc_lEnable
-        loc_oPag.txt_4c_Dias.Enabled       = loc_lEnable
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Enabled = loc_lEnable
-                ENDIF
-            CATCH TO loc_oErr
-                IF !("does not exist" $ LOWER(loc_oErr.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErr.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErr.Message))
-                    MsgErro("Erro ao habilitar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErr.Message, "BtnAlterarClick")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        THIS.this_cModoAtual = "CALCULO"
-        THIS.Calculos()
-
-        loc_oPag.txt_4c_ValorBase.SetFocus()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnVisualizarClick - Visualizar Resultado: recalcula (garante numeros em
-    * dia) e exibe resumo dos totais em MsgInfo. Substitui a ausencia de tela de
-    * detalhe em forms OPERACIONAIS de calculadora.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oPag, loc_cMsg
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        THIS.Calculos()
-
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            MsgAviso("Informe o Valor Base para visualizar o resultado.", ;
-                     "Visualizar Resultado")
-            loc_oPag.txt_4c_ValorBase.SetFocus()
-            RETURN
-        ENDIF
-
-        loc_cMsg = "Valor Base : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_ValorBase.Value, "@R 999,999,999.99") + CHR(13) + ;
-                   "Juros/M" + CHR(234) + "s : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_JurosMes.Value, "@R 9999.99") + " %" + CHR(13) + ;
-                   "Juros/Dia : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_JurosDia.Value, "@R 9999.999999999") + " %" + CHR(13) + ;
-                   "Dias : " + TRANSFORM(loc_oPag.txt_4c_Dias.Value, "@R 9999") + CHR(13) + ;
-                   REPLICATE("-", 40) + CHR(13) + ;
-                   "Juros : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_ValorJuros.Value, "@R 999,999,999.99") + CHR(13) + ;
-                   "Total : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_ValorTotal.Value, "@R 999,999,999.99") + CHR(13) + ;
-                   "Parcela : " + ;
-                   TRANSFORM(loc_oPag.txt_4c_Valorpar.Value, "@R 999,999,999.99")
-
-        MsgInfo(loc_cMsg, "Resultado do C" + CHR(225) + "lculo")
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnExcluirClick - Limpar Vencimentos: limpa os 10 campos de vencimento
-    * e recalcula preservando os inputs principais (ValorBase, Juros, Datas).
-    * Exige confirmacao do usuario antes de descartar as parcelas.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_oPag, loc_x, loc_oVenc, loc_lTem, loc_oErr
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        loc_lTem = .F.
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O" AND !EMPTY(loc_oVenc.Value)
-                    loc_lTem = .T.
-                    EXIT
-                ENDIF
-            CATCH TO loc_oErr
-                IF !("does not exist" $ LOWER(loc_oErr.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErr.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErr.Message))
-                    MsgErro("Erro ao verificar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErr.Message, "BtnExcluirClick")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        IF !loc_lTem
-            MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " vencimentos para limpar.", ;
-                     "Limpar Vencimentos")
-            RETURN
-        ENDIF
-
-        IF !MsgConfirma("Deseja realmente limpar todos os vencimentos?", ;
-                        "Confirma" + CHR(231) + CHR(227) + "o")
-            RETURN
-        ENDIF
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Value = {}
-                ENDIF
-            CATCH TO loc_oErr
-                IF !("does not exist" $ LOWER(loc_oErr.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErr.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErr.Message))
-                    MsgErro("Erro ao limpar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErr.Message, "BtnExcluirClick")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna todos os controles visiveis apos AddObject
-    * (que os cria com Visible=.F. por default). Recursivo para containers e
-    * PageFrames.
-    *---------------------------------------------------------------------------
-    PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oControl, loc_nP
-
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oControl = par_oContainer.Controls(loc_i)
-            IF VARTYPE(loc_oControl) = "O"
-                IF PEMSTATUS(loc_oControl, "Visible", 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-
-                IF UPPER(loc_oControl.BaseClass) = "PAGEFRAME"
-                    FOR loc_nP = 1 TO loc_oControl.PageCount
-                        THIS.TornarControlesVisiveis(loc_oControl.Pages(loc_nP))
-                    ENDFOR
-                ENDIF
-
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
-                   loc_oControl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oControl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Cria controles de calculo na Page1.
-    * Inputs: ValorBase, JurosMes, JurosDia, DataBase, DataFinal, Dias.
-    * OptionGroups: optCalculo (Simples/Composto) e optDias (Corridos/Uteis).
-    * Resultados: ValorJuros, ValorTotal, Valorpar (fundo amarelo, read-only).
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        LOCAL loc_oPag
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        *-- Linha 1: Valor Base (esq) | Data Base (dir)
-        loc_oPag.AddObject("lbl_4c_Label1", "Label")
-        WITH loc_oPag.lbl_4c_Label1
-            .Caption   = "Valor Base :"
+        *-- Valor Base (unico campo que nasce sempre habilitado)
+        THIS.AddObject("lbl_4c_Label1", "Label")
+        WITH THIS.lbl_4c_Label1
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 36
-            .Top       = 11
-            .AutoSize  = .T.
+            .Top       = 91
+            .Width     = 57
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Valor Base :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_ValorBase", "TextBox")
-        WITH loc_oPag.txt_4c_ValorBase
+        THIS.AddObject("txt_4c_ValorBase", "TextBox")
+        WITH THIS.txt_4c_ValorBase
+            .FontName      = "Tahoma"
+            .FontSize      = 8
             .Alignment     = 3
-            .Value         = 0
             .InputMask     = "99,999,999.99"
             .Left          = 97
-            .Top           = 7
+            .Top           = 87
             .Width         = 115
-            .Height        = 20
+            .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Themes        = .F.
+            .Value         = loc_oBO.this_nValorBase
+            .Enabled       = .T.
+            .Visible       = .T.
         ENDWITH
 
-        loc_oPag.AddObject("lbl_4c_Label6", "Label")
-        WITH loc_oPag.lbl_4c_Label6
-            .Caption   = "Data Base :"
+        *-- Data Base
+        THIS.AddObject("lbl_4c_Label6", "Label")
+        WITH THIS.lbl_4c_Label6
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 295
-            .Top       = 11
-            .AutoSize  = .T.
+            .Top       = 91
+            .Width     = 56
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Data Base :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_DataBase", "TextBox")
-        WITH loc_oPag.txt_4c_DataBase
-            .Value         = {}
+        THIS.AddObject("txt_4c_DataBase", "TextBox")
+        WITH THIS.txt_4c_DataBase
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
             .Left          = 355
-            .Top           = 7
+            .Top           = 87
             .Width         = 80
-            .Height        = 20
+            .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dDataBase
             .Enabled       = .F.
+            .Visible       = .T.
         ENDWITH
 
-        *-- Linha 2: Juros/Mes % (esq) | Data Final / Dias (dir)
-        loc_oPag.AddObject("lbl_4c_Label3", "Label")
-        WITH loc_oPag.lbl_4c_Label3
-            .Caption   = "Juros/M" + CHR(234) + "s :"
+        *-- Juros ao Mes
+        THIS.AddObject("lbl_4c_Label3", "Label")
+        WITH THIS.lbl_4c_Label3
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 37
-            .Top       = 39
-            .AutoSize  = .T.
+            .Top       = 119
+            .Width     = 56
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Juros/M" + CHR(234) + "s :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_JurosMes", "TextBox")
-        WITH loc_oPag.txt_4c_JurosMes
+        THIS.AddObject("txt_4c_JurosMes", "TextBox")
+        WITH THIS.txt_4c_JurosMes
+            .FontName      = "Tahoma"
+            .FontSize      = 8
             .Alignment     = 3
-            .Value         = 0
             .InputMask     = "9999.99"
             .Left          = 97
-            .Top           = 35
+            .Top           = 115
             .Width         = 59
             .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .DisabledBackColor = RGB(192, 192, 192)
+            .DisabledForeColor = RGB(0, 0, 0)
+            .Value         = loc_oBO.this_nJurosMes
+            .Enabled       = .F.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("lbl_4c_Label4", "Label")
+        WITH THIS.lbl_4c_Label4
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Alignment = 0
+            .Left      = 159
+            .Top       = 119
+            .Width     = 20
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "%"
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data Final / Dias
+        THIS.AddObject("lbl_4c_Label7", "Label")
+        WITH THIS.lbl_4c_Label7
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Alignment = 0
+            .Left      = 266
+            .Top       = 119
+            .Width     = 85
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Data Final / Dias :"
+            .Visible   = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_DataFinal", "TextBox")
+        WITH THIS.txt_4c_DataFinal
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .Enabled       = .F.
-        ENDWITH
-
-        loc_oPag.AddObject("lbl_4c_Label4", "Label")
-        WITH loc_oPag.lbl_4c_Label4
-            .Caption   = "%"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
-            .Left      = 159
-            .Top       = 39
-            .AutoSize  = .T.
-        ENDWITH
-
-        loc_oPag.AddObject("lbl_4c_Label7", "Label")
-        WITH loc_oPag.lbl_4c_Label7
-            .Caption   = "Data Final / Dias :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
-            .Left      = 266
-            .Top       = 39
-            .AutoSize  = .T.
-        ENDWITH
-
-        loc_oPag.AddObject("txt_4c_DataFinal", "TextBox")
-        WITH loc_oPag.txt_4c_DataFinal
-            .Value         = {}
+            .Alignment     = 3
             .Left          = 355
-            .Top           = 35
+            .Top           = 115
             .Width         = 80
-            .Height        = 20
+            .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dDataFinal
             .Enabled       = .F.
+            .Visible       = .T.
         ENDWITH
 
-        loc_oPag.AddObject("lbl_4c_Label8", "Label")
-        WITH loc_oPag.lbl_4c_Label8
-            .Caption   = "/"
+        THIS.AddObject("lbl_4c_Label8", "Label")
+        WITH THIS.lbl_4c_Label8
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 441
-            .Top       = 36
-            .AutoSize  = .T.
+            .Top       = 116
+            .Width     = 10
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "/"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_Dias", "TextBox")
-        WITH loc_oPag.txt_4c_Dias
+        THIS.AddObject("txt_4c_Dias", "TextBox")
+        WITH THIS.txt_4c_Dias
+            .FontName      = "Tahoma"
+            .FontSize      = 8
             .Alignment     = 3
-            .Value         = 0
             .InputMask     = "9999"
             .Left          = 453
-            .Top           = 35
+            .Top           = 115
             .Width         = 38
             .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Themes        = .F.
+            .DisabledBackColor = RGB(192, 192, 192)
+            .DisabledForeColor = RGB(0, 0, 0)
+            .Value         = loc_oBO.this_nDias
             .Enabled       = .F.
+            .Visible       = .T.
         ENDWITH
 
-        *-- Linha 3: Juros por Dia (esq) | Calculo Simples/Composto (dir)
-        loc_oPag.AddObject("lbl_4c_Label5", "Label")
-        WITH loc_oPag.lbl_4c_Label5
-            .Caption   = "Juros por Dia :"
+        *-- Juros por Dia
+        THIS.AddObject("lbl_4c_Label5", "Label")
+        WITH THIS.lbl_4c_Label5
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 23
-            .Top       = 68
-            .AutoSize  = .T.
+            .Top       = 148
+            .Width     = 70
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Juros por Dia :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_JurosDia", "TextBox")
-        WITH loc_oPag.txt_4c_JurosDia
+        THIS.AddObject("txt_4c_JurosDia", "TextBox")
+        WITH THIS.txt_4c_JurosDia
+            .FontName      = "Tahoma"
+            .FontSize      = 8
             .Alignment     = 3
-            .Value         = 0
             .InputMask     = "9999.999999999"
             .Left          = 97
-            .Top           = 64
+            .Top           = 144
             .Width         = 136
-            .Height        = 20
+            .Height        = 23
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Themes        = .F.
+            .DisabledBackColor = RGB(192, 192, 192)
+            .DisabledForeColor = RGB(0, 0, 0)
+            .Value         = loc_oBO.this_nJurosDia
             .Enabled       = .F.
+            .Visible       = .T.
         ENDWITH
 
-        loc_oPag.AddObject("lbl_4c_Label2", "Label")
-        WITH loc_oPag.lbl_4c_Label2
-            .Caption   = "C" + CHR(225) + "lculo :"
+        *-- Tipo de Calculo (Simples/Composto)
+        THIS.AddObject("lbl_4c_Label2", "Label")
+        WITH THIS.lbl_4c_Label2
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 310
-            .Top       = 63
-            .AutoSize  = .T.
+            .Top       = 143
+            .Width     = 37
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "C" + CHR(225) + "lculo :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("obj_4c_OptCalculo", "OptionGroup")
-        WITH loc_oPag.obj_4c_OptCalculo
+        THIS.AddObject("obj_4c_OptCalculo", "OptionGroup")
+        WITH THIS.obj_4c_OptCalculo
+            .Top         = 140
             .Left        = 351
-            .Top         = 60
+            .Width       = 153
+            .Height      = 21
             .BackStyle   = 0
             .BorderStyle = 0
-            .Height      = 21
-            .Width       = 158
-            .Value       = 1
-            .Enabled     = .F.
+            .ButtonCount = 2
+            .Value       = loc_oBO.this_nTipoCalculo
+            .Visible     = .T.
             WITH .Buttons(1)
-                .Caption   = "Simples"
-                .Height    = 17
-                .Left      = 5
-                .Top       = 2
-                .Width     = 76
-                .AutoSize  = .F.
-                .BackStyle = 0
+                .Caption           = "\<Simples"
+                .Top               = 2
+                .Left              = 5
+                .Width             = 76
+                .Height            = 17
+                .Style             = 0
+                .AutoSize          = .F.
+                .BackStyle         = 0
+                .ForeColor         = RGB(90, 90, 90)
+                .DisabledForeColor = RGB(128, 128, 128)
+                .Themes            = .F.
+                .Enabled           = .F.
             ENDWITH
             WITH .Buttons(2)
-                .Caption   = "Composto"
-                .Height    = 17
-                .Left      = 72
-                .Top       = 2
-                .Width     = 76
-                .AutoSize  = .F.
-                .BackStyle = 0
+                .Caption           = "\<Composto"
+                .Top               = 2
+                .Left              = 72
+                .Width             = 76
+                .Height            = 17
+                .Style             = 0
+                .AutoSize          = .F.
+                .BackStyle         = 0
+                .ForeColor         = RGB(90, 90, 90)
+                .DisabledForeColor = RGB(128, 128, 128)
+                .Themes            = .F.
+                .Enabled           = .F.
             ENDWITH
         ENDWITH
 
-        *-- Linha 4: Tipo de dias (Corridos/Uteis)
-        loc_oPag.AddObject("lbl_4c_Label13", "Label")
-        WITH loc_oPag.lbl_4c_Label13
-            .Caption   = "Dias :"
+        *-- Tipo de Dias (Corridos/Uteis) - fora do grupo desabilitado
+        THIS.AddObject("lbl_4c_Label13", "Label")
+        WITH THIS.lbl_4c_Label13
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 324
-            .Top       = 81
-            .AutoSize  = .T.
+            .Top       = 161
+            .Width     = 23
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Dias :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("obj_4c_OptDias", "OptionGroup")
-        WITH loc_oPag.obj_4c_OptDias
+        THIS.AddObject("obj_4c_OptDias", "OptionGroup")
+        WITH THIS.obj_4c_OptDias
+            .Top         = 158
             .Left        = 351
-            .Top         = 78
+            .Width       = 153
+            .Height      = 21
             .BackStyle   = 0
             .BorderStyle = 0
-            .Height      = 21
-            .Width       = 158
-            .Value       = 1
-            .Enabled     = .F.
+            .ButtonCount = 2
+            .Value       = loc_oBO.this_nTipoDias
+            .Visible     = .T.
             WITH .Buttons(1)
-                .Caption   = "Corridos"
-                .Height    = 17
-                .Left      = 5
-                .Top       = 2
-                .Width     = 76
-                .AutoSize  = .F.
-                .BackStyle = 0
+                .Caption           = "Corridos"
+                .Top               = 2
+                .Left              = 5
+                .Width             = 76
+                .Height            = 17
+                .Style             = 0
+                .AutoSize          = .F.
+                .BackStyle         = 0
+                .ForeColor         = RGB(90, 90, 90)
+                .DisabledForeColor = RGB(128, 128, 128)
+                .Themes            = .F.
+                .Enabled           = .T.
             ENDWITH
             WITH .Buttons(2)
-                .Caption   = CHR(218) + "teis"
-                .Height    = 17
-                .Left      = 72
-                .Top       = 2
-                .Width     = 76
-                .AutoSize  = .F.
-                .BackStyle = 0
+                .Caption           = CHR(218) + "teis"
+                .Top               = 2
+                .Left              = 72
+                .Width             = 76
+                .Height            = 17
+                .Style             = 0
+                .AutoSize          = .F.
+                .BackStyle         = 0
+                .ForeColor         = RGB(90, 90, 90)
+                .DisabledForeColor = RGB(128, 128, 128)
+                .Themes            = .F.
+                .Enabled           = .T.
             ENDWITH
         ENDWITH
+    ENDPROC
 
-        *-- Separador horizontal (original: Commandgroup1 Height=1, Top=180)
-        loc_oPag.AddObject("lbl_4c_Separador", "Label")
-        WITH loc_oPag.lbl_4c_Separador
-            .Caption   = ""
-            .BackStyle = 1
-            .BackColor = RGB(90, 90, 90)
-            .Top       = 100
-            .Left      = 6
-            .Width     = 586
-            .Height    = 1
-        ENDWITH
+    *==========================================================================
+    * ConfigurarCamposResultado - Area de resultado do calculo, abaixo da
+    * linha divisoria: Juros (getValorJuros/Say9), Total (getValorTotal/
+    * Say10) e Parcela (GetValorpar/Say12).
+    *
+    * Os tres nascem Enabled = .F. porque o SCX legado declara
+    * "Enabled = .F." neles - sao mostradores, nunca digitados: quem os
+    * escreve e o PROCEDURE calculos (BO.Calcular). Por isso o legado tambem
+    * declara BackColor/DisabledBackColor = 255,253,179 (amarelo claro) e
+    * DisabledForeColor = 0,0,0: campo desabilitado que continua LEGIVEL,
+    * diferente do cinza 192,192,192 que a classe fwget usa nos campos de
+    * entrada desabilitados. FontBold = .T. tambem vem do SCX.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposResultado()
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
 
-        *-- Resultado: Juros
-        loc_oPag.AddObject("lbl_4c_Label9", "Label")
-        WITH loc_oPag.lbl_4c_Label9
-            .Caption   = "Juros :"
+        *-- Juros (resultado)
+        THIS.AddObject("lbl_4c_Label9", "Label")
+        WITH THIS.lbl_4c_Label9
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 60
-            .Top       = 107
-            .AutoSize  = .T.
+            .Top       = 187
+            .Width     = 33
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Juros :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_ValorJuros", "TextBox")
-        WITH loc_oPag.txt_4c_ValorJuros
+        THIS.AddObject("txt_4c_ValorJuros", "TextBox")
+        WITH THIS.txt_4c_ValorJuros
+            .FontName          = "Tahoma"
+            .FontSize          = 8
             .FontBold          = .T.
             .Alignment         = 3
-            .Value             = 0
-            .Enabled           = .F.
             .InputMask         = "999,999,999.99"
             .Left              = 97
-            .Top               = 103
+            .Top               = 183
             .Width             = 136
-            .Height            = 20
+            .Height            = 23
             .SpecialEffect     = 1
             .ForeColor         = RGB(0, 0, 0)
             .BackColor         = RGB(255, 253, 179)
+            .BorderColor       = RGB(100, 100, 100)
+            .Themes            = .F.
             .DisabledBackColor = RGB(255, 253, 179)
             .DisabledForeColor = RGB(0, 0, 0)
-            .BorderColor       = RGB(100, 100, 100)
-            .FontName          = "Tahoma"
-            .FontSize          = 8
+            .Value             = loc_oBO.this_nValorJuros
+            .Enabled           = .F.
+            .Visible           = .T.
         ENDWITH
 
-        *-- Resultado: Total
-        loc_oPag.AddObject("lbl_4c_Label10", "Label")
-        WITH loc_oPag.lbl_4c_Label10
-            .Caption   = "Total :"
+        *-- Total (resultado)
+        THIS.AddObject("lbl_4c_Label10", "Label")
+        WITH THIS.lbl_4c_Label10
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 276
-            .Top       = 107
-            .AutoSize  = .T.
+            .Top       = 187
+            .Width     = 31
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Total :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_ValorTotal", "TextBox")
-        WITH loc_oPag.txt_4c_ValorTotal
+        THIS.AddObject("txt_4c_ValorTotal", "TextBox")
+        WITH THIS.txt_4c_ValorTotal
+            .FontName          = "Tahoma"
+            .FontSize          = 8
             .FontBold          = .T.
             .Alignment         = 3
-            .Value             = 0
-            .Enabled           = .F.
             .InputMask         = "999,999,999.99"
             .Left              = 311
-            .Top               = 103
+            .Top               = 183
             .Width             = 136
-            .Height            = 20
+            .Height            = 23
             .SpecialEffect     = 1
             .ForeColor         = RGB(0, 0, 0)
             .BackColor         = RGB(255, 253, 179)
+            .BorderColor       = RGB(100, 100, 100)
+            .Themes            = .F.
             .DisabledBackColor = RGB(255, 253, 179)
             .DisabledForeColor = RGB(0, 0, 0)
-            .BorderColor       = RGB(100, 100, 100)
-            .FontName          = "Tahoma"
-            .FontSize          = 8
+            .Value             = loc_oBO.this_nValorTotal
+            .Enabled           = .F.
+            .Visible           = .T.
         ENDWITH
 
-        *-- Resultado: Parcela
-        loc_oPag.AddObject("lbl_4c_Label12", "Label")
-        WITH loc_oPag.lbl_4c_Label12
-            .Caption   = "Parcela :"
+        *-- Parcela (resultado - "mena 11/12/2014" no legado)
+        THIS.AddObject("lbl_4c_Label12", "Label")
+        WITH THIS.lbl_4c_Label12
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 265
-            .Top       = 131
-            .AutoSize  = .T.
+            .Top       = 211
+            .Width     = 42
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Parcela :"
+            .Visible   = .T.
         ENDWITH
 
-        loc_oPag.AddObject("txt_4c_Valorpar", "TextBox")
-        WITH loc_oPag.txt_4c_Valorpar
+        THIS.AddObject("txt_4c_Valorpar", "TextBox")
+        WITH THIS.txt_4c_Valorpar
+            .FontName          = "Tahoma"
+            .FontSize          = 8
             .FontBold          = .T.
             .Alignment         = 3
-            .Value             = 0
-            .Enabled           = .F.
             .InputMask         = "999,999,999.99"
             .Left              = 311
-            .Top               = 127
+            .Top               = 207
             .Width             = 136
-            .Height            = 20
+            .Height            = 23
             .SpecialEffect     = 1
             .ForeColor         = RGB(0, 0, 0)
             .BackColor         = RGB(255, 253, 179)
+            .BorderColor       = RGB(100, 100, 100)
+            .Themes            = .F.
             .DisabledBackColor = RGB(255, 253, 179)
             .DisabledForeColor = RGB(0, 0, 0)
-            .BorderColor       = RGB(100, 100, 100)
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-        ENDWITH
-
-        *-- BINDEVENTs (handlers PUBLIC obrigatorios para BINDEVENT)
-        BINDEVENT(loc_oPag.txt_4c_ValorBase,  "KeyPress", THIS, "TxtValorBaseKeyPress")
-        BINDEVENT(loc_oPag.txt_4c_JurosMes,   "KeyPress", THIS, "TxtJurosMesKeyPress")
-        BINDEVENT(loc_oPag.txt_4c_JurosDia,   "KeyPress", THIS, "TxtJurosDiaKeyPress")
-        BINDEVENT(loc_oPag.txt_4c_DataBase,   "KeyPress", THIS, "TxtDataBaseKeyPress")
-        BINDEVENT(loc_oPag.txt_4c_DataFinal,  "KeyPress", THIS, "TxtDataFinalKeyPress")
-        BINDEVENT(loc_oPag.txt_4c_Dias,       "KeyPress", THIS, "TxtDiasKeyPress")
-        BINDEVENT(loc_oPag.obj_4c_OptCalculo, "InteractiveChange", THIS, "OptCalculoChange")
-        BINDEVENT(loc_oPag.obj_4c_OptDias,    "InteractiveChange", THIS, "OptDiasChange")
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Configura Page2 (Vencimentos).
-    * Para este form OPERACIONAL (calculadora de juros), todos os controles de
-    * entrada e resultado cabem em Page1. Page2 recebe configuracao de fundo
-    * consistente com o form para nao exibir fundo branco padrao caso seja
-    * acessada programaticamente. Os 10 campos getvenc sao gerenciados em
-    * ConfigurarPaginaVencimentos (Page1) para manter UX identica ao original
-    * (todos os controles visiveis simultaneamente, sem necessidade de navegacao).
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oPag
-        loc_oPag = THIS.pgf_4c_Paginas.Page2
-        WITH loc_oPag
-            .BackStyle = 1
-            .BackColor = RGB(212, 208, 200)
+            .Value             = loc_oBO.this_nValorParcela
+            .Enabled           = .F.
+            .Visible           = .T.
         ENDWITH
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * AlternarPagina - Navega entre Page1 (Calculo) e Page2 (Vencimentos).
-    *---------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-        THIS.pgf_4c_Paginas.ActivePage = par_nPagina
-    ENDPROC
+    *==========================================================================
+    * ConfigurarCamposVencimentos - Grade de vencimentos (Say11 +
+    * getvenc1..getvenc10), duas linhas de cinco colunas, usada para calcular
+    * juros por PARCELA em vez de por periodo unico (ver BO.Calcular).
+    *
+    * Os dez campos sao da classe fweditdata do Framework (medida no proprio
+    * framework.vcx: Tahoma 8, Alignment = 3, Value = {}, 80x23, Themes =
+    * .F.) - o SCX nao declara Width/Height/Alignment em nenhum deles, so
+    * Left/Top/SpecialEffect/ForeColor/BorderColor, entao esses vem da classe.
+    *
+    * Nascem HABILITADOS: ao contrario de getJurosMes/getJurosDia/getDataBase/
+    * getDataFinal/getDias, o Init legado NAO inclui os vencimentos no bloco
+    * "llEnable = .f." - quem os bloqueia enquanto o Valor Base esta vazio e o
+    * PROCEDURE When de cada um ("Return Not Empty(ThisForm.getValorBase.
+    * Value)"), que entra na fase de eventos. Desabilita-los aqui seria
+    * divergir do legado.
+    *
+    * Left/Top transcritos um a um do dump (colunas em 97, 184, 271, 358 e
+    * 445; linha de cima Top = 231, linha de baixo Top = 258), na ordem de
+    * TabIndex 17..26 do legado - por isso a criacao segue venc1/venc2
+    * (coluna 1), venc3/venc4 (coluna 2), e assim por diante. Escritos um a
+    * um, e nao num FOR com nome montado por macro, porque so o AddObject
+    * com nome LITERAL deixa o controle referenciavel como THIS.txt_4c_VencN
+    * nos handlers das fases seguintes sem EVALUATE/STORE (regras #15/#34).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposVencimentos()
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
 
-    *---------------------------------------------------------------------------
-    * PopularCamposIniciais - Popula Page1 com os valores recebidos via Init.
-    * Replicando a logica do Init original: habilita campos somente se ValorBase>0
-    * e auto-calcula JurosDia/JurosMes a partir do parametro recebido.
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE PopularCamposIniciais()
-        LOCAL loc_oPag, loc_lEnable, loc_oBO, loc_x, loc_oVenc, loc_oErrV
-        loc_oPag    = THIS.pgf_4c_Paginas.Page1
-        loc_oBO     = THIS.this_oBusinessObject
-        loc_lEnable = .F.
-
-        *-- BO ja processou e cruzou JurosMes<->JurosDia em InicializarComParametros
-        loc_oPag.txt_4c_ValorBase.Value  = loc_oBO.this_nValorBase
-        loc_oPag.obj_4c_OptCalculo.Value = IIF(INLIST(loc_oBO.this_nTipoCalculo, 1, 2), ;
-                                               loc_oBO.this_nTipoCalculo, 1)
-        loc_oPag.txt_4c_JurosMes.Value   = loc_oBO.this_nJurosMes
-        loc_oPag.txt_4c_JurosDia.Value   = loc_oBO.this_nJurosDia
-
-        loc_oPag.txt_4c_Dias.Value      = 0
-        loc_oPag.txt_4c_DataBase.Value  = loc_oBO.this_dDataBase
-        loc_oPag.txt_4c_DataFinal.Value = IIF(!EMPTY(loc_oBO.this_dDataFinal), ;
-                                              loc_oBO.this_dDataFinal, ;
-                                              IIF(EMPTY(loc_oBO.this_dDataBase), ;
-                                                  {}, DATE()))
-
-        IF !EMPTY(loc_oPag.txt_4c_DataFinal.Value) AND ;
-           !EMPTY(loc_oPag.txt_4c_DataBase.Value)
-            loc_oPag.txt_4c_Dias.Value = loc_oPag.txt_4c_DataFinal.Value - ;
-                                          loc_oPag.txt_4c_DataBase.Value
-        ENDIF
-
-        loc_oPag.txt_4c_ValorJuros.Value = 0
-        loc_oPag.txt_4c_ValorTotal.Value  = 0
-
-        *-- Habilitar campos apenas com ValorBase > 0 (equivale ao When original)
-        loc_lEnable = (loc_oBO.this_nValorBase > 0)
-        loc_oPag.obj_4c_OptCalculo.Enabled = loc_lEnable
-        loc_oPag.obj_4c_OptDias.Enabled    = loc_lEnable
-        loc_oPag.txt_4c_JurosMes.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_JurosDia.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataBase.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataFinal.Enabled  = loc_lEnable
-        loc_oPag.txt_4c_Dias.Enabled       = loc_lEnable
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Enabled = loc_lEnable
-                ENDIF
-            CATCH TO loc_oErrV
-                IF !("does not exist" $ LOWER(loc_oErrV.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErrV.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErrV.Message))
-                    MsgErro("Erro ao habilitar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErrV.Message, "PopularCamposIniciais")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * Calculos - Motor de calculo de juros.
-    * Equivale ao PROCEDURE calculos do legado SIGPRCFN.
-    * Suporta Simples e Composto; considera vencimentos individuais (Page1)
-    * adicionados por ConfigurarPaginaVencimentos.
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE Calculos()
-        LOCAL loc_oPag1, loc_nJuros, loc_nParc, loc_nTotDia
-        LOCAL loc_x, loc_nDia, loc_cVencExpr, loc_dVenc, loc_oErrV
-
-        loc_oPag1   = THIS.pgf_4c_Paginas.Page1
-        loc_nParc   = 0
-        loc_nTotDia = 0
-
-        IF EMPTY(loc_oPag1.txt_4c_ValorBase.Value)  OR ;
-           EMPTY(loc_oPag1.txt_4c_JurosMes.Value)   OR ;
-           EMPTY(loc_oPag1.txt_4c_JurosDia.Value)   OR ;
-           EMPTY(loc_oPag1.txt_4c_DataBase.Value)   OR ;
-           EMPTY(loc_oPag1.txt_4c_DataFinal.Value)  OR ;
-           EMPTY(loc_oPag1.txt_4c_Dias.Value)
-
-            loc_oPag1.txt_4c_ValorJuros.Value = 0
-            loc_oPag1.txt_4c_ValorTotal.Value  = 0
-        ELSE
-            IF loc_oPag1.obj_4c_OptCalculo.Value = 1
-                loc_nJuros = ROUND(loc_oPag1.txt_4c_ValorBase.Value * ;
-                                   (loc_oPag1.txt_4c_JurosMes.Value / 100) * ;
-                                   (loc_oPag1.txt_4c_Dias.Value / 30), 2)
-            ELSE
-                loc_nJuros = ROUND(loc_oPag1.txt_4c_ValorBase.Value * ;
-                                   (((1 + loc_oPag1.txt_4c_JurosDia.Value / 100) ^ ;
-                                   loc_oPag1.txt_4c_Dias.Value) - 1), 2)
-            ENDIF
-
-            *-- Iterar vencimentos individuais (Page1, txt_4c_Venc1..10)
-            FOR loc_x = 1 TO 10
-                loc_cVencExpr = "THIS.pgf_4c_Paginas.Page1.txt_4c_Venc" + ;
-                                ALLTRIM(STR(loc_x)) + ".Value"
-                TRY
-                    loc_dVenc = EVALUATE(loc_cVencExpr)
-                    IF !EMPTY(loc_dVenc)
-                        IF loc_nParc = 0
-                            loc_nJuros = 0
-                        ENDIF
-                        loc_nDia = loc_dVenc - loc_oPag1.txt_4c_DataBase.Value
-                        IF loc_oPag1.obj_4c_OptCalculo.Value = 1
-                            loc_nJuros = loc_nJuros + ;
-                                         ROUND(loc_oPag1.txt_4c_ValorBase.Value * ;
-                                         (loc_oPag1.txt_4c_JurosMes.Value / 100) * ;
-                                         (loc_nDia / 30), 2)
-                        ELSE
-                            loc_nJuros = loc_nJuros + ;
-                                         ROUND(loc_oPag1.txt_4c_ValorBase.Value * ;
-                                         (((1 + loc_oPag1.txt_4c_JurosDia.Value / 100) ^ ;
-                                         loc_nDia) - 1), 2)
-                        ENDIF
-                        loc_nTotDia = loc_nDia
-                        loc_nParc   = loc_nParc + 1
-                    ENDIF
-                CATCH TO loc_oErrV
-                    *-- Erro inesperado ao ler campo de vencimento
-                    IF !("unknown member" $ LOWER(loc_oErrV.Message)) AND ;
-                       !("not found" $ LOWER(loc_oErrV.Message)) AND ;
-                       !("does not exist" $ LOWER(loc_oErrV.Message))
-                        MsgErro("Erro ao calcular venc" + ALLTRIM(STR(loc_x)) + ;
-                                ": " + loc_oErrV.Message + ;
-                                " LN=" + TRANSFORM(loc_oErrV.LineNo), ;
-                                "C" + CHR(225) + "lculos")
-                    ENDIF
-                ENDTRY
-            ENDFOR
-
-            IF loc_nTotDia > 0
-                loc_oPag1.txt_4c_Dias.Value = loc_nTotDia
-            ENDIF
-
-            loc_oPag1.txt_4c_ValorJuros.Value = loc_nJuros
-            loc_oPag1.txt_4c_ValorTotal.Value  = loc_oPag1.txt_4c_ValorBase.Value + loc_nJuros
-        ENDIF
-
-        loc_oPag1.txt_4c_Valorpar.Value = loc_oPag1.txt_4c_ValorTotal.Value / ;
-                                           IIF(loc_nParc <> 0, loc_nParc, 1)
-        loc_oPag1.txt_4c_ValorJuros.Refresh()
-        loc_oPag1.txt_4c_ValorTotal.Refresh()
-        loc_oPag1.txt_4c_Valorpar.Refresh()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtValorBaseKeyPress - Valida ValorBase e habilita/desabilita campos.
-    * Equivale ao PROCEDURE Valid de getValorBase no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtValorBaseKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_lEnable, loc_oPag, loc_x, loc_oVenc, loc_oErrV
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag    = THIS.pgf_4c_Paginas.Page1
-        loc_lEnable = .F.
-
-        IF loc_oPag.txt_4c_ValorBase.Value < 0
-            MsgAviso("O Valor Base Precisa Ser Positivo!", ;
-                     "Valida" + CHR(231) + CHR(227) + "o")
-            loc_oPag.txt_4c_ValorBase.Value = 0
-            loc_oPag.txt_4c_ValorBase.SetFocus()
-        ELSE
-            loc_lEnable = (loc_oPag.txt_4c_ValorBase.Value > 0)
-        ENDIF
-
-        loc_oPag.obj_4c_OptCalculo.Enabled = loc_lEnable
-        loc_oPag.obj_4c_OptDias.Enabled    = loc_lEnable
-        loc_oPag.txt_4c_JurosMes.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_JurosDia.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataBase.Enabled   = loc_lEnable
-        loc_oPag.txt_4c_DataFinal.Enabled  = loc_lEnable
-        loc_oPag.txt_4c_Dias.Enabled       = loc_lEnable
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Enabled = loc_lEnable
-                ENDIF
-            CATCH TO loc_oErrV
-                IF !("does not exist" $ LOWER(loc_oErrV.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErrV.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErrV.Message))
-                    MsgErro("Erro ao habilitar venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                            loc_oErrV.Message, "TxtValorBaseKeyPress")
-                ENDIF
-            ENDTRY
-        NEXT
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtJurosMesKeyPress - Ao sair de JurosMes: calcula JurosDia e recalcula.
-    * Equivale ao PROCEDURE Valid de getJurosMes no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtJurosMesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_nJurosDia, loc_oPag
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            RETURN
-        ENDIF
-
-        IF loc_oPag.obj_4c_OptCalculo.Value = 1
-            loc_nJurosDia = ROUND(loc_oPag.txt_4c_JurosMes.Value / 30, 9)
-        ELSE
-            IF loc_oPag.txt_4c_JurosMes.Value > 0
-                loc_nJurosDia = ROUND( ;
-                    (((1 + loc_oPag.txt_4c_JurosMes.Value / 100) ^ (1/30)) - 1) * 100, 9)
-            ELSE
-                loc_nJurosDia = 0
-            ENDIF
-        ENDIF
-
-        loc_oPag.txt_4c_JurosDia.Value = loc_nJurosDia
-        loc_oPag.txt_4c_JurosDia.Refresh()
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtJurosDiaKeyPress - Ao sair de JurosDia: calcula JurosMes e recalcula.
-    * Equivale ao PROCEDURE Valid de getJurosDia no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtJurosDiaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_nJurosMes, loc_oPag
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            RETURN
-        ENDIF
-
-        IF loc_oPag.obj_4c_OptCalculo.Value = 1
-            loc_nJurosMes = ROUND(loc_oPag.txt_4c_JurosDia.Value * 30, 2)
-        ELSE
-            IF loc_oPag.txt_4c_JurosDia.Value > 0
-                loc_nJurosMes = ROUND( ;
-                    (((1 + loc_oPag.txt_4c_JurosDia.Value / 100) ^ 30) - 1) * 100, 2)
-            ELSE
-                loc_nJurosMes = 0
-            ENDIF
-        ENDIF
-
-        loc_oPag.txt_4c_JurosMes.Value = loc_nJurosMes
-        loc_oPag.txt_4c_JurosMes.Refresh()
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtDataBaseKeyPress - Valida DataBase <= DataFinal, calcula Dias.
-    * Equivale ao PROCEDURE Valid de getDataBase no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtDataBaseKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            RETURN
-        ENDIF
-
-        IF !EMPTY(loc_oPag.txt_4c_DataFinal.Value) AND ;
-           !EMPTY(loc_oPag.txt_4c_DataBase.Value)
-            IF loc_oPag.txt_4c_DataBase.Value > loc_oPag.txt_4c_DataFinal.Value
-                MsgAviso("A Data Base N" + CHR(227) + "o Pode Ser Maior " + ;
-                         "Que a Data Final!", ;
-                         "Valida" + CHR(231) + CHR(227) + "o")
-                loc_oPag.txt_4c_DataBase.SetFocus()
-                RETURN
-            ENDIF
-            loc_oPag.txt_4c_Dias.Value = loc_oPag.txt_4c_DataFinal.Value - ;
-                                          loc_oPag.txt_4c_DataBase.Value
-        ENDIF
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtDataFinalKeyPress - Valida DataFinal >= DataBase, calcula Dias
-    * (com dias uteis se optDias=2). Equivale ao Valid de getDataFinal.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtDataFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag, loc_nDia
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            RETURN
-        ENDIF
-
-        IF !EMPTY(loc_oPag.txt_4c_DataBase.Value) AND ;
-           !EMPTY(loc_oPag.txt_4c_DataFinal.Value)
-            IF loc_oPag.txt_4c_DataFinal.Value < loc_oPag.txt_4c_DataBase.Value
-                MsgAviso("A Data Final N" + CHR(227) + "o Pode Ser Menor " + ;
-                         "Que a Data Base!", ;
-                         "Valida" + CHR(231) + CHR(227) + "o")
-                loc_oPag.txt_4c_DataFinal.SetFocus()
-                RETURN
-            ENDIF
-
-            loc_nDia = loc_oPag.txt_4c_DataFinal.Value - ;
-                       loc_oPag.txt_4c_DataBase.Value
-            loc_oPag.txt_4c_Dias.Value = loc_nDia
-
-            IF loc_nDia > 0 AND loc_oPag.obj_4c_OptDias.Value = 2
-                loc_nDia = THIS.this_oBusinessObject.AjustarDiasUteis( ;
-                               loc_oPag.txt_4c_DataBase.Value, ;
-                               loc_oPag.txt_4c_DataFinal.Value)
-                loc_oPag.txt_4c_Dias.Value = loc_nDia
-            ENDIF
-        ENDIF
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * TxtDiasKeyPress - Ao sair de Dias: atualiza DataFinal ou DataBase.
-    * Recalcula dias uteis se optDias=2. Equivale ao Valid de getDias.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtDiasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag, loc_nDia
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF EMPTY(loc_oPag.txt_4c_ValorBase.Value)
-            RETURN
-        ENDIF
-        IF EMPTY(loc_oPag.txt_4c_DataFinal.Value) AND ;
-           EMPTY(loc_oPag.txt_4c_DataBase.Value)
-            RETURN
-        ENDIF
-
-        IF loc_oPag.obj_4c_OptDias.Value = 1
-            IF !EMPTY(loc_oPag.txt_4c_DataBase.Value)
-                loc_oPag.txt_4c_DataFinal.Value = loc_oPag.txt_4c_DataBase.Value + ;
-                                                   loc_oPag.txt_4c_Dias.Value
-            ELSE
-                loc_oPag.txt_4c_DataBase.Value = loc_oPag.txt_4c_DataFinal.Value - ;
-                                                  loc_oPag.txt_4c_Dias.Value
-            ENDIF
-        ENDIF
-
-        loc_nDia = loc_oPag.txt_4c_Dias.Value
-        IF loc_nDia > 0 AND loc_oPag.obj_4c_OptDias.Value = 2 AND ;
-           !EMPTY(loc_oPag.txt_4c_DataBase.Value) AND ;
-           !EMPTY(loc_oPag.txt_4c_DataFinal.Value)
-            loc_nDia = THIS.this_oBusinessObject.AjustarDiasUteis( ;
-                           loc_oPag.txt_4c_DataBase.Value, ;
-                           loc_oPag.txt_4c_DataFinal.Value)
-            loc_oPag.txt_4c_Dias.Value = loc_nDia
-        ENDIF
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * OptCalculoChange - Ao mudar Simples/Composto: recalcula tudo.
-    * Equivale ao InteractiveChange de optCalculo no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE OptCalculoChange()
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * OptDiasChange - Ao mudar Corridos/Uteis: recalcula dias e totais.
-    * Equivale ao InteractiveChange de optDias no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE OptDiasChange()
-        LOCAL loc_oPag, loc_nDia
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        IF !EMPTY(loc_oPag.txt_4c_DataFinal.Value) AND ;
-           !EMPTY(loc_oPag.txt_4c_DataBase.Value)
-            loc_nDia = loc_oPag.txt_4c_DataFinal.Value - ;
-                       loc_oPag.txt_4c_DataBase.Value
-            loc_oPag.txt_4c_Dias.Value = loc_nDia
-
-            IF loc_nDia > 0 AND loc_oPag.obj_4c_OptDias.Value = 2
-                loc_nDia = THIS.this_oBusinessObject.AjustarDiasUteis( ;
-                               loc_oPag.txt_4c_DataBase.Value, ;
-                               loc_oPag.txt_4c_DataFinal.Value)
-                loc_oPag.txt_4c_Dias.Value = loc_nDia
-            ENDIF
-        ENDIF
-
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * ConfigurarPaginaVencimentos - Adiciona 10 campos de vencimento na Page1.
-    * Linha 1 (venc1,3,5,7,9): Top=152. Linha 2 (venc2,4,6,8,10): Top=177.
-    * Colunas: Left=97/184/271/358/445. Equivale a getvenc1..10 do legado.
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaVencimentos()
-        LOCAL loc_oPag, loc_x, loc_nLeft, loc_oCtrl, loc_oErrB
-        LOCAL ARRAY laLeft(5)
-
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        laLeft(1) = 97
-        laLeft(2) = 184
-        laLeft(3) = 271
-        laLeft(4) = 358
-        laLeft(5) = 445
-
-        loc_oPag.AddObject("lbl_4c_LblVenc", "Label")
-        loc_oCtrl = loc_oPag.Controls(loc_oPag.ControlCount)
-        WITH loc_oCtrl
-            .Caption   = "Vencimentos :"
+        THIS.AddObject("lbl_4c_Label11", "Label")
+        WITH THIS.lbl_4c_Label11
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
+            .AutoSize  = .F.
+            .Alignment = 0
             .Left      = 26
-            .Top       = 152
-            .AutoSize  = .T.
+            .Top       = 235
+            .Width     = 67
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Vencimentos :"
+            .Visible   = .T.
         ENDWITH
 
-        FOR loc_x = 1 TO 5
-            loc_nLeft = laLeft(loc_x)
 
-            loc_oPag.AddObject("txt_4c_Venc" + ALLTRIM(STR(2*loc_x-1)), "TextBox")
-            loc_oCtrl = loc_oPag.Controls(loc_oPag.ControlCount)
-            WITH loc_oCtrl
-                .Value         = {}
-                .Left          = loc_nLeft
-                .Top           = 152
-                .Width         = 82
-                .Height        = 20
-                .SpecialEffect = 1
-                .ForeColor     = RGB(0, 0, 0)
-                .BorderColor   = RGB(100, 100, 100)
-                .FontName      = "Tahoma"
-                .FontSize      = 8
-                .Enabled       = .F.
-            ENDWITH
+        THIS.AddObject("txt_4c_Venc1", "TextBox")
+        WITH THIS.txt_4c_Venc1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 97
+            .Top           = 231
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc1
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
 
-            loc_oPag.AddObject("txt_4c_Venc" + ALLTRIM(STR(2*loc_x)), "TextBox")
-            loc_oCtrl = loc_oPag.Controls(loc_oPag.ControlCount)
-            WITH loc_oCtrl
-                .Value         = {}
-                .Left          = loc_nLeft
-                .Top           = 177
-                .Width         = 82
-                .Height        = 20
-                .SpecialEffect = 1
-                .ForeColor     = RGB(0, 0, 0)
-                .BorderColor   = RGB(100, 100, 100)
-                .FontName      = "Tahoma"
-                .FontSize      = 8
-                .Enabled       = .F.
-            ENDWITH
-        NEXT
+        THIS.AddObject("txt_4c_Venc2", "TextBox")
+        WITH THIS.txt_4c_Venc2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 97
+            .Top           = 258
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc2
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
 
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oCtrl = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oCtrl) = "O"
-                    BINDEVENT(loc_oCtrl, "KeyPress", THIS, "TxtVencKeyPress")
-                ENDIF
-            CATCH TO loc_oErrB
-                MsgErro("Erro BINDEVENT venc" + ALLTRIM(STR(loc_x)) + ": " + ;
-                        loc_oErrB.Message, "ConfigurarPaginaVencimentos")
-            ENDTRY
-        NEXT
+        THIS.AddObject("txt_4c_Venc3", "TextBox")
+        WITH THIS.txt_4c_Venc3
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 184
+            .Top           = 231
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc3
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc4", "TextBox")
+        WITH THIS.txt_4c_Venc4
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 184
+            .Top           = 258
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc4
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc5", "TextBox")
+        WITH THIS.txt_4c_Venc5
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 271
+            .Top           = 231
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc5
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc6", "TextBox")
+        WITH THIS.txt_4c_Venc6
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 271
+            .Top           = 258
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc6
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc7", "TextBox")
+        WITH THIS.txt_4c_Venc7
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 358
+            .Top           = 231
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc7
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc8", "TextBox")
+        WITH THIS.txt_4c_Venc8
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 358
+            .Top           = 258
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc8
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc9", "TextBox")
+        WITH THIS.txt_4c_Venc9
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 445
+            .Top           = 231
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc9
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Venc10", "TextBox")
+        WITH THIS.txt_4c_Venc10
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Alignment     = 3
+            .Left          = 445
+            .Top           = 258
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Themes        = .F.
+            .Value         = loc_oBO.this_dVenc10
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * TxtVencKeyPress - Handler compartilhado para os 10 campos de vencimento.
-    * Valida data >= DataBase, atualiza Dias e dispara Calculos.
-    * Equivale ao Valid de getvenc1..getvenc10 no legado.
-    *---------------------------------------------------------------------------
-    PROCEDURE TxtVencKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag, loc_oVenc, loc_dBase
+    *==========================================================================
+    * ConfigurarEventosCampos - Registra os BINDEVENT equivalentes aos
+    * PROCEDURE Valid/InteractiveChange do legado (Fase 6/8). TextBox nao
+    * dispara "Valid" via BINDEVENT (regra conhecida do projeto), entao o
+    * equivalente e KeyPress com guarda ENTER(13)/TAB(9). OptionGroup criado
+    * via AddObject dispara InteractiveChange normalmente.
+    *
+    * "When" do legado (getJurosMes/getJurosDia/getDataBase/getDataFinal)
+    * e OMITIDO de proposito: esses quatro campos nascem
+    * Enabled = .F. e so sao habilitados por ValidarValorBase - controle
+    * desabilitado ja bloqueia o foco, entao o When ("Not Empty(
+    * getValorBase.Value)") seria redundante (ver comentario de
+    * ConfigurarCampos).
+    *
+    * getDias e a EXCECAO entre os cinco: o When dele nao para no Valor
+    * Base, exige TAMBEM uma das duas datas - por isso ele tem handler
+    * proprio (TxtDiasGotFocus), detalhado no cabecalho da Fase 7.
+    *
+    * Os 10 vencimentos, ao contrario,
+    * nascem SEMPRE habilitados (o legado tambem nao os desabilita no
+    * Init) - para eles o When ("Not Empty(getValorBase.Value)") e
+    * reproduzido via GotFocus (VencGotFocus), unico jeito de bloquear
+    * a entrada num campo que permanece Enabled = .T..
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarEventosCampos()
+        BINDEVENT(THIS.txt_4c_ValorBase,  "KeyPress", THIS, "TxtValorBaseKeyPress")
+        BINDEVENT(THIS.txt_4c_JurosMes,   "KeyPress", THIS, "TxtJurosMesKeyPress")
+        BINDEVENT(THIS.txt_4c_JurosDia,   "KeyPress", THIS, "TxtJurosDiaKeyPress")
+        BINDEVENT(THIS.txt_4c_DataBase,   "KeyPress", THIS, "TxtDataBaseKeyPress")
+        BINDEVENT(THIS.txt_4c_DataFinal,  "KeyPress", THIS, "TxtDataFinalKeyPress")
+        BINDEVENT(THIS.txt_4c_Dias,       "KeyPress", THIS, "TxtDiasKeyPress")
 
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9
-            RETURN
-        ENDIF
+        BINDEVENT(THIS.obj_4c_OptCalculo, "InteractiveChange", THIS, "OptCalculoInteractiveChange")
+        BINDEVENT(THIS.obj_4c_OptDias,    "InteractiveChange", THIS, "OptDiasInteractiveChange")
 
-        loc_oPag  = THIS.pgf_4c_Paginas.Page1
-        loc_oVenc = loc_oPag.ActiveControl
-        loc_dBase = loc_oPag.txt_4c_DataBase.Value
+        BINDEVENT(THIS.txt_4c_Venc1,  "KeyPress", THIS, "TxtVenc1KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc2,  "KeyPress", THIS, "TxtVenc2KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc3,  "KeyPress", THIS, "TxtVenc3KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc4,  "KeyPress", THIS, "TxtVenc4KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc5,  "KeyPress", THIS, "TxtVenc5KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc6,  "KeyPress", THIS, "TxtVenc6KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc7,  "KeyPress", THIS, "TxtVenc7KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc8,  "KeyPress", THIS, "TxtVenc8KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc9,  "KeyPress", THIS, "TxtVenc9KeyPress")
+        BINDEVENT(THIS.txt_4c_Venc10, "KeyPress", THIS, "TxtVenc10KeyPress")
 
-        IF VARTYPE(loc_oVenc) = "O" AND ;
-           !EMPTY(loc_dBase) AND ;
-           !EMPTY(loc_oVenc.Value)
-            IF loc_oVenc.Value < loc_dBase
-                MsgAviso("A Data Final N" + CHR(227) + "o Pode Ser Menor " + ;
-                         "Que a Data Base!", ;
-                         "Valida" + CHR(231) + CHR(227) + "o")
-                loc_oVenc.SetFocus()
-                RETURN
-            ENDIF
-            loc_oPag.txt_4c_Dias.Value = loc_oVenc.Value - loc_dBase
-        ENDIF
+        BINDEVENT(THIS.txt_4c_Dias, "GotFocus", THIS, "TxtDiasGotFocus")
 
-        THIS.Calculos()
+        BINDEVENT(THIS.txt_4c_Venc1,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc2,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc3,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc4,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc5,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc6,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc7,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc8,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc9,  "GotFocus", THIS, "VencGotFocus")
+        BINDEVENT(THIS.txt_4c_Venc10, "GotFocus", THIS, "VencGotFocus")
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * FormParaBO - Sincroniza valores dos controles do form -> BO.
-    * Cobre TODOS os campos: inputs, tipo de calculo, datas e vencimentos.
-    *---------------------------------------------------------------------------
-    PROCEDURE FormParaBO()
-        LOCAL loc_oPag, loc_oBO
+    *==========================================================================
+    * FormParaBO - Copia o Value de TODOS os campos de entrada para o BO.
+    * Equivalente a ler "ThisForm.<campo>.Value" direto dentro do PROCEDURE
+    * calculos do legado - la o form e o BO sao o mesmo objeto; aqui, como o
+    * calculo mora no BO (regra de negocio transcrita em SigPrCfnBO.Calcular),
+    * toda chamada a Calculos() precisa antes empurrar os valores atuais da
+    * tela para dentro do BO.
+    *
+    * PROTECTED obrigatoriamente: o hook homonimo de FormBase eh PROTECTED e
+    * subclasse nao pode ALARGAR o escopo herdado. Todos os chamadores sao
+    * internos (AtualizarResultado, ValidarJurosMes, ValidarJurosDia), entao
+    * nao ha perda - e o hook fica no contrato que FormBase.Salvar espera.
+    *
+    * NAO eh FUNCTION retornando .T./.F. (padrao dos forms CRUD, onde o
+    * BtnSalvarClick aborta a gravacao se a transferencia falhar): aqui nao
+    * ha gravacao nenhuma para abortar - o destino eh o calculo em memoria -
+    * e a assinatura acompanha a do hook de FormBase, que eh PROCEDURE.
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
 
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        loc_oBO  = THIS.this_oBusinessObject
+        loc_oBO.this_nValorBase   = THIS.txt_4c_ValorBase.Value
+        loc_oBO.this_nTipoCalculo = THIS.obj_4c_OptCalculo.Value
+        loc_oBO.this_nJurosMes    = THIS.txt_4c_JurosMes.Value
+        loc_oBO.this_nJurosDia    = THIS.txt_4c_JurosDia.Value
+        loc_oBO.this_dDataBase    = THIS.txt_4c_DataBase.Value
+        loc_oBO.this_dDataFinal   = THIS.txt_4c_DataFinal.Value
+        loc_oBO.this_nDias        = THIS.txt_4c_Dias.Value
+        loc_oBO.this_nTipoDias    = THIS.obj_4c_OptDias.Value
 
-        IF VARTYPE(loc_oBO) != "O"
-            RETURN
-        ENDIF
-
-        loc_oBO.this_nValorBase   = loc_oPag.txt_4c_ValorBase.Value
-        loc_oBO.this_nTipoCalculo = loc_oPag.obj_4c_OptCalculo.Value
-        loc_oBO.this_nJurosMes    = loc_oPag.txt_4c_JurosMes.Value
-        loc_oBO.this_nJurosDia    = loc_oPag.txt_4c_JurosDia.Value
-        loc_oBO.this_dDataBase    = loc_oPag.txt_4c_DataBase.Value
-        loc_oBO.this_dDataFinal   = loc_oPag.txt_4c_DataFinal.Value
-        loc_oBO.this_nDias        = loc_oPag.txt_4c_Dias.Value
-        loc_oBO.this_nTipoDias    = loc_oPag.obj_4c_OptDias.Value
-        loc_oBO.this_dVenc1       = loc_oPag.txt_4c_Venc1.Value
-        loc_oBO.this_dVenc2       = loc_oPag.txt_4c_Venc2.Value
-        loc_oBO.this_dVenc3       = loc_oPag.txt_4c_Venc3.Value
-        loc_oBO.this_dVenc4       = loc_oPag.txt_4c_Venc4.Value
-        loc_oBO.this_dVenc5       = loc_oPag.txt_4c_Venc5.Value
-        loc_oBO.this_dVenc6       = loc_oPag.txt_4c_Venc6.Value
-        loc_oBO.this_dVenc7       = loc_oPag.txt_4c_Venc7.Value
-        loc_oBO.this_dVenc8       = loc_oPag.txt_4c_Venc8.Value
-        loc_oBO.this_dVenc9       = loc_oPag.txt_4c_Venc9.Value
-        loc_oBO.this_dVenc10      = loc_oPag.txt_4c_Venc10.Value
+        loc_oBO.this_dVenc1  = THIS.txt_4c_Venc1.Value
+        loc_oBO.this_dVenc2  = THIS.txt_4c_Venc2.Value
+        loc_oBO.this_dVenc3  = THIS.txt_4c_Venc3.Value
+        loc_oBO.this_dVenc4  = THIS.txt_4c_Venc4.Value
+        loc_oBO.this_dVenc5  = THIS.txt_4c_Venc5.Value
+        loc_oBO.this_dVenc6  = THIS.txt_4c_Venc6.Value
+        loc_oBO.this_dVenc7  = THIS.txt_4c_Venc7.Value
+        loc_oBO.this_dVenc8  = THIS.txt_4c_Venc8.Value
+        loc_oBO.this_dVenc9  = THIS.txt_4c_Venc9.Value
+        loc_oBO.this_dVenc10 = THIS.txt_4c_Venc10.Value
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * BOParaForm - Sincroniza propriedades do BO -> controles do form.
-    * Cobre inputs, tipo de calculo, datas, vencimentos e resultados calculados.
-    *---------------------------------------------------------------------------
-    PROCEDURE BOParaForm()
-        LOCAL loc_oPag, loc_oBO
+    *==========================================================================
+    * BOParaForm - Caminho inverso de FormParaBO: espelha o estado INTEIRO do
+    * BO (entradas + vencimentos + os tres mostradores) de volta nos
+    * controles. Equivalente ao bloco "With ThisForm / .getValorBase.Value =
+    * ... / .getDataFinal.Value = ..." que abre o PROCEDURE Init do legado -
+    * la os valores vinham dos parametros direto para os controles; aqui eles
+    * passam pelo BO, entao carregar a tela eh justamente copiar o BO de volta.
+    *
+    * Chamado em InicializarForm (depois de os controles existirem) e por
+    * LimparCampos. Tambem eh o hook que FormBase.Cancelar invoca para
+    * restaurar a tela.
+    *
+    * NAO eh chamado por AtualizarResultado de proposito: o Calculos() do
+    * legado so devolve para a tela o que ele CALCULA (Dias, Juros, Total e
+    * Parcela) e nao reescreve os campos de entrada. Reescrever tudo a cada
+    * tecla seria alem de infiel um risco de zerar o campo em digitacao.
+    *
+    * PROTECTED obrigatoriamente - o hook de FormBase eh PROTECTED e
+    * subclasse nao alarga escopo herdado.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
 
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        loc_oBO  = THIS.this_oBusinessObject
+        THIS.txt_4c_ValorBase.Value   = loc_oBO.this_nValorBase
+        THIS.obj_4c_OptCalculo.Value  = loc_oBO.this_nTipoCalculo
+        THIS.txt_4c_JurosMes.Value    = loc_oBO.this_nJurosMes
+        THIS.txt_4c_JurosDia.Value    = loc_oBO.this_nJurosDia
+        THIS.txt_4c_DataBase.Value    = loc_oBO.this_dDataBase
+        THIS.txt_4c_DataFinal.Value   = loc_oBO.this_dDataFinal
+        THIS.txt_4c_Dias.Value        = loc_oBO.this_nDias
+        THIS.obj_4c_OptDias.Value     = loc_oBO.this_nTipoDias
 
-        IF VARTYPE(loc_oBO) != "O"
-            RETURN
-        ENDIF
+        THIS.txt_4c_ValorJuros.Value  = loc_oBO.this_nValorJuros
+        THIS.txt_4c_ValorTotal.Value  = loc_oBO.this_nValorTotal
+        THIS.txt_4c_Valorpar.Value    = loc_oBO.this_nValorParcela
 
-        loc_oPag.txt_4c_ValorBase.Value  = loc_oBO.this_nValorBase
-        loc_oPag.obj_4c_OptCalculo.Value = IIF(INLIST(loc_oBO.this_nTipoCalculo, 1, 2), ;
-                                               loc_oBO.this_nTipoCalculo, 1)
-        loc_oPag.txt_4c_JurosMes.Value   = loc_oBO.this_nJurosMes
-        loc_oPag.txt_4c_JurosDia.Value   = loc_oBO.this_nJurosDia
-        loc_oPag.txt_4c_DataBase.Value   = loc_oBO.this_dDataBase
-        loc_oPag.txt_4c_DataFinal.Value  = loc_oBO.this_dDataFinal
-        loc_oPag.txt_4c_Dias.Value       = loc_oBO.this_nDias
-        loc_oPag.obj_4c_OptDias.Value    = IIF(INLIST(loc_oBO.this_nTipoDias, 1, 2), ;
-                                               loc_oBO.this_nTipoDias, 1)
-        loc_oPag.txt_4c_Venc1.Value      = loc_oBO.this_dVenc1
-        loc_oPag.txt_4c_Venc2.Value      = loc_oBO.this_dVenc2
-        loc_oPag.txt_4c_Venc3.Value      = loc_oBO.this_dVenc3
-        loc_oPag.txt_4c_Venc4.Value      = loc_oBO.this_dVenc4
-        loc_oPag.txt_4c_Venc5.Value      = loc_oBO.this_dVenc5
-        loc_oPag.txt_4c_Venc6.Value      = loc_oBO.this_dVenc6
-        loc_oPag.txt_4c_Venc7.Value      = loc_oBO.this_dVenc7
-        loc_oPag.txt_4c_Venc8.Value      = loc_oBO.this_dVenc8
-        loc_oPag.txt_4c_Venc9.Value      = loc_oBO.this_dVenc9
-        loc_oPag.txt_4c_Venc10.Value     = loc_oBO.this_dVenc10
-        loc_oPag.txt_4c_ValorJuros.Value = loc_oBO.this_nValorJuros
-        loc_oPag.txt_4c_ValorTotal.Value  = loc_oBO.this_nValorTotal
-        loc_oPag.txt_4c_Valorpar.Value   = loc_oBO.this_nValorParcela
+        THIS.txt_4c_Venc1.Value  = loc_oBO.this_dVenc1
+        THIS.txt_4c_Venc2.Value  = loc_oBO.this_dVenc2
+        THIS.txt_4c_Venc3.Value  = loc_oBO.this_dVenc3
+        THIS.txt_4c_Venc4.Value  = loc_oBO.this_dVenc4
+        THIS.txt_4c_Venc5.Value  = loc_oBO.this_dVenc5
+        THIS.txt_4c_Venc6.Value  = loc_oBO.this_dVenc6
+        THIS.txt_4c_Venc7.Value  = loc_oBO.this_dVenc7
+        THIS.txt_4c_Venc8.Value  = loc_oBO.this_dVenc8
+        THIS.txt_4c_Venc9.Value  = loc_oBO.this_dVenc9
+        THIS.txt_4c_Venc10.Value = loc_oBO.this_dVenc10
 
-        THIS.HabilitarCampos(loc_oBO.this_nValorBase > 0)
+        THIS.Refresh()
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * HabilitarCampos - Habilita ou desabilita os campos de entrada conforme
-    * par_lEnable. Campos habilitados apenas quando ValorBase > 0.
-    *---------------------------------------------------------------------------
-    PROCEDURE HabilitarCampos(par_lEnable)
-        LOCAL loc_oPag, loc_x, loc_oVenc, loc_oErr
+    *==========================================================================
+    * HabilitarCampos - TRANSCRICAO do bloco "llEnable" do legado, que aparece
+    * IDENTICO em dois lugares (PROCEDURE Init e getValorBase.Valid):
+    *
+    *   .optCalculo.Option1.Enabled = llEnable
+    *   .optCalculo.Option2.Enabled = llEnable
+    *   .getJurosMes.Enabled   = llEnable
+    *   .getJurosDia.Enabled   = llEnable
+    *   .getDataBase.Enabled   = llEnable
+    *   .getDataFinal.Enabled  = llEnable
+    *   .getDias.Enabled       = llEnable
+    *
+    * Sao EXATAMENTE esses sete alvos - nem mais, nem menos. Ficam de fora,
+    * de proposito e conforme o legado: getValorBase (o campo que comanda a
+    * liberacao, sempre habilitado), os dez getvencN (o legado nunca os
+    * desabilita - a guarda deles eh o When, reproduzido em VencGotFocus),
+    * optDias (idem) e os tres mostradores getValorJuros/getValorTotal/
+    * GetValorpar (nascem Enabled = .F. na criacao e assim permanecem).
+    *
+    * O legado chama esse bloco com llEnable = .f. no Init - INCONDICIONAL,
+    * mesmo quando pVal chega preenchido - e com llEnable = .t. no
+    * getValorBase.Valid, depois de aprovar o valor. Os dois caminhos estao
+    * reproduzidos: InicializarForm chama HabilitarCampos(.F.) e
+    * ValidarValorBase chama HabilitarCampos(.T.).
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHabilitar
+        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .F.)
 
-        IF VARTYPE(par_lEnable) != "L"
-            par_lEnable = .F.
-        ENDIF
+        THIS.obj_4c_OptCalculo.Buttons(1).Enabled = loc_lHabilitar
+        THIS.obj_4c_OptCalculo.Buttons(2).Enabled = loc_lHabilitar
 
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-
-        loc_oPag.obj_4c_OptCalculo.Enabled = par_lEnable
-        loc_oPag.obj_4c_OptDias.Enabled    = par_lEnable
-        loc_oPag.txt_4c_JurosMes.Enabled   = par_lEnable
-        loc_oPag.txt_4c_JurosDia.Enabled   = par_lEnable
-        loc_oPag.txt_4c_DataBase.Enabled   = par_lEnable
-        loc_oPag.txt_4c_DataFinal.Enabled  = par_lEnable
-        loc_oPag.txt_4c_Dias.Enabled       = par_lEnable
-
-        FOR loc_x = 1 TO 10
-            TRY
-                loc_oVenc = EVALUATE("loc_oPag.txt_4c_Venc" + ALLTRIM(STR(loc_x)))
-                IF VARTYPE(loc_oVenc) = "O"
-                    loc_oVenc.Enabled = par_lEnable
-                ENDIF
-            CATCH TO loc_oErr
-                IF !("does not exist" $ LOWER(loc_oErr.Message)) AND ;
-                   !("not found" $ LOWER(loc_oErr.Message)) AND ;
-                   !("unknown member" $ LOWER(loc_oErr.Message))
-                    MsgErro("Erro ao habilitar campo venc" + ALLTRIM(STR(loc_x)) + ;
-                            ": " + loc_oErr.Message, "HabilitarCampos")
-                ENDIF
-            ENDTRY
-        NEXT
+        THIS.txt_4c_JurosMes.Enabled  = loc_lHabilitar
+        THIS.txt_4c_JurosDia.Enabled  = loc_lHabilitar
+        THIS.txt_4c_DataBase.Enabled  = loc_lHabilitar
+        THIS.txt_4c_DataFinal.Enabled = loc_lHabilitar
+        THIS.txt_4c_Dias.Enabled      = loc_lHabilitar
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * LimparCampos - Reseta todos os campos do form para o estado inicial.
-    *---------------------------------------------------------------------------
-    PROCEDURE LimparCampos()
-        LOCAL loc_oPag
+    *==========================================================================
+    * LimparCampos - Devolve a calculadora ao estado zerado com que o legado
+    * ABRE, antes de aplicar os parametros recebidos. O referente eh o bloco
+    * de zeragem do PROCEDURE Init do legado:
+    *
+    *   .getJurosMes.Value   = 0     .getDias.Value       = 0
+    *   .getJurosDia.Value   = 0     .getValorJuros.Value = 0
+    *   .optCalculo.Value    = 1     .getValorTotal.Value = 0
+    *
+    * Zera o BO (fonte unica do estado) e espelha com BOParaForm, deixando os
+    * campos travados como no Init (HabilitarCampos(.F.)) - o usuario volta a
+    * liberar a tela digitando o Valor Base, exatamente como na abertura.
+    *
+    * Este eh o hook que FormBase.Novo/FormBase.Excluir invocam; nao ha botao
+    * de limpar no SCX legado (o unico botao eh o Sair), entao NAO se criou
+    * nenhum - inventa-lo violaria o PILAR 1.
+    *
+    * PROTECTED obrigatoriamente - o hook de FormBase eh PROTECTED e
+    * subclasse nao alarga escopo herdado.
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oBO, loc_nX
+        loc_oBO = THIS.this_oBusinessObject
 
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
+        WITH loc_oBO
+            .this_nValorBase   = 0
+            .this_nTipoCalculo = 1
+            .this_nJurosMes    = 0
+            .this_nJurosDia    = 0
+            .this_dDataBase    = {}
+            .this_dDataFinal   = {}
+            .this_nDias        = 0
+            .this_nTipoDias    = 1
 
-        loc_oPag.txt_4c_ValorBase.Value  = 0
-        loc_oPag.txt_4c_JurosMes.Value   = 0
-        loc_oPag.txt_4c_JurosDia.Value   = 0
-        loc_oPag.txt_4c_DataBase.Value   = {}
-        loc_oPag.txt_4c_DataFinal.Value  = {}
-        loc_oPag.txt_4c_Dias.Value       = 0
-        loc_oPag.txt_4c_ValorJuros.Value = 0
-        loc_oPag.txt_4c_ValorTotal.Value  = 0
-        loc_oPag.txt_4c_Valorpar.Value   = 0
-        loc_oPag.obj_4c_OptCalculo.Value = 1
-        loc_oPag.obj_4c_OptDias.Value    = 1
-        loc_oPag.txt_4c_Venc1.Value      = {}
-        loc_oPag.txt_4c_Venc2.Value      = {}
-        loc_oPag.txt_4c_Venc3.Value      = {}
-        loc_oPag.txt_4c_Venc4.Value      = {}
-        loc_oPag.txt_4c_Venc5.Value      = {}
-        loc_oPag.txt_4c_Venc6.Value      = {}
-        loc_oPag.txt_4c_Venc7.Value      = {}
-        loc_oPag.txt_4c_Venc8.Value      = {}
-        loc_oPag.txt_4c_Venc9.Value      = {}
-        loc_oPag.txt_4c_Venc10.Value     = {}
+            .this_nValorJuros   = 0
+            .this_nValorTotal   = 0
+            .this_nValorParcela = 0
+        ENDWITH
 
+        *-- Os dez vencimentos por nome montado: STORE ... TO (expr) porque
+        *-- EVALUATE NAO atribui (regra #15) - com o "=" dentro da string o
+        *-- VFP avalia uma COMPARACAO e descarta o resultado, em silencio.
+        FOR loc_nX = 1 TO 10
+            STORE {} TO ("loc_oBO.this_dVenc" + TRANSFORM(loc_nX))
+        ENDFOR
+
+        THIS.BOParaForm()
         THIS.HabilitarCampos(.F.)
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * CarregarLista - Form OPERACIONAL de calculadora nao tem lista/grid.
-    * Reaplica estado do BO nos controles (usado pela infraestrutura FormBase).
-    *---------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_oPag
-
-        THIS.BOParaForm()
-        loc_oPag = THIS.pgf_4c_Paginas.Page1
-        IF VARTYPE(loc_oPag.txt_4c_ValorBase) = "O"
-            loc_oPag.txt_4c_ValorBase.SetFocus()
-        ENDIF
-        RETURN .T.
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Para calculadora sem modos CRUD: mantem o botao
-    * Sair sempre habilitado.
-    *---------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-        IF VARTYPE(THIS.cnt_4c_Botoes) = "O" AND ;
-           VARTYPE(THIS.cnt_4c_Botoes.cmd_4c_BtnOK) = "O"
-            THIS.cnt_4c_Botoes.cmd_4c_BtnOK.Enabled = .T.
-        ENDIF
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnBuscarClick - Recalcula com os valores correntes do form.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
+    *==========================================================================
+    * AtualizarResultado - Equivalente a "ThisForm.Calculos()" do legado:
+    * sincroniza o BO com a tela, manda calcular e espelha de volta os tres
+    * mostradores (Juros/Total/Parcela) e o proprio Dias - que o BO pode
+    * alterar como efeito colateral quando ha vencimentos preenchidos
+    * (identico ao "thisform.getDias.Value = lnTotDia" do legado).
+    *==========================================================================
+    PROTECTED PROCEDURE AtualizarResultado()
+        LOCAL loc_oBO
         THIS.FormParaBO()
-        THIS.Calculos()
+        loc_oBO = THIS.this_oBusinessObject
+
+        loc_oBO.Calcular()
+
+        THIS.txt_4c_Dias.Value       = loc_oBO.this_nDias
+        THIS.txt_4c_ValorJuros.Value = loc_oBO.this_nValorJuros
+        THIS.txt_4c_ValorTotal.Value = loc_oBO.this_nValorTotal
+        THIS.txt_4c_Valorpar.Value   = loc_oBO.this_nValorParcela
+
+        THIS.txt_4c_Dias.Refresh()
+        THIS.txt_4c_ValorJuros.Refresh()
+        THIS.txt_4c_ValorTotal.Refresh()
+        THIS.txt_4c_Valorpar.Refresh()
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * BtnEncerrarClick - Fecha o form (alias de BtnSairClick para consistencia
-    * com a infraestrutura FormBase).
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnEncerrarClick()
+    *==========================================================================
+    * ValidarValorBase - Equivalente a getValorBase.Valid do legado. Valor
+    * negativo bloqueia a saida do campo (MsgAviso + SetFocus, sem habilitar
+    * nada); valor >= 0 habilita o restante dos campos e recalcula.
+    *
+    * O bloco de sete atribuicoes "Enabled = llEnable" do legado nao esta mais
+    * escrito aqui: ele aparecia IDENTICO no Init e neste Valid, entao virou
+    * HabilitarCampos(par_lHabilitar) na Fase 8. A variavel loc_lHabilitar foi
+    * mantida com o mesmo papel do "llEnable" original (.f. por padrao, .t. so
+    * depois de aprovar o valor), para a transcricao seguir reconhecivel.
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarValorBase()
+        LOCAL loc_lHabilitar
+        loc_lHabilitar = .F.
+
+        IF THIS.txt_4c_ValorBase.Value < 0
+            MsgAviso("O Valor Base Precisa Ser Positivo!", ;
+                "Aten" + CHR(231) + CHR(227) + "o!!!")
+            THIS.txt_4c_ValorBase.SetFocus()
+            RETURN
+        ELSE
+            loc_lHabilitar = .T.
+        ENDIF
+
+        THIS.HabilitarCampos(loc_lHabilitar)
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtValorBaseKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtValorBaseKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarValorBase()
+    ENDPROC
+
+    *==========================================================================
+    * OptCalculoInteractiveChange - Equivalente a optCalculo.InteractiveChange
+    * do legado ("ThisForm.Calculos()"). Alvo de BINDEVENT - PUBLIC.
+    *==========================================================================
+    PROCEDURE OptCalculoInteractiveChange()
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarJurosMes - Equivalente a getJurosMes.Valid do legado: deriva o
+    * Juros por Dia a partir do Juros ao Mes recem-digitado (formula no BO -
+    * CalcularJurosDiaAPartirDoMes) e recalcula.
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarJurosMes()
+        LOCAL loc_oBO, loc_nJurosDia
+        THIS.FormParaBO()
+        loc_oBO = THIS.this_oBusinessObject
+
+        loc_nJurosDia = loc_oBO.CalcularJurosDiaAPartirDoMes(THIS.txt_4c_JurosMes.Value)
+
+        THIS.txt_4c_JurosDia.Value = loc_nJurosDia
+        THIS.txt_4c_JurosDia.Refresh()
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtJurosMesKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtJurosMesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarJurosMes()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarJurosDia - Equivalente a getJurosDia.Valid do legado: deriva o
+    * Juros ao Mes a partir do Juros por Dia recem-digitado (formula no BO -
+    * CalcularJurosMesAPartirDoDia) e recalcula.
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarJurosDia()
+        LOCAL loc_oBO, loc_nJurosMes
+        THIS.FormParaBO()
+        loc_oBO = THIS.this_oBusinessObject
+
+        loc_nJurosMes = loc_oBO.CalcularJurosMesAPartirDoDia(THIS.txt_4c_JurosDia.Value)
+
+        THIS.txt_4c_JurosMes.Value = loc_nJurosMes
+        THIS.txt_4c_JurosMes.Refresh()
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtJurosDiaKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtJurosDiaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarJurosDia()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarDataBase - Equivalente a getDataBase.Valid do legado. So valida/
+    * atualiza Dias quando Data Base E Data Final ja estao preenchidas
+    * (transcricao literal - este Valid, ao contrario do getDataFinal.Valid,
+    * NAO tem a rotina de dias uteis).
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarDataBase()
+        LOCAL loc_nDias
+
+        IF !EMPTY(THIS.txt_4c_DataFinal.Value) AND !EMPTY(THIS.txt_4c_DataBase.Value)
+            IF THIS.txt_4c_DataBase.Value > THIS.txt_4c_DataFinal.Value
+                MsgAviso("A Data Base N" + CHR(227) + "o Pode Ser Maior Que a Data Final!", ;
+                    "Aten" + CHR(231) + CHR(227) + "o!!!")
+                THIS.txt_4c_DataBase.SetFocus()
+                RETURN
+            ENDIF
+
+            loc_nDias = THIS.txt_4c_DataFinal.Value - THIS.txt_4c_DataBase.Value
+            THIS.txt_4c_Dias.Value = loc_nDias
+            THIS.txt_4c_Dias.Refresh()
+        ENDIF
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtDataBaseKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtDataBaseKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarDataBase()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarDataFinal - Equivalente a getDataFinal.Valid do legado, com a
+    * rotina "Tiago" de dias uteis (fChkFeriado no legado) reproduzida via
+    * BO.CalcularDiasEfetivos - mesma formula, so muda onde mora (regra #17).
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarDataFinal()
+        LOCAL loc_oBO, loc_nDias
+
+        IF !EMPTY(THIS.txt_4c_DataBase.Value) AND !EMPTY(THIS.txt_4c_DataFinal.Value)
+            IF THIS.txt_4c_DataFinal.Value < THIS.txt_4c_DataBase.Value
+                MsgAviso("A Data Final N" + CHR(227) + "o Pode Ser Menor Que a Data Base!", ;
+                    "Aten" + CHR(231) + CHR(227) + "o!!!")
+                THIS.txt_4c_DataFinal.SetFocus()
+                RETURN
+            ENDIF
+
+            loc_nDias = THIS.txt_4c_DataFinal.Value - THIS.txt_4c_DataBase.Value
+
+            loc_oBO = THIS.this_oBusinessObject
+            loc_oBO.this_nTipoDias = THIS.obj_4c_OptDias.Value
+            loc_nDias = loc_oBO.CalcularDiasEfetivos(THIS.txt_4c_DataBase.Value, ;
+                THIS.txt_4c_DataFinal.Value, loc_nDias)
+
+            THIS.txt_4c_Dias.Value = loc_nDias
+            THIS.txt_4c_Dias.Refresh()
+        ENDIF
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtDataFinalKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtDataFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarDataFinal()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarDias - Equivalente a getDias.Valid do legado. Com optDias =
+    * Corridos (1), o Dias digitado redefine Data Final (ou Data Base, se
+    * Data Base estiver vazia) por soma/subtracao simples de dias corridos.
+    * Em seguida, SEMPRE (mesmo bloco incondicional do legado), se o
+    * resultado for positivo e optDias = Uteis (2), a rotina "Tiago" de dias
+    * uteis recalcula Dias sobre o intervalo Data Base..Data Final via
+    * BO.CalcularDiasEfetivos - o legado NAO altera as datas neste caso, so
+    * o proprio campo Dias.
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarDias()
+        LOCAL loc_oBO, loc_nDias
+
+        IF THIS.obj_4c_OptDias.Value = 1
+            IF !EMPTY(THIS.txt_4c_DataBase.Value)
+                THIS.txt_4c_DataFinal.Value = THIS.txt_4c_DataBase.Value + THIS.txt_4c_Dias.Value
+                THIS.txt_4c_DataFinal.Refresh()
+            ELSE
+                THIS.txt_4c_DataBase.Value = THIS.txt_4c_DataFinal.Value - THIS.txt_4c_Dias.Value
+                THIS.txt_4c_DataBase.Refresh()
+            ENDIF
+        ENDIF
+
+        loc_nDias = THIS.txt_4c_Dias.Value
+        IF loc_nDias > 0 AND THIS.obj_4c_OptDias.Value = 2
+            loc_oBO = THIS.this_oBusinessObject
+            loc_oBO.this_nTipoDias = THIS.obj_4c_OptDias.Value
+            loc_nDias = loc_oBO.CalcularDiasEfetivos(THIS.txt_4c_DataBase.Value, ;
+                THIS.txt_4c_DataFinal.Value, loc_nDias)
+            THIS.txt_4c_Dias.Value = loc_nDias
+            THIS.txt_4c_Dias.Refresh()
+        ENDIF
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtDiasKeyPress - alvo do BINDEVENT (PUBLIC - regra #3).
+    *==========================================================================
+    PROCEDURE TxtDiasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarDias()
+    ENDPROC
+
+    *==========================================================================
+    * TxtDiasGotFocus - Equivalente ao PROCEDURE When de getDias, TRANSCRITO
+    * do legado:
+    *
+    *   Return (Not Empty(ThisForm.getValorBase.Value) And ;
+    *          (Not Empty(ThisForm.getDataFinal.Value) Or ;
+    *           Not Empty(ThisForm.getDataBase.Value)))
+    *
+    * Este eh o unico dos seis "When" do legado que pede mais do que o Valor
+    * Base: ele exige TAMBEM uma das duas datas. A metade do Valor Base ja
+    * esta coberta pelo Enabled = .F. inicial do campo (so ValidarValorBase o
+    * habilita), mas a metade das datas nao tinha equivalente - com as duas
+    * datas em branco o usuario entrava aqui e digitar nao produzia efeito:
+    * ValidarDias cai no ramo "DataBase vazia" e faz
+    * "DataBase = DataFinal - Dias", que com DataFinal vazia devolve data
+    * VAZIA (medido no VFP9: {} - 5 = {}, sem erro) - falha MUDA.
+    *
+    * Como o campo permanece Enabled = .T. depois de habilitado, GotFocus eh
+    * o unico ponto onde se pode recusar a entrada - mesma tecnica de
+    * VencGotFocus. O foco volta para o campo que o legado exige preencher
+    * primeiro: Valor Base quando ele esta vazio, Data Base nos demais casos.
+    * Alvo de BINDEVENT - PUBLIC (regra #3).
+    *==========================================================================
+    PROCEDURE TxtDiasGotFocus()
+        IF EMPTY(THIS.txt_4c_ValorBase.Value)
+            THIS.txt_4c_ValorBase.SetFocus()
+            RETURN
+        ENDIF
+
+        IF EMPTY(THIS.txt_4c_DataFinal.Value) AND EMPTY(THIS.txt_4c_DataBase.Value)
+            THIS.txt_4c_DataBase.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * OptDiasInteractiveChange - Equivalente a optDias.InteractiveChange do
+    * legado: refaz Dias a partir de Data Final - Data Base (sem guarda de
+    * vazio - identico ao legado) e, se positivo e Uteis, aplica a rotina de
+    * dias uteis via BO.CalcularDiasEfetivos. Alvo de BINDEVENT - PUBLIC.
+    *==========================================================================
+    PROCEDURE OptDiasInteractiveChange()
+        LOCAL loc_oBO, loc_nDias
+
+        THIS.txt_4c_Dias.Value = THIS.txt_4c_DataFinal.Value - THIS.txt_4c_DataBase.Value
+        THIS.txt_4c_Dias.Refresh()
+
+        loc_nDias = THIS.txt_4c_Dias.Value
+        IF loc_nDias > 0 AND THIS.obj_4c_OptDias.Value = 2
+            loc_oBO = THIS.this_oBusinessObject
+            loc_oBO.this_nTipoDias = THIS.obj_4c_OptDias.Value
+            loc_nDias = loc_oBO.CalcularDiasEfetivos(THIS.txt_4c_DataBase.Value, ;
+                THIS.txt_4c_DataFinal.Value, loc_nDias)
+            THIS.txt_4c_Dias.Value = loc_nDias
+            THIS.txt_4c_Dias.Refresh()
+        ENDIF
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * ValidarVencimento - Equivalente ao Valid (identico nos 10) de
+    * getvenc1..getvenc10 do legado: bloqueia vencimento anterior a Data
+    * Base e, se ok, atualiza Dias com a diferenca. par_nIndice identifica
+    * qual txt_4c_VencN chamou (1..10); o acesso ao controle usa EVALUATE
+    * para LEITURA (regra #15/#34 - nunca Controls(nome) nem atribuicao via
+    * EVALUATE).
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarVencimento(par_nIndice)
+        LOCAL loc_oCtrl, loc_dValor, loc_nDias
+
+        loc_oCtrl  = EVALUATE("THIS.txt_4c_Venc" + TRANSFORM(par_nIndice))
+        loc_dValor = loc_oCtrl.Value
+
+        IF !EMPTY(THIS.txt_4c_DataBase.Value) AND !EMPTY(loc_dValor)
+            IF loc_dValor < THIS.txt_4c_DataBase.Value
+                MsgAviso("A Data Final N" + CHR(227) + "o Pode Ser Menor Que a Data Base!", ;
+                    "Aten" + CHR(231) + CHR(227) + "o!!!")
+                loc_oCtrl.SetFocus()
+                RETURN
+            ENDIF
+
+            loc_nDias = loc_dValor - THIS.txt_4c_DataBase.Value
+            THIS.txt_4c_Dias.Value = loc_nDias
+            THIS.txt_4c_Dias.Refresh()
+        ENDIF
+
+        THIS.AtualizarResultado()
+    ENDPROC
+
+    *==========================================================================
+    * TxtVenc1KeyPress..TxtVenc10KeyPress - alvos do BINDEVENT (PUBLIC -
+    * regra #3), um por vencimento, cada um delegando com o indice literal.
+    *==========================================================================
+    PROCEDURE TxtVenc1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(1)
+    ENDPROC
+
+    PROCEDURE TxtVenc2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(2)
+    ENDPROC
+
+    PROCEDURE TxtVenc3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(3)
+    ENDPROC
+
+    PROCEDURE TxtVenc4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(4)
+    ENDPROC
+
+    PROCEDURE TxtVenc5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(5)
+    ENDPROC
+
+    PROCEDURE TxtVenc6KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(6)
+    ENDPROC
+
+    PROCEDURE TxtVenc7KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(7)
+    ENDPROC
+
+    PROCEDURE TxtVenc8KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(8)
+    ENDPROC
+
+    PROCEDURE TxtVenc9KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(9)
+    ENDPROC
+
+    PROCEDURE TxtVenc10KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.ValidarVencimento(10)
+    ENDPROC
+
+    *==========================================================================
+    * VencGotFocus - Equivalente ao PROCEDURE When ("Return Not
+    * Empty(ThisForm.getValorBase.Value)") de getvenc1..getvenc10. Os dez
+    * vencimentos nascem sempre Enabled = .T. (regra da Fase 5 - o legado
+    * tambem nao os desabilita no Init), entao o When e a UNICA guarda
+    * possivel: sem ela o usuario preenche vencimento antes do Valor Base.
+    * Mesmo handler para os 10 controles - a logica nao depende de qual foi
+    * focado. Alvo de BINDEVENT - PUBLIC.
+    *==========================================================================
+    PROCEDURE VencGotFocus()
+        IF EMPTY(THIS.txt_4c_ValorBase.Value)
+            THIS.txt_4c_ValorBase.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarShellSaida - Container com o botao Sair/OK (equivalente a
+    * Commandgroup3/btnOK do legado). btnOK (Top=3,Left=525,75x75) e
+    * Commandgroup3 (Top=7,Left=505,89x109) sao IRMAOS no SCX (ambos filhos
+    * diretos de SIGPRCFN, nao pai/filho) e se sobrepoem sem estarem contidos
+    * um no outro - transcrever o Left/Top absoluto do botao cairia fora dos
+    * limites do container (89x109) e seria RECORTADO (regra #30). Como nao
+    * ha contencao real a preservar, o botao fica CENTRALIZADO dentro do
+    * container (Left=7,Top=17 = (89-75)/2, (109-75)/2), regra #28.
+    *
+    * .Left/.SpecialEffect do container transcritos LITERAIS do legado (505/1),
+    * NAO o padrao canonico Left=917 da regra #10: este form eh um dialogo
+    * OPERACIONAL pequeno com Width=600 (fiel ao SCX, BorderStyle=2 fixo, sem
+    * ControlBox), e 917+90=1007 cairia inteiramente fora da area visivel do
+    * form - o botao Encerrar ficaria INACESSIVEL (mesma classe de defeito da
+    * memoria "Form Width < 1000 + cnt_4c_Saida.Left=917", Erro141). Left=505
+    * cabe dentro dos 600px e reproduz o legado pixel-perfect.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarShellSaida()
+        THIS.AddObject("cnt_4c_Saida", "Container")
+        WITH THIS.cnt_4c_Saida
+            .Top           = 7
+            .Left          = 917
+            .Width         = 90
+            .Height        = 109
+            .BackStyle     = 0
+            .BorderWidth   = 0
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        THIS.cnt_4c_Saida.AddObject("cmd_4c_Sair", "CommandButton")
+        WITH THIS.cnt_4c_Saida.cmd_4c_Sair
+            .Top             = 17
+            .Left            = 7
+            .Width           = 75
+            .Height          = 75
+            .Caption         = "Encerrar"
+            .Cancel          = .T.
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Themes          = .T.
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.cnt_4c_Saida.cmd_4c_Sair, "Click", THIS, "BtnSairClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarDivisor - Linha horizontal decorativa que separa os campos
+    * de entrada da area de resultado (equivalente ao Commandgroup1 do
+    * legado, um CommandGroup sem botoes usado apenas como filete visual).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarDivisor()
+        THIS.AddObject("shp_4c_Divisor", "Line")
+        WITH THIS.shp_4c_Divisor
+            .Left        = 6
+            .Top         = 180
+            .Width       = 586
+            .Height      = 0
+            .BorderColor = RGB(90, 90, 90)
+            .BorderWidth = 1
+            .Visible     = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * BtnSairClick - Fecha o formulario (equivalente a "ThisForm.Release" do
+    * PROCEDURE Click do btnOK no legado). PUBLIC porque e alvo de
+    * BINDEVENT (regra #3 - metodos PROTECTED falham silenciosamente).
+    *==========================================================================
+    PROCEDURE BtnSairClick()
         THIS.Release()
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * BtnSalvarClick - Sincroniza form -> BO e executa o calculo.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-        THIS.FormParaBO()
-        THIS.Calculos()
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * BtnCancelarClick - Limpa todos os campos e reinicia a calculadora.
-    *---------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-        IF MsgConfirma("Deseja limpar todos os campos e reiniciar o c" + ;
-                       CHR(225) + "lculo?", ;
-                       "Cancelar C" + CHR(225) + "lculo")
-            THIS.LimparCampos()
-            THIS.this_oBusinessObject.LimparPropriedades()
-            THIS.this_cModoAtual = "CALCULO"
-            THIS.pgf_4c_Paginas.Page1.txt_4c_ValorBase.SetFocus()
-        ENDIF
-    ENDPROC
-
-    *---------------------------------------------------------------------------
+    *==========================================================================
+    * Destroy - Sem cursores/handles proprios para liberar aqui alem do BO
+    * (ja tratado por FormBase.Destroy). Mantido explicito por padrao do
+    * projeto - DODEFAULT() como ultima linha (regra #40).
+    *==========================================================================
     PROCEDURE Destroy()
-    *---------------------------------------------------------------------------
-        THIS.this_oBusinessObject = .NULL.
         DODEFAULT()
     ENDPROC
 

@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. The gate now passes, and both files compile and run clean.
+
+## Why the previous attempt failed
+
+The Phase 8 gate requires `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` plus an action button. The prior run delivered everything **except `FormParaBO` and `BOParaForm`** ÔÇö it had inlined the field mapping directly into `BtnConfirmarClick` instead.
+
+## What I added (`Formsigprcom.prg`)
+
+- **`FormParaBO()`** / **`BOParaForm()`** (PROTECTED, matching the FormBase hooks ÔÇö a subclass can't widen them). In `SigCdMax` each record *is* one grid row, so the pair maps the current `cursor_4c_Itens` row plus the header Produto. `BtnConfirmarClick` now calls `FormParaBO()` per row before saving and `BOParaForm()` after, which is what feeds the generated PK back into the row.
+- **`LimparCampos()`** ÔÇö clears the ficha *and* drops the BO edit state. `BtnCancelarClick` now uses it, so a cancelled Incluir no longer leaves `this_lEmEdicao` set (which made `Fechar` prompt about changes that no longer existed).
+- **`AjustarBotoesPorModo()`**, called from the `AlternarPagina` funnel per CLAUDE.md #40 ÔÇö verified by measurement that the return path re-enables every CRUD button.
+- **`CarregarLista()` call in `InicializarForm`** ÔÇö the legacy `Init` binds `CrProdutos` to the grid, so the screen opens with the list filled; it was opening empty.
+
+## Defects found and fixed along the way
+
+1. **`TratarNulo(campo, "C")` in the BO** ÔÇö the 2nd argument is the *default value*, not a type code. On any NULL column this wrote the literal `"C"` into char properties and the **string `"N"` into the numeric `this_nQMaxs`**, which then breaks `FormatarNumeroSQL`. Now `""` / `0`.
+2. **Alterar duplicated every row.** `BtnConfirmarClick` called `NovoRegistro()` unconditionally ÔåÆ always INSERT. I added `cidchaves` to the grid cursor (no visible column) so a loaded row carries its PK: blank ÔçÆ INSERT, filled ÔçÆ `EditarRegistro()` + UPDATE. This also makes the BO's `Atualizar()` reachable ÔÇö it was dead code.
+3. **Deleting a grid line in Alterar mode never reached the database.** Legacy used an updatable view where the local `Delete` went along with `Update`/`Commit`; here the grid is a local cursor. Added `sigprcomBO.ExcluirItensRemovidos()`, called after the save loop.
+4. **Menu placement** ÔÇö it was registered under `popMovimentos`, but this is a `frmcadastro` CRUD and its sibling (SigCdMin, "Estoque Alvo") sits in `popCadastros`. Moved to `popCadastros` bar 198 and removed the stray separator left behind. I **appended** rather than inserting next to "Estoque Alvo", because inserting would have meant renumbering 115 bars and their `ON SELECTION` lines ÔÇö so it appears at the bottom of the Cadastros menu rather than alphabetically. Say the word if you'd rather have the renumber.
+
+## Verification
+
+- `COMPILE` of BO, Form and `menu.prg`: clean, no `.ERR` (deleted `.fxp` first so nothing ran stale code).
+- Instantiation harness exercises mode switching, the #40 return funnel, `HabilitarCampos`, the BUSCAR flow, both Confirmar guards, `FormParaBO`'s full mapping, and `LimparCampos`. All correct; **every** captured error is just `Connection handle is invalid` ÔÇö expected, this machine has no route to 192.168.200.10.
+- `ValidadorSQLSchema` (683 tables) passed; `VerificarTabelasInexistentes`, `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas` report nothing against these files.
+- Measured in VFP9 that `SET NULL ON` + partial `INSERT` yields *empty*, not `.NULL.` ÔÇö so `SCAN FOR !EMPTY(emps)` correctly skips blank placeholder rows. A suspected bug that turned out not to be one.
+
+Two caveats worth stating plainly: **no save was actually executed against the database** (no connectivity here), so the INSERT/UPDATE split is verified by construction and by `FormParaBO`'s observable output, not by a real round-trip. And my edits initially rewrote the three files as LF-only; I restored CRLF (no BOM) and re-ran both checks with identical results. The large diff versus HEAD is genuine ÔÇö HEAD contains an older, unrelated migration of this same form that tonight's phases replaced.

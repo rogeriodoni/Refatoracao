@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da para `task603` (FormSigPrEml / SigPrEmlBO). Resumo do que foi entregue:
+
+**Contexto**: este ├® um form OPERACIONAL flat (sem PageFrame/Page2 ÔÇö s├│ grade + bot├Áes), ent├úo o template gen├®rico "campos principais Page2" n├úo se aplicava. O `analise.json` confirmava campos/lookups/labels vazios. O controle principal que ainda faltava era o bot├úo **cmd_4c_BtnEmail** ("Enviar Email"), explicitamente adiado nas fases anteriores.
+
+**SigPrEmlBO.prg** ÔÇö 3 m├®todos novos:
+- `ObterDadosContaEmail()` ÔÇö busca conta SMTP de alerta em `SigCdEmp.AleServs/AleEmails/AleSenhas/AlePortas` (colunas conferidas no schema.sql)
+- `EnviarEmailSmtp()` ÔÇö envio real via CDO.Message, transcrito do padr├úo can├┤nico j├í validado em `sigpremaBO.prg` (a fun├º├úo legada `EnviaEmail()` n├úo veio no acervo ÔÇö regra #27)
+- `EnviarAlertasSelecionados()` ÔÇö monta destinat├írio principal + c├│pia a partir dos marcados na grade, comp├Áe a mensagem (Job/Descritivo/Movimenta├º├úo/A├º├úo/Usu├írio/Data/Mensagem/Observa├º├úo), grava hist├│rico em `SigAlert` por destinat├írio, dispara o envio, e faz `SQLCOMMIT`/`SQLROLLBACK` reproduzindo a fronteira transacional do legado
+
+**FormSigPrEml.prg** ÔÇö `ConfigurarBotaoEmail()` (visual, fiel ao SCX: Top=3/Left=848/75x75/`geral_envelope_60.jpg`) + `BtnEmailClick()`.
+
+**N├úo coberto ainda** (fica para a fase seguinte, documentado em coment├írio): a cascata de baixa (`crOpeBaixa`/`laOpeBaixa`), que depende de reconstruir aquela l├│gica no `Init`.
+
+Ambos os arquivos foram validados com `COMPILE` real no VFP9 (COMPILE_OK, sem erros).

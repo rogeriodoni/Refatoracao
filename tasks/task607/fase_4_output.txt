@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Resumo do que fiz at├® agora nesta Fase 4 (`task607` / `Formsigpres2.prg`):
+
+- Adicionei o Grid `grd_4c_Lista` (11 colunas, somente leitura) e o container `cnt_4c_Botoes` com os 5 bot├Áes CRUD padr├úo, reproduzindo literalmente o `AcertaBotoes()` do legado (s├│ "Visualizar" fica ativo ÔÇö Incluir/Alterar/Excluir/Buscar ficam ocultos e desabilitados, e o grupo encolhe para Width=90).
+- Adicionei `cnt_4c_Saida`/`cmd_4c_Encerrar` (padr├úo can├┤nico, regra #10).
+- Implementei `AlternarPagina()` e `CarregarLista()` (monta um cursor local de 1 linha a partir do BO, j├í que este di├ílogo edita um ├║nico movimento, n├úo uma lista busc├ível).
+- Corrigi um bug que eu mesmo teria introduzido: `TornarControlesVisiveis()` reexibe todos os controles, ent├úo movi o bloco de desabilita├º├úo dos bot├Áes para depois dessa chamada.
+- Adicionei a propriedade `this_cUsuario` (coluna `usuars`) no BO, que faltava e ├® usada na grade.
+
+Disparei um compile-check via `vfp9.exe` para validar sintaticamente BO+Form; ainda est├í rodando em background ÔÇö vou reportar assim que sair o resultado.

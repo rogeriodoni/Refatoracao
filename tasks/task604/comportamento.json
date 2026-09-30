@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For", "fConfigGeral", "fCarregarImps"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRENV",
+      "evento": "Init",
+      "linhas": 202,
+      "codigoOriginal": "Private pQtd\nLocal lnTipos, lnTipoPadrao, lnI, lnTop, lnHeight, lnImpres, lnBottom1, lnBottom2, lnMaxTipos, lnPrinters\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tpQtd = 1\n*!*\t\t\tThisForm.poDataMgr.CursorQuery('SigSySeq', 'crSigSySeq', 'Valor', Padr('ETIQENVELOPE', 25))\n*!*\t\t\tIf Eof('crSigSySeq')\n*!*\t\t\t\tlcQuery = [Insert Int... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "CursorQuery,sqlexecute",
+        "controlesReferenciados": "Opt_Tipo,Option&lcI,Opt_Impressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRENV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRENV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRENV.btnReport",
+      "evento": "Click",
+      "linhas": 62,
+      "codigoOriginal": "Private pQtd\nLocal lcSelecao, lcConfirma, lcNomeImp, lnTpImp, lnAjVerts, lnAjHorzs\n\n* Testa o Campo Quantidade\nIf (Val(ThisForm.Etq_Qtd.Value) <= 0)\n\t=Messagebox('A Quantidade de Etiquetas Precisa Ser Maior Que 0 (Zero)!!!', 16, '')\n\tThisForm.Etq_Qtd.SetFocus\n\tReturn .t.\nEndIf\n\n* Confirma o Envio das Etiquetas Para Impressão\nClear Typeahead()\nIf Messagebox('Confirma a Impressão Das Etiquetas ?', 4+32+256, '') <> 6\n\tReturn .t.\nEndIf\n\n*!*\tThisForm.poDataMgr.CursorQuery('SigSySeq', 'crSigSySeq', 'V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value + Val",
+        "controlesReferenciados": "Opt_Impressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRENV.btnReport",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Release()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRENV.Opt_Impressora",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "loImp = ThisForm.cnt_Impressora\n=fCarregarImps(ThisForm.Opt_Impressora.Buttons(ThisForm.Opt_Impressora.Value).Tag, loImp.Opcao_Imp, ;\n\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.spn_AjVelos, ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "Buttons",
+        "controlesReferenciados": "Opt_Impressora",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

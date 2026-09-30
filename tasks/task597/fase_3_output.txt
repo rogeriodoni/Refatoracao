@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Fase 3 is complete: `FormSigPrCtc.prg` created in `projeto/app/forms/operacionais/` (not `cadastros/`, correcting the earlier task272 misclassification), compiles cleanly, and instantiates correctly both with and without parameters (verified via VFP9).
+
+## Summary
+
+**Arquivo criado:** `C:\4c\projeto\app\forms\operacionais\FormSigPrCtc.prg`
+
+**Decis├úo estrutural chave:** o `task_state.json` rotulou este form como "CRUD", mas o dump do legado (`SigPrCtc_form_codigo_fonte.txt`) e o `analise.json` confirmam **OPERACIONAL flat** ÔÇö raiz `Class: form` gen├®rica, zero `PageFrame`, um ├║nico container (`cntSombra`) direto no form. Encontrei duas tentativas anteriores deste mesmo form (task169, task272): task169 seguiu o legado fielmente e foi reprovado por um gate antigo que exigia `PageFrame`; task272 seguiu o template CRUD gen├®rico (inventou `PageFrame`+5 bot├Áes CRUD) e passou em todos os gates, mas violou o PILAR 1 ÔÇö por isso foi descartado (`forms/cadastros/FormSigPrCtc.prg` aparece deletado no git status). Segui o legado, como task169, presumindo que o gate j├í foi corrigido (mem├│ria `feedback_gate_fase3_exige_container_inexistente`, 2026-09-25).
+
+**Entregue nesta fase:**
+- `DEFINE CLASS FormSigPrCtc AS FormBase` com as propriedades visuais exatas (550├ù384, `BorderStyle=2`, `ControlBox=.F.`, `TitleBar=0`)
+- `Init(par_oFormPai, par_cEscolha, par_cEmps, par_cDopes, par_nNumes)` ÔÇö cria o BO, desabilita o form pai, monta `this_cEmpDopNums` como chave **posicional** (sem ALLTRIM nas partes ÔÇö regra #42) e o Caption din├ómico
+- `InicializarForm()` / `ConfigurarCabecalho()` (`cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, nomes exatos de `mapeamento.json`) / `Destroy()` (reabilita o form pai)
+- `AtualizarBotoesFormPai()` ÔÇö porta fiel do `mctrlbotoes` legado (corpo inteiro comentado no original, preservado como no-op)
+
+Validado por compila├º├úo (`ValidarCompilacao.prg`, ambos os arquivos OK) e por instancia├º├úo real no VFP9 (com e sem par├ómetros ÔÇö sem exce├º├Áes, chave de 29 caracteres correta, toggle do form pai funcionando).
+
+**Pr├│xima fase (4/8):** grid (`grd_4c_Dados`, 3 colunas) + bot├Áes `cmd_4c_CmdInserir/CmdExcluir/CmdSair` + `Shape1`.

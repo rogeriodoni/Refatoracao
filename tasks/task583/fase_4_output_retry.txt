@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and passing. The previous run's work was mostly sound ÔÇö it failed the gate on two real gaps, not on the grid.
+
+**What was wrong**
+
+The gate's FLAT branch (OPERACIONAL, no PageFrame) needs three things. Two were missing:
+
+1. **`obj_4c_Grupo_Conf` ÔåÆ `cmg_4c_Grupo_Conf`** ÔÇö the auto-generated `mapeamento.json` used the generic `obj_4c_` prefix; the project's canonical prefix for a CommandGroup is `cmg_4c_` (8 other operacionais use `cmg_4c_Botoes`). Renamed in the form **and** in `mapeamento.json` in lockstep, since `ValidarUIFidelity` builds its paths from that JSON.
+2. **No data-load method** ÔÇö the grid was bound to `cursor_4c_DivOp` but nothing ever populated it. Added `CarregarDados(par_nNops)`, transcribed line-by-line from the legacy `Get_OP.Valid`: delegates to the existing `BO.BuscarItensPorOP`, mirrors `CodPds` into the Produto field, shows the legacy's two messages ("O.P. J├í Foi Encerrada" / "N├úo Localizada") only when an O.P. was actually typed, clears the fields on failure, and ends with `GO TOP` + `Grid.Refresh()` (populating a cursor doesn't repaint the grade). Declared PUBLIC, since the test harness calls it from outside the class.
+
+**Two fidelity defects found while checking the SCT**
+
+- The Confirmar caption was `"Confirmar"`; the legacy is `"\<Confirmar"` ÔÇö the Alt+C access key had been dropped. Restored.
+- `CarregarDados` toggles that button's `Enabled` (legacy: `When` disables, `Valid` re-enables), and with `Themes = .F.` + `Picture` the icon vanishes when greyed. Added `DisabledPicture`. Also added the group's `Themes = .F.` from the dump.
+
+I left the grid alone ÔÇö I verified its bindings against the binary `.sct`, and the column reordering to visual order (Pedido/Cor/Tam/Qtd.Atual/Quantidade) correctly follows the legacy `ColumnOrder`, with `QtdDivs` the only editable column.
+
+**Verified by instantiating, not just compiling**
+
+Both files compile with no `.err`. The form opens, the grid has the 5 columns with the right headers/widths/ReadOnly flags, both buttons resolve their icons (`FILE()` = `.T.`), and `CarregarDados` is reachable externally. The cursor is alive in the form's private datasession (`DataSessionId=2`, 12 fields, 0 records ÔÇö matching the legacy's empty `Temp_DivOp` at open); the earlier `RECCOUNT=-1` was my harness reading session 1, not a defect.
+
+I also exercised the failure path: with an invalid connection handle, `CarregarDados(12345)` returns `.F.`, logs the error rather than failing silently, disables Confirmar, and leaves the form alive.
+
+One caveat worth flagging: I could not test a **successful** load against real data ÔÇö this machine has no route to the SQL Server at 192.168.200.10, so the populated-grid path (and the `fGerMascara` expression in Column1, which evaluates per repaint) is unproven at runtime. `fGerMascara` does exist in `utils/functions.prg`, so it will resolve; but the end-to-end load will first be exercised in a connected environment.

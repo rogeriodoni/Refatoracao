@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da.
+
+## O que faltava
+
+A Fase 6 reprovou porque, no ramo **flat/OPERACIONAL** do validador (`OrquestradorMigracao.ps1:6271+`), o `SIGPRCAR` cai na exig├¬ncia `$temMetodoLookup = ($conteudo -match "PROCEDURE\s+(AbrirLookup|AbrirBusca)\w*")` ÔÇö o dump legado **tem** lookup (`fwBuscaExt` nos dois `Valid`), ent├úo a exce├º├úo `$legadoSemLookup` n├úo se aplica. A tentativa anterior delegava para `AbrirLookupCanonico` herdado do `FormBase` e n├úo definia m├®todo de lookup no pr├│prio form.
+
+## Corre├º├úo
+
+Al├®m de satisfazer o gate, a delega├º├úo ao `AbrirLookupCanonico` tinha um defeito real: ele grava o resultado em `par_oTxtCod.Value` / `par_oTxtDesc.Value` ÔÇö que, num Grid, s├úo a **c├®lula corrente** compartilhada por todas as linhas. Como o picker ├® modal, o ponteiro do cursor pode ter se movido quando ele fecha, e ler o valor de volta dali ├® indeterminado.
+
+Em `projeto\app\forms\operacionais\FormSigPrCar.prg`:
+
+- **`PROCEDURE AbrirLookupCaracteristica(par_cValorFiltro, par_cCampoBusca)`** ÔÇö transcreve o `CreateObject('fwBuscaExt', ..., 'SigCrRap', 'CrListaRemota', 'Codigos'|'Descrs', ..., [CGrus In (...crSigCdPro.CGrus..., Space(3))])` dos dois `Valid` legado: SQL no chamador com `LIKE 'valor%'` em c├│digo **ou** descri├º├úo + fallback SHOW-ALL, `CREATEOBJECT("FormBuscaAuxiliar")` sem par├ómetros, `DefinirCursor` + `mAddColuna` **na ordem de cada `Valid`** (por C├│digo ÔåÆ C├│digo/Descri├º├úo; por Descri├º├úo ÔåÆ Descri├º├úo/C├│digo, igual ao legado), `Mostrar()`, `Release()`, `USE IN` do cursor. Guarda de reentr├óncia (picker modal aberto de dentro de handler de c├®lula), `RETURN` ├║nico fora do `TRY`, `CATCH` com `Message`/`LineNo`/`Procedure`.
+- **Properties `this_cLkpCodigo` / `this_cLkpDescricao`** ÔÇö o par selecionado volta por property; `ValidarSelecaoCaracteristica` grava no registro certo via `LOCATE FOR pkchaves`, n├úo rel├¬ as c├®lulas do Grid.
+- Coment├írio obsoleto citando `AbrirLookupCanonico` atualizado.
+
+Colunas conferidas em `docs\schema.sql` (`Get-Content -Raw`, UTF-16): `SIGCRRAP` tem `codigos char(20)`, `descrs char(40)`, `cgrus char(3)`.
+
+## Verifica├º├úo
+
+- `COMPILE` no VFP9 ÔåÆ `OK-SEM-ERROS` (`.fxp`/`.err` apagados antes e depois).
+- Instancia├º├úo real com `gb_4c_ModoTeste` + `gc_4c_ArquivoErroTeste`: `OK Width=480 Height=540 AbrirLookupCaracteristica=.T. this_cLkpCodigo=.T. this_lLookupAberto=.T. grd=.T. ColCount=2 Hdr1=[Caracter├¡stica] Hdr2=[Descri├º├úo]`.
+- Gate da Fase 6: `semPageFrame` OK, `BINDEVENT` OK (14), `PROCEDURE AbrirLookupCaracteristica` presente, zero TODO/stub.
+
+Ressalva: os caminhos de lookup n├úo foram exercitados contra o banco ÔÇö a m├íquina n├úo tem rota para `192.168.200.10`. O que foi provado ├® compila├º├úo limpa e `Init` completo sem exce├º├úo; o comportamento do `SQLEXEC` contra `SigCrRap` continua n├úo verificado em execu├º├úo.

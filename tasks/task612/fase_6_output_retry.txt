@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete and verified. Here's what was missing and what I added to `projeto/app/forms/operacionais/FormSigPrGf1.prg`:
+
+**Why it failed before:** the previous attempt concluded "no lookups exist, nothing to do" and stopped. That conclusion about lookups is correct ÔÇö I confirmed the dump has zero `fwBuscaExt`/`fwBuscaSel`/`mAddColuna`/`sigacess` ÔÇö but it left the phase's *other* deliverables undone: the field properties and the event wiring.
+
+**What I added:**
+
+1. **Field completion** (`ConfigurarFiltroPeriodo`) ÔÇö properties Phase 5 omitted on both date fields: `.Format = "K"` (declared in the SCX), `.Alignment = 3` and `.Themes = .F.` (from the `fweditdata` class in `framework.vcx`), and `.InputMask = "99/99/9999"` (the project's canonical date mask, 36 existing sites).
+
+2. **Event wiring** ÔÇö `BINDEVENT` on `KeyPress` of both fields ÔåÆ `DtInicialKeyPress`/`DtFinalKeyPress` (PUBLIC, with `LPARAMETERS`). They only mirror the typed value into the BO on Enter/Tab; they show nothing, because the legacy has no `Valid` on either field ÔÇö the only validation is `mChkValid`, fired by the Processar button.
+
+3. **`ValidarPeriodo()`** ÔÇö migration of the legacy `PROCEDURE mchkvalid`. The three rules already live in `SigPrGf1BO.ValidarPeriodo` (transcribed literally). What the form adds is what the BO can't do and the legacy also does: move focus to the offending field. The messageÔåÆfield mapping is exact without duplicating logic ÔÇö in the legacy only the first test (`Empty(getDtFinal.Value)`) focuses `getDtFinal`; the other two focus `getDtInicial`. Like the legacy, it does **not** display the message; it fills `this_cMsgValidacao` (the legacy's `pcMsg`) and the Processar click will show it in Phase 8.
+
+I deliberately did **not** create a lookup ÔÇö inventing a picker for two date fields would violate PILAR 1 and the "never invent lookup tables" rule. I also did not port `fweditdata`'s right-click calendar: no migrated form in the project does, and it's outside this phase.
+
+**Verification (measured, not read):**
+- Compiles clean in VFP9, `.fxp` regenerated, no `.err`.
+- Instantiation probe (`automation/InstantiateCheckPrGf1F6.prg`): form opens at 800x158 with the right caption; defaults are `01/09/2026`/`30/09/2026`, matching the legacy `Ctod('01/<mes>/<ano>')` + `GoMonth(...,1)-1`; all four properties applied; handlers exist and are PUBLIC; `KeyPress(13)` syncs to the BO while an ordinary key does not; `ValidarPeriodo()` returns `.T.` for a valid period and the three legacy messages verbatim for the three failure cases; no suppressed dialogs; clean release.
+- Phase 6 gate: passes via the CAPTURA branch (all nine conditions true).
+- `Test-CompletudeCodigo` (extracted via AST, not dot-sourced): OK on both form and BO.

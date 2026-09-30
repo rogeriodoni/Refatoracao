@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This completes Fase 2/8. `SigPrEmlBO.prg` now has:
+
+- **ObterChavePrimaria()** ÔÇö returns `this_cPkChaves`
+- **CarregarDoCursor()** ÔÇö maps all 15 `SigAlert` columns (confirmed against `docs/schema.sql`, read via `Get-Content -Raw` per the UTF-16 rule)
+- **Inserir()** ÔÇö full INSERT covering all NOT NULL columns, with guards for `pkchaves` (fUniqueIds()), `dtalerts` (DATETIME() fallback), `dtalert2s` (sentinel `'19000101'` since it's NOT NULL but the legacy code never explicitly sets it), and `usualerts`/`usuars` (fallback to `gc_4c_UsuarioLogado`)
+- **Atualizar()** ÔÇö UPDATE by `pkchaves`, with the empty-key guard placed *before* the TRY block (caught and fixed a rule #1 violation ÔÇö RETURN inside TRY ÔÇö during review)
+- Both call `THIS.RegistrarAuditoria(...)` on success, per the Audit System convention
+
+Note: kept `dtalerts`/`dtalert2s` as raw DATETIME values (not run through `ConverterParaData`, which truncates to DATE) since both are `datetime` columns.

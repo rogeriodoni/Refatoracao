@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da para o form `Formsigprcom` (Estoque M├íximo por Produto/Empresa/Tamanho/Cor):
+
+**`Formsigprcom.prg`** (Page2 - Dados, parte 2):
+- Campos restantes: Fornecedor (c├│digo/descri├º├úo), Refer├¬ncia do Produto, bot├úo Excluir item, e a grade de itens (`grd_4c_Itens`: Emp/Qtde.M├íxima/Tamanho/Cor/Departamento) ligada a um cursor placeholder `cursor_4c_Itens` (criado antes do `Grid.Init`, conforme regra do schema #41).
+- Container `cnt_4c_BotoesAcao` com os bot├Áes Confirmar/Cancelar, totalmente funcionais.
+- Lookups **completos** (sem stubs): Produto por c├│digo e por descri├º├úo (join com Grupo/Fornecedor via SQL, checagem de produto inativo via `SigCdPam.gesind`, checagem de duplicidade em `SigCdMax`), Tamanho, Cor e Departamento na grade ÔÇö todos via `FormBuscaAuxiliar` seguindo o contrato can├┤nico (`this_lAchouRegistro`/`this_lSelecionou` antes do `Show()`).
+- Checagem de acesso ├á Empresa na grade via `VerificarAcessoEmpresa` (helper j├í existente, evitando reintroduzir `fAcessoEmpresa`, que n├úo foi portada).
+- Regras de neg├│cio do legado replicadas: obrigatoriedade de Tamanho/Cor conforme `tipoestos` do Grupo, nova linha autom├ítica ao preencher Departamento, exclus├úo em lote por Empresa.
+- Corrigido de passagem: `AlternarPagina(1)` agora normaliza `this_cModoAtual = "LISTA"` (regra #40 do funil de volta).
+
+**`sigprcomBO.prg`**: novo m├®todo `ExistemItensParaProduto()` para a checagem de duplicidade exigida pelo lookup do Produto.
+
+Ambos os arquivos foram compilados no VFP9 (`COMPILE`) sem erros ÔÇö validei e removi os artefatos tempor├írios de compila├º├úo depois. Tamb├®m corrigi, no c├│digo novo, o uso de `TratarNulo()` para passar valores-padr├úo reais (`""`/`0`) em vez de c├│digos de tipo (`"C"`/`"N"`), evitando reproduzir o bug conhecido do projeto.
+
+Fora do escopo desta fase (deixado para as pr├│ximas, por n├úo terem sido mencionadas no prompt da Fase 6): os handlers `BtnIncluirClick`/`BtnAlterarClick`/`BtnExcluirClick`/`BtnVisualizarClick`/`BtnBuscarClick`/`BtnEncerrarClick` de Page1 ainda n├úo existem ÔÇö s├│ o `BINDEVENT` j├í estava wireado desde a Fase 4.

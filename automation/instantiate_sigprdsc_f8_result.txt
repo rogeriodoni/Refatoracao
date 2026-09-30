@@ -1,0 +1,15 @@
+ETAPA 0: inicio
+ETAPA 1: config.prg OK, ValidandoUI=.T.
+ETAPA 2: SET PROCEDURE OK
+ETAPA 3: CREATEOBJECT devolveu O
+OK ABRIU W=800 H=600
+MEMBROS: BtnGravarClick=.T. BtnCancelarClick=.T. AjustarBotoesPorModo=.T. FormParaBO=.T. BOParaForm=.T. CarregarLista=.T. this_lListaPronta=.T.
+INICIAL: ListaPronta=.F. AtualizarEnabled=.F.
+FUNIL: prontaComLinha=.T. naoProntaComLinha=.F. prontaSemLinha=.F. (esperado .T. .F. .F.)
+FILTRO VAZIO: saiu sem excecao, BO.CProsI=[]
+ESPELHO: telaI=[PRD0001] telaF=[PRD0001] boI=[PRD0001] boF=[PRD0001] (esperado PRD0001 nos quatro)
+GRAVAR LISTA VAZIA: saiu sem excecao
+BO ESPELHO INVERSO: I=[PRD0009] F=[PRD0009]
+BO TemFiltro vazio=.F. soGrupo=.T. (esperado .F. .T.)
+BtnCancelarClick: fechou sem excecao
+PROBE COMPLETO

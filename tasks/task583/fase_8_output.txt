@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8 conclu├¡da.** O checklist gen├®rico da fase (BtnSalvarClick/BtnCancelarClick/FormParaBO/BOParaForm/HabilitarCampos/LimparCampos/CarregarLista/AjustarBotoesPorModo) ├® conven├º├úo de form CRUD e n├úo se aplica ao `SIGPRAOP` ÔÇö que ├® tela ├║nica: um campo digit├ível (O.P.) que dispara a carga, grade toda somente-leitura exceto a coluna Quantidade, e um par Confirmar/Encerrar. Auditei os 15 m├®todos/eventos do SCX um a um: todos j├í tinham equivalente real das Fases 1ÔÇô7. Criar aqueles m├®todos seria inventar tela que o legado n├úo tem.
+
+## Dois defeitos reais encontrados e corrigidos
+
+**1. `ShowWindow` atribu├¡do em runtime (crash s├│ em produ├º├úo).** O `Init` fazia `THIS.ShowWindow = 1` no ramo "*n├úo* estou em modo teste". Medi no VFP9 (`automation/vfp_helpers/medir_showwindow.prg`):
+
+```
+obj.ShowWindow = 1 (runtime)              -> ERRO "Property SHOWWINDOW is read-only."
+obj.WindowType = 1 (runtime)              -> OK
+THIS.ShowWindow = 1 dentro do pr├│prio Init -> ERRO (o Init n├úo ├® exce├º├úo)
+```
+
+A polaridade do guard escondia isso de todo gate: nunca rodava no harness, **sempre** rodaria em produ├º├úo ÔåÆ `CREATEOBJECT` devolve `.F.` e a tela nunca abriria pelo menu. Agora `ShowWindow`/`WindowType` s├úo definidos s├│ na classe (1/1, a conven├º├úo de 143 dos 149 operacionais), sem atribui├º├úo em runtime.
+
+**2. O `CorretorAutomatico` introduziu uma regress├úo que eu revert├¡.** Rodei a etapa 05b e diferenciei o resultado ÔÇö os dois "fixes" eram falsos positivos:
+- `SHOWWINDOW_AUSENTE` injetou um **`ShowWindow` duplicado** na classe (procura literalmente `= 1`; achando `= 0`, acrescenta outra declara├º├úo ÔÇö a ├║ltima vence).
+- `LOSTFOCUS-LOOKUP` religou `BINDEVENT(..., "LostFocus", ..., "TxtOPLostFocus")` para `"KeyPress"`. ├ë o crit├®rio (d) do pattern, que trata como lookup todo handler cujo **nome** termina em "LostFocus" ÔÇö e este form n├úo tem lookup algum. Empilhava um 2┬║ handler de KeyPress no mesmo controle, passava 2 argumentos a um m├®todo sem par├ómetros e trocava "ao sair do campo" por "a cada tecla".
+
+Renomeei o handler pela a├º├úo (`PularParaGradeAposOP`). Rodei o corretor duas vezes: agora **idempotente** ÔÇö sobra s├│ o `WARN-168` (pede `fundo_cad_1003.jpg`, que ├® de p├ígina CRUD; o legado deste form usa `new_background.jpg`, j├í correto).
+
+## Verifica├º├úo
+
+| checagem | resultado |
+|---|---|
+| `COMPILE` do par BO+Form | sem `.ERR`, `.fxp` recriado |
+| `CREATEOBJECT` + `Show()` em `vfp9.exe -T` | OK, `Visible = .T.` |
+| Grade | 5 colunas, larguras 180/38/38/80/80 e captions do `pColuna` legado; s├│ a coluna Quantidade edit├ível |
+| Cursor | `cursor_4c_DivOp`, 12 campos = `Create Cursor Temp_DivOp` |
+| Handlers chamados de fora da classe | todos OK |
+| Validador de completude (05d) | sem TODO/stub nos dois arquivos |
+
+O `TestFormWrapper` oficial n├úo passa da ETAPA 1B nesta m├íquina (erro 1526 ÔÇö sem rota para 192.168.200.10), ent├úo escrevi `automation/vfp_helpers/test_fase8_task583.prg`, que pula a conex├úo e reproduz a ETAPA 3.
+
+## Dois pontos que precisam da sua decis├úo
+
+**O gate da Fase 8 vai reprovar de novo nesta execu├º├úo, por causa do processo, n├úo do c├│digo.** O ramo `$legadoFluxoUnicoF8` que cobre este form j├í est├í no `OrquestradorMigracao.ps1` (editado hoje 00:48:34), e simulei o gate com os helpers reais: **passa**. Mas o `RunLoop` invoca o orquestrador uma vez por task, e o processo desta task (pid 8692) subiu em 25/09 16:32 ÔÇö tem a vers├úo **anterior** em mem├│ria. A tentativa 1 da Fase 8 j├í foi rejeitada assim ├ás 00:54; com `maxTentativasMigracao: 3`, a etapa deve falhar mesmo estando correta. A pr├│xima task pega o gate corrigido; re-rodar a task583 num orquestrador novo tamb├®m passaria.
+
+**O mesmo defeito de `ShowWindow` existe em 4 outros forms** (pr├®-existentes, n├úo mexi):
+
+| form | atribui├º├úo | quando roda | efeito |
+|---|---|---|---|
+| `FormICD:37`, `FormICN:44` | `THIS.ShowWindow = 1` | s├│ em produ├º├úo | menu n├úo abre a tela |
+| `FormHOR:119`, `FormICO:50` | `THIS.ShowWindow = 2` | s├│ em modo teste | quebra o harness |
+
+Todos os quatro tamb├®m t├¬m `ShowWindow` declarado duas vezes na classe, pela mesma inje├º├úo do corretor. Quer que eu corrija esses quatro, e/ou os dois patterns do `CorretorAutomatico` que produzem os falsos positivos?
+
+Registrei as duas li├º├Áes em mem├│ria, atualizando as entradas existentes (`feedback_propriedade_readonly_em_runtime`, `feedback_handler_nomeado_pela_acao_nao_pelo_objeto_legado`) em vez de duplicar.

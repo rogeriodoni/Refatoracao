@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigPrCar.prg` est├í completo (1.471 linhas, 29 m├®todos), compila limpo e foi verificado instanciando de verdade no VFP9.
+
+## O que a Fase 8 acrescentou
+
+| M├®todo | Conte├║do real |
+|---|---|
+| `FormParaBO` | transfere a **linha corrente da grade** ÔåÆ BO (nesta tela a "ficha" ├® a linha: `pkchaves`/`cpros`/`codigos` s├úo as 3 colunas de `SigPrCar`). Extra├¡do do c├│digo que estava inline em `GravarCaracteristica` |
+| `BOParaForm` | volta BO ÔåÆ linha ap├│s `Salvar()`, sincronizando o `pkchaves` que `SigPrCarBO.Inserir` gera sozinho |
+| `LimparCampos` | limpa `codigos`/`descrs` da linha corrente ÔÇö transcri├º├úo do `Replace Codigos With [], Descrs With []` dos dois `Valid` legado; **dedupli├ºou 5 sites** |
+| `HabilitarCampos(par_lHabilitar)` | metade "acion├ível" do bloco `llVis` do `Init` legado (`Enabled` dos bot├Áes + `Column.ReadOnly`), separada de `AjustarVisibilidadePorModo` (que ficou com `Visible` + geometria do `Shape1`) |
+| fidelidade da grade | `Column{1,2}.Text1.Margin = 0` (do SCX) e `MaxLength` 20/40 vindos do **schema** (`SigPrCar.codigos` char(20), `SigCrRap.descrs` char(40)) |
+
+## Achados fora do previsto ÔÇö tr├¬s defeitos reais
+
+1. **`FormBase` declara `FormParaBO`/`BOParaForm`/`LimparCampos` como `PROTECTED`, e o VFP9 n├úo deixa a subclasse alargar o escopo.** Redeclarar sem `PROTECTED` n├úo torna p├║blico ÔÇö `PEMSTATUS` devolve `.T.` e a chamada de fora estoura `Property FORMPARABO is not found`. Marquei os tr├¬s explicitamente e validei-os por uma subclasse-sonda.
+2. **`ValidarUIFidelity` pendurava indefinidamente neste form.** Ele instancia com `CREATEOBJECT(<classe>)` **sem argumento** e n├úo roda `config.prg` ÔÇö ent├úo `this_cCpros` vazio abria `MsgErro` modal, e `gc_4c_CaminhoFramework` (inexistente l├í) estourava dentro do `TRY`, caindo no mesmo modal. Medido: 4min30 com 0,25s de CPU. Corrigi nos dois lados (guardas `TYPE()` no form + a global declarada no validador, que beneficia todo form que usa o caminho do Framework).
+3. **`Themes = .F.` do SCX n├úo tinha sido transcrito** (a classe usava o default `.T.`), e o mapeamento JSON n├úo batia com nome nenhum do form (`cmd_4c_CmdSair` vs `cmd_4c_Sair`, e `Column1` mapeado para `"Page1"`).
+
+**UI fidelity: de 15 para 10 problemas (9 ÔåÆ 4 bloqueantes).** As 4 restantes s├úo todas "desenho x runtime" em que ├® o **pr├│prio `Init` do legado** que muda o valor: o `Caption` das labels do cabe├ºalho ├® um placeholder esquecido (`"Cadastro de Testes"`) que o legado sobrescreve com `ThisForm.Caption`, e o `Shape1` encolhe em modo CONSULTAR por c├│digo do legado. N├úo h├í conserto no form sem p├┤r t├¡tulo errado na tela ÔÇö detalhei as duas sa├¡das em `SolicitacaoTesteManual/task585_SigPrCar.md` ┬º4.1; a segunda mexe na sem├óntica do gate para ~500 forms, ent├úo n├úo fiz por conta pr├│pria.
+
+## Gate da Fase 8
+
+O gate exigia `BtnCancelarClick` e um handler `Btn(Salvar|Confirmar|ÔÇª)Click` que **o legado n├úo tem** (os tr├¬s bot├Áes s├úo Inserir/Excluir/Encerrar). Seguindo o padr├úo j├í estabelecido no projeto, o conserto foi no gate: quinto ramo `linha-imediata`, fail-closed, dispensando s├│ esses dois. **Delta medido em 584 dumps: altera o resultado em 1 form** (o pr├│prio `FormSigPrCar`, presente em 4 tasks), 19 no-ops, zero regress├úo.
+
+Ao medir, descobri que meu pr├│prio cabe├ºalho documentando "o que n├úo se aplica" **satisfazia o gate por acidente** (a checagem ├® substring no arquivo inteiro). Reescrevi grafando `Btn...Click`, para o ramo fazer o trabalho de verdade.
+
+## Duas coisas que deixei de fora, de prop├│sito
+
+- **Integra├º├úo com o `FormProduto`**: o legado abre este di├ílogo em `cmdCaracts.btnCaracts.Valid` ÔåÆ `Do Form SigPrCar With ThisForm`, e esse bot├úo **n├úo existe no `FormProduto` migrado** ÔÇö nem o do di├ílogo irm├úo de Tamanhos (`Formsigprtam`, j├í migrado). ├ë lacuna sist├¬mica da fam├¡lia, e lig├í-la exige editar `FormProduto.prg`, que pertence ├á task dele. **Hoje n├úo h├í caminho pela UI para chegar neste form.**
+- **Entrada de menu**: n├úo criei. O di├ílogo n├úo funciona sem um produto ÔÇö mesma decis├úo j├í tomada para o `Formsigprtam`, que tamb├®m n├úo tem entrada.
+
+E uma diverg├¬ncia deliberada que vale sua decis├úo: o form migrado **grava na hora** (DataSession privada + BO pr├│prio), enquanto no legado quem persistia era o `TABLEUPDATE` do form pai. Consequ├¬ncia: incluir uma caracter├¡stica e depois **cancelar a altera├º├úo do produto** deixa a caracter├¡stica gravada. Est├í documentado em ┬º6 do doc de teste.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Esse erro **n├úo ├® um bug de c├│digo** em `FormSigPrFem.prg`/`SigPrFemBO.prg`. ├ë o mesmo problema recorrente j├í documentado na mem├│ria do projeto: a m├íquina que roda o pipeline n├úo tem rota de rede para `192.168.200.0/24`, ent├úo o `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg` falha na **ETAPA 1B**, antes mesmo de qualquer `CREATEOBJECT("FormSigPrFem")`/`CREATEOBJECT("SigPrFemBO")` acontecer ÔÇö o form e o BO nunca chegam a ser instanciados.
+
+Isso j├í se repetiu em 100+ tasks desde 2026-08-02, e esta ├® a 6┬¬ tentativa id├¬ntica s├│ na task610. Reconferi o c├│digo inteiro de novo (├® id├¬ntico ao j├í revisado nas tentativas 1/10 a 5/10):
+
+- `BtnProcessarClick`: guard `this_lProcessando` com `RETURN` antes do `TRY` (regra #1) Ô£ô
+- `ConfigurarGradeDetalhe`: n├úo define `ControlSource` (cursor ainda n├úo existe nesse ponto ÔÇö regra #41) Ô£ô
+- `LigarGradeDetalhe`: `ColumnCount`/`RecordSource` ÔåÆ `ControlSource` ÔåÆ `Width` na ordem certa (regra #35c) Ô£ô
+- `AbrirBuscaDemonstrativo`: `gnConnHandle` como 1┬║ argumento do `FormBuscaAuxiliar` (regras #36/#37) Ô£ô
+- `LimparResultado`: acesso por nome via `STORE ... TO (expr)`, nunca `Controls("nome")` (regra #34) Ô£ô
+- `HabilitarCampos(.T.)` reposto nos dois caminhos de volta (sucesso e CATCH) Ô£ô
+
+Nenhum defeito encontrado, nada relacionado a conectividade. N├úo fiz nenhuma edi├º├úo ÔÇö editar c├│digo correto arriscaria violar o PILAR 3 sem motivo. Registrei essa 6┬¬ ocorr├¬ncia na mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`).
+
+O que resolve isso de fato ├® infraestrutura: dar ├á m├íquina do pipeline uma rota at├® `192.168.200.10:1433`, n├úo mais reprocessamento de c├│digo. Restam 4 tentativas antes do or├ºamento da task610 se esgotar por esse mesmo motivo.

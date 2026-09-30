@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+**Diagn├│stico**: erro 1526 (`DBNETLIB`, "SQL Server inexistente ou acesso negado") ocorre na ETAPA 1B do `TestFormWrapper.prg`, no pr├®-flight de conex├úo SQL ÔÇö **antes** de qualquer `CREATEOBJECT` de `FormSIGPRCOT`/`SIGPRCOTBO`. N├úo ├® um defeito de c├│digo.
+
+**Evid├¬ncia**: 
+- Esta ├® a **4┬¬ tentativa consecutiva** (task594) com o mesmo sintoma exato, e a mesma falha j├í se repetiu em 77+ tasks desde 2026-08-02 (ver mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`).
+- `Test-NetConnection 192.168.200.10 -Port 1433` n├úo completa (sem rota) ÔÇö mesmo padr├úo de todas as reincid├¬ncias anteriores.
+- Revisei `FormSIGPRCOT.prg` e `SIGPRCOTBO.prg` novamente: string de conex├úo, `SQLEXEC`, tratamento de erro ÔÇö tudo correto e consistente com os demais forms que passam quando a rede est├í dispon├¡vel.
+
+**A├º├úo tomada**: nenhuma edi├º├úo nos `.prg` (edit├í-los de novo n├úo mudaria o resultado ÔÇö n├úo h├í nada relacionado a conectividade para corrigir). Atualizei a mem├│ria do projeto registrando esta 4┬¬ reincid├¬ncia.
+
+**Recomenda├º├úo**: este erro precisa ser tratado como falha de infraestrutura da m├íquina que roda o pipeline (falta de rota para `192.168.200.0/24`), n├úo consumido como retry de "corre├º├úo de c├│digo". Vale considerar um circuit-breaker no orquestrador para o C├│digo 1526, como j├í sugerido nas entradas anteriores da mem├│ria.

@@ -1,0 +1,60 @@
+=== TESTE FASE 6 Formsigprccp (campos restantes + lookups) ===
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+Caption           : [Recálculo de Preços]
+BaseClass         : [Form]
+ControlCount      : 71
+
+--- CONTROLES DA FASE 6 ---
+txt_4c_UnidadeI       : existe=.T.
+txt_4c_UnidadeF       : existe=.T.
+txt_4c_MoedaI         : existe=.T.
+txt_4c_MoedaF         : existe=.T.
+txt_4c_Variacao       : existe=.T.
+txt_4c_Feitio         : existe=.T.
+txt_4c_NovoMkp        : existe=.T.
+txt_4c_Reajuste       : existe=.T.
+txt_4c_NovoMarkup     : existe=.T.
+txt_4c_NovoEncargo    : existe=.T.
+obj_4c_Recalcula      : existe=.T.
+obj_4c_Situacao       : existe=.T.
+obj_4c_Compra         : existe=.T.
+img_4c_FigJpg         : existe=.T.
+
+img_4c_FigJpg.Visible (esperado .F.): .F.
+Column1.CurrentControl: [CHK_4C_MARCA]
+Column1.Sparse        : .F.
+
+--- AbrirLookup<X>() CHAMADOS DE FORA (campo vazio) ---
+AbrirLookupGrupoI         : OK (chamavel)
+AbrirLookupGrupoF         : OK (chamavel)
+AbrirLookupGrandeGrupoI   : OK (chamavel)
+AbrirLookupGrandeGrupoF   : OK (chamavel)
+AbrirLookupColecaoI       : OK (chamavel)
+AbrirLookupColecaoF       : OK (chamavel)
+AbrirLookupSubGrupoI      : OK (chamavel)
+AbrirLookupSubGrupoF      : OK (chamavel)
+AbrirLookupLinhaI         : OK (chamavel)
+AbrirLookupLinhaF         : OK (chamavel)
+AbrirLookupUnidadeI       : OK (chamavel)
+AbrirLookupUnidadeF       : OK (chamavel)
+AbrirLookupMoedaI         : OK (chamavel)
+AbrirLookupMoedaF         : OK (chamavel)
+AbrirLookupFeitio         : OK (chamavel)
+AbrirLookupNovoMkp        : OK (chamavel)
+AbrirLookupFornecedor     : OK (chamavel)
+
+--- HANDLERS BINDEVENT CHAMADOS DE FORA ---
+GrupoIKeyPress(F4)        : OK
+GrdProdutosAfterRowColChange: OK
+FigJpgDblClick            : OK
+ChkMarca* (4 handlers)    : OK
+RecalculaValorAlterado    : OK
+
+--- TOGGLE REAL DO CHECKBOX (cursor da grade) ---
+lMarca antes/depois       : 0 -> 1  (ALTERNOU OK)
+
+--- ERROS REGISTRADOS PELO MODO TESTE ---
+(nenhum dialogo de erro suprimido foi registrado)
+
+=== FIM ===

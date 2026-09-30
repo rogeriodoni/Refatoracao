@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Compile-check artifacts removed; pre-existing pipeline files from earlier phases left untouched.
+
+## Summary
+
+Phase 6 of the SIGPRCCP (Rec├ílculo de Pre├ºos) migration is complete. Changes to `Formsigprccp.prg`:
+
+- **`ConfigurarFiltrosParte2()`** ÔÇö added the remaining "Filtros" fields: Unidade, Moeda, Varia├º├úo, C├│digo MKP (Feitio), Op├º├úo Moeda (Ideal/Venda), Situa├º├úo, Compra.
+- **`ConfigurarDados()`** ÔÇö added the entire "Dados" section: Reajuste, Novo Encargo, Atualiza Val.Venda, Novo Markup, Novo MKP, and the 8-option Recalcula group.
+- **17 lookups fully implemented** via `AbrirLookupCanonico` (FormBase helper): Grupo, Grande Grupo, Grupo Venda, Subgrupo, Linha, Unidade, Moeda (all exact-match-then-picker), Feitio/Novo MKP (SigPrFti with the `Tipos = 1` filter the legacy `getNewMkp` used), and Fornecedor (replacing the forbidden `fAcessoContas` UX pattern per project memory, with the canonical exact-match/prefix-picker approach).
+- **`TransferirFiltrosParaBO()`** (new, critical fix) ÔÇö the filter fields were being created but never copied into the BO before querying; without it every "Processar" would silently run against BO defaults, ignoring everything typed on screen. Now wired in at the top of `CarregarLista()`.
+- Reproduced the legacy `When`/`Valid` rules tying Reajuste/Novo Markup/Varia├º├úo/Novo MKP enabled-state to the Recalcula option group (`AtualizarEstadoCalculo`), plus the "Novo MKP obrigat├│rio" guard for Recalcula = Markup Custo/Venda.
+- Fixed two BO option-group defaults (`this_nAtualizaVenda=2`, `this_nOpcaoCompra=3`) to match the legacy SCX's actual default selections.
+
+`sigprccpBO.prg` and `Formsigprccp.prg` both compile cleanly under VFP9 with zero errors.

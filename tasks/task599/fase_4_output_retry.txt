@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í conclu├¡da e validada.
+
+## O que estava errado
+
+O trabalho da Fase 4 **j├í estava correto** na tentativa anterior ÔÇö o que reprovava era o **gate**, n├úo o c├│digo.
+
+`SIGPRDFT` ├® um di├ílogo modal SiTef (cart├úo de d├®bito): sem grade, sem lista, sem CRUD. Ele deveria passar pelo ramo **CAPTURA** do gate, mas o teste estrito de lista o desqualificava por causa de **uma ├║nica linha** do dump:
+
+```
+ControlSource = "OPSENHA"
+```
+
+Essa linha pertence ao **CommandGroup `SAIDA`** (`ButtonCount = 1`, o bot├úo Cancelar) ÔÇö resqu├¡cio herdado da classe `Grupo_Saida` do Framework Fortyus, que n├úo tem nada a ver com lista. Medido: ├® a **├║nica** ocorr├¬ncia n├úo vazia do dump, e o form tem zero `BaseClass: grid/pageframe/listbox`, zero `pColuna`, zero `AddCursor`.
+
+Sem isso, as ├║nicas sa├¡das eram inventar um Grid/PageFrame (viola o PILAR 1) ou escrever m├®todos-adaptador vazios (stub disfar├ºado) ÔÇö as duas proibidas.
+
+## Corre├º├úo aplicada
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö novo helper `Test-LegadoControlSourceLigaLista`, irm├ú de `Test-LegadoAddCursorLigaGrade`, usado nos 3 call sites do teste estrito (Fases 4, 5 e 6). `RecordSource` conta sempre como prova de lista; `ControlSource` **n├úo** conta apenas quando o dono ├® `commandgroup`/`optiongroup`. Dono desconhecido conta (fail-closed). Os regex largos dos ramos DESPACHANTE/EXIBICAO ficaram intocados.
+
+Medido em 250 forms OPERACIONAL: leva o ramo CAPTURA de 55 ÔåÆ 69 tasks = **5 forms distintos** (sigprdft, sigproer, SIGPRSTF, SIGPRTFH, sigtosen) ÔÇö conferidos um a um, todos com a mesma `"OPSENHA"` e nenhum com lista escondida. Deliberadamente **n├úo** removi `ControlSource` do teste (daria 75 tasks, liberando 4 forms onde ele est├í em controle de dados e pode ser v├¡nculo real a cursor).
+
+## Verifica├º├Áes
+
+| Item | Resultado |
+|---|---|
+| Gate Fase 4 (ramo CAPTURA) | **True** ÔÇö passa |
+| Sintaxe do `.ps1` / BOM UTF-8 | 0 erros de parse / preservado |
+| Compila├º├úo (BO + Form) no VFP9 | `OK`, `.fxp` novos, nenhum `.err` |
+| Geometria: 19 objetos vs `layout.json` | **Top/Left/Width/Height id├¬nticos** em todos |
+| `VerificarPropriedadesInexistentes` | OK (OptionGroup/Shape sem ForeColor no grupo ÔÇö correto) |
+| `VerificarFuncoesNaoDefinidas` | OK, nenhuma chamada ├│rf├ú |
+| ├ìcone `cadastro_cancelar_60.jpg` | existe em `vbmp/`, transcrito do dump |
+
+## Ajuste adjacente
+
+`tasks/task599/mapeamento.json` apontava o cabe├ºalho para `cnt_4c_Sombra`/`lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, mas o `.prg` usa os nomes can├┤nicos da regra #11 (`cnt_4c_Cabecalho`/`lbl_4c_Sombra`/`lbl_4c_Titulo`). Alinhei o **JSON**, n├úo o `.prg` ÔÇö evita 3 falsos "objeto n├úo encontrado" no `ValidarUIFidelity` depois.
+
+## Ponto de aten├º├úo
+
+A corre├º├úo do gate **n├úo destrava o run em andamento**: o PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo. Este retry ainda vai reprovar com o c├│digo antigo em mem├│ria ÔÇö ├® preciso **reiniciar o orquestrador** para a Fase 4 passar. O c├│digo do form em si n├úo precisa de mais nada.
+
+Tamb├®m registrei a li├º├úo na mem├│ria do projeto, junto ├ás outras entradas de falso positivo de gate.

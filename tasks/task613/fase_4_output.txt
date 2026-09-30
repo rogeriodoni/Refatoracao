@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O arquivo est├í consistente. A Fase 4 foi implementada seguindo o roteiro j├í registrado no pr├│prio arquivo (n├úo o template gen├®rico de "Grid + bot├Áes CRUD", que n├úo se aplica a este form ÔÇö SIGPRGF2 ├® um di├ílogo de gr├ífico filho, sem grade nem CRUD).
+
+**Resumo da Fase 4:**
+- Adicionado `ConfigurarBotoesGrafico()`: cria o `CommandGroup obj_4c_CmdgGrafico` (2 bot├Áes: "Gr├ífico" e "Encerrar"), com geometria, cores e ├¡cones transcritos fielmente do dump legado (`cmdgGrafico`/`cmdImprimir`/`cmdSair`).
+- `ConfigurarPageFrame()` agora chama esse novo m├®todo ap├│s `ConfigurarCabecalho()`.
+- BINDEVENT dos cliques fica para a Fase 7/8 (junto com `mGeraGrafico`/Report Form/fechamento), seguindo exatamente o mesmo padr├úo j├í usado no form irm├úo `FormSigPrGf1.ConfigurarBotoesAcao`.
+- Cabe├ºalho do arquivo atualizado registrando a fase.
+
+Confirmei que os dois ├¡cones (`geral_grafico_pizza_60.jpg` e `cadastro_sair_60.jpg`) existem em `vbmp\`. Pr├│ximo passo (Fase 5/6): containers `cnt_4c_Grf2` (combo) e `cnt_4c_Grf1` (OleBoundControl do gr├ífico).

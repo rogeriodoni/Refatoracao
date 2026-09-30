@@ -735,6 +735,21 @@ DEFINE CLASS AnalisadorFormulario AS Custom
     ENDPROC
 
     *====================================================================
+    * EhValorNumerico - .T. so quando a string e' um numero puro (digitos,
+    * sinal e ponto decimal). Usada para blindar os valores que GerarJSON
+    * emite SEM aspas: expressao VFP crua ali produz JSON invalido.
+    *====================================================================
+    PROTECTED FUNCTION EhValorNumerico(par_cValor)
+        LOCAL loc_cTrim, loc_cResto
+        loc_cTrim = ALLTRIM(NVL(par_cValor, ""))
+        IF EMPTY(loc_cTrim)
+            RETURN .F.
+        ENDIF
+        *-- LEN()=0 (nao EMPTY()): EMPTY("  ") e' .T. e aceitaria "1 + 2"
+        loc_cResto = CHRTRAN(loc_cTrim, "0123456789+-.", "")
+        RETURN LEN(loc_cResto) = 0 AND LEN(CHRTRAN(loc_cTrim, "+-.", "")) > 0
+    ENDFUNC
+    *====================================================================
     * ExtrairGrid - Extrai informacoes do Grid
     *====================================================================
     PROTECTED PROCEDURE ExtrairGrid()
@@ -743,6 +758,22 @@ DEFINE CLASS AnalisadorFormulario AS Custom
         FOR i = 1 TO THIS.nLinhas
             loc_cLinha = ALLTRIM(THIS.aLinhas[i])
 
+            *-- Linha COMENTADA do legado nao define nada: o dump traz blocos
+            *-- mortos ("*!*  .Top = Thisform.ParentForm...Grade.Top + 50") que
+            *-- casavam com "GRADE." e injetavam uma EXPRESSAO VFP crua no lugar
+            *-- de um numero no analise.json, quebrando o JSON (task597).
+            IF LEFT(loc_cLinha, 1) == "*" OR LEFT(loc_cLinha, 2) == CHR(38) + CHR(38)
+                LOOP
+            ENDIF
+
+            *-- Deteccao AUTORITATIVA do grid: a arvore de objetos (SECAO 1 do
+            *-- dump) declara "BaseClass: grid". O substring "GRADE."/"GRID."
+            *-- abaixo so aparece quando o Init legado toca a grade pelo nome -
+            *-- no SIGPRCTC isso existia SO em linha morta (*!*), de modo que o
+            *-- grid real (GradeSubN) seria dado como ausente sem esta checagem.
+            IF UPPER(ALLTRIM(loc_cLinha)) == "BASECLASS: GRID"
+                THIS.lTemGrid = .T.
+            ENDIF
             *-- Detecta propriedades do Grid
             IF "GRADE." $ UPPER(loc_cLinha) OR "GRID." $ UPPER(loc_cLinha)
                 THIS.lTemGrid = .T.
@@ -753,15 +784,29 @@ DEFINE CLASS AnalisadorFormulario AS Custom
                     loc_cProp = UPPER(ALLTRIM(LEFT(loc_cLinha, loc_nPos - 1)))
                     loc_cValor = ALLTRIM(SUBSTR(loc_cLinha, loc_nPos + 3))
 
+                    *-- Estes 4 valores sao emitidos CRUS como numero JSON em
+                    *-- GerarJSON; qualquer coisa que nao seja numero gera JSON
+                    *-- invalido, e todo consumidor faz ConvertFrom-Json dentro
+                    *-- de "catch { }" - o erro vira SILENCIO e o formType cai
+                    *-- no default "CRUD" (task597: OPERACIONAL lido como CRUD,
+                    *-- reprovando a Fase 4 por 4 fases seguidas). Guarda aqui.
                     DO CASE
                     CASE "WIDTH" $ loc_cProp
-                        THIS.cGridWidth = loc_cValor
+                        IF THIS.EhValorNumerico(loc_cValor)
+                            THIS.cGridWidth = loc_cValor
+                        ENDIF
                     CASE "HEIGHT" $ loc_cProp
-                        THIS.cGridHeight = loc_cValor
+                        IF THIS.EhValorNumerico(loc_cValor)
+                            THIS.cGridHeight = loc_cValor
+                        ENDIF
                     CASE "TOP" $ loc_cProp
-                        THIS.cGridTop = loc_cValor
+                        IF THIS.EhValorNumerico(loc_cValor)
+                            THIS.cGridTop = loc_cValor
+                        ENDIF
                     CASE "LEFT" $ loc_cProp
-                        THIS.cGridLeft = loc_cValor
+                        IF THIS.EhValorNumerico(loc_cValor)
+                            THIS.cGridLeft = loc_cValor
+                        ENDIF
                     ENDCASE
                 ENDIF
             ENDIF

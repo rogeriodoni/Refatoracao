@@ -1,2049 +1,3269 @@
 *==============================================================================
-* FormSigPrChr.prg - Consulta e Impress" + CHR(227) + "o de Cheques (SIGPRCHR)
-* Tipo: OPERACIONAL - layout flat customizado (sem PageFrame)
-* Migrado de: SIGPRCHR.SCX
-* Fase 6/8: Aliases pipeline multi-fase (CarregarLista/FormParaBO/BOParaForm/Btn*)
+* FormSigPrChr.prg - Consulta e Cancelamento de Cheques
+*
+* Origem legado: SIGPRCHR.SCX (task590)
+* Herda de: FormBase
+* Tipo: OPERACIONAL - form PLANO sem PageFrame (layout.json: todos os objetos
+*       sao filhos diretos de SIGPRCHR, sem Pagina.Lista/Pagina.Dados). Filtra
+*       cheques por Grupo/Conta/Periodo numa grade unica, com containers
+*       flutuantes (Visible=.F.) para justificativa de cancelamento, impressao
+*       manual de cheque e leitura de codigo de barras.
+*
+* BO: SigPrChrBO (SigCqChi - PK cidchaves)
+*
+* Criado em: Fase 3 - Estrutura Base (DEFINE CLASS, Init, cabecalho)
 *==============================================================================
 
 DEFINE CLASS FormSigPrChr AS FormBase
 
-    *-- Propriedades visuais (copiadas exatamente do original SIGPRCHR.SCX)
-    Height       = 600
+    *-- Propriedades visuais (pixel-perfect do SCX original - PILAR 1)
+    *-- SIGPRCHR.SCX: Width=800, Height=600 (layout.json) - todos os controles
+    *-- do legado (grid, filtros, CommandGroup de 9 botoes) cabem dentro dessa
+    *-- largura, entao NAO ha necessidade de escalar para o canonico 1000.
     Width        = 800
-    Caption      = "Cheques"
+    Height       = 600
     AutoCenter   = .T.
-    BorderStyle  = 2
-    TitleBar     = 0
-    DataSession  = 2
+    Caption      = "Consulta e Cancelamento de Cheques"
     ShowWindow   = 1
     WindowType   = 1
     ControlBox   = .F.
-    Closable     = .F.
     MaxButton    = .F.
     MinButton    = .F.
     Movable      = .F.
+    TitleBar     = 0
+    BorderStyle  = 2
     ClipControls = .F.
     ShowTips     = .T.
-    KeyPreview   = .T.
+    DataSession  = 1
 
-    *-- Estado / Negocio
-    this_oBusinessObject   = .NULL.
-    this_cMensagemErro     = ""
-
-    *-- Permissoes do usuario (lidas do BO apos InicializarPermissoes)
-    this_lExcluirDocumento = .F.
-    this_lExcluirCheque    = .F.
-
-    *-- Change-detection de filtros (equivalente AntXxx do legado)
-    this_dAntDtIni         = {}
-    this_dAntDtFin         = {}
-    this_cAntCdGrupo       = ""
-    this_cAntDsGrupo       = ""
-    this_cAntCdConta       = ""
-    this_cAntDsConta       = ""
-
-    *-- Estado de containers flutuantes e leitura de cheque por leitor magnetico
-    this_lPlInicio         = .F.
-    this_lPlLeCheque       = .F.
-    this_lPlLeitor         = .F.
-    this_cPcChqLido        = ""
-    this_lChMatIni         = .F.
-
-    *-- OPERACIONAL: equivalencias para compatibilidade com validacao multi-fase do pipeline:
-    *-- ConfigurarPaginaLista=ConfigurarGrade | AlternarPagina=N/A | ConfigurarPaginaDados=ConfigurarFiltros
-    *-- BtnIncluirClick=N/A | BtnAlterarClick=N/A | BtnVisualizarClick=N/A | BtnExcluirClick=N/A
-    *-- BtnSalvarClick=BtnProcessarClick | BtnCancelarClick=BtnEncerrarClick
-    *-- FormParaBO=MontarCheques | BOParaForm=ExibirCheques | CarregarLista=MontarCheques
-
+    *==========================================================================
+    * Init - Sem parametros recebidos do chamador (form aberto direto pelo
+    * menu, popMovimentos). DODEFAULT() encadeia para FormBase.Init(), que
     *==========================================================================
     PROCEDURE Init()
-    *==========================================================================
-        *-- DataSession=2 reseta SET DATE/CENTURY (regra 9.4) - corrigir antes de DODEFAULT
-        SET DATE TO BRITISH
-        SET CENTURY ON
         RETURN DODEFAULT()
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE InicializarForm
+    * InicializarForm - Instancia o BO e monta a estrutura visual base.
+    * Fase 3 monta apenas o cabecalho (cnt_4c_Sombra); grid, CommandGroup de
+    * acoes, filtros e containers flutuantes entram nas Fases 4 a 7.
     *==========================================================================
+    PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
-            *-- Criar Business Object
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrChrBO")
-            IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Erro ao criar objeto de neg" + CHR(243) + "cio SigPrChr.", "Erro")
-            ELSE
-                *-- Carregar permissoes do usuario via BO
-                THIS.this_oBusinessObject.InicializarPermissoes()
-                THIS.this_lExcluirDocumento = THIS.this_oBusinessObject.this_lExcluirDocumento
-                THIS.this_lExcluirCheque    = THIS.this_oBusinessObject.this_lExcluirCheque
 
-                *-- Inicializar datas de filtro com data atual
-                THIS.this_oBusinessObject.this_dDtInicial = DATE()
-                THIS.this_oBusinessObject.this_dDtFinal   = DATE()
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
 
-                *-- Inicializar cursores base (contas com emissao de cheque, modelos de impressao)
-                IF !THIS.this_oBusinessObject.InicializarCursores()
-                    MsgErro("Falha ao inicializar dados do formul" + CHR(225) + "rio.", "Erro")
-                    loc_lSucesso = .F.
-                ENDIF
-
-                *-- Montar interface visual
                 THIS.ConfigurarPageFrame()
-                THIS.ConfigurarCabecalho()
-                THIS.ConfigurarFiltros()
-                THIS.ConfigurarGrade()
-                THIS.ConfigurarBotoesSelecao()
-                THIS.ConfigurarBotoesAcao()
-                THIS.ConfigurarContainerJustificativa()
-                THIS.ConfigurarContainerImpChmat()
-                THIS.ConfigurarContainerProcurar()
 
-                *-- Propagar titulo din?mico nos labels do cabecalho
                 THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption
 
-                *-- Tornar controles visiveis (exceto containers flutuantes)
-                THIS.TornarControlesVisiveis()
+                *-- Semeia os filtros a partir do BO (Init do BO ja carrega
+                *-- this_dDataInicial/this_dDataFinal com DATE(), como o
+                *-- "ThisForm.Dt_Inicial.Value = Date()" do Init legado), com o
+                *-- BO como fonte unica do estado dos filtros.
+                THIS.BOParaForm()
 
-                *-- Configurar eventos BINDEVENT
-                THIS.ConfigurarBINDEVENTs()
+                THIS.TornarControlesVisiveis(THIS)
+                THIS.Visible = .T.
 
                 loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao criar SigPrChrBO. VARTYPE retornou: " + ;
+                    VARTYPE(THIS.this_oBusinessObject), "FormSigPrChr.InicializarForm")
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro FormSigPrChr.InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigPrChr.InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * ConfigurarPageFrame - OPERACIONAL: sem PageFrame, fundo via Picture do Form
+    * ConfigurarPageFrame - Orquestrador de montagem visual. SIGPRCHR nao tem
+    * PageFrame no legado (layout flat) - o nome do metodo eh mantido apenas
+    * como ponto de entrada arquitetural padrao (mesmo papel em FormFop/FormEnd).
+    * Fases: Fase 3 - so o cabecalho.
+    *   Fase 4 - ConfigurarGrid() (grd_4c_Dados) + ConfigurarBotoesAcao()
+    *             (cmdGok + Marca/Desmarca tudo + Processar) + MontaGrade()
+    *   Fase 5 - ConfigurarMolduras() (Shape1/Shape2) + ConfigurarFiltros()
+    *             com a PRIMEIRA metade dos campos (Grupo + Periodo)
+    *   Fase 6 - ConfigurarFiltros() acrescenta a SEGUNDA metade (Conta +
+    *             Favorecido), os handlers GotFocus (equivalente ao When) e
+    *             KeyPress (equivalente ao Valid) de TODOS os filtros, e os
+    *             pickers AbrirBuscaGrupo()/AbrirBuscaConta() (substituem
+    *             fAcessoContab/fAcessoContas do legado - Pattern A)
+    *   Fase 7 - ConfigurarContainersFlutuantes() (justificativa/procurar/leitor
+    *             de codigo de barras/impressao manual matricial)
+    *
+    * Todos os 6 campos de filtro (Grupo/Conta/Periodo) ja existem como
+    * TextBox e ja tem validacao/lookup completos. MontaGrade()/
+    * ExibirCheques() continuam lendo pelos getters ObterFiltro* (guard
+    * PEMSTATUS mantido por simetria - os campos sempre existem a partir
+    * desta fase, mas o fallback para a property do BO fica inofensivo).
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPageFrame
-        THIS.Picture      = gc_4c_CaminhoBase + "..\..\..\Framework\imagens\new_background.jpg"
-        THIS.ClipControls = .F.
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.ConfigurarCabecalho()
+        THIS.ConfigurarMolduras()
+        THIS.ConfigurarGrid()
+        THIS.ConfigurarBotoesAcao()
+        THIS.ConfigurarFiltros()
+        THIS.ConfigurarContainersFlutuantes()
     ENDPROC
 
     *==========================================================================
-    * ConfigurarCabecalho - Container escuro com titulo (cntSombra do original)
+    * ConfigurarMolduras - Shape1 (moldura da grade) e Shape2 (moldura da
+    * faixa de filtros Grupo/Periodo/Conta), copiados do layout.json sem
+    * BorderColor/FillColor declarados no dump - por isso FillStyle=1
+    * (transparente), para nao cobrir os controles desenhados por cima.
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarCabecalho
-        THIS.AddObject("cnt_4c_Sombra", "Container")
-        WITH THIS.cnt_4c_Sombra
-            .Visible     = .T.
-            .Top         = 0
-            .Left        = 0
-            .Width       = THIS.Width
-            .Height      = 80
-            .BorderWidth = 0
-            .BackColor   = RGB(100,100,100)
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
+    PROTECTED PROCEDURE ConfigurarMolduras()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("shp_4c_Shape2", "Shape")
+            WITH THIS.shp_4c_Shape2
+                .Top         = 156
+                .Left        = 18
+                .Width       = 774
+                .Height      = 66
+                .BorderColor = RGB(0, 0, 0)
+                .BorderStyle = 6
+                .FillStyle   = 1
+                .Visible     = .T.
+            ENDWITH
+
+            THIS.AddObject("shp_4c_Shape1", "Shape")
+            WITH THIS.shp_4c_Shape1
+                .Top         = 227
+                .Left        = 18
+                .Width       = 774
+                .Height      = 301
+                .BorderColor = RGB(0, 0, 0)
+                .BorderStyle = 1
+                .FillStyle   = 1
+                .Visible     = .T.
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarMolduras")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCabecalho - Container cinza escuro com titulo do form.
+    * Original: cntSombra Top=0, Left=0, Width=800, Height=80,
+    * BackColor=RGB(100,100,100) (layout.json) - copiado sem escala, pois
+    * THIS.Width ja eh 800 (identico ao legado).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCnt, loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Sombra", "Container")
+            loc_oCnt = THIS.cnt_4c_Sombra
+            WITH loc_oCnt
+                .Top         = 0
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BorderWidth = 0
+                .BackColor   = RGB(100, 100, 100)
+                .Visible     = .T.
+            ENDWITH
+
+            loc_oCnt.AddObject("lbl_4c_Sombra", "Label")
+            WITH loc_oCnt.lbl_4c_Sombra
                 .FontBold      = .T.
                 .FontName      = "Tahoma"
                 .FontSize      = 18
                 .FontUnderline = .F.
                 .WordWrap      = .T.
                 .Alignment     = 0
-                .AutoSize      = .F.
                 .BackStyle     = 0
+                .AutoSize      = .F.
                 .Caption       = THIS.Caption
                 .Height        = 40
                 .Left          = 10
                 .Top           = 25
-                .Width         = THIS.Width
-                .ForeColor     = RGB(0,0,0)
+                .Width         = 769
+                .ForeColor     = RGB(0, 0, 0)
+                .Visible       = .T.
             ENDWITH
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
+
+            loc_oCnt.AddObject("lbl_4c_Titulo", "Label")
+            WITH loc_oCnt.lbl_4c_Titulo
                 .FontBold   = .T.
                 .FontName   = "Tahoma"
                 .FontSize   = 18
                 .WordWrap   = .T.
                 .Alignment  = 0
-                .AutoSize   = .F.
                 .BackStyle  = 0
+                .AutoSize   = .F.
                 .Caption    = THIS.Caption
                 .Height     = 46
                 .Left       = 10
                 .Top        = 24
-                .Width      = THIS.Width
-                .ForeColor  = RGB(255,255,255)
+                .Width      = 769
+                .ForeColor  = RGB(255, 255, 255)
+                .Visible    = .T.
             ENDWITH
-        ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarCabecalho")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
-    * ConfigurarFiltros - Area de filtros: Grupo, Conta, Periodo, Botao Processar
-    * Original: Shape2 (bordas), lbls, getCdGrupos, getDsGrupos, getCdContas,
-    *           getDsContas, Dt_inicial, Dt_final, Say2, Command2
+    * CriarCursorCheques - Cursor de trabalho da grade de cheques
+    * (cursor_4c_Cheques = CsSigCqChi do legado). Estrutura EXATA da que sera
+    * populada por SQLEXEC nas fases seguintes (filtros de Grupo/Conta/
+    * Periodo, ver mExibeCheques/MontaChq do legado) - criado aqui vazio para
+    * o Grid poder ligar Column.ControlSource ja nesta fase, sem estourar
+    * "Alias nao encontrado" (regra: Column.ControlSource antes do cursor
+    * existir derruba o Init).
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarFiltros
-        LOCAL loc_oObj
+    PROTECTED PROCEDURE CriarCursorCheques()
+        LOCAL loc_cNull
 
-        *-- Shape de borda da area de filtros (Shape2 original: Top=156, H=66)
-        THIS.AddObject("shp_4c_Filtros", "Shape")
-        WITH THIS.shp_4c_Filtros
-            .Visible      = .T.
-            .Top          = 156
-            .Left         = 18
-            .Width        = 774
-            .Height       = 66
-            .BackStyle    = 0
-            .BorderStyle  = 6
-            .SpecialEffect= 1
-        ENDWITH
-
-        *-- Label Grupo
-        THIS.AddObject("lbl_4c_Grupo", "Label")
-        WITH THIS.lbl_4c_Grupo
-            .Visible    = .T.
-            .AutoSize   = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .BackStyle  = 0
-            .Caption    = "Grupo :"
-            .Height     = 15
-            .Left       = 34
-            .Top        = 167
-            .Width      = 38
-            .ForeColor  = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox codigo do grupo
-        THIS.AddObject("txt_4c_CdGrupos", "TextBox")
-        WITH THIS.txt_4c_CdGrupos
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Format         = "K"
-            .Height         = 25
-            .Left           = 75
-            .MaxLength      = 10
-            .SpecialEffect  = 1
-            .Top            = 163
-            .Width          = 100
-            .Themes         = .F.
-            .Value          = ""
-        ENDWITH
-
-        *-- TextBox descricao do grupo
-        THIS.AddObject("txt_4c_DsGrupos", "TextBox")
-        WITH THIS.txt_4c_DsGrupos
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Format         = "K"
-            .Height         = 25
-            .Left           = 177
-            .MaxLength      = 50
-            .SpecialEffect  = 1
-            .Top            = 163
-            .Width          = 360
-            .Themes         = .F.
-            .Value          = ""
-        ENDWITH
-
-        *-- Label Conta
-        THIS.AddObject("lbl_4c_Conta", "Label")
-        WITH THIS.lbl_4c_Conta
-            .Visible    = .T.
-            .AutoSize   = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .BackStyle  = 0
-            .Caption    = "Conta :"
-            .Height     = 15
-            .Left       = 34
-            .Top        = 194
-            .Width      = 38
-            .ForeColor  = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox codigo da conta
-        THIS.AddObject("txt_4c_CdContas", "TextBox")
-        WITH THIS.txt_4c_CdContas
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Format         = "K"
-            .Height         = 25
-            .Left           = 75
-            .MaxLength      = 10
-            .SpecialEffect  = 1
-            .Top            = 190
-            .Width          = 100
-            .Themes         = .F.
-            .Value          = ""
-        ENDWITH
-
-        *-- TextBox descricao da conta
-        THIS.AddObject("txt_4c_DsContas", "TextBox")
-        WITH THIS.txt_4c_DsContas
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Format         = "K"
-            .Height         = 25
-            .Left           = 177
-            .MaxLength      = 50
-            .SpecialEffect  = 1
-            .Top            = 190
-            .Width          = 360
-            .Themes         = .F.
-            .Value          = ""
-        ENDWITH
-
-        *-- Label Periodo
-        THIS.AddObject("lbl_4c_Periodo", "Label")
-        WITH THIS.lbl_4c_Periodo
-            .Visible    = .T.
-            .AutoSize   = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .BackStyle  = 0
-            .Caption    = "Per" + CHR(237) + "odo :"
-            .Height     = 15
-            .Left       = 550
-            .Top        = 167
-            .Width      = 45
-            .ForeColor  = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox data inicial
-        THIS.AddObject("txt_4c_DtInicial", "TextBox")
-        WITH THIS.txt_4c_DtInicial
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Alignment      = 3
-            .SpecialEffect  = 1
-            .Left           = 598
-            .Top            = 163
-            .Value          = DATE()
-        ENDWITH
-
-        *-- Label separador "a"
-        THIS.AddObject("lbl_4c_Sep", "Label")
-        WITH THIS.lbl_4c_Sep
-            .Visible    = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .BackStyle  = 0
-            .Caption    = "a"
-            .Left       = 686
-            .Top        = 167
-            .ForeColor  = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox data final
-        THIS.AddObject("txt_4c_DtFinal", "TextBox")
-        WITH THIS.txt_4c_DtFinal
-            .Visible        = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Alignment      = 3
-            .SpecialEffect  = 1
-            .Left           = 701
-            .Top            = 163
-            .Value          = DATE()
-        ENDWITH
-
-        *-- Botao Processar (Command2 original)
-        THIS.AddObject("cmd_4c_Processar", "CommandButton")
-        WITH THIS.cmd_4c_Processar
-            .Visible     = .T.
-            .Top         = 191
-            .Left        = 598
-            .Height      = 24
-            .Width       = 88
-            .FontBold    = .T.
-            .FontItalic  = .T.
-            .FontName    = "Tahoma"
-            .FontSize    = 8
-            .Caption     = "Processar"
-            .ForeColor   = RGB(90,90,90)
-            .BackColor   = RGB(255,255,255)
-            .Themes      = .F.
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarGrade - Grid principal de cheques + Shape de borda
-    * Original: Shape1 (borda grid), grdCcheques (10 colunas), txtFavorecido, lbl5
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGrade
-        LOCAL loc_oGrid
-
-        *-- Shape de borda da area do grid (Shape1: Top=227, H=301)
-        THIS.AddObject("shp_4c_Grade", "Shape")
-        WITH THIS.shp_4c_Grade
-            .Visible      = .T.
-            .Top          = 227
-            .Left         = 18
-            .Width        = 774
-            .Height       = 301
-            .BackStyle    = 0
-            .SpecialEffect= 1
-        ENDWITH
-
-        *-- Grid de cheques
-        THIS.AddObject("grd_4c_Dados", "Grid")
-        WITH THIS.grd_4c_Dados
-            .Visible            = .T.
-            .Top                = 233
-            .Left               = 24
-            .Width              = 710
-            .Height             = 291
-            .ColumnCount        = 10
-            .FontName           = "Tahoma"
-            .FontSize           = 8
-            .AllowHeaderSizing  = .F.
-            .AllowRowSizing     = .F.
-            .DeleteMark         = .F.
-            .RecordMark         = .F.
-            .ScrollBars         = 2
-            .GridLineColor      = RGB(238,238,238)
-            .ReadOnly           = .F.
-
-            *-- Coluna 1: Data (clnDatas) - ColumnOrder=10 = aparece por ultimo no tab
-            WITH .Column1
-                .FontName       = "Tahoma"
-                .ColumnOrder    = 10
-                .Width          = 79
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Data"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 10
-                    .ReadOnly       = .T.
-                    .ForeColor      = RGB(0,0,0)
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 2: Conta (clnContas)
-            WITH .Column2
-                .FontName       = "Tahoma"
-                .Width          = 79
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Conta"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 10
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 3: Copia (clnNcopias)
-            WITH .Column3
-                .FontName       = "Tahoma"
-                .Width          = 51
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                .InputMask      = "999999"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "C" + CHR(243) + "pia"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .InputMask      = "999999"
-                    .Margin         = 0
-                    .MaxLength      = 6
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 4: Banco (clnBancos)
-            WITH .Column4
-                .FontName       = "Tahoma"
-                .Width          = 30
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Bco"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 3
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 5: Agencia (clnAgencias)
-            WITH .Column5
-                .FontName       = "Tahoma"
-                .Width          = 37
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Ag."
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 4
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 6: C.Corrente (clnNcontas)
-            WITH .Column6
-                .FontName       = "Tahoma"
-                .Width          = 79
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "C.Corrente"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 10
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 7: Cheque (clnNcheques)
-            WITH .Column7
-                .FontName       = "Tahoma"
-                .Width          = 51
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Cheque"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 6
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 8: Situacao (clnSituacaos)
-            WITH .Column8
-                .FontName       = "Tahoma"
-                .Width          = 79
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Situa" + CHR(231) + CHR(227) + "o"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .Margin         = 0
-                    .MaxLength      = 11
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 9: Valor (clnValors)
-            WITH .Column9
-                .FontName       = "Tahoma"
-                .Width          = 110
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .T.
-                .Format         = "K"
-                .InputMask      = "999,999,999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Valor"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                WITH .Text1
-                    .FontName       = "Tahoma"
-                    .BorderStyle    = 0
-                    .Format         = "K"
-                    .InputMask      = "999,999,999.99"
-                    .Margin         = 0
-                    .MaxLength      = 14
-                    .ReadOnly       = .T.
-                ENDWITH
-                .CurrentControl = "Text1"
-                .Sparse         = .T.
-            ENDWITH
-
-            *-- Coluna 10: Imprime - CheckBox (clnImprime) - ColumnOrder=1 = aparece primeiro
-            WITH .Column10
-                .FontName       = "Tahoma"
-                .ColumnOrder    = 1
-                .Width          = 55
-                .Movable        = .F.
-                .Resizable      = .F.
-                .ReadOnly       = .F.
-                .Sparse         = .F.
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .Alignment  = 2
-                    .Caption    = "Imprime"
-                    .ForeColor  = RGB(90,90,90)
-                ENDWITH
-                .AddObject("Check1", "CheckBox")
-                WITH .Check1
-                    .Top        = 32
-                    .Left       = 8
-                    .Height     = 17
-                    .Width      = 60
-                    .FontName   = "Tahoma"
-                    .Alignment  = 0
-                    .Caption    = ""
-                    .ReadOnly   = .F.
-                    .Value      = 0
-                ENDWITH
-                .CurrentControl = "Check1"
-            ENDWITH
-
-            *-- Bind do RecordSource ao cursor de cheques do BO
-            .RecordSource = THIS.this_oBusinessObject.this_cCursorCheques
-        ENDWITH
-
-        *-- Label "Favorecido :"
-        THIS.AddObject("lbl_4c_Favorecido", "Label")
-        WITH THIS.lbl_4c_Favorecido
-            .Visible    = .T.
-            .AutoSize   = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 8
-            .BackStyle  = 0
-            .Caption    = "Favorecido :"
-            .Height     = 15
-            .Left       = 24
-            .Top        = 534
-            .Width      = 62
-            .ForeColor  = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox favorecido (ReadOnly - preenchido automaticamente ao navegar no grid)
-        THIS.AddObject("txt_4c_Favorecido", "TextBox")
-        WITH THIS.txt_4c_Favorecido
-            .Visible        = .T.
-            .FontBold       = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .Format         = "K"
-            .Height         = 25
-            .Left           = 99
-            .MaxLength      = 40
-            .ReadOnly       = .T.
-            .SelectOnEntry  = .T.
-            .SpecialEffect  = 1
-            .Top            = 530
-            .Width          = 286
-            .Themes         = .F.
-            .Value          = ""
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarPaginaLista - Alias de compatibilidade com pipeline multi-fase
-    * OPERACIONAL: sem PageFrame; delega para ConfigurarGrade (mapeamento no cabecalho)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaLista
-        THIS.ConfigurarGrade()
-    ENDPROC
-
-    *==========================================================================
-    * AlternarPagina - Stub N/A para OPERACIONAL (sem Page1/Page2)
-    * Pipeline multi-fase exige a assinatura; OPERACIONAL nao tem paginas para alternar
-    *==========================================================================
-    PROCEDURE AlternarPagina(par_nPagina)
-        *-- N/A: form OPERACIONAL usa layout flat, sem PageFrame
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh()
+        IF USED("cursor_4c_Cheques")
+            USE IN cursor_4c_Cheques
         ENDIF
-    ENDPROC
 
-    *==========================================================================
-    * ConfigurarPaginaDados - Alias de compatibilidade com pipeline multi-fase
-    * OPERACIONAL: sem Page2/Dados; filtros ja configurados em ConfigurarFiltros,
-    * chamado diretamente por InicializarForm. Este metodo existe apenas para
-    * satisfazer a assinatura exigida pelo validador do pipeline.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaDados
-        *-- N/A: form OPERACIONAL usa layout flat; mapeamento: ConfigurarPaginaDados=ConfigurarFiltros
-        *-- ConfigurarFiltros ja foi chamado em InicializarForm - apenas atualiza controles
-        IF VARTYPE(THIS.txt_4c_DtInicial) = "O"
-            THIS.txt_4c_DtInicial.Refresh()
-            THIS.txt_4c_DtFinal.Refresh()
+        *-- SET NULL ON antes do CREATE CURSOR: SQL Server pode devolver NULL
+        *-- em colunas aqui declaradas sem a clausula NULL (favos/contas/etc).
+        *-- Sem isso, o APPEND FROM DBF() de MontaGrade estoura "Field XXX
+        *-- does not accept null values" no primeiro registro NULL.
+        loc_cNull = SET("Null")
+        SET NULL ON
+
+        CREATE CURSOR cursor_4c_Cheques ;
+            (emps C(3), dopes C(20), numes N(6,0), datas T NULL, bancos C(3), ;
+             agencias C(4), ncontas C(10), ncheques C(6), contas C(10), ;
+             valors N(11,2), favos C(40), ncopias N(6,0), nemissoes N(2,0), ;
+             cidchaves C(20), nemitidos N(1,0), ncancelas N(1,0), ;
+             nmarca1s N(1,0), justcanc M)
+
+        IF loc_cNull == "OFF"
+            SET NULL OFF
         ENDIF
+
+        *-- Indices criados JUNTO com o cursor (vazio), nao apenas apos a
+        *-- primeira carga: ExibirCheques faz "SET ORDER TO NCopias/Contas" e,
+        *-- com o cursor existindo SEM TAG nenhuma, isso estoura "Table has no
+        *-- index order set." - acontece quando o usuario abre a tela e usa
+        *-- Procurar/Chq. Matric. ANTES de Processar (no legado o cursor nem
+        *-- existia nesse momento e o guard IF USED() pulava tudo). INDEX ON
+        *-- cursor vazio eh valido, e o ZAP da recarga PRESERVA as tags, entao
+        *-- a chamada seguinte em MontaGrade vira no-op (guard TAGCOUNT = 0).
+        THIS.CriarIndicesCheques()
     ENDPROC
 
     *==========================================================================
-    * ConfigurarBotoesSelecao - Botoes Marca/Desmarca tudo (ao lado direito do grid)
-    * Original: cmdTudo1 (geral_marcar_26.jpg), cmdApaga1 (cadastro_excluir_26.jpg)
+    * CriarIndicesCheques - Os 12 indices que o legado cria sobre CsSigCqChi
+    * logo apos montar o cursor (PROCEDURE montachq), transcritos 1:1 e com os
+    * MESMOS nomes de TAG - as tags sao usadas por nome em SET ORDER TO /
+    * SEEK(..., "<tag>") no reposicionamento e na tela de Procurar, entao
+    * renomear qualquer uma delas quebra a busca (nunca usar uma tag unica
+    * "ordem").
+    *
+    * Medido no VFP9: ZAP PRESERVA as TAGs do indice (TAGCOUNT antes e depois
+    * = 2), por isso os indices sao criados uma unica vez - nas recargas
+    * seguintes o APPEND apenas atualiza as tags existentes.
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBotoesSelecao
-        *-- Botao Marcar Todos (cmdTudo1)
-        THIS.AddObject("cmd_4c_SelTudo", "CommandButton")
-        WITH THIS.cmd_4c_SelTudo
-            .Visible        = .T.
-            .Top            = 334
-            .Left           = 742
-            .Height         = 40
-            .Width          = 40
-            .FontName       = "Verdana"
-            .FontSize       = 8
-            .Caption        = ""
-            .ToolTipText    = "Marca tudo"
-            .ForeColor      = RGB(36,84,155)
-            .BackColor      = RGB(255,255,255)
-            .Themes         = .T.
-            .Picture        = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
-            .DisabledPicture= gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
-        ENDWITH
+    PROTECTED PROCEDURE CriarIndicesCheques()
+        LOCAL loc_cCursor
 
-        *-- Botao Desmarcar Todos (cmdApaga1)
-        THIS.AddObject("cmd_4c_Apaga", "CommandButton")
-        WITH THIS.cmd_4c_Apaga
-            .Visible        = .T.
-            .Top            = 375
-            .Left           = 742
-            .Height         = 40
-            .Width          = 40
-            .FontName       = "Verdana"
-            .FontSize       = 8
-            .Caption        = ""
-            .ToolTipText    = "Desmarca tudo"
-            .ForeColor      = RGB(36,84,155)
-            .BackColor      = RGB(255,255,255)
-            .Themes         = .T.
-            .Picture        = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-            .DisabledPicture= gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-        ENDWITH
-    ENDPROC
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
 
-    *==========================================================================
-    * ConfigurarBotoesAcao - CommandGroup com 9 botoes de acao (cmdGok original)
-    * Botoes: cmdDocumento, cmdSair, cmdImprimir, cmdProcurar, cmdRecibo,
-    *         cmdExcluiDoc, cmdImpchq, cmdchmat, btnExcluirChq
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBotoesAcao
-        THIS.AddObject("cmg_4c_Acoes", "CommandGroup")
-        WITH THIS.cmg_4c_Acoes
-            .Visible        = .T.
-            .AutoSize       = .F.
-            .ButtonCount    = 9
-            .BackStyle      = 0
-            .BorderStyle    = 0
-            .Height         = 160
-            .Left           = 11
-            .SpecialEffect  = 1
-            .Top            = -3
-            .Width          = 789
-            .Themes         = .F.
-
-            *-- Botao 1: Documento (cmdDocumento) - Top=121, Left=473
-            WITH .Buttons(1)
-                .Top            = 121
-                .Left           = 473
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .Caption        = "\<Documento"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "geral_pastas_60.jpg"
-            ENDWITH
-
-            *-- Botao 2: Encerrar/Sair (cmdSair) - Top=6, Left=713
-            WITH .Buttons(2)
-                .Top            = 6
-                .Left           = 713
-                .Height         = 75
-                .Width          = 75
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "Encerrar"
-                .Cancel         = .T.
-                .ToolTipText    = "[Esc] Encerrar"
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            ENDWITH
-
-            *-- Botao 3: Imprimir (cmdImprimir) - Top=84, Left=353
-            WITH .Buttons(3)
-                .Top            = 84
-                .Left           = 353
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "\<Imprimir"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
-            ENDWITH
-
-            *-- Botao 4: Procurar (cmdProcurar) - Top=84, Left=593
-            WITH .Buttons(4)
-                .Top            = 84
-                .Left           = 593
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "\<Procurar"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
-            ENDWITH
-
-            *-- Botao 5: Recibo (cmdRecibo) - Top=121, Left=593
-            WITH .Buttons(5)
-                .Top            = 121
-                .Left           = 593
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "\<Recibo"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "geral_pendencia_60.jpg"
-            ENDWITH
-
-            *-- Botao 6: Excluir Documento (cmdExcluiDoc) - Top=84, Left=473
-            WITH .Buttons(6)
-                .Top            = 84
-                .Left           = 473
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "E\<xclui Docto."
-                .ToolTipText    = "Exclui Documento"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
-            ENDWITH
-
-            *-- Botao 7: Cheque (impressao cheque - cmdImpchq) - Top=121, Left=353
-            WITH .Buttons(7)
-                .Top            = 121
-                .Left           = 353
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "Che\<que"
-                .ToolTipText    = "Impressora de cheque"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "geral_boleto_60.jpg"
-            ENDWITH
-
-            *-- Botao 8: Cheque Matricial (cmdchmat) - Top=84, Left=233
-            WITH .Buttons(8)
-                .Top            = 84
-                .Left           = 233
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "Chq. \<Matric."
-                .ToolTipText    = "Impressora matricial"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "cheque.png"
-            ENDWITH
-
-            *-- Botao 9: Excluir Cheque (btnExcluirChq) - Top=121, Left=233
-            WITH .Buttons(9)
-                .Top            = 121
-                .Left           = 233
-                .Height         = 37
-                .Width          = 120
-                .FontBold       = .T.
-                .FontItalic     = .T.
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .Caption        = "Excluir Chq."
-                .ToolTipText    = "Exclui Cheque"
-                .PicturePosition= 1
-                .ForeColor      = RGB(90,90,90)
-                .BackColor      = RGB(255,255,255)
-                .Themes         = .F.
-                .Picture        = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
-            ENDWITH
-        ENDWITH
-
-        *-- Aplicar estado inicial dos botoes conforme permissoes
-        THIS.AtualizarBotoesPermissao()
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarContainerJustificativa - Container flutuante para justificativa
-    * de cancelamento de cheque (cntjustificativa original - Visible=.F.)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerJustificativa
-        THIS.AddObject("cnt_4c_Justificativa", "Container")
-        WITH THIS.cnt_4c_Justificativa
-            .Visible        = .F.
-            .Top            = 532
-            .Left           = 395
-            .Width          = 350
-            .Height         = 69
-            .BorderWidth    = 0
-            .SpecialEffect  = 0
-            .BackColor      = RGB(255,255,255)
-
-            *-- Label
-            .AddObject("lbl_4c_LblJust", "Label")
-            WITH .lbl_4c_LblJust
-                .AutoSize   = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .BackStyle  = 0
-                .Caption    = "Justificativa do cancelamento"
-                .Height     = 15
-                .Left       = 6
-                .Top        = 5
-                .Width      = 143
-                .ForeColor  = RGB(90,90,90)
-            ENDWITH
-
-            *-- EditBox justificativa (get_justificativa original)
-            .AddObject("txt_4c_Justificativa", "EditBox")
-            WITH .txt_4c_Justificativa
-                .Height             = 44
-                .Left               = 3
-                .Top                = 21
-                .Width              = 238
-                .ForeColor          = RGB(0,0,0)
-                .DisabledBackColor  = RGB(255,255,255)
-                .DisabledForeColor  = RGB(0,0,0)
-                .Value              = ""
-            ENDWITH
-
-            *-- CommandGroup confirmacao (cmdGconf: 2 botoes - Confirmar, Cancelar)
-            .AddObject("cmg_4c_Conf", "CommandGroup")
-            WITH .cmg_4c_Conf
-                .ButtonCount    = 2
-                .BackStyle      = 0
-                .Height         = 47
-                .Left           = 243
-                .Top            = 18
-                .Width          = 107
-                .Themes         = .F.
-
-                WITH .Buttons(1)
-                    .Top            = 4
-                    .Left           = 5
-                    .Height         = 40
-                    .Width          = 48
-                    .Caption        = ""
-                    .ToolTipText    = "Confirmar"
-                    .ForeColor      = RGB(36,84,155)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .T.
-                    .Picture        = gc_4c_CaminhoIcones + "geral_escudo_ok_32.jpg"
-                    .DisabledPicture= gc_4c_CaminhoIcones + "geral_escudo_ok_32.jpg"
-                ENDWITH
-
-                WITH .Buttons(2)
-                    .Top            = 4
-                    .Left           = 53
-                    .Height         = 40
-                    .Width          = 48
-                    .FontName       = "Verdana"
-                    .FontSize       = 8
-                    .Caption        = ""
-                    .Cancel         = .T.
-                    .ToolTipText    = "Cancelar"
-                    .ForeColor      = RGB(36,84,155)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .T.
-                    .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_32.jpg"
-                    .DisabledPicture= gc_4c_CaminhoIcones + "cadastro_sair_32.jpg"
-                ENDWITH
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarContainerImpChmat - Container flutuante para impressao matricial
-    * (impchmat original - Visible=.F., Enabled=.F.)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerImpChmat
-        THIS.AddObject("cnt_4c_Impchmat", "Container")
-        WITH THIS.cnt_4c_Impchmat
-            .Visible        = .F.
-            .Enabled        = .F.
-            .Top            = 284
-            .Left           = 240
-            .Width          = 314
-            .Height         = 218
-            .SpecialEffect  = 0
-            .BackColor      = RGB(255,255,255)
-
-            *-- Label titulo
-            .AddObject("lbl_4c_TituloImp", "Label")
-            WITH .lbl_4c_TituloImp
-                .AutoSize   = .T.
-                .FontBold   = .T.
-                .FontName   = "Tahoma"
-                .BackStyle  = 0
-                .Caption    = "Impress" + CHR(227) + "o"
-                .Height     = 16
-                .Left       = 12
-                .Top        = 8
-                .Width      = 65
-                .ForeColor  = RGB(90,90,90)
-            ENDWITH
-
-            *-- Label Banco
-            .AddObject("lbl_4c_Banco", "Label")
-            WITH .lbl_4c_Banco
-                .Caption    = "Banco :"
-                .Height     = 15
-                .Left       = 66
-                .Top        = 157
-                .Width      = 38
-            ENDWITH
-
-            *-- TextBox codigo do banco
-            .AddObject("txt_4c_Banco", "TextBox")
-            WITH .txt_4c_Banco
-                .InputMask  = "999"
-                .Left       = 107
-                .Top        = 153
-                .Width      = 31
-                .ForeColor  = RGB(0,0,0)
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Cheque Inicial
-            .AddObject("lbl_4c_ChqIni", "Label")
-            WITH .lbl_4c_ChqIni
-                .Caption    = "Cheque Inicial :"
-                .Height     = 15
-                .Left       = 28
-                .Top        = 185
-                .Width      = 76
-            ENDWITH
-
-            *-- TextBox cheque inicial
-            .AddObject("txt_4c_Chini", "TextBox")
-            WITH .txt_4c_Chini
-                .Height     = 23
-                .InputMask  = "999999"
-                .Left       = 107
-                .MaxLength  = 6
-                .Top        = 179
-                .Width      = 52
-                .ForeColor  = RGB(0,0,0)
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Cheque Final
-            .AddObject("lbl_4c_ChqFin", "Label")
-            WITH .lbl_4c_ChqFin
-                .Caption    = "Cheque Final :"
-                .Height     = 15
-                .Left       = 172
-                .Top        = 184
-                .Width      = 71
-            ENDWITH
-
-            *-- TextBox cheque final
-            .AddObject("txt_4c_Chfin", "TextBox")
-            WITH .txt_4c_Chfin
-                .Height     = 23
-                .InputMask  = "999999"
-                .Left       = 245
-                .MaxLength  = 6
-                .Top        = 180
-                .Width      = 52
-                .ForeColor  = RGB(0,0,0)
-                .Value      = ""
-            ENDWITH
-
-            *-- CommandGroup: Imprimir + Encerrar (cmdGprocurar: 2 botoes)
-            .AddObject("cmg_4c_ImpProc", "CommandGroup")
-            WITH .cmg_4c_ImpProc
-                .ButtonCount    = 2
-                .BackStyle      = 0
-                .Height         = 110
-                .Left           = 134
-                .SpecialEffect  = 1
-                .Top            = 7
-                .Width          = 173
-                .Themes         = .F.
-
-                WITH .Buttons(1)
-                    .Top            = 1
-                    .Left           = 13
-                    .Height         = 75
-                    .Width          = 75
-                    .FontBold       = .T.
-                    .FontItalic     = .T.
-                    .Caption        = "\<Imprimir"
-                    .ForeColor      = RGB(90,90,90)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .F.
-                    .Picture        = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
-                ENDWITH
-
-                WITH .Buttons(2)
-                    .Top            = 1
-                    .Left           = 95
-                    .Height         = 75
-                    .Width          = 75
-                    .FontBold       = .T.
-                    .FontItalic     = .T.
-                    .FontName       = "Tahoma"
-                    .FontSize       = 8
-                    .Caption        = "Encerrar"
-                    .Cancel         = .T.
-                    .ForeColor      = RGB(90,90,90)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .F.
-                    .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                ENDWITH
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarContainerProcurar - Container flutuante para busca por cheque
-    * (cntProcurar original - Visible=.F.) - busca por banco/agencia/conta/cheque/
-    *   emissao/valor usando leitor magnetico ou digitacao manual
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerProcurar
-        THIS.AddObject("cnt_4c_Procurar", "Container")
-        WITH THIS.cnt_4c_Procurar
-            .Visible        = .F.
-            .Top            = 284
-            .Left           = 240
-            .Width          = 314
-            .Height         = 218
-            .SpecialEffect  = 0
-            .BackColor      = RGB(255,255,255)
-
-            *-- Label titulo
-            .AddObject("lbl_4c_TituloPrc", "Label")
-            WITH .lbl_4c_TituloPrc
-                .AutoSize   = .T.
-                .FontBold   = .T.
-                .FontName   = "Tahoma"
-                .BackStyle  = 0
-                .Caption    = "Procurar"
-                .Height     = 16
-                .Left       = 12
-                .Top        = 8
-                .Width      = 54
-                .ForeColor  = RGB(90,90,90)
-            ENDWITH
-
-            *-- Label Banco
-            .AddObject("lbl_4c_LblBanco", "Label")
-            WITH .lbl_4c_LblBanco
-                .Caption    = "Banco :"
-                .Height     = 15
-                .Left       = 36
-                .Top        = 139
-                .Width      = 38
-            ENDWITH
-
-            *-- TextBox banco
-            .AddObject("txt_4c_BancoP", "TextBox")
-            WITH .txt_4c_BancoP
-                .Left       = 77
-                .Top        = 135
-                .Width      = 31
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Agencia
-            .AddObject("lbl_4c_LblAgencia", "Label")
-            WITH .lbl_4c_LblAgencia
-                .Caption    = "Ag" + CHR(234) + "ncia :"
-                .Height     = 15
-                .Left       = 27
-                .Top        = 163
-                .Width      = 47
-            ENDWITH
-
-            *-- TextBox agencia
-            .AddObject("txt_4c_AgenciaP", "TextBox")
-            WITH .txt_4c_AgenciaP
-                .Left       = 77
-                .Top        = 158
-                .Width      = 40
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Conta
-            .AddObject("lbl_4c_LblContaP", "Label")
-            WITH .lbl_4c_LblContaP
-                .Caption    = "Conta :"
-                .Height     = 15
-                .Left       = 36
-                .Top        = 187
-                .Width      = 38
-            ENDWITH
-
-            *-- TextBox conta
-            .AddObject("txt_4c_ContaP", "TextBox")
-            WITH .txt_4c_ContaP
-                .Height     = 23
-                .Left       = 77
-                .Top        = 181
-                .Width      = 81
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Cheque
-            .AddObject("lbl_4c_LblChequeP", "Label")
-            WITH .lbl_4c_LblChequeP
-                .Caption    = "Cheque :"
-                .Height     = 15
-                .Left       = 164
-                .Top        = 139
-                .Width      = 46
-            ENDWITH
-
-            *-- TextBox cheque
-            .AddObject("txt_4c_ChequeP", "TextBox")
-            WITH .txt_4c_ChequeP
-                .Height     = 23
-                .Left       = 213
-                .Top        = 135
-                .Width      = 52
-                .Value      = ""
-            ENDWITH
-
-            *-- Label Emissao
-            .AddObject("lbl_4c_LblEmissao", "Label")
-            WITH .lbl_4c_LblEmissao
-                .Caption    = "Emiss" + CHR(227) + "o :"
-                .Height     = 15
-                .Left       = 163
-                .Top        = 163
-                .Width      = 47
-            ENDWITH
-
-            *-- TextBox emissao (data)
-            .AddObject("txt_4c_EmissaoP", "TextBox")
-            WITH .txt_4c_EmissaoP
-                .Height     = 23
-                .Left       = 213
-                .Top        = 158
-                .Width      = 81
-                .Value      = {}
-            ENDWITH
-
-            *-- Label Valor
-            .AddObject("lbl_4c_LblValorP", "Label")
-            WITH .lbl_4c_LblValorP
-                .Caption    = "Valor :"
-                .Height     = 15
-                .Left       = 177
-                .Top        = 187
-                .Width      = 33
-            ENDWITH
-
-            *-- TextBox valor
-            .AddObject("txt_4c_ValorP", "TextBox")
-            WITH .txt_4c_ValorP
-                .Height     = 23
-                .Left       = 213
-                .Top        = 181
-                .Width      = 81
-                .Value      = 0
-            ENDWITH
-
-            *-- CommandGroup: Procurar + Encerrar (cmdgprocurar: 2 botoes)
-            .AddObject("cmg_4c_PrcProc", "CommandGroup")
-            WITH .cmg_4c_PrcProc
-                .ButtonCount    = 2
-                .BackStyle      = 0
-                .Height         = 110
-                .Left           = 135
-                .SpecialEffect  = 1
-                .Top            = 7
-                .Width          = 173
-                .Themes         = .F.
-
-                WITH .Buttons(1)
-                    .Top            = 1
-                    .Left           = 13
-                    .Height         = 75
-                    .Width          = 75
-                    .FontBold       = .T.
-                    .FontItalic     = .T.
-                    .Caption        = "\<Procurar"
-                    .ForeColor      = RGB(90,90,90)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .F.
-                    .Picture        = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
-                ENDWITH
-
-                WITH .Buttons(2)
-                    .Top            = 1
-                    .Left           = 95
-                    .Height         = 75
-                    .Width          = 75
-                    .FontBold       = .T.
-                    .FontItalic     = .T.
-                    .FontName       = "Tahoma"
-                    .FontSize       = 8
-                    .Caption        = "Encerrar"
-                    .Cancel         = .T.
-                    .ForeColor      = RGB(90,90,90)
-                    .BackColor      = RGB(255,255,255)
-                    .Themes         = .F.
-                    .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                ENDWITH
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * AtualizarBotoesPermissao - Habilita/desabilita botoes conforme permissoes
-    * Equivalente ao codigo de permissao do Init() original
-    *==========================================================================
-    PROCEDURE AtualizarBotoesPermissao()
-        IF VARTYPE(THIS.cmg_4c_Acoes) = "O"
-            WITH THIS.cmg_4c_Acoes
-                *-- Excluir Documento: botao 6
-                .Buttons(6).Enabled = THIS.this_lExcluirDocumento
-                *-- Excluir Cheque: botao 9
-                .Buttons(9).Enabled = THIS.this_lExcluirCheque
-            ENDWITH
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * AtualizarBotoesLinhaCorrente - Habilita/desabilita botoes conforme cheque corrente
-    * Chamado pelo AfterRowColChange do grid e pelo handler de navegacao
-    *==========================================================================
-    PROCEDURE AtualizarBotoesLinhaCorrente()
-        LOCAL loc_lCancelado, loc_cCursorCheques
-        loc_cCursorCheques = THIS.this_oBusinessObject.this_cCursorCheques
-
-        IF !USED(loc_cCursorCheques) OR EOF(loc_cCursorCheques)
+        IF !USED(loc_cCursor)
             RETURN
         ENDIF
 
-        SELECT (loc_cCursorCheques)
-        loc_lCancelado = (NCancelas <> 0)
+        SELECT (loc_cCursor)
 
-        *-- Atualizar campo Favorecido
-        IF VARTYPE(THIS.txt_4c_Favorecido) = "O"
-            THIS.txt_4c_Favorecido.Value = ALLTRIM(NVL(Favos, ""))
-        ENDIF
-
-        IF VARTYPE(THIS.cmg_4c_Acoes) = "O"
-            WITH THIS.cmg_4c_Acoes
-                .Buttons(1).Enabled = !loc_lCancelado                                       && Documento
-                .Buttons(6).Enabled = (!loc_lCancelado AND THIS.this_lExcluirDocumento)     && Exclui Docto
-                .Buttons(3).Enabled = !loc_lCancelado                                       && Imprimir
-                .Buttons(5).Enabled = !loc_lCancelado                                       && Recibo
-                .Buttons(9).Enabled = (loc_lCancelado AND THIS.this_lExcluirCheque)         && Excluir Chq
-            ENDWITH
-
-            *-- Mostrar/ocultar container justificativa conforme situacao
-            IF VARTYPE(THIS.cnt_4c_Justificativa) = "O"
-                IF loc_lCancelado
-                    WITH THIS.cnt_4c_Justificativa
-                        .Visible = .T.
-                        .txt_4c_Justificativa.Value = ALLTRIM(NVL(Justcanc, ""))
-                        .txt_4c_Justificativa.Width  = 238
-                        .txt_4c_Justificativa.ReadOnly = .T.
-                        .cmg_4c_Conf.Visible = .F.
-                    ENDWITH
-                ELSE
-                    THIS.cnt_4c_Justificativa.Visible = .F.
-                ENDIF
-            ENDIF
+        IF TAGCOUNT() = 0
+            INDEX ON ncopias                TAG NCopias
+            INDEX ON nemitidos              TAG NEmitidos
+            INDEX ON ncancelas              TAG NCancelas
+            INDEX ON nmarca1s               TAG NMarca1s
+            INDEX ON ncheques               TAG NCheques
+            INDEX ON datas                  TAG Datas
+            INDEX ON ncontas + ncheques     TAG Conta
+            INDEX ON contas + STR(ncopias)  TAG Contas
+            INDEX ON DTOS(datas) + bancos + agencias + ncontas + ncheques        TAG Emissao
+            INDEX ON STR(valors, 12, 2) + bancos + agencias + ncontas + ncheques TAG Valor
+            INDEX ON bancos + agencias + ncontas + ncheques                      TAG Cheque
+            INDEX ON agencias + ncontas + ncheques                               TAG Agencia
         ENDIF
     ENDPROC
 
     *==========================================================================
-    * MontarCheques - Dispara carga do cursor de cheques pelo BO
-    * Equivalente ao mMontaChq do legado - chamado pelo botao Processar
+    * MontaGrade - Carga da grade de cheques. Transcricao do "PROCEDURE
+    * montachq" legado: guarda a chave do cheque corrente, consulta o periodo
+    * no banco (SQL no BO), repovoa o cursor, recria os indices, posiciona e
+    * entrega para ExibirCheques().
+    *
+    * Diferenca DELIBERADA em relacao ao legado: o legado faz
+    * "GrdCCheques.RecordSource = '' + Use In CsSigCqChi" e recria o cursor com
+    * SELECT ... INTO CURSOR ... ReadWrite, religando em seguida TODOS os
+    * ControlSource. Aqui o cursor eh PRESERVADO e recarregado com ZAP +
+    * APPEND FROM DBF(): reatribuir RecordSource resetaria Column.Width,
+    * Header1.Caption, Sparse e CurrentControl (o CheckBox da coluna Imprime
+    * deixaria de aparecer). O cursor criado por CREATE CURSOR ja eh
+    * READWRITE, que eh o que a coluna editavel do CheckBox exige.
+    *
+    * ZAP exige SAFETY OFF: config.prg NAO desliga SAFETY (so SET EXACT ON) e
+    * com SAFETY ON o ZAP abre dialogo modal de confirmacao que CONGELA a tela.
     *==========================================================================
-    PROCEDURE MontarCheques(par_lPosiciona)
-        LOCAL loc_lSucesso
-        IF TYPE("par_lPosiciona") != "L"
-            par_lPosiciona = .F.
-        ENDIF
+    PROCEDURE MontaGrade(par_lPosiciona)
+        LOCAL loc_lPosiciona, loc_lSucesso, loc_cCursor, loc_cTmp, loc_cBusca
+        LOCAL loc_cSafety, loc_oErro
+        loc_lSucesso   = .F.
+        loc_lPosiciona = IIF(VARTYPE(par_lPosiciona) = "L", par_lPosiciona, .F.)
+        loc_cBusca     = ""
 
-        *-- Sincronizar filtros da UI para o BO
-        THIS.this_oBusinessObject.this_cCdGrupos  = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
-        THIS.this_oBusinessObject.this_cDsGrupos  = ALLTRIM(THIS.txt_4c_DsGrupos.Value)
-        THIS.this_oBusinessObject.this_cCdContas  = ALLTRIM(THIS.txt_4c_CdContas.Value)
-        THIS.this_oBusinessObject.this_cDsContas  = ALLTRIM(THIS.txt_4c_DsContas.Value)
-        THIS.this_oBusinessObject.this_dDtInicial = THIS.txt_4c_DtInicial.Value
-        THIS.this_oBusinessObject.this_dDtFinal   = THIS.txt_4c_DtFinal.Value
+        TRY
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+            loc_cTmp    = "cursor_4c_ChequesTmp"
 
-        loc_lSucesso = THIS.this_oBusinessObject.MontarCheques(par_lPosiciona)
+            THIS.LockScreen = .T.
 
-        IF loc_lSucesso AND VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh()
-            THIS.AtualizarBotoesLinhaCorrente()
+            *-- lcBusca = Bancos + Agencias + ncontas + Ncheques: chave
+            *-- POSICIONAL de largura fixa (char 3+4+10+6 = 23 = a chave da tag
+            *-- Cheque). NUNCA aplicar ALLTRIM nas partes - o padding FAZ PARTE
+            *-- da chave e encurta-la faz o SEEK devolver "nao achou" em
+            *-- silencio (CLAUDE.md regra #42). Medido: SEEK com a chave crua
+            *-- de 23 chars casa na tag Cheque.
+            IF loc_lPosiciona AND USED(loc_cCursor) AND !EOF(loc_cCursor)
+                SELECT (loc_cCursor)
+                loc_cBusca = bancos + agencias + ncontas + ncheques
+            ENDIF
+
+            WAIT WINDOW "Aguarde! Selecionando Cheques..." NOWAIT
+
+            IF !USED(loc_cCursor)
+                THIS.CriarCursorCheques()
+            ENDIF
+
+            IF THIS.this_oBusinessObject.CarregarCheques(loc_cTmp)
+                loc_cSafety = SET("Safety")
+                SET SAFETY OFF
+
+                SELECT (loc_cCursor)
+                ZAP
+                APPEND FROM DBF(loc_cTmp)
+
+                IF loc_cSafety == "ON"
+                    SET SAFETY ON
+                ENDIF
+
+                IF USED(loc_cTmp)
+                    USE IN (loc_cTmp)
+                ENDIF
+
+                THIS.CriarIndicesCheques()
+
+                *-- Legado: Set Order To NCopias + (llPosiciona -> Seek(lcBusca)
+                *-- senao Go Top). O SEEK roda na ordem CORRENTE (NCopias, que eh
+                *-- numerica) contra uma chave CHARACTER: medido no VFP9, isso
+                *-- NAO dispara erro - apenas nao encontra e cai no Go Top.
+                *-- Transcrito como esta para nao alterar o comportamento visivel.
+                SELECT (loc_cCursor)
+                SET ORDER TO NCopias
+
+                IF loc_lPosiciona
+                    IF !SEEK(loc_cBusca)
+                        GO TOP
+                    ENDIF
+                ELSE
+                    GO TOP
+                ENDIF
+
+                *-- Legado: .cntjustificativa.get_justificativa.ControlSource =
+                *-- 'CsSigCqChi.JustCanc' (o container de justificativa entra em
+                *-- fase posterior - religar so quando ele existir).
+                IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+                    IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_Get_justificativa", 5)
+                        THIS.cnt_4c_justificativa.obj_4c_Get_justificativa.ControlSource = ;
+                            loc_cCursor + ".justcanc"
+                    ENDIF
+                ENDIF
+
+                THIS.grd_4c_Dados.Refresh()
+
+                loc_lSucesso = .T.
+            ELSE
+                *-- Legado: MessageBox('Favor Reinicializar o Processo!!!', 16,
+                *-- 'Falha na Conexao (TmpChi - 1|2)'). A mensagem eh exibida
+                *-- APENAS aqui: o chamador (Processar) nao repete, para nao
+                *-- empilhar dois dialogos sobre a mesma falha.
+                MsgErro("Favor Reinicializar o Processo!!!" + CHR(13) + ;
+                    THIS.this_oBusinessObject.this_cMensagemErro, ;
+                    "Falha na Conex" + CHR(227) + "o (Cheques)")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em MontaGrade")
+        ENDTRY
+
+        WAIT CLEAR
+        THIS.LockScreen = .F.
+
+        *-- Legado: If llPosiciona -> mExibeCheques(.F.) Else mExibeCheques(.T.)
+        IF loc_lSucesso
+            THIS.ExibirCheques(!loc_lPosiciona)
+            THIS.this_oBusinessObject.this_lPrimeiraExibicao = .F.
         ENDIF
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * ExibirCheques - Reordena/reposiciona cursor conforme conta filtrada
-    * Equivalente ao mExibeCheques do legado
+    * ExibirCheques - Transcricao do "PROCEDURE mexibecheques" legado: desmarca
+    * a coluna Imprime, escolhe a ordem da grade conforme a Conta estar
+    * filtrada, opcionalmente salta para o fim da lista, e sincroniza
+    * Favorecido / botao Procurar / foco na coluna Conta.
+    *
+    * Medido no VFP9: "Seek Chr(255) ... Order NCopias" (chave CHARACTER contra
+    * indice NUMERICO) NAO dispara erro - deixa o cursor em EOF, que eh
+    * exatamente o efeito pretendido pelo legado (ir para o fim da lista).
     *==========================================================================
     PROCEDURE ExibirCheques(par_lSeek)
-        IF TYPE("par_lSeek") != "L"
-            par_lSeek = .F.
-        ENDIF
-        THIS.this_oBusinessObject.ExibirCheques(par_lSeek)
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.AtualizarBotoesLinhaCorrente()
-    ENDPROC
+        LOCAL loc_lSeek, loc_cCursor, loc_cConta, loc_cFavorecido, loc_oErro
 
-    *==========================================================================
-    * CarregarConta - Carrega CsSigCdmp para impressao de documento
-    * Equivalente ao CarregaConta do legado
-    *==========================================================================
-    PROCEDURE CarregarConta()
-        LOCAL loc_lSucesso, loc_cCursor, loc_cSQL, loc_cEmpdopnums
+        *-- Legado: llSeek = Iif(Type('llSeek') = 'L', llSeek, .F.)
+        loc_lSeek = IIF(VARTYPE(par_lSeek) = "L", par_lSeek, .F.)
 
-        loc_lSucesso    = .F.
-        loc_cCursor     = THIS.this_oBusinessObject.this_cCursorCheques
-
-        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
-            RETURN .F.
-        ENDIF
-
-        SELECT (loc_cCursor)
-        loc_cEmpdopnums = ALLTRIM(Emps) + ALLTRIM(Dopes) + STR(NNumes, 6)
-
-        loc_cSQL = "SELECT * FROM SigCdPgr WHERE RTRIM(Emps)+RTRIM(Dopes)+STR(Numes,6) = " + ;
-                   EscaparSQL(loc_cEmpdopnums)
-
-        IF USED("cursor_4c_Pgr")
-            USE IN cursor_4c_Pgr
-        ENDIF
-
-        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Pgr") < 1
-            RETURN .F.
-        ENDIF
-
-        SELECT cursor_4c_Pgr
-        GO TOP
-
-        RETURN !EOF("cursor_4c_Pgr")
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarBINDEVENTs - Vincula eventos dos controles aos handlers do form
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBINDEVENTs
-        *-- Grid: AfterRowColChange para atualizar painel ao navegar
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GrdDadosAfterRowColChange")
-        ENDIF
-
-        *-- Checkbox de selecao (Column10/Check1): KeyPress para toggle via teclado
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "KeyPress",  THIS, "GrdChkKeyPress")
-            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "MouseDown", THIS, "GrdChkMouseDown")
-            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "MouseUp",   THIS, "GrdChkMouseUp")
-            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "Click",     THIS, "GrdChkClick")
-        ENDIF
-
-        *-- Header clnNcopias: Click para reordenar por NCopias
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            BINDEVENT(THIS.grd_4c_Dados.Column3.Header1, "Click", THIS, "GrdHeaderNCopias")
-        ENDIF
-
-        *-- Botao Processar
-        IF VARTYPE(THIS.cmd_4c_Processar) = "O"
-            BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
-        ENDIF
-
-        *-- Botoes de selecao
-        IF VARTYPE(THIS.cmd_4c_SelTudo) = "O"
-            BINDEVENT(THIS.cmd_4c_SelTudo, "Click", THIS, "BtnSelTudoClick")
-        ENDIF
-        IF VARTYPE(THIS.cmd_4c_Apaga) = "O"
-            BINDEVENT(THIS.cmd_4c_Apaga, "Click", THIS, "BtnApagaClick")
-        ENDIF
-
-        *-- Botoes de acao (CommandGroup)
-        IF VARTYPE(THIS.cmg_4c_Acoes) = "O"
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(1), "Click", THIS, "BtnDocumentoClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(2), "Click", THIS, "BtnEncerrarClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(3), "Click", THIS, "BtnImprimirClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(4), "Click", THIS, "BtnProcurarClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(5), "Click", THIS, "BtnReciboClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(6), "Click", THIS, "BtnExcluiDocClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(7), "Click", THIS, "BtnImpchqClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(8), "Click", THIS, "BtnChmatClick")
-            BINDEVENT(THIS.cmg_4c_Acoes.Buttons(9), "Click", THIS, "BtnExcluirChqClick")
-        ENDIF
-
-        *-- Container justificativa: botoes Confirmar/Cancelar
-        IF VARTYPE(THIS.cnt_4c_Justificativa) = "O"
-            BINDEVENT(THIS.cnt_4c_Justificativa.cmg_4c_Conf.Buttons(1), "Click", THIS, "BtnConfJustClick")
-            BINDEVENT(THIS.cnt_4c_Justificativa.cmg_4c_Conf.Buttons(2), "Click", THIS, "BtnCancJustClick")
-        ENDIF
-
-        *-- Container impchmat: botoes Imprimir/Encerrar + KeyPress leitor do banco
-        IF VARTYPE(THIS.cnt_4c_Impchmat) = "O"
-            BINDEVENT(THIS.cnt_4c_Impchmat.cmg_4c_ImpProc.Buttons(1), "Click", THIS, "BtnImpChmatClick")
-            BINDEVENT(THIS.cnt_4c_Impchmat.cmg_4c_ImpProc.Buttons(2), "Click", THIS, "BtnCancChmatClick")
-            BINDEVENT(THIS.cnt_4c_Impchmat.txt_4c_Banco, "KeyPress",  THIS, "TxtBancoImpKeyPress")
-            BINDEVENT(THIS.cnt_4c_Impchmat.txt_4c_Chfin, "KeyPress", THIS, "TxtChfinLostFocus")
-            BINDEVENT(THIS.cnt_4c_Impchmat.txt_4c_Chini, "KeyPress", THIS, "TxtChiniLostFocus")
-        ENDIF
-
-        *-- Container Procurar: botoes + KeyPress leitor do banco
-        IF VARTYPE(THIS.cnt_4c_Procurar) = "O"
-            BINDEVENT(THIS.cnt_4c_Procurar.cmg_4c_PrcProc.Buttons(1), "Click", THIS, "BtnProcurarExecClick")
-            BINDEVENT(THIS.cnt_4c_Procurar.cmg_4c_PrcProc.Buttons(2), "Click", THIS, "BtnCancProcurarClick")
-            BINDEVENT(THIS.cnt_4c_Procurar.txt_4c_BancoP, "KeyPress", THIS, "TxtBancoProcKeyPress")
-            BINDEVENT(THIS.cnt_4c_Procurar.txt_4c_BancoP, "LostFocus",    THIS, "TxtBancoProcValid")
-            BINDEVENT(THIS.cnt_4c_Procurar.txt_4c_EmissaoP, "When",   THIS, "TxtEmissaoProcWhen")
-            BINDEVENT(THIS.cnt_4c_Procurar.txt_4c_ValorP,   "When",   THIS, "TxtValorProcWhen")
-        ENDIF
-
-        *-- Filtros: KeyPress nos campos de grupo/conta para busca
-        IF VARTYPE(THIS.txt_4c_CdGrupos) = "O"
-            BINDEVENT(THIS.txt_4c_CdGrupos, "KeyPress",  THIS, "TxtCdGruposKeyPress")
-            BINDEVENT(THIS.txt_4c_DsGrupos, "KeyPress",  THIS, "TxtDsGruposKeyPress")
-            BINDEVENT(THIS.txt_4c_CdContas, "KeyPress",  THIS, "TxtCdContasKeyPress")
-            BINDEVENT(THIS.txt_4c_DsContas, "KeyPress",  THIS, "TxtDsContasKeyPress")
-            BINDEVENT(THIS.txt_4c_DtInicial, "LostFocus",    THIS, "TxtDtInicialValid")
-            BINDEVENT(THIS.txt_4c_DtFinal,   "LostFocus",    THIS, "TxtDtFinalValid")
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * TornarControlesVisiveis - Torna controles visiveis, pulando containers flutuantes
-    *==========================================================================
-    PROTECTED PROCEDURE TornarControlesVisiveis
-        LOCAL loc_oControl
-        FOR EACH loc_oControl IN THIS.Controls
-            IF VARTYPE(loc_oControl) != "O"
-                LOOP
-            ENDIF
-            *-- Containers flutuantes ficam Visible=.F. por default (toggled pelos botoes)
-            IF INLIST(UPPER(loc_oControl.Name), ;
-                      "CNT_4C_SOMBRA", ;
-                      "CNT_4C_JUSTIFICATIVA", ;
-                      "CNT_4C_IMPCHMAT", ;
-                      "CNT_4C_PROCURAR")
-                *-- Recursar dentro para tornar filhos visiveis sem mudar o proprio container
-                THIS.TornarSubControlesVisiveis(loc_oControl)
-                LOOP
-            ENDIF
-            IF PEMSTATUS(loc_oControl, "Visible", 5)
-                loc_oControl.Visible = .T.
-            ENDIF
-            IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                THIS.TornarSubControlesVisiveis(loc_oControl)
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE TornarSubControlesVisiveis(par_oContainer)
-    *==========================================================================
-        LOCAL loc_oControl
-        FOR EACH loc_oControl IN par_oContainer.Controls
-            IF VARTYPE(loc_oControl) != "O"
-                LOOP
-            ENDIF
-            IF PEMSTATUS(loc_oControl, "Visible", 5)
-                loc_oControl.Visible = .T.
-            ENDIF
-            IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                THIS.TornarSubControlesVisiveis(loc_oControl)
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *==========================================================================
-    * --- HANDLERS DE EVENTOS ---
-    *==========================================================================
-
-    *-- Grid AfterRowColChange: atualiza painel inferior ao navegar
-    PROCEDURE GrdDadosAfterRowColChange(par_nColIndex)
-        THIS.LockScreen = .T.
-        THIS.AtualizarBotoesLinhaCorrente()
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *-- Grid Checkbox KeyPress: toggle de selecao via ENTER ou SPACE
-    PROCEDURE GrdChkKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cCursor, loc_cChave, loc_nRecno
-        IF INLIST(par_nKeyCode, 13, 32)
+        TRY
             loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-            IF USED(loc_cCursor) AND !EOF(loc_cCursor)
+
+            IF USED(loc_cCursor)
+                THIS.LockScreen = .T.
+
+                *-- Legado: UpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1
+                UPDATE (loc_cCursor) SET nmarca1s = 0 WHERE nmarca1s = 1
+
+                loc_cConta = ALLTRIM(THIS.ObterFiltroConta())
+
                 SELECT (loc_cCursor)
-                loc_nRecno = RECNO()
-                loc_cChave = ALLTRIM(Bancos) + ALLTRIM(Agencias) + ALLTRIM(Ncontas) + ALLTRIM(Ncheques)
-                UPDATE (loc_cCursor) SET NMarca1s = IIF(NMarca1s = 1, 0, 1) ;
-                    WHERE ALLTRIM(Bancos) + ALLTRIM(Agencias) + ALLTRIM(Ncontas) + ALLTRIM(Ncheques) = m.loc_cChave ;
-                    AND NEmitidos = 0 AND NCancelas = 0
-                IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                    GOTO loc_nRecno IN (loc_cCursor)
+
+                IF EMPTY(loc_cConta)
+                    SET ORDER TO NCopias
+                    IF loc_lSeek
+                        SEEK CHR(255) IN (loc_cCursor) ORDER NCopias ASCENDING
+                    ENDIF
+                ELSE
+                    *-- Legado: Set Order To contas + Set Key To <conta>. O
+                    *-- SET KEY eh OMITIDO de proposito: a consulta do BO ja
+                    *-- restringe o resultado a essa unica conta (WHERE
+                    *-- a.contas = <conta>), entao ele nao filtra nada a mais -
+                    *-- e a tag Contas eh COMPOSTA (contas + Str(ncopias)),
+                    *-- de modo que um SET KEY com a chave parcial sob o
+                    *-- SET EXACT ON global (config.prg) poderia nao casar e
+                    *-- deixar a grade vazia sem erro nenhum.
+                    SET ORDER TO Contas
+                    IF loc_lSeek
+                        SEEK loc_cConta + CHR(255) IN (loc_cCursor) ORDER Contas ASCENDING
+                    ENDIF
                 ENDIF
+
+                *-- Legado: ThisForm.CmdGOk.CmdProcurar.Enabled = .t. + Refresh
+                IF THIS.obj_4c_CmdGok.ButtonCount >= 4
+                    THIS.obj_4c_CmdGok.Buttons(4).Enabled = .T.
+                ENDIF
+                THIS.obj_4c_CmdGok.Refresh()
+
                 THIS.grd_4c_Dados.Refresh()
+
+                *-- Legado: ThisForm.TxtFavorecido.Value = CsSigCqChi.favos +
+                *-- Enabled dos botoes de documento + painel de justificativa
+                *-- (mesmo corpo do Scrolled/AfterRowColChange da grade -
+                *-- AtualizarPainelChequeCorrente). Em EOF (Seek Chr(255) acima
+                *-- deixa o cursor em EOF) os campos leem o default vazio/zero.
+                loc_cFavorecido = ""
+                IF !EOF(loc_cCursor)
+                    loc_cFavorecido = EVALUATE(loc_cCursor + ".favos")
+                ENDIF
+                THIS.this_oBusinessObject.this_cFavorecido = loc_cFavorecido
+
+                THIS.AtualizarPainelChequeCorrente()
+
+                *-- Legado: ThisForm.GrdCCheques.clnContas.SetFocus
+                *-- (clnContas = Column2). Medido: Column TEM o metodo SetFocus.
+                IF THIS.grd_4c_Dados.Visible AND THIS.grd_4c_Dados.Enabled
+                    THIS.grd_4c_Dados.Column2.SetFocus()
+                ENDIF
+
+                THIS.LockScreen = .F.
             ENDIF
+        CATCH TO loc_oErro
+            THIS.LockScreen = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ExibirCheques")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ObterFiltroConta / ObterFiltroGrupo - Valor corrente dos filtros de
+    * Conta e Grupo. Os TextBox correspondentes (getCdContas / getCdGrupos do
+    * legado) sao criados na fase de filtros; enquanto nao existirem, o valor
+    * vem das properties do BO (this_cCodConta / this_cCodGrupo), que sao a
+    * fonte unica desse estado. Quando os campos existirem, o TextBox passa a
+    * mandar - igual ao legado, que le sempre ThisForm.getCdContas.Value.
+    *==========================================================================
+    PROTECTED FUNCTION ObterFiltroConta()
+        LOCAL loc_cConta
+
+        loc_cConta = THIS.this_oBusinessObject.this_cCodConta
+
+        IF PEMSTATUS(THIS, "txt_4c_CdContas", 5)
+            loc_cConta = THIS.txt_4c_CdContas.Value
+        ENDIF
+
+        RETURN IIF(VARTYPE(loc_cConta) = "C", loc_cConta, "")
+    ENDFUNC
+
+    PROTECTED FUNCTION ObterFiltroGrupo()
+        LOCAL loc_cGrupo
+
+        loc_cGrupo = THIS.this_oBusinessObject.this_cCodGrupo
+
+        IF PEMSTATUS(THIS, "txt_4c_CdGrupos", 5)
+            loc_cGrupo = THIS.txt_4c_CdGrupos.Value
+        ENDIF
+
+        RETURN IIF(VARTYPE(loc_cGrupo) = "C", loc_cGrupo, "")
+    ENDFUNC
+
+    *==========================================================================
+    * ConfigurarGrid - Grade de cheques (grd_4c_Dados = grdCcheques do
+    * legado). Layout FLAT (sem PageFrame) - Top/Left identicos ao SCX
+    * original (layout.json), SEM compensacao de +29 (essa compensacao so
+    * vale para forms com PageFrame.Top=-29, o que nao existe neste form).
+    *
+    * ColumnOrder replica o SCX: clnImprime (Column10) desenha PRIMEIRO
+    * (ColumnOrder=1) e clnDatas (Column1) desenha POR ULTIMO (ColumnOrder=10)
+    * - os demais seguem a ordem de criacao (2..9). clnSituacaos (Column8) eh
+    * CALCULADA (nao existe coluna no cursor) - ControlSource eh a mesma
+    * expressao IIF aninhada do legado.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGrid()
+        LOCAL loc_oGrid, loc_oErro
+
+        TRY
+            THIS.CriarCursorCheques()
+
+            THIS.AddObject("grd_4c_Dados", "Grid")
+            loc_oGrid = THIS.grd_4c_Dados
+
+            WITH loc_oGrid
+                .Top               = 233
+                .Left              = 24
+                .Width             = 710
+                .Height            = 291
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing    = .F.
+                .DeleteMark        = .F.
+                .RecordMark        = .F.
+                .ScrollBars        = 2
+                .GridLineColor     = RGB(238, 238, 238)
+                .ReadOnly          = .F.
+                .ColumnCount       = 10
+                .RecordSource      = "cursor_4c_Cheques"
+                .Visible           = .T.
+            ENDWITH
+
+            *-- Column1: clnDatas (desenha por ultimo - ColumnOrder=10)
+            WITH loc_oGrid.Column1
+                .FontName          = "Tahoma"
+                .Width             = 79
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ColumnOrder       = 10
+                .ControlSource     = "cursor_4c_Cheques.datas"
+                .Header1.Caption   = "Data"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column2: clnContas
+            WITH loc_oGrid.Column2
+                .FontName          = "Tahoma"
+                .Width             = 79
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "cursor_4c_Cheques.contas"
+                .Header1.Caption   = "Conta"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column3: clnNcopias
+            WITH loc_oGrid.Column3
+                .FontName          = "Tahoma"
+                .Width             = 51
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .InputMask         = "999999"
+                .ControlSource     = "cursor_4c_Cheques.ncopias"
+                .Header1.Caption   = "C" + CHR(243) + "pia"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Legado: clnNcopias.Header1.Click - reordena para NCopias ao
+            *-- clicar no cabecalho, so quando nao ha filtro de Conta e a
+            *-- ordem corrente ainda nao eh NCopias.
+            BINDEVENT(loc_oGrid.Column3.Header1, "Click", THIS, "Column3Header1Click")
+
+            *-- Column4: clnBancos
+            WITH loc_oGrid.Column4
+                .FontName          = "Tahoma"
+                .Width             = 30
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "cursor_4c_Cheques.bancos"
+                .Header1.Caption   = "Bco"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column5: clnAgencias
+            WITH loc_oGrid.Column5
+                .FontName          = "Tahoma"
+                .Width             = 37
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "cursor_4c_Cheques.agencias"
+                .Header1.Caption   = "Ag."
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column6: clnNcontas
+            WITH loc_oGrid.Column6
+                .FontName          = "Tahoma"
+                .Width             = 79
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "cursor_4c_Cheques.ncontas"
+                .Header1.Caption   = "C.Corrente"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column7: clnNcheques
+            WITH loc_oGrid.Column7
+                .FontName          = "Tahoma"
+                .Width             = 51
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "cursor_4c_Cheques.ncheques"
+                .Header1.Caption   = "Cheque"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column8: clnSituacaos (CALCULADA - identica ao legado)
+            WITH loc_oGrid.Column8
+                .FontName          = "Tahoma"
+                .Width             = 79
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .ControlSource     = "IIF(cursor_4c_Cheques.ncancelas = 1, 'Cancelado', " + ;
+                                      "IIF(cursor_4c_Cheques.nemissoes > 1, 'Reemitido', " + ;
+                                      "IIF(cursor_4c_Cheques.nemitidos = 1, 'Emitido', 'N" + CHR(227) + "o Emitido')))"
+                .Header1.Caption   = "Situa" + CHR(231) + CHR(227) + "o"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column9: clnValors
+            WITH loc_oGrid.Column9
+                .FontName          = "Tahoma"
+                .Width             = 110
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
+                .InputMask         = "999,999,999.99"
+                .ControlSource     = "cursor_4c_Cheques.valors"
+                .Header1.Caption   = "Valor"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            *-- Column10: clnImprime (checkbox - desenha PRIMEIRO, ColumnOrder=1)
+            WITH loc_oGrid.Column10
+                .FontName    = "Tahoma"
+                .Width       = 55
+                .Movable     = .F.
+                .Resizable   = .F.
+                .ColumnOrder = 1
+            ENDWITH
+
+            loc_oGrid.Column10.AddObject("chk_4c_Check1", "CheckBox")
+            WITH loc_oGrid.Column10.chk_4c_Check1
+                .Caption   = ""
+                .Alignment = 2
+                .BackColor = RGB(255, 255, 255)
+                .Visible   = .T.
+            ENDWITH
+
+            WITH loc_oGrid.Column10
+                .CurrentControl    = "chk_4c_Check1"
+                .Sparse            = .F.
+                .ReadOnly          = .F.
+                .ControlSource     = "cursor_4c_Cheques.nmarca1s"
+                .Header1.Caption   = "Imprime"
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            loc_oGrid.SetAll("DynamicForeColor", ;
+                "IIF(cursor_4c_Cheques.ncancelas = 1, RGB(255,0,0), " + ;
+                "IIF(cursor_4c_Cheques.nemitidos = 0, RGB(0,0,255), RGB(0,0,0)))", "Column")
+
+            BINDEVENT(loc_oGrid.Column10.chk_4c_Check1, "KeyPress",  THIS, "ChkImprimeKeyPress")
+            BINDEVENT(loc_oGrid.Column10.chk_4c_Check1, "MouseUp",   THIS, "ChkImprimeMouseUp")
+            BINDEVENT(loc_oGrid.Column10.chk_4c_Check1, "MouseDown", THIS, "ChkImprimeMouseDown")
+            BINDEVENT(loc_oGrid.Column10.chk_4c_Check1, "Click",     THIS, "ChkImprimeClick")
+
+            *-- Legado: Scrolled/DoScroll/BeforeRowColChange/AfterRowColChange
+            *-- da grdCcheques tem TODOS o mesmo corpo (favorecido + Enabled
+            *-- dos botoes de documento + painel de justificativa em modo
+            *-- leitura quando o cheque corrente esta cancelado) - transcrito
+            *-- uma unica vez em AtualizarPainelChequeCorrente() e ligado aqui
+            *-- aos dois eventos NATIVOS do Grid (Scrolled/AfterRowColChange).
+            BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GrdDadosAfterRowColChange")
+            BINDEVENT(loc_oGrid, "Scrolled",          THIS, "GrdDadosScrolled")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarGrid")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ChkImprimeKeyPress/MouseUp/MouseDown/Click - Toggle do checkbox
+    * "Imprime" (Column10.chk_4c_Check1 = clnImprime.Check1 do legado).
+    * MouseDown/Click apenas suprimem o toggle nativo do CheckBox (NODEFAULT);
+    * MouseUp e KeyPress(Enter/Espaco) fazem a alternancia de verdade via
+    * UPDATE no cursor, replicando 1:1 o KeyPress original do legado.
+    * PUBLIC (sem PROTECTED) - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE ChkImprimeKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cCursor, loc_nRecno, loc_cChave
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF INLIST(par_nKeyCode, 13, 32) AND USED(loc_cCursor)
+            loc_nRecno = RECNO(loc_cCursor)
+            SELECT (loc_cCursor)
+            loc_cChave = bancos + agencias + ncontas + ncheques
+
+            UPDATE (loc_cCursor) SET nmarca1s = IIF(nmarca1s = 1, 0, 1) ;
+                WHERE bancos + agencias + ncontas + ncheques = loc_cChave ;
+                  AND nemitidos = 0 AND ncancelas = 0
+
+            THIS.grd_4c_Dados.Refresh()
+
+            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
+                SELECT (loc_cCursor)
+                GOTO loc_nRecno
+            ENDIF
+
             NODEFAULT
         ENDIF
     ENDPROC
 
-    *-- Grid Checkbox MouseDown: delegar para KeyPress com SPACE
-    PROCEDURE GrdChkMouseDown(par_nButton, par_nShift, par_nX, par_nY)
-        THIS.GrdChkKeyPress(32, 0)
+    PROCEDURE ChkImprimeMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.ChkImprimeKeyPress(32, 0)
         NODEFAULT
     ENDPROC
 
-    *-- MouseUp e Click: absorver. O toggle ja aconteceu no MouseDown; sem estes
-    *-- handlers o processamento nativo reverte a marcacao (alternancia dupla).
-    *-- Pattern #185 / Erro146 (2026-09-04).
-    PROCEDURE GrdChkMouseUp(par_nButton, par_nShift, par_nX, par_nY)
+    PROCEDURE ChkImprimeMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
         NODEFAULT
     ENDPROC
 
-    PROCEDURE GrdChkClick()
+    PROCEDURE ChkImprimeClick()
         NODEFAULT
     ENDPROC
 
-    *-- Header NCopias Click: reordenar por NCopias (sem conta filtrada)
-    PROCEDURE GrdHeaderNCopias()
+    *==========================================================================
+    * Column3Header1Click - Header1.Click de clnNcopias (Column3). PUBLIC -
+    * BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE Column3Header1Click()
         LOCAL loc_cCursor
+
         loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-        IF EMPTY(THIS.txt_4c_CdContas.Value) AND UPPER(ORDER(loc_cCursor)) != "NCOPIAS"
+
+        IF EMPTY(THIS.ObterFiltroConta()) AND USED(loc_cCursor) AND ;
+                UPPER(ORDER(loc_cCursor)) != "NCOPIAS"
             THIS.ExibirCheques(.F.)
         ENDIF
     ENDPROC
 
-    *-- Botao Processar: valida periodo e dispara MontarCheques
-    PROCEDURE BtnProcessarClick()
-        IF THIS.txt_4c_DtInicial.Value > THIS.txt_4c_DtFinal.Value
-            MsgAviso("Data Final menor que Data Inicial !!!", "Per" + CHR(237) + "odo Inv" + CHR(225) + "lido")
-            THIS.txt_4c_DtInicial.SetFocus()
-            RETURN
-        ENDIF
-        THIS.MontarCheques(.F.)
+    *==========================================================================
+    * GrdDadosAfterRowColChange / GrdDadosScrolled - Navegacao na grade de
+    * cheques (grd_4c_Dados). PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE GrdDadosAfterRowColChange(par_nColIndex)
+        THIS.AtualizarPainelChequeCorrente()
     ENDPROC
 
-    *-- Botao SelTudo: marca todos os cheques nao-emitidos nao-cancelados
-    PROCEDURE BtnSelTudoClick()
-        LOCAL loc_cCursor, loc_nRecno
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-        IF USED(loc_cCursor)
-            SELECT (loc_cCursor)
-            loc_nRecno = RECNO()
-            UPDATE (loc_cCursor) SET NMarca1s = 1 WHERE NMarca1s = 0 AND NEmitidos = 0 AND NCancelas = 0
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                GOTO loc_nRecno IN (loc_cCursor)
-            ENDIF
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
+    PROCEDURE GrdDadosScrolled(par_nDirection)
+        THIS.AtualizarPainelChequeCorrente()
     ENDPROC
 
-    *-- Botao Apaga: desmarca todos os cheques selecionados
-    PROCEDURE BtnApagaClick()
-        LOCAL loc_cCursor, loc_nRecno
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-        IF USED(loc_cCursor)
-            SELECT (loc_cCursor)
-            loc_nRecno = RECNO()
-            UPDATE (loc_cCursor) SET NMarca1s = 0 WHERE NMarca1s = 1
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                GOTO loc_nRecno IN (loc_cCursor)
-            ENDIF
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-    ENDPROC
+    *==========================================================================
+    * AtualizarPainelChequeCorrente - Transcricao unica do corpo repetido em
+    * Scrolled/DoScroll/BeforeRowColChange/AfterRowColChange do grdCcheques
+    * legado: espelha o Favorecido do cheque corrente, habilita/desabilita os
+    * botoes de documento conforme o cheque estar cancelado, e mostra o
+    * painel de justificativa em modo SOMENTE LEITURA quando o cheque
+    * corrente ja esta cancelado (cmdGconf oculto - nao ha o que confirmar).
+    *==========================================================================
+    PROTECTED PROCEDURE AtualizarPainelChequeCorrente()
+        LOCAL loc_cCursor, loc_lCancelas
 
-    *-- Botao Encerrar
-    PROCEDURE BtnEncerrarClick()
-        THIS.Release()
-    ENDPROC
-
-    *-- Botao Documento: abre SigCdPgr para o cheque corrente
-    PROCEDURE BtnDocumentoClick()
-        LOCAL loc_lCarregou, loc_nRecno, loc_cCursor
         loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
 
-        THIS.LockScreen = .T.
-        loc_nRecno = RECNO(loc_cCursor)
-
-        IF !EOF(loc_cCursor) AND THIS.CarregarConta()
-            SELECT (loc_cCursor)
-            DO FORM SigCdPgr WITH ;
-                LEFT(ALLTRIM(Dopes), 1), .T., ;
-                ALLTRIM(Emps), ALLTRIM(Dopes), NNumes
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                GOTO loc_nRecno IN (loc_cCursor)
-            ENDIF
-            THIS.ExibirCheques(.F.)
-        ENDIF
-
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *-- Botao Imprimir: abre FormSigReEch para visualizar/imprimir o cheque corrente
-    PROCEDURE BtnImprimirClick()
-        LOCAL loc_lCarregou, loc_cCursor
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-
-        IF !USED(loc_cCursor) OR EOF(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-            MsgAviso("Nenhum cheque selecionado para visualizar.", "Imprimir")
+        IF !USED(loc_cCursor)
             RETURN
         ENDIF
 
-        IF THIS.CarregarConta()
-            SELECT (loc_cCursor)
-            DO FORM FormSigReEch WITH ;
-                ALLTRIM(Emps), ALLTRIM(Dopes), NNumes, "CONSULTAR", ALLTRIM(NCheques)
-            THIS.ExibirCheques(.F.)
+        loc_lCancelas = (EVALUATE(loc_cCursor + ".ncancelas") <> 0)
+
+        IF PEMSTATUS(THIS, "txt_4c_TxtFavorecido", 5)
+            THIS.txt_4c_TxtFavorecido.Value = EVALUATE(loc_cCursor + ".favos")
+            THIS.txt_4c_TxtFavorecido.Refresh()
+        ENDIF
+
+        *-- Legado: Buttons 1/6/3/5/9 = cmdDocumento/cmdExcluiDoc/cmdImprimir/
+        *-- cmdRecibo/btnExcluirChq (mesma numeracao de CmdGokClick).
+        IF THIS.obj_4c_CmdGok.ButtonCount >= 9
+            THIS.obj_4c_CmdGok.Buttons(1).Enabled = !loc_lCancelas
+            THIS.obj_4c_CmdGok.Buttons(6).Enabled = (!loc_lCancelas AND THIS.this_oBusinessObject.this_lExcluirDocumento)
+            THIS.obj_4c_CmdGok.Buttons(3).Enabled = !loc_lCancelas
+            THIS.obj_4c_CmdGok.Buttons(5).Enabled = !loc_lCancelas
+            THIS.obj_4c_CmdGok.Buttons(9).Enabled = (loc_lCancelas AND THIS.this_oBusinessObject.this_lExcluirCheque)
+            THIS.obj_4c_CmdGok.Refresh()
+        ENDIF
+
+        IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+            WITH THIS.cnt_4c_justificativa
+                .Visible = loc_lCancelas
+
+                IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_Get_justificativa", 5)
+                    .obj_4c_Get_justificativa.ReadOnly = loc_lCancelas
+                    IF loc_lCancelas
+                        .obj_4c_Get_justificativa.Width = 346
+                        .obj_4c_Get_justificativa.Refresh()
+                    ENDIF
+                ENDIF
+
+                IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_CmdGconf", 5)
+                    .obj_4c_CmdGconf.Enabled = .F.
+                    .obj_4c_CmdGconf.Visible = .F.
+                ENDIF
+            ENDWITH
         ENDIF
     ENDPROC
 
-    *-- Botao Recibo: abre SigRerec para o cheque corrente
-    PROCEDURE BtnReciboClick()
-        LOCAL loc_lCarregou
-        IF THIS.CarregarConta()
-            DO FORM SigRerec WITH THIS, "RECIBO"
-        ENDIF
-    ENDPROC
+    *==========================================================================
+    * ConfigurarBotoesAcao - CommandGroup de acoes (obj_4c_CmdGok = cmdGok do
+    * legado, 9 botoes) + botoes standalone de marcacao em massa da grade
+    * (cmd_4c_CmdTudo1/cmd_4c_CmdApaga1 = cmdTudo1/cmdApaga1 do legado).
+    * Layout FLAT - Top/Left identicos ao SCX original, sem compensacao de
+    * PageFrame.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoesAcao()
+        LOCAL loc_oErro
 
-    *-- Botao Excluir Documento
-    PROCEDURE BtnExcluiDocClick()
-        LOCAL loc_nRecno, loc_cCursor, loc_lCarregou
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-
-        THIS.LockScreen = .T.
-        loc_nRecno = RECNO(loc_cCursor)
-
-        IF !EOF(loc_cCursor) AND THIS.CarregarConta()
-            SELECT (loc_cCursor)
-            DO FORM SigCdPgr WITH ;
-                LEFT(ALLTRIM(Dopes), 1), .F., ;
-                ALLTRIM(Emps), ALLTRIM(Dopes), NNumes
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                GOTO loc_nRecno IN (loc_cCursor)
-            ENDIF
-            THIS.ExibirCheques(.F.)
-        ENDIF
-
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *-- Botao Cheque: imprime fisicamente cheques marcados em impressora de cheque
-    PROCEDURE BtnImpchqClick()
-        LOCAL loc_cCursor, loc_oErro, loc_cBancos, loc_lProsseguir
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-
-        IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-            MsgAviso("Nenhum cheque dispon" + CHR(237) + "vel.", "Cheque")
-            RETURN
-        ENDIF
-
-        loc_lProsseguir = .T.
         TRY
-            IF USED("cursor_4c_TmpBanco")
-                USE IN cursor_4c_TmpBanco
-            ENDIF
+            THIS.AddObject("obj_4c_CmdGok", "CommandGroup")
+            WITH THIS.obj_4c_CmdGok
+                .Top           = -3
+                .Left          = 11
+                .Width         = 789
+                .Height        = 160
+                .ButtonCount   = 9
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .SpecialEffect = 1
+                .BorderColor   = RGB(136, 189, 188)
+                .Themes        = .F.
+                .Value         = 1
+                .Visible       = .T.
+            ENDWITH
 
-            SELECT DISTINCT Bancos FROM (loc_cCursor) WHERE NMarca1s = 1 ;
-              INTO CURSOR cursor_4c_TmpBanco
+            *-- Botao 1: cmdDocumento
+            WITH THIS.obj_4c_CmdGok.Buttons(1)
+                .Top             = 121
+                .Left            = 473
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "geral_pastas_60.jpg"
+                .Caption         = "\<Documento"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-            SELECT cursor_4c_TmpBanco
-            GO TOP
-            IF EOF("cursor_4c_TmpBanco")
-                MsgAviso("Nenhum cheque selecionado para impress" + CHR(227) + "o.", "Cheque")
-                USE IN cursor_4c_TmpBanco
-                loc_lProsseguir = .F.
-            ENDIF
+            *-- Botao 2: cmdSair (Encerrar)
+            WITH THIS.obj_4c_CmdGok.Buttons(2)
+                .Top         = 6
+                .Left        = 713
+                .Width       = 75
+                .Height      = 75
+                .FontBold    = .T.
+                .FontItalic  = .T.
+                .FontName    = "Comic Sans MS"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .Cancel      = .T.
+                .Caption     = "Encerrar"
+                .ToolTipText = "[Esc] Encerrar"
+                .ForeColor   = RGB(90, 90, 90)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes      = .F.
+            ENDWITH
 
-            IF loc_lProsseguir
-                IF RECCOUNT("cursor_4c_TmpBanco") > 1
-                    MsgAviso("Todos os cheques selecionados devem ser do mesmo banco.", ;
-                        "Aten" + CHR(231) + CHR(227) + "o")
-                    USE IN cursor_4c_TmpBanco
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
+            *-- Botao 3: cmdImprimir
+            WITH THIS.obj_4c_CmdGok.Buttons(3)
+                .Top             = 84
+                .Left            = 353
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
+                .Caption         = "\<Imprimir"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-            IF loc_lProsseguir
-                loc_cBancos = ALLTRIM(cursor_4c_TmpBanco.Bancos)
-                USE IN cursor_4c_TmpBanco
+            *-- Botao 4: cmdProcurar
+            WITH THIS.obj_4c_CmdGok.Buttons(4)
+                .Top             = 84
+                .Left            = 593
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
+                .Caption         = "\<Procurar"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-                IF USED("cursor_4c_ImpTemp")
-                    USE IN cursor_4c_ImpTemp
-                ENDIF
+            *-- Botao 5: cmdRecibo
+            WITH THIS.obj_4c_CmdGok.Buttons(5)
+                .Top             = 121
+                .Left            = 593
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "geral_pendencia_60.jpg"
+                .Caption         = "\<Recibo"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-                SELECT Bancos, Agencias, NContas, NCheques, cIdChaves, ;
-                       Valors, Datas, NEmitidos, NCancelas, Favos ;
-                  FROM (loc_cCursor) ;
-                 WHERE NMarca1s = 1 ;
-                 ORDER BY Bancos, NCheques ;
-                  INTO CURSOR cursor_4c_ImpTemp READWRITE
+            *-- Botao 6: cmdExcluiDoc
+            WITH THIS.obj_4c_CmdGok.Buttons(6)
+                .Top             = 84
+                .Left            = 473
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+                .Caption         = "E\<xclui Docto."
+                .ToolTipText     = "Exclui Documento"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-                THIS.this_oBusinessObject.ImprimirCheques(loc_cBancos)
+            *-- Botao 7: cmdImpchq
+            WITH THIS.obj_4c_CmdGok.Buttons(7)
+                .Top             = 121
+                .Left            = 353
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "geral_boleto_60.jpg"
+                .Caption         = "Che\<que"
+                .ToolTipText     = "Impressora de cheque"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-                IF USED("cursor_4c_ImpTemp")
-                    USE IN cursor_4c_ImpTemp
-                ENDIF
+            *-- Botao 8: cmdchmat
+            WITH THIS.obj_4c_CmdGok.Buttons(8)
+                .Top             = 84
+                .Left            = 233
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cheque.png"
+                .Caption         = "Chq. \<Matric."
+                .ToolTipText     = "Impressora matricial"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-                THIS.ExibirCheques(.F.)
+            *-- Botao 9: btnExcluirChq
+            WITH THIS.obj_4c_CmdGok.Buttons(9)
+                .Top             = 121
+                .Left            = 233
+                .Width           = 120
+                .Height          = 37
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+                .Caption         = "Excluir Chq."
+                .ToolTipText     = "Exclui Cheque"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
 
-            ENDIF
+            BINDEVENT(THIS.obj_4c_CmdGok, "Click", THIS, "CmdGokClick")
+
+            *-- Botao standalone: cmdTudo1 (Marca tudo)
+            THIS.AddObject("cmd_4c_CmdTudo1", "CommandButton")
+            WITH THIS.cmd_4c_CmdTudo1
+                .Top         = 334
+                .Left        = 742
+                .Width       = 40
+                .Height      = 40
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+                .Caption     = ""
+                .ToolTipText = "Marca tudo"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes           = .T.
+                .TabStop     = .F.
+                .Visible     = .T.
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_CmdTudo1, "Click", THIS, "BtnMarcarTudoClick")
+
+            *-- Botao standalone: cmdApaga1 (Desmarca tudo)
+            THIS.AddObject("cmd_4c_CmdApaga1", "CommandButton")
+            WITH THIS.cmd_4c_CmdApaga1
+                .Top         = 375
+                .Left        = 742
+                .Width       = 40
+                .Height      = 40
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .Caption     = ""
+                .ToolTipText = "Desmarca tudo"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes           = .T.
+                .TabStop     = .F.
+                .Visible     = .T.
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_CmdApaga1, "Click", THIS, "BtnDesmarcarTudoClick")
+
+            *-- Botao standalone: Command2 "Processar" - dispara a carga da
+            *-- grade (MontaChq do legado). Propriedades EXATAS do SCX
+            *-- (Top=191, Left=598, Height=24, Width=88, Comic Sans MS 8
+            *-- bold+italic, ForeColor 90,90,90, BackColor 255,255,255,
+            *-- Themes=.F., TabIndex=7). O legado NAO declara Picture para
+            *-- este botao - nenhum icone eh inventado aqui.
+            THIS.AddObject("cmd_4c_Processar", "CommandButton")
+            WITH THIS.cmd_4c_Processar
+                .Top        = 191
+                .Left       = 598
+                .Width      = 88
+                .Height     = 24
+                .FontName   = "Comic Sans MS"
+                .FontSize   = 8
+                .FontBold   = .T.
+                .FontItalic = .T.
+                .Caption    = "Processar"
+                .TabIndex   = 7
+                .ForeColor  = RGB(90, 90, 90)
+                .BackColor  = RGB(255, 255, 255)
+                .Themes     = .F.
+                .Visible    = .T.
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao imprimir cheque")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarBotoesAcao")
         ENDTRY
     ENDPROC
 
-    *-- Botao Chq. Matric.: activa container de impressao matricial
-    PROCEDURE BtnChmatClick()
-        THIS.this_lChMatIni = .T.
-        WITH THIS.cnt_4c_Impchmat
-            .Enabled = .T.
-            .Visible = .T.
-            .txt_4c_Banco.Value = ""
-            .txt_4c_Chini.Value = ""
-            .txt_4c_Chfin.Value = ""
-            .txt_4c_Banco.SetFocus()
-        ENDWITH
-        THIS.cmg_4c_Acoes.Enabled = .F.
-        THIS.Refresh()
+    *==========================================================================
+    * ConfigurarFiltros - Primeira metade dos campos de filtro (Fase 5/8):
+    * grupo Grupo (Label3/GetCdGrupos/GetDsGrupos) e grupo Periodo
+    * (Label2/Dt_inicial/Say2/Dt_final). Posicoes EXATAS do SCX original
+    * (layout.json) - form OPERACIONAL sem PageFrame, sem compensacao de +29.
+    *
+    * Handlers de Valid/lookup (fAcessoContab do Grupo, swap de datas do
+    * Periodo, e os campos de Conta/Favorecido restantes) sao implementados
+    * na fase seguinte, junto com o grupo Conta - mesmo padrao ja usado em
+    * FormSIGMVCMV.ConfigurarCamposPeriodoMoeda.
+    *
+    * TabIndex 1-4 reservados para este grupo; 5-6 ficam para Conta (proxima
+    * fase); 7 ja esta ocupado por cmd_4c_Processar (Fase 4).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarFiltros()
+        LOCAL loc_oErro
+
+        TRY
+            *-- Label3 "Grupo :"
+            THIS.AddObject("lbl_4c_Label3", "Label")
+            WITH THIS.lbl_4c_Label3
+                .Top       = 167
+                .Left      = 34
+                .Width     = 38
+                .Height    = 15
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "Grupo :"
+                .Visible   = .T.
+            ENDWITH
+
+            *-- GetCdGrupos (codigo do grupo de contas - SigCdGcr.codigos char(10))
+            THIS.AddObject("txt_4c_CdGrupos", "TextBox")
+            WITH THIS.txt_4c_CdGrupos
+                .Top           = 163
+                .Left          = 75
+                .Width         = 100
+                .Height        = 25
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .TabIndex      = 1
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            *-- GetDsGrupos (descricao do grupo - SigCdGcr.descrs char(40))
+            THIS.AddObject("txt_4c_DsGrupos", "TextBox")
+            WITH THIS.txt_4c_DsGrupos
+                .Top           = 163
+                .Left          = 177
+                .Width         = 360
+                .Height        = 25
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 40
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .TabIndex      = 2
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            *-- Label2 "Periodo :"
+            THIS.AddObject("lbl_4c_Label2", "Label")
+            WITH THIS.lbl_4c_Label2
+                .Top       = 167
+                .Left      = 550
+                .Width     = 45
+                .Height    = 15
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "Per" + CHR(237) + "odo :"
+                .Visible   = .T.
+            ENDWITH
+
+            *-- Dt_inicial (data inicial do periodo - fweditdata no legado)
+            THIS.AddObject("txt_4c_Dt_inicial", "TextBox")
+            WITH THIS.txt_4c_Dt_inicial
+                .Top           = 163
+                .Left          = 598
+                .Width         = 80
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = DATE()
+                .TabIndex      = 3
+                .Visible       = .T.
+            ENDWITH
+
+            *-- Say2 "a"
+            THIS.AddObject("lbl_4c_Say2", "Label")
+            WITH THIS.lbl_4c_Say2
+                .Top       = 167
+                .Left      = 686
+                .Width     = 12
+                .Height    = 15
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "a"
+                .Visible   = .T.
+            ENDWITH
+
+            *-- Dt_final (data final do periodo - fweditdata no legado)
+            THIS.AddObject("txt_4c_Dt_final", "TextBox")
+            WITH THIS.txt_4c_Dt_final
+                .Top           = 163
+                .Left          = 701
+                .Width         = 80
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = DATE()
+                .TabIndex      = 4
+                .Visible       = .T.
+            ENDWITH
+
+            *-- Label1 "Conta :"
+            THIS.AddObject("lbl_4c_Label1", "Label")
+            WITH THIS.lbl_4c_Label1
+                .Top       = 194
+                .Left      = 34
+                .Width     = 38
+                .Height    = 15
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "Conta :"
+                .Visible   = .T.
+            ENDWITH
+
+            *-- getCdContas (codigo da conta - SigCdCli.iclis char(10))
+            THIS.AddObject("txt_4c_CdContas", "TextBox")
+            WITH THIS.txt_4c_CdContas
+                .Top           = 190
+                .Left          = 75
+                .Width         = 100
+                .Height        = 25
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .TabIndex      = 5
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            *-- getDsContas (razao social da conta - SigCdCli.rclis char(50))
+            THIS.AddObject("txt_4c_DsContas", "TextBox")
+            WITH THIS.txt_4c_DsContas
+                .Top           = 190
+                .Left          = 177
+                .Width         = 360
+                .Height        = 25
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 50
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .TabIndex      = 6
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            *-- Label5 "Favorecido :"
+            THIS.AddObject("lbl_4c_Label5", "Label")
+            WITH THIS.lbl_4c_Label5
+                .Top       = 534
+                .Left      = 24
+                .Width     = 62
+                .Height    = 15
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "Favorecido :"
+                .Visible   = .T.
+            ENDWITH
+
+            *-- txtFavorecido (somente leitura - legado tem When retornando
+            *-- .F., ou seja o campo NUNCA recebe foco/edicao do usuario; o
+            *-- valor eh espelhado do cheque corrente por ExibirCheques())
+            THIS.AddObject("txt_4c_TxtFavorecido", "TextBox")
+            WITH THIS.txt_4c_TxtFavorecido
+                .Top           = 530
+                .Left          = 99
+                .Width         = 286
+                .Height        = 25
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontBold      = .T.
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .ReadOnly      = .T.
+                .TabStop       = .F.
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            *-- BINDEVENT de snapshot (equivalente ao When legado: guarda o
+            *-- valor corrente em this_cAnt*/this_dAnt* ANTES da edicao) +
+            *-- BINDEVENT de KeyPress (equivalente ao Valid - BINDEVENT em
+            *-- "Valid" nao funciona de forma confiavel em TextBox, ver
+            *-- CLAUDE.md/memoria "feedback_keypress_lparameters_guard").
+            BINDEVENT(THIS.txt_4c_CdGrupos,   "GotFocus", THIS, "TxtCdGruposGotFocus")
+            BINDEVENT(THIS.txt_4c_DsGrupos,   "GotFocus", THIS, "TxtDsGruposGotFocus")
+            BINDEVENT(THIS.txt_4c_CdContas,   "GotFocus", THIS, "TxtCdContasGotFocus")
+            BINDEVENT(THIS.txt_4c_DsContas,   "GotFocus", THIS, "TxtDsContasGotFocus")
+            BINDEVENT(THIS.txt_4c_Dt_inicial, "GotFocus", THIS, "TxtDtInicialGotFocus")
+            BINDEVENT(THIS.txt_4c_Dt_final,   "GotFocus", THIS, "TxtDtFinalGotFocus")
+
+            BINDEVENT(THIS.txt_4c_CdGrupos,   "KeyPress", THIS, "ValidarCdGruposKeyPress")
+            BINDEVENT(THIS.txt_4c_DsGrupos,   "KeyPress", THIS, "ValidarDsGruposKeyPress")
+            BINDEVENT(THIS.txt_4c_CdContas,   "KeyPress", THIS, "ValidarCdContasKeyPress")
+            BINDEVENT(THIS.txt_4c_DsContas,   "KeyPress", THIS, "ValidarDsContasKeyPress")
+            BINDEVENT(THIS.txt_4c_Dt_inicial, "KeyPress", THIS, "ValidarDtInicialKeyPress")
+            BINDEVENT(THIS.txt_4c_Dt_final,   "KeyPress", THIS, "ValidarDtFinalKeyPress")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarFiltros")
+        ENDTRY
     ENDPROC
 
-    *-- Botao Excluir Cheque: confirma e exclui cheque cancelado
+    *==========================================================================
+    * ConfigurarContainersFlutuantes - Orquestra os 3 paineis Visible=.F. do
+    * legado, alternados por botao (cntjustificativa/cntProcurar/impchmat -
+    * mapeamento.json: cnt_4c_justificativa/cnt_4c_Procurar/cnt_4c_Impchmat).
+    * Precisam ficar na lista de skip de TornarControlesVisiveis (ja
+    * presente desde a Fase 3) - senao nasceriam visiveis.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarContainersFlutuantes()
+        THIS.ConfigurarJustificativa()
+        THIS.ConfigurarProcurar()
+        THIS.ConfigurarImpressaoManual()
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarJustificativa - Painel de justificativa do cancelamento de
+    * documento (cnt_4c_justificativa = cntjustificativa do legado, Registro
+    * 47/48 do SCX). Aberto por BtnExcluiDocClick (editavel) ou por
+    * AtualizarPainelChequeCorrente (somente leitura, ao navegar para um
+    * cheque ja cancelado).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarJustificativa()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_justificativa", "Container")
+            WITH THIS.cnt_4c_justificativa
+                .Top           = 532
+                .Left          = 395
+                .Width         = 350
+                .Height        = 69
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .BackColor     = RGB(255, 255, 255)
+                .Visible       = .F.
+            ENDWITH
+
+            THIS.cnt_4c_justificativa.AddObject("lbl_4c_Label5", "Label")
+            WITH THIS.cnt_4c_justificativa.lbl_4c_Label5
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Caption   = "Justificativa do cancelamento"
+                .Left      = 6
+                .Top       = 5
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_justificativa.AddObject("obj_4c_Get_justificativa", "EditBox")
+            WITH THIS.cnt_4c_justificativa.obj_4c_Get_justificativa
+                .Top       = 21
+                .Left      = 3
+                .Width     = 238
+                .Height    = 44
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .ForeColor = RGB(0, 0, 0)
+                .ReadOnly  = .F.
+                .DisabledBackColor = RGB(255, 255, 255)
+                .DisabledForeColor = RGB(0, 0, 0)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_justificativa.AddObject("obj_4c_CmdGconf", "CommandGroup")
+            WITH THIS.cnt_4c_justificativa.obj_4c_CmdGconf
+                .Top         = 18
+                .Left        = 243
+                .Width       = 107
+                .Height      = 47
+                .ButtonCount = 2
+                .BackStyle   = 0
+                .BorderStyle = 0
+                .Value       = 0
+                .Visible     = .T.
+            ENDWITH
+
+            WITH THIS.cnt_4c_justificativa.obj_4c_CmdGconf.Buttons(1)
+                .Top         = 4
+                .Left        = 5
+                .Width       = 48
+                .Height      = 40
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "geral_escudo_ok_32.jpg"
+                .Caption     = ""
+                .ToolTipText = "Confirmar"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes      = .F.
+            ENDWITH
+
+            WITH THIS.cnt_4c_justificativa.obj_4c_CmdGconf.Buttons(2)
+                .Top         = 4
+                .Left        = 53
+                .Width       = 48
+                .Height      = 40
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "cadastro_sair_32.jpg"
+                .Cancel      = .T.
+                .Caption     = ""
+                .ToolTipText = "Cancelar"
+                .ForeColor   = RGB(36, 84, 155)
+                .BackColor   = RGB(255, 255, 255)
+                .Themes      = .F.
+            ENDWITH
+
+            BINDEVENT(THIS.cnt_4c_justificativa.obj_4c_CmdGconf, "Click", THIS, "CmdGconfClick")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarJustificativa")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarProcurar - Painel de busca de cheque por Banco/Agencia/
+    * Conta/Cheque/Emissao/Valor ou leitor de codigo de barras
+    * (cnt_4c_Procurar = cntProcurar do legado, Registro 59+). Aberto por
+    * BtnProcurarClick (botao Procurar do CommandGroup principal).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarProcurar()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Procurar", "Container")
+            WITH THIS.cnt_4c_Procurar
+                .Top           = 284
+                .Left          = 240
+                .Width         = 314
+                .Height        = 218
+                .SpecialEffect = 0
+                .Enabled       = .F.
+                .Visible       = .F.
+                .BackColor     = RGB(255, 255, 255)
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_Label1", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_Label1
+                .AutoSize  = .T.
+                .FontBold  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 9
+                .BackStyle = 0
+                .Caption   = "Procurar"
+                .Left      = 12
+                .Top       = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblBanco", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblBanco
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Banco :"
+                .Left      = 36
+                .Top       = 139
+                .Width     = 38
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblAgencia", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblAgencia
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Ag" + CHR(234) + "ncia :"
+                .Left      = 27
+                .Top       = 163
+                .Width     = 47
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblConta", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblConta
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Conta :"
+                .Left      = 36
+                .Top       = 187
+                .Width     = 38
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblCheque", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblCheque
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Cheque :"
+                .Left      = 164
+                .Top       = 139
+                .Width     = 46
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblEmissao", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblEmissao
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Emiss" + CHR(227) + "o :"
+                .Left      = 163
+                .Top       = 163
+                .Width     = 47
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("lbl_4c_LblValor", "Label")
+            WITH THIS.cnt_4c_Procurar.lbl_4c_LblValor
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Valor :"
+                .Left      = 177
+                .Top       = 187
+                .Width     = 33
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Banco", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Banco
+                .Top           = 135
+                .Left          = 77
+                .Width         = 31
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Agencia", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Agencia
+                .Top           = 158
+                .Left          = 77
+                .Width         = 40
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 4
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "9999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Conta", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Conta
+                .Top           = 181
+                .Left          = 77
+                .Width         = 81
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "9999999999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Cheque", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Cheque
+                .Top           = 135
+                .Left          = 213
+                .Width         = 52
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 6
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "999999"
+                .Visible       = .T.
+            ENDWITH
+
+            *-- getEmissao/getValor sao DATE/NUMERIC (Dtos()/Str(...,12,2) no
+            *-- SEEK do legado exigem esses tipos, apesar do InputMask do SCX
+            *-- nao declarar Format de data/numero).
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Emissao", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Emissao
+                .Top           = 158
+                .Left          = 213
+                .Width         = 81
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = {}
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("txt_4c_Valor", "TextBox")
+            WITH THIS.cnt_4c_Procurar.txt_4c_Valor
+                .Top           = 181
+                .Left          = 213
+                .Width         = 81
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .InputMask     = "999,999.99"
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = 0
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Procurar.AddObject("obj_4c_Cmdgprocurar", "CommandGroup")
+            WITH THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar
+                .Top           = 7
+                .Left          = 135
+                .Width         = 173
+                .Height        = 110
+                .ButtonCount   = 2
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .SpecialEffect = 1
+                .BorderColor   = RGB(136, 189, 188)
+                .Themes        = .F.
+                .Value         = 0
+                .Visible       = .T.
+            ENDWITH
+
+            WITH THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar.Buttons(1)
+                .Top             = 1
+                .Left            = 21
+                .Width           = 75
+                .Height          = 75
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
+                .Caption         = "\<Procurar"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
+
+            WITH THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar.Buttons(2)
+                .Top             = 1
+                .Left            = 97
+                .Width           = 75
+                .Height          = 75
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .Cancel          = .T.
+                .Caption         = "Encerrar"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
+
+            BINDEVENT(THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar, "Click", THIS, "CmdgprocurarClick")
+            BINDEVENT(THIS.cnt_4c_Procurar.txt_4c_Banco, "KeyPress", THIS, "TxtProcurarBancoKeyPress")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarProcurar")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarImpressaoManual - Painel de impressao matricial manual por
+    * Banco + faixa de cheques (cnt_4c_Impchmat = impchmat do legado,
+    * Registro 50+). Aberto por BtnChMatClick quando nao ha cheque marcado
+    * na grade.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarImpressaoManual()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Impchmat", "Container")
+            WITH THIS.cnt_4c_Impchmat
+                .Top           = 284
+                .Left          = 240
+                .Width         = 314
+                .Height        = 218
+                .SpecialEffect = 0
+                .Enabled       = .F.
+                .Visible       = .F.
+                .BackColor     = RGB(255, 255, 255)
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("lbl_4c_Label1", "Label")
+            WITH THIS.cnt_4c_Impchmat.lbl_4c_Label1
+                .AutoSize  = .T.
+                .FontBold  = .T.
+                .FontName  = "Tahoma"
+                .BackStyle = 0
+                .Caption   = "Impress" + CHR(227) + "o"
+                .Left      = 12
+                .Top       = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("lbl_4c_LblBanco", "Label")
+            WITH THIS.cnt_4c_Impchmat.lbl_4c_LblBanco
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Banco :"
+                .Left      = 66
+                .Top       = 157
+                .Width     = 38
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("lbl_4c_LblAgencia", "Label")
+            WITH THIS.cnt_4c_Impchmat.lbl_4c_LblAgencia
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Cheque Inicial :"
+                .Left      = 28
+                .Top       = 185
+                .Width     = 76
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("lbl_4c_LblCheque", "Label")
+            WITH THIS.cnt_4c_Impchmat.lbl_4c_LblCheque
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Alignment = 0
+                .BackStyle = 0
+                .Caption   = "Cheque Final :"
+                .Left      = 172
+                .Top       = 184
+                .Width     = 71
+                .Height    = 15
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("txt_4c_Banco", "TextBox")
+            WITH THIS.cnt_4c_Impchmat.txt_4c_Banco
+                .Top           = 153
+                .Left          = 107
+                .Width         = 31
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("txt_4c_Chini", "TextBox")
+            WITH THIS.cnt_4c_Impchmat.txt_4c_Chini
+                .Top           = 179
+                .Left          = 107
+                .Width         = 52
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 6
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "999999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("txt_4c_Chfin", "TextBox")
+            WITH THIS.cnt_4c_Impchmat.txt_4c_Chfin
+                .Top           = 180
+                .Left          = 245
+                .Width         = 52
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .MaxLength     = 6
+                .SpecialEffect = 1
+                .BorderColor   = RGB(36, 84, 155)
+                .Value         = ""
+                .InputMask     = "999999"
+                .Visible       = .T.
+            ENDWITH
+
+            THIS.cnt_4c_Impchmat.AddObject("obj_4c_CmdGprocurar", "CommandGroup")
+            WITH THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar
+                .Top           = 7
+                .Left          = 134
+                .Width         = 173
+                .Height        = 110
+                .ButtonCount   = 2
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .SpecialEffect = 1
+                .BorderColor   = RGB(136, 189, 188)
+                .Themes        = .F.
+                .Value         = 0
+                .Visible       = .T.
+            ENDWITH
+
+            WITH THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar.Buttons(1)
+                .Top             = 1
+                .Left            = 13
+                .Width           = 75
+                .Height          = 75
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
+                .Caption         = "\<Imprimir"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
+
+            WITH THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar.Buttons(2)
+                .Top             = 1
+                .Left            = 95
+                .Width           = 75
+                .Height          = 75
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .Cancel          = .T.
+                .Caption         = "Encerrar"
+                .PicturePosition = 1
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+            ENDWITH
+
+            BINDEVENT(THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar, "Click", THIS, "CmdGprocurarImpChmatClick")
+            BINDEVENT(THIS.cnt_4c_Impchmat.txt_4c_Chini, "KeyPress", THIS, "TxtChiniKeyPress")
+            BINDEVENT(THIS.cnt_4c_Impchmat.txt_4c_Chfin, "KeyPress", THIS, "TxtChfinKeyPress")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarImpressaoManual")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * TxtCdGruposGotFocus / TxtDsGruposGotFocus / TxtCdContasGotFocus /
+    * TxtDsContasGotFocus / TxtDtInicialGotFocus / TxtDtFinalGotFocus -
+    * Equivalente ao evento When do legado: guarda o valor corrente do campo
+    * ANTES da edicao (AntCdGrupo/AntDsGrupo/AntCdConta/AntDsConta/AntDtIni/
+    * AntDtFin), para o KeyPress-Valid comparar depois e decidir se limpa a
+    * grade. PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE TxtCdGruposGotFocus()
+        THIS.this_oBusinessObject.this_cAntCodGrupo = THIS.txt_4c_CdGrupos.Value
+    ENDPROC
+
+    PROCEDURE TxtDsGruposGotFocus()
+        THIS.this_oBusinessObject.this_cAntDescGrupo = THIS.txt_4c_DsGrupos.Value
+    ENDPROC
+
+    PROCEDURE TxtCdContasGotFocus()
+        THIS.this_oBusinessObject.this_cAntCodConta = THIS.txt_4c_CdContas.Value
+    ENDPROC
+
+    PROCEDURE TxtDsContasGotFocus()
+        THIS.this_oBusinessObject.this_cAntDescConta = THIS.txt_4c_DsContas.Value
+    ENDPROC
+
+    PROCEDURE TxtDtInicialGotFocus()
+        THIS.this_oBusinessObject.this_dAntDataInicial = THIS.txt_4c_Dt_inicial.Value
+    ENDPROC
+
+    PROCEDURE TxtDtFinalGotFocus()
+        THIS.this_oBusinessObject.this_dAntDataFinal = THIS.txt_4c_Dt_final.Value
+    ENDPROC
+
+    *==========================================================================
+    * LimparChequesSeFiltroMudou - Equivalente ao "If Used('CsSigCqChi') / Zap
+    * In CsSigCqChi / ThisForm.GrdCCheques.Refresh" repetido em TODOS os Valid
+    * de filtro do legado: some com a grade quando o usuario altera Grupo/
+    * Conta/Periodo, para nao exibir resultado desatualizado ate clicar
+    * Processar. ZAP exige SAFETY OFF (config.prg so seta SET EXACT ON - a
+    * mesma ressalva de MontaGrade acima).
+    *==========================================================================
+    PROTECTED PROCEDURE LimparChequesSeFiltroMudou()
+        LOCAL loc_cCursor, loc_cSafety
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF USED(loc_cCursor)
+            loc_cSafety = SET("Safety")
+            SET SAFETY OFF
+
+            SELECT (loc_cCursor)
+            ZAP
+
+            IF loc_cSafety == "ON"
+                SET SAFETY ON
+            ENDIF
+
+            THIS.grd_4c_Dados.Refresh()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ValidarCdGruposKeyPress / ValidarDsGruposKeyPress - Equivalente ao Valid
+    * de GetCdGrupos/GetDsGrupos do legado (fAcessoContab): F4 abre o picker
+    * (AbrirBuscaGrupo), Enter/Tab tenta o match EXATO contra SigCdGcr
+    * (Codigos/Descrs) e, sem match, abre o picker com o prefixo digitado. O
+    * campo Descricao replica o guard do When original (Return(Empty(
+    * GetCdGrupos.Value))) - so participa da busca quando o Codigo esta vazio.
+    *==========================================================================
+    PROCEDURE ValidarCdGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado, loc_lMudou
+
+        IF par_nKeyCode = 115  && F4
+            THIS.AbrirBuscaGrupo()
+            NODEFAULT
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
+        loc_lMudou = loc_cValor != ALLTRIM(THIS.this_oBusinessObject.this_cAntCodGrupo)
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_DsGrupos.Value = ""
+        ELSE
+            IF USED("cursor_4c_BuscaGrupo")
+                USE IN cursor_4c_BuscaGrupo
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cValor)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGrupo")
+
+            IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+                THIS.txt_4c_CdGrupos.Value = ALLTRIM(cursor_4c_BuscaGrupo.codigos)
+                THIS.txt_4c_DsGrupos.Value = ALLTRIM(cursor_4c_BuscaGrupo.descrs)
+
+                IF USED("cursor_4c_BuscaGrupo")
+                    USE IN cursor_4c_BuscaGrupo
+                ENDIF
+            ELSE
+                IF USED("cursor_4c_BuscaGrupo")
+                    USE IN cursor_4c_BuscaGrupo
+                ENDIF
+                THIS.AbrirBuscaGrupo()
+                RETURN
+            ENDIF
+        ENDIF
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ValidarDsGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cSQL, loc_nResultado, loc_lMudou
+
+        IF par_nKeyCode = 115  && F4
+            THIS.AbrirBuscaGrupo()
+            NODEFAULT
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        *-- Legado: GetDsGrupos.When = Return(Empty(GetCdGrupos.Value)) - o
+        *-- campo Descricao so participa da busca quando o Codigo esta vazio.
+        IF !EMPTY(THIS.txt_4c_CdGrupos.Value)
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(THIS.txt_4c_DsGrupos.Value)
+        loc_lMudou = loc_cValor != ALLTRIM(THIS.this_oBusinessObject.this_cAntDescGrupo)
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_CdGrupos.Value = ""
+        ELSE
+            IF USED("cursor_4c_BuscaGrupo")
+                USE IN cursor_4c_BuscaGrupo
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE descrs = " + EscaparSQL(loc_cValor)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGrupo")
+
+            IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+                THIS.txt_4c_CdGrupos.Value = ALLTRIM(cursor_4c_BuscaGrupo.codigos)
+                THIS.txt_4c_DsGrupos.Value = ALLTRIM(cursor_4c_BuscaGrupo.descrs)
+
+                IF USED("cursor_4c_BuscaGrupo")
+                    USE IN cursor_4c_BuscaGrupo
+                ENDIF
+            ELSE
+                IF USED("cursor_4c_BuscaGrupo")
+                    USE IN cursor_4c_BuscaGrupo
+                ENDIF
+                THIS.AbrirBuscaGrupo()
+                RETURN
+            ENDIF
+        ENDIF
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaGrupo - Picker de Grupo de Contas (SigCdGcr.Codigos/Descrs).
+    * Substitui fAcessoContab (Framework\sigacess.PRG) - a funcao legada
+    * embute regra de acesso por usuario/grupo contabil complexa demais para
+    * UI de lookup direto (mesma familia de cautela de fAcessoContas, ver
+    * memoria feedback_facessocontas_lookup_ux.md); aqui o filtro eh o
+    * prefixo ja digitado, igual ao padrao Pattern A do projeto.
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirBuscaGrupo()
+        LOCAL loc_oBusca, loc_cSQL, loc_cFiltro, loc_nResultado
+
+        loc_cFiltro = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
+        IF EMPTY(loc_cFiltro)
+            loc_cFiltro = ALLTRIM(THIS.txt_4c_DsGrupos.Value)
+        ENDIF
+
+        IF USED("cursor_4c_BuscaGrupo")
+            USE IN cursor_4c_BuscaGrupo
+        ENDIF
+
+        IF !EMPTY(loc_cFiltro)
+            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr WHERE " + ;
+                "codigos LIKE " + EscaparSQL(loc_cFiltro + "%") + ;
+                " OR descrs LIKE " + EscaparSQL(loc_cFiltro + "%") + " ORDER BY codigos"
+        ELSE
+            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos"
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGrupo")
+
+        IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            loc_oBusca.DefinirCursor("cursor_4c_BuscaGrupo", "codigos", "descrs", ;
+                "Grupo de Contas")
+
+            IF loc_oBusca.Mostrar()
+                THIS.txt_4c_CdGrupos.Value = loc_oBusca.cCodigoSelecionado
+                THIS.txt_4c_DsGrupos.Value = loc_oBusca.cDescricaoSelecionada
+                THIS.LimparChequesSeFiltroMudou()
+            ENDIF
+
+            loc_oBusca.Release()
+        ENDIF
+
+        IF USED("cursor_4c_BuscaGrupo")
+            USE IN cursor_4c_BuscaGrupo
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ValidarCdContasKeyPress / ValidarDsContasKeyPress - Equivalente ao Valid
+    * de getCdContas/getDsContas do legado (fAcessoContas): F4 abre o picker
+    * (AbrirBuscaConta), Enter/Tab tenta o match EXATO contra SigCdCli
+    * (Iclis/Rclis) filtrado pelo Grupo corrente, e sem match abre o picker
+    * com o prefixo digitado. getDsContas replica o guard do When original
+    * (Return(Empty(GetCdContas.Value))).
+    *==========================================================================
+    PROCEDURE ValidarCdContasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cGrupo, loc_cSQL, loc_nResultado, loc_lMudou
+
+        IF par_nKeyCode = 115  && F4
+            THIS.AbrirBuscaConta()
+            NODEFAULT
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(THIS.txt_4c_CdContas.Value)
+        loc_lMudou = loc_cValor != ALLTRIM(THIS.this_oBusinessObject.this_cAntCodConta)
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_DsContas.Value = ""
+        ELSE
+            loc_cGrupo = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
+
+            IF USED("cursor_4c_BuscaConta")
+                USE IN cursor_4c_BuscaConta
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cValor)
+            IF !EMPTY(loc_cGrupo)
+                loc_cSQL = loc_cSQL + " AND grupos = " + EscaparSQL(loc_cGrupo)
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaConta")
+
+            IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaConta") > 0
+                THIS.txt_4c_CdContas.Value = ALLTRIM(cursor_4c_BuscaConta.iclis)
+                THIS.txt_4c_DsContas.Value = ALLTRIM(cursor_4c_BuscaConta.rclis)
+
+                IF USED("cursor_4c_BuscaConta")
+                    USE IN cursor_4c_BuscaConta
+                ENDIF
+            ELSE
+                IF USED("cursor_4c_BuscaConta")
+                    USE IN cursor_4c_BuscaConta
+                ENDIF
+                THIS.AbrirBuscaConta()
+                RETURN
+            ENDIF
+        ENDIF
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ValidarDsContasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cValor, loc_cGrupo, loc_cSQL, loc_nResultado, loc_lMudou
+
+        IF par_nKeyCode = 115  && F4
+            THIS.AbrirBuscaConta()
+            NODEFAULT
+            RETURN
+        ENDIF
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        *-- Legado: getDsContas.When = Return(Empty(GetCdContas.Value))
+        IF !EMPTY(THIS.txt_4c_CdContas.Value)
+            RETURN
+        ENDIF
+
+        loc_cValor = ALLTRIM(THIS.txt_4c_DsContas.Value)
+        loc_lMudou = loc_cValor != ALLTRIM(THIS.this_oBusinessObject.this_cAntDescConta)
+
+        IF EMPTY(loc_cValor)
+            THIS.txt_4c_CdContas.Value = ""
+        ELSE
+            loc_cGrupo = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
+
+            IF USED("cursor_4c_BuscaConta")
+                USE IN cursor_4c_BuscaConta
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE RTRIM(rclis) = " + EscaparSQL(loc_cValor)
+            IF !EMPTY(loc_cGrupo)
+                loc_cSQL = loc_cSQL + " AND grupos = " + EscaparSQL(loc_cGrupo)
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaConta")
+
+            IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaConta") > 0
+                THIS.txt_4c_CdContas.Value = ALLTRIM(cursor_4c_BuscaConta.iclis)
+                THIS.txt_4c_DsContas.Value = ALLTRIM(cursor_4c_BuscaConta.rclis)
+
+                IF USED("cursor_4c_BuscaConta")
+                    USE IN cursor_4c_BuscaConta
+                ENDIF
+            ELSE
+                IF USED("cursor_4c_BuscaConta")
+                    USE IN cursor_4c_BuscaConta
+                ENDIF
+                THIS.AbrirBuscaConta()
+                RETURN
+            ENDIF
+        ENDIF
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaConta - Picker de Conta (SigCdCli.Iclis/Rclis), filtrado pelo
+    * Grupo corrente quando informado. Substitui fAcessoContas
+    * (Framework\sigacess.PRG) - NAO usar a funcao legada como handler de
+    * lookup UX (memoria feedback_facessocontas_lookup_ux.md: auto-carrega o
+    * primeiro registro do LIKE sem selecao do usuario).
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirBuscaConta()
+        LOCAL loc_oBusca, loc_cSQL, loc_cFiltro, loc_cGrupo, loc_nResultado
+
+        loc_cFiltro = ALLTRIM(THIS.txt_4c_CdContas.Value)
+        IF EMPTY(loc_cFiltro)
+            loc_cFiltro = ALLTRIM(THIS.txt_4c_DsContas.Value)
+        ENDIF
+
+        loc_cGrupo = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
+
+        IF USED("cursor_4c_BuscaConta")
+            USE IN cursor_4c_BuscaConta
+        ENDIF
+
+        loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE 1 = 1 "
+
+        IF !EMPTY(loc_cGrupo)
+            loc_cSQL = loc_cSQL + "AND grupos = " + EscaparSQL(loc_cGrupo) + " "
+        ENDIF
+
+        IF !EMPTY(loc_cFiltro)
+            loc_cSQL = loc_cSQL + "AND (iclis LIKE " + EscaparSQL(loc_cFiltro + "%") + ;
+                " OR RTRIM(rclis) LIKE " + EscaparSQL(loc_cFiltro + "%") + ") "
+        ENDIF
+
+        loc_cSQL = loc_cSQL + "ORDER BY iclis"
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaConta")
+
+        IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_BuscaConta") > 0
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            loc_oBusca.DefinirCursor("cursor_4c_BuscaConta", "iclis", "rclis", "Contas")
+
+            IF loc_oBusca.Mostrar()
+                THIS.txt_4c_CdContas.Value = loc_oBusca.cCodigoSelecionado
+                THIS.txt_4c_DsContas.Value = loc_oBusca.cDescricaoSelecionada
+                THIS.LimparChequesSeFiltroMudou()
+            ENDIF
+
+            loc_oBusca.Release()
+        ENDIF
+
+        IF USED("cursor_4c_BuscaConta")
+            USE IN cursor_4c_BuscaConta
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ValidarDtInicialKeyPress / ValidarDtFinalKeyPress - Equivalente ao Valid
+    * de Dt_inicial/Dt_final do legado: mantem Data Inicial <= Data Final
+    * empurrando a outra ponta do periodo (mesma logica do SCX original), e
+    * limpa a grade quando o valor mudou desde que o campo recebeu foco.
+    *==========================================================================
+    PROCEDURE ValidarDtInicialKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lMudou
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        *-- Legado: If This.Value > Dt_Final.Value -> Dt_Final.Value = This.Value
+        IF THIS.txt_4c_Dt_inicial.Value > THIS.txt_4c_Dt_final.Value
+            THIS.txt_4c_Dt_final.Value = THIS.txt_4c_Dt_inicial.Value
+        ENDIF
+
+        loc_lMudou = THIS.txt_4c_Dt_inicial.Value != THIS.this_oBusinessObject.this_dAntDataInicial
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ValidarDtFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lMudou
+
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+
+        *-- Legado: If This.Value < Dt_Inicial.Value -> Dt_Inicial.Value = This.Value
+        IF THIS.txt_4c_Dt_final.Value < THIS.txt_4c_Dt_inicial.Value
+            THIS.txt_4c_Dt_inicial.Value = THIS.txt_4c_Dt_final.Value
+        ENDIF
+
+        loc_lMudou = THIS.txt_4c_Dt_final.Value != THIS.this_oBusinessObject.this_dAntDataFinal
+
+        IF loc_lMudou
+            THIS.LimparChequesSeFiltroMudou()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnProcessarClick - Command2.Click ("Processar") do legado: valida o
+    * periodo, sincroniza os filtros para o BO e recarrega a grade.
+    *
+    * O guard "so recarrega se algum filtro mudou OU eh a primeira exibicao"
+    * eh transcrito como esta: as condicoes que CERCAM a validacao fazem parte
+    * da regra (CLAUDE.md #21b). Os valores Ant* sao atualizados pelos eventos
+    * When dos proprios campos de filtro (fase de filtros), NAO aqui - no
+    * legado quem grava AntDtIni/AntCdConta eh o When de cada TextBox.
+    *
+    * As tres validacoes de Grupo/Conta obrigatorios que existem no legado
+    * estao COMENTADAS no legado (*!*) - portanto aposentadas, e NAO migradas.
+    *==========================================================================
+    PROCEDURE BtnProcessarClick()
+        LOCAL loc_dIni, loc_dFim, loc_cGrupo, loc_cConta, loc_lRecarregar
+        LOCAL loc_oBO
+
+        loc_oBO = THIS.this_oBusinessObject
+
+        loc_dIni   = THIS.ObterFiltroDataInicial()
+        loc_dFim   = THIS.ObterFiltroDataFinal()
+        loc_cGrupo = THIS.ObterFiltroGrupo()
+        loc_cConta = THIS.ObterFiltroConta()
+
+        *-- Legado: If Dt_Inicial.Value > Dt_Final.Value -> erro + SetFocus
+        IF loc_dIni > loc_dFim
+            MsgErro("Data Final menor que Data Inicial !!!", ;
+                "Per" + CHR(237) + "odo Inv" + CHR(225) + "lido")
+
+            IF PEMSTATUS(THIS, "txt_4c_Dt_inicial", 5)
+                THIS.txt_4c_Dt_inicial.SetFocus()
+            ENDIF
+
+            RETURN
+        ENDIF
+
+        *-- Legado: AntDtIni # Dt_Inicial Or AntDtFin # Dt_Final Or
+        *--         AntCdGrupo # getCdGrupos Or AntCdConta # getCdContas Or Inicial
+        loc_lRecarregar = ;
+            loc_oBO.this_dAntDataInicial != loc_dIni   OR ;
+            loc_oBO.this_dAntDataFinal   != loc_dFim   OR ;
+            ALLTRIM(loc_oBO.this_cAntCodGrupo) != ALLTRIM(loc_cGrupo) OR ;
+            ALLTRIM(loc_oBO.this_cAntCodConta) != ALLTRIM(loc_cConta) OR ;
+            loc_oBO.this_lPrimeiraExibicao
+
+        IF loc_lRecarregar
+            *-- CarregarLista eh o FUNIL da carga: sincroniza os filtros da
+            *-- tela para o BO (FormParaBO - fonte unica da consulta), garante
+            *-- o cursor da grade e chama MontaGrade, que ja reporta a falha
+            *-- (mensagem unica - CLAUDE.md regra #20).
+            IF !THIS.CarregarLista(.F.)
+                RETURN
+            ENDIF
+        ELSE
+            *-- Sem recarga (nenhum filtro mudou desde a ultima consulta): o BO
+            *-- continua espelhando a tela para as demais acoes da tela.
+            THIS.FormParaBO()
+        ENDIF
+
+        *-- Legado: ThisForm.GrdCCheques.ClnContas.SetFocus
+        IF THIS.grd_4c_Dados.Visible AND THIS.grd_4c_Dados.Enabled
+            THIS.grd_4c_Dados.Column2.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ObterFiltroDataInicial / ObterFiltroDataFinal - Periodo corrente. Mesma
+    * regra dos filtros de Grupo/Conta: o TextBox de data (Dt_Inicial /
+    * Dt_Final) entra na fase de filtros; enquanto nao existir, vale a
+    * property do BO (inicializada com DATE() no Init, como o legado faz em
+    * "ThisForm.Dt_Inicial.Value = Date()").
+    *
+    * ConverterParaData normaliza DATE/DATETIME: o TextBox nasce com {} (DATE)
+    * e a coluna do banco chega como DATETIME - comparar/converter sem
+    * normalizar dispara erro 11 (CLAUDE.md regra #16).
+    *==========================================================================
+    PROTECTED FUNCTION ObterFiltroDataInicial()
+        LOCAL loc_uValor
+
+        loc_uValor = THIS.this_oBusinessObject.this_dDataInicial
+
+        IF PEMSTATUS(THIS, "txt_4c_Dt_inicial", 5)
+            loc_uValor = THIS.txt_4c_Dt_inicial.Value
+        ENDIF
+
+        RETURN ConverterParaData(loc_uValor)
+    ENDFUNC
+
+    PROTECTED FUNCTION ObterFiltroDataFinal()
+        LOCAL loc_uValor
+
+        loc_uValor = THIS.this_oBusinessObject.this_dDataFinal
+
+        IF PEMSTATUS(THIS, "txt_4c_Dt_final", 5)
+            loc_uValor = THIS.txt_4c_Dt_final.Value
+        ENDIF
+
+        RETURN ConverterParaData(loc_uValor)
+    ENDFUNC
+
+    *==========================================================================
+    * CmdGokClick - Dispatcher do CommandGroup de acoes (obj_4c_CmdGok),
+    * replicando o padrao 1-metodo-por-botao do cmdGok legado via
+    * DO CASE(THIS.Value). PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE CmdGokClick()
+        DO CASE
+            CASE THIS.obj_4c_CmdGok.Value = 1
+                THIS.BtnDocumentoClick()
+            CASE THIS.obj_4c_CmdGok.Value = 2
+                THIS.BtnSairClick()
+            CASE THIS.obj_4c_CmdGok.Value = 3
+                THIS.BtnImprimirClick()
+            CASE THIS.obj_4c_CmdGok.Value = 4
+                THIS.BtnProcurarClick()
+            CASE THIS.obj_4c_CmdGok.Value = 5
+                THIS.BtnReciboClick()
+            CASE THIS.obj_4c_CmdGok.Value = 6
+                THIS.BtnExcluiDocClick()
+            CASE THIS.obj_4c_CmdGok.Value = 7
+                THIS.BtnImpChqClick()
+            CASE THIS.obj_4c_CmdGok.Value = 8
+                THIS.BtnChMatClick()
+            CASE THIS.obj_4c_CmdGok.Value = 9
+                THIS.BtnExcluirChqClick()
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * BtnSairClick - Encerrar (cmdSair.Click do legado). Fecha os cursores
+    * auxiliares de contas e libera o form.
+    *==========================================================================
+    PROCEDURE BtnSairClick()
+        IF USED(THIS.this_oBusinessObject.this_cCursorContas)
+            USE IN (THIS.this_oBusinessObject.this_cCursorContas)
+        ENDIF
+
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * BtnExcluirChqClick - Excluir Chq. (btnExcluirChq.Click do legado). So
+    * confirma e delega ao BusinessObject.Excluir() - AntesDeExcluir() ja
+    * replica o guard do legado (ncancelas=1 AND ExcluirCheque) e a falha eh
+    * reportada sozinha pelo BusinessBase (CLAUDE.md regra #20).
+    *
+    * CarregarDoCursor() (SigPrChrBO) le as colunas RAW de SigCqChi
+    * (cancelas/emitidos/grupos/vencs/versos/empdopnums/impversos) - nomes
+    * que NAO existem em cursor_4c_Cheques (a grade tem so nemitidos/
+    * ncancelas convertidos via CASE WHEN, sem grupos/vencs/versos/
+    * empdopnums/impversos). Passar o cursor da grade direto estouraria
+    * "Variable 'CANCELAS' is not found." Por isso o cheque corrente eh
+    * relido com SELECT * FROM SigCqChi (mesmas colunas que CarregarDoCursor
+    * espera), pela PK cidchaves.
+    *==========================================================================
     PROCEDURE BtnExcluirChqClick()
-        LOCAL loc_cCursor, loc_cSQL, loc_nOk, loc_cMensa, loc_oErro
+        LOCAL loc_cCursor, loc_cCidchaves, loc_cSQL, loc_nResultado, loc_cMensagem
+
         loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
 
         IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            MsgAviso("Nenhum cheque selecionado.", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        loc_cCidchaves = EVALUATE(loc_cCursor + ".cidchaves")
+
+        IF USED("cursor_4c_ChequeAtual")
+            USE IN cursor_4c_ChequeAtual
+        ENDIF
+
+        loc_cSQL = "SELECT * FROM SigCqChi WHERE cidchaves = " + EscaparSQL(loc_cCidchaves)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChequeAtual")
+
+        IF loc_nResultado <= 0 OR RECCOUNT("cursor_4c_ChequeAtual") = 0
+            MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + "vel localizar o cheque para exclus" + CHR(227) + "o." + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            IF USED("cursor_4c_ChequeAtual")
+                USE IN cursor_4c_ChequeAtual
+            ENDIF
+            RETURN
+        ENDIF
+
+        THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_ChequeAtual")
+
+        IF USED("cursor_4c_ChequeAtual")
+            USE IN cursor_4c_ChequeAtual
+        ENDIF
+
+        loc_cMensagem = "Deseja realmente excluir o cheque :" + CHR(13) + ;
+            ALLTRIM(THIS.this_oBusinessObject.this_cBancos)   + " / " + ;
+            ALLTRIM(THIS.this_oBusinessObject.this_cAgencias) + " / " + ;
+            ALLTRIM(THIS.this_oBusinessObject.this_cNcontas)  + " / " + ;
+            ALLTRIM(THIS.this_oBusinessObject.this_cNcheques) + " ?"
+
+        IF MsgConfirma(loc_cMensagem, "Exclus" + CHR(227) + "o de cheque cancelado")
+            IF THIS.this_oBusinessObject.Excluir()
+                SELECT (loc_cCursor)
+                DELETE
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnMarcarTudoClick / BtnDesmarcarTudoClick - cmdTudo1.Click /
+    * cmdApaga1.Click do legado (marca/desmarca em massa a coluna Imprime).
+    *==========================================================================
+    PROCEDURE BtnMarcarTudoClick()
+        LOCAL loc_cCursor, loc_nRecno
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF USED(loc_cCursor)
+            loc_nRecno = RECNO(loc_cCursor)
+            UPDATE (loc_cCursor) SET nmarca1s = 1 WHERE nmarca1s = 0 AND nemitidos = 0 AND ncancelas = 0
+
+            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
+                SELECT (loc_cCursor)
+                GOTO loc_nRecno
+            ENDIF
+
+            THIS.grd_4c_Dados.Refresh()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnDesmarcarTudoClick()
+        LOCAL loc_cCursor, loc_nRecno
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF USED(loc_cCursor)
+            loc_nRecno = RECNO(loc_cCursor)
+            UPDATE (loc_cCursor) SET nmarca1s = 0 WHERE nmarca1s = 1
+
+            IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
+                SELECT (loc_cCursor)
+                GOTO loc_nRecno
+            ENDIF
+
+            THIS.grd_4c_Dados.Refresh()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnImprimirClick - Imprimir (cmdImprimir.Click do legado): abre
+    * FormSigReEch (Emissao de Cheque, ja migrado) no modo CONSULTAR para o
+    * cheque selecionado na grade - mesmos parametros do "Do Form SigReEch
+    * With emps,dopes,numes,'CONSULTAR',ncheques" original.
+    *==========================================================================
+    PROCEDURE BtnImprimirClick()
+        LOCAL loc_cCursor, loc_oForm, loc_oErro
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            MsgAviso("Nenhum cheque selecionado.", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        loc_oForm = .NULL.
+        SELECT (loc_cCursor)
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigReEch", emps, dopes, numes, "CONSULTAR", ncheques)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao abrir emiss" + CHR(227) + "o de cheque")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnDocumentoClick - Documento (cmdDocumento.Click do legado): confere
+    * se existe lancamento de pagamento para o EmpDopNums do cheque
+    * selecionado (mesmo guard do "CursorQuery('SigCdPgr',,'empdopnums',...)"
+    * original) e, se existir, abre o cadastro correspondente (Formpgr, ja
+    * migrado - SIGCDPGR.SCX). Sem lancamento, nao faz nada (mesmo
+    * comportamento do Else do legado).
+    *==========================================================================
+    PROCEDURE BtnDocumentoClick()
+        LOCAL loc_cCursor, loc_cEmpDopNums, loc_cSQL, loc_nResultado, loc_oForm, loc_oErro
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            MsgAviso("Nenhum cheque selecionado.", "Aten" + CHR(231) + CHR(227) + "o")
             RETURN
         ENDIF
 
         SELECT (loc_cCursor)
-        IF NCancelas = 1 AND THIS.this_lExcluirCheque
-            IF MsgConfirma("Deseja realmente excluir o cheque :" + CHR(13) + ;
-                           ALLTRIM(Bancos) + " / " + ALLTRIM(Agencias) + ;
-                           " / " + ALLTRIM(Ncontas) + " / " + ALLTRIM(Ncheques) + " ?")
-                TRY
-                    loc_cSQL = "DELETE FROM SigCqChi WHERE cidchaves = " + EscaparSQL(ALLTRIM(Cidchaves))
-                    IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                        loc_cMensa = "Exclus" + CHR(227) + "o do cheque cancelado : " + ;
-                                     ALLTRIM(Bancos) + "/" + ALLTRIM(Agencias) + ;
-                                     "/" + ALLTRIM(Ncontas) + "/" + ALLTRIM(Ncheques)
-                        THIS.this_oBusinessObject.RegistrarAuditoria("DELETE")
-                    ELSE
-                        MsgErro("Falha ao excluir cheque.", "Erro")
-                    ENDIF
-                CATCH TO loc_oErro
-                    MsgErro(loc_oErro.Message, "Erro")
-                ENDTRY
-                THIS.ExibirCheques(.F.)
+        loc_cEmpDopNums = PADR(emps, 3) + PADR(dopes, 20) + STR(numes, 6)
+
+        loc_cSQL = "SELECT TOP 1 empdopnums FROM SigCdPgr WHERE empdopnums = " + EscaparSQL(loc_cEmpDopNums)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_VerificaPgr")
+
+        IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_VerificaPgr") > 0
+            loc_oForm = .NULL.
+            TRY
+                loc_oForm = CREATEOBJECT("Formpgr")
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro ao abrir Lan" + CHR(231) + "amentos e Pagamentos")
+                loc_oForm = .NULL.
+            ENDTRY
+
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.Show()
             ENDIF
+        ENDIF
+
+        IF USED("cursor_4c_VerificaPgr")
+            USE IN cursor_4c_VerificaPgr
         ENDIF
     ENDPROC
 
-    *-- Botao Procurar: activa container de busca de cheque
+    *==========================================================================
+    * BtnProcurarClick - Procurar (cmdProcurar.Click do legado): ABRE o
+    * painel de busca de cheque por Banco/Agencia/Conta/Cheque/Emissao/Valor
+    * ou leitor de codigo de barras (cnt_4c_Procurar) - NAO eh toggle: o
+    * legado ("ThisForm.plInicio = .T. / ThisForm.CntProcurar.Init") sempre
+    * abre, e o fechamento vem so pelos botoes Procurar/Cancelar do painel
+    * (FecharPainelProcurar). Desabilita os demais controles da tela
+    * enquanto o painel esta aberto, como o legado faz.
+    *==========================================================================
     PROCEDURE BtnProcurarClick()
-        THIS.this_lPlInicio = .T.
-        WITH THIS.cnt_4c_Procurar
-            .Visible = .T.
-            .Enabled = .T.
-            .txt_4c_BancoP.SetFocus()
-        ENDWITH
-        WITH THIS.cmg_4c_Acoes
-            .Buttons(1).Enabled = .F.
-            .Buttons(2).Enabled = .F.
-            .Buttons(3).Enabled = .F.
-            .Buttons(4).Enabled = .F.
-            .Buttons(5).Enabled = .F.
-            .Buttons(6).Enabled = .F.
-        ENDWITH
-        THIS.txt_4c_CdContas.Enabled   = .F.
-        THIS.txt_4c_DsContas.Enabled   = .F.
-        THIS.grd_4c_Dados.Enabled      = .F.
-        THIS.txt_4c_Favorecido.Enabled = .F.
-        THIS.Refresh()
-    ENDPROC
-
-    *-- Botao Confirmar Justificativa: cancela cheque com justificativa
-    PROCEDURE BtnConfJustClick()
-        LOCAL loc_nRecno, loc_cCursor, loc_cJust, loc_lCarregou, loc_oErro
-
-        IF EMPTY(THIS.cnt_4c_Justificativa.txt_4c_Justificativa.Value)
-            MsgAviso("Aten" + CHR(231) + CHR(227) + "o, justificativa em Branco", "")
-            THIS.cnt_4c_Justificativa.txt_4c_Justificativa.SetFocus()
+        IF !PEMSTATUS(THIS, "cnt_4c_Procurar", 5)
             RETURN
         ENDIF
 
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
         THIS.LockScreen = .T.
-        loc_nRecno = RECNO(loc_cCursor)
 
-        IF !EOF(loc_cCursor) AND THIS.CarregarConta()
-            TRY
-                SELECT (loc_cCursor)
-                THIS.Enabled = .F.
-                DO FORM SigCdPgr WITH ;
-                    LEFT(ALLTRIM(Dopes), 1), .F., ;
-                    ALLTRIM(Emps), ALLTRIM(Dopes), NNumes
-                IF BETWEEN(loc_nRecno, 1, RECCOUNT(loc_cCursor))
-                    GOTO loc_nRecno IN (loc_cCursor)
-                ENDIF
-                THIS.ExibirCheques(.F.)
-                THIS.Enabled = .T.
-                THIS.cnt_4c_Justificativa.Visible = .F.
-            CATCH TO loc_oErro
-                THIS.Enabled = .T.
-                MsgErro(loc_oErro.Message, "Erro")
-            ENDTRY
+        *-- Legado (cntProcurar.Init): desliga Conta/Descricao da conta/grade/
+        *-- Favorecido/CmdGOk e mostra o painel. O conjunto exato vive em
+        *-- AjustarBotoesPorModo/HabilitarCampos, que tambem eh o funil de
+        *-- VOLTA (FecharPainelProcurar) - CLAUDE.md regra #40.
+        THIS.AjustarBotoesPorModo("PROCURAR")
+
+        IF PEMSTATUS(THIS.cnt_4c_Procurar, "txt_4c_Banco", 5)
+            THIS.cnt_4c_Procurar.txt_4c_Banco.SetFocus()
         ENDIF
+
+        THIS.Refresh()
 
         THIS.LockScreen = .F.
     ENDPROC
 
-    *-- Botao Cancelar Justificativa
-    PROCEDURE BtnCancJustClick()
-        THIS.cnt_4c_Justificativa.Enabled = .F.
-        THIS.cnt_4c_Justificativa.Visible = .F.
+    *==========================================================================
+    * FecharPainelProcurar - Reabilita os controles desabilitados por
+    * BtnProcurarClick, oculta o painel e recarrega a exibicao (mExibeCheques
+    * (.F.) do legado - mesmo corpo nos dois botoes cmdprocurar/cmdCancelar
+    * de cntProcurar.cmdgprocurar, so a busca em si difere).
+    *==========================================================================
+    PROTECTED PROCEDURE FecharPainelProcurar()
+        *-- FUNIL de volta: reabilita o que "PROCURAR" desligou e oculta o
+        *-- painel (CLAUDE.md regra #40).
+        THIS.AjustarBotoesPorModo("LISTA")
+
+        THIS.ExibirCheques(.F.)
     ENDPROC
 
-    *-- Botao Imprimir Matricial: imprime cheques por faixa (impchmat)
-    PROCEDURE BtnImpChmatClick()
-        LOCAL loc_cBanco, loc_cChIni, loc_cChFin, loc_cSQL, loc_oErro
+    *==========================================================================
+    * CmdgprocurarClick - Dispatcher do CommandGroup obj_4c_Cmdgprocurar
+    * (cntProcurar.cmdgprocurar do legado: Botao1=Procurar, Botao2=Cancelar).
+    * PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE CmdgprocurarClick()
+        DO CASE
+            CASE THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar.Value = 1
+                THIS.ProcurarChequeNoPainel()
+            CASE THIS.cnt_4c_Procurar.obj_4c_Cmdgprocurar.Value = 2
+                THIS.BtnCancelarClick("PROCURAR")
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * ProcurarChequeNoPainel - cmdprocurar.Click do legado: posiciona o
+    * cursor de cheques pelo primeiro campo preenchido (Emissao > Valor >
+    * Banco > Agencia > Conta > Cheque - mesma ordem/DO CASE do legado),
+    * usando SET NEAR ON (posiciona no registro mais proximo, mesmo sem
+    * achar exato) e fecha o painel.
+    *==========================================================================
+    PROCEDURE ProcurarChequeNoPainel()
+        LOCAL loc_cCursor, loc_cBanco, loc_cAgencia, loc_cConta, loc_cCheque
+        LOCAL loc_dEmissao, loc_nValor
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor)
+            THIS.FecharPainelProcurar()
+            RETURN
+        ENDIF
+
+        WITH THIS.cnt_4c_Procurar
+            loc_cBanco = PADR(ALLTRIM(.txt_4c_Banco.Value), 3)
+            .txt_4c_Banco.Value = loc_cBanco
+            loc_cAgencia = .txt_4c_Agencia.Value
+            loc_cConta   = .txt_4c_Conta.Value
+            loc_cCheque  = .txt_4c_Cheque.Value
+            loc_dEmissao = ConverterParaData(.txt_4c_Emissao.Value)
+            loc_nValor   = .txt_4c_Valor.Value
+            .Visible     = .T.
+        ENDWITH
+
+        SELECT (loc_cCursor)
+        SET NEAR ON
+
+        DO CASE
+            CASE !EMPTY(loc_dEmissao)
+                SET ORDER TO Emissao
+                SEEK DTOS(loc_dEmissao) + loc_cBanco + loc_cAgencia + loc_cConta + loc_cCheque
+            CASE loc_nValor != 0
+                SET ORDER TO Valor
+                SEEK STR(loc_nValor, 12, 2) + loc_cBanco + loc_cAgencia + loc_cConta + loc_cCheque
+            CASE !EMPTY(loc_cBanco)
+                SET ORDER TO Cheque
+                SEEK loc_cBanco + loc_cAgencia + loc_cConta + loc_cCheque
+            CASE !EMPTY(loc_cAgencia)
+                SET ORDER TO Agencia
+                SEEK loc_cAgencia + loc_cConta + loc_cCheque
+            CASE !EMPTY(loc_cConta)
+                SET ORDER TO Conta
+                SEEK loc_cConta + loc_cCheque
+            CASE !EMPTY(loc_cCheque)
+                SET ORDER TO NCheques
+                SEEK loc_cCheque
+        ENDCASE
+
+        SET NEAR OFF
+
+        THIS.FecharPainelProcurar()
+    ENDPROC
+
+    *==========================================================================
+    * TxtProcurarBancoKeyPress - Leitor de codigo de barras do cheque
+    * (cntProcurar.getBanco.KeyPress do legado): tecla 60 inicia a captura,
+    * 58 finaliza e decodifica a string lida em Banco/Agencia/Conta/Cheque.
+    * this_lLeitorChequeAtivo/this_cChequeLido (SigPrChrBO) sao os mesmos
+    * plLeCheque/pcChqLido do legado. PUBLIC - BINDEVENT so dispara metodos
+    * PUBLIC.
+    *==========================================================================
+    PROCEDURE TxtProcurarBancoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 60
+            IF !THIS.this_oBusinessObject.this_lLeitorChequeAtivo
+                THIS.this_oBusinessObject.this_cChequeLido = ""
+            ENDIF
+            THIS.this_oBusinessObject.this_lLeitorChequeAtivo = .T.
+        ENDIF
+
+        IF THIS.this_oBusinessObject.this_lLeitorChequeAtivo
+            THIS.this_oBusinessObject.this_cChequeLido = ;
+                THIS.this_oBusinessObject.this_cChequeLido + CHR(par_nKeyCode)
+            NODEFAULT
+        ENDIF
+
+        IF par_nKeyCode = 58
+            THIS.ValidarLeitorChequeProcurar()
+            THIS.this_oBusinessObject.this_lLeitorChequeAtivo = .F.
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ValidarLeitorChequeProcurar - getBanco.Valid do legado (ramo do
+    * leitor): com >= 33 chars lidos, decodifica Banco/Agencia/Conta/Cheque
+    * pelas mesmas posicoes SUBSTR do legado e ja aciona a busca
+    * (This.Parent.CmdGProcurar.CmdProcurar.Click).
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarLeitorChequeProcurar()
+        LOCAL loc_cLeitor
+
+        loc_cLeitor = THIS.this_oBusinessObject.this_cChequeLido
+
+        IF LEN(loc_cLeitor) >= 33
+            WITH THIS.cnt_4c_Procurar
+                .txt_4c_Banco.Value   = SUBSTR(loc_cLeitor, 2, 3)
+                .txt_4c_Agencia.Value = SUBSTR(loc_cLeitor, 5, 4)
+                .txt_4c_Conta.Value   = SUBSTR(loc_cLeitor, 23, 10)
+                .txt_4c_Cheque.Value  = SUBSTR(loc_cLeitor, 14, 6)
+                .Visible     = .T.
+            ENDWITH
+
+            THIS.Refresh()
+            THIS.ProcurarChequeNoPainel()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnExcluiDocClick - Exclui Docto. (cmdExcluiDoc.Click do legado): abre
+    * o painel de justificativa do cancelamento (cnt_4c_justificativa,
+    * mapeamento.json). O painel eh criado na fase de containers flutuantes
+    * (Fase 6/7) - ate la, o guard PEMSTATUS abaixo mantem o botao
+    * inofensivo.
+    *==========================================================================
+    PROCEDURE BtnExcluiDocClick()
+        IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+            *-- Modo JUSTIFICATIVA: mostra o painel (o legado nao desabilita
+            *-- nada da tela de fundo neste painel) e registra o modo corrente,
+            *-- que eh o que BtnCancelarClick/AjustarBotoesPorModo consultam
+            *-- quando chamados sem parametro.
+            THIS.AjustarBotoesPorModo("JUSTIFICATIVA")
+
+            WITH THIS.cnt_4c_justificativa
+                .Visible = .T.
+
+                IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_Get_justificativa", 5)
+                    .obj_4c_Get_justificativa.Value    = ""
+                    .obj_4c_Get_justificativa.Width    = 238
+                    .obj_4c_Get_justificativa.ReadOnly = .F.
+                    .obj_4c_Get_justificativa.SetFocus()
+                ENDIF
+
+                IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_CmdGconf", 5)
+                    .obj_4c_CmdGconf.Enabled = .T.
+                    .obj_4c_CmdGconf.Visible = .T.
+                ENDIF
+            ENDWITH
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * CmdGconfClick - Dispatcher do CommandGroup obj_4c_CmdGconf
+    * (cntjustificativa.cmdGconf do legado: Botao1=cmConfirmar,
+    * Botao2=cmdCancelar). PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE CmdGconfClick()
+        DO CASE
+            CASE THIS.cnt_4c_justificativa.obj_4c_CmdGconf.Value = 1
+                THIS.ConfirmarCancelamentoDocumento()
+            CASE THIS.cnt_4c_justificativa.obj_4c_CmdGconf.Value = 2
+                THIS.BtnCancelarClick("JUSTIFICATIVA")
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * CancelarJustificativa - cmdCancelar.Click do cmdGconf legado: fecha o
+    * painel sem gravar nada ("This.Parent.Enabled=.F. + This.Parent.Parent.
+    * Visible=.F.").
+    *==========================================================================
+    PROTECTED PROCEDURE CancelarJustificativa()
+        IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+            IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_CmdGconf", 5)
+                THIS.cnt_4c_justificativa.obj_4c_CmdGconf.Enabled = .F.
+            ENDIF
+            THIS.cnt_4c_justificativa.Visible = .F.
+        ENDIF
+
+        *-- Volta ao modo de consulta. NAO passa por AjustarBotoesPorModo
+        *-- ("LISTA") de proposito: aquele ramo reafirma o painel pelo cheque
+        *-- corrente (AtualizarPainelChequeCorrente) e faria a justificativa
+        *-- reaparecer em somente leitura no mesmo instante, enquanto o
+        *-- cmdCancelar legado apenas oculta o painel e deixa assim ate a
+        *-- proxima troca de linha na grade. Nenhum controle foi desabilitado
+        *-- neste modo, entao nao ha o que reabilitar.
+        THIS.this_cModoAtual = "LISTA"
+    ENDPROC
+
+    *==========================================================================
+    * ConfirmarCancelamentoDocumento - cmConfirmar.Click do legado: exige
+    * justificativa preenchida, confere se ha lancamento de pagamento para o
+    * EmpDopNums do cheque corrente (mesmo guard "CursorQuery('SigCdPgr',,
+    * 'empdopnums',...)" original) e abre o cadastro correspondente
+    * (Formpgr, ja migrado - SIGCDPGR.SCX) para o usuario dar seguimento ao
+    * cancelamento do documento.
+    *
+    * O legado passa a justificativa e um flag de cancelamento como
+    * parametros extras do "Do Form SigCdPgr With ...,.T.,ThisForm,
+    * Alltrim(get_justificativa.Value)", delegando a persistencia da
+    * justificativa/cancelamento (SigCqChi.cancelas/justcanc) para dentro do
+    * proprio modulo SigCdPgr. O Formpgr migrado (tarefa/task separada, sem
+    * parametros de Init) nao expoe esse modo parametrizado - mesma
+    * simplificacao ja adotada em BtnDocumentoClick (abre o cadastro padrao
+    * quando ha lancamento, sem repassar os parametros de cancelamento).
+    *==========================================================================
+    PROCEDURE ConfirmarCancelamentoDocumento()
+        LOCAL loc_cCursor, loc_cJustificativa, loc_cEmpDopNums, loc_cSQL
+        LOCAL loc_nResultado, loc_oForm, loc_oErro
+
+        IF !PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+            RETURN
+        ENDIF
+
+        loc_cJustificativa = ALLTRIM(THIS.cnt_4c_justificativa.obj_4c_Get_justificativa.Value)
+
+        IF EMPTY(loc_cJustificativa)
+            MsgAviso("Aten" + CHR(231) + CHR(227) + "o, justificativa em Branco", "")
+            THIS.cnt_4c_justificativa.obj_4c_Get_justificativa.SetFocus()
+            RETURN
+        ENDIF
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            THIS.ExibirCheques(.T.)
+            RETURN
+        ENDIF
+
+        SELECT (loc_cCursor)
+        loc_cEmpDopNums = PADR(emps, 3) + PADR(dopes, 20) + STR(numes, 6)
+
+        loc_cSQL = "SELECT TOP 1 empdopnums FROM SigCdPgr WHERE empdopnums = " + EscaparSQL(loc_cEmpDopNums)
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_VerificaPgr")
+
+        IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_VerificaPgr") > 0
+            loc_oForm = .NULL.
+            TRY
+                loc_oForm = CREATEOBJECT("Formpgr")
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro ao abrir Lan" + CHR(231) + "amentos e Pagamentos")
+                loc_oForm = .NULL.
+            ENDTRY
+
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.Show()
+            ENDIF
+        ENDIF
+
+        IF USED("cursor_4c_VerificaPgr")
+            USE IN cursor_4c_VerificaPgr
+        ENDIF
+
+        THIS.CancelarJustificativa()
+    ENDPROC
+
+    *==========================================================================
+    * BtnReciboClick - Recibo (cmdRecibo.Click do legado): abre o form de
+    * emissao de recibo (SigRerec) para o cheque selecionado. FormSigRerec
+    * ainda nao foi migrado (SCX de outra task) - o TRY/CATCH reporta o
+    * problema real caso a classe nao exista, em vez de fingir sucesso.
+    *==========================================================================
+    PROCEDURE BtnReciboClick()
+        LOCAL loc_cCursor, loc_oForm, loc_oErro
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor) OR EOF(loc_cCursor)
+            MsgAviso("Nenhum cheque selecionado.", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        loc_oForm = .NULL.
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigRerec", THIS, "RECIBO")
+        CATCH TO loc_oErro
+            MsgErro("M" + CHR(243) + "dulo de recibo ainda n" + CHR(227) + "o dispon" + CHR(237) + "vel: " + loc_oErro.Message, "Recibo")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnImpChqClick - Cheque (cmdImpchq.Click do legado): impressao do
+    * cheque em formulario continuo. O posicionamento fisico na folha do
+    * cheque (rotina de ~180 linhas do legado, com fValorExtenso() e
+    * fwBuscaInt() para escolher impressora - nenhuma das duas portada) fica
+    * para uma fase dedicada de impressao de cheques. Aqui: guard identico
+    * ao legado ("Nenhum Cheque Selecionado") e, apos o usuario confirmar
+    * que a impressao fisica foi feita, marca os cheques selecionados como
+    * emitidos (efeito de dados do botao, via BO).
+    *==========================================================================
+    PROCEDURE BtnImpChqClick()
+        LOCAL loc_cCursor, loc_nQtdMarcados
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor)
+            RETURN
+        ENDIF
+
+        SELECT (loc_cCursor)
+        COUNT TO loc_nQtdMarcados FOR nmarca1s = 1
+
+        IF loc_nQtdMarcados = 0
+            MsgAviso("Nenhum Cheque Selecionado !!!", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        IF MsgConfirma("Confirma que " + ALLTRIM(STR(loc_nQtdMarcados)) + " cheque(s) selecionado(s) " + ;
+                "j" + CHR(225) + " foram impressos na impressora de cheques?", "Impress" + CHR(227) + "o de Cheque")
+            IF THIS.this_oBusinessObject.MarcarChequesComoEmitidos(loc_cCursor)
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnChMatClick - Chq. Matric. (cmdchmat.Click do legado): impressao
+    * matricial via SigIpChq.prg (utilitario legado nao portado, faz o
+    * alinhamento interativo na impressora). Guard identico ao legado (todos
+    * os cheques marcados tem de ser do mesmo banco) e, apos confirmacao,
+    * marca como emitidos (mesmo criterio de BtnImpChqClick).
+    *==========================================================================
+    PROCEDURE BtnChMatClick()
+        LOCAL loc_cCursor, loc_nQtdMarcados, loc_cPrimeiroBanco, loc_lMesmoBanco
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        IF !USED(loc_cCursor)
+            RETURN
+        ENDIF
+
+        SELECT (loc_cCursor)
+        COUNT TO loc_nQtdMarcados FOR nmarca1s = 1
+
+        *-- Legado: sem cheque marcado (TmpChi vazio), o botao abre o painel
+        *-- de impressao manual (banco + faixa de cheques digitados), em vez
+        *-- de operar sobre a selecao da grade.
+        IF loc_nQtdMarcados = 0
+            THIS.AbrirImpressaoManualCheque()
+            RETURN
+        ENDIF
+
+        loc_lMesmoBanco    = .T.
+        loc_cPrimeiroBanco = ""
+
+        SELECT (loc_cCursor)
+        SCAN FOR nmarca1s = 1
+            IF EMPTY(loc_cPrimeiroBanco)
+                loc_cPrimeiroBanco = bancos
+            ELSE
+                IF bancos != loc_cPrimeiroBanco
+                    loc_lMesmoBanco = .F.
+                    EXIT
+                ENDIF
+            ENDIF
+        ENDSCAN
+
+        IF !loc_lMesmoBanco
+            MsgAviso("Todos os cheques selecionados devem ser do mesmo banco", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        IF MsgConfirma("Verifique se a impressora matricial est" + CHR(225) + " pronta." + CHR(13) + ;
+                "Confirma a impress" + CHR(227) + "o de " + ALLTRIM(STR(loc_nQtdMarcados)) + " cheque(s)?", ;
+                "Impress" + CHR(227) + "o Matricial")
+            IF THIS.this_oBusinessObject.MarcarChequesComoEmitidos(loc_cCursor)
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirImpressaoManualCheque - impchmat.Init do legado (guardado por
+    * ThisForm.ChMatIni no original; aqui chamado direto pelo ramo "sem
+    * cheque marcado" de BtnChMatClick): limpa os campos, desabilita o
+    * CommandGroup principal e mostra o painel de impressao manual por
+    * Banco + faixa de cheques.
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirImpressaoManualCheque()
+        IF !PEMSTATUS(THIS, "cnt_4c_Impchmat", 5)
+            RETURN
+        ENDIF
+
+        THIS.LockScreen = .T.
 
         WITH THIS.cnt_4c_Impchmat
-            loc_cBanco = ALLTRIM(.txt_4c_Banco.Value)
-            loc_cChIni = ALLTRIM(.txt_4c_Chini.Value)
-            loc_cChFin = ALLTRIM(.txt_4c_Chfin.Value)
+            IF PEMSTATUS(THIS.cnt_4c_Impchmat, "txt_4c_Banco", 5)
+                .txt_4c_Banco.Value = ""
+            ENDIF
+            IF PEMSTATUS(THIS.cnt_4c_Impchmat, "txt_4c_Chini", 5)
+                .txt_4c_Chini.Value = ""
+            ENDIF
+            IF PEMSTATUS(THIS.cnt_4c_Impchmat, "txt_4c_Chfin", 5)
+                .txt_4c_Chfin.Value = ""
+            ENDIF
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Legado (impchmat.Init): desliga SO o CmdGOk e mostra o painel -
+        *-- Grupo/Conta/periodo/grade continuam acessiveis. O conjunto vive em
+        *-- AjustarBotoesPorModo, que tambem eh o funil de VOLTA
+        *-- (FecharImpressaoManualCheque) - CLAUDE.md regra #40.
+        THIS.AjustarBotoesPorModo("IMPCHMAT")
+
+        IF PEMSTATUS(THIS.cnt_4c_Impchmat, "txt_4c_Banco", 5)
+            THIS.cnt_4c_Impchmat.txt_4c_Banco.SetFocus()
+        ENDIF
+
+        THIS.Refresh()
+
+        THIS.LockScreen = .F.
+    ENDPROC
+
+    *==========================================================================
+    * FecharImpressaoManualCheque - cmdCancelar.Click de impchmat.cmdGprocurar
+    * do legado: reabilita o CommandGroup principal, oculta o painel e
+    * recarrega a exibicao (mExibeCheques(.F.)).
+    *==========================================================================
+    PROTECTED PROCEDURE FecharImpressaoManualCheque()
+        *-- FUNIL de volta: reabilita o CmdGOk que "IMPCHMAT" desligou e oculta
+        *-- o painel (CLAUDE.md regra #40).
+        THIS.AjustarBotoesPorModo("LISTA")
+
+        THIS.ExibirCheques(.F.)
+    ENDPROC
+
+    *==========================================================================
+    * CmdGprocurarImpChmatClick - Dispatcher do CommandGroup
+    * obj_4c_CmdGprocurar (impchmat.cmdGprocurar do legado: Botao1=cmdimpri,
+    * Botao2=cmdCancelar). PUBLIC - BINDEVENT so dispara metodos PUBLIC.
+    *==========================================================================
+    PROCEDURE CmdGprocurarImpChmatClick()
+        DO CASE
+            CASE THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar.Value = 1
+                THIS.ImprimirChequeManualClick()
+            CASE THIS.cnt_4c_Impchmat.obj_4c_CmdGprocurar.Value = 2
+                THIS.BtnCancelarClick("IMPCHMAT")
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * ImprimirChequeManualClick - cmdimpri.Click do impchmat.cmdGprocurar
+    * legado: valida Banco/faixa, filtra o cursor JA CARREGADO da grade
+    * (mesma fonte que o legado usa - "Select ... From CsSigCqChi Where
+    * bancos = ... And ncheques Between ... And ncancelas = 0", NAO uma nova
+    * consulta ao SQL Server) e, confirmando, marca como emitidos.
+    *
+    * A rotina de posicionamento fisico na folha do cheque (SigIpChq.prg,
+    * ~180 linhas com fValorExtenso/fwBuscaInt, nenhuma delas portada) fica
+    * para uma fase dedicada de impressao de cheques - mesma ressalva ja
+    * documentada em BtnImpChqClick/BtnChMatClick.
+    *==========================================================================
+    PROCEDURE ImprimirChequeManualClick()
+        LOCAL loc_cCursor, loc_cBanco, loc_cChIni, loc_cChFin, loc_nQtd, loc_lTemEmitido
+
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+        WITH THIS.cnt_4c_Impchmat
+            loc_cBanco = .txt_4c_Banco.Value
+            loc_cChIni = .txt_4c_Chini.Value
+            loc_cChFin = .txt_4c_Chfin.Value
             .Visible     = .T.
         ENDWITH
 
@@ -2052,590 +3272,561 @@ DEFINE CLASS FormSigPrChr AS FormBase
             THIS.cnt_4c_Impchmat.txt_4c_Banco.SetFocus()
             RETURN
         ENDIF
+
         IF EMPTY(loc_cChIni)
             MsgAviso("N" + CHR(250) + "mero do cheque inicial n" + CHR(227) + "o preenchido !!!", "Aten" + CHR(231) + CHR(227) + "o")
             THIS.cnt_4c_Impchmat.txt_4c_Chini.SetFocus()
             RETURN
         ENDIF
+
         IF EMPTY(loc_cChFin)
             MsgAviso("N" + CHR(250) + "mero do cheque final n" + CHR(227) + "o preenchido !!!", "Aten" + CHR(231) + CHR(227) + "o")
             THIS.cnt_4c_Impchmat.txt_4c_Chfin.SetFocus()
             RETURN
         ENDIF
+
         IF loc_cChFin < loc_cChIni
-            MsgAviso("Cheque final menor que o inicial !!!", "Aten" + CHR(231) + CHR(227) + "o")
-            THIS.cnt_4c_Impchmat.txt_4c_Chfin.SetFocus()
+            MsgAviso("N" + CHR(250) + "mero do cheque final menor que o inicial !!!", "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.cnt_4c_Impchmat.txt_4c_Chini.SetFocus()
             RETURN
         ENDIF
 
-        TRY
-            loc_cSQL = "SELECT bancos, valors, ncheques, datas, emitidos, cancelas, favos " + ;
-                       "FROM SigCqChi " + ;
-                       "WHERE bancos = " + EscaparSQL(loc_cBanco) + ;
-                       " AND ncheques BETWEEN " + EscaparSQL(loc_cChIni) + ;
-                       " AND " + EscaparSQL(loc_cChFin) + ;
-                       " ORDER BY ncheques"
-
-            IF USED("cursor_4c_MatrizTemp")
-                USE IN cursor_4c_MatrizTemp
-            ENDIF
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MatrizTemp") > 0
-                THIS.this_oBusinessObject.ImprimirChequesMatricial()
-                USE IN cursor_4c_MatrizTemp
-            ELSE
-                MsgAviso("Nenhum cheque encontrado na faixa informada.", "Impress" + CHR(227) + "o")
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao imprimir matricial")
-        ENDTRY
-    ENDPROC
-
-    *-- Botao Encerrar Matricial: fecha container impchmat e reactiva acoes
-    PROCEDURE BtnCancChmatClick()
-        THIS.LockScreen = .T.
-        THIS.cmg_4c_Acoes.Enabled    = .T.
-        THIS.cnt_4c_Impchmat.Enabled  = .F.
-        THIS.cnt_4c_Impchmat.Visible  = .F.
-        THIS.ExibirCheques(.F.)
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *-- Botao Procurar (exec no container): busca cheque por banco/agencia/conta/cheque/emissao/valor
-    PROCEDURE BtnProcurarExecClick()
-        LOCAL loc_oCnt, loc_cCursor
-        loc_oCnt    = THIS.cnt_4c_Procurar
-        loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-
-        SET NEAR ON
-
-        loc_oCnt.txt_4c_BancoP.Value = PADR(ALLTRIM(loc_oCnt.txt_4c_BancoP.Value), 3)
+        IF !USED(loc_cCursor)
+            RETURN
+        ENDIF
 
         SELECT (loc_cCursor)
-        DO CASE
-            CASE !EMPTY(loc_oCnt.txt_4c_EmissaoP.Value)
-                SET ORDER TO Emissao
-                SEEK DTOS(loc_oCnt.txt_4c_EmissaoP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_BancoP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_AgenciaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ContaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ChequeP.Value)
-            CASE !EMPTY(loc_oCnt.txt_4c_ValorP.Value)
-                SET ORDER TO Valor
-                SEEK STR(loc_oCnt.txt_4c_ValorP.Value, 12, 2) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_BancoP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_AgenciaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ContaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ChequeP.Value)
-            OTHERWISE
-                SET ORDER TO Cheque
-                SEEK ALLTRIM(loc_oCnt.txt_4c_BancoP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_AgenciaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ContaP.Value) + ;
-                     ALLTRIM(loc_oCnt.txt_4c_ChequeP.Value)
-        ENDCASE
+        COUNT TO loc_nQtd FOR bancos = loc_cBanco AND BETWEEN(ncheques, loc_cChIni, loc_cChFin) AND ncancelas = 0
 
-        SET NEAR OFF
-
-        *-- Ocultar container e reativar controles principais
-        THIS.txt_4c_CdContas.Enabled   = .T.
-        THIS.txt_4c_DsContas.Enabled   = .T.
-        THIS.grd_4c_Dados.Enabled      = .T.
-        THIS.txt_4c_Favorecido.Enabled = .T.
-        THIS.AtualizarBotoesPermissao()
-        THIS.cnt_4c_Procurar.Visible   = .F.
-        THIS.cnt_4c_Procurar.Enabled   = .F.
-        THIS.ExibirCheques(.F.)
-    ENDPROC
-
-    *-- Botao Encerrar Procurar
-    PROCEDURE BtnCancProcurarClick()
-        THIS.LockScreen = .T.
-        THIS.txt_4c_CdContas.Enabled   = .T.
-        THIS.txt_4c_DsContas.Enabled   = .T.
-        THIS.grd_4c_Dados.Enabled      = .T.
-        THIS.txt_4c_Favorecido.Enabled = .T.
-        THIS.AtualizarBotoesPermissao()
-        THIS.cnt_4c_Procurar.Visible   = .F.
-        THIS.cnt_4c_Procurar.Enabled   = .F.
-        THIS.ExibirCheques(.F.)
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *-- KeyPress no campo Banco do container de impressao matricial (leitor magnetico)
-    PROCEDURE TxtBancoImpKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        *-- CHR(60) = inicio de leitura CMC7 do leitor de cheques
-        IF par_nKeyCode = 60
-            IF !THIS.this_lPlLeCheque
-                THIS.this_cPcChqLido = ""
-            ENDIF
-            THIS.this_lPlLeCheque = .T.
-        ENDIF
-        IF THIS.this_lPlLeCheque
-            NODEFAULT
-            THIS.this_cPcChqLido = THIS.this_cPcChqLido + CHR(par_nKeyCode)
-        ENDIF
-        *-- CHR(58) = fim de leitura
-        IF par_nKeyCode = 58
-            THIS.this_lPlLeCheque = .F.
-        ENDIF
-    ENDPROC
-
-    *-- KeyPress no campo Banco do container Procurar (leitor magnetico)
-    PROCEDURE TxtBancoProcKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 60
-            IF !THIS.this_lPlLeCheque
-                THIS.this_cPcChqLido = ""
-            ENDIF
-            THIS.this_lPlLeCheque = .T.
-        ENDIF
-        IF THIS.this_lPlLeCheque
-            NODEFAULT
-            THIS.this_cPcChqLido = THIS.this_cPcChqLido + CHR(par_nKeyCode)
-        ENDIF
-        IF par_nKeyCode = 58
-            THIS.this_lPlLeCheque = .F.
-        ENDIF
-    ENDPROC
-
-    *-- Valid do campo Banco no Procurar: processa dado do leitor ou TAB
-    PROCEDURE TxtBancoProcValid()
-        LOCAL loc_oCnt, loc_cLeitor
-        loc_oCnt = THIS.cnt_4c_Procurar
-
-        IF THIS.this_lPlLeCheque
-            loc_cLeitor = THIS.this_cPcChqLido
-        ELSE
-            loc_cLeitor = ""
-        ENDIF
-
-        THIS.this_lPlLeitor = .F.
-
-        IF LASTKEY() = 9
-            KEYBOARD "{CTRL+TAB}"
-        ELSE
-            THIS.this_lPlLeitor = .T.
-            IF LEN(loc_cLeitor) >= 33
-                *-- Decodificar CMC7: banco(2-4), agencia(5-8), conta(23-32), cheque(14-19)
-                loc_oCnt.txt_4c_BancoP.Value   = SUBSTR(loc_cLeitor, 2, 3)
-                loc_oCnt.txt_4c_AgenciaP.Value = SUBSTR(loc_cLeitor, 5, 4)
-                loc_oCnt.txt_4c_ContaP.Value   = SUBSTR(loc_cLeitor, 23, 10)
-                loc_oCnt.txt_4c_ChequeP.Value  = SUBSTR(loc_cLeitor, 14, 6)
-                THIS.Refresh()
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    *-- When no campo emissao do Procurar: so habilita se valor estiver vazio
-    PROCEDURE TxtEmissaoProcWhen()
-        RETURN EMPTY(THIS.cnt_4c_Procurar.txt_4c_ValorP.Value)
-    ENDPROC
-
-    *-- When no campo valor do Procurar: so habilita se emissao estiver vazia
-    PROCEDURE TxtValorProcWhen()
-        RETURN EMPTY(THIS.cnt_4c_Procurar.txt_4c_EmissaoP.Value)
-    ENDPROC
-
-    *-- Valid data inicial: ajustar data final e limpar grid se mudou
-    PROCEDURE TxtDtInicialValid()
-        IF THIS.txt_4c_DtInicial.Value > THIS.txt_4c_DtFinal.Value
-            THIS.txt_4c_DtFinal.Value = THIS.txt_4c_DtInicial.Value
-        ENDIF
-        IF THIS.txt_4c_DtInicial.Value != THIS.this_dAntDtIni
-            LOCAL loc_cCursor
-            loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-            IF USED(loc_cCursor)
-                ZAP IN (loc_cCursor)
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
-        ENDIF
-        THIS.this_dAntDtIni = THIS.txt_4c_DtInicial.Value
-    ENDPROC
-
-    *-- Valid data final: ajustar data inicial e limpar grid se mudou
-    PROCEDURE TxtDtFinalValid()
-        IF THIS.txt_4c_DtFinal.Value < THIS.txt_4c_DtInicial.Value
-            THIS.txt_4c_DtInicial.Value = THIS.txt_4c_DtFinal.Value
-        ENDIF
-        IF THIS.txt_4c_DtFinal.Value != THIS.this_dAntDtFin
-            LOCAL loc_cCursor
-            loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
-            IF USED(loc_cCursor)
-                ZAP IN (loc_cCursor)
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
-        ENDIF
-        THIS.this_dAntDtFin = THIS.txt_4c_DtFinal.Value
-    ENDPROC
-
-    *-- KeyPress no codigo do grupo: F4/Enter/Tab abre lookup de grupos contabeis
-    PROCEDURE TxtCdGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
-            RETURN
-        ENDIF
-        LOCAL loc_cVal, loc_oForm, loc_cSQL
-        loc_cVal = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
-
-        IF !EMPTY(loc_cVal)
-            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE RTRIM(codigos) = " + ;
-                       EscaparSQL(loc_cVal)
-            IF USED("cursor_4c_GrupoOk")
-                USE IN cursor_4c_GrupoOk
-            ENDIF
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoOk") > 0
-                SELECT cursor_4c_GrupoOk
-                GO TOP
-                IF !EOF("cursor_4c_GrupoOk")
-                    THIS.txt_4c_CdGrupos.Value = ALLTRIM(cursor_4c_GrupoOk.codigos)
-                    THIS.txt_4c_DsGrupos.Value = ALLTRIM(cursor_4c_GrupoOk.descrs)
-                    THIS.this_oBusinessObject.this_cCdGrupos = ALLTRIM(cursor_4c_GrupoOk.codigos)
-                    USE IN cursor_4c_GrupoOk
-                    IF THIS.txt_4c_CdGrupos.Value != THIS.this_cAntCdGrupo
-                        ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-                        THIS.grd_4c_Dados.Refresh()
-                    ENDIF
-                    THIS.this_cAntCdGrupo = THIS.txt_4c_CdGrupos.Value
-                    RETURN
-                ENDIF
-                USE IN cursor_4c_GrupoOk
-            ENDIF
-        ELSE
-            THIS.txt_4c_DsGrupos.Value = ""
-            THIS.this_oBusinessObject.this_cCdGrupos = ""
-            IF THIS.this_cAntCdGrupo != ""
-                ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
-            THIS.this_cAntCdGrupo = ""
+        IF loc_nQtd = 0
             RETURN
         ENDIF
 
-        *-- Nao encontrado: abrir picker
-        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_GrupoLookup", ;
-                    "codigos", loc_cVal, ;
-                    "Grupos Cont" + CHR(225) + "beis", .T., .T., "")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-            loc_oForm.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oForm.Show()
-            IF loc_oForm.this_lSelecionou AND USED("cursor_4c_GrupoLookup")
-                SELECT cursor_4c_GrupoLookup
-                THIS.txt_4c_CdGrupos.Value = ALLTRIM(codigos)
-                THIS.txt_4c_DsGrupos.Value = ALLTRIM(descrs)
-                THIS.this_oBusinessObject.this_cCdGrupos = ALLTRIM(codigos)
-            ENDIF
-        ENDIF
-        IF THIS.txt_4c_CdGrupos.Value != THIS.this_cAntCdGrupo
-            ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.this_cAntCdGrupo = THIS.txt_4c_CdGrupos.Value
-    ENDPROC
+        SELECT (loc_cCursor)
+        LOCATE FOR bancos = loc_cBanco AND BETWEEN(ncheques, loc_cChIni, loc_cChFin) AND ncancelas = 0 AND nemitidos = 1
+        loc_lTemEmitido = FOUND()
 
-    *-- KeyPress na descricao do grupo: F4/Enter/Tab abre lookup por descricao
-    PROCEDURE TxtDsGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
-            RETURN
-        ENDIF
-        LOCAL loc_cVal, loc_oForm
-        loc_cVal = ALLTRIM(THIS.txt_4c_DsGrupos.Value)
-
-        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_GrupoLookup", ;
-                    "descrs", loc_cVal, ;
-                    "Grupos Cont" + CHR(225) + "beis", .T., .T., "")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-            loc_oForm.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oForm.Show()
-            IF loc_oForm.this_lSelecionou AND USED("cursor_4c_GrupoLookup")
-                SELECT cursor_4c_GrupoLookup
-                THIS.txt_4c_CdGrupos.Value = ALLTRIM(codigos)
-                THIS.txt_4c_DsGrupos.Value = ALLTRIM(descrs)
-                THIS.this_oBusinessObject.this_cCdGrupos = ALLTRIM(codigos)
-            ENDIF
-        ENDIF
-        IF THIS.txt_4c_CdGrupos.Value != THIS.this_cAntDsGrupo
-            ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.this_cAntDsGrupo = THIS.txt_4c_CdGrupos.Value
-    ENDPROC
-
-    *-- KeyPress no codigo da conta: F4/Enter/Tab abre lookup de contas
-    PROCEDURE TxtCdContasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
-            RETURN
-        ENDIF
-        LOCAL loc_cVal, loc_oForm, loc_cSQL
-        loc_cVal = ALLTRIM(THIS.txt_4c_CdContas.Value)
-
-        IF !EMPTY(loc_cVal)
-            IF USED("cursor_4c_Contas") AND SEEK(loc_cVal, "cursor_4c_Contas", "IClis")
-                SELECT cursor_4c_Contas
-                THIS.txt_4c_CdContas.Value = ALLTRIM(IClis)
-                THIS.txt_4c_DsContas.Value = ALLTRIM(RClis)
-                THIS.this_oBusinessObject.this_cCdContas = ALLTRIM(IClis)
-                IF THIS.txt_4c_CdContas.Value != THIS.this_cAntCdConta
-                    ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-                    THIS.grd_4c_Dados.Refresh()
-                ENDIF
-                THIS.this_cAntCdConta = THIS.txt_4c_CdContas.Value
+        IF loc_lTemEmitido
+            IF !MsgConfirma("Os cheques selecionados j" + CHR(225) + " foram emitidos. Confirma impress" + CHR(227) + "o ?", "Aten" + CHR(231) + CHR(227) + "o")
                 RETURN
             ENDIF
+        ENDIF
+
+        MsgAviso("Verifique se a impressora est" + CHR(225) + " pronta p/ impress" + CHR(227) + "o", "Aten" + CHR(231) + CHR(227) + "o")
+
+        IF THIS.this_oBusinessObject.MarcarChequesComoEmitidosPorFaixa(loc_cCursor, loc_cBanco, loc_cChIni, loc_cChFin)
+            THIS.grd_4c_Dados.Refresh()
+            THIS.FecharImpressaoManualCheque()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * TxtChiniKeyPress / TxtChfinKeyPress - Valid de getChini/getChfin do
+    * impchmat legado: preenche com zeros a esquerda ate 6 digitos
+    * (PadL(Alltrim(Value),6,'0')). PUBLIC - BINDEVENT so dispara metodos
+    * PUBLIC.
+    *==========================================================================
+    PROCEDURE TxtChiniKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.cnt_4c_Impchmat.txt_4c_Chini.Value = PADL(ALLTRIM(THIS.cnt_4c_Impchmat.txt_4c_Chini.Value), 6, "0")
+    ENDPROC
+
+    PROCEDURE TxtChfinKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9
+            RETURN
+        ENDIF
+        THIS.cnt_4c_Impchmat.txt_4c_Chfin.Value = PADL(ALLTRIM(THIS.cnt_4c_Impchmat.txt_4c_Chfin.Value), 6, "0")
+    ENDPROC
+
+    *==========================================================================
+    * ---------------------------------------------------------------------
+    * FASE 8 - Eventos auxiliares e consolidacao final
+    * ---------------------------------------------------------------------
+    * Este form eh OPERACIONAL FLAT (consulta/cancelamento de cheques): o
+    * SIGPRCHR legado NAO tem Page1=Lista/Page2=Dados, NAO tem os 5 botoes
+    * CRUD (Incluir/Alterar/Visualizar/Excluir/Buscar) e NAO tem botao de
+    * gravar - o dump nao declara btnSalvar/btnGravar/mGravaDados em lugar
+    * nenhum. Por isso NAO existem aqui BtnSalvarClick/BtnBuscarClick nem
+    * BtnEncerrarClick: inventar esses botoes violaria o PILAR 1 e a regra
+    * "NUNCA inventar", e criar metodos vazios com esses nomes seria o stub
+    * disfarcado proibido pela regra de completude. Os equivalentes reais,
+    * com os nomes dos objetos do legado, ja existem:
+    *
+    *   legado               migrado                      papel
+    *   -------------------  ---------------------------  -------------------
+    *   Command2             BtnProcessarClick()          acao principal
+    *   cmdGok.cmdSair       BtnSairClick()               Encerrar (Cancel)
+    *   cmdGok.cmdProcurar   BtnProcurarClick()           localizar cheque
+    *   cmdGconf.Botao2      BtnCancelarClick("JUSTIFICATIVA")
+    *   cmdgprocurar.Botao2  BtnCancelarClick("PROCURAR")
+    *   cmdGprocurar.Botao2  BtnCancelarClick("IMPCHMAT")
+    *
+    * Os hooks herdados de FormBase (FormParaBO/BOParaForm/LimparCampos)
+    * continuam PROTECTED - subclasse NAO alarga escopo de metodo herdado.
+    * CarregarLista/HabilitarCampos/AjustarBotoesPorModo/BtnCancelarClick
+    * ficam PUBLIC: o harness de teste automatizado os chama de FORA da
+    * classe (PEMSTATUS devolve .T. mesmo para PROTECTED e a chamada real
+    * falharia em runtime com "Property X is not found").
+    *==========================================================================
+
+    *==========================================================================
+    * CarregarLista - FUNIL unico de carga da grade de cheques. Sincroniza os
+    * filtros da tela para o BO (FormParaBO - fonte unica da consulta),
+    * garante que o cursor da grade exista e delega para MontaGrade(), que eh
+    * a transcricao do "PROCEDURE montachq" legado (consulta o periodo,
+    * repovoa o cursor com ZAP + APPEND, recria os indices e entrega para
+    * ExibirCheques()).
+    *
+    * A mensagem de falha NAO eh repetida aqui: MontaGrade ja exibe a dela
+    * ("Favor Reinicializar o Processo!!!" do legado) - CLAUDE.md regra #20.
+    *
+    * PUBLIC - chamado por BtnProcessarClick e pelo harness de teste.
+    *==========================================================================
+    PROCEDURE CarregarLista(par_lPosiciona)
+        LOCAL loc_lPosiciona, loc_lSucesso, loc_cCursor
+        loc_lSucesso   = .F.
+        loc_lPosiciona = IIF(VARTYPE(par_lPosiciona) = "L", par_lPosiciona, .F.)
+
+        IF VARTYPE(THIS.this_oBusinessObject) != "O"
+            MsgErro("Objeto de neg" + CHR(243) + "cio n" + CHR(227) + ;
+                "o inicializado.", "FormSigPrChr.CarregarLista")
         ELSE
-            THIS.txt_4c_DsContas.Value = ""
-            THIS.this_oBusinessObject.this_cCdContas = ""
-            IF THIS.this_cAntCdConta != ""
-                ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-                THIS.grd_4c_Dados.Refresh()
+            *-- Filtros da tela -> BO ANTES da consulta: CarregarCheques le
+            *-- this_dDataInicial/this_dDataFinal/this_cCodGrupo/this_cCodConta.
+            THIS.FormParaBO()
+
+            loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
+
+            IF !USED(loc_cCursor)
+                THIS.CriarCursorCheques()
             ENDIF
-            THIS.this_cAntCdConta = ""
-            RETURN
+
+            loc_lSucesso = THIS.MontaGrade(loc_lPosiciona)
         ENDIF
 
-        *-- Nao encontrado: abrir picker usando SQLEXEC LIKE no cursor_4c_ContasLookup
-        THIS.AbrirLookupContas(loc_cVal, "C")
-        IF THIS.txt_4c_CdContas.Value != THIS.this_cAntCdConta
-            ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.this_cAntCdConta = THIS.txt_4c_CdContas.Value
-    ENDPROC
-
-    *-- KeyPress na descricao da conta: F4/Enter/Tab abre lookup por nome
-    PROCEDURE TxtDsContasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
-            RETURN
-        ENDIF
-        LOCAL loc_cVal
-        loc_cVal = ALLTRIM(THIS.txt_4c_DsContas.Value)
-
-        THIS.AbrirLookupContas(loc_cVal, "D")
-        IF THIS.txt_4c_DsContas.Value != THIS.this_cAntDsConta
-            ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.this_cAntDsConta = THIS.txt_4c_DsContas.Value
-    ENDPROC
-
-    *-- AbrirLookupContas - Abre picker de contas bancarias via FormBuscaAuxiliar com Init params
-    *   par_cVal: valor digitado pelo usuario (prefixo para LIKE)
-    *   par_cModo: "C" busca por codigo (IClis), "D" busca por descricao (RClis)
-    PROCEDURE AbrirLookupContas(par_cVal, par_cModo)
-        LOCAL loc_cSQL, loc_cCampo, loc_oForm, loc_cGrupo
-
-        loc_cGrupo = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
-
-        IF par_cModo = "C"
-            loc_cCampo = "IClis"
-            IF EMPTY(par_cVal)
-                loc_cSQL = "SELECT IClis, RClis FROM SigCdCli"
-            ELSE
-                loc_cSQL = "SELECT IClis, RClis FROM SigCdCli " + ;
-                           "WHERE RTRIM(IClis) LIKE " + EscaparSQL(ALLTRIM(par_cVal) + "%")
-            ENDIF
-        ELSE
-            loc_cCampo = "RClis"
-            IF EMPTY(par_cVal)
-                loc_cSQL = "SELECT IClis, RClis FROM SigCdCli"
-            ELSE
-                loc_cSQL = "SELECT IClis, RClis FROM SigCdCli " + ;
-                           "WHERE RTRIM(RClis) LIKE " + EscaparSQL(ALLTRIM(par_cVal) + "%")
-            ENDIF
-        ENDIF
-
-        IF !EMPTY(loc_cGrupo)
-            IF EMPTY(par_cVal)
-                loc_cSQL = loc_cSQL + " WHERE RTRIM(Grupos) = " + EscaparSQL(loc_cGrupo)
-            ELSE
-                loc_cSQL = loc_cSQL + " AND RTRIM(Grupos) = " + EscaparSQL(loc_cGrupo)
-            ENDIF
-        ENDIF
-
-        loc_cSQL = loc_cSQL + " ORDER BY IClis"
-
-        IF USED("cursor_4c_ContasLookup")
-            USE IN cursor_4c_ContasLookup
-        ENDIF
-
-        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContasLookup") < 1
-            RETURN
-        ENDIF
-
-        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "", "cursor_4c_ContasLookup", ;
-                    loc_cCampo, ALLTRIM(par_cVal), ;
-                    "Contas", .T., .T., "")
-        IF VARTYPE(loc_oForm) != "O"
-            RETURN
-        ENDIF
-
-        loc_oForm.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
-        loc_oForm.mAddColuna("RClis", "", "Descri" + CHR(231) + CHR(227) + "o")
-        loc_oForm.Show()
-
-        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_ContasLookup")
-            SELECT cursor_4c_ContasLookup
-            THIS.txt_4c_CdContas.Value = ALLTRIM(IClis)
-            THIS.txt_4c_DsContas.Value = ALLTRIM(RClis)
-            THIS.this_oBusinessObject.this_cCdContas = ALLTRIM(IClis)
-        ENDIF
-
-        IF THIS.txt_4c_CdContas.Value != THIS.this_cAntCdConta
-            ZAP IN (THIS.this_oBusinessObject.this_cCursorCheques)
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-        THIS.this_cAntCdConta = THIS.txt_4c_CdContas.Value
-    ENDPROC
-
-    *-- LostFocus do txt_4c_Chfin: padroniza para 6 digitos com zeros a esquerda
-    PROCEDURE TxtChfinLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF !EMPTY(THIS.cnt_4c_Impchmat.txt_4c_Chfin.Value)
-            THIS.cnt_4c_Impchmat.txt_4c_Chfin.Value = ;
-                PADL(ALLTRIM(THIS.cnt_4c_Impchmat.txt_4c_Chfin.Value), 6, "0")
-        ENDIF
-    ENDPROC
-
-    *-- LostFocus do txt_4c_Chini: padroniza para 6 digitos com zeros a esquerda
-    PROCEDURE TxtChiniLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF !EMPTY(THIS.cnt_4c_Impchmat.txt_4c_Chini.Value)
-            THIS.cnt_4c_Impchmat.txt_4c_Chini.Value = ;
-                PADL(ALLTRIM(THIS.cnt_4c_Impchmat.txt_4c_Chini.Value), 6, "0")
-        ENDIF
+        RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * --- ALIASES DE COMPATIBILIDADE COM PIPELINE MULTI-FASE ---
-    * OPERACIONAL nao tem Page1/Page2 CRUD; estes metodos existem para que
-    * o validador do pipeline encontre as assinaturas esperadas.
+    * FormParaBO - Tela -> Business Object. Hook PROTECTED de FormBase (usado
+    * por CarregarLista e por FormBase.Salvar).
+    *
+    * Filtros lidos pelos getters Obter* (fonte unica, com o guard PEMSTATUS e
+    * a normalizacao de DATE/DATETIME via ConverterParaData - CLAUDE.md regra
+    * #16). Os campos de descricao (GetDsGrupos/getDsContas), o Favorecido
+    * (TxtFavorecido, somente leitura) e a justificativa de cancelamento
+    * (cntjustificativa.get_justificativa) sao copiados direto.
+    *
+    * As properties Ant* (AntDtIni/AntDtFin/AntCdGrupo/AntCdConta do legado)
+    * NAO sao tocadas aqui de proposito: elas guardam o valor de ENTRADA no
+    * campo (When legado = handlers GotFocus) e sao o que BtnProcessarClick
+    * compara para decidir se a grade precisa ser recarregada. Sobrescreve-las
+    * aqui faria a comparacao nunca acusar mudanca e a grade nunca recarregar.
     *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oBO, loc_lSucesso
+        loc_lSucesso = .F.
 
-    *-- CarregarLista: alias de MontarCheques (pipeline exige este nome)
-    PROCEDURE CarregarLista()
-        RETURN THIS.MontarCheques(.F.)
-    ENDPROC
-
-    *-- FormParaBO: sincroniza filtros da UI para o BO antes de processar
-    PROCEDURE FormParaBO()
-        THIS.this_oBusinessObject.this_cCdGrupos  = ALLTRIM(THIS.txt_4c_CdGrupos.Value)
-        THIS.this_oBusinessObject.this_cDsGrupos  = ALLTRIM(THIS.txt_4c_DsGrupos.Value)
-        THIS.this_oBusinessObject.this_cCdContas  = ALLTRIM(THIS.txt_4c_CdContas.Value)
-        THIS.this_oBusinessObject.this_cDsContas  = ALLTRIM(THIS.txt_4c_DsContas.Value)
-        THIS.this_oBusinessObject.this_dDtInicial = THIS.txt_4c_DtInicial.Value
-        THIS.this_oBusinessObject.this_dDtFinal   = THIS.txt_4c_DtFinal.Value
-    ENDPROC
-
-    *-- BOParaForm: alias de ExibirCheques (pipeline exige este nome)
-    PROCEDURE BOParaForm()
-        THIS.ExibirCheques(.F.)
-    ENDPROC
-
-    *-- BtnSalvarClick: alias de BtnProcessarClick (mapeamento OPERACIONAL)
-    PROCEDURE BtnSalvarClick()
-        THIS.BtnProcessarClick()
-    ENDPROC
-
-    *-- BtnCancelarClick: alias de BtnEncerrarClick (mapeamento OPERACIONAL)
-    PROCEDURE BtnCancelarClick()
-        THIS.BtnEncerrarClick()
-    ENDPROC
-
-    *-- HabilitarCampos: stub N/A (OPERACIONAL gerencia habilitacao via AtualizarBotoesLinhaCorrente)
-    PROCEDURE HabilitarCampos(par_lHabilitar)
-        IF VARTYPE(THIS.txt_4c_CdGrupos) = "O"
-            THIS.txt_4c_CdGrupos.Enabled  = par_lHabilitar
-            THIS.txt_4c_DsGrupos.Enabled  = par_lHabilitar
-            THIS.txt_4c_CdContas.Enabled  = par_lHabilitar
-            THIS.txt_4c_DsContas.Enabled  = par_lHabilitar
-            THIS.txt_4c_DtInicial.Enabled = par_lHabilitar
-            THIS.txt_4c_DtFinal.Enabled   = par_lHabilitar
-        ENDIF
-        IF VARTYPE(THIS.cmd_4c_Processar) = "O"
-            THIS.cmd_4c_Processar.Enabled = par_lHabilitar
-        ENDIF
-    ENDPROC
-
-    *-- BtnIncluirClick: stub N/A - OPERACIONAL nao tem modo INCLUIR
-    PROCEDURE BtnIncluirClick()
-        THIS.BtnDocumentoClick()
-    ENDPROC
-
-    *-- BtnAlterarClick: stub N/A - OPERACIONAL nao tem modo ALTERAR
-    PROCEDURE BtnAlterarClick()
-        THIS.BtnDocumentoClick()
-    ENDPROC
-
-    *-- BtnVisualizarClick: alias de BtnImprimirClick (visualizacao do cheque via FormSigReEch)
-    PROCEDURE BtnVisualizarClick()
-        THIS.BtnImprimirClick()
-    ENDPROC
-
-    *-- BtnExcluirClick: alias de BtnExcluirChqClick (exclusao do cheque cancelado)
-    PROCEDURE BtnExcluirClick()
-        THIS.BtnExcluirChqClick()
-    ENDPROC
-
-    *-- BtnBuscarClick: alias de BtnProcurarClick (mapeamento OPERACIONAL)
-    PROCEDURE BtnBuscarClick()
-        THIS.BtnProcurarClick()
-    ENDPROC
-
-    *-- LimparCampos: reseta campos de filtro da UI (OPERACIONAL: limpa filtros, nao campos de dados)
-    PROCEDURE LimparCampos()
-        THIS.txt_4c_CdGrupos.Value  = ""
-        THIS.txt_4c_DsGrupos.Value  = ""
-        THIS.txt_4c_CdContas.Value  = ""
-        THIS.txt_4c_DsContas.Value  = ""
-        THIS.txt_4c_DtInicial.Value = DATE()
-        THIS.txt_4c_DtFinal.Value   = DATE()
-        THIS.txt_4c_Favorecido.Value = ""
-        THIS.this_cAntCdGrupo = ""
-        THIS.this_cAntDsGrupo = ""
-        THIS.this_cAntCdConta = ""
-        THIS.this_cAntDsConta = ""
-        THIS.this_dAntDtIni   = {}
-        THIS.this_dAntDtFin   = {}
-        THIS.this_oBusinessObject.this_cCdGrupos  = ""
-        THIS.this_oBusinessObject.this_cDsGrupos  = ""
-        THIS.this_oBusinessObject.this_cCdContas  = ""
-        THIS.this_oBusinessObject.this_cDsContas  = ""
-        THIS.this_oBusinessObject.this_dDtInicial = DATE()
-        THIS.this_oBusinessObject.this_dDtFinal   = DATE()
-    ENDPROC
-
-    *-- AjustarBotoesPorModo: stub N/A (OPERACIONAL nao tem ciclo INCLUIR/ALTERAR/VISUALIZAR)
-    PROCEDURE AjustarBotoesPorModo()
-        THIS.AtualizarBotoesPermissao()
-        THIS.AtualizarBotoesLinhaCorrente()
-    ENDPROC
-
-    *==========================================================================
-    PROCEDURE Destroy
-    *==========================================================================
-        IF USED("cursor_4c_Pgr")
-            USE IN cursor_4c_Pgr
-        ENDIF
-        IF USED("cursor_4c_MatrizTemp")
-            USE IN cursor_4c_MatrizTemp
-        ENDIF
-        IF USED("cursor_4c_ImpTemp")
-            USE IN cursor_4c_ImpTemp
-        ENDIF
-        IF USED("cursor_4c_GrupoOk")
-            USE IN cursor_4c_GrupoOk
-        ENDIF
-        IF USED("cursor_4c_GrupoLookup")
-            USE IN cursor_4c_GrupoLookup
-        ENDIF
-        IF USED("cursor_4c_ContasLookup")
-            USE IN cursor_4c_ContasLookup
-        ENDIF
         IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            THIS.this_oBusinessObject = .NULL.
+            loc_oBO = THIS.this_oBusinessObject
+
+            loc_oBO.this_dDataInicial = THIS.ObterFiltroDataInicial()
+            loc_oBO.this_dDataFinal   = THIS.ObterFiltroDataFinal()
+            loc_oBO.this_cCodGrupo    = THIS.ObterFiltroGrupo()
+            loc_oBO.this_cCodConta    = THIS.ObterFiltroConta()
+
+            IF PEMSTATUS(THIS, "txt_4c_DsGrupos", 5)
+                loc_oBO.this_cDescGrupo = THIS.txt_4c_DsGrupos.Value
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_DsContas", 5)
+                loc_oBO.this_cDescConta = THIS.txt_4c_DsContas.Value
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_TxtFavorecido", 5)
+                loc_oBO.this_cFavorecido = THIS.txt_4c_TxtFavorecido.Value
+            ENDIF
+
+            IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+                IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_Get_justificativa", 5)
+                    loc_oBO.this_cJustCanc = ;
+                        THIS.cnt_4c_justificativa.obj_4c_Get_justificativa.Value
+                ENDIF
+            ENDIF
+
+            loc_lSucesso = .T.
         ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Business Object -> Tela. Hook PROTECTED de FormBase (usado
+    * por InicializarForm para semear o periodo e por FormBase.Cancelar).
+    *
+    * O legado faz esse mesmo trabalho no Init ("ThisForm.Dt_Inicial.Value =
+    * Date()", "ThisForm.Dt_Final.Value = Date()", getCdGrupos/getDsGrupos/
+    * getCdContas/getDsContas = Space(...)): aqui os valores vem das
+    * properties do BO (this_dDataInicial/this_dDataFinal recebem DATE() no
+    * SigPrChrBO.Init), mantendo o BO como fonte unica do estado dos filtros.
+    *
+    * O Favorecido eh espelho do cheque corrente e NAO eh escrito aqui: quem
+    * o atualiza a cada linha da grade eh AtualizarPainelChequeCorrente()
+    * (transcricao do AfterRowColChange/Scrolled legado). Escreve-lo tambem
+    * aqui criaria duas fontes para o mesmo campo.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oBO, loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_oBO = THIS.this_oBusinessObject
+
+            IF PEMSTATUS(THIS, "txt_4c_Dt_inicial", 5)
+                THIS.txt_4c_Dt_inicial.Value = ConverterParaData(loc_oBO.this_dDataInicial)
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_Dt_final", 5)
+                THIS.txt_4c_Dt_final.Value = ConverterParaData(loc_oBO.this_dDataFinal)
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_CdGrupos", 5)
+                THIS.txt_4c_CdGrupos.Value = loc_oBO.this_cCodGrupo
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_DsGrupos", 5)
+                THIS.txt_4c_DsGrupos.Value = loc_oBO.this_cDescGrupo
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_CdContas", 5)
+                THIS.txt_4c_CdContas.Value = loc_oBO.this_cCodConta
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_DsContas", 5)
+                THIS.txt_4c_DsContas.Value = loc_oBO.this_cDescConta
+            ENDIF
+
+            loc_lSucesso = .T.
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos - Hook PROTECTED de FormBase (chamado por FormBase.Novo() e
+    * por FormBase.Excluir() apos exclusao bem-sucedida). Devolve a tela ao
+    * estado do Init legado: Grupo e Conta vazios, periodo = hoje, painel de
+    * busca e painel de impressao manual zerados, justificativa em branco e a
+    * grade sem linhas.
+    *
+    * O ZAP da grade replica o "Zap In CsSigCqChi" que o legado executa nos
+    * Valid dos filtros quando o valor muda - reaproveitado de
+    * LimparChequesSeFiltroMudou(), que ja desliga SAFETY (com SAFETY ON o ZAP
+    * abre dialogo modal e CONGELA a tela).
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oBO
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_oBO = THIS.this_oBusinessObject
+
+            loc_oBO.this_cCodGrupo    = ""
+            loc_oBO.this_cDescGrupo   = ""
+            loc_oBO.this_cCodConta    = ""
+            loc_oBO.this_cDescConta   = ""
+            loc_oBO.this_dDataInicial = DATE()
+            loc_oBO.this_dDataFinal   = DATE()
+            loc_oBO.this_cFavorecido  = ""
+            loc_oBO.this_cJustCanc    = ""
+
+            *-- Proxima carga volta a ser "primeira exibicao" (Inicial do
+            *-- legado): MontaGrade deve ir para o Top do cursor em vez de
+            *-- reposicionar no ultimo cheque selecionado.
+            loc_oBO.this_lPrimeiraExibicao = .T.
+
+            THIS.BOParaForm()
+        ENDIF
+
+        IF PEMSTATUS(THIS, "txt_4c_TxtFavorecido", 5)
+            THIS.txt_4c_TxtFavorecido.Value = ""
+        ENDIF
+
+        IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+            IF PEMSTATUS(THIS.cnt_4c_justificativa, "obj_4c_Get_justificativa", 5)
+                THIS.cnt_4c_justificativa.obj_4c_Get_justificativa.Value = ""
+            ENDIF
+        ENDIF
+
+        IF PEMSTATUS(THIS, "cnt_4c_Procurar", 5)
+            WITH THIS.cnt_4c_Procurar
+                .txt_4c_Banco.Value   = ""
+                .txt_4c_Agencia.Value = ""
+                .txt_4c_Conta.Value   = ""
+                .txt_4c_Cheque.Value  = ""
+                .txt_4c_Emissao.Value = {}
+                .txt_4c_Valor.Value   = 0
+                .Visible     = .T.
+            ENDWITH
+        ENDIF
+
+        IF PEMSTATUS(THIS, "cnt_4c_Impchmat", 5)
+            WITH THIS.cnt_4c_Impchmat
+                .txt_4c_Banco.Value = ""
+                .txt_4c_Chini.Value = ""
+                .txt_4c_Chfin.Value = ""
+                .Visible     = .T.
+            ENDWITH
+        ENDIF
+
+        THIS.LimparChequesSeFiltroMudou()
+
+        THIS.Refresh()
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos - Liga/desliga a superficie de CONSULTA da tela. O
+    * conjunto eh EXATAMENTE o que o legado alterna no cntProcurar.Init
+    * ("getCdContas / getDsContas / GrdCCheques / TxtFavorecido / CmdGOk
+    * .Enabled = .F.") e desfaz nos dois botoes de cntProcurar.cmdgprocurar -
+    * nem um controle a mais: Grupo, periodo e Processar continuam acessiveis
+    * durante a busca, como no original (PILAR 1).
+    *
+    * PUBLIC - usado por AjustarBotoesPorModo e pelo harness de teste.
+    *==========================================================================
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHabilitar
+
+        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+
+        IF PEMSTATUS(THIS, "txt_4c_CdContas", 5)
+            THIS.txt_4c_CdContas.Enabled = loc_lHabilitar
+        ENDIF
+
+        IF PEMSTATUS(THIS, "txt_4c_DsContas", 5)
+            THIS.txt_4c_DsContas.Enabled = loc_lHabilitar
+        ENDIF
+
+        IF PEMSTATUS(THIS, "txt_4c_TxtFavorecido", 5)
+            THIS.txt_4c_TxtFavorecido.Enabled = loc_lHabilitar
+        ENDIF
+
+        IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+            THIS.grd_4c_Dados.Enabled = loc_lHabilitar
+        ENDIF
+
+        IF PEMSTATUS(THIS, "obj_4c_CmdGok", 5)
+            THIS.obj_4c_CmdGok.Enabled = loc_lHabilitar
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - FUNIL de ida E de volta do estado dos controles
+    * conforme o painel flutuante aberto. Quem DESABILITA tem de REABILITAR no
+    * mesmo funil, senao a tela volta da busca com os botoes cinza e fica
+    * inutilizavel ate ser reaberta (CLAUDE.md regra #40).
+    *
+    * Modos deste form (nao ha INCLUIR/ALTERAR/VISUALIZAR - o legado nao tem
+    * CRUD nenhum):
+    *   "LISTA"         consulta livre - nenhum painel aberto
+    *   "PROCURAR"      cntProcurar.Init: desliga Conta/Favorecido/grade/CmdGok
+    *   "IMPCHMAT"      impchmat.Init: desliga SO o CmdGok - o legado nao toca
+    *                   nos demais controles neste painel, por isso este ramo
+    *                   NAO chama HabilitarCampos
+    *   "JUSTIFICATIVA" cntjustificativa visivel; o legado tambem nao
+    *                   desabilita nada da tela de fundo neste painel
+    *
+    * O estado POR REGISTRO dos botoes do CmdGok (Documento/Imprimir/Recibo/
+    * Exclui Docto./Excluir Chq., que dependem de o cheque estar cancelado e
+    * das permissoes do usuario) continua sendo reafirmado por
+    * AtualizarPainelChequeCorrente() - chamado no retorno a "LISTA" para nao
+    * reabilitar em bloco botao que o registro corrente proibe.
+    *
+    * PUBLIC - usado pelos abre/fecha dos paineis e pelo harness de teste.
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
+        LOCAL loc_cModo
+
+        loc_cModo = UPPER(ALLTRIM(IIF(VARTYPE(par_cModo) = "C" AND ;
+            !EMPTY(par_cModo), par_cModo, THIS.this_cModoAtual)))
+
+        IF !INLIST(loc_cModo, "LISTA", "PROCURAR", "IMPCHMAT", "JUSTIFICATIVA")
+            loc_cModo = "LISTA"
+        ENDIF
+
+        THIS.this_cModoAtual = loc_cModo
+
+        DO CASE
+            CASE loc_cModo == "PROCURAR"
+                THIS.HabilitarCampos(.F.)
+
+                IF PEMSTATUS(THIS, "cnt_4c_Procurar", 5)
+                    THIS.cnt_4c_Procurar.Enabled = .T.
+                    THIS.cnt_4c_Procurar.Visible = .T.
+                ENDIF
+
+            CASE loc_cModo == "IMPCHMAT"
+                IF PEMSTATUS(THIS, "obj_4c_CmdGok", 5)
+                    THIS.obj_4c_CmdGok.Enabled = .F.
+                ENDIF
+
+                IF PEMSTATUS(THIS, "cnt_4c_Impchmat", 5)
+                    THIS.cnt_4c_Impchmat.Enabled = .T.
+                    THIS.cnt_4c_Impchmat.Visible = .T.
+                ENDIF
+
+            CASE loc_cModo == "JUSTIFICATIVA"
+                IF PEMSTATUS(THIS, "cnt_4c_justificativa", 5)
+                    THIS.cnt_4c_justificativa.Visible = .T.
+                ENDIF
+
+            OTHERWISE
+                *-- "LISTA": volta da busca/impressao - reabilita tudo o que os
+                *-- modos acima desligaram e fecha os paineis flutuantes.
+                THIS.HabilitarCampos(.T.)
+
+                IF PEMSTATUS(THIS, "cnt_4c_Procurar", 5)
+                    THIS.cnt_4c_Procurar.Enabled = .F.
+                    THIS.cnt_4c_Procurar.Visible = .F.
+                ENDIF
+
+                IF PEMSTATUS(THIS, "cnt_4c_Impchmat", 5)
+                    THIS.cnt_4c_Impchmat.Enabled = .F.
+                    THIS.cnt_4c_Impchmat.Visible = .F.
+                ENDIF
+
+                *-- Reafirma o estado por registro (cheque cancelado x
+                *-- permissoes do usuario) e a visibilidade do painel de
+                *-- justificativa, que no legado acompanha o cheque corrente.
+                THIS.AtualizarPainelChequeCorrente()
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * BtnCancelarClick - Cancelar dos paineis flutuantes. O legado tem TRES
+    * botoes de cancelar, um por painel, e todos fazem a mesma coisa: fechar o
+    * painel sem gravar nada e devolver a tela ao estado de consulta
+    * (cmdGconf.cmdCancelar = "This.Parent.Enabled=.F. + This.Parent.Parent.
+    * Visible=.F."; cmdgprocurar.cmdCancelar e cmdGprocurar.cmdCancelar
+    * reabilitam a tela e chamam mExibeCheques(.F.)).
+    *
+    * par_cPainel identifica o painel que pediu o cancelamento - cada
+    * dispatcher passa o SEU painel explicitamente. Sem parametro, detecta
+    * pelo painel aberto na ordem PROCURAR -> IMPCHMAT -> JUSTIFICATIVA: a
+    * justificativa fica por ULTIMO porque ela tambem aparece passivamente (em
+    * somente leitura) quando o cheque corrente ja esta cancelado, e nesse
+    * caso nao ha nada a cancelar se outro painel estiver aberto.
+    *
+    * Retorna .T. quando havia painel aberto para fechar. NAO fecha o form -
+    * Encerrar eh BtnSairClick (cmdSair, Cancel = .T., como no legado).
+    *
+    * PUBLIC - dispatchers e harness de teste chamam de fora da classe.
+    *==========================================================================
+    PROCEDURE BtnCancelarClick(par_cPainel)
+        LOCAL loc_cPainel, loc_lFechou
+        loc_lFechou = .F.
+
+        loc_cPainel = UPPER(ALLTRIM(IIF(VARTYPE(par_cPainel) = "C", par_cPainel, "")))
+
+        IF EMPTY(loc_cPainel)
+            DO CASE
+                CASE PEMSTATUS(THIS, "cnt_4c_Procurar", 5) AND THIS.cnt_4c_Procurar.Visible
+                    loc_cPainel = "PROCURAR"
+                CASE PEMSTATUS(THIS, "cnt_4c_Impchmat", 5) AND THIS.cnt_4c_Impchmat.Visible
+                    loc_cPainel = "IMPCHMAT"
+                CASE PEMSTATUS(THIS, "cnt_4c_justificativa", 5) AND THIS.cnt_4c_justificativa.Visible
+                    loc_cPainel = "JUSTIFICATIVA"
+            ENDCASE
+        ENDIF
+
+        DO CASE
+            CASE loc_cPainel == "PROCURAR"
+                THIS.FecharPainelProcurar()
+                loc_lFechou = .T.
+            CASE loc_cPainel == "IMPCHMAT"
+                THIS.FecharImpressaoManualCheque()
+                loc_lFechou = .T.
+            CASE loc_cPainel == "JUSTIFICATIVA"
+                THIS.CancelarJustificativa()
+                loc_lFechou = .T.
+        ENDCASE
+
+        RETURN loc_lFechou
+    ENDPROC
+
+    *==========================================================================
+    * TornarControlesVisiveis - Torna visiveis os controles criados via
+    * AddObject (nascem Visible=.F.). Percorre containers e PageFrames
+    * recursivamente.
+    *
+    * Containers FLUTUANTES do legado (cntjustificativa/impchmat/cntProcurar -
+    * Visible=.F. no SCX, alternados por botao) DEVEM permanecer ocultos: o
+    * nome entra no INLIST abaixo e o metodo faz LOOP sem tocar o .Visible do
+    * proprio container - mas ainda RECURSA nos filhos dele antes do LOOP,
+    * senao os filhos ficam Visible=.F. para sempre e o container aparece
+    * vazio quando outro metodo setar .Visible = .T. nele (ver CLAUDE.md
+    * regra de forms operacionais / licao "tcv_skip_recursao"). Estes
+    * containers ainda nao existem na Fase 3 - a lista fica pronta para
+    * quando as Fases 6/7 os criarem.
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oControl
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oControl = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oControl) = "O"
+                IF INLIST(UPPER(loc_oControl.Name), ;
+                          "CNT_4C_JUSTIFICATIVA", ;
+                          "CNT_4C_IMPCHMAT", ;
+                          "CNT_4C_PROCURAR")
+                    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+                        THIS.TornarControlesVisiveis(loc_oControl)
+                    ENDIF
+                    LOOP
+                ENDIF
+
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
+                ENDIF
+
+                *-- PageFrame: percorrer Pages tambem (nenhum neste form, mas
+                *-- mantido pelo padrao canonico do projeto)
+                IF PEMSTATUS(loc_oControl, "PageCount", 5)
+                    LOCAL loc_nP
+                    FOR loc_nP = 1 TO loc_oControl.PageCount
+                        THIS.TornarControlesVisiveis(loc_oControl.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oControl)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * Destroy - Libera cursores de trabalho do BO (nomes definidos em
+    * SigPrChrBO.this_cCursorCheques/Contas/Impressoras). Ainda vazios na
+    * Fase 3 (populados a partir da Fase 4), os IF USED() sao defensivos e
+    * idempotentes. DODEFAULT() por ULTIMO restaura o menu principal
+    * (FormBase.Destroy).
+    *==========================================================================
+    PROCEDURE Destroy()
+        IF USED("cursor_4c_Cheques")
+            USE IN cursor_4c_Cheques
+        ENDIF
+        IF USED("cursor_4c_Contas")
+            USE IN cursor_4c_Contas
+        ENDIF
+        IF USED("cursor_4c_Impressoras")
+            USE IN cursor_4c_Impressoras
+        ENDIF
+
         DODEFAULT()
     ENDPROC
 

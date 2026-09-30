@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete. I created `FormSIGPRCNB.prg` (form OPERACIONAL "Gera├º├úo de Arquivos CNAB - Recebimentos") with:
+
+- `DEFINE CLASS FormSIGPRCNB AS FormBase` with canonical visual properties (1000x600, DataSession=2, etc.)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (avoids the double-`InicializarForm()` bug)
+- `InicializarForm()` ÔÇö creates the `SIGPRCNBBO` business object, checks `gb_4c_ValidandoUI`/`gnConnHandle`, wires up the PageFrame and both pages, wrapped in TRY/CATCH with line/procedure in the error message
+- `ConfigurarPageFrame()` ÔÇö 2 pages (`Page1`="Filtro", `Page2`="Dados", matching the legacy `pgfiltro`/`pgdados` split, since this form doesn't follow the CRUD Lista/Dados pattern), `Top=-29`/`Height=Form.Height+29` per the standard hidden-tabs compensation
+- `ConfigurarPaginaLista()` ÔÇö builds `cnt_4c_Cabecalho` (first `AddObject`, gray band with properly-configured `lbl_4c_Sombra`/`lbl_4c_Titulo`, not "peladas") plus an empty `cnt_4c_Botoes` placeholder for the Processar/Encerrar buttons
+- `ConfigurarPaginaDados()` ÔÇö empty `cnt_4c_BotoesAcao` placeholder for the CNAB/Relat├│rio/Boleto/Encerrar buttons
+- `TornarControlesVisiveis()` and `Destroy()` (delegating to `FormBase`)
+
+No grid, CRUD buttons, data fields, or BINDEVENTs were added, per the phase scope. I verified the file compiles cleanly in VFP9 (`-T` headless mode) before cleaning up the scratch compile-check files.
+
+One side note, not part of this task: while using the sibling form `FormSIGPGCNB.prg` as a reference, I noticed it references `THIS.pgf_4c_Principal.pgfiltro`/`.pgdados` throughout, but its `ConfigurarPageFrame()` never renames `Page1`/`Page2` to those names ÔÇö that looks like a latent bug (would throw "PGFILTRO is not an object" at runtime). I avoided reproducing it here by using plain `Page1`/`Page2`. Flagging it in case you want it looked at separately.

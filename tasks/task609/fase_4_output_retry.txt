@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e validada.
+
+## Diagn├│stico
+
+A Fase 4 anterior **j├í tinha gerado** Grid + bot├Áes + handlers (o `fase_4_output.txt` mostra exit code 0). O que reprovou foi o gate do orquestrador (`OrquestradorMigracao.ps1:6191`), ramo **FLAT** ÔÇö que ├® o correto aqui, porque o SCX legado tem `BaseClass: grid` (`Grd_Etiqueta`) e nenhum PageFrame. Ele exige tr├¬s coisas:
+
+| Condi├º├úo | Antes | Agora |
+|---|---|---|
+| `AddObject("grd_4c_` | Ô£à | Ô£à |
+| `AddObject("cmd_4c_` / `cmg_4c_` | Ô£à | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî **0 ocorr├¬ncias** | Ô£à |
+
+Faltava s├│ o **m├®todo de carga**. O form tinha `CriarCursorDados` e `BtnCarregarClick`, mas nenhum nome que casasse com o regex do gate.
+
+## O que fiz
+
+N├úo inventei um m├®todo para satisfazer regex ÔÇö o legado **tem** essa rotina de carga: o bloco ap├│s o picker em `Get_lpreco.Valid` (linhas 2027-2062 do dump) popula `dbImpressao` a partir da lista de pre├ºos. Transcrevi-o como `CarregarDados(par_cListaPreco)`:
+
+- confirma├º├úo "Existem Etiquetas na Grade! Deseja Refazer a Sele├º├úo?" ÔåÆ `MsgConfirma` (LOGICAL, regra #7)
+- `ZAP` + varredura dos itens via `BuscarItensListaPreco` do BO (que j├í replica o `CursorQuery` legado, mesmas 7 colunas e o mesmo `PADR(...,30)`)
+- **item com vig├¬ncia vencida troca pre├ºo/pre├ºo-de pelo pre├ºo corrente de `SigCdPro`** ÔÇö essa ├® a regra de neg├│cio do legado, transcrita, n├úo reescrita (regra #17)
+- `Qtds`/`QtdeEtiq = 1`, `Obs` = c├│digo da lista, `empos` = `go_4c_Sistema.cCodEmpresa` (n├úo `_EMPR`)
+- fecha com `GO TOP` + `grd_4c_Dados.Refresh()` (regra #21a)
+
+Decis├Áes que vale registrar:
+- **N├úo liguei `CarregarDados` ao `InicializarForm`** ÔÇö o legado tamb├®m n├úo chama no Init (s├│ do `Valid` do campo Lista). Assim o form continua instanci├ível na Fase 4.
+- O valor da lista vem por **par├ómetro**, com fallback guardado por `PEMSTATUS` para o TextBox e depois para a property do BO. `txt_4c_Lpreco`/`chk_4c_ChkLista` s├│ nascem em fases posteriores; sem a guarda, o m├®todo ficaria intransit├ível at├® a Fase 6.
+- Usei `APPEND BLANK` + `REPLACE` em vez de `INSERT INTO (expr)` ÔÇö VFP9 n├úo aceita nome de tabela por express├úo em `INSERT INTO`, e esse ├® o padr├úo j├í usado no `BtnCarregarClick` do arquivo.
+- Reescrevi um coment├írio que dizia "**TODO** o bloco" (portugu├¬s, "inteiro"). Passava no validador atual (o regex exige `TODO` imediatamente ap├│s `*--`), mas ├® justamente a classe de tripwire que o CLAUDE.md documenta ÔÇö troquei por "o bloco de carga INTEIRO".
+
+## Verifica├º├úo
+
+- **Gate Fase 4 simulado** com os regexes exatos do orquestrador: `temLayoutFlat = True` ÔåÆ PASSOU (27,03 KB)
+- **Compilado no VFP9 real**: `.fxp` gerado, **compila├º├úo limpa**, sem `.err` (apaguei o `.fxp` antes, conforme regra #29, para n├úo medir c├│digo velho)
+- **Completude (05d)**: rodei as 4 regexes de `Test-CompletudeCodigo` ÔåÆ **0 problemas**. N├úo fiz dot-source do orquestrador (dispararia migra├º├úo real).
+- **Balanceamento**: TRY/ENDTRY 2/2, SCAN/ENDSCAN 3/3, IF/ENDIF 35/35, WITH/ENDWITH 13/13, PROCEDURE/ENDPROC 10/10, FUNCTION/ENDFUNC 1/1
+- **Regra #1**: zero `RETURN` dentro de TRY/CATCH; retorno ├║nico ap├│s `ENDTRY`
+- Zero caracteres n├úo-ASCII (acentos todos via `CHR()`); sem `MESSAGEBOX`, `MostrarAviso`, `_EMPR`, `.Self`, `COUNT TO ... IN`
+
+Artefatos tempor├írios e o `.fxp` removidos.
+
+Dois pontos que **n├úo** corrigi por estarem fora do escopo da Fase 4 ÔÇö decida se quer que eu trate:
+
+1. O arquivo usa **LF**, enquanto os forms de refer├¬ncia (ex. `FormCor.prg`) usam **CRLF**. Veio assim da Fase 3 e compila sem erro; mantive LF para n├úo misturar terminadores.
+2. `BtnCarregarClick` (escrito na tentativa anterior) referencia `txt_4c_Emps`/`txt_4c_Dopes`/`txt_4c_Numes`/`chk_4c_*` **sem guarda**. Compila e s├│ ├® alcan├º├ível por clique ap├│s as fases seguintes criarem esses controles ÔÇö mas, ao contr├írio do `CarregarDados`, n├úo ├® test├ível isoladamente agora.

@@ -1,0 +1,14 @@
+=== TESTE FASE 4 FormSigPrAop ===
+SET PROCEDURE        : OK
+CREATEOBJECT         : OK  Caption=[Alteração de Quantidade da O.P.]
+grd_4c_Dados         : OK  ColumnCount=5  RecordSource=[cursor_4c_DivOp]
+   Col1 hdr=[Pedido] w=180 ro=.T. src=[ALLTRIM(cursor_4c_DivOp.Dopes) + ' ' + ALLTRIM(fGerMascara(cursor_4c_DivOp.Numes))]
+   Col2 hdr=[Cor] w=38 ro=.T. src=[cursor_4c_DivOp.CodCors]
+   Col3 hdr=[Tam] w=38 ro=.T. src=[cursor_4c_DivOp.CodTams]
+   Col4 hdr=[Qtd.Atual] w=80 ro=.T. src=[cursor_4c_DivOp.Qtds]
+   Col5 hdr=[Quantidade] w=80 ro=.F. src=[cursor_4c_DivOp.QtdDivs]
+cmg_4c_Grupo_Conf    : OK  ButtonCount=2
+   Btn1 cap=[\<Confirmar] picOK=.T. enab=.T.
+   Btn2 cap=[Encerrar] picOK=.T. enab=.T.
+CarregarDados(0)     : ret=.T.  RECCOUNT=-1  Confirmar.Enabled=.F.
+RESULTADO            : SUCESSO

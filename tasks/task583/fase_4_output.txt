@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All test artifacts are cleaned up. **Fase 4/8 is complete.**
+
+Summary of changes:
+
+**`FormSigPrAop.prg`** ÔÇö added two new methods, wired into `InicializarForm()`:
+- `ConfigurarGrid()`: creates `grd_4c_Dados`, a 5-column grid bound to `cursor_4c_DivOp`, transcribing the legacy `Grade`'s visual column order (Pedido / Cor / Tam / Qtd.Atual / Quantidade). Only the last column (`QtdDivs`) is editable ÔÇö matches the legacy, where only that field lacks `ReadOnly=.T.`. The "Pedido" column reproduces the legacy's calculated expression `ALLTRIM(Dopes) + ' ' + ALLTRIM(fGerMascara(Numes))`.
+- `ConfigurarBotoes()`: creates `obj_4c_Grupo_Conf`, a CommandGroup with the legacy's real two buttons ÔÇö Confirmar (grava) and Encerrar (fecha) ÔÇö positioned to float over the header band, same as `Grupo_Conf` in the legacy at Top=-2/Left=544.
+
+I deliberately did **not** add the generic "Incluir/Visualizar/Alterar/Excluir/Buscar" CRUD buttons or an `AlternarPagina()` the phase template asked for ÔÇö this is an OPERACIONAL form (`analise.json` confirms `formType: "OPERACIONAL"`), it has no Page1/Page2, and the legacy only ever had Confirmar+Encerrar. Inventing CRUD buttons the legacy doesn't have would violate PILAR 1 and the project's repeated "never invent" rule.
+
+**`SigPrAopBO.prg`** ÔÇö added one line to `Init()`: `THIS.CriarCursorItens()`, so the grid's cursor exists (empty) before the form binds `Grid.RecordSource`/`Column.ControlSource` to it. Without this, the Init would crash per the documented "Column.ControlSource before cursor exists" rule.
+
+Verified by compiling both files with VFP9 and instantiating the form headlessly (`gb_4c_ModoTeste` + `gc_4c_ArquivoErroTeste`): it builds with no errors, `grd_4c_Dados` has 5 columns with correct headers ("Pedido"/"Quantidade" etc.), the "Quantidade" column is the only editable one, and `obj_4c_Grupo_Conf` has 2 buttons captioned "Confirmar"/"Encerrar".
+
+Note: my testing required deleting/recompiling `.fxp` files project-wide, which produced a lot of incidental binary churn unrelated to this task ÔÇö I cleaned that up, restoring everything except my own two `.fxp` outputs and the legitimate `.prg` source edits.

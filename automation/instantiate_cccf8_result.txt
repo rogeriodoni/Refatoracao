@@ -1,0 +1,21 @@
+v2 FASE8 CHECK - inicio 26/09/2026 11:52:19
+0 AMBIENTE FALHOU: Variable 'GNCONNHANDLE' is not found.
+1 INSTANCIA: VARTYPE=O W=800
+2a BINDEVENT cmd_4c_Processa: n=1 [CLICK->BTNPROCESSARCLICK ]
+2b BINDEVENT cmd_4c_Cancela: n=1 [CLICK->BTNCANCELARCLICK ]
+3 txt_4c_Registro: ReadOnly=.T. TabStop=.F. Enabled=.T.
+3b AtualizarContadorRegistros(4321) -> Value=4321
+4 When do Get_Descs (Descricao so digitavel com Produto vazio):
+   cnt_4c_OpEstoque   Produto vazio         -> Desc.ReadOnly=.F. TabStop=.T.
+   cnt_4c_OpEstoque   Produto PRO123        -> Desc.ReadOnly=.T. TabStop=.F.
+   cnt_4c_OpEstoque   Produto limpo (volta) -> Desc.ReadOnly=.F. TabStop=.T.
+   cnt_4c_OpCusto     Produto vazio         -> Desc.ReadOnly=.F. TabStop=.T.
+   cnt_4c_OpCusto     Produto PRO123        -> Desc.ReadOnly=.T. TabStop=.F.
+   cnt_4c_OpCusto     Produto limpo (volta) -> Desc.ReadOnly=.F. TabStop=.T.
+   cnt_4c_OpCompra    Produto vazio         -> Desc.ReadOnly=.F. TabStop=.T.
+   cnt_4c_OpCompra    Produto PRO123        -> Desc.ReadOnly=.T. TabStop=.F.
+   cnt_4c_OpCompra    Produto limpo (volta) -> Desc.ReadOnly=.F. TabStop=.T.
+4b ProdutoCustoInteractiveChange de FORA: OK Desc.ReadOnly=.T.
+4c Estoque/Compra InteractiveChange de FORA: OK
+5 POS BtnProcessarClick: Processa=.F. Cancela=.T. chkConta=.T. LblEnd.Visible=.F.
+5b BtnCancelarClick de FORA: OK (VARTYPE pos=X)

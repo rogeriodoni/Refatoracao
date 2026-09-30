@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I verified all three findings against the schema and legacy business logic ÔÇö all three are **false positives** from the audit harness, and applying the suggested "fixes" would introduce real bugs. Here's the evidence for each:
+
+**1. `EMPDNPS` (SigCdNec / SigPdMvf queries in `SigPrAopBO.prg`)**
+- `empdnps` is a real column: `char(33)` in **both** `SigCdNec` and `SigPdMvf` (confirmed via `schema.sql`).
+- It's the documented positional composite key: `PADR(cCodEmpresa,3) + PADR(DoppPads,20) + STR(Nops,10)` = 33 chars exactly ÔÇö matches the column width.
+- This is the exact same pattern fixed in a previous real bug (Erro177, `feedback_chave_posicional_alltrim_quebra_busca.md`): positional keys must use `PADR`, never `ALLTRIM`, on the parts. This code already does it correctly.
+- The "WHERE original usa: CIDCHAVES, NOPS, CITENS" list the audit used is incomplete ÔÇö it's drawn from a partial legacy snippet that didn't include the `Get_OP.Valid` procedure, which is exactly where the legacy code queries `SigCdNec`/`SigPdMvf` by this key.
+
+**2. `SEQDIVS`**
+- `SeqDivs` never appears in a SQL `WHERE` clause sent to SQL Server anywhere in the BO. It only appears in `UPDATE ... SET SeqDivs = ...` (a SET target, matching the legacy `Update SigOpPic Set SeqDivs = 0 Where cIdChaves = ...` line verbatim) and in local VFP cursor `SCAN`/`SEEK` filtering (in-memory, not SQL). There's no invented filter to remove.
+
+**3. `CONTROLCOUNT`**
+- `ControlCount` only appears in `TornarControlesVisiveis` (`FormSigPrAop.prg:817,823`) ÔÇö it's the native VFP object property used to iterate a container's children recursively. It has nothing to do with SQL at all; it's not inside any query string.
+
+Given the schema confirms `empdnps` exists with the exact width the code constructs, and the other two aren't SQL WHERE conditions at all, I'm not making any changes ÔÇö doing so would break the O.P. lookup query and the control-visibility recursion. No files were modified.

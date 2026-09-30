@@ -1060,40 +1060,57 @@ DEFINE CLASS FormTester AS Custom
                         loc_lPassou = .T.
                         ?? "PASSOU"
                     ELSE
+                        *-- Dialogo filho com CRUD restrito: AcertaBotoes/regra de negocio
+                        *-- do legado pode deixar cmd_4c_Incluir Enabled=.F./Visible=.F.
+                        *-- (ex.: Grupo_op.Click com Inlist(This.Value,1,3,4,5) que so
+                        *-- devolve para a Lista - regra #17 CLAUDE.md, transcricao
+                        *-- literal de regra de negocio, nao bug). Botao nunca
+                        *-- alcancavel pela UI real -> navegacao nao se aplica.
+                        LOCAL loc_oBtnIncluir
+                        loc_oBtnIncluir = THIS.LocalizarControlePorNome(THIS.oForm.pgf_4c_Paginas.Page1, "cmd_4c_Incluir")
 
-                    *-- Chamar BtnIncluirClick e verificar navegacao para Page2
-                    THIS.oForm.BtnIncluirClick()
-
-                    IF THIS.oForm.pgf_4c_Paginas.ActivePage = 2
-                        loc_cDetalhes = "BtnIncluirClick navegou para Page2"
-
-                        *-- Tentar voltar com BtnCancelarClick
-                        IF loc_lTemCancelar
-                            THIS.oForm.BtnCancelarClick()
-
-                            IF THIS.oForm.pgf_4c_Paginas.ActivePage = 1
-                                loc_cDetalhes = loc_cDetalhes + " | BtnCancelarClick retornou para Page1"
-                                loc_lPassou = .T.
-                                ?? "PASSOU"
-                            ELSE
-                                loc_cErro = "BtnCancelarClick nao retornou para Page1 (ActivePage=" + ;
-                                    ALLTRIM(STR(THIS.oForm.pgf_4c_Paginas.ActivePage)) + ")"
-                                ?? "FALHOU"
-                            ENDIF
-                        ELSE
-                            *-- Sem BtnCancelarClick, volta manualmente
-                            THIS.oForm.pgf_4c_Paginas.ActivePage = 1
-                            loc_cDetalhes = loc_cDetalhes + " | BtnCancelarClick nao encontrado (voltou manualmente)"
+                        IF VARTYPE(loc_oBtnIncluir) = "O" AND (!loc_oBtnIncluir.Enabled OR !loc_oBtnIncluir.Visible)
+                            loc_cDetalhes = "cmd_4c_Incluir desabilitado/oculto (Enabled=" + ;
+                                TRANSFORM(loc_oBtnIncluir.Enabled) + ", Visible=" + ;
+                                TRANSFORM(loc_oBtnIncluir.Visible) + ") - nao alcancavel pela UI, navegacao nao aplicavel"
                             loc_lPassou = .T.
                             ?? "PASSOU"
+                        ELSE
+
+                        *-- Chamar BtnIncluirClick e verificar navegacao para Page2
+                        THIS.oForm.BtnIncluirClick()
+
+                        IF THIS.oForm.pgf_4c_Paginas.ActivePage = 2
+                            loc_cDetalhes = "BtnIncluirClick navegou para Page2"
+
+                            *-- Tentar voltar com BtnCancelarClick
+                            IF loc_lTemCancelar
+                                THIS.oForm.BtnCancelarClick()
+
+                                IF THIS.oForm.pgf_4c_Paginas.ActivePage = 1
+                                    loc_cDetalhes = loc_cDetalhes + " | BtnCancelarClick retornou para Page1"
+                                    loc_lPassou = .T.
+                                    ?? "PASSOU"
+                                ELSE
+                                    loc_cErro = "BtnCancelarClick nao retornou para Page1 (ActivePage=" + ;
+                                        ALLTRIM(STR(THIS.oForm.pgf_4c_Paginas.ActivePage)) + ")"
+                                    ?? "FALHOU"
+                                ENDIF
+                            ELSE
+                                *-- Sem BtnCancelarClick, volta manualmente
+                                THIS.oForm.pgf_4c_Paginas.ActivePage = 1
+                                loc_cDetalhes = loc_cDetalhes + " | BtnCancelarClick nao encontrado (voltou manualmente)"
+                                loc_lPassou = .T.
+                                ?? "PASSOU"
+                            ENDIF
+                        ELSE
+                            loc_cErro = "BtnIncluirClick nao navegou para Page2 (ActivePage=" + ;
+                                ALLTRIM(STR(THIS.oForm.pgf_4c_Paginas.ActivePage)) + ")"
+                            ?? "FALHOU"
                         ENDIF
-                    ELSE
-                        loc_cErro = "BtnIncluirClick nao navegou para Page2 (ActivePage=" + ;
-                            ALLTRIM(STR(THIS.oForm.pgf_4c_Paginas.ActivePage)) + ")"
-                        ?? "FALHOU"
+                        ENDIF
                     ENDIF
                 ENDIF
-            ENDIF
             ENDIF
 
         CATCH TO loc_oException
@@ -1109,6 +1126,52 @@ DEFINE CLASS FormTester AS Custom
 
         THIS.AdicionarResultado("BtnIncluirNavegacao", loc_lPassou, loc_cErro, loc_cDetalhes)
     ENDPROC
+
+    *====================================================================
+    * LocalizarControlePorNome - Busca recursiva por um controle pelo NOME
+    * do objeto (Controls()/Pages()), descendo em Containers/PageFrames
+    * aninhados. Usada para checar o estado REAL (Enabled/Visible) de um
+    * botao antes de assumir que o Click dele deveria produzir navegacao -
+    * dialogos filhos podem desabilitar/ocultar botoes CRUD legitimamente
+    * (regra de negocio transcrita do legado, nao bug do form migrado).
+    *====================================================================
+    PROTECTED FUNCTION LocalizarControlePorNome(par_oContainer, par_cNome)
+        LOCAL loc_nI, loc_oObjeto, loc_oAchado, loc_nP
+
+        IF VARTYPE(par_oContainer) != "O"
+            RETURN .NULL.
+        ENDIF
+
+        IF PEMSTATUS(par_oContainer, "ControlCount", 5)
+            FOR loc_nI = 1 TO par_oContainer.ControlCount
+                loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+                IF VARTYPE(loc_oObjeto) = "O"
+                    IF UPPER(loc_oObjeto.Name) == UPPER(par_cNome)
+                        RETURN loc_oObjeto
+                    ENDIF
+
+                    IF UPPER(loc_oObjeto.BaseClass) == "PAGEFRAME"
+                        FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                            loc_oAchado = THIS.LocalizarControlePorNome(loc_oObjeto.Pages(loc_nP), par_cNome)
+                            IF VARTYPE(loc_oAchado) = "O"
+                                RETURN loc_oAchado
+                            ENDIF
+                        ENDFOR
+                    ENDIF
+
+                    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                        loc_oAchado = THIS.LocalizarControlePorNome(loc_oObjeto, par_cNome)
+                        IF VARTYPE(loc_oAchado) = "O"
+                            RETURN loc_oAchado
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDFOR
+        ENDIF
+
+        RETURN .NULL.
+    ENDFUNC
 
     *====================================================================
     * TesteBtnEncerrarExiste - Verifica se BtnEncerrarClick existe

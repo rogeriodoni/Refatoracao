@@ -1,525 +1,295 @@
 *==============================================================================
-* sigpres2BO.prg - Business Object para Pedido de Estoque (SIGPRES2)
-* Herda de: BusinessBase
-* Tabela principal: SigMvPec (PK: cidchaves, chave negocio: empdopnums)
-* Itens: SigMvItn (join SigMvIts para cor/tamanho)
+* SIGPRES2BO.PRG
+* Business Object para o dialogo de Origem/Destino/Representante de Movimento
+* (SIGPRES2 - dialogo filho aberto por um form OPERACIONAL pai via
+*  "Do Form SigPrEs2 With ThisForm, ...", NAO acessivel direto pelo menu)
+*
+* Tabela Principal : SigMvCab (cabecalho de movimentacao)
+* Chave Real (PK)  : CidChaves    CHAR(20)
+* Chave Posicional : EmpDopNums   CHAR(29) = Emps CHAR(3) + Dopes CHAR(20) + Str(Numes, 6)
+*                     (NUNCA usar ALLTRIM nas partes - ver CLAUDE.md regra #42)
+*
+* Logica do legado: o form pai ja populou um cursor local (csTemporario) com o
+* registro (ou lote de registros) de SigMvCab a editar; o SIGPRES2 apenas edita
+* os campos de cabecalho abaixo (Origem/Destino/Representante/Status/Prazo) e
+* delega o commit ao TableUpdate do buffer do framework (Grupo_Salva.Salva.Click
+* so chama DoDefault() + mAtivapagina1 - nao ha INSERT/UPDATE/DELETE proprios no
+* codigo fonte do SIGPRES2). Os campos de item (grid fwgrade1/xEestI, vindos de
+* SigMvItn/SigMvIts) e a grade de operacoes (TmpOperacao/SigMvPec) sao
+* somente-leitura e pertencem a um cursor de detalhe, nao a properties escalares
+* deste BO.
 *==============================================================================
-SET PROCEDURE TO (gc_4c_CaminhoClasses + "businessbase.prg") ADDITIVE
 
 DEFINE CLASS sigpres2BO AS BusinessBase
 
-    *-- Identificacao da tabela principal
-    this_cTabela      = "SigMvPec"
-    this_cCampoChave  = "cidchaves"
+    *-- Chave composta do movimento (SigMvCab)
+    this_cEmpresa            = ""   && Emps        CHAR(3)  - Empresa (parte da chave posicional)
+    this_cTipoDocumento      = ""   && Dopes        CHAR(20) - Tipo de documento (parte da chave posicional)
+    this_nNumero             = 0    && Numes        NUMERIC(6,0) - Numero do documento (parte da chave posicional)
+    this_cEmpresaDestino     = ""   && Empds        CHAR(3)  - Empresa de destino (grid Lista, coluna "EmpD")
+    this_cChaveMovimento     = ""   && EmpDopNums   CHAR(29) - Chave posicional (Emps+Dopes+Str(Numes,6))
+    this_cCidChave           = ""   && CidChaves    CHAR(20) - Chave primaria real da tabela
 
-    *-- Chave de negocio composta (emps+dopes+numes)
-    this_cEmpdopnums  = ""
+    *-- Origem / Destino / Representante (container "Origem" da Pagina Dados)
+    this_cGrupoOrigem        = ""   && Grupoos      CHAR(10)
+    this_cContaOrigem        = ""   && Contaos      CHAR(10)
+    this_cGrupoDestino       = ""   && Grupods      CHAR(10)
+    this_cContaDestino       = ""   && Contads      CHAR(10)
+    this_cRepresentante      = ""   && Vends        CHAR(10)
+    this_cGrupoRepresentante = ""   && Grvends      CHAR(10)
 
-    *-- Campos de SigMvPec (schema exato)
-    this_cEmps        = ""
-    this_cDopes       = ""
-    this_nNumes       = 0
-    this_nCodigos     = 0
-    this_dDatatrans   = {}
-    this_nNtrans      = 0
-    this_cLocals      = ""
-    this_nValobxs     = 0
-    this_cCidchaves   = ""
-    this_cEmpsubs     = ""
-    this_dDatas       = {}
-    this_lChksubn     = .F.
-    this_dDtagends    = {}
-    this_lChkpagos    = .F.
-    this_nNparcs      = 0
-    this_nValps       = 0
-    this_nValvars     = 0
-    this_dVencps      = {}
-    this_cPStatus     = ""
-
-    *-- Campos adicionais do csTemporario (origem/destino contabil)
-    this_cGrupoOs     = ""
-    this_cContaOs     = ""
-    this_cGrupoDs     = ""
-    this_cContaDs     = ""
-    this_cEmpds       = ""
-    this_cUsuars      = ""
-    this_nNops        = 0
-    this_cVends       = ""
-    this_cGrvends     = ""
-    this_cTabds       = ""
-    this_cObses       = ""
-    this_dPrazoents   = {}
-    this_cMascnum     = ""
-    this_cNotas       = ""
-    this_lChkBxParcs  = .F.
-
-    *-- Descricoes (preenchidas por lookup em tempo de execucao)
-    this_cDconta      = ""
-    this_cDcontad     = ""
-    this_cDresps      = ""
-
-    *-- Referencia ao form pai (para navegacao/callbacks)
-    this_oParentForm  = .NULL.
+    *-- Demais campos de cabecalho editaveis na Pagina Dados
+    this_cTabelaDesconto     = ""   && Tabds        CHAR(10)
+    this_cStatus             = ""   && PStatus      CHAR(1)
+    this_cUsuario            = ""   && Usuars       CHAR(10) - usuario do movimento (grid Lista, coluna "Usuario")
+    this_nNumeroOP           = 0    && Nops         NUMERIC(10,0)
+    this_dPrazoEntrega       = {}   && PrazoEnts    DATETIME
+    this_cCodigoMascarado    = ""   && MascNum      CHAR(10) - exibicao formatada (Get_codigo), somente leitura
+    this_cDocumento          = ""   && Notas        CHAR(6)  - numero do documento/nota (Get_nota)
+    this_dData               = {}   && Datas        DATETIME
+    this_cObservacao         = ""   && Obses        TEXT (memo)
 
     *--------------------------------------------------------------------------
-    * Init - Configura tabela principal e chave
+    * INIT - Construtor
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-        TRY
-            DODEFAULT()
-            THIS.this_cTabela     = "SigMvPec"
-            THIS.this_cCampoChave = "cidchaves"
-            loc_lResultado = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
+        DODEFAULT()
+        THIS.this_cTabela     = "SigMvCab"
+        THIS.this_cCampoChave = "CidChaves"
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna cidchaves para auditoria
+    * ObterChavePrimaria - Chave real da tabela (CidChaves), usada por
+    * RegistrarAuditoria() e pela clausula WHERE de Atualizar()
     *--------------------------------------------------------------------------
-    FUNCTION ObterChavePrimaria()
-        RETURN THIS.this_cCidchaves
-    ENDFUNC
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidChave)
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega propriedades a partir de cursor
+    * CarregarDoCursor - Mapeia as colunas de SigMvCab que este dialogo edita
+    * (Origem/Destino/Representante/cabecalho) para as properties do BO.
+    * SELECT (par_cAliasCursor) ANTES de acessar os campos (regra #8 CLAUDE.md).
     *--------------------------------------------------------------------------
     PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
             IF USED(par_cAliasCursor)
                 SELECT (par_cAliasCursor)
-                THIS.this_cEmps        = TratarNulo(emps,       "C")
-                THIS.this_cDopes       = TratarNulo(dopes,      "C")
-                THIS.this_nNumes       = TratarNulo(numes,      "N")
-                THIS.this_nCodigos     = TratarNulo(codigos,    "N")
-                THIS.this_dDatatrans   = TratarNulo(datatrans,  "D")
-                THIS.this_nNtrans      = TratarNulo(ntrans,     "N")
-                THIS.this_cLocals      = TratarNulo(locals,     "C")
-                THIS.this_nValobxs     = TratarNulo(valobxs,    "N")
-                THIS.this_cCidchaves   = TratarNulo(cidchaves,  "C")
-                THIS.this_cEmpdopnums  = TratarNulo(empdopnums, "C")
-                THIS.this_cEmpsubs     = TratarNulo(empsubns,   "C")
-                THIS.this_dDatas       = TratarNulo(datas,      "D")
-                THIS.this_lChksubn     = ConverterParaLogico(chksubn)
-                THIS.this_dDtagends    = TratarNulo(dtagends,   "D")
-                THIS.this_lChkpagos    = ConverterParaLogico(chkpagos)
-                THIS.this_nNparcs      = TratarNulo(nparcs,     "N")
-                THIS.this_nValps       = TratarNulo(valps,      "N")
-                THIS.this_nValvars     = TratarNulo(valvars,    "N")
-                THIS.this_dVencps      = TratarNulo(vencps,     "D")
-                THIS.this_cPStatus     = TratarNulo(pstatus,    "C")
-                loc_lResultado = .T.
+
+                THIS.this_cEmpresa            = TratarNulo(emps, "")
+                THIS.this_cTipoDocumento      = TratarNulo(dopes, "")
+                THIS.this_nNumero             = TratarNulo(numes, 0)
+                THIS.this_cEmpresaDestino     = TratarNulo(empds, "")
+                THIS.this_cChaveMovimento     = TratarNulo(empdopnums, "")
+                THIS.this_cCidChave           = TratarNulo(cidchaves, "")
+
+                THIS.this_cGrupoOrigem        = TratarNulo(grupoos, "")
+                THIS.this_cContaOrigem        = TratarNulo(contaos, "")
+                THIS.this_cGrupoDestino       = TratarNulo(grupods, "")
+                THIS.this_cContaDestino       = TratarNulo(contads, "")
+                THIS.this_cRepresentante      = TratarNulo(vends, "")
+                THIS.this_cGrupoRepresentante = TratarNulo(grvends, "")
+
+                THIS.this_cTabelaDesconto     = TratarNulo(tabds, "")
+                THIS.this_cStatus             = TratarNulo(pstatus, "")
+                THIS.this_cUsuario            = TratarNulo(usuars, "")
+                THIS.this_nNumeroOP           = TratarNulo(nops, 0)
+                THIS.this_dPrazoEntrega       = TratarNulo(prazoents, {})
+                THIS.this_cCodigoMascarado    = TratarNulo(mascnum, "")
+                THIS.this_cDocumento          = TratarNulo(notas, "")
+                THIS.this_dData               = TratarNulo(datas, {})
+                THIS.this_cObservacao         = TratarNulo(obses, "")
+
+                THIS.this_lNovoRegistro = .F.
+                loc_lSucesso = .T.
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+        CATCH TO loException
+            MsgErro(loException.Message, "Erro em sigpres2BO.CarregarDoCursor")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDoCursorTemporario - Carrega campos do csTemporario (form)
+    * CarregarPorCodigo - Carrega o movimento pela chave real (CidChaves).
+    * SELECT * (como no legado, que abre o registro inteiro via csTemporario)
+    * para que CarregarDoCursor sempre encontre as colunas que le.
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursorTemporario(par_cAliasCursor)
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-        TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
-                THIS.this_cEmps        = TratarNulo(emps,       "C")
-                THIS.this_cEmpds       = TratarNulo(empds,      "C")
-                THIS.this_cDopes       = TratarNulo(dopes,      "C")
-                THIS.this_nNumes       = TratarNulo(numes,      "N")
-                THIS.this_dDatas       = TratarNulo(datas,      "D")
-                THIS.this_cGrupoOs     = TratarNulo(grupoos,    "C")
-                THIS.this_cContaOs     = TratarNulo(contaos,    "C")
-                THIS.this_cGrupoDs     = TratarNulo(grupods,    "C")
-                THIS.this_cContaDs     = TratarNulo(contads,    "C")
-                THIS.this_nNops        = TratarNulo(nops,       "N")
-                THIS.this_cUsuars      = TratarNulo(usuars,     "C")
-                THIS.this_cPStatus     = TratarNulo(pstatus,    "C")
-                THIS.this_cVends       = TratarNulo(vends,      "C")
-                THIS.this_cGrvends     = TratarNulo(grvends,    "C")
-                THIS.this_cTabds       = TratarNulo(tabds,      "C")
-                THIS.this_cObses       = TratarNulo(obses,      "C")
-                THIS.this_dPrazoents   = TratarNulo(prazoents,  "D")
-                THIS.this_cMascnum     = TratarNulo(mascnum,    "C")
-                THIS.this_cNotas       = TratarNulo(notas,      "C")
-                THIS.this_lChksubn     = ConverterParaLogico(chksubn)
-                THIS.this_lChkBxParcs  = ConverterParaLogico(chkbxparcs)
-                THIS.this_cEmpdopnums  = ALLTRIM(THIS.this_cEmps) + ;
-                                         ALLTRIM(THIS.this_cDopes) + ;
-                                         STR(THIS.this_nNumes, 6)
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+    PROCEDURE CarregarPorCodigo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
 
-    *--------------------------------------------------------------------------
-    * CarregarPorCodigo - Carrega registro do SigMvPec pela chave de negocio
-    * par_cEmpdopnums: emps+dopes+numes(6) concatenados
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarPorCodigo(par_cEmpdopnums)
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
         TRY
-            loc_cSQL = "SELECT * FROM SigMvPec WHERE empdopnums = " + ;
-                       EscaparSQL(ALLTRIM(par_cEmpdopnums))
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega") > 0
+            loc_cSQL = "SELECT * FROM SigMvCab WHERE cidchaves = " + EscaparSQL(par_cCodigo)
+
+            IF USED("cursor_4c_Carrega")
+                USE IN cursor_4c_Carrega
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+
+            IF loc_nResultado >= 0
                 IF RECCOUNT("cursor_4c_Carrega") > 0
-                    loc_lResultado = THIS.CarregarDoCursor("cursor_4c_Carrega")
-                    THIS.this_lNovoRegistro = .F.
+                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                ELSE
+                    MsgAviso("Movimenta" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada!")
                 ENDIF
+
                 IF USED("cursor_4c_Carrega")
                     USE IN cursor_4c_Carrega
                 ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Buscar - Lista registros de SigMvPec conforme filtro
-    * par_cFiltro: clausula WHERE adicional (sem o WHERE)
-    *--------------------------------------------------------------------------
-    PROCEDURE Buscar(par_cFiltro)
-        LOCAL loc_lResultado, loc_cSQL, loc_cWhere
-        loc_lResultado = .F.
-        TRY
-            loc_cWhere = ""
-            IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cWhere = " WHERE " + par_cFiltro
-            ENDIF
-            loc_cSQL = "SELECT emps, dopes, numes, datas, pstatus, cidchaves," + ;
-                       " empdopnums, valobxs, nparcs, valps, valvars, vencps" + ;
-                       " FROM SigMvPec" + loc_cWhere + ;
-                       " ORDER BY empdopnums"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados") > 0
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BuscarItens - Carrega cursor xEestI com itens do pedido
-    * par_cEmpdopnums: chave composta do pedido
-    *--------------------------------------------------------------------------
-    PROCEDURE BuscarItens(par_cEmpdopnums)
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
-        TRY
-            loc_cSQL = "SELECT ISNULL(b.codtams,'') AS codtams," + ;
-                       " ISNULL(b.codcors,'') AS codcors, b.qtds AS QtdsS, a.*" + ;
-                       " FROM SigMvItn a" + ;
-                       " LEFT JOIN SigMvIts b ON a.empdopnums = b.empdopnums" + ;
-                       " AND a.cpros = b.cpros AND a.citens = b.citens" + ;
-                       " WHERE a.empdopnums = " + EscaparSQL(ALLTRIM(par_cEmpdopnums))
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigMvItn") > 0
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * MontarCursorItens - Agrega itens por cpros+codcors+codtams para o grid
-    * Precisa que crSigMvItn ja esteja carregado (via BuscarItens)
-    *--------------------------------------------------------------------------
-    PROCEDURE MontarCursorItens(par_cEmpdopnums)
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
-        TRY
-            IF !USED("crSigMvItn")
-                IF !THIS.BuscarItens(par_cEmpdopnums)
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-
-            loc_cSQL = "SELECT empdopnums, cpros, codcors, codtams," + ;
-                       " SUM(qtds) AS qtds, SUM(qtdss) AS qtdss," + ;
-                       " MAX(qtbaixas) AS qtbaixas, MAX(qtprods) AS qtprods," + ;
-                       " MAX(qtbxprods) AS qtbxprods, 0 AS citens," + ;
-                       " SUM(tpesos) AS tpesos, SUM(descvals) AS descvals" + ;
-                       " FROM crSigMvItn" + ;
-                       " GROUP BY empdopnums, cpros, codcors, codtams"
-            SELECT &loc_cSQL INTO CURSOR crSigMvItn READWRITE
-
-            IF !USED("xEestI")
-                CREATE CURSOR xEestI (empdopnums C(29), cpros C(14), codcors C(4), ;
-                    codtams C(4), qtds N(11,3), qtdss N(11,3), qtbaixas N(11,3), ;
-                    qtprods N(11,3), qtbxprods N(11,3), citens N(4,0), ;
-                    tpesos N(11,2), descvals N(11,2), DPros C(50), OBS M)
             ELSE
-                ZAP IN xEestI
+                MostrarErro("Erro ao carregar movimenta" + CHR(231) + CHR(227) + "o:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-
-            SELECT crSigMvItn
-            INDEX ON EmpDopNums TAG EmpDopNums
-
-            LOCAL loc_nI, loc_nQtds, loc_nQtdss
-            FOR loc_nI = 1 TO RECCOUNT("crSigMvItn")
-                GO loc_nI IN crSigMvItn
-                SELECT crSigMvItn
-                SCATTER MEMVAR MEMO
-
-                IF !EMPTY(ALLTRIM(m.codtams)) OR !EMPTY(ALLTRIM(m.codcors))
-                    m.qtds = m.qtdss
-                ENDIF
-
-                LOCAL loc_cSQLPro
-                loc_cSQLPro = "SELECT cpros, DPros, PesoMs FROM SigCdPro" + ;
-                              " WHERE cpros = " + EscaparSQL(ALLTRIM(m.cpros))
-                IF SQLEXEC(gnConnHandle, loc_cSQLPro, "crSigCdPro") > 0 AND ;
-                   RECCOUNT("crSigCdPro") > 0
-                    m.tpesos   = crSigCdPro.PesoMs * m.qtds
-                    m.descvals = (m.qtbaixas / IIF(m.qtds <> 0, m.qtds, 1)) * 100
-                    m.DPros    = ALLTRIM(crSigCdPro.DPros)
-                    IF USED("crSigCdPro")
-                        USE IN crSigCdPro
-                    ENDIF
-                ENDIF
-
-                INSERT INTO xEestI FROM MEMVAR
-            ENDFOR
-
-            *-- Linha de TOTAL
-            LOCAL loc_nTqtd, loc_nTqtdb, loc_nTpeso, loc_nTQtPrd, loc_nTQtBxprd
-            SELECT xEestI
-            SUM qtds, qtbaixas, tpesos, qtprods, qtbxprods ;
-                TO loc_nTqtd, loc_nTqtdb, loc_nTpeso, loc_nTQtPrd, loc_nTQtBxprd
-            APPEND BLANK IN xEestI
-            SELECT xEestI
-            REPLACE cpros    WITH "TOTAL ->", ;
-                    qtds     WITH loc_nTqtd, ;
-                    qtbaixas WITH loc_nTqtdb, ;
-                    tpesos   WITH loc_nTpeso, ;
-                    qtprods  WITH loc_nTQtPrd, ;
-                    qtbxprods WITH loc_nTQtBxprd, ;
-                    descvals WITH ((loc_nTqtdb / IIF(loc_nTqtd <> 0, loc_nTqtd, 1)) * 100)
-            GO TOP IN xEestI
-
-            *-- Index para busca por produto+tamanho
-            SELECT xEestI
-            INDEX ON ALLTRIM(cpros) + ALLTRIM(codtams) TAG Tamanho
-
-            loc_lResultado = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+        CATCH TO loException
+            MostrarErro("Erro ao carregar:" + CHR(13) + loException.Message, "sigpres2BO.CarregarPorCodigo")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarMascaraNumeracao - Busca MascNums de SigCdPam para o tipo de OP
+    * Atualizar - UPDATE parcial em SigMvCab, restrito aos campos que este
+    * dialogo de fato edita (Origem/Destino/Representante/Status/Prazo/
+    * Documento/Data/Observacao). Equivalente ao TableUpdate() do buffer
+    * otimista do framework legado: Grupo_Salva.Salva.Click do SIGPRES2 nao
+    * tem SQL proprio (so DoDefault() + mAtivapagina1 - ver cabecalho do
+    * arquivo), mas o buffer so envia ao SQL Server as colunas realmente
+    * alteradas na tela - por isso o UPDATE aqui cobre so essas colunas,
+    * nunca a linha inteira (colunas de identificacao como Emps/Dopes/Numes/
+    * EmpDopNums/MascNum sao somente leitura nesta tela e ficam de fora).
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarMascaraNumeracao()
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
-        TRY
-            loc_cSQL = "SELECT TOP 1 MascNums FROM SigCdPam"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdPam") > 0 AND ;
-               RECCOUNT("crSigCdPam") > 0
-                SELECT crSigCdPam
-                THIS.this_cMascnum = ALLTRIM(crSigCdPam.MascNums)
-                loc_lResultado = .T.
-                IF USED("crSigCdPam")
-                    USE IN crSigCdPam
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
 
-    *--------------------------------------------------------------------------
-    * CarregarTipoOperacao - Busca dados de SigCdOpe para o tipo op
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarTipoOperacao(par_cDopes)
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
         TRY
-            loc_cSQL = "SELECT * FROM SigCdOpe WHERE Dopes = " + ;
-                       EscaparSQL(ALLTRIM(par_cDopes))
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdOpe") > 0 AND ;
-               RECCOUNT("crSigCdOpe") > 0
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+            loc_cSQL = "UPDATE SigMvCab SET"
+            loc_cSQL = loc_cSQL + " grupoos = "   + EscaparSQL(LEFT(THIS.this_cGrupoOrigem, 10)) + ","
+            loc_cSQL = loc_cSQL + " contaos = "   + EscaparSQL(LEFT(THIS.this_cContaOrigem, 10)) + ","
+            loc_cSQL = loc_cSQL + " grupods = "   + EscaparSQL(LEFT(THIS.this_cGrupoDestino, 10)) + ","
+            loc_cSQL = loc_cSQL + " contads = "   + EscaparSQL(LEFT(THIS.this_cContaDestino, 10)) + ","
+            loc_cSQL = loc_cSQL + " vends = "     + EscaparSQL(LEFT(THIS.this_cRepresentante, 10)) + ","
+            loc_cSQL = loc_cSQL + " grvends = "   + EscaparSQL(LEFT(THIS.this_cGrupoRepresentante, 10)) + ","
+            loc_cSQL = loc_cSQL + " tabds = "     + EscaparSQL(LEFT(THIS.this_cTabelaDesconto, 10)) + ","
+            loc_cSQL = loc_cSQL + " pstatus = "   + EscaparSQL(LEFT(THIS.this_cStatus, 1)) + ","
+            loc_cSQL = loc_cSQL + " nops = "      + FormatarNumeroSQL(THIS.this_nNumeroOP, 0) + ","
+            loc_cSQL = loc_cSQL + " prazoents = " + FormatarDataSQL(THIS.this_dPrazoEntrega) + ","
+            loc_cSQL = loc_cSQL + " notas = "     + EscaparSQL(LEFT(THIS.this_cDocumento, 6)) + ","
+            loc_cSQL = loc_cSQL + " datas = "     + FormatarDataSQL(THIS.this_dData) + ","
+            loc_cSQL = loc_cSQL + " obses = "     + EscaparSQL(THIS.this_cObservacao)
+            loc_cSQL = loc_cSQL + " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChave)
 
-    *--------------------------------------------------------------------------
-    * CarregarSubDadosOperacao - Busca SigOpCdc para tipo de operacao
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarSubDadosOperacao(par_cDopes)
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
-        TRY
-            loc_cSQL = "SELECT * FROM SigOpCdc WHERE Dopes = " + ;
-                       EscaparSQL(ALLTRIM(par_cDopes))
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigOpCdc") > 0
-                loc_lResultado = .T.
+            IF USED("cursor_4c_Update")
+                USE IN cursor_4c_Update
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarDescricaoCliente - Busca Rclis de SigCdCli
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDescricaoCliente(par_cConta)
-        LOCAL loc_lResultado, loc_cSQL, loc_cDescricao
-        loc_lResultado = .F.
-        loc_cDescricao = ""
-        TRY
-            IF !EMPTY(ALLTRIM(par_cConta))
-                loc_cSQL = "SELECT TOP 1 Rclis FROM SigCdCli" + ;
-                           " WHERE Iclis = " + EscaparSQL(ALLTRIM(par_cConta))
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdCli") > 0 AND ;
-                   RECCOUNT("crSigCdCli") > 0
-                    loc_cDescricao = ALLTRIM(crSigCdCli.Rclis)
-                    loc_lResultado = .T.
-                ENDIF
-                IF USED("crSigCdCli")
-                    USE IN crSigCdCli
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        THIS.this_cDconta = loc_cDescricao
-        RETURN loc_lResultado
-    ENDPROC
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Update")
 
-    *--------------------------------------------------------------------------
-    * SalvarAlteracoes - Persiste alteracoes do csTemporario de volta ao SigMvPec
-    * Atualiza apenas os campos editaveis pelo usuario neste form
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarAtualizacao()
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
-        TRY
-            loc_cSQL = "UPDATE SigMvPec SET" + ;
-                       " datas   = " + FormatarDataSQL(THIS.this_dDatas) + "," + ;
-                       " pstatus = " + EscaparSQL(THIS.this_cPStatus) + ;
-                       " WHERE empdopnums = " + EscaparSQL(THIS.this_cEmpdopnums)
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+            IF loc_nResultado < 0
+                MsgErro("Erro ao atualizar movimento:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ELSE
                 THIS.RegistrarAuditoria("UPDATE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao atualizar pedido:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                loc_lSucesso = .T.
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+
+            IF USED("cursor_4c_Update")
+                USE IN cursor_4c_Update
+            ENDIF
+        CATCH TO loException
+            MsgErro(loException.Message, "Erro em sigpres2BO.Atualizar")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ExecutarExclusao - Exclui pedido do SigMvPec (e itens relacionados)
+    * Inserir() e ExecutarExclusao() permanecem com o comportamento herdado
+    * de BusinessBase (recusar a operacao): no fonte legado do SIGPRES2 nao
+    * ha Append/Delete contra SigMvCab - o dialogo so edita um registro que
+    * o form pai ja havia populado em csTemporario antes de abri-lo (ver
+    * cabecalho do arquivo). Este BO nunca cria nem exclui movimentos.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lResultado, loc_cSQL
-        loc_lResultado = .F.
+
+    *--------------------------------------------------------------------------
+    * CarregarItens - Carrega os itens do movimento (grid fwgrade1/xEestI do
+    * legado) em cursor_4c_Itens. Fonte: SigMvItn (a) LEFT JOIN SigMvIts (b)
+    * por EmpDopNums+Cpros+CItens (mesma juncao do PROCEDURE Init legado -
+    * regra #42 CLAUDE.md, nunca ALLTRIM na chave posicional). Saldo =
+    * Qtds - QtBaixas ja calculado no SELECT (equivalente ao
+    * Column4.ControlSource legado 'xEestI.Qtds - xEestI.QtBaixas', ramo
+    * Else de montagrades - o ramo If(gcTpInstalas='V') nao foi portado:
+    * essa global de configuracao nao existe na nova arquitetura, e o ramo
+    * Else e o que bate com os headers estaticos do SCX/layout.json).
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarItens()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_cSQL = "DELETE FROM SigMvItn WHERE empdopnums = " + ;
-                       EscaparSQL(THIS.this_cEmpdopnums)
-            SQLEXEC(gnConnHandle, loc_cSQL)
-
-            loc_cSQL = "DELETE FROM SigMvIts WHERE empdopnums = " + ;
-                       EscaparSQL(THIS.this_cEmpdopnums)
-            SQLEXEC(gnConnHandle, loc_cSQL)
-
-            loc_cSQL = "DELETE FROM SigMvPec WHERE empdopnums = " + ;
-                       EscaparSQL(THIS.this_cEmpdopnums)
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("DELETE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao excluir pedido:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            IF USED("cursor_4c_Itens")
+                USE IN cursor_4c_Itens
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+
+            loc_cSQL = "SELECT a.cpros, a.dpros, a.qtds, a.qtprods," + ;
+                " a.qtbaixas, a.qtbxprods, a.citens, a.tpesos," + ;
+                " a.descvals, ISNULL(b.codtams, '') AS codtams," + ;
+                " a.obs, (a.qtds - a.qtbaixas) AS saldo" + ;
+                " FROM sigmvitn a" + ;
+                " LEFT JOIN sigmvits b ON b.empdopnums = a.empdopnums" + ;
+                " AND b.cpros = a.cpros AND b.citens = a.citens" + ;
+                " WHERE a.empdopnums = " + EscaparSQL(THIS.this_cChaveMovimento) + ;
+                " ORDER BY a.citens"
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Itens")
+
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao carregar itens do movimento:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar itens:" + CHR(13) + loException.Message, "sigpres2BO.CarregarItens")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - INSERT em SigMvPec com todos os campos obrigatorios
-    * cidchaves gerado como emps(3)+dopes(10)+numes(6)+segundos(1)
+    * CarregarOperacoes - Carrega os codigos de operacao vinculados ao
+    * movimento (grid GradeOperacao/TmpOperacao do legado). Fonte: SigMvPec
+    * filtrado por EmpDopNums (mesmo filtro do legado
+    * CursorQuery('SigMvPec', 'TmpOperacao', 'EmpDopNums', pEdn)).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lResultado, loc_cSQL, loc_cCidchaves, loc_cEmpdopnums
-        loc_lResultado = .F.
+    PROCEDURE CarregarOperacoes()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            *-- Gerar cidchaves (char 20): emps 3 + dopes 10 + numes 6 + tick 1
-            loc_cEmpdopnums = LEFT(ALLTRIM(THIS.this_cEmps) + SPACE(3), 3) + ;
-                              LEFT(ALLTRIM(THIS.this_cDopes) + SPACE(20), 20) + ;
-                              RIGHT("      " + ALLTRIM(STR(THIS.this_nNumes, 6)), 6)
-            loc_cCidchaves  = LEFT(loc_cEmpdopnums, 19) + ;
-                              RIGHT(ALLTRIM(STR(INT(SECONDS()), 1)), 1)
-
-            THIS.this_cCidchaves  = LEFT(loc_cCidchaves, 20)
-            THIS.this_cEmpdopnums = LEFT(loc_cEmpdopnums, 29)
-
-            loc_cSQL = "INSERT INTO SigMvPec" + ;
-                       " (emps, dopes, numes, codigos, datatrans, ntrans," + ;
-                       "  locals, valobxs, cidchaves, empdopnums, empsubns," + ;
-                       "  datas, chksubn, dtagends, chkpagos, nparcs," + ;
-                       "  valps, valvars, vencps, pstatus)" + ;
-                       " VALUES (" + ;
-                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cEmps), 3)) + "," + ;
-                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cDopes), 20)) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nNumes) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nCodigos) + "," + ;
-                       FormatarDataSQL(THIS.this_dDatatrans) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nNtrans) + "," + ;
-                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cLocals), 10)) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nValobxs) + "," + ;
-                       EscaparSQL(THIS.this_cCidchaves) + "," + ;
-                       EscaparSQL(THIS.this_cEmpdopnums) + "," + ;
-                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cEmpsubs), 3)) + "," + ;
-                       FormatarDataSQL(THIS.this_dDatas) + "," + ;
-                       IIF(THIS.this_lChksubn, "1", "0") + "," + ;
-                       FormatarDataSQL(THIS.this_dDtagends) + "," + ;
-                       IIF(THIS.this_lChkpagos, "1", "0") + "," + ;
-                       FormatarNumeroSQL(THIS.this_nNparcs) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nValps) + "," + ;
-                       FormatarNumeroSQL(THIS.this_nValvars) + "," + ;
-                       FormatarDataSQL(THIS.this_dVencps) + "," + ;
-                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cPStatus), 1)) + ;
-                       ")"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("INSERT")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao inserir pedido:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            IF USED("cursor_4c_Operacoes")
+                USE IN cursor_4c_Operacoes
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+
+            loc_cSQL = "SELECT DISTINCT codigos FROM sigmvpec" + ;
+                " WHERE empdopnums = " + EscaparSQL(THIS.this_cChaveMovimento) + ;
+                " ORDER BY codigos"
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Operacoes")
+
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao carregar opera" + CHR(231) + CHR(245) + "es do movimento:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar opera" + CHR(231) + CHR(245) + "es:" + CHR(13) + loException.Message, "sigpres2BO.CarregarOperacoes")
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

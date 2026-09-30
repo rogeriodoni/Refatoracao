@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both fixes applied. Summary:
+
+**Fixed (2 genuine issues):**
+1. `CarregarLista` (grd_4c_Lista) ÔÇö added `loc_oGrid.RecordSource = ""` before the SQLEXEC that requeries `cursor_4c_Lista`, matching the safe pattern already established in this same file's `MontaGrade`.
+2. `ValidarCpfCnpjFornecedor` ÔÇö moved the `THIS.AtualizarCpfEGrupoPorConta(loc_oPagina)` call to run unconditionally at the end of the handler (was buried inside one nested success branch only), matching the sibling handlers `ValidarContaFornecedor`/`ValidarDescricaoConta`, so the grade of estoque resyncs correctly even when access is denied mid-lookup.
+
+**Not changed (18 findings, all confirmed false positives by grepping the actual file against documented audit-tool bug patterns):**
+- 7├ù BINDEVENT-PARAMS ÔÇö handlers already declare params inline.
+- METODO-INEXISTENTE `THIS.Width()` ÔÇö no such call exists in the file.
+- CONTAINER-VISIVEL `cnt_4c_Cabecalho` ÔÇö always `.Visible = .T.`, matches CLAUDE.md rule #11 (never detect header by name).
+- GRID-SQLEXEC `cursor_4c_Estoque` ÔÇö `MontaGrade` already clears `RecordSource` before SQLEXEC.
+- 4├ù GRID-HEADER ÔÇö captions map 1:1 to the SQL SELECT, mismatch is an encoding-corruption artifact of the audit's legado-text extraction.
+- 2├ù LAYOUT-POSITION `Label1` ÔÇö name collision: our `lbl_4c_Label1` ("Per├¡odo :", Pagina.Lista) is a different control than the legado's `Label1` in `Pagina.Dados.Pageframe1.Page1`.
+- 2├ù CARGA-DADOS OptionGroups ÔÇö both values are read only on explicit button click (Confirmar/Processar), not a live grid filter.
+
+No BO changes were needed for this pass.

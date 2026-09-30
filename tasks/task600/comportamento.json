@@ -1,0 +1,1501 @@
+{
+  "resumo": {
+    "totalMetodos": 89,
+    "metodosComSQL": 15,
+    "metodosComValidacao": 24,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGravarLog", "fDtoSQL", "from", "For", "Found", "fwBuscaExt", "File", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "If crDistribui.QtdDistr <= 0\n\tReplace crDistribui.QtdDistr With 0\nEndIf\n\nSelect crDistribui\nlnReg = Recno()\nSum QtdDistr for Cpros = crDisponivel.Cpros to lnQtdDistr\nGo lnReg\n\nIf crDisponivel.Sqtds - lnQtdDistr < 0\n\tMessagebox('Saldo insuficiente para movimentar.',48,'Aviso')\n\tReplace QtdDistr With 0 in crDistribui\n\tSelect crDistribui\n\tlnReg = Recno()\n\tSum QtdDistr for Cpros = crDisponivel.Cpros to lnQtdDistr\n\tGo lnReg\nEndif \n\nReplace QtdSaida With lnQtdDistr in crDisponivel\nReplace QtdSaldo Wit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigPrDis\nLocate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "* Incluindo os Registros\nllOK = .t.\nIf Not ThisForm.poDataMgr.Update('crSigPrDis')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1.0)')\n\tllOK = .f.\nEndIf\n\nIf llOK\n\tWith ThisForm\n\t\t.poDataMgr.Commit()\n\t\t=fGravarLog('C',ThisForm.Name,'INSERIR',;\n\t\t\t\t\t('Tabela('+.poDataMgr.pfSqlTabela(2).pcTabela+;\n\t\t\t\t\t ') C.P.('+.poDataMgr.pfSqlTabela(2).pcChaveprimaria+')='+;\n\t\t\t\t\t Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(2).pcNomecursor+'.'+.poDataMgr.pfSqlTabel... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Update,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "_Codigo = Iif(Empty(TmpSigPrDis.Codigos), Replicate(Chr(254), 10), TmpSigPrDis.Codigos)\n\nllOK = .t.\n\n* Eliminando os Registros\nIf llOK\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPrDis Where Codigos = ?_Codigo], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')\n\t\tllOK = .f.\n\tEndIf\nEndIf\n\n* Incluindo os Registros\nIf llOK\n\tIf Not ThisForm.poDataMgr.Update('crSigPrDis')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexã... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SQLExecute,Update,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value\nldDataf = ThisForm.Pagina.Lista.Dt_final.Value\nldDatai = fDtoSQL(ldDatai)\nldDataf = fDtoSQL(ldDataf,'23:59:59')\n\nDodefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\t_Codigo = []\n\t\tldDatai = fDtoSQL(Date())\n\t\tldDataf = fDtoSQL(Date(),'23:59:59')\t\t\n\t\tlcQueryLista = [Select Distinct Codigos, Datas from SigPrDis where Datas Between ?ldDatai And ?ldDataF]\n\t\tlcQueryPrDis = [Select * from SigPrDis where Codigos = ?_Codigo]\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrDis', 'Codigos', 'TmpSigPrDis', '', ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Value = Date,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Destroy",
+      "linhas": 9,
+      "codigoOriginal": "**\nIf Used( \"crDistribui\" )\n\tUse IN crDistribui\nEndIf\n\nIf Used( \"crDisponivel\" )\n\tUse IN crDisponivel\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Click",
+      "linhas": 241,
+      "codigoOriginal": "Lparameters Opcao\n\nThisform.LockScreen   = .T.\nllOk = .t.\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndif\n\n_Codigo = TmpSigPrDis.Codigos\nthisform.podatamgr.Requery([crSigPrDis])\n\nthisform.pagina.dados.pageframe1.page1.grdEstoque.RecordSource = []\n\nlcQuery = [Select 0 as nMarca, * From SigCdCeg Where TpCads = 3]\nIf ThisForm.PodataMgr.SqlExecute(lcquery,'crSigCdCeg') < 1\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "from",
+        "metodosFormChamados": "Requery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Click",
+      "linhas": 44,
+      "codigoOriginal": "If Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])\n\tIf Reccount([crSigMvCab]) > 0 && Se já foi processado pega a numeração gerada\n\t\t_Codigo = TmpSigPrDis.Codigos\n\tElse \n\t\tSelect crSigPrDis\n\t\tZap\n\t\n\t\t_Codigo = Iif(thisform.pcescolha = [INSERIR],Alltrim(Str(fGerUniqueKey([SIGPRDIS]),10)),TmpSigPrDis.Codigos)\n\n\t\tSelect crDisponivel\n\t\tSet Relation to\t\t\n\n\t\tSelect crDistribui\n\t\tSet Order To\n\t\tScan\n\t\t\tIf crDistribui.QtdDistr # 0\n\t\t\t\tInsert Into crSigPrDis (Codigos, Datas, CidChaves, Cpros, CodCors, CodT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcescolha = [INSERIR],Alltrim,pcescolha = [ALTERAR],Datetime",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\n\tThisForm.Pagina.Lista.Enabled = .T. \n\tThisForm.Pagina.ActivePage = 1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Lista.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Lista.Dt_final",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Lista.Dt_final",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Lista.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 8,
+      "codigoOriginal": "ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value\nldDataf = ThisForm.Pagina.Lista.Dt_final.Value\nldDatai = fDtoSQL(ldDatai)\nldDataf = fDtoSQL(ldDataf,'23:59:59')\n\nthisform.podatamgr.Requery([TmpSigPrDis])\nThisForm.Pagina.Lista.Grade.SetFocus()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Requery,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "thisform.pagina.dados.Grupo_Salva.salva.Enabled = .f.\nthisform.pagina.dados.pageframe1.page2.Enabled = .f.\nthisform.pagina.dados.pageframe1.page3.Enabled = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "this.grdDisponivel.col01_Codigo.SetFocus()\nthis.grdDisponivel.Refresh()\nthis.grdDistribui.Refresh()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Update crSigCdCeg Set nMarca = 1\nthisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Update crSigCdCeg Set nMarca = 0\ntthisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace nMarca With Iif(crSigCdCeg.nMarca = 0,1,0) In crSigCdCeg\nthisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 13, 32)\n\t\tReplace nMarca With Iif(crSigCdCeg.nMarca = 0,1,0)In crSigCdCeg\nEndcase\nthisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\n*!*\tDo Case\n*!*\t\tCase InList(nKeyCode, 9) && TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n*!*\t\t\tNoDefault\n\n*!*\t\tCase InList(nKeyCode, 15) && SHIFT + TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n*!*\t\t\tNoDefault\n*!*\tEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\n*!*\tDo Case\n*!*\t\tCase InList(nKeyCode, 9) && TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n*!*\t\t\tNoDefault\n\n*!*\t\tCase InList(nKeyCode, 15) && SHIFT + TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n*!*\t\t\tNoDefault\n*!*\tEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\n*!*\tDo Case\n*!*\t\tCase InList(nKeyCode, 9) && TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus\n*!*\t\t\tNoDefault\n\n*!*\t\tCase InList(nKeyCode, 15) && SHIFT + TAB\n*!*\t\t\tThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus\n*!*\t\t\tNoDefault\n*!*\tEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.processar",
+      "evento": "Click",
+      "linhas": 84,
+      "codigoOriginal": "Local loEmp As Object, loGrp As Object, loCta As Object \nLocal logrdDisponivel As Object, logrdDistribui As Object \n\nlogrdDisponivel = ThisForm.Pagina.dados.pageframe1.page2.grdDisponivel\nlogrdDistribui = ThisForm.Pagina.dados.pageframe1.page2.grdDistribui \n\nSelect crSigCdceg\nGo top \nCount for nMarca = 1 to lnSel1\nIf lnSel1 = 0 \n\t=MessageBox('Nenhum estoque foi selecionado.', 16, 'Aviso')\t\t\n\tReturn .f.\nEndif\n\nSelect 0\nlogrdDisponivel.RecordSourceType = 1 \t&& Alias\nlogrdDisponivel.RecordSource = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel",
+      "evento": "Procedure",
+      "linhas": 140,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nm.SelectPro   = [Select a.cpros,a.cgrus,a.dpros,a.sgrus,a.cunis,a.cunips,a.ifors,a.reffs,a.qmins,a.valors,a.moedas,a.icms,]+;\n\t\t\t\t[a.custofs,a.moecusfs,a.margems,a.markupa,a.pvens,a.moevs,a.dtincs,a.datas,a.pesoms,a.fcustos,a.moepcs,]+;\n\t\t\t\t[a.fvendas,a.moepvs,a.obspeds,a.obspes,a.DPro2s,a.linhas,a.situas,a.colecoes,a.cftios,a.pftios,a.mftios,]+;\n\t\t\t\t[a.pcuss,a.moecs,a.pvideals,a.CodCors,c.rclis,g.dg... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For,Found",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_cd_fornecedor,Get_ref_fornecedor,Get_cd_grupo,Get_cd_sgrupo,Get_peso_medio,Get_GrVenda,Get_ds_fornecedor,Get_ds_grupo,Get_ds_sgrupo,Get_GrDVenda,Get_CdLinha,Get_DsLinha,Get_pr_venda,Get_pr_venda_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf IsNull(ThisForm.poObjExt1)\n\t\tIf goSistema.ConsultaAberta\n\t\t\t=MessageBox([Pesquisa Global de Produtos em Execução!!!], 0+16, [Atenção!!!])\n\t\t\tReturn\n\t\tElse\n\t\t\tDo Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow\n\t\tEndIf\n\tEndIf\n\n\tIf (Type([ThisForm.poObjExt1])=[O])\n\t\tWith ThisForm.poObjExt1\n\t\t\t.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()\n\t\t\t.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 14)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_produto_inicial,get_produto_final,cmd_consulta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR.Text1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Inlist( ThisForm.pcescolha, 'INSERIR', 'ALTERAR' ))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Calcula_Saldo()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calcula_Saldo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Inlist( ThisForm.pcescolha, 'INSERIR', 'ALTERAR' ))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Localização')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pagina.dados.pageframe1.page2.grdDisponivel.col01_Codigo.SetFocus()\n\t\tNoDefault\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.FigJpg",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lcArquivo\n\nlcArquivo = Sys(2023) + '\\' + goSistema.Sys2015Tmp + Sys(2015) + '.Jpg'\n\nSelect crDisponivel\nlcCodPro  = crDisponivel.Cpros\n\nlcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]\nThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')\n\n* Figura no Campo Memo\nIf Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR]) And (Empty(This.Parent.get_cgrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcescolha,[INSERIR],[ALTERAR]) And",
+        "controlesReferenciados": "get_cgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dgrupo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.pagina.dados.pageframe1.page2\n\tIf Empty(This.Value)\n\t\t.get_cgrupo.Value = ''\n\t\t.get_cgrupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tm.loLista = NULL\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\t.get_cgrupo.Value ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cgrupo,Get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cgrupo",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\nWith ThisForm.pagina.dados.pageframe1.page2\n\tIf Empty(This.Value)\n\t\t.Get_DGrupo.Value = ''\n\t\t.Get_DGrupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tm.loLista = NULL\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\t.get_cgrupo.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DGrupo,get_cgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Filtrar",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Filtrar",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Select crDisponivel\nIf Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)\n\tSet Key To\nElse\n\tIf !Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)\n\t\tIndex on Cgrus Tag Cgrus\n\t\tSet Key To thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value\n\tEndif\n\tIf Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And !Empty(thisform.pag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cgrupo,get_csgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_produto_inicial",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If !Empty(this.Value)\n\tSelect crDisponivel\n\tlnReg = Recno()\n\tGo top\n\tLocate for Cpros = this.Value\n\tIf Eof()\n\t\tGo lnReg\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_fornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_fornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ref_fornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_peso_medio",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_sgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_sgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrVenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrDvenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_CdLinha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_DsLinha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getCodFinP",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getDesFinP",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dsgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR]) And Empty(This.Parent.Get_CSGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CSGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dsgrupo",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.pagina.dados.pageframe1.page2\n\tIf Empty(This.Value)\n\t\t.Get_CSGrupo.Value = ''\n\t\t.Get_CSGrupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Descricaos',This.Value,'Sub-Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')\n\t\t\tm.loLi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CSGrupo,Get_DSgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_csgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_csgrupo",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.pagina.dados.pageframe1.page2\n\tIf Empty(This.Value)\n\t\t.Get_DSgrupo.Value = ''\n\t\t.Get_DSgrupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Codigos',This.Value,'Sub-Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')\n\t\t\tm.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')\n\t\t\tm.loLista... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DSgrupo,Get_CSGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes",
+      "evento": "Activate",
+      "linhas": 7,
+      "codigoOriginal": "Select crItnOpera\nSet Order To Ordem\nSet Key To crCabOpera.Dopes + Str(crCabOpera.Numes, 6) In crItnOpera\nGo Top In crItnOpera\nThisForm.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.Refresh() \nThisForm.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.Column1.SetFocus()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7.Text1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase InList(nKeyCode, 9) && TAB\n\t\tThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus\n\t\tNoDefault\n\n\tCase InList(nKeyCode, 15) && SHIFT + TAB\n\t\tThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus\n\t\tNoDefault\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cmdProcessar",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cmdProcessar",
+      "evento": "Click",
+      "linhas": 404,
+      "codigoOriginal": "Select crDistribui\nCount for QtdDistr > 0 to lnTotDis\nIf lnTotDis = 0\n\tMessagebox([Nenhum produto foi informado para distribuir],48,[Aviso])\n\tReturn .f.\nEndif \n\nSelect crDisponivel\nGo top\nCount for QtdSaldo < 0 to lnQtdNeg\nIf lnQtdNeg > 0\n\tMessagebox([Existe produtos distribuídos que estão ficando com saldo negativo.] + Chr(13) +[Favor checar antes de processar.],48,[Aviso])\n\tReturn .f.\nEndif\n\n*** Atualiza tabela temporária com os estoques que serão distribuídos\nlccidquerys = fUniqueIds()\nSelect... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "UpDate,RollBack,commit,SqlExecute,fSqlApagarTmp",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRDIS.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPrDis Where Codigos = ?_Codigo], '') < 1)",
+      "tabelas": "SigPrDis",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Init",
+      "queryOriginal": "\t\tlcQueryLista = [Select Distinct Codigos, Datas from SigPrDis where Datas Between ?ldDatai And ?ldDataF]",
+      "tabelas": "SigPrDis",
+      "colunas": "Datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Init",
+      "queryOriginal": "\t\tlcQueryPrDis = [Select * from SigPrDis where Codigos = ?_Codigo]",
+      "tabelas": "SigPrDis",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Click",
+      "queryOriginal": "lcQuery = [Select 0 as nMarca, * From SigCdCeg Where TpCads = 3]",
+      "tabelas": "SigCdCeg",
+      "colunas": "TpCads",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Click",
+      "queryOriginal": "\t\t\t\tInsert Into crSigPrDis (Codigos, Datas, CidChaves, Cpros, CodCors, CodT... [TRUNCADO]",
+      "tabelas": "crSigPrDis",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca.Click",
+      "queryOriginal": "Update crSigCdCeg Set nMarca = 1",
+      "tabelas": "crSigCdCeg",
+      "colunas": "nMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca.Click",
+      "queryOriginal": "Update crSigCdCeg Set nMarca = 0",
+      "tabelas": "crSigCdCeg",
+      "colunas": "nMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRDIS.Pagina.Dados.Pageframe1.Page2.FigJpg.Click",
+      "queryOriginal": "lcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ] ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "cpros,FigJpgs,Sqlexecutelcsql,CrTmpPro",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrDis", "SigCdCeg", "crSigPrDis", "crSigCdCeg", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

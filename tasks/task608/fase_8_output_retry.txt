@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada. Resumo:
+
+## Por que a fase tinha reprovado
+
+N├úo era defeito no c├│digo. O 9┬║ ramo do gate (`utilitario-arquivo`) foi acrescentado ao `OrquestradorMigracao.ps1` **durante** a pr├│pria Fase 8 ÔÇö e o PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo, ent├úo o processo em curso validou com o gate antigo. Rodei os dois gates isoladamente (extraindo as fun├º├Áes via AST, sem dot-source do orquestrador) e ambos passam:
+
+- gate de m├®todos ÔåÆ `Form COMPLETO` (`BtnCancelarClick`/`CarregarLista` dispensados pelo ramo; `FormParaBO`/`BOParaForm`/`BtnOKClick` exigidos e presentes)
+- `Test-CompletudeCodigo` ÔåÆ OK nos dois arquivos
+
+## Defeito real que encontrei e corrigi
+
+N├úo me limitei a reconfirmar o que a execu├º├úo anterior alegou. O form declarava `WindowType = 0`, transcrito do baseclass `form` do SCX ÔÇö e isso **quebrava a tela**, porque o modo de abertura mudou entre os sistemas:
+
+| | como abre | efeito |
+|---|---|---|
+| legado | `Do Form SigPrEst` | o VFP guarda a refer├¬ncia; o modeless fica na tela |
+| migrado | `menu.prg`: `CREATEOBJECT` em vari├ível LOCAL + `Show()` | `Show()` retorna na hora, o `PROCEDURE` termina, a ├║ltima refer├¬ncia cai |
+
+Medido no VFP9 instanciando o form exatamente como o menu o abre: `FormCount` = 1 dentro do procedimento, **0** depois dele (`Destroy` dispara). Sem erro, sem log ÔÇö o usu├írio clicaria em Ferramentas ÔåÆ Gerar Estrutura e a caixa piscaria e sumiria. Corrigido para `WindowType = 1` / `ShowWindow = 1` (can├┤nico: 435 dos 459 forms). As propriedades que de fato trancam a tela (`TitleBar = 0`, `ControlBox = .F.`, `Closable = .F.`) seguem transcritas do legado.
+
+## Prova funcional (n├úo s├│ "a tela abre")
+
+Sandbox com dois `.DBF` (ALFA: 3 campos/2 tags; BETA: 2 campos/1 tag), exercitando os dois caminhos do legado:
+
+- **├ìndice sem Estrutura** ÔåÆ rodap├® "Processamento Interrompido.", **um ├║nico** di├ílogo, nenhum arquivo criado, bot├Áes reabilitados
+- **Estrutura + ├ìndice** ÔåÆ `ArqDBF.DBF` com **5 linhas** (metadados corretos) e `ArqInd.DBF` com **3 tags**; rodap├® "Processamento Finalizado."
+- `CURDIR` restaurado ap├│s o `SET DEFAULT` global; `BtnEncerrarClick` fecha (`FormCount` = 0)
+
+Compila├º├úo limpa, nenhum `.err`. Artefatos de teste removidos; nada commitado.
+
+## Dois pontos para voc├¬ decidir
+
+1. **Prov├ível defeito sist├¬mico, n├úo corrigido**: outros **8 forms** declaram `WindowType = 0` e s├úo abertos pelo menu com o mesmo `CREATEOBJECT` + LOCAL + `Show()` (FormIct, Formint, Formlch, FormGr1, FormICD, FormICN, FormICO, FormVca). N├úo verifiquei um a um nem mexi neles ÔÇö fora do escopo desta fase e merece passada pr├│pria.
+2. **Incidente da execu├º├úo anterior**: aquela sess├úo disparou por acidente uma migra├º├úo real (task609/`SigPrEtq`) ao fazer dot-source do orquestrador, e reverteu. Conferi: `SigPrEtqBO.prg` est├í com 892 linhas e limpo no git, os `SCX/SCT` em `origem\` est├úo limpos e `tasks\task609` n├úo existe. O reverte pega o `HEAD` ÔÇö se havia edi├º├úo n├úo-commitada nesse BO antes, ela n├úo voltou.
+
+Registrei a li├º├úo do `WindowType` na mem├│ria e compactei o `MEMORY.md` (160 ÔåÆ 124 linhas, 178 links, zero quebrados) a pedido do harness.

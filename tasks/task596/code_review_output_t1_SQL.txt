@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei o achado apontado pelo pass SQL e ├® **falso positivo** ÔÇö nenhum arquivo foi alterado.
+
+O que o pass acusou: coluna `SERVICOS` "inventada" num WHERE que n├úo existe no legado.
+
+O que realmente existe no c├│digo (`SIGPRCPRBO.prg:387-388`):
+```foxpro
+THIS.ConsultarRegistro("SigCdOpe", "cursor_4c_TipoOper", ;
+    "Dopes = " + EscaparSQL(loc_cDopesOrigem), "Globalizas, Servicos")
+loc_lGlobalOuServico = (cursor_4c_TipoOper.Globalizas = 1 OR cursor_4c_TipoOper.Servicos = 1)
+```
+`"Globalizas, Servicos"` ├® o **4┬║ argumento** de `ConsultarRegistro` ÔÇö a lista de *colunas selecionadas* (`par_cCampos`), n├úo parte do WHERE. O WHERE real ├® s├│ `Dopes = ...`.
+
+Conferi contra o legado (`tasks\task596\SIGPRCPR_form_codigo_fonte.txt:539-540`):
+```foxpro
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', LocalEest.Dopes)
+If (crSigCdOpe.Globalizas = 1) Or (crSigCdOpe.Servicos = 1)
+```
+Mesmo padr├úo: consulta por `Dopes`, depois compara `Globalizas`/`Servicos` **em mem├│ria**. O c├│digo migrado ├® transcri├º├úo fiel ÔÇö n├úo h├í condi├º├úo WHERE inventada para remover.
+
+Registrei essa variante (coluna confundida entre "lista de campos selecionados" e "condi├º├úo WHERE") na mem├│ria existente sobre falsos positivos desse pass (`feedback_sql_filtro_inventado_lookup_outra_tabela.md`), j├í que ├® a 4┬¬ variante confirmada da mesma causa raiz.

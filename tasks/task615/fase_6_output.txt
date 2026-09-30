@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All checks pass ÔÇö no stub comments, no MESSAGEBOX usage, and all BINDEVENT-bound handlers are PUBLIC (no PROTECTED prefix). The Fase 6/8 implementation is complete.
+
+## Summary
+
+I completed **Fase 6/8** for `FormSigPrGlo.prg` (Processamento de O.P.), adding the remaining fields and all lookups:
+
+**Fields added** (populating containers already scaffolded in Fase 3-5):
+- `cnt_4c_Conta` / `cnt_4c_Responsavel`: Grupo/Conta/Descri├º├úo textboxes + direct labels "Conta :" / "Vendedor :"
+- `cnt_4c_Empresa`: c├│digo/raz├úo social + checkbox "N├úo Empenhar Pedras" + label "Empresa :", with default company code/name pre-loaded from `go_4c_Sistema.cCodEmpresa` + `SigCdEmp`
+- `cnt_4c_Previsao`: data de previs├úo/gera├º├úo, defaulted from the BO's already-computed values
+- `cnt_4c_Op`: n├║mero manual da O.P.
+
+**Lookups implemented** (all via `FormBase.AbrirLookupCanonico`, since the legacy `fAcessoContab`/`fAcessoContas`/`fAcessoEmpresa` Fortyus functions aren't ported):
+- Grupo ÔåÆ `SigCdGcr` (Codigos/Descrs)
+- Conta ÔåÆ `SigCdCli` (Iclis/Rclis) filtered by grupo, searchable by code or description
+- Empresa ÔåÆ `SigCdEmp` (Cemps/Razas), searchable by code or description
+- Movimenta├º├úo ÔåÆ `SigCdOpe` (single-column Dopes, filtered by `Globalizas IN (1,2)`)
+- Tipo de O.P. ÔåÆ `SigInTgo` (Codigos/Descs)
+- N├║mero da O.P. ÔåÆ duplicate check against `SigOpPic.Numps` (not a picker, matches legacy)
+
+Each handler follows the Enter/Tab/F4 KeyPress pattern with exact-match-first SQL check before opening the picker. I also added `AjustarVisibilidadeCondicional()` to reapply conditional hiding (Cnt_Previsao/Chec_pedra/Cnt_Op) *after* `TornarControlesVisiveis()`, since that method forces everything visible.
+
+Verified the file compiles cleanly with VFP9 (no errors) and has balanced PROCEDURE/ENDPROC and WITH/ENDWITH blocks.

@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. Resumo do que foi feito e por qu├¬.
+
+## O entreg├ível nominal n├úo se aplica ÔÇö e n├úo inventei bot├úo
+
+A fase pede `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`. O `SIGPREST.SCX` **n├úo tem superf├¡cie CRUD nenhuma**: herda de `form` puro (n├úo `frmcadastro`), sem `Grupo_Op`, sem `pcEscolha`, e o dump tem exatamente **3 m├®todos com c├│digo** ÔÇö `Load`, `OK.Click`, `Cancela.Click`. Criar os quatro seria inventar bot├úo (viola o PILAR 1) ou deixar m├®todo vazio (proibido pela regra de completude).
+
+Conferi o gate da Fase 7 (`OrquestradorMigracao.ps1:7071`): toda evid├¬ncia de CRUD d├í 0, o legado tem 2 bot├Áes ÔåÆ m├¡nimo 2 handlers, e o form tem os 2 reais. **Passa.**
+
+## Defeito real encontrado e corrigido no evento do bot├úo
+
+Os dois handlers j├í existiam da Fase 6, mas tinham um bug: os `CATCH` do BO chamavam `MsgErro` **e** preenchiam `this_cMensagemErro`; o `BtnOKClick` ent├úo repetia o mesmo texto num `MsgAviso` ÔÇö **dois di├ílogos para uma falha** (regra #20). O contrato `this_lErroExibido` existe no `BusinessBase` mas n├úo estava ligado aqui.
+
+- **Form**: `MsgAviso` agora guardado por `!this_lErroExibido`.
+- **BO** (precisei tocar ÔÇö a guarda do form ├® inerte sem quem exibe marcar a flag): os 3 `CATCH` que j├í exibem passam a marcar a flag; `ExecutarProcessamento` rep├Áe a flag na entrada (o di├ílogo n├úo fecha entre cliques, ent├úo flag presa engoliria a mensagem do clique seguinte); e o guard "├¡ndices sem estrutura" rep├Áe `.F.` ao **substituir** a mensagem, mantendo o invariante flagÔåömensagem corrente.
+
+Documentei tamb├®m o mapa completo de eventos no cabe├ºalho, incluindo o `Load (=fConfigGeral())` **n├úo portado** ÔÇö decis├úo j├í estabelecida no projeto (`fconfiggeral.prg` ├® no-op que existe s├│ para p-code legado; mesma nota em `FormSigMvExp.prg`).
+
+## Verifica├º├úo
+
+Compila limpo (form + BO, sem `.err`). Probe de instancia├º├úo (`automation/InstantiateCheckSigPrEstF7.prg`, 4 cen├írios) ÔÇö **passou**:
+
+| Cen├írio | Resultado |
+|---|---|
+| Instancia├º├úo | 600x191, BO criado, ambos checkboxes = 1 (legado `Value=.T.`) |
+| ├ìndices sem estrutura | **1 di├ílogo**, texto exato do legado, `"Processamento Interrompido."`, bot├Áes reabilitados |
+| 2┬║ clique | mensagem reaparece ÔÇö reset da flag funciona |
+| Exce├º├úo for├ºada | **1 di├ílogo** (era 2 antes), `ErroExibido=.T.` |
+| Encerrar | `Release()` ok |
+
+Sem TODO/stub, zero bytes n├úo-ASCII (acentos via `CHR()`), nenhum `RETURN` dentro de `TRY`.
+
+Dois pontos que **deixei de fora** de prop├│sito, ambos fora do escopo da fase: o `SET DEFAULT TO basededados\` nunca ├® restaurado (o legado tamb├®m n├úo ÔÇö declara `lcDirAtual1` e nunca usa), e quando a gera├º├úo de estrutura estoura *com* ├¡ndices pedidos, o texto da exce├º├úo ├® sobrescrito pela mensagem do guard. Ambos s├úo do BO (Fase 2); me avise se quiser que eu ataque.

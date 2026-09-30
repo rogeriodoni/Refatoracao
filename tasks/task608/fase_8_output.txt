@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSIGPREST.prg` est├í completo e **verificado medindo no VFP9**, n├úo por leitura.
+
+## O que a Fase 8 entregou
+
+**`FormSIGPREST.prg`**
+- `FormParaBO()` / `BOParaForm()` ÔÇö hooks `PROTECTED` de `FormBase`. Os "campos" desta tela s├úo as duas caixas de op├º├úo (Estrutura/├ìndice), que mapeiam para `this_lGeraArquivos`/`this_lGeraIndices`. Convers├úo expl├¡cita `(Value = 1)`, porque `CheckBox.Value` ├® num├®rico e a property ├® l├│gica.
+- `HabilitarCampos()` ÔÇö funil ├║nico do par `This.Enabled=.f. / Cancela.Enabled=.f.` do legado, que o `BtnOKClick` repetia solto na ida e na volta. A reabilita├º├úo ficou **fora do TRY**: com `ControlBox = .F.`, um CATCH que a pulasse deixaria o usu├írio sem sa├¡da.
+- `DataSession = 2`, transcrito do SCX ÔÇö **n├úo ├® cosm├®tico** (abaixo).
+- Bot├úo de fechar renomeado para `cmd_4c_Encerrar`/`BtnEncerrarClick` (o objeto legado chama-se `Cancela`, mas o Caption ├® "Encerrar" e o Click s├│ fecha); `mapeamento.json` sincronizado no mesmo passo.
+
+**Tr├¬s defeitos reais que o teste funcional encontrou** (nenhum apareceria instanciando a tela):
+
+1. **`ADIR()`/`AFIELDS()` recebendo `LOCAL` escalar** ÔåÆ `'LOC_AARQ' is not an array` em runtime. O form estava **totalmente quebrado**: `ArqDBF.DBF` sa├¡a vazio, `ArqInd.DBF` nem era criado. O legado funcionava porque *n├úo* declarava `laArq`/`laCampos`. Fix: `LOCAL ARRAY`.
+2. **`CLOSE TABLES ALL` com o `DataSession` herdado (=1)** derrubava os cursores globais da aplica├º├úo. Medido: cursor criado fora do form ÔåÆ `USED()` = `.F.` com DataSession herdado, `.T.` com `= 2`.
+3. **`SET DEFAULT TO` nunca era reposto** ÔÇö ├® global e sobrevive ao form; a *segunda* abertura montava `...\basededados\basededados\`.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (zero `.err`), `Test-CompletudeCodigo` OK nos dois arquivos, e um probe que exercita a tela de verdade: instancia (600x191, DataSession=2), guard "├¡ndices sem estrutura" com **um** di├ílogo s├│, e o caminho real de grava├º├úo produzindo **ArqDBF.DBF com 4 linhas + ArqInd.DBF com 2 tags** ÔÇö mais as provas de isolamento e de restaura├º├úo do diret├│rio.
+
+## Gate da Fase 8
+
+Nenhum dos 8 ramos existentes alcan├ºava este legado, ent├úo adicionei o 9┬║ (`utilitario-arquivo`), dispensando s├│ `BtnCancelarClick` e `CarregarLista`; `FormParaBO`/`BOParaForm` seguem exigidos, com regex ancorada. **Delta medido em 607 dumps: 1 form distinto, zero regress├úo.** Veredicto: `PASSA`.
+
+## Incidente que preciso reportar
+
+Meu primeiro script de medi├º├úo fazia `. .\OrquestradorMigracao.ps1` para reusar os helpers. Esse arquivo tem corpo principal: o dot-source **disparou uma migra├º├úo real** (task609/`SigPrEtq`), que moveu `origem\SigPrEtq.SCX/.SCT` para fora de `origem\` e **sobrescreveu `SigPrEtqBO.prg` ÔÇö 892 linhas viraram um esqueleto de 121**. Matei o processo na Fase 2 e revert├¡ tudo com `git checkout HEAD --` nos tr├¬s arquivos (SCX/SCT restaurados em `origem\`, BO de volta com 892 linhas) e removi `tasks\task609\`. Confirmei que o orquestrador nunca apaga `.prg`, portanto as dele├º├Áes de `FormSigPrEtq.prg`/`.bak` no `git status` s├úo anteriores e n├úo mexi nelas. Vale voc├¬ conferir se havia edi├º├úo n├úo-commitada em `SigPrEtqBO.prg` antes ÔÇö nesse caso o `HEAD` n├úo a recupera. Refiz a medi├º├úo extraindo s├│ as defini├º├Áes de fun├º├úo via AST.
+
+Nada foi commitado. Registrei as quatro li├º├Áes na mem├│ria, incluindo essa armadilha do dot-source.

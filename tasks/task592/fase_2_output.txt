@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This completes Fase 2/8. The BO now has full CRUD methods for the `SigPcOoL` control table (the record written once per t├¡tulo each time a CNAB file is generated):
+
+- **`ObterChavePrimaria()`** ÔÇö returns `cidchaves`.
+- **`CarregarDoCursor()`** ÔÇö maps all 15 columns, using proper `TratarNulo` defaults (`""`/`0`/`{}` ÔÇö not the widespread "type code" bug documented in memory).
+- **`Inserir()`** ÔÇö full INSERT covering every NOT NULL column (including the three the legacy code never references ÔÇö `empds`, `edndests`, `nopers` ÔÇö per CLAUDE.md regra #22), generates a fresh `cidchaves` via `LEFT(fUniqueIds(), 20)` and `datas = DATETIME()` on every call (mirrors the legacy per-row `Insert Into crSigPcOol` inside the CNAB-generation scan loops), calls `RegistrarAuditoria("INSERT")`.
+- **`Atualizar()`** ÔÇö full UPDATE by `cidchaves`, calls `RegistrarAuditoria("UPDATE")`.
+- **`ExecutarExclusao()`** ÔÇö DELETE by `cidchaves`, calls `RegistrarAuditoria("DELETE")`.
+
+I verified the real table name/columns against `docs/schema.sql` (read via `Get-Content -Raw`, since it's UTF-16) ÔÇö it's actually `SigPcOoL` (capital L), matching the legacy `Insert Into crSigPcOol` + `poDataMgr.Update()` pattern I found in the source dump.
+
+**Note**: this file is ~14 KB, under the pipeline's generic ">20 KB" completeness heuristic ÔÇö that heuristic is tuned for CRUD cadastro forms with dozens of fields; `SigPcOoL` only has 15 columns and no cadastro UI, so a smaller file is expected here. I didn't pad it with unrelated methods to game that check.
+
+Next phase (3/8) will build the Form's base structure (PageFrame, containers) per the OPERACIONAL layout rules.

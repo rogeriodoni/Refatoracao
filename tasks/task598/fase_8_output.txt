@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and matches the codebase's established conventions. Phase 8 is complete.
+
+## Resumo
+
+O `FormSigPrCtr.prg` j├í tinha a maior parte da Fase 8 implementada nas fases anteriores (`CarregarLista`, `AlternarPagina`, `FormParaBO`/`BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`/`BtnEncerrarClick`). Faltavam tr├¬s m├®todos que j├í estavam referenciados via `BINDEVENT` mas nunca definidos ÔÇö isso faria os bot├Áes falharem em runtime com "Property ... is not found":
+
+- **`BtnBuscarClick()`** ÔÇö recarrega a lista (o legado tinha `msv_procurar`/`GetCodigos`, mas esse campo de busca-por-exemplo nunca foi migrado nas fases anteriores; segui o padr├úo j├í estabelecido em `FormMoe`/`FormROM`/`FormPAT` para o mesmo cen├írio).
+- **`BtnConfirmarClick()`** ÔÇö `FormParaBO()` ÔåÆ `Salvar()` ÔåÆ mensagem de sucesso + volta ├á lista, ou erro (s├│ exibe mensagem pr├│pria se o BO ainda n├úo exibiu ÔÇö regra #20).
+- **`BtnCancelarClick()`** ÔÇö `CancelarEdicao()` no BO + volta ├á lista.
+
+Tamb├®m adicionei `ValidarDados()` no `SigPrCtrBO.prg` (chamado automaticamente por `BusinessBase.Salvar()`), replicando a valida├º├úo do legado "Favor Informar uma Conta." antes de gravar.
+
+Conferi que todos os alvos de `BINDEVENT` no form agora t├¬m `PROCEDURE` correspondente, que `PROCEDURE`/`ENDPROC` est├úo balanceados nos dois arquivos, e que a integra├º├úo com `menu.prg` (que j├í existia de fase anterior) segue o padr├úo can├┤nico (`VARTYPE`, `Show()` fora do `TRY`, sem `Release()`).

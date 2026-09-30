@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da.
+
+## O que estava errado ÔÇö n├úo era o form
+
+A Fase 5 foi reprovada por um **gate obsoleto em mem├│ria**, n├úo por defeito no artefato. Segui o procedimento j├í registrado na mem├│ria do projeto para esse caso:
+
+| Medi├º├úo | Resultado |
+|---|---|
+| Processo do orquestrador iniciou | **16:38:55** |
+| `OrquestradorMigracao.ps1` alterado | **16:56:34** (18 min depois, n├úo-commitado) |
+| Ramos adicionados nessas edi├º├Áes | `$legadoCapturaF4`, **`F5`**, `F6`, + os de F8 |
+| Gate da Fase 5 com o `.ps1` **de disco** | **`GATE CAPTURA = True`** |
+| Gate com a vers├úo que o processo tem | **False** ÔÇö sem ramo CAPTURA, s├│ restava exigir `ConfigurarPaginaDados` |
+
+PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo. O ramo CAPTURA foi escrito **enquanto a Fase 4 rodava** (16:51ÔÇô17:08), ent├úo a Fase 5 foi julgada por um gate que n├úo o conhecia. Rodei o bloco do gate isolado, com os helpers `Test-Legado*` reais: `temListaEstritaF5=False`, `legadoCapturaF5=True`, 5 campos migrados contra piso de 3 ÔåÆ passa.
+
+Por isso **n├úo criei `ConfigurarPaginaDados`**: `SIGPRDFT` ├® di├ílogo modal SiTef de 500x370, sem PageFrame e sem grade na ├írvore do SCX. Inventar uma Page2 violaria o PILAR 1, e m├®todo vazio ├® proibido pela regra de completude.
+
+## Auditoria dos campos (o trabalho real)
+
+Conferi os 5 TextBox + OptionGroup propriedade por propriedade contra o dump lido em CP1252 (o `layout.json` perde os acentos). Todos fi├®is, incluindo os dois pontos onde ├® f├ícil errar o tipo:
+
+- `GetValor` ÔåÆ `.Value = 0` **num├®rico** com `InputMask = "99,999,999.99"` (n├úo `""`)
+- `Text1` ÔåÆ `.Value = ""` **char**, que ├® o que o `LostFocus` legado exige (`TRANSFORM(VAL(This.Value),"@L 99")`)
+- `GetDatas` ÔåÆ `.Value = {}`; `GetCartao` ÔåÆ `MaxLength = 19` batendo com as 19 posi├º├Áes do InputMask
+- Captions acentuadas via `CHR()`: `CHR(170)` (1┬¬) e `CHR(186)` (N┬║); labels com `AutoSize = .F.` + Width/Height transcritos, conforme a regra #23
+
+## Achei um defeito ÔÇö no harness, n├úo no form
+
+`InstantiateCheckSigprdftF5.prg` (escrito na tentativa anterior) pulava `ConfigurarAmbiente()` **sem repor os `SET PROCEDURE`**. O carregamento das classes e forms mora dentro desse m├®todo (`config.prg:304-399`), ent├úo o probe falhava com `Class definition FORMSIGPRDFT is not found` ÔÇö media a pr├│pria falta de setup. O `.txt` de resultado "OK" que estava em disco era de outro probe e n├úo se reproduzia. Corrigi o harness e re-medi do zero, com os `.fxp` apagados antes:
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Compila├º├úo BO + Form | `COMPILE_OK`, nenhum `.err` |
+| Instancia├º├úo real | **`OK W=500 H=370`**, sem exception, sem di├ílogo |
+| `TabIndex` | **1ÔåÆ7 na ordem do legado** (ValorÔåÆCart├úoÔåÆD├¡gitosÔåÆOptionGroupÔåÆParcelasÔåÆVencimentoÔåÆSa├¡da) |
+| `obj_4c_SAIDA.BackStyle` | `0` (legado: 0) |
+| `VerificarPropriedadesInexistentes` | OK |
+| Blocos `PROCEDURE`/`WITH`/`TRY`/`IF`/`FOR` | 9/9, 22/22, 1/1, 8/8, 1/1 |
+| Acento literal, `PUBLIC` em `DEFINE CLASS`, `RETURN` em TRY, `MESSAGEBOX` | nenhum |
+
+`.fxp` apagados ao final. Atualizei a mem├│ria existente sobre o probe com esse sintoma (n├úo criei entrada duplicada).
+
+## Ponto de aten├º├úo
+
+As Fases **6 e 8** tamb├®m tiveram ramos de exce├º├úo adicionados ├ás 16:56, ent├úo provavelmente v├úo reprovar pelo mesmo motivo ÔÇö cada uma queimando o ciclo sonnet + escala├º├úo opus + retry opus (~35 min) antes de seguir, porque a valida├º├úo do retry s├│ checa `Test-Path` do arquivo. O pipeline avan├ºa, mas o diagn├│stico nos logs vai mentir do mesmo jeito. A corre├º├úo limpa ├® reiniciar o pipeline para o PowerShell carregar o `.ps1` atual ÔÇö decis├úo sua; n├úo interrompi a execu├º├úo em andamento, e editar o `.ps1` agora n├úo teria efeito neste run.

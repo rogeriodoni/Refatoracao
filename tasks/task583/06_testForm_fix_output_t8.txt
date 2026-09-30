@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `TcpTestSucceeded: False`, `PingSucceeded: False` for `192.168.200.10:1433`, and the ping test also timed out with 100% packet loss.
+
+## Conclus├úo
+
+Este N├âO ├® um bug de c├│digo. ├ë o problema de infraestrutura j├í documentado em mem├│ria (recorrente em 77+ tasks desde 2026-08-02): a m├íquina que roda o pipeline s├│ tem interfaces em `192.168.100.x` (OpenVPN TAP) e `192.168.199.x` (Ethernet) ÔÇö n├úo h├í rota para `192.168.200.0/24`, onde vive o SQL Server real (`DB_MBAHIA`).
+
+O log mostra que a falha ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, no pr├®-flight de conex├úo SQL ÔÇö **antes** de `CREATEOBJECT("FormSigPrAop")` ser sequer chamado. Nada em `FormSigPrAop.prg` ou `SigPrAopBO.prg` participa dessa conex├úo; ambos os arquivos j├í est├úo corretos e usam exatamente o mesmo padr├úo de `config.prg`/`ObterStringConexao()` que todo form que passa usa.
+
+**N├úo vou editar os `.prg`** ÔÇö reescrever c├│digo que j├í est├í correto s├│ consumiria as tentativas restantes (8/10) sem resolver nada, j├í que o erro acontece antes do form ser instanciado.
+
+**Recomenda├º├úo**: tratar esta tentativa como falha de infraestrutura, fora do escopo de "corrigir c├│digo". ├ë necess├írio restaurar a rota de rede para `192.168.200.0/24` na m├íquina que executa o pipeline (ou usar uma VPN/rota alternativa) antes de re-rodar a etapa `06_testForm`.

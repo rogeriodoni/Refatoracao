@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files are structurally sound. Phase 7/8 is complete.
+
+**Summary of changes:**
+
+`C:\4c\projeto\app\forms\cadastros\FormSigPrCtr.prg`:
+- Added `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()`, `BtnExcluirClick()` ÔÇö the 4 required CRUD events, all PUBLIC (BINDEVENT requires it, rule #3).
+- Added supporting methods needed for these to be functional (not stubs): `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`.
+- Fixed `AlternarPagina(1)` to call `AjustarBotoesPorModo()` so buttons disabled on entering edit mode get re-enabled on return to the list (rule #40 from CLAUDE.md ÔÇö Erro176).
+- Avoided the VFP9 non-short-circuit `OR` trap (rule in memory) when checking grid selection state ÔÇö used nested `IF USED(...)` before `RECCOUNT`/`EOF`.
+
+`C:\4c\projeto\app\classes\SigPrCtrBO.prg`:
+- Added `CarregarPorCodigo()` and `ExecutarExclusao()`, which were missing despite being prerequisites for Alterar/Visualizar/Excluir to work at all (BO was left incomplete from earlier phases).
+- Per `comportamento.json`, the legacy list groups `SigPrCtr` rows by `Codigos` (one row per product line, many lines per batch), and the legacy delete is literally `Delete From SigPrCtr Where Codigos = ?_Codigo` ÔÇö so `ExecutarExclusao` deletes the whole batch by `Codigos`, matching the grid's grouping, and `CarregarPorCodigo` loads the representative row for that batch to populate the header fields (Conta/Moeda/Arquivo/Precific).
+
+One thing to flag: `BtnConfirmarClick`/`BtnCancelarClick` (bound via BINDEVENT since an earlier phase) are still unimplemented ÔÇö that's Phase 8's job, not this one.

@@ -1,0 +1,42 @@
+FORM OK (Init executou CarregarLista)
+--- FASE 8: metodos ---
+CarregarLista=.T. LigarGradeItens=.T. FormParaBO=.T. BOParaForm=.T.
+HabilitarCampos=.T. AjustarBotoesPorModo=.T. LimparCampos=.T.
+--- apos Init ---
+RecordSource=[TmpFinal] Totais=150/0/150
+RECNO(TmpFinal)=1  ObsLabel=[Observação do Item PROD-A]
+--- rebind via CarregarLista ---
+apos limpar: RecordSource=[] C1.Width=115 C6.Header=[Produzir]
+CarregarLista()=.T.
+RecordSource=[TmpFinal] C1.CtrlSrc=[TmpFinal.Cpros]
+C1.Width=115 C6.Width=150 C9.Width=38
+C1.Header=[Produto] C6.Header=[Produzir] C8.CtrlSrc=[IIF(ISNULL(TmpFinal.Obsps) OR EMPTY(TmpFinal.Obsps), "", "*")]
+--- BOParaForm via ItemProduzirLostFocus (reg 2) ---
+Totais=150/0/150  RECNO preservado=2
+Caption=[Prévia da Globalização] ObsLabel=[Observação do Item PROD-B]
+--- AjustarBotoesPorModo (COM itens) ---
+Processar=.T. TotLinha=.T. Disponivel=.T. Relatorio=.T.
+Pedras=.F. SelEstoque=.T. Sair=.T. Grade=.T.
+  (Pedras=.F. esperado: SigCdPam sem as 4 operacoes neste ambiente)
+--- HabilitarCampos(.F., .T.) ---
+Processar=.F. Sair=.F. TotLinha=.F. Pedras=.F. Disponivel=.F.
+SelEstoque=.F. Container3=.F. Grade=.F.
+--- HabilitarCampos(.T., .F.) ---
+Processar=.T. Grade=.T. Container3=.T.
+SelEstoque continua .F. (fora do bloco)=.F.
+--- FormParaBO via BtnProcessarClick (sem avo) ---
+form ainda vivo apos o clique=.T.  previsao no BO=  /  /     (esperada vazia: FormParaBO abortou antes de gravar)
+--- AjustarBotoesPorModo (SEM itens) ---
+Processar=.F. TotLinha=.F. Relatorio=.F. Grade=.F. Sair=.T. (Sair sempre .T.)
+--- LimparCampos via CarregarLista (cursor vazio) ---
+CarregarLista()=.F. (esperado .F.)
+Totais=0/0/0
+C3 totais=0/0  C3.Grupo=[]
+C2.QtSelec=0 C5.QtPedida=0 Foto.Visible=.F.
+ObsLabel=[Observação do Item]
+cursor compartilhado intacto: TmpSaldG=2
+--- CarregarLista (TmpFinal ausente) ---
+retorno=.F. (esperado .F., com aviso)
+--- DIALOGOS CAPTURADOS ---
+[29/09/2026 15:11:11] Erro: Não foi possível localizar a tela de Processamento de O.P. (form avô).
+[29/09/2026 15:11:12] Atenção: Os itens da prévia não foram recebidos da tela de Processamento de O.P.

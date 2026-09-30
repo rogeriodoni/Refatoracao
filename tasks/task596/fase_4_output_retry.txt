@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da para `FormSIGPRCPR`.
+
+## Causa da reprova├º├úo anterior
+
+O gate da Fase 4 (ramo **FLAT**, que ├® o aplic├ível a este OPERACIONAL) exige tr├¬s coisas:
+
+| Condi├º├úo | Antes | Agora |
+|---|---|---|
+| `AddObject("grd_4c_...")` | Ô£à j├í existia | Ô£à |
+| `AddObject("cmd_4c_/cmg_4c_...")` | Ô£à j├í existia | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî **ausente** | Ô£à |
+
+A tentativa anterior entregou Grid e bot├Áes, mas **nunca portou o `PROCEDURE carregabars` do legado** ÔÇö o m├®todo que o `Init` legado chama para popular a grade. N├úo era falso positivo do gate: era funcionalidade faltando.
+
+## O que foi implementado
+
+**`CarregarDados()`** ÔÇö equivalente ao `carregabars` legado. Delega a montagem ao `SIGPRCPRBO.CarregarEtiquetasPendentes()` (Fases 1ÔÇæ2) e reproduz o bloco final do legado linha a linha: `Select/Go Top`, o aviso `'Nenhuma Etiqueta Selecionada Nesta Opera├º├úo!!!'`, a visibilidade por `Eof()` e o `SetFocus`.
+
+**`VincularGrid()`** ÔÇö precisou ser m├®todo separado: o BO faz `USE IN` + `CREATE CURSOR` a cada carga, ent├úo o cursor ├® **destru├¡do e recriado** e o binding do Grid cai. Segue a ordem can├┤nica `RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption`, porque reatribuir `RecordSource` reseta larguras para ~90 e captions para `"Header1"`.
+
+**`AjustarVisibilidadePorEtiquetas()`** ÔÇö `Grade/Txt_Leitura/Get_Leitura/Ok/Conferencia` vis├¡veis s├│ com etiqueta pendente; `Sair` permanece sempre vis├¡vel (fiel ao legado). Os controles de leitura chegam na Fase 5, por isso cada um ├® testado com `PEMSTATUS`.
+
+Duas decis├Áes de fidelidade: `CarregarDados()` **n├úo** entra em `loc_lSucesso` ÔÇö o legado avisa e abre a tela mesmo sem etiquetas; e o `SetFocus` s├│ roda com o form j├í vis├¡vel, sen├úo estouraria durante o `Init`.
+
+## Verifica├º├úo em VFP9 real
+
+- **Compila limpo** ÔÇö `.fxp` gerado, nenhum `.err`.
+- **Instancia** (`VARTYPE = "O"`, 800x400) ÔÇö `VincularGrid` roda dentro do `Init`.
+- Grid ligado a `cursor_4c_Baixa`, 5 colunas, larguras **108/108/154/61/75** e headers corretos ÔÇö os valores exatos do SCX, **sobrevivendo ao rebind** (re-chamei `VincularGrid()` e confirmei).
+- `DynamicForeColor` fiel ao legado; `Grid.Visible = .F.` como no SCX.
+- Toggle de visibilidade validado nos dois estados, com `Sair` intacto.
+
+Tamb├®m corrigi uma armadilha que reprovaria a etapa seguinte: um coment├írio come├ºava com a palavra `placeholder` logo ap├│s o `*`, casando com o regex `^\s*\*--\s*(TODO|...|PLACEHOLDER)` do validador de completude ÔÇö falso positivo que teria travado o `05d`. Reescrevi as duas ocorr├¬ncias.
+
+Simulei o gate com as express├Áes exatas do orquestrador: **`temLayoutFlat = True` ÔåÆ PASSA (27,84 KB)**.
+
+Os artefatos tempor├írios de teste foram removidos; s├│ `FormSIGPRCPR.prg` ficou modificado.

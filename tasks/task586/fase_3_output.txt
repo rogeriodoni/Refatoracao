@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormSigPrCcc.prg (Fase 3/8) foi criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrCcc.prg` e compila sem erros no VFP9.
+
+Estrutura entregue (form OPERACIONAL flat, sem PageFrame ÔÇö conforme `analise.json` indica `formType: "OPERACIONAL"` e as regras espec├¡ficas para esse tipo):
+- `DEFINE CLASS FormSigPrCcc AS FormBase` com propriedades visuais exatas do SCX legado (Width=800, Height=600, Caption, DataSession=2, ControlBox/Closable/MaxButton/MinButton=.F., etc.)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (FormBase j├í trata SET DATE/CENTURY e chama `InicializarForm`)
+- `InicializarForm()` ÔÇö cria o BO `SigPrCccBO`, monta cabe├ºalho e containers, propaga t├¡tulo, chama `TornarControlesVisiveis`
+- `ConfigurarPageFrame()` ÔÇö sem PageFrame real; aplica o fundo `new_background.jpg` via `gc_4c_CaminhoFramework`
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Sombra` com `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` (nomes conforme `mapeamento.json`)
+- `ConfigurarContainersOperacao()` ÔÇö os 4 containers flutuantes das frentes de rec├ílculo (`cnt_4c_OpConta`, `cnt_4c_OpEstoque`, `cnt_4c_OpCusto`, `cnt_4c_OpCompra`), todos com posi├º├úo/estilo exatos do dump e `Visible=.F.` (igual ao legado)
+- `TornarControlesVisiveis()` com o filtro correto para n├úo expor os containers flutuantes, mas recursando dentro deles
+- `Destroy()`
+
+Deixei fora de prop├│sito (ficam para as pr├│ximas fases, conforme o pr├│prio plano): bot├Áes Processar/Encerrar, os 4 checkboxes de toggle, campos internos de cada container e todos os bindings/valida├º├Áes.

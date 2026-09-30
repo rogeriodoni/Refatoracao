@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í entregue. Os dois arquivos compilam limpos e o form foi provado **instanciando**, n├úo por leitura de c├│digo.
+
+## O que a Fase 8 acrescentou
+
+Este ├® um form OPERACIONAL sem CRUD ÔÇö o SCX s├│ tem `btnCarregar`, `btnexcluir` e o CommandGroup `BTNREPORT` (Imprimir + Encerrar). Em vez de inventar Salvar/Cancelar/Buscar, implementei os hooks que **t├¬m** sentido aqui, e cada um fechou uma lacuna real de paridade com o legado:
+
+| M├®todo | Lacuna que fechou |
+|---|---|
+| `BOParaForm` + `CarregarParametrosPadrao` | Os defaults de **SigCdPam** (ImpEtis, AjVerts, AjHorzs) e **SigCdPac** (AjDens, AjVelos, EtqSeps) nunca chegavam ├á tela. `SigPrEtqBO.CarregarParametrosImpressao` era **c├│digo morto** ÔÇö os spinners abriam com constantes cravadas. O default de velocidade estava **3**; o legado usa **1**. |
+| `AplicarAcessosUsuario` | As 6 chamadas `fChecaAcesso('SigPrEtq', ...)` do Init legado **n├úo tinham sido migradas** ÔÇö qualquer usu├írio podia mexer nos ajustes finos e no tipo de etiqueta. |
+| `HabilitarCampos` | Aplica esse teto de permiss├úo e o `Imprime.Enabled = (lnTipos <> 0 And lnImp <> 0)` do legado. Nunca toca `THIS.Enabled` (form modal sem TitleBar) nem desabilita o Encerrar. |
+| `FormParaBO` | Centraliza o bloco de leitura de controles do `BTNREPORT.Click`, com `EmpDopNums` montado por `PADR` ÔÇö 29 caracteres, medido. |
+| `CarregarLista` / `LimparCampos` | Centralizam o `Go Top + Append Blank + Refresh` e o reset p├│s-impress├úo que estavam repetidos em 4 lugares. Corrigi o teste de linha vazia: `EOF()` ap├│s `GO TOP`, n├úo `RECCOUNT()` ÔÇö que conta registros marcados para exclus├úo e deixaria a grade sem linha vis├¡vel depois de um Delete. |
+| `CriarCursorImpressorasWindows` (reescrito) | Listava **todas** as impressoras do Windows. Agora casa com as de etiqueta **autorizadas ao usu├írio** (`SigCdmp.nTpImpres = 2` via SigSyImp/SigCdAcG), como o legado ÔÇö `BuscarImpressorasAutorizadas` tamb├®m era c├│digo morto. Acrescentei ao BO o fallback `BuscarImpressorasEtiqueta` que o legado tem. Com fallback para a lista Windows quando n├úo h├í banco. |
+| `Activate` | O `Grd_Etiqueta.Col_cpros.SetFocus` do fim do Init legado. |
+
+Colunas conferidas contra `docs/schema.sql` lido com `Get-Content -Raw` (UTF-16) ÔÇö todas existem.
+
+## Um ponto que precisa da sua decis├úo
+
+**O gate da Fase 8 vai reprovar este form, e n├úo por defeito dele.** Medi os predicados:
+
+- `FormParaBO`, `BOParaForm`, `CarregarLista` ÔåÆ presentes como m├®todo real (regex ancorada, n├úo coment├írio).
+- `BtnCancelarClick` ÔåÆ ausente; o legado n├úo tem Cancelar.
+- `$padraoAcaoGravar` ÔåÆ n├úo casa `BtnImprimeClick`. **Quarta recorr├¬ncia** da lista de palavras, depois de `Processa`/`Processo` e `Consultar`.
+- A causa de fundo: `semCrudLegadoF8` deu **falso positivo** porque `btnexcluir` casa `(btn|cmd)(Excluir)` ÔÇö mas ele ├® o apaga-linha da grade (`Delete` em cursor local), n├úo um Excluir de CRUD. Com isso os **oito** ramos de exce├º├úo ficam fora de alcance de uma vez.
+
+N├úo mexi no `OrquestradorMigracao.ps1`: `$padroesCrudLegadoF8` ├® consumido pelos oito ramos e por outras fases, e a li├º├úo j├í registrada manda medir o delta na cadeia de exclus├úo inteira antes de alterar. Registrei o achado na mem├│ria do gate. Se quiser, eu fa├ºo o conserto com a medi├º├úo de delta ÔÇö as duas frentes s├úo n├úo deixar apaga-linha marcar CRUD (o helper `Test-LegadoEscritaSoEmCursorLocal` j├í sabe responder isso) e parar de depender de lista de palavras no nome do handler.
+
+Uma limita├º├úo do ambiente: `VerificarCamposCursorBO.ps1` e o validador SQL n├úo rodaram ÔÇö esta m├íquina n├úo alcan├ºa o SQL Server 192.168.200.10. Por isso o probe usa `gnConnHandle = -1`; com handle falso-positivo (`1`) o `SQLEXEC` dispara exce├º├úo e o form corretamente n├úo abre.

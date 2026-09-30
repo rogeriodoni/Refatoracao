@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked this before touching any code, and this is **not a code bug in `FormSigMvTta.prg` or `SigMvTtaBO.prg`** ÔÇö both files are complete, well-structured, and follow the project's conventions correctly.
+
+**Root cause: infrastructure, not code.**
+
+- The failure happens in ETAPA 1B, *before* any form-specific code runs ÔÇö it's the generic SQL Server connection step (`gnConnHandle`, `192.168.200.10`, `DB_MBAHIA`, per `config.prg:22-25`).
+- I tested TCP connectivity directly: `Test-NetConnection -ComputerName 192.168.200.10 -Port 1433` ÔåÆ **`TcpTestSucceeded: False`**. The database server is unreachable from this machine right now.
+- The exact same error ("SQL Server inexistente ou acesso negado", code 1526) appears in at least 20 other unrelated task logs (task398 through task416, plus this one, task580) ÔÇö confirming it's a systemic connectivity outage across the whole pipeline, not something specific to this form.
+
+Editing `FormSigMvTta.prg`/`SigMvTtaBO.prg` would not fix this ÔÇö there's nothing wrong in them to fix, and per the project's own lesson (`feedback_warning_massivo_verificar_premissa` / the CEP-server incident) I don't want to make speculative code changes against a false premise.
+
+**What actually needs attention**: the SQL Server at `192.168.200.10:1433` (or the network path to it) is currently down/unreachable. That needs to be restored (VPN, firewall, server status, etc.) before ETAPA 06_testForm can pass for *any* form, not just this one.
+
+Do you want me to keep investigating the network/DB side, or should this be escalated separately while I leave these two files untouched?

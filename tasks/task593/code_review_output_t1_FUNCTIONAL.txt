@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Revisei os 14 achados do pass FUNCTIONAL de `Formsigprcom.prg` e apliquei **apenas 1 corre├º├úo real**; os outros 13 eram falsos positivos da pr├│pria ferramenta de auditoria (confirmados contra o dump legado `tasks/task593/sigprcom_form_codigo_fonte.txt` e contra o padr├úo j├í usado no resto do arquivo):
+
+**Corrigido:**
+- `[NULL-CURSOR]` ÔÇö adicionado `SET NULL ON`/`SET NULL OFF` ao redor do `CREATE CURSOR cursor_4c_Lista` (linha ~831), por precau├º├úo, seguindo o mesmo padr├úo j├í usado para `cursor_4c_Itens`.
+
+**Falsos positivos (nenhuma altera├º├úo ÔÇö confirmado, n├úo apenas presumido):**
+- `[CONTAINER-VISIVEL]` em `cnt_4c_Cabecalho` ÔÇö ambas as inst├óncias (Page1/Page2) j├í declaram `.Visible = .T.`; regra #11 do CLAUDE.md pro├¡be detectar o cabe├ºalho pelo nome.
+- 6├ù `[BINDEVENT-PARAMS]` ÔÇö todos os handlers j├í declaram os par├ómetros **inline** na pr├│pria linha `PROCEDURE Nome(par_nKeyCode, par_nShiftAltCtrl)`, sintaxe VFP9 v├ílida e equivalente a `LPARAMETERS`; o detector s├│ reconhece a forma separada.
+- 4├ù `[GRID-HEADER]` ÔÇö conferido no dump legado (`pColuna(...)`): os captions `Descri├º├úo`/`Fornecedor`/`Refer├¬ncia`/`Sub Grp` batem exatamente; a lista "headers legado encontrados" do pr├│prio relat├│rio j├í mostra os acentos corrompidos (`M?x.`), provando que o problema ├® na extra├º├úo do dump, n├úo no c├│digo migrado.
+- 2├ù `[LAYOUT-POSITION]` (`Opc_situacao`, `btnExcluir`) ÔÇö o diff de 40px bate exatamente com o offset documentado no pr├│prio cabe├ºalho do m├®todo (+29 PageFrame + 11 re-layout da regra #11), aplicado uniformemente em toda a Page2.
+
+Tamb├®m registrei na mem├│ria os dois padr├Áes novos de falso positivo (BINDEVENT-PARAMS com par├ómetro inline; GRID-HEADER com encoding corrompido no dump) como itens #31/#32 do cat├ílogo j├í existente de "modos da auditoria errar", para evitar retrabalho em futuras revis├Áes.

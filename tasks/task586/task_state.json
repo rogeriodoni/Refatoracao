@@ -1,0 +1,267 @@
+﻿{
+    "taskId":  "task586",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "PENDING",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-26T09:33:32",
+    "atualizadoEm":  "2026-09-26T12:54:02",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-26T09:33:32",
+                                            "fim":  "2026-09-26T09:33:32",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task586\\SigPrCcc.sct",
+                                            "baseName":  "SigPrCcc",
+                                            "scxFile":  "C:\\4c\\tasks\\task586\\SigPrCcc.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-26T09:33:32",
+                                          "fim":  "2026-09-26T09:33:32",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigPrCcc",
+                                          "txtFile":  "C:\\4c\\tasks\\task586\\SigPrCcc_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-26T09:33:32",
+                                              "fim":  "2026-09-26T09:33:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task586\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-26T09:33:34",
+                                              "fim":  "2026-09-26T09:33:42",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task586\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task586\\meta_prompt.md",
+                                              "boClass":  "SigPrCccBO",
+                                              "formClass":  "FormSigPrCcc",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task586\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-26T09:33:43",
+                                              "fim":  "2026-09-26T09:33:43",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task586\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-26T09:33:43",
+                                               "fim":  "2026-09-26T09:33:44",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task586\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigPrCcc_esqueleto.prg",
+                                                                "SigPrCccBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-26T09:33:44",
+                                       "fim":  "2026-09-26T11:56:04",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrCccBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  68.86,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrCcc.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2677
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-26T11:56:04",
+                                                  "fim":  "2026-09-26T11:56:16",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrCccBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrCcc.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-26T11:56:16",
+                                                 "fim":  "2026-09-26T11:56:17",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-26T12:07:15",
+                                       "fim":  "2026-09-26T12:51:46",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "autoSkipped":  true,
+                                       "erro":  "Teste de formulario falhou com exit code 1.",
+                                       "tentativasUsadas":  10,
+                                       "timedOut":  false
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-26T12:51:46",
+                                               "fim":  "2026-09-26T12:54:00",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task586\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "FAILED",
+                                        "inicio":  "2026-09-26T12:54:01",
+                                        "fim":  "2026-09-26T12:54:02",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 0 erros (limite 4), 44 diferencas visuais (limite 0), 18 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSigPrCcc_20260926125402.html",
+                                        "diferencas":  44,
+                                        "erros":  0,
+                                        "totalProblemas":  62,
+                                        "avisos":  18
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-26T09:33:33",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-26T09:33:34",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task586\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-26T09:33:34",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-26T09:33:34"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-26T11:56:16",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-26T11:56:16",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigPrCcc_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrCcc.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task586\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-26T11:56:17",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-26T11:59:55",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-26T11:59:56",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-26T12:06:57",
+                                          "passes":  2,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_SOMBRA, CNT_4C_OPESTOQUE, CNT_4C_OPCUSTO, CNT_4C_OPCOMPRA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_TmpConta\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, GRUPOS, CONTAS, MOEDAS, EMPS, DATAS, DATACONCS, CONCS, CEMPS, CPROS, DOPES, TIPOOPS, TPGDMIS, ATUCOMPRAS, EMPDOPNUMS, ICLIS, I, GERGDMIS, MULTCOMPS; [INIT-DUPLICADO] Init() chama DODEFAULT() E THIS.InicializarForm(). FormBase.Init() ja chama InicializarForm() internamente. Isso causa \u0027A member object with this name already exists\u0027 porque ConfigurarPageFrame/AddObject executa 2 vezes. CORRIGIR: Remover THIS.InicializarForm() do Init() - DODEFAULT() ja faz isso.; [METODO-INEXISTENTE] Metodo \u0027THIS.AbrirLookupCanonico()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027OpEstoque\u0027 (parent: SIGPRCCC): Top original=200 vs migrado \u0027cnt_4c_OpEstoque\u0027 Top=2 (diff=198px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpEstoque\u0027 (parent: SIGPRCCC): Left original=139 vs migrado \u0027cnt_4c_OpEstoque\u0027 Left=182 (diff=43px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpEstoque): Top original=90 vs migrado \u0027lbl_4c_Label1\u0027 Top=547 (diff=457px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpEstoque): Left original=35 vs migrado \u0027lbl_4c_Label1\u0027 Left=171 (diff=136px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpConta\u0027 (parent: SIGPRCCC): Top original=114 vs migrado \u0027cnt_4c_OpConta\u0027 Top=2 (diff=112px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpConta\u0027 (parent: SIGPRCCC): Left original=139 vs migrado \u0027cnt_4c_OpConta\u0027 Left=171 (diff=32px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Estoque\u0027 (parent: SIGPRCCC): Left original=425 vs migrado \u0027cnt_4c_OpEstoque\u0027 Left=182 (diff=243px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Conta\u0027 (parent: SIGPRCCC): Left original=350 vs migrado \u0027cnt_4c_OpConta\u0027 Left=171 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpCusto\u0027 (parent: SIGPRCCC): Top original=349 vs migrado \u0027cnt_4c_OpCusto\u0027 Top=2 (diff=347px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpCusto): Top original=39 vs migrado \u0027lbl_4c_Label1\u0027 Top=547 (diff=508px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpCusto): Left original=35 vs migrado \u0027lbl_4c_Label1\u0027 Left=171 (diff=136px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpCompra\u0027 (parent: SIGPRCCC): Top original=447 vs migrado \u0027cnt_4c_OpCompra\u0027 Top=2 (diff=445px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpCompra): Top original=39 vs migrado \u0027lbl_4c_Label1\u0027 Top=547 (diff=508px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRCCC.OpCompra): Left original=35 vs migrado \u0027lbl_4c_Label1\u0027 Left=171 (diff=136px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  19
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-26T12:06:57",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-26T12:07:15",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrCccBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrCcc.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-26T12:54:00",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-26T12:54:01",
+                                             "thresholdPx":  5,
+                                             "unmatched":  41,
+                                             "errors":  41,
+                                             "matched":  15,
+                                             "warnings":  11,
+                                             "reportFile":  "C:\\4c\\tasks\\task586\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `TcpTestSucceeded: False`, `PingSucceeded: False` for 192.168.200.10:1433 ÔÇö the exact same "no route" signature documented across 100+ prior tasks since 2026-08-02.
+
+**Diagnosis: this is not a code bug.** The failure happens in `TestFormWrapper.prg`'s own pre-flight `SQLSTRINGCONNECT` at ETAPA 1B, *before* `CREATEOBJECT("Formsigprftp")` or `CREATEOBJECT("sigprftpBO")` is ever reached ÔÇö the form and BO code are never instantiated. I reviewed `Formsigprftp.prg`/`sigprftpBO.prg` in full anyway and confirmed there's nothing to fix:
+
+- `Init()` and `InicializarForm()` both guard on `gb_4c_ModoTeste` and return `.T.` immediately, without touching SQL/BO.
+- Grid setup follows the correct order (cursors created before `RecordSource`/`ControlSource`; `ColumnCount`/`RecordSource` outside the `WITH` before column config ÔÇö regra GRID-WITH).
+- `BOParaForm`/`FormParaBO` are `PROTECTED` (correct, matches `FormBase`), `CarregarLista`/`HabilitarCampos` are `PUBLIC` (correct, harness calls them directly ÔÇö regra #3).
+- No `RETURN` inside `TRY/CATCH`, no `.Self`, no `EVALUATE` misuse, no `Controls("nome")` by string.
+
+No edit was made ÔÇö changing working code here would be pointless and risky. I appended this occurrence to the project memory (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`) documenting tentativa 2/10 for task611.
+
+This is a pipeline-machine networking problem (no route to 192.168.200.0/24), not something fixable from the .prg files. Someone with access to the pipeline VM/host needs to restore network access to 192.168.200.10:1433 ÔÇö retrying `runtime_fix` on this task will keep burning attempts against the same wall.

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo ├® um bug de c├│digo ÔÇö ├® o problema de rede recorrente j├í documentado em mem├│ria.
+
+**Diagn├│stico:**
+- O erro ocorre em `[ETAPA 1B] Conectando ao banco de dados...`, **antes** de qualquer `CREATEOBJECT("FormSigPrGf2")`/`CREATEOBJECT("SigPrGf2BO")` ÔÇö o pre-flight `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg` falha antes do form/BO serem instanciados.
+- Confirmei agora: `Test-NetConnection 192.168.200.10 -Port 1433` ÔåÆ `TcpTestSucceeded: False`, `PingSucceeded: False`. A m├íquina do pipeline n├úo tem rota para `192.168.200.0/24`.
+- Esta ├® a **3┬¬ tentativa** deste mesmo task613/FormSigPrGf2 com o mesmo erro id├¬ntico. J├í ├® recorr├¬ncia de 100+ tasks desde 2026-08-02 (mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`).
+
+**Revisei o c├│digo de novo por inteiro** (FormSigPrGf2.prg + SigPrGf2BO.prg) contra as regras do CLAUDE.md ÔÇö nenhum defeito encontrado:
+- `RETURN` sempre fora de `TRY/CATCH`
+- M├®todos `PROTECTED` chamados com `THIS.`
+- Handlers de `BINDEVENT` s├úo `PUBLIC`, sem `LPARAMETERS` onde o evento legado n├úo leva par├ómetro
+- `.ControlSource` do OLE s├│ ├® setado dentro de `DesenharGrafico()`, depois que o cursor j├í existe (regra #41)
+- Nenhum `EVALUATE` para atribui├º├úo, `Controls("nome")` por string, ou `.Self` dentro de `WITH`
+- Nenhum `SELECT`/`SQLEXEC` contra o SQL Server neste form ÔÇö s├│ `SELECT` local sobre o cursor de origem recebido do form pai
+
+Como n├úo h├í edi├º├úo a fazer no c├│digo, **n├úo alterei os arquivos** (isso violaria a regra do projeto contra edi├º├Áes especulativas). Registrei a reincid├¬ncia (tentativa 3/10) na mem├│ria do projeto para rastrear o padr├úo. Restam 7 tentativas antes do or├ºamento do pipeline se esgotar por causa deste mesmo erro de infraestrutura ÔÇö vale avisar quem administra a m├íquina do pipeline sobre a rota ausente para `192.168.200.0/24`.

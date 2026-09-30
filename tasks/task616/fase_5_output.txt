@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 5 j├í est├í entregue. N├úo alterei nenhum arquivo do projeto.**
+
+Esta ├® a **quarta** invoca├º├úo da task616 sobre a mesma `SigPrGloT.scx` ÔÇö j├í migrada em task188 e task291. Verifiquei independentemente:
+
+- `FormSigPrGloT.prg` ├® **id├¬ntico ao HEAD do git** (`git diff` vazio), 1781 linhas, 51 m├®todos, cobrindo as Fases 3-8.
+- O SCX de origem ├® um **placeholder vazio** (`Form1`, 375├ù250, zero controles, zero m├®todos) e por isso `analise.json` traz `campos: []` / `labels: []` e `layout.json` traz 3 objetos vazios ÔÇö **n├úo h├í lista de campos para "dividir ao meio"**.
+
+O que a Fase 5 pede (`ConfigurarPaginaDados()` com 50% dos campos da Page2) n├úo se aplica: este ├® um despachante OPERACIONAL de layout FLAT, sem split Page1/Page2. Os campos **j├í existem** e est├úo completos:
+
+| Item | Situa├º├úo real |
+|---|---|
+| Campos | **19 TextBoxes + 17 Labels** em `ConfigurarCamposForm()` (l. 422) + 7 `ConfigurarContainer*` (l. 609-925) |
+| `ConfigurarPaginaDados()` | `RETURN` puro **de prop├│sito** (l. 942), com coment├írio explicando que OPERACIONAL n├úo tem Page2 |
+| Orquestra├º├úo | `ConfigurarPaginaLista()` (l. 926) chama os 8 m├®todos de layout |
+
+Obedecer o template inventaria campos que o legado nunca teve ÔÇö viola├º├úo do PILAR 1, mesma fam├¡lia da Fase 4 desta task.
+
+**Auditoria dos campos existentes (tudo limpo):**
+
+- `MaxLength` Ôëá `Width` em todos os blocos `WITH` ÔÇö regra #19 Ô£ô
+- `ForeColor` branco s├│ no `lbl_4c_Titulo` do cabe├ºalho; os 17 labels de dados em `RGB(90,90,90)` ÔÇö regra #12 Ô£ô
+- Zero `.Self` (#38), zero `Controls("<nome>")` (#34), nenhum `Format` com `M` (#24) Ô£ô
+- Os 3 `.Picture` (`cadastro_sair_60.jpg`, `geral_processar_60.jpg`, `new_background.jpg`) existem em `vbmp\` ÔÇö regra #25 Ô£ô
+
+N├úo mexi em `task_state.json` (bookkeeping do orquestrador) nem no BO. Conforme a orienta├º├úo j├í registrada nas sess├Áes anteriores, n├úo repeti a pergunta sobre descartar/marcar duplicada ÔÇö entreguei a auditoria e parei. Registrei a recorr├¬ncia da Fase 5 na mem├│ria `feedback_task_rerun_sobre_form_ja_migrado`, incluindo uma armadilha nova: os blocos usam alinhamento por espa├ºos (`.ForeColor     = RGB(...)`), ent├úo grep com um espa├ºo antes do `=` d├í falso negativo.
+
+**Ponto para o pipeline:** o `OrquestradorMigracao.ps1` est├í re-enfileirando esta task fase por fase sobre um form pronto. Vale um gate no orquestrador que compare o md5 da SCX com as tasks `COMPLETED` antes de enfileirar ÔÇö sen├úo as Fases 6, 7 e 8 v├úo chegar aqui pelo mesmo caminho.

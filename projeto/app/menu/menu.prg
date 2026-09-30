@@ -424,6 +424,8 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Cadastro de Presen" + CHR(231) + "a de Vendedores (SigCdVen)"
     DEFINE BAR 197 OF popCadastros PROMPT "Visitas de Representantes" ;
            MESSAGE "Cadastro de Visitas de Representantes (SigCdVis)"
+    DEFINE BAR 198 OF popCadastros PROMPT "Estoque M" + CHR(225) + "ximo" ;
+           MESSAGE "Cadastro de Estoque M" + CHR(225) + "ximo por Produto/Empresa (SigCdMax)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -606,6 +608,7 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 195 OF popCadastros DO AbrirFormUSA
     ON SELECTION BAR 196 OF popCadastros DO AbrirFormVEN
     ON SELECTION BAR 197 OF popCadastros DO AbrirFormVis
+    ON SELECTION BAR 198 OF popCadastros DO AbrirFormsigprcom
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -659,9 +662,6 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 30 OF popMovimentos PROMPT "Gera" + CHR(231) + CHR(227) + "o CNAB Cobran" + CHR(231) + "a" ;
            MESSAGE "Gera arquivos CNAB de cobran" + CHR(231) + "a para bancos (BB, Itau, Bradesco, Santander)"
     DEFINE BAR 31 OF popMovimentos PROMPT "\-"
-    DEFINE BAR 32 OF popMovimentos PROMPT "Estoque M" + CHR(225) + "ximo" ;
-           MESSAGE "Cadastro de Estoque M" + CHR(225) + "ximo por Produto/Empresa"
-    DEFINE BAR 33 OF popMovimentos PROMPT "\-"
     DEFINE BAR 34 OF popMovimentos PROMPT "Capacidade Produtiva" ;
            MESSAGE "Consulta de Capacidade Produtiva por Fase/Data/Processo"
 
@@ -679,7 +679,6 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 24 OF popMovimentos DO AbrirFormSigPrCcc
     ON SELECTION BAR 26 OF popMovimentos DO AbrirFormSigPrCcp
     ON SELECTION BAR 28 OF popMovimentos DO AbrirFormSigPrCfn
-    ON SELECTION BAR 32 OF popMovimentos DO AbrirFormsigprcom
     ON SELECTION BAR 30 OF popMovimentos DO AbrirFormSIGPRCNB
     DEFINE BAR 35 OF popMovimentos PROMPT "\-"
     DEFINE BAR 36 OF popMovimentos PROMPT "Distribui" + CHR(231) + CHR(227) + "o de Produtos" ;
@@ -994,6 +993,18 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "T" + CHR(237) + "tulos Gerados - Processamento CMV - Consulta os t" + CHR(237) + "tulos financeiros gerados pelo processamento de CMV (SigMvCcr)"
 
     ON SELECTION BAR 139 OF popMovimentos DO AbrirFormSIGMVTI2
+
+    DEFINE BAR 140 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 141 OF popMovimentos PROMPT "Sele" + CHR(231) + CHR(227) + "o de Vendedores" ;
+           MESSAGE "Sele" + CHR(231) + CHR(227) + "o de Vendedores para Movimenta" + CHR(231) + CHR(227) + "o (SigMvVde)"
+
+    ON SELECTION BAR 141 OF popMovimentos DO AbrirFormSigMvVde
+
+    DEFINE BAR 142 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 143 OF popMovimentos PROMPT "Consulta e Cancelamento de Cheques" ;
+           MESSAGE "Consulta e Cancelamento de Cheques Emitidos (SigCqChi)"
+
+    ON SELECTION BAR 143 OF popMovimentos DO AbrirFormSigPrChr
 
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
@@ -11892,6 +11903,78 @@ PROCEDURE AbrirFormSIGMVTI2()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de T" + CHR(237) + "tulos Gerados:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigMvVde - Abre o dialogo de Selecao de Vendedores (SigMvVde).
+* Dialogo modal (WindowType=1 na propria classe) sem tabela propria: resolve
+* 11 vendedores (contas de SigCdCli) e devolve os codigos escolhidos via
+* go_4c_Vendedor (equivalente ao goVendedor global do legado). Sem parametro
+* de entrada, igual ao Init legado - ver FormSigMvVde.prg.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigMvVde()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("FormSigMvVde")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Sele" + CHR(231) + CHR(227) + "o de Vendedores" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Sele" + CHR(231) + CHR(227) + "o de Vendedores:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigPrChr - Abre a Consulta e Cancelamento de Cheques (SigCqChi).
+* Form OPERACIONAL sem parametros de entrada, igual ao Init legado - ver
+* FormSigPrChr.prg.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigPrChr()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("FormSigPrChr")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Consulta e Cancelamento de Cheques" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Consulta e Cancelamento de Cheques:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

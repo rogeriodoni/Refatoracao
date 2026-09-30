@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e **verificada instanciando** ÔÇö n├úo s├│ "o arquivo tem os m├®todos".
+
+## O que a Fase 8 entregou
+
+- **`FormParaBO()` / `BOParaForm()`** ÔÇö a ponte dos 33 campos (`Conta<N>`/`DConta<N>`/`Grupo<N>`, slots 0..10) entre tela e BO. Era o defeito real: `ValidarSelecao()`/`ConfirmarSelecao()` leem s├│ as properties `this_c*`, que nunca eram alimentadas pelos TextBox.
+- **`menu.prg`** ÔÇö bar 141 do `popMovimentos` + `AbrirFormSigMvVde()` (`Show()` fora do TRY, regra #29).
+- O boilerplate CRUD (`BtnBuscarClick`/`BtnEncerrarClick`/`HabilitarCampos`/`LimparCampos`/`CarregarLista`/`AjustarBotoesPorModo`) **n├úo se aplica**: o legado ├® di├ílogo modal flat, sem lista, sem modos e com um bot├úo s├│.
+
+## Tr├¬s defeitos que encontrei ao verificar
+
+1. **`Empty` n├úo tem o m├®todo `AddProperty` (FATAL)** ÔÇö `SigMvVdeBO.Init` fazia `go_4c_Vendedor.AddProperty(...)`. Medido no VFP9: erro 1734, e `Empty` ├® a **├║nica** base class sem esse m├®todo (`Custom`/`Form`/`Container`/`Session`/`_Screen` t├¬m). O erro estourava dentro do TRY do form ÔåÆ `CREATEOBJECT` devolvia `.F.` ÔåÆ **a tela nunca abria** e o menu n├úo fazia nada. Corrigido para a fun├º├úo `ADDPROPERTY()`. Sweep nos 13 sites de `.AddProperty(` do projeto: era o **├║nico** defeito real.
+
+2. **`DO FORM SigOpSen` falha** ÔÇö medido: `sigopsen.SCX` s├│ existe em `C:\4install\FortyusMC\Fortyus\`, fora do `SET PATH`. Sem TRY/CATCH isso virava **Program Error cru** e abortava o m├®todo antes de gravar ÔÇö o caminho principal do bot├úo estava 100% quebrado. Sendo gate de autoriza├º├úo, tratei **fail-closed** (indispon├¡vel ÔçÆ n├úo autorizado, mesmo desfecho do "Autoriza├º├úo n├úo confirmada" do legado) com a aus├¬ncia **vis├¡vel** em `MsgErro`. N├úo substitu├¡ por `MsgConfirma`: seria liberar leil├úo sem senha, em sil├¬ncio.
+
+3. **Nome do handler** ÔÇö o objeto legado `btnSair` ├® misnomer: `Caption` ├® `"\<Confirmar"` e o Click **grava**. Renomeei para `cmd_4c_Confirmar`/`BtnConfirmarClick` (+ `mapeamento.json`, que o ValidarUIFidelity usa). Isso tamb├®m ├® o que o gate da Fase 8 exigia ÔÇö aqui o gate estava certo, o form estava mal nomeado.
+
+## Verifica├º├úo (rebuild limpo, `.FXP` apagado e recriado)
+
+`COMPILE_OK` sem `.ERR`; form instancia; 33/33 campos; **Click disparado no pr├│prio bot├úo** (prova o BINDEVENT) chega em `BtnConfirmarClick` sem vazar exce├º├úo; BO recebe `Conta0=1001`/`Grupo0=GRP1`/`Conta3=1004` da tela; `this_lConfirmado=.F.`, `Vendedor00`=sentinela, `Vendedor03` vazio ÔÇö fail-closed correto. Gate da Fase 8 reavaliado: `metodosFaltantes=[]`, a├º├úo de gravar = `True`.
+
+## Dois pontos para voc├¬ decidir
+
+- **O gate da Fase 8 tem um furo**: ele testa os nomes como *substring do arquivo inteiro*, ent├úo `BtnCancelarClick` e `CarregarLista` "passam" aqui s├│ porque aparecem em **coment├írios** explicando por que n├úo se aplicam. A Fase 8 n├úo tem o ramo *"layout captura"* (sem lista + campos edit├íveis) que as Fases 4 e 5 j├í ganharam. N├úo mexi: endurecer isso afeta os 573 forms e exige medi├º├úo pr├│pria.
+- **`FormSigPdMp9.prg:1836` e `FormSigPrGlx.prg:2717`** chamam `DO FORM SigOpSen` **sem guard** ÔÇö mesmo defeito latente, fora do escopo desta task.
+
+Detalhe deixado fiel de prop├│sito: `Left+Width` do bot├úo = 623 contra `Form.Width` = 620 (3px recortados). O overflow ├® herdado do SCX + classe `fwbtng`; mexer divergiria do legado. Est├í documentado no cabe├ºalho.
+
+Harness reutiliz├ível em `automation/test_fase8_sigmvvde.prg` e `automation/check_fase8_sigmvvde.prg`; scratch limpo. Li├º├Áes gravadas na mem├│ria (incluindo que **nenhuma fase do pipeline instancia o form** ÔÇö foi por isso que o defeito #1 atravessou as 8 fases).

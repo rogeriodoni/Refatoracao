@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Investiguei os 5 achados do pass FUNCTIONAL contra o c├│digo real e o dump legado (`tasks/task607/sigpres2_form_codigo_fonte.txt`) antes de aplicar qualquer corre├º├úo, seguindo a pr├ítica j├í estabelecida neste projeto (`feedback_warning_massivo_verificar_premissa`). **Os 5 s├úo falsos positivos** ÔÇö nenhum arquivo foi alterado:
+
+- **CONTAINER-VISIVEL**: `cnt_4c_Cabecalho`/`cnt_4c_Observacao` j├í t├¬m `.Visible = .T.` expl├¡cito, nada os oculta.
+- **CARGA-DADOS**: o `Get_conta.Valid` do legado n├úo carrega grade nenhuma ÔÇö o dialogo n├úo tem Lista filtr├ível.
+- **NULL-CURSOR**: o cursor ├® povoado via `APPEND BLANK` + `REPLACE` com valores j├í tratados por `TratarNulo`, sem caminho de NULL do SQL Server.
+- **GRID-WITH**: cita um bloco `WITH` que n├úo existe ÔÇö `this_cEmpresaDestino` ├® uma property escalar, n├úo grid.
+- **LAYOUT-POSITION**: o container `cnt_4c_Origem` j├í est├í correto (`Top=202` = 173 do legado + 29 de compensa├º├úo do PageFrame); o "Top=5" do achado ├® na verdade o label filho, lido por engano de dentro do `WITH` aninhado.
+
+Registrei as reincid├¬ncias em `feedback_container_visivel_cabecalho_falso_positivo.md` e `feedback_harness_de_auditoria_mede_errado.md` (item #36) para o pr├│ximo pass n├úo repetir a mesma investiga├º├úo do zero.

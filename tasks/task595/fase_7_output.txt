@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. O resultado principal ├® que **os 4 eventos CRUD pedidos n├úo se aplicam a este form** ÔÇö e cri├í-los seria defeito, n├úo entrega.
+
+## O que o legado prova
+
+Medi o dump inteiro (`sigprcpd_form_codigo_fonte.txt`, 14 m├®todos):
+
+| Evid├¬ncia de CRUD | Resultado |
+|---|---|
+| `frmcadastro` | ausente ÔÇö herda de `form` puro |
+| `Grupo_Op` | ausente |
+| `pcEscolha` | **0** ocorr├¬ncias |
+| nome `cmd/btn(Incluir\|Alterar\|Visualizar\|Excluir)` | ausente |
+| `X.Click` com verbo CRUD | ausente |
+
+O SCX tem **um ├║nico CommandButton** (`Sair`, `fwbtng`, "Encerrar", `Click = ThisForm.Release`). ├ë um visualizador somente-leitura aberto com 4 par├ómetros. Criar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├Áes (viola o PILAR 1) ou deixar m├®todos vazios (proibido pela regra de completude) ÔÇö exatamente a fam├¡lia de falso-positivo j├í registrada para `SIGMVCTH`/`SIGPRCAR`/`SIGPRCHR`.
+
+Os eventos que o legado **realmente** tem j├í estavam implementados e com `BINDEVENT`: `BtnSairClick` e `GradeAfterRowColChange`. Os 9 `When ÔåÆ Return .f.` est├úo como `ReadOnly = .T.` nos 9 TextBox.
+
+## O que eu mudei de fato
+
+1. **Defeito real corrigido** ÔÇö a classe tinha `ShowWindow` declarado **duas vezes** (`= 0` e depois `= 1`). Em VFP o ├║ltimo vence, ent├úo o `1` anulava o guard anti-timeout que o pr├│prio coment├írio do `Init` descreve. Removida a linha duplicada.
+2. **N├úo-port do `Load` documentado** ÔÇö o legado tem `Load ÔåÆ =fConfigGeral()`. A decis├úo can├┤nica (precedente `FormSigMvExp.prg`) ├® n├úo portar, porque `utils\fconfiggeral.prg` ├® um no-op cujo cabe├ºalho diz "em c├│digo NOSSO nunca se chama fConfigGeral". Registrei a tabela dos 14 m├®todos no header para a aus├¬ncia ficar audit├ível em vez de parecer esquecimento.
+
+## Uma corre├º├úo que fiz no meio do caminho
+
+Minha primeira vers├úo do coment├írio continha os quatro nomes CRUD e as strings `PROCEDURE BtnÔÇªClick` em texto corrido. Como o gate faz substring match no arquivo todo, isso fez `eventosFaltantes` cair para 0 e `nHandlers` subir de 1 para 2 ÔÇö o gate passava **pela minha prosa**, n├úo pelo carve-out. Reescrevi o coment├írio; agora os 4 nomes est├úo genuinamente ausentes e o veredicto vem do carve-out leg├¡timo.
+
+Tamb├®m restaurei CRLF: minhas edi├º├Áes normalizaram o arquivo para LF, divergindo do resto do repo (`FormCor.prg`, `sigprcpdBO.prg` s├úo todos CRLF, e n├úo h├í `.gitattributes`).
+
+## Verifica├º├úo
+
+- Compila├º├úo VFP9: `.fxp` do Form e do BO gerados, **nenhum `.err`** (apaguei os `.fxp` antes ÔÇö regra #29).
+- Gate Fase 7 replicado com as fun├º├Áes reais do orquestrador: `nBotoesLegado=1` ÔåÆ `minHandlersF7=1`, `nHandlers=1` ÔåÆ **PASSA**.
+- Completude: `todoPattern=0`, `laterPattern=0` (os 7 hits de "TODO" s├úo substring de `meTODOs`/`toDOs`; o regex ├® ancorado em `^\s*\*--?\s*TODO\b`).
+- Arquivo segue ASCII puro, sem BOM, 14 m├®todos preservados.
+
+Uma ressalva que n├úo toquei porque est├í fora do escopo da Fase 7: o `Init` migrado for├ºa `WindowType = 1` (modal) em produ├º├úo, mas o SCX legado n├úo declara `WindowType` nem `ShowWindow` ÔÇö ou seja, o legado ├® **n├úo-modal**. Pode ser conven├º├úo deliberada do projeto (`Show()` sem par├ómetro + `FormBase` gerenciando), mas vale conferir na Fase 8 se a modalidade era intencional.

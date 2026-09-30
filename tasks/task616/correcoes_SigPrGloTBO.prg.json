@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPrGloTBO.prg",
+    "timestamp":  "2026-09-29T12:22:21",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-189-SUCESSO-SEM-GRAVAR",
+                          "Linha":  569,
+                          "Original":  "                    loc_lSucesso = .T.",
+                          "Corrigido":  "(REVISAR MANUAL)",
+                          "Descricao":  "Pattern #189-A: o metodo marca sucesso (.T.) no ramo em que o cursor de detalhe esta VAZIO (guarda na linha 566) — nada eh gravado e mesmo assim o form costuma exibir MsgInfo de sucesso e voltar para a lista. Em modo de INCLUSAO, bloquear ANTES de chamar o BO: contar as linhas do cursor com a coluna-chave preenchida e, se zero, MsgAviso(Informe ao menos um item antes de gravar) + RETURN. Em ALTERAR a lista vazia pode ser legitima (apaga-e-reinsere = remover todos os itens), por isso nao ha auto-fix. Origem: Erro148 (2026-09-08 FormSIGPRLNC)."
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

@@ -1,0 +1,23 @@
+FASE8 task608 / FormSIGPREST - inicio 28/09/2026 12:37:05
+0a config.prg OK - gc_4c_CaminhoBase=[C:\4C\PROJETO\APP\START]
+0b dependencias carregadas
+0c cenario: basededados com AlfaTst.DBF + BetaTst.DBF
+0d crGlobalProbe (fora do form) criado: .T.
+1 INSTANCIA VARTYPE=O Caption=[Gerar Estrutura] W=600 H=191 DataSession=2
+2 BOParaForm no Init -> Estrutura=1 Indice=1 Rodape=[] (esperado 1 / 1 / vazio)
+3a HabilitarCampos(.F.) -> OK=.F. Encerrar=.F. (esperado .F./.F.)
+3b HabilitarCampos(.T.) -> OK=.T. Encerrar=.T. (esperado .T./.T.)
+4 FormParaBO -> this_lGeraArquivos=.F. (tipo L) this_lGeraIndices=.T. (esperado .F. tipo L / .T.)
+5 BOParaForm -> Rodape=[ECO DE TESTE] Estrutura=0 Indice=1
+6 GUARD indices-sem-estrutura -> Rodape=[Processamento Interrompido.] OK.Enabled=.T. Encerrar.Enabled=.T. ArqDBF criado? .F.  (esperado Interrompido / .T. / .T. / .F.)
+7a PROCESSAMENTO -> Rodape=[Processamento Finalizado.] OK.Enabled=.T.
+7b GRAVOU -> ArqDBF.DBF=.T. linhas=4 (4 campos esperados) | ArqInd.DBF=.T. linhas=2 (2 tags esperados)
+7c contadores BO -> Arquivos=2 Campos=4 Indices=2
+8 ISOLAMENTO DataSession=2 -> USED(crGlobalProbe)=.T. (esperado .T.)
+9 CURDIR depois=[C:\4C\PROJETO\APP\START\] antes=[C:\4C\PROJETO\APP\START\] reposto? .T.
+10 BtnEncerrarClick de FORA: OK
+LIMPEZA basededados removido? .T.
+DIALOGOS SUPRIMIDOS:
+[28/09/2026 12:37:06 PM] Atenção: Antes de gerar os índices, é necessário que seja gerada a Estrutura de Arquivos...
+
+FIM 28/09/2026 12:37:06

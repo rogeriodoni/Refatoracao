@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada medindo no VFP9.
+
+## O que estava errado
+
+A Fase 8 anterior concluiu "j├í estava completo" e n├úo mexeu no form. Reproduzi o gate extraindo as fun├º├Áes do orquestrador **via AST** (nunca dot-source ÔÇö ele dispara migra├º├úo real) e isolei o motivo exato da reprova├º├úo:
+
+- Os quatro nomes CRUD (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`) **s├úo dispensados** pelo ramo *fluxo-├║nico* (legado sem CRUD, com lista e campo edit├ível reais).
+- O bloqueio era **um s├│**: `$padraoAcaoGravar = 'PROCEDURE\s+Btn(Salvar|Confirmar|Gravar|Processa|Aplicar|Executar|OK)\w*Click'`. Os bot├Áes do SIGPRFTP s├úo "Conecta"/"Transfere"/"Recebe"/"Rede Dial-Up" e a tela n├úo persiste nada em tabela ÔÇö a a├º├úo dela ├® mover arquivo.
+
+## Form (`Formsigprftp.prg`)
+
+Implementei os hooks que **existem de verdade** neste legado, em vez de declar├í-los inaplic├íveis:
+
+- **`BOParaForm()`** ÔÇö transcri├º├úo literal do bloco do `Init` legado (`.pgfloc.Page1.direnvftp.Value = ThisForm._DirEnvFtp` e os outros tr├¬s, mais os `ToolTipText`). Os `AddObject` passaram a `.Value = ""` e o preenchimento ficou centralizado.
+- **`FormParaBO()`** ÔÇö l├¬ os quatro diret├│rios de volta com a mesma normaliza├º├úo do `Init` legado (`ADDBS` na pasta local, `+ "/"` na remota). Campo em branco **n├úo** sobrescreve a property; pasta local inexistente devolve `.F.` com aviso.
+- **`CarregarLista()`** (PUBLIC, o harness chama de fora) ÔÇö `FormParaBO` ÔåÆ `MontaContainer` ÔåÆ `GO TOP`/`Refresh` nos dois grids.
+- **`HabilitarCampos()`** ÔÇö consolida o bloco `.enabled` que o legado repete em tr├¬s lugares.
+- Renomeei `BtnTransferirClick`/`BtnReceberClick` ÔåÆ `BtnExecutarTransferenciaClick`/`BtnExecutarRecebimentoClick` (BINDEVENTs atualizados).
+- Fidelidade: `RETURN .F.` no guard de "nada selecionado" (o legado faz `return .f.`); coment├írio do `RasConexao` corrigido (ele ├® o `rasentradas` legado ÔÇö `rasconexao`/`rashangup` s├úo c├│digo morto no legado).
+
+## Precisa da sua decis├úo ÔÇö diverg├¬ncia deliberada
+
+No legado os quatro TextBox de diret├│rio s├úo **edit├íveis mas inertes**: nada l├¬ o valor de volta, e os bot├Áes "..." de escolher pasta est├úo `Enabled = .F.` no SCX. Ligar `FormParaBO` no fluxo de transfer├¬ncia faz a edi├º├úo **passar a valer**. Documentei no c├│digo, mas ├® desvio do PILAR 1 ÔÇö se preferir o comportamento legado (campo edit├ível que n├úo faz nada), removo as chamadas de `Transferir`/`Receber`.
+
+## Gate corrigido para as pr├│ximas migra├º├Áes
+
+Como gate corrigido no meio da fase n├úo vale para ela mesma, o form precisou satisfazer o gate como est├í carregado. Mas corrigi a causa: `Test-AcaoDoLegadoTemHandler` deriva o verbo do **pr├│prio dump** (Caption/Name dos CommandButton), descarta o bot├úo que s├│ fecha, exige raiz de 4+ letras e casa o handler ancorado em in├¡cio de linha. Fail-closed. Medido nos 358 dumps: dos 47 forms que falham o padr├úo, o ramo novo aceita 8 (3 forms distintos, todos j├í cobertos por ramos anteriores) ÔÇö a mudan├ºa ├® estreita. Orquestrador reparseado sem erro.
+
+## Verifica├º├úo (medida, n├úo lida)
+
+- `COMPILE` limpo nos dois arquivos.
+- Probe com **controles reais** (subclasse que troca o `InicializarForm` por um caminho sem SQL): `BOParaForm` espelha as 4 properties; `FormParaBO` normaliza `/DESTINO/NOVO` ÔåÆ `/destino/novo/`; campo vazio preserva a property; pasta inexistente devolve `.F.`; `HabilitarCampos` alterna; `CarregarLista()` ÔåÆ `.T.` com `ListCount=2` e os arquivos corretos na lista.
+- Caminho de produ├º├úo: form instancia (800x600), todos os handlers presentes, `Release` OK.
+- Dois resultados esperados, n├úo defeitos: `WordToC is not found` de fora (├® PROTECTED) e `GNCONNHANDLE is not found` (SQL Server 192.168.200.10 inalcan├º├ível desta m├íquina).

@@ -1,0 +1,30 @@
+=== TESTE FASE 4 - CARGA DA GRADE (FormSigPrChr) ===
+CREATEOBJECT        : OK
+cmd_4c_Processar    : .T.
+MontaGrade          : .T.
+ExibirCheques       : .T.
+BtnProcessarClick   : .T.
+BO.CarregarCheques  : .T.
+MontaGrade s/conexao: retorno=.F. LockScreen=.F.
+MontaGrade sucesso  : retorno=.T. RECCOUNT=2 LockScreen=.F.
+TAGCOUNT            : 12
+TAGS                : NCOPIAS,NEMITIDOS,NCANCELAS,NMARCA1S,NCHEQUES,DATAS,CONTA,CONTAS,EMISSAO,VALOR,CHEQUE,AGENCIA
+ORDER apos carga    : [NCOPIAS]
+--- binding pos-carga (deve ser IDENTICO ao pre-carga) ---
+Col1.Width   79 -> 79
+Col1.Header  [Data] -> [Data]
+Col10.CurCtl [CHK_4C_CHECK1] -> [CHK_4C_CHECK1]
+Col10.Sparse .F. -> .F.
+Col10.Width  55 -> 55
+RecordSource [cursor_4c_Cheques]
+Col10.CtlSrc [cursor_4c_Cheques.nmarca1s]
+ExibirCheques(.T.)  : OK marcados=0 EOF=.T. ORDER=[NCOPIAS]
+MontaGrade(.T.)     : OK len(chave)=23 RECCOUNT=2
+ExibirCheques c/conta: OK ORDER=[CONTAS]
+Periodo invertido   : OK (avisou, CarregarCheques chamado 0x - esperado 0)
+Processar valido    : OK CarregarCheques=1x RECCOUNT=2
+--- ERROS CAPTURADOS ---
+[26/09/2026 20:44:51] Falha na Conexão (Cheques): Favor Reinicializar o Processo!!!Connection handle is invalid.Linha: 277Procedure: carregarcheques
+[26/09/2026 20:44:51] Período Inválido: Data Final menor que Data Inicial !!!
+
+=== FIM ===

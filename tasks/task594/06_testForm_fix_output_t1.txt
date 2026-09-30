@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+O erro na etapa `06_testForm` (task594, FormSIGPRCOT) **n├úo ├® um bug de c├│digo**. ├ë a falha de infraestrutura j├í documentada e recorrente desde 2026-08-02: a m├íquina que executa o pipeline n├úo tem rota para a subrede `192.168.200.0/24`, onde vive o SQL Server real (`DB_MBAHIA`). A falha ocorre na ETAPA 1B (pr├®-flight de conex├úo do `TestFormWrapper.prg`), **antes** de `FormSIGPRCOT`/`SIGPRCOTBO` serem instanciados.
+
+- Confirmei com `Test-NetConnection 192.168.200.10 -Port 1433`: n├úo completou em 30s (foi para background), o mesmo padr├úo de "sem rota" j├í registrado nas ~9 reincid├¬ncias anteriores.
+- Revisei `FormSIGPRCOT.prg` e `SIGPRCOTBO.prg` ÔÇö n├úo h├í nada neles relacionado a conectividade de rede que precise de corre├º├úo; a string de conex├úo vem de `config.prg`, id├¬ntica ├á de toda task que passa.
+- **N├úo editei nenhum arquivo de c├│digo**, para n├úo gastar as 10 tentativas do orquestrador "corrigindo" um problema que nenhuma edi├º├úo de `.prg` resolve.
+- Atualizei a mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`) com esta nova reincid├¬ncia (task594).
+
+Isso precisa ser resolvido na infraestrutura da m├íquina do pipeline (rota/VPN para `192.168.200.0/24`), n├úo no c├│digo migrado.

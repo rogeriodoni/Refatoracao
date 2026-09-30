@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, no leftover scratch files tracked. Fase 3 is complete.
+
+## Resumo
+
+Criei `C:\4c\projeto\app\forms\operacionais\FormSigPrChr.prg` ÔÇö estrutura base do form OPERACIONAL:
+
+- **`DEFINE CLASS FormSigPrChr AS FormBase`**, Width=800/Height=600 (pixel-perfect com o SCX legado, sem PageFrame ÔÇö layout flat confirmado no `layout.json`, onde todos os objetos s├úo filhos diretos de `SIGPRCHR`).
+- **`Init()`** ÔÇö apenas `RETURN DODEFAULT()`.
+- **`InicializarForm()`** ÔÇö instancia `SigPrChrBO`, monta o cabe├ºalho, torna controles vis├¡veis.
+- **`ConfigurarPageFrame()`** ÔÇö orquestrador (nome mantido por conven├º├úo arquitetural, como em `FormFop`/`FormEnd`, mesmo sem PageFrame real); por ora s├│ chama `ConfigurarCabecalho()`.
+- **`ConfigurarCabecalho()`** ÔÇö cria `cnt_4c_Sombra` + `lbl_4c_Sombra`/`lbl_4c_Titulo`, copiando Top/Left/Width/Height exatos do `cntSombra` legado.
+- **`TornarControlesVisiveis()`** ÔÇö recursivo, j├í com a lista de containers flutuantes (`CNT_4C_JUSTIFICATIVA`/`CNT_4C_IMPCHMAT`/`CNT_4C_PROCURAR`) que devem permanecer ocultos nas fases futuras, recursando nos filhos antes do `LOOP` (evita a armadilha de filhos ficarem `Visible=.F.` para sempre).
+- **`Destroy()`** ÔÇö libera os cursores do BO defensivamente e termina com `DODEFAULT()`.
+
+Validado com `COMPILE` via VFP9 (BO + Form) ÔåÆ `COMPILE_OK`, sem `.err`. Grid, CommandGroup de a├º├Áes e filtros ficam para as Fases 4ÔÇô7, conforme o escopo desta fase.

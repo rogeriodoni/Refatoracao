@@ -1,0 +1,22 @@
+v1 FASE7 CHECK
+1 INSTANCIA: VARTYPE=O W=800
+2 BINDEVENT Processa: n=1 [CLICK->CMDPROCESSACLICK ]
+3 BO metodos (PEMSTATUS vs chamada real):
+   RecalcularContaCorrente    PEMSTATUS=.T. chamada=retornou .F.
+   RecalcularEstoque          PEMSTATUS=.T. chamada=retornou .F.
+   RecalcularCustoProduto     PEMSTATUS=.T. chamada=retornou .F.
+   AtualizarUltimaCompra      PEMSTATUS=.T. chamada=retornou .F.
+4 AtualizarContadorRegistros(4321) de FORA: OK txt_4c_Registro.Value=4321
+5 FormParaBO: retorno=.T.
+   ContaEmpresa=[001] ContaGrupo=[GRP1      ] ContaConta=[CTA9      ] ContaMoeda=[BRL]
+   ContaData=26/09/2026 tipo=D EstoqueProduto=[PRO123] lCusto=.T. lConta=.F.
+6 TRAVADO: Processa=.F. Cancela=.F. chkConta=.F.
+  DESTRAVADO: Processa=.T. Cancela=.T. chkConta=.T.
+6b POS CmdProcessaClick: Processa=.T. Cancela=.T. chkConta=.T. LblEnd.Visible=.F.
+DIALOGOS SUPRIMIDOS: 
+[26/09/2026 11:23:21 AM] Erro em RecalcularContaCorrente: Connection handle is invalid.Linha: 409Procedure: recalcularcontacorrente
+[26/09/2026 11:23:21 AM] Erro em RecalcularEstoque: Connection handle is invalid.Linha: 560Procedure: recalcularestoque
+[26/09/2026 11:23:21 AM] Erro em RecalcularCustoProduto: Connection handle is invalid.Linha: 666Procedure: recalcularcustoproduto
+[26/09/2026 11:23:21 AM] Erro em AtualizarUltimaCompra: Connection handle is invalid.Linha: 825Procedure: atualizarultimacompra
+[26/09/2026 11:23:21 AM] Atenção: Sem conexão com o servidor de banco de dados. Não eh possível processar.
+

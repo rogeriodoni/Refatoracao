@@ -1,0 +1,332 @@
+{
+  "resumo": {
+    "totalMetodos": 19,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 14,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "Falhas", "FReal n", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRFEM",
+      "evento": "Procedure",
+      "linhas": 678,
+      "codigoOriginal": "Private pDat, pNot\nLocal _Origem, _Destino, _Grupo, _Conta, _Data, _DatauBal, _Saldoi, _Saidas, _FalhaAdimitida\n\nldDatai  = ThisForm.Get_datai.Value\nldDataf  = ThisForm.Get_dataf.Value\nlcEmp    = _Empr\nlcCodMat = crSigCdPam.Ouros\n_Trabalhado = 0\n\nldPrimBal = Date()\n\nlcSql = [Select Rclis, GerBals, PagFals, RecFals From SigCdCli where Iclis = ']+CrSigMvEst.Estos+[']\nIf Thisform.Podatamgr.Sqlexecute(lcSql,'CrSigCdCli') < 1\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "Get_datai,Get_dataf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor Entradas (Emps c(3), TpOps c(15), Qtde n(12,3))\nIndex On Emps + TpOps Tag TpOps\n\nCreate Cursor Saidas (Emps c(3), TpOps c(15), Qtde n(12,3))\nIndex On Emps + TpOps Tag TpOps\n\nCreate Cursor Saldos (Grupos c(10), Contas c(10), Qtde n(12,3), Emps c(3))\nIndex On Grupos + Contas Tag GruConta\n\nCreate Cursor SaldoAnt (Grupos c(10), Contas c(10), Qtde n(12,3), Emps c(3))\nIndex On Grupos + Contas Tag GruConta\n\nCreate Cursor Falhas (Grupos c(10), Contas c(10), Qtde n(12,3), E... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,Falhas,FReal n",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'Ouros, DopeBals')\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac', .f., .f., 'ndFechas')\n\n\t\tThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', .f., .f., 'Dopes, Origems, EstOrigs, Destinos, EstDests... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_TEntradas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_Saidas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_Pesagem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_FalhaFunc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_Entradas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_Saldo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_SaldoFunc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_Saldoi",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_SaldoT",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Resultado.Resumo.Get_SaldoAnt",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Visualizar",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If thisform.resultado.Visible\n\tSelect TmpImp\n\tGo Top\n\tIf !Eof()\n\t\tReport Form SIGPRFEM Preview NoConsole\n\tEndif\nEndif\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Get_Demonstrativo",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrDmo', ;\n\t\t\t\t\t\t   'crListaRemota', 'Nome', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Nome', '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Nome\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Processar",
+      "evento": "Click",
+      "linhas": 897,
+      "codigoOriginal": "Private pDat, pDtI, pDtF\n\nldDatai  = ThisForm.Get_datai.Value\nldDataf  = ThisForm.Get_dataf.Value\nlcConfig = ThisForm.Get_Demonstrativo.Value\nlcEmp    = _Empr\nlcCodMat = crSigCdPam.Ouros\n\nIf Empty(ldDataf)\n\t=Messagebox('A Data Final Deve Ser Informada!!!', 32, '')\n\tThisForm.Get_Dataf.SetFocus\n\tReturn 0\nEndIf\n\nIf (ldDatai > ldDataf)\n\t=Messagebox('A Data Final Deve Ser Maior Que a Data Inicial!!!', 32, '')\n\tThisForm.Get_Datai.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(lcConfig)\n\t=Messagebox('A Configuraçã... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_datai,Get_dataf,Get_Demonstrativo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Imprimir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If thisform.resultado.Visible\n\tSelect TmpImp\n\tGo Top\n\tIf !Eof()\n\t\tReport Form SIGPRFEM To Print Prompt NoConsole\n\tEndif\nEndif \n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFEM.Sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRFEM.Procedure",
+      "queryOriginal": "lcSql = [Select Rclis, GerBals, PagFals, RecFals From SigCdCli where Iclis = ']+CrSigMvEst.Estos+['] If Thisform.Podatamgr.Sqlexecute(lcSql,'CrSigCdCli') < 1",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,GerBals,PagFals,RecFals,Iclis,Estos+[],SqlexecutelcSql,CrSigCdCli",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

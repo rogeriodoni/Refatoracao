@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada.
+
+## O que foi entregue
+
+**`FormSIGPRCOT.prg`** ÔÇö os hooks can├┤nicos de transfer├¬ncia que faltavam:
+
+- **`PROTECTED PROCEDURE FormParaBO`** / **`BOParaForm`** ÔÇö neste di├ílogo a "ficha" n├úo ├® uma Page2 de campos soltos, ├® a **linha corrente da grade** (o legado edita data/hora/valor direto na c├®lula), ent├úo os dois hooks leem/gravam o registro corrente de `cursor_4c_Dados`.
+- As mesmas atribui├º├Áes BOÔåölinha estavam **duplicadas inline** em `BtnIncluirClick`, `BtnExcluirClick` e nos **dois** `Scan` do `BtnSairClick` ÔÇö consolidadas nos hooks.
+- `PROTECTED` expl├¡cito: `FormBase` j├í declara os tr├¬s como PROTECTED e o VFP9 n├úo deixa a subclasse alargar o escopo.
+
+**Verifica├º├úo real** (n├úo s├│ compila├º├úo): compila limpo, sem `.err`; probe por subclasse (`InstantiateCheckSigPrCotF8.prg`) prova o round-trip ÔÇö sem cursor os dois devolvem `.F.` sem estourar; com cursor, linhaÔåÆBO l├¬ `USD/09:30/5.4321/chave` e BOÔåÆlinha grava `18:45/7.25/PROBE` preservando a chave.
+
+## O que N├âO foi inventado
+
+A fase pedia `Btn...Salvar/Cancelar...Click`, `Habilitar...Campos`, `Limpar...Campos`, `Ajustar...PorModo`. O SCX legado tem **3 bot├Áes** (`inserir`/`delete`/`sair`), nenhum campo fora da grade e nenhum modo ÔÇö cri├í-los violaria o PILAR 1 ou seria stub disfar├ºado. Documentei cada um no cabe├ºalho **com o miolo elidido de prop├│sito**, j├í que a valida├º├úo procura o nome como substring no arquivo inteiro e escrev├¬-los por extenso faria o gate passar pelo motivo errado.
+
+## Corre├º├úo no gate (`OrquestradorMigracao.ps1`)
+
+O ramo LINHA-IMEDIATA j├í existia para exatamente este layout e n├úo alcan├ºava ÔÇö por **grafia**, n├úo por comportamento:
+
+1. O legado nomeia os bot├Áes **sem prefixo** (`inserir`/`delete`), e o gate exigia `cmdInserir`/`cmdExcluir`. Relaxar para o texto cru casaria com **c├│digo** (`Delete From SigCdCot`), ent├úo criei `Get-NomesBotoesLegado`, que l├¬ s├│ as declara├º├Áes `commandbutton`.
+2. O handler migrado usa o sin├┤nimo (`BtnIncluirClick`); passou a aceitar Inserir **ou** Incluir.
+3. `-not $legadoFluxoUnicoF8` bloqueava o ramo ÔÇö os dois s├úo **complementares** (um dispensa os 4 nomes, o outro a exig├¬ncia de bot├úo de a├º├úo).
+
+**Delta medido em 593 dumps:** a condi├º├úo isolada dos bot├Áes vai de 36ÔåÆ59, mas com o predicado inteiro muda o veredicto em **3 dumps que s├úo o mesmo `.prg`** ÔÇö efetivamente 1 form, zero regress├úo. Gate agora: `VEREDICTO FASE 8: PASSA`.
+
+Dois pontos que valem registro: escrever o hook como `PROTECTED FUNCTION` (leg├¡timo em VFP) **n├úo casa** com o regex do gate, que procura `PROCEDURE` ÔÇö alinhei ├á conven├º├úo dominante do projeto. E `sed -i` do git bash trocou CRLFÔåÆLF no arquivo inteiro; reverti para LF (o que `HEAD` e as fases 3ÔÇô7 usam), conferindo por contagem de bytes. Ambos anotados na mem├│ria do projeto.

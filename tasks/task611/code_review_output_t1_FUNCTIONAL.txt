@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Corrigi os 2 defeitos reais deste pass e documentei os demais 12 como falsos positivos da auditoria (n├úo alterei c├│digo funcional que j├í estava correto):
+
+**Corrigidos:**
+- **GRID-WITH** (2 sites): `.ColumnCount`/`.RecordSourceType`/`.RecordSource` de `grd_4c_Progresso` e `grd_4c_Log` movidos para **fora** do `WITH`, seguindo o padr├úo can├┤nico j├í usado em `FormCor`/`Formsigprema`/`FormSigPrFem` (evita `Unknown member COLUMN1`).
+- **GRID-HEADER** (5 captions): removidos espa├ºos esp├║rios em " Arquivo", " Tamanho", " Pasta Local ", " Pasta Host", " Status" ÔåÆ agora id├¬nticos ao legado.
+
+**N├úo alterados (falsos positivos, verificados via grep no pr├│prio arquivo):**
+- **METODO-INEXISTENTE** (5 m├®todos FTP): todos j├í est├úo definidos como `PROTECTED FUNCTION` no arquivo (linhas 1845/1922/1978/2055/2165), com chamadas correspondentes ÔÇö a auditoria n├úo os viu, possivelmente por ler um trecho truncado.
+- **NULL-CURSOR** (3 cursores): s├úo cursores 100% locais, populados s├│ via `APPEND BLANK`/`INSERT INTO` com valores literais/VFP (WinInet), nunca via `SQLEXEC`/`APPEND FROM` ÔÇö o risco de NULL do SQL Server n├úo se aplica.
+- **NAVEGACAO-PAGINA** (3 m├®todos): o padr├úo "Page2 sem carga de dados" ├® do template CRUD Lista/Dados; aqui as PageFrames s├úo abas de sincroniza├º├úo FTP que j├í fazem o que o legado faz (espelhar a aba), sem cursor de detalhe a carregar.
+
+N├úo toquei em nenhuma propriedade visual (Width/Height/Top/Left/cores) nem em l├│gica de neg├│cio fora do escopo listado.

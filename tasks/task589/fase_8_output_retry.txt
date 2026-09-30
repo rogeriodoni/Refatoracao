@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both `.fxp` are newer than their `.prg` (no stale-bytecode trap) and no VFP process is left running.
+
+## Fase 8 ÔÇö conclu├¡da e verificada por medi├º├úo
+
+**Por que a fase foi reprovada antes:** o c├│digo estava certo. A tentativa anterior acrescentou o ramo `CALCULADORA` ao gate **durante a pr├│pria execu├º├úo**, e o PowerShell n├úo recarrega o `.ps1` no meio de um run ÔÇö a valida├º├úo rodou com a fun├º├úo velha em mem├│ria. ├ë a armadilha j├í registrada em `feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma`.
+
+**Medi o veredito do gate** montando um harness com as fun├º├Áes auxiliares reais: `metodosFaltantes = [BtnCancelarClick, CarregarLista]` e `legadoCalculadoraF8 = True` ÔåÆ os dois s├úo dispensados e a lista esvazia. O ramo est├í correto.
+
+**N├úo afrouxa mais nada:** varri os 588 dumps de `tasks\` ÔÇö 4 casam, e os 4 s├úo o *mesmo* SCX `SigPrCfn` (tasks 161/236/264/589). Um form.
+
+**Verifica├º├úo do entreg├ível** (n├úo por leitura ÔÇö `automation\VerifF8CfnLean.prg`):
+
+| Item | Resultado |
+|---|---|
+| `COMPILE` form + BO | limpo, sem `.ERR` |
+| Instancia | `VARTYPE=O`, 600x300 |
+| 7 alvos do `llEnable` | `.F.` no Init ÔåÆ `.T.` pelo Valid |
+| Simples / composto / 2 vencimentos | 30/1030 ┬À 30,44/1030,44 ┬À 90/1090/545/60 ÔÇö todos batem com o c├ílculo feito ├á m├úo a partir do dump |
+| 4 hooks | `PROTECTED` confirmado (chamada externa recusada) |
+| `LimparCampos` via `FormBase.Novo` | zera e re-trava |
+| Validador de completude (fun├º├úo real) | passa nos dois arquivos |
+| Regras VFP (#1/#4/#12/#16/#34/#38, MESSAGEBOX) | nenhuma viola├º├úo; ASCII puro |
+| Menu | `popMovimentos` BAR 28 + `Show()` fora do TRY, `Init` com guardas de `VARTYPE` |
+
+Duas "diverg├¬ncias" do harness eram **erro meu, n├úo do c├│digo**: o composto ├® 30,44 (1.001┬│Ôü░ = 1,0304390875) e, no Valor Base negativo, o legado d├í `Return .f.` **antes** do bloco `With`, ent├úo n├úo desabilita nada ÔÇö `.T.` ├® fiel. Corrigi os coment├írios do harness.
+
+**Achado fora do script, que vale registro:** ao investigar o risco de `Buttons(N)`, medi que `OptionGroup` criado por `AddObject` nasce com **`ButtonCount = 0`** ÔÇö `BUTTONS is not an object` ├® falha de **pr├®-condi├º├úo** (├¡ndice > `ButtonCount`), n├úo de sintaxe do `WITH`: os **quatro** padr├Áes de `WITH` funcionam com o `ButtonCount` setado antes. A mem├│ria prescrevia capturar o bot├úo num `LOCAL` para resolver um n├úo-problema, e o texto de `migration-patterns` no orquestrador condena a forma que a mem├│ria exigia ÔÇö os dois se contradiziam, sinal de que nenhum foi medido. Corrigi a mem├│ria; **o texto embutido no `OrquestradorMigracao.ps1` continua com a atribui├º├úo errada** e deveria passar pelo `propagate-lesson` (n├úo mexi nele: n├úo bloqueia a Fase 8 e alterar regra de prompt n├úo ├® parte deste retry).
+
+Dois pontos honestos: nesta execu├º├úo o gate provavelmente reprova de novo pelo mesmo motivo de `.ps1` em mem├│ria ÔÇö deve passar no pr├│ximo start limpo do orquestrador, e n├úo h├í nada que eu possa fazer no c├│digo sem burlar o gate. E **n├úo commitei**; diga se quer que eu fa├ºa.

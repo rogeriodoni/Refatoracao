@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 validada. **N├úo havia nada a adicionar no form ÔÇö o defeito estava no gate.**
+
+## O que eu medi antes de mexer
+
+`FormSigMvTta.prg` j├í cobre os 15 m├®todos do dump legado: `Init`, `AfterRowColChange` ÔåÆ `GrdDadosAfterRowColChange`, os `When` das Column1ÔÇæ6 (`Return .f.`) e das Column7/8 (`InList(pcEscolha,...)`) ÔåÆ `AjustarColunasPorModo`, `getDGrupos/getDContas.When` ÔåÆ ReadOnly, e `cmdSair.Click` ÔåÆ `CmdSairClick` + `ValidarTitulosVencimentos`.
+
+O `SIGMVTTA` ├® um **di├ílogo filho** da tela de movimenta├º├úo: `Class: form` (n├úo `frmcadastro`), sem `Grupo_Op`, sem bot├úo CRUD, com **um bot├úo s├│** (`cmdSair`, "OK"). N├úo h├í Incluir/Alterar/Visualizar/Excluir para migrar.
+
+## Por que reprovava
+
+O gate da Fase 7 (`OrquestradorMigracao.ps1`, `case 7`) tratava `pcEscolha` como prova de CRUD. Ele j├í descontava a leitura via **refer├¬ncia ao pai** (`pForm.pcEscolha`), mas n├úo a outra forma de receber o modo ÔÇö **par├ómetro do pr├│prio `Init`**:
+
+```foxpro
+LParameters pArq, pEsc, pObj
+.pcEscolha = pEsc          && recebido, nunca decidido
+If InList(.pcEscolha, [INSERIR], [ALTERAR])   && s├│ L├è
+```
+
+Com isso exigia os 4 `BtnXxxClick` ÔÇö insatisfaz├¡vel sem inventar bot├úo (viola o PILAR 1) ou criar m├®todo vazio (proibido pela regra de completude). ├ë a mesma fam├¡lia j├í registrada de `SIGMVITN`/`SIGMVCTH`.
+
+## O conserto
+
+Helper `Test-ModoRecebidoDoChamador`, failÔÇæclosed em duas camadas: (1) atribui├º├úo de **literal** ancorada em in├¡cio de linha prova que o form decide o pr├│prio modo ÔåÆ segue CRUD (a ├óncora separa comando de compara├º├úo: o `If ThisForm.pcEscolha = 'INSERIR'` dos CRUD n├úo casa); (2) s├│ devolve "recebido" com prova positiva de que o RHS ├® um **par├ómetro formal** declarado no dump.
+
+**Impacto medido nos 579 dumps de `tasks\`** antes de commitar: dos 29 forms cuja ├║nica evid├¬ncia era `pcEscolha`, apenas **4** mudam de veredicto ÔÇö `SigMvAte`, `SigMvChv`, `SigPrEml` e `SigMvTta`, todos di├ílogos filhos. Nenhum ganha passe livre: os tr├¬s primeiros t├¬m 4 bot├Áes e seguem no piso de 2 handlers; s├│ o `SigMvTta` cai para 1, por ter um bot├úo s├│.
+
+## Verifica├º├Áes
+
+- `PARSE OK` no orquestrador; gate re-executado contra o form: **FASE 7: VALIDADA** (legadoSemCrud=True, 1 bot├úo ÔåÆ m├¡nimo 1 handler, 1 handler no `.prg`).
+- `Test-CompletudeCodigo`: OK no Form e no BO (nenhum TODO/stub).
+- Compila├º├úo com `.FXP` apagado e recriado: `COMPILE_OK`, `ERR_BO=[]`, `ERR_FORM=[]`.
+- ├ìcone `cadastro_salvar_60.jpg` confere com a linha 511 do dump e existe em `vbmp\`.
+
+## Um ponto que deixo sinalizado
+
+A **Fase 8** tem o mesmo defeito: `$padroesCrudLegadoF8` lista `'pcEscolha'` cru, sem olhar o dono. N├úo morde o `SigMvTta` (que tem Grid e coluna edit├ível, ent├úo n├úo entra nos ramos DESPACHANTE/EXIBICAO), por isso **n├úo mexi** ÔÇö estava fora do escopo desta fase. Mas vai reprovar o pr├│ximo di├ílogo filho sem lista. Registrei na mem├│ria; posso aplicar o mesmo helper l├í se quiser.
+
+Nada foi commitado ÔÇö as mudan├ºas est├úo no working tree (`automation/OrquestradorMigracao.ps1`, +80 linhas).

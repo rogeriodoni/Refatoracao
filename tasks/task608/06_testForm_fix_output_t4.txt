@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í defeito de c├│digo para corrigir aqui. Revisei `FormSIGPREST.prg` e `SIGPRESTBO.prg` por inteiro (conte├║do id├¬ntico ao j├í analisado nas 3 tentativas anteriores desta mesma task608) e testei conectividade direta:
+
+```
+Test-NetConnection 192.168.200.10:1433 -> TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+O erro 1526 acontece na **ETAPA 1B** do `TestFormWrapper.prg`, num pr├®-flight `SQLSTRINGCONNECT` que roda **antes** de qualquer `CREATEOBJECT` do form/BO ÔÇö ou seja, antes do nosso c├│digo sequer ser instanciado. Isso ├® consistente com um padr├úo documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): a m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24`, e esse mesmo erro j├í reincidiu em 100+ tasks desde 2026-08-02.
+
+Vale notar que `SIGPRESTBO` ├® um utilit├írio 100% local (varre `.DBF` em `basededados\`, sem tabela SQL Server ÔÇö s├│ usa `SQLEXEC` opcionalmente em `CarregarLogoTipo`, chamado apenas depois de gerar com sucesso), ent├úo mesmo que o form estivesse perfeito ele nunca passaria pela ETAPA 1B enquanto a m├íquina do pipeline n├úo alcan├ºar o SQL Server.
+
+N├úo fiz nenhuma edi├º├úo nos arquivos ÔÇö editar c├│digo n├úo resolve um problema de rota de rede. Recomendo escalar para quem administra a infraestrutura do pipeline (verificar rota/VPN/firewall para 192.168.200.10:1433) em vez de continuar gastando as tentativas restantes (6/10) neste form.

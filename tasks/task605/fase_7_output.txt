@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+A compila├º├úo confirmou que o `FormSigPrEop.prg` compila limpo no VFP9 (`.fxp` gerado, sem `.err`).
+
+**Fase 7/8 conclu├¡da** ÔÇö eventos principais implementados no `FormSigPrEop.prg`:
+
+- **Toggle do checkbox por linha** (`Column1.chk_4c_Check1`): `GridCheck1Click`/`MouseDown`/`MouseUp`/`KeyPress`, os 4 handlers ligados por `BINDEVENT`, replicando o padr├úo exato do legado (toggle no `MouseDown` e no `KeyPress` Enter/Espa├ºo, `NODEFAULT` nos demais) ÔÇö necess├írio porque CheckBox em coluna de Grid n├úo alterna pelo binding nativo.
+- **`CkMarcaClick`**: marcar/desmarcar todas as linhas, delegando a `SigPrEopBO.MarcarTodasOperacoes`.
+- **`CmdSairClick`**: bot├úo OK ÔÇö monta o cursor de sa├¡da via `SigPrEopBO.MontarCursorSelecionados` (chave `EmpDopNums`) e fecha o picker.
+
+Todos os handlers s├úo `PROCEDURE` (PUBLIC, sem `PROTECTED`), como exige o `BINDEVENT`. Pr├│ximo passo natural seria uma instancia├º├úo real (`CREATEOBJECT` em modo teste) para validar comportamento em runtime, mas isso est├í fora do escopo desta fase ÔÇö posso rodar se quiser.

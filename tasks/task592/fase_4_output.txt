@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 is complete. Summary of what was done to `FormSIGPRCNB.prg`:
+
+**Grid e bot├Áes reais da Page1 (Filtro)** ÔÇö o form ├® OPERACIONAL (n├úo CRUD), ent├úo segui a estrutura real do legado (`grdope`/`cmdTestaPos`/`Commandgroup2`) em vez do template gen├®rico de 6 bot├Áes CRUD:
+- `grd_4c_Operacoes`: grade de sele├º├úo de opera├º├Áes (2 colunas ÔÇö CheckBox `Marca` edit├ível + descri├º├úo `Dopes`), ligada a `cursor_4c_Operacoes`
+- `cnt_4c_Botoes`: bot├Áes `cmd_4c_Processar` e `cmd_4c_Encerrar` (├¡cones/posi├º├Áes transcritos do SCX legado)
+- `cnt_4c_Marca`: bot├Áes `cmd_4c_MarcarTudo`/`cmd_4c_DesmarcarTudo`
+- `CarregarOperacoes()`: popula o cursor via SQLEXEC (mesma consulta do `Init` legado sobre `SigCdOpe`), com cursor READWRITE para o checkbox funcionar
+- `AlternarPagina(par_nPagina)`: utilit├írio de troca de p├ígina, para as fases 7-8 usarem
+
+**Dois bugs pr├®-existentes da Fase 3 corrigidos** (descobertos ao instanciar o form de verdade, n├úo s├│ compilar):
+- `PageFrame.ErasePage` ÔÇö propriedade que n├úo existe em VFP9, travava o `Init` inteiro
+- `Grid.SplitBar` ÔÇö propriedade read-only em runtime, mesmo problema
+
+Tamb├®m corrigi um "Data type mismatch" ao adicionar o CheckBox na Column1 (o Grid auto-liga a coluna ao primeiro campo do cursor quando `RecordSource` j├í existe ÔÇö limpei o `ControlSource` antes do `AddObject`, regra #18).
+
+Validei com compila├º├úo real e instancia├º├úo do form via VFP9 (n├úo s├│ leitura de c├│digo) ÔÇö confirmei que grid, colunas, bindings e todos os bot├Áes existem e est├úo corretamente ligados. Arquivos de teste tempor├írios foram removidos depois.

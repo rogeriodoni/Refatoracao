@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I investigated before touching any code ÔÇö the failure is **not** a bug in `FormSigMvTta.prg` or `SigMvTtaBO.prg`. It's failing one step earlier, in `TestFormWrapper.prg` ETAPA 1B, before the form is even instantiated:
+
+```
+ERRO - Falha na conexao SQL:
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Evidence this is infrastructure, not code:
+1. **`ping 192.168.200.10`** from this machine right now: 100% packet loss, request timed out ÔÇö the SQL Server (defined in `config.prg:22`, `DB_SERVER`) is genuinely unreachable from here.
+2. **This same error appears in ~20 other unrelated tasks** (`task398`ÔÇô`task416`, `task580`), spanning from **2026-08-01** through today. Different forms, different BOs, same exact failure at the same ETAPA 1B step ÔÇö proof it's not something specific to `FormSigMvTta`/`SigMvTtaBO`.
+3. The connection string logic in `TestFormWrapper.prg:124-152` and the `DB_SERVER`/`DB_NOME`/`DB_USUARIO` constants in `config.prg` match exactly what's documented in `CLAUDE.md` ÔÇö there's no typo or misconfiguration to fix there.
+
+Editing `FormSigMvTta.prg` or `SigMvTtaBO.prg` would not fix this and would violate the "corrigir APENAS o erro indicado" rule, since the indicated error has no code-level cause ÔÇö it's the SQL Server at 192.168.200.10 being down or unreachable from this network (VPN, routing, or the server itself).
+
+**I'm not modifying the form/BO files** since there's nothing wrong with them. The actual fix needed is restoring network/VPN connectivity to `192.168.200.10`, or re-running the pipeline once that connectivity is back ÔÇö this recurring failure across 20+ tasks over nearly two months suggests it's worth flagging as an environment issue rather than re-attempting code fixes on each affected task.

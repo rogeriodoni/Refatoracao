@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 delivered. Summary:
+
+**Created `C:\4c\projeto\app\forms\operacionais\FormSigPrGlp.prg`** ÔÇö base structure for the "Pr├®via da Globaliza├º├úo" OPERACIONAL form (SIGPRGLP.SCX, no PageFrame ÔÇö a flat form with 5 floating containers + grids, none of which belong in Phase 3):
+
+- `DEFINE CLASS FormSigPrGlp AS FormBase` with pixel-perfect properties from the SCX dump (1000├ù600, DataSession=2, BorderStyle=2, etc.)
+- `Init()` implementing the **exact 6-parameter contract already consumed by `FormSigPrGl2.prg`** (`CREATEOBJECT("FormSigPrGlp", par_oParentForm, par_nDataSessionId, par_lReservaAuto, par_nGerEmphPdr, par_lAutom, par_nNumeroOp)`), joining the parent's `DataSessionId` so it can see the temp cursors (`TmpFinal`, `TmpDisp`, `CrSigCdPac`, etc.) the parent already populated
+- `Destroy()` re-enabling the parent form, `DODEFAULT()` last
+- `InicializarForm()` creating `SigPrGlpBO`, resolving the dynamic Caption (Globaliza├º├úo vs. Reserva Autom├ítica), reading `SigKey` from `CrSigCdPac`, and building the header
+- `ConfigurarCabecalho()` building `cnt_4c_Sombra`/`lbl_4c_LblSombra`/`lbl_4c_LblTitulo` per `mapeamento.json`
+- `TornarControlesVisiveis()` pre-wired to skip the floating containers (`Container1/2/4/5`, all `Visible=.F.` in the legacy dump) once they're added in later phases ÔÇö `Container3` is correctly excluded since it's visible by default in the legacy dump
+
+I verified this by reading the sibling forms `FormSigPrGlx.prg` and `FormSigPrGl2.prg` (already migrated), which establish the exact calling convention and naming this task must match.
+
+Both `SigPrGlpBO.prg` and the new form were compiled and instantiated in VFP9:
+- Compile: clean, no errors in either file
+- Instantiate: form creates successfully, Width/Height match legacy, header renders with correct Caption/BackColor, BO instantiates with correct default properties, `Release()` clean, no suppressed dialogs

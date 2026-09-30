@@ -121,10 +121,24 @@ SET PROCEDURE TO (loc_cCaminhoUtils + "RelatorioUI.prg") ADDITIVE
 
 *-- Cria variaveis globais minimas necessarias
 ? "Configurando ambiente..."
-PUBLIC gnConnHandle, gc_4c_CaminhoIcones, gb_4c_ValidandoUI
+PUBLIC gnConnHandle, gc_4c_CaminhoIcones, gb_4c_ValidandoUI, gc_4c_CaminhoFramework
 gnConnHandle = -1  && Nao ha conexao (apenas validacao visual)
 gb_4c_ValidandoUI = .T.  && Flag para pular queries SQL durante validacao
 gc_4c_CaminhoIcones = ADDBS(loc_cCaminhoBase) + "..\..\..\vbmp\"
+
+*-- gc_4c_CaminhoFramework: este script NAO roda config.prg (monta o ambiente
+*-- com SET PROCEDURE manual), entao toda global usada pelos forms tem de ser
+*-- declarada aqui. Sem esta, qualquer form que use o caminho do Framework
+*-- legado - Picture de fundo (imagens\new_background.jpg), SET CLASSLIB de
+*-- framework.vcx/classresp.vcx, etc., que eh o padrao mandado pela regra #26/#27
+*-- do CLAUDE.md - estoura "Variable GC_4C_CAMINHOFRAMEWORK is not found" DENTRO
+*-- do TRY do InicializarForm; o CATCH chama MsgErro e, como aqui nao se seta
+*-- gc_4c_ArquivoErroTeste (que eh o que faz messages.prg desviar o dialogo para
+*-- arquivo), abre um MODAL de verdade que PENDURA esta validacao sem limite.
+*-- Medido em 2026-09-26 com FormSigPrCar: vfp9.exe parado 4min30 com 0,25s de
+*-- CPU, segurando o proprio .log aberto (o .log fica com 0 byte, o que faz o
+*-- sintoma parecer "nao rodou"). Mesma formula de gc_4c_CaminhoIcones acima.
+gc_4c_CaminhoFramework = ADDBS(loc_cCaminhoBase) + "..\..\..\Framework\"
 
 *-- Carrega dependencias minimas do formulario
 ? "Carregando dependencias do formul" + CHR(225) + "rio..."

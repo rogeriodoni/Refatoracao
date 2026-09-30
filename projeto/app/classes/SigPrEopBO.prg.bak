@@ -1,285 +1,226 @@
-*==============================================================================
-* SigPrEopBO.prg - Business Object: Selecao de Operacoes
-* Entidade  : SigPrEop
-* Tabela    : (sem tabela propria - opera com cursores temporarios)
-* Tipo      : OPERACIONAL (seletor de operacoes)
-*==============================================================================
+*====================================================================
+* SigPrEopBO.prg
+*
+* Business Object para SigPrEop (Selecao de Operacoes)
+* Tabela de origem: SigMvCab (movimentacao) | Chave composta: EmpDopNums
+*
+* Form OPERACIONAL modal (picker) chamado por outras telas do sistema
+* para o usuario marcar quais movimentacoes (linhas de SigMvCab, ja
+* filtradas pelo chamador num cursor de origem) entram num filtro.
+* Nao executa SQL Server proprio: opera sobre cursores em memoria
+* recebidos do form chamador (cursor de origem com as movimentacoes
+* candidatas) e devolve, ao final, um cursor de saida com a chave
+* composta EmpDopNums = Padr(Emps,3) + Padr(Dopes,20) + Padl(Str(Numes,6),6)
+* de cada linha marcada - identico ao Scan do cmdSair.Click do legado.
+*
+* Herda de: BusinessBase
+*====================================================================
+
 DEFINE CLASS SigPrEopBO AS BusinessBase
 
-    *-- Operacao selecionada (linha corrente no grid)
-    this_cDopes      = ""  && Codigo da operacao (20 chars)
-    this_nNumes      = 0   && Numero da operacao
-    this_dDatas      = {}  && Data da operacao
-    this_dPrazoEnts  = {}  && Previsao de entrega
-    this_cEmps       = ""  && Codigo da empresa (3 chars)
-    this_cContas     = ""  && Conta / numero do pedido
-    this_cRClis      = ""  && Nome do cliente
-    this_cConjuges   = ""  && Operacao conjugada
-    this_nSelecionada = 0  && Flag de selecao (0=nao, 1=sim)
+    *-- ===================================================================
+    *-- Propriedades da entidade (linha corrente do cursor de operacoes)
+    *-- ===================================================================
+    this_nSelecionada  = 0     && Selecionada numeric(1,0) - flag de marcacao da linha no grid
+    this_cEmps         = ""    && Emps char(3) - empresa (SigMvCab)
+    this_cDopes        = ""    && Dopes char(20) - operacao/documento (SigMvCab / SigCdOpe.Dopes)
+    this_nNumes        = 0     && Numes numeric(6,0) - numero da movimentacao (SigMvCab)
+    this_dDatas        = {}    && Datas date - data da movimentacao
+    this_dPrazoEnts    = {}    && PrazoEnts date - previsao de entrega
+    this_cContas       = ""    && Contas char - codigo do cliente/conta (SigCdCli.Iclis)
+    this_cRClis        = ""    && RClis char - nome/razao do cliente
+    this_cConjuges     = ""    && Conjuges - indicador de operacao conjugada
+    this_cEmpDopNums   = ""    && EmpDopNums char(29) - chave composta Emps(3)+Dopes(20)+Numes(6)
 
-    *--------------------------------------------------------------------------
-    * Init - Inicializa o BO de Selecao de Operacoes
-    *--------------------------------------------------------------------------
+    *====================================================================
+    * Init - Inicializa Business Object
+    *====================================================================
     PROCEDURE Init()
-        THIS.this_cTabela     = ""
-        THIS.this_cCampoChave = ""
-        RETURN DODEFAULT()
-    ENDPROC
+        DODEFAULT()
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega propriedades do BO a partir de linha do cursor
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_nSelecionada = NVL(Selecionada, 0)
-            THIS.this_cDopes       = ALLTRIM(NVL(Dopes, ""))
-            THIS.this_nNumes       = NVL(Numes, 0)
-            THIS.this_dDatas       = NVL(Datas, {})
-            THIS.this_dPrazoEnts   = NVL(PrazoEnts, {})
-            THIS.this_cEmps        = ALLTRIM(NVL(Emps, ""))
-            THIS.this_cContas      = ALLTRIM(NVL(Contas, ""))
-            THIS.this_cRClis       = ALLTRIM(NVL(RClis, ""))
-            THIS.this_cConjuges    = ALLTRIM(NVL(Conjuges, ""))
-            RETURN .T.
-        ENDIF
-        RETURN .F.
-    ENDPROC
+        THIS.this_cTabela = "SigMvCab"
+        THIS.this_cCampoChave = "EmpDopNums"
 
-    *--------------------------------------------------------------------------
-    * InicializarOperacoes - Cria cursor_4c_Operacoes a partir do cursor de origem
-    * par_cCursorOrigem: nome do cursor com operacoes pre-carregadas (crTprMvCab)
-    *--------------------------------------------------------------------------
-    PROCEDURE InicializarOperacoes(par_cCursorOrigem)
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_Operacoes")
-                USE IN cursor_4c_Operacoes
-            ENDIF
-            IF USED(par_cCursorOrigem)
-                SELECT 1 AS Selecionada, * FROM (par_cCursorOrigem) ;
-                    INTO CURSOR cursor_4c_Operacoes READWRITE
-                loc_lSucesso = .T.
-            ELSE
-                SET NULL ON
-                CREATE CURSOR cursor_4c_Operacoes ;
-                    (Selecionada N(1,0) NULL, ;
-                     Emps        C(3)   NULL, ;
-                     Dopes       C(20)  NULL, ;
-                     Numes       N(6,0) NULL, ;
-                     Datas       D      NULL, ;
-                     PrazoEnts   D      NULL, ;
-                     Contas      C(20)  NULL, ;
-                     RClis       C(60)  NULL, ;
-                     Conjuges    C(20)  NULL)
-                SET NULL OFF
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AlternarSelecao - Inverte o flag Selecionada da linha corrente do cursor
-    * Equivalente ao GATHER MEMVAR do legado (Check1 KeyPress + MouseDown)
-    * par_cAliasCursor: alias do cursor (padrao: cursor_4c_Operacoes)
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarSelecao(par_cAliasCursor)
-        LOCAL loc_lSucesso, loc_oErro, loc_nNovoValor, loc_cAlias
-        loc_lSucesso = .F.
-        loc_cAlias   = IIF(EMPTY(par_cAliasCursor), "cursor_4c_Operacoes", par_cAliasCursor)
-        TRY
-            IF USED(loc_cAlias) AND !EOF(loc_cAlias)
-                SELECT (loc_cAlias)
-                loc_nNovoValor = IIF(Selecionada = 0, 1, 0)
-                REPLACE Selecionada WITH loc_nNovoValor
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * MarcarDesmarcarTodos - Marca ou desmarca todas as operacoes
-    * par_nValor: 1 = marcar todos, 0 = desmarcar todos (equivale a ck_Marca.Click)
-    * par_cAliasCursor: alias do cursor (padrao: cursor_4c_Operacoes)
-    *--------------------------------------------------------------------------
-    PROCEDURE MarcarDesmarcarTodos(par_nValor, par_cAliasCursor)
-        LOCAL loc_lSucesso, loc_oErro, loc_cAlias
-        loc_lSucesso = .F.
-        loc_cAlias   = IIF(EMPTY(par_cAliasCursor), "cursor_4c_Operacoes", par_cAliasCursor)
-        TRY
-            IF USED(loc_cAlias)
-                SELECT (loc_cAlias)
-                REPLACE ALL Selecionada WITH par_nValor
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * PopularFilOper - Varre cursor de operacoes e popula cursor destino
-    * com as operacoes selecionadas (Selecionada = 1)
-    * Equivalente ao SCAN em cmdSair.Click do legado
-    * par_cCursorDest  : nome do cursor destino (crFilOper no legado)
-    * par_cCursorOrigem: cursor fonte (padrao: cursor_4c_Operacoes)
-    * Formato de cada registro: Emps(3) + Dopes(20) + Numes(6) = 29 chars
-    *--------------------------------------------------------------------------
-    PROCEDURE PopularFilOper(par_cCursorDest, par_cCursorOrigem)
-        LOCAL loc_lSucesso, loc_oErro, loc_cAlias, loc_cChave
-        loc_lSucesso = .F.
-        loc_cAlias   = IIF(EMPTY(par_cCursorOrigem), "cursor_4c_Operacoes", par_cCursorOrigem)
-        TRY
-            IF USED(loc_cAlias) AND USED(par_cCursorDest)
-                ZAP IN (par_cCursorDest)
-                SELECT (loc_cAlias)
-                GO TOP
-                SCAN
-                    IF Selecionada = 1
-                        loc_cChave = PADR(Emps, 3) + PADR(Dopes, 20) + PADL(STR(Numes, 6), 6)
-                        INSERT INTO (par_cCursorDest) VALUES (loc_cChave)
-                    ENDIF
-                ENDSCAN
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna chave composta da operacao corrente
-    * Formato: Emps(3) + Dopes(20) + Numes(6) = 29 chars
-    *--------------------------------------------------------------------------
-    PROCEDURE ObterChavePrimaria()
-        RETURN PADR(THIS.this_cEmps, 3) + PADR(THIS.this_cDopes, 20) + PADL(STR(THIS.this_nNumes, 6), 6)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Registra as operacoes selecionadas no cursor destino (crFilOper)
-    * BO OPERACIONAL de selecao: nao persiste em tabela SQL Server.
-    * Equivalente ao SCAN em cmdSair.Click do legado que popula crFilOper com
-    * as operacoes marcadas (Selecionada = 1) e serve de filtro para o form pai.
-    * Requer THIS.this_cCursorDestino previamente configurado (default: crFilOper).
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lSucesso, loc_oErro, loc_cCursorDest, loc_nRegistros, loc_lContinua
-        loc_lSucesso    = .F.
-        loc_lContinua   = .T.
-        loc_nRegistros  = 0
-        loc_cCursorDest = IIF(PEMSTATUS(THIS, "this_cCursorDestino", 5) AND ;
-                              !EMPTY(THIS.this_cCursorDestino), ;
-                              THIS.this_cCursorDestino, "crFilOper")
-
-        TRY
-            IF !USED("cursor_4c_Operacoes")
-                THIS.this_cMensagemErro = "Cursor de opera" + CHR(231) + CHR(245) + ;
-                    "es n" + CHR(227) + "o inicializado"
-                loc_lContinua = .F.
-            ENDIF
-
-            IF loc_lContinua AND !USED(loc_cCursorDest)
-                THIS.this_cMensagemErro = "Cursor destino '" + loc_cCursorDest + ;
-                    "' n" + CHR(227) + "o encontrado"
-                loc_lContinua = .F.
-            ENDIF
-
-            IF loc_lContinua AND !THIS.PopularFilOper(loc_cCursorDest, "cursor_4c_Operacoes")
-                THIS.this_cMensagemErro = "Falha ao popular cursor destino"
-                loc_lContinua = .F.
-            ENDIF
-
-            IF loc_lContinua
-                SELECT (loc_cCursorDest)
-                GO TOP
-                COUNT TO loc_nRegistros
-
-                IF loc_nRegistros = 0
-                    THIS.this_cMensagemErro = "Nenhuma opera" + CHR(231) + CHR(227) + ;
-                        "o foi selecionada"
-                    loc_lContinua = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lContinua
-                THIS.RegistrarAuditoria("SELECT")
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza o estado de selecao da operacao corrente no cursor
-    * BO OPERACIONAL de selecao: nao persiste em tabela SQL Server.
-    * Equivalente ao GATHER MEMVAR Fields Selecionada do Check1 (KeyPress/MouseDown).
-    * Usa this_nSelecionada (definido via CarregarDoCursor ou setter externo)
-    * para atualizar o registro corrente do cursor de operacoes.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_oErro, loc_lContinua
-        loc_lSucesso  = .F.
-        loc_lContinua = .T.
-
-        TRY
-            IF !USED("cursor_4c_Operacoes")
-                THIS.this_cMensagemErro = "Cursor de opera" + CHR(231) + CHR(245) + ;
-                    "es n" + CHR(227) + "o inicializado"
-                loc_lContinua = .F.
-            ENDIF
-
-            IF loc_lContinua
-                SELECT cursor_4c_Operacoes
-                IF EOF() OR BOF()
-                    THIS.this_cMensagemErro = "Nenhuma opera" + CHR(231) + CHR(227) + ;
-                        "o corrente para atualizar"
-                    loc_lContinua = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lContinua
-                REPLACE Selecionada  WITH THIS.this_nSelecionada, ;
-                        Emps         WITH THIS.this_cEmps, ;
-                        Dopes        WITH THIS.this_cDopes, ;
-                        Numes        WITH THIS.this_nNumes, ;
-                        Datas        WITH THIS.this_dDatas, ;
-                        PrazoEnts    WITH THIS.this_dPrazoEnts, ;
-                        Contas       WITH THIS.this_cContas, ;
-                        RClis        WITH THIS.this_cRClis, ;
-                        Conjuges     WITH THIS.this_cConjuges
-
-                THIS.RegistrarAuditoria("TOGGLE")
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Override para BO OPERACIONAL sem tabela
-    * BO de selecao opera apenas em cursores de sessao (nao persiste em tabela).
-    * Nao ha registro em LogAuditoria (this_cTabela vazio inviabiliza SQL de log).
-    * Metodo mantido para preservar contrato com BusinessBase.Salvar/Excluir.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
         RETURN .T.
+    ENDPROC
+
+    *====================================================================
+    * CarregarDoCursor - Mapeia TODAS as colunas da linha corrente do
+    * cursor de operacoes (Selecionada, Emps, Dopes, Numes, Datas,
+    * PrazoEnts, Contas, RClis, Conjuges - as mesmas colunas produzidas
+    * por "Select 1 as Selecionada, * from crTprMvCab" no Init legado)
+    * para as properties this_* da linha corrente, e calcula a chave
+    * composta EmpDopNums via ObterChavePrimaria().
+    *====================================================================
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF VARTYPE(par_cAliasCursor) = "C" AND !EMPTY(par_cAliasCursor) AND USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+
+            THIS.this_nSelecionada = NVL(Selecionada, 0)
+            THIS.this_cEmps        = TratarNulo(Emps, "")
+            THIS.this_cDopes       = TratarNulo(Dopes, "")
+            THIS.this_nNumes       = NVL(Numes, 0)
+            THIS.this_dDatas       = ConverterParaData(Datas)
+            THIS.this_dPrazoEnts   = ConverterParaData(PrazoEnts)
+            THIS.this_cContas      = TratarNulo(Contas, "")
+            THIS.this_cRClis       = TratarNulo(RClis, "")
+            THIS.this_cConjuges    = TratarNulo(Conjuges, "")
+
+            THIS.this_cEmpDopNums = THIS.ObterChavePrimaria()
+
+            loc_lSucesso = .T.
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * ObterChavePrimaria - Chave composta EmpDopNums, identica ao Scan do
+    * cmdSair.Click legado: Padr(Emps,3) + Padr(Dopes,20) +
+    * Padl(Str(Numes,6),6) (char(29) = 3+20+6). Chave POSICIONAL - o
+    * padding faz parte da chave, por isso PADR/PADL nas partes, NUNCA
+    * ALLTRIM (CLAUDE.md regra #22 / Erro177: ALLTRIM nas partes internas
+    * descasa a busca em SILENCIO, sem erro, devolvendo zero linhas).
+    *====================================================================
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN PADR(THIS.this_cEmps, 3) + PADR(THIS.this_cDopes, 20) + ;
+            PADL(STR(THIS.this_nNumes, 6), 6)
+    ENDPROC
+
+    *====================================================================
+    * Inserir()/Atualizar()/ExecutarExclusao() - o legado (SIGPREOP.SCX)
+    * NAO grava nada em SQL Server: eh um picker modal que (1) recebe do
+    * form chamador um cursor de origem JA FILTRADO (crTprMvCab), (2)
+    * deixa o usuario marcar linhas via checkbox e (3) devolve ao
+    * chamador um cursor de saida em memoria (crFilOper) com a chave
+    * composta das linhas marcadas - tudo dentro do proprio processo VFP,
+    * sem SQLEXEC, sem TABLEUPDATE, sem AddCursor remoto (comportamento.json
+    * confirma: nenhum metodo do form tem gravacao remota). O
+    * comportamento herdado de BusinessBase (recusar Inserir/Atualizar) ja
+    * eh o correto para esta entidade neste form; a operacao real de
+    * "gravacao" desta tela eh a montagem do cursor de saida, implementada
+    * abaixo em MontarCursorSelecionados() (equivalente ao Scan do
+    * cmdSair.Click).
+    *====================================================================
+
+    *====================================================================
+    * CarregarOperacoes - Constroi o cursor de trabalho da grade a partir
+    * do cursor de origem recebido do form chamador, replicando o Init
+    * legado: "Select 1 as Selecionada, * from crTprMvCab into cursor
+    * crOperacoes readwrite". par_cCursorOrigem eh o cursor JA POPULADO
+    * pelo chamador (equivalente a crTprMvCab); par_cCursorDestino recebe
+    * as mesmas colunas mais a coluna Selecionada, iniciada em 1 - o
+    * legado marca TODAS as linhas como selecionadas por padrao (mesmo
+    * valor inicial de ck_Marca.Value = 1).
+    *====================================================================
+    PROCEDURE CarregarOperacoes(par_cCursorOrigem, par_cCursorDestino)
+        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
+        loc_lSucesso = .F.
+
+        IF VARTYPE(par_cCursorOrigem) = "C" AND !EMPTY(par_cCursorOrigem) AND USED(par_cCursorOrigem) AND ;
+           VARTYPE(par_cCursorDestino) = "C" AND !EMPTY(par_cCursorDestino)
+
+            TRY
+                IF USED(par_cCursorDestino)
+                    USE IN (par_cCursorDestino)
+                ENDIF
+
+                loc_cSQL = "SELECT 1 AS Selecionada, * FROM " + par_cCursorOrigem + ;
+                    " INTO CURSOR " + par_cCursorDestino + " READWRITE"
+
+                &loc_cSQL.
+
+                IF USED(par_cCursorDestino)
+                    SELECT (par_cCursorDestino)
+                    GO TOP
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "N" + CHR(227) + "o foi poss" + CHR(237) + ;
+                        "vel montar o cursor de opera" + CHR(231) + CHR(245) + "es."
+                ENDIF
+            CATCH TO loc_oErro
+                THIS.this_cMensagemErro = loc_oErro.Message + CHR(13) + ;
+                    "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure
+            ENDTRY
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * MarcarTodasOperacoes - Replica ck_Marca.Click do legado: marca ou
+    * desmarca TODAS as linhas do cursor de operacoes de uma vez ("Replace
+    * All Selecionada with This.Value in crOperacoes").
+    *====================================================================
+    PROCEDURE MarcarTodasOperacoes(par_cCursorOperacoes, par_nValor)
+        LOCAL loc_lSucesso, loc_nRecno
+        loc_lSucesso = .F.
+
+        IF VARTYPE(par_cCursorOperacoes) = "C" AND !EMPTY(par_cCursorOperacoes) AND USED(par_cCursorOperacoes)
+            loc_nRecno = RECNO(par_cCursorOperacoes)
+
+            SELECT (par_cCursorOperacoes)
+            REPLACE ALL Selecionada WITH NVL(par_nValor, 0)
+
+            IF BETWEEN(loc_nRecno, 1, RECCOUNT(par_cCursorOperacoes))
+                GOTO loc_nRecno
+            ENDIF
+
+            loc_lSucesso = .T.
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * MontarCursorSelecionados - Replica o Scan do cmdSair.Click legado:
+    * percorre o cursor de operacoes e grava, no cursor de saida (ja
+    * criado pelo form chamador, equivalente a crFilOper), a chave
+    * composta EmpDopNums de cada linha marcada (Selecionada == 1). O
+    * cursor de saida eh ZERADO no inicio (Zap in crFilOper do legado) e
+    * espera uma unica coluna EmpDopNums char(29).
+    *====================================================================
+    PROCEDURE MontarCursorSelecionados(par_cCursorOperacoes, par_cCursorDestino)
+        LOCAL loc_lSucesso, loc_nRecnoOrigem, loc_cChave, loc_oErro
+        loc_lSucesso = .F.
+
+        IF VARTYPE(par_cCursorOperacoes) = "C" AND !EMPTY(par_cCursorOperacoes) AND USED(par_cCursorOperacoes) AND ;
+           VARTYPE(par_cCursorDestino) = "C" AND !EMPTY(par_cCursorDestino) AND USED(par_cCursorDestino)
+
+            TRY
+                loc_nRecnoOrigem = RECNO(par_cCursorOperacoes)
+
+                SELECT (par_cCursorDestino)
+                ZAP
+
+                SELECT (par_cCursorOperacoes)
+                SCAN FOR NVL(Selecionada, 0) = 1
+                    THIS.CarregarDoCursor(par_cCursorOperacoes)
+                    loc_cChave = THIS.ObterChavePrimaria()
+
+                    INSERT INTO (par_cCursorDestino) VALUES (loc_cChave)
+
+                    SELECT (par_cCursorOperacoes)
+                ENDSCAN
+
+                IF USED(par_cCursorOperacoes) AND BETWEEN(loc_nRecnoOrigem, 1, RECCOUNT(par_cCursorOperacoes))
+                    SELECT (par_cCursorOperacoes)
+                    GOTO loc_nRecnoOrigem
+                ENDIF
+
+                loc_lSucesso = .T.
+            CATCH TO loc_oErro
+                THIS.this_cMensagemErro = loc_oErro.Message + CHR(13) + ;
+                    "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure
+            ENDTRY
+        ENDIF
+
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

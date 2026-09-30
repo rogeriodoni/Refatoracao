@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprema.prg",
+    "timestamp":  "2026-09-28T01:36:23",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  647,
+                          "Original":  "IF NVL(cursor_4c_Dados.Checks, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-185-GRID-CHECKBOX-SEM-TOGGLE",
+                          "Linha":  435,
+                          "Original":  ".Column1.AddObject(\"chk_4c_Checks\", \"CheckBox\")",
+                          "Corrigido":  "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)",
+                          "Descricao":  "Pattern #185 (Erro146): CheckBox \u0027chk_4c_checks\u0027 eh o CurrentControl de uma coluna de Grid mas NAO tem os handlers de toggle (faltam: keypress, mouseup, mousedown, click). CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND INLIST(THIS.this_cModoAtual,\u0027INCLUIR\u0027,\u0027ALTERAR\u0027) AND USED(\u0027\u003ccursor\u003e\u0027) AND !EOF(\u0027\u003ccursor\u003e\u0027) -\u003e REPLACE \u003ccursor\u003e.\u003ccampo\u003e WITH IIF(\u003ccursor\u003e.\u003ccampo\u003e = 0, 1, 0) + \u003cgrid\u003e.Refresh() + NODEFAULT. MouseUp: THIS.\u003cChk\u003eKeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do delegate, entao \u0027When\u0027 via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern #184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

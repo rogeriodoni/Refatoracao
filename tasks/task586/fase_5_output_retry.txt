@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 **j├í est├í completa e correta** ÔÇö a reprova├º├úo anterior n├úo foi defeito no c├│digo, foi um gate obsoleto. Verifiquei os dois lados antes de tocar em qualquer coisa.
+
+## O que o `FormSigPrCcc.prg` j├í entrega (Fase 5)
+
+`ConfigurarCamposOpConta()` e `ConfigurarCamposOpEstoque()`, chamados em `InicializarForm` ÔÇö 12 TextBoxes (metade dos 20 do legado; `OpCusto`/`OpCompra` ficam para a Fase 6). Conferi o entreg├ível por fora:
+
+- **Compila limpo** (apaguei os `.FXP` antes ÔÇö regra #29): `FXP_BO=SIM FXP_FORM=SIM`, `.ERR` vazios.
+- **Instancia de verdade**: form abre (800x600), os 4 containers nascem `Visible=.F.` como no legado, e o toggle de `chk_4c_Conta` revela o container **com os campos internos j├í vis├¡veis**. Nenhum di├ílogo capturado.
+- **Coordenadas** batem 1-para-1 com `layout.json` (relativas ao container).
+- **`MaxLength` conferido contra `docs/schema.sql`** (lido com `Get-Content -Raw`, regra #14), n├úo copiado do `Width`: Empresa 3 (`SigCdEmp.cemps`), Grupo 10 (`SigCdCli.grupos`), Conta 10 (`iclis`), Moeda 3 (`SigCdMoe.cmoes`), Produto 14 (`SigCdPro.cpros`), Descri├º├úo 65 (`dpros`).
+- Labels com `ForeColor = RGB(90,90,90)` e `AutoSize = .F.` (regras #12 e #23); a colis├úo `Say1`/`Label1` ÔåÆ `lbl_4c_Label1` do `mapeamento.json` foi resolvida nomeando por conte├║do (`lbl_4c_Estoque`/`lbl_4c_Produto`).
+
+## Por que o gate reprovou
+
+`RunLoop.ps1` chama `& OrquestradorMigracao.ps1` e o PowerShell fixa a c├│pia no momento da invoca├º├úo. A task586 come├ºou ├ás **09:33**; o `.ps1` foi editado ├ás **10:02:23** (acrescentando o ramo `CAPTURA` ├ás Fases 4 e 5, ainda n├úo commitado); a valida├º├úo rodou ├ás **10:16** com o gate **velho** em mem├│ria. ├ë o padr├úo j├í registrado em `feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma.md`.
+
+Rodei os dois blocos `case 5` standalone contra este form, em vez de deduzir:
+
+| gate | resultado |
+|---|---|
+| disco (com ramo CAPTURA) | `VALIDADO=True` ÔÇö "piso de 10 campos (metade dos 20 do legado), 12 no migrado" |
+| `HEAD` (sem o ramo, = o que roda em mem├│ria) | `VALIDADO_HEAD=False` |
+
+O legado `SIGPRCCC` n├úo tem grid, pageframe, listbox, `pColuna` nem `AddCursor` ligando grade (o `AddCursor` dele tem 3 args), e os 20 TextBoxes t├¬m `ControlSource = ""` ÔÇö s├úo filtros lidos por `.Value` dentro de `Processa.Click`. O gate velho s├│ passaria se eu inventasse um `PageFrame` ou escrevesse um `.ControlSource` de fachada; as duas coisas s├úo proibidas (PILAR 1 / "nunca inventar"), e a segunda seria linha morta s├│ para enganar regex. **N├úo mexi no form.**
+
+## O que falta e n├úo ├® meu
+
+A Fase 5 vai reprovar de novo neste retry, por constru├º├úo ÔÇö o gate em mem├│ria n├úo muda. O conserto j├í est├í no disco e vale a partir da pr├│xima invoca├º├úo do orquestrador. Reiniciar o `RunLoop.ps1` (PID 8692, de 25/09 16:32) faria valer agora, mas ├® uma decis├úo sua: derruba a fila noturna em andamento, ent├úo n├úo fiz.
+
+Limpei os artefatos tempor├írios (probes de gate, `.FXP` dos scripts de teste, `.ERR`). `automation/CompileCheckCcc.prg` e `InstantiateCheckCcc.prg` ficaram para reuso nas fases 6ÔÇô8.

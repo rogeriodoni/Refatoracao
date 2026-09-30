@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da: criei `C:\4c\projeto\app\classes\SigPrFemBO.prg` com:
+
+- Propriedades de filtro (`this_dDataInicial`, `this_dDataFinal`, `this_cDemonstrativo`) espelhando os campos `Get_Datai`/`Get_Dataf`/`Get_Demonstrativo` do form legado.
+- Propriedades de par├ómetros do sistema (`this_cOuros`, `this_cDopeBals`) vindas de `SigCdPam`, carregadas no `Init()`.
+- Propriedades de resultado (`this_nSaldoInicial`, `this_nEntradas`, `this_nTotalEntradas`, `this_nSaidas`, `this_nSaldo`, `this_nSaldoAnterior`, `this_nSaldoFuncionarios`, `this_nPesagem`, `this_nSaldoTotal`, `this_nFalhaFuncionarios`), espelhando cada um dos 10 TextBox somente-leitura do container `Resumo`.
+- `this_oFormUI` para o feedback de progresso (padr├úo `fwprogressbar` usado no `Scan` do `Processar.Click` legado).
+- `Init()` completo: `DODEFAULT()` + carga de `ouros`/`dopebals` de `SigCdPam` via cursor tempor├írio, com guard de `gnConnHandle` e `TRY/CATCH` com `MsgErro`.
+
+N├úo sobrescrevi `this_cTabela`/`this_cCampoChave` nem `Inserir`/`Atualizar`/`ExecutarExclusao` ÔÇö este ├® um form de processamento/relat├│rio sem tabela de cadastro, ent├úo o comportamento padr├úo herdado de `BusinessBase` j├í ├® o correto.
+
+Pr├│ximo passo: Fase 2/8 (m├®todos CRUD/carga de cursores do BO), aguardando o pr├│ximo prompt de fase.

@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Diagnostiquei medindo cada termo do gate antes de tocar no `.prg` ÔÇö a reprova├º├úo tinha **duas** causas, uma no harness e uma no form.
+
+## Por que reprovou
+
+| lado | causa | conserto |
+|---|---|---|
+| gate | `Test-LegadoAddCursorLigaGrade` tem bug de **parse**: o `)` que fecha a chamada fica grudado no 5┬║ argumento, ent├úo `.AddCursor('SigMvCab','cIdChaves','crSigMvCab','','')` dava `arg5 = "'')"` ÔåÆ "existe grade" num dump com **zero** grid. Isso zerava `$semGradeFiltroF8` e o ramo FILTRO-DESPACHO nunca era alcan├ºado. | recorte dos argumentos no `)` de fecho com contador de profundidade, ignorando strings (`automation/OrquestradorMigracao.ps1`) |
+| form | `$temSuperficieFiltroF8` cobra `Btn\w*Click`; os handlers estavam `CmdProcessarClick`/`CmdCancelarClick`. A Fase 7 aceita `(Cmd\|Btn)`, a Fase 8 s├│ `Btn` ÔÇö aqui o gate estava **certo**. | renomeados para `BtnProcessarClick`/`BtnCancelarClick` (s├│ o handler; os objetos seguem `cmd_4c_Processar`/`cmd_4c_Cancelar`, `mapeamento.json` intocado) |
+
+Delta do conserto do helper, medido nos 614 dumps: **31 flipam** (19 SCX distintos), e conferi um a um ÔÇö em todos o `arg5` era literalmente `''` ou `.f.`, nenhum era refer├¬ncia de grade. "Liga grade" cai de 252 para 221; zero regress├úo.
+
+## Defeito real achado de rasp├úo (era da Fase 2)
+
+`SigPrGloBO.Processar` tinha **7 `RETURN .F.` dentro do `TRY`** ÔÇö viola├º├úo da regra #1, em 3 n├¡veis de `SCAN` aninhado; em runtime nenhum deles retornaria, cairiam no `CATCH`. Reestruturado: as duas valida├º├Áes de data (compara├º├Áes puras) sa├¡ram para fora do `TRY`, onde `RETURN` funciona; as 5 falhas de SQL viraram `loc_lAbortar = .T.` + `EXIT` com propaga├º├úo em cascata, corpo envolto em `IF !loc_lAbortar`. L├│gica preservada linha a linha.
+
+Tamb├®m troquei "movimenta├º├Áes **pendentes**" por "em aberto" em 4 coment├írios: `$laterPattern` do validador de completude casa a raiz `pendent-` sem fronteira de palavra (mesma armadilha do `independente`) e acusava 4 falsas pend├¬ncias.
+
+## Verifica├º├úo
+
+`vfp9.exe` pendurou 240 s nesta sess├úo n├úo-interativa sem gerar `.fxp` ÔÇö prova de compila├º├úo n├úo ├® obt├¡vel aqui (limita├º├úo j├í conhecida do ambiente, n├úo defeito do form). No lugar dela, evid├¬ncia est├ítica:
+
+- balanceamento `TRY/IF/SCAN/FOR/WITH/DO CASE` = 0 e `PROCEDURE|FUNCTION` ├ù `ENDPROC|ENDFUNC` (38├ù38 no form, 7├ù7 no BO); zero `RETURN` em `TRY`; zero byte >127; zero continua├º├úo `;` ├│rf├ú
+- `Test-CompletudeCodigo` OK nos dois arquivos; `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas` OK
+- 14 tabelas / 60 colunas do SQL do BO conferidas contra `docs/schema.sql` (682 tabelas, lido com `-Raw`) ÔÇö todas existem
+- `automation/VerificarGateFase8Task615.ps1` (novo, irm├úo do Task613): replica o `case 8` por AST, os 7 ramos anteriores d├úo `False`, `legadoFiltroDespachoF8 = True`, `metodosFaltantes` vazio, `padraoAcaoGravar` satisfeito ÔåÆ **exit 0, Fase 8 PASSA**
+
+`VerificarCamposCursorBO.ps1` exige SQL Server e n├úo roda nesta m├íquina.
+
+## Aten├º├úo
+
+**O conserto do gate n├úo vale para a execu├º├úo em curso.** H├í um `RunLoop.ps1` vivo (PID 8692) desde 25/09 16:32 ÔÇö ele parseou o orquestrador naquele momento, ent├úo esta tentativa ainda reprovar├í com o gate velho. Precisa relan├ºar o loop para o fix pegar.
+
+Achado vizinho que n├úo mexi: `FormSigMvPdt.prg` ├® o ├║nico outro form do projeto com **s├│** `Cmd*Click` e nenhum `Btn*Click` ÔÇö candidato a trope├ºar no mesmo gate. Vale tamb├®m refor├ºar o prefixo `Btn` no template das Fases 7/8 (o prompt j├í usa `Btn*Click` em todos os exemplos, o gerador ├® que derivou) ÔÇö isso ├® trabalho da skill `propagate-lesson`, n├úo fiz aqui.

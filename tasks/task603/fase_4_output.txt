@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete. Summary of what was added:
+
+**`FormSigPrEml.prg`** (form):
+- `ConfigurarGrid()` + `CriarCursorDados()` ÔÇö creates `cursor_4c_Dados` (mirrors the legacy `crLocalTotal` cursor + its 3 tag indexes) and builds `grd_4c_Dados` with the 5 original columns (Checks/Contas/Nome/Email/Mensagem), preserving widths, fonts, alignment and read-only flags from the SCX.
+- Checkbox column toggle via the proven 4-handler pattern (Click/MouseDown/MouseUp/KeyPress with NODEFAULT), since native Grid-checkbox binding doesn't toggle reliably in VFP9.
+- Header-click column sorting (Contas/Nome/Email) replicating the legacy `Header1.Click` tag-switch + highlight behavior.
+- `ConfigurarBotoesAcao()` ÔÇö standalone `cmd_4c_SelTudo`/`cmd_4c_Apaga` buttons (Marcar/Desmarcar Todos).
+- `CarregarDados()` wired into `InicializarForm()`, gated by `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` so the form still opens in test/UI-validation harnesses without a live DB connection.
+
+**`SigPrEmlBO.prg`** (BO):
+- New `CarregarAlertas()` method replicating the legacy Init's data cascade (SigMvCab ÔåÆ SigCdAle filtered by Dopes/a├º├úo ÔåÆ SigClJob per-account Job filter ÔåÆ SigCdPam/SigCdCli fallback list with dedup), populating `cursor_4c_Dados`.
+- Helper `ContaPertenceAoJob()` replicating the "skip account if it has Jobs but none match the movement's Job" legacy guard.
+
+Deliberately deferred to a later phase: `cmd_4c_BtnEmail` (actual email sending + the `laOpeBaixa`/`crOpeBaixa` cascade), since that's a distinct, heavy action analogous to a CRUD form's "Salvar" ÔÇö not part of "Grid e Bot├Áes" scope.

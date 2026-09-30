@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `projeto/app/forms/operacionais/FormSigPrEop.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O arquivo j├í tinha os dois pares label/campo. O que faltava era o gate: `FormSigPrEop` ├® OPERACIONAL **flat** (o SCX legado n├úo tem PageFrame), ent├úo o orquestrador avalia o ramo `temLayoutFlat`, que exige `legadoSemLookup AND temCamposFlat` ÔÇö e `temCamposFlat` pede `.ControlSource =` **e** `PROCEDURE Validar*`. Havia ControlSource, n├úo havia `Validar*`. Pior: `temBindEvent` passava s├│ porque a palavra `BINDEVENT` aparecia em **coment├írios** ("fica para a Fase 7/8") ÔÇö zero chamadas reais.
+
+## O que foi acrescentado
+
+**1. `GridAfterRowColChange(par_nColIndex)` + `BINDEVENT` real** (em `ConfigurarGrid`)
+O `AfterRowColChange` do legado existe **s├│** para repintar os dois campos de exibi├º├úo (`get_Operacao.Refresh()` / `get_Numes.Refresh()`) ÔÇö ├® o comportamento dos campos que esta fase entrega, n├úo mat├®ria de Fase 7/8. Sem ele os campos ficavam mostrando a primeira linha enquanto o usu├írio navegava. Handler PUBLIC com o par├ómetro do evento declarado (regra #3).
+
+**2. `ValidarCursorOperacoes(par_cCursor)`**, chamado antes de qualquer `ControlSource` em `CarregarDados`.
+N├úo ├® inven├º├úo: o legado lia do cursor global fixo `crTprMvCab` e podia confiar nele; aqui o cursor de origem chega como **par├ómetro do chamador** e o de trabalho ├® s├│ `SELECT 1 AS Selecionada, * FROM <origem>` ÔÇö quem define as colunas ├® o chamador. Coluna ausente estoura o `ControlSource` (regra #41) com mensagem que n├úo diz *qual* coluna falta. A valida├º├úo confere as 9 colunas vinculadas e nomeia todas de uma vez. Usa `TYPE(alias + "." + campo)`, nunca `PEMSTATUS` em cursor.
+
+**Sem lookups, de prop├│sito.** Os 5 padr├Áes que o gate procura (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`) d├úo **0 ocorr├¬ncias** no dump; os dois campos t├¬m `When / Return(.F.)`. Inventar picker violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup". Isso est├í registrado no cabe├ºalho do arquivo.
+
+## Verificado no VFP9 real (n├úo s├│ por regex)
+
+- **COMPILE**: `.fxp` regenerado, nenhum `.err`
+- **CREATEOBJECT**: `OK W=740 H=431`; os dois pares presentes nas coordenadas exatas do SCX (`Left=87`/`276`), ambos `ReadOnly=.T.`
+- **`AEVENTS(grid)`**: `1` binding ÔÇö evento `AFTERROWCOLCHANGE` ÔåÆ handler `GRIDAFTERROWCOLCHANGE`
+- **Valida├º├úo, 3 casos**: cursor inexistente ÔåÆ `.F.`; cursor completo ÔåÆ `.T.`; cursor sem `Conjuges`/`Numes` ÔåÆ `.F.` nomeando as duas colunas ausentes
+- Zero bytes n├úo-ASCII (acentos todos via `CHR()`), zero `MESSAGEBOX`, zero `RETURN` dentro de `TRY`, blocos balanceados (12 `PROCEDURE`/12 `ENDPROC`)
+
+Gate atendido: `temLayoutFlat = TRUE`.
+
+Dois pontos honestos: o `SigPrEopBO.prg` aparece como modificado, mas isso vem das Fases 1/2 ÔÇö n├úo toquei nele, j├í estava completo. E deixei em `automation/` os dois scripts de verifica├º├úo (`CompileCheckEopF6.prg`, `InstantiateCheckEopF6.prg`) seguindo a conven├º├úo dos demais `CompileCheck*`/`InstantiateCheck*` do reposit├│rio, junto com seus tr├¬s `.txt` de sa├¡da ÔÇö se preferir que sa├¡da de diagn├│stico n├úo fique no diret├│rio, ├® s├│ dizer e eu removo.

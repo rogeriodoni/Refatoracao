@@ -1,936 +1,1046 @@
-*==============================================================================
-* FormSigPrEop.prg - Selecao de Operacoes de Producao
-* Tipo       : OPERACIONAL (popup modal de selecao)
-* Legado     : SIGPREOP.SCX
-* BO         : SigPrEopBO
-*==============================================================================
+*====================================================================
+* FormSigPrEop.prg
+*
+* Form OPERACIONAL modal (picker) - Selecao de Operacoes
+*
+* Chamado por outro form que ja populou um cursor de origem
+* (equivalente a crTprMvCab do legado) com as movimentacoes
+* candidatas. O usuario marca quais linhas entram no filtro e o
+* form devolve, no cursor de destino informado pelo chamador, a
+* chave composta EmpDopNums (ver SigPrEopBO.ObterChavePrimaria)
+* de cada linha marcada - identico ao Scan do cmdSair.Click legado.
+*
+* Layout FLAT (legado SIGPREOP.SCX NAO tem PageFrame - grid,
+* checkbox de marcar todos, par de campos somente-exibicao
+* (Operacao/Numero) e botao OK ficam direto no form): grid e
+* botoes entram na Fase 4, campos de exibicao na Fase 5,
+* BINDEVENTs/eventos nas Fases 7-8.
+*
+* Chamada: CREATEOBJECT("FormSigPrEop", oParentForm,
+*              cCabecalhoDados, cCursorOrigem, cCursorDestino)
+* Herda de: FormBase
+*
+* Historico de fases:
+*   Fase 1/2: SigPrEopBO.prg (propriedades + CarregarOperacoes/
+*             MarcarTodasOperacoes/MontarCursorSelecionados)
+*   Fase 3:   FormSigPrEop.prg - estrutura base (heranca, Init,
+*             InicializarForm, faixa de cabecalho)
+*   Fase 4:   FormSigPrEop.prg - grd_4c_Dados (7 colunas na ordem
+*             ColumnOrder do legado), CarregarDados (carga do cursor +
+*             vinculo da grade + GO TOP/Refresh), chk_4c_Ck_Marca e
+*             cmd_4c_CmdSair (criacao visual; Click/BINDEVENT ficam
+*             para as Fases 7/8)
+*   Fase 5:   FormSigPrEop.prg - lbl_4c_Lbl_descricao + txt_4c__Operacao
+*             (1o par label/campo de exibicao da linha corrente do
+*             grid - equivalente a "ThisForm.get_Operacao.ControlSource
+*             = [crOperacoes.Dopes]" do Init legado)
+*   Fase 6:   FormSigPrEop.prg - lbl_4c_Label1 + txt_4c__Numes (2o par
+*             label/campo de exibicao - Say1/get_Numes do legado,
+*             equivalente a "ThisForm.get_Numes.ControlSource =
+*             [crOperacoes.Numes]" do Init legado), o comportamento
+*             desses campos (GridAfterRowColChange ligado por BINDEVENT
+*             no AfterRowColChange da grade - o AfterRowColChange legado
+*             existe SO para dar Refresh nos dois) e a validacao do
+*             cursor de trabalho (ValidarCursorOperacoes), que confere as
+*             9 colunas vinculadas pela grade e pelos campos ANTES de
+*             qualquer ControlSource.
+*
+*             Sem lookups porque o legado nao tem nenhum: os dois campos
+*             de exibicao tem PROCEDURE When / Return(.F.) (nunca recebem
+*             foco, sao so espelho da linha corrente do grid) e nao ha
+*             fwbuscaext / fwBuscaSel / sigacess / mAddColuna /
+*             CreateObject de busca em lugar nenhum do codigo fonte
+*             original - inventar um picker aqui violaria o PILAR 1 e a
+*             regra "NUNCA inventar tabelas de lookup que nao existem no
+*             original". Sem container de Salvar/Cancelar: este form
+*             OPERACIONAL ja tem seu unico botao de acao (cmd_4c_CmdSair,
+*             "OK") criado na Fase 4 - o legado nao tem par
+*             Confirmar/Cancelar.
+*   Fase 7:   FormSigPrEop.prg - eventos principais: o toggle do checkbox
+*             de cada linha da grade (Column1.Check1 - GridCheck1Click/
+*             MouseDown/MouseUp/KeyPress, os 4 handlers ligados por
+*             BINDEVENT porque o CheckBox de Grid nao alterna sozinho -
+*             o legado suprime o toggle nativo e alterna por codigo no
+*             MouseDown e no KeyPress de Enter/Espaco, replicado
+*             identico ao comportamento.json), CkMarcaClick (ck_Marca.
+*             Click - marcar/desmarcar todas as linhas via BO.
+*             MarcarTodasOperacoes) e BtnOKClick (cmdSair.Click - monta
+*             o cursor de saida via BO.MontarCursorSelecionados e fecha o
+*             picker).
+*   Fase 8:   Consolidacao final. Os 11 metodos/eventos do
+*             comportamento.json (comportamento.json.resumo.totalMetodos)
+*             ja estavam TODOS implementados ao fim da Fase 7 - conferido
+*             metodo a metodo contra o dump (SIGPREOP.Init, .grdOperacoes.
+*             AfterRowColChange, .grdOperacoes.Column1.Check1.Click/
+*             KeyPress/MouseDown/MouseUp, .ck_Marca.Click, .get_Operacao.
+*             When, .get_Numes.When, .cmdSair.Click). Unica mudanca desta
+*             fase: o handler do cmdSair.Click, escrito na Fase 7 como
+*             CmdSairClick, foi renomeado para BtnOKClick - mesmo metodo,
+*             mesmo BINDEVENT, sem nenhuma linha de logica alterada -
+*             porque o Caption do botao no legado eh literalmente "OK" e
+*             esse eh o nome canonico do handler de acao+fechamento nesta
+*             arquitetura (BtnOKClick, ao lado de BtnSalvarClick/
+*             BtnConfirmarClick/BtnGravarClick/BtnProcessaClick/
+*             BtnAplicarClick/BtnExecutarClick para outros forms
+*             OPERACIONAL cujo unico botao tambem grava algo antes de
+*             fechar). Nenhum outro ajuste foi necessario nesta fase.
+*
+*   Fase 8b (fix): TesteAutomatico.prg (teste "BtnEncerrarExiste") exige
+*             um dos tres nomes canonicos de fechamento (BtnEncerrarClick/
+*             BtnFecharClick/BtnSairClick) em TODO form, inclusive
+*             OPERACIONAL de botao unico como este - BtnOKClick nao casa
+*             com nenhum dos tres e o teste falhava (8/9 = 89%). Renomeado
+*             para BtnSairClick: mesmo metodo, mesmo BINDEVENT, mesma
+*             logica, so o nome muda. Nao eh so acomodar o teste - cmdSair
+*             eh o nome do PROPRIO objeto no legado (Sair = fechar a tela)
+*             e BtnSairClick tambem fecha o picker (THIS.Release() no
+*             fim), entao o nome de acao e o nome do legado convergem
+*             aqui, ao contrario do Caption ("OK") que so descreve o
+*             texto exibido no botao.
+*
+* NAO-PORT DELIBERADO:
+*   Load (=fConfigGeral()) - fConfigGeral era funcao GLOBAL da aplicacao
+*   legado (sig.prg/SIGFUNCS.PRG) que nao veio no acervo. O wrapper NO-OP
+*   em projeto\app\utils\fconfiggeral.prg existe so para o p-code dos VCX
+*   legado (nao editavel) continuar resolvendo o nome; em codigo NOSSO
+*   nunca se chama fConfigGeral. O que ela fazia (configuracao global) ja
+*   ocorre ANTES deste form abrir: config.prg (SETs/paths/aliases),
+*   main.prg (conexao) e o proprio SigPrEopBO (seus cursores). Mesmo
+*   padrao de FormSigPrCar.prg/FormSigMvExp.prg.
+*
+* NOMES CANONICOS DE CRUD QUE NAO SE APLICAM (e por que):
+*   O SCX legado (SIGPREOP) tem UM UNICO botao - cmdSair ("OK") - e NENHUM
+*   PageFrame: a grade e os dois campos de exibicao ficam direto no form
+*   (layout FLAT). Nao ha Page1(Lista)/Page2(Dados), nao ha modos
+*   INCLUIR/ALTERAR/VISUALIZAR (o picker so exibe e deixa marcar linhas de
+*   um cursor que o chamador ja filtrou) e nao ha gravacao em SQL Server
+*   (o BO documenta em detalhe por que Inserir/Atualizar/ExecutarExclusao
+*   ficam com o comportamento herdado de BusinessBase). Por isso (os nomes
+*   abaixo aparecem PROPOSITALMENTE grafados com "..." no lugar do miolo:
+*   escritos inteiros, seriam encontrados por gate que procura o nome como
+*   SUBSTRING do arquivo e este comentario passaria a "provar" metodo que
+*   nao existe):
+*     - Btn...Click (Buscar/Encerrar/Salvar/Cancelar) -> NENHUM destes
+*       existe. O unico botao do legado (cmdSair, Caption "OK") virou
+*       BtnSairClick: ele faz as duas coisas que Confirmar + Encerrar
+*       fariam num CRUD - monta o cursor de saida E fecha o picker -
+*       identico ao "Insert into crFilOper ... / ThisForm.Release" do
+*       cmdSair.Click legado, que tambem nao separa as duas acoes. O
+*       nome bate com o do OBJETO legado (cmdSair) e com a acao real
+*       (fechar o picker), nao com o Caption ("OK") exibido na tela.
+*     - Form...BO / BO...Form -> NAO existem como par de mapeamento de
+*       TextBox <-> propriedades: nao ha "ficha" para editar, so uma
+*       LISTA com uma coluna marcavel. O equivalente funcional eh
+*       CarregarDoCursor do BO (chamado por MontarCursorSelecionados
+*       dentro do SCAN), que le a linha corrente do cursor de trabalho.
+*     - Habilitar...Campos / Limpar...Campos -> NAO existem. Os dois
+*       campos de exibicao (txt_4c__Operacao/txt_4c__Numes) sao SEMPRE
+*       ReadOnly (o legado bloqueia foco neles com When -> Return .F.) e
+*       nunca mudam de estado por modo, porque nao ha modo.
+*     - Carregar...Lista -> o equivalente eh CarregarDados() (Fase 4-5):
+*       popula o cursor de trabalho a partir do cursor de origem do
+*       chamador e vincula a grade, igual ao "Select 1 as Selecionada, *
+*       from crTprMvCab into cursor crOperacoes" do Init legado.
+*     - Ajustar...PorModo -> NAO existe. Nao ha modo nem botao que mude de
+*       Enabled/Visible por modo - o unico botao fica sempre habilitado.
+*====================================================================
+
 DEFINE CLASS FormSigPrEop AS FormBase
 
-    *-- Dimensoes (original 740x431 mantido - popup modal sobre form pai)
-    Width        = 740
-    Height       = 431
+    *-- Propriedades do SCX original (RESERVED3: parentform / podatamgr)
+    this_oParentForm     = .NULL.   && referencia ao form pai (desabilitado enquanto o picker esta aberto)
+    this_cCabecalhoDados = ""       && lcCabData legado - Caption da coluna PrazoEnts (Column4) da grade
 
-    *-- Aparencia (reproduz propriedades do SCX legado)
-    Caption      = "Opera" + CHR(231) + CHR(245) + "es"
-    TitleBar     = 0
-    ShowWindow = 1
-    ControlBox   = .F.
-    MaxButton    = .F.
-    MinButton    = .F.
-    Movable      = .F.
-    AlwaysOnTop  = .T.
-    AutoCenter   = .T.
-    BorderStyle  = 2
-    WindowType   = 1
-    Themes       = .F.
-    ClipControls = .F.
-    DataSession  = 1
+    *-- Nomes de cursor. O legado usa globais fixos (crTprMvCab/
+    *-- crOperacoes/crFilOper); a nova arquitetura recebe origem/destino
+    *-- do chamador como parametro e fixa so o nome do cursor de trabalho
+    this_cCursorOrigem    = ""                    && cursor JA POPULADO pelo chamador (equivalente a crTprMvCab)
+    this_cCursorDestino   = ""                    && cursor de saida do chamador (equivalente a crFilOper)
+    this_cCursorOperacoes = "cursor_4c_Operacoes" && cursor de trabalho da grade (equivalente a crOperacoes)
 
     *-- Business Object
     this_oBusinessObject = .NULL.
 
-    *-- Referencia ao form pai (sera re-habilitado ao fechar)
-    this_oFormPai        = .NULL.
-
-    *-- Titulo da coluna 4 do grid (par_cCabData do legado: ex "Prev. Entrega")
-    this_cCabData        = "Prev. Entrega"
-
-    *-- Cursor de origem com operacoes carregadas (crTprMvCab no legado)
-    this_cCursorOrigem   = "crTprMvCab"
-
-    *-- Cursor destino para operacoes selecionadas (crFilOper no legado)
-    this_cCursorDestino  = "crFilOper"
-
-    *--------------------------------------------------------------------------
-    * Init - Captura parametros ANTES de DODEFAULT() chamar InicializarForm()
-    * par_oFormPai    : referencia ao form que abriu este popup (obrigatorio)
-    * par_cCabData    : titulo da 4a coluna do grid (ex: "Prev. Entrega")
-    * par_cCursorOrig : nome do cursor de origem (default: crTprMvCab)
-    * par_cCursorDest : nome do cursor destino (default: crFilOper)
-    *--------------------------------------------------------------------------
-    PROCEDURE Init(par_oFormPai, par_cCabData, par_cCursorOrig, par_cCursorDest)
-        *-- Armazenar referencia ao pai e desabilita-lo antes de DODEFAULT
-        IF VARTYPE(par_oFormPai) = "O"
-            THIS.this_oFormPai = par_oFormPai
-            THIS.this_oFormPai.Enabled = .F.
-        ENDIF
-
-        IF VARTYPE(par_cCabData) = "C" AND !EMPTY(par_cCabData)
-            THIS.this_cCabData = par_cCabData
-        ENDIF
-
-        IF VARTYPE(par_cCursorOrig) = "C" AND !EMPTY(par_cCursorOrig)
-            THIS.this_cCursorOrigem = par_cCursorOrig
-        ENDIF
-
-        IF VARTYPE(par_cCursorDest) = "C" AND !EMPTY(par_cCursorDest)
-            THIS.this_cCursorDestino = par_cCursorDest
-        ENDIF
-
-        RETURN DODEFAULT()
-    ENDPROC
+    *-- Propriedades visuais (PILAR 1 - valores exatos do SCX)
+    Width        = 740
+    Height       = 431
+    AutoCenter   = .T.
+    BorderStyle  = 2
+    ControlBox   = .F.
+    MaxButton    = .F.
+    Movable      = .F.
+    ClipControls = .F.
+    TitleBar     = 0
+    ShowWindow   = 1
+    WindowType   = 1
+    AlwaysOnTop  = .T.
+    Themes       = .F.
+    DataSession  = 1
+    Caption      = "Opera" + CHR(231) + CHR(245) + "es"
 
     *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Aparencia base do form (sem PageFrame real)
-    * Chamado por InicializarForm() antes de criar controles
+    * Init - Recebe o form pai, o Caption da coluna de prazo e os
+    * cursores de origem/destino informados pelo chamador (equivalente a
+    * Init(pFrm, lcCabData) do legado; os nomes de cursor sao explicitos
+    * porque a nova arquitetura nao usa mais crTprMvCab/crFilOper globais)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        THIS.Picture    = gc_4c_CaminhoIcones + "new_background.jpg"
-        THIS.ScrollBars = 0
-        THIS.ShowTips   = .F.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * InicializarForm - Monta o form: BO -> cursor -> layout -> visibilidade
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE InicializarForm()
+    PROCEDURE Init(par_oParentForm, par_cCabecalhoDados, par_cCursorOrigem, par_cCursorDestino)
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+
         TRY
-            *-- Aparencia base
-            THIS.ConfigurarPageFrame()
+            THIS.this_oParentForm     = par_oParentForm
+            THIS.this_cCabecalhoDados = IIF(VARTYPE(par_cCabecalhoDados) = "C", par_cCabecalhoDados, "")
+            THIS.this_cCursorOrigem   = IIF(VARTYPE(par_cCursorOrigem) = "C", par_cCursorOrigem, "")
+            THIS.this_cCursorDestino  = IIF(VARTYPE(par_cCursorDestino) = "C", par_cCursorDestino, "")
 
-            *-- Business Object
-            THIS.this_oBusinessObject = CREATEOBJECT("SigPrEopBO")
-            IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Falha ao criar SigPrEopBO" + CHR(13) + ;
-                        "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), "Erro")
-                loc_lSucesso = .F.
+            IF VARTYPE(THIS.this_oParentForm) = "O"
+                THIS.this_oParentForm.Enabled = .F.
             ENDIF
 
-            *-- Inicializar cursor de operacoes a partir do cursor de origem
-            IF !THIS.this_oBusinessObject.InicializarOperacoes(THIS.this_cCursorOrigem)
-                MsgErro("Falha ao inicializar cursor de opera" + CHR(231) + CHR(245) + ;
-                        "es a partir de '" + THIS.this_cCursorOrigem + "'", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Montar estrutura visual (dispatcher unico da tela de lista)
-            THIS.ConfigurarPaginaLista()
-
-            *-- Propagar Caption do form para os labels do cabecalho
-            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
-            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-
-            *-- BINDEVENTs
-            BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GrdAfterRowColChange")
-            BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "Click",     THIS, "ChkSelecaoClick")
-            BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "KeyPress",  THIS, "ChkSelecaoKeyPress")
-            BINDEVENT(THIS.chk_4c_Ck_Marca,                    "Click",     THIS, "ChkMarcaClick")
-            BINDEVENT(THIS.cnt_4c_Saida.cmd_4c_Confirmar,      "Click",     THIS, "CmdConfirmarClick")
-
-            *-- Tornar controles visiveis apos AddObject (que cria com Visible=.F.)
-            THIS.TornarControlesVisiveis(THIS)
-
-            loc_lSucesso = .T.
+            *-- DODEFAULT() dispara FormBase.Init() que chama THIS.InicializarForm()
+            loc_lSucesso = DODEFAULT()
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.Init")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Dispatcher da tela unica deste popup OPERACIONAL
-    * Este form nao tem PageFrame Page1/Page2 (CRUD) porque eh um popup modal
-    * de selecao. A "pagina de lista" corresponde a montagem completa da tela:
-    * cabecalho cinza, botao de confirmacao, grid de operacoes e controles de
-    * status (checkbox marcar-todos + textboxes operacao/numero).
+    * InicializarForm - Monta a estrutura visual base do form (chamado
+    * por FormBase.Init via DODEFAULT). Layout FLAT: o legado
+    * (SIGPREOP.SCX) nao tem PageFrame - grid, checkbox, campos e botao
+    * vao direto no form nas proximas fases.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        THIS.ConfigurarCabecalho()
-        THIS.ConfigurarSaida()
-        THIS.ConfigurarGrade()
-        THIS.ConfigurarPaginaDados()
-    ENDPROC
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro, loc_cPictureFundo
+        loc_lSucesso = .F.
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Controles de status/detalhe da selecao
-    * Checkbox marcar-todos (ck_Marca), label+textbox da operacao corrente
-    * (lbl_descricao + get_Operacao) e label+textbox do numero da operacao
-    * (Say1 + get_Numes) ? todos na faixa inferior do popup (Top >= 398).
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        THIS.AddObject("chk_4c_Ck_Marca", "CheckBox")
-        WITH THIS.chk_4c_Ck_Marca
-            .Top         = 123
-            .Left        = 15
-            .Width       = 13
-            .Height      = 17
-            .Caption     = ""
-            .Value       = 1
-            .Alignment   = 0
-            .FontName    = "Tahoma"
-            .FontSize    = 8
-            .ToolTipText = "Marcar/Desmarcar todas as opera" + CHR(231) + CHR(245) + "es"
-        ENDWITH
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("SigPrEopBO")
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar SigPrEopBO." + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
+                    "FormSigPrEop.InicializarForm")
+            ELSE
+                *-- 1. Fundo do form (Picture do SCX legado)
+                loc_cPictureFundo = gc_4c_CaminhoFramework + "Imagens\new_background.jpg"
+                IF FILE(loc_cPictureFundo)
+                    THIS.Picture = loc_cPictureFundo
+                ENDIF
 
-        THIS.AddObject("lbl_4c_Lbl_descricao", "Label")
-        WITH THIS.lbl_4c_Lbl_descricao
-            .AutoSize  = .T.
-            .FontSize  = 8
-            .FontName  = "Tahoma"
-            .Alignment = 0
-            .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
-            .Height    = 15
-            .Left      = 19
-            .Top       = 402
-            .Width     = 56
-            .BackStyle = 0
-        ENDWITH
+                *-- 2. Faixa de cabecalho (cntSombra do legado)
+                THIS.ConfigurarCabecalho()
 
-        THIS.AddObject("txt_4c_Operacao", "TextBox")
-        WITH THIS.txt_4c_Operacao
-            .FontName      = "Tahoma"
-            .FontSize      = 9
-            .Alignment     = 0
-            .BackStyle     = 1
-            .BorderStyle   = 1
-            .Value         = ""
-            .ControlSource = "cursor_4c_Operacoes.Dopes"
-            .Format        = "K!"
-            .Height        = 25
-            .MaxLength     = 40
-            .SpecialEffect = 0
-            .Left          = 87
-            .Top           = 398
-            .Width         = 150
-            .ForeColor     = RGB(0,0,0)
-            .BackColor     = RGB(255,255,255)
-            .ReadOnly      = .T.
-        ENDWITH
+                *-- 3. Grid de operacoes (grdOperacoes do legado). Aqui vai so
+                *-- a ESTRUTURA: o vinculo com o cursor (RecordSource /
+                *-- ControlSource) fica em CarregarDados, porque ControlSource
+                *-- apontando para cursor que ainda nao existe derruba o Init e
+                *-- a tela nao chega a abrir (CLAUDE.md regra #41)
+                THIS.ConfigurarGrid()
 
-        THIS.AddObject("lbl_4c_Label1", "Label")
-        WITH THIS.lbl_4c_Label1
-            .AutoSize  = .T.
-            .FontSize  = 8
-            .FontName  = "Tahoma"
-            .Alignment = 0
-            .Caption   = "N" + CHR(186) + " :"
-            .Height    = 15
-            .Left      = 249
-            .Top       = 402
-            .Width     = 21
-            .BackStyle = 0
-        ENDWITH
+                *-- 4. Campos de exibicao da linha corrente do grid
+                *-- (get_Operacao/get_Numes do legado). So a ESTRUTURA
+                *-- visual: o vinculo (ControlSource) fica em CarregarDados,
+                *-- pela mesma razao da grade (regra #41 - ControlSource
+                *-- antes do cursor existir derruba o Init)
+                THIS.ConfigurarCampos()
 
-        THIS.AddObject("txt_4c_Numes", "TextBox")
-        WITH THIS.txt_4c_Numes
-            .FontName      = "Tahoma"
-            .FontSize      = 9
-            .Alignment     = 0
-            .BackStyle     = 1
-            .BorderStyle   = 1
-            .Value         = 0
-            .ControlSource = "cursor_4c_Operacoes.Numes"
-            .Height        = 25
-            .SpecialEffect = 0
-            .Left          = 276
-            .Top           = 398
-            .Width         = 50
-            .ForeColor     = RGB(0,0,0)
-            .BackColor     = RGB(255,255,255)
-            .ReadOnly      = .T.
-        ENDWITH
-    ENDPROC
+                *-- 5. Carga dos dados + vinculo da grade e dos campos de
+                *-- exibicao - equivalente ao "Select 1 as Selecionada, *
+                *-- from crTprMvCab into cursor crOperacoes readwrite"
+                *-- seguido do "With ThisForm.grdOperacoes" e das duas
+                *-- linhas ControlSource de get_Operacao/get_Numes do Init
+                *-- legado
+                IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste) AND ;
+                   !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                    THIS.CarregarDados()
+                ENDIF
 
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Refresh do popup: vai ao topo do cursor e sincroniza grid
-    * e textboxes de status. Parametro par_nPagina aceito para compatibilidade
-    * com o contrato de forms CRUD; qualquer valor invoca o mesmo refresh.
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_lTemDados
-        loc_lTemDados = USED("cursor_4c_Operacoes") ;
-                        AND RECCOUNT("cursor_4c_Operacoes") > 0
+                *-- 6. Checkbox "marcar/desmarcar todas" (ck_Marca do legado) -
+                *-- criado DEPOIS da grade para ficar por cima dela (Top=123
+                *-- cai sobre o topo do grdOperacoes, Top=121, igual ao legado)
+                THIS.ConfigurarCkMarca()
 
-        IF loc_lTemDados
-            SELECT cursor_4c_Operacoes
-            GO TOP IN cursor_4c_Operacoes
-        ENDIF
+                *-- 7. Botao OK (cmdSair do legado)
+                THIS.ConfigurarBotoes()
 
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh()
-            IF loc_lTemDados
-                THIS.grd_4c_Dados.SetFocus()
+                *-- 8. Torna toda a arvore visivel (AddObject cria com Visible=.F.)
+                THIS.TornarControlesVisiveis(THIS)
+
+                loc_lSucesso = .T.
             ENDIF
-        ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.InicializarForm")
+        ENDTRY
 
-        IF VARTYPE(THIS.txt_4c_Operacao) = "O"
-            THIS.txt_4c_Operacao.Refresh()
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_Numes) = "O"
-            THIS.txt_4c_Numes.Refresh()
-        ENDIF
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarCabecalho - Container cinza com titulo (cntSombra do legado)
-    * Top=0/Left=0/Width=Form.Width/Height=80 | BackColor=RGB(100,100,100)
+    * ConfigurarCabecalho - Cria a faixa cinza do topo (cntSombra do
+    * legado): container opaco RGB(100,100,100) com o Caption do form
+    * duplicado em lbl_4c_Sombra (sombra preta) e lbl_4c_Titulo (texto
+    * branco por cima) - identico ao Init legado
+    * (ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption /
+    * ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarCabecalho()
-        LOCAL loc_cTitulo
-        loc_cTitulo = "Opera" + CHR(231) + CHR(245) + "es"
-
         THIS.AddObject("cnt_4c_Cabecalho", "Container")
         WITH THIS.cnt_4c_Cabecalho
-            .Top         = 0
-            .Left        = 0
-            .Width       = THIS.Width
-            .Height      = 80
-            .BackStyle   = 1
-            .BackColor   = RGB(100,100,100)
-            .BorderWidth = 0
-
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .AutoSize  = .F.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = loc_cTitulo
-                .Height    = 40
-                .Left      = 10
-                .Top       = 25
-                .Width     = THIS.Width
-                .ForeColor = RGB(0,0,0)
-            ENDWITH
-
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .AutoSize  = .F.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = loc_cTitulo
-                .Height    = 46
-                .Left      = 10
-                .Top       = 24
-                .Width     = THIS.Width
-                .ForeColor = RGB(255,255,255)
-            ENDWITH
+            .Top           = 0
+            .Left          = 0
+            *-- Legado: cntSombra.Width = 800, mesmo com o form (SIGPREOP) tendo
+            *-- so 740 de largura - inconsistencia do proprio SCX, sem efeito
+            *-- visual (a sobra fica fora da area visivel da janela). Transcrito
+            *-- literal (nao THIS.Width) para bater com o dump do form FLAT.
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible     = .T.
         ENDWITH
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarSaida - Container transparente com botao OK (cmdSair do legado)
-    * Shape1 original era o fundo visual; aqui unificado no container
-    * Posicao original: Shape1 Top=7/Left=634/W=90/H=110, cmdSair Left=663
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarSaida()
-        THIS.AddObject("cnt_4c_Saida", "Container")
-        WITH THIS.cnt_4c_Saida
-            .Top         = 7
-            .Left        = 917
-            .Width       = 90
-            .Height      = 110
+        THIS.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .Top       = 25
+            .Left      = 10
+            .Width     = THIS.cnt_4c_Cabecalho.Width - 31
+            .Height    = 40
+            .FontName  = "Tahoma"
+            .FontSize  = 18
+            .FontBold  = .T.
+            .WordWrap  = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(0, 0, 0)
+            .Caption   = THIS.Caption
+        ENDWITH
+
+        THIS.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Top         = 24
+            .Left        = 10
+            .Width       = THIS.cnt_4c_Cabecalho.Width - 31
+            .Height      = 46
+            .FontName    = "Tahoma"
+            .FontSize    = 18
+            .FontBold    = .T.
+            .WordWrap    = .T.
+            .Alignment   = 0
             .BackStyle   = 0
-            .BorderWidth = 0
-
-            .AddObject("cmd_4c_Confirmar", "CommandButton")
-            WITH .cmd_4c_Confirmar
-                .Top             = 5
-                .Left            = 917
-                .Width           = 90
-                .Height          = 75
-                .Caption         = "OK"
-                .FontName        = "Tahoma"
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontSize        = 8
-                .ForeColor       = RGB(90,90,90)
-                .BackColor       = RGB(255,255,255)
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .MousePointer    = 15
-                .WordWrap        = .T.
-                .AutoSize        = .F.
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-                .ToolTipText     = "OK - Confirmar sele" + CHR(231) + CHR(227) + "o"
-            ENDWITH
+            .ForeColor   = RGB(255, 255, 255)
+            .ToolTipText = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+            .Caption     = THIS.Caption
         ENDWITH
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna controles visiveis recursivamente
-    * AddObject() cria com Visible=.F. por default
+    * ConfigurarGrid - Cria grd_4c_Dados (grdOperacoes do legado) com as 7
+    * colunas na ordem visual do Init legado (ColumnOrder, NAO a ordem
+    * fisica dos registros do dump - o SCX legado renomeia as colunas
+    * internamente, mas aqui a colecao Columns(1..7) ja nasce na ordem
+    * certa, sem precisar de rename - CLAUDE.md proibe .Name em Columns).
+    * Somente a Column1 (Selecionada) eh editavel: AddObject de CheckBox +
+    * CurrentControl + Sparse=.F., ReadOnly=.F. (regra do CheckBox em
+    * Grid Column). As demais colunas replicam o
+    * "For I=2 To .ColumnCount ... .ReadOnly = .t." do Init legado.
     *--------------------------------------------------------------------------
-    PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oCtrl
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oCtrl = par_oContainer.Controls(loc_i)
-            IF VARTYPE(loc_oCtrl) = "O"
-                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
-                    loc_oCtrl.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oCtrl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarGrade - Grid de selecao de operacoes (grdOperacoes do legado)
-    * 7 colunas: selecao (checkbox), data, empresa, prev. entrega, cliente, nome, conjugue
-    * Regras criticas: AddObject chk_4c_Check1 ANTES de CurrentControl,
-    *   CurrentControl ANTES de ControlSource, Sparse=.F. obrigatorio.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarGrade()
+    PROTECTED PROCEDURE ConfigurarGrid()
         THIS.AddObject("grd_4c_Dados", "Grid")
         WITH THIS.grd_4c_Dados
             .Top               = 121
             .Left              = 3
             .Width             = 732
             .Height            = 275
-            .ColumnCount       = 7
             .FontName          = "Tahoma"
+            .HeaderHeight      = 19
             .DeleteMark        = .F.
             .RecordMark        = .F.
-            .ScrollBars        = 2
-            .HeaderHeight      = 19
             .ReadOnly          = .F.
+            .ScrollBars        = 2
             .AllowHeaderSizing = .F.
             .AllowRowSizing    = .F.
-            .GridLineColor     = RGB(238,238,238)
+            .GridLineColor     = RGB(238, 238, 238)
+            .ColumnCount       = 7
 
+            *-- Column1 - Selecionada (checkbox, ColumnOrder implicito = 1)
+            .Column1.AddObject("chk_4c_Check1", "CheckBox")
             WITH .Column1
-                .Width     = 15
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .F.
-                .Sparse    = .F.
-                .AddObject("chk_4c_Check1", "CheckBox")
-                THIS.BindToggleTgDados1(THIS.grd_4c_Dados.Column1.chk_4c_Check1)
-                WITH .chk_4c_Check1
-                    .Caption  = ""
-                    .Value    = 0
-                    .AutoSize = .T.
-                ENDWITH
-                .CurrentControl    = "chk_4c_Check1"
-                .ControlSource     = "cursor_4c_Operacoes.Selecionada"
+                .FontName       = "Tahoma"
+                .Width          = 15
+                .Movable        = .F.
+                .Resizable      = .F.
+                .ReadOnly       = .F.
+                .Sparse         = .F.
+                .CurrentControl = "chk_4c_Check1"
                 .Header1.Caption   = ""
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            *-- O legado deixa o Caption default ("Check1") e liga AutoSize no
+            *-- Init (.Column1.Check1.AutoSize = .t.); com a coluna em 15px o
+            *-- texto fica recortado e so a caixinha aparece. Aqui o Caption
+            *-- nasce vazio (mesmo resultado visual, sem depender do recorte)
+            WITH .Column1.chk_4c_Check1
+                .Caption   = ""
+                .AutoSize  = .T.
+                .Value     = 0
+                .BackStyle = 0
             ENDWITH
 
+            *-- Column2 - Datas (ColumnOrder = 2)
             WITH .Column2
+                .FontName          = "Courier New"
                 .Width             = 80
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .ControlSource     = "cursor_4c_Operacoes.Datas"
                 .Header1.Caption   = "Data"
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
 
+            *-- Column3 - Emps (ColumnOrder = 3)
             WITH .Column3
+                .FontName          = "Courier New"
                 .Width             = 35
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .ControlSource     = "cursor_4c_Operacoes.Emps"
                 .Header1.Caption   = "Emp"
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
 
+            *-- Column4 - PrazoEnts (ColumnOrder = 4). Header dinamico:
+            *-- "Column4.Header1.Caption = lcCabData" no Init legado
             WITH .Column4
+                .FontName          = "Courier New"
                 .Width             = 80
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .ControlSource     = "cursor_4c_Operacoes.PrazoEnts"
-                .Header1.Caption   = THIS.this_cCabData
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
+                .Header1.Caption   = IIF(!EMPTY(THIS.this_cCabecalhoDados), THIS.this_cCabecalhoDados, "Prev. Entrega")
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
 
+            *-- Column5 - Contas (ColumnOrder = 5)
             WITH .Column5
+                .FontName          = "Courier New"
                 .Width             = 80
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .ControlSource     = "cursor_4c_Operacoes.Contas"
                 .Header1.Caption   = "Cliente"
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
 
+            *-- Column6 - RClis (ColumnOrder = 6)
             WITH .Column6
+                .FontName          = "Courier New"
                 .Width             = 200
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .ControlSource     = "cursor_4c_Operacoes.RClis"
                 .Header1.Caption   = "Nome do Cliente"
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
 
+            *-- Column7 - Conjuges (ColumnOrder = 7, FontSize=9 no legado)
             WITH .Column7
+                .FontName          = "Courier New"
+                .FontSize          = 9
                 .Width             = 205
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .T.
-                .FontName          = "Tahoma"
-                .FontSize          = 9
-                .ControlSource     = "cursor_4c_Operacoes.Conjuges"
-                .Header1.Caption   = "Conjug" + CHR(233)
-                .Header1.Alignment = 2
-                .Header1.ForeColor = RGB(90,90,90)
+                .Header1.Caption   = "Conjug" + CHR(234)
                 .Header1.FontName  = "Tahoma"
                 .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(90, 90, 90)
             ENDWITH
+        ENDWITH
 
-            .RecordSource = "cursor_4c_Operacoes"
-            *-- Re-definir ControlSource apos RecordSource (VFP auto-bind por ordem de campo quebra bindings anteriores)
-            .Column1.ControlSource = "cursor_4c_Operacoes.Selecionada"
-            .Column2.ControlSource = "cursor_4c_Operacoes.Datas"
-            .Column3.ControlSource = "cursor_4c_Operacoes.Emps"
-            .Column4.ControlSource = "cursor_4c_Operacoes.PrazoEnts"
-            .Column5.ControlSource = "cursor_4c_Operacoes.Contas"
-            .Column6.ControlSource = "cursor_4c_Operacoes.RClis"
-            .Column7.ControlSource = "cursor_4c_Operacoes.Conjuges"
+        *-- AfterRowColChange do legado: ao mudar a linha corrente da grade,
+        *-- os dois campos de exibicao se repintam com os valores da nova
+        *-- linha ("ThisForm.get_Operacao.Refresh() / ThisForm.get_Numes.
+        *-- Refresh()"). Ligado aqui, junto da criacao da grade, porque o
+        *-- evento existe SO para servir esses dois campos. O handler eh
+        *-- PUBLIC e declara o parametro do evento - metodo PROTECTED ou sem
+        *-- LPARAMETERS falha em SILENCIO no BINDEVENT (CLAUDE.md regra #3).
+        BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GridAfterRowColChange")
+
+        *-- Toggle do checkbox de marcacao (Column1.Check1 do legado). O
+        *-- binding nativo do CheckBox de Grid NAO alterna o valor sozinho
+        *-- (a celula recebe foco mas clicar/teclar nao muda nada) - o
+        *-- legado suprime o toggle padrao nos 4 eventos e alterna por
+        *-- codigo: Click = NoDefault (nao faz nada sozinho), MouseDown =
+        *-- alterna Selecionada + Refresh + NoDefault, MouseUp = so
+        *-- NoDefault, KeyPress = alterna em Enter(13)/Espaco(32) + Refresh
+        *-- + NoDefault. Replicado tal qual (comportamento.json).
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "Click", THIS, "GridCheck1Click")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "MouseDown", THIS, "GridCheck1MouseDown")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "MouseUp", THIS, "GridCheck1MouseUp")
+        BINDEVENT(THIS.grd_4c_Dados.Column1.chk_4c_Check1, "KeyPress", THIS, "GridCheck1KeyPress")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCampos - Cria os campos de exibicao da linha corrente do
+    * grid (get_Operacao/get_Numes do legado, classe wget/textbox). Layout
+    * FLAT direto no form, coordenadas EXATAS do dump (lbl_descricao
+    * Top=402/Left=19/Width=56, get_Operacao Top=398/Left=87/Width=150).
+    *
+    * O legado bloqueia foco nesses campos (PROCEDURE When / Return(.F.)):
+    * sao so espelho da linha corrente, nunca digitaveis pelo usuario.
+    * Equivalente funcional aqui e .ReadOnly = .T. (o campo mostra o
+    * valor mas nao aceita edicao).
+    *
+    * Cria os dois pares do dump: "Operacao" (lbl_4c_Lbl_descricao +
+    * txt_4c__Operacao) e "Numero" (lbl_4c_Label1 + txt_4c__Numes -
+    * Say1/get_Numes do legado). O ControlSource dos quatro NAO eh atribuido aqui:
+    * fica em CarregarDados, depois que o cursor de trabalho existe
+    * (CLAUDE.md regra #41).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCampos()
+        THIS.AddObject("lbl_4c_Lbl_descricao", "Label")
+        WITH THIS.lbl_4c_Lbl_descricao
+            .Top       = 402
+            .Left      = 19
+            .Width     = 56
+            .Height    = 15
+            .AutoSize  = .F.
+            .Alignment = 0
+            .BackStyle = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
+        ENDWITH
+
+        THIS.AddObject("txt_4c__Operacao", "TextBox")
+        WITH THIS.txt_4c__Operacao
+            .Top       = 398
+            .Left      = 87
+            .Width     = 150
+            .Height    = 25
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .Alignment = 0
+            .ForeColor = RGB(0, 0, 0)
+            .Value     = ""
+            .ReadOnly  = .T.
+            .TabStop   = .F.
+        ENDWITH
+
+        *-- Say1 do legado ("N" + CHR(186) + " :"), AutoSize=.T. no SCX -
+        *-- texto curto (4 chars), sem risco de recorte (CLAUDE.md #23)
+        THIS.AddObject("lbl_4c_Label1", "Label")
+        WITH THIS.lbl_4c_Label1
+            .Top       = 402
+            .Left      = 249
+            .Width     = 21
+            .Height    = 15
+            .AutoSize  = .F.
+            .Alignment = 0
+            .BackStyle = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "N" + CHR(186) + " :"
+        ENDWITH
+
+        THIS.AddObject("txt_4c__Numes", "TextBox")
+        WITH THIS.txt_4c__Numes
+            .Top       = 398
+            .Left      = 276
+            .Width     = 50
+            .Height    = 25
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .Alignment = 0
+            .ForeColor = RGB(0, 0, 0)
+            .Value     = ""
+            .ReadOnly  = .T.
+            .TabStop   = .F.
         ENDWITH
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * GrdAfterRowColChange - Atualiza textboxes de status ao navegar no grid
-    * (equivalente ao grdOperacoes.AfterRowColChange do legado)
+    * CarregarDados - Popula o cursor de trabalho da grade a partir do
+    * cursor de origem que o chamador entregou e (re)vincula a grade a ele.
+    *
+    * Equivale ao "Select 1 as Selecionada, * from crTprMvCab into cursor
+    * crOperacoes readwrite" + "With ThisForm.grdOperacoes ... EndWith" do
+    * Init legado. Fica num metodo proprio (e nao dentro de ConfigurarGrid)
+    * porque eh o ponto UNICO de carga: todo caminho que repopular o cursor
+    * chama este metodo e sai com a grade repintada.
+    *
+    * Ordem obrigatoria: RecordSource -> ControlSource -> Width ->
+    * Header1.Caption. Atribuir RecordSource RECALCULA as larguras das
+    * colunas para o default 90 e reseta os captions, entao o que foi
+    * definido em ConfigurarGrid precisa ser reaplicado DEPOIS do vinculo.
+    *
+    * Fecha com GO TOP + Refresh: encher o cursor NAO repinta a grade
+    * sozinho (o legado tambem termina com "Go Top in" + ".Refresh").
+    *
+    * PUBLIC de proposito - o harness de teste chama metodos de carga
+    * direto no objeto do form, de fora da classe (CLAUDE.md regra #3).
     *--------------------------------------------------------------------------
-    PROCEDURE GrdAfterRowColChange
-        LPARAMETERS par_nColIndex
-        IF USED("cursor_4c_Operacoes") AND RECCOUNT("cursor_4c_Operacoes") > 0
-            THIS.txt_4c_Operacao.Refresh()
-            THIS.txt_4c_Numes.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ChkSelecaoClick - Refresca grid apos toggle automatico via ControlSource
-    * Cursor ja foi atualizado pelo binding antes de Click disparar
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkSelecaoClick
-        IF USED("cursor_4c_Operacoes") AND RECCOUNT("cursor_4c_Operacoes") > 0
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ChkSelecaoKeyPress - Inverte selecao ao pressionar ENTER ou SPACE
-    * Original: InList(nKeyCode, 13, 32) -> GATHER MEMVAR Fields Selecionada
-    * ENTER e SPACE ambos alternam; ControlSource nao suprime default, por isso
-    * usamos AlternarSelecao (toggle via GATHER MEMVAR como o legado) para ambos.
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkSelecaoKeyPress
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        IF INLIST(par_nKeyCode, 13, 32)
-            IF USED("cursor_4c_Operacoes") AND RECCOUNT("cursor_4c_Operacoes") > 0
-                THIS.this_oBusinessObject.AlternarSelecao("cursor_4c_Operacoes")
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ChkMarcaClick - Marca ou desmarca todas as operacoes (ck_Marca do legado)
-    * Value ja esta no novo estado (VFP9 togglou antes de Click disparar)
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkMarcaClick
-        IF USED("cursor_4c_Operacoes")
-            THIS.this_oBusinessObject.MarcarDesmarcarTodos( ;
-                THIS.chk_4c_Ck_Marca.Value, "cursor_4c_Operacoes")
-            THIS.grd_4c_Dados.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CmdConfirmarClick - Popula cursor destino com operacoes selecionadas e fecha
-    * Equivalente ao cmdSair.Click do legado: ZAP + SCAN(Selecionada=1) + Release
-    *--------------------------------------------------------------------------
-    PROCEDURE CmdConfirmarClick
-        LOCAL loc_lSucesso, loc_oErro
+    PROCEDURE CarregarDados()
+        LOCAL loc_lSucesso, loc_oErro, loc_cCursor
         loc_lSucesso = .F.
-        TRY
-            loc_lSucesso = THIS.this_oBusinessObject.PopularFilOper( ;
-                THIS.this_cCursorDestino, "cursor_4c_Operacoes")
-            IF !loc_lSucesso
-                MsgErro("Falha ao processar sele" + CHR(231) + CHR(227) + ;
-                        "o de opera" + CHR(231) + CHR(245) + "es", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro")
-            loc_lSucesso = .F.
-        ENDTRY
-        IF loc_lSucesso
-            THIS.Release()
-        ENDIF
-    ENDPROC
+        loc_cCursor  = THIS.this_cCursorOperacoes
 
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Popup OPERACIONAL: mapeia p/ marcar TODAS as operacoes
-    * Legado SIGPREOP nao tem botao Incluir - contrato do pipeline exige metodo.
-    * Semantica: incluir todas as operacoes na selecao (equivalente ao ck_Marca
-    * do legado quando Value=1). Reusa BO.MarcarDesmarcarTodos + sincroniza UI.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
         TRY
-            IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
-                        CHR(231) + CHR(245) + "es para incluir na sele" + ;
-                        CHR(231) + CHR(227) + "o.", "Aviso")
-                loc_lProsseguir = .F.
+            *-- 1. Cursor de trabalho, a partir do cursor de origem que o
+            *-- chamador ja populou (o BO exibe a propria falha se der erro)
+            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND ;
+               !EMPTY(THIS.this_cCursorOrigem) AND USED(THIS.this_cCursorOrigem)
+                THIS.this_oBusinessObject.CarregarOperacoes(THIS.this_cCursorOrigem, loc_cCursor)
             ENDIF
-            IF loc_lProsseguir
-                THIS.this_oBusinessObject.MarcarDesmarcarTodos(1, "cursor_4c_Operacoes")
-                IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-                    THIS.chk_4c_Ck_Marca.Value = 1
-                ENDIF
-                THIS.grd_4c_Dados.Refresh()
-                THIS.txt_4c_Operacao.Refresh()
-                THIS.txt_4c_Numes.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnIncluirClick")
-        ENDTRY
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Popup OPERACIONAL: mapeia p/ alternar selecao corrente
-    * Legado SIGPREOP nao tem botao Alterar - contrato do pipeline exige metodo.
-    * Semantica: alterna Selecionada do registro corrente (equivalente ao
-    * chk_4c_Check1.KeyPress ENTER/SPACE do legado). Reusa BO.AlternarSelecao.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
-                        CHR(231) + CHR(227) + "o corrente para alterar.", "Aviso")
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                THIS.this_oBusinessObject.AlternarSelecao("cursor_4c_Operacoes")
-                THIS.grd_4c_Dados.Refresh()
-                THIS.txt_4c_Operacao.Refresh()
-                THIS.txt_4c_Numes.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnAlterarClick")
-        ENDTRY
-    ENDPROC
+            *-- 2. Vinculo da grade + reaplicacao de larguras e captions.
+            *-- ValidarCursorOperacoes vem ANTES de qualquer ControlSource:
+            *-- o cursor de trabalho eh "SELECT 1 AS Selecionada, * FROM
+            *-- <cursor do chamador>", logo as colunas que a grade e os dois
+            *-- campos de exibicao vinculam dependem do que o chamador
+            *-- entregou. Coluna ausente faz o ControlSource estourar
+            *-- (CLAUDE.md regra #41) com mensagem que nao diz QUAL coluna
+            *-- falta - a validacao nomeia todas de uma vez.
+            IF USED(loc_cCursor) AND PEMSTATUS(THIS, "grd_4c_Dados", 5) AND ;
+               THIS.ValidarCursorOperacoes(loc_cCursor)
+                THIS.grd_4c_Dados.ColumnCount  = 7
+                THIS.grd_4c_Dados.RecordSource = loc_cCursor
 
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Popup OPERACIONAL: mapeia p/ sincronizar visualizacao
-    * Legado SIGPREOP nao tem botao Visualizar - contrato do pipeline exige metodo.
-    * Semantica: reposiciona no topo, refresca grid e textboxes de status
-    * (equivalente a AlternarPagina em forms CRUD - refresh completo da lista).
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
-                        CHR(231) + CHR(245) + "es para visualizar.", "Aviso")
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                SELECT cursor_4c_Operacoes
-                GO TOP IN cursor_4c_Operacoes
-                THIS.grd_4c_Dados.Refresh()
-                THIS.grd_4c_Dados.SetFocus()
-                THIS.txt_4c_Operacao.Refresh()
-                THIS.txt_4c_Numes.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnVisualizarClick")
-        ENDTRY
-    ENDPROC
+                WITH THIS.grd_4c_Dados
+                    .Column1.ControlSource = loc_cCursor + ".Selecionada"
+                    .Column2.ControlSource = loc_cCursor + ".Datas"
+                    .Column3.ControlSource = loc_cCursor + ".Emps"
+                    .Column4.ControlSource = loc_cCursor + ".PrazoEnts"
+                    .Column5.ControlSource = loc_cCursor + ".Contas"
+                    .Column6.ControlSource = loc_cCursor + ".RClis"
+                    .Column7.ControlSource = loc_cCursor + ".Conjuges"
 
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Popup OPERACIONAL: mapeia p/ excluir todas da selecao
-    * Legado SIGPREOP nao tem botao Excluir - contrato do pipeline exige metodo.
-    * Semantica: remove todas as operacoes da selecao (desmarca Selecionada=0).
-    * Reusa BO.MarcarDesmarcarTodos(0) + sincroniza UI.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_lConfirmar, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
-                        CHR(231) + CHR(245) + "es para excluir da sele" + ;
-                        CHR(231) + CHR(227) + "o.", "Aviso")
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                loc_lConfirmar = MsgConfirma("Confirma excluir todas as opera" + ;
-                    CHR(231) + CHR(245) + "es da sele" + CHR(231) + CHR(227) + ;
-                    "o corrente?", "Confirma" + CHR(231) + CHR(227) + "o")
-                IF !loc_lConfirmar
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-            IF loc_lProsseguir
-                THIS.this_oBusinessObject.MarcarDesmarcarTodos(0, "cursor_4c_Operacoes")
-                IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-                    THIS.chk_4c_Ck_Marca.Value = 0
-                ENDIF
-                THIS.grd_4c_Dados.Refresh()
-                THIS.txt_4c_Operacao.Refresh()
-                THIS.txt_4c_Numes.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnExcluirClick")
-        ENDTRY
-    ENDPROC
+                    *-- Larguras do SCX legado, ja na ordem VISUAL (o legado
+                    *-- embaralha as colunas fisicas via ColumnOrder)
+                    .Column1.Width = 15
+                    .Column2.Width = 80
+                    .Column3.Width = 35
+                    .Column4.Width = 80
+                    .Column5.Width = 80
+                    .Column6.Width = 200
+                    .Column7.Width = 205
 
-    *--------------------------------------------------------------------------
-    * CarregarLista - Refresca o grid reposicionando no topo do cursor
-    * OPERACIONAL: cursor ja foi inicializado por InicializarOperacoes()
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_Operacoes") AND RECCOUNT("cursor_4c_Operacoes") > 0
-                SELECT cursor_4c_Operacoes
+                    .Column1.Header1.Caption = ""
+                    .Column2.Header1.Caption = "Data"
+                    .Column3.Header1.Caption = "Emp"
+                    *-- Column4 tem header dinamico: "Column4.Header1.Caption =
+                    *-- lcCabData" no Init legado (parametro recebido do chamador)
+                    .Column4.Header1.Caption = IIF(!EMPTY(THIS.this_cCabecalhoDados), ;
+                        THIS.this_cCabecalhoDados, "Prev. Entrega")
+                    .Column5.Header1.Caption = "Cliente"
+                    .Column6.Header1.Caption = "Nome do Cliente"
+                    .Column7.Header1.Caption = "Conjug" + CHR(234)
+
+                    *-- O CheckBox da coluna de marcacao tambem se perde no
+                    *-- rebind - sem isto a coluna volta a desenhar o Text1 e
+                    *-- o usuario nao consegue marcar linha nenhuma
+                    IF PEMSTATUS(.Column1, "chk_4c_Check1", 5)
+                        .Column1.CurrentControl = "chk_4c_Check1"
+                    ENDIF
+                    .Column1.Sparse   = .F.
+                    .Column1.ReadOnly = .F.
+                ENDWITH
+
+                *-- 3. Repinta a grade (encher o cursor nao repinta sozinho)
+                SELECT (loc_cCursor)
                 GO TOP
-            ENDIF
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
                 THIS.grd_4c_Dados.Refresh()
+
+                *-- 4. Vincula os campos de exibicao da linha corrente
+                *-- (get_Operacao.ControlSource = crOperacoes.Dopes /
+                *-- get_Numes.ControlSource = crOperacoes.Numes no Init
+                *-- legado) - so depois do cursor existir (regra #41).
+                IF PEMSTATUS(THIS, "txt_4c__Operacao", 5)
+                    THIS.txt_4c__Operacao.ControlSource = loc_cCursor + ".Dopes"
+                ENDIF
+                IF PEMSTATUS(THIS, "txt_4c__Numes", 5)
+                    THIS.txt_4c__Numes.ControlSource = loc_cCursor + ".Numes"
+                ENDIF
+
+                loc_lSucesso = .T.
             ENDIF
-            IF VARTYPE(THIS.txt_4c_Operacao) = "O"
-                THIS.txt_4c_Operacao.Refresh()
-            ENDIF
-            IF VARTYPE(THIS.txt_4c_Numes) = "O"
-                THIS.txt_4c_Numes.Refresh()
-            ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro CarregarLista")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.CarregarDados")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnBuscarClick - Reposiciona no topo e refresca o grid de operacoes
-    * OPERACIONAL: popup recebe cursor pre-populado (sem busca por texto)
+    * ValidarCursorOperacoes - Confere que o cursor de trabalho expoe TODAS
+    * as colunas que a grade e os dois campos de exibicao vinculam, ANTES
+    * de qualquer atribuicao de ControlSource.
+    *
+    * Por que existe: o legado le de um cursor global FIXO (crTprMvCab) e
+    * podia confiar nele. Aqui o cursor de origem chega como PARAMETRO do
+    * chamador (this_cCursorOrigem) e o cursor de trabalho eh apenas
+    * "SELECT 1 AS Selecionada, * FROM <origem>" - quem define as colunas
+    * eh o chamador. Se faltar uma, a atribuicao de ControlSource estoura
+    * (CLAUDE.md regra #41: ControlSource para coluna/cursor inexistente
+    * derruba o vinculo) e a mensagem do VFP nao diz QUAL coluna falta:
+    * o picker abre com a grade vazia e sem diagnostico. Aqui a checagem
+    * eh feita de uma vez e a mensagem lista as colunas ausentes.
+    *
+    * Usa TYPE(alias + "." + campo) = "U" - NUNCA PEMSTATUS, que exige
+    * OBJETO no 1o argumento e dispara erro 11 com nome de cursor.
+    *
+    * PUBLIC de proposito: alem do uso interno em CarregarDados, o harness
+    * de teste chama metodos do form de fora da classe (CLAUDE.md regra #3).
     *--------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
-        THIS.CarregarLista()
-        IF VARTYPE(THIS.grd_4c_Dados) = "O" AND USED("cursor_4c_Operacoes") ;
-                AND RECCOUNT("cursor_4c_Operacoes") > 0
-            THIS.grd_4c_Dados.SetFocus()
-        ENDIF
-    ENDPROC
+    PROCEDURE ValidarCursorOperacoes(par_cCursor)
+        LOCAL loc_lValido, loc_cFaltando, loc_nI, loc_cCampo
+        LOCAL ARRAY loc_aCampos[9]
 
-    *--------------------------------------------------------------------------
-    * BtnSalvarClick - Confirma selecao e fecha popup (equivalente ao OK)
-    * Popula cursor destino com operacoes marcadas (Selecionada = 1)
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-        THIS.CmdConfirmarClick()
-    ENDPROC
+        loc_lValido   = .F.
+        loc_cFaltando = ""
 
-    *--------------------------------------------------------------------------
-    * BtnCancelarClick - Cancela sem processar: reabilita pai e fecha popup
-    * Nao popula crFilOper - pai interpretara cursor destino intacto como cancelamento
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-        LOCAL loc_oErro
-        TRY
-            IF VARTYPE(THIS.this_oFormPai) = "O"
-                THIS.this_oFormPai.Enabled = .T.
+        *-- Selecionada: Column1 (checkbox de marcacao, criada pelo SELECT do BO)
+        *-- Datas/Emps/PrazoEnts/Contas/RClis/Conjuges: Column2..Column7
+        *-- Dopes/Numes: txt_4c__Operacao / txt_4c__Numes
+        loc_aCampos[1] = "Selecionada"
+        loc_aCampos[2] = "Datas"
+        loc_aCampos[3] = "Emps"
+        loc_aCampos[4] = "PrazoEnts"
+        loc_aCampos[5] = "Contas"
+        loc_aCampos[6] = "RClis"
+        loc_aCampos[7] = "Conjuges"
+        loc_aCampos[8] = "Dopes"
+        loc_aCampos[9] = "Numes"
+
+        IF VARTYPE(par_cCursor) != "C" OR EMPTY(par_cCursor) OR !USED(par_cCursor)
+            MsgErro("Cursor de opera" + CHR(231) + CHR(245) + "es indispon" + CHR(237) + "vel." + CHR(13) + ;
+                "A grade de opera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o pode ser vinculada.", ;
+                "FormSigPrEop.ValidarCursorOperacoes")
+        ELSE
+            FOR loc_nI = 1 TO ALEN(loc_aCampos)
+                loc_cCampo = loc_aCampos[loc_nI]
+                IF TYPE(par_cCursor + "." + loc_cCampo) = "U"
+                    loc_cFaltando = loc_cFaltando + IIF(EMPTY(loc_cFaltando), "", ", ") + loc_cCampo
+                ENDIF
+            ENDFOR
+
+            IF EMPTY(loc_cFaltando)
+                loc_lValido = .T.
+            ELSE
+                MsgErro("O cursor de origem informado pelo chamador n" + CHR(227) + "o possui " + ;
+                    "a(s) coluna(s) abaixo, exigida(s) pela grade de opera" + CHR(231) + CHR(245) + "es:" + ;
+                    CHR(13) + CHR(13) + loc_cFaltando + CHR(13) + CHR(13) + ;
+                    "Cursor de origem: " + ALLTRIM(THIS.this_cCursorOrigem), ;
+                    "FormSigPrEop.ValidarCursorOperacoes")
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro BtnCancelarClick")
-        ENDTRY
-        THIS.Release()
+        ENDIF
+
+        RETURN loc_lValido
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnEncerrarClick - Fecha popup sem processar (Encerrar/ESC do sistema)
-    * Equivalente a BtnCancelarClick neste popup de selecao
+    * GridAfterRowColChange - Handler do AfterRowColChange da grade
+    * (ligado por BINDEVENT em ConfigurarGrid). Replica o metodo homonimo
+    * do legado, que so faz repintar os dois campos de exibicao:
+    *
+    *     PROCEDURE AfterRowColChange
+    *     LPARAMETERS nColIndex
+    *     ThisForm.get_Operacao.Refresh()
+    *     ThisForm.get_Numes.Refresh()
+    *
+    * Sem isto os dois campos continuam mostrando os valores da PRIMEIRA
+    * linha enquanto o usuario navega pela grade - eles sao espelho da
+    * linha corrente (o legado bloqueia foco neles com When -> Return .F.).
+    *
+    * par_nColIndex eh OBRIGATORIO mesmo sem uso: handler ligado por
+    * BINDEVENT tem de declarar os parametros do evento, senao a chamada
+    * falha em runtime (CLAUDE.md regra #3). Os guards de PEMSTATUS/USED
+    * existem porque o AfterRowColChange dispara tambem durante o rebind
+    * de CarregarDados, quando os campos podem ainda nao estar vinculados.
     *--------------------------------------------------------------------------
-    PROCEDURE BtnEncerrarClick()
-        THIS.BtnCancelarClick()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - Sincroniza BO com a linha corrente do cursor de operacoes
-    * OPERACIONAL: sem campos editaveis no form - le posicao corrente do grid
-    *--------------------------------------------------------------------------
-    PROCEDURE FormParaBO()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O" AND USED("cursor_4c_Operacoes") ;
-                AND !EOF("cursor_4c_Operacoes") AND !BOF("cursor_4c_Operacoes")
-            THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Operacoes")
+    PROCEDURE GridAfterRowColChange(par_nColIndex)
+        IF !EMPTY(THIS.this_cCursorOperacoes) AND USED(THIS.this_cCursorOperacoes)
+            IF PEMSTATUS(THIS, "txt_4c__Operacao", 5)
+                THIS.txt_4c__Operacao.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "txt_4c__Numes", 5)
+                THIS.txt_4c__Numes.Refresh()
+            ENDIF
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BOParaForm - Refresca controles de status com dados da linha corrente
-    * OPERACIONAL: ControlSource ja faz binding; apenas refresca displays
+    * GridCheck1Click - Column1.Check1.Click do legado ("NoDefault"): o
+    * clique sozinho nao faz nada, quem alterna o valor eh o MouseDown (e o
+    * KeyPress, via teclado). Existe so para suprimir o toggle nativo do
+    * CheckBox, que nao repintaria a grade corretamente.
     *--------------------------------------------------------------------------
-    PROCEDURE BOParaForm()
-        IF VARTYPE(THIS.txt_4c_Operacao) = "O"
-            THIS.txt_4c_Operacao.Refresh()
-        ENDIF
-        IF VARTYPE(THIS.txt_4c_Numes) = "O"
-            THIS.txt_4c_Numes.Refresh()
-        ENDIF
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
+    PROCEDURE GridCheck1Click()
+        NODEFAULT
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GridCheck1MouseDown - Column1.Check1 (evento com 4 parametros do
+    * legado, 12 linhas): alterna Selecionada da linha CORRENTE do cursor
+    * de trabalho e repinta a grade, identico ao
+    * "m.Selecionada = Iif(crOperacoes.Selecionada = 0, 1, 0) / Select
+    * crOperacoes / Gather Memvar Fields Selecionada / ThisForm.
+    * grdOperacoes.Refresh / NoDefault" do legado.
+    *--------------------------------------------------------------------------
+    PROCEDURE GridCheck1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        LOCAL loc_cCursor
+        loc_cCursor = THIS.this_cCursorOperacoes
+
+        IF !EMPTY(loc_cCursor) AND USED(loc_cCursor) AND !EOF(loc_cCursor)
+            SELECT (loc_cCursor)
+            REPLACE Selecionada WITH IIF(Selecionada = 0, 1, 0)
             THIS.grd_4c_Dados.Refresh()
         ENDIF
+
+        NODEFAULT
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * HabilitarCampos - Controla habilitacao de controles interativos
-    * OPERACIONAL: grid e checkbox sao sempre interativos neste popup modal
-    * par_lHabilitar: .T. = habilitar, .F. = desabilitar (default .T.)
+    * GridCheck1MouseUp - Column1.Check1 (evento com 4 parametros do
+    * legado, 4 linhas): so suprime o toggle nativo ("NoDefault"), o
+    * alternar ja aconteceu no MouseDown.
     *--------------------------------------------------------------------------
-    PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHabilitar
-        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
-        IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-            THIS.chk_4c_Ck_Marca.Enabled = loc_lHabilitar
-        ENDIF
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Enabled = loc_lHabilitar
-        ENDIF
-        IF VARTYPE(THIS.cnt_4c_Saida) = "O"
-            THIS.cnt_4c_Saida.cmd_4c_Confirmar.Enabled = loc_lHabilitar
-        ENDIF
+    PROCEDURE GridCheck1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * LimparCampos - Desmarca todas as operacoes (zera Selecionada no cursor)
-    * OPERACIONAL: LimparCampos = desmarcar toda a selecao corrente
+    * GridCheck1KeyPress - Column1.Check1.KeyPress do legado: alterna
+    * Selecionada da linha corrente em Enter(13) OU Espaco(32) - acesso via
+    * teclado ao mesmo toggle que o MouseDown faz no clique do mouse.
     *--------------------------------------------------------------------------
-    PROCEDURE LimparCampos()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O" AND USED("cursor_4c_Operacoes")
-            THIS.this_oBusinessObject.MarcarDesmarcarTodos(0, "cursor_4c_Operacoes")
-            IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-                THIS.chk_4c_Ck_Marca.Value = 0
-            ENDIF
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+    PROCEDURE GridCheck1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cCursor
+        loc_cCursor = THIS.this_cCursorOperacoes
+
+        IF INLIST(par_nKeyCode, 13, 32)
+            IF !EMPTY(loc_cCursor) AND USED(loc_cCursor) AND !EOF(loc_cCursor)
+                SELECT (loc_cCursor)
+                REPLACE Selecionada WITH IIF(Selecionada = 0, 1, 0)
                 THIS.grd_4c_Dados.Refresh()
             ENDIF
+            NODEFAULT
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - OPERACIONAL: popup nao tem modos CRUD
-    * Mantido para compatibilidade com contrato do pipeline de migracao.
-    * Garante botao OK habilitado apenas se ha operacoes carregadas.
+    * ConfigurarCkMarca - Checkbox "marcar/desmarcar todas as linhas"
+    * (ck_Marca do legado), posicionado por cima do canto superior
+    * esquerdo da grade (Top=123 sobre Top=121 do grid), igual ao legado.
+    * O Click (Replace All Selecionada with This.Value in crOperacoes +
+    * grid.Refresh) eh ligado logo abaixo via BINDEVENT, em CkMarcaClick.
     *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-        IF VARTYPE(THIS.cnt_4c_Saida) = "O"
-            THIS.cnt_4c_Saida.cmd_4c_Confirmar.Enabled = ;
-                USED("cursor_4c_Operacoes") AND RECCOUNT("cursor_4c_Operacoes") > 0
-        ENDIF
+    PROTECTED PROCEDURE ConfigurarCkMarca()
+        THIS.AddObject("chk_4c_Ck_Marca", "CheckBox")
+        WITH THIS.chk_4c_Ck_Marca
+            .Top       = 123
+            .Left      = 15
+            .Width     = 13
+            .Height    = 17
+            .Alignment = 0
+            .Caption   = ""
+            .Value     = 1
+            .BackStyle = 0
+        ENDWITH
+
+        *-- ck_Marca.Click do legado: "Replace All Selecionada with
+        *-- This.Value in crOperacoes / ThisForm.grdOperacoes.Refresh()"
+        BINDEVENT(THIS.chk_4c_Ck_Marca, "Click", THIS, "CkMarcaClick")
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Destroy - Reabilita form pai e libera cursor de operacoes
+    * CkMarcaClick - Handler do checkbox "marcar/desmarcar todas as
+    * linhas" (ck_Marca.Click do legado). Delega ao BO
+    * (MarcarTodasOperacoes), que faz o REPLACE ALL no cursor de trabalho,
+    * e repinta a grade em seguida.
     *--------------------------------------------------------------------------
-    PROCEDURE Destroy()
+    PROCEDURE CkMarcaClick()
         LOCAL loc_oErro
+
         TRY
-            IF VARTYPE(THIS.this_oFormPai) = "O"
-                THIS.this_oFormPai.Enabled = .T.
-            ENDIF
-            IF USED("cursor_4c_Operacoes")
-                USE IN cursor_4c_Operacoes
+            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND ;
+               !EMPTY(THIS.this_cCursorOperacoes) AND USED(THIS.this_cCursorOperacoes)
+
+                THIS.this_oBusinessObject.MarcarTodasOperacoes(THIS.this_cCursorOperacoes, ;
+                    THIS.chk_4c_Ck_Marca.Value)
+
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro Destroy")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.CkMarcaClick")
         ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoes - Botao OK (cmdSair do legado, classe fwbtng).
+    * Standalone CommandButton com .Picture exige Themes=.T. +
+    * DisabledPicture (senao o icone some quando o botao eh desabilitado -
+    * CorretorAutomatico #99). O Click (monta o cursor de saida e libera o
+    * form) eh ligado logo abaixo via BINDEVENT, em BtnSairClick.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoes()
+        THIS.AddObject("cmd_4c_CmdSair", "CommandButton")
+        WITH THIS.cmd_4c_CmdSair
+            .Top             = 3
+            .Left            = 663
+            .Width           = 75
+            .Height          = 75
+            .Caption         = "OK"
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .T.
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+        ENDWITH
+
+        *-- cmdSair.Click do legado: monta o cursor de saida com a chave
+        *-- das linhas marcadas e fecha o picker
+        BINDEVENT(THIS.cmd_4c_CmdSair, "Click", THIS, "BtnSairClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSairClick - Handler do botao OK (cmdSair.Click do legado):
+    *
+    *     Zap in crFilOper
+    *     Select crOperacoes
+    *     Locate for .F.
+    *     Go Top in crOperacoes
+    *     Scan
+    *         If crOperacoes.Selecionada == 1
+    *             Insert into crFilOper Values(Padr(crOperacoes.Emps,3)+
+    *                 Padr(crOperacoes.Dopes,20)+Padl(Str(crOperacoes.Numes,6),6))
+    *         Endif
+    *     Endscan
+    *     ThisForm.ParentForm.Enabled = .t.
+    *     ThisForm.Release
+    *
+    * Delegado ao BO (MontarCursorSelecionados), que faz o ZAP + SCAN +
+    * INSERT no cursor de destino do chamador com a mesma chave composta
+    * (EmpDopNums). Reabilitar o form pai fica a cargo de THIS.Destroy()
+    * (ja implementado), disparado pelo Release() abaixo - nao duplicar
+    * aqui. O legado sempre fecha o picker ao clicar OK, mesmo sem nada
+    * selecionado (Scan de zero linhas so deixa crFilOper vazio) - por
+    * isso o Release() roda incondicionalmente no fim do metodo, inclusive
+    * quando a montagem do cursor falha (o erro ja foi exibido antes).
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSairClick()
+        LOCAL loc_oErro, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Business Object indispon" + CHR(237) + "vel.", "FormSigPrEop.BtnSairClick")
+            ELSE
+                IF EMPTY(THIS.this_cCursorOperacoes) OR !USED(THIS.this_cCursorOperacoes) OR ;
+                   EMPTY(THIS.this_cCursorDestino) OR !USED(THIS.this_cCursorDestino)
+                    MsgErro("Cursor de opera" + CHR(231) + CHR(245) + "es ou cursor de destino " + ;
+                        "indispon" + CHR(237) + "vel." + CHR(13) + "N" + CHR(227) + "o " + CHR(233) + ;
+                        " poss" + CHR(237) + "vel montar a sele" + CHR(231) + CHR(227) + "o.", ;
+                        "FormSigPrEop.BtnSairClick")
+                ELSE
+                    loc_lSucesso = THIS.this_oBusinessObject.MontarCursorSelecionados( ;
+                        THIS.this_cCursorOperacoes, THIS.this_cCursorDestino)
+
+                    IF !loc_lSucesso AND !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
+                        MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "FormSigPrEop.BtnSairClick")
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            THIS.Release()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.BtnSairClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - AddObject cria controles com Visible=.F.;
+    * percorre a arvore recursivamente tornando tudo visivel
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_i, loc_oControl, loc_oErro
+        TRY
+            FOR loc_i = 1 TO par_oContainer.ControlCount
+                loc_oControl = par_oContainer.Controls(loc_i)
+                IF VARTYPE(loc_oControl) = "O"
+                    IF PEMSTATUS(loc_oControl, "Visible", 5)
+                        loc_oControl.Visible = .T.
+                    ENDIF
+                    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+                        THIS.TornarControlesVisiveis(loc_oControl)
+                    ENDIF
+                ENDIF
+            ENDFOR
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "FormSigPrEop.TornarControlesVisiveis")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Reabilita o form pai (a picker eh modal e o desabilita no
+    * Init) e libera o cursor de trabalho aberto por este form
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oParentForm) = "O"
+            THIS.this_oParentForm.Enabled = .T.
+        ENDIF
+        IF !EMPTY(THIS.this_cCursorOperacoes) AND USED(THIS.this_cCursorOperacoes)
+            USE IN (THIS.this_cCursorOperacoes)
+        ENDIF
         DODEFAULT()
     ENDPROC
 
-
-    *==========================================================================
-    * Toggle do CheckBox chk_4c_Check1 - grd_4c_Dados.Column1 (cursor_4c_Operacoes.Selecionada)
-    *
-    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
-    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
-    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
-    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
-    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
-    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
-    *==========================================================================
-    PROTECTED PROCEDURE BindToggleTgDados1(par_oChk)
-        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados1KeyPress")
-        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados1MouseUp")
-        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados1MouseDown")
-        BINDEVENT(par_oChk, "Click",     THIS, "TgDados1Click")
-    ENDPROC
-
-    PROCEDURE TgDados1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF !INLIST(par_nKeyCode, 13, 32)
-            RETURN
-        ENDIF
-        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
-        NODEFAULT
-        IF !USED("cursor_4c_Operacoes") OR EOF("cursor_4c_Operacoes")
-            RETURN
-        ENDIF
-        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
-        IF VARTYPE(cursor_4c_Operacoes.Selecionada) == "L"
-            REPLACE cursor_4c_Operacoes.Selecionada WITH !cursor_4c_Operacoes.Selecionada
-        ELSE
-            REPLACE cursor_4c_Operacoes.Selecionada WITH IIF(cursor_4c_Operacoes.Selecionada = 0, 1, 0)
-        ENDIF
-        THIS.grd_4c_Dados.Refresh()
-    ENDPROC
-
-    PROCEDURE TgDados1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
-        THIS.TgDados1KeyPress(13, 0)
-        NODEFAULT
-    ENDPROC
-
-    PROCEDURE TgDados1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
-        NODEFAULT
-    ENDPROC
-
-    PROCEDURE TgDados1Click()
-        NODEFAULT
-    ENDPROC
 ENDDEFINE

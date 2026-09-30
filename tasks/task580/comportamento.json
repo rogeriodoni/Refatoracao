@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMVTTA",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTTA",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTTA",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "LParameters pArq, pEsc, pObj\n\nWith ThisForm\n\t.poDataMgr = pObj\n\t.Arquivo   = Alltrim(pArq)\n\t.pcEscolha = pEsc\n\t\n\tlcArq = .Arquivo\n\t\n\t.Caption = [Impostos Gerados Na Movimentação: ] + ;\n\t\t\t   Alltrim(Left(&lcArq..EmpDopNums, 3)) + [ / ] + ;\n\t\t\t   Alltrim(Substr(&lcArq..EmpDopNums, 4, 20)) + [ / ] + ;\n\t\t\t   Alltrim(Right(&lcArq..EmpDopNums, 6))\n\t\n\t.cntSombra.lblSombra.Caption = .Caption\n\t.cntSombra.lblTitulo.Caption = .Caption\n\t\n\tSelect &lcArq.\n\tGoto Top In &lcArq.\n\tWith .grdTitulos\n\t\t.RecordSourc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "Lparameters nColIndex\n\nlcArq = ThisForm.Arquivo\n\t\nThisForm.getDGrupos.Value = []\nIf Not Empty(&lcArq..Grupos)\n\tlcQuery = [Select Descrs ] + ;\n\t\t\t\t[From SigCdGcr ] + ;\n\t\t\t   [Where Codigos = '] + Padr(&lcArq..Grupos, 10) + [' ] + ;\n\t\t\t   [Order By Codigos]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crfOpFin_Bus]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crfOpFin_Bus)])\n\t\tReturn .f.\n\tEndIf\n\tGo Top In crfOpFin_Bus\n\tlcDgr = Iif(Eof([crfOpFin_Bus]), [], crfOpF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.grdTitulos.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.cmdSair",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Local lcArq, llOks\n\nlcArq = ThisForm.Arquivo\nllOks = .t.\n\t\nSelect &lcArq.\nGo Top In &lcArq.\nDo While Not Eof() And llOks\n\tIf (Empty(&lcArq..ValTits) Or IsEmpty(&lcArq..Vencs))\n\t\tIf (MessageBox([O ] + Alltrim(&lcArq..Impostos) + [ NÃO Está Com Valor Título / Vencimento] + Chr(13) + ;\n\t\t\t\t\t   [Informado e NÃO Será Lançado! Deseja Corrigir?], 4+32+256, [Lançamento de Título Cancelado]) = 6)\n\t\t\tllOks = .f.\n\t\tEndIf\t\n\tEndIf\n\tIf llOks\n\t\tSkip In &lcArq.\n\tEndIf\nEndDo\n\nIf Not llOks\n\tThisForm.grdTitulos.Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.getDGrupos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMVTTA.getDContas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

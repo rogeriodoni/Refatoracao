@@ -1,0 +1,23 @@
+FORM OK
+--- FASE 8: metodos ---
+CarregarDados=.T. SincronizarBOComLinhaCorrente=.T.
+--- GradeOperacao ControlSource ---
+C5=[IIF(ISNULL(TmpCabec.Entregas), {}, TmpCabec.Entregas)]
+C8=[TmpCabec.Conta]
+C9=[IIF(EMPTY(TmpCabec.Obs), ' ', '*')]
+Widths=17/156/70/90/44/52 RowHeight=17 HdrFore=10179620 C9Text1Size=12
+--- GradeItens ---
+C1=[TmpItens.Cpros] C5=[IIF(EMPTY(TmpItens.Obs), ' ', '*')]
+ColumnOrder 1/8/6/7/2/3/4/5 = 1/2/3/4/5/6/7/8
+--- props SCX ---
+ObsOper.NullDisplay=[ ] ObsItens.NullDisplay=[ ] getCliente.SpecialEffect=1 Cancelar.Cancel=.T.
+SelTudo.Picture=[geral_selecionar_26.jpg] tip=[Seleciona Tudo] Apaga.tip=[Desmarca Tudo] Shape.BackStyle=0
+--- CarregarDados ---
+retorno=.T.
+TmpCabec: ordem=EMPDOPNUM recno=1 Numes=7
+TmpItens: ordem=EMPDOPNUM visiveis=2 CPros=[PROD-9        ]
+--- BO sincronizado ---
+Emps=[001] Dopes=[PEDIDO] Numes=7 Conta=[C0001] Jobs=[JOB-A]
+--- apos AfterRowColChange (linha 2) ---
+BO.Numes=9 BO.Conta=[C0002]
+alias corrente=[TMPITENS] TmpItens.CPros=[PROD-9        ] itens visiveis=2

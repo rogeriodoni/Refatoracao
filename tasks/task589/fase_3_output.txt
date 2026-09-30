@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö `gcCaminhoForms + "operacionais\Form*.prg"` will auto-load `FormSigPrCfn.prg`, no manual `SET PROCEDURE` needed.
+
+Fase 3/8 is complete. Summary of what was created:
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrCfn.prg`** ÔÇö base structure for the "C├ílculo de Juros" modal dialog:
+- `DEFINE CLASS FormSigPrCfn AS FormBase` with pixel-faithful legacy properties (600├ù300, no title bar, `ControlBox=.F.`, `DataSession=2`, etc.) ÔÇö this is a flat OPERACIONAL dialog (no PageFrame/Lista/Dados, since the legacy SCX has none)
+- `Init(par_nValorBase, par_nTipoCalculo, par_nJurosMes, par_nJurosDia, par_dDataBase, par_dDataFinal)` ÔÇö mirrors the legacy `Lparameters pVal, pTip, pJMe, pJDi, pDtB, pDtF` with identical type/default checks, storing them before `DODEFAULT()`
+- `InicializarForm()` ÔÇö creates `SigPrCfnBO`, seeds it with the initial parameters (replicating the legacy Juros-M├¬s/Juros-Dia cross-derivation priority), calls `.Calcular()` (equivalent to the legacy's closing `.Calculos()`), then builds the header container
+- `ConfigurarCabecalho()` ÔÇö the `cntSombra`/`lblSombra`/`lblTitulo` header, transcribed
+- `ConfigurarShellSaida()` / `ConfigurarDivisor()` ÔÇö empty containers for the future Sair button (Fase 4) and the decorative divider line
+
+Next phase (4) will add the Sair/OK button inside `cnt_4c_Saida`.

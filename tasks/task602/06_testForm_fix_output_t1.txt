@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmei que **n├úo ├® bug de c├│digo**: ├® a mesma falha de infraestrutura j├í documentada em mem├│ria (89┬¬ ocorr├¬ncia desde 2026-08-02, agora em task602/`Formsigprema`).
+
+O log mostra o erro na **ETAPA 1B**, *antes* de qualquer `CREATEOBJECT` do form/BO ÔÇö o `TestFormWrapper.prg` faz um pre-flight `SQLSTRINGCONNECT` contra `192.168.200.10:1433` para todo form testado. Testei a conectividade agora mesmo:
+
+```
+TcpClient.BeginConnect(192.168.200.10:1433) -> TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+A m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server real (s├│ tem interfaces `192.168.100.x`/`192.168.199.x`). Revisei `Formsigprema.prg` e `sigpremaBO.prg` e ambos est├úo corretos ÔÇö o guard `IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0` j├í existe antes de qualquer SQLEXEC, igual a todo form que passa quando a rede est├í dispon├¡vel. N├úo h├í nada no c├│digo relacionado a essa falha de rede, ent├úo **n├úo fiz nenhuma edi├º├úo** ÔÇö editar `.prg` aqui seria reescrever c├│digo que j├í est├í certo para tentar "consertar" um problema de infraestrutura que nenhuma edi├º├úo de c├│digo resolve.
+
+Atualizei a mem├│ria do projeto com essa nova ocorr├¬ncia (task602). Recomendo tratar C├│digo 1526/ETAPA 1B como falha de infraestrutura fora do escopo deste fix e n├úo consumir as 10 tentativas do pipeline nesse mesmo erro.

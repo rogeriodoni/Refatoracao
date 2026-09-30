@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean ÔÇö only the source `.prg` remains, no leftover build artifacts.
+
+## Summary
+
+Phase 2 of `SigPrAprBO.prg` is complete. Added to the BO created in Phase 1:
+
+- **New properties**: SigPrPmi record fields (`this_cIdChaves`, `this_cPecas`, `this_nCBars`, `this_dDatas`, `this_cPromoPro`, `this_dDtAlts`, `this_nVendavels`), the current-item property `this_cCpros`, and `this_lImprimirEtiquetas` (a property-passed flag since `Salvar()` calls `Atualizar()` with no arguments).
+- **CarregarDoCursor()** ÔÇö maps a SigPrPmi row to `this_*` properties.
+- **ObterChavePrimaria()** ÔÇö returns `this_cIdChaves` for auditing.
+- **Inserir()** ÔÇö links a product to a promotion in SigPrPmi, covering every NOT NULL column (including `vendavels`, which has no legacy equivalent but is NOT NULL in the schema).
+- **Atualizar()** ÔÇö the real persistence logic behind the legacy `Atualiza.Click`: for each marked product it snapshots the pre-change row into `SigCdPrc` (121 shared columns copied via SQL Server `INSERTÔÇªSELECT`, plus the 15 columns unique to the history table), recomputes price/cost per reajuste type (transcribing `calcpreco`/`calcmarkpa` literally, including the currency-resolution two-step from `SigCdMoe`/`SigCdCot`), updates `SigCdPro`, copies composition history into `SigPrCp2` (with a **freshly generated** `cidchaves` per row ÔÇö reusing the source key would collide with `SigPrCp2`'s own PK on a second reajuste), clears `SigPrPrt`, optionally clears prior promotions, and links the new promotion ÔÇö all inside one manual transaction (`SQLCOMMIT`/`SQLROLLBACK`).
+- Supporting helpers: `CarregarCambio()`, `ObterCotacaoResolvida()`, `CalcPreco()`, `GravarHistoricoComposicao()`, and a `Destroy()` that releases every work cursor.
+
+Verified against `docs/schema.sql` (read with `-Raw` per the UTF-16 rule) for exact column lists, and compiled the file cleanly with VFP9 (no `.err` output).
+
+One scope note: `Atualizar()` assumes `cursor_4c_Produtos` is already populated (marked products with computed `ValAtu`/`CustoFs`/etc.) ÔÇö that population step mirrors the legacy `Processa.Click` and, per the phase's explicit "CRUD methods only" scope, is left for the phase that builds the Form/grid.

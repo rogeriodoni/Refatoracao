@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I reviewed all 24 findings against the FUNCTIONAL pass's actual scope (categories listed under "INSTRUCOES DE CORRECAO") and against documented false-positive patterns in memory:
+
+**Fixed (2):**
+- `[NULL-CURSOR]` `cursor_4c_Dados` and `cursor_4c_ImpPar` ÔÇö added `SET NULL ON` before / `SET NULL OFF` after each `CREATE CURSOR`, matching the established low-risk precaution pattern for cursors that exist in the target file.
+
+**Not fixed ÔÇö confirmed false positives (verified against code, not assumed):**
+- `[CONTAINER-VISIVEL]` on `CNT_4C_SOMBRA` ÔÇö it already has `.Visible = .T.` explicit at creation (line ~151+2 from edits), no `.F.` anywhere in the file. This exact finding is a catalogued recurring detector bug (header/shadow containers flagged by name).
+- `[METODO-INEXISTENTE]` `AbrirLookupCanonico()` ÔÇö confirmed defined in `formbase.prg:393` as a `PUBLIC PROCEDURE`; `FormSigPrEtq AS FormBase` inherits it. Signature matches all call sites.
+- `[METODO-INEXISTENTE]` `CarregarDados()` and `ObterImpressoraSelecionada()` ÔÇö both are defined in this same file (lines ~2123 and ~2773), just declared with `FUNCTION`/`ENDFUNC` instead of `PROCEDURE`/`ENDPROC` ÔÇö a documented detector limitation (it only recognizes the `PROCEDURE` token).
+
+**Out of scope for this pass (not touched):** the `GRID-HEADER` and 14 `LAYOUT-POSITION` findings concern captions/Top/Left ÔÇö this pass's rules explicitly prohibit altering visual properties except pure alignment fixes, and these categories aren't part of the FUNCTIONAL instruction list; they belong to a separate visual/grid review pass.
+
+No other functional categories (BUSCA-CURSOR, OPTIONGROUP-LEFT, CARGA-DADOS, BINDEVENT-PARAMS, STUB-MSGAVISO, LOSTFOCUS-SEM-GUARDIA, INIT-DUPLICADO) had corresponding findings in this report, so nothing further was needed there.

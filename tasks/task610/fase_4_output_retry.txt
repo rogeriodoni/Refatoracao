@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada em execu├º├úo real no VFP9.
+
+## O que faltava (por que a tentativa anterior reprovou)
+
+O gate da Fase 4, no ramo **FLAT** (OPERACIONAL sem PageFrame ÔÇö que ├® o caso do SIGPRFEM), exige tr├¬s coisas: `AddObject("grd_4c_ÔÇª")` **+** `AddObject("cmd_4c_/cmg_4c_ÔÇª")` **+** um m├®todo `CarregarLista|CarregarDados|MontaGrade`. A tentativa anterior entregou s├│ a grade ÔÇö os bot├Áes e o m├®todo de carga tinham sido empurrados para "Fases 7-8".
+
+## O que foi acrescentado a `FormSigPrFem.prg`
+
+**Barra de a├º├úo** (`ConfigurarBotoesAcao` + `ConfigurarBotaoAcao`) ÔÇö transcrita do dump: `shp_4c_Shape2`/`shp_4c_Shape1` (molduras) e `cmd_4c_Visualizar`/`cmd_4c_Imprimir`/`cmd_4c_Processar`/`cmd_4c_Sair`, com geometria, fontes, cores, `Picture` e o `Cancel = .T.` do Encerrar. Criada **depois** do cabe├ºalho (os bot├Áes ficam em `Top = 3`, dentro da faixa cinza) e os Shapes **antes** dos bot├Áes. `ZOrderSet` do dump descartado (regra #33). `Themes = .T.` + `DisabledPicture` ├® desvio deliberado do dump, para o ├¡cone n├úo desaparecer quando o bot├úo ├® desabilitado.
+
+**Cursores** (`CriarCursoresResultado`) ÔÇö equivalente ao `PROCEDURE Load` do legado, mesma ordem de campos e mesmos ├¡ndices; roda antes de compor o layout.
+
+**Carga/bind** (`CarregarDados` + `LigarGradeDetalhe` + `AtualizarResumo`) ÔÇö transcri├º├úo do trecho final de `Processar.Click`: as 5 grades recebem `RecordSource`/`ControlSource`/captions do legado (Fase|Opera├º├úo / Qtde|Falha / Emp) e as larguras 110/80/40 s├úo reaplicadas **depois** do `RecordSource`. Os totalizadores s├úo espelho puro do BO ÔÇö as somas do legado n├úo foram duplicadas no form (regra #17).
+
+## Verifica├º├úo
+
+Compila├º├úo limpa; probe headless instancia o form e exercita o caminho inteiro:
+
+```
+D: Init OK Width=1000 Height=600 Caption=[An├ílise de Produ├º├úo]
+E: BOTOES Visualizar/Imprimir/Processar/Sair/Shape1/Shape2 = .T.
+G: PICTURES Video=.T. Impr=.T. Proc=.T.        (os 4 .jpg existem em vbmp\)
+H: CURSORES SaldoAnt/Entradas/Saidas/Saldos/Falhas/Resumo = .T.
+K: CarregarDados OK  Resultado.Visible=.T.
+L: RS=[cursor_4c_SaldoAnt] H1=[Fase] H2=[Qtde] H3=[Emp] W=110/80/40
+N: RS=[cursor_4c_Falhas]   H1=[Fase] H2=[Falha] H3=[Emp]
+O: RESUMO os 10 totais chegaram do BO   |   sem di├ílogos suprimidos
+```
+
+Duas coisas valem registro para as fases seguintes:
+
+1. **Um bug real foi pego pelo probe** ÔÇö `LigarGradeDetalhe` resolvia os containers de detalhe como `THIS.<nome>`, mas eles s├úo filhos de `cnt_4c_Resultado`. S├│ instanciando aparece (`Property CNT_4C_DETALHE is not found`, engolido pelo CATCH); corrigido.
+2. **O helper escondia o gate** ÔÇö criar os bot├Áes via `THIS.AddObject(par_cNome, ÔÇª)` n├úo casa com o regex `AddObject("cmd_4c_`. Refatorei para o `AddObject` ficar no chamador com o nome literal.
+
+Os eventos de Click dos 4 bot├Áes continuam sendo entrega das Fases 7-8, como o prompt define ÔÇö n├úo criei handlers parciais.

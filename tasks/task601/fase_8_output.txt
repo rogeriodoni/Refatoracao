@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 conclu├¡da. Resumo:
+
+**Estado encontrado**: `FormSigPrDsc.prg` e `SigPrDscBO.prg` j├í estavam funcionalmente completos desde a Fase 7 ÔÇö cruzando contra `comportamento.json`, os 14/14 m├®todos do legado (SIGPRDSC.SCX) j├í tinham equivalente implementado (Init/gravacao/processamento/Destroy no BO+Form, os 3 `When`/3 `Valid` dos filtros, e os Click de `btnSelecionar`/`btnAtualizar`/`btnSair`).
+
+**Por que os m├®todos gen├®ricos da Fase 8 n├úo se aplicam**: o roteiro padr├úo (BtnBuscarClick/BtnEncerrarClick/BtnSalvarClick/BtnCancelarClick/FormParaBO/BOParaForm/HabilitarCampos/LimparCampos/AjustarBotoesPorModo) ├® vocabul├írio do template CRUD (Page1=Lista/Page2=Dados, modos INCLUIR/ALTERAR/VISUALIZAR). SIGPRDSC ├® um form OPERACIONAL flat, sem PageFrame e sem conceito de modo ÔÇö os 3 bot├Áes do legado (Selecionar/Atualizar/Sair) j├í s├úo os equivalentes literais e cri├í-los duplicados violaria o PILAR 1. `CarregarLista()` j├í existe desde a Fase 7.
+
+**O que fiz nesta fase**:
+1. Adicionei a chamada faltante a `fGravarLog()` (wrapper no-op j├í existente em `utils\fgravarlog.prg`) em `SigPrDscBO.Atualizar()`, reproduzindo a linha do `PROCEDURE gravacao` legado que disparava no ramo de falha do `Delete SigPrPrt`.
+2. Documentei no cabe├ºalho do Form a decis├úo da Fase 8 (por que os m├®todos CRUD gen├®ricos n├úo se aplicam e o que j├í cobre cada um).
+3. Compilei os dois arquivos no VFP9 real ÔÇö sem erros (`ERROS FORM: nenhum`, `ERROS BO: nenhum`).
+4. Confirmei que o menu j├í tem `AbrirFormSigPrDsc` registrado em `popMovimentos` (feito em fase anterior).
+
+Arquivos finais: `C:\4c\projeto\app\forms\operacionais\FormSigPrDsc.prg` e `C:\4c\projeto\app\classes\SigPrDscBO.prg`.

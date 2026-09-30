@@ -1,0 +1,46 @@
+FORM OK  DataSessionId=1
+--- FASE 7: handlers ---
+Disponivel=.T. SelEstoque=.T. TotLinha=.T. Pedras=.T. Relatorio=.T.
+Cancelar=.T. ConfProd=.T. ConfGrupo=.T. FecharPedra=.T. FecharLinha=.T.
+--- BINDEVENT (AEVENTS por botao) ---
+Disponivel=1 SelEstoque=1 TotLinha=1 Pedras=1 Relatorio=1 Cancelar=1
+C1.CancelaLin=1 C2.CancelaDisp=1 C4.CancelaDisp=1 C5.CancelaDisp=1
+--- PrepararCursoresDeTrabalho ---
+SelPedra reccount=1  TmpSaldU used=.T.  TmpSaldG order=[CPROS]
+Totais Qtd/Est/Prz = 150 / 0 / 150
+Container3 RecordSource=[TmpSaldG] C4.ControlSource=[TmpSaldG.Saldo - TmpSaldG.Disps]
+--- BtnTotLinhaClick ---
+TmpLinha used=.T. reccount=3 Container1.Visible=.T. Processar.Enabled=.F.
+ultima linha=[TOTAIS    ] Saldo=150 RecordSource=[TmpLinha]
+--- BtnFecharLinhasClick ---
+Container1.Visible=.F. Processar.Enabled=.T. Pedras.Enabled=.T. Grade.Enabled=.T.
+--- BtnPedrasClick ---
+Container4.Visible=.T. RecordSource=[SelPedra] C5.ControlSource=[SelPedra.Cpro2s] C1.Width=110 C2.Header=[Descrição]
+lookup ainda ligado (AEVENTS C1.Text1)=2
+--- BtnDisponivelClick (PROD-A/VM) ---
+TmpDisp used=.T. reccount=2 Container2.Visible=.T.
+RecordSource=[TmpDisp] C3.Width=24 C4.Header=[Disponivel]
+--- antes do confirma por grupo ---
+TmpFinal.Produzir=100 TmpSaldo(P).Disps=30
+--- BtnSelEstoqueClick (PROD-A/VM/'') ---
+TmpDisp reccount=0 Container5.Visible=.F. label=[Estoque Disponível]
+QtPedida=0 C3.Header=[Prioridade] C3.Width=80
+TmpSaldG na faixa do item: eof=.F. 1a linha Grupo/Conta=[GRP1/CTA1]
+--- BtnConfirmarDispGrupoClick (Utilizar=10) ---
+TmpFinal.Produzir=90 TmpFinal.Estoque=10
+TmpSaldo(P).Disps=20
+TmpSaldG(GRP1/CTA1).Disps=20
+TmpSaldU reccount=1 KeySelm=.T.
+Container5.Visible=.F. SelEstoque.Enabled=.T.
+--- BtnConfirmarDispProdutoClick (Utilizar=5) ---
+ANTES: TmpFinal.Saldo=100 Produzir=90 Obsps=[obs do item A]
+  (1o com a guarda de conexao ativa: nada pode mudar)
+  sem conexao: Saldo=100 Produzir=90 Temporario used=.F.
+  (2o com handle falso: exercita o desmembramento)
+DEPOIS: TmpFinal.Saldo=95 Produzir=85
+Temporario used=.T. reccount=1
+Temporario: Cpros=[PROD-A        ] CodTams=[G   ] Saldo=5 Estoque=5 Produzir=0 Obsps=[obs do item A]
+--- DIALOGOS CAPTURADOS ---
+[29/09/2026 14:02:13] Atenção: Não existe Estoque Disponível !!!
+[29/09/2026 14:02:13] Falha na Conexão: Sem conexão com o banco de dados - não é possível confirmar a seleção de estoque.
+[29/09/2026 14:02:13] Erro em BtnConfirmarDispProdutoClick: Connection handle is invalid.Linha: 3341Procedure: btnconfirmardispprodutoclick

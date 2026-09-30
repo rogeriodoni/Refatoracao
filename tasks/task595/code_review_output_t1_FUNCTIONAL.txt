@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Done. Summary of the FUNCTIONAL pass for `Formsigprcpd.prg`:
+
+**Fixed (1 real issue):**
+- **GRID-WITH** ÔÇö `loc_oGrid.RecordSource` is now assigned before the `WITH loc_oGrid` block that accesses `.Column1`..`.Column8`, instead of inside it (in `CarregarLista`).
+
+**Not applied (verified false positives / not applicable):**
+- **CONTAINER-VISIVEL** on `cnt_4c_Container1` ÔÇö already `.Visible = .T.` explicitly, never set to `.F.` anywhere.
+- **12├ù LAYOUT-POSITION** ÔÇö all are the same generic-name collision (`lbl_4c_Label1..4` reused in `Container1`, `Container2`, and `ConfigurarDetalheProduto`); the audit tool paired each legado label with the wrong migrated control. Checked directly against the code ÔÇö the real Container1/Container2 labels already match the "original" values the report cites.
+- BUSCA-CURSOR, OPTIONGROUP-LEFT, CARGA-DADOS, BINDEVENT-PARAMS, STUB-MSGAVISO, LOSTFOCUS-SEM-GUARDIA, INIT-DUPLICADO, METODO-INEXISTENTE ÔÇö none of these patterns exist in this form.
+
+I also appended reincidence notes to the two existing memory files documenting these false-positive families, since this is a repeat of a well-established pattern.

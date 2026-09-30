@@ -1,0 +1,54 @@
+=== TESTE FASE 7 Formsigprccp (eventos principais) ===
+SET PROCEDURE      : OK
+
+--- 1) BO: metodos novos ---
+CREATEOBJECT BO    : OK
+  BO.BuscarPresetsAutomaticos  : existe
+  BO.ObterChkSubGrupos         : existe
+  BO.ResolverSubGrupoPorFaixa  : existe
+  BO.GravarHistoricoPreco      : existe
+  BO.GravarHistoricoComposicao : existe
+  BO.ExcluirPrecosTabela       : existe
+  BO.IniciarTransacao          : existe
+  BO.ConfirmarTransacao        : existe
+  BO.DesfazerTransacao         : existe
+  BO.this_nImpEtiqs            : existe
+  BO.this_cSubGrupo            : existe
+  BO.this_lAtualizarSubGrupo   : existe
+  chamada ObterChkSubGrupos  : OK (retornou 0)
+  chamada ResolverSubGrupo   : OK (retornou [])
+
+--- 2) INSTANCIACAO ---
+CREATEOBJECT       : OK (form instanciado)
+
+--- 3) EVENTOS DA FASE 7 ---
+  BtnProcessarClick       : existe
+  BtnAtualizarClick       : existe
+  BtnEncerrarClick        : existe
+  BtnSelTudoClick         : existe
+  BtnApagaClick           : existe
+  BtnImprimirClick        : existe
+  AtualizarPrecos         : existe
+  ProcessaAutomatico      : existe
+  AplicarFiltroVariacao   : existe
+  AplicarPresetNaTela     : existe
+  CarregarLista           : existe
+  Activate                : existe
+
+--- 4) SETs DA DATASESSION PRIVADA ---
+  SET(SAFETY)   = OFF  (OK - ZAP nao abre dialogo)
+  SET(DELETED)  = ON   (OK - DELETE some da grade)
+  SET(DATE)     = BRITISH
+
+--- 5) FILTRO DE VARIACAO (sinal) ---
+  Variacao = +10 : 4 -> 2 linhas  (OK - sobraram A=25 e B=10)
+  Variacao = -10 : 3 -> 2 linhas  (OK - sobraram B=-10 e C=-30)
+  Variacao =   0 : 3 -> 3 linhas  (OK - nao filtra)
+  cursor_4c_Produtos.cgrus  : existe (OK)
+
+--- 6) AtualizarPrecos sem selecao ---
+  AtualizarPrecos()  : retornou .F.  (OK - recusou lote vazio)
+  BtnSelTudo/Apaga   : OK (alcancaveis)
+
+===============================================
+Status: SUCESSO (0 falhas)

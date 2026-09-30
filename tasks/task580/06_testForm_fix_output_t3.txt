@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The failure isn't in `FormSigMvTta.prg` or `SigMvTtaBO.prg` ÔÇö it's an infrastructure problem upstream of both.
+
+**Root cause confirmed:** the test harness (`TestFormWrapper.prg`, ETAPA 1B) calls `SQLSTRINGCONNECT()` against the main SQL Server (192.168.200.10) *before* `FormSigMvTta` is even instantiated. I tested TCP connectivity directly:
+
+```
+ComputerName   RemotePort TcpTestSucceeded
+192.168.200.10       1433            False
+```
+
+Port 1433 is unreachable from this machine right now ÔÇö that's exactly what error 1526 ("SQL Server inexistente ou acesso negado") means. This will fail for **every** form in the pipeline right now, not just `FormSigMvTta` ÔÇö it's not specific to this task.
+
+I'm not going to edit `FormSigMvTta.prg` or `SigMvTtaBO.prg`: there's nothing wrong in either file that relates to this error, and per CLAUDE.md's own guidance (and the connectivity-diagnostic pattern already documented in memory for the CEP server, `project_sigconn_cep_servidor_desatualizado`), a connectivity error should be diagnosed at the network/server level, never "fixed" by mutating unrelated application code. Doing so would just add churn to working files without touching the actual cause, and risks masking a real outage.
+
+**What actually needs attention:**
+1. Confirm whether 192.168.200.10 (SQL Server, DB_MBAHIA) is up and reachable from this build machine ÔÇö it may be down, or a VPN/network path changed.
+2. Retry `06_testForm` for task580 once connectivity is restored ÔÇö no code change is needed for it to pass.
+
+If you'd like, I can keep polling connectivity and retry the test automatically once the server comes back ÔÇö just say so.

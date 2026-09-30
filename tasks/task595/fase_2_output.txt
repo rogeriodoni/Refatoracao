@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. The BO compiles successfully with only the source file remaining. Phase 2 is complete.
+
+**Summary of `sigprcpdBO.prg` (Fase 2/8):**
+
+- **`CarregarDados(par_cFase, par_cUnidade, par_dData, par_nCodigo)`** ÔÇö transcreve fielmente a cadeia de 4 SQLEXECs + 2 SELECTs locais do `Init` legado: valida o envelope em `SigCdPcz`, agrega capacidade em `SigCdPcp` (ÔåÆ `this_nMinutos/Utilizados/Saldos`), busca o "peso" por envelope/sequ├¬ncia em `SigCdPcg`, o detalhe das opera├º├Áes em `SigCdPco` + `SigCdCli`, e por fim rateia o tempo (`TempoReal`) proporcionalmente, gravando tudo no cursor `this_cCursorGrade` que alimenta a grade.
+- **`ConverterSegundosParaMinutos()`** ÔÇö fun├º├úo global (fora da classe) que transcreve literalmente `fStoM()` de `SIGFUNCS.PRG` (achei o fonte legado em `C:\4install\...\SIGFUNCS.PRG:188-190` para confirmar a f├│rmula exata, em vez de adivinhar).
+- **`ObterDetalheProduto()`** ÔÇö busca `Dpros`/`FigJpgs` em `SigCdPro` para a linha selecionada (decodifica├º├úo do JPG fica no Form, Fase 3+).
+- **`FecharCursoresTemporarios()`** e **`ObterChavePrimaria()`** (override).
+- Mantive `Inserir()`/`Atualizar()`/`ExecutarExclusao()` sem sobrescrever, pois o legado ├® somente-consulta (j├í documentado no cabe├ºalho da Fase 1) ÔÇö comportamento padr├úo do `BusinessBase` j├í ├® correto.
+
+Compila├º├úo verificada com `vfp9.exe -c`: `COMPILE_OK`, sem `.err`.

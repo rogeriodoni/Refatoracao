@@ -1,0 +1,34 @@
+=== TESTE FASE 4 FormSigPrChr ===
+COMPILE           : OK
+SET PROCEDURE     : OK
+CREATEOBJECT      : OK (form instanciado)
+grd_4c_Dados      : .T.
+obj_4c_CmdGok     : .T.
+cmd_4c_CmdTudo1   : .T.
+cmd_4c_CmdApaga1  : .T.
+cursor_4c_Cheques : .T.
+Grid.ColumnCount  : 10
+Grid.RecordSource : [cursor_4c_Cheques]
+Grid.Visible      : .T.
+Col1  [Data] W=79 ord=10 src=cursor_4c_Cheques.datas
+Col8  [Situação] W=79
+Col10 [Imprime] W=55 ord=1 CurrentControl=CHK_4C_CHECK1 Sparse=.F.
+chk_4c_Check1     : .T.
+CmdGok.ButtonCount: 9
+Botao1 Caption    : [\<Documento] Picture FILE=.T.
+Botao2 Caption    : [Encerrar] Picture FILE=.T.
+Botao7 Caption    : [Che\<que] Picture FILE=.T.
+Botao8 Caption    : [Chq. \<Matric.] Picture FILE=.T.
+Botao9 Caption    : [Excluir Chq.] Picture FILE=.T.
+Marcar/DesmarcarTudo: OK
+ChkImprime*       : OK
+Procurar/ExcluiDoc: OK (no-op esperado)
+Botoes com grade vazia: OK (guards)
+obj_4c_CmdGok.Value=2 (Sair): OK (form liberado)
+--- CONTEUDO gc_4c_ArquivoErroTeste ---
+[26/09/2026 20:23:09] Atenção: Nenhum cheque selecionado.
+[26/09/2026 20:23:09] Atenção: Nenhum cheque selecionado.
+[26/09/2026 20:23:09] Atenção: Nenhum cheque selecionado.
+[26/09/2026 20:23:09] Atenção: Nenhum Cheque Selecionado !!!
+[26/09/2026 20:23:09] Atenção: Nenhum cheque selecionado.
+=== FIM ===

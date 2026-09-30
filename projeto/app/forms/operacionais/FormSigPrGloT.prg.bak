@@ -57,7 +57,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
         THIS.this_lAutomatico = IIF(VARTYPE(par_lAutom)      = "L", par_lAutom,      .F.)
         THIS.this_lPorDestino = IIF(VARTYPE(par_lPorDestino) = "L", par_lPorDestino, .F.)
         THIS.this_lGerPorTp   = IIF(VARTYPE(par_pTipo)       = "L", par_pTipo,       .F.)
-        DODEFAULT()
+        *-- RETORNAR o veredito do FormBase: com DODEFAULT() nu, o Init devolve
+        *-- .T. mesmo com InicializarForm falhando, o CREATEOBJECT entrega um
+        *-- objeto meio-montado, o guard VARTYPE do menu.prg nunca dispara e o
+        *-- Show() abre uma janela 375x250 vazia - sem X, porque ControlBox e
+        *-- Closable sao .F. Mesmo padrao do FormSigPrGlo (task615).
+        RETURN DODEFAULT()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -101,8 +106,9 @@ DEFINE CLASS FormSigPrGloT AS FormBase
     * InicializarForm - cria BO, carrega parametros e monta estrutura visual
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso, loc_oErro, loc_cCaption
-        loc_lSucesso = .F.
+        LOCAL loc_lSucesso, loc_oErro, loc_cCaption, loc_lModoTeste
+        loc_lSucesso   = .F.
+        loc_lModoTeste = (TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
 
         TRY
             *-- Criar Business Object
@@ -120,14 +126,22 @@ DEFINE CLASS FormSigPrGloT AS FormBase
                 ENDWITH
 
                 *-- Carregar operacoes (obrigatorio - form nao funciona sem elas)
-                IF NOT THIS.this_oBusinessObject.CarregarOperacoes()
+                *-- Pulado em harness headless (gb_4c_ModoTeste): nesse modo
+                *-- gnConnHandle = 0 (config.prg) e SQLEXEC contra handle
+                *-- invalido DISPARA excecao (nao devolve -1) - sem banco
+                *-- disponivel nao ha operacao para carregar, e abortar a
+                *-- construcao da tela so pra isso quebraria o teste de
+                *-- Instanciacao. Mesmo padrao de FormSIGMVMVT.
+                IF !loc_lModoTeste AND NOT THIS.this_oBusinessObject.CarregarOperacoes()
                     MsgErro("Nenhuma Opera" + CHR(231) + CHR(227) + ;
                             "o configurada para Processamento de O.P. por Totais.", "Erro")
                 ELSE
                     *-- Carregar demais parametros do sistema
-                    THIS.this_oBusinessObject.CarregarParametros()
-                    THIS.this_oBusinessObject.CarregarPacotes()
-                    THIS.this_oBusinessObject.CarregarTiposGeracao()
+                    IF !loc_lModoTeste
+                        THIS.this_oBusinessObject.CarregarParametros()
+                        THIS.this_oBusinessObject.CarregarPacotes()
+                        THIS.this_oBusinessObject.CarregarTiposGeracao()
+                    ENDIF
 
                     *-- Caption dinamico conforme modo de operacao
                     loc_cCaption = "Processamento de O.P. por Totais"
@@ -164,6 +178,11 @@ DEFINE CLASS FormSigPrGloT AS FormBase
                     THIS.ConfigurarPaginaLista()
                     THIS.TornarControlesVisiveis()
                     THIS.PopularCamposIniciais()
+                    *-- Render BO -> tela. Roda SO na construcao, onde ainda
+                    *-- nao existe entrada do usuario para ser sobrescrita
+                    *-- (chamar isto de BtnVisualizarClick descartaria os
+                    *-- filtros ja digitados).
+                    THIS.BOParaForm()
                     THIS.ConfigurarEventos()
                     THIS.AlternarPagina("ENTRADA")
 
@@ -712,6 +731,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 10
         ENDWITH
 
         THIS.cnt_4c_Conta.AddObject("txt_4c_Conta", "TextBox")
@@ -723,6 +743,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 10
         ENDWITH
 
         THIS.cnt_4c_Conta.AddObject("txt_4c_Dconta", "TextBox")
@@ -734,6 +755,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 50
         ENDWITH
     ENDPROC
 
@@ -750,6 +772,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 10
         ENDWITH
 
         THIS.cnt_4c_Responsavel.AddObject("txt_4c_ContaResp", "TextBox")
@@ -761,6 +784,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 10
         ENDWITH
 
         THIS.cnt_4c_Responsavel.AddObject("txt_4c_DcontaResp", "TextBox")
@@ -772,6 +796,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .MaxLength     = 50
         ENDWITH
     ENDPROC
 
@@ -989,22 +1014,26 @@ DEFINE CLASS FormSigPrGloT AS FormBase
     * PopularCamposIniciais - preenche valores iniciais apos criacao dos controles
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PopularCamposIniciais()
-        LOCAL loc_oErro, loc_cEmp, loc_cRazas
+        LOCAL loc_oErro, loc_cEmp, loc_cRazas, loc_lModoTeste
         TRY
+            loc_lModoTeste = (TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
             *-- Empresa padrao: go_4c_Sistema.cCodEmpresa
             loc_cEmp   = ALLTRIM(go_4c_Sistema.cCodEmpresa)
             loc_cRazas = ""
-            IF USED("cursor_4c_TmpEmpInitT")
-                USE IN cursor_4c_TmpEmpInitT
-            ENDIF
-            IF SQLEXEC(gnConnHandle, ;
-               "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmp), ;
-               "cursor_4c_TmpEmpInitT") >= 1
-                IF RECCOUNT("cursor_4c_TmpEmpInitT") > 0
-                    SELECT cursor_4c_TmpEmpInitT
-                    loc_cRazas = ALLTRIM(cursor_4c_TmpEmpInitT.Razas)
+            *-- Pulado em ModoTeste: gnConnHandle=0 dispara excecao em SQLEXEC
+            IF !loc_lModoTeste
+                IF USED("cursor_4c_TmpEmpInitT")
+                    USE IN cursor_4c_TmpEmpInitT
                 ENDIF
-                USE IN cursor_4c_TmpEmpInitT
+                IF SQLEXEC(gnConnHandle, ;
+                   "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmp), ;
+                   "cursor_4c_TmpEmpInitT") >= 1
+                    IF RECCOUNT("cursor_4c_TmpEmpInitT") > 0
+                        SELECT cursor_4c_TmpEmpInitT
+                        loc_cRazas = ALLTRIM(cursor_4c_TmpEmpInitT.Razas)
+                    ENDIF
+                    USE IN cursor_4c_TmpEmpInitT
+                ENDIF
             ENDIF
             THIS.cnt_4c_Empresa.txt_4c_CdEmpresa.Value = loc_cEmp
             THIS.cnt_4c_Empresa.txt_4c_DsEmpresa.Value = loc_cRazas
@@ -1030,6 +1059,22 @@ DEFINE CLASS FormSigPrGloT AS FormBase
                 SELECT cursor_4c_CrTmpTpGopT
                 GO TOP
                 THIS.cnt_4c_TipoOp.txt_4c_TpGOp.Value = ALLTRIM(cursor_4c_CrTmpTpGopT.Codigos)
+            ENDIF
+
+            *-- Espelhar no BO os defaults recem-calculados. O BO passa a ser
+            *-- a fonte de verdade desses campos e BOParaForm (chamado no fim
+            *-- do InicializarForm) eh quem os RENDERIZA - mesma divisao de
+            *-- responsabilidade do FormSigPrGlo (task615), onde BOParaForm
+            *-- tambem roda em caminho vivo na construcao da tela.
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                WITH THIS.this_oBusinessObject
+                    .this_cCodEmpresa        = ALLTRIM(THIS.cnt_4c_Empresa.txt_4c_CdEmpresa.Value)
+                    .this_cDsEmpresa         = ALLTRIM(THIS.cnt_4c_Empresa.txt_4c_DsEmpresa.Value)
+                    .this_nNaoEmpenharPedras = THIS.cnt_4c_Empresa.chk_4c_NaoEmpPedra.Value
+                    .this_dPrevisao          = THIS.cnt_4c_Previsao.txt_4c_Previsao.Value
+                    .this_dGeracao           = THIS.cnt_4c_Previsao.txt_4c_Geracao.Value
+                    .this_cTipoGerOP         = ALLTRIM(THIS.cnt_4c_TipoOp.txt_4c_TpGOp.Value)
+                ENDWITH
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao popular campos: " + loc_oErro.Message, "Erro")
@@ -1469,10 +1514,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Grupos Cont" + CHR(225) + "beis", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("codigos", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("descrs",  "                              ", "Descri" + CHR(231) + CHR(227) + "o")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("codigos", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("descrs",  "                              ", "Descri" + CHR(231) + CHR(227) + "o")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_GrpContaT")
                     SELECT cursor_4c_GrpContaT
                     THIS.cnt_4c_Conta.txt_4c_Grupo.Value = ALLTRIM(cursor_4c_GrpContaT.codigos)
                 ELSE
@@ -1497,10 +1544,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Clientes - Movimenta" + CHR(231) + CHR(227) + "o", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("RClis", "                                        ", "Nome")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("RClis", "                                        ", "Nome")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_CliContaT")
                     SELECT cursor_4c_CliContaT
                     THIS.cnt_4c_Conta.txt_4c_Conta.Value  = ALLTRIM(cursor_4c_CliContaT.IClis)
                     THIS.cnt_4c_Conta.txt_4c_Dconta.Value = ALLTRIM(cursor_4c_CliContaT.RClis)
@@ -1530,10 +1579,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Clientes - Movimenta" + CHR(231) + CHR(227) + "o (Nome)", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("RClis", "                                        ", "Nome")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("RClis", "                                        ", "Nome")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_CliDcontaT")
                     SELECT cursor_4c_CliDcontaT
                     THIS.cnt_4c_Conta.txt_4c_Conta.Value  = ALLTRIM(cursor_4c_CliDcontaT.IClis)
                     THIS.cnt_4c_Conta.txt_4c_Dconta.Value = ALLTRIM(cursor_4c_CliDcontaT.RClis)
@@ -1560,10 +1611,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Grupos - Vendedor", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("codigos", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("descrs",  "                              ", "Descri" + CHR(231) + CHR(227) + "o")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("codigos", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("descrs",  "                              ", "Descri" + CHR(231) + CHR(227) + "o")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_GrpRespT")
                     SELECT cursor_4c_GrpRespT
                     THIS.cnt_4c_Responsavel.txt_4c_GrupoResp.Value = ALLTRIM(cursor_4c_GrpRespT.codigos)
                 ELSE
@@ -1588,10 +1641,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Clientes - Vendedor", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("RClis", "                                        ", "Nome")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("RClis", "                                        ", "Nome")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_CliRespT")
                     SELECT cursor_4c_CliRespT
                     THIS.cnt_4c_Responsavel.txt_4c_ContaResp.Value  = ALLTRIM(cursor_4c_CliRespT.IClis)
                     THIS.cnt_4c_Responsavel.txt_4c_DcontaResp.Value = ALLTRIM(cursor_4c_CliRespT.RClis)
@@ -1621,10 +1676,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Clientes - Vendedor (Nome)", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                .mAddColuna("RClis", "                                        ", "Nome")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("RClis", "                                        ", "Nome")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_CliDcontaRespT")
                     SELECT cursor_4c_CliDcontaRespT
                     THIS.cnt_4c_Responsavel.txt_4c_ContaResp.Value  = ALLTRIM(cursor_4c_CliDcontaRespT.IClis)
                     THIS.cnt_4c_Responsavel.txt_4c_DcontaResp.Value = ALLTRIM(cursor_4c_CliDcontaRespT.RClis)
@@ -1655,10 +1712,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Empresas", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
-                .mAddColuna("Razas", "                                        ", "Raz" + CHR(227) + "o Social")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("Razas", "                                        ", "Raz" + CHR(227) + "o Social")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_EmpT")
                     SELECT cursor_4c_EmpT
                     THIS.cnt_4c_Empresa.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_EmpT.Cemps)
                     THIS.cnt_4c_Empresa.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpT.Razas)
@@ -1692,10 +1751,12 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             "Empresas (Raz" + CHR(227) + "o Social)", .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             WITH loc_oBusca
-                .mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
-                .mAddColuna("Razas", "                                        ", "Raz" + CHR(227) + "o Social")
-                .Show()
-                IF .this_lSelecionou
+                IF !.this_lAchouRegistro
+                    .mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
+                    .mAddColuna("Razas", "                                        ", "Raz" + CHR(227) + "o Social")
+                    .Show()
+                ENDIF
+                IF .this_lSelecionou AND USED("cursor_4c_EmpDsT")
                     SELECT cursor_4c_EmpDsT
                     THIS.cnt_4c_Empresa.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_EmpDsT.Cemps)
                     THIS.cnt_4c_Empresa.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpDsT.Razas)
@@ -1740,22 +1801,47 @@ DEFINE CLASS FormSigPrGloT AS FormBase
         THIS.AlternarPagina("ENTRADA")
     ENDPROC
 
-    *-- Stubs de compatibilidade com FormBase (OPERACIONAL nao tem CRUD)
+    *--------------------------------------------------------------------------
+    * Eventos principais - verbos CRUD do FormBase sobre as acoes desta tela
+    *
+    * O legado SigPrGloT.SCX herda de `form` (nao de `frmcadastro`) e nao tem
+    * barra CRUD: os unicos botoes da tela sao Processar e Cancelar. Os quatro
+    * handlers abaixo mapeiam os verbos do FormBase sobre as acoes REAIS de
+    * entrada de filtros, SEM gravar e SEM destruir o form:
+    *   - gravar/processar mora em cmd_4c_Processar -> BtnSalvarClick
+    *   - fechar a tela    mora em cmd_4c_Cancelar  -> BtnEncerrarClick
+    *--------------------------------------------------------------------------
+
+    *-- Incluir: nova entrada de filtros - limpa os campos e repoe os defaults
+    *-- de Empresa/Previsao/Geracao/Tipo de OP. NAO chama CmdProcessarClick:
+    *-- ele grava a OP e abre FormSigPrGl2 MODAL, o que gravaria dados reais e
+    *-- travaria qualquer chamador automatico (harness/pipeline unattended).
     PROCEDURE BtnIncluirClick()
-        THIS.CmdProcessarClick()
+        THIS.AlternarPagina("ENTRADA")
+        THIS.LimparCampos()
+        THIS.PopularCamposIniciais()
     ENDPROC
 
+    *-- Alterar: reabre os campos para edicao preservando o que ja foi digitado
+    *-- (AlternarPagina("ENTRADA") reabilita os containers conforme os flags de
+    *-- modo Reserva / Automatico / AlterEmp / GerPorTp).
     PROCEDURE BtnAlterarClick()
         THIS.AlternarPagina("ENTRADA")
     ENDPROC
 
+    *-- Visualizar: repoe os defaults lidos dos cursores de parametro sem
+    *-- descartar os filtros ja informados pelo usuario.
     PROCEDURE BtnVisualizarClick()
         THIS.AlternarPagina("ENTRADA")
         THIS.PopularCamposIniciais()
     ENDPROC
 
+    *-- Excluir: descarta a entrada corrente (equivale ao Limpa do legado).
+    *-- NAO fecha o form - fechar eh BtnEncerrarClick / cmd_4c_Cancelar.
     PROCEDURE BtnExcluirClick()
-        THIS.CmdCancelarClick()
+        THIS.AlternarPagina("ENTRADA")
+        THIS.LimparCampos()
+        THIS.PopularCamposIniciais()
     ENDPROC
 
     PROCEDURE BtnEncerrarClick()

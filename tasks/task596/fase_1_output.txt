@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Created **SIGPRCPRBO.prg** (Phase 1/8) at `C:\4c\projeto\app\classes\SIGPRCPRBO.prg` with:
+
+- `DEFINE CLASS SIGPRCPRBO AS BusinessBase`
+- `this_cTabela`/`this_cCampoChave` (operational form, no primary table)
+- Context received from the parent form (empresa, usuario, data base, SigKey, cursor de operacoes selecionadas) ÔÇö mirrors how `FormSigPrCtc` (an existing dialog also launched by SIGPRCPR/SIGPRCIC) receives context via `Init()` parameters rather than `ThisForm.ParentForm`
+- `SigCdPam` system-parameter properties actually used by the legacy `carregabars`/`Ok.Click` logic (GruConfs, ConConfs, DopeCitens, GruReservs, ConReservs, GrupoEsts, ContaEsts, TransfEncs)
+- Grade/leitura state (`this_cCursorBaixa`, `this_lPossuiEtiquetas`, `this_cCodigoBarraLido`)
+- `Init()` calling `DODEFAULT()` then resetting `this_cTabela`/`this_cCampoChave`, matching the canonical OPERACIONAL BO pattern seen in `SigPrEtqBO.prg`
+
+Scope was kept to properties + Init only, per Phase 1 instructions ÔÇö no `CarregarDoCursor`/`Inserir`/`Atualizar`/business logic yet (that's Phase 2+).

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All helper functions exist and match. The implementation is consistent with the codebase's established patterns and conventions.
+
+## Summary
+
+For **FASE 5/8** of the FormSigPrCar migration, I first verified that this OPERACIONAL form (a flat 480├ù540 popup grid-editor, not a Page1/Page2 CRUD form) has **no individual data-entry fields** ÔÇö its `layout.json`/`analise.json` confirm `campos: []`. The form's actual "campos principais" are the two editable grid columns (`Codigos`/`Descrs`), which were already structurally present from earlier phases but had no lookup/validation behavior wired up.
+
+I implemented the first half (Column1/Codigos) of that behavior, mirroring `SIGPRCAR.Grade.Column1.Text1.Valid`/`When` from the legacy code:
+
+- **`this_cCgrus`** property + **`CarregarCgrusDoProduto()`**: fetches the product's group (`SigCdPro.cgrus`) to filter the characteristics lookup, exactly like the legacy `CGrus In (crSigCdPro.CGrus, Space(3))` filter.
+- **`ConfigurarLookupCaracteristicas()`**: binds `GotFocus`/`KeyPress` on the grid's `Column1.Text1`.
+- **`GrdColumn1GotFocus`** / **`GrdColumn1KeyPress`** (PUBLIC, per BINDEVENT rules): snapshot the pre-edit value and react on ENTER/TAB/F4, replicating the legacy `This.Tag <> This.Value` change-detection.
+- **`ValidarSelecaoCaracteristica()`**: exact-match lookup against `SigCrRap`, falling back to the canonical `AbrirLookupCanonico` picker (filtered by the same group), then blocks duplicate characteristics on the same product ÔÇö matching the legacy duplicate check.
+- Extended `AjustarVisibilidadePorModo()` to set `Column1.ReadOnly` based on mode (Grid.ReadOnly set first, per the CLAUDE.md ordering rule), mirroring the legacy `When` gate.
+
+Column2 (Descrs) direct-entry lookup and its `ReadOnly` interplay with Column1 are left for a later phase, consistent with this phase being explicitly "Parte 1" of the split. Verified all referenced helpers (`EscaparSQL`, `TratarNulo`, `MsgAviso`, `MsgErro`, `AbrirLookupCanonico`, `FormBuscaAuxiliar.DefinirCursor/Mostrar`) exist with matching signatures, and confirmed `SigCrRap`/`SigPrCar`/`SigCdPro.cgrus` column names against `docs/schema.sql`.

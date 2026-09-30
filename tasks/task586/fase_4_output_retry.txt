@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado
+
+A Fase 4 **j├í estava correta e completa** no `FormSigPrCcc.prg`. O que reprovava era o **gate**, n├úo o form ÔÇö quinta recorr├¬ncia de uma fam├¡lia j├í documentada, mas com causa-raiz nova.
+
+### Diagn├│stico
+
+O ramo CAPTURA do gate (Fase 4) trata qualquer token `AddCursor` como prova de que o legado tem lista. O `Init` do SIGPRCCC tem **uma** chamada, na forma de 3 argumentos:
+
+```foxpro
+.AddCursor('SigOpClU','CidChaves','CrSigOpClU' )
+```
+
+Isso s├│ **registra um cursor**. Quem liga grade ├® o **5┬║ argumento** (regra #35):
+
+```foxpro
+.AddCursor('SigCdGrp','cgrus','CrSigCdGrp','', ThisForm.Pagina.Lista.Grade, lcQryGru)
+                                                 ^-- GRADE
+```
+
+Medi termo a termo: era o **├║nico** bloqueio ÔÇö o dump tem zero `grid`/`pageframe`/`listbox`, 20 TextBox edit├íveis e 4 CheckBox. ├ë processamento em lote; n├úo h├í o que listar. Passar exigiria inventar Grid+CRUD (viola o PILAR 1) ou escrever m├®todos-adaptador vazios.
+
+### Corre├º├úo ÔÇö no harness, n├úo no `.prg`
+
+Helper `Test-LegadoAddCursorLigaGrade` em `automation/OrquestradorMigracao.ps1`, usado s├│ nos testes **estritos** das Fases 4 e 5. Os regex largos de DESPACHANTE/EXIBICAO ficaram intocados.
+
+Medi├º├úo em 585 dumps / 240 OPERACIONAL: **0 vazamentos** (os 27 dumps que mudam n├úo t├¬m grid algum); CAPTURA passa de 36 para 49 dispensas; task570/573/574/581 seguem casando com seus pr├│prios ramos. Encoding preservado (BOM, 2959 bytes >127 id├¬nticos) e parser limpo.
+
+### Verifica├º├úo do form
+
+Contrariando a nota da execu├º├úo anterior, **o VFP9 est├í dispon├¡vel nesta m├íquina** ÔÇö ent├úo instanciei de verdade:
+
+```
+OK: INSTANCIOU. BaseClass=Form Caption=[Rec├ílculo de Saldos] W=800 H=600 Controles=15
+   Processa.Enabled=.F.   OpConta/OpEstoque.Visible=.F.   (= legado)
+   APOS toggle C.C.: Visible=.T. Width=536 Processa.Enabled=.T.
+   APOS desmarcar  : Visible=.F. Processa.Enabled=.F.
+== FIM == Status: SUCESSO
+```
+
+Tamb├®m conferi: 0 propriedades inexistentes (tabela medida das base classes), ├¡cones/Caption/Style/Alignment transcritos **exatos** do dump legado, todo `THIS.<membro>` resolve, e zero ocorr├¬ncias de `.Self`, `Controls("nome")`, `RETURN` dentro de `TRY`, `MESSAGEBOX` ou acento literal. Artefatos de teste e `.fxp` recompilados removidos.
+
+N├úo alterei o `FormSigPrCcc.prg` ÔÇö ele j├í estava assim (modificado pelo retry anterior).
+
+### ÔÜá´©Å O fix n├úo vale para a execu├º├úo em curso
+
+O `RunLoop.ps1` **PID 8692 est├í vivo desde 25/09 16:32:34**, e o gate foi gravado hoje 10:02:23. O PowerShell parseia o orquestrador inteiro na invoca├º├úo, ent├úo esse loop tem a **c├│pia velha** em mem├│ria: quando o retry atual terminar, a Fase 4 vai reprovar de novo com o gate antigo, e vai parecer que a corre├º├úo n├úo funcionou.
+
+**Para valer, o RunLoop precisa ser relan├ºado.** N├úo matei o processo ÔÇö ├® decis├úo sua.
+
+Deixei backup em `automation/OrquestradorMigracao.ps1.bak_erro_fase4_addcursor` (o arquivo j├í tinha altera├º├Áes n├úo commitadas de outro trabalho, ent├úo `git checkout` sozinho n├úo recuperaria o estado pr├®-edi├º├úo). Li├º├úo salva na mem├│ria e indexada na fam├¡lia dos gates da Fase 4.

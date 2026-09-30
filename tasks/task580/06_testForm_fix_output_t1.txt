@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmei que **n├úo h├í um bug de c├│digo** aqui. O erro que apareceu na etapa `06_testForm` (Codigo 1526, "SQL Server inexistente ou acesso negado") acontece na **ETAPA 1B - Conectando ao banco de dados**, dentro de `TestFormWrapper.prg`, *antes* de `FormSigMvTta`/`SigMvTtaBO` sequer serem tocados. `config.prg:22` aponta corretamente para `192.168.200.10` (DB_MBAHIA), como documentado no CLAUDE.md.
+
+Testei a conectividade agora e confirmei que ├® um problema de **rede/ambiente**, n├úo de c├│digo:
+
+- `Test-NetConnection 192.168.200.10:1433` ÔåÆ `TcpTestSucceeded: False`
+- `Test-Connection` (ping) para `192.168.200.10` ÔåÆ sem resposta
+- A m├íquina atual s├│ tem rotas para `192.168.100.x` (OpenVPN TAP) e `192.168.199.x` (Ethernet, gateway `192.168.199.1`) ÔÇö **n├úo h├í rota para a sub-rede `192.168.200.0/24`** onde fica o SQL Server
+
+Isso ├® exatamente o padr├úo descrito na regra #14 do CLAUDE.md ("a diverg├¬ncia ├® de BANCO/ambiente e N├âO se conserta no c├│digo") e no meu memory sobre `SigConn.CEP` ÔÇö a causa ├® conectividade de rede/VPN, n├úo uma linha de c├│digo errada em `FormSigMvTta.prg` ou `SigMvTtaBO.prg`.
+
+Por isso **n├úo editei os arquivos**: os dois `.prg` fornecidos est├úo corretos em rela├º├úo ao problema relatado, e alter├í-los n├úo resolveria uma falha de rota de rede ÔÇö s├│ introduziria mudan├ºa sem causa real, violando a regra "Corrigir APENAS o erro indicado".
+
+Recomenda├º├úo: reexecutar a etapa `06_testForm` depois que a VPN/rota para `192.168.200.0/24` for restabelecida (provavelmente uma queda tempor├íria de VPN nesta m├íquina de pipeline), em vez de tratar isso como retry de c├│digo.

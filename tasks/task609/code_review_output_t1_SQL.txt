@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 10 findings in this pass are false positives, so I'm not making any code changes. Here's why, verified against `tasks\task609\SigPrEtq_form_codigo_fonte.txt` (the legacy dump):
+
+| Coluna acusada | Onde existe no legado | Por que o detector nao viu |
+|---|---|---|
+| `EAN13` | `CursorQuery('SigCdPro',...,'Ean13', lnCod, 'CPros')` linha 2137 | `CursorQuery` passa o filtro como argumento posicional, nao como texto `Where` |
+| `CBARS` | `CursorQuery('SigCdPro',...,'CBars',...)` linha 2148 | idem |
+| `DPROS` | `CursorQuery('SigCdPro',...,'DPros',...)` linha 2281 | idem |
+| `DPRO2S` | `CreateObject('fwbuscaext',...,'Dpro2s',...)` linha 2424 | mesmo mecanismo, outro helper (fwbuscaext) |
+| `CUNIS` | `CursorQuery('SigCdUni',...,'CUnis',...)` linha 2163 | idem |
+| `EMPDOPNUMS` | `CursorQuery('SigMvItn',...,'EmpDopNums', lcEdn,...)` linha 2544 | idem |
+| `DOPES` | `CursorQuery('SigCdOpe',...,'Dopes',...)` linha 2748 | idem |
+| `CEMPS` | `SigPrEtqBO.ValidarEmpresa`: `WHERE Cemps = ...` | substitui `fAcessoEmpresa()` legado nao portado ÔÇö decisao arquitetural documentada, nao invencao |
+| `QTDEETIQ` | so aparece em `SCAN FOR ... AND QtdeEtiq > 0` | isso e um filtro de CURSOR LOCAL em memoria, nunca vai para SQL Server |
+| `IMPRESSORAS` | nao existe como coluna nenhuma | o pass casou por substring dentro dos nomes `BuscarImpressorasAutorizadas`/`cursor_4c_ImpressorasAutorizadas` |
+
+A "lista de colunas do WHERE original" que o pass usa como refer├¬ncia foi extra├¡da s├│ do texto literal `Where ...` do legado ÔÇö mas este form busca produto/unidade/opera├º├úo/movimenta├º├úo quase inteiramente via `ThisForm.poDataMgr.CursorQuery(tabela, cursor, campo, valor, ...)` e `CreateObject('fwbuscaext', ...)`, onde a coluna de filtro ├® passada como argumento posicional, sem a palavra `Where` no fonte. Isso ├® o mesmo padr├úo de falso positivo j├í documentado (10 variantes agora) na mem├│ria do projeto ÔÇö removeria buscas de produto por EAN13/c├│digo de barras/descri├º├úo/unidade e a carga de itens de movimenta├º├úo/lista de pre├ºos, quebrando funcionalidade real.
+
+N├úo alterei `FormSigPrEtq.prg` nem `SigPrEtqBO.prg`. Registrei esta 10┬¬ variante confirmada na mem├│ria para acelerar a triagem de rodadas futuras deste pass.

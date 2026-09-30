@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: n├úo ├® bug de c├│digo ÔÇö ├® infraestrutura de rede
+
+**Erro**: `Codigo: 1526 - SQL Server inexistente ou acesso negado` na ETAPA 1B (`TestFormWrapper.prg`), *antes* de qualquer `CREATEOBJECT` do form/BO.
+
+**Confirmado agora**: `TcpClient.BeginConnect` a `192.168.200.10:1433` com timeout de 3s ÔåÆ `FAILED (timeout/unreachable)`.
+
+Isso ├® a **6┬¬ tentativa consecutiva** do mesmo erro nesta mesma task596/FormSIGPRCPR, e a **91┬¬+ ocorr├¬ncia** documentada desde 2026-08-02 em 78+ tasks diferentes (mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`). A m├íquina que roda o pipeline s├│ tem rotas para `192.168.100.x` (OpenVPN) e `192.168.199.x` (Ethernet) ÔÇö **n├úo h├í rota para `192.168.200.0/24`**, onde fica o SQL Server real.
+
+Revisei `FormSIGPRCPR.prg` e `SIGPRCPRBO.prg` por completo: ambos est├úo corretos, usam `gnConnHandle` do jeito can├┤nico, e n├úo h├í nada neles relacionado a conectividade de rede que participe dessa falha. **Nenhuma edi├º├úo foi feita** ÔÇö reescrever c├│digo correto n├úo resolve uma sub-rede inalcan├º├ível.
+
+**Recomenda├º├úo**: isso precisa de interven├º├úo de infraestrutura (rota de rede at├® `192.168.200.0/24` na m├íquina do pipeline), n├úo de mais tentativas de `runtime_fix`. Restam 4 das 10 tentativas antes do or├ºamento se esgotar neste mesmo erro.

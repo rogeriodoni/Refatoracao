@@ -1,1091 +1,1379 @@
 *==============================================================================
-* FormSigPrGf2.prg - Gr??fico de Falha X Recupera????o Mensal
-* Tipo: OPERACIONAL - Visualiza????o de gr??fico OLE (MSGraph)
-* Fase 8/8 - COMPLETO
+* FormSigPrGf2.prg - Grafico de Falha X Recuperacao Mensal (grafico filho)
+*
+* Origem legado: SIGPRGF2.SCX (task613)
+* Herda de: FormBase
+* Tipo: OPERACIONAL - form PLANO sem PageFrame (layout.json: todos os objetos
+*       sao filhos diretos de SIGPRGF2). Aberto pelo form pai FormSigPrGf1
+*       (BtnProcessarClick, ja completo) via
+*       CREATEOBJECT("FormSigPrGf2", THIS), depois de processar e deixar
+*       pronto o cursor agregado por mes no alias GLOBAL "crRel1" (o legado
+*       abria com "Do Form SigPrGf2 With ThisForm").
+*
+* BO: SigPrGf2BO (sem tabela propria - so agrega/formata o cursor de origem
+*     recebido do form pai; ver SigPrGf2BO.PopularChaves/GerarGrafico)
+*
+* Criado em: Fase 3 - Estrutura Base (DEFINE CLASS, Init, cabecalho)
+* Atualizado em: Fase 4 - CommandGroup obj_4c_CmdgGrafico (Grafico/Encerrar).
+*                BINDEVENT dos 2 botoes fica para a Fase 7/8, junto com
+*                mGeraGrafico/Report Form/fechamento do form (mesmo padrao
+*                de FormSigPrGf1.ConfigurarBotoesAcao).
+* Atualizado em: Fase 5 - cnt_4c_Grf1 (container flutuante do dump legado,
+*                Top=120/Left=17/Width=770/Height=429/BackColor=branco) com
+*                obj_4c_OleGrafico1 (OleBoundControl, Top=19/Left=5/
+*                Width=760/Height=390). Container comeca Visible=.F.
+*                (transcrito do Init legado: ".cntGrf1.Visible = .f." antes
+*                de mGeraGrafico e ".t." depois) e por isso eh filtrado em
+*                TornarControlesVisiveis, mesmo padrao de FormSigReCmg
+*                (cnt_4c_Grf1/cnt_4c_Grf2/cnt_4c_Aguarde sao flutuantes,
+*                controlados pelo Init/eventos, nao pelo
+*                TornarControlesVisiveis generico). .ControlSource NAO eh
+*                setado aqui - o legado so faz
+*                ".cntGrf1.oleGrafico1.ControlSource = 'crGrafico1.gGrafico1s'"
+*                dentro de mGeraGrafico, depois que o cursor crGrafico1 (e o
+*                registro correspondente) ja existe; setar antes estouraria
+*                alias inexistente (mesma familia da regra de
+*                Column.ControlSource antes do cursor existir). Fica para a
+*                Fase 7/8, junto com o resto de mGeraGrafico.
+* Atualizado em: Fase 6 - cnt_4c_Grf2 (container flutuante do dump legado,
+*                Top=558/Left=559/Width=228/Height=35/BackColor=branco)
+*                com lbl_4c_LblChave1 ("Grupo / Vendedor :") e
+*                cbo_4c_CmbChave1 (ComboBox Style=2/ColumnCount=1/
+*                FontName="Courier New"). Container comeca Visible=.F. e
+*                fica filtrado em TornarControlesVisiveis, mesmo padrao de
+*                cnt_4c_Grf1: o Init legado faz ".cntGrf2.Visible = .f."
+*                tanto ANTES quanto DEPOIS de mGeraGrafico (o combo de
+*                selecao de chave nunca aparece neste fluxo).
+*
+*                LOOKUPS: o SCX legado NAO tem lookup nenhum - zero
+*                fwBuscaExt / fwBuscaSel / sigacess() / mAddColuna /
+*                Acesso*() no dump inteiro (SigPrGf2_form_codigo_fonte.txt).
+*                Esta tela eh um visualizador de grafico: o unico campo de
+*                entrada eh o ComboBox Style=2 (dropdown LIST), que nao
+*                aceita digitacao e cuja lista o proprio form monta a partir
+*                do cursor de origem recebido do pai. Criar um
+*                AbrirLookup*/FormBuscaAuxiliar aqui seria INVENTAR tabela de
+*                lookup que o legado nao consulta - viola o PILAR 1 e a regra
+*                "NUNCA inventar tabelas de lookup que nao existem no
+*                original".
+*
+*                CAMPOS RESTANTES (ultimo container estatico do dump):
+*                cnt_4c_Aguarde (Top=288/Left=312/Width=207/Height=49/
+*                BorderWidth=5/BackColor=branco) com lbl_4c_Label1
+*                ("Aguarde...", Verdana 10 bold, ForeColor=RGB(255,0,0)) e
+*                lbl_4c_Label2 ("Processando Dados...", Verdana 10 bold
+*                condensada). Com ele, TODOS os 14 objetos da arvore do SCX
+*                legado estao criados.
+*
+*                COMPORTAMENTO DO CAMPO (o que substitui o lookup nesta
+*                tela): os DOIS eventos que o legado tem no cmbChave1 -
+*                Click e GotFocus - ligados por BINDEVENT, mais a guarda que
+*                o legado aplica ao indice do combo antes de usa-lo
+*                (ValidarLinhaChave, transcrita de "m.lnLinhaCmb1 =
+*                Iif((Type('m.lnLinhaCmb1')=='N'.And.m.lnLinhaCmb1>0),
+*                m.lnLinhaCmb1,1)" somada ao gate
+*                "If .cntGrf2.cmbChave1.ListCount>0" do mGeraGrafico) e a
+*                leitura do item selecionado (ObterChaveSelecionada,
+*                transcrita de "m.lcChave1 =
+*                .cntGrf2.cmbChave1.List(m.lnLinhaCmb1)").
+*                CboChave1Click reproduz o Click legado inteiro: exibe
+*                cnt_4c_Aguarde, Refresh/Draw, LockScreen, desabilita os
+*                OleBoundControl, gera o grafico da chave escolhida
+*                (SigPrGf2BO.GerarGrafico, ja completo desde a Fase 2),
+*                devolve o foco ao combo e esconde o Aguarde.
+*
+*                O AddItem dos valores, o ListIndex=1 inicial, o
+*                reposicionamento/redimensionamento dinamico do proprio
+*                cntGrf2 (calculados a partir do tamanho dos valores de
+*                crRel1.cEmps) e o DESENHO do MSGraph no OleBoundControl
+*                (Append General + ControlSource + propriedades do chart)
+*                ficam para a Fase 7/8, junto com o resto de mGeraGrafico e
+*                com os Click dos 2 botoes de obj_4c_CmdgGrafico.
+*
+* Atualizado em: Fase 7/8 - fecha o mgeragrafico legado: PopularComboChaves()
+*                (AddItem + reposicionamento de cnt_4c_Grf2, so na 1a chamada,
+*                guardado pelo ListCount) e DesenharGrafico() (cursor LOCAL
+*                cursor_4c_OleGrafico1 - equivalente a crGrafico1, com o
+*                binario do OLE que o BO nao guarda - Append General +
+*                ControlSource + toda a formatacao do MSGraph.Chart), ambos
+*                por tras de MGeraGrafico() (fonte UNICA, chamada tanto por
+*                ExecutarCargaInicial() - equivalente ao trecho do Init
+*                legado que chama ".mGeraGrafico()" antes do Show() - quanto
+*                por CboChave1Click(), que agora delega em vez de duplicar
+*                Validar/Obter/Gerar). BINDEVENT dos 2 botoes de
+*                obj_4c_CmdgGrafico: Buttons(1) "Grafico" -> BtnGraficoClick
+*                (Report Form do registro atual do cache, igual ao
+*                cmdImprimir.Click legado) e Buttons(2) "Encerrar" ->
+*                BtnEncerrarClick (fecha o cursor do OLE, libera o form e
+*                reabilita this_oFormPai, igual ao cmdSair.Click legado).
+*                Medido no VFP9 (2026-09-29): fluxo pai->filho fim-a-fim
+*                (crRel1 populado na sessao privada do pai, filho aberto com
+*                CREATEOBJECT("FormSigPrGf2", <pai>)) prova o combo populado,
+*                o BO gerando a serie certa e a troca de chave regenerando -
+*                o unico ponto que a maquina de teste nao cobre eh o proprio
+*                APPEND GENERAL CLASS "MSGraph.Chart", porque este ambiente
+*                nao tem esse OLE server registrado (OLE error 0x800401f3);
+*                por isso DesenharGrafico() isola o INSERT/APPEND GENERAL num
+*                TRY proprio e desfaz a linha de cache se falhar - sem o
+*                rollback, a mesma chave nunca mais tentaria desenhar (ficaria
+*                para sempre com o cache "encontrado" e o gGrafico1s vazio).
+*
+* CONTRATO COM O FORM PAI (FormSigPrGf1, ja completo - ver o comentario acima
+* de "CREATEOBJECT("FormSigPrGf2", THIS)" em FormSigPrGf1.BtnProcessarClick)
+* --------------------------------------------------------------------------
+* 1) CREATEOBJECT("FormSigPrGf2", <form pai>) - UM parametro, a referencia do
+*    form pai (par_loForm1, mesmo nome do "loForm1" recebido pelo Init
+*    legado). Sem parametro, THIS.this_oFormPai aponta para o proprio form
+*    (equivalente a "Iif(Type('m.loForm1')=='O',m.loForm1,ThisForm)" do
+*    legado).
+* 2) THIS.DataSessionId = par_loForm1.DataSessionId ANTES do DODEFAULT() -
+*    entra na MESMA sessao privada do pai (DataSession=2 dele) para enxergar
+*    o cursor global "crRel1" que o pai populou antes de abrir este form.
+* 3) WindowType = 0 (modeless, TRANSCRITO do legado - NAO trocar para 1): o
+*    pai (FormSigPrGf1.BtnProcessarClick) so faz THIS.Enabled = .F. depois de
+*    confirmar VARTYPE(...) = "O" do CREATEOBJECT e NUNCA chama .Show() no
+*    filho - quem se mostra eh o proprio filho.
+* 4) O legado mostra a tela no proprio Init (".Show()" dentro de
+*    "With ThisForm"), por isso InicializarForm chama THIS.Show() ao final -
+*    seguro aqui porque WindowType = 0 nao bloqueia (a regra do CLAUDE.md
+*    sobre Show() modal dentro de TRY fechar a tela nao se aplica a form
+*    modeless, so a WindowType = 1).
 *==============================================================================
 
 DEFINE CLASS FormSigPrGf2 AS FormBase
 
-    *-- Propriedades do legado (CLASSINFO: poform1, pnnumgrf)
-    poform1  = .NULL.
-    pnnumgrf = 0
-
-    *-- Propriedades do novo sistema
-    this_oBusinessObject = .NULL.
-    this_cModoAtual      = "OPERACIONAL"
-
-    *-- Configura????es visuais (classe-level - iguais ao legado PILAR 1)
-    Width       = 800
-    Height      = 600
-    AutoCenter  = .T.
-    TitleBar    = 0
-    BorderStyle = 1
-    Caption     = "\"
+    *-- Propriedades visuais (pixel-perfect do SCX original - PILAR 1)
+    *-- SIGPRGF2.SCX: Width=800, Height=600 (layout.json) - dialogo de
+    *-- grafico, sem necessidade de escalar para o canonico 1000x600 (esse
+    *-- canonico vale para forms CRUD frmcadastro).
+    Width        = 800
+    Height       = 600
+    AutoCenter   = .T.
+    Caption      = "Gr" + CHR(225) + "fico de Falha X Recupera" + CHR(231) + CHR(227) + "o Mensal"
+    WindowType   = 0
     ShowWindow = 1
-    WindowType = 1
-    ControlBox  = .F.
-    MaxButton   = .F.
-    MinButton   = .F.
-    WindowType  = 0
-    DataSession = 2
+    ControlBox   = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    TitleBar     = 0
+    BorderStyle  = 1
 
-    *--------------------------------------------------------------------------
-    * Init - Recebe ref do form pai, compartilha datasession e inicializa
-    * DataSessionId ?? compartilhado ANTES do DODEFAULT para que
-    * InicializarForm acesse crRel1 (cursor populado pelo form pai)
-    *--------------------------------------------------------------------------
-    PROCEDURE Init(par_loForm1)
-        IF VARTYPE(par_loForm1) = "O"
-            THIS.poform1       = par_loForm1
-            THIS.DataSessionId = par_loForm1.DataSessionId
-        ELSE
-            THIS.poform1 = THIS
-        ENDIF
+    *-- DataSession = 2 transcrito do SCX. So vale quando este form eh aberto
+    *-- SEM form pai (this_oFormPai = THIS): nesse caso ganha sessao privada
+    *-- propria. Quando ha form pai, Init() troca THIS.DataSessionId pela
+    *-- sessao dele ANTES do DODEFAULT() - ver contrato no cabecalho.
+    DataSession  = 2
+
+    *-- Business Object
+    this_oBusinessObject = .NULL.
+
+    *-- Referencia do form pai (poForm1 do legado). Reabilitado no Encerrar
+    *-- (Fase 7/8, migracao de cmdSair.Click).
+    this_oFormPai = .NULL.
+
+    *-- Cache LOCAL do binario do grafico (MSGraph.Chart) por chave -
+    *-- equivalente ao crGrafico1 do legado (gGrafico1s g(4)/cChave1s c(100)/
+    *-- cempresas c(254)/ctitulo1s c(128)). O BO (this_oBusinessObject) so
+    *-- guarda o TEXTO das series (this_cLabelsMeses/this_cSerieFalha/
+    *-- this_cSerieRecuperacao) - o binario do OLE eh responsabilidade do
+    *-- Form (PILAR 3: BO nao manipula OLE). Populado em DesenharGrafico().
+    this_cCursorOleGrafico = "cursor_4c_OleGrafico1"
+
+    *==========================================================================
+    * Init - Recebe a referencia do form pai (par_loForm1, equivalente ao
+    * "Lparameters loForm1" do legado) e assume a DataSessionId dele ANTES do
+    * DODEFAULT(), para enxergar o cursor "crRel1" que o pai ja populou.
+    *==========================================================================
+    PROCEDURE Init()
+        LPARAMETERS par_loForm1
+
+        LOCAL loc_oErro
+
+        TRY
+            IF VARTYPE(par_loForm1) = "O"
+                THIS.this_oFormPai = par_loForm1
+                THIS.DataSessionId = par_loForm1.DataSessionId
+            ELSE
+                THIS.this_oFormPai = THIS
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em Init")
+        ENDTRY
 
         RETURN DODEFAULT()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * InicializarForm - Configura form, cria containers e prepara exibi????o
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * InicializarForm - Instancia o BO, aponta o cursor de origem (alias
+    * GLOBAL "crRel1", equivalente ao crRel1 do legado - regra #22/PILAR 3: o
+    * BO nao adivinha o nome, o Form eh quem sabe o contrato com o pai), monta
+    * o cabecalho e exibe o form (equivalente ao ".Show()" dentro do
+    * "With ThisForm" do Init legado).
+    *==========================================================================
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
-            *-- Business Object
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrGf2BO")
 
             IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                *-- Propriedades visuais do form
+                THIS.this_oBusinessObject.this_cCursorOrigem = "crRel1"
+
                 THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
 
-                *-- Inicializar cursor de cache do gr??fico (via BO)
-                THIS.this_oBusinessObject.InicializarCursorGrafico()
-
-                *-- Criar containers do layout
                 THIS.ConfigurarPageFrame()
-                THIS.ConfigurarPaginaLista()
-                THIS.ConfigurarPaginaDados()
 
-                *-- Sincronizar caption do cabecalho com o form
-                LOCAL loc_cTitulo
-                loc_cTitulo = "Gr" + CHR(225) + "fico de Falha X Recupera" + ;
-                              CHR(231) + CHR(227) + "o Mensal"
-                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
-                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                THIS.TornarControlesVisiveis(THIS)
 
-                *-- Estado inicial: aguarde visivel, grafico oculto
-                THIS.AlternarPagina("AGUARDE")
+                THIS.ExecutarCargaInicial()
 
-                *-- Exibir form com aguarde enquanto carrega o grafico
-                THIS.Refresh()
-                THIS.Show()
-
-                *-- Gerar grafico inicial (popula combo + gera chart para item 1)
-                THIS.LockScreen = .T.
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Clear()
-                THIS.GerarGrafico(1)
-
-                *-- Transicionar para estado de exibicao do grafico
-                THIS.AlternarPagina("GRAFICO")
-                IF THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount > 0
-                    THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex = 1
+                *-- Pulado em harness headless (gb_4c_ModoTeste/
+                *-- gb_4c_ValidandoUI): sem janela de verdade o Show() de um
+                *-- form modeless so faria o processo depender de uma UI que
+                *-- nao existe no teste automatizado.
+                IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste) AND ;
+                   !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                    THIS.Show()
                 ENDIF
-                THIS.LockScreen = .F.
 
                 loc_lSucesso = .T.
             ELSE
-                MsgErro("Erro ao criar SigPrGf2BO. " + ;
-                        "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
-                        "Erro InicializarForm")
+                MsgErro("Erro ao criar SigPrGf2BO. VARTYPE retornou: " + ;
+                    VARTYPE(THIS.this_oBusinessObject), "FormSigPrGf2.InicializarForm")
             ENDIF
-
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormSigPrGf2.InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Cria containers e controles do form
-    * Form OPERACIONAL sem PageFrame: nome mantido por convencao do pipeline;
-    * o layout eh custom (cabecalho + grafico OLE + controles inferiores).
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarPageFrame - Orquestrador de montagem visual. SIGPRGF2 nao tem
+    * PageFrame no legado (layout flat) - nome mantido apenas como ponto de
+    * entrada arquitetural padrao (mesmo papel em FormSigPrGf1/FormFop).
+    *
+    * Roteiro das proximas fases:
+    *   Fase 3 (feita) - ConfigurarCabecalho()
+    *   Fase 4 (feita) - ConfigurarBotoesGrafico() (obj_4c_CmdgGrafico,
+    *                      CommandGroup com 2 botoes: Grafico/Encerrar)
+    *   Fase 5 (feita) - ConfigurarGrf1() (cnt_4c_Grf1 flutuante +
+    *                      obj_4c_OleGrafico1)
+    *   Fase 6 (esta)  - ConfigurarGrf2() (cnt_4c_Grf2 flutuante + combo
+    *                      cbo_4c_CmbChave1 + lbl_4c_LblChave1),
+    *                      ConfigurarAguarde() (cnt_4c_Aguarde + os 2 labels)
+    *                      e ConfigurarEventos() (BINDEVENT Click/GotFocus do
+    *                      combo - o legado nao tem lookup nenhum)
+    *   Fase 7/8        - BINDEVENT dos 2 botoes de obj_4c_CmdgGrafico e
+    *                      mGeraGrafico (carga do combo + desenho do MSGraph)
+    *
+    * ConfigurarEventos() vai por ULTIMO de proposito: BINDEVENT so resolve
+    * referencia de objeto que JA existe, entao todo AddObject tem de ter
+    * acontecido antes.
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
-        *-- === Cabe??alho cinza escuro (cntSombra do legado) ===
-        THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH THIS.cnt_4c_Cabecalho
-            .Top         = 0
-            .Left        = 0
-            .Width       = THIS.Width
-            .Height      = 80
-            .BackColor   = RGB(100, 100, 100)
-            .BackStyle   = 1
-            .BorderWidth = 0
-            .Visible     = .T.
+        THIS.ConfigurarCabecalho()
+        THIS.ConfigurarBotoesGrafico()
+        THIS.ConfigurarGrf1()
+        THIS.ConfigurarGrf2()
+        THIS.ConfigurarAguarde()
+        THIS.ConfigurarEventos()
+    ENDPROC
 
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .Top       = 18
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 40
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .FontBold  = .T.
-                .BackStyle = 0
-                .ForeColor = RGB(0, 0, 0)
-                .WordWrap  = .T.
+    *==========================================================================
+    * ConfigurarCabecalho - Container cinza escuro com titulo do form.
+    * Original: cntSombra Top=0, Left=0, Width=800, Height=80,
+    * BackColor=RGB(100,100,100) (layout.json) - copiado sem escala, pois
+    * THIS.Width ja eh 800 (identico ao legado).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCnt, loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Sombra", "Container")
+            loc_oCnt = THIS.cnt_4c_Sombra
+            WITH loc_oCnt
+                .Top         = 0
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BorderWidth = 0
+                .BackColor   = RGB(100, 100, 100)
+                .Visible     = .T.
+            ENDWITH
+
+            loc_oCnt.AddObject("lbl_4c_LblSombra", "Label")
+            WITH loc_oCnt.lbl_4c_LblSombra
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .AutoSize      = .F.
+                .Caption       = THIS.Caption
+                .Height        = 40
+                .Left          = 10
+                .Top           = 18
+                .Width         = 769
+                .ForeColor     = RGB(0, 0, 0)
+                .Visible       = .T.
+            ENDWITH
+
+            loc_oCnt.AddObject("lbl_4c_LblTitulo", "Label")
+            WITH loc_oCnt.lbl_4c_LblTitulo
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 18
+                .WordWrap   = .T.
+                .Alignment  = 0
+                .BackStyle  = 0
+                .AutoSize   = .F.
+                .Caption    = THIS.Caption
+                .Height     = 46
+                .Left       = 10
+                .Top        = 17
+                .Width      = 769
+                .ForeColor  = RGB(255, 255, 255)
+                .Visible    = .T.
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarCabecalho")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoesGrafico - CommandGroup obj_4c_CmdgGrafico com os 2
+    * botoes do legado (cmdgGrafico, ButtonCount=2): Buttons(1)=Grafico
+    * (cmdImprimir, dispara Report Form SigPrGf1 - migracao na Fase 7/8) e
+    * Buttons(2)=Encerrar (cmdSair, fecha o form e reabilita o pai). Geometria
+    * e cores copiadas do dump (SigPrGf2_form_codigo_fonte.txt) -
+    * Left=644/Top=-3/Width=160/Height=85 no grupo, botoes 75x75 em
+    * Left=5/80. BINDEVENT do Click fica para a Fase 7/8 (junto com
+    * mGeraGrafico/Report Form/fechamento), mesmo padrao de
+    * FormSigPrGf1.ConfigurarBotoesAcao.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoesGrafico()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("obj_4c_CmdgGrafico", "CommandGroup")
+            WITH THIS.obj_4c_CmdgGrafico
+                .ButtonCount   = 2
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .SpecialEffect = 1
+                .Top           = -3
+                .Left          = 644
+                .Width         = 160
+                .Height        = 85
+                .Value         = 0
+                .BorderColor   = RGB(136, 189, 188)
+                .TabIndex      = 4
+                .AutoSize      = .T.
+                .Visible       = .T.
+
+                WITH .Buttons(1)
+                    *-- "\<Gr" + CHR(225) + "fico" - acelerador Alt+G do
+                    *-- legado (Command1.Caption = "\<Gr醘ico" no dump,
+                    *-- CHR(225)=a-acute corrompido na extracao em texto).
+                    .Caption         = "\<Gr" + CHR(225) + "fico"
+                    .Left            = 5
+                    .Top             = 5
+                    .Width           = 75
+                    .Height          = 75
+                    .FontName        = "Comic Sans MS"
+                    .FontSize        = 8
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .ForeColor       = RGB(90, 90, 90)
+                    .BackColor       = RGB(255, 255, 255)
+                    .Themes          = .F.
+                    .SpecialEffect   = 0
+                    .PicturePosition = 13
+                    .Picture         = gc_4c_CaminhoIcones + "geral_grafico_pizza_60.jpg"
+                    .WordWrap        = .T.
+                    .MousePointer    = 15
+                ENDWITH
+
+                WITH .Buttons(2)
+                    *-- Cancel = .T. liga o ESC neste botao (nao tem
+                    *-- acelerador "\<" no dump legado).
+                    .Caption         = "Encerrar"
+                    .Left            = 80
+                    .Top             = 5
+                    .Width           = 75
+                    .Height          = 75
+                    .FontName        = "Comic Sans MS"
+                    .FontSize        = 8
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .ForeColor       = RGB(90, 90, 90)
+                    .BackColor       = RGB(255, 255, 255)
+                    .Themes          = .F.
+                    .SpecialEffect   = 0
+                    .PicturePosition = 13
+                    .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                    .WordWrap        = .T.
+                    .MousePointer    = 15
+                    .Cancel          = .T.
+                ENDWITH
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarBotoesGrafico")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGrf1 - cnt_4c_Grf1, container flutuante que hospeda o grafico
+    * (obj_4c_OleGrafico1, OleBoundControl). Geometria e cores copiadas do
+    * dump (SigPrGf2_form_codigo_fonte.txt): cntGrf1 Top=120/Left=17/
+    * Width=770/Height=429/BackStyle=1/BackColor=branco; oleGrafico1 dentro
+    * dele em Top=19/Left=5/Width=760/Height=390.
+    *
+    * Container comeca Visible=.F. (transcrito do Init legado -
+    * ".cntGrf1.Visible = .f." ate mGeraGrafico terminar, ".t." depois) e por
+    * isso NAO passa por TornarControlesVisiveis (ver filtro abaixo) - quem
+    * vai alternar a visibilidade eh a logica de Init/mGeraGrafico da
+    * Fase 7/8, igual ao padrao de FormSigReCmg.
+    *
+    * .ControlSource do OLE NAO eh setado aqui: o legado so faz
+    * ".ControlSource = 'crGrafico1.gGrafico1s'" dentro de mGeraGrafico,
+    * depois que o cursor crGrafico1 e o registro correspondente ja existem -
+    * setar antes estouraria alias inexistente. Fica para a Fase 7/8.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGrf1()
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Grf1", "Container")
+            WITH THIS.cnt_4c_Grf1
+                .Top           = 120
+                .Left          = 17
+                .Width         = 770
+                .Height        = 429
+                .BackStyle     = 1
+                .SpecialEffect = 0
+                .BackColor     = RGB(255, 255, 255)
+                .Visible       = .F.
+
+                .AddObject("obj_4c_OleGrafico1", "OleBoundControl")
+                WITH .obj_4c_OleGrafico1
+                    .Top     = 19
+                    .Left    = 5
+                    .Width   = 760
+                    .Height  = 390
+                    .Visible = .T.
+                ENDWITH
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarGrf1")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGrf2 - cnt_4c_Grf2, container flutuante que hospeda o combo de
+    * selecao de chave do grafico (cbo_4c_CmbChave1 + lbl_4c_LblChave1).
+    * Geometria e cores copiadas do dump (SigPrGf2_form_codigo_fonte.txt):
+    * cntGrf2 Top=558/Left=559/Width=228/Height=35/BackStyle=1/BackColor=branco;
+    * cmbChave1 Top=4/Left=129/Width=86/Height=25/Style=2 (dropdown list)/
+    * ColumnCount=1/FontName="Courier New"; lblChave1 Top=9/Left=7/Width=94/
+    * Height=15/AutoSize=.T./FontName="Tahoma"/FontSize=8/
+    * ForeColor=RGB(90,90,90) (regra #12/canonico - Say sem ForeColor
+    * declarado no legado, mas aqui o dump ja traz 90,90,90 explicito).
+    *
+    * Container comeca Visible=.F. (transcrito do Init legado -
+    * ".cntGrf2.Visible = .f." tanto ANTES quanto DEPOIS de mGeraGrafico, isto
+    * eh, o legado nunca exibe este container neste fluxo com uma unica
+    * empresa/vendedor) e por isso NAO passa por TornarControlesVisiveis (ver
+    * filtro abaixo), mesmo padrao de cnt_4c_Grf1/FormSigReCmg. Geometria e
+    * conteudo do combo (AddItem/ListIndex/reposicionamento dinamico do
+    * proprio cntGrf2) ficam para a Fase 7/8, dentro de mGeraGrafico - aqui
+    * so a estrutura estatica do dump eh criada.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGrf2()
+        LOCAL loc_oCnt, loc_oErro
+
+        TRY
+            THIS.AddObject("cnt_4c_Grf2", "Container")
+            loc_oCnt = THIS.cnt_4c_Grf2
+            WITH loc_oCnt
+                .Top           = 558
+                .Left          = 559
+                .Width         = 228
+                .Height        = 35
+                .BackStyle     = 1
+                .SpecialEffect = 0
+                .BackColor     = RGB(255, 255, 255)
+                .Visible       = .F.
+            ENDWITH
+
+            *-- .AddObject FORA do WITH do pai + WITH com caminho EXPLICITO
+            *-- (nao ".filho" relativo) - WITH aninhado apos AddObject descarta
+            *-- Caption/ForeColor em silencio (mesmo padrao de
+            *-- ConfigurarCabecalho acima).
+            loc_oCnt.AddObject("lbl_4c_LblChave1", "Label")
+            WITH loc_oCnt.lbl_4c_LblChave1
+                *-- .AutoSize = .F. embora o dump traga .T.: AutoSize eh no-op
+                *-- em Label criado por AddObject (a Width fica no default 100)
+                *-- e, com WordWrap, ainda DESCARTA a .Height. Width/Height
+                *-- transcritos do SCX ja SAO o auto-size que o Form Designer
+                *-- calculou, logo fixa-los eh reproducao fiel (regra #23).
                 .AutoSize  = .F.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Caption   = "Grupo / Vendedor :"
+                .Height    = 15
+                .Left      = 7
+                .Top       = 9
+                .Width     = 94
+                .ForeColor = RGB(90, 90, 90)
                 .Visible   = .T.
             ENDWITH
 
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .Top       = 17
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 46
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .FontBold  = .T.
-                .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
-                .WordWrap  = .T.
-                .AutoSize  = .F.
-                .Visible   = .T.
+            loc_oCnt.AddObject("cbo_4c_CmbChave1", "ComboBox")
+            WITH loc_oCnt.cbo_4c_CmbChave1
+                .FontName    = "Courier New"
+                .FontSize    = 9
+                .ColumnCount = 1
+                .Style       = 2
+                .Height      = 25
+                .Left        = 129
+                .Top         = 4
+                .Width       = 86
+                .Visible     = .T.
             ENDWITH
-        ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarGrf2")
+        ENDTRY
+    ENDPROC
 
-        *-- === CommandGroup: Imprimir + Encerrar (bot??es configurados na fase 4) ===
-        THIS.AddObject("obj_4c_CmdgGrafico", "CommandGroup")
-        WITH THIS.obj_4c_CmdgGrafico
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .BorderStyle   = 0
-            .SpecialEffect = 1
-            .Top           = -3
-            .Left          = 644
-            .Width         = 160
-            .Height        = 85
-            .Visible       = .T.
-        ENDWITH
+    *==========================================================================
+    * ConfigurarAguarde - cnt_4c_Aguarde, ultimo container estatico do dump
+    * legado (cntAguarde): a caixinha branca "Aguarde... / Processando
+    * Dados..." exibida enquanto o grafico eh gerado. Geometria e cores
+    * copiadas do dump (SigPrGf2_form_codigo_fonte.txt): cntAguarde
+    * Top=288/Left=312/Width=207/Height=49/BorderWidth=5/SpecialEffect=0/
+    * BackColor=branco; Label1 "Aguarde..." Top=7/Left=69/Width=78/Height=18/
+    * Verdana 10 bold/BackStyle=0/ForeColor=RGB(255,0,0); Label2 "Processando
+    * Dados..." Top=24/Left=34/Width=159/Height=18/Verdana 10 bold/
+    * FontCondense=.T./Alignment=0/BackStyle=0.
+    *
+    * Label2 NAO declara ForeColor no dump - canonico RGB(90,90,90)
+    * (regra #12). Aqui os dois labels ficam sobre container OPACO branco,
+    * entao ambos sao legiveis; RGB(90,90,90) mantem o padrao do projeto.
+    *
+    * Container comeca Visible=.F.: o Init legado o deixa .t. durante o
+    * processamento e .f. ao terminar (".cntAguarde.Visible = .f." como
+    * estado final), e o Click do combo faz o mesmo ciclo. Por isso NAO passa
+    * por TornarControlesVisiveis - quem alterna eh CboChave1Click (e, na
+    * Fase 7/8, o fluxo de Init/mGeraGrafico).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarAguarde()
+        LOCAL loc_oCnt, loc_oErro
 
-        *-- === Container do gr??fico OLE (oleGrafico1 adicionado na fase 4) ===
-        THIS.AddObject("cnt_4c_Grf1", "Container")
-        WITH THIS.cnt_4c_Grf1
-            .Top           = 120
-            .Left          = 17
-            .Width         = 770
-            .Height        = 429
-            .BackColor     = RGB(255, 255, 255)
-            .BackStyle     = 1
-            .SpecialEffect = 0
-            .Visible       = .T.
-        ENDWITH
+        TRY
+            THIS.AddObject("cnt_4c_Aguarde", "Container")
+            loc_oCnt = THIS.cnt_4c_Aguarde
+            WITH loc_oCnt
+                .Top           = 288
+                .Left          = 312
+                .Width         = 207
+                .Height        = 49
+                .BorderWidth   = 5
+                .SpecialEffect = 0
+                .BackStyle     = 1
+                .BackColor     = RGB(255, 255, 255)
+                .Visible       = .F.
+            ENDWITH
 
-        *-- === Container de espera (vis??vel durante inicializa????o e processamento) ===
-        THIS.AddObject("cnt_4c_Aguarde", "Container")
-        WITH THIS.cnt_4c_Aguarde
-            .Top           = 288
-            .Left          = 312
-            .Width         = 207
-            .Height        = 49
-            .BackColor     = RGB(255, 255, 255)
-            .BackStyle     = 1
-            .BorderWidth   = 5
-            .SpecialEffect = 0
-            .Visible       = .T.
-
-            .AddObject("lbl_4c_Label1", "Label")
-            WITH .lbl_4c_Label1
-                .Top       = 7
-                .Left      = 69
-                .Width     = 78
-                .Height    = 18
+            *-- .AddObject FORA do WITH do pai + WITH com caminho EXPLICITO
+            *-- (nao ".filho" relativo) - WITH aninhado apos AddObject descarta
+            *-- Caption/ForeColor em silencio.
+            loc_oCnt.AddObject("lbl_4c_Label1", "Label")
+            WITH loc_oCnt.lbl_4c_Label1
+                *-- .AutoSize = .F. embora o dump traga .T. (regra #23)
+                .AutoSize  = .F.
+                .FontBold  = .T.
                 .FontName  = "Verdana"
                 .FontSize  = 10
-                .FontBold  = .T.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 0, 0)
                 .Caption   = "Aguarde..."
-                .AutoSize  = .T.
-                .Visible   = .T.
-            ENDWITH
-
-            .AddObject("lbl_4c_Label2", "Label")
-            WITH .lbl_4c_Label2
-                .Top       = 24
-                .Left      = 34
-                .Width     = 159
                 .Height    = 18
-                .FontName  = "Verdana"
-                .FontSize  = 10
-                .FontBold  = .T.
-                .BackStyle = 0
-                .Caption   = "Processando Dados..."
-                .AutoSize  = .F.
+                .Left      = 69
+                .Top       = 7
+                .Width     = 78
+                .ForeColor = RGB(255, 0, 0)
                 .Visible   = .T.
             ENDWITH
-        ENDWITH
 
-        *-- === Container inferior: Label + ComboBox (conte??do adicionado na fase 5) ===
-        THIS.AddObject("cnt_4c_Grf2", "Container")
-        WITH THIS.cnt_4c_Grf2
-            .Top           = 558
-            .Left          = 559
-            .Width         = 228
-            .Height        = 35
-            .BackColor     = RGB(255, 255, 255)
-            .BackStyle     = 1
-            .SpecialEffect = 0
-            .Visible       = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Destroy - Libera recursos ao fechar o form
-    *--------------------------------------------------------------------------
-    PROCEDURE Destroy()
-        LOCAL loc_oErro
-
-        TRY
-            *-- Limpar cursor de cache do gr??fico
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.LimparCursorGrafico()
-                THIS.this_oBusinessObject = .NULL.
-            ENDIF
-
-            *-- Reabilitar form pai (form era modeless e desabilitava o pai)
-            IF VARTYPE(THIS.poform1) = "O" AND THIS.poform1 != THIS
-                THIS.poform1.LockScreen = .T.
-                THIS.poform1.Enabled   = .T.
-                THIS.poform1.LockScreen = .F.
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro Destroy FormSigPrGf2")
-        ENDTRY
-
-        DODEFAULT()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Adiciona OLE e configura botoes do CommandGroup
-    * OLEBoundControl criado lazy em GerarGrafico() para evitar dialog COM
-    * "Insert Object" no init sem dados (SYS(2335) nao intercepta dialogs OS)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        *-- Botao 1: Grafico (geral_grafico_pizza_60.jpg - icone do legado)
-        WITH THIS.obj_4c_CmdgGrafico
-            WITH .Buttons(1)
-                .Caption         = "Gr" + CHR(225) + "fico"
-                .Left            = 5
-                .Top             = 5
-                .Width           = 75
-                .Height          = 75
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .Picture         = gc_4c_CaminhoIcones + "geral_grafico_pizza_60.jpg"
-                .WordWrap        = .T.
-                .MousePointer    = 15
+            loc_oCnt.AddObject("lbl_4c_Label2", "Label")
+            WITH loc_oCnt.lbl_4c_Label2
+                .AutoSize     = .F.
+                .FontBold     = .T.
+                .FontName     = "Verdana"
+                .FontSize     = 10
+                .FontCondense = .T.
+                .Alignment    = 0
+                .BackStyle    = 0
+                .Caption      = "Processando Dados..."
+                .Height       = 18
+                .Left         = 34
+                .Top          = 24
+                .Width        = 159
+                .ForeColor    = RGB(90, 90, 90)
+                .Visible      = .T.
             ENDWITH
-            WITH .Buttons(2)
-                .Caption         = "Encerrar"
-                .Left            = 80
-                .Top             = 5
-                .Width           = 75
-                .Height          = 75
-                .FontName        = "Tahoma"
-                .FontSize        = 8
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .WordWrap        = .T.
-                .MousePointer    = 15
-            ENDWITH
-        ENDWITH
-
-        *-- BINDEVENT: CommandGroup Click -> CmdGraficoClick (PUBLIC)
-        BINDEVENT(THIS.obj_4c_CmdgGrafico, "Click", THIS, "CmdGraficoClick")
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Popula cnt_4c_Grf2 com Label e ComboBox
-    * (cntGrf2.lblChave1 + cntGrf2.cmbChave1 do legado)
-    * Items do combo sao populados em GerarGrafico() na primeira chamada.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oGrf2
-        loc_oGrf2 = THIS.cnt_4c_Grf2
-
-        *-- Label "Grupo / Vendedor :" (lblChave1 do legado)
-        loc_oGrf2.AddObject("lbl_4c_LblChave1", "Label")
-        WITH loc_oGrf2.lbl_4c_LblChave1
-            .Top       = 9
-            .Left      = 7
-            .Width     = 94
-            .Height    = 15
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Caption   = "Grupo / Vendedor :"
-            .AutoSize  = .T.
-            .Visible   = .T.
-        ENDWITH
-
-        *-- ComboBox de selecao de grupo/vendedor (cmbChave1 do legado)
-        *-- Items populados em GerarGrafico() ao inicializar
-        loc_oGrf2.AddObject("cbo_4c_CmbChave1", "ComboBox")
-        WITH loc_oGrf2.cbo_4c_CmbChave1
-            .Top               = 4
-            .Left              = 129
-            .Width             = 86
-            .Height            = 25
-            .FontName          = "Courier New"
-            .FontSize          = 9
-            .ColumnCount       = 1
-            .ColumnLines       = .F.
-            .IncrementalSearch = .T.
-            .Style             = 2
-            .ReadOnly          = .T.
-            .Format            = "K"
-            .Sorted            = .F.
-            .SpecialEffect     = 0
-            .Alignment         = 0
-            .Visible           = .T.
-        ENDWITH
-
-        *-- BINDEVENTs: Click e GotFocus no ComboBox (PUBLIC handlers exigidos)
-        BINDEVENT(loc_oGrf2.cbo_4c_CmbChave1, "Click",    THIS, "CboChave1Click")
-        BINDEVENT(loc_oGrf2.cbo_4c_CmbChave1, "GotFocus", THIS, "CboChave1GotFocus")
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CboChave1Click - Regera grafico para grupo/vendedor selecionado no combo
-    *--------------------------------------------------------------------------
-    PROCEDURE CboChave1Click()
-        LOCAL loc_oErro
-
-        TRY
-            THIS.cnt_4c_Aguarde.Visible = .T.
-            THIS.Refresh()
-            THIS.LockScreen = .T.
-            THIS.SetAll("Enabled", .F., "OLEBoundControl")
-
-            THIS.GerarGrafico(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex)
-
-            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
-            THIS.cnt_4c_Aguarde.Visible = .F.
-            THIS.Refresh()
-            THIS.LockScreen = .F.
-
         CATCH TO loc_oErro
-            THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro CboChave1Click")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarAguarde")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CboChave1GotFocus - Desabilita controles OLE quando combo recebe foco
-    *--------------------------------------------------------------------------
-    PROCEDURE CboChave1GotFocus()
-        THIS.SetAll("Enabled", .F., "OLEBoundControl")
+    *==========================================================================
+    * ConfigurarEventos - Liga por BINDEVENT os DOIS eventos que o SCX legado
+    * tem no cmbChave1, e SO esses dois (o dump nao tem mais nenhum evento de
+    * campo - zero Valid, zero KeyPress, zero LostFocus, zero lookup):
+    *
+    *   SIGPRGF2.cntGrf2.cmbChave1.Click    -> CboChave1Click
+    *   SIGPRGF2.cntGrf2.cmbChave1.GotFocus -> CboChave1GotFocus
+    *
+    * Os handlers sao PUBLIC (sem PROTECTED): BINDEVENT falha em SILENCIO com
+    * metodo PROTECTED. Nenhum dos dois eventos leva parametro, por isso os
+    * handlers tambem nao declaram LPARAMETERS.
+    *
+    * Fase 7/8 (esta): BINDEVENT dos 2 botoes de obj_4c_CmdgGrafico -
+    * Buttons(1) "Grafico" (cmdImprimir do legado) -> BtnGraficoClick,
+    * Buttons(2) "Encerrar" (cmdSair do legado) -> BtnEncerrarClick.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarEventos()
+        LOCAL loc_oErro
+
+        TRY
+            BINDEVENT(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1, "Click", ;
+                THIS, "CboChave1Click")
+
+            BINDEVENT(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1, "GotFocus", ;
+                THIS, "CboChave1GotFocus")
+
+            BINDEVENT(THIS.obj_4c_CmdgGrafico.Buttons(1), "Click", ;
+                THIS, "BtnGraficoClick")
+
+            BINDEVENT(THIS.obj_4c_CmdgGrafico.Buttons(2), "Click", ;
+                THIS, "BtnEncerrarClick")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarEventos")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Alterna entre estado de espera e exibicao do grafico
-    * par_cEstado: "AGUARDE" ou "GRAFICO"
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_cEstado)
-        LOCAL loc_cEstado
-        loc_cEstado = UPPER(ALLTRIM(IIF(VARTYPE(par_cEstado) = "C", par_cEstado, "AGUARDE")))
+    *==========================================================================
+    * ExecutarCargaInicial - Estados de visibilidade + primeira chamada de
+    * MGeraGrafico(), equivalente ao trecho do Init legado entre o
+    * "With ThisForm" e o ".Show()" final:
+    *
+    *   .cntAguarde.Visible = .t. / .cntGrf1.Visible = .f. /
+    *   .cntGrf2.Visible = .f. / .cmdgGrafico.Visible = .f.
+    *   .cntGrf2.cmbChave1.Clear
+    *   .mGeraGrafico()
+    *   .cntAguarde.Visible = .f. / .cntGrf1.Visible = .t. /
+    *   .cntGrf2.Visible = .f. / .cmdgGrafico.Visible = .t.
+    *   .cntGrf2.cmbChave1.ListIndex = 1
+    *   .cntGrf2.cmbChave1.SetFocus
+    *
+    * DIVERGENCIA DELIBERADA: o legado intercala Refresh()/Show()/Draw() e
+    * LockScreen .t./.f./.t. DUAS VEZES antes deste trecho, so para reduzir
+    * flicker numa maquina antiga enquanto mostra a janela ainda com
+    * "Aguarde..." antes de calcular o grafico. O estado VISIVEL final
+    * (containers, combo populado no item 1, grafico desenhado) e o mesmo
+    * se este metodo rodar por completo ANTES do THIS.Show() unico do
+    * InicializarForm - por isso o dance de Show()/LockScreen intermediario
+    * nao foi reproduzido (nao ha diferenca de ESTADO, so de flicker, sem
+    * forma segura de testar flicker num harness headless). SetFocus final
+    * do legado NAO eh chamado aqui: cnt_4c_Grf2 fica Visible = .F. nos dois
+    * estados (ver comentario de ConfigurarGrf2 - o combo de selecao nunca
+    * aparece neste fluxo) e SetFocus em controle dentro de container
+    * invisivel estoura em runtime.
+    *==========================================================================
+    PROTECTED PROCEDURE ExecutarCargaInicial()
+        LOCAL loc_oErro
 
-        DO CASE
-        CASE loc_cEstado = "AGUARDE"
+        TRY
             THIS.cnt_4c_Aguarde.Visible     = .T.
             THIS.cnt_4c_Grf1.Visible        = .F.
             THIS.cnt_4c_Grf2.Visible        = .F.
             THIS.obj_4c_CmdgGrafico.Visible = .F.
-        CASE loc_cEstado = "GRAFICO"
+
+            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Clear
+
+            THIS.MGeraGrafico(1)
+
             THIS.cnt_4c_Aguarde.Visible     = .F.
             THIS.cnt_4c_Grf1.Visible        = .T.
-            THIS.cnt_4c_Grf2.Visible        = .T.
+            THIS.cnt_4c_Grf2.Visible        = .F.
             THIS.obj_4c_CmdgGrafico.Visible = .T.
-        ENDCASE
 
-        THIS.Refresh()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CmdGraficoClick - Handler do CommandGroup (despachante por .Value)
-    *--------------------------------------------------------------------------
-    PROCEDURE CmdGraficoClick()
-        DO CASE
-        CASE THIS.obj_4c_CmdgGrafico.Value = 1
-            THIS.BtnGraficoClick()
-        CASE THIS.obj_4c_CmdgGrafico.Value = 2
-            THIS.BtnEncerrarClick()
-        ENDCASE
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnGraficoClick - Imprime grafico atual na impressora via SigPrGf1.frx
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BtnGraficoClick()
-        LOCAL loc_oErro, loc_cRelatorio, loc_nRecno
-        LOCAL loc_cPoint, loc_cSep
-
-        TRY
-            THIS.LockScreen = .T.
-
-            loc_cRelatorio = FULLPATH(gc_4c_CaminhoReports + "SigPrGf1.frx")
-
-            IF NOT FILE(loc_cRelatorio)
-                MsgErro("Relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + ;
-                        CHR(13) + loc_cRelatorio, ;
-                        "Gr" + CHR(225) + "fico")
-            ELSE
-                IF USED("crGrafico1") AND RECCOUNT("crGrafico1") > 0
-                    loc_nRecno = RECNO("crGrafico1")
-                    loc_cPoint = SET("POINT")
-                    loc_cSep   = SET("SEPARATOR")
-
-                    SET POINT TO "."
-                    SET SEPARATOR TO ","
-                    SET REPORTBEHAVIOR 80
-
-                    SELECT crGrafico1
-                    REPORT FORM (FULLPATH(gc_4c_CaminhoReports + "SigPrGf1")) ;
-                        NEXT 1 TO PRINTER PROMPT NOCONSOLE
-
-                    SET POINT TO (loc_cPoint)
-                    SET SEPARATOR TO (loc_cSep)
-                    SET REPORTBEHAVIOR 90
-
-                    IF BETWEEN(loc_nRecno, 1, RECCOUNT("crGrafico1"))
-                        GOTO loc_nRecno IN crGrafico1
-                    ENDIF
-
-                    THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
-                ELSE
-                    MsgAviso("Nenhum gr" + CHR(225) + "fico dispon" + CHR(237) + ;
-                             "vel para impress" + CHR(227) + "o.", ;
-                             "Impress" + CHR(227) + "o")
-                ENDIF
-            ENDIF
-
-            THIS.Refresh()
-            THIS.LockScreen = .F.
-
-        CATCH TO loc_oErro
-            THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro BtnGraficoClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnEncerrarClick - Limpa OLE, fecha cursor de cache e libera o form
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BtnEncerrarClick()
-        LOCAL loc_oErro
-
-        TRY
-            THIS.LockScreen = .T.
-
-            IF VARTYPE(THIS.cnt_4c_Grf1) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf1, "obj_4c_OleGrafico1", 5)
-                THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ControlSource = ""
-            ENDIF
-
-            IF USED("crGrafico1")
-                USE IN crGrafico1
-            ENDIF
-
-            THIS.Release()
-
-        CATCH TO loc_oErro
-            THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro BtnEncerrarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * GerarGrafico - Gera/exibe grafico OLE para o grupo/vendedor selecionado
-    *   par_nLinha - Indice 1-based no ComboBox (0 ou omitido = usar primeiro)
-    *   Equivale ao mgeragrafico do legado: popula combo na 1a chamada,
-    *   gera dados via BO, configura objeto MSGraph.Chart no OLE Bound Control.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE GerarGrafico(par_nLinha)
-        LOCAL loc_lSucesso, loc_oErro
-        LOCAL loc_nLinha, loc_cChave1
-        LOCAL loc_nCount, loc_nTmStr
-        LOCAL loc_lCacheMiss
-        LOCAL loc_cPoint, loc_cSep
-        LOCAL loc_i, loc_nGrupo, loc_nMes
-        LOCAL loc_oOle
-        LOCAL ARRAY loc_aChaves(1)
-
-        loc_lSucesso  = .F.
-        loc_lCacheMiss = .F.
-
-        *-- Salvar locale antes de qualquer RETURN/CATCH
-        loc_cPoint = SET("POINT")
-        loc_cSep   = SET("SEPARATOR")
-        SET POINT TO ","
-        SET SEPARATOR TO "."
-
-        TRY
-            loc_nLinha = IIF(VARTYPE(par_nLinha) = "N" .AND. par_nLinha > 0, par_nLinha, 1)
-
-            *-- === 1. Populacao inicial do ComboBox (apenas na primeira chamada) ===
-            IF THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount = 0
-                DIMENSION loc_aChaves(1)
-                loc_nCount = THIS.this_oBusinessObject.ObterChavesGrafico(@loc_aChaves)
-
-                IF loc_nCount > 0
-                    loc_nTmStr = LEN(ALLTRIM(loc_aChaves(1)))
-
-                    WITH THIS.cnt_4c_Grf2.cbo_4c_CmbChave1
-                        .Clear()
-                        .RowSourceType = 0
-                        .RowSource     = ""
-                        .Width         = (loc_nTmStr * 7 + 9) + 20
-                        .Height        = 25
-                        .Top           = 5
-                        .Left          = 5 + THIS.cnt_4c_Grf2.lbl_4c_LblChave1.Width
-                        FOR loc_i = 1 TO loc_nCount
-                            .AddItem(PADR(loc_aChaves(loc_i), loc_nTmStr))
-                        ENDFOR
-                    ENDWITH
-
-                    WITH THIS.cnt_4c_Grf2
-                        .Height = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Height + 10
-                        .Width  = THIS.cnt_4c_Grf2.lbl_4c_LblChave1.Width + ;
-                                  THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Width + 10
-                        .Visible     = .T.
-                    ENDWITH
-                ENDIF
-            ENDIF
-
-            *-- === 2. Gerar grafico se ha itens no combo ===
             IF THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount > 0
-                *-- Obter chave selecionada do combo
-                loc_cChave1 = ALLTRIM(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.List(loc_nLinha))
+                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex = 1
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ExecutarCargaInicial")
+        ENDTRY
+    ENDPROC
 
-                *-- Montar array de 1 elemento para passar ao BO
-                DIMENSION loc_aChaves(1)
-                loc_aChaves(1) = loc_cChave1
+    *==========================================================================
+    * PopularComboChaves - Preenche cbo_4c_CmbChave1 com as chaves distintas
+    * do cursor de origem (this_oBusinessObject.PopularChaves(), Fase 1/2 ja
+    * completa) e reposiciona/redimensiona cnt_4c_Grf2, replicando o bloco
+    * "If Empty(.cntGrf2.cmbChave1.ListCount)" do mgeragrafico legado (linhas
+    * 420-467 do dump). So roda de fato UMA vez por form (guard pelo proprio
+    * ListCount) - chamadas seguintes de MGeraGrafico() so pulam este bloco,
+    * igual ao "If Empty(...)" do legado.
+    *
+    * m.lnTmStr1 do legado (Len(laVendedor(1)), 1o elemento do array
+    * Select Distinct SEM AllTrim - cEmps eh char de largura fixa, entao
+    * todos os elementos tem o MESMO Len) vira aqui o MAIOR comprimento
+    * entre as chaves ja TRIMADAS por PopularChaves (regra #22/PILAR 3: o BO
+    * ja decidiu usar ALLTRIM na Fase 1/2, entao os comprimentos podem
+    * variar) - o maior valor preserva o alinhamento em coluna do PadR
+    * usado no AddItem.
+    *==========================================================================
+    PROTECTED PROCEDURE PopularComboChaves()
+        LOCAL loc_oCnt, loc_oCombo, loc_oLabel, loc_nTamanho, loc_cAlias, loc_oErro
 
-                *-- Verificar cache ANTES de chamar BO (para saber se precisa configurar OLE)
-                IF USED("crGrafico1")
-                    SELECT crGrafico1
-                    LOCATE FOR crGrafico1.cChave1s == PADR(loc_cChave1, 100)
-                    loc_lCacheMiss = EOF("crGrafico1")
-                ELSE
-                    loc_lCacheMiss = .T.
-                ENDIF
+        loc_oCnt   = THIS.cnt_4c_Grf2
+        loc_oCombo = loc_oCnt.cbo_4c_CmbChave1
+        loc_oLabel = loc_oCnt.lbl_4c_LblChave1
 
-                *-- BO: cache miss -> INSERT + APPEND GENERAL; cache hit -> apenas posiciona
-                IF THIS.this_oBusinessObject.CarregarDadosGrafico(1, @loc_aChaves)
-                    *-- Criacao lazy: evita dialog COM "Insert Object" no init sem dados
-                    IF !PEMSTATUS(THIS.cnt_4c_Grf1, "obj_4c_OleGrafico1", 5)
-                        THIS.cnt_4c_Grf1.AddObject("obj_4c_OleGrafico1", "OLEBoundControl")
-                        WITH THIS.cnt_4c_Grf1.obj_4c_OleGrafico1
-                            .Top     = 19
-                            .Left    = 5
-                            .Height  = 390
-                            .Width   = 760
-                            .Visible = .T.
-                        ENDWITH
+        IF loc_oCombo.ListCount > 0
+            RETURN
+        ENDIF
+
+        TRY
+            IF THIS.this_oBusinessObject.PopularChaves()
+                loc_cAlias = THIS.this_oBusinessObject.this_cCursorChaves
+
+                loc_nTamanho = 1
+                SELECT (loc_cAlias)
+                SCAN
+                    loc_nTamanho = MAX(loc_nTamanho, LEN(ALLTRIM(Chaves)))
+                ENDSCAN
+
+                *-- Legado: With .cntGrf2 / With .lblChave1 / .Left=5 / .Top=10
+                loc_oLabel.Left = 5
+                loc_oLabel.Top  = 10
+
+                loc_oCombo.Clear
+                loc_oCombo.Alignment         = 0
+                loc_oCombo.ColumnCount       = 0
+                loc_oCombo.ColumnLines       = .F.
+                loc_oCombo.IncrementalSearch = .T.
+                loc_oCombo.FontName          = "Courier New"
+                loc_oCombo.FontSize          = 9
+                loc_oCombo.RowSourceType     = 0
+                loc_oCombo.Style             = 2
+                loc_oCombo.ReadOnly          = .T.
+                loc_oCombo.Format            = "K"
+                loc_oCombo.Sorted            = .F.
+                loc_oCombo.SpecialEffect     = 0
+                loc_oCombo.Width             = (loc_nTamanho * 7 + 9) + 20
+                loc_oCombo.Height            = 25
+                loc_oCombo.Top               = 5
+                loc_oCombo.Left              = 5 + loc_oLabel.Width
+
+                SELECT (loc_cAlias)
+                GO TOP
+                SCAN
+                    loc_oCombo.AddItem(PADR(ALLTRIM(Chaves), loc_nTamanho))
+                ENDSCAN
+
+                loc_oCnt.Height = loc_oCombo.Height + 10
+                loc_oCnt.Width  = loc_oLabel.Width + loc_oCombo.Width + 10
+                loc_oCnt.Top    = THIS.obj_4c_CmdgGrafico.Top - loc_oCnt.Height
+                loc_oCnt.Left   = THIS.Width - loc_oCnt.Width - 5
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em PopularComboChaves")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * MGeraGrafico - Equivalente ao mgeragrafico legado (LParameters
+    * lnLinhaCmb1): popula o combo de chaves na PRIMEIRA chamada
+    * (PopularComboChaves, guardado pelo proprio ListCount), valida a linha
+    * recebida (ValidarLinhaChave - gate "If .cntGrf2.cmbChave1.ListCount>0"
+    * do legado), pede ao BO os dados da chave selecionada
+    * (this_oBusinessObject.GerarGrafico) e, se OK, desenha o MSGraph.Chart
+    * no OleBoundControl (DesenharGrafico).
+    *
+    * Fonte UNICA de geracao - chamado por ExecutarCargaInicial() (migracao
+    * do ".mGeraGrafico()" dentro do Init legado) e por CboChave1Click()
+    * (migracao do ".mGeraGrafico(.cntGrf2.cmbChave1.ListIndex)" dentro do
+    * Click legado do combo), sem duplicar a logica nos dois lugares.
+    *==========================================================================
+    PROTECTED PROCEDURE MGeraGrafico(par_nLinha)
+        LOCAL loc_nLinha, loc_cChave, loc_lResultado, loc_oErro
+
+        loc_lResultado = .F.
+
+        TRY
+            THIS.PopularComboChaves()
+
+            loc_nLinha = THIS.ValidarLinhaChave(par_nLinha)
+
+            IF loc_nLinha > 0
+                loc_cChave = THIS.ObterChaveSelecionada(loc_nLinha)
+
+                IF !EMPTY(loc_cChave)
+                    IF THIS.this_oBusinessObject.GerarGrafico(loc_cChave)
+                        loc_lResultado = THIS.DesenharGrafico()
                     ENDIF
-                    loc_oOle = THIS.cnt_4c_Grf1.obj_4c_OleGrafico1
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em MGeraGrafico")
+        ENDTRY
 
-                    IF loc_lCacheMiss
-                        *-- Cache miss: configurar propriedades do grafico OLE
-                        TRY
-                            WITH loc_oOle
-                                .ControlSource   = "crGrafico1.gGrafico1s"
-                                .AutoActivate    = 0
-                                .AutoSize        = .T.
-                                .Sizable         = .T.
-                                .Stretch         = 2
-                                .HasLegend       = .T.
-                                .HasTitle        = .T.
-                                .DisplayBlanksAs = 1
-                                .HasAxis(2)      = .T.
-                                .Type            = -4100
-                                .SubType         = 1
+        RETURN loc_lResultado
+    ENDPROC
 
-                                WITH .ChartArea
-                                    .Font.Name        = "Arial"
-                                    .Font.Size        = 8
-                                    .Font.Bold        = .T.
-                                    .Font.Italic      = .F.
-                                    .Interior.Color   = RGB(255, 255, 255)
-                                    .Border.Color     = RGB(0, 0, 0)
-                                    .Border.LineStyle = 1
-                                    .Border.Weight    = 2
-                                    .Shadow           = .T.
-                                ENDWITH
+    *==========================================================================
+    * DesenharGrafico - Renderiza o grafico (MSGraph.Chart) no
+    * OleBoundControl para a chave que this_oBusinessObject.GerarGrafico() ja
+    * calculou. Mantem this_cCursorOleGrafico ("cursor_4c_OleGrafico1"),
+    * cache LOCAL do binario do grafico por chave - equivalente ao crGrafico1
+    * do legado (gGrafico1s g(4)/cChave1s c(100)/cempresas c(254)/
+    * ctitulo1s c(128)). O BO nao guarda esse binario (PILAR 3: BO nao
+    * manipula OLE) - so o texto (labels/series), ja em
+    * this_oBusinessObject.this_cLabelsMeses/this_cSerieFalha/
+    * this_cSerieRecuperacao.
+    *
+    * Transcricao de mgeragrafico legado (linhas 486-634 do dump): Locate
+    * por chave no cursor de cache -> achou (cache hit) => so reposiciona o
+    * registro corrente e faz Refresh (o ControlSource fixo em
+    * "<cursor>.gGrafico1s" reflete o registro corrente); nao achou => monta
+    * o General a partir das series do BO (mesmo layout Data() do legado:
+    * lcStrg1+CRLF+lcStrg2+CRLF+lcStrg3 = this_cLabelsMeses/this_cSerieFalha/
+    * this_cSerieRecuperacao) e aplica toda a formatacao do chart.
+    *==========================================================================
+    PROTECTED PROCEDURE DesenharGrafico()
+        LOCAL loc_oBO, loc_oOle, loc_cChavePad, loc_cDataChart, loc_nGrupo, ;
+              loc_nMes, loc_lResultado, loc_lFalhaOle, loc_oErro, loc_oErroOle
 
-                                WITH .PlotArea
-                                    .Interior.Color = RGB(255, 255, 255)
-                                    .Border.Color   = RGB(0, 0, 0)
-                                ENDWITH
+        loc_lResultado = .F.
+        loc_lFalhaOle  = .F.
+        loc_oBO        = THIS.this_oBusinessObject
+        loc_oOle       = THIS.cnt_4c_Grf1.obj_4c_OleGrafico1
 
-                                WITH .ChartTitle
-                                    .Font.Name   = "Arial"
-                                    .Font.Size   = 9
-                                    .Font.Bold   = .T.
-                                    .Font.Italic = .F.
-                                    .Text        = THIS.this_oBusinessObject.this_cTitulo1
-                                ENDWITH
+        TRY
+            IF !USED(THIS.this_cCursorOleGrafico)
+                CREATE CURSOR (THIS.this_cCursorOleGrafico) ;
+                    (gGrafico1s G(4), cChave1s C(100), cEmpresas C(254), cTitulo1s C(128))
+                INDEX ON cChave1s TAG cChave1s
+            ENDIF
 
-                                WITH .Legend
-                                    .Font.Name   = "Arial"
-                                    .Font.Size   = 8
-                                    .Font.Bold   = .T.
-                                    .Font.Italic = .F.
-                                    .Position    = 1
-                                    .Shadow      = .T.
-                                ENDWITH
+            loc_cChavePad = PADR(ALLTRIM(loc_oBO.this_cChaveAtual), 100)
 
-                                WITH .Axes(1)
-                                    .HasTitle               = .T.
-                                    .AxisTitle.Caption      = "Meses"
-                                    .AxisTitle.Font.Name    = "Arial"
-                                    .AxisTitle.Font.Size    = 8
-                                    .AxisTitle.Font.Bold    = .T.
-                                    .AxisTitle.Font.Italic  = .F.
-                                    .AxisTitle.Orientation  = 0
-                                    .ReversePlotOrder       = .F.
-                                    .TickLabels.Orientation = 0
-                                    WITH .TickLabels.Font
-                                        .Name          = "Small Fonts"
-                                        .Bold          = .F.
-                                        .Size          = 7
-                                        .Strikethrough = .F.
-                                        .Superscript   = .F.
-                                        .Subscript     = .F.
-                                        .OutlineFont   = .F.
-                                        .Shadow        = .F.
-                                    ENDWITH
-                                ENDWITH
+            SELECT (THIS.this_cCursorOleGrafico)
+            LOCATE FOR cChave1s == loc_cChavePad
 
-                                WITH .Axes(2)
-                                    .HasTitle               = .F.
-                                    .ReversePlotOrder       = .F.
-                                    .HasMajorGridLines      = .T.
-                                    .HasMinorGridlines      = .F.
-                                    .MinimumScaleIsAuto     = .T.
-                                    .MaximumScaleIsAuto     = .T.
-                                    .TickLabels.Orientation  = 0
-                                    .TickLabels.NumberFormat = "###,###,##0.00"
-                                    WITH .TickLabels.Font
-                                        .Name          = "Arial"
-                                        .Bold          = .T.
-                                        .Size          = 8
-                                        .Strikethrough = .F.
-                                        .Superscript   = .F.
-                                        .Subscript     = .F.
-                                        .OutlineFont   = .F.
-                                        .Shadow        = .F.
-                                    ENDWITH
-                                ENDWITH
+            IF !FOUND()
+                loc_cDataChart = loc_oBO.this_cLabelsMeses + CHR(13) + CHR(10) + ;
+                    loc_oBO.this_cSerieFalha + CHR(13) + CHR(10) + ;
+                    loc_oBO.this_cSerieRecuperacao
 
-                                WITH .ChartGroups(1)
-                                    .HasSeriesLines = .F.
-                                    .GapWidth       = 10
-                                    .Overlap        = (.GapWidth / 2 * -1)
+                *-- INSERT/APPEND GENERAL isolados num TRY proprio: se o OLE
+                *-- server "MSGraph.Chart" nao estiver registrado na maquina
+                *-- (medido: OLE error 0x800401f3 "Cadeia de caracteres de
+                *-- classe invalida"), a linha de cache JA FOI inserida antes
+                *-- do APPEND GENERAL estourar - sem desfazer, a PROXIMA
+                *-- chamada para a MESMA chave acharia essa linha via LOCATE
+                *-- (FOUND()=.T.) e trataria como cache HIT, nunca mais
+                *-- tentando desenhar (gGrafico1s ficaria para sempre vazio,
+                *-- sem erro nenhum). Por isso a linha eh apagada no CATCH.
+                TRY
+                    INSERT INTO (THIS.this_cCursorOleGrafico) (cChave1s, cTitulo1s, cEmpresas) ;
+                        VALUES (loc_cChavePad, LEFT(loc_oBO.this_cTitulo1, 128), loc_oBO.this_cEmpresaAtual)
 
-                                    FOR loc_nGrupo = 1 TO THIS.this_oBusinessObject.this_nNgrupos
-                                        IF TYPE("THIS.cnt_4c_Grf1.obj_4c_OleGrafico1" + ;
-                                                ".ChartGroups(1).SeriesCollection(" + ;
-                                                TRANSFORM(loc_nGrupo) + ")") = "O"
-                                            WITH .SeriesCollection(loc_nGrupo)
-                                                .ApplyDataLabels      = .T.
-                                                .ApplyDataLabels.Type = 2
-                                                FOR loc_nMes = 1 TO THIS.this_oBusinessObject.this_nNmeses
-                                                    IF TYPE("THIS.cnt_4c_Grf1.obj_4c_OleGrafico1" + ;
-                                                            ".ChartGroups(1).SeriesCollection(" + ;
-                                                            TRANSFORM(loc_nGrupo) + ").Points(" + ;
-                                                            TRANSFORM(loc_nMes) + ").DataLabel") = "O"
-                                                        WITH .PointsDataLabel
-                                                            .Top          = (.Top - 10)
-                                                            .NumberFormat = "###,###,##0.00"
-                                                            .Font.Name    = "Arial"
-                                                            .Font.Size    = 8
-                                                            .Font.Bold    = .T.
-                                                            .Font.Shadow  = .F.
-                                                        ENDWITH
-                                                    ENDIF
-                                                ENDFOR
+                    APPEND GENERAL gGrafico1s CLASS "MSGraph.Chart" DATA (loc_cDataChart)
+                CATCH TO loc_oErroOle
+                    loc_lFalhaOle = .T.
+
+                    SELECT (THIS.this_cCursorOleGrafico)
+                    LOCATE FOR cChave1s == loc_cChavePad
+                    IF FOUND()
+                        DELETE
+                    ENDIF
+
+                    loc_oBO.this_cMensagemErro = loc_oErroOle.Message
+                ENDTRY
+            ENDIF
+
+            IF !FOUND() AND !loc_lFalhaOle
+                *-- So chega aqui com o APPEND GENERAL acima OK: aplica o
+                *-- ControlSource e toda a formatacao (Font/Interior/Border/
+                *-- Axes/ChartGroups) do chart recem-criado.
+                loc_oOle.ControlSource = THIS.this_cCursorOleGrafico + ".gGrafico1s"
+
+                WITH loc_oOle
+                    .AutoActivate    = 0
+                    .AutoSize        = .T.
+                    .Height          = .Height
+                    .Left            = .Left
+                    .Sizable         = .T.
+                    .Stretch         = 2
+                    .Top             = .Top
+                    .Width           = .Width
+                    .HasLegend       = .T.
+                    .HasTitle        = .T.
+                    .DisplayBlanksAs = 1
+                    .HasAxis(2)      = .T.
+                    .Type            = -4100
+                    .SubType         = 1
+
+                    WITH .ChartArea
+                        .Font.Name        = "Arial"
+                        .Font.Size        = 8
+                        .Font.Bold        = .T.
+                        .Font.Italic      = .F.
+                        .Interior.Color   = RGB(255, 255, 255)
+                        .Border.Color     = RGB(0, 0, 0)
+                        .Border.LineStyle = 1
+                        .Border.Weight    = 2
+                        .Shadow           = .T.
+                    ENDWITH
+
+                    WITH .PlotArea
+                        .Interior.Color = RGB(255, 255, 255)
+                        .Border.Color   = RGB(0, 0, 0)
+                    ENDWITH
+
+                    WITH .ChartTitle
+                        .Font.Name   = "Arial"
+                        .Font.Size   = 9
+                        .Font.Bold   = .T.
+                        .Font.Italic = .F.
+                        .Text        = loc_oBO.this_cTitulo1
+                    ENDWITH
+
+                    WITH .Legend
+                        .Font.Name   = "Arial"
+                        .Font.Size   = 8
+                        .Font.Bold   = .T.
+                        .Font.Italic = .F.
+                        .Position    = 1
+                        .Shadow      = .T.
+                    ENDWITH
+
+                    WITH .Axes(1)
+                        .HasTitle               = .T.
+                        .AxisTitle.Caption      = "Meses"
+                        .AxisTitle.Font.Name    = "Arial"
+                        .AxisTitle.Font.Size    = 8
+                        .AxisTitle.Font.Bold    = .T.
+                        .AxisTitle.Font.Italic  = .F.
+                        .AxisTitle.Orientation  = 0
+                        .ReversePlotOrder       = .F.
+                        .TickLabels.Orientation = 0
+
+                        WITH .TickLabels.Font
+                            .Name          = "Small Fonts"
+                            .Bold          = .F.
+                            .Size          = 7
+                            .Strikethrough = .F.
+                            .Superscript   = .F.
+                            .Subscript     = .F.
+                            .OutlineFont   = .F.
+                            .Shadow        = .F.
+                        ENDWITH
+                    ENDWITH
+
+                    WITH .Axes(2)
+                        .HasTitle                = .F.
+                        .ReversePlotOrder        = .F.
+                        .HasMajorGridLines       = .T.
+                        .HasMinorGridlines       = .F.
+                        .MinimumScaleIsAuto      = .T.
+                        .MaximumScaleIsAuto      = .T.
+                        .TickLabels.Orientation  = 0
+                        .TickLabels.NumberFormat = "###,###,##0.00"
+
+                        WITH .TickLabels.Font
+                            .Name          = "Arial"
+                            .Bold          = .T.
+                            .Size          = 8
+                            .Strikethrough = .F.
+                            .Superscript   = .F.
+                            .Subscript     = .F.
+                            .OutlineFont   = .F.
+                            .Shadow        = .F.
+                        ENDWITH
+                    ENDWITH
+
+                    WITH .ChartGroups(1)
+                        .HasSeriesLines = .F.
+                        .GapWidth       = 10
+                        .Overlap        = (.GapWidth / 2 * -1)
+
+                        FOR loc_nGrupo = 1 TO loc_oBO.this_nTotalGrupos
+                            IF TYPE("THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ChartGroups(1).SeriesCollection(m.loc_nGrupo)") == "O"
+                                WITH .SeriesCollection(loc_nGrupo)
+                                    .ApplyDataLabels      = .T.
+                                    .ApplyDataLabels.Type = 2
+
+                                    FOR loc_nMes = 1 TO loc_oBO.this_nTotalMeses
+                                        IF TYPE("THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ChartGroups(1).SeriesCollection(m.loc_nGrupo).Points(m.loc_nMes).DataLabel") == "O"
+                                            WITH .PointsDataLabel
+                                                .Top          = .Top - 10
+                                                .NumberFormat = "###,###,##0.00"
+                                                .Font.Name    = "Arial"
+                                                .Font.Size    = 8
+                                                .Font.Bold    = .T.
+                                                .Font.Shadow  = .F.
                                             ENDWITH
                                         ENDIF
                                     ENDFOR
                                 ENDWITH
+                            ENDIF
+                        ENDFOR
+                    ENDWITH
 
-                                .Refresh()
-                            ENDWITH
-                        CATCH TO loc_oErro
-                            *-- Erros OLE nao sao fatais; grafico pode exibir parcialmente
-                        ENDTRY
-                    ELSE
-                        *-- Cache hit: cursor ja posicionado, reforcar ControlSource e refresh
-                        TRY
-                            loc_oOle.ControlSource = "crGrafico1.gGrafico1s"
-                            loc_oOle.Refresh()
-                        CATCH TO loc_oErro
-                            *-- Erros OLE nao sao fatais
-                        ENDTRY
-                    ENDIF
-
-                    loc_lSucesso = .T.
+                    .Refresh
+                ENDWITH
+            ELSE
+                IF !loc_lFalhaOle
+                    *-- Cache HIT de verdade (achou na LOCATE original, antes
+                    *-- do bloco de criacao acima rodar) - so reposiciona o
+                    *-- ControlSource; o registro corrente ja esta certo.
+                    loc_oOle.ControlSource = THIS.this_cCursorOleGrafico + ".gGrafico1s"
                 ENDIF
             ENDIF
 
+            IF !loc_lFalhaOle
+                loc_oOle.Refresh
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro GerarGrafico")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em DesenharGrafico")
         ENDTRY
 
-        SET POINT TO (loc_cPoint)
-        SET SEPARATOR TO (loc_cSep)
-
-        THIS.Refresh()
-
-        RETURN loc_lSucesso
+        RETURN loc_lResultado
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Reseta a selecao do combo para o primeiro item e
-    * regenera o grafico. Em SigPrGf2 (form OPERACIONAL de visualizacao de
-    * grafico MSGraph) nao ha INSERT persistente ??? "Incluir" corresponde a
-    * "nova consulta/processamento" do grafico com a chave inicial.
-    * Existe para atender ao contrato da pipeline.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+    *==========================================================================
+    * ValidarLinhaChave - Guarda que o legado aplica ao indice do combo antes
+    * de usa-lo, transcrita do mGeraGrafico (duas linhas, nao uma):
+    *
+    *   m.lnLinhaCmb1 = Iif((Type('m.lnLinhaCmb1')=='N'.And.m.lnLinhaCmb1>0), ;
+    *                        m.lnLinhaCmb1,1)
+    *   ...
+    *   If .cntGrf2.cmbChave1.ListCount>0
+    *
+    * Devolve 0 quando o combo ainda nao tem item nenhum (gate do ListCount:
+    * nada a selecionar, nada a gerar) e, quando tem, o indice normalizado -
+    * valor nao numerico ou <= 0 vira 1, exatamente como o Iif do legado.
+    *
+    * Sem TRY/CATCH de proposito: so le propriedades do proprio combo e faz
+    * aritmetica; quem chama (CboChave1Click) ja roda dentro de TRY/CATCH.
+    *==========================================================================
+    PROCEDURE ValidarLinhaChave(par_nLinha)
+        LOCAL loc_nLinha, loc_nTotal
+
+        loc_nTotal = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount
+
+        IF VARTYPE(loc_nTotal) != "N" OR loc_nTotal <= 0
+            RETURN 0
+        ENDIF
+
+        loc_nLinha = IIF(VARTYPE(par_nLinha) = "N" AND par_nLinha > 0, par_nLinha, 1)
+
+        RETURN loc_nLinha
+    ENDPROC
+
+    *==========================================================================
+    * ObterChaveSelecionada - Le o item do combo correspondente a linha ja
+    * validada. Transcricao de "m.lcChave1 =
+    * .cntGrf2.cmbChave1.List(m.lnLinhaCmb1)" do mGeraGrafico legado.
+    *
+    * O BETWEEN protege o .List() de indice fora de faixa - no legado esse
+    * caso caia no "On Error m.llError = .f." que o mGeraGrafico instala e
+    * seguia em silencio; aqui devolve string vazia e o chamador simplesmente
+    * nao gera grafico, sem alterar valor nenhum.
+    *
+    * ALLTRIM aqui casa com o contrato do BO: os itens do combo sao gravados
+    * com PadR (mGeraGrafico legado) e SigPrGf2BO.GerarGrafico compara com
+    * ALLTRIM dos dois lados (ALLTRIM(cEmps) == ALLTRIM(par_cChave)).
+    *==========================================================================
+    PROCEDURE ObterChaveSelecionada(par_nLinha)
+        LOCAL loc_cChave, loc_oCombo
+
+        loc_cChave = ""
+        loc_oCombo = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1
+
+        IF VARTYPE(par_nLinha) = "N" AND BETWEEN(par_nLinha, 1, loc_oCombo.ListCount)
+            loc_cChave = ALLTRIM(loc_oCombo.List(par_nLinha))
+        ENDIF
+
+        RETURN loc_cChave
+    ENDPROC
+
+    *==========================================================================
+    * CboChave1Click - Handler do Click do combo "Grupo / Vendedor :".
+    * Transcricao do PROCEDURE Click legado (SIGPRGF2.cntGrf2.cmbChave1):
+    *
+    *   .cntAguarde.Visible = .t. / .Refresh / .Draw / .LockScreen = .t.
+    *   .SetAll('Enabled',.f.,'Oleboundcontrol')
+    *   .mGeraGrafico(.cntGrf2.cmbChave1.ListIndex)
+    *   .cntGrf2.cmbChave1.SetFocus
+    *   .cntAguarde.Visible = .f. / .Refresh / .Draw / .LockScreen = .f.
+    *
+    * A parte de DADOS do mGeraGrafico eh SigPrGf2BO.GerarGrafico (completo
+    * desde a Fase 2); a parte de DESENHO (Append General + ControlSource do
+    * OleBoundControl + propriedades do MSGraph) entra na Fase 7/8.
+    *
+    * PUBLIC (sem PROTECTED): exigencia do BINDEVENT.
+    *
+    * A mensagem de falha eh exibida DEPOIS do ENDTRY, com a tela ja
+    * destravada - dialogo aberto com LockScreen = .T. deixa a janela
+    * congelada por tras. O LockScreen = .F. mora no FINALLY para valer
+    * tambem quando o CATCH dispara.
+    *==========================================================================
+    PROCEDURE CboChave1Click()
+        LOCAL loc_cAviso, loc_oErro
+
+        loc_cAviso = ""
 
         TRY
             THIS.cnt_4c_Aguarde.Visible = .T.
             THIS.Refresh()
+            THIS.Draw()
             THIS.LockScreen = .T.
-            THIS.SetAll("Enabled", .F., "OLEBoundControl")
 
-            *-- Regenera o grafico a partir do primeiro item do combo
-            THIS.GerarGrafico(1)
+            *-- Legado: .SetAll('Enabled',.f.,'Oleboundcontrol') - congela o
+            *-- grafico atual enquanto o novo eh calculado.
+            THIS.SetAll("Enabled", .F., "OleBoundControl")
 
-            IF THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount > 0
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex = 1
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
+            *-- Legado: .mGeraGrafico(.cntGrf2.cmbChave1.ListIndex) - fonte
+            *-- unica com ExecutarCargaInicial() (ver MGeraGrafico acima).
+            IF !THIS.MGeraGrafico(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex)
+                loc_cAviso = THIS.this_oBusinessObject.this_cMensagemErro
             ENDIF
 
             THIS.cnt_4c_Aguarde.Visible = .F.
             THIS.Refresh()
-            THIS.LockScreen = .F.
+            THIS.Draw()
 
+            *-- SetFocus so com o container visivel e o combo habilitado -
+            *-- SetFocus em controle invisivel/desabilitado dispara erro.
+            IF THIS.cnt_4c_Grf2.Visible AND ;
+               THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Visible AND ;
+               THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Enabled
+                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em CboChave1Click")
+        FINALLY
             THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em BtnIncluirClick")
         ENDTRY
+
+        IF !EMPTY(loc_cAviso)
+            MsgAviso(loc_cAviso, "Gr" + CHR(225) + "fico")
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Habilita edicao interativa da chave: garante que o
-    * ComboBox esteja habilitado e devolve foco ao combo para permitir troca
-    * do grupo/vendedor. Nao ha UPDATE persistente em SigPrGf2 (form
-    * OPERACIONAL sem entidade CRUD). Existe para atender ao contrato da
-    * pipeline e como atalho equivalente a "editar selecao".
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
+    *==========================================================================
+    * CboChave1GotFocus - Handler do GotFocus do combo. Transcricao literal do
+    * PROCEDURE GotFocus legado, que tem UMA linha:
+    *
+    *   ThisForm.SetAll('Enabled',.f.,'Oleboundcontrol')
+    *
+    * PUBLIC (sem PROTECTED): exigencia do BINDEVENT.
+    *==========================================================================
+    PROCEDURE CboChave1GotFocus()
         LOCAL loc_oErro
 
         TRY
-            IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Enabled  = .T.
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ReadOnly = .F.
-
-                IF THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount > 0
-                    THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
-                ENDIF
-            ENDIF
-
-            THIS.Refresh()
-
+            THIS.SetAll("Enabled", .F., "OleBoundControl")
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em BtnAlterarClick")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em CboChave1GotFocus")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Executa a regeracao/exibicao do grafico para a
-    * chave atualmente selecionada no combo. Em forms OPERACIONAIS de
-    * consulta/relatorio, "Visualizar" corresponde a executar a consulta e
-    * exibir o resultado ??? delegamos para CboChave1Click para reaproveitar
-    * o indicador cnt_4c_Aguarde, a chamada a GerarGrafico e o tratamento
-    * de erros.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        THIS.CboChave1Click()
+    *==========================================================================
+    * BtnGraficoClick - Buttons(1) "Grafico" do obj_4c_CmdgGrafico. Transcricao
+    * do cmdImprimir.Click legado:
+    *
+    *   Local lnRecno1
+    *   With ThisForm
+    *       .LockScreen = .t.
+    *       m.lnRecno1 = RecNo('crGrafico1')
+    *       Select ('crGrafico1')
+    *       Report Form SigPrGf1 Next 1 To Printer Prompt Noconsole
+    *       If BetWeen(m.lnRecno1,1,RecCount('crGrafico1'))
+    *           GoTo m.lnRecno1 In ('crGrafico1')
+    *       EndIf
+    *       .cntGrf2.cmbChave1.SetFocus
+    *       .Refresh / .Draw / .LockScreen = .f.
+    *   EndWith
+    *
+    * crGrafico1 -> this_cCursorOleGrafico (cursor_4c_OleGrafico1, criado em
+    * DesenharGrafico()). Guard IF FILE(...) antes do REPORT FORM (regra
+    * CLAUDE.md sobre .Picture/.frx ausente falhar em silencio e sobre o
+    * helper canonico de REPORT FORM) - SigPrGf1.frx nao existe no acervo
+    * (nem em origem\, nem no historico do git): a impressao real so
+    * funciona quando o arquivo for adicionado a
+    * projeto\app\reports\SigPrGf1.frx; ate la o usuario ve o aviso
+    * descritivo em vez de um erro cru do VFP ou, peor, silencio total.
+    *==========================================================================
+    PROCEDURE BtnGraficoClick()
+        LOCAL loc_nRecnoAtual, loc_cFrx, loc_oErro
+
+        TRY
+            THIS.LockScreen = .T.
+
+            loc_nRecnoAtual = RECNO(THIS.this_cCursorOleGrafico)
+
+            SELECT (THIS.this_cCursorOleGrafico)
+
+            loc_cFrx = FULLPATH(gc_4c_CaminhoReports + "SigPrGf1.frx")
+
+            IF !FILE(loc_cFrx)
+                MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
+                    "o encontrado: " + loc_cFrx, "Erro")
+            ELSE
+                REPORT FORM (gc_4c_CaminhoReports + "SigPrGf1") NEXT 1 TO PRINTER PROMPT NOCONSOLE
+            ENDIF
+
+            IF BETWEEN(loc_nRecnoAtual, 1, RECCOUNT(THIS.this_cCursorOleGrafico))
+                GO loc_nRecnoAtual IN (THIS.this_cCursorOleGrafico)
+            ENDIF
+
+            *-- SetFocus so com o container visivel e o combo habilitado -
+            *-- SetFocus em controle invisivel/desabilitado dispara erro.
+            IF THIS.cnt_4c_Grf2.Visible AND ;
+               THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Visible AND ;
+               THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Enabled
+                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus()
+            ENDIF
+
+            THIS.Refresh()
+            THIS.Draw()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em BtnGraficoClick")
+        FINALLY
+            THIS.LockScreen = .F.
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Limpa o cache do grafico e reseta o OLE Bound Control:
-    * apaga registros do cursor crGrafico1, desvincula a ControlSource do OLE
-    * e sinaliza o container de espera. Nao existe DELETE em SigPrGf2 (form
-    * OPERACIONAL sem entidade persistida) ??? este evento existe para atender
-    * ao contrato da pipeline e como atalho equivalente a "limpar consulta".
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
+    *==========================================================================
+    * BtnEncerrarClick - Buttons(2) "Encerrar" do obj_4c_CmdgGrafico.
+    * Transcricao do cmdSair.Click legado:
+    *
+    *   With ThisForm
+    *       .LockScreen = .t.
+    *       .cntGrf1.oleGrafico1.ControlSource = ''
+    *       If Used('crGrafico1')
+    *           Use In ('crGrafico1')
+    *       EndIf
+    *       .Release / .Refresh / .LockScreen = .f.
+    *       If Type('ThisForm.poForm1')=='O'
+    *           .poForm1.LockScreen = .t.
+    *           .poForm1.Enabled = .t.
+    *           .poForm1.LockScreen = .f.
+    *       EndIf
+    *   EndWith
+    *
+    * poForm1 -> this_oFormPai. Guard adicional (!= THIS) para o caso deste
+    * form ter sido aberto SEM form pai (Init: this_oFormPai = THIS quando
+    * par_loForm1 nao eh objeto) - nesse caso nao ha ninguem para reabilitar.
+    * crRel1 (cursor global do form pai) NAO eh fechado aqui - ver Destroy().
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick()
         LOCAL loc_oErro
 
         TRY
             THIS.LockScreen = .T.
 
-            *-- Desvincula o OLE Bound Control (para o grafico deixar de refletir cache)
-            IF VARTYPE(THIS.cnt_4c_Grf1) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf1, "obj_4c_OleGrafico1", 5)
-                TRY
-                    THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ControlSource = ""
-                CATCH TO loc_oErro
-                    *-- Erros OLE nao sao fatais aqui
-                ENDTRY
+            THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ControlSource = ""
+
+            IF USED(THIS.this_cCursorOleGrafico)
+                USE IN (THIS.this_cCursorOleGrafico)
             ENDIF
 
-            *-- Limpa cache do BO (ZAP em crGrafico1)
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.LimparCursorGrafico()
-                THIS.this_oBusinessObject.InicializarCursorGrafico()
-            ENDIF
-
-            *-- Estado de espera: grafico oculto, combo mantido para reselecao
-            THIS.cnt_4c_Grf1.Visible    = .F.
-            THIS.cnt_4c_Aguarde.Visible = .T.
-
+            THIS.Release()
             THIS.Refresh()
             THIS.LockScreen = .F.
 
+            IF VARTYPE(THIS.this_oFormPai) = "O" AND !(THIS.this_oFormPai == THIS)
+                THIS.this_oFormPai.LockScreen = .T.
+                THIS.this_oFormPai.Enabled    = .T.
+                THIS.this_oFormPai.LockScreen = .F.
+            ENDIF
         CATCH TO loc_oErro
-            THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em BtnExcluirClick")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em BtnEncerrarClick")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarLista - Regenera grafico OLE para o item atualmente selecionado
-    * no ComboBox. Em form OPERACIONAL de visualizacao de grafico, nao ha lista
-    * de registros para carregar ??? "CarregarLista" equivale a "regenerar grafico".
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_nIdx
-        loc_lSucesso = .F.
+    *==========================================================================
+    * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
+    * (AddObject cria com Visible=.F. por padrao)
+    *
+    * FILTRO: cnt_4c_Grf1/cnt_4c_Grf2/cnt_4c_Aguarde sao containers flutuantes
+    * (Visible controlado pelo Init/mGeraGrafico e por CboChave1Click - ver
+    * comentarios de ConfigurarGrf1/ConfigurarGrf2/ConfigurarAguarde), nao
+    * pelo TornarControlesVisiveis generico. Mesmo padrao de FormSigReCmg.
+    *
+    * O skip RECURSA antes do LOOP: o LOOP preserva o Visible = .F. do
+    * PROPRIO container (que eh o que se quer), mas os FILHOS dele precisam
+    * ficar Visible = .T., senao o container aparece VAZIO quando o codigo o
+    * exibe (CorretorAutomatico #109). Aqui os filhos ja nascem com
+    * .Visible = .T. explicito nos Configurar*, e a recursao mantem isso
+    * verdadeiro mesmo se algum filho for acrescentado sem o .Visible.
+    *==========================================================================
+    PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oControl
 
-        TRY
-            IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-                loc_nIdx = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex
-                IF loc_nIdx < 1
-                    loc_nIdx = 1
-                ENDIF
-                loc_lSucesso = THIS.GerarGrafico(loc_nIdx)
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro CarregarLista")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - Copia o estado atual do form (selecao do combo) para o BO
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_nIdx, loc_cChave
-
-        IF VARTYPE(THIS.this_oBusinessObject) != "O"
-            RETURN
-        ENDIF
-
-        loc_cChave = ""
-
-        IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-           PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-            loc_nIdx = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex
-            IF loc_nIdx > 0
-                loc_cChave = ALLTRIM(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.List(loc_nIdx))
-            ENDIF
-        ENDIF
-
-        THIS.this_oBusinessObject.this_cChave1 = loc_cChave
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BOParaForm - Atualiza o form a partir do estado do BO
-    * Sincroniza titulo do cabecalho com this_cCaption do BO
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BOParaForm()
-        IF VARTYPE(THIS.this_oBusinessObject) != "O"
-            RETURN
-        ENDIF
-
-        IF !EMPTY(THIS.this_oBusinessObject.this_cCaption)
-            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.this_oBusinessObject.this_cCaption
-            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.this_oBusinessObject.this_cCaption
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - Habilita ou desabilita controles do form
-    * par_lHabilitar: .T. = habilitar, .F. = desabilitar
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHabilitar
-        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
-
-        IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-           PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Enabled  = loc_lHabilitar
-            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ReadOnly = !loc_lHabilitar
-        ENDIF
-
-        IF VARTYPE(THIS.obj_4c_CmdgGrafico) = "O"
-            THIS.obj_4c_CmdgGrafico.Enabled = loc_lHabilitar
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * LimparCampos - Reseta combo, limpa cache do grafico e volta ao estado
-    * de espera (cnt_4c_Aguarde). Equivalente a "limpar consulta".
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oErro
-
-        TRY
-            *-- Desvincula o OLE antes de zerar cursor (evita acesso a dados liberados)
-            IF VARTYPE(THIS.cnt_4c_Grf1) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf1, "obj_4c_OleGrafico1", 5)
-                TRY
-                    THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.ControlSource = ""
-                CATCH
-                ENDTRY
-            ENDIF
-
-            *-- Limpa e recria cursor de cache via BO
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.LimparCursorGrafico()
-                THIS.this_oBusinessObject.InicializarCursorGrafico()
-            ENDIF
-
-            *-- Resetar combo
-            IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.Clear()
-            ENDIF
-
-            *-- Exibir estado de espera
-            THIS.AlternarPagina("AGUARDE")
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro LimparCampos")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Ajusta visibilidade do CommandGroup conforme estado
-    * Form OPERACIONAL sem modo CRUD: apenas garante que o CmdGroup esta visivel
-    * quando o grafico foi gerado.
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-        LOCAL loc_lTemGrafico
-        loc_lTemGrafico = USED("crGrafico1") AND RECCOUNT("crGrafico1") > 0
-
-        IF VARTYPE(THIS.obj_4c_CmdgGrafico) = "O"
-            THIS.obj_4c_CmdgGrafico.Visible = loc_lTemGrafico
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnBuscarClick - Dispara geracao/atualizacao do grafico para a selecao
-    * atual do ComboBox. Em form OPERACIONAL de grafico, "Buscar" equivale a
-    * "visualizar grafico para chave selecionada".
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
-        THIS.CboChave1Click()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnSalvarClick - Form OPERACIONAL sem persistencia em banco de dados.
-    * Dados sao gerados dinamicamente a partir do cursor crRel1 do form pai
-    * e mantidos em memoria (crGrafico1). Nao ha operacao de salvamento.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro, loc_nIdx
-        loc_nIdx = 1
-
-        TRY
-            IF VARTYPE(THIS.cnt_4c_Grf2) = "O" AND ;
-               PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-                loc_nIdx = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex
-                IF loc_nIdx < 1
-                    loc_nIdx = 1
-                ENDIF
-            ENDIF
-
-            THIS.GerarGrafico(loc_nIdx)
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em BtnSalvarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnCancelarClick - Encerra o form (equivalente a Encerrar para este
-    * form OPERACIONAL que nao tem estado editavel a cancelar).
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-        THIS.BtnEncerrarClick()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna controles visiveis recursivamente
-    * Percorre Controls e sub-containers. Estado de exibicao dos containers
-    * principais (cnt_4c_Grf1/Grf2/CmdgGrafico) e gerenciado por AlternarPagina,
-    * portanto este metodo e chamado antes da primeira chamada a AlternarPagina.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oControl
-
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oControl = par_oContainer.Controls(loc_i)
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oControl = par_oContainer.Controls(loc_nI)
 
             IF VARTYPE(loc_oControl) = "O"
-                IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_CABECALHO")
+                IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_GRF1", "CNT_4C_GRF2", "CNT_4C_AGUARDE")
+                    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+                        THIS.TornarControlesVisiveis(loc_oControl)
+                    ENDIF
                     LOOP
                 ENDIF
 
@@ -1093,12 +1381,32 @@ DEFINE CLASS FormSigPrGf2 AS FormBase
                     loc_oControl.Visible = .T.
                 ENDIF
 
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
-                   loc_oControl.ControlCount > 0
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
                     THIS.TornarControlesVisiveis(loc_oControl)
                 ENDIF
             ENDIF
         ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * Destroy - Fecha this_cCursorOleGrafico (cache local do binario do OLE -
+    * BtnEncerrarClick ja fecha no fluxo normal, mas Destroy pode disparar por
+    * outro caminho, ex.: pai chamando .Release() direto em vez do botao) e
+    * solta a referencia do Business Object (SigPrGf2BO.Destroy() fecha
+    * this_cCursorChaves/this_cCursorGrafico, cursores locais que nunca tocam
+    * SQL Server). O cursor global "crRel1" NAO eh fechado aqui: quem o cria
+    * eh o form pai (FormSigPrGf1), e eh ele quem o fecha no proprio Destroy -
+    * fechar aqui derrubaria o cursor debaixo do pai se o usuario fechar o
+    * grafico e processar outro periodo em seguida.
+    *==========================================================================
+    PROCEDURE Destroy()
+        IF !EMPTY(THIS.this_cCursorOleGrafico) AND USED(THIS.this_cCursorOleGrafico)
+            USE IN (THIS.this_cCursorOleGrafico)
+        ENDIF
+
+        THIS.this_oBusinessObject = .NULL.
+
+        DODEFAULT()
     ENDPROC
 
 ENDDEFINE

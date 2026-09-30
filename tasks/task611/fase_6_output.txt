@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 for `Formsigprftp.prg` is complete and verified to compile cleanly in VFP9. Summary of what was implemented:
+
+**`pgf_4c_Ftp` PageFrame controls (remaining 50% of fields)**
+- Page1 "Enviados": `lst_4c_RecLoc` / `txt_4c_DirRecLoc` (bound to `this_cDirRecLoc`) / `cmd_4c_BrowRecLoc`
+- Page2 "A Receber": `lst_4c_EnvLoc` / `txt_4c_DirEnvLoc` (bound to `this_cDirEnvLoc`) / `cmd_4c_BrowEnvLoc`
+- `Activate` handlers (`PagFtpEnviadosActivate`/`PagFtpAReceberActivate`, PUBLIC per BINDEVENT rule) mirroring the legacy's mutual pageframe sync with `pgf_4c_Loc`
+
+**Dial-Up combo (CboProvedor)**
+- `cbo_4c_Provedor` (array-bound ComboBox, `RowSourceType=5`) wired to `PUBLIC ARRAY aProvedor`/`PUBLIC nProvedor`
+- New `RasConexao()` method ÔÇö transcription of the legacy RAS API enumeration (`RasEnumEntries`), populating the provider list
+- `ConfigurarProvedorDialUp()` reproduces the legacy Init branch that shows/hides the combo based on `this_cTpConnect == "D"` and handles the "no dial-up connections available" failure path
+
+**Functional completion tied to the new controls** (not stubbed, since these controls previously had no data source):
+- `MontaContainer()` now actually populates `lst_4c_EnvLoc` from the remote FTP listing, filtered by the `this_cTpRec` mask, transcribing the legacy's cursorÔåÆtemp-fileÔåÆADIR wildcard-matching trick
+- `Destroy()` now handles the Dial-Up hangup (`this_cProvedorConectado` property added) and releases the `aProvedor`/`nProvedor` memvars, matching the legacy `Release()`
+
+No SQL lookups exist in this legacy form (confirmed via `analise.json`), so the "lookup" requirement of the phase template didn't apply ÔÇö the actual gaps were these FTP-side directory/listing controls and the Dial-Up plumbing, which are now fully wired, not stubbed.

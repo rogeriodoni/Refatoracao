@@ -32,7 +32,7 @@ PROCEDURE Main()
 
     * Configura SET's globais
     ConfigurarSETs()
-
+SET STEP ON 
     * Conecta ao banco de dados
     IF !ConectarBancoDados()
         WAIT CLEAR
@@ -47,6 +47,7 @@ PROCEDURE Main()
 
     * Exibe tela de apresentacao (splash screen) - opcional
     * DO splash.prg
+    SET STEP ON 
 
     * Abre menu principal
     CriarMenuPrincipal()

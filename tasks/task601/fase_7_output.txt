@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is in order. Both files compiled cleanly with vfp9.exe.
+
+**Summary of FASE 7/8 work on `FormSigPrDsc.prg`:**
+
+This is an OPERACIONAL form (product-description translation utility), not a CRUD form ÔÇö the legacy `SIGPRDSC.SCX` only has `btnSelecionar`/`btnAtualizar`/`btnSair`, no Incluir/Alterar/Visualizar/Excluir. So instead of inventing CRUD handlers the generic phase template asked for, I implemented the actual missing event: the **Selecionar** button.
+
+- `ConfigurarBotoes()`: wired `cmd_4c_BtnSelecionar`'s Click to `BtnSelecionarClick`.
+- `BtnSelecionarClick()`: transcribes the legacy filter validation (requires at least one of faixa-de-produto/grupo; mirrors one end of the range into the other when only one is filled).
+- `Processamento()`: transcribes the legacy `PROCEDURE processamento` ÔÇö builds the candidate list from `SigCdPro` (by `cgrus` or by `cpros BETWEEN`), then for each product runs the `SigCdPro`/`SigCdGrp`/`SigCdCor` LEFT JOIN, with a `fwprogressbar` progress dialog.
+- `InicializarForm()`: added the `cursor_4c_Dicionario` load (`SigCdDic` filtered by `Idioma = 'INGLES    '`), matching legacy `Init`'s `crSigCdDic`, guarded by `gb_4c_ValidandoUI` so UI-only validation doesn't require a live SQL connection.
+- `Destroy()`: releases the new temp cursors.
+
+One important finding worth flagging: the legacy `processamento` method has genuine dead code ÔÇö `lcDes` is initialized to `""` and never reassigned before the `If Not Empty(lcDes)` check that guards the dictionary-translation and `Insert Into crProdutos`. I verified this against the complete (non-truncated) extracted source, so it's not a partial-extraction artifact ÔÇö it's an inert branch in the legacy system itself. Per PILAR 1 (behavioral fidelity), I transcribed it literally rather than "fixing" it, with a comment explaining the finding so a future reviewer doesn't mistake it for a migration bug. Practical effect: the query/JOIN logic all runs, but no row is ever inserted into the grid and `Atualizar` stays disabled ÔÇö identical to the legacy behavior.
+
+Since the pipeline machine has no route to the SQL Server (192.168.200.10), I could only verify via `vfp9.exe COMPILE` (both files compiled clean) plus manual review ÔÇö not a live instantiation test.

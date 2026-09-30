@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: falso positivo ÔÇö nenhuma altera├º├úo aplicada
+
+O ├║nico item detectado pelo pass (`PKCHAVES` no WHERE) ├® o padr├úo j├í conhecido de **PK bufferizada** (variante 2 da mem├│ria `feedback_sql_filtro_inventado_lookup_outra_tabela.md`):
+
+- `pkchaves` ├® a PK real de `SigAlert` (`this_cCampoChave = "pkchaves"`).
+- `Atualizar()` ├® o override obrigat├│rio do contrato `BusinessBase.Salvar()` (PILAR 3) ÔÇö arquitetura, n├úo filtro de neg├│cio inventado.
+- O legado nunca emite esse `UPDATE` como texto: grava via cursor bufferizado (`thisform.podatamgr2.Update([crSigAlert])`), cujo `WHERE pkchaves = ...` ├® gerado internamente pelo motor de update, invis├¡vel no dump ÔÇö por isso o pass (que s├│ extrai colunas de WHERE literal do legado) n├úo o reconhece e acusa "inven├º├úo".
+- Remover essa cl├íusula transformaria o `UPDATE` em incondicional, atualizando **todas** as linhas de `SigAlert` a cada chamada ÔÇö uma regress├úo grave, o oposto do que o pass pretende prevenir.
+
+Nenhum arquivo foi alterado. Registrei essa 8┬¬ variante confirmada na mem├│ria `feedback_sql_filtro_inventado_lookup_outra_tabela.md` para o pass n├úo repetir a mesma acusa├º├úo em outros BOs.

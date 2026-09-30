@@ -408,6 +408,15 @@ O texto encostado na borda direita cai **dentro do TextBox**; como o label eh cr
 
 **`AutoSize = .T.` NAO resolve - eh no-op em Label criado por `AddObject`.** Medido nas duas ordens (`Caption`->`AutoSize` e `AutoSize`->`Caption`), antes e depois do `Show()` e reatribuindo o `Caption`: a `Width` fica nos **100** do default. Usar `Alignment = 0` + `Width` explicita que caiba o texto.
 
+**Pior: com `WordWrap = .T.`, `AutoSize = .T.` DESCARTA a `.Height` e CORTA o texto.** Medido no VFP9 (2026-09-25) reproduzindo a ordem real de um `ConfigurarControles`:
+
+| alvo do dump | `AutoSize = .T.` | `AutoSize = .F.` |
+|---|---|---|
+| 97x25 / 221x25 (1 linha) | OK | OK |
+| **248x48** (2 linhas) | **248x25 - `.Height = 48` descartado** | 248x48 OK |
+
+A label de 2 linhas colapsa para UMA e a segunda linha desaparece **sem erro e sem log** - na screenshot a frase so parece curta. Nao existe ordem "segura" (por `.Height` depois de `.Visible` tambem da 25). Entao: ao migrar `Say`/`Label` que declara `AutoSize = .T.` no dump, escrever **`.AutoSize = .F.`** e transcrever `Width` **E** `Height` do SCX - esses numeros JA SAO o auto-size que o Form Designer calculou, logo fixa-los eh reproducao fiel, nao desvio do PILAR 1. Vale tambem depois de trocar o `Caption` em runtime (dialogo cuja mensagem vem do chamador). Maior risco onde ninguem olha: label de aviso/rodape com `WordWrap = .T.`. Origem: Fase 8 do `FormSIGPRALE` (task582) - "Por Favor. Nao Desligue a impressora Fiscal." exibia so a 1a metade. Ferramentas: `automation\medir_autosize_label.prg`, `automation\medir_autosize_label2.prg`.
+
 A caixa larga que sobra eh inofensiva (`BackStyle = 0` nao pinta e o controle fica por cima) **desde que o label seja criado ANTES do controle** - senao a caixa transparente bloqueia o clique no campo.
 
 **O legado USA `Alignment = 1` legitimamente (884 labels nos dumps) - conferir antes de corrigir:**

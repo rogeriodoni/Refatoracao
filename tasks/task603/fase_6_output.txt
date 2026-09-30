@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files exist, so nothing to delete before the next test pass.
+
+## Summary
+
+For this FASE 6 task, the generic template ("campos restantes e lookups") didn't actually apply ÔÇö `FormSigPrEml` is an OPERACIONAL dialog with no additional TextBox fields or F4/F5 lookups; the grid, buttons, and header from phases 3-5 already cover everything in `layout.json`. The one genuine gap was the **cascata de baixa** (crOpeBaixa/laOpeBaixa), which phase 5 explicitly deferred with "fica para uma fase seguinte" ÔÇö a violation of the project's mandatory 100% functional parity rule if left uncovered.
+
+I implemented it now:
+
+- **`SigPrEmlBO.prg`**: added `this_aOpeBaixa` property; new `MontarCascataBaixa()` (builds `cursor_4c_OpeBaixa` from the array ÔÇö either finds a previously-sent "BAIXAR" alert in `SigAlert` and enriches it, or falls back to querying `SigCdAle`/`SigCdCli` with `baixas=1` and binds each row's `EmpDopNums` by matching `Dopes`); new `EnviarCascataBaixa()` (sends the complementary email and writes the `SigAlert` history with `Acaos='BAIXAR'`, called from `EnviarAlertasSelecionados` only after the main send succeeds ÔÇö mirroring the legacy's `If llOk And Used([CrOpeBaixa])`); wired `CarregarAlertas()` to call the cascade builder and fold its result into the overall success flag.
+- **`FormSigPrEml.prg`**: passes `this_aOpeBaixa` to the BO in `InicializarForm`, closes `cursor_4c_OpeBaixa` in `Destroy`, and updated the stale "not covered" comments.
+
+Both files were read in full afterward to verify IF/ENDIF/SCAN/ENDSCAN balance ÔÇö structurally sound. No stale `.fxp` files need clearing before the next compile/test phase.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is a **false positive** ÔÇö I checked the legacy source (`tasks\task594\SIGPRCOT_form_codigo_fonte.txt`, dated today) and confirmed it, so I made no changes to `SIGPRCOTBO.prg` or `FormSIGPRCOT.prg`.
+
+**Why the flag is wrong:**
+
+The legacy `SIGPRCOT.Init` does:
+```foxpro
+Select * From CrSigCdCot Into Cursor TmpCot ReadWrite   && no WHERE at all
+```
+`CrSigCdCot` is a cursor from the **parent form's** DataEnvironment (this dialog is opened modally from the Currency cadastro, `ThisParent`), and it arrives **already scoped to one moeda** ÔÇö the dialog's own caption proves it: `'Cota├º├úo do ' + Alltrim(CrSigCdMoe.cmoes)`. The filtering happens upstream in the parent, invisibly to this form's source.
+
+The migrated `SIGPRCOTBO.Buscar(par_cMoeda)` doesn't have access to that pre-filtered buffered cursor (PILAR 3 ÔÇö no shared remote-view cursors), so it queries `SigCdCot` directly and **must** add `WHERE cmoes = ...` to reproduce the same effective scope. Removing it would make a single-currency dialog load every currency's quotations ÔÇö a real regression, not a fix.
+
+The pass's reference list (`WHERE original usa: INCLUIR, CIDCHAVES`) also mixes unrelated statements: `INCLUIR` isn't a column anywhere ÔÇö it's the legacy `ThisForm.Incluir` *property* (`Recno() <> ThisForm.Incluir`), and `CIDCHAVES` comes from the separate `delete.Click` DELETE statement. That's a sign the automated extraction conflated different code blocks rather than describing one query the `cmoes` filter supposedly diverges from.
+
+I recorded this as a third variant in the existing `feedback_sql_filtro_inventado_lookup_outra_tabela` memory (filters that replicate a parent-form's pre-scoped shared cursor) so future SQL-pass runs on this or similar dialogs aren't auto-"corrected" into a real bug.

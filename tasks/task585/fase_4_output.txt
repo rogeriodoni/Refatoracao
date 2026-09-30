@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4/8 conclu├¡da
+
+Completei o `FormSigPrCar.prg` (form flat OPERACIONAL, sem PageFrame ÔÇö como j├í estabelecido nas fases anteriores) adicionando:
+
+- **`ConfigurarGrid()`** ÔÇö grid `grd_4c_Dados` com dimens├Áes exatas do SCX legado (Top=103, Left=8, Width=463, Height=411, Column1="Caracter├¡stica" 150px, Column2="Descri├º├úo" 290px), sem `ControlSource` ainda (cursor s├│ existe ap├│s `CarregarLista`).
+- **`ConfigurarBotoes()`** ÔÇö os 3 bot├Áes reais do legado (`cmd_4c_Inserir`, `cmd_4c_Excluir`, `cmd_4c_Sair`/Encerrar), n├úo os 6 gen├®ricos do template CRUD ÔÇö este popup nunca teve Visualizar/Alterar/Buscar.
+- **`AjustarVisibilidadePorModo()`** ÔÇö espelha o `llVis = InList(pcEscolha,'INSERIR','ALTERAR')` do legado, rodando depois de `TornarControlesVisiveis()` para a oculta├º├úo n├úo ser sobrescrita.
+- **`CarregarLista()`**, **`BtnInserirClick`**, **`BtnExcluirClick`**, **`BtnSairClick`** ÔÇö l├│gica transcrita do legado (inserir linha em branco, excluir com `Delete/Skip/Skip-1` para linha n├úo gravada, exclus├úo real via `BO.Excluir()` para linha j├í persistida, limpeza de linhas abandonadas ao sair).
+
+Tamb├®m ajustei `SigPrCarBO.Buscar()` para gerar `cursor_4c_Dados` como `READWRITE` (c├│pia de um cursor tempor├írio do `SQLEXEC`), porque sem isso `APPEND BLANK`/`DELETE` no grid falhariam silenciosamente ÔÇö cursor de `SQLEXEC` nasce somente-leitura.
+
+Compilei os dois arquivos no VFP9 real (`vfp9.exe`) e ambos compilaram sem erro. A l├│gica de lookup nas c├®lulas (F4/Enter abrindo busca em `SigCrRap`) fica para a Fase 6, conforme o pipeline.

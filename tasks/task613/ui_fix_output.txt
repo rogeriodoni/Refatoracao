@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö this matches the documented false-positive pattern exactly (same as sibling `FormSigPrGf1.prg`, already recorded in memory).
+
+Analysis of the 3 reported differences:
+
+1. **Form `Caption`**: SCX static value is `\` (placeholder). The legado `Init()` overrides it at runtime (`.Caption = 'Gr├ífico de Falha X Recupera├º├úo Mensal'`, line 666 of the dump) ÔÇö that's what users actually see.
+2/3. **`lblSombra`/`lblTitulo` Caption**: SCX static value is `Cadastro de Testes` (leftover template default). Legado `Init()` immediately propagates the real title afterward: `ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption` and same for `lblTitulo` (lines 692-693).
+
+The migrated `FormSigPrGf2.prg` already reproduces this runtime behavior correctly:
+- Line 152 sets `Caption` directly to the runtime value the legado computes.
+- Lines 320 and 338 (`ConfigurarCabecalho`) already do `.Caption = THIS.Caption` for both `lbl_4c_LblSombra` and `lbl_4c_LblTitulo`.
+
+All 3 "DIFERENCA" entries compare against the SCX's static/placeholder values, not the legado's actual runtime output ÔÇö they're false positives from the validator. Applying the suggested "fix" (setting captions to `\` and `Cadastro de Testes`) would introduce a real UX regression (wrong title shown to users), which is exactly what happened with the sibling `FormSigPrGf1.prg` case already logged.
+
+No changes made to `FormSigPrGf2.prg`. The remaining 26 items in the report are `AVISO` (not `DIFERENCA`) and were out of scope per your instruction to fix only the 3 differences ÔÇö they're for the `Command1`/`Command2` properties, which the validator can't resolve because those live inside `obj_4c_CmdgGrafico.Buttons(1)`/`Buttons(2)` in the migrated code (a known naming/indexing mismatch between the flat SCX dump and the CommandGroup's runtime structure), not missing properties.

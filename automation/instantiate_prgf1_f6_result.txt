@@ -1,0 +1,16 @@
+FASE6 CHECK FormSigPrGf1 - inicio 28/09/2026 23:08:16
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O W=800 H=158 Cap=[Falha X Recuperação por Mês da Empresa]
+2 DtInicial: Val=[01/09/2026] Tipo=D Fmt=[K] Mask=[99/99/9999] Align=3 Themes=.F. Tab=1 Vis=.T.
+2 DtFinal  : Val=[30/09/2026] Tipo=D Fmt=[K] Mask=[99/99/9999] Align=3 Themes=.F. Tab=2 Vis=.T.
+2a esperado legado: Ini=01/09/2026 Fim=30/09/2026
+3 handlers existem: DtInicialKeyPress=.T. DtFinalKeyPress=.T. SincronizarPeriodoComBO=.T. ValidarPeriodo=.T.
+3a pos KeyPress(13): BO.Ini=01/03/2026 BO.Fim=31/03/2026 [esperado 01/03/2026 e 31/03/2026]
+3b KeyPress de tecla comum (65='A') NAO sincroniza: BO.Ini=01/03/2026 [deve continuar 01/03/2026]
+4a periodo VALIDO (01/03 a 31/03): retorno=.T. Msg=[] [esperado .T. e msg vazia]
+4b Data Final VAZIA: retorno=.F. Msg=[Data Final Inválida!!!] [legado: 'Data Final Invalida!!!' + foco em getDtFinal]
+4c Inicial > Final: retorno=.F. Msg=[Data Inicial Maior Que a Data Final!!!] [legado: 'Data Inicial Maior Que a Data Final!!!' + foco em getDtInicial]
+4d periodo > 12 meses: retorno=.F. Msg=[Período Ultrapassa Doze Meses!!!] [legado: 'Periodo Ultrapassa Doze Meses!!!' + foco em getDtInicial]
+5 Release: VARTYPE=X [X = liberado]
+DIALOGOS SUPRIMIDOS: nenhum
+FIM 28/09/2026 23:08:16

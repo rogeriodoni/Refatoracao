@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo ├® um bug de c├│digo ÔÇö ├® a mesma falha de infraestrutura recorrente documentada na mem├│ria (77+ tasks desde 2026-08-02, agora tamb├®m task605, task606 e esta task607 pela 7┬¬ vez).
+
+**Diagn├│stico**: `06_testForm` falha na ETAPA 1B, **antes** de qualquer `CREATEOBJECT` do `Formsigpres2`/`sigpres2BO` ÔÇö o `TestFormWrapper.prg` faz um pre-flight `SQLSTRINGCONNECT` contra `192.168.200.10:1433` que j├í falha sozinho. Confirmei agora:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False | PingSucceeded: False
+```
+
+A m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server real (DB_MBAHIA). Isso n├úo tem rela├º├úo com `Formsigpres2.prg`/`sigpres2BO.prg` ÔÇö ambos os arquivos s├úo id├¬nticos aos j├í revisados nas 6 tentativas anteriores (dialogo filho com chave posicional `EmpDopNums` via `PADR`, `Show()` do `FormCTA` fora do `TRY`, guards `gb_4c_ValidandoUI` nos 3 m├®todos de grid, UPDATE parcial restrito aos campos editados) e n├úo fazem nada relacionado a conectividade.
+
+**Nenhuma edi├º├úo foi feita nos arquivos** ÔÇö reescrever c├│digo correto n├úo resolve um problema de rota de rede. Registrei essa 7┬¬ reincid├¬ncia na mem├│ria do projeto. Restam 3 tentativas antes do pipeline esgotar o or├ºamento nesta task por causa desse mesmo erro de infraestrutura; recomendo tratar C├│digo 1526 como falha de infra e n├úo consumir mais retries tentando "corrigir" c├│digo que j├í est├í certo.

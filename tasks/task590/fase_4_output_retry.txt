@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and verified.
+
+## What was actually wrong
+
+The CLI run had exited 0 and the grid/buttons were already correct. I measured each gate term individually before touching the `.prg` (my notes warn this gate family has produced five false rejections), and exactly **one** term failed:
+
+```
+temGrade  = True      temBotoes = True      temCarga  = False
+```
+
+No `CarregarLista`/`CarregarDados`/`MontaGrade` existed. This was **not** a gate false positive ÔÇö the legacy `montachq` is the form's core data-loading routine, and neither form nor BO had any equivalent. The grid was built and bound but **nothing ever populated it**, which is why every button in the prior test log reported "Nenhum cheque selecionado."
+
+## What I added
+
+- **`SigPrChrBO.CarregarCheques()`** ÔÇö the SQL from `montachq`, both branches (with/without Conta; Grupo filter optional, as in the legacy). Verified all columns against `schema.sql` read as UTF-16 per rule #14: `SigCqChi` and `SigOpFp.contads`/`emichqs` all exist. `emitidos`/`cancelas` are `bit`, so I convert them server-side with `CASE WHEN` to avoid the documented driver-dependent Logical/Numeric ambiguity.
+- **`MontaGrade()`**, **`ExibirCheques()`**, **`CriarIndicesCheques()`** (12 tags, legacy names exactly), **`BtnProcessarClick()`** + the `Processar` button with the SCX's exact geometry (no `.Picture` ÔÇö the legacy declares none, so none was invented).
+
+## Three things I measured instead of guessing
+
+1. `SEEK CHR(255)` and `SEEK <char>` against the **numeric** `NCopias` index **don't error** ÔÇö they land at EOF / "not found". So I transcribed both legacy SEEKs literally rather than "fixing" them, which keeps UX identical.
+2. `Column.SetFocus()` genuinely exists (the project's property dump only covers properties and couldn't answer it).
+3. **`ZAP` preserves index tags** and `APPEND FROM DBF()` preserves the memo field.
+
+That third point drove the one deliberate deviation: the legacy closes and recreates the cursor, but I reload via `ZAP` + `APPEND` so the grid binding survives. Re-attaching `RecordSource` would have reset `Column.Width`, `Header1.Caption`, `Sparse` and `CurrentControl` ÔÇö silently killing the Imprime checkbox. The test proves it holds: `Col10.CurCtl [CHK_4C_CHECK1] -> [CHK_4C_CHECK1]`, widths `79ÔåÆ79`, `55ÔåÆ55`.
+
+Two smaller judgment calls, both commented in-code: I **omitted** the legacy's `SET KEY TO` (provably redundant ÔÇö the query already restricts to that one Conta ÔÇö and a partial key on the compound `Contas` tag under the global `SET EXACT ON` risks a silently empty grid), and I report the load failure **once** rather than the legacy's two stacked dialogs.
+
+## Verification
+
+Both files compile with no `.err`. Since this machine has no route to `192.168.200.10`, I couldn't exercise the real query, so I tested the mechanics with a BO test-double: success path returns `.T.` with `RECCOUNT=2`; 12 tags created with the exact legacy names; `ORDER=NCOPIAS`; positional key length **23** (3+4+10+6, confirming rule #42 ÔÇö no `ALLTRIM` on the parts); inverted period warns and calls the loader **0├ù**; valid period calls it **1├ù**; and with no connection it returns `.F.` with `LockScreen` restored to `.F.` ÔÇö no frozen screen, error logged with line and procedure.
+
+Files are pure ASCII, no `MESSAGEBOX`/`ISEMPTY`/`.Self`/`Controls("name")`, no `RETURN` inside `TRY`, and no TODO/stub markers. All `.fxp`/`.err` cleaned up.
+
+Two caveats worth flagging: the **real SQL is untested against the live database** (no network route from here), and per my notes a **running `RunLoop.ps1` re-validates with the orchestrator copy parsed at its launch** ÔÇö the gate now passes on disk, but if a loop started before these edits it will still read the old file state, so this only counts from the next invocation.

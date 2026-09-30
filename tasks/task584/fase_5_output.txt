@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is all correct and consistent. The Fase 5/8 deliverable is complete.
+
+## Summary
+
+I updated `C:\4c\projeto\app\forms\operacionais\FormSigPrApr.prg` (Fase 5/8) with:
+
+1. **`ConfigurarCampos()`** ÔÇö new method adding the first half of the SIGPRAPR filter/reajuste fields, transcribed exactly from the legacy dump (positions, `Format`/`InputMask`/`MaxLength`, colors): Grupo de Produto (de/at├®), Grupo de Venda (Cole├º├úo), the `Opt_Tipo` OptionGroup (Varia├º├úo/MarkUp/C├ómbio), and every field the legacy `Opt_Tipo.InteractiveChange` toggles (Varia├º├úo/%, Incluir Custos, Moeda, MarkUp1/2, Fator de Custo + moeda do fator, and the Moeda Custo Compo./Total, Feitio, Moeda Pre├ºo Ideal/Atual group).
+2. **`OptTipoInteractiveChange()`** ÔÇö faithful transcription of the legacy `Opt_Tipo.InteractiveChange`, showing/hiding the right fields per reajuste type, bound via `BINDEVENT` and re-applied after `TornarControlesVisiveis` (which would otherwise force everything visible again).
+3. **`SincronizarFiltros()`** ÔÇö copies these new fields into the BO's `this_*` properties, wired into `BtnProcessarClick` before `BuscarProdutos()` so the filters that already exist are functionally connected, not just decorative.
+
+Fornecedor, Promo├º├úo, the remaining flags, and the "Produtos" (chkAuditado) manual-entry mode ÔÇö none of which the `Opt_Tipo` toggle touches ÔÇö are left for Fase 6, as noted in the updated file header.

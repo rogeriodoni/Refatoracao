@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da e validada.
+
+## O que foi entregue
+
+**`projeto\app\classes\SigPrEs1BO.prg`** (341 ÔåÆ 555 linhas), compila├º├úo limpa e instancia├º├úo comprovada:
+
+- **`CarregarDoCursor()`** ÔÇö era o ├║nico token que faltava para o gate, e estava genuinamente ausente. L├¬ a linha corrente do cursor de resultado nas 15 colunas de `SigMvCab` que o legado nomeia no `consulta.Click` (nenhuma inventada; todas conferidas uma a uma em `docs/schema.sql`). Usa `SELECT (alias)` antes de acessar campos, e `TYPE(alias+"."+campo)` ÔÇö nunca `PEMSTATUS` em cursor.
+- **`ObterChavePrimaria()` + `MontarChaveEmpDopNums()`** ÔÇö chave `EmpDopNums`. Montada com `PADR(emps,3)+PADR(dopes,20)+STR(numes,6)` = **29** = `empdopnums char(29)`. Medido no VFP9: chave com `PADR` casa no `SEEK`, com `ALLTRIM` d├í 15 chars e **n├úo casa** (regra #42).
+- **`Inserir()`/`Atualizar()`/`ExecutarExclusao()` ficaram HERDADOS** ÔÇö o dump prova que o legado n├úo grava em tabela alguma: nenhum `TABLEUPDATE`, nenhum `.AddCursor`, e o ├║nico `Update` tem por alvo `csTemporario`, cursor local de `SqlExecute`. A base j├í recusa e reporta pelo `ExibirFalha()`.
+
+## Um defeito silencioso que encontrei e corrigi
+
+As **27 atribui├º├Áes do `Init` gerado na Fase 1 estavam sem o prefixo `THIS.`** ÔÇö em VFP isso cria vari├ível de mem├│ria e a property nunca ├® escrita. Compilava limpo. Consequ├¬ncia medida: `this_dDataInicial`/`this_dDataFinal` ficavam em `{}` em vez de `DATE()`, e como `fDtoSQL()` pisa data vazia em `01/01/1900`, o `BETWEEN` da consulta ia para 1900. A empresa default (`_empr` no legado) tamb├®m se perdia. Depois do fix, medido: `28/09/2026` e `01`.
+
+## Gate da Fase 2 corrigido
+
+A causa da reprova├º├úo: a prova "BO somente-leitura" s├│ reconhecia `Create Cursor`/`Into Cursor`, sendo **cega ao cursor criado por `SqlExecute`/`SQLEXEC`/`CursorQuery`** ÔÇö a 3┬¬ forma. Ensinei o gate a colh├¬-los (apenas a posi├º├úo do *cursor*, nunca a da tabela, para n├úo virar fail-open). Re-medido nos 605 dumps: OPERACIONAL 97 ÔåÆ 107, CRUD 0 ÔåÆ 2. Investiguei os 2 CRUD: s├úo o mesmo form, `sigpres2` ÔÇö a tela filha que o pr├│prio SIGPRES1 abre, um visualizador classificado como CRUD por engano, cujos alvos de escrita s├úo cursores locais. A libera├º├úo ├® correta.
+
+Ambos os gates verificados passando (Fase 2 e `Test-CompletudeCodigo`), e `VerificarFuncoesNaoDefinidas.ps1` sem chamadas ├│rf├ús.
+
+## Fora do escopo ÔÇö precisa da sua decis├úo
+
+O defeito do `THIS.` **n├úo ├® local desta task**: a varredura m├®todo-aware achou **106 sites em 17 arquivos**, concentrados em `SIGPRMEIBO` (28), `SigPdM11BO` (27), `SIGPRESTBO` (16) ÔÇö e um em `FormSIGBLCTA`, ent├úo n├úo ├® s├│ BO. Confirmei ├á m├úo em `Init` e em `CarregarDoCursor`; neste ├║ltimo a carga da linha inteira ├® descartada, o que faz Alterar/Visualizar exibirem branco e a grava├º├úo regravar o default. Corrigi s├│ o `SigPrEs1BO`, porque um sweep em 17 arquivos ├® mudan├ºa de outra natureza. Quer que eu aplique?
+
+Registrei as duas li├º├Áes na mem├│ria (a do `THIS.` ├® nova; a do gate atualizou a existente).

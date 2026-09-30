@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da.
+
+## Situa├º├úo encontrada
+
+Os campos que a Fase 5 pede **j├í estavam todos no arquivo** ÔÇö as Fases 3/4 corretamente front-carregaram a superf├¡cie visual inteira, porque `SIGPRDFT` ├® um di├ílogo modal SiTef sem PageFrame, sem grade e sem CRUD (ramo CAPTURA do gate). Conferi os 19 objetos visuais do dump um a um: todos presentes, geometria id├¬ntica.
+
+A tentativa anterior (sonnet) parou a├¡ e n├úo tocou no arquivo ÔÇö caiu no guard NO-OP do orquestrador (`Erro178`), que ├® o motivo deste retry.
+
+Em vez de reescrever o que j├í existia, auditei propriedade por propriedade contra o dump e achei **tr├¬s lacunas reais nos campos**. As tr├¬s foram medidas no VFP9, n├úo deduzidas.
+
+## O que estava errado
+
+**1. `TabIndex` nunca foi transcrito** ÔÇö o defeito de verdade. Com `AddObject`, o VFP numera pela ordem de cria├º├úo:
+
+| | sequ├¬ncia |
+|---|---|
+| migrado (ordem de cria├º├úo) | Valor ÔåÆ D├¡gitos ÔåÆ Cart├úo ÔåÆ Vencimento ÔåÆ Tipo de Venda ÔåÆ Parcelas ÔåÆ Cancelar |
+| SCX legado | GetValor(1) ÔåÆ GetCartao(2) ÔåÆ GetDigitos(3) ÔåÆ Optiongroup1(5) ÔåÆ Text1(6) ÔåÆ GetDatas(7) ÔåÆ SAIDA(8) |
+
+N├úo ├® cosm├®tico: `Text1.LostFocus` faz `getDatas.Enabled = .t.` e o `KeyPress` do `Optiongroup1` faz `KEYBOARD '{TAB}'` ÔÇö o legado conta com o Tab saindo de "N┬║ PARCELAS" para "1┬¬ PARCELA/VENCTO". Na ordem de cria├º├úo o Tab pulava direto para o bot├úo Cancelar, e o campo de vencimento rec├®m-habilitado s├│ era alcan├ºado dando a volta no form.
+
+**2. `obj_4c_SAIDA` sem `.BackStyle = 0`** ÔÇö o SCX declara. Medi: **`CommandGroup` TEM `BackStyle`**; `CommandButton` n├úo (a regra do prompt vale para o bot├úo, n├úo para o grupo). Sem a linha o grupo nasce opaco e pinta um ret├óngulo branco sobre a faixa cinza do cabe├ºalho.
+
+**3. `lbl_4c_Titulo.ToolTipText`** ausente ÔÇö transcrito com `CHR()`.
+
+## Como foi consertado
+
+M├®todo novo `ConfigurarOrdemTabulacao()`, chamado no fim de `ConfigurarPageFrame()`. Medi que `TabIndex` **├® grav├ível em runtime** e que atribuir em ordem ascendente p├Áe cada controle na posi├º├úo pedida. Numerei **s├│ os focaliz├íveis**: `Label` tem `TabIndex` mas **n├úo tem `TabStop`** (medido) ÔÇö n├úo recebe foco, ent├úo transcrever o TabIndex dos 6 labels seria inerte e embaralharia a sequ├¬ncia dos que de fato param o Tab. O SCX ainda traz TabIndex duplicado (v├írios 5 e 6), imposs├¡vel de reproduzir literalmente e desnecess├írio: entre os focaliz├íveis n├úo h├í empate.
+
+## Verifica├º├Áes
+
+| Item | Resultado |
+|---|---|
+| Compila├º├úo BO + Form no VFP9 | `.fxp` gerados, nenhum `.err` |
+| Instancia├º├úo real (`CREATEOBJECT`) | `OK W=500 H=370`, sem exception, sem di├ílogo |
+| `TabIndex` medido ap├│s o fix | **1ÔåÆ7 exatamente na ordem do legado**; labels/containers em 8..15 |
+| `obj_4c_SAIDA.BackStyle` | `0` (legado: 0) |
+| `VerificarPropriedadesInexistentes` (projeto todo) | OK |
+| `VerificarFuncoesNaoDefinidas` | OK, nenhuma chamada ├│rf├ú |
+| `PROCEDURE`/`ENDPROC`, `WITH`/`ENDWITH`, `TRY`/`ENDTRY` | 9/9, 22/22, 1/1 |
+| Acentos literais / `PUBLIC` em `DEFINE CLASS` / `RETURN` em TRY | nenhum |
+| Gate Fase 5 (ramo CAPTURA) | **True** ÔÇö 5 campos migrados contra piso de 3 |
+
+`.fxp` apagados ao final, para as fases seguintes n├úo rodarem c├│digo velho.
+
+## Pontos de aten├º├úo
+
+- **Meu primeiro probe travou** o VFP9: `ConfigurarAmbiente()` conecta em `192.168.200.10`, inalcan├º├ível nesta m├íquina. Refeito carregando s├│ `config.prg` com `gnConnHandle = -1`. J├í havia mem├│ria sobre isso.
+- **O detector de ordem de foco que escrevi mentiu** na primeira vers├úo: filtrei por `TabStop`, e `OptionGroup`/`CommandGroup` n├úo t├¬m essa property (o foco vai ao membro), ent├úo eles sumiram da lista. A tabela de `TabIndex` ├® a fonte correta ÔÇö registrei isso na mem├│ria, junto das outras entradas de "a pr├│pria auditoria mede errado".
+- Registrei a li├º├úo na mem├│ria do projeto. **N├úo** propaguei para `CLAUDE.md`/`OrquestradorMigracao.ps1`: mexer em artefato do pipeline no meio de um run n├úo vale para o pr├│prio run (o PowerShell n├úo recarrega o `.ps1`), e isso est├í fora do escopo da Fase 5. Vale como candidato a `/propagate-lesson` depois que a task fechar ÔÇö pelo que medi, o `TabIndex` descartado provavelmente atinge muitos outros forms migrados.

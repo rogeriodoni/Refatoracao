@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\operacionais\Formsigprdft.prg` com a estrutura base.
+
+Decis├úo importante: o prompt gen├®rico da fase pedia um PageFrame com Page1(Lista)/Page2(Dados), mas o `layout.json`/`mapeamento.json` do task599 mostram que SIGPRDFT ├® um form OPERACIONAL de raiz `Class: form` **sem nenhum PageFrame no legado** (├® um di├ílogo modal de captura de pagamento TEF, sem grid ÔÇö confirmado em `analise.json`: `temGrid: false`). Inventar um PageFrame Lista/Dados violaria o PILAR 1 e o pr├│prio memory j├í documenta esse gate (`feedback_gate_fase3_exige_pageframe_inexistente`). Segui o padr├úo j├í validado em `FormICD.prg` (outro form OPERACIONAL flat) em vez disso.
+
+O que entrou nesta fase:
+- `DEFINE CLASS Formsigprdft AS FormBase` com propriedades visuais exatas do SCX legado (Width=500, Height=370, BorderStyle=2, TitleBar=0, ControlBox=.F., etc.)
+- `Init()` com Caption via `CHR()` ("Sitef - Cart" + CHR(227) + "o de D" + CHR(233) + "bito") e guard de modal para n├úo travar em modo de teste
+- `InicializarForm()` criando o `sigprdftBO` e chamando `ConfigurarPageFrame()`
+- `ConfigurarPageFrame()` ÔåÆ `ConfigurarCabecalho()` (migra `cntSombra`/`lblSombra`/`lblTitulo` do legado)
+- `TornarControlesVisiveis()` (necess├írio para o cabe├ºalho aparecer, j├í que `AddObject` cria com `Visible=.F.`)
+- `Destroy()` liberando o BO e o cursor `crSiTef`
+
+Campos (GetValor/GetDigitos/GetCartao/Optiongroup1/GetDatas), o container `SAIDA` e os eventos ficam para as fases 4-8, como instru├¡do.
+
+Validei compilando com VFP9 (`COMPILE` limpo, sem `.err`) e instanciando o form via probe headless (`gb_4c_ModoTeste`, sem `ConfigurarAmbiente()` ÔÇö que trava nesta m├íquina): form abre com BO criado, cabe├ºalho vis├¡vel e caption correto.

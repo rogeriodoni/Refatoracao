@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í defeito de c├│digo aqui ÔÇö este ├® o mesmo problema recorrente de infraestrutura documentado em mem├│ria h├í semanas (100+ tasks desde 2026-08-02).
+
+**Diagn├│stico**: o log mostra a falha ocorrendo na **ETAPA 1B** do `TestFormWrapper.prg`, dentro do pr├│prio `SQLSTRINGCONNECT` ÔÇö **antes** de qualquer `CREATEOBJECT("FormSigPrEtq")` ou `CREATEOBJECT("SigPrEtqBO")`. O form e o BO nunca chegam a ser instanciados. Confirmei agora mesmo:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False
+PingSucceeded:    False
+```
+
+A m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24`, ent├úo o SQL Server `DB_MBAHIA` fica inalcan├º├ível ÔÇö da├¡ o erro 1526 "SQL Server inexistente ou acesso negado".
+
+Revisei `FormSigPrEtq.prg` e `SigPrEtqBO.prg` por inteiro (7┬¬ vez nesta mesma task609) e o conte├║do ├® id├¬ntico ao j├í validado nas tentativas anteriores: `CriarCursorDados()` roda antes do `ControlSource` da grade (regra #41), a chave posicional `EmpDopNums` usa `PADR` nas partes (regra #42/Erro177), `BOParaForm`/`FormParaBO` sim├®tricos, handlers `BINDEVENT` p├║blicos com os par├ómetros do evento, `HabilitarCampos` nunca mexe em `THIS.Enabled`, `OptionGroup.Value` sempre com guard `BETWEEN`. Nenhum defeito de c├│digo.
+
+**N├úo editei os arquivos** ÔÇö corrigir c├│digo que n├úo ├® a causa do erro violaria a regra do CLAUDE.md de nunca alterar l├│gica al├®m do necess├írio, e arriscaria introduzir regress├Áes num form j├í correto. Registrei a reincid├¬ncia (tentativa 7/10) na mem├│ria do projeto. Restam 3 tentativas antes do pipeline esgotar o or├ºamento desta task por causa deste erro de rede ÔÇö o bloqueio real est├í na conectividade da m├íquina do pipeline com `192.168.200.10:1433`, n├úo no c├│digo migrado.

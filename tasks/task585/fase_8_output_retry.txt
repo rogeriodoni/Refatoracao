@@ -1,0 +1,53 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+A Fase 8 j├í estava completa. N├úo alterei o form ÔÇö a reprova├º├úo n├úo era defeito de c├│digo.
+
+## O que a reprova├º├úo era, de fato
+
+`RunLoop.ps1` invoca `& OrquestradorMigracao.ps1` **uma vez por SCX**, e o PowerShell parseia o script inteiro nessa invoca├º├úo. **Editar o `.ps1` no meio da execu├º├úo n├úo recarrega as fun├º├Áes.**
+
+Cronologia da task585:
+
+| hora | evento |
+|---|---|
+| ~05:41 | orquestrador inicia e parseia o `.ps1` (vers├úo de HEAD, sem ramo `linha-imediata`) |
+| 08:07:45 | a pr├│pria Fase 8 grava o ramo `linha-imediata` no `.ps1` |
+| 08:25:20 | valida├º├úo roda com o gate **velho em mem├│ria** ÔåÆ reprova |
+
+Provei rodando os dois gates standalone contra o form atual:
+
+```
+gate de HEAD (o que estava em mem├│ria) ÔåÆ VALIDADO = False
+   "faltam metodos finais: BtnCancelarClick, BtnSalvarClick (ou ...)"
+gate de disco (p├│s-08:07)              ÔåÆ VALIDADO = True
+   "Form COMPLETO com todos os metodos (66.83 KB)"
+```
+
+Os dois m├®todos exigidos s├úo exatamente os que o legado **n├úo tem** ÔÇö `SIGPRCAR` tem tr├¬s bot├Áes: `cmdInserir`, `cmdExcluir`, `cmdSair` ("Encerrar"). Adicion├í-los violaria o PILAR 1 / "NUNCA inventar", ou criaria stubs vazios proibidos pela regra de completude. Por isso n├úo mexi no form.
+
+## Verifica├º├úo independente do entreg├ível
+
+- **Compila limpo** com `.fxp` apagado antes (regra do FXP velho): BO e Form, `.err` nenhum, FXP recriado.
+- **`Test-CompletudeCodigo`**: OK nos dois ÔÇö nenhum TODO/stub/procedure vazia.
+- **Instancia de verdade** (`CREATEOBJECT("FormSigPrCar", .NULL., "PROD000001", "ALTERAR")`): `BaseClass=Form`, Caption com acentos, **480x540** batendo com o `layout.json` do legado, `DataSession=2`.
+- Os 8 m├®todos da fase existem; `CarregarLista()` e `HabilitarCampos(.T./.F.)` executam sem erro.
+- `FormParaBO` chamado de fora ÔåÆ `Property FORMPARABO is not found`, ou seja o `PROTECTED` do `FormBase` est├í sendo respeitado como a regra manda.
+- ├Ünico erro no log ├® `Connection handle is invalid` do harness sem SQL Server ÔÇö capturado no arquivo de modo teste, sem modal.
+- Os 16 nomes do `FormSigPrCar_mapeamento.json` todos existem no `.prg`.
+
+## O ramo de gate herdado ├® apertado
+
+Medi nos 584 dumps de `tasks\`: **28** satisfazem as provas de dump, mas s├│ **4** conseguem ativar o ramo ÔÇö e os 4 s├úo o *mesmo* form (`SigPrCar` nas tasks 157/234/260/585). Os outros 24 s├úo barrados pelo `FormType` ou pela exig├¬ncia de superf├¡cie entregue (`BtnInserirClick` + `BtnExcluirClick` + `Salvar`/`Excluir` no BO + os dois hooks). Confirma de forma independente o "delta = 1 form" que a execu├º├úo anterior afirmou.
+
+## O que voc├¬ precisa saber
+
+**Este retry n├úo pode fazer a task585 passar.** O processo do orquestrador (PID 8692 / 10620, iniciados em 25/09 16:29) ainda tem o gate velho em mem├│ria ÔÇö nenhuma edi├º├úo minha muda isso. O conserto s├│ passa a valer na **pr├│xima task**, quando o `.ps1` for parseado de novo.
+
+Como a task585 seguir├í marcada como falha apesar de os artefatos estarem corretos, a decis├úo ├® sua: reprocessar a task585 num orquestrador novo (que j├í leria o gate corrigido), ou aceitar o estado atual e deixar o pipeline seguir. N├úo reiniciei nada por conta pr├│pria.
+
+Gravei isso na mem├│ria (`feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma.md`) ÔÇö o projeto conserta gate dentro da pr├│pria fase nas Fases 3 a 8, ent├úo isso vai reincidir, e a rea├º├úo errada ├® mexer no form.
+
+Dois pontos pendentes que a execu├º├úo anterior deixou de fora de prop├│sito e continuam valendo: n├úo h├í caminho pela UI at├® este di├ílogo (o bot├úo `cmdCaracts` n├úo existe no `FormProduto` migrado, mesma lacuna do `Formsigprtam`), e o form migrado **grava na hora** enquanto no legado quem persistia era o `TABLEUPDATE` do form pai ÔÇö incluir uma caracter├¡stica e depois cancelar a altera├º├úo do produto deixa a caracter├¡stica gravada.

@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. `Formsigprftp.prg` compila limpo (`COMPILE_OK`) e passa no gate.
+
+**Por que a tentativa anterior foi reprovada** ÔÇö n├úo foi falta de trabalho: os campos da metade "Local" j├í estavam l├í. O gate da Fase 5 tem 6 ramos, e este form n├úo cabia em nenhum:
+
+| ramo | por que n├úo passava |
+|---|---|
+| PAGINADO | exige a string `ConfigurarPaginaDados` ÔÇö o m├®todo chamava-se `ConfigurarControlesLocal` |
+| FLAT | exige **aus├¬ncia** de `AddObject("pgf_4c_` ÔÇö o form cria `pgf_4c_Loc`/`pgf_4c_Ftp` |
+| DESPACHANTE / EXIBICAO / CAPTURA | o dump legado tem `BaseClass: pageframe` e `listbox` |
+| ARVORE | exige `OLEControl` |
+
+O form **tem** superf├¡cie paginada de dados, ent├úo o ramo PAGINADO ├® o correto ÔÇö faltava s├│ o ponto de entrada can├┤nico. Como o PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo (mexer no orquestrador n├úo valeria para esta corrida), a corre├º├úo foi no `.prg`.
+
+**O que fiz**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö novo ponto de entrada dos controles de dados das p├íginas, chamado pelo `InicializarForm`. Delega a cria├º├úo dos controles a `ConfigurarControlesLocal()` e concentra o *guard* de disponibilidade transcrito do `Init` legado. A Fase 6 s├│ precisa acrescentar a chamada da metade FTP aqui.
+
+2. **Corrigi um defeito real de comportamento que a tentativa anterior introduziu.** Ela documentou os `zorder` do legado como "sem equivalente, porque os dois PageFrames ficam lado a lado" ÔÇö leitura errada. `pgfloc.Page1.Activate` faz `This.Parent.Parent.pgfftp.Page1.zorder`: ├® **sincroniza├º├úo entre os dois PageFrames**, que mostram origem e destino da *mesma* opera├º├úo (escolher "A Enviar" no lado Local tem de trazer "Enviados" no lado FTP). `Page.ZOrder` traz a p├ígina ├á frente, ou seja, **seleciona** a p├ígina ÔÇö o equivalente ├® `<pageframe>.ActivePage = N`. Os dois `Activate` agora sincronizam, com guarda `<> N` para o `Activate` rec├¡proco n├úo re-disparar. O mesmo vale no *guard* do `Init` (`.pgfloc.Page2.zOrder` depois de desabilitar a Page1): a navega├º├úo ├® levada para a p├ígina do sentido que continua v├ílido.
+
+**Verifica├º├Áes:** `WITH/ENDWITH` 25/25, `PROCEDURE/ENDPROC` 30/30, `FUNCTION/ENDFUNC` 2/2, `IF/ENDIF` 50/50, `TRY/ENDTRY` 1/1, `DO CASE/ENDCASE` 5/5; arquivo 100% ASCII, sem BOM (acentos por `CHR()`); `.fxp` apagado antes de compilar. Scripts tempor├írios removidos.
+
+**Pendente para a Fase 6** (conforme o split da fase): `pgf_4c_Ftp` (Page1 "Enviados" / Page2 "A Receber" ÔÇö ListBox/TextBox/bot├úo "...") e o `CboProvedor`.

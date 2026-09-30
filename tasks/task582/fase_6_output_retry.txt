@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da.
+
+## O que estava errado
+
+O `.prg` **j├í estava correto e completo**. O que reprovava era o **gate da Fase 6**.
+
+`SIGPRALE.SCX` ├® um di├ílogo passivo de "Aguarde..." (419x115, `TitleBar=0`, `AlwaysOnTop=.T.`): s├│ `Image` + 3 `Label` penduradas direto na Form, e um ├║nico `Init` de 4 par├ómetros. **Zero campo, zero lookup, zero grade, zero bot├úo.** Nenhum dos cinco ramos do `case 6` alcan├ºava esse form, e o ramo DESPACHANTE ÔÇö o ├║nico aplic├ível ÔÇö falhava numa condi├º├úo s├│: exigia literalmente `ConfigurarPageFrame`, que um legado flat-sem-container n├úo tem. Passar exigiria inventar um PageFrame (viola o PILAR 1) ou escrever m├®todo vazio (stub disfar├ºado).
+
+├ë a **quinta** vez que a mesma previs├úo se cumpre: exce├º├úo de layout criada numa fase n├úo se propaga para as vizinhas. As Fases 3, 4 e 5 j├í tinham esse carve-out ÔÇö a 6 ficou para tr├ís.
+
+## Corre├º├úo
+
+`automation/OrquestradorMigracao.ps1`, ramo despachante da Fase 6: `$temEstruturaSemPageFrameF6`, OR-ado com o `ConfigurarPageFrame` original ÔÇö c├│pia literal do crit├®rio que as Fases 4 e 5 j├í usam (`DEFINE CLASS ... AS FormBase` + `InicializarForm` + BO instanciado, sem `AddObject("pgf_4c_`). Fail-closed preservado.
+
+## Medi├º├úo
+
+- **541 forms** avaliados: 4 flips, mas os quatro s├úo o **mesmo legado** (SIGPRALE remigrado em task154/233/257/582) ÔÇö **1 form distinto, zero regress├úo**.
+- **8 controles negativos** confirmados: `FormType=CRUD`, dump ausente, dump com `textbox`, com `grid`, com `fwBuscaExt`, migrado sem instanciar o BO, e legado com `commandbutton` ÔÇö todos reprovam.
+- Form e BO **compilam limpo** no VFP9 (`.fxp` apagado antes, recriado depois) e **instanciam**: sem par├ómetro as 3 Captions do SCX sobrevivem e a Imagem fica oculta; com `("", "Processando...", "Etapa 2")` as 3 s├úo substitu├¡das, a 3┬¬ fica vazia e a Imagem fica vis├¡vel ÔÇö presen├ºa, n├úo conte├║do, igual ao `Iif(Type('_msg3')='C',_msg3,'')` do legado.
+
+Um dos controles negativos passou no primeiro ensaio e o defeito era do meu harness, n├úo do gate: `-replace '(?m)^...image$'` n├úo casa com CRLF (`$` ancora antes do `\n`, e ali h├í `\r`), ent├úo o textbox nunca foi injetado. Corrigido com `.Replace()` literal.
+
+## Fica fora do escopo, mas vai bloquear a seguir
+
+**A Fase 7 vai reprovar este mesmo form**, e o veredito est├í **correto por design**: com `nBotoesLegado = 0` o piso de 2 handlers `Cmd*/Btn*Click` ├® mantido de prop├│sito, porque zero bot├Áes declarados ├® *aus├¬ncia de prova* nos 152 forms REPORT, que herdam os 4 bot├Áes do `frmrelatorio` sem declar├í-los no SCX. Afrouxar o piso liberaria todos eles em massa ÔÇö por isso n├úo mexi. SIGPRALE ├® um caso leg├¡timo de zero bot├Áes de verdade; registrei na mem├│ria qual prova extra seria necess├íria (`FormType=OPERACIONAL` + `Class: form` puro + nenhum `.Click` no dump) caso valha a pena cobrir depois.
+
+N├úo commitei ÔÇö o working tree j├í tinha outras corre├º├Áes de gate n├úo commitadas de sess├Áes anteriores.

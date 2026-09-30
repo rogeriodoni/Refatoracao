@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced (WITH/ENDWITH=12, IF/ENDIF=10, FOR/ENDFOR=2, TRY/ENDTRY=1, PROCEDURE/ENDPROC=11, DEFINE CLASS/ENDDEFINE=1).
+
+Fase 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSigPrGlo.prg` com a estrutura base do form OPERACIONAL (sem PageFrame Lista/Dados, j├í que o legado SIGPRGLO ├® uma tela de par├ómetros flat ÔÇö segui o precedente j├í existente em `FormSigPrGloT.prg`, que ├® praticamente irm├úo deste form e j├í passou pelas fases anteriores). O arquivo cont├®m:
+
+- `DEFINE CLASS FormSigPrGlo AS FormBase` com as flags de modo (`this_lReserva`/`this_lAutomatico`/`this_lPorDestino`/`this_lGerPorTp`) espelhando o `SigPrGloBO` j├í criado nas Fases 1-2.
+- `Init(par_lReserva, par_lAutom, par_lPorDestino, par_pTipo)` e `Destroy()`.
+- `InicializarForm()` que cria o `SigPrGloBO`, repassa as flags, resolve o `Caption` din├ómico (normal / Reserva Autom├ítica / por Tipo) e monta a estrutura visual base.
+- `ConfigurarPageFrame()` (fundo), `ConfigurarCabecalho()` (faixa cinza + t├¡tulo), `ConfigurarShape()` (Shape3 decorativo).
+- `ConfigurarContainers()` criando **vazios** os 7 containers de agrupamento (`cnt_4c_Container1`, `cnt_4c_Operacao`, `cnt_4c_Conta`, `cnt_4c_Responsavel`, `cnt_4c_Empresa`, `cnt_4c_Previsao`, `cnt_4c_Op`), nas posi├º├Áes exatas do `layout.json` do legado.
+- `TornarControlesVisiveis()` recursivo.
+
+Deixei de fora (pr├│ximas fases, como instru├¡do): bot├Áes Processar/Cancelar, campos internos dos containers (TextBoxes/labels/checkbox) e todos os eventos/BINDEVENT.

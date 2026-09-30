@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í conclu├¡da e verificada.
+
+## O que foi feito
+
+O template da Fase 7 pede `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **O SIGPRCCP legado n├úo tem CRUD nenhum** ÔÇö ├® uma ferramenta de lote ("Rec├ílculo de Pre├ºos"): sem `frmcadastro`, sem `Grupo_Op`, sem `pcEscolha`, sem bot├úo CRUD (a ├║nica ocorr├¬ncia no dump ├® o *├¡cone* `cadastro_excluir_26.jpg`, que o pr├│prio gate j├í trata como n├úo-prova). Inventar esses 4 eventos violaria o PILAR 1. Os eventos reais s├úo os 6 bot├Áes do legado, e eles tinham **lacunas de comportamento** ÔÇö foi isso que corrigi.
+
+**`Formsigprccp.prg`** (2622 ÔåÆ 3122 linhas)
+- **`BtnProcessarClick`**: faltava o ramo `If Thisform.Automatico` e o **filtro de Varia├º├úo (%)**. O campo existia na tela, alimentava o BO e **n├úo filtrava nada** ÔÇö extra├¡ `AplicarFiltroVariacao()` transcrevendo o sinal do legado (positivo descarta `pvarias` MENOR; negativo, MAIOR).
+- **`AtualizarPrecos`** (novo, substituindo o `BtnAtualizarClick` simplificado): transcri├º├úo do `PROCEDURE atualizar` legado ÔÇö confirma├º├úo de etiquetas ÔåÆ `impetiqs`, barra de progresso, hist├│rico em `SigCdPrc` e `SigPrCp2`, expurgo de `SigPrPrt`, reclassifica├º├úo de subgrupo por faixa (`SigCdPsg`, quando `SigCdPaC.nchksubgrs = 1`), transa├º├úo com commit/rollback, zap da grade. Antes gravava s├│ 7 colunas de `SigCdPro` e **nenhum hist├│rico**.
+- **`ProcessaAutomatico`** (novo): o lote sobre os presets de `SigCdCcp`. `this_lAutomatico` era recebido e guardado, mas **nada o consumia** ÔÇö o modo autom├ítico n├úo fazia nada.
+- `SET SAFETY OFF` + `SET DELETED ON` em `InicializarForm`: `DataSession = 2` nasce com os dois no default, ent├úo o `ZAP` congelaria a tela e o `DELETE` do filtro n├úo sumiria da grade.
+
+**`sigprccpBO.prg`** (324 ÔåÆ 783 linhas): `BuscarPresetsAutomaticos`, `ObterChkSubGrupos`, `ResolverSubGrupoPorFaixa`, `GravarHistoricoPreco`, `GravarHistoricoComposicao`, `ExcluirPrecosTabela`, trio de transa├º├úo; `Atualizar()` passou a gravar `impetiqs`/`sgrus`. Corrigi tamb├®m `TratarNulo(col, "C"/"N")` ÔåÆ valor padr├úo real (com coluna NULL, o `"N"` poria uma *string* em property `this_n*`).
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (`.fxp` apagados antes, timestamps conferidos) e harness novo `automation\vfp_helpers\test_fase7_sigprccp.prg` ÔåÆ **Status: SUCESSO (0 falhas)**: form instancia, 12 m├®todos de evento alcan├º├íveis de fora da classe, `SAFETY=OFF`/`DELETED=ON` na datasession privada, e os 3 cen├írios de sinal do filtro de Varia├º├úo. `ValidadorSQLSchema` passou (683 tabelas, 14 statements); auditores de fun├º├úo ├│rf├ú e de propriedade inexistente, limpos. O INSERT de hist├│rico confere 141 = 141 colunas.
+
+Duas diverg├¬ncias deliberadas, documentadas em coment├írio: o `This.Enabled = .F.` final do legado ├® m├®todo **do form** ÔÇö medido no VFP9, `Form.Enabled = .F.` trancaria esta tela modal (`ControlBox = .F.`, `Closable = .F.`) sem sa├¡da; o alvo pretendido ├® o bot├úo Atualizar, como prova o `Processa.Click` reabilitando exatamente ele.
+
+## O que deixei de fora, e por qu├¬
+
+O **motor de rec├ílculo** (`PROCEDURE processar`, linhas 2212ÔÇô3229 do dump, ~1017 linhas: convers├úo de moeda via `fCarregarCambio`, custeio ponderado de composi├º├úo, os 8 modos de `Opc_Recalc`, faixas de markup por Feitio) continua n├úo implementado ÔÇö `BuscarProdutosFiltrados` **lista** os produtos filtrados no pre├ºo atual, sem recalcular. N├úo ├® evento de bot├úo e sim regra de neg├│cio de BO; transcrever essa massa de aritm├®tica sem um passe dedicado ├® exatamente o risco da regra #17 (grava valor errado sem erro na tela). **Consequ├¬ncia pr├ítica hoje**: Processar mostra a lista, e Atualizar grava de volta os mesmos valores ÔÇö com hist├│rico correto, mas sem reajuste. Recomendo isso como tarefa pr├│pria antes de liberar a tela para uso.

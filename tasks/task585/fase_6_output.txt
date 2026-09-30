@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, already confirmed earlier that `AbrirLookupCanonico` exists in FormBase.prg (lines 393+). The implementation is complete and consistent with the existing Column1 pattern.
+
+## Summary
+
+Reviewed the existing FormSigPrCar.prg/SigPrCarBO.prg from prior phases and found they were already largely complete (grid, buttons, cabe├ºalho, BO CRUD with Buscar/Inserir/Atualizar/ExecutarExclusao). The one genuine gap for Phase 6 was the **Descri├º├úo column's lookup**: the legacy `Column2.Text1.Valid` lets the user search a characteristic by typing its *description* (not just its code), with a `When` gate that only allows editing Descri├º├úo while C├│digo is empty for that row.
+
+Changes made to `FormSigPrCar.prg`:
+- Documented the deliberate non-port of `Load (=fConfigGeral())`, matching the established convention from `FormSigMvExp.prg`.
+- Added `GrdColumn2GotFocus`/`GrdColumn2KeyPress` handlers (BINDEVENT-registered), mirroring the Column1 pattern, including the per-row "Descri├º├úo editable only if C├│digo is empty" gate (implemented by redirecting focus back to Column1, since `Column.ReadOnly` can't vary per cell).
+- Generalized `ValidarSelecaoCaracteristica` to accept a `par_cCampoBusca` parameter ("codigos" or "descrs"), so the exact-match query searches by whichever field the user typed into, while reusing the same duplicate-check and `AbrirLookupCanonico` fallback logic for both paths.
+- Set `Column2.ReadOnly` alongside `Column1.ReadOnly` in `AjustarVisibilidadePorModo`.
+
+No stubs/TODOs left; both lookup paths from the legacy form are now fully implemented.

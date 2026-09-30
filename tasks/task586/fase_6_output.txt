@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormSigPrCcc.prg (Fase 6/8) is complete and compiles cleanly in VFP9. Summary of what was added:
+
+- **OpCusto and OpCompra field containers** ÔÇö mirrored the OpEstoque pattern (Empresa/Data/Produto/Descricao), transcribed exactly from `layout.json`/`mapeamento.json`, wired into `InicializarForm()`.
+- **Complete lookups for all 4 containers**, via `THIS.AbrirLookupCanonico` (the safer Pattern A helper already on `FormBase`) rather than the banned `CREATEOBJECT("FormBuscaAuxiliar", conn, tabela, ...)` Pattern B:
+  - Empresa ÔåÆ `SigCdEmp` (Cemps/Razas), ├ù4 containers
+  - Produto/Descricao ÔåÆ `SigCdPro` (CPros/DPros), bidirectional, ├ù3 containers
+  - Grupo ÔåÆ `SigCdGcr` (Codigos/Descrs), and Conta/Estoque ÔåÆ `SigCdCli` (IClis/RClis) filtered by Grupo ÔÇö these replace the legacy `fAcessoContab`/`fAcessoContas` calls, which per project memory are banned as UI lookup handlers (auto-populate-on-partial-match bug)
+  - Moeda ÔåÆ `SigCdMoe` (Cmoes/Dmoes)
+- Every field got both **KeyPress** (Enter/Tab does an exact-match check first, F4 always opens the picker) and **DblClick** (always opens) handlers ÔÇö 30 PUBLIC handler procedures in total, none stubbed.
+- Verified compilation with the real `vfp9.exe` ÔÇö no errors.
+
+Not yet done (explicitly deferred, per the file's own header comment): `cmd_4c_Processa.Click` (the 556-line SQL/recalculation logic) is scheduled for a later phase, matching the task's phased plan.

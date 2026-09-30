@@ -1,0 +1,12 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da. Criei `C:\4c\projeto\app\classes\SIGPRALEBO.prg` com:
+
+- `DEFINE CLASS SIGPRALEBO AS BusinessBase`
+- Propriedades espelhando os par├ómetros do `Init` legado (`_BitMap, _Msg1, _msg2, _msg3`): `this_cBitmap`, `this_cMensagem1`, `this_cMensagem2`, `this_cMensagem3`
+- `Init()` que zera `this_cTabela`/`this_cCampoChave` (SIGPRALE ├® um di├ílogo de aguarde sem tabela no banco, confirmado por `analise.json` com `tabela: ""`) e chama `DODEFAULT()`
+
+Pr├│xima fase (2/8) vai completar o BO com `CarregarDoCursor()`/l├│gica de neg├│cio, se aplic├ível ÔÇö aguardando o disparo da pr├│xima etapa do pipeline multi-fase.

@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e verificada medindo no VFP9.
+
+## O que a fase realmente exigia
+
+O prompt pedia `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **O SIGPRCCC n├úo tem CRUD** ÔÇö ├® `Class: form` puro (n├úo `frmcadastro`), sem `Grupo_Op` e sem nenhum bot├úo desses. Cri├í-los violaria o PILAR 1. ├ë o caso de falso positivo do gate da Fase 7 que j├í est├í na mem├│ria.
+
+O evento principal que de fato faltava era outro: **`cmd_4c_Processa` n├úo tinha handler nem BINDEVENT** ÔÇö as 556 linhas do `Processa.Click` nunca foram migradas. O pr├│prio cabe├ºalho do arquivo dizia "fica para fase posterior". Foi isso que implementei.
+
+## Entregue
+
+**Form** (`FormSigPrCcc.prg`): `CmdProcessaClick` (trava a tela ÔåÆ roda as 4 frentes marcadas na ordem do legado ÔåÆ destrava **sempre** ÔåÆ "Processamento Conclu├¡do"), `HabilitarControlesProcessamento`, `FormParaBO` (PROTECTED expl├¡cito ÔÇö `FormBase` o declara assim e VFP9 n├úo deixa alargar escopo), `AtualizarContadorRegistros` (PUBLIC, chamado de fora pelo BO), e o BINDEVENT do Processar.
+
+**BO** (`SigPrCccBO.prg`): as 4 frentes com o SQL ÔÇö `RecalcularContaCorrente`, `RecalcularEstoque`, `RecalcularCustoProduto`, `AtualizarUltimaCompra` ÔÇö mais 5 auxiliares. Coloquei o SQL no BO seguindo o padr├úo dos irm├úos (`SIGPRCPRBO`, `SigPrGlpBO`), n├úo no form como no legado.
+
+Conferi **todas** as colunas das 12 tabelas contra o `schema.sql` lido em UTF-16: nenhuma diverg├¬ncia de grafia. `EmpGruEsts`/`EmpDopNums` tratadas como chave posicional com `PADR`, nunca `ALLTRIM`.
+
+## Verifica├º├úo (medida, n├úo lida)
+
+Compila├º├úo limpa nos dois arquivos, e um harness instanciando de verdade provou: BINDEVENT registrado (`CLICK->CMDPROCESSACLICK`), os 4 m├®todos do BO cham├íveis de fora, `FormParaBO` com round-trip correto (data sai tipo **D**, n├úo T), e ÔÇö com o processamento falhando ÔÇö a tela volta **destravada** com `LblEnd` oculto, sem sucesso falso.
+
+Dois erros meus no caminho, ambos j├í registrados na mem├│ria e corrigidos: `AEVENTS` com 3 argumentos (s├úo 2) e um teste vacuoso que meu pr├│prio guard curto-circuitava.
+
+## Tr├¬s coisas que voc├¬ precisa saber
+
+1. **`fRecalculaP` e `fRecalculaC` n├úo existem em lugar nenhum do projeto** ÔÇö mas j├í s├úo chamadas nuas por `SIGPRCPRBO`, `SigPrGlpBO`, `sigprilaBO` e `SIGMDETQBO`. Mantive a chamada nua (falha alta) em vez de criar stub retornando `.T.`, que gravaria silenciosamente errado. Sem elas, as frentes Estoque e Custo n├úo recalculam. ├ë uma lacuna pr├®-existente do projeto, maior que esta task. O `dmoBO.prg` tem stubs locais retornando `.T.` ÔÇö esses s├úo perigosos e valem revis├úo ├á parte.
+
+2. **`ConfigurarAmbiente()` do `config.prg` trava indefinidamente nesta m├íquina** ÔÇö antes de tocar em qualquer c├│digo meu. Contornei carregando os procedures direto. ├ë um bloqueador de ambiente independente desta fase, mas vai atrapalhar qualquer harness que use o caminho normal.
+
+3. **`SigPrCccBO.Init()` (Fase 1) retorna `.F.` quando o `SELECT` de `SigCdPam` falha**, e a├¡ o form inteiro n├úo abre. Com o banco inacess├¡vel, a tela n├úo abre por causa disso ÔÇö n├úo do meu c├│digo. N├úo mexi por estar fora do escopo da Fase 7.

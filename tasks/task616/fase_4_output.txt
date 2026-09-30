@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 ÔÇö n├úo editei o arquivo. Auditei, e a fase j├í est├í entregue.
+
+Verifiquei tudo por conta pr├│pria (n├úo me baseei s├│ nos outputs das fases 3 e 4 anteriores):
+
+**task616 ├® a terceira re-execu├º├úo da mesma migra├º├úo.** A `SigPrGloT.scx` tem `md5sum` id├¬ntico (`4e5cf515ÔÇª`) em **task188**, **task291** e task616 ÔÇö e as duas primeiras est├úo `COMPLETED`. A SCX ├® um **placeholder vazio**: `Form1`, 375├ù250, `TitleBar=0`, zero controles, **zero m├®todos** (normal em OPERACIONAL, cuja l├│gica n├úo mora no SCX). Por isso `layout.json`/`analise.json`/`comportamento.json` da task nasceram vazios ÔÇö n├úo havia o que extrair. `FormSigPrGloT.prg` j├í est├í no git (`f87d3141`) com 1781 linhas e 51 m├®todos, e o working tree bate com o HEAD.
+
+**Por que obedecer ao template da Fase 4 seria um defeito, n├úo uma entrega:** ele pede Grid + 6 bot├Áes CRUD na Page1. Este form ├® um despachante de a├º├úo ├║nica ("Processamento de O.P. por Totais"), layout flat, sem lista de registros. Injetar Grid e CRUD inventaria UI que o legado nunca teve ÔÇö viola├º├úo direta do PILAR 1.
+
+**Escopo da Fase 4 conferido no arquivo existente:**
+
+| Item da Fase 4 | Situa├º├úo |
+|---|---|
+| `ConfigurarPaginaLista()` (linha 926) | presente ÔÇö orquestra os 9 `Configurar*` do layout flat |
+| Grid | **ausente, corretamente** ÔÇö o legado n├úo tem lista |
+| 6 bot├Áes CRUD | **2 bot├Áes reais**: `cmd_4c_Processar` + `cmd_4c_Cancelar` (Caption `"Encerrar"`) |
+| `AlternarPagina()` (linha 1251) | presente, com `par_cModo` (`ENTRADA`/`PROCESSANDO`) |
+| `Btn*Click` de compatibilidade | presentes, delegando para as a├º├Áes reais (harness de teste) |
+
+**Checagens de regress├úo que passaram:** blocos balanceados (`IF/ENDIF` 119/119, `PROCEDURE/ENDPROC` 51/51, `TRY/ENDTRY` 5/5, `WITH/ENDWITH` 60/60, `FOR/ENDFOR` 2/2, `DEFINE/ENDDEFINE` 1/1); nenhum `RETURN` dentro de `TRY/ENDTRY` (regra #1); os 3 `.Picture` referenciados existem em `vbmp\` (regra #25); `AlternarPagina("ENTRADA")` ├® chamado no funil de volta e **fora do `TRY`** ÔÇö restaura a UI inclusive quando o processamento estoura (regra #40); `Show()` do modal filho `FormSigPrGl2` tamb├®m fora do `TRY` (regra #29).
+
+**├Ünica mudan├ºa n├úo commitada** ├® do BO, herdada da Fase 2 e leg├¡tima: `SigPrGloTBO.prg` teve um `IF VARTYPE(...) = "L"` aninhado 8 vezes (artefato de auto-fix reaplicado) colapsado na forma can├┤nica de 4 linhas, para `Divs`, `Imprs` e `Iimprs`. Comportamento id├¬ntico, 102 linhas a menos. N├úo toquei nela.
+
+N├úo mexi em `tasks/task616/task_state.json` ÔÇö mudar o `status` ├® decis├úo de pipeline, n├úo da fase. Registrei a reincid├¬ncia na mem├│ria (`feedback_task_rerun_sobre_form_ja_migrado`), incluindo o modo de falha novo da Fase 4, que ├® diferente do da Fase 3.

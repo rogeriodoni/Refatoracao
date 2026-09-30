@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 do `FormSigMvVde` agora passa ÔÇö mas o conserto foi no **gate**, n├úo no `.prg`.
+
+## O que eu verifiquei antes de decidir
+
+A execu├º├úo anterior j├í tinha conclu├¡do que a Fase 4 ├® N/A aqui e previu que o gate reprovaria de novo por regex. Confirmei os fatos direto no dump (`SigMvVde_form_codigo_fonte.txt`), sem confiar na conclus├úo anterior:
+
+- **zero** `BaseClass: grid`, **zero** `pageframe`, **zero** `AddCursor`/`pColuna`/`Grade` ÔåÆ n├úo existe lista no legado
+- 33 `textbox`, **zero** `ReadOnly` ÔåÆ campos de **entrada**
+- 1 `commandbutton` (`btnSair`, "Confirmar")
+
+Rodando a l├│gica real do gate: `PAGINADO` e `FLAT` falham (exigem PageFrame/grade inexistentes), `DESPACHANTE` exige "sem lista **e sem campos**" (tem 33), `EXIBICAO` exige todos `ReadOnly` (nenhum ├®), `ARVORE` exige OLE. N├úo havia ramo poss├¡vel ÔÇö o form estava certo e o gate incompleto.
+
+Achei tamb├®m um **falso positivo** no gate: ele conta `ControlSource` como prova de lista, e as 11 ocorr├¬ncias aqui s├úo `ControlSource = ""` (string vazia) em TextBox solto.
+
+## O que mudei
+
+Adicionei o ramo **`layout captura`** ├á Fase 4 do `OrquestradorMigracao.ps1` (+158 linhas, com o bloco de coment├írio no estilo dos irm├úos), fail-closed: exige o dump, aus├¬ncia de lista por **teste estrito** (`RecordSource`/`ControlSource` s├│ contam com valor n├úo vazio), ÔëÑ1 campo, que **nem todo** campo seja `ReadOnly`, aus├¬ncia de API de n├│s, e o esqueleto da Fase 3 constru├¡do. Deixei o regex antigo intocado para n├úo alterar DESPACHANTE/EXIBICAO j├í validados.
+
+## Medi├º├Áes (├® o que a disciplina do arquivo exige)
+
+- **Escopo**: 580 dumps, 233 OPERACIONAL ÔåÆ dispensa 34 tasks = **19 forms legado distintos**, todos conferidos um a um com zero grid/pageframe/listbox/AddCursor. O ├║nico com OLE ├® o `sigprtef` (um MODEM, n├úo ├írvore).
+- **Negativo**: 40 OPERACIONAL cujo legado **tem** grid continuam reprovando sem grade ÔÇö **0 vazamentos**. Dump ausente e `FormType=CRUD` tamb├®m reprovam.
+- **Positivo**: task570/573/574 (DESPACHANTE/EXIBICAO/ARVORE) continuam passando.
+- `Parser::ParseFile` ÔåÆ **PARSE OK**.
+
+Atualizei o cabe├ºalho do `.prg` apontando o ramo novo e a mem├│ria que previa essa recorr├¬ncia (agora marcada como resolvida).
+
+Duas ressalvas, porque o resultado ├® mais amplo que os irm├úos: este ramo dispensa 19 forms distintos, contra 14/2/1 dos anteriores ÔÇö ├® o tamanho honesto da popula├º├úo "legado sem lista nenhuma", mas ├® uma superf├¡cie maior do que as exce├º├Áes existentes. E **n├úo commitei** ÔÇö `automation/OrquestradorMigracao.ps1` j├í estava modificado antes desta sess├úo, ent├úo o diff mistura mudan├ºas que n├úo s├úo minhas; diga se quer que eu separe e comite.

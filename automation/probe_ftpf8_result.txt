@@ -1,0 +1,30 @@
+PROBE FASE8 HOOKS - inicio 28/09/2026 21:25:27
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O
+2a txt DirEnvFtp .Value=[c:\users\roger\appdata\local\temp\ftpf8_env\] BO=[c:\users\roger\appdata\local\temp\ftpf8_env\] TIP=[c:\users\roger\appdata\local\temp\ftpf8_env\]
+2b txt DirRecFtp .Value=[c:\users\roger\appdata\local\temp\ftpf8_rec\] BO=[c:\users\roger\appdata\local\temp\ftpf8_rec\]
+2c txt DirRecLoc .Value=[/remoto/destino/] BO=[/remoto/destino/]
+2d txt DirEnvLoc .Value=[/remoto/origem/] BO=[/remoto/origem/]
+3a FormParaBO(): .T.
+3b BO DirRecLoc pos=[/destino/novo/] (esperado /destino/novo/)
+3c BO DirEnvFtp pos=[c:\users\roger\appdata\local\temp\ftpf8_env\] (esperado c:\users\roger\appdata\local\temp\ftpf8_env\)
+3d tela DirRecLoc pos=[/destino/novo/] (BOParaForm reescreveu normalizado)
+4a FormParaBO() com campo vazio: .T.
+4b BO DirRecLoc preservado=[/destino/novo/]
+5a FormParaBO() pasta inexistente: .F. (esperado .F.)
+5b BO DirEnvFtp preservado=[c:\users\roger\appdata\local\temp\ftpf8_env\]
+6a HabilitarCampos(.F.): Transferir=.F. Receber=.F. Encerrar=.F. Navegacao=.T.
+6b HabilitarCampos(.T.): Transferir=.T. Receber=.T. Encerrar=.T.
+7a BtnExecutarTransferenciaClick: .T.
+7b BtnExecutarRecebimentoClick  : .T.
+7c CarregarLista                : .T.
+7d HabilitarCampos              : .T.
+7e BtnTransferirClick (antigo)  : .F. (esperado .F.)
+8a CarregarLista(): .T.
+8b lst_4c_EnvFtp.ListCount=2 (esperado 2)
+8c item1=[ARQUIVO1.TXT] tam=[         5]
+9 RELEASE: OK
+DIALOGOS SUPRIMIDOS:
+[28/09/2026 21:25:28] Atenção: A pasta local de envio informada não existe:z:\pasta\que\nao\existe
+
+FIM 28/09/2026 21:25:28

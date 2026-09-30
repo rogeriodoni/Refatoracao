@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 est├í completa. O BO compila limpo (`.fxp` regenerado ap├│s apagar o anterior, sem `.err`).
+
+## O que realmente reprovou a Fase 2
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1:5723`) exige tr├¬s tokens no BO para form n├úo-REPORT: `CarregarDoCursor`, `Inserir`, `Atualizar`. Medindo o arquivo antes de mexer:
+
+| token | antes | causa |
+|---|---|---|
+| `Inserir` / `Atualizar` | 2 cada | j├í casavam ÔÇö pelo **texto do cabe├ºalho** da Fase 1 ("recusar Inserir/Atualizar/ExecutarExclusao") |
+| `CarregarDoCursor` | **0** | lacuna real |
+
+Ou seja: a Fase 1 n├úo estava errada em n├úo sobrescrever `Inserir`/`Atualizar` (o legado ├® s├│ consulta ÔÇö `Sair.Click` faz `ThisForm.Release` e todos os `Get_*` t├¬m `When ÔåÆ Return .f.`). Faltava mesmo era o `CarregarDoCursor`.
+
+## O que adicionei
+
+`CarregarDoCursor(par_cAliasCursor)` ÔÇö transcreve a parte de **leitura** do `AfterRowColChange` legado (dump, linhas 1231-1240), que carrega a linha corrente da grade nos campos do painel inferior:
+
+```
+Get_qtde    ÔåÉ zTmpPcpOp.Qtds      Get_cliente ÔåÉ zTmpPcpOp.Rclis
+Get_tEnv    ÔåÉ zTmpPcpOp.TempU     Get_descr   ÔåÉ CrTmpPro.Dpros  (lookup SigCdPro)
+```
+
+Mais `LimparDetalhe()`, usado no in├¡cio do carregamento e quando a grade n├úo tem linha posicionada. Ambos **PUBLIC** de prop├│sito: quem chama ├® o handler do Form, de fora da classe ÔÇö `PROTECTED` falharia em runtime e o `PEMSTATUS` que costuma cercar a chamada devolveria `.T.` sem proteger. Tamb├®m reproduzi o `Select zTmpPcpOp` final do legado (o `SQLEXEC` do lookup troca a ├írea corrente no meio do caminho).
+
+## Verifica├º├Áes
+
+- **Colunas conferidas no `docs/schema.sql` can├┤nico** (682 tabelas, lido com `Get-Content -Raw` por ser UTF-16): `cpros` char(14), `qtds` numeric(9,3), `SigCdCli.rclis` char(50), `SigCdPro.Dpros` char(65) ÔÇö todas OK, mais as 6 que o grid do legado binda (`nenvs/nops/ordems/cpros/uniprdts/priors`), que chegam pelo `a.*`.
+- `TratarNulo(valor, **padr├úo**)` ÔÇö 2┬║ argumento ├® valor padr├úo, n├úo c├│digo de tipo (confirmei a assinatura em `functions.prg:376`).
+- Auditoria de `RETURN` dentro de `TRY/CATCH`: zero viola├º├Áes. Zero acentos literais, zero `MESSAGEBOX`, zero TODO/stub.
+- Normalizei o arquivo para **CRLF** ÔÇö estava LF-only, divergindo de `CorBO`/`CCJBO`/`businessbase`, que s├úo 100% CRLF.
+
+Dois pontos que **n├úo** consegui verificar, para ficar claro:
+
+- `VerificarCamposCursorBO.ps1` **n├úo rodou** ÔÇö exige conex├úo com o SQL Server 192.168.200.10, inalcan├º├ível desta m├íquina. Substitu├¡ pela confer├¬ncia manual contra o schema acima. `VerificarFuncoesNaoDefinidas.ps1` rodou e n├úo acusou nada neste BO.
+- Comportamento em runtime (se as consultas devolvem linha) n├úo foi testado, pela mesma falta de banco.
+
+## Um ponto de aten├º├úo que deixei intacto
+
+`SigCdPcg.seqs` ├® `numeric(2,0)` mas `SigCdPco.seqs` ├® `numeric(3,0)`, e a chave posicional usa `STR(Seqs, 2)` nos dois lados ÔÇö com sequ├¬ncia ÔëÑ 100, `STR()` devolve asteriscos e o join deixa de casar em sil├¬ncio. **Conferi o dump legado e ele usa exatamente `Str(a.Seqs,2)` / `Str(b.Seqs,2)`**, ent├úo a Fase 1 est├í fiel e corrigir seria reescrever a f├│rmula do legado (regra #17). Mantive como est├í ÔÇö ├® defeito herdado, n├úo da migra├º├úo.
+
+Fica tamb├®m uma fragilidade no gate, que **n├úo** alterei: para BO somente-consulta, `Inserir`/`Atualizar` s├│ casaram por acaso da reda├º├úo do cabe├ºalho. Se um pr├│ximo form read-only tiver cabe├ºalho redigido de outra forma, o gate bloqueia e as sa├¡das seriam inventar m├®todos de escrita (proibido) ou ajustar o coment├írio para passar. As Fases 3ÔÇô8 j├í t├¬m exce├º├Áes *fail-closed* provadas pelo dump para esse padr├úo; a Fase 2 n├úo tem. Se quiser, propago essa li├º├úo ÔÇö mas vale saber que editar o `.ps1` agora n├úo afetaria esta execu├º├úo, porque o PowerShell n├úo recarrega o script no meio do run.

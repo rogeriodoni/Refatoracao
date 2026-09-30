@@ -1,0 +1,19 @@
+FASE7 CHECK FormSigPrCfn - inicio 26/09/2026 17:56:39
+0 AMBIENTE FALHOU: Variable 'GNCONNHANDLE' is not found.
+1 INSTANCIA: VARTYPE=O W=600 H=300 Cap=[Cálculo de Juros]
+2 Init semeou: VB=1000 JMes=3 JDia=0,100000000 Dias=30 Juros=30 Total=1030 Parc=1030
+3 EnaInicial (legado llEnable=.f.): JMes=.F. JDia=.F. DtB=.F. DtF=.F. Dias=.F. OptCalc1=.F. OptDias1=.T.
+4 TxtDiasGotFocus PUBLIC/existe=.T.
+4a duas datas vazias: chamada OK (When do legado recusa)
+4b DataBase preenchida: chamada OK (When do legado libera)
+4c ValorBase vazio: chamada OK (When recusa pela 1a metade)
+5 posValorBase: JMesEna=.T. DiasEna=.T. OptCalc1Ena=.T.
+6 posJurosMes(3%): JDia=0,100000000 Juros=30 Total=1030 [esperado simples: 1000*0.03*30/30=30, total 1030]
+7 ValorBase negativo (legado getValorBase.Valid recusa): VB=-5
+8 dois vencimentos: Dias=90 Juros=150 Total=1150 Parc=575 [Parc = Total/2]
+9 Composto: Juros=155,93
+10 BtnSairClick existe=.T. SairVis=.T. SairCancel=.T.
+11 posBtnSairClick: VARTYPE=X [X = liberado]
+DIALOGOS SUPRIMIDOS: [26/09/2026 05:58:59 PM] Atenção!!!: O Valor Base Precisa Ser Positivo!
+
+FIM 26/09/2026 17:58:59

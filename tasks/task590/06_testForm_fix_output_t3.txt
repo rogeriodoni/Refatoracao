@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is not a code bug ÔÇö it's a known infrastructure issue that has hit this pipeline repeatedly.
+
+**Diagnosis**: The failure happens in ETAPA 1B, *before* `FormSigPrChr`/`SigPrChrBO` are even touched ÔÇö `TestFormWrapper.prg` does a pre-flight `SQLSTRINGCONNECT` to `192.168.200.10` (DB_MBAHIA) for every form test. I confirmed it directly:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False
+PingSucceeded:    False
+```
+
+The machine running this pipeline has no network route to the `192.168.200.0/24` subnet where the real SQL Server lives (it only has `192.168.100.x`/`192.168.199.x` interfaces). This exact symptom (C├│digo 1526, DBNETLIB, failing at ETAPA 1B) has occurred in 77+ other tasks since 2026-08-02 ÔÇö it's a saved project memory (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`), not something specific to this form.
+
+`config.prg`'s connection string and `TestFormWrapper.prg`'s logic are correct and identical to every task that passes when network access is available. There's nothing in `FormSigPrChr.prg` or `SigPrChrBO.prg` that participates in this failure, so I'm not making any code changes ÔÇö editing the form/BO would just burn through the 10 retry attempts rewriting code that already works, without fixing the actual problem.
+
+**What's needed**: network/infra fix on the machine running the pipeline (route to `192.168.200.0/24`), not a code change. If you want, I can still review the two files for other latent issues, but the connectivity failure itself needs to be resolved outside this task.

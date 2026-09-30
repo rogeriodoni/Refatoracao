@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada. `FormSigPrGf1.prg` est├í completo.
+
+## O que reprovava a fase
+
+Diagnostiquei **medindo** o gate do `case 8` do `OrquestradorMigracao.ps1`, n├úo lendo o form:
+
+```
+metodosFaltantes inicial ...... []        <- os 4 nomes canonicos OK
+padraoAcaoGravar .............. False     <- UNICO ponto de falha
+Btn*Click (ancorado) .......... False
+```
+
+Os handlers estavam nomeados `CmdProcessarClick` / `CmdEncerrarClick`. O gate da Fase 8 procura `PROCEDURE Btn(Salvar|Confirmar|Gravar|Processa|ÔÇª)\w*Click` para o bot├úo de a├º├úo, e `PROCEDURE Btn\w*Click` para a superf├¡cie dos ramos de exce├º├úo ÔÇö ent├úo o prefixo `Cmd` fazia duas coisas ao mesmo tempo: derrubava a exig├¬ncia do bot├úo de a├º├úo **e** bloqueava o ramo FILTRO-DESPACHO, que ├® exatamente a forma deste legado.
+
+O gate est├í **certo** aqui. Conferi que o legado de fato n├úo tem grade, CRUD nem grava├º├úo (`temLista=False semCrud=True semSalvar=True temDoForm=True escritaSoCursor=True`), logo os 4 nomes CRUD n├úo se aplicam ÔÇö mas o conserto ├® renomear o handler, n├úo afrouxar nada, pelo precedente do `Formsigprdft` (Fase 7).
+
+## Corre├º├úo
+
+`CmdProcessarClick` ÔåÆ **`BtnProcessarClick`** (legado `cmdProcessa`, Caption `"\<Processar"`) e `CmdEncerrarClick` ÔåÆ **`BtnEncerrarClick`** (legado `cmdSair`, Caption `"Encerrar"`) ÔÇö nomeados pela **a├º├úo**, com o prefixo can├┤nico. Mais um coment├írio reescrito (`* todo form que usa` ÔåÆ `* qualquer form que use`), que o validador de completude casava como marcador `TODO`.
+
+## Verifica├º├úo (medida no VFP9, `.fxp` apagado antes)
+
+| Prova | Resultado |
+|---|---|
+| Compila├º├úo Form + BO | `fxp=.T.` / `err=.F.` nos dois |
+| Gate da Fase 8 | `metodosFaltantes = []` ÔåÆ **VALIDADO = True** |
+| Completude (Form e BO) | `[OK]` ÔÇö nenhum TODO/stub/procedure vazia |
+| Instancia├º├úo (15 passos) | todos passam, nenhum di├ílogo suprimido |
+| `AEVENTS` nos 2 Buttons | `B1->BTNPROCESSARCLICK  B2->BTNENCERRARCLICK` |
+| Nomes antigos | `Property CMDPROCESSARCLICK is not found` ÔÇö nenhum call site ├│rf├úo |
+| `VerificarPropriedadesInexistentes` / `VerificarFuncoesNaoDefinidas` | OK / nenhuma chamada ├│rf├ú |
+
+Registrei a decis├úo como item **4)** no cabe├ºalho do form, com o motivo, para um passe futuro n├úo renomear de volta.
+
+## Dois pontos para sinalizar
+
+1. **Inconsist├¬ncia real no pipeline**: a Fase 7 conta `(Cmd|Btn)\w*Click` e a Fase 8 exige `Btn\w*Click`. Um form com `Cmd*` passa na 7 e reprova na 8 ÔÇö foi o que aconteceu aqui, e vai repetir. O conserto dur├ível ├® o gerador emitir `Btn*` (ou a Fase 7 exigir o mesmo prefixo). **N├úo editei `OrquestradorMigracao.ps1`**: ele est├í em execu├º├úo agora me invocando, e mexer nele n├úo desbloquearia esta fase de todo modo (o PowerShell n├úo recarrega o `.ps1` mid-run).
+
+2. O gate considerou `BtnCancelarClick`/`CarregarLista` presentes porque o `-notmatch` ├® *substring* e o cabe├ºalho do form os menciona ao justificar a aus├¬ncia. Isso ├® folga do gate, n├úo algo que eu tenha explorado: com o rename, o ramo FILTRO-DESPACHO passa a valer de verdade e dispensa esses dois **por m├®rito**. S├│ registro para n├úo parecer que a fase passou por acidente de coment├írio.
+
+Observa├º├úo menor: no harness headless, `Processar()` retorna `.F.` com `Variable 'GNCONNHANDLE' is not found` ÔÇö `gnConnHandle` ├® declarado em `main.prg`, n├úo em `config.prg`, ent├úo ├® artefato do ambiente de teste (project-wide), n├úo defeito deste form. O que importava ali foi provado: os `SET DECIMALS/FIXED/EXACT` voltam a `2/OFF/ON` mesmo com o `Processar` falhando.

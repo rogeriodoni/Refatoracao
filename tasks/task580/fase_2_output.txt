@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This completes Fase 2. Summary of what was added to `C:\4c\projeto\app\classes\SigMvTtaBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps all 14 `sigmvimp` columns (verified against the canonical UTF-16 `docs/schema.sql`, not the stale task snapshot) into `this_*` properties, using `SELECT (alias)` + direct field access and `TratarNulo(campo, "")`/`TratarNulo(campo, 0)` with real default values (not type codes ÔÇö that "C"/"N" pattern is a known bug elsewhere in the codebase, avoided here).
+- **`ObterChavePrimaria()`** ÔÇö returns `this_cPkChaves`.
+- **`Inserir()`** ÔÇö generates `pkchaves` via `LEFT(fUniqueIds(), 20)` when empty, builds a full INSERT covering all 14 columns with `EscaparSQL`/`FormatarNumeroSQL(...,2)`, handles nullable `vencs` (`NULL` literal vs `FormatarDataSQL`), calls `RegistrarAuditoria("INSERT")`.
+- **`Atualizar()`** ÔÇö same column set as UPDATE keyed on `pkchaves`, calls `RegistrarAuditoria("UPDATE")`.
+
+Both follow the project's canonical TRY/CATCH + `MsgErro(...+ CapturarErroSQL())` pattern (matching `CatBO.prg`).
+
+Next up is Fase 3 (creating the Form), which will be a separate phase in this pipeline.

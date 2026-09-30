@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da.
+
+## O que estava faltando
+
+A Fase 6 n├úo reprovou por campo ausente ÔÇö todos os controles do SCX j├í estavam no form (`edt_4c_ObsOperacao`, `lbl_4c_Cliente`, `txt_4c_Cliente`, `lbl_4c_ObsItens`, `edt_4c_ObsItens`, grades, bot├Áes, cabe├ºalho). E o legado **n├úo tem lookup nenhum**: varri o dump por `fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(` e `FormBuscaAuxiliar` ÔÇö zero ocorr├¬ncias. O `getCliente` ├® `fwget` com `When ÔåÆ Return .f.`, ou seja, campo n├úo-digit├ível (reproduzido com `ReadOnly = .T.` + `TabStop = .F.`). Inventar `AbrirLookup*` aqui violaria o PILAR 1.
+
+O que **de fato faltava** era a metade de TELA da valida├º├úo do `Processar.Click` legado:
+
+```foxpro
+If (_Contador = 0)
+    =Messagebox('Nenhuma Opera├º├úo Foi Selecionada!!!', 32, '')
+    ThisForm.GradeOpera├º├úo.Column1.SetFocus      && <- isto se perdeu
+```
+
+O crit├®rio de neg├│cio tinha ido inteiro para `SigPrGl2BO.ValidarSelecaoParaProcessamento()`, mas o BO n├úo pode devolver foco a uma coluna de grade ÔÇö e o legado s├│ faz esse `SetFocus` no ramo da sele├º├úo vazia, nunca no ramo dos Jobs diferentes.
+
+## Mudan├ºas
+
+**`FormSigPrGl2.prg`** ÔÇö novo `PROCEDURE ValidarSelecaoOperacoes()`: delega o crit├®rio ao BO (fonte ├║nica), exibe a mensagem com `MsgAviso` e reproduz `Column1.SetFocus()` **s├│** quando `this_nOperacoesMarcadas = 0`, guardado por `USED()`/`RECCOUNT() > 0` (grade sem linha cai no mesmo ramo e ali n├úo h├í c├®lula para focar). `BtnProcessarClick` passou a cham├í-lo, ficando com um caminho ├║nico de valida├º├úo.
+
+**`SigPrGl2BO.prg`** ÔÇö property `this_nOperacoesMarcadas`, preenchida por `ValidarSelecaoParaProcessamento()`. ├ë o que permite ao form distinguir os dois ramos sem recontar o cursor nem inferir pelo texto da mensagem.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa nos dois arquivos (sem `.err`). Probe de instancia├º├úo (`automation\InstantiateCheckGl2F6.prg`, entrando na datasession privada do form) exercitando os quatro estados:
+
+| cen├írio | retorno | marcadas | mensagem |
+|---|---|---|---|
+| grade vazia | `.F.` | 0 | Nenhuma Opera├º├úo Foi Selecionada!!! |
+| 2 linhas, 0 marcadas | `.F.` | 0 | Nenhuma Opera├º├úo Foi Selecionada!!! |
+| 2 marcadas, Jobs diferentes | `.F.` | 2 | N├úo ├® permitido gerar OPs... |
+| 2 marcadas, mesmo Job | `.T.` | 2 | ÔÇö |
+
+O caso "2 linhas, 0 marcadas" ├® o que executa o `Column1.SetFocus()` de verdade ÔÇö rodou sem erro. Campos conferidos contra o SCX: `edt_ObsOperacao` Top=82/`TmpCabec.Obs`, `txt_Cliente` Top=313/ReadOnly/`TmpCabec.DConta`, `edt_ObsItens` Top=548/`TmpItens.Obs`.
+
+Simulei o gate da Fase 6 com a l├│gica real do orquestrador: entra pelo ramo **FLAT** (`semPageFrame` Ô£ô, `BINDEVENT` Ô£ô, `legadoSemLookup` Ô£ô, `ControlSource` + `PROCEDURE Validar*` Ô£ô) ÔåÆ `temLayoutFlat = True`.
+
+Os `.fxp` gerados no teste foram apagados para o pipeline recompilar do zero.

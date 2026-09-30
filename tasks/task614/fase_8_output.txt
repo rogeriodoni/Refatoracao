@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and verified. Here's what I found and did.
+
+## What Phase 8 actually needed
+
+The phase prompt asks for the CRUD template (`BtnBuscarClick`, `BtnSalvarClick`, `FormParaBO`/`BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`). **SIGPRGL2 has none of those in the legacy** ÔÇö it's a modal selection/processing dialog inheriting from generic `form` with exactly 4 buttons (Processar, Encerrar, apaga, SelTudo). I did not invent them; I documented each absence against the SCX evidence in a consolidation block at the top of the class.
+
+What the form genuinely was missing:
+
+**`CarregarDados()`** ÔÇö the tail of the legacy `Init` (filter `TmpItens` by `EmpDopNum`, `TmpCabec` to top, `Refresh`) had been dropped entirely. Without it both grids open bound but unfiltered and unpainted. Now called at the end of `InicializarForm`.
+
+**`SincronizarBOComLinhaCorrente()`** ÔÇö the real `BOParaForm` equivalent here. Every data control is bound by `ControlSource` directly to the cursors, so VFP moves the data; but `SigPrGl2BO.CarregarDoCursor` was never called by anything, leaving `ObterChavePrimaria()`/auditoria reading blank properties. Wired into `CarregarDados` and `AfterRowColChange`, preserving the work area.
+
+## Transcription defects found against the SCX dump
+
+The phase-3/4 output had invented values the legacy contradicts:
+
+- **`Column8` bound to `TmpCabec.DConta`** ÔÇö legacy binds `TmpCabec.Conta` (the *code*). `DConta` is the description, and it belongs to `getCliente` only.
+- **`grd_4c_Itens.Column1` bound to `Dpros`** ÔÇö legacy binds `Cpros`.
+- **Two marker columns lost**: `Column9`/`Column5` are `IIF(EMPTY(Obs), ' ', '*')` in Verdana 12 bold centered, not the memo text.
+- **`Column5` NULL guard dropped** ÔÇö `IIF(ISNULL(Entregas), {}, ...)`; without it the cell shows `.NULL.`.
+- **Every column width invented** (e.g. `Column8` 140 vs 90), plus missing `ColumnOrder` ÔÇö the items grid's visual order in the legacy is Produto, Ref. Fornecedor, Cor, Tam, Quantidade, Saldo, Peso, Obs, not declaration order.
+- Missing `NullDisplay=" "` on both EditBoxes, `SpecialEffect=1`, `Cancel=.T.` on Encerrar, header Verdana/`RGB(36,84,155)`, `TabIndex` throughout, and Shape3's `BackStyle`/`BorderColor`.
+- **`SelTudo` pointed at `geral_marcar_26.jpg`**; the legacy uses `geral_selecionar_26.jpg` (regra #25 ÔÇö both exist, so this failed silently). Tooltips were paraphrased too.
+
+## Verification
+
+Compiled clean, then instantiated for real (`CREATEOBJECT` in test mode) ÔÇö no exceptions, no captured dialogs, all new bindings/widths/`ColumnOrder`/props read back correct, and the BO row-sync confirmed moving with `AfterRowColChange`.
+
+Two things the run caught that I'd otherwise have assumed:
+
+1. **`RowHeight` read back 16, not the 17 I set.** Assigning `FontName`/`FontSize` *after* it makes VFP recompute row height ÔÇö same family as "Column.Width after RecordSource". Moved `RowHeight` below the font in both grids; now reads 17.
+
+2. **After `CarregarDados`, items show PROD-9 while the header row is Numes=7.** I probed this rather than "fixing" it (`automation/ProbeGl2SetKey.prg`): `SET KEY TO <expr>` **freezes** the value at command time and does not re-evaluate when `TmpCabec` moves. The legacy `Init` sets the key *before* its `GO TOP`, so the legacy has the identical stale filter until the first `AfterRowColChange` realigns it. Correcting it would make the migrated tela diverge from the legada, so I kept it literal and recorded the measurement in the comment.
+
+Files: `projeto/app/forms/operacionais/FormSigPrGl2.prg` (modified), plus two new harnesses `automation/InstantiateCheckGl2F8.prg` and `automation/ProbeGl2SetKey.prg`. `SigPrGl2BO.prg` shows as modified in git from phases 1ÔÇô2, not from this phase ÔÇö I didn't change it.

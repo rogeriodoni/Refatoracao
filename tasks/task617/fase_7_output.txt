@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete and verified. Summary:
+
+## O que foi entregue
+
+**`projeto/app/forms/operacionais/FormSigPrGlp.prg`** (2523 ÔåÆ 3690 linhas)
+
+Este form ├® OPERACIONAL ÔÇö o legado `SIGPRGLP` **n├úo tem bot├Áes CRUD**. Os "eventos principais dos bot├Áes" s├úo os 7 bot├Áes de a├º├úo da barra superior e os 4 de OK/Sair dos pain├®is flutuantes. Implementei os **10 handlers** que o legado realmente tem, mais o `BINDEVENT` de cada um:
+
+| Handler | Legado |
+|---|---|
+| `BtnDisponivelClick` | `Disponivel.Click` ÔÇö painel de estoque por tamanho |
+| `BtnSelEstoqueClick` | `SelEstoque.Click` ÔÇö painel de estoque por grupo/conta |
+| `BtnTotLinhaClick` | `TotLinha.Click` ÔÇö resumo por linha com `UNION ALL`/TOTAIS |
+| `BtnPedrasClick` | `Pedras.Click` ÔÇö requisi├º├úo de componentes |
+| `BtnRelatorioClick` | `btnRelatorio.Click` ÔÇö `SigReGlp.frx` |
+| `BtnCancelarClick` | `Cancelar.Click` ÔÇö rollback + fecha |
+| `BtnConfirmarDispProdutoClick` | `Container2.CancelaDisp.Click` |
+| `BtnConfirmarDispGrupoClick` | `Container5.CancelaDisp.Click` |
+| `BtnFecharPedrasClick` / `BtnFecharLinhasClick` | `Container4`/`Container1` |
+
+Mais `PrepararCursoresDeTrabalho()` (o resto do `Init` legado: linha em branco do `SelPedra`, `TmpSaldU`, `crSigCdCom`, bind do Container3, totais) e os helpers `RestaurarGradePrincipal` / `ExecutarReportForm`.
+
+## Defeito encontrado e corrigido (medido, n├úo suposto)
+
+O legado usa **chave parcial** em `SET KEY`/`SEEK` sobre o ├¡ndice composto de `TmpSaldG`. O `config.prg:231` liga `SET EXACT ON`, que o legado n├úo tinha. Medido no VFP9:
+
+```
+EXACT ON  -> SET KEY parcial: eof=.T.  | SEEK parcial: .F.
+EXACT OFF -> SET KEY parcial: eof=.F.  | SEEK parcial: .T.
+SET KEY sob EXACT OFF + navega├º├úo sob EXACT ON -> eof=.T.  (avaliada na navega├º├úo)
+REPLACE <alias>.<campo> em EOF -> N├âO d├í erro (silencioso)
+```
+
+Transcrever literalmente deixaria o grid do Container3 sempre vazio e a baixa de estoque por conta **n├úo aconteceria, sem erro nenhum**. Corrigi com `SET FILTER TO ... == [literal]` (imune ao `SET EXACT`, congelado por macro) e `SET EXACT OFF` salvo/restaurado s├│ em volta do bloco de `SEEK`/`SCAN` que ├® todo meu. Atualizei a mem├│ria `feedback_index_composto_seek_parcial_exact_on.md`, cuja receita "salvar/restaurar SET EXACT" estava incompleta para `SET KEY`.
+
+Tamb├®m adicionei guarda de conex├úo antes das muta├º├Áes em `BtnConfirmarDispProdutoClick` ÔÇö o legado s├│ descobre a falta de conex├úo no meio do la├ºo e faz `Return 0` deixando `TmpFinal`/`TmpSaldo`/`TmpSaldG` pela metade.
+
+## Verifica├º├úo
+
+Compila limpo (nenhum `.err`, `.fxp` gerado). Harness `automation/InstantiateCheckGlpF7.prg` instancia o form e exercita os caminhos ÔÇö n├úo s├│ "abriu":
+
+- 10 handlers existem; os 10 `BINDEVENT` de fato ligados (`AEVENTS=1` cada)
+- `TotLinha`: `TmpLinha` com 3 linhas, TOTAIS por ├║ltimo, Saldo=150
+- `Pedras`: liga `SelPedra` e os **lookups da Fase 6 sobrevivem** (`AEVENTS=2` na Column1.Text1)
+- `ConfirmarDispGrupo` (Utilizar=10): `Produzir` 100ÔåÆ90, `TmpSaldo.Disps` 30ÔåÆ20, `TmpSaldG.Disps` 30ÔåÆ20, `TmpSaldU.KeySelm=.T.`
+- `ConfirmarDispProduto` (Utilizar=5): `Saldo` 100ÔåÆ95, linha desmembrada com `CodTams=G`, `Saldo=5`, `Produzir=0` e **a observa├º├úo preservada** (`SCATTER/GATHER MEMVAR MEMO`)
+
+Sem TODO/stub (regex do validador: 0 ocorr├¬ncias).
+
+**Fora do escopo desta fase, por decis├úo registrada no roteiro do arquivo:** `BtnProcessarClick` (1637 linhas no legado) e o `AfterRowColChange` da grade principal ficam para a Fase 8, junto com `SigPrGlpBO.Processar/AtualizaPeso/GravaHis` ÔÇö escrever a chamada agora deixaria uma refer├¬ncia a m├®todo de BO inexistente.

@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8/8 conclu├¡da** ÔÇö `projeto/app/forms/operacionais/Formsigprccp.prg` est├í completo, compila limpo e foi validado **instanciando no VFP9** (n├úo por leitura de c├│digo).
+
+## O que a fase entregou
+
+| M├®todo | Papel | Origem no legado |
+|---|---|---|
+| `FormParaBO()` *(PROTECTED)* | todos os campos/grupos da tela ÔåÆ propriedades do BO | bloco inicial de `processar` (`lcMercI = Thisform.getMercI.Value`, ÔÇª) |
+| `BOParaForm()` *(PROTECTED)* | inverso exato; o BO passa a ser **fonte ├║nica dos defaults** | valores dos OptionGroups do SCX |
+| `LimparCampos()` *(PROTECTED)* | zera o cursor da grade, esconde a foto, volta ao modo LISTA | os `Zap In CrProdutos` que o legado repete em 3 lugares |
+| `HabilitarCampos(par_l)` | trava/destrava a entrada durante o lote longo | clausulas `When` + `getDFornecs.When ÔåÆ .F.` |
+| `AjustarBotoesPorModo()` | **funil ├║nico** do `Enabled` de Atualizar/Imprimir | `Sair.Atualiza.Enabled` / `Impress├úo.Enabled` |
+| `BtnCancelarClick()` | o bot├úo `Cancela` do SCX (`Cancel=.T.`, caption "Encerrar") ÔÇö delega, n├úo duplica | `Cancela.Click ÔåÆ ThisForm.Release` |
+
+Os tr├¬s hooks s├úo `PROTECTED` porque os hom├┤nimos em `FormBase` s├úo ÔÇö subclasse n├úo alarga escopo herdado.
+
+## Medi├º├Áes no VFP9 (`automation/instantiate_ccpf8_result.txt`)
+
+```
+INSTANCIA: OK  BaseClass=Form  Caption=[Rec├ílculo de Pre├ºos]
+Modo inicial=[LISTA]   Atualizar.Enabled=.F.  Imprimir.Enabled=.F.
+OpcMoeda=1 Situacao=1 Compra=3 Recalcula=1 AtualizaVenda=2   (defaults vindos do BO)
+HabilitarCampos(.F.): GrupoI.Enabled=.F.  SelTudo.Visible=.F.
+HabilitarCampos(.T.): GrupoI.Enabled=.T.  DescForn.Enabled=.F.  SelTudo.Visible=.T.
+PROCESSADO c/ grade vazia -> Atualizar.Enabled=.F.
+BtnCancelarClick: OK
+```
+
+Auditorias limpas: `VerificarFuncoesNaoDefinidas` (nenhuma chamada ├│rf├ú), `VerificarPropriedadesInexistentes` (nenhuma atribui├º├úo inv├ílida), zero TODO/stub, zero acento literal, zero `MESSAGEBOX`.
+
+## Tr├¬s defeitos que apareceram e foram corrigidos
+
+1. **`TornarControlesVisiveis` revertia o controle de acesso** ÔÇö for├ºava `cmd_4c_Imprimir.Visible = .T.`, anulando o `fChecaAcesso("SigPrCcp","IMPRIMIR")` do Init e exibindo o bot├úo para quem n├úo pode imprimir, sem erro nenhum. Agora `cmd_4c_Imprimir`/`shp_4c_Shape2` entram na lista de skip junto com `img_4c_FigJpg`.
+2. **`Show()` modal dentro de `TRY`** em `BtnImprimirClick` (regra #29) ÔÇö o TRY cobria a vida inteira do relat├│rio, ent├úo o primeiro erro de runtime l├í dentro fecharia a tela sozinha. `TRY` agora cobre s├│ o `CREATEOBJECT`, com guarda contra mensagem dupla.
+3. **Caminho do `CATCH` do `AtualizarPrecos` deixava Atualizar habilitado** sobre um lote que abortou no meio ÔÇö passa pelo funil e volta a LISTA.
+
+## O que deliberadamente N├âO criei
+
+O enunciado da fase lista `BtnBuscarClick` e `BtnSalvarClick`; o SCX legado **n├úo tem** bot├úo Buscar nem Salvar ÔÇö os bot├Áes de a├º├úo s├úo `Processa`/`Atualiza`/`Cancela` (+ `Impress├úo`). Cri├í-los exigiria inventar superf├¡cie que o legado n├úo tem (viola o PILAR 1) ou escrever m├®todo vazio (proibido pela regra de completude). O gate da Fase 8 exige `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`, e os quatro est├úo presentes com implementa├º├úo real.
+
+Uma ressalva: `AtualizarPrecos`/`ProcessaAutomatico` gravam de verdade no SQL Server e **n├úo foram exercitados** ÔÇö esta m├íquina n├úo tem rota para 192.168.200.10. O que est├í provado ├® que a tela abre, os funis de estado respondem e os hooks s├úo cham├íveis; a grava├º├úo precisa de um teste com banco alcan├º├ível.

@@ -1,0 +1,76 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "Free", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPREST",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREST.OK",
+      "evento": "Click",
+      "linhas": 145,
+      "codigoOriginal": "Local lnArq, lcArquivo, lnGeraArq, lnGeraInd, lnKey\nLocal lcChave, lcFiltro, lcTag, lcAlias, loBarra, lcDbc,lcCampo,lcDirAtual1\n\nClose Tables All \nThis.Enabled = .f.\nThisForm.Cancela.Enabled = .f.\nThisForm.Draw\n\nSet Default To .\\basededados\\\n\nIf ThisForm.GeraArquivos.Value\n\n\tSelect 0 \n\n\tCreate Table ArqDBF Free ( Arquivos c(20), Dbcs c(50), Campos c(20), Tipos c(1), Tamanhos n(3) , ;\n\t\t\t\t\t\t\tFracaos n(2), C_05s l, C_06s l, C_07s c(20), C_08s c(20),;\n\t\t\t\t\t\t\tC_09s c(20), C_10s c(20), C_11s c(20), C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Free,File",
+        "metodosFormChamados": "Value And !File",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREST.Cancela",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "THISFORM.RELEASE\n\nIf Not Used('csLogoTipo')\n\tSelect Logos as gnLogos From SigCdPam Into Cursor csLogoTipo\n\tUse In SigCdPam\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPREST.Cancela.Click",
+      "queryOriginal": "\tSelect Logos as gnLogos From SigCdPam Into Cursor csLogoTipo",
+      "tabelas": "SigCdPam",
+      "colunas": "Logos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

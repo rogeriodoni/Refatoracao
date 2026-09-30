@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 is complete. Summary:
+
+## What was wrong
+
+The `.prg` work from the first attempt was essentially sound ÔÇö the validator was rejecting it. This is the **same gate gap as Fase 4**, which was fixed yesterday for this exact form: `SIGMVVDE` is a flat *capture dialog* (33 TextBoxes, no grid, no PageFrame), and its 11 `ControlSource` declarations are all `ControlSource = ""` ÔÇö **empty**. Values go to `goVendedor.Vendedor00..10`, never to a table or cursor.
+
+None of Fase 5's five branches fit: PAGINADO wants `ConfigurarPaginaDados`, FLAT wants `.ControlSource =`, DESPACHANTE wants *no* fields, EXIBICAO wants all-ReadOnly, ARVORE wants an OLEControl.
+
+I deliberately did **not** take the two shortcuts available: adding a fake `.ControlSource` (pointing an unbound field at a nonexistent cursor is a defect, not cosmetics ÔÇö the ARVORE branch's own comment says so) or renaming the field method to `ConfigurarPaginaDados`. Per the established rule, when a gate demands a surface the legacy doesn't have, **the fix goes in the harness**.
+
+## Changes
+
+**`projeto/app/forms/operacionais/FormSigMvVde.prg`** ÔÇö found and fixed a real fidelity gap while verifying: all 18 TextBoxes were missing `SpecialEffect = 1` and `Margin = 0`, which the legacy declares explicitly. Without them VFP9 defaults to `SpecialEffect = 0` (3D/sunken) instead of the legacy's flat look, across every field. Verified both are valid TextBox properties first (rule #33). After the fix, a property-by-property diff shows all 18 TextBoxes and all 24 labels matching the legacy exactly on position, size, caption, font and `MaxLength`. Compiles clean, `.FXP` confirmed freshly recreated.
+
+Two things I checked and deliberately left alone: `MaxLength = 40` on the description fields (the legacy declares 40, even though `RClis` is `char(50)` ÔÇö transcription, not the pixel-copy bug of rule #19), and TabIndex (legacy order is ContaÔåÆNomeÔåÆGrupo per row, which already matches creation order).
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö added the `$temLayoutCapturaF5` branch, mirroring Fase 4's criteria. The key difference: Fase 4 had nothing to add, so it waves through; **Fase 5 has real work** (half the fields), so this branch does *not* pass on absence-of-list alone ÔÇö it requires `migrated TextBox >= ceil(legacy TextBox / 2)` (floor 17, migrated has 18), the same parity approach the ARVORE branch uses.
+
+## Verification
+
+Measured across all 580 dumps (235 OPERACIONAL): dispenses 36 tasks = 20 distinct forms, all with zero `grid|pageframe|listbox` and zero `AddCursor`/`pColuna`. Eight tests via the verbatim-extracted gate block: task581 passes via `captura`; four negatives all correctly reject (CRUD FormType, missing dump, **5-of-33 fields ÔåÆ fails on parity**, tree legacy); task570/573/574 still pass their own branches.
+
+One thing worth flagging: my first pass at the orchestrator used `Set-Content -Encoding Default`, which silently re-encoded the whole UTF-8-with-BOM file to ANSI ÔÇö 66 KB of collateral mojibake in text the pipeline injects into phase prompts. I restored from backup and redid it with `WriteAllText` + `UTF8Encoding($true)`; the diff is now 88 lines scoped to my change, BOM intact. Both lessons are saved to memory.
+
+Rows 6ÔÇô10 (15 remaining TextBoxes) and the lookups are Fase 6's scope by design. I did not commit ÔÇö say the word if you want that.

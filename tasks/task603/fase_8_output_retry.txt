@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Here's what I found and did.
+
+## What was actually wrong
+
+The form was **already complete** ÔÇö all 11 legacy methods from `comportamento.json` are migrated, no stubs, no TODOs, and it compiles clean. Phase 8 was failing on two things, neither of which was missing functionality:
+
+**1. The gate's `pcEscolha` defect (the documented-pending one).** `$padroesCrudLegadoF8` listed `'pcEscolha'` as a raw substring. `SIGPREML` *receives* the mode from its caller ÔÇö `Parameters prDopes, pcEscolha, laOpeBaixa` then `Thisform.pcEscolha = pcEscolha` ÔÇö it doesn't own it. `SigMvCab` opens this dialog with `Do form SigPrEml With TprMvCab.EmpDopNums, thisform.pcEscolha, laOpeBaixa`. That was the **only** CRUD evidence in the whole dump, and it blocked every exception branch, so the gate demanded `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista` from a legacy with no Page2, no edit mode and no Cancel button. Phase 7 was fixed for this on 2026-09-24/25 and the twin defect in Phase 8 was recorded as pending ÔÇö "it'll bite the next child dialog." It bit this one.
+
+I applied Phase 7's exact block (`Test-ModoRecebidoDoChamador` + discounting parent-sourced occurrences). The form now lands in the FLUXO-UNICO branch, which fits: real grid, real editable cell, no CRUD.
+
+**2. The action-button verb.** `BtnEmailClick` didn't match `$padraoAcaoGravar`. Here the gate is **right** ÔÇö `btnEmail.Click` genuinely persists (`Insert Into crSigAlert` + `Update`/`Commit` on SigAlert). Same case as task602's `SIGPREMA` last run, so I renamed the handler to `BtnProcessarEmailClick` ÔÇö honest, since the Click builds the message, writes the history *and* sends. Only the handler changed; the control `cmd_4c_BtnEmail` keeps its name, so `mapeamento.json` is untouched.
+
+I did **not** invent the four CRUD methods, and I did not add a header comment naming them ÔÇö that substring trick is what let task602 pass by accident, and the memory flags it as a trap to detect, not to use.
+
+## Verification
+
+- Gate simulated in a fresh process: `metodosFaltantes` empty, **VALIDADO True**; `Test-CompletudeCodigo` OK.
+- VFP9 compile with `.fxp` deleted first: **COMPILE_OK** (BO + form).
+- Gate-fix delta across all 603 dumps: the intermediate predicate flips on 21, but filtering for "the `.prg` actually fails something today" leaves 2 forms ÔÇö and `FormSigMvTta` is a no-op (it already has the four names; FLUXO-UNICO doesn't waive the action button it's missing). **Real verdict change: 1 form, zero regression.**
+- Rule #42 checked since this form carries `EmpDopNums char(29)`: the BO slices by `SUBSTR` position exactly like the legacy, no `ALLTRIM` on the parts.
+
+## One thing you need to know
+
+**This run will still report Phase 8 as failed.** The orchestrator parsed `OrquestradorMigracao.ps1` when task603 started at 01:40; my fix landed at ~03:15, and PowerShell doesn't reload mid-run. So the stale gate validates the corrected artifact and rejects it ÔÇö the exact self-reference scenario from task585. The artifact is correct; I verified it out-of-band instead. Since `SigPrEml.SCX` has already been moved out of `origem\`, RunLoop won't re-pick it, so **task603 won't self-heal** ÔÇö re-running that one task against the fixed gate is the way to get a green mark.
+
+I also killed a stray `powershell.exe` I'd spawned: I dot-sourced the orchestrator to test predicates, which started executing its main body. Switched to AST extraction of just the helper functions after that.
+
+Two notes on scope: I deliberately left Phase 8's `(Incluir|Alterar|Visualizar|Excluir)\.Click` pattern alone (Phase 7 gave it an owner-check too), since no case drives it and widening without measurement is unearned blast radius ÔÇö the asymmetry is documented in the memory. Nothing is committed.

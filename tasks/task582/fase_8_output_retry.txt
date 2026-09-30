@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSIGPRALE.prg` est├í completo, compila e foi **instanciado** com sucesso.
+
+## O que reprovava a Fase 8 ÔÇö era o GATE, n├úo o form
+
+O gate do `case 8` ├® insatisfaz├¡vel para este legado. `SIGPRALE.SCX` ├® um di├ílogo "Aguarde..." com **zero bot├úo, zero campo, zero grade, zero Click** (s├│ o `Init` de 4 par├ómetros). O ramo DESPACHANTE, quando o dump prova 0 bot├Áes, exigia literalmente `ConfigurarPageFrame` ÔÇö que um legado *flat sem container* n├úo tem. Sem ele, nenhum ramo alcan├ºava o form e o gate cobrava `PROCEDURE Btn(Salvar|Confirmar|Gravar|ÔÇª)Click` de uma tela sem bot├úo: passar exigiria **inventar** um bot├úo (viola o PILAR 1) ou criar handler vazio (proibido pela regra de completude).
+
+**Sexta recorr├¬ncia da mesma fam├¡lia** ÔÇö as Fases 4, 5 e 6 j├í tinham a exce├º├úo (`$temEstruturaSemPageFrameF4/F5/F6`); copiei o crit├®rio id├¬ntico para a Fase 8, OR-ado com o `ConfigurarPageFrame` original. Fail-closed preservado:
+
+- **Delta: 4 flips em 538 pares dumpÔåöform, 0 regress├Áes** ÔÇö e os quatro s├úo o *mesmo* legado (SIGPRALE remigrado em task154/233/257/582) ÔåÆ **1 form distinto**.
+- **12/12 controles negativos reprovam** como devem: `FormType` CRUD/REPORT, dump ausente, dump com `textbox`/`grid`/`frmcadastro`/`commandbutton`, migrado sem instanciar o BO, sem `AS FormBase`, com `pgf_4c_`, sem `InicializarForm`. Evitei a armadilha de CRLF da medi├º├úo anterior usando `.Replace()` literal e **provando** que cada muta├º├úo entrou no dump fabricado.
+
+## Um defeito REAL que s├│ o teste pegou
+
+`lbl_4c_Mensagem3` sa├¡a com **Height 25 em vez de 48**: com `AutoSize = .T.`, o VFP9 **descarta** o `.Height` e a segunda linha de *"Por Favor. N├úo Desligue a impressora Fiscal."* ficava **cortada** ÔÇö sem erro e sem log. Medi no VFP9 reproduzindo a ordem exata de atribui├º├úo (7 variantes): n├úo existe ordem segura; com `AutoSize = .F.` as tr├¬s labels batem com o dump e sobrevivem ├á troca de `Caption` em runtime. Isso estende a regra #23, que s├│ documentava o no-op da `Width`. Tamb├®m acrescentei `MinButton = .F.` (o dump declara, o migrado omitia) e deixei a `Imagem` vis├¡vel por default, como o SCX.
+
+## Prova por instancia├º├úo (`FALHAS: 0`)
+
+| cen├írio | resultado |
+|---|---|
+| sem par├ómetro | 3 Captions do SCX preservadas; geometria id├¬ntica ao dump (419x115, 97x25 / 221x25 / **248x48**); BO instanciado |
+| `(bitmap, "Processando...", "Etapa 2 de 3")` | Captions substitu├¡das, a 3┬¬ fica **vazia**, Imagem recebe o Picture |
+| `("", "", "", "")` | as 3 Captions s├úo apagadas ÔÇö **presen├ºa**, n├úo conte├║do, como `Iif(Type('_msg3')='C',ÔÇª)` |
+
+`.FXP` apagados antes e recriados (22:32), sem di├ílogo suprimido. `Test-CompletudeCodigo` OK no form e no BO; auditoria de propriedades inexistentes OK.
+
+## Arquivos
+
+- `automation/OrquestradorMigracao.ps1` ÔÇö fix do gate da Fase 8
+- `projeto/app/forms/operacionais/FormSIGPRALE.prg` ÔÇö AutoSize, MinButton, Imagem.Visible + nota da medi├º├úo
+- `CLAUDE.md` regra #23 ÔÇö o achado do `AutoSize`/`Height`, com tabela medida
+- `automation/test_fase8_sigprale.prg`, `medir_autosize_label{,2}.prg` ÔÇö harness e medi├º├Áes
+- mem├│ria: recorr├¬ncia na Fase 8 e o achado do AutoSize registrados nos arquivos existentes
+
+Uma observa├º├úo que vale saber: a **Fase 7 passou por acidente**, n├úo por m├®rito. Este form tem *zero* handlers e o piso dela ├® 2 ÔÇö mas as checagens de nome usam substring no arquivo inteiro, e o cabe├ºalho do `.prg` cita `BtnIncluirClick` etc. ao explicar por que n├úo existem. ├ë a fragilidade j├í registrada (6 de 449 forms passam algum nome s├│ por coment├írio); endurec├¬-la atinge as 4 fases, ent├úo n├úo mexi aqui.

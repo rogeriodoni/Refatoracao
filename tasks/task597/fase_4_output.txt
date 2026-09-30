@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both `SigPrCtcBO.prg` and `FormSigPrCtc.prg` compile cleanly (verified with VFP9, no errors, stale FXPs cleaned up).
+
+## Summary ÔÇö Fase 4/8: Grid e Bot├Áes CRUD
+
+**`FormSigPrCtc.prg`** (updated):
+- `ConfigurarGrid()` ÔÇö grade `grd_4c_Dados` com 3 colunas (Moeda/Descri├º├úo/Cota├º├úo, larguras 50/200/95, exatas do legado)
+- Lookup de moeda (`fwbuscaext` do legado) emulado via `ColMoedaLostFocus` usando `FormBuscaAuxiliar`, seguindo o contrato can├┤nico (`this_lAchouRegistro`/`this_lSelecionou`)
+- `ColMoedaGotFocus`/`ColDescricaoGotFocus` emulam o `When` das colunas 1 e 2 (c├®lula s├│ edita moeda em linha nova; descri├º├úo nunca recebe foco), com guarda de reentr├óncia (`this_lNavegandoGrade`)
+- `ConfigurarShape`/`ConfigurarBotoes`/`AjustarBotoesPorAcesso` ÔÇö bot├Áes Inserir/Excluir/Sair (75x75 can├┤nico) + Shape1 decorativo, replicando o bloco ativo (n├úo comentado) do `Init` legado (`fChecaAcesso` + cascata de `Left`/`Width`)
+- `CarregarGrade()` ÔÇö popula e vincula a grade, reconfigurando `Width`/`Header1.Caption` ap├│s `RecordSource` (regra do projeto)
+- `BtnInserirClick`/`BtnExcluirClick`/`BtnSairClick` ÔÇö transcri├º├úo fiel do `cmdInserir.Click`/`cmdExcluir.Click`/`cmdSair.Click`, incluindo a checagem de moeda duplicada e o comportamento "falha de grava├º├úo n├úo impede fechamento"
+
+**`SigPrCtcBO.prg`** (updated): dois m├®todos novos ÔÇö `CarregarGradeCotacoes` (SELECT com JOIN em SigCdMoe ÔåÆ cursor local edit├ível) e `SalvarGradeCotacoes` (DELETE+reinsert transacional, padr├úo `BEGIN/COMMIT/ROLLBACK TRANSACTION` j├í usado em `CargoBO.prg`).
+
+Pr├│ximo: Fase 5-6/8 (sem campos soltos fora da grade, j├í cobertos aqui).

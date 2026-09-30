@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í entregue. Os dois arquivos compilam limpos (`.fxp` de 15:52 mais novos que os fontes, zero `.err`).
+
+## O que estava bloqueando
+
+A sess├úo anterior diagnosticou corretamente e parou. Eu medi de novo, replicando o `case 8` com os helpers extra├¡dos por **AST** (nunca dot-source do orquestrador ÔÇö isso dispara migra├º├úo real), e confirmei os dois bloqueios ÔÇö que s├úo **independentes**:
+
+| Bloqueio | Medi├º├úo |
+|---|---|
+| `semCrudLegadoF8 = False` | O ├║nico padr├úo CRUD que casa no dump inteiro ├® `btnexcluir`. Mas ele ├® `ToolTipText = "Excluir item"` e seu Click ├® `Select dbImpressao / Delete` ÔÇö **apaga-linha da grade**, cursor local, nenhuma tabela. Com ele falso, os **oito** ramos de exce├º├úo ficam fora de alcance antes de serem avaliados, e a fase passa a exigir `BtnCancelarClick` de um legado que n├úo tem Cancelar. |
+| `padraoAcaoGravar` n├úo casa | `BtnImprimeClick`. **Quarta recorr├¬ncia** da lista de verbos, depois de `Processa`/`Processo`, `Consultar` e `Enviar`. |
+
+## As duas corre├º├Áes
+
+**1. Handler renomeado** ÔÇö aqui o gate est├í **certo**: o legado tem a├º├úo de verdade (`Imprime.Click` chama `SigOpEtq(...)` e faz `Commit()`/`RollBack()`). Segui o precedente j├í registrado: `BtnImprimeClick` ÔåÆ **`BtnProcessarImpressaoClick`**. "Processar" ├® honesto ÔÇö o Click confirma, descarta itens sem quantidade, reordena o cursor, imprime e commita. S├│ o handler mudou; o objeto segue `obj_4c_BTNREPORT`, ent├úo o `mapeamento.json` n├úo foi tocado.
+
+**2. Gate: `$soApagaLinhaGradeF8`** ÔÇö em vari├ível **pr├│pria** (`$semCrudRealF8`), consumida **s├│** pelo ramo FLUXO-UNICO. N├úo mexi em `$semCrudLegadoF8`, que os outros sete ramos consomem ÔÇö mesma decis├úo que PROTOCOLO e FILTRO-DESPACHO tomaram. Fail-closed em tr├¬s provas somadas: zero evid├¬ncia estrutural, ├║nico verbo ├® `Excluir` sem irm├úos da barra CRUD, e `Test-LegadoEscritaSoEmCursorLocal` (o helper que j├í sabia responder isso).
+
+**Delta medido nos 608 dumps, com a cadeia de exclus├úo inteira + `$metodosFaltantes.Count -gt 0`:** o predicado casa 9 dumps; muda o veredicto em **3 dumps do mesmo SCX = 1 form distinto**, zero regress├úo.
+
+## Um achado novo, que valia a fase sozinho
+
+O validador de completude reprovava o **BO** por `pendente` ÔÇö casando dentro de **`independente`**, num coment├írio de design leg├¡timo. Mesma classe da armadilha j├í conhecida com "nao implement", mas ainda n├úo catalogada. Reescrito para "seja qual for o resultado interno dela". Depois disso `Test-CompletudeCodigo` passa nos dois arquivos.
+
+## Verificado
+
+`.fxp` gerados / zero `.err` ┬À `Test-CompletudeCodigo` OK nos dois ┬À `VerificarPropriedadesInexistentes` OK ┬À zero `RETURN` dentro de `TRY` ┬À zero n├úo-ASCII ┬À rename sem vazamento (`Formche.prg` tem um `BtnImprimeClick` pr├│prio, de outro form, corretamente intocado).
+
+## Dois pontos que voc├¬ precisa saber
+
+**Esta execu├º├úo ainda vai reprovar, e n├úo por defeito do form.** O orquestrador da task609 foi parseado ~13:39; meu conserto ├® de ~15:30 ÔÇö PowerShell n├úo recarrega o `.ps1` mid-run. Medido com o gate **de disco**: `semCrudRealF8=True`, `legadoFluxoUnicoF8=True`, `metodosFaltantes` vazio, `padraoAcaoGravar` casando ÔåÆ **passa**. Vale da pr├│xima task em diante. N├úo inventei um `BtnCancelarClick` para satisfazer o gate velho: seria superf├¡cie que o legado n├úo tem (PILAR 1) ou stub vazio.
+
+**N├úo consegui reproduzir a prova de instancia├º├úo.** Nesta sess├úo n├úo-interativa o `vfp9.exe` **compila mas n├úo executa** o corpo do `.prg`: `COMPILE` gera os `.fxp`, mas `STRTOFILE`, `?` (mesmo com `-RedirectStandardOutput`), `MD` e `CREATE TABLE` n├úo produzem nada, e ├ás vezes o processo fica pendurado com a janela do IDE. Testei `-t`/`-T`, com e sem aspas, por Git Bash e por `Start-Process -NoNewWindow` replicando o `Invoke-VFP9WithTimeout`. Ent├úo, ao contr├írio da sess├úo anterior, **n├úo estou afirmando que o form instancia** ÔÇö a evid├¬ncia que tenho ├® est├ítica. Piorei isso num ponto: apaguei `instantiate_sigpretqf8_result.txt` antes de rodar, destruindo o resultado da corrida anterior, que eu tamb├®m n├úo posso citar. Acrescentei um passo 11 ao `InstantiateCheckSigPrEtqF8.prg` (prova o handler renomeado cham├ível de fora) para quando rodar num ambiente interativo.
+
+Registrei tudo ÔÇö as duas frentes, o delta, a armadilha do `independente` e a limita├º├úo do VFP9 ÔÇö na mem├│ria do gate da Fase 8.

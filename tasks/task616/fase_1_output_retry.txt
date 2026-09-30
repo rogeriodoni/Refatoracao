@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All structures balanced, all 13 CATCH blocks report errors. **Phase 1 is complete** ÔÇö but I need to flag what I found, because it changes what the rest of task616 should do.
+
+## Fase 1 conclu├¡da
+
+`projeto/app/classes/SigPrGloTBO.prg` existe (52 KB, 1037 linhas): `DEFINE CLASS SigPrGloTBO AS BusinessBase`, **72 propriedades `this_*`** declaradas, `Init()` com `this_cTabela = "SigOpPic"` / `this_cCampoChave = "Cidchaves"`. Validado contra as regras: sem `RETURN` dentro de TRY (#1), sem `ISEMPTY` (#2), sem `PUBLIC` em DEFINE CLASS (#9.1), sem acentos literais (#4, usa `CHR()` em 18 sites), nenhum CATCH silencioso (#9). `SigOpPic` confere no schema can├┤nico (682 tabelas lidas com encoding correto, 40 colunas).
+
+## O que eu n├úo fiz: gerar c├│digo novo
+
+N├úo escrevi um BO do zero, porque o diagn├│stico mudou a tarefa:
+
+**1. O SCX de origem est├í genuinamente vazio.** `SigPrGloT.scx` tem 2 objetos (`Dataenvironment` + `Form1` 375x250) e **zero m├®todos**. N├úo ├® falha de extra├º├úo ÔÇö os mesmos 1469 bytes sa├¡ram id├¬nticos em tr├¬s extra├º├Áes (03/07, 16/07, 29/09). Os quatro irm├úos t├¬m conte├║do real (`SigPrGlo` 49 objetos/24 m├®todos, `SigPrGl2` 53/13, `SigPrGlp` 127/64, `SigPrGlx` 190/88).
+
+**2. Este form j├í foi migrado e commitado.** `SigPrGloTBO.prg` (1037 linhas, 15 m├®todos) e `FormSigPrGloT.prg` (1781 linhas) est├úo no HEAD, com relat├│rios ValidarUI e `FormSigPrGloT_mapeamento.json`. O `menu.prg` j├í chama `CREATEOBJECT("FormSigPrGloT", .F., .F., .F., .T.)` ÔÇö 4 par├ómetros, "Processamento Global por Tipo". O SCX ├® um lan├ºador vazio; a tela real ├® a variante parametrizada de `SigPrGlo`.
+
+**3. Os arquivos tinham sido apagados da working tree**, n├úo do git (` D` no `git status`, junto da dele├º├úo em massa que tamb├®m atingiu `origem/*.scx`). Restaurei com `git checkout` ÔÇö est├úo de volta, id├¬nticos ao HEAD ÔÇö e guardei c├│pia em `tasks/task616/_recuperado_do_git/`, fora do caminho de escrita do pipeline.
+
+## Recomenda├º├úo: abortar as fases 2ÔÇô8
+
+As fases seguintes v├úo gerar a partir do SCX vazio e **sobrescrever** a migra├º├úo validada. A Fase 3 (`Write` do Form) destr├│i as 1781 linhas do `FormSigPrGloT.prg`; a Fase 2 reescreve o BO por cima.
+
+Sugiro marcar task616 como `BLOCKED`/`COMPLETED` com nota "form j├í migrado ÔÇö SCX de origem ├® shell vazio". N├úo mexi em `task_state.json` ÔÇö a decis├úo de parar o pipeline ├® sua. Se preferir que as fases rodem assim mesmo, diga e eu sigo, mas a c├│pia em `_recuperado_do_git/` passa a ser a ├║nica vers├úo v├ílida.

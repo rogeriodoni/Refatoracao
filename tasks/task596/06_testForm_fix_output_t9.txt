@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este n├úo ├® um bug de c├│digo ÔÇö ├® a mesma falha de infraestrutura j├í documentada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`).
+
+O log mostra que o erro ocorre na **ETAPA 1B**, dentro de `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT` do `FormSIGPRCPR`/`SIGPRCPRBO` ÔÇö ├® um pre-flight `SQLSTRINGCONNECT` contra `192.168.200.10`. Confirmei agora mesmo com um teste TCP direto:
+
+```
+TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+A m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server real. Isso j├í se repetiu em 80+ tasks desde 2026-08-02, incluindo 8 tentativas anteriores desta mesma task596/FormSIGPRCPR ÔÇö em nenhuma delas havia algo a corrigir em `FormSIGPRCPR.prg`/`SIGPRCPRBO.prg`, ambos revisados e corretos, sem nada relacionado a conectividade.
+
+N├úo editei nenhum arquivo (n├úo h├í nada no c├│digo que participe dessa conex├úo de rede). Esta ├® a **tentativa 9/10** ÔÇö resta s├│ 1 tentativa antes do pipeline esgotar o or├ºamento nesse mesmo erro de infraestrutura, que nenhuma edi├º├úo de `.prg` pode resolver. Registrei essa ocorr├¬ncia na mem├│ria para refor├ºar que o orquestrador precisa de um circuit-breaker para o c├│digo 1526.

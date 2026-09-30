@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da e verificada.
+
+## Por que a tentativa anterior reprovou
+
+Reproduzi o gate da Fase 8 (`OrquestradorMigracao.ps1:7095-7810`) e isolei **um ├║nico** item faltante: o padr├úo `PROCEDURE Btn(Salvar|Confirmar|Gravar|Processa|...)Click`. O ramo de dispensa n├úo se aplica ÔÇö o legado tem 3 bot├Áes (n├úo 1) e os Clicks fazem trabalho real.
+
+Descobri tamb├®m que a tentativa anterior satisfez `BtnCancelarClick`/`FormParaBO`/`BOParaForm` **s├│ com texto de coment├írio** no cabe├ºalho: o gate usa `-notmatch` sobre o arquivo inteiro, ent├úo a men├º├úo num coment├írio passava. Passava, mas os m├®todos n├úo existiam.
+
+## O que fiz
+
+Nomeei cada m├®todo can├┤nico pelo que a tela **realmente faz**, sem inventar bot├úo (PILAR 1) nem criar m├®todo vazio:
+
+| M├®todo | Realidade |
+|---|---|
+| `BtnGravarClick` | era `BtnAtualizarClick`. O Click do `btnAtualizar` chama `ThisForm.Gravacao` = `Update SigCdPro` + `Delete SigPrPrt` + Commit. Objeto e Caption continuam "Atualizar" |
+| `BtnCancelarClick` | era `BtnSairClick`. O `btnSair` declara `Cancel = .T.` no dump ÔÇö ├® o bot├úo de cancelar do form. Caption segue "Encerrar" |
+| `FormParaBO` / `BOParaForm` | reais e `PROTECTED` (FormBase declara assim; VFP9 n├úo alarga escopo). Levam os 3 filtros ├á ida e exibem o espelhamento da faixa na volta |
+| `AjustarBotoesPorModo` | funil ├║nico do `Enabled` do Atualizar. Antes eram 4 atribui├º├Áes espalhadas ÔÇö o defeito da regra #40 |
+
+No BO: `TemFiltro()` e `NormalizarFiltros()` (crit├®rio da guarda de filtro vazio e espelhamento da faixa, transcritos do `Click` do `btnSelecionar`).
+
+Aproveitei para fechar duas lacunas reais: as properties de filtro do BO nunca eram populadas, e o caminho de sucesso do `Processamento` n├úo repintava a grade (regra #21).
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9 real**: `COMPILE_OK`, `.ERR` vazios nos dois arquivos.
+- **Instancia├º├úo real** (probe headless novo): form abre 800x600, todos os membros presentes, funil devolve `.T./.F./.F.` nos tr├¬s estados, guarda de filtro vazio dispara, e o round-trip `FormParaBO ÔåÆ NormalizarFiltros ÔåÆ BOParaForm` espelha `PRD0001` **na tela** ÔÇö prova que os hooks s├úo carga real, n├úo decora├º├úo.
+- **Gate da Fase 8** e **05d_validarCompletude**: ambos passam.
+
+## Pontos que voc├¬ precisa saber
+
+1. **Deixei de fora, de prop├│sito**: `BtnBuscarClick`/`BtnSalvarClick` (seriam segundo nome para Selecionar/Atualizar), `HabilitarCampos` e `LimparCampos` (o legado n├úo tem habilita├º├úo por modo nem limpeza geral). Cri├í-los seria stub disfar├ºado, que o pr├│prio prompt pro├¡be. Est├í documentado no cabe├ºalho.
+
+2. **O `Processamento` do legado ├® c├│digo morto** ÔÇö e o migrado reproduz isso fielmente. Confirmei no dump: `lcDes = []` (linha 579) nunca ├® reatribu├¡do antes do `If Not Empty(lcDes)` (linha 594), ent├úo o `Insert Into crProdutos` jamais executa. Na pr├ítica **a grade nunca popula e o Atualizar nunca habilita**, no legado e no migrado. Corrigir isso exigiria inventar de onde sai a descri├º├úo ÔÇö regra de neg├│cio que n├úo existe em lugar nenhum do fonte original (regra #17). Se o comportamento esperado ├® a grade popular, isso precisa de decis├úo de neg├│cio, n├úo de c├│digo.
+
+3. **Dois obst├ículos de ambiente** que custaram tempo e vale registrar: `ConfigurarAmbiente()` n├úo retorna nesta m├íquina (probe montado sem ela, carregando s├│ as depend├¬ncias), e `config.prg:118` faz `gb_4c_ValidandoUI = .F.` ÔÇö a flag tem de ser ligada **depois** do `DO config.prg`, sen├úo o form tenta o SQL e n├úo instancia.

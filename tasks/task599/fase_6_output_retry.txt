@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. Compila limpo, instancia e as 9 asser├º├Áes de comportamento passam.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 6 entra pelo ramo **CAPTURA** para este form (confirmei rodando as tr├¬s fun├º├Áes auxiliares do orquestrador contra o dump: `AddCursorLigaGrade`/`ControlSourceLigaLista`/`DialogoExibicao` = `False`). Nesse ramo o ├║nico requisito n├úo atendido era **`PROCEDURE Validar*`**: a valida├º├úo de cada campo tinha sido transcrita **inline dentro dos handlers de KeyPress**, sem virar m├®todo nomeado.
+
+O legado **n├úo tem lookup nenhum** ÔÇö zero `fwBuscaExt`/`fwBuscaSel`/`sigacess`/`mAddColuna` no dump. ├ë um di├ílogo que conversa com o terminal SiTef pela DLL `CliSiTef32I`, n├úo com tabela. Ent├úo inventar `AbrirLookup*` violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"; o ramo CAPTURA existe exatamente para isso.
+
+## O que fiz
+
+Extra├¡ a **cabe├ºa de cada `PROCEDURE Valid` do legado** (valida├º├úo pura) para m├®todos nomeados, deixando o resto (avan├ºo do protocolo SiTef) nos handlers, que agora abortam quando a valida├º├úo reprova ÔÇö o mesmo efeito do `Return(.f.)` legado:
+
+| M├®todo | Origem | Regra |
+|---|---|---|
+| `ValidarDigitos()` | `GetDigitos.Valid` | `abandona` ÔåÆ release; `LEN(ALLTRIM()) <> 4 AND !EMPTY()` ÔåÆ aviso + limpa campo |
+| `ValidarParcelas()` | `Text1.Valid` | `EMPTY()` n├úo avan├ºa protocolo |
+| `ValidarDataVencimento()` | `GetDatas.Valid` | ESC sai primeiro; default `DATE()+30`; `Optiongroup1.Value = 2 AND Value <= DATE()` ÔåÆ "Data Invalida" |
+
+Enquanto transcrevia, achei **dois guards do legado que tinham sido perdidos** na gera├º├úo anterior:
+
+1. **`ThisForm.abandona` nunca foi migrada.** ├ë property custom declarada no `RESERVED3/ClassInfo` do SCX, lida em dois pontos ÔÇö `GetDigitos.Valid` e `GetDigitos.GotFocus` (`IF lnRetorno < 0 .or. ThisForm.Abandona`). O `OR` tinha sido simplesmente cortado do `GotFocus`. Declarei `this_lAbandona` e restaurei os dois usos.
+2. **`IF LASTKEY() = 27 / RETURN .t.` do `GetDatas.Valid` n├úo existia no migrado**, e a ordem importa: no legado o ESC sai **antes** de o campo receber `DATE()+30`. Do jeito que estava, abandonar a tela com ESC gravava data de vencimento numa transa├º├úo cancelada.
+
+N├úo acrescentei valida├º├úo que o legado n├úo tem (ex.: faixa m├¡n/m├íx de parcelas) ÔÇö quem recusa parcela inv├ílida ├® o pr├│prio terminal, via `ProximoComando = 22`, que o handler j├í trata.
+
+## Verifica├º├úo
+
+- `COMPILE_OK` em BO e Form, `.err` vazios (FXP apagado antes, para n├úo medir c├│digo velho).
+- Probe de instancia├º├úo (`automation/InstantiateCheckSigprdftF6.prg`): os tr├¬s `Validar*` foram **chamados de fora da classe**, o que prova que s├úo PUBLIC ÔÇö `PEMSTATUS` sozinho n├úo prova escopo. As 9 asser├º├Áes batem, e os di├ílogos capturados ("Quantidade de Digitos Invalida", "Data Invalida") provam que os caminhos de erro dispararam de fato, em vez de devolver `.F.` calado. `LASTKEY() = 0` no probe, ent├úo os `.T.` n├úo vieram do ramo de ESC.
+- Gate da Fase 6 re-executado com a engine de regex do PowerShell: **`GATE CAPTURA F6 = True`**.
+- `VerificarFuncoesNaoDefinidas.ps1` e `VerificarPropriedadesInexistentes.ps1`: OK, sem achados.
+
+Uma observa├º├úo sobre o ambiente, n├úo sobre esta fase: o `fase_6_output.txt` anterior come├ºa com cinco avisos de regra de permiss├úo em `.claude/settings.local.json` (wildcard antes do resto do comando, em `Bash(grep -rln '...'` e quatro `Bash(cp .../*.frx ...)`). Eles poluem a captura de sa├¡da do invoker e valem revis├úo ├á parte.

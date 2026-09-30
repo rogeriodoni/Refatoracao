@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 complete and verified.
+
+## What I found
+
+The prior (sonnet) attempt was **right that the 4 CRUD handlers don't apply here**, but wrong to stop there ÔÇö it made zero edits, which the orchestrator's no-op detector (Erro178) correctly treats as a failed phase.
+
+`SIGPRCPR` is a modal child dialog: `Class: form` (not `frmcadastro`), no `Grupo_Op`, no `pcEscolha`, exactly 3 standalone buttons (Sair/Ok/Conferencia). Inventing `BtnIncluirClick`/etc. would violate PILAR 1. The Phase 7 gate agrees ÔÇö I replicated its logic: `legadoSemCrud=True, nBotoesLegado=3, nHandlers=3, min=2` ÔåÆ **PASSA**.
+
+But three legacy **events** were genuinely missing, so the phase did have real work:
+
+1. **`Get_Leitura.When` = `Set Confirm On` / `.LostFocus` = `Set Confirm Off` ÔÇö dropped entirely.** With VFP's default `CONFIRM OFF`, the barcode TextBox (`InputMask = "99999999999999"`, 14 digits) **auto-exits on the 14th digit**, so the scanner's trailing ENTER leaks to whatever control took focus. That's the core workflow of this screen. Added `LeituraWhen`/`LeituraLostFocus` via `BINDEVENT`, matching the project idiom (`FormFti`, `Formsigprdft`).
+2. **The legacy `Valid` fires on *any* field exit; the migration only bound `KeyPress` (ENTER/TAB).** Typing a barcode and clicking Ok with the mouse silently discarded the read. `LeituraLostFocus` now covers that, with a reentrancy guard (`this_lProcessandoLeitura`) since `MsgAviso` + `SetFocus` re-trigger `LostFocus`.
+3. **`SET CONFIRM OFF` in `Destroy`** ÔÇö this form has no `DataSession = 2`, so the setting would leak into the rest of the app if closed with focus in the field.
+
+## Bug the probe uncovered
+
+Exercising the new path threw `Table has no index order set` at `SIGPRCPRBO:498`. The Form's placeholder cursor (pre-created for the `ControlSource` binding, regra #41) had the BO's **field list** but not its **index tags**. `ProcessarLeituraCodigoBarra` and `ConferenciaAutomatica` both do `SET ORDER TO TAG CodBarra`, and `ConfirmarConferencia` uses `TAG GruConta` ÔÇö all would raise a **raw VFP Program Error** (neither method has TRY/CATCH). Added the two matching `INDEX ON` lines.
+
+## Verification
+
+- `COMPILE` clean ÔÇö both `.prg`, no `.err` generated.
+- Headless probe: form instantiates; all 3 `BINDEVENT`s registered (`KEYPRESS/WHEN/LOSTFOCUS`); `When`ÔåÆ`CONFIRM=ON`; empty-field `LostFocus`ÔåÆ`OFF` with no processing; reentrancy guard blocks the nested call; real call zeroes the field, clears the flag, and emits the legacy message *once* ("C├│digo de Barras N├úo Cadastrado!!!"); `Release()` leaves `CONFIRM=OFF`.
+- `VerificarPropriedadesInexistentes.ps1` and `VerificarFuncoesNaoDefinidas.ps1`: OK, exit 0.
+- Stale `.fxp` deleted so Phase 8 can't run old p-code.
+
+Helpers added, following existing repo convention: `automation\CompileCheckSigPrCprF7.prg`, `automation\ProbeCprF7.prg`.
+
+## One divergence I left alone ÔÇö your call
+
+The legacy `Ok.Click` does `ParentForm.Enabled = .t.` + `Release` **even after a rollback**; the migrated `BtnOkClick` keeps the dialog open on failure and shows the error. I did not "fix" this to match: staying open preserves the error message and lets the user retry, and no deadlock exists (Sair still re-enables the parent). Reverting to literal legacy behavior would discard the diagnostic. Say the word if PILAR 1 should win here.

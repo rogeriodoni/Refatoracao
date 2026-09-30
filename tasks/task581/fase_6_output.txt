@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All checks pass: no duplicate AddObject names, PROCEDURE/ENDPROC counts balanced, single ENDDEFINE at the end, Destroy() properly updated.
+
+**Phase 6 complete.** Summary of changes to `FormSigMvVde.prg`:
+
+1. **`ConfigurarCamposParte2()`** ÔÇö adds rows 6-10 (labels Conta/Nome/Grupo + line indicator + 3 TextBoxes each), positions/MaxLength/FontName taken exactly from `layout.json`.
+2. **`ConfigurarLookups()`** ÔÇö wires all 11 Conta/DConta pairs (0-10) via `BINDEVENT` on `KeyPress` (Enter/Tab/F4), since a single handler can't know which control fired and `BINDEVENT "Valid"` doesn't fire reliably on TextBox.
+3. **22 KeyPress handlers** (`Conta0KeyPress`..`Conta10KeyPress`, `DConta0KeyPress`..`DConta10KeyPress`) ÔÇö thin delegates passing a literal index to two shared workers.
+4. **`ProcessarBuscaConta`/`ProcessarBuscaDConta`** ÔÇö mirror the legacy `Valid` (exact match via `BuscarContaPorCodigo`/`BuscarContaPorDescricao` on the BO); on miss, open the picker.
+5. **`AbrirLookupVendedor`** ÔÇö canonical `FormBuscaAuxiliar` pattern (handle as 1st arg, `this_lAchouRegistro` guard before `Show()`, assignment only under `this_lSelecionou`).
+6. **`Destroy()`** updated to also release `cursor_4c_VdeLookup`.
+7. Header comment updated to document Phase 6 and clarify that this OPERACIONAL form has no generic Salvar/Cancelar container (only the single `Confirmar` button, deferred to Phase 8).
+
+Grupo fields remain without their own lookup (legacy never defines `Valid` for `get_grupoN`, only an always-`.F.` `When`) ÔÇö that focus-lock is deferred to Phase 7 as already planned.

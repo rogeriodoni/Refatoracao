@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í defeito de c├│digo para corrigir aqui. Isso ├® a 8┬¬ tentativa sobre o **mesmo** task606/FormSigPrEs1, com o **mesmo** erro exato j├í documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`, 78+ tasks desde 2026-08-02).
+
+**Diagn├│stico confirmado agora:**
+```
+TcpClient.BeginConnect(192.168.200.10, 1433) -> TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+O erro `Codigo: 1526` acontece na **ETAPA 1B do TestFormWrapper.prg** ÔÇö pr├®-flight `SQLSTRINGCONNECT` contra o SQL Server (192.168.200.10) ÔÇö **antes** de qualquer `CREATEOBJECT` do `SigPrEs1BO` ou `FormSigPrEs1` ser executado. Ou seja, o erro ocorre num ponto do teste onde nosso c├│digo ainda nem come├ºou a rodar.
+
+`FormSigPrEs1.prg` e `SigPrEs1BO.prg` foram revisados novamente por inteiro (guards de conex├úo, `Show()` fora do TRY - regra #29, `INDEX ON EmpDopNums` refeito ap├│s `SELECT...INTO CURSOR` - regra #42, chave posicional com `PADR` - regra Erro177, `BOParaForm`/`FormParaBO` sim├®tricos, handlers `BINDEVENT` p├║blicos): nenhuma diferen├ºa de c├│digo desde as 7 revis├Áes anteriores, nada relacionado a conectividade de rede.
+
+**Causa raiz**: a m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server real (s├│ tem interfaces para `192.168.100.x` e `192.168.199.x`). Nenhuma edi├º├úo de `.prg` pode resolver isso.
+
+N├úo fiz nenhuma altera├º├úo nos arquivos ÔÇö reescrev├¬-los sem necessidade violaria a regra de s├│ corrigir o erro indicado, e o erro indicado ├® de infraestrutura, n├úo de c├│digo. Atualizei a mem├│ria do projeto registrando esta 8┬¬ reincid├¬ncia (restam 2 tentativas de 10 antes do or├ºamento da task se esgotar neste mesmo problema de rede).

@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada.
+
+## O que estava errado
+
+A fase 8 n├úo falhou por falta de funcionalidade ÔÇö falhou por **um nome de m├®todo**.
+
+O gate da fase 8 exige quatro nomes (`BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`). Rodei as condi├º├Áes do gate contra os arquivos reais e confirmei que o SIGPRCPD se enquadra no ramo **visualizador** (`$legadoVisualizadorF8 = True`: sem CRUD, sem bot├úo de gravar, `Test-LegadoSomenteLeitura` = True, superf├¡cie bot├úo+handler entregue, `.ReadOnly = .T.` no migrado). Esse ramo dispensa tr├¬s nomes ÔÇö mas **mant├®m `CarregarLista` de prop├│sito**, porque este legado *tem* grade e popul├í-la ├® obrigat├│rio.
+
+O form j├í populava a grade, mas o m├®todo se chamava `CarregarGrade()`. A tentativa anterior argumentou que os m├®todos CRUD n├úo se aplicam ÔÇö correto quanto aos outros tr├¬s, mas isso n├úo cobria o `CarregarLista`, que era o ├║nico bloqueador real.
+
+## Corre├º├úo
+
+Renomeei `CarregarGrade` ÔåÆ `CarregarLista` (nome can├┤nico: 138 dos 141 forms OPERACIONAL usam, incluindo o visualizador de refer├¬ncia `FormSigMvSbn`) e **removi o `PROTECTED`**.
+
+O `PROTECTED` n├úo era detalhe cosm├®tico ÔÇö medi no VFP9: o `TesteAutomatico.prg` chama `THIS.oForm.CarregarLista()` de fora da classe, guardado s├│ por `PEMSTATUS(...,5)`, que retorna `.T.` mesmo para m├®todo PROTECTED. Reproduzi os dois estados:
+
+| | `PEMSTATUS` | chamada externa |
+|---|---|---|
+| `PROTECTED FUNCTION` | `.T.` | **`Property CARREGARLISTA is not found`** |
+| `FUNCTION` (public) | `.T.` | `OK retorno=.F.` |
+
+├ë exatamente a regra #3 do CLAUDE.md. Documentei isso em coment├írio no m├®todo para ningu├®m reintroduzir o `PROTECTED`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo** BO + Form no VFP9: `COMPILE_OK`, `.err` vazios (apaguei os `.fxp` antes, sen├úo rodaria c├│digo velho).
+- **Instancia├º├úo headless**: form instancia, `grd_4c_Dados` / `cmd_4c_Sair` / `cnt_4c_Cabecalho` presentes, chamada externa a `CarregarLista()` funciona (retorna `.F.` pelo guard de conex├úo ÔÇö comportamento correto, n├úo crash).
+- **Gate da fase 8**: `(vazio) -> FASE APROVA`.
+- Sem `TODO`/`FIXME`/"nao implement"; sem `MESSAGEBOX` direto; menu j├í registrado (BAR 34 de `popMovimentos`, com `Show()` fora do TRY per regra #29).
+
+## Dois pontos a registrar
+
+1. **Eu introduzi e corrigi uma regress├úo**: o `sed -i` converteu o arquivo inteiro de CRLF para LF. Compilava mesmo assim, mas sujaria o diff em 1077 linhas e foge da conven├º├úo do projeto. Restaurei CRLF ÔÇö o diff final tem s├│ as 6 linhas do rename mais o coment├írio novo.
+
+2. **`ConfigurarAmbiente()` trava o probe** (carrega ~320 forms via `SET PROCEDURE` + `menu.prg`; estourou o timeout de 120s). O script de instancia├º├úo que deixei (`automation/InstantiateCheckSigPrCpdF8b.prg`, novo/n├úo versionado) carrega s├│ a cadeia de depend├¬ncia do form ÔÇö isso confirma a mem├│ria que eu j├í tinha sobre esse probe.
+
+N├úo mexi no `sigprcpdBO.prg` (aparece como modificado no git por causa das fases 1ÔÇô2, n├úo desta fase).

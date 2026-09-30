@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigPrGloT.prg`.
+
+## O que encontrei
+
+Os quatro handlers **j├í existiam** (a execu├º├úo anterior da Fase 7 os declarou "satisfeitos"), mas dois deles tinham defeito real de sem├óntica ÔÇö n├úo eram stubs vazios, eram atalhos perigosos:
+
+| Handler | Mapeamento anterior | Problema |
+|---|---|---|
+| `BtnIncluirClick` | ÔåÆ `CmdProcessarClick()` | Executava o **processamento real da OP** (grava├º├úo no banco via `this_oBusinessObject.ProcessarOP()`) e em seguida abria `FormSigPrGl2` **MODAL** ÔÇö qualquer chamador autom├ítico (harness/pipeline unattended) gravaria dados reais e **travaria no modal** |
+| `BtnExcluirClick` | ÔåÆ `CmdCancelarClick()` ÔåÆ `THIS.Release()` | "Excluir" **destru├¡a o form**; chamadas subsequentes cairiam sobre objeto liberado |
+
+O risco n├úo est├í ativo hoje *pelo harness* ÔÇö `TesteAutomatico.prg:1045` curto-circuita com "PASSOU" quando `lFormOperacional` ├® `.T.`, sem chegar a chamar `BtnIncluirClick()`. Mas depende dessa detec├º├úo de tipo continuar correta, e a sem├óntica est├í errada de qualquer forma.
+
+## O que fiz
+
+Reescrevi os 4 handlers sobre as a├º├Áes **reais** desta tela (o legado `SigPrGloT.SCX` herda de `form`, n├úo de `frmcadastro`, e s├│ tem Processar/Cancelar):
+
+- **Incluir** ÔåÆ nova entrada: `AlternarPagina("ENTRADA")` + `LimparCampos()` + `PopularCamposIniciais()` (rep├Áe defaults de Empresa/Previs├úo/Gera├º├úo/Tipo de OP)
+- **Alterar** ÔåÆ reabre os campos preservando o digitado
+- **Visualizar** ÔåÆ rep├Áe defaults sem descartar os filtros informados
+- **Excluir** ÔåÆ descarta a entrada corrente (equivale ao Limpa), **sem fechar o form**
+
+Gravar continua em `BtnSalvarClick` ÔåÆ `CmdProcessarClick`; fechar continua em `BtnEncerrarClick` ÔåÆ `CmdCancelarClick`. Os m├®todos seguem PUBLIC (regra #3 do CLAUDE.md).
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9 real**: `COMPILE` limpo, arquivo `.err` reporta `SEM ERROS` (`.fxp` apagado depois)
+- 51 `PROCEDURE`/`FUNCTION` ├ù 51 `ENDPROC` ÔÇö balanceado
+- Zero caracteres acentuados literais no `.prg` (regra #4)
+- Nenhum padr├úo rejeitado pelo `Test-CompletudeCodigo` (TODO/FIXME/"nao implement"/`MsgAviso` placeholder); removi tamb├®m a palavra "Stubs" do coment├írio
+- Gate da Fase 7: os 4 nomes presentes, com corpo funcional
+
+## Observa├º├úo sobre esta task
+
+`SigPrGloT.SCX` ├® um **stub vazio no legado** (Form1, 375├ù250, zero controles, zero m├®todos) ÔÇö id├¬ntico em `task188`, `task291` e agora `task616`: ├® a **terceira re-enfileira├º├úo** do mesmo form j├í migrado. O `FormSigPrGloT.prg` real (1797 linhas) foi recuperado do git em `_recuperado_do_git/` durante esta execu├º├úo, porque a Fase 3 usa `Write` e teria destru├¡do o arquivo completo. Vale checar por que a task volta ├á fila ÔÇö o extrator n├úo tem o que extrair desse SCX.

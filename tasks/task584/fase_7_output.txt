@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, that's now consistent with the rest of the repo's FXP cleanup already in progress. The Fase 7/8 work is complete:
+
+**Summary of what was implemented** (`FormSigPrApr.prg` + `SigPrAprBO.prg`):
+
+Since this is an OPERACIONAL form (not CRUD), the generic Fase 7 template ("BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick") didn't apply ÔÇö those buttons don't exist in the legacy `SIGPRAPR`. Instead, I implemented the real "eventos principais" that Fases 5/6 had explicitly deferred:
+
+1. **10 unwired F4/Enter/Tab lookups** ÔÇö Grupo de Produto (de/at├®), Grupo de Venda, and 7 currency/feitio fields ÔÇö using the established `AbrirLookupCanonico` pattern.
+2. **`Get_Variacao` ÔåÆ focus jump** to the Processar button (trivial legacy navigation event).
+3. **Modo "Produtos"** (manual product entry) ÔÇö the `chkAuditado` toggle button, `Shp_foto`/`FigJpg` controls, grid Column1/Column2 `When`/`Valid`/`LostFocus`, and the extended `Column5` Valid ÔÇö transcribed from the legacy source with a new `SigPrAprBO.ProcessarProdutoManual()` (added as **PUBLIC** since the Form can't call the BO's `PROTECTED CalcPreco`/`ObterCotacaoResolvida` directly ÔÇö a bug I caught and fixed before it shipped).
+4. **`Grd_Produto.AfterRowColChange`** ÔÇö loads the current row's product photo, using a single `STRCONV(...,14)` decode (per the documented double-decode corruption pitfall).
+
+Verified: VFP9 compile check passed clean for both files, block-keyword balance checked (IF/ENDIF, WITH/ENDWITH, TRY/ENDTRY, DO CASE/ENDCASE), no duplicate method names, and all new BINDEVENT handlers are PUBLIC.

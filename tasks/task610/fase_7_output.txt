@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da.
+
+## O que foi entregue
+
+**`projeto\app\forms\operacionais\FormSigPrFem.prg`** (+~500 linhas) ÔÇö os eventos dos bot├Áes, ligados por `BINDEVENT` em `ConfigurarBotoesAcao` e todos **PUBLIC** (regra #3):
+
+| Handler | Origem no legado |
+|---|---|
+| `BtnProcessarClick` | `SIGPRFEM.Processar.Click` ÔÇö as 3 valida├º├Áes com `SetFocus` (mensagens literais, `RETURN` **antes** do `TRY`), esconde o Resultado, delega o c├ílculo ao BO, chama `CarregarDados()` e monta os cursores de impress├úo |
+| `BtnVisualizarClick` | `SIGPRFEM.Visualizar.Click` ÔÇö `REPORT FORM ... PREVIEW` |
+| `BtnImprimirClick` | `SIGPRFEM.Imprimir.Click` ÔÇö `REPORT FORM ... TO PRINTER PROMPT` |
+| `BtnSairClick` | `SIGPRFEM.Sair.Click` ÔÇö `ThisForm.Release` |
+
+Auxiliares: `ResultadoDisponivel` (o gate `If thisform.resultado.Visible`), `MontarCursoresImpressao` / `MontarCabecalhoImpressao` (bloco "Criando a Impress├úo" do fim do Click) e `ExecutarReportForm` (helper can├┤nico: guard de FRX, guard de cursor vazio, isolamento de locale, restaura├º├úo do menu).
+
+## Duas decis├Áes que valem registro
+
+**1. O SCX n├úo tem CRUD.** O prompt pedia `BtnIncluir/Alterar/Visualizar/ExcluirClick`, mas SIGPRFEM ├® tela de processamento: os ├║nicos `CommandButton` do dump s├úo Processar/V├¡deo/Impressora/Encerrar, e n├úo h├í `pcEscolha` nem `mGravaDados`. Inventar handlers CRUD violaria o PILAR 1. O gate da Fase 7 tem ramo pr├│prio para isso (legado sem CRUD + ÔëÑ2 handlers `Btn*Click`) ÔÇö o form entrega 4.
+
+**2. Precisei completar o BO, que a Fase 2 deixou em aberto.** O `SigPrFemBO` documentava que o c├ílculo viria "nas fases seguintes", mas sem ele os handlers chamariam m├®todo inexistente ÔÇö que em VFP9 compila limpo e s├│ estoura em runtime (regra #13). Ent├úo transcrevi para `SigPrFemBO.prg` (+1.740 linhas) o `Processar.Click` (~900 linhas) e o `PROCEDURE posbalanco` (~680 linhas), com o corpo fora de `TRY/CATCH` (os 22 `Return 0` de falha de conex├úo n├úo cabem dentro dele) e o `TRY/CATCH` no ponto de entrada. `ZAP` vai guardado por `SET SAFETY OFF` ÔÇö `DataSession = 2` nasce com SAFETY ON e o di├ílogo modal congelaria a tela.
+
+Tamb├®m copiei `SigPrFem.frx`/`.frt` do acervo legado para `projeto\app\reports\` ÔÇö n├úo existiam l├í, e os dois bot├Áes de relat├│rio apontam para eles. Os cursores `TmpImp`/`Cabecalho` mant├¬m o nome do legado de prop├│sito: s├úo contrato do FRX.
+
+## Desvios deliberados (3, todos comentados no c├│digo)
+
+- V├¡deo/Impressora sem resultado **avisam**; o legado fica mudo e o usu├írio clica achando que quebrou.
+- Guard de divis├úo por zero no `%` de falhas ÔÇö sem ele uma fase sem sa├¡da derruba a montagem inteira do relat├│rio.
+- `ResolverMaterialNensI` usa alias pr├│prio para a consulta pontual ao `SigOpPic`, em vez de sobrescrever o cursor indexado como o legado faz (resultado id├¬ntico).
+
+## Verifica├º├úo
+
+Compila├º├úo limpa nos dois arquivos, e probe headless instanciando o form: os 4 handlers s├úo PUBLIC, os 4 `BINDEVENT` est├úo registrados, as 3 valida├º├Áes disparam na ordem certa com o texto exato do legado, o gate dos relat├│rios barra antes de processar e o FRX resolve.
+
+**O que n├úo foi exercitado:** o caminho de c├ílculo em si (`Processar` ÔåÆ `PosBalanco`). O SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina, ent├úo a l├│gica de neg├│cio foi transcrita e compilada, mas n├úo rodada contra dados reais ÔÇö o primeiro teste com banco vivo ainda precisa acontecer.

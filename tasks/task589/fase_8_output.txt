@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is done and verified by measurement in VFP9.
+
+## O que foi entregue
+
+**`FormSigPrCfn.prg`** (1835 linhas) ÔÇö quatro m├®todos de consolida├º├úo, todos com referente **literal** no dump legado e todos em caminho **vivo**:
+
+| M├®todo | Referente no legado | Chamado por |
+|---|---|---|
+| `FormParaBO` | leitura de `ThisForm.<campo>.Value` dentro de `PROCEDURE calculos` | `AtualizarResultado`, `ValidarJurosMes`, `ValidarJurosDia` |
+| `BOParaForm` | bloco `With ThisForm / .getValorBase.Value = ...` do `Init` | `InicializarForm`, `LimparCampos` |
+| `HabilitarCampos` | bloco `llEnable` (7 alvos), id├¬ntico no `Init` (`.f.`) e em `getValorBase.Valid` (`.t.`) | `InicializarForm(.F.)`, `ValidarValorBase(.T.)` |
+| `LimparCampos` | bloco de zeragem do `Init` | hook de `FormBase.Novo` |
+
+`SincronizarBOControles` virou `FormParaBO` (renomea├º├úo, n├úo duplica├º├úo), e as sete atribui├º├Áes `Enabled` que estavam repetidas em dois lugares viraram uma chamada.
+
+## Verifica├º├úo (n├úo por leitura de c├│digo)
+
+`COMPILE` limpo nos dois arquivos, e um harness instanciou o form no VFP9: c├ílculo simples confere (`1000 ├ù 3% ├ù 30/30 = 30`, total 1030), `Parcela = Total/2` com dois vencimentos, os 7 alvos do `llEnable` nascem `.F.` enquanto `ValorBase`/`optDias`/vencimentos seguem `.T.`, `FormBase.Novo` zera tudo e re-trava, rec├ílculo p├│s-limpeza confere (520), e os quatro m├®todos recusam chamada externa ÔÇö provando que s├úo `PROTECTED` de fato (os hooks de `FormBase` s├úo `PROTECTED` e subclasse n├úo alarga escopo). Nenhum di├ílogo suprimido.
+
+## O que N├âO foi criado ÔÇö e a mudan├ºa no gate
+
+Este legado n├úo tem lista, n├úo tem CRUD e tem **um** bot├úo que s├│ faz `ThisForm.Release`. `CarregarLista` e `BtnCancelarClick` n├úo t├¬m referente: cri├í-los seria inventar superf├¡cie (PILAR 1) ou gerar m├®todo vazio. Confirmei que os cinco ramos de exce├º├úo da Fase 8 n├úo cobrem esta forma ÔÇö **campos edit├íveis + sem lista + sem CRUD** ÔÇö ent├úo o conserto ├® no gate, e acrescentei o sexto ramo (`CALCULADORA`) em `OrquestradorMigracao.ps1`, fail-closed em sete provas somadas, dispensando **s├│** esses dois nomes; `FormParaBO`/`BOParaForm` continuam exigidos.
+
+**Delta medido** nos dumps de `tasks\`: o lado-dump casa 4 arquivos, mas s├úo o mesmo SCX migrado em task161/236/264/589 apontando para o mesmo `.prg` ÔÇö efetivamente **1 form, zero regress├úo**.
+
+Dois pontos que valem men├º├úo:
+
+- Escrevi os nomes dispensados no cabe├ºalho **com o miolo elidido** (`Btn Cancelar Click`, `Carregar Lista`). A checagem do gate ├® substring no arquivo inteiro, ent├úo document├í-los por extenso faria o ramo virar no-op e a fase passar pelo motivo errado.
+- O ambiente n├úo alcan├ºa o SQL Server (`gnConnHandle` n├úo resolve) ÔÇö ├® a limita├º├úo de rota j├í conhecida desta m├íquina, n├úo defeito do form; o form instancia e calcula normalmente, pois n├úo consulta banco.
+
+N├úo commitei ÔÇö me avise se quer que eu fa├ºa.

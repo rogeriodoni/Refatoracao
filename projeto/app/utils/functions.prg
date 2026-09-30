@@ -2135,3 +2135,268 @@ ENDFUNC
 FUNCTION fGerMascara(par_nNum)
     RETURN PADL(ALLTRIM(STR(INT(NVL(par_nNum, 0)))), 10, "0")
 ENDFUNC
+
+*==============================================================================
+* FUNCTION fCalcMod10
+* Digito verificador Modulo 10 (campos do codigo de barras/linha digitavel de
+* boleto - padrao FEBRABAN). O fonte legado desta funcao NAO existe no acervo
+* (regra CLAUDE.md #27 - wrapper para funcao global do legado ausente); o
+* algoritmo abaixo eh o padrao publico FEBRABAN, o mesmo usado por qualquer
+* banco brasileiro para os campos 1/2/3 da linha digitavel.
+*
+* Par: par_cCampo - string somente digitos
+* Ret: 1 digito verificador (char)
+*==============================================================================
+FUNCTION fCalcMod10(par_cCampo)
+    LOCAL loc_cCampo, loc_nI, loc_nPeso, loc_nSoma, loc_nDig, loc_nProduto, loc_nJ, loc_cDig
+
+    loc_cCampo = ALLTRIM(NVL(par_cCampo, ""))
+    loc_nSoma  = 0
+    loc_nPeso  = 2
+
+    FOR loc_nI = LEN(loc_cCampo) TO 1 STEP -1
+        loc_cDig    = SUBSTR(loc_cCampo, loc_nI, 1)
+        loc_nDig    = IIF(ISDIGIT(loc_cDig), VAL(loc_cDig), 0)
+        loc_nProduto = loc_nDig * loc_nPeso
+
+        IF loc_nProduto > 9
+            *-- soma os dois algarismos do produto (ex.: 16 -> 1+6=7)
+            FOR loc_nJ = 1 TO LEN(ALLTRIM(STR(loc_nProduto)))
+                loc_nSoma = loc_nSoma + VAL(SUBSTR(ALLTRIM(STR(loc_nProduto)), loc_nJ, 1))
+            ENDFOR
+        ELSE
+            loc_nSoma = loc_nSoma + loc_nProduto
+        ENDIF
+
+        loc_nPeso = IIF(loc_nPeso = 2, 1, 2)
+    ENDFOR
+
+    loc_nDig = MOD(10 - MOD(loc_nSoma, 10), 10)
+
+    RETURN ALLTRIM(STR(loc_nDig, 1))
+ENDFUNC
+
+*==============================================================================
+* FUNCTION fCalcMod11BB
+* Digito verificador Modulo 11 do codigo de barras de boleto (padrao FEBRABAN,
+* pesos ciclando de 2 a 9). Usado por Banco do Brasil (001), Santander
+* (033/353) e Bradesco (237) no barramento de 43 posicoes (banco+moeda+
+* fator+valor+campo livre, SEM o proprio DV).
+*
+* O fonte legado (fCalcMod11BB) NAO existe no acervo - so as chamadas no
+* dump (regra CLAUDE.md #27). O algoritmo abaixo eh o padrao publico FEBRABAN;
+* par_cBanco/par_cTipo sao aceitos para manter a assinatura do legado (o
+* legado passa cBanco sempre, e "DVB" as vezes como 3o argumento), mas a
+* regra do DV excepcional (resto 0/1/10/11 -> DV=1) eh universal para todos
+* os bancos deste form - nenhum eh a Caixa Economica (104), unico banco que
+* usa DV=0 nesses casos.
+*
+* Par: par_cCampo - os 43 digitos do campo (sem o DV)
+*      par_cBanco, par_cTipo - mantidos por compatibilidade de assinatura
+* Ret: 1 digito verificador (char)
+*==============================================================================
+FUNCTION fCalcMod11BB(par_cCampo, par_cBanco, par_cTipo)
+    LOCAL loc_cCampo, loc_nI, loc_nPeso, loc_nSoma, loc_nResto, loc_nDV
+
+    loc_cCampo = ALLTRIM(NVL(par_cCampo, ""))
+    loc_nSoma  = 0
+    loc_nPeso  = 2
+
+    FOR loc_nI = LEN(loc_cCampo) TO 1 STEP -1
+        loc_nSoma = loc_nSoma + (IIF(ISDIGIT(SUBSTR(loc_cCampo, loc_nI, 1)), VAL(SUBSTR(loc_cCampo, loc_nI, 1)), 0) * loc_nPeso)
+        loc_nPeso = IIF(loc_nPeso = 9, 2, loc_nPeso + 1)
+    ENDFOR
+
+    loc_nResto = MOD(loc_nSoma, 11)
+    loc_nDV    = 11 - loc_nResto
+
+    IF loc_nDV = 0 OR loc_nDV = 10 OR loc_nDV = 11
+        loc_nDV = 1
+    ENDIF
+
+    RETURN ALLTRIM(STR(loc_nDV, 2))
+ENDFUNC
+
+*==============================================================================
+* FUNCTION fCalcMod11B7
+* Digito verificador do "Nosso Numero" do Bradesco - Modulo 11 com pesos
+* ciclando de 2 a 7 (padrao proprio do Bradesco, distinto do Mod11 "B9" do
+* codigo de barras). Fonte legado ausente do acervo (regra CLAUDE.md #27);
+* algoritmo abaixo eh o padrao publico Bradesco: resto 0 -> DV "0",
+* resto 1 -> DV "P", senao DV = 11 - resto.
+*
+* Par: par_cCampo - carteira + nosso numero (sem o DV)
+* Ret: 1 digito verificador (char, pode ser "P")
+*==============================================================================
+FUNCTION fCalcMod11B7(par_cCampo)
+    LOCAL loc_cCampo, loc_nI, loc_nPeso, loc_nSoma, loc_nResto, loc_cDV
+
+    loc_cCampo = ALLTRIM(NVL(par_cCampo, ""))
+    loc_nSoma  = 0
+    loc_nPeso  = 2
+
+    FOR loc_nI = LEN(loc_cCampo) TO 1 STEP -1
+        loc_nSoma = loc_nSoma + (IIF(ISDIGIT(SUBSTR(loc_cCampo, loc_nI, 1)), VAL(SUBSTR(loc_cCampo, loc_nI, 1)), 0) * loc_nPeso)
+        loc_nPeso = IIF(loc_nPeso = 7, 2, loc_nPeso + 1)
+    ENDFOR
+
+    loc_nResto = MOD(loc_nSoma, 11)
+
+    DO CASE
+        CASE loc_nResto = 0
+            loc_cDV = "0"
+        CASE loc_nResto = 1
+            loc_cDV = "P"
+        OTHERWISE
+            loc_cDV = ALLTRIM(STR(11 - loc_nResto, 2))
+    ENDCASE
+
+    RETURN loc_cDV
+ENDFUNC
+
+*==============================================================================
+* FUNCTION fGerBar2de5
+* Gera um arquivo BMP monocromatico com o codigo de barras "Interleaved 2 of 5"
+* (padrao dos boletos bancarios brasileiros - 44 digitos: banco+moeda+DV+
+* fator+valor+campo livre). Fonte legado (fGerBar2de5) NAO existe no acervo
+* (regra CLAUDE.md #27) - algoritmo abaixo eh o padrao publico I2of5.
+*
+* Par: par_cArquivo - caminho completo do .bmp a gravar
+*      par_cCodigo  - string somente digitos (o codigo de barras, 44 posicoes)
+* Ret: .T. se gravou o arquivo
+*==============================================================================
+FUNCTION fGerBar2de5(par_cArquivo, par_cCodigo)
+    LOCAL loc_cCodigo, loc_nHandle, loc_lSucesso, loc_nI, loc_cPar, ;
+          loc_cPatDig1, loc_cPatDig2, loc_nBit, loc_nLarguraTotal, loc_nAltura, ;
+          loc_nLarguraN, loc_nLarguraW, loc_aPadroes, loc_cLinha, loc_nBytesLinha, ;
+          loc_nX, loc_cPixels, loc_nModulo, loc_nLargModulo, loc_lPreto
+    loc_lSucesso = .F.
+
+    *-- Tabela padrao I2of5: 5 bits por digito (0=estreito, 1=largo),
+    *-- sempre com exatamente 2 barras largas em 5.
+    DIMENSION loc_aPadroes(10)
+    loc_aPadroes(1)  = "00110"  && 0
+    loc_aPadroes(2)  = "10001"  && 1
+    loc_aPadroes(3)  = "01001"  && 2
+    loc_aPadroes(4)  = "11000"  && 3
+    loc_aPadroes(5)  = "00101"  && 4
+    loc_aPadroes(6)  = "10100"  && 5
+    loc_aPadroes(7)  = "01100"  && 6
+    loc_aPadroes(8)  = "00011"  && 7
+    loc_aPadroes(9)  = "10010"  && 8
+    loc_aPadroes(10) = "01010"  && 9
+
+    loc_cCodigo = ALLTRIM(NVL(par_cCodigo, ""))
+    IF MOD(LEN(loc_cCodigo), 2) <> 0
+        loc_cCodigo = "0" + loc_cCodigo
+    ENDIF
+    IF EMPTY(loc_cCodigo)
+        RETURN .F.
+    ENDIF
+
+    loc_nLarguraN = 1  && modulos (pixels) da barra/espaco estreito
+    loc_nLarguraW = 3  && modulos (pixels) da barra/espaco largo
+
+    *-- Monta a sequencia de modulos: cada elemento eh "largura,cor" (cor
+    *-- 1=barra preta, 0=espaco branco). Inicio: N N N N (barra,espaco,
+    *-- barra,espaco, todos estreitos). Fim: barra larga, espaco estreito,
+    *-- barra estreita.
+    loc_cLinha = ""
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",1;"
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",0;"
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",1;"
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",0;"
+
+    FOR loc_nI = 1 TO LEN(loc_cCodigo) STEP 2
+        loc_cPatDig1 = loc_aPadroes(VAL(SUBSTR(loc_cCodigo, loc_nI, 1)) + 1)
+        loc_cPatDig2 = loc_aPadroes(VAL(SUBSTR(loc_cCodigo, loc_nI + 1, 1)) + 1)
+        FOR loc_nBit = 1 TO 5
+            loc_nModulo = IIF(SUBSTR(loc_cPatDig1, loc_nBit, 1) = "1", loc_nLarguraW, loc_nLarguraN)
+            loc_cLinha  = loc_cLinha + TRANSFORM(loc_nModulo) + ",1;"
+            loc_nModulo = IIF(SUBSTR(loc_cPatDig2, loc_nBit, 1) = "1", loc_nLarguraW, loc_nLarguraN)
+            loc_cLinha  = loc_cLinha + TRANSFORM(loc_nModulo) + ",0;"
+        ENDFOR
+    ENDFOR
+
+    *-- Fim: barra larga, espaco estreito, barra estreita
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraW) + ",1;"
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",0;"
+    loc_cLinha = loc_cLinha + TRANSFORM(loc_nLarguraN) + ",1;"
+
+    *-- Calcula a largura total em pixels somando cada modulo da sequencia
+    loc_nLarguraTotal = 0
+    FOR loc_nI = 1 TO OCCURS(";", loc_cLinha)
+        loc_cPar          = GETWORDNUM(loc_cLinha, loc_nI, ";")
+        loc_nLarguraTotal = loc_nLarguraTotal + VAL(GETWORDNUM(loc_cPar, 1, ","))
+    ENDFOR
+    loc_nAltura = 60
+
+    TRY
+        *-- Monta a linha de pixels 1-bit-por-modulo (1=preto, 0=branco),
+        *-- depois expande para 1 byte por pixel monocromatico (paleta 2 cores).
+        loc_cPixels = ""
+        FOR loc_nI = 1 TO OCCURS(";", loc_cLinha)
+            loc_cPar       = GETWORDNUM(loc_cLinha, loc_nI, ";")
+            loc_nLargModulo = VAL(GETWORDNUM(loc_cPar, 1, ","))
+            loc_lPreto      = (VAL(GETWORDNUM(loc_cPar, 2, ",")) = 1)
+            FOR loc_nX = 1 TO loc_nLargModulo
+                loc_cPixels = loc_cPixels + IIF(loc_lPreto, CHR(0), CHR(1))
+            ENDFOR
+        ENDFOR
+
+        *-- BMP 8bpp com paleta de 2 cores (preto/branco), linhas com padding
+        *-- de 4 bytes (regra do formato BMP) e armazenadas de baixo para cima.
+        loc_nBytesLinha = INT((loc_nLarguraTotal + 3) / 4) * 4
+
+        loc_nHandle = FCREATE(par_cArquivo)
+        IF loc_nHandle >= 0
+            = FWRITE(loc_nHandle, "BM")                                    && assinatura
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(54 + 8 + (loc_nBytesLinha * loc_nAltura))) && tamanho arquivo
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(0))                     && reservado
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(54 + 8))                && offset dos pixels
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(40))                    && tamanho do BITMAPINFOHEADER
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(loc_nLarguraTotal))     && largura
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(loc_nAltura))           && altura
+            = FWRITE(loc_nHandle, fGerBar2de5Word(1))                      && planos
+            = FWRITE(loc_nHandle, fGerBar2de5Word(8))                      && bits por pixel
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(0))                     && sem compressao
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(loc_nBytesLinha * loc_nAltura)) && tamanho da imagem
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(2835))                  && resolucao X (72 dpi)
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(2835))                  && resolucao Y
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(2))                     && cores na paleta
+            = FWRITE(loc_nHandle, fGerBar2de5DWord(0))                     && cores importantes
+            = FWRITE(loc_nHandle, CHR(255) + CHR(255) + CHR(255) + CHR(0)) && paleta[0] branco
+            = FWRITE(loc_nHandle, CHR(0)   + CHR(0)   + CHR(0)   + CHR(0)) && paleta[1] preto
+
+            FOR loc_nI = 1 TO loc_nAltura
+                = FWRITE(loc_nHandle, PADR(loc_cPixels, loc_nBytesLinha, CHR(1)))
+            ENDFOR
+
+            = FCLOSE(loc_nHandle)
+            loc_lSucesso = .T.
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro("Falha ao gerar imagem do c" + CHR(243) + "digo de barras:" + CHR(13) + ;
+            loc_oErro.Message, "C" + CHR(243) + "digo de Barras")
+        loc_lSucesso = .F.
+    ENDTRY
+
+    RETURN loc_lSucesso
+ENDFUNC
+
+*==============================================================================
+* FUNCTION fGerBar2de5DWord / fGerBar2de5Word - helpers internos de fGerBar2de5
+* Empacotam inteiro em little-endian (formato binario do BMP).
+*==============================================================================
+FUNCTION fGerBar2de5DWord(par_nValor)
+    LOCAL loc_nV
+    loc_nV = INT(NVL(par_nValor, 0))
+    RETURN CHR(MOD(loc_nV, 256)) + CHR(MOD(INT(loc_nV / 256), 256)) + ;
+           CHR(MOD(INT(loc_nV / 65536), 256)) + CHR(MOD(INT(loc_nV / 16777216), 256))
+ENDFUNC
+
+FUNCTION fGerBar2de5Word(par_nValor)
+    LOCAL loc_nV
+    loc_nV = INT(NVL(par_nValor, 0))
+    RETURN CHR(MOD(loc_nV, 256)) + CHR(MOD(INT(loc_nV / 256), 256))
+ENDFUNC

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í bug de c├│digo aqui ÔÇö reproduzi o mesmo cen├írio j├í documentado na mem├│ria do projeto (91+ tasks desde 2026-08-02).
+
+**Diagn├│stico:** o log mostra a falha na **ETAPA 1B**, antes de qualquer `CREATEOBJECT` do form ou do BO: ├® o pr├®-flight `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg` tentando conectar em `192.168.200.10:1433` (DB_MBAHIA). Confirmei agora que a m├íquina que roda o pipeline n├úo tem rota at├® essa sub-rede:
+
+```
+TCP CONNECT: FAILED (timeout/unreachable)
+```
+
+**Revisei `FormSigPrEop.prg` e `SigPrEopBO.prg` por inteiro** ÔÇö nada neles participa da conectividade de rede, e ambos j├í seguem os padr├Áes corretos do projeto: guards `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` em `InicializarForm`, `ControlSource` s├│ depois do cursor existir (regra #41), `ObterChavePrimaria` com `PADR`/`PADL` (chave posicional, regra #22/Erro177), CheckBox de Grid Column com `CurrentControl`+`Sparse=.F.` (regra #18), handlers `BINDEVENT` p├║blicos com os par├ómetros do evento declarados.
+
+N├úo fiz nenhuma edi├º├úo nos arquivos ÔÇö reescrever c├│digo que j├í est├í correto n├úo resolve um problema de infraestrutura, e s├│ consumiria os retries do pipeline ├á toa (esse padr├úo j├í se repetiu em dezenas de tasks anteriores, sempre com a mesma conclus├úo). Registrei essa ocorr├¬ncia na mem├│ria do projeto para o pr├│ximo runtime_fix (se houver) n├úo perder tempo revisando o form de novo.
+
+Se quiser, posso investigar a rota de rede da m├íquina do pipeline em si, mas isso est├í fora do escopo de "corrigir o `.prg`".

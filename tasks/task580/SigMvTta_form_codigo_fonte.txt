@@ -1,0 +1,919 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigMvTta.SCX
+* Data/Hora: 25/09/2026 16:32:36
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGMVTTA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGMVTTA
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGMVTTA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGMVTTA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGMVTTA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdTitulos
+  Parent: SIGMVTTA
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGMVTTA.grdTitulos.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGMVTTA.grdTitulos.Column8
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGMVTTA
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupos
+  Parent: SIGMVTTA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDContas
+  Parent: SIGMVTTA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGMVTTA
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGMVTTA
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Impostos Gerados na Movimentação"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .T.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  arquivo = .F.
+  pcescolha = .F.
+  Name = "SIGMVTTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.Shape1
+------------------------------------------------------------
+  Top = 12
+  Left = 899
+  Height = 72
+  Width = 85
+  BackStyle = 0
+  BorderStyle = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1004
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 453
+  Left = 7
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 93
+  Width = 884
+  GridLineColor = 238,238,238
+  Name = "grdTitulos"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 106
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 130
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 70
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 130
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.Width = 100
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 7
+  Column7.Width = 130
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.BackColor = 255,255,221
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 8
+  Column8.Width = 80
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.BackColor = 255,255,221
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Impostos"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Base"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Alíquota %"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Imposto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Título"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,221
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.grdTitulos.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 2
+  Margin = 0
+  Top = 39
+  BackColor = 255,255,221
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 923
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "OK"
+  TabIndex = 1
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.getDGrupos
+------------------------------------------------------------
+  Height = 23
+  Left = 6
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Descrição do Grupo"
+  Top = 564
+  Width = 440
+  Name = "getDGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.getDContas
+------------------------------------------------------------
+  Height = 23
+  Left = 450
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Descrição da Conta"
+  Top = 564
+  Width = 440
+  Name = "getDContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição do Grupo"
+  Height = 15
+  Left = 6
+  Top = 549
+  Width = 111
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGMVTTA.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição da Conta"
+  Height = 15
+  Left = 450
+  Top = 549
+  Width = 110
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGMVTTA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pArq, pEsc, pObj
+
+With ThisForm
+	.poDataMgr = pObj
+	.Arquivo   = Alltrim(pArq)
+	.pcEscolha = pEsc
+	
+	lcArq = .Arquivo
+	
+	.Caption = [Impostos Gerados Na Movimentação: ] + ;
+			   Alltrim(Left(&lcArq..EmpDopNums, 3)) + [ / ] + ;
+			   Alltrim(Substr(&lcArq..EmpDopNums, 4, 20)) + [ / ] + ;
+			   Alltrim(Right(&lcArq..EmpDopNums, 6))
+	
+	.cntSombra.lblSombra.Caption = .Caption
+	.cntSombra.lblTitulo.Caption = .Caption
+	
+	Select &lcArq.
+	Goto Top In &lcArq.
+	With .grdTitulos
+		.RecordSource          = lcArq
+		.Column1.ControlSource = lcArq + [.Impostos]
+		.Column2.ControlSource = lcArq + [.ValBases]
+		.Column3.ControlSource = lcArq + [.Aliqs]
+		.Column4.ControlSource = lcArq + [.ValImps]
+		.Column5.ControlSource = lcArq + [.Grupos]
+		.Column6.ControlSource = lcArq + [.Contas]
+		.Column7.ControlSource = lcArq + [.ValTits]
+		.Column8.ControlSource = [Ttod(] + lcArq + [.Vencs)]
+		
+		.Refresh
+		.AfterRowColChange()
+	EndWith
+	
+	If InList(.pcEscolha, [INSERIR], [ALTERAR])
+		.grdTitulos.Column7.SetFocus
+	Else
+		.cmdSair.SetFocus
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos
+* Classe: grid (Base: grid)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+lcArq = ThisForm.Arquivo
+	
+ThisForm.getDGrupos.Value = []
+If Not Empty(&lcArq..Grupos)
+	lcQuery = [Select Descrs ] + ;
+				[From SigCdGcr ] + ;
+			   [Where Codigos = '] + Padr(&lcArq..Grupos, 10) + [' ] + ;
+			   [Order By Codigos]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crfOpFin_Bus]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crfOpFin_Bus)])
+		Return .f.
+	EndIf
+	Go Top In crfOpFin_Bus
+	lcDgr = Iif(Eof([crfOpFin_Bus]), [], crfOpFin_Bus.Descrs)
+	ThisForm.getDGrupos.Value = lcDgr
+EndIf
+
+ThisForm.getDContas.Value = []
+If Not Empty(&lcArq..Contas)
+	lcQuery = [Select RClis ] + ;
+				[From SigCdCli ] + ;
+			   [Where IClis = '] + Padr(&lcArq..Contas, 10) + [' ] + ;
+			   [Order By IClis]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crfOpFin_Bus]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crfOpFin_Bus)])
+		Return .f.
+	EndIf
+	Go Top In crfOpFin_Bus
+	lcDct = Iif(Eof([crfOpFin_Bus]), [], crfOpFin_Bus.RClis)
+	ThisForm.getDContas.Value = lcDct
+EndIf
+
+If Used([crfOpFin_Bus])
+	Use In crfOpFin_Bus
+EndIf
+
+ThisForm.getDGrupos.Refresh
+ThisForm.getDContas.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.grdTitulos.Column8.Text1
+* Classe: fweditdata (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq, llOks
+
+lcArq = ThisForm.Arquivo
+llOks = .t.
+	
+Select &lcArq.
+Go Top In &lcArq.
+Do While Not Eof() And llOks
+	If (Empty(&lcArq..ValTits) Or IsEmpty(&lcArq..Vencs))
+		If (MessageBox([O ] + Alltrim(&lcArq..Impostos) + [ NÃO Está Com Valor Título / Vencimento] + Chr(13) + ;
+					   [Informado e NÃO Será Lançado! Deseja Corrigir?], 4+32+256, [Lançamento de Título Cancelado]) = 6)
+			llOks = .f.
+		EndIf	
+	EndIf
+	If llOks
+		Skip In &lcArq.
+	EndIf
+EndDo
+
+If Not llOks
+	ThisForm.grdTitulos.Column7.SetFocus
+	Return .f.
+Else
+	ThisForm.Release()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.getDGrupos
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGMVTTA.getDContas
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGMVTTA
+RESERVED3 (ClassInfo): arquivo
+pcescolha
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

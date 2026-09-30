@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. `FormSigPrEop.prg` compila limpo no VFP9 (sem `.err`) e agora satisfaz as tr├¬s condi├º├Áes do ramo FLAT do gate.
+
+**O que fazia a Fase 4 reprovar**: o gate FLAT exige `grd_4c_*` + `cmd_4c_/cmg_4c_` + um m├®todo de carga (`CarregarLista|CarregarDados|MontaGrade`) **no form**. Os dois primeiros existiam; o terceiro n├úo ÔÇö o form chamava `BO.CarregarOperacoes` inline dentro do `InicializarForm` e amarrava a grade dentro do `ConfigurarGrid`. O gate estava certo, e apontava um defeito real: n├úo havia nenhum ponto que fizesse `GO TOP` + `Refresh` depois de encher o cursor (regra #21a ÔÇö cursor cheio com grade visualmente vazia).
+
+**O que foi feito**:
+
+- **`CarregarDados()` (novo, PUBLIC)** ÔÇö ponto ├║nico de carga: popula `cursor_4c_Operacoes` via BO, vincula a grade e fecha com `SELECT` + `GO TOP` + `Refresh()`, como o `Go Top in` + `.Refresh` do legado. PUBLIC porque o harness chama m├®todos de carga direto de fora da classe (regra #3).
+- **Ordem do rebind** ÔÇö `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Width` ÔåÆ `Header1.Caption`, com `CurrentControl`/`Sparse`/`ReadOnly` da Column1 restaurados no fim: atribuir `RecordSource` recalcula larguras para o default 90, apaga os captions e faz a coluna voltar a desenhar o `Text1` (o que deixaria o CheckBox de marca├º├úo inacess├¡vel).
+- **`ConfigurarGrid()`** ÔÇö passou a ser s├│ estrutura; saiu todo o `IF loc_lCursorPronto ... ControlSource`, que era a prote├º├úo contra a regra #41 (`ControlSource` em cursor inexistente derruba o `Init`). Com a separa├º├úo, a prote├º├úo deixou de ser necess├íria.
+- **`InicializarForm()`** ÔÇö passos 3/4 reordenados: `ConfigurarGrid()` (estrutura) e depois `CarregarDados()`, ainda sob o guard de modo teste.
+
+Tr├¬s desvios do SCX que encontrei de passagem e corrigi (PILAR 1):
+
+| | migrado | legado |
+|---|---|---|
+| `Column1.Width` | 30 | **15** |
+| `Column7.Header1.Caption` | "Conjugada" (inventado) | **`"Conjug" + CHR(234)`** |
+| `Column1.Check1.AutoSize` | ausente | **`.T.`** (setado no `Init` legado) |
+
+Os handlers de clique (marcar-todas, OK, `AfterRowColChange`) continuam fora ÔÇö s├úo das Fases 7/8, como o pr├│prio arquivo j├í previa.

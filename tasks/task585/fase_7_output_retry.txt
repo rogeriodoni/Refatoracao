@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da e validada.
+
+## O que estava errado
+
+O `FormSigPrCar.prg` j├í estava **completo e fiel** ÔÇö a execu├º├úo anterior migrou os tr├¬s bot├Áes reais. A fase reprovava por **falso positivo do gate**, n├úo por defeito no form.
+
+O `SIGPRCAR` ├® um di├ílogo filho do Cadastro de Produtos: `cmdInserir` / `cmdExcluir` / `cmdSair` operando sobre a grade, sem `frmcadastro`, sem `Grupo_Op`, lendo o modo do pai. O gate exigia os 4 `BtnXxxClick` de CRUD porque o nome **`cmdExcluir`** sozinho provava CRUD ÔÇö mas ali ele apaga a **linha** da grade, n├úo um registro. Satisfazer isso exigiria inventar bot├úo (viola o PILAR 1) ou gerar m├®todo vazio (proibido pela regra de completude).
+
+## Defeito real encontrado e corrigido no form
+
+Ao exercitar os handlers no VFP9 descobri que `BtnExcluirClick` **apagava sem apagar**: `DataSession = 2` nasce com os SETs no default do VFP e o `FormBase` s├│ normaliza DATE/CENTURY. Medido:
+
+```
+SESSAO 1      : deleted=ON  exact=ON
+SESSAO DO FORM: deleted=OFF exact=OFF
+```
+
+Com `DELETED OFF`, o `DELETE` marcava a linha e ela **continuava na grade** ÔÇö o usu├írio clicava Excluir e nada sumia, sem erro nem log. Corrigido com `SET DELETED ON` / `SET EXACT ON` no `InicializarForm`. A contagem passou de 2 para 1.
+
+## Gate: corre├º├úo medida antes de commitar
+
+Duas mudan├ºas em `OrquestradorMigracao.ps1`, separando evid├¬ncia **estrutural** (`frmcadastro`/`Grupo_Op`, vale sempre) de evid├¬ncia **de nome** (fraca):
+
+1. Helper `Test-DialogoFilhoDoChamador` ÔÇö o form adota a datasession do chamador (`LParameters poForm` + `Set DataSession to poForm.DataSessionId`); form CRUD de topo nunca faz isso.
+2. `Test-ModoRecebidoDoChamador` ganhou a **terceira** forma de receber o modo: `.pcEscolha = Iif(Type([ThisForm.ParentForm.pcEscolha])=[C], .ParentForm.pcEscolha, [CONSULTAR])`.
+
+Medi├º├úo nos dumps de `tasks\`: **12 forms distintos** mudam de veredicto, conferidos um a um ÔÇö todos t├¬m atribui├º├úo lendo `ParentForm.pcEscolha` e **nenhum** tem superf├¡cie CRUD. Sem regress├úo: `SIGCDCOR`, `SigCdGrp`, `SIGCDCAR`, `sigcdcli`, `SigCdMoe`, `SIGCDSET`, `SigCdTam` seguem CRUD. Ningu├®m ganha passe livre ÔÇö o piso de handlers continua valendo (3 bot├Áes no legado, 3 handlers no migrado).
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa de form e BO (sem `.err`).
+- Form **instancia** (480x540, modo `INCLUIR`ÔåÆ`INSERIR` normalizado, 2 colunas, headers corretos).
+- 1┬║ Inserir cria a linha em branco; o 2┬║ **reaproveita** (guard `LOCATE` do legado); linha nova marcada como pendente de INSERT e a do banco n├úo; Excluir remove a nova localmente; Excluir **recusa** linha de outro produto (guard `CPros`).
+- Gate da Fase 7 simulado ponta a ponta: **VALIDADA**.
+
+**N├úo verificado:** os caminhos INSERT/UPDATE/DELETE contra o SQL Server ÔÇö esta m├íquina n├úo alcan├ºa `192.168.200.10`. Provei compila├º├úo, abertura e a l├│gica de estado local.
+
+Dois pontos para sua decis├úo, que deixei **fora** do escopo desta fase:
+
+- **516 forms** t├¬m `DataSession = 2` e todos herdam `DELETED OFF`/`EXACT OFF`. Consertar no `FormBase.Init()` resolveria de uma vez, mas ligar `EXACT ON` muda a sem├óntica de `=` e de `SEEK` em c├│digo testado sob `EXACT OFF` ÔÇö vale avaliar `DELETED` e `EXACT` separadamente.
+- A **Fase 8** tem o mesmo defeito de nome cru em `$padroesCrudLegadoF8`.
+
+Ambos registrados em mem├│ria; o `CLAUDE.md` e o skill n├úo foram tocados (isso ├® trabalho do `propagate-lesson`).

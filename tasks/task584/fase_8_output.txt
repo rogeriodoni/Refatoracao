@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Revisei o estado completo de `FormSigPrApr.prg` (2164 linhas) e `SigPrAprBO.prg` (1016 linhas) ÔÇö as fases 1-7 j├í haviam entregue uma migra├º├úo inteiramente funcional deste form OPERACIONAL, sem stubs, sem `TODO`/`FIXME`, sem `MsgAviso("...sera implementado")`.
+
+Verificado nesta Fase 8:
+- **Bot├Áes**: `BtnProcessarClick`, `BtnAtualizarClick`, `BtnEncerrarClick` ÔÇö todos `PUBLIC` (sem `PROTECTED`), com l├│gica real transcrita do legado (n├úo s├úo stubs).
+- **Grade**: `CarregarLista` (PUBLIC, exigido pelo TesteAutomatico), `GridHeaderMarcaClick`, `Column2Valid/LostFocus`, `GridAfterRowColChange` ÔÇö completos.
+- **BO**: `BuscarProdutos`, `ProcessarProdutoManual`, `Atualizar` (transa├º├úo completa com `SQLCOMMIT`/`SQLROLLBACK`, snapshot em `SigCdPrc`, hist├│rico em `SigPrCp2`, v├¡nculo de promo├º├úo em `SigPrPmi`) ÔÇö sem lacunas.
+- **Integra├º├úo**: `menu.prg` j├í tem `popMovimentos` bar 22 ÔåÆ `AbrirFormSigPrApr`, seguindo o padr├úo can├┤nico (`Show()` fora do `TRY`, regra #29). `config.prg` usa `ADIR()` din├ómico ÔÇö n├úo precisa de `SET PROCEDURE` manual.
+- Nenhum `.fxp` de `SigPrApr*` na ├írvore para limpar.
+
+Como este ├® um form OPERACIONAL (sem PageFrame/Page1/Page2), o checklist gen├®rico da Fase 8 (`BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo`) n├úo se aplica ÔÇö os equivalentes j├í existentes (`BtnProcessarClick`/`BtnAtualizarClick`/`BtnEncerrarClick`/`CarregarLista`/`SincronizarFiltros`/`ChkAuditadoClick`) cobrem o mesmo papel. Documentei isso no cabe├ºalho do arquivo para deixar expl├¡cito que a Fase 8 foi avaliada e nada ficou pendente.

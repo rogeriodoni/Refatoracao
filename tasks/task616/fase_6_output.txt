@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 complete. Here's what I found and did.
+
+## The situation
+
+`SigPrGloT.SCX` is an **empty placeholder** ÔÇö 74-line dump with `Form1` (375x250), zero controls, zero methods, zero lookups. This is the fifth re-run of an already-migrated task (`task188`/`task291` migrated the same SCX). The form file's content was byte-identical to the git-recovered copy, so phases 3ÔÇô5 changed nothing.
+
+So Phase 6's nominal deliverable was already satisfied, and there was nothing legitimate to add:
+
+- **Fields**: 21 mapped in both directions (`FormParaBO`/`BOParaForm`), all 21 properties declared in `SigPrGloTBO`. Verified by cross-referencing both files ÔÇö no missing declarations.
+- **Lookups**: all 10 already implemented inline in the `Txt*KeyPress` handlers, no TODOs or stubs.
+- **`cnt_4c_BotoesAcao`** (Salvar/Cancelar) doesn't apply ÔÇö this is a single-action dispatcher with `cmd_4c_Processar` + `cmd_4c_Cancelar`.
+
+Adding the "remaining 50% of fields" the template asks for would have meant inventing UI the legacy never had.
+
+## The real defect I fixed
+
+The audit wasn't a no-op this time. The 8 lookups built with `Init`-with-params called `.Show()` **without the `this_lAchouRegistro` guard** and had an `ELSE` that **clears the field**. Each half alone is tolerated; together they destroy valid input:
+
+1. User types a valid exact code and presses TAB.
+2. `Init` resolves it (1 row ÔåÆ `this_lAchouRegistro = .T.`).
+3. The picker opens anyway ÔÇö the guard is missing.
+4. User presses ESC ("I already typed it right") ÔåÆ `this_lSelecionou = .F.`
+5. The `ELSE` fires and **wipes the field** ÔÇö plus the description, for Conta/Vendedor/Empresa.
+
+Applied the canonical rule #37 shape to all 8: wrapped `mAddColuna`+`.Show()` in `IF !.this_lAchouRegistro`, and changed `IF .this_lSelecionou` to `IF .this_lSelecionou AND USED("<cursor>")`. The `ELSE` now only fires when the picker actually opened and was cancelled.
+
+I left the other 2 lookups (`TxtTpGOp`, `TxtOperacao`) alone ÔÇö they use the manual-API over a pre-populated cursor and already do the equivalent guard via `IF SEEK(...) / RETURN`.
+
+**This sharpens rule #37.** The rule currently calls the missing guard "incomodo e nao quebrado" and declines an auto-fix across 530 sites. The breaking subset has a deterministic signature: *missing guard **plus** an `ELSE` that assigns `""`/`0` to the field*. Without the clearing `ELSE`, it really is only an annoyance. I recorded that in memory.
+
+## Verification
+
+- `COMPILE` of both form and BO after deleting the `.fxp`: `fxp=.T.`, `err=.F.`, no `.err` files.
+- `IF`/`ENDIF` balanced 127/127; +16 lines = exactly 8 blocks ├ù 2; CRLF preserved.
+- `automation\VerificarFormBuscaAuxiliar.ps1`: **zero findings** for this form ÔÇö all 8 pass `gnConnHandle` first (#36).
+- Column names correct per table: `SigCdGcr`ÔåÆ`codigos`/`descrs` (with the 'r'), `SigCdCli`ÔåÆ`IClis`/`RClis`, `SigCdEmp`ÔåÆ`Cemps`/`Razas`.
+- Full diff reviewed ÔÇö only the 8 intended transformations, nothing else touched.
+
+Two candidate findings I measured and **discarded as false positives**: the `DataSession` 2-vs-1 boundary (`DataSession = 1` is the *current* session, so no isolation), and `chk_4c_ChecPedra` appearing "missing" versus sibling `FormSigPrGlo` ÔÇö it's the same control renamed to `chk_4c_NaoEmpPedra`.
+
+I left `task_state.json` untouched; its status is orchestrator bookkeeping, not a phase decision.

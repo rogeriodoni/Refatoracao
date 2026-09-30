@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. `C:\4c\projeto\app\forms\operacionais\FormSigPrEs1.prg` atualizado (1688 linhas, compila limpo com `.fxp` novo).
+
+## O que a fase entregou
+
+O legado **SIGPRES1 n├úo tem CRUD**: herda de `form` (n├úo `frmcadastro`), sem `Grupo_Op`, sem `pcEscolha`, e seus bot├Áes principais s├úo o CommandGroup `sair` com 2 bot├Áes ÔÇö `consulta` ("Consultar") e `sair` ("Encerrar"). Por isso os eventos principais s├úo `BtnConsultarClick` / `BtnEncerrarClick` (despachados por `BtnSairClick`), n├úo os 4 `BtnIncluir/Alterar/Visualizar/ExcluirClick` ÔÇö invent├í-los violaria o PILAR 1 ou exigiria m├®todo vazio. Os 3 handlers existentes satisfazem o gate (piso 2).
+
+A superf├¡cie j├í existia da invoca├º├úo anterior, que a deixou **sem tocar no arquivo** ÔÇö da├¡ o retry (guard NO-OP do Erro178). Auditando-a contra o dump, encontrei 3 defeitos reais e os corrigi:
+
+**1. `Show()` de form modal dentro do `TRY`** (regra #29) ÔÇö `Formsigpres2` tem `WindowType = 1`, ent├úo o `Show()` bloqueia e a tela filha inteira vivia dentro do bloco. Como `TRY/CATCH` vence `ON ERROR` em toda a pilha, qualquer erro de runtime l├í dentro saltaria pro `CATCH`, derrubaria a refer├¬ncia `LOCAL` e **destruiria a tela filha no meio do uso**. O `TRY` agora cobre s├│ cursor + `CREATEOBJECT`; o `Show()` ficou fora, com tratamento separado para `CREATEOBJECT` devolvendo `.F.` (Init da filha recusando), caminho em que o `CATCH` n├úo roda.
+
+**2. `EmpDopNums` perdido no `csTemporario`** ÔÇö o legado indexa o **pr├│prio** `csTemporario` (linha 1704 do dump). O BO criava o ├¡ndice em `cursor_4c_Movimentacao`, mas o `SELECT ... INTO CURSOR csTemporario` nasce **sem tag nenhuma**: a tela filha recebia o cursor sem o ├¡ndice, e um `SEEK` nele falharia devolvendo zero linhas em sil├¬ncio (regra #42). ├ìndice refeito no cursor entregue.
+
+**3. Alcance do `ThisForm.Enabled` alargado** ÔÇö o migrado desabilitava o form **antes** da consulta SQL; o legado desabilita s├│ **depois** dela (SQL falhando faz `Return 0` sem desabilitar). N├úo ├® detalhe: o form ├® modal com `TitleBar = 0` / `ControlBox = .F.`, ent├úo form desabilitado deixa o usu├írio **sem sa├¡da ÔÇö nem o Encerrar responde**. Fronteira do legado restaurada, com t├¡tulo de erro literal (`Falha na Conex├úo (csTemporario)`) e o aviso "Nenhum Registro Selecionado!!!" de volta para dentro do trecho desabilitado, como no original.
+
+Tamb├®m limpei um `├│` literal num coment├írio do cabe├ºalho (regra #4) ÔÇö resqu├¡cio da Fase 3.
+
+## Verificado
+
+Compila├º├úo limpa (`.fxp` apagado antes e regerado ÔÇö n├úo rodou c├│digo velho); 0 literais acentuados; 0 `RETURN` dentro de `TRY`; 0 `.Show()` dentro de `TRY`; 0 TODO/stub; 3 handlers `Btn*Click`.
+
+Uma observa├º├úo fora do escopo: `Formsigpres2.prg` est├í em `forms/cadastros/` (n├úo `operacionais/`), mas o `ADIR()` do `config.prg` o carrega e a assinatura `Init(par_cChave, par_nDataSession, par_oParentForm)` casa com os 3 argumentos passados. Como n├úo declara `DataSession`, usa a sess├úo **corrente** (a privada 2 deste form) e v├¬ o `csTemporario` ÔÇö equivalente ao legado passar o `DataSessionId` do pai.

@@ -1,516 +1,344 @@
-*==============================================================================
-* SigPrCtrBO.prg - Business Object para Controle de Movimentacoes por XML
+*====================================================================
+* SigPrCtrBO.prg
+*
+* Business Object para Controle de Movimentacoes por XML
 * Tabela: SigPrCtr
 * Herda de: BusinessBase
-*
-* Descricao: Gerencia lotes de distribuicao de produtos via XML.
-*   Cada "Codigos" representa um lote que agrupa N linhas em SigPrCtr
-*   (uma por produto distribuido). A exclusao/atualizacao opera por Codigos
-*   (DELETE WHERE Codigos = ?), nao por PkChave.
-*==============================================================================
+*====================================================================
 
 DEFINE CLASS SigPrCtrBO AS BusinessBase
 
-    *-- Chave primaria real da tabela (unica por linha)
-    this_cPkChave    = ""  && char(20) - PRIMARY KEY
-    *-- Chave de lote: identifica o conjunto de linhas do processamento
-    this_cCodigos    = ""  && char(10) - identificador do lote
-    *-- Campos do produto na linha
-    this_cCodCors    = ""  && char(4)  - codigo da cor
-    this_cCodTams    = ""  && char(4)  - codigo do tamanho
-    this_cCpros      = ""  && char(14) - codigo do produto
-    *-- Quantidades
-    this_nQtds       = 0   && numeric(10,2) - quantidade XML
-    this_nQtdOs      = 0   && numeric(10,2) - quantidade OS/distribuida
-    *-- Referencia de origem
-    this_cOriDopNums = ""  && char(29) - EmpDopNums da movimentacao de origem
-    this_cFkChaves   = ""  && char(20) - cidchaves do item de movimentacao
-    *-- Dados do fornecedor/conta
-    this_cContas     = ""  && char(10) - codigo da conta/fornecedor
-    *-- Opcoes de processamento
-    this_nPrecific   = 0   && numeric(1,0) - tipo de precificacao (Opt_Custo)
-    this_cMoedas     = ""  && char(3)  - codigo da moeda
-    this_cArquivo    = ""  && char(200) - caminho do arquivo XML
-    *-- Auditoria
-    this_dDatas      = {}  && datetime - data/hora do processamento
-    this_dDtAlts     = {}  && datetime - data/hora da ultima alteracao
-    this_cUsuars     = ""  && char(10) - usuario que criou
-    this_cUsualts    = ""  && char(10) - usuario da ultima alteracao
+    *-- Propriedades da entidade (mapeamento para tabela SigPrCtr)
+    this_cPkChave     = ""    && pkchave    char(20)  - PK
+    this_cCodCors     = ""    && codcors    char(4)
+    this_cCodigos     = ""    && codigos    char(10)
+    this_cCodTams     = ""    && codtams    char(4)
+    this_cCpros       = ""    && cpros      char(14)
+    this_dDatas       = {}    && datas      datetime  NULL
+    this_dDtAlts      = {}    && dtalts     datetime  NULL
+    this_nQtdos       = 0     && qtdos      numeric(10,2)
+    this_nQtds        = 0     && qtds       numeric(10,2)
+    this_cUsuAlts     = ""    && usualts    char(10)
+    this_cUsuars      = ""    && usuars     char(10)
+    this_cOriDopNums  = ""    && oridopnums char(29)
+    this_cContas      = ""    && contas     char(10)
+    this_nPrecific    = 0     && precific   numeric(1,0)
+    this_cMoedas      = ""    && moedas     char(3)
+    this_cArquivo     = ""    && arquivo    char(200)
+    this_cFkChaves    = ""    && fkchaves   char(20)
 
-    *-- Campos operacionais do formulario (nao persistidos diretamente)
-    this_cGrupo      = ""  && grupo contabil (Get_Grupo - GrPadFors de SigCdPam)
-    this_cDconta     = ""  && descricao da conta (Get_Dconta)
-    this_cCpf        = ""  && CPF/CNPJ do fornecedor (Get_cpf)
-
-    *-- Filtro de data para a lista principal
-    this_dDataInicial = {}
-    this_dDataFinal   = {}
-
-    *--------------------------------------------------------------------------
+    *====================================================================
+    * Init - Inicializa Business Object
+    *====================================================================
     PROCEDURE Init()
-    *--------------------------------------------------------------------------
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
         TRY
             DODEFAULT()
-            THIS.this_cTabela      = "SigPrCtr"
-            THIS.this_cCampoChave  = "PkChave"
-            THIS.this_dDataInicial = DATE()
-            THIS.this_dDataFinal   = DATE()
-            loc_lResultado = .T.
+            THIS.this_cTabela     = "SigPrCtr"
+            THIS.this_cCampoChave = "pkchave"
+            loc_lSucesso = .T.
         CATCH TO loException
-            MsgErro("Erro ao inicializar SigPrCtrBO: " + loException.Message, "Erro")
+            MostrarErro(loException, "SigPrCtrBO.Init")
         ENDTRY
-
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna chave de lote para auditoria
-    *--------------------------------------------------------------------------
+    *====================================================================
+    * ObterChavePrimaria - Chave primaria do registro atual (RegistrarAuditoria)
+    *====================================================================
     FUNCTION ObterChavePrimaria()
-        RETURN THIS.this_cCodigos
+        RETURN ALLTRIM(THIS.this_cPkChave)
     ENDFUNC
 
-    *--------------------------------------------------------------------------
-    * Inserir - Grava novo lote (delega para SalvarLote)
-    *   Form deve popular cursor_4c_Linhas antes de chamar BusinessBase.Salvar()
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Inserir()
-        RETURN THIS.SalvarLote("", .T.)
-    ENDFUNC
+    *====================================================================
+    * CarregarCambio - fCarregarCambio (SIGFUNCS.PRG) do legado NAO foi
+    * portada para utils/functions.prg (memoria: fCarregarCambio_nao_portada).
+    * Usa os cursores crSigCdCot/crSigCdMoe (carregados pelo Form no Init,
+    * mesma sessao - FormSigPrCtr nao declara DataSession proprio). PUBLIC
+    * (nao PROTECTED) - chamada pelo Form em ExecutarProcessamentoXml.
+    *====================================================================
+    FUNCTION CarregarCambio(par_cMoeda, par_xData)
+        LOCAL loc_nCotacao, loc_cMoeda, loc_dData, loc_oErro
+        loc_nCotacao = 0
+        loc_cMoeda   = ALLTRIM(par_cMoeda)
 
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza lote existente (delega para SalvarLote)
-    *   Form deve popular cursor_4c_Linhas antes de chamar BusinessBase.Salvar()
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Atualizar()
-        RETURN THIS.SalvarLote(THIS.this_cCodigos, .F.)
-    ENDFUNC
+        DO CASE
+            CASE VARTYPE(par_xData) == "T"
+                loc_dData = ConverterParaData(par_xData)
+            CASE VARTYPE(par_xData) == "D"
+                loc_dData = par_xData
+            OTHERWISE
+                loc_dData = DATE()
+        ENDCASE
 
-    *--------------------------------------------------------------------------
-    * Buscar - Seleciona lotes distintos de SigPrCtr filtrados por data
-    *--------------------------------------------------------------------------
-    FUNCTION Buscar(par_cFiltro)
-        LOCAL loc_lResultado, loc_cSQL, loc_cDataIni, loc_cDataFin, loc_nResult
-        loc_lResultado = .F.
-
-        TRY
-            loc_cDataIni = FormatarDataSQL(THIS.this_dDataInicial)
-            loc_cDataFin = FormatarDataSQL(THIS.this_dDataFinal)
-
-            IF USED("cursor_4c_Dados")
-                USE IN cursor_4c_Dados
-            ENDIF
-
-            loc_cSQL = "SELECT DISTINCT a.Codigos, MAX(a.Datas) AS Datas," + ;
-                       " a.OriDopNums, a.Usuars, a.Contas, b.Rclis" + ;
-                       " FROM SigPrCtr a" + ;
-                       " JOIN SigCdCli b ON b.Iclis = a.Contas" + ;
-                       " WHERE a.Datas BETWEEN " + loc_cDataIni + ;
-                       " AND " + loc_cDataFin + ;
-                       " GROUP BY a.Codigos, a.OriDopNums, a.Usuars, a.Contas, b.Rclis"
-
-            IF !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = loc_cSQL + " HAVING " + par_cFiltro
-            ENDIF
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
-                USE IN cursor_4c_Dados
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-            IF loc_nResult >= 0
-                IF USED("cursor_4c_Dados")
-                    GO TOP IN cursor_4c_Dados
-                ENDIF
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao buscar lotes: " + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.Buscar: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarPorCodigo - Carrega primeira linha de um lote pelo Codigos
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarPorCodigo(par_cCodigos)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
-        loc_lResultado = .F.
-
-        TRY
-            IF USED("cursor_4c_Carrega")
-                USE IN cursor_4c_Carrega
-            ENDIF
-
-            loc_cSQL = "SELECT * FROM SigPrCtr WHERE Codigos = " + EscaparSQL(par_cCodigos)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
-
-            IF loc_nResult >= 0 AND RECCOUNT("cursor_4c_Carrega") > 0
-                IF THIS.CarregarDoCursor("cursor_4c_Carrega")
-                    THIS.this_lNovoRegistro = .F.
-                    loc_lResultado = .T.
-                ENDIF
-            ENDIF
-
-            IF USED("cursor_4c_Carrega")
-                USE IN cursor_4c_Carrega
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.CarregarPorCodigo: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Popula propriedades a partir de um cursor
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
-                THIS.this_cPkChave    = TratarNulo(PkChave,    "C")
-                THIS.this_cCodigos    = TratarNulo(Codigos,    "C")
-                THIS.this_cCodCors    = TratarNulo(CodCors,    "C")
-                THIS.this_cCodTams    = TratarNulo(CodTams,    "C")
-                THIS.this_cCpros      = TratarNulo(Cpros,      "C")
-                THIS.this_nQtds       = TratarNulo(Qtds,       "N")
-                THIS.this_nQtdOs      = TratarNulo(QtdOs,      "N")
-                THIS.this_cOriDopNums = TratarNulo(OriDopNums, "C")
-                THIS.this_cFkChaves   = TratarNulo(FkChaves,   "C")
-                THIS.this_cContas     = TratarNulo(Contas,     "C")
-                THIS.this_nPrecific   = TratarNulo(Precific,   "N")
-                THIS.this_cMoedas     = TratarNulo(Moedas,     "C")
-                THIS.this_cArquivo    = TratarNulo(Arquivo,    "C")
-                THIS.this_dDatas      = TratarNulo(Datas,      "T")
-                THIS.this_dDtAlts     = TratarNulo(DtAlts,     "T")
-                THIS.this_cUsuars     = TratarNulo(Usuars,     "C")
-                THIS.this_cUsualts    = TratarNulo(UsuAlts,    "C")
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.CarregarDoCursor: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * BuscarMovimentosDistribuiveis - Produtos do lote para grdDisponivel (Page2)
-    *--------------------------------------------------------------------------
-    FUNCTION BuscarMovimentosDistribuiveis(par_cCodigos)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
-        loc_lResultado = .F.
-
-        TRY
-            IF USED("cursor_4c_Movimentos")
-                USE IN cursor_4c_Movimentos
-            ENDIF
-
-            loc_cSQL = "SELECT a.Cpros, f.Dpros, a.Units," + ;
-                       " SUM(a.Qtds) AS Qtds, SUM(a.QtBaixas) AS QtBaixas," + ;
-                       " SUM(a.QtReservas) AS QtReservas," + ;
-                       " (SUM(a.Qtds) - SUM(a.QtBaixas) - SUM(a.QtReservas)) AS Saldo," + ;
-                       " SUM(g.QtdOs) AS QtdOs," + ;
-                       " a.EmpDopNums AS OriDopNums, f.Cgrus, f.Sgrus," + ;
-                       " a.CidChaves, a.Moedas" + ;
-                       " FROM SigMvItn a" + ;
-                       " JOIN SigMvCab c ON a.EmpDopNums = c.EmpDopNums" + ;
-                       " JOIN SigCdOpe d ON c.Dopes = d.Dopes" + ;
-                       " JOIN SigOpCdd e ON d.Dopes = e.Dopes" + ;
-                       " JOIN SigCdPro f ON a.Cpros = f.Cpros" + ;
-                       " JOIN SigPrCtr g ON a.EmpDopNums = g.OriDopNums" + ;
-                       "   AND a.Cpros = g.Cpros AND g.FkChaves = a.CidChaves" + ;
-                       " WHERE e.Distribui = 3" + ;
-                       " AND c.GrupoDs <> SPACE(10)" + ;
-                       " AND c.ContaDs <> SPACE(10)" + ;
-                       " AND a.Qtds <> a.QtBaixas" + ;
-                       " AND a.CItem2 = 0" + ;
-                       " AND g.Codigos = " + EscaparSQL(par_cCodigos) + ;
-                       " GROUP BY a.Cpros, f.Dpros, f.Cgrus, f.Sgrus," + ;
-                       "   a.EmpDopNums, a.Units, a.CidChaves, a.Moedas"
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Movimentos")
-                TABLEREVERT(.T., "cursor_4c_Movimentos")
-                USE IN cursor_4c_Movimentos
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Movimentos")
-            IF loc_nResult >= 0
-                IF USED("cursor_4c_Movimentos")
-                    GO TOP IN cursor_4c_Movimentos
-                ENDIF
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao buscar movimentos: " + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.BuscarMovimentosDistribuiveis: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    *   Retorna movimentacoes distribuiveis para grdEstoque (Page1)
-    *   par_cConta   : filtra por fornecedor (vazio = todos)
-    *   par_lFiltrar : .T. aplica filtro de conta
-    *--------------------------------------------------------------------------
-    FUNCTION BuscarMovimentosPendentes(par_cConta, par_lFiltrar)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_cFiltro
-        loc_lResultado = .F.
-
-        TRY
-            IF USED("cursor_4c_Pendentes")
-                USE IN cursor_4c_Pendentes
-            ENDIF
-
-            loc_cFiltro = ""
-            IF par_lFiltrar AND !EMPTY(ALLTRIM(par_cConta))
-                loc_cFiltro = " AND a.ContaOs = " + EscaparSQL(par_cConta)
-            ENDIF
-
-            loc_cSQL = "SELECT 0 AS nMarca, a.Emps, a.Dopes, a.Numes," + ;
-                       " a.EmpDopNums AS OriDopNums," + ;
-                       " a.GrupoOs AS Grupos, a.ContaOs AS Contas" + ;
-                       " FROM SigMvCab a" + ;
-                       " JOIN SigCdOpe b ON a.Dopes = b.Dopes" + ;
-                       " JOIN SigOpCdd c ON b.Dopes = c.Dopes" + ;
-                       " WHERE c.Distribui = 3" + ;
-                       " AND a.ChkSubn = 0" + ;
-                       " AND a.GrupoOs <> SPACE(10)" + ;
-                       " AND a.ContaOs <> SPACE(10)" + ;
-                       loc_cFiltro
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Pendentes")
-                TABLEREVERT(.T., "cursor_4c_Pendentes")
-                USE IN cursor_4c_Pendentes
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Pendentes")
-            IF loc_nResult >= 0
-                IF USED("cursor_4c_Pendentes")
-                    GO TOP IN cursor_4c_Pendentes
-                ENDIF
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao buscar pendentes: " + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.BuscarMovimentosPendentes: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * SalvarLote - Persiste linhas de cursor_4c_Linhas no banco.
-    *   Modo INSERIR (par_lNovoLote=.T.): gera novo Codigos, insere linhas
-    *   Modo ALTERAR (par_lNovoLote=.F.): deleta lote antigo, insere novas linhas
-    *
-    *   cursor_4c_Linhas deve conter os campos:
-    *     Cpros(C14), CodCors(C4), CodTams(C4), OriDopNums(C29),
-    *     Qtds(N), QtdOs(N), Contas(C10), Arquivo(C200),
-    *     Moedas(C3), Precific(N), FkChaves(C20)
-    *--------------------------------------------------------------------------
-    FUNCTION SalvarLote(par_cCodigos, par_lNovoLote)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_cCodigos, loc_lScanOK
-        loc_lResultado = .F.
-        loc_cCodigos   = ""
-
-        IF !USED("cursor_4c_Linhas") OR RECCOUNT("cursor_4c_Linhas") = 0
-            MsgErro("Nenhuma linha para gravar no lote.", "Aviso")
-            RETURN loc_lResultado
+        IF EMPTY(loc_cMoeda)
+            RETURN 1
         ENDIF
 
         TRY
-            loc_lResultado = .T.
-
-            *-- Modo ALTERAR: exclui linhas do lote anterior antes de reinserir
-            IF !par_lNovoLote AND !EMPTY(ALLTRIM(par_cCodigos))
-                loc_cSQL   = "DELETE FROM SigPrCtr WHERE Codigos = " + EscaparSQL(par_cCodigos)
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                IF loc_nResult < 0
-                    MsgErro("Erro ao excluir lote anterior: " + CapturarErroSQL(), "Erro SQL")
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-
-            *-- Modo INSERIR: gera novo Codigos sequencial
-            IF loc_lResultado AND par_lNovoLote
-                loc_cSQL = "SELECT ISNULL(MAX(CAST(LTRIM(RTRIM(Codigos)) AS INT)), 0) + 1" + ;
-                           " AS ProxCod FROM SigPrCtr"
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_MaxCod")
-                    TABLEREVERT(.T., "cursor_4c_MaxCod")
-                    USE IN cursor_4c_MaxCod
-                ENDIF
-
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MaxCod")
-                IF loc_nResult >= 0 AND RECCOUNT("cursor_4c_MaxCod") > 0
-                    SELECT cursor_4c_MaxCod
-                    loc_cCodigos = PADL(ALLTRIM(TRANSFORM(cursor_4c_MaxCod.ProxCod)), 10)
-                    USE IN cursor_4c_MaxCod
-                ELSE
-                    MsgErro("Erro ao gerar codigo de lote: " + CapturarErroSQL(), "Erro SQL")
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lResultado AND !par_lNovoLote
-                loc_cCodigos = par_cCodigos
-            ENDIF
-
-            *-- Insere cada linha do cursor no banco
-            IF loc_lResultado
-                SELECT cursor_4c_Linhas
-                GO TOP
-                loc_lScanOK = .T.
-                SCAN WHILE loc_lScanOK
-                    loc_cSQL = "INSERT INTO SigPrCtr" + ;
-                               " (PkChave, Codigos, Cpros, CodCors, CodTams," + ;
-                               "  OriDopNums, Qtds, QtdOs, Contas, Arquivo," + ;
-                               "  Moedas, Precific, FkChaves, Datas, Usuars, UsuAlts)" + ;
-                               " VALUES (" + ;
-                               " NEWID()," + ;
-                               EscaparSQL(loc_cCodigos) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.Cpros), 14)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.CodCors), 4)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.CodTams), 4)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.OriDopNums), 29)) + "," + ;
-                               FormatarNumeroSQL(cursor_4c_Linhas.Qtds) + "," + ;
-                               FormatarNumeroSQL(cursor_4c_Linhas.QtdOs) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.Contas), 10)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.Arquivo), 200)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.Moedas), 3)) + "," + ;
-                               FormatarNumeroSQL(cursor_4c_Linhas.Precific) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.FkChaves), 20)) + "," + ;
-                               "GETDATE()," + ;
-                               EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + "," + ;
-                               EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ")"
-
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                    IF loc_nResult < 0
-                        MsgErro("Erro ao inserir linha do lote: " + CapturarErroSQL(), "Erro SQL")
-                        loc_lScanOK = .F.
-                        EXIT
-                    ENDIF
-
-                    *-- Acumula reserva em SigMvItn (espelha logica legada Salva.Click)
-                    IF !EMPTY(ALLTRIM(cursor_4c_Linhas.FkChaves)) AND cursor_4c_Linhas.QtdOs > 0
-                        loc_cSQL = "UPDATE SigMvItn SET QtReservas = (QtReservas + " + ;
-                                   FormatarNumeroSQL(cursor_4c_Linhas.QtdOs) + ")" + ;
-                                   " WHERE CidChaves = " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.FkChaves), 20))
-                        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                        IF loc_nResult < 0
-                            MsgErro("Erro ao atualizar reserva em SigMvItn: " + CapturarErroSQL(), "Erro SQL")
-                            loc_lScanOK = .F.
-                            EXIT
+            IF USED("crSigCdMoe")
+                SELECT crSigCdMoe
+                SET ORDER TO CMoes
+                IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas <> 0
+                    IF USED("crSigCdCot")
+                        SELECT crSigCdCot
+                        SET ORDER TO CMoeData DESCENDING
+                        SET NEAR ON
+                        SEEK loc_cMoeda + DTOS(loc_dData)
+                        SET NEAR OFF
+                        IF !EOF() AND ALLTRIM(crSigCdCot.CMoes) = loc_cMoeda
+                            loc_nCotacao = crSigCdCot.Valos
                         ENDIF
                     ENDIF
-
-                    SELECT cursor_4c_Linhas
-                ENDSCAN
-
-                loc_lResultado = loc_lScanOK
+                ENDIF
             ENDIF
-
-            IF loc_lResultado
-                THIS.this_cCodigos = loc_cCodigos
-                THIS.RegistrarAuditoria(IIF(par_lNovoLote, "INSERT", "UPDATE"))
-            ENDIF
-
-        CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.SalvarLote: " + loException.Message, "Erro")
-            loc_lResultado = .F.
+        CATCH TO loc_oErro
+            SET NEAR OFF
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN IIF(loc_nCotacao = 0, 1, loc_nCotacao)
     ENDFUNC
 
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - Exclui todas as linhas do lote e restaura QtReservas.
-    *   Chamado internamente por BusinessBase.Excluir()
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION ExecutarExclusao()
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_lScanOK
-        loc_lResultado = .F.
+    *====================================================================
+    * ValidarDados - Validacao chamada pelo BusinessBase.Salvar() antes de
+    * Inserir/Atualizar (legado: "Favor Informar uma Conta." - guard no
+    * inicio do Lerxml/processar do Pageframe1.Page1 - comportamento.json).
+    *====================================================================
+    PROTECTED PROCEDURE ValidarDados()
+        LOCAL loc_lValido
+        loc_lValido = .T.
+
+        IF EMPTY(ALLTRIM(THIS.this_cContas))
+            THIS.this_cMensagemErro = "Favor Informar uma Conta."
+            loc_lValido = .F.
+        ENDIF
+
+        RETURN loc_lValido
+    ENDPROC
+
+    *====================================================================
+    * CarregarDoCursor - Carrega propriedades a partir de uma linha do
+    * cursor (estrutura de dbo.SigPrCtr - docs/schema.sql).
+    * REGRA: OriDopNums eh chave POSICIONAL (Emps char(3)+Dopes char(20)+
+    * Str(Numes,6) = 29) - NUNCA aplicar ALLTRIM nela, o padding faz parte
+    * da chave usada para casar com SigMvCab.EmpDopNums.
+    *====================================================================
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+
+            THIS.this_cPkChave    = ALLTRIM(TratarNulo(pkchave, ""))
+            THIS.this_cCodCors    = ALLTRIM(TratarNulo(codcors, ""))
+            THIS.this_cCodigos    = ALLTRIM(TratarNulo(codigos, ""))
+            THIS.this_cCodTams    = ALLTRIM(TratarNulo(codtams, ""))
+            THIS.this_cCpros      = ALLTRIM(TratarNulo(cpros, ""))
+            THIS.this_dDatas      = ConverterParaData(TratarNulo(datas, {}))
+            THIS.this_dDtAlts     = ConverterParaData(TratarNulo(dtalts, {}))
+            THIS.this_nQtdos      = TratarNulo(qtdos, 0)
+            THIS.this_nQtds       = TratarNulo(qtds, 0)
+            THIS.this_cUsuAlts    = ALLTRIM(TratarNulo(usualts, ""))
+            THIS.this_cUsuars     = ALLTRIM(TratarNulo(usuars, ""))
+            THIS.this_cOriDopNums = TratarNulo(oridopnums, "")
+            THIS.this_cContas     = ALLTRIM(TratarNulo(contas, ""))
+            THIS.this_nPrecific   = TratarNulo(precific, 0)
+            THIS.this_cMoedas     = ALLTRIM(TratarNulo(moedas, ""))
+            THIS.this_cArquivo    = ALLTRIM(TratarNulo(arquivo, ""))
+            THIS.this_cFkChaves   = ALLTRIM(TratarNulo(fkchaves, ""))
+
+            loc_lSucesso = .T.
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * Inserir - Insere novo registro em SigPrCtr
+    * Espelha o "Insert Into crSigPrCtr (...)" + "Replace PkChave With
+    * fUniqueIds()" do Grupo_Salva.Salva.Click legado (modo INSERIR):
+    * a chave primaria (pkchave) e o codigo de agrupamento (codigos) sao
+    * gerados aqui quando ainda nao foram atribuidos pelo chamador.
+    *====================================================================
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
 
         TRY
-            IF EMPTY(ALLTRIM(THIS.this_cCodigos))
-                MsgErro("Codigo do lote nao informado para exclusao.", "Aviso")
-            ELSE
-                *-- Carrega linhas para restaurar QtReservas em SigMvItn
-                loc_cSQL = "SELECT FkChaves, QtdOs FROM SigPrCtr" + ;
-                           " WHERE Codigos = " + EscaparSQL(THIS.this_cCodigos)
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_ExclLote")
-                    TABLEREVERT(.T., "cursor_4c_ExclLote")
-                    USE IN cursor_4c_ExclLote
-                ENDIF
-
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ExclLote")
-
-                IF loc_nResult < 0
-                    MsgErro("Erro ao carregar lote para exclusao: " + CapturarErroSQL(), "Erro SQL")
-                ELSE
-                    loc_lScanOK = .T.
-                    IF USED("cursor_4c_ExclLote") AND RECCOUNT("cursor_4c_ExclLote") > 0
-                        SELECT cursor_4c_ExclLote
-                        GO TOP
-                        SCAN WHILE loc_lScanOK
-                            loc_cSQL = "UPDATE SigMvItn SET QtReservas =" + ;
-                                       " CASE WHEN (QtReservas - " + ;
-                                       FormatarNumeroSQL(cursor_4c_ExclLote.QtdOs) + ;
-                                       ") < 0 THEN 0" + ;
-                                       " ELSE (QtReservas - " + ;
-                                       FormatarNumeroSQL(cursor_4c_ExclLote.QtdOs) + ")" + ;
-                                       " END" + ;
-                                       " WHERE CidChaves = " + ;
-                                       EscaparSQL(ALLTRIM(cursor_4c_ExclLote.FkChaves))
-
-                            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                            IF loc_nResult < 0
-                                MsgErro("Erro ao restaurar QtReservas: " + CapturarErroSQL(), "Erro SQL")
-                                loc_lScanOK = .F.
-                                EXIT
-                            ENDIF
-                            SELECT cursor_4c_ExclLote
-                        ENDSCAN
-                        USE IN cursor_4c_ExclLote
-                    ENDIF
-
-                    IF loc_lScanOK
-                        loc_cSQL = "DELETE FROM SigPrCtr WHERE Codigos = " + EscaparSQL(THIS.this_cCodigos)
-                        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                        IF loc_nResult < 0
-                            MsgErro("Erro ao excluir lote: " + CapturarErroSQL(), "Erro SQL")
-                        ELSE
-                            THIS.RegistrarAuditoria("DELETE")
-                            loc_lResultado = .T.
-                        ENDIF
-                    ENDIF
-                ENDIF
+            IF EMPTY(ALLTRIM(THIS.this_cPkChave))
+                THIS.this_cPkChave = LEFT(fUniqueIds(), 20)
             ENDIF
+
+            IF EMPTY(ALLTRIM(THIS.this_cCodigos))
+                THIS.this_cCodigos = fGerMascara(fGerUniqueKey("SigPrCtr"))
+            ENDIF
+
+            IF EMPTY(THIS.this_dDatas)
+                THIS.this_dDatas = DATETIME()
+            ENDIF
+
+            THIS.this_cUsuars = IIF(!EMPTY(ALLTRIM(THIS.this_cUsuars)), THIS.this_cUsuars, ;
+                IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, ""))
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigPrCtr (pkchave, codcors, codigos, codtams, cpros,
+                    datas, dtalts, qtdos, qtds, usualts, usuars, oridopnums,
+                    contas, precific, moedas, arquivo, fkchaves)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cPkChave)>>,
+                    <<EscaparSQL(THIS.this_cCodCors)>>,
+                    <<EscaparSQL(THIS.this_cCodigos)>>,
+                    <<EscaparSQL(THIS.this_cCodTams)>>,
+                    <<EscaparSQL(THIS.this_cCpros)>>,
+                    <<FormatarDataSQL(THIS.this_dDatas)>>,
+                    <<FormatarDataSQL(THIS.this_dDtAlts)>>,
+                    <<FormatarNumeroSQL(THIS.this_nQtdos, 2)>>,
+                    <<FormatarNumeroSQL(THIS.this_nQtds, 2)>>,
+                    <<EscaparSQL(THIS.this_cUsuAlts)>>,
+                    <<EscaparSQL(THIS.this_cUsuars)>>,
+                    <<EscaparSQL(THIS.this_cOriDopNums)>>,
+                    <<EscaparSQL(THIS.this_cContas)>>,
+                    <<FormatarNumeroSQL(THIS.this_nPrecific, 0)>>,
+                    <<EscaparSQL(THIS.this_cMoedas)>>,
+                    <<EscaparSQL(THIS.this_cArquivo)>>,
+                    <<EscaparSQL(THIS.this_cFkChaves)>>
+                )
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao inserir controle:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
         CATCH TO loException
-            MsgErro("Erro em SigPrCtrBO.ExecutarExclusao: " + loException.Message, "Erro")
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "SigPrCtrBO.Inserir")
         ENDTRY
 
-        RETURN loc_lResultado
-    ENDFUNC
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * Atualizar - Atualiza registro existente em SigPrCtr (WHERE pkchave)
+    * Espelha "Replace DtAlts With Datetime() / UsuAlts With m.usuar" do
+    * Grupo_Salva.Salva.Click legado (modo ALTERAR).
+    *====================================================================
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_dDtAlts  = DATETIME()
+            THIS.this_cUsuAlts = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, THIS.this_cUsuAlts)
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigPrCtr
+                SET codcors    = <<EscaparSQL(THIS.this_cCodCors)>>,
+                    codigos    = <<EscaparSQL(THIS.this_cCodigos)>>,
+                    codtams    = <<EscaparSQL(THIS.this_cCodTams)>>,
+                    cpros      = <<EscaparSQL(THIS.this_cCpros)>>,
+                    datas      = <<FormatarDataSQL(THIS.this_dDatas)>>,
+                    dtalts     = <<FormatarDataSQL(THIS.this_dDtAlts)>>,
+                    qtdos      = <<FormatarNumeroSQL(THIS.this_nQtdos, 2)>>,
+                    qtds       = <<FormatarNumeroSQL(THIS.this_nQtds, 2)>>,
+                    usualts    = <<EscaparSQL(THIS.this_cUsuAlts)>>,
+                    usuars     = <<EscaparSQL(THIS.this_cUsuars)>>,
+                    oridopnums = <<EscaparSQL(THIS.this_cOriDopNums)>>,
+                    contas     = <<EscaparSQL(THIS.this_cContas)>>,
+                    precific   = <<FormatarNumeroSQL(THIS.this_nPrecific, 0)>>,
+                    moedas     = <<EscaparSQL(THIS.this_cMoedas)>>,
+                    arquivo    = <<EscaparSQL(THIS.this_cArquivo)>>,
+                    fkchaves   = <<EscaparSQL(THIS.this_cFkChaves)>>
+                WHERE pkchave = <<EscaparSQL(THIS.this_cPkChave)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao atualizar controle:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "SigPrCtrBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * CarregarPorCodigo - Carrega a linha mais representativa do agrupamento
+    * "Codigos" (legado: crSigPrCtr requerido pela Grade da Lista, que
+    * agrupa por Codigos - regra #42/comportamento.json). Usada por
+    * Alterar/Visualizar/Excluir para trazer Conta/Moeda/Arquivo/Precific
+    * do "cabecalho" do lote antes de reconstruir as linhas em Confirmar.
+    *====================================================================
+    PROCEDURE CarregarPorCodigo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("cursor_4c_CarregaCtr")
+                USE IN cursor_4c_CarregaCtr
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 * FROM SigPrCtr WHERE codigos = " + ;
+                EscaparSQL(par_cCodigo) + " ORDER BY pkchave"
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CarregaCtr")
+
+            IF loc_nResultado >= 0 AND USED("cursor_4c_CarregaCtr") AND RECCOUNT("cursor_4c_CarregaCtr") > 0
+                loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_CarregaCtr")
+                THIS.this_lNovoRegistro = .F.
+            ELSE
+                THIS.this_cMensagemErro = "Registro n" + CHR(227) + "o encontrado"
+            ENDIF
+
+            IF USED("cursor_4c_CarregaCtr")
+                USE IN cursor_4c_CarregaCtr
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar:" + CHR(13) + loException.Message, "SigPrCtrBO.CarregarPorCodigo")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * ExecutarExclusao - Exclui TODAS as linhas do lote "Codigos" (transcrito
+    * literalmente do legado: "Delete From SigPrCtr Where Codigos = ?_Codigo",
+    * msv_Alterar - comportamento.json). A Lista agrupa por Codigos (regra
+    * #42), entao excluir eh excluir o lote inteiro, nao so a linha this_cPkChave.
+    *====================================================================
+    PROTECTED PROCEDURE ExecutarExclusao()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "DELETE FROM SigPrCtr WHERE codigos = " + EscaparSQL(THIS.this_cCodigos)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("DELETE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao excluir controle:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao excluir:" + CHR(13) + loException.Message, "SigPrCtrBO.ExecutarExclusao")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
 
 ENDDEFINE

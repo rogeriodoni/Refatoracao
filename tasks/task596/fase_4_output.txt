@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 is complete for `FormSIGPRCPR`.
+
+**Changes to `C:\4c\projeto\app\forms\operacionais\FormSIGPRCPR.prg`:**
+
+Since this is a flat OPERACIONAL dialog (no PageFrame/Page1-Page2, confirmed already in Fase 3), I adapted the generic "Grid + CRUD buttons" phase template to the form's real structure instead of inventing a CRUD list page:
+
+- **`ConfigurarGrid()`** ÔÇö adds `grd_4c_Dados` (equivalent to legado `Grade`/`TmpBaixa`), 5 columns (C├│d. Barra, Produto, Opera├º├úo, N├║mero, Qtde.) with the exact widths, headers, and `DynamicForeColor` rule from the SCX (blue when `QtdeLido <> 0`, black otherwise). Creates a **placeholder `cursor_4c_Baixa`** with the identical structure `SIGPRCPRBO.CarregarEtiquetasPendentes()` uses, so `Column.ControlSource` doesn't blow up the `Init` before any etiqueta is loaded (project rule: binding a column to a cursor that doesn't exist yet kills `CREATEOBJECT`). Grid starts `Visible = .F.`, matching the legado (`Grade.Visible = Not Eof()`).
+- **`ConfigurarBotoes()`** ÔÇö adds the 3 real legado buttons (`cmd_4c_Conferencia`, `cmd_4c_Ok`, `cmd_4c_Sair`) at their exact SCX positions/pictures, following the project's standalone-button pattern (`Themes=.T.` + `DisabledPicture`).
+- **Click handlers** (`BtnConferenciaClick`, `BtnOkClick`, `BtnSairClick`) ÔÇö wired to the BO methods already implemented in Fases 1-2 (`ConferenciaAutomatica`, `ConfirmarConferencia`), reproducing the legado's confirm dialog and grid refresh instead of leaving stub buttons.
+- **`TornarControlesVisiveis`** updated to skip `grd_4c_Dados` (kept hidden until etiquetas are loaded, same pattern as "containers flutuantes").
+- **`Destroy()`** now closes the placeholder cursor if open.
+
+Verified with a real VFP9 compile (`COMPILE`) ÔÇö compiled clean, no `.err` generated.

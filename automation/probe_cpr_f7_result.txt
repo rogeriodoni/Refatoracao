@@ -1,0 +1,12 @@
+INICIO
+config OK
+deps OK
+createobject retornou O
+OK W=800 H=400 | Confirm(inicial)=OFF | Leitura.InputMask=99999999999999 Leitura.Value=0 | Handlers: When=.T. LostFocus=.T. KeyPress=.T. FlagReentr=.T.
+BINDEVENTs txt_4c_Leitura (3): KEYPRESS/WHEN/LOSTFOCUS
+PosLeituraWhen: Confirm=ON
+PosLostFocus(vazio): Confirm=OFF Flag=.F.
+PosLostFocus(reentrante): Value=99999999999999 (deve continuar 99999999999999)
+PosLostFocus(real): Value=0 Flag=.F. (Value deve ser 0 e Flag .F.)
+PosRelease: Confirm=OFF (deve ser OFF)
+DIALOGOS: [27/09/2026 12:02:01] Atenção: Código de Barras Não Cadastrado!!!

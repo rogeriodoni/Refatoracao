@@ -1,0 +1,10 @@
+ISNULL(emps)      = .F.
+ISNULL(cidchaves) = .F.
+ISNULL(qmaxs)     = .F.
+EMPTY(.NULL.)     = .F.
+EMPTY(emps)       = .T.
+EMPTY(NVL(emps,'')) = .T.
+SCAN FOR !EMPTY(emps) viu 0 linha(s) (esperado 0)
+SCAN FOR !EMPTY(NVL(emps,'')) viu 0 linha(s) (esperado 0)
+LOCATE FOR EMPTY(emps) FOUND = .T.
+LOCATE FOR EMPTY(NVL(emps,'')) FOUND = .T.

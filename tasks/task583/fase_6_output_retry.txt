@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e validada para `FormSigPrAop`.
+
+## O que a fase entregou
+
+**`FormSigPrAop.prg`** ÔÇö campos restantes j├í estavam criados pela tentativa anterior; o que faltava eram **os eventos do ├║nico campo digit├ível da tela**, que ├® onde mora o equivalente do "lookup" neste form:
+
+| legado | migrado | liga├º├úo |
+|---|---|---|
+| `Get_OP.Valid` | `ValidarOP()` | `BINDEVENT` em **KeyPress** (ENTER/TAB) |
+| `Get_OP.LostFocus` | `TxtOPLostFocus()` | `BINDEVENT` em LostFocus |
+| `Get_OP.When` | `TxtOPGotFocus()` | `BINDEVENT` em GotFocus |
+
+`ValidarOP` transcreve a parte de campo do `Valid` literalmente, inclusive o `Right(This.Value, 10)` que corta os 12 d├¡gitos do `InputMask` para os 10 de `SigOpPic.Nops` ÔÇö medido: `123456789012` ÔåÆ `3456789012`.
+
+**Este form n├úo tem lookup/picker nenhum** ÔÇö confirmei no dump: zero `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`sigacess()`/`mAddColuna`. A "busca" da O.P. ├® a pr├│pria consulta SQL do `Valid` (SigCdNec ÔåÆ SigPdMvf ÔåÆ SigOpPic), j├í no BO. N├úo inventei picker; o gate passa pelo ramo FLAT leg├¡timo (`legadoSemLookup=True` + `temCamposFlat=True`).
+
+## Dois defeitos que s├│ apareceriam ao usu├írio
+
+Ao ligar o gatilho, o caminho de dados passou a rodar de verdade e exp├┤s dois problemas em `SigPrAopBO.CriarCursorItens`, ambos consertados:
+
+1. **`USE IN` + `CREATE CURSOR` derrubava o binding.** O legado faz `Zap In Temp_DivOp`, n├úo recria. Fechando o alias, `grd_4c_Dados.RecordSource`, as 5 `Column.ControlSource` e `edt_4c_Obss.ControlSource` (ligados no `InicializarForm`) morriam ÔÇö o usu├írio digitaria a O.P. e a grade ficaria **permanentemente vazia com o cursor cheio**, sem erro e sem log.
+
+2. **`ZAP` congelaria a tela.** Medido no VFP9: dentro de um form `DataSession = 2`, `SET("SAFETY")` vale **ON** mesmo com `SET SAFETY OFF` no `main.prg` ÔÇö `SET SAFETY` ├® escopado por data session (mesmo mecanismo da regra #9.4). O `ZAP` abriria o modal *"Zap ÔÇª Are you sure?"*. Guardei com `SET SAFETY OFF` + restaura├º├úo. Gravei isso como mem├│ria: afeta outros BOs com `ZAP IN` (`CCOBO`, `COMBO`, `ClfBO`).
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9 real** do par BO+Form, `.FXP` apagado antes e recriado: `BO_ERR=(nenhum) FORM_ERR=(nenhum)`.
+- **Instancia├º├úo real** com `gb_4c_ModoTeste` + `gc_4c_ArquivoErroTeste`: form abre, `RAISEEVENT(txt_4c_OP, "GotFocus")` desliga o Confirmar (prova de que o binding est├í vivo, n├úo s├│ registrado), `ValidarOP` roda nos dois caminhos sem travar, e o binding da grade **sobrevive** ao esvaziamento (`RecordSource=cursor_4c_DivOp`, `Col5.CtrlSrc=cursor_4c_DivOp.QtdDivs`, `Header=Quantidade`, `Width=80`, `FCOUNT=12`).
+- Os tr├¬s `Connection handle is invalid` no log s├úo esperados (`gnConnHandle = -1` no harness) e foram **reportados**, n├úo engolidos.
+
+Uma nota de m├®todo: o teste travou duas vezes antes de eu perceber que o VFP rodava o **`.FXP` velho** da primeira vers├úo do script ÔÇö apagar o `.FXP` resolveu. Vale para qualquer diagn├│stico via `vfp9.exe script.prg`.
+
+N├úo mexi em `AfterRowColChange` da grade nem no `Click` dos bot├Áes ÔÇö s├úo da Fase 7/8, como o pr├│prio plano do arquivo indica.

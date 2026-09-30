@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete and verified.
+
+## What was wrong
+
+The previous attempt concluded "nothing to do" and added no code. It was right that **there are no lookups** ÔÇö I re-confirmed against the legacy dump (`fwbusca`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar` ÔåÆ all zero occurrences), so inventing an `AbrirLookup*` would have violated PILAR 1. But it was wrong that there was nothing left: the Phase 6 gate's flat-form branch requires `ControlSource` **and** `PROCEDURE Validar*` ÔÇö the validation handler for the editable cell ÔÇö and that genuinely did not exist.
+
+## What I added
+
+I first verified the grid is faithful to the SCX (`ColumnOrder`/`Width`/`ReadOnly` per column all match, including the checkbox being visually first via `Column6.ColumnOrder = 1`). That confirmed **Column4 (Email) is the one digitable cell** ÔÇö `ReadOnly = .F.` in both legacy and migrated ÔÇö and it had no handler at all.
+
+- **`ValidarEmailLinha` + `ValidarEmailLinhaKeyPress`** ÔÇö normalizes the typed e-mail (`LOWER` + `ALLTRIM`, the same normalization the legacy applies at send time) and writes it back to the cursor, so what shows in the grid equals what goes into the "Para" field. Bound via `KeyPress` (Enter/Tab) + `LostFocus`, since `Valid` doesn't fire through BINDEVENT on a TextBox. It deliberately does **not** block input ÔÇö the legacy has no `Valid` on that cell.
+
+- **`ValidarEnvio`** ÔÇö pre-flight check transcribing the legacy's own two criteria (`Where Checks = 1` and `If IsEmpty(...emails) / Loop`).
+
+One deliberate deviation, flagged: in the legacy, both of those cases are silent ÔÇö the `SCAN` runs zero iterations, `llOk` stays `.T.`, and the screen announces *"Email enviado com sucesso!"* and closes **having sent nothing**. I did not reproduce that (CLAUDE.md #20). The scope of the deviation is limited to the message and the abort; the automatic-mode `Release()` stays unconditional, as in the legacy ÔÇö I initially wrote an early `RETURN` that would have left an unattended automatic run stuck on an open form, and restructured it.
+
+## Verification
+
+- Compile: `COMPILE_OK`, both BO and form, no `.err`.
+- Instantiation: form opens, grid intact, `Col4CS=[cursor_4c_Dados.Emails]`, `Col4RO=.F.`, all three methods reachable, and `AEVENTS` confirms both bindings landed (`KEYPRESS/LOSTFOCUS`).
+- Behavior (instantiating alone proves nothing, so I drove the logic): empty cursor ÔåÆ `.F.`; rows but none checked ÔåÆ `.F.`; checked-but-no-email ÔåÆ `.F.`; checked-with-email ÔåÆ `.T.`; current row preserved. Normalization: `"  JOAO@Teste.COM  "` ÔåÆ `joao@teste.com`.
+
+Stale `.fxp` files removed so the next run recompiles. Test scripts left in `automation/` (`CompileCheckSigPremaF6.prg`, `InstantiateCheckSigPremaF6.prg`, `TestValidarEnvioSigPremaF6.prg`, `TestValidarEmailSigPremaF6.prg`) following the existing convention there.

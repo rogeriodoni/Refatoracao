@@ -1,0 +1,21 @@
+FASE8 CHECK FormSigPrGf1 - inicio 28/09/2026 23:52:27
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O W=800 H=158 Cap=[Falha X Recuperação por Mês da Empresa]
+2 form: Closable=.F. [SCX .F.]  DataSession=2 [SCX 2]  DataSessionId=2  TitleBar=0 [SCX 0]  ControlBox=.F. [SCX .F.]
+2a SETs na sessao privada: DATE=DMY CENTURY=ON [FormBase.Init deve ter posto BRITISH/ON]
+2b TabIndex: DtIni=1 [SCX 1] DtFim=2 [SCX 2] lblPeriodo=6 [SCX 3] cntAguarde=4 [SCX 4] cmdGrupo=5 [SCX 5]
+2c CommandGroup: W=160 H=85 [SCX 160x85 com AutoSize] Value=0 AutoSize=.T.
+2d Buttons(1).Caption=[\<Processar] [SCX tem o acelerador Alt+P]  Buttons(2).Caption=[Encerrar] Cancel=.T.
+2e cnt_4c_Aguarde.Visible=.F. [deve ser .F.]  filhos: L1=.T. L2=.T. [ambos .T.]
+3 metodos: FormParaBO=.T. BOParaForm=.T. LiberarFormGrafico=.T. this_oFormGrafico=.T. SincronizarPeriodoComBO(deve ser .F.)=.F.
+3a carga inicial (BOParaForm no ConfigurarFiltroPeriodo): DtIni=01/09/2026 DtFim=30/09/2026  [legado: 01/09/2026 e 30/09/2026]  tipos=DD
+3b chamada EXTERNA de FormParaBO recusada, como esperado: Property FORMPARABO is not found.
+3c FormParaBO pelo KeyPress(13): BO.Ini=01/04/2026 BO.Fim=30/04/2026 [esperado 01/04/2026 e 30/04/2026]
+3d ValidarPeriodo -> FormParaBO: retorno=.T. BO.Ini=01/06/2026 BO.Fim=30/06/2026 Msg=[] [esperado .T., 01/06 a 30/06, msg vazia]
+4 LiberarFormGrafico 2x com .NULL.: OK, prop VARTYPE=X
+5 antes de Processar: DEC=2 FIXED=OFF EXACT=ON
+5a Processar retorno=.F. Msg=[Variable 'GNCONNHANDLE' is not found.]
+5b DEPOIS de Processar: DEC=2 FIXED=OFF EXACT=ON  [tem de voltar a 2 / OFF / ON]
+6 Release do pai: VARTYPE=X [X = liberado]
+DIALOGOS SUPRIMIDOS: nenhum
+FIM 28/09/2026 23:52:27

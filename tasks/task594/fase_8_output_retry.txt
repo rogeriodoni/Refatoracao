@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada.
+
+## Por que a fase tinha reprovado
+
+N├úo era o form. A execu├º├úo anterior **consertou o pr├│prio gate** no `OrquestradorMigracao.ps1` durante a Fase 8 ÔÇö e o PowerShell n├úo recarrega o `.ps1` no meio da execu├º├úo, ent├úo a corre├º├úo n├úo valeu para ela mesma. O c├│digo corrigido j├í estava na working tree; s├│ nunca tinha sido exercitado.
+
+Confirmei rodando o gate **real** (extra├¡do verbatim das linhas 6997ÔÇô7604) fora do orquestrador, sem reinvocar o Claude CLI: `VEREDICTO FASE 8: PASSA`. Os dois ramos de dispensa disparam como projetado (FLUXO-├ÜNICO tira o `BtnCancelarClick`, LINHA-IMEDIATA tira a exig├¬ncia de bot├úo de a├º├úo).
+
+## Defeito real que encontrei e corrigi
+
+Indo al├®m do gate, achei um bug silencioso em `ValidarCelulaHora` ÔÇö o padr├úo da regra #42 (chave POSICIONAL). O `TAG Cotacaos` ├® `cmoes + DTOS(datas) + horas`, e no schema `cmoes` ├® `char(3)` e `horas` ├® `char(8)` ÔåÆ chave de **19**. O migrado montava `ALLTRIM(this_cMoeda) + DTOS(...) + <hora do TextBox de InputMask "99:99">` ÔåÆ **16**.
+
+O que medi no VFP9 (`SET EXACT ON`) ├® a parte que vale registrar:
+
+| | resultado |
+|---|---|
+| `SEEK` chave 16, moeda `"USD"` (3 de 3 chars) | **`.T.`** ÔÇö passa! |
+| `SEEK` chave 16, moeda `"R$"` (2 de 3 chars) | **`.F.`** |
+| `cmoes + DTOS(datas) + horas == <chave 16>` | **`.F.` sempre** |
+
+O `SEEK` sobrevive quando a diferen├ºa ├® s├│ espa├ºo no fim, mas o `==` ├® exato em comprimento ÔÇö e era ele que decidia o aviso. Resultado: **`Cota├º├úo j├í cadastrada!` estava morto desde a migra├º├úo, para todas as moedas**, e o legado bloqueava. Pior: testar com moeda de 3 chars faz o `SEEK` dar `.T.` e parecer correto.
+
+Conserto: `PADR(this_cMoeda, 3) + DTOS(loc_dData) + PADR(loc_cHora, 8)`, numa vari├ível s├│, reusada no `SEEK` e na compara├º├úo.
+
+Os outros dois sites de chave que auditei (`BtnIncluirClick:923`, `BtnExcluirClick:998`) est├úo **fi├®is** ÔÇö o seek parcial do 923 tamb├®m n├úo casa no legado, e o 998 usa `SET NEAR ON` por projeto. N├úo mexi.
+
+## Verifica├º├úo
+
+Compila limpo (apaguei o `.FXP` antes e conferi timestamp novo, sem `.err`). Prova end-to-end pelo **form real** (`automation\ProbeCotMin.prg`): `Init OK Cols=3`, aviso dispara para `USD` **e** `R$`, sem falso positivo em hora in├®dita, e a mensagem do legado aparece no log de di├ílogos suprimidos. Gate e completude passam no estado final.
+
+Dois pontos honestos:
+
+- O `.ERR` que apareceu no meu check ├® do `formsigprglx`, datado de **2026-09-10** ÔÇö artefato pr├®-existente que meu wildcard pegou, n├úo do meu compile.
+- `TestFormWrapper.prg` **n├úo roda nesta m├íquina**: `ConfigurarAmbiente()` pendura e nunca retorna, antes de criar form nenhum. Medi e descartei as duas explica├º├Áes ├│bvias ÔÇö n├úo ├® o SQL Server inalcan├º├ível (ela n├úo conecta) nem lentid├úo de compila├º├úo (id├¬ntico com as ~870 `.prg` pr├®-compiladas). A causa exata n├úo isolei; por isso o probe carrega s├│ as depend├¬ncias do form. Efeito colateral do diagn├│stico: apaguei os `.fxp` de `forms\operacionais\` (pr├ítica documentada) e pr├®-compilei a ├írvore, ent├úo `classes`, `relatorios` e `operacionais` est├úo 100% com `.FXP`.
+
+Registrei as duas li├º├Áes na mem├│ria ÔÇö a nuance de "parte de largura cheia mascara o defeito" foi anexada ├á mem├│ria existente da regra #42, em vez de duplic├í-la.

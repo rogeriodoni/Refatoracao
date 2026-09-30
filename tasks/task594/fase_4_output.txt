@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balance correctly. Phase 4 is complete.
+
+**Summary of changes:**
+
+1. **`SIGPRCOTBO.prg`** ÔÇö added `Buscar(par_cMoeda)`, which loads `SigCdCot` filtered by moeda into a READWRITE `cursor_4c_Dados` (required since the grid columns are editable) and builds the two indexes (`CidChaves`, `Cotacaos`) the legacy `TmpCot` cursor relied on.
+
+2. **`FormSIGPRCOT.prg`**:
+   - `ConfigurarGrid()` ÔÇö adds `grd_4c_Dados` with the 3 columns (Data/Cota├º├úo/Hora), exact widths/formats/masks/`ColumnOrder` transcribed from the SCX dump, structure-only (no `ControlSource` yet, per the "cursor doesn't exist until CarregarLista" rule).
+   - `ConfigurarBotoes()` ÔÇö adds `cmd_4c_Incluir`/`cmd_4c_Delete`/`cmd_4c_Sair` (names per `mapeamento.json`), canonical framework button styling, wired via `BINDEVENT`.
+   - `AjustarBotoesPorAcesso()` ÔÇö transcribes the legacy `fChecaAcesso`-driven Visible + cascading `Left` repositioning.
+   - `CarregarLista()` ÔÇö binds the grid to `cursor_4c_Dados` after populating it.
+   - `BtnIncluirClick`/`BtnExcluirClick`/`BtnSairClick` ÔÇö full transcriptions of `inserir.Click`/`delete.Click`/`sair.Click`, adapted to persist through the BO (`NovoRegistro`/`EditarRegistro`/`Salvar`/`Excluir`) since this dialog talks to SQL Server directly rather than via the legacy's buffered `TABLEUPDATE`.
+   - Added `SET DELETED ON` (missing previously), needed so deleted grid rows don't get re-processed by the sync loop.
+
+Deliberately deferred to Fases 7-8 (documented in the header and in `ConfigurarGrid`'s comment): the grid's per-cell `GotFocus`/`KeyPress`/`When` events (Data-required validation, Hora duplicate check, Cota├º├úo refresh-on-confirm) ÔÇö these are the "eventos da grade" the file's own Fase-3 comment already earmarked for later phases.

@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and verified.
+
+## What was missing
+
+The previous attempt's code was already faithful ÔÇö grid, 8 columns, the OK button, the validation loop. It failed the gate on one thing: no method matching `CarregarLista|CarregarDados|MontaGrade`. The grid binding was inlined in `ConfigurarGrid`.
+
+That gate requirement is **legitimate here**, so I satisfied it by extracting rather than inventing: the legacy `Init` ends with `Select &lcArq. / Goto Top In &lcArq. / With .grdTitulos / .RecordSource = lcArq / ... / .Refresh` ÔÇö that *is* a carga surface. The FLAT branch is also the right branch: `SIGMVTTA` has a real Grid and real editable columns, so DESPACHANTE/EXIBICAO/ARVORE would all have been the wrong exception to claim.
+
+## Changes to `FormSigMvTta.prg`
+
+- **`CarregarDados()`** (PUBLIC, per rule #3 ÔÇö the test harness calls carga methods from outside the class): the 8 `ControlSource` binds, widths/headers reapplied *after* `ControlSource` (rule #41), `GO TOP` + `Refresh()` (rule #21), returning `.T./.F.`. Called from `InicializarForm` after `ConfigurarGrid`, mirroring the legacy order.
+- **`AjustarColunasPorModo()`**: the legacy `Column<N>.Text1.When` gates as `Column.ReadOnly` ÔÇö grid first, then columns (rule #18). Column reached by built name via `STORE ... TO (expr)`, since `Controls` is numeric-indexed (#34) and `EVALUATE` doesn't assign (#15).
+- **Fidelity fix in `CmdSairClick`**: legacy uses `IsEmpty(<arq>.Vencs)`, and the Fortyus `IsEmpty` treats NULL as empty while native `EMPTY(.NULL.)` returns `.F.` (#27). Added the `ISNULL` guard ÔÇö **harness B proved this matters**: the `Vencs = .NULL.` row now triggers the warning; without it that incomplete row was silently accepted.
+- Removed a latent landmine: a comment beginning `* todo bloco...`. `Test-CompletudeCodigo`'s `^\s*\*\s*TODO\b` matches the Portuguese "todo", which would have failed `05d_validarCompletude` later as a false positive. I verified the hit, rephrased, and re-ran all four completude patterns ÔÇö now 0 hits.
+
+## Verification (real VFP9, not inspection)
+
+- **Compile**: `.fxp` deleted first and confirmed recreated, no `.err`.
+- **Harness A** (real 3-row cursor, no test flags so the binding actually runs): caption `001 / MALOTE / 3` from positional `EmpDopNums`; all 8 `ControlSource`s correct; widths `106/130/70/130/100/100/130/80` exactly the SCX values and surviving the bind; `ALTERAR` ÔåÆ grid RO=`.F.`, cols 1-6 RO=`.T.`, cols 7/8 RO=`.F.`; `VISUALIZAR` ÔåÆ all RO=`.T.`; `RECNO=1`; re-callable idempotently.
+- **Harness B** (test mode): IPI row (no ValTits) and PIS row (NULL Vencs) each produced exactly one warning with correct accented text; the complete row produced none; `CarregarDados()` correctly returns `.F.` in test mode.
+
+Two notes worth recording. `config.prg` + `ConfigurarAmbiente()` compiles ~900 `.prg` files from cold, taking several minutes ÔÇö my first runs looked like hangs and weren't. And my initial harness silently did nothing because a stale `.fxp` from a broken earlier version was executed instead of the new source, which is the `.FXP`-velho trap; deleting it before each run is what made the results trustworthy.
+
+`getDGrupos`/`getDContas` and the `AfterRowColChange` SQL lookups that fill them remain for Fase 5 ÔÇö they're fields, not grid/buttons, and depend on controls that don't exist yet.

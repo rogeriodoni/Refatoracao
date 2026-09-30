@@ -1,506 +1,555 @@
-*==============================================================================
-* SigPrEs1BO.prg - Business Object: Posicao Por Movimentacao
-* Herda de BusinessBase
-* Form OPERACIONAL - consulta/filtro de movimentacoes em SigMvCab
-*==============================================================================
-
+*------------------------------------------------------------------------------
+* SigPrEs1BO.prg - Business Object para Posicao Por Movimentacao
+* Form legado: SIGPRES1 (form OPERACIONAL - filtro de relatorio, sem tabela CRUD)
+* Herdado de: BusinessBase
+*
+* O legado nao grava em tabela alguma: monta filtros e consulta SigMvCab +
+* SigCdOpe para alimentar a tela filha (sigpres2). Conferido no dump
+* tasks\task606\SigPrEs1_form_codigo_fonte.txt: nenhum TABLEUPDATE(), nenhum
+* .AddCursor(), e o unico comando de escrita eh
+*   Update csTemporario Set PrazoEnts = Iif(IsNull(PrazoEnts), Ctod(''), ...)
+* cujo alvo csTemporario eh o CURSOR LOCAL criado por
+* poDataMgr.SqlExecute(lcQuery, 'csTemporario') - ou seja, ajuste em memoria
+* que nunca volta para o banco.
+*
+* Por isso este BO deixa Inserir(), Atualizar() e ExecutarExclusao() HERDADOS
+* de BusinessBase: a base ja recusa a operacao e reporta pelo ExibirFalha() do
+* Salvar(), que eh o comportamento correto aqui. Sobrescrever esses metodos
+* exigiria INVENTAR um INSERT/UPDATE, o que a regra #22 do CLAUDE.md proibe
+* (a lista de colunas vem do schema, nunca de adivinhacao).
+*
+* O metodo de negocio real eh BuscarMovimentacao(), equivalente ao
+* consulta.Click do SCX original. CarregarDoCursor() le a linha corrente do
+* cursor de resultado e ObterChavePrimaria() devolve a chave EmpDopNums dessa
+* linha (usada pela auditoria de BusinessBase e pelo handoff para a tela
+* filha).
+*------------------------------------------------------------------------------
 DEFINE CLASS SigPrEs1BO AS BusinessBase
 
-    *-- Empresa
-    this_cEmpresa      = ""
-    this_cDsEmpresa    = ""
-    this_nEmpD         = 0
+    *-- Configuracao da entidade (form OPERACIONAL - nao ha tabela unica/CRUD)
+    this_cTabela     = "SigMvCab"
+    this_cCampoChave = ""
 
-    *-- Operacao / Movimentacao
-    this_cNmOperacao   = ""
+    *-- Filtro: Movimentacao / Periodo
+    this_cNomeOperacao = ""
+    this_dDataInicial  = {}
+    this_dDataFinal    = {}
     this_nNumero       = 0
-    this_nOp           = 0
-
-    *-- Periodo
-    this_dDtInicial    = {}
-    this_dDtFinal      = {}
-    this_nPeriodo      = 1
-
-    *-- Grupo contabil
-    this_cGrupo        = ""
-    this_cDsGrupo      = ""
-
-    *-- Conta
-    this_cConta        = ""
-    this_cDsConta      = ""
-
-    *-- CPF/CNPJ
-    this_cCpf          = ""
-
-    *-- Responsavel / Vendedor
-    this_cResps        = ""
-    this_cDsResps      = ""
-
-    *-- Moeda
-    this_cMoeda        = ""
-    this_cDsMoeda      = ""
-
-    *-- Opcoes de filtro
-    this_nSituacao     = 3
-    this_nImpressao    = 1
-    this_nCotacao      = 1
+    this_nOperacao     = 0
     this_cStatus       = ""
 
-    *-- Grupo padrao de vendedores (SigCdPam.grpadvens) - carregado em Init
-    this_cGrPadVens    = ""
+    *-- Filtro: Grupo / Conta
+    this_cGrupo            = ""
+    this_cDescricaoGrupo   = ""
+    this_cConta            = ""
+    this_cDescricaoConta   = ""
+    this_cCpfCnpj          = ""
+
+    *-- Filtro: Moeda
+    this_cCodigoMoeda    = ""
+    this_cDescricaoMoeda = ""
+
+    *-- Filtro: Responsavel
+    this_cResponsavel          = ""
+    this_cDescricaoResponsavel = ""
+
+    *-- Filtro: Empresa
+    this_cCodigoEmpresa    = ""
+    this_cDescricaoEmpresa = ""
+    this_lEmpresaDestino   = .F.
+
+    *-- Opcoes (OptionGroups do filtro) - valores DEFAULT identicos ao SCX legado
+    this_nOpcaoPeriodo    = 1
+    this_nOpcaoPendente   = 3
+    this_nOpcaoImpressao  = 1
+    this_nOpcaoCotacao    = 1
+
+    *-- Parametros do sistema (equivalente ao cursor LocalParam do legado)
+    this_cGrupoPadraoResponsavel = ""
+
+    *-- Resultado da consulta (equivalente ao cursor csTemporario do legado)
+    this_cCursorResultado = "cursor_4c_Movimentacao"
+    this_nTotalRegistros  = 0
+
+    *-- Linha corrente do cursor de resultado, lida por CarregarDoCursor().
+    *-- Sao EXATAMENTE as colunas de SigMvCab que o legado nomeia no lcWhere /
+    *-- lcQuery do consulta.Click, mais a chave empdopnums usada no Index On -
+    *-- nenhuma coluna a mais. Conferidas uma a uma em docs\schema.sql:
+    *--   emps char(3)        empds char(3)       dopes char(20)
+    *--   datas datetime      prazoents datetime  grupoos char(10)
+    *--   grupods char(10)    contaos char(10)    contads char(10)
+    *--   nops numeric(10,0)  numes numeric(6,0)  vends char(10)
+    *--   chksubn bit         pstatus char(1)     empdopnums char(29)
+    this_cRegEmpresa       = ""
+    this_cRegEmpresaDest   = ""
+    this_cRegOperacao      = ""
+    *-- {/:} eh DATETIME vazio (VARTYPE "T"): as colunas datas/prazoents sao
+    *-- datetime, e manter o tipo estavel antes e depois da carga evita o erro
+    *-- 11 de TTOD() com DATE (regra #16 do CLAUDE.md).
+    this_dRegData          = {/:}
+    this_dRegPrazoEntrega  = {/:}
+    this_cRegGrupoOrigem   = ""
+    this_cRegGrupoDestino  = ""
+    this_cRegContaOrigem   = ""
+    this_cRegContaDestino  = ""
+    this_nRegNumeroOp      = 0
+    this_nRegNumero        = 0
+    this_cRegVendedor      = ""
+    this_lRegBaixada       = .F.
+    this_cRegStatus        = ""
+    this_cRegChave         = ""
 
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        THIS.this_cTabela     = "SigMvCab"
-        THIS.this_cCampoChave = ""
-        DODEFAULT()
-        THIS.CarregarGrPadVens()
-    ENDPROC
-
     *--------------------------------------------------------------------------
-    * CarregarGrPadVens - Carrega o grupo padrao de vendedores de SigCdPam
-    * Necessario para validacao de Responsavel via fAcessoContab
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarGrPadVens()
-        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
-        loc_lResultado = .F.
-
-        TRY
-            loc_cSQL = "SELECT TOP 1 grpadvens AS GrPadVens FROM SigCdPam"
-
-            IF USED("cursor_4c_ParamPam")
-                USE IN cursor_4c_ParamPam
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ParamPam")
-
-            IF loc_nResultado >= 1
-                SELECT cursor_4c_ParamPam
-                GO TOP
-                IF !EOF("cursor_4c_ParamPam")
-                    THIS.this_cGrPadVens = NVL(cursor_4c_ParamPam.GrPadVens, "")
-                    loc_lResultado = .T.
-                ENDIF
-                USE IN cursor_4c_ParamPam
-            ELSE
-                THIS.this_cMensagemErro = "Erro ao carregar par" + CHR(226) + "metros SigCdPam"
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ValidarFiltros - Valida filtros antes de executar consulta
-    * Retorna .T. se valido; popula this_cMensagemErro se invalido
-    *--------------------------------------------------------------------------
-    FUNCTION ValidarFiltros()
-        THIS.this_cMensagemErro = ""
-
-        IF EMPTY(ALLTRIM(THIS.this_cEmpresa))
-            THIS.this_cMensagemErro = "Empresa Inv" + CHR(225) + "lida!!!"
-            RETURN .F.
-        ENDIF
-
-        IF EMPTY(ALLTRIM(THIS.this_cNmOperacao))
-            THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + "lida!!!"
-            RETURN .F.
-        ENDIF
-
-        IF !EMPTY(THIS.this_dDtFinal) AND !EMPTY(THIS.this_dDtInicial)
-            IF THIS.this_dDtFinal < THIS.this_dDtInicial
-                THIS.this_cMensagemErro = "Per" + CHR(237) + "odo Inv" + CHR(225) + "lido!!! " + ;
-                    "Data Final Menor do Que a Inicial!!!"
-                RETURN .F.
-            ENDIF
-        ENDIF
-
-        RETURN .T.
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ExecutarConsulta - Executa a consulta principal contra SigMvCab
-    * Cria cursor csTemporario com resultados indexados
-    * Retorna .T. se encontrou registros, .F. caso contrario
-    *--------------------------------------------------------------------------
-    FUNCTION ExecutarConsulta()
-        LOCAL loc_lResultado, loc_cSQL, loc_cWhere, loc_nResultado
-        LOCAL loc_cEmp, loc_cNmO, loc_cGrupo, loc_cConta, loc_cResps, loc_cSta
-        LOCAL loc_nEmpD, loc_nNrP, loc_nPen, loc_nOp, loc_nNum
-        LOCAL loc_dDtI, loc_dDtF, loc_cDtISQL, loc_cDtFSQL, loc_cEmpFilter
-
-        loc_lResultado = .F.
-
-        TRY
-            loc_cEmp    = ALLTRIM(THIS.this_cEmpresa)
-            loc_cNmO    = ALLTRIM(THIS.this_cNmOperacao)
-            loc_cGrupo  = ALLTRIM(THIS.this_cGrupo)
-            loc_cConta  = ALLTRIM(THIS.this_cConta)
-            loc_cResps  = ALLTRIM(THIS.this_cResps)
-            loc_cSta    = ALLTRIM(THIS.this_cStatus)
-            loc_nEmpD   = THIS.this_nEmpD
-            loc_nNrP    = THIS.this_nPeriodo
-            loc_nPen    = THIS.this_nSituacao
-            loc_nOp     = THIS.this_nOp
-            loc_nNum    = THIS.this_nNumero
-            loc_dDtI    = THIS.this_dDtInicial
-            loc_dDtF    = THIS.this_dDtFinal
-
-            *-- Formata datas para SQL Server (com componente de hora)
-            loc_cDtISQL = "'" + PADL(YEAR(loc_dDtI), 4, "0") + "-" + ;
-                PADL(MONTH(loc_dDtI), 2, "0") + "-" + ;
-                PADL(DAY(loc_dDtI), 2, "0") + " 00:00:00'"
-            loc_cDtFSQL = "'" + PADL(YEAR(loc_dDtF), 4, "0") + "-" + ;
-                PADL(MONTH(loc_dDtF), 2, "0") + "-" + ;
-                PADL(DAY(loc_dDtF), 2, "0") + " 23:59:59'"
-
-            *-- Monta WHERE replicando logica de consulta.Click do legado
-            loc_cWhere = ""
-
-            IF !EMPTY(loc_cNmO)
-                loc_cWhere = loc_cWhere + "a.Dopes = " + EscaparSQL(loc_cNmO) + " And "
-            ENDIF
-
-            IF loc_nNrP = 1
-                loc_cWhere = loc_cWhere + "a.Datas "
-            ELSE
-                loc_cWhere = loc_cWhere + "a.PrazoEnts "
-            ENDIF
-            loc_cWhere = loc_cWhere + "BetWeen " + loc_cDtISQL + " And " + loc_cDtFSQL + " And "
-
-            IF !EMPTY(loc_cGrupo)
-                loc_cWhere = loc_cWhere + "(a.GrupoOs = " + EscaparSQL(loc_cGrupo) + ;
-                    " Or a.GrupoDs = " + EscaparSQL(loc_cGrupo) + ") And "
-            ENDIF
-
-            IF !EMPTY(loc_cConta)
-                loc_cWhere = loc_cWhere + "(a.ContaOs = " + EscaparSQL(loc_cConta) + ;
-                    " Or a.ContaDs = " + EscaparSQL(loc_cConta) + ") And "
-            ENDIF
-
-            IF loc_nOp > 0
-                loc_cWhere = loc_cWhere + "a.Nops = " + FormatarNumeroSQL(loc_nOp, 0) + " And "
-            ENDIF
-
-            IF loc_nNum > 0
-                loc_cWhere = loc_cWhere + "a.Numes = " + FormatarNumeroSQL(loc_nNum, 0) + " And "
-            ENDIF
-
-            IF !EMPTY(loc_cResps)
-                loc_cWhere = loc_cWhere + "a.Vends = " + EscaparSQL(loc_cResps) + " And "
-            ENDIF
-
-            DO CASE
-                CASE loc_nPen = 1
-                    loc_cWhere = loc_cWhere + "a.ChkSubn = 0 And "
-                CASE loc_nPen = 2
-                    loc_cWhere = loc_cWhere + "a.ChkSubn = 1 And "
-            ENDCASE
-
-            IF !EMPTY(loc_cSta)
-                loc_cWhere = loc_cWhere + "a.pStatus = " + EscaparSQL(loc_cSta) + " And "
-            ENDIF
-
-            *-- Filtro de empresa (com empresa destino opcional)
-            loc_cEmpFilter = "(a.Emps = " + EscaparSQL(loc_cEmp)
-            IF loc_nEmpD != 0
-                loc_cEmpFilter = loc_cEmpFilter + " Or a.Empds = " + EscaparSQL(loc_cEmp)
-            ENDIF
-            loc_cEmpFilter = loc_cEmpFilter + ")"
-
-            loc_cSQL = "Select a.* " + ;
-                "From SigMvCab a, SigCdOpe b " + ;
-                "Where " + loc_cEmpFilter + " And " + ;
-                loc_cWhere + ;
-                "a.Dopes = b.Dopes"
-
-            IF USED("csTemporario")
-                USE IN csTemporario
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "csTemporario")
-
-            IF loc_nResultado >= 1
-                SELECT csTemporario
-                IF RECCOUNT("csTemporario") > 0
-                    INDEX ON EmpDopNums TAG EmpDopNums
-                    *-- Corrige PrazoEnts NULL (replica Update Set PrazoEnts = Iif(IsNull,Ctod(''),PrazoEnts))
-                    REPLACE ALL prazoents WITH IIF(ISNULL(prazoents), CTOD(""), prazoents) IN csTemporario
-                    GO TOP IN csTemporario
-                    loc_lResultado = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Nenhum Registro Selecionado!!!"
-                    USE IN csTemporario
-                ENDIF
-            ELSE
-                THIS.this_cMensagemErro = "Falha ao executar consulta (csTemporario)"
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarCpfPorConta - Carrega CPF do cliente pelo codigo da conta (iclis)
-    * Retorna o CPF (string) ou "" se nao encontrado
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarCpfPorConta(par_cConta)
-        LOCAL loc_cCpf, loc_cSQL, loc_nResultado
-        loc_cCpf = ""
-
-        IF EMPTY(ALLTRIM(par_cConta))
-            RETURN ""
-        ENDIF
-
-        TRY
-            loc_cSQL = "SELECT TOP 1 Cpfs FROM SigCdCli " + ;
-                "WHERE iClis = " + EscaparSQL(PADR(ALLTRIM(par_cConta), 10))
-
-            IF USED("cursor_4c_CpfCli")
-                USE IN cursor_4c_CpfCli
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CpfCli")
-
-            IF loc_nResultado >= 1
-                SELECT cursor_4c_CpfCli
-                IF !EOF("cursor_4c_CpfCli")
-                    loc_cCpf = NVL(cursor_4c_CpfCli.Cpfs, "")
-                ENDIF
-                USE IN cursor_4c_CpfCli
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_cCpf
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ValidarCpfCnpj - Valida CPF/CNPJ e localiza conta vinculada em SigCdCli
-    * Retorna objeto Empty com: lValido, cConta, cDsConta, cCpf, cErro
-    * Replica logica de Get_cpf.Valid do legado
-    *--------------------------------------------------------------------------
-    FUNCTION ValidarCpfCnpj(par_cCpfCnpj)
-        LOCAL loc_oRet, loc_cCgc, loc_cCgc1, loc_nLen, loc_nVerCpfCgc, loc_nResultado
-
-        loc_oRet = CREATEOBJECT("Empty")
-        ADDPROPERTY(loc_oRet, "lValido",  .F.)
-        ADDPROPERTY(loc_oRet, "cConta",   "")
-        ADDPROPERTY(loc_oRet, "cDsConta", "")
-        ADDPROPERTY(loc_oRet, "cCpf",     "")
-        ADDPROPERTY(loc_oRet, "cErro",    "")
-
-        IF EMPTY(ALLTRIM(par_cCpfCnpj))
-            loc_oRet.lValido = .T.
-            RETURN loc_oRet
-        ENDIF
-
-        loc_cCgc = STRTRAN(STRTRAN(STRTRAN(ALLTRIM(par_cCpfCnpj), ".", ""), "-", ""), "/", "")
-        loc_nLen = LEN(ALLTRIM(loc_cCgc))
-        loc_nVerCpfCgc = 0
-
-        IF loc_nLen <> 14
-            loc_cCgc1 = TRANSFORM(loc_cCgc, "@R 999.999.999-99")
-            IF loc_nLen = 11
-                loc_nVerCpfCgc = IIF(ValidarCPF(loc_cCgc1), 1, 2)
-            ENDIF
-        ELSE
-            loc_cCgc1 = TRANSFORM(loc_cCgc, "@R 99.999.999/9999-99")
-            loc_nVerCpfCgc = IIF(ValidarCNPJ(loc_cCgc1), 1, 2)
-        ENDIF
-
-        IF loc_nVerCpfCgc = 2
-            loc_oRet.cErro = "CPF / CGC Incorreto !!!"
-            RETURN loc_oRet
-        ENDIF
-
-        TRY
-            loc_cSQL = "SELECT TOP 1 iclis, rclis, cpfs FROM SigCdCli " + ;
-                "WHERE cpfs = " + EscaparSQL(PADR(ALLTRIM(loc_cCgc1), 20))
-
-            IF USED("cursor_4c_BuscaCpf")
-                USE IN cursor_4c_BuscaCpf
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCpf")
-
-            IF loc_nResultado >= 1
-                SELECT cursor_4c_BuscaCpf
-                IF !EOF("cursor_4c_BuscaCpf")
-                    loc_oRet.cConta   = NVL(cursor_4c_BuscaCpf.iclis, "")
-                    loc_oRet.cDsConta = NVL(cursor_4c_BuscaCpf.rclis, "")
-                    loc_oRet.cCpf     = NVL(cursor_4c_BuscaCpf.cpfs, "")
-                    loc_oRet.lValido  = .T.
-                ELSE
-                    IF loc_nVerCpfCgc = 1
-                        loc_oRet.cErro = "CPF / CGC n" + CHR(227) + "o encontrado !!!"
-                    ELSE
-                        loc_oRet.lValido = .T.
-                    ENDIF
-                ENDIF
-                USE IN cursor_4c_BuscaCpf
-            ELSE
-                loc_oRet.cErro = "Falha ao buscar CPF/CGC em SigCdCli"
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_oRet.cErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_oRet
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Chave composta de SigMvCab (Emps + Dopes + Nums)
-    * Usada em RegistrarAuditoria para log de consulta/operacoes
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        RETURN ALLTRIM(THIS.this_cEmpresa) + "|" + ;
-               ALLTRIM(THIS.this_cNmOperacao) + "|" + ;
-               ALLTRIM(TRANSFORM(THIS.this_nNumero))
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega chave e campos principais de SigMvCab
-    * a partir da linha corrente do cursor (usado quando usuario seleciona
-    * uma movimentacao no grid de resultados de ExecutarConsulta)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso, loc_oErro
+
+        TRY
+            loc_lSucesso = DODEFAULT()
+
+            THIS.this_cTabela     = "SigMvCab"
+            THIS.this_cCampoChave = ""
+
+            THIS.this_cNomeOperacao = ""
+            THIS.this_dDataInicial  = DATE()
+            THIS.this_dDataFinal    = DATE()
+            THIS.this_nNumero       = 0
+            THIS.this_nOperacao     = 0
+            THIS.this_cStatus       = ""
+
+            THIS.this_cGrupo          = ""
+            THIS.this_cDescricaoGrupo = ""
+            THIS.this_cConta          = ""
+            THIS.this_cDescricaoConta = ""
+            THIS.this_cCpfCnpj        = ""
+
+            THIS.this_cCodigoMoeda    = ""
+            THIS.this_cDescricaoMoeda = ""
+
+            THIS.this_cResponsavel          = ""
+            THIS.this_cDescricaoResponsavel = ""
+
+            *-- Legado: .get_cd_empresa.Value = _empr
+            *-- _EMPR eh variavel do Framework antigo; a fonte canonica no
+            *-- sistema novo eh go_4c_Sistema.cCodEmpresa (config.prg).
+            THIS.this_cCodigoEmpresa = ""
+            IF TYPE("go_4c_Sistema") = "O"
+                THIS.this_cCodigoEmpresa = ALLTRIM(NVL(go_4c_Sistema.cCodEmpresa, ""))
+            ENDIF
+            THIS.this_cDescricaoEmpresa = ""
+            THIS.this_lEmpresaDestino   = .F.
+
+            THIS.this_nOpcaoPeriodo   = 1
+            THIS.this_nOpcaoPendente  = 3
+            THIS.this_nOpcaoImpressao = 1
+            THIS.this_nOpcaoCotacao   = 1
+
+            THIS.this_cGrupoPadraoResponsavel = ""
+            THIS.this_cCursorResultado        = "cursor_4c_Movimentacao"
+            THIS.this_nTotalRegistros         = 0
+
+            THIS.LimparLinhaCorrente()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        IF loc_lSucesso
+            *-- Equivalente ao SqlExecute("Select GrPadVens From SigCdPam...", "LocalParam")
+            *-- do Init legado - usado pela validacao de acesso do Responsavel.
+            THIS.CarregarParametrosSistema()
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarParametrosSistema - Carrega parametros globais de SigCdPam
+    * Equivalente ao cursor LocalParam populado no Init do form legado:
+    *   Select GrPadVens From SigCdPam Where Not cIdChaves = fUniqueIds()
+    * (a comparacao com um id recem-gerado nunca casa, entao devolve a linha
+    * unica de parametros da empresa - transcrito literalmente do legado)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE CarregarParametrosSistema()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+
         loc_lSucesso = .F.
 
-        IF !USED(par_cAliasCursor)
-            THIS.this_cMensagemErro = "Cursor " + par_cAliasCursor + " n" + CHR(227) + "o est" + CHR(225) + " aberto"
-            RETURN .F.
-        ENDIF
-
         TRY
-            SELECT (par_cAliasCursor)
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_cSQL = "SELECT GrPadVens FROM SigCdPam WHERE NOT cidchaves = " + ;
+                    EscaparSQL(fUniqueIds())
 
-            IF TYPE(par_cAliasCursor + ".emps") != "U"
-                THIS.this_cEmpresa    = TratarNulo(emps, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".empds") != "U"
-                THIS.this_nEmpD       = IIF(NVL(empds, "") != THIS.this_cEmpresa AND !EMPTY(NVL(empds, "")), 1, 0)
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".dopes") != "U"
-                THIS.this_cNmOperacao = TratarNulo(dopes, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".nops") != "U"
-                THIS.this_nOp         = NVL(nops, 0)
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".numes") != "U"
-                THIS.this_nNumero     = NVL(numes, 0)
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".grupos") != "U"
-                THIS.this_cGrupo      = TratarNulo(grupos, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".iclis") != "U"
-                THIS.this_cConta      = TratarNulo(iclis, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".vends") != "U"
-                THIS.this_cResps      = TratarNulo(vends, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".datas") != "U"
-                THIS.this_dDtInicial  = TratarNulo(datas, "D")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".prazoents") != "U"
-                THIS.this_dDtFinal    = TratarNulo(prazoents, "D")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".pstatus") != "U"
-                THIS.this_cStatus     = TratarNulo(pstatus, "C")
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".chksubn") != "U"
-                THIS.this_nSituacao   = IIF(NVL(chksubn, .F.), 2, 1)
-            ENDIF
+                IF USED("cursor_4c_SigPrEs1Pam")
+                    USE IN cursor_4c_SigPrEs1Pam
+                ENDIF
 
-            loc_lSucesso = .T.
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigPrEs1Pam")
+
+                IF loc_nResultado > 0 AND USED("cursor_4c_SigPrEs1Pam")
+                    SELECT cursor_4c_SigPrEs1Pam
+                    GO TOP
+                    IF !EOF()
+                        THIS.this_cGrupoPadraoResponsavel = ALLTRIM(TratarNulo(GrPadVens, ""))
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!!" + CHR(13) + CapturarErroSQL()
+                ENDIF
+
+                IF USED("cursor_4c_SigPrEs1Pam")
+                    USE IN cursor_4c_SigPrEs1Pam
+                ENDIF
+            ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro SigPrEs1BO.CarregarDoCursor")
-            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - NAO APLICAVEL a form OPERACIONAL de consulta
-    * SigPrEs1 (Posicao Por Movimentacao) apenas LE registros de SigMvCab
-    * atraves de ExecutarConsulta. Inclusao de movimentacoes ocorre nos
-    * forms de entrada de operacao (SigMvCab tem forms proprios de CRUD).
-    * Metodo mantido para conformidade com contrato BusinessBase; sempre
-    * retorna .F. com mensagem clara para prevenir uso indevido.
+    * ValidarFiltros - Reproduz as validacoes do consulta.Click do legado antes
+    * de disparar a consulta: Empresa, Operacao (Movimentacao) e Periodo.
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Inserir()
-        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-            "o suportada: SigPrEs1 " + CHR(233) + " form de consulta de posi" + ;
-            CHR(231) + CHR(227) + "o por movimenta" + CHR(231) + CHR(227) + "o. " + ;
-            "Utilize o form pr" + CHR(243) + "prio da opera" + CHR(231) + CHR(227) + ;
-            "o para incluir movimenta" + CHR(231) + CHR(245) + "es."
-        RETURN .F.
-    ENDFUNC
+    PROTECTED PROCEDURE ValidarFiltros()
+        LOCAL loc_lValido
+
+        loc_lValido = .T.
+        THIS.this_cMensagemErro = ""
+
+        IF EMPTY(ALLTRIM(THIS.this_cCodigoEmpresa))
+            THIS.this_cMensagemErro = "Empresa Inv" + CHR(225) + "lida!!!"
+            loc_lValido = .F.
+        ENDIF
+
+        IF loc_lValido AND EMPTY(ALLTRIM(THIS.this_cNomeOperacao))
+            THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + "lida!!!"
+            loc_lValido = .F.
+        ENDIF
+
+        IF loc_lValido AND THIS.this_dDataFinal < THIS.this_dDataInicial
+            THIS.this_cMensagemErro = "Per" + CHR(237) + "odo Inv" + CHR(225) + "lido!!! Data Final Menor do Que a Inicial!!!"
+            loc_lValido = .F.
+        ENDIF
+
+        RETURN loc_lValido
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * Atualizar - NAO APLICAVEL a form OPERACIONAL de consulta
-    * Mesma razao de Inserir(): SigPrEs1 apenas consulta SigMvCab.
-    * Atualizacoes ocorrem nos forms de operacao correspondentes.
+    * MontarWhereConsulta - Monta o trecho de filtros da consulta, transcrito
+    * literalmente da variavel lcWhere do metodo consulta.Click do legado.
+    * Cada filtro so entra na clausula quando o campo correspondente esta
+    * preenchido, exatamente como no SCX original.
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Atualizar()
-        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-            "o suportada: SigPrEs1 " + CHR(233) + " form de consulta de posi" + ;
-            CHR(231) + CHR(227) + "o por movimenta" + CHR(231) + CHR(227) + "o. " + ;
-            "Utilize o form pr" + CHR(243) + "prio da opera" + CHR(231) + CHR(227) + ;
-            "o para atualizar movimenta" + CHR(231) + CHR(245) + "es."
-        RETURN .F.
-    ENDFUNC
+    PROTECTED PROCEDURE MontarWhereConsulta()
+        LOCAL loc_cWhere
+
+        loc_cWhere = ""
+
+        IF !EMPTY(ALLTRIM(THIS.this_cNomeOperacao))
+            loc_cWhere = loc_cWhere + "a.Dopes = " + EscaparSQL(ALLTRIM(THIS.this_cNomeOperacao)) + " And "
+        ENDIF
+
+        IF THIS.this_nOpcaoPeriodo = 1
+            loc_cWhere = loc_cWhere + "a.Datas BetWeen " + ;
+                FormatarDataSQL(fDtoSQL(THIS.this_dDataInicial)) + " And " + ;
+                FormatarDataSQL(fDtoSQL(THIS.this_dDataFinal, "23:59:59")) + " And "
+        ELSE
+            loc_cWhere = loc_cWhere + "a.PrazoEnts BetWeen " + ;
+                FormatarDataSQL(fDtoSQL(THIS.this_dDataInicial)) + " And " + ;
+                FormatarDataSQL(fDtoSQL(THIS.this_dDataFinal, "23:59:59")) + " And "
+        ENDIF
+
+        IF !EMPTY(ALLTRIM(THIS.this_cGrupo))
+            loc_cWhere = loc_cWhere + "(a.GrupoOs = " + EscaparSQL(ALLTRIM(THIS.this_cGrupo)) + ;
+                " Or a.GrupoDs = " + EscaparSQL(ALLTRIM(THIS.this_cGrupo)) + ") And "
+        ENDIF
+
+        IF !EMPTY(ALLTRIM(THIS.this_cConta))
+            loc_cWhere = loc_cWhere + "(a.ContaOs = " + EscaparSQL(ALLTRIM(THIS.this_cConta)) + ;
+                " Or a.ContaDs = " + EscaparSQL(ALLTRIM(THIS.this_cConta)) + ") And "
+        ENDIF
+
+        IF THIS.this_nOperacao != 0
+            loc_cWhere = loc_cWhere + "a.Nops = " + FormatarNumeroSQL(THIS.this_nOperacao, 0) + " And "
+        ENDIF
+
+        IF THIS.this_nNumero != 0
+            loc_cWhere = loc_cWhere + "a.Numes = " + FormatarNumeroSQL(THIS.this_nNumero, 0) + " And "
+        ENDIF
+
+        IF !EMPTY(ALLTRIM(THIS.this_cResponsavel))
+            loc_cWhere = loc_cWhere + "a.Vends = " + EscaparSQL(ALLTRIM(THIS.this_cResponsavel)) + " And "
+        ENDIF
+
+        DO CASE
+            CASE THIS.this_nOpcaoPendente = 1
+                loc_cWhere = loc_cWhere + "a.ChkSubn = 0 And "
+            CASE THIS.this_nOpcaoPendente = 2
+                loc_cWhere = loc_cWhere + "a.ChkSubn = 1 And "
+        ENDCASE
+
+        IF !EMPTY(ALLTRIM(THIS.this_cStatus))
+            loc_cWhere = loc_cWhere + "a.pStatus = " + EscaparSQL(ALLTRIM(THIS.this_cStatus)) + " And "
+        ENDIF
+
+        RETURN loc_cWhere
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Registra em LogAuditoria a consulta executada
-    * Sobrescreve BusinessBase para logar operacao "CONSULTA" com filtros
-    * aplicados (empresa, operacao, periodo). DataHora usa GETDATE() (regra
-    * canonica - GETDATE() rejeita tipo T).
+    * MontarSQLConsulta - Monta a consulta completa, transcrita da variavel
+    * lcQuery do metodo consulta.Click do legado (join SigMvCab + SigCdOpe).
     *--------------------------------------------------------------------------
-    FUNCTION RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_lSucesso, loc_cSQL, loc_cChave, loc_cUsuario, loc_cDetalhes
+    PROTECTED PROCEDURE MontarSQLConsulta()
+        LOCAL loc_cWhereEmpresa
+
+        loc_cWhereEmpresa = "(a.Emps = " + EscaparSQL(ALLTRIM(THIS.this_cCodigoEmpresa))
+        IF THIS.this_lEmpresaDestino
+            loc_cWhereEmpresa = loc_cWhereEmpresa + " Or a.Empds = " + EscaparSQL(ALLTRIM(THIS.this_cCodigoEmpresa))
+        ENDIF
+        loc_cWhereEmpresa = loc_cWhereEmpresa + ") And "
+
+        RETURN "SELECT a.* FROM SigMvCab a, SigCdOpe b WHERE " + ;
+            loc_cWhereEmpresa + THIS.MontarWhereConsulta() + "a.Dopes = b.Dopes"
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarMovimentacao - Executa a consulta de posicao por movimentacao.
+    * Equivalente ao metodo consulta.Click do legado (sem a parte de UI:
+    * SetFocus/MessageBox/Do Form sigpres2 ficam por conta do Form).
+    * Popula THIS.this_cCursorResultado (cursor_4c_Movimentacao) e
+    * THIS.this_nTotalRegistros. Retorna .F. so quando a consulta falha -
+    * zero registros encontrados NAO eh erro, eh resultado valido.
+    *--------------------------------------------------------------------------
+    FUNCTION BuscarMovimentacao()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+
+        THIS.this_cMensagemErro  = ""
+        THIS.this_nTotalRegistros = 0
         loc_lSucesso = .F.
 
+        IF !THIS.ValidarFiltros()
+            RETURN .F.
+        ENDIF
+
         TRY
-            loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", ;
-                              ALLTRIM(gc_4c_UsuarioLogado), "SISTEMA")
-            loc_cChave = THIS.ObterChavePrimaria()
+            loc_cSQL = THIS.MontarSQLConsulta()
 
-            loc_cDetalhes = "Empresa=" + ALLTRIM(THIS.this_cEmpresa) + ;
-                "; Operacao=" + ALLTRIM(THIS.this_cNmOperacao) + ;
-                "; Periodo=" + DTOC(THIS.this_dDtInicial) + ".." + DTOC(THIS.this_dDtFinal)
+            IF USED("cursor_4c_SigPrEs1Tmp")
+                USE IN cursor_4c_SigPrEs1Tmp
+            ENDIF
 
-            loc_cSQL = "INSERT INTO LogAuditoria " + ;
-                "(Tabela, Operacao, ChaveRegistro, Usuario, DataHora, DadosNovos) " + ;
-                "VALUES (" + ;
-                EscaparSQL("SigPrEs1") + ", " + ;
-                EscaparSQL(par_cOperacao) + ", " + ;
-                EscaparSQL(loc_cChave) + ", " + ;
-                EscaparSQL(loc_cUsuario) + ", " + ;
-                "GETDATE(), " + ;
-                EscaparSQL(loc_cDetalhes) + ")"
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigPrEs1Tmp")
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
+            IF loc_nResultado < 0
+                THIS.this_cMensagemErro = "Favor Reinicializar o Processo!!!" + CHR(13) + CapturarErroSQL()
+            ELSE
+                IF USED("cursor_4c_Movimentacao")
+                    USE IN cursor_4c_Movimentacao
+                ENDIF
+
+                SELECT * FROM cursor_4c_SigPrEs1Tmp INTO CURSOR cursor_4c_Movimentacao READWRITE
+
+                IF USED("cursor_4c_SigPrEs1Tmp")
+                    USE IN cursor_4c_SigPrEs1Tmp
+                ENDIF
+
+                SELECT cursor_4c_Movimentacao
+                INDEX ON EmpDopNums TAG EmpDopNums
+
+                REPLACE ALL PrazoEnts WITH CTOD("") FOR ISNULL(PrazoEnts)
+
+                *-- Legado: Go Top In csTemporario, e so depois If (Reccount() > 0)
+                GO TOP
+
+                THIS.this_nTotalRegistros = RECCOUNT("cursor_4c_Movimentacao")
+
+                *-- Deixa a 1a linha ja carregada nas propriedades this_*Reg*
+                *-- (e limpa quando a consulta nao trouxe nada, para nao herdar
+                *-- a linha da consulta anterior).
+                IF THIS.this_nTotalRegistros > 0
+                    THIS.CarregarDoCursor("cursor_4c_Movimentacao")
+                ELSE
+                    THIS.LimparLinhaCorrente()
+                ENDIF
+
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            *-- Falha de auditoria nao interrompe operacao principal
+            THIS.this_cMensagemErro = loc_oErro.Message
             loc_lSucesso = .F.
         ENDTRY
 
         RETURN loc_lSucesso
     ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * LimparLinhaCorrente - zera as propriedades da linha corrente do cursor
+    * de resultado. Chamado no Init e sempre que a consulta devolve zero linhas,
+    * para que uma consulta nova nunca herde a linha da consulta anterior.
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparLinhaCorrente()
+        THIS.this_cRegEmpresa      = ""
+        THIS.this_cRegEmpresaDest  = ""
+        THIS.this_cRegOperacao     = ""
+        THIS.this_dRegData         = {/:}
+        THIS.this_dRegPrazoEntrega = {/:}
+        THIS.this_cRegGrupoOrigem  = ""
+        THIS.this_cRegGrupoDestino = ""
+        THIS.this_cRegContaOrigem  = ""
+        THIS.this_cRegContaDestino = ""
+        THIS.this_nRegNumeroOp     = 0
+        THIS.this_nRegNumero       = 0
+        THIS.this_cRegVendedor     = ""
+        THIS.this_lRegBaixada      = .F.
+        THIS.this_cRegStatus       = ""
+        THIS.this_cRegChave        = ""
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LerCampoCursor - le um campo do cursor corrente pelo NOME, devolvendo o
+    * valor padrao quando o campo nao existe ou vem NULL.
+    *
+    * EVALUATE eh o caminho CERTO para LEITURA por nome (regra #15); e a
+    * existencia do campo se testa com TYPE(alias + "." + campo), NUNCA com
+    * PEMSTATUS - PEMSTATUS exige objeto no 1o argumento e dispara erro 11 com
+    * alias de cursor.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LerCampoCursor(par_cAlias, par_cCampo, par_uPadrao)
+        LOCAL loc_uValor
+
+        loc_uValor = par_uPadrao
+
+        IF TYPE(par_cAlias + "." + par_cCampo) != "U"
+            loc_uValor = TratarNulo(EVALUATE(par_cAlias + "." + par_cCampo), par_uPadrao)
+        ENDIF
+
+        RETURN loc_uValor
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MontarChaveEmpDopNums - monta a chave composta EmpDopNums de SigMvCab.
+    *
+    * Legado (mesma montagem usada em todo o sistema Fortyus):
+    *   lcEmpDopNums = <cursor>.Emps + <cursor>.Dopes + Str(<cursor>.Numes, 6)
+    *
+    * A chave eh POSICIONAL: o padding faz parte dela. Por isso as partes vao
+    * com PADR na largura EXATA da coluna do schema, NUNCA com ALLTRIM - a
+    * conferencia eh a largura do destino:
+    *   emps char(3) + dopes char(20) + Str(numes, 6) = 29 = empdopnums char(29)
+    * Com ALLTRIM nas partes a chave encurta, o WHERE nunca casa e o SELECT
+    * devolve ZERO linhas em silencio (regra #42 do CLAUDE.md).
+    *--------------------------------------------------------------------------
+    PROCEDURE MontarChaveEmpDopNums(par_cEmps, par_cDopes, par_nNumes)
+        RETURN PADR(NVL(par_cEmps, ""), 3) + ;
+               PADR(NVL(par_cDopes, ""), 20) + ;
+               STR(NVL(par_nNumes, 0), 6)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - carrega a linha CORRENTE do cursor de resultado nas
+    * propriedades this_cReg* / this_nReg* / this_dReg* / this_lReg*.
+    *
+    * Sao as colunas de SigMvCab que o legado nomeia no consulta.Click; o
+    * cursor vem de "Select a.* From SigMvCab a, SigCdOpe b", logo todas estao
+    * presentes. NAO move o ponteiro do cursor: quem posiciona eh o chamador
+    * (BuscarMovimentacao faz GO TOP, como o "Go Top In csTemporario" legado).
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_cAlias, loc_lSucesso, loc_uChave, loc_oErro
+
+        loc_lSucesso = .F.
+        loc_cAlias = IIF(VARTYPE(par_cAliasCursor) = "C" AND !EMPTY(par_cAliasCursor), ;
+                         ALLTRIM(par_cAliasCursor), THIS.this_cCursorResultado)
+
+        IF !USED(loc_cAlias)
+            THIS.this_cMensagemErro = "Cursor [" + loc_cAlias + "] n" + CHR(227) + "o est" + CHR(225) + " aberto."
+            THIS.LimparLinhaCorrente()
+            RETURN .F.
+        ENDIF
+
+        IF EOF(loc_cAlias)
+            THIS.LimparLinhaCorrente()
+            RETURN .F.
+        ENDIF
+
+        TRY
+            *-- Padrao obrigatorio: SELECT (alias) ANTES de acessar campos
+            SELECT (loc_cAlias)
+
+            THIS.this_cRegEmpresa      = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "emps", ""))
+            THIS.this_cRegEmpresaDest  = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "empds", ""))
+            THIS.this_cRegOperacao     = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "dopes", ""))
+            THIS.this_dRegData         = THIS.LerCampoCursor(loc_cAlias, "datas", {/:})
+            THIS.this_dRegPrazoEntrega = THIS.LerCampoCursor(loc_cAlias, "prazoents", {/:})
+            THIS.this_cRegGrupoOrigem  = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "grupoos", ""))
+            THIS.this_cRegGrupoDestino = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "grupods", ""))
+            THIS.this_cRegContaOrigem  = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "contaos", ""))
+            THIS.this_cRegContaDestino = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "contads", ""))
+            THIS.this_nRegNumeroOp     = THIS.LerCampoCursor(loc_cAlias, "nops", 0)
+            THIS.this_nRegNumero       = THIS.LerCampoCursor(loc_cAlias, "numes", 0)
+            THIS.this_cRegVendedor     = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "vends", ""))
+            THIS.this_cRegStatus       = ALLTRIM(THIS.LerCampoCursor(loc_cAlias, "pstatus", ""))
+
+            *-- chksubn eh bit: chega como Logico (.T./.F.) ou Numerico (0/1)
+            *-- conforme o driver ODBC - ConverterParaLogico trata os dois.
+            THIS.this_lRegBaixada = ConverterParaLogico(THIS.LerCampoCursor(loc_cAlias, "chksubn", .F.))
+
+            *-- empdopnums vem gravada na tabela; so remontamos quando vier em
+            *-- branco, para nunca divergir do valor real do banco.
+            loc_uChave = THIS.LerCampoCursor(loc_cAlias, "empdopnums", "")
+            IF EMPTY(loc_uChave)
+                loc_uChave = THIS.MontarChaveEmpDopNums(THIS.this_cRegEmpresa, ;
+                                                        THIS.this_cRegOperacao, ;
+                                                        THIS.this_nRegNumero)
+            ENDIF
+            THIS.this_cRegChave = loc_uChave
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - chave do registro corrente para a auditoria de
+    * BusinessBase e para o handoff da linha selecionada. A chave de SigMvCab
+    * eh a composta EmpDopNums (char(29)).
+    *
+    * PROTECTED porque o metodo da base tambem eh PROTECTED - subclasse nao
+    * alarga escopo de hook herdado.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        LOCAL loc_cChave
+
+        loc_cChave = THIS.this_cRegChave
+
+        IF EMPTY(loc_cChave)
+            loc_cChave = THIS.MontarChaveEmpDopNums(THIS.this_cRegEmpresa, ;
+                                                    THIS.this_cRegOperacao, ;
+                                                    THIS.this_nRegNumero)
+        ENDIF
+
+        RETURN loc_cChave
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DESTROY - libera o cursor de resultado da consulta
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF USED("cursor_4c_Movimentacao")
+            USE IN cursor_4c_Movimentacao
+        ENDIF
+
+        DODEFAULT()
+    ENDPROC
 
 ENDDEFINE

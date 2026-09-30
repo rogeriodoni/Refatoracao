@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigMvVde.prg",
+    "timestamp":  "2026-09-25T21:28:20",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-177-BO-PROP-NAO-DECLARADA",
+                          "Linha":  1663,
+                          "Original":  "THIS.this_oBusinessObject.this_cConta usada em \u0027FormSigMvVde.prg\u0027 mas nao declarada em \u0027SigMvVdeBO.prg\u0027",
+                          "Corrigido":  "(REVISAR MANUAL — refactor coordenado Form+BO: renomear property para nome consistente, preferir nome DB)",
+                          "Descricao":  "Pattern #177: Form usa \u0027THIS.this_oBusinessObject.this_cConta\u0027 mas \u0027SigMvVdeBO\u0027 NAO declara \u0027this_cConta\u0027 no bloco DEFINE CLASS. Runtime dispara \u0027Property THIS_CCONTA is not found\u0027 em MessageBox — user clica OK/Continuar mas CATCH nao interrompe fluxo, INSERT/UPDATE prossegue com property default (nunca atribuida) e grava valor errado silenciosamente. REFACTOR: renomear no BO (preferir nome DB — espelhar coluna) OU no Form (menor mudanca). CUIDADO: refactor em pares (Form + BO simultaneos, ~4 sites no BO + ~2-6 no Form). Complementa CLAUDE.md \u0027Propriedades this_ DECLARAR com nome EXATO do uso\u0027. Origem: Erro139 (2026-09-01 FormDepartamento — this_nChkSubs no Form vs this_nSubclaEncerr no BO)."
+                      },
+                      {
+                          "Tipo":  "WARN-177-BO-PROP-NAO-DECLARADA",
+                          "Linha":  1665,
+                          "Original":  "THIS.this_oBusinessObject.this_cGrupo usada em \u0027FormSigMvVde.prg\u0027 mas nao declarada em \u0027SigMvVdeBO.prg\u0027",
+                          "Corrigido":  "(REVISAR MANUAL — refactor coordenado Form+BO: renomear property para nome consistente, preferir nome DB)",
+                          "Descricao":  "Pattern #177: Form usa \u0027THIS.this_oBusinessObject.this_cGrupo\u0027 mas \u0027SigMvVdeBO\u0027 NAO declara \u0027this_cGrupo\u0027 no bloco DEFINE CLASS. Runtime dispara \u0027Property THIS_CGRUPO is not found\u0027 em MessageBox — user clica OK/Continuar mas CATCH nao interrompe fluxo, INSERT/UPDATE prossegue com property default (nunca atribuida) e grava valor errado silenciosamente. REFACTOR: renomear no BO (preferir nome DB — espelhar coluna) OU no Form (menor mudanca). CUIDADO: refactor em pares (Form + BO simultaneos, ~4 sites no BO + ~2-6 no Form). Complementa CLAUDE.md \u0027Propriedades this_ DECLARAR com nome EXATO do uso\u0027. Origem: Erro139 (2026-09-01 FormDepartamento — this_nChkSubs no Form vs this_nSubclaEncerr no BO)."
+                      },
+                      {
+                          "Tipo":  "WARN-177-BO-PROP-NAO-DECLARADA",
+                          "Linha":  1664,
+                          "Original":  "THIS.this_oBusinessObject.this_cDConta usada em \u0027FormSigMvVde.prg\u0027 mas nao declarada em \u0027SigMvVdeBO.prg\u0027",
+                          "Corrigido":  "(REVISAR MANUAL — refactor coordenado Form+BO: renomear property para nome consistente, preferir nome DB)",
+                          "Descricao":  "Pattern #177: Form usa \u0027THIS.this_oBusinessObject.this_cDConta\u0027 mas \u0027SigMvVdeBO\u0027 NAO declara \u0027this_cDConta\u0027 no bloco DEFINE CLASS. Runtime dispara \u0027Property THIS_CDCONTA is not found\u0027 em MessageBox — user clica OK/Continuar mas CATCH nao interrompe fluxo, INSERT/UPDATE prossegue com property default (nunca atribuida) e grava valor errado silenciosamente. REFACTOR: renomear no BO (preferir nome DB — espelhar coluna) OU no Form (menor mudanca). CUIDADO: refactor em pares (Form + BO simultaneos, ~4 sites no BO + ~2-6 no Form). Complementa CLAUDE.md \u0027Propriedades this_ DECLARAR com nome EXATO do uso\u0027. Origem: Erro139 (2026-09-01 FormDepartamento — this_nChkSubs no Form vs this_nSubclaEncerr no BO)."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

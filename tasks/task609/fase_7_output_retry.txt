@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í conclu├¡da e validada.
+
+## Diagn├│stico
+
+A fase anterior **n├úo estava incompleta** ÔÇö o form j├í tinha os 4 handlers dos 4 bot├Áes do legado. O que reprovava era o **gate**, que classificava o `SIGPRETQ` como CRUD e passava a exigir `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` ÔÇö bot├Áes que o legado n├úo tem.
+
+Seguindo a tabela de decis├úo da li├º├úo mais recente, medi os dois lados antes de julgar (r├®plica do `case 7` em processo novo, helpers extra├¡dos por AST ÔÇö nunca dot-source do orquestrador):
+
+```
+legadoSemCrud : False   <- indevido
+nHandlers     : 4  / nBotoesLegado: 4 / minimo: 2   <- piso OK
+```
+
+A causa ├® uma variante nova na fam├¡lia: a evid├¬ncia de **NOME** casava `btnexcluir`, que ├® bot├úo de **linha de grade**, provado por cinco vias no dump ÔÇö Click faz `Select dbImpressao / Delete / ... / Append Blank / grd_Etiqueta.Refresh()` (apaga a linha do cursor, sem tabela e sem SQL), `ToolTipText = "Excluir item"`, `Top=374` a 1px abaixo da grade, **nenhum** irm├úo `Incluir/Alterar/Visualizar/Inserir`, e `Class: form` puro. Os carve-outs existentes n├úo alcan├ºam porque este ├® form de **topo**, aberto pelo menu.
+
+## Corre├º├úo
+
+Uma linha funcional no `case 7`: `Excluir` sai da evid├¬ncia de nome, porque ├® o **├║nico verbo compartilhado** pela barra CRUD (`Incluir/Alterar/Visualizar/Excluir`) e pela toolbar de linha (`Inserir/Excluir`) ÔÇö isolado ├® amb├¡guo. O backstop para CRUD real continua sendo a evid├¬ncia estrutural (`frmcadastro`/`Grupo_Op`), checada antes.
+
+Medido nos 609 dumps antes de aplicar: predicado muda em **17** forms, **veredicto em 1** (`SigPrEtq`), **zero regress├Áes** ÔÇö os outros 16 j├í t├¬m os 4 nomes ou nem foram migrados, e todos t├¬m assinatura de toolbar de linha (`cmdInserir`+`cmdExcluir`, ou ToolTip "Excluir Item da Grade"). Forms CRUD can├┤nicos conferidos um a um, todos seguem CRUD.
+
+Escolhi deliberadamente a regra mais restritiva: a alternativa ├│bvia ("ÔëÑ2 verbos") liberaria `SigPrIct` e `SigPrItb`, que t├¬m `btnVisualizar` ├║nico e devem seguir CRUD. Descartei tamb├®m o sufixo do ├¡cone como crit├®rio ÔÇö esses bot├Áes usam `cadastro_excluir_60.jpg` e a regra #25 diz que `_26`/`_60` n├úo tem significado.
+
+## Verifica├º├úo
+
+- Gate (processo novo, regex lido do disco): `legadoSemCrud=True`, `FALTANTES` vazio, **VALIDADO**
+- `COMPILE` limpo no VFP9 do form e do BO, com os `.fxp` apagados antes e regerados (14:54), sem `.err`
+- Form puro ASCII, TRY/WITH/DEFINE CLASS balanceados, sem TODO/stub, sem `MESSAGEBOX`, sem `RETURN` em TRY, CATCH com `MsgErro`
+- Scripts de medi├º├úo removidos; meu diff no orquestrador ├® uma linha + coment├írio (o resto do `git diff` daquele arquivo ├® trabalho n├úo-commitado anterior ├á sess├úo)
+
+## Dois pontos que valem sua aten├º├úo
+
+1. **Fase 8 vai bater no mesmo form.** Ela mant├®m a lista crua `'(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)'` ÔÇö sem fronteira final, sem olhar o dono e sem separar o verbo ÔÇö e casa `btnexcluir`. Era o item j├í previsto como pendente nas mem├│rias irm├ús; **n├úo apliquei** porque n├úo h├í reprova├º├úo medida da Fase 8 guiando o blast radius, e as pr├│prias li├º├Áes s├úo expl├¡citas em n├úo alargar sem caso. O conserto est├í escrito, pronto para quando ela reprovar.
+
+2. **O gate foi corrigido durante a pr├│pria fase**, ent├úo se o orquestrador ainda estiver rodando, a valida├º├úo daquela execu├º├úo usa o gate velho em mem├│ria e pode reprovar o artefato correto ÔÇö foi por isso que verifiquei por fora, em processo novo.
+
+Registrei a li├º├úo em mem├│ria (`feedback_gate_fase7_excluir_sozinho_nao_prova_crud`), incluindo a armadilha de medi├º├úo que me custou um passo: `[regex]::Matches` ├® case-sensitive e o `-match` do PowerShell n├úo ├®, ent├úo uma r├®plica ing├¬nua acusa **zero** ocorr├¬ncias em `btnexcluir` min├║sculo e faz parecer que o gate n├úo casa nada.

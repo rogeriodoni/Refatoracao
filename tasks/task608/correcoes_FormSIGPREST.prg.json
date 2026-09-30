@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGPREST.prg",
+    "timestamp":  "2026-09-29T16:27:57",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "AUTO-182-BOTAO-LEFT-ABSOLUTO",
+                          "Linha":  359,
+                          "Original":  ".Left = 525 (provavel Left absoluto do container — botao invisivel)",
+                          "Corrigido":  ".Left = 5 (Left relativo canonico para cmd_4c_Encerrar)",
+                          "Descricao":  "Pattern #182 (Erro143): cmd_4c_Encerrar.Left = 525 parece ser Left absoluto do container pai (\u003e10, deve ser relativo). Corrigido para Left canonico RELATIVO = 5. Botao com Left absoluto fica em posicao 525 + offset_container, fora do form (Width=1000), INVISIVEL. Sweep 2026-09-03: 32 forms afetados."
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

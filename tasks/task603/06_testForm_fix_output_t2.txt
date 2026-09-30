@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este erro **n├úo ├® um bug de c├│digo** ÔÇö ├® o mesmo problema de infraestrutura j├í documentado e recorrente h├í 90+ tasks desde 2026-08-02.
+
+**Diagn├│stico:**
+- O erro (C├│digo 1526, DBNETLIB "SQL Server inexistente ou acesso negado") ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, no pre-flight `SQLSTRINGCONNECT` ÔÇö **antes** de qualquer `CREATEOBJECT` do `FormSigPrEml`/`SigPrEmlBO`.
+- Confirmei agora com teste de conectividade TCP: `192.168.200.10:1433` ÔåÆ **FAILED (timeout/unreachable)**.
+- A m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server real (s├│ tem interfaces para `192.168.100.x` e `192.168.199.x`).
+
+**Revisei `FormSigPrEml.prg` e `SigPrEmlBO.prg` por inteiro** e ambos est├úo corretos:
+- `InicializarForm` j├í tem o guard `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` que pula `CarregarDados()` em modo teste
+- `CriarCursorDados()` cria o cursor antes de qualquer `ControlSource` (regra #41)
+- `Inserir()`/`Atualizar()` usam os helpers SQL corretamente
+
+N├úo h├í nada nesses arquivos relacionado a conectividade de rede ÔÇö nenhuma edi├º├úo de `.prg` resolve um problema de rota de rede na m├íquina do pipeline. Nenhuma altera├º├úo foi feita nos arquivos, conforme a regra j├í validada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`), e registrei mais essa recorr├¬ncia (task603) na mem├│ria para manter o padr├úo documentado.
+
+Recomendo tratar esta tentativa como falha de infraestrutura, fora do escopo de "corrigir c├│digo" ÔÇö reescrever o `.prg` s├│ vai consumir os retries restantes sem resolver nada.

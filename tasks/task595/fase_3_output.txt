@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All counts balance (6 PROCEDURE/ENDPROC pairs, 3 WITH/ENDWITH, 3 FOR/ENDFOR, 12 IF/ENDIF, 1 TRY/ENDTRY, 1 DEFINE CLASS/ENDDEFINE).
+
+Fase 3 conclu├¡da: criei `Formsigprcpd.prg` (`projeto/app/forms/operacionais/`) como form OPERACIONAL flat herdando de `FormBase`, sem PageFrame (o legado SIGPRCPD n├úo tem nenhum) ÔÇö atendendo ao gate da Fase 3 que exige aus├¬ncia de `pgf_4c_` quando o legado ├® flat. Estrutura entregue:
+
+- Propriedades visuais fi├®is ao legado (Width=800, Height=600, DataSession=2, ControlBox/Closable/MaxButton/MinButton/Movable=.F., TitleBar=0, ClipControls=.F.), com `WindowType`/`ShowWindow` condicionados a modo de teste para evitar timeout em VFP9 `-T`.
+- `Init()` recebendo os 4 par├ómetros do legado (`par_cFase, par_cUnidade, par_dData, par_nCodigo`) e gravando em `this_cFasePar/this_cUnidadePar/this_dDataPar/this_nCodigoPar`.
+- `InicializarForm()` criando `sigprcpdBO` e delegando a `ConfigurarPageFrame()`.
+- `ConfigurarCabecalho()` com o container `cnt_4c_Cabecalho` + labels `lbl_4c_Sombra`/`lbl_4c_Titulo`, valores transcritos literalmente do dump (Top/Left/Width/Height/cores).
+- `TornarControlesVisiveis()` recursivo e `Destroy()` fechando os cursores tempor├írios do BO.
+
+Pr├│xima fase (4) adiciona o Grid e os containers de campos/bot├Áes ÔÇö ainda n├úo inclu├¡dos aqui por instru├º├úo expl├¡cita da fase.

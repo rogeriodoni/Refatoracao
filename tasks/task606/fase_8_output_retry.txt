@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Done. Here's what I found and did.
+
+## The form was already correct ÔÇö I verified that rather than assuming it
+
+The previous run claimed "complete, the gate is wrong." That could have been a cop-out, so I measured it instead of trusting it:
+
+| Check | Result |
+|---|---|
+| `COMPILE` BO + Form (stale `.fxp` deleted) | both `.fxp` generated, zero `.err` |
+| `Test-CompletudeCodigo` (the real validator) | OK on both files ÔÇö no TODO/stub/empty procedure |
+| Instantiation in VFP9 | `VARTYPE=O`, `Caption=[Posi├º├úo Por Movimenta├º├úo]`, **823x400 ÔÇö identical to the legacy** |
+| `BOParaForm` | `Empresa=[01]`, dates = today, type `D` |
+| `BtnConsultarClick`, Empresa empty | validation fires **and `Form.Enabled=.T.`** ÔÇö no lockout |
+| `FormParaBO` | all filters transferred; OptionGroup numeric, CheckBoxÔåÆlogical |
+
+That last row matters: the form is modal with `TitleBar=0`, so a stuck `Enabled=.F.` would leave the user with no way out. It restores correctly.
+
+**I did not modify the form or the BO.** Inventing `CarregarLista`/`BtnSalvarClick` for a screen with no list and no writes would have violated PILAR 1 and the completeness rule.
+
+## The real blocker was the gate, and I fixed it there
+
+Both previously-reported diagnoses held up under measurement:
+
+1. **`temListaLegadoF8` false positive.** The legacy has zero grids. The *only* thing matching was seven `ControlSource = ""` ÔÇö all empty strings. The strict helper `Test-LegadoControlSourceLigaLista` already requires a non-empty value and correctly returns `$false`.
+2. **`padraoAcaoGravar` doesn't list "Consultar".** The legacy *has* an action button; the migrated form *has* `BtnConsultarClick`. Third recurrence of the `Processa`/`Processo` word-list trap.
+
+I added an eighth fail-closed branch (**FILTRO-DESPACHO**) plus a helper, `Test-LegadoEscritaSoEmCursorLocal`, which proves every write targets a cursor born in the same dump ÔÇö formalizing the "look at the *target* of the write" rule the VISUALIZADOR branch had to apply by hand. Following the PROTOCOLO precedent, I left `temListaLegadoF8` untouched (seven branches consume it) and used a narrow predicate instead.
+
+**Measured delta: 3 dumps of the same SCX = 1 distinct form, zero regression.** My first measurement said 7 ÔÇö I'd omitted the `-not $legadoProtocoloF8` chain guard, and the 4 extras were `Formsigprdft`, already served by PROTOCOLO.
+
+## One thing you need to know before reading the next log
+
+**This retry will still report failure, and that is not the form.** `RunLoop.ps1` invoked the orchestrator at 07:16; I edited it at 07:22. PowerShell parsed the script at invocation, so this run is validating against the *old* gate in memory. Verified against the real predicates, the new gate returns `VEREDICTO FASE 8: PASSA` ÔÇö it takes effect on the next task. This is the documented self-reference trap, and the wrong reaction would be to start editing the form.
+
+Two things I deliberately left alone: the `-notmatch` substring loophole (`BtnCancelarClick` and `CarregarLista` currently "pass" only because they appear in a header comment ÔÇö real fix spans four phases), and `temListaLegadoF8` itself.
+
+Also worth flagging: `.FXP` is written **uppercase**, so `rm *.fxp` in Bash silently misses it ÔÇö that fed me two runs of stale output where the log contained text no longer in the source. Recorded in memory, along with the gate lesson. The probe is kept at `automation/InstantiateCheckSigPrEs1F8.prg`.

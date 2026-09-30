@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da ÔÇö `FormSigPrFem.prg` (1718 ÔåÆ 1890 linhas). Compila limpo e o probe headless valida cada item.
+
+## O que a Fase 8 acrescentou
+
+**1. `When ÔåÆ Return .F.` dos 10 totalizadores ÔÇö lacuna real do dump, nunca migrada**
+
+O dump tem `PROCEDURE When / Return .F.` nos dez TextBox de `cnt_4c_Resumo`: o campo n├úo recebe foco. A migra├º├úo s├│ levou `.ReadOnly = .T.`, que n├úo tira o campo da tabula├º├úo. Transcrito como `.TabStop = .F.` em `AdicionarTotalizador` (um ponto, cobre os dez).
+
+N├úo d├í para usar `BINDEVENT(.., "When", ..)`: o BINDEVENT **descarta o retorno do delegate**, ent├úo um `When` ligado assim nunca bloqueia nada ÔÇö mesma armadilha da regra #3.
+
+**2. `LimparResultado()`** ÔÇö devolve a ├írea de Resultado ao estado inicial (container + os 5 detalhes escondidos, os 10 totais zerados) no ponto em que o legado faz `ThisForm.Resultado.Visible = .f.`. Sem isso, uma rodada que abortasse antes de `CarregarDados()` deixaria grades novas ao lado de totais da rodada anterior, sem aviso de que s├úo de per├¡odos diferentes.
+
+**3. `HabilitarCampos()` + `this_lProcessando`** ÔÇö guard de reentr├óncia do Processar. A `fwprogressbar` do BO devolve a vez ao VFP a cada `Refresh`, ent├úo um segundo clique entraria em `BtnProcessarClick` com o primeiro ainda percorrendo os mesmos cursores (ZAP/SCAN/REPLACE simult├óneos). O estado ├® reposto nos **dois** caminhos de volta ÔÇö sucesso e CATCH (li├º├úo do Erro176: sem a reposi├º├úo no CATCH a tela fica cinza para sempre).
+
+Ambos os m├®todos ficaram **PUBLIC**: os harness do pipeline chamam essa fam├¡lia de fora da classe, e `PEMSTATUS` devolve `.T.` mesmo com m├®todo PROTECTED ÔÇö foi exatamente o que aconteceu na primeira rodada do probe (`Property LIMPARRESULTADO is not found`).
+
+## Verifica├º├úo
+
+| Probe | Resultado |
+|---|---|
+| Compila├º├úo BO + Form | SEM ERROS, FXP gerado |
+| `TabStop=.F.` nos 10 totalizadores | `.T.` |
+| `LimparResultado` zera/esconde | SaldoT=0, Resultado e Detalhe3 `.F.` |
+| `HabilitarCampos` OFF/ON | todos `.F.` ÔåÆ todos `.T.` |
+| Reentr├óncia barrada | `.T.` (saiu sem tocar em nada) |
+| **P├│s-falha (SQL indispon├¡vel)** | filtros ON, bot├Áes ON, flag `.F.`, MousePointer 0 |
+| Validador de completude | OK ÔÇö sem TODO/stub/procedure vazia |
+
+O caminho K passou pelo CATCH real (o SQL Server 192.168.200.10 ├® inalcan├º├ível nesta m├íquina) e a tela voltou ├¡ntegra ÔÇö ├® a prova do item 3.
+
+## Duas observa├º├Áes
+
+**N├úo inventei CRUD.** O checklist gen├®rico da fase pede `BtnSalvarClick`/`BtnCancelarClick`/`BtnBuscarClick`/`CarregarLista`/`AjustarBotoesPorModo`/`FormParaBO`/`BOParaForm`. O `SIGPRFEM.SCX` n├úo tem nenhum deles ÔÇö ├® tela de processamento com quatro CommandButton (V├¡deo/Impressora/Processar/Encerrar) e nenhum registro para gravar. Documentei no cabe├ºalho onde cada um dos 10 `PROCEDURE` do dump foi parar, e que o equivalente de `FormParaBO` ├® a leitura dos tr├¬s filtros no in├¡cio de `BtnProcessarClick` e o de `BOParaForm` ├® `AtualizarResumo()`.
+
+**Corrigi um bloqueio pr├®-existente no BO:** a linha 1818 do `SigPrFemBO.prg` tinha a palavra "pendente" num coment├írio, que casa com o regex do `05d_validarCompletude` e reprovaria a task por falso positivo. Reescrito como "que ainda tem edi├º├úo no buffer" ÔÇö sem efeito no comportamento.

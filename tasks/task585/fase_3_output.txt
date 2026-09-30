@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleanup done. I abandoned the VFP9 GUI compile-check ÔÇö it kept opening the interactive IDE instead of running headless in this sandboxed environment, and chasing it was creating stray processes rather than a reliable answer, so I stopped and cleaned up (killed the process, removed screenshots/temp scripts).
+
+**Fase 3/8 deliverable complete**: `C:\4c\projeto\app\forms\operacionais\FormSigPrCar.prg` created with:
+- `DEFINE CLASS FormSigPrCar AS FormBase`, popup modal 480x540 (fiel ao SCX legado, sem escalonar), `DataSession = 2` privada (evita colis├úo do `cursor_4c_Dados` com o Cadastro de Produtos pai, j├í que o BO consulta o SQL Server direto)
+- `Init()` capturando `par_oFormPai`, `this_cCpros` (produto) e `this_cModoPai` antes de `DODEFAULT()`
+- `InicializarForm()` criando `SigPrCarBO`, validando que o produto foi informado, e chamando os dois m├®todos de estrutura
+- `ConfigurarDecoracao()` ÔÇö Picture de fundo (`new_background.jpg` via `gc_4c_CaminhoFramework`) e o `Shape1` decorativo do legado
+- `ConfigurarCabecalho()` ÔÇö container cinza (`cntSombra`) com os labels sombra/t├¡tulo fi├®is ao dump (Top 25/24, FontSize 18, ForeColor preto/branco)
+- `TornarControlesVisiveis()` recursivo e `Destroy()` (reabilita o form pai, limpa o BO, `DODEFAULT()` no fim)
+
+Grid e os 3 bot├Áes (Inserir/Excluir/Sair) ficam para a Fase 4, conforme o escopo desta fase.

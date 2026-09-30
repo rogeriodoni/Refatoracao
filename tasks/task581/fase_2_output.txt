@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All counts balance (16 IF/ENDIF, 2 TRY/ENDTRY, 2 FOR/ENDFOR, 7 PROCEDURE/ENDPROC). Phase 2 is complete.
+
+**Summary of `SigMvVdeBO.prg` (Phase 2/8):**
+
+Since `comportamento.json` confirms the legacy `SIGMVVDE.SCX` has **zero SQL writes** (it's a modal dialog that resolves up to 11 vendedores/contas via lookup in `SigCdCli` and hands the result to the caller through the legacy global `goVendedor`), I implemented the BO's real behavior instead of the generic CRUD template:
+
+- **`CarregarDoCursor()`** ÔÇö populates the 11 Conta/DConta/Grupo slots from a pre-selection cursor (for reopening the dialog on an existing choice).
+- **`BuscarContaPorCodigo()` / `BuscarContaPorDescricao()`** ÔÇö mirror the legacy `fwBuscaExt` exact-match lookups (`IClis`/`RClis`) against `SigCdCli`, to be used by the Form's KeyPress handlers for the 11 lookup fields.
+- **`ValidarSelecao()`** ÔÇö mirrors the legacy's silent "no-op if Conta0 empty" rule.
+- **`ConfirmarSelecao(par_lAutorizado)`** ÔÇö mirrors `btnSair.Click`: writes the cancellation sentinel (`CHR(254)` x10) to `Vendedor00` when not authorized, or copies all 11 contas into the new `go_4c_Vendedor` global object (the `_4c_`-prefixed equivalent of legacy `goVendedor`) when confirmed.
+- **`ObterChavePrimaria()`** ÔÇö returns Conta0 as the audit reference.
+- **`Inserir()`/`Atualizar()`/`ExecutarExclusao()`** ÔÇö deliberately **not** overridden, with a comment explaining why (matching the project's established "BO somente-leitura" rule), since faking SQL against `SigCdCli` here would violate PILAR 2/3.
+
+Next: Phase 3 will build `FormSigMvVde.prg`'s layout.

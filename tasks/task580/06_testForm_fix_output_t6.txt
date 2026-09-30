@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I investigated the failure before touching any code, and it doesn't originate in `FormSigMvTta.prg` or `SigMvTtaBO.prg`.
+
+**Root cause: infrastructure, not code.**
+
+The error happens in `[ETAPA 1B] Conectando ao banco de dados`, inside `TestFormWrapper.prg` (`automation\vfp_helpers\TestFormWrapper.prg:119-144`) ÔÇö this is a generic pre-flight step that runs `SQLSTRINGCONNECT(ObterStringConexao())` **before the harness even attempts to `CREATEOBJECT` the target form**. `ObterStringConexao()` (`projeto\app\start\config.prg:416`) builds a fixed connection string from `DB_SERVER`/`DB_NOME` ÔÇö the same string every form's test uses, identical to what `main.prg` uses in production.
+
+The ODBC error returned is:
+```
+Codigo: 1526
+[Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+This is DBNETLIB failing to reach the SQL Server host (192.168.200.10) at all ÔÇö not a SQL syntax/schema error, not an application exception. It happens identically regardless of which form is being tested, because it fires before `FormSigMvTta` or `SigMvTtaBO` are ever loaded.
+
+**Why I'm not editing the .prg files:** there's no code path in the two files given that participates in this connection attempt. Rewriting them would not change the outcome, and per the project's own rule (never fabricate a "fix" for something that isn't the actual defect ÔÇö this is the same trap as CLAUDE.md's "harness measuring wrong" pattern), I'd just be burning an attempt and polluting the diff with no-op changes.
+
+**Recommended next step:** this needs an infra check outside the code ÔÇö confirm the SQL Server at 192.168.200.10 is up and reachable from the machine running the pipeline (network/VPN/firewall), and that no credential/DSN config drifted. Once connectivity is restored, this same test should pass without any change to `FormSigMvTta.prg`/`SigMvTtaBO.prg`.
+
+Want me to check whether other tasks/forms failed with the identical 1526 error around the same timestamp (which would confirm it's a shared outage window rather than something specific to task580)?

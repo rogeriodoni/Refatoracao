@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e validada.
+
+## O que fez a Fase 6 falhar
+
+Os campos e os lookups j├í estavam l├í da tentativa anterior ÔÇö o gate reprovou por **nomenclatura**: o ramo FLAT exige `PROCEDURE AbrirLookup*`/`AbrirBusca*` **no form**, e a implementa├º├úo anterior chamava `FormBase.AbrirLookupCanonico` direto de dentro de `ValidarLookupSimples`/`ValidarLookupFeitio`. Nenhum ponto de entrada can├┤nico por campo existia.
+
+## Corre├º├Áes aplicadas em `Formsigprccp.prg`
+
+**1. Lookups no padr├úo can├┤nico (17 m├®todos)** ÔÇö `ValidarLookupSimples`/`ValidarLookupFeitio` viraram `ExecutarLookupFiltro`/`ExecutarLookupFeitio` (nome pela a├º├úo: eles *abrem* o picker, n├úo validam) e cada campo com `fwBuscaExt`/`fwBuscaInt` no legado ganhou seu `AbrirLookup<X>()`, carregando tabela/coluna/t├¡tulo exatos do `CreateObject` legado. O corpo inline do Fornecedor saiu do `KeyPress` para `AbrirLookupFornecedor()`. As 9 tabelas de lookup foram conferidas contra `docs/schema.sql` lido com `Get-Content -Raw` (683 tabelas ÔÇö acima do piso de sanidade): `SigCdGrp.cgrus/dgrus`, `SigCdGpr.codigos/descs`, `SigCdCol.colecoes/descs`, `SigCdPsg.codigos/descricaos`, `SigCdLin.linhas/descs`, `SigCdUni.cunis/dunis`, `SigCdMoe.cmoes/dmoes`, `SigPrFti.cods/descs/tipos`, `SigCdCli.iclis/rclis`.
+
+**2. `img_4c_FigJpg` estava faltando** ÔÇö o `Image` da foto do produto (Top=128, Left=764, 223x190, Stretch=1, nasce oculto) n├úo tinha sido criado em nenhuma fase, e com ele faltavam os dois eventos que o legado pendura em volta: `Grd_Produto.AfterRowColChange` (recarrega a foto de `SigCdPro.FigJpgs`, `STRCONV(...,14)` **uma** vez) e `FigJpg.DblClick` (amplia via `SigOpZom`, com fallback `ShellExecute` porque `FormSigOpZom` ainda n├úo foi migrado). `TornarControlesVisiveis` agora pula esse objeto ÔÇö mostr├í-lo deixaria um ret├óngulo vazio permanente.
+
+**3. Toggle do checkbox da grade** ÔÇö o legado s├│ tem o `When` (`Return(!Empty(CrProdutos.CPros))`), e migrar s├│ isso deixa a c├®lula inerte. Adicionados os 4 handlers (`KeyPress` alterna; `Click`/`MouseDown`/`MouseUp` com `NODEFAULT`), com o gate do `When` **dentro** do `KeyPress` ÔÇö `BINDEVENT` descarta o retorno do delegate, ent├úo um `When` ligado assim n├úo bloquearia nada.
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Compila├º├úo VFP9 (form + BO) | limpa, sem `.err`, `.fxp` gerados |
+| Gate Fase 6 (`temLayoutFlat`) | **True** ÔÇö sem PageFrame + BINDEVENT + `AbrirLookup*` |
+| `Test-CompletudeCodigo` (regex reproduzida) | 0 problemas nos dois arquivos |
+| `ValidadorSQLSchema.ps1` | PASSOU ÔÇö nenhuma coluna inv├ílida |
+| `VerificarFormBuscaAuxiliar` / `FuncoesNaoDefinidas` / `PropriedadesInexistentes` | zero achados para este form |
+| Instancia├º├úo real (`automation\test_fase6_sigprccp.prg`) | form abre, 71 controles, os 17 `AbrirLookup*` cham├íveis **de fora** (PEMSTATUS n├úo prova escopo), foto oculta, `Column1.CurrentControl=CHK_4C_MARCA`/`Sparse=.F.`, toggle do checkbox **alternou 0ÔåÆ1**, nenhum di├ílogo de erro suprimido |
+
+Artefatos tempor├írios removidos. Ficaram o harness `automation\test_fase6_sigprccp.prg` e seu log `tasks\task587\teste_fase6.txt`, no mesmo padr├úo dos harnesses das outras fases.
+
+Uma ressalva sobre cobertura: `gnConnHandle = -1` no harness, porque esta m├íquina n├úo tem rota para o SQL Server 192.168.200.10. Isso prova escopo, nomes e o fluxo de controle dos lookups, mas **n├úo** prova que cada `SELECT` devolve linha ÔÇö a confer├¬ncia de `RECCOUNT` contra o banco real fica para quando a etapa 06 rodar num host com acesso.

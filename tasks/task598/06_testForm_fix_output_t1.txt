@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmei que **n├úo ├® um bug de c├│digo** ÔÇö ├® o mesmo erro de infraestrutura j├í documentado extensivamente na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`), reincidente em 80+ tasks desde 2026-08-02.
+
+**Diagn├│stico**: o erro `Codigo: 1526 / [DBNETLIB]SQL Server inexistente ou acesso negado` ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, *antes* de qualquer `CREATEOBJECT` do `FormSigPrCtr`/`SigPrCtrBO` ÔÇö ├® um pr├®-flight de conex├úo (`SQLSTRINGCONNECT`) contra `192.168.200.10:1433`, comum a todo form testado.
+
+Testei a conectividade agora mesmo:
+```
+TCP CONNECT: FAILED (timeout/unreachable)
+```
+Confirma que a m├íquina que roda o pipeline segue sem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server (DB_MBAHIA). Isso ├® id├¬ntico ao padr├úo j├í visto em task592ÔÇôtask596 (todas essa semana), onde revis├Áes repetidas confirmaram que `FormSIGPRCNB`, `Formsigprcom`, `FormSIGPRCOT`, `Formsigprcpd` e `FormSIGPRCPR` estavam com c├│digo correto e o erro nunca foi resolvido por edi├º├úo de `.prg`.
+
+**Revisei `FormSigPrCtr.prg` e `SigPrCtrBO.prg`** ÔÇö ambos usam `gnConnHandle` global do jeito can├┤nico, sem nada relacionado a conectividade que possa ser corrigido no c├│digo. Por isso **n├úo editei nenhum arquivo**: fazer isso desperdi├ºaria uma tentativa do pipeline num erro que edi├º├úo de c├│digo n├úo resolve.
+
+Registrei essa reincid├¬ncia (task598) na mem├│ria do projeto. Como j├í apontado nas notas anteriores, seria recomend├ível que o `OrquestradorMigracao.ps1` tivesse um circuit-breaker para o C├│digo 1526 (detectar e sinalizar infraestrutura em vez de consumir as 10 tentativas de retry).
