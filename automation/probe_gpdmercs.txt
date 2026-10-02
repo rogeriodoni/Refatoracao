@@ -1,0 +1,19 @@
+A: inicio
+B: conn=1
+C: Init OK
+=== 1) Incluir SEM Grande Grupo
+   modo = [LISTA] (esperado LISTA)  ActivePage = 1 (esperado 1)
+=== 2) Incluir COM Grande Grupo [JOO]
+   modo = [INCLUIR]  ActivePage = 2
+   BO.this_cMercs   = [JOO]
+   txt_4c_Mercs     = [JOO]  <- tela
+   cestoqs=.T. bpesos=2 atucomps=.T. fornecs=2 avalests=.T. etidups=2 mtprimas=3
+=== 3) BANCO apos Confirmar (SQLEXEC=1 linhas=1)
+   cgrus=[Z97] dgrus=[TESTE ERRO180] MERCS=[JOO]
+   cestoqs=1 bpesos=2 atucomps=1 fornecs=2 avalests=1 etidups=2 mtprimas=3
+   (legado: mercs=JOO cestoqs=1 bpesos=2 atucomps=1 fornecs=2 avalests=1 etidups=2 mtprimas=3)
+   limpeza Z97 executada
+DIALOGOS: [30/09/2026 12:47:58 PM] Campo Obrigatório: Grande Grupo Inválido !!!
+[30/09/2026 12:47:58 PM] Informação: Registro salvo com sucesso!
+
+Z: fim

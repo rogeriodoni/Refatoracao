@@ -13054,3 +13054,453 @@ cobrir o caso). Regra de wording adicionada ao prompt de geracao
 (`OrquestradorMigracao.ps1`, secao "REGRA OBRIGATORIA DE COMPLETUDE" + blocos "Regras VFP
 Criticas"): nunca escrever "nao implementado"/"nao implementada" dentro de comentario `*`
 ao documentar essa decisao.
+
+---
+
+## 229. `SQLEXEC` sobre o alias ligado a um Grid ZERA o `ColumnCount` (Erro179 2026-09-30)
+
+`SQLEXEC(handle, sql, "cursor_x")` **fecha e recria** o alias. Se `cursor_x` for o
+`RecordSource` de um Grid, o Grid perde o bind inteiro. Medido no VFP9 contra o banco real
+(`Formgpd`, aba Cadastro):
+
+```
+01-apos-Init                 ColumnCount=4   RecordSource=[cursor_4c_SigCdPsg]
+                             Col3 CurrentControl=[CHECK1]
+04-apos-CarregarSigCdPsgCad  ColumnCount=0   <- retangulo branco
+```
+
+Sem erro, sem log, sem excecao: a grade desenha um retangulo branco **sem cabecalho e sem
+coluna**. E como nada rebinda, ela fica morta pelo **resto da vida do form** - quem entrasse
+em ALTERAR uma vez via a grade vazia tambem no INCLUIR seguinte. O sintoma reportado ("a
+grade nao aparece, em inclusao E em alteracao") manda o diagnostico para SQL/permissao.
+
+**O legado rebinda tudo** (`mgradesgru` do `sigcdgpd.scx`):
+
+```foxpro
+ThisForm.Pagina.Dados.pgDivisoes.pgCadastro.GrdSigCdPsg.RecordSource = ''
+ThisForm.poDataMgr.Requery('CrSigCdPsg')
+Select CrSigCdPsg
+Index On codigos Tag Codigos
+Go Top
+With ThisForm.Pagina.Dados.pgDivisoes.pgCadastro.GrdSigCdPsg
+    .RecordSource = 'CrSigCdPsg'
+    .Column1.ControlSource = 'CrSigCdPsg.codigos'
+    .Refresh
+EndWith
+```
+
+**Mas copiar isso ao pe da letra DESTROI o que foi posto nas Columns por `AddObject`** -
+mexer no `ColumnCount` recria os objetos `Column`, e o `Check1` eleito `CurrentControl` da
+Column3 (regra #18) some. A forma segura e equivalente eh **nao derrubar o alias**:
+
+```foxpro
+* ERRADO - fecha e recria o alias ligado a grade
+loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdPsg")
+
+* CERTO - SQLEXEC num cursor TEMPORARIO, recarga por ZAP + APPEND FROM DBF()
+IF USED("cursor_4c_PsgTmp")
+    USE IN cursor_4c_PsgTmp
+ENDIF
+SELECT cursor_4c_SigCdPsg
+ZAP                                          && preserva estrutura e bind
+loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_PsgTmp")
+IF loc_nRet >= 0 AND USED("cursor_4c_PsgTmp") AND RECCOUNT("cursor_4c_PsgTmp") > 0
+    SELECT cursor_4c_SigCdPsg
+    APPEND FROM DBF("cursor_4c_PsgTmp")      && casa por NOME de campo
+ENDIF
+IF USED("cursor_4c_PsgTmp")
+    USE IN cursor_4c_PsgTmp
+ENDIF
+SELECT cursor_4c_SigCdPsg
+GO TOP
+THIS.RepintarGradesSubGrupos(.T.)            && GO TOP + Refresh (regra #21a)
+```
+
+`ZAP` **preserva** `RecordSource`, cada `Column.ControlSource`, `Column.Width`,
+`Header1.Caption` e `CurrentControl`; fechar e recriar o alias derruba tudo isso
+(mesma nota ja registrada em `feedback_zap_em_datasession_privada_trava`).
+
+**A lista de colunas do `CREATE CURSOR` e a do `SELECT` tem de ser IDENTICAS** - o
+`APPEND FROM` casa por NOME de campo, entao coluna a mais no SELECT eh descartada em
+silencio e coluna a menos fica em branco. No `Formgpd` isso obrigou a subir o cursor de
+7 para as **11** colunas de `SigCdPsg` (todas NOT NULL, regra #22), que eh justamente o
+que o legado faz (`[Select * From SigCdPsg Where cgrus = ?lcCdGru]`).
+
+**Cursor compartilhado por mais de uma grade**: no legado `CrSigCdPsg` alimenta TRES grades
+(`Pagina.Lista`, `pgCadastro`, `pgSubGru`) e o `mgradesgru` rebinda as tres. Popular ou
+esvaziar o cursor por um lado obriga a repintar o outro, senao a aba que nao esta em foco
+segue exibindo o conteudo antigo. Concentrar num metodo unico de repintura.
+
+**Instanciar o form NAO pega este defeito** - `InicializarForm` devolve `.T.`, o
+`TestFormWrapper` da SUCESSO e o `ColumnCount` so cai quando a carga roda. Conferir
+medindo `Grid.ColumnCount` e `Grid.RecordSource` DEPOIS da chamada de carga.
+
+Sem auto-fix: escolher o nome do cursor temporario e garantir que as duas listas de colunas
+batem depende do caso. WARNING: CorretorAutomatico **#211**.
+
+---
+
+## 230. Handler de grade editavel: o `INSERT` eh so a PRIMEIRA linha do que o legado faz (Erro179 2026-09-30)
+
+O migrador transcreve o `Insert Into` do `cmdSInserir.Click` legado e **joga fora as linhas
+seguintes**, que sao exatamente o que torna a linha nova utilizavel:
+
+```foxpro
+* Legado (pgCadastro.cmdgCompo.cmdSInserir.Click)
+lcGruCods = lcCGrus + lcCodigos
+lcIdChave = fUniqueIds()
+Insert Into CrSigCdPsg (cgrucods,cgrus,codigos,descricaos,cidchaves) ;
+                Values (lcGruCods,lcCGrus,lcCodigos,lcDescs,lcIdChave)
+With ThisForm.Pagina.Dados.pgDivisoes.pgCadastro.GrdSigCdPsg
+    .Column1.ReadOnly = .F.      && <- SEM ISTO nao da para digitar nada
+    .Refresh
+    .Column1.SetFocus
+EndWith
+```
+
+Sem `Column1.ReadOnly = .F.` a coluna do codigo fica **travada** (o SCX declara
+`Column1.ReadOnly = .T.` como default) e o usuario nao consegue digitar na linha
+recem-criada. **Compila limpo, nao da erro**; o sintoma reportado eh "nao consigo realizar
+a inclusao nessa grid".
+
+Tambem se perdem, no mesmo handler:
+
+| o que | onde estava no legado | consequencia de perder |
+|---|---|---|
+| guard de modo + campo-chave | `cmdSInserir.When` | o "+" cria linha fora de INSERIR/ALTERAR, ou sem grupo pai |
+| colunas do INSERT invisiveis na tela | `cgrucods` e afins | coluna NOT NULL fica vazia -> INSERT recusado (regra #22) |
+| gerador de PK | `fUniqueIds()` | `SYS(2015)` nao eh a PK Fortyus |
+| `Refresh` / `SetFocus` | bloco `With` | linha inserida nao aparece nem recebe o cursor |
+
+**O `When` le o TEXTBOX, nao o BO**: `Not Empty(pgCadastro.get_codigo.Value)`. Em INCLUIR o
+codigo so chega ao BO no `FormParaBO`, depois do Confirmar - ler `this_cCgrus` faria o guard
+recusar sempre. No migrado isso vira um guard no inicio do handler, lendo o controle com
+fallback para o BO.
+
+**Quem TRANCA a coluna tem de destrancar no caminho de volta e vice-versa** (regra #40): o
+reset de `Column1.ReadOnly` para `.T.` mora no mesmo funil que repinta a grade (a carga do
+ALTERAR e o `LimparCampos` do INCLUIR), nunca so no botao que insere. O legado faz os dois
+lados: `cmdSInserir.Click` libera, `Grupo_op.Click` do ramo ALTERAR re-tranca.
+
+**A grade editavel tambem precisa existir do outro lado**: no `Formgpd` o cursor era populado
+e editavel mas **nao havia nenhum `Salvar<X>`** - o Confirmar gravava as outras tabelas e
+ignorava o cursor da grade. Ao migrar grade de detalhe, procurar no legado o
+`poDataMgr.Update('<cursor>')` dentro de `msv_inserir`/`msv_alterar`/`msv_excluir` (com o
+`Delete From <cursor> Where <chave> = Space(N)` e o `Replace All` que o antecedem) e
+transcrever como DELETE-do-grupo + INSERT linha a linha.
+
+Sem auto-fix (depende do dump do legado). WARNING: CorretorAutomatico **#212**.
+
+---
+
+## 231. Guard e defaults do Click do GRUPO de botoes CRUD valem para TODAS as opcoes (Erro180 2026-09-30)
+
+No `frmcadastro` Fortyus os botoes Incluir/Visualizar/Alterar/Excluir/Procurar sao **UM
+CommandGroup**. O que esta no topo do `Click` dele roda para **todos**:
+
+```foxpro
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+lcMercs = This.Parent.cntFiltros.Container1.Get_Gde.Value
+If Empty(lcMercs)
+    MessageBox('Grande Grupo Invalido !!!',48,'Campo Obrigatorio')
+    This.Parent.cntFiltros.Container1.Get_gde.SetFocus
+    Return 0                                  && <- vale para as CINCO opcoes
+EndIf
+If ThisForm.pcEscolha = 'INSERIR'
+    Replace mercs    With lcMercs, cestoqs  With 1, bpesos   With 2, ;
+            atucomps With 1,       fornecs  With 2, avalests With 1, ;
+            etidups  With 2,       mtprimas With 3 In CrSigCdGrp
+EndIf
+```
+
+O migrado quebra o CommandGroup em **cinco** handlers `Btn*Click` e replica o guard so
+**naquele que foi testado na epoca** - no `Formgpd` o guard entrou no `BtnBuscarClick`
+(Erro177) e os outros quatro ficaram abertos. Pelo Incluir dava para entrar com o filtro
+vazio, e o registro nascia sem Grande Grupo nenhum.
+
+**Duas regras de migracao**:
+
+1. **O guard vira UM metodo** (`ValidarPreAcao` / `Validar<X>Selecionado`) chamado por TODOS
+   os `Btn*Click`, com a mensagem e o `SetFocus` do legado. Um guard replicado em cada
+   handler diverge na proxima correcao.
+2. **O ramo `If pcEscolha = 'INSERIR'` do mesmo Click eh o `InicializarValoresPadrao()` do
+   BO** - o hook que `BusinessBase.NovoRegistro()` ja chama e que a maioria dos BOs migrados
+   **nao sobrescreve**. Os valores CONSTANTES vao para la; o que depende da TELA (o valor
+   herdado do filtro da Lista) fica no form, atribuido depois do `NovoRegistro()` e antes do
+   `BOParaForm()`:
+
+```foxpro
+PROCEDURE BtnIncluirClick()
+    IF !THIS.ValidarGrandeGrupoSelecionado()
+        RETURN
+    ENDIF
+    THIS.this_oBusinessObject.NovoRegistro()      && aplica os defaults constantes
+    THIS.LimparCampos()
+    THIS.this_cModoAtual = "INCLUIR"
+    THIS.this_oBusinessObject.this_cMercs = PADR(THIS.ObterFiltroGrandeGrupo(), 3)
+    THIS.BOParaForm()                             && espelha os defaults nos controles
+ENDPROC
+```
+
+**`LimparCampos` roda ANTES do `BOParaForm`**, senao apaga o que acabou de ser semeado.
+
+Descartar o `Replace` faz o registro nascer com todos esses campos em zero/branco - **sem
+erro e sem aviso**, e so aparece quando alguem compara a tela nova com a legada. Ao migrar
+form CRUD, ler o `Click` do CommandGroup INTEIRO, nao so o ramo da opcao que se esta
+implementando.
+
+Sem auto-fix (a lista de defaults eh regra de negocio, regra #17).
+
+---
+
+## 232. Coluna `numeric(1,0)` ligada a controle de DUAS opcoes NAO eh logica - grava 1 ou 2, nunca 0 (Erro180 2026-09-30)
+
+No SCX, `ComboBox` com `Style = 2` + `RowSource "Sim,Nao"` e `OptionGroup` com
+`ButtonCount = 2` sobre um `ControlSource` NUMERICO gravam o **indice 1-based**: os valores
+possiveis sao **1 e 2**.
+
+```
+Get_fornobri          ControlSource = "crSigCdGrp.fornecs"    Style = 2  RowSource "Sim,Nao"
+opt_descricao_produto ControlSource = "crSigCdGrp.etidups"    ButtonCount = 2
+```
+
+O migrador ve `numeric(1,0)` com duas opcoes, conclui "booleano" e escreve:
+
+```foxpro
+* ERRADO - grava 0 onde o legado grava 2
+this_lFornecs = .F.
+THIS.this_lFornecs = (fornecs = 1)                           && CarregarDoCursor
+"fornecs = " + STR(IIF(THIS.this_lFornecs,1,0),1)            && INSERT / UPDATE
+loc_oPgProd.cbo_4c_Fornecs.ListIndex = IIF(THIS.this_lFornecs, 1, 2)
+
+* CERTO - a property acompanha o INDICE
+this_nFornecs = 0
+THIS.this_nFornecs = NVL(fornecs, 0)
+"fornecs = " + STR(THIS.this_nFornecs, 1)
+loc_oPgProd.cbo_4c_Fornecs.ListIndex = ;
+    IIF(THIS.this_oBusinessObject.this_nFornecs >= 1, THIS.this_oBusinessObject.this_nFornecs, 1)
+```
+
+Nao ha erro nem aviso: eh **divergencia silenciosa de dado** e viola o PILAR 2, porque
+codigo legado que testa `col = 2` deixa de casar. `ComboBox.ListIndex` e `OptionGroup.Value`
+**ja sao** o indice, entao o mapeamento eh direto nos dois sentidos; na volta usar
+`IIF(valor >= 1, valor, 1)` para nunca atribuir `0` a um controle 1-based.
+
+Mesma familia da regra **#34** (colunas MULTI-VALOR de 3 a 7 opcoes do `gpdBO`:
+`bpesos` 3, `dsccompras` 3, `mncompos` 5, `tpcalcps` 6, `montadescs` 7). O caso de **DUAS**
+opcoes escapa justamente porque "parece" booleano - **conferir no dump do SCX quantas opcoes
+o controle tem antes de escolher o tipo da property**, nunca deduzir de `numeric(1,0)`.
+
+**Coluna `numeric(1,0)` de verdade booleana existe** e eh maioria (checkbox `0`/`1`): por
+isso nao ha auto-fix nem sweep - varrer todas as `numeric(1,0)` mapeadas como logicas daria
+WARNING massivo. O que distingue eh o CONTROLE no SCX. Medido no `gpdBO`: de todas as
+colunas mapeadas como logicas, so `fornecs` e `etidups` estavam ligadas a controle de indice.
+
+## 233. `FormParaBO`/`BOParaForm` cobrindo SO a primeira aba (Erro184 2026-10-01)
+
+O gerador liga os campos da **aba 1** e abandona as demais. O controle existe na tela, o
+usuario digita, e o valor **nunca chega ao BO**.
+
+O sintoma MENTE: `ValidarDados` le a property que ninguem alimentou e acusa
+`A Classificacao Fiscal Necessita Ser Preenchida Neste Grupo!!!` com o campo **preenchido na
+tela**. Pior que a mensagem: o resto da aba grava **em branco**, em silencio.
+
+Medido no `FormProduto` (SIGCDPRO): o legado liga **155** controles a colunas de `SigCdPro`
+e o `FormParaBO` transferia **70**. A aba Fiscal INTEIRA (22 campos) estava fora, e mais
+Componente 25, Processo 16, Consumo 2, Designer 1.
+
+**Auditoria** (a unica que pega isto): extrair do dump do SCX todo
+`ControlSource = "cr<Tabela>.<coluna>"` de TODAS as paginas e cruzar com o que o
+`FormParaBO` atribui.
+
+**A auditoria eh por CONTROLE, nunca por COLUNA.** Agrupar por coluna e dar a coluna por
+coberta quando QUALQUER controle dela esta ligado deixa passar o par — e o par existe:
+
+```powershell
+# CERTO: guarda o OBJETO, nao so a coluna, e testa o nome MIGRADO de cada um
+$atual=$null; $lig=@()
+foreach ($l in (Get-Content $dump)) {
+  if ($l.StartsWith('* PROPRIEDADES DE:')) { $atual = $l }
+  elseif ($atual -and $l -match '^\s*ControlSource\s*=\s*"crSigCdPro\.(\w+)"') {
+      $lig += [pscustomobject]@{Obj=$atual; Col=$Matches[1]}; $atual=$null }
+}
+# para cada CONTROLE: o nome migrado aparece em "<ctrl>.Value" dentro do FormParaBO?
+```
+
+Ao ler o resultado, descontar os **nomes de-colididos**: o PILAR 3 renomeia, e o
+`mapeamento.json` colide (`opc_CravCera` mapeado para `chk_4c_Opc_CravCera` quando o `.prg`
+criou `chk_4c_OpcCravCera`; `fwget3` -> `txt_4c_Volumes`; `get_Dtucp` -> `txt_4c_DtUcp`).
+Conferir pelo `AddObject` real antes de acusar.
+
+O que sobrar cai em dois baldes: **tem property no BO** (falta so transferir) ou **a coluna
+nao existe no banco** - conferir no `INFORMATION_SCHEMA` do banco REAL, nao so no
+`docs/schema.sql`. No FormProduto 13 colunas do SCX nao existem mais em `DB_MBAHIA`
+(`CnjLacto`, `dpro4s`, `espessus`, `BrcEsp`, `DispEnc`, `CodImpPro`, `DCodImpPro`,
+`codnacpro`, `coddcr`, `TpCodPro`, `DesLacto`, `CriaLacto`, `DtAprAmo`): criar o controle
+para nao divergir da tela, mas **sem bind** - inventar coluna viola o PILAR 2.
+
+**Tres defeitos que vem no mesmo pacote:**
+
+**(a) `LimparCampos` tem de limpar TODAS as abas transferidas.** Enquanto a aba nao gravava
+isso era inocuo; com o bind ligado, Incluir depois de Visualizar leva os dados do produto
+**anterior** para o registro novo.
+
+**(b) O formatador de EXIBICAO tem de tolerar Caractere**, pela mesma razao que o
+`FormatarNumeroSQL` tolera: o `FormParaBO` guarda a STRING do TextBox na property `this_n*`.
+
+```foxpro
+* ERRADO - zera qualquer valor que nao seja N, e o campo volta VAZIO
+loc_nValor = IIF(VARTYPE(par_nValor) = "N", par_nValor, 0)
+* CERTO
+loc_nValor = THIS.ValorNumerico(par_nValor)   && aceita C, N e L
+```
+
+**(c) `CheckBox` ligado a coluna `bit` exige conversao explicita.** Medido no VFP9: o
+`CheckBox` nasce com `.Value` **NUMERICO** (0), o `ComboBox` nasce **CARACTERE** (""), e os
+dois assumem o tipo do que for atribuido.
+
+```foxpro
+* property do BO eh LOGICA (coluna bit), o controle eh NUMERICO
+loc_oBO.this_lChkfunds  = (THIS.ValorNumerico(loc_oPg.chk_4c_ChkFund.Value) = 1)
+loc_oPg.chk_4c_ChkFund.Value = IIF(loc_oBO.this_lChkfunds, 1, 0)
+```
+
+**(d) DUAS telas, UMA coluna: o par de controles com `ControlSource` compartilhado.** Eh o
+caso que a auditoria por COLUNA deixa passar, e foi assim que escapou na primeira varredura
+do FormProduto (Erro187). Medido no SIGCDPRO: **seis** colunas tem dois controles, em paginas
+diferentes, com o MESMO `ControlSource` —
+
+| coluna | lado A | lado B |
+|---|---|---|
+| `custofs` | `pgDados.getCtotal` | `pgComposicao.getCustof` |
+| `pvens` | `pgDados.getPvenda` | `pgComposicao.getPven` |
+| `moecusfs` | `pgDados.getMctotal` | `pgComposicao.getMoecusf` |
+| `moevs` | `pgDados.getMpvenda` | `pgComposicao.getMoev` |
+| `moepvs` | `pgDados.getMfvenda` | `pgComposicao.getMoepv` |
+| `moedas` | `pgDadosFiscais.GetMvalor` | `pgComposicao.getMoeda` |
+
+Com `ControlSource` o legado **nunca diverge**: digitar em um atualiza o cursor e o outro
+passa a exibir o mesmo valor — sao duas VISTAS do mesmo campo. O migrado nao tem
+`ControlSource` e lia so um dos lados: quem preenchesse a moeda pela aba Componente via
+*"Moeda do Total de Custo Invalida!!!"* na gravacao, com o campo preenchido na tela.
+
+Reproduzir o par com tres helpers: **ler** aceita qualquer um dos lados (o preenchido ganha),
+**gravar** escreve nos DOIS, e o validador do lado B **espelha** para o lado A no LostFocus —
+que eh o equivalente ao refresh que o `ControlSource` compartilhado faz sozinho. O
+`LimparCampos` tambem tem de zerar os dois.
+
+```foxpro
+loc_oBO.this_cMoecusfs = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Mctotal, loc_oPgCmp.txt_4c_Moecusf)
+THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Mctotal, loc_oPgCmp.txt_4c_Moecusf, ALLTRIM(loc_oBO.this_cMoecusfs))
+```
+
+## 234. A validacao do legado mora em DOIS lugares: `Obrigatorios()` E o `Salva.Click` (Erro186 2026-10-01)
+
+O migrador porta o metodo `Obrigatorios()` - que tem nome de validacao e eh facil de achar -
+e **ignora as regras escritas dentro do Click do botao Salvar**.
+
+Medido no SIGCDPRO: **14** regras no `Obrigatorios()` (todas portadas) e **mais 24** dentro
+do `Pagina.Dados.Grupo_Salva.Salva.Click`, **todas perdidas**:
+
+| regra | gatilho |
+|---|---|
+| Grupo e Conta do C.C. | `Substr(GrCtObCCs, 21, 1)` nao vazio |
+| Peso Medio | `ObrPesoMs = 1` |
+| Cod. Pai | `obrconjuts = 1` |
+| Descricao em branco | sempre |
+| Unidades x movimentacao de estoque | ALTERAR + `SigMvItn`/`SigMvHst` |
+| EAN13 duplicado | `Ean13 <> 0` |
+| Localizacao | `LocalObrig = 1` |
+| Caracteristica / Titulo / Descricao | `prodwebs = 1` (3 regras) |
+| Grupo/Cor/Colecao/Categoria x Cod. Pai | `VldConjuts = 1` (4 regras) |
+| Situacao x Situacao da Classificacao | `SigCdCls.Situas` |
+| Aliquota de IPI x classificacao / Excecao da TIPI | `SigCdClf.aIpis` / `IpiProds = 'S'` |
+| Peso Liquido | INSERIR + `nChkPess = 1` |
+| Unidade 1 / Unidade 2 | sempre / `Substr(CfgGerGprs, 10, 1) = 1` |
+| Fornecedor | `Fornecs = 1` |
+| Valor de Venda | `SigCdPam.PrVendas = 'N'` |
+| 3 moedas conferidas contra `SigCdMoe` | valor correspondente <> 0 |
+| 4 moedas obrigatorias | `oMoecs`/`oMoeCusfs`/`oMoedas`/`oMoevs` = 1 |
+| 7 pisos de preco do grupo | coluna do grupo > 0 e > a do produto |
+| Codigo com ate 6 digitos | `ServPrds = 1` |
+
+**Ao migrar, ler o Click do Salvar INTEIRO** e separar: o que valida CAMPO ja ligado vai
+para `ValidarDados`; o que depende de grade ainda nao migrada fica de fora **com comentario
+explicito** dizendo o que falta (no FormProduto: Servico Obrigatorio, `chkforcomp`, itens e
+moedas da composicao, componentes obrigatorios por grupo, ordem das fases, faixa de markup
+do feitio).
+
+**O foco tem de saber abrir a aba certa.** O legado faz `oPag.ActivePage = <pagina>` +
+`SetFocus`. Um `FocarCampoValidacao` que so atende a aba 1 descarta **em silencio** toda
+regra que aponte para FISCAL ou COMPOSICAO.
+
+**Validacao de PK duplicada** entra aqui: sem checagem previa o INSERT vai ao SQL Server e o
+usuario ve `Violacao da restricao PRIMARY KEY ... chave duplicada` cru do ODBC. A guarda tem
+de ser condicionada a `this_lNovoRegistro` - no ALTERAR o codigo existe por definicao e a
+checagem recusaria **toda** alteracao. No FormProduto o BO ja tinha `ExisteProduto()` com o
+comentario "usado pelo formulario antes de incluir" e **ninguem chamava**.
+
+## 235. Quem LIGA um controle novo tem de reaplicar o default do ramo INSERIR (Erro184/185 2026-10-01)
+
+Enquanto o campo **nao existia na tela**, o default posto por `InicializarValoresPadrao`
+sobrevivia ate a gravacao. Assim que o controle passa a ser lido pelo `FormParaBO`, ele chega
+com `0`/vazio e **sobrescreve o default** - o registro novo nasce errado, sem erro e sem
+aviso.
+
+Aconteceu **duas vezes** no FormProduto, ambas do mesmo `Replace` do legado:
+
+```foxpro
+Replace Datas With DateTime(), DtIncs With DateTime(), ;
+        Cunis With Iif(!Empty(crSigCdGrp.cUniPs), crSigCdGrp.cUniPs, crSigCdPam.CUnis), ;
+        Situas With 1, CravCers With 2, UsuIncs With Usuar, Consigs With 1 In crSigCdPro
+```
+
+`Consigs` quebrou ao ligar a aba Principal; `CravCers` quebrou depois, ao ligar a aba
+Processo. Depois de ligar QUALQUER aba, reler o `If pcEscolha = 'INSERIR'` do legado e repor
+na tela todo default cujo controle agora existe.
+
+Vale tambem a **normalizacao de carga** que costuma acompanhar o default:
+
+```foxpro
+* legado, no caminho comum de carga
+opc_CravCera.Value = Iif(CrSigCdPro.CravCers = 0, 2, CrSigCdPro.CravCers)
+```
+
+O que depende do GRUPO (unidade vinda de `SigCdGrp.cUniPs` com fallback em
+`SigCdPam.CUnis`) so pode ser aplicado DEPOIS de o grupo ser conhecido - no FormProduto isso
+virou `AplicarDefaultsInclusao(par_cGrupo)`, chamada logo apos o `LimparCampos` do Incluir.
+
+## 236. `AutoSize` eh no-op tambem em CheckBox; e `TornarControlesVisiveis` apaga o `Visible = .F.` do SCX (Erro183 2026-10-01)
+
+A regra **#23** documenta `AutoSize` como no-op em `Label` criado por `AddObject`. Medido no
+VFP9 (`automation\MedirAutoSizeChk.prg`) com 16 captions diferentes: vale **igual para
+CheckBox** - todos ficaram nos **100x17** do default, com e sem `AutoSize = .T.`.
+
+| controle | `.Value` default | com `AutoSize = .T.` |
+|---|---|---|
+| CheckBox | **N** (0) | 100 x 17 (ignorado) |
+| ComboBox | **C** ("") | - |
+
+Escrever `Width`/`Height` EXPLICITOS. Os 100px nao invadem o vizinho quando as colunas do
+legado tem passo >= 101 (no FormProduto: Left 633 / 734 / 906) - conferir antes.
+
+**E o `TornarControlesVisiveis` do form forca `Visible = .T.` em TUDO**, apagando o
+`Visible = .F.` que o proprio SCX declara. No FormProduto exporia o bloco "Imagem Tecnica"
+(label + shape + image + commandgroup), o `chkAtivoSite` e as opcoes "So Valor"/"So Estoque"
+do `Fwoption1` - cinco controles que o legado mantem ocultos.
+
+```foxpro
+IF loc_cNome == "GRD_4C_RELOGIOS" OR ;
+        INLIST(loc_cNome, "CHK_4C_CHKATIVOSITE", "LBL_4C_LABEL41", ;
+            "SHP_4C_SHAPE2", "IMG_4C_IMGFIGTEC", "OBJ_4C_COMMANDGROUP1")
+    *-- nascem com Visible = .F. NO PROPRIO SCX: nao tocar, nao recursar
+ELSE
+    *-- e NAO recursar em OptionGroup cujos Buttons(N) tenham Visible = .F.
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND ;
+            !INLIST(loc_cNome, "OBJ_4C_FWOPTION1")
+        THIS.TornarControlesVisiveis(loc_oObjeto)
+    ENDIF
+ENDIF
+```
+

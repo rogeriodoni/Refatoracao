@@ -16123,6 +16123,212 @@ function Corrigir-SetPathMultiplasExpressoes {
     return $lista.ToArray()
 }
 
+function Avisar-SqlExecSobreAliasDeGrid {
+    # Pattern #211 (Erro179, 2026-09-30, Formgpd) - WARNING.
+    #
+    # SQLEXEC(handle, sql, "cursor_x") FECHA e RECRIA o alias. Se cursor_x for o
+    # RecordSource de um Grid, o Grid perde o bind inteiro: medido no VFP9 contra
+    # o banco real, grd_4c_PsgCad saiu de ColumnCount = 4 (com RecordSource, as 4
+    # Column.ControlSource, headers e o CheckBox eleito CurrentControl) para
+    # ColumnCount = 0 - um retangulo branco SEM cabecalho e SEM coluna.
+    #
+    # Sem erro, sem log, sem excecao. E como nada rebinda depois, a grade fica
+    # morta pelo RESTO da vida do form: quem entrasse em ALTERAR uma vez via a
+    # grade vazia tambem no INCLUIR seguinte.
+    #
+    # NAO eh auto-fix: o conserto exige (a) escolher um nome de cursor temporario
+    # e (b) garantir que a lista de colunas do CREATE CURSOR e a do SELECT sejam
+    # IDENTICAS, porque o APPEND FROM casa por NOME de campo. Nenhuma das duas
+    # coisas se decide por regex.
+    #
+    # Detecta SO o caso perigoso: SQLEXEC cujo 3o argumento (literal) eh um alias
+    # que o MESMO arquivo usa como .RecordSource, e SEM rebind nas 150 linhas
+    # seguintes. O padrao canonico e SEGURO do projeto (CarregarLista: zera o
+    # RecordSource, chama o BO/SQLEXEC e rebinda logo abaixo) NAO eh acusado.
+    #
+    # Sweep de calibracao em 2026-09-30 sobre os 932 .prg de forms + classes:
+    #   janela  40 linhas -> 4 achados (3 falsos positivos: o rebind existe, so
+    #                        esta mais abaixo - FormProduto e FormSigPrCtr)
+    #   janela  80 linhas -> 3 achados (2 falsos positivos)
+    #   janela 120 linhas -> 1 achado
+    #   janela 150 linhas -> 1 achado  <- estabilizou
+    # O unico achado real era Formgpd.CarregarSigcdcpo (aba Compos), CONFIRMADO
+    # medindo no VFP9 (ColumnCount 4 -> 0) e corrigido. A janela de 150 linhas eh
+    # o que separa defeito de rebind-mais-abaixo sem virar WARNING massivo.
+    param([string[]]$Linhas, [string]$Arquivo)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $texto = $Linhas -join "`n"
+
+    # aliases que este arquivo usa como RecordSource de algum Grid
+    $aliases = @{}
+    foreach ($m in [regex]::Matches($texto, '(?i)\.RecordSource\s*=\s*"([A-Za-z0-9_]+)"')) {
+        $a = $m.Groups[1].Value
+        if ($a -ne '') { $aliases[$a.ToLower()] = $true }
+    }
+    if ($aliases.Count -eq 0) { return $Linhas }
+
+    # mapa metodo -> aliases que ESSE metodo rebinda, para reconhecer delegacao
+    # (FormProduto.AplicarResultadoBusca faz o SQLEXEC e chama THIS.VincularGradeLista(),
+    # que eh quem religa a grade - sem seguir isso o pattern acusaria 2 falsos positivos)
+    $rebindPorMetodo = @{}
+    $metodoAtual = ''
+    for ($k = 0; $k -lt $Linhas.Count; $k++) {
+        $mh = [regex]::Match($Linhas[$k], '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:PROCEDURE|FUNCTION)\s+([A-Za-z0-9_]+)')
+        if ($mh.Success) { $metodoAtual = $mh.Groups[1].Value.ToLower(); continue }
+        $mr = [regex]::Match($Linhas[$k], '(?i)\.RecordSource\s*=\s*"([A-Za-z0-9_]+)"')
+        if ($mr.Success -and $metodoAtual -ne '') {
+            if (-not $rebindPorMetodo.ContainsKey($metodoAtual)) { $rebindPorMetodo[$metodoAtual] = @{} }
+            $rebindPorMetodo[$metodoAtual][$mr.Groups[1].Value.ToLower()] = $true
+        }
+    }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = [regex]::Match($Linhas[$i], '(?i)SQLEXEC\s*\([^,]+,[^,]+,\s*"([A-Za-z0-9_]+)"\s*\)')
+        if (-not $m.Success) { continue }
+
+        $alias = $m.Groups[1].Value
+        $aliasLower = $alias.ToLower()
+        if (-not $aliases.ContainsKey($aliasLower)) { continue }
+
+        # janela = ate o fim do PROCEDURE corrente, no maximo 150 linhas
+        $fim = [Math]::Min($Linhas.Count - 1, $i + 150)
+        for ($k = $i + 1; $k -le $fim; $k++) {
+            if ($Linhas[$k] -match '(?i)^\s*END(PROC|FUNC)') { $fim = $k; break }
+        }
+        $trecho = ($Linhas[$i..$fim]) -join "`n"
+
+        # rebind explicito do MESMO alias = padrao seguro
+        if ($trecho -match ('(?i)\.RecordSource\s*=\s*"' + [regex]::Escape($alias) + '"')) { continue }
+
+        # delegacao: chama THIS.<Metodo>() que rebinda esse alias = padrao seguro
+        $delegou = $false
+        foreach ($mc in [regex]::Matches($trecho, '(?i)THIS\.([A-Za-z0-9_]+)\s*\(')) {
+            $nm = $mc.Groups[1].Value.ToLower()
+            if ($rebindPorMetodo.ContainsKey($nm) -and $rebindPorMetodo[$nm].ContainsKey($aliasLower)) { $delegou = $true; break }
+        }
+        if ($delegou) { continue }
+
+        Write-Host "[Pattern #211 WARN] linha $($i + 1): SQLEXEC sobre '$alias', que eh RecordSource de Grid - o Grid cai para ColumnCount = 0" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-211-SQLEXEC-SOBRE-ALIAS-DE-GRID" -Linha ($i + 1) -Original ($Linhas[$i].Trim()) -Corrigido "(nao mutado - exige cursor temporario + listas de colunas identicas)" -Descricao ("Pattern #211 WARNING: SQLEXEC(handle, sql, `"$alias`") FECHA e RECRIA o alias, e `"$alias`" eh usado " + "como .RecordSource de um Grid neste mesmo arquivo. O Grid perde RecordSource, todas as " + "Column.ControlSource, headers e o CurrentControl, e cai para ColumnCount = 0 - medido no VFP9: 4 -> 0. " + "A grade vira um retangulo BRANCO sem cabecalho e sem coluna, sem erro, sem log e sem excecao; e como " + "nada rebinda, fica morta pelo resto da vida do form (entrar em ALTERAR uma vez deixa o INCLUIR seguinte " + "vazio tambem). Nao ha rebind de .RecordSource = `"$alias`" nas 150 linhas seguintes. CONSERTO: nao " + "derrubar o alias - mandar o SQLEXEC para um cursor TEMPORARIO e recarregar o alias da grade com " + "SELECT <alias> / ZAP / APPEND FROM DBF(`"<tmp>`"), que preserva estrutura, RecordSource, ControlSource " + "e CurrentControl; fechar com GO TOP + Grid.Refresh. A lista de colunas do CREATE CURSOR e a do SELECT " + "tem de ser IDENTICAS (o APPEND FROM casa por NOME). Copiar o rebind do legado (mgradesgru: " + "RecordSource vazio + Requery + RecordSource + ControlSource + Refresh) NAO serve quando a Column tem " + "objeto posto por AddObject - mexer no ColumnCount recria as Columns e destroi o CheckBox/OptionGroup " + "eleito CurrentControl (regra #18). Skill: secao 229. Origem: Erro179 (Formgpd).")
+    }
+
+    return $Linhas
+}
+
+function Avisar-GradeEditavelSemLiberarColuna {
+    # Pattern #212 (Erro179, 2026-09-30, Formgpd) - WARNING, so com o DUMP confirmando.
+    #
+    # O migrador transcreve o Insert Into do cmdSInserir.Click legado e JOGA FORA
+    # as linhas seguintes do bloco With, que sao o que torna a linha nova
+    # utilizavel:
+    #
+    #   With ...GrdSigCdPsg
+    #       .Column1.ReadOnly = .F.      <- SEM ISTO nao da para digitar nada
+    #       .Refresh
+    #       .Column1.SetFocus
+    #   EndWith
+    #
+    # Sem o ReadOnly = .F. a coluna do codigo fica TRAVADA (o SCX declara
+    # Column1.ReadOnly = .T. como default) e o usuario nao consegue digitar na
+    # linha recem-criada. Compila limpo, nao da erro; o sintoma reportado eh
+    # "nao consigo realizar a inclusao nessa grid".
+    #
+    # NAO eh auto-fix: qual coluna liberar, e se ela deve mesmo ser liberada, so
+    # o dump do SCX legado diz - ha grades cuja Column1 eh somente-leitura de
+    # proposito (codigo gerado pelo sistema).
+    #
+    # POR ISSO o pattern exige o DUMP, como #202/#203/#204: so avisa quando o
+    # legado daquele form REALMENTE contem Column<N>.ReadOnly = .F.. Sem dump,
+    # fica em silencio - nao ha como julgar.
+    #
+    # Calibracao em 2026-09-30 sobre os 932 .prg de forms + classes:
+    #   sem o gate do dump  -> 13 achados, precisao ruim (varios delegam a um
+    #                          Habilitar*/Repintar*, outros nem tem coluna
+    #                          travada na grade em questao)
+    #   com o gate do dump  -> 3 achados (FormCLC, FormEnd, FormSigPdMp9); dos
+    #                          20 forms candidatos, so 4 tinham
+    #                          Column<N>.ReadOnly = .F. no legado - o 4o era o
+    #                          proprio Formgpd, ja corrigido.
+    # Evita o WARNING massivo (ver feedback_warning_massivo_verificar_premissa).
+    param([string[]]$Linhas, [string]$Arquivo)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $texto = $Linhas -join "`n"
+    # so faz sentido onde alguma Column nasce ReadOnly
+    if ($texto -notmatch '(?im)^\s*\.?Column\d+\.ReadOnly\s*=\s*\.T\.') { return $Linhas }
+
+    # GATE: o legado deste form libera alguma coluna de grade?
+    $taskDir = $null
+    try { $taskDir = Get-TaskDirDoForm -Arquivo $Arquivo } catch { $taskDir = $null }
+    if (-not $taskDir) { return $Linhas }
+    $dump = Get-ChildItem $taskDir -Filter '*_form_codigo_fonte.txt' -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $dump) { return $Linhas }
+    $legado = Get-Content $dump.FullName -Raw -ErrorAction SilentlyContinue
+    if (-not $legado) { return $Linhas }
+    $nLegado = ([regex]::Matches($legado, '(?i)\.Column\d+\.ReadOnly\s*=\s*\.F\.')).Count
+    if ($nLegado -lt 1) { return $Linhas }
+
+    $ini = -1
+    $nome = ''
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mh = [regex]::Match($Linhas[$i], '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+([A-Za-z0-9_]+)')
+        if ($mh.Success) {
+            if ($ini -ge 0) { Test-GradeEditavelHandler -Linhas $Linhas -Ini $ini -Fim ($i - 1) -Nome $nome -NLegado $nLegado -Dump $dump.Name }
+            $nome = $mh.Groups[1].Value
+            $ini = $i
+            continue
+        }
+        if ($Linhas[$i] -match '(?i)^\s*ENDPROC') {
+            if ($ini -ge 0) { Test-GradeEditavelHandler -Linhas $Linhas -Ini $ini -Fim $i -Nome $nome -NLegado $nLegado -Dump $dump.Name }
+            $ini = -1
+            $nome = ''
+        }
+    }
+
+    return $Linhas
+}
+
+function Test-GradeEditavelHandler {
+    # auxiliar do Pattern #212
+    param([string[]]$Linhas, [int]$Ini, [int]$Fim, [string]$Nome, [int]$NLegado, [string]$Dump)
+
+    if ($Ini -lt 0 -or $Fim -le $Ini) { return }
+    if ($Nome -notmatch '(?i)(Inserir|Incluir|AddLinha|AdicionarLinha)') { return }
+
+    $corpo = ($Linhas[$Ini..$Fim]) -join "`n"
+    if ($corpo -notmatch '(?i)(INSERT\s+INTO\s+[A-Za-z0-9_]+|APPEND\s+BLANK)') { return }
+    # ja libera alguma coluna? entao esta certo
+    if ($corpo -match '(?i)\.ReadOnly\s*=\s*\.F\.') { return }
+    # delega a um metodo que cuida disso (HabilitarEdicaoGrid, Repintar*(.F.))?
+    if ($corpo -match '(?i)THIS\.(Habilitar|Repintar|Liberar)[A-Za-z0-9_]*\s*\(') { return }
+
+    # A GRADE que este handler toca tem mesmo alguma coluna TRAVADA? O gate do
+    # dump eh por ARQUIVO; sem esta correlacao o pattern acusa handler de grade
+    # totalmente editavel. Medido no Formgpd: grd_4c_Compos declara as 4 colunas
+    # com ReadOnly = .F. e grd_4c_Prazos nao declara nenhuma - os dois handlers
+    # eram falso positivo; so grd_4c_Codificacao tem Column1.ReadOnly = .T..
+    # Handler que nao nomeia grade nenhuma nao da para julgar: fica em silencio.
+    $grades = [regex]::Matches($corpo, '(?i)\b(grd_4c_[A-Za-z0-9_]+)') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+    if (-not $grades -or $grades.Count -eq 0) { return }
+    $texto = $Linhas -join "`n"
+    $temTravada = $false
+    foreach ($g in $grades) {
+        # forma qualificada: <alias>.grd_4c_X.ColumnN.ReadOnly = .T.
+        if ($texto -match ('(?i)' + [regex]::Escape($g) + '\.Column\d+\.ReadOnly\s*=\s*\.T\.')) { $temTravada = $true; break }
+        # forma WITH: WITH ....grd_4c_X ... .ColumnN.ReadOnly = .T. ... ENDWITH
+        foreach ($mw in [regex]::Matches($texto, ('(?is)WITH[^\r\n]*\.' + [regex]::Escape($g) + '[^\r\n]*\r?\n(.*?)ENDWITH'))) {
+            if ($mw.Groups[1].Value -match '(?i)\.Column\d+\.ReadOnly\s*=\s*\.T\.') { $temTravada = $true; break }
+        }
+        if ($temTravada) { break }
+    }
+    if (-not $temTravada) { return }
+
+    Write-Host "[Pattern #212 WARN] linha $($Ini + 1): $Nome insere linha na grade mas nao libera Column.ReadOnly (legado tem $NLegado site(s))" -ForegroundColor Yellow
+    Add-Correcao -Tipo "WARN-212-GRADE-EDITAVEL-SEM-LIBERAR-COLUNA" -Linha ($Ini + 1) -Original ("PROCEDURE " + $Nome) -Corrigido "(nao mutado - qual coluna liberar vem do dump do SCX legado)" -Descricao ("Pattern #212 WARNING: o handler $Nome insere linha no cursor da grade (INSERT INTO / APPEND BLANK) mas " + "NAO contem nenhum .ReadOnly = .F., e este arquivo declara Column<N>.ReadOnly = .T.. O dump do legado " + "($Dump) tem $NLegado ocorrencia(s) de Column<N>.ReadOnly = .F. - conferir se alguma pertence a este " + "handler. No legado o cmdSInserir.Click NAO termina no Insert Into: vem logo depois um bloco With <grade> " + "com .Column1.ReadOnly = .F. + .Refresh + .Column1.SetFocus. Sem o ReadOnly = .F. a coluna fica TRAVADA e " + "o usuario nao consegue digitar NADA na linha recem-criada - compila limpo, nao da erro, e o sintoma " + "reportado eh `"nao consigo realizar a inclusao nessa grid`". Conferir tambem, no mesmo handler: o guard " + "do .When do botao (InList(pcEscolha,'INSERIR','ALTERAR') MAIS campo-chave preenchido, lido do TEXTBOX e " + "nao do BO - em INCLUIR o valor so chega ao BO no FormParaBO), as colunas do INSERT que nao aparecem na " + "tela (regra #22) e o gerador de PK, que eh fUniqueIds() e nao SYS(2015). E quem TRANCA tem de destrancar " + "no caminho de volta (regra #40): o reset para .T. mora no funil que repinta a grade, nunca so no botao " + "que insere. Skill: secao 230. Origem: Erro179 (Formgpd).")
+}
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -16273,6 +16479,8 @@ function Invoke-CorrecaoAutomatica {
         $linhas = Corrigir-ControlsIndexadoPorNome -Linhas $linhas -Arquivo $Arquivo
         $linhas = Corrigir-FormBuscaAuxiliarSemHandle -Linhas $linhas -Arquivo $Arquivo
         $linhas = Corrigir-SelfDentroDeWith -Linhas $linhas -Arquivo $Arquivo
+        $linhas = Avisar-SqlExecSobreAliasDeGrid -Linhas $linhas -Arquivo $Arquivo
+        $linhas = Avisar-GradeEditavelSemLiberarColuna -Linhas $linhas -Arquivo $Arquivo
     }
 
     if ($ehFormOuBO) {
@@ -16464,6 +16672,8 @@ function Invoke-CorrecaoAutomatica {
     # #210 so na lista de forms/BO: AjustarBotoesPorModo/AlternarPagina so existem
     # em form CRUD - em classe base/utilitario o pattern nao teria o que casar.
     $linhas = Corrigir-BotoesCrudNaoReabilitadosNaVolta -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Avisar-SqlExecSobreAliasDeGrid -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Avisar-GradeEditavelSemLiberarColuna -Linhas $linhas -Arquivo $Arquivo
 
     }
 

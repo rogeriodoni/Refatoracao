@@ -52,9 +52,9 @@ DEFINE CLASS gpdBO AS BusinessBase
     this_lSemiacabs           = .F.  && semiacabs numeric(1,0)
     this_nMtprimas            = 0    && mtprimas numeric(1,0) - 1=Prim, 2=Sec, 3=Acab, 4=Matriz
     this_lEntregas            = .F.  && entregas numeric(1,0)
-    this_lFornecs             = .F.  && fornecs numeric(1,0)
+    this_nFornecs             = 0    && fornecs numeric(1,0) - 1=Sim, 2=Nao (Get_fornobri, ComboBox Style=2)
     this_lCaracteris          = .F.  && caracteris numeric(1,0)
-    this_lEtidups             = .F.  && etidups numeric(1,0)
+    this_nEtidups             = 0    && etidups numeric(1,0) - 1 ou 2 (opt_descricao_produto, OptionGroup 2 botoes)
     this_cCodservs            = ""   && codservs char(4)
     this_lAtucomps            = .F.  && atucomps numeric(1,0)
     this_lRepauts             = .F.  && repauts numeric(1,0)
@@ -296,6 +296,34 @@ DEFINE CLASS gpdBO AS BusinessBase
         RETURN loc_lResultado
     ENDFUNC
 
+    *==========================================================================
+    * InicializarValoresPadrao - Defaults do registro NOVO (hook de NovoRegistro)
+    *
+    * Erro180: transcrito do Grupo_op.Click legado, ramo INSERIR:
+    *
+    *   Replace mercs    With lcMercs, cestoqs  With 1, bpesos   With 2, ;
+    *           atucomps With 1,       fornecs  With 2, avalests With 1, ;
+    *           etidups  With 2,       mtprimas With 3 In CrSigCdGrp
+    *
+    * O migrador descartou o bloco inteiro: o grupo novo nascia com TODOS estes
+    * campos em zero/branco. `mercs` nao entra aqui porque depende da tela (eh o
+    * filtro "Grande Grupo :" da Lista) - quem o atribui eh Formgpd.BtnIncluirClick.
+    *
+    * fornecs e etidups valem 2, nunca 0: sao colunas numeric(1,0) de DOIS valores
+    * (1/2), ligadas no SCX a um ComboBox Style=2 "Sim,Nao" e a um OptionGroup de
+    * 2 botoes - ControlSource numerico grava o INDICE 1-based. Estavam mapeadas
+    * como LOGICO aqui, e o IIF(...,1,0) gravava 0 onde o legado grava 2.
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarValoresPadrao()
+        THIS.this_lCestoqs  = .T.   && cestoqs  = 1
+        THIS.this_nBpesos   = 2     && bpesos   = 2
+        THIS.this_lAtucomps = .T.   && atucomps = 1
+        THIS.this_nFornecs  = 2     && fornecs  = 2 (Nao)
+        THIS.this_lAvalests = .T.   && avalests = 1
+        THIS.this_nEtidups  = 2     && etidups  = 2
+        THIS.this_nMtprimas = 3     && mtprimas = 3 (Acabado)
+    ENDPROC
+
     PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
         SELECT (par_cAliasCursor)
         THIS.this_cCgrus             = ALLTRIM(cgrus)
@@ -340,9 +368,9 @@ DEFINE CLASS gpdBO AS BusinessBase
         THIS.this_lSemiacabs         = (semiacabs = 1)
         THIS.this_nMtprimas          = mtprimas
         THIS.this_lEntregas          = (entregas = 1)
-        THIS.this_lFornecs           = (fornecs = 1)
+        THIS.this_nFornecs           = NVL(fornecs, 0)
         THIS.this_lCaracteris        = (caracteris = 1)
-        THIS.this_lEtidups           = (etidups = 1)
+        THIS.this_nEtidups           = NVL(etidups, 0)
         THIS.this_cCodservs          = ALLTRIM(codservs)
         THIS.this_lAtucomps          = (atucomps = 1)
         THIS.this_lRepauts           = (repauts = 1)
@@ -537,16 +565,16 @@ DEFINE CLASS gpdBO AS BusinessBase
                 EscaparSQL(THIS.this_cCgrus) + ", " + EscaparSQL(THIS.this_cDgrus) + ", " + ;
                 EscaparSQL(THIS.this_cMercs) + ", " + EscaparSQL(THIS.this_cIdecpros) + ", " + ;
                 EscaparSQL(THIS.this_cCodcols) + ", " + FormatarNumeroSQL(THIS.this_nCodprods) + ", " + ;
-                STR(IIF(THIS.this_lDiggprs,1,0),1) + ", " + FormatarNumeroSQL(THIS.this_nIds) + ", " + ;
+                STR(IIF(THIS.this_lDiggprs,1,2),1) + ", " + FormatarNumeroSQL(THIS.this_nIds) + ", " + ;
                 EscaparSQL(THIS.this_cCgrus2) + ", GETDATE(), " + ;
                 EscaparSQL(THIS.this_cConcmvs) + ", " + EscaparSQL(THIS.this_cGrucmvs) + ", " + ;
                 EscaparSQL(THIS.this_cConestps) + ", " + EscaparSQL(THIS.this_cGruestps) + ", " + ;
                 EscaparSQL(THIS.this_cContabxps) + ", " + EscaparSQL(THIS.this_cGrupobxps) + ", " + ;
                 EscaparSQL(THIS.this_cGrctobccs) + ", " + EscaparSQL(THIS.this_cGrufins) + ", " + ;
-                STR(IIF(THIS.this_lGeratubs,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lCestoqs,1,0),1) + ", " + STR(IIF(THIS.this_lTipestos,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lInvents,1,0),1) + ", " + STR(IIF(THIS.this_lCalcsalds,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lTpmovs,1,0),1) + ", " + STR(IIF(THIS.this_lPesoms,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lGeratubs,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lCestoqs,1,2),1) + ", " + STR(IIF(THIS.this_lTipestos,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lInvents,1,2),1) + ", " + STR(IIF(THIS.this_lCalcsalds,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lTpmovs,1,2),1) + ", " + STR(IIF(THIS.this_lPesoms,1,0),1) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nBpesos, 0) + ", " + STR(IIF(THIS.this_lPesos,1,0),1) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nMontagrds) + ", " + ;
                 STR(IIF(THIS.this_lAvalests,1,0),1) + ", " + STR(IIF(THIS.this_lAvalest2gs,1,0),1) + ", " + ;
@@ -554,26 +582,26 @@ DEFINE CLASS gpdBO AS BusinessBase
                 STR(IIF(THIS.this_lAvalestis,1,0),1) + ", " + STR(IIF(THIS.this_lAvalestngs,1,0),1) + ", " + ;
                 EscaparSQL(THIS.this_cUnificas) + ", " + ;
                 STR(IIF(THIS.this_lCores,1,0),1) + ", " + STR(IIF(THIS.this_lTams,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lEmbs,1,0),1) + ", " + STR(IIF(THIS.this_lServicos,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lEmbs,1,0),1) + ", " + STR(IIF(THIS.this_lServicos,1,2),1) + ", " + ;
                 STR(IIF(THIS.this_lSemiacabs,1,0),1) + ", " + STR(THIS.this_nMtprimas, 1) + ", " + ;
-                STR(IIF(THIS.this_lEntregas,1,0),1) + ", " + STR(IIF(THIS.this_lFornecs,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lCaracteris,1,0),1) + ", " + STR(IIF(THIS.this_lEtidups,1,0),1) + ", " + ;
-                EscaparSQL(THIS.this_cCodservs) + ", " + STR(IIF(THIS.this_lAtucomps,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lRepauts,1,0),1) + ", " + STR(IIF(THIS.this_lMontagens,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lEntregas,1,0),1) + ", " + STR(THIS.this_nFornecs, 1) + ", " + ;
+                STR(IIF(THIS.this_lCaracteris,1,2),1) + ", " + STR(THIS.this_nEtidups, 1) + ", " + ;
+                EscaparSQL(THIS.this_cCodservs) + ", " + STR(IIF(THIS.this_lAtucomps,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lRepauts,1,2),1) + ", " + STR(IIF(THIS.this_lMontagens,1,2),1) + ", " + ;
                 STR(IIF(THIS.this_lNtipjoals,1,0),1) + ", " + EscaparSQL(THIS.this_cBases) + ", " + ;
                 EscaparSQL(THIS.this_cEtipads) + ", " + EscaparSQL(THIS.this_cDcats) + ", " + ;
                 EscaparSQL(THIS.this_cCunips) + ", " + ;
                 EscaparSQL(THIS.this_cCompos) + ", " + FormatarNumeroSQL(THIS.this_nDigimaxs) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nOrdcompos) + ", " + FormatarNumeroSQL(THIS.this_nCasas) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nMontadescs, 0) + ", " + STR(IIF(THIS.this_lMkpobrigs,1,0),1) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nMncompos, 0) + ", " + STR(IIF(THIS.this_lPvcompos,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lRetiras,1,0),1) + ", " + STR(IIF(THIS.this_lTraduz,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lChkforcomp,1,0),1) + ", " + STR(IIF(THIS.this_lFtecsubs,1,0),1) + ", " + ;
-                EscaparSQL(THIS.this_mMfictecs) + ", " + STR(IIF(THIS.this_lLocalobrig,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lObrigfiscs,1,0),1) + ", " + STR(IIF(THIS.this_lNchkdims,1,0),1) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nMontadescs, 0) + ", " + STR(IIF(THIS.this_lMkpobrigs,1,2),1) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nMncompos, 0) + ", " + STR(IIF(THIS.this_lPvcompos,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lRetiras,1,2),1) + ", " + STR(IIF(THIS.this_lTraduz,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lChkforcomp,1,2),1) + ", " + STR(IIF(THIS.this_lFtecsubs,1,2),1) + ", " + ;
+                EscaparSQL(THIS.this_mMfictecs) + ", " + STR(IIF(THIS.this_lLocalobrig,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lObrigfiscs,1,2),1) + ", " + STR(IIF(THIS.this_lNchkdims,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lNchkimps,1,0),1) + ", " + STR(IIF(THIS.this_lNchkpess,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lNchktems,1,0),1) + ", " + STR(IIF(THIS.this_lNfixfigs,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lNchkcerts,1,0),1) + ", " + STR(IIF(THIS.this_lNgenerics,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lNchkcerts,1,0),1) + ", " + STR(IIF(THIS.this_lNgenerics,1,2),1) + ", " + ;
                 STR(IIF(THIS.this_lObrdimes,1,0),1) + ", " + STR(IIF(THIS.this_lObrcclas,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lObrcolec,1,0),1) + ", " + STR(IIF(THIS.this_lObrfinps,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lObridecs,1,0),1) + ", " + STR(IIF(THIS.this_lObrlinha,1,0),1) + ", " + ;
@@ -603,9 +631,9 @@ DEFINE CLASS gpdBO AS BusinessBase
                 FormatarNumeroSQL(THIS.this_nPvideals) + ", " + FormatarNumeroSQL(THIS.this_nMarkaplics) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nPadmargens) + ", " + ;
                 STR(IIF(THIS.this_lAjpvens,1,0),1) + ", " + FormatarNumeroSQL(THIS.this_nTpcalcps, 0) + ", " + ;
-                STR(IIF(THIS.this_lDwvendas,1,0),1) + ", " + STR(IIF(THIS.this_lSugestoas,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lIcustos,1,0),1) + ", " + STR(IIF(THIS.this_lCvestims,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lFabrproprs,1,0),1) + ", " + FormatarNumeroSQL(THIS.this_nDsccompras, 0) + ", " + ;
+                STR(IIF(THIS.this_lDwvendas,1,2),1) + ", " + STR(IIF(THIS.this_lSugestoas,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lIcustos,1,2),1) + ", " + STR(IIF(THIS.this_lCvestims,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lFabrproprs,1,2),1) + ", " + FormatarNumeroSQL(THIS.this_nDsccompras, 0) + ", " + ;
                 EscaparSQL(THIS.this_cMoecusts) + ", " + EscaparSQL(THIS.this_cCmoeds) + ", " + ;
                 EscaparSQL(THIS.this_cMoemrkaps) + ", " + EscaparSQL(THIS.this_cPadmoecs) + ", " + ;
                 EscaparSQL(THIS.this_cPadmoepcs) + ", " + EscaparSQL(THIS.this_cPadmoedas) + ", " + ;
@@ -624,17 +652,17 @@ DEFINE CLASS gpdBO AS BusinessBase
                 STR(IIF(THIS.this_lVldconjuts,1,0),1) + ", " + STR(IIF(THIS.this_lBlqpesun2s,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lCnjtsQtds,1,0),1) + ", " + STR(IIF(THIS.this_lVldvarpeso,1,0),1) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nDiasgar) + ", " + FormatarNumeroSQL(THIS.this_nDiasents) + ", " + ;
-                STR(IIF(THIS.this_lAtupretam,1,0),1) + ", " + STR(IIF(THIS.this_lAtucodide,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lAtupretam,1,2),1) + ", " + STR(IIF(THIS.this_lAtucodide,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lCodideobr,1,0),1) + ", " + STR(IIF(THIS.this_lLogalt,1,0),1) + ", " + ;
                 EscaparSQL(THIS.this_cLocalpdr) + ", " + STR(IIF(THIS.this_lLoclivre,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lChkinstala,1,0),1) + ", " + STR(IIF(THIS.this_lChkinstalas,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lChkinstala,1,0),1) + ", " + STR(IIF(THIS.this_lChkinstalas,1,2),1) + ", " + ;
                 STR(IIF(THIS.this_lChkinstal2,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lNagmts,1,0),1) + ", " + STR(IIF(THIS.this_lPesmts,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lRespcads,1,0),1) + ", " + STR(IIF(THIS.this_lPatricustos,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lNagmts,1,2),1) + ", " + STR(IIF(THIS.this_lPesmts,1,2),1) + ", " + ;
+                STR(IIF(THIS.this_lRespcads,1,2),1) + ", " + STR(IIF(THIS.this_lPatricustos,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lPatrireals,1,0),1) + ", " + STR(IIF(THIS.this_lPatricusto,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lServprds,1,0),1) + ", " + STR(IIF(THIS.this_lDespacfs,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lServprds,1,2),1) + ", " + STR(IIF(THIS.this_lDespacfs,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lDespacgs,1,0),1) + ", " + STR(IIF(THIS.this_lFrtsegfs,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lFrtseggs,1,0),1) + ", " + STR(IIF(THIS.this_lPrdrefcmp,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lFrtseggs,1,0),1) + ", " + STR(IIF(THIS.this_lPrdrefcmp,1,2),1) + ", " + ;
                 EscaparSQL(THIS.this_cCfggergprs) + ", " + EscaparSQL(THIS.this_cTitulospro) + ", " + ;
                 STR(IIF(THIS.this_lProdmostr,1,0),1) + ", " + STR(IIF(THIS.this_lExibecatlink,1,0),1) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nSelectDescriCompra) + ", " + ;
@@ -662,7 +690,7 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "idecpros = " + EscaparSQL(THIS.this_cIdecpros) + ", " + ;
                 "codcols = " + EscaparSQL(THIS.this_cCodcols) + ", " + ;
                 "codprods = " + FormatarNumeroSQL(THIS.this_nCodprods) + ", " + ;
-                "diggprs = " + STR(IIF(THIS.this_lDiggprs,1,0),1) + ", " + ;
+                "diggprs = " + STR(IIF(THIS.this_lDiggprs,1,2),1) + ", " + ;
                 "ids = " + FormatarNumeroSQL(THIS.this_nIds) + ", " + ;
                 "cgrus2 = " + EscaparSQL(THIS.this_cCgrus2) + ", " + ;
                 "concmvs = " + EscaparSQL(THIS.this_cConcmvs) + ", " + ;
@@ -673,12 +701,12 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "grupobxps = " + EscaparSQL(THIS.this_cGrupobxps) + ", " + ;
                 "grctobccs = " + EscaparSQL(THIS.this_cGrctobccs) + ", " + ;
                 "grufins = " + EscaparSQL(THIS.this_cGrufins) + ", " + ;
-                "geratubs = " + STR(IIF(THIS.this_lGeratubs,1,0),1) + ", " + ;
-                "cestoqs = " + STR(IIF(THIS.this_lCestoqs,1,0),1) + ", " + ;
+                "geratubs = " + STR(IIF(THIS.this_lGeratubs,1,2),1) + ", " + ;
+                "cestoqs = " + STR(IIF(THIS.this_lCestoqs,1,2),1) + ", " + ;
                 "tipoestos = " + STR(IIF(THIS.this_lTipestos,1,0),1) + ", " + ;
-                "invents = " + STR(IIF(THIS.this_lInvents,1,0),1) + ", " + ;
+                "invents = " + STR(IIF(THIS.this_lInvents,1,2),1) + ", " + ;
                 "calcsalds = " + STR(IIF(THIS.this_lCalcsalds,1,0),1) + ", " + ;
-                "tpmovs = " + STR(IIF(THIS.this_lTpmovs,1,0),1) + ", " + ;
+                "tpmovs = " + STR(IIF(THIS.this_lTpmovs,1,2),1) + ", " + ;
                 "pesoms = " + STR(IIF(THIS.this_lPesoms,1,0),1) + ", " + ;
                 "bpesos = " + FormatarNumeroSQL(THIS.this_nBpesos, 0) + ", " + ;
                 "pesos = " + STR(IIF(THIS.this_lPesos,1,0),1) + ", " + ;
@@ -693,17 +721,17 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "cores = " + STR(IIF(THIS.this_lCores,1,0),1) + ", " + ;
                 "tams = " + STR(IIF(THIS.this_lTams,1,0),1) + ", " + ;
                 "embs = " + STR(IIF(THIS.this_lEmbs,1,0),1) + ", " + ;
-                "servicos = " + STR(IIF(THIS.this_lServicos,1,0),1) + ", " + ;
+                "servicos = " + STR(IIF(THIS.this_lServicos,1,2),1) + ", " + ;
                 "semiacabs = " + STR(IIF(THIS.this_lSemiacabs,1,0),1) + ", " + ;
                 "mtprimas = " + STR(THIS.this_nMtprimas, 1) + ", " + ;
                 "entregas = " + STR(IIF(THIS.this_lEntregas,1,0),1) + ", " + ;
-                "fornecs = " + STR(IIF(THIS.this_lFornecs,1,0),1) + ", " + ;
-                "caracteris = " + STR(IIF(THIS.this_lCaracteris,1,0),1) + ", " + ;
-                "etidups = " + STR(IIF(THIS.this_lEtidups,1,0),1) + ", " + ;
+                "fornecs = " + STR(THIS.this_nFornecs, 1) + ", " + ;
+                "caracteris = " + STR(IIF(THIS.this_lCaracteris,1,2),1) + ", " + ;
+                "etidups = " + STR(THIS.this_nEtidups, 1) + ", " + ;
                 "codservs = " + EscaparSQL(THIS.this_cCodservs) + ", " + ;
-                "atucomps = " + STR(IIF(THIS.this_lAtucomps,1,0),1) + ", " + ;
-                "repauts = " + STR(IIF(THIS.this_lRepauts,1,0),1) + ", " + ;
-                "montagens = " + STR(IIF(THIS.this_lMontagens,1,0),1) + ", " + ;
+                "atucomps = " + STR(IIF(THIS.this_lAtucomps,1,2),1) + ", " + ;
+                "repauts = " + STR(IIF(THIS.this_lRepauts,1,2),1) + ", " + ;
+                "montagens = " + STR(IIF(THIS.this_lMontagens,1,2),1) + ", " + ;
                 "ntipojoals = " + STR(IIF(THIS.this_lNtipjoals,1,0),1) + ", " + ;
                 "bases = " + EscaparSQL(THIS.this_cBases) + ", " + ;
                 "etipads = " + EscaparSQL(THIS.this_cEtipads) + ", " + ;
@@ -714,23 +742,23 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "ordcompos = " + FormatarNumeroSQL(THIS.this_nOrdcompos) + ", " + ;
                 "casas = " + FormatarNumeroSQL(THIS.this_nCasas) + ", " + ;
                 "montadescs = " + FormatarNumeroSQL(THIS.this_nMontadescs, 0) + ", " + ;
-                "mkpobrigs = " + STR(IIF(THIS.this_lMkpobrigs,1,0),1) + ", " + ;
+                "mkpobrigs = " + STR(IIF(THIS.this_lMkpobrigs,1,2),1) + ", " + ;
                 "mncompos = " + FormatarNumeroSQL(THIS.this_nMncompos, 0) + ", " + ;
-                "pvcompos = " + STR(IIF(THIS.this_lPvcompos,1,0),1) + ", " + ;
-                "retiras = " + STR(IIF(THIS.this_lRetiras,1,0),1) + ", " + ;
+                "pvcompos = " + STR(IIF(THIS.this_lPvcompos,1,2),1) + ", " + ;
+                "retiras = " + STR(IIF(THIS.this_lRetiras,1,2),1) + ", " + ;
                 "traduz = " + STR(IIF(THIS.this_lTraduz,1,0),1) + ", " + ;
-                "chkforcomp = " + STR(IIF(THIS.this_lChkforcomp,1,0),1) + ", " + ;
-                "ftecsubs = " + STR(IIF(THIS.this_lFtecsubs,1,0),1) + ", " + ;
+                "chkforcomp = " + STR(IIF(THIS.this_lChkforcomp,1,2),1) + ", " + ;
+                "ftecsubs = " + STR(IIF(THIS.this_lFtecsubs,1,2),1) + ", " + ;
                 "mfictecs = " + EscaparSQL(THIS.this_mMfictecs) + ", " + ;
-                "localobrig = " + STR(IIF(THIS.this_lLocalobrig,1,0),1) + ", " + ;
-                "obrigfiscs = " + STR(IIF(THIS.this_lObrigfiscs,1,0),1) + ", " + ;
+                "localobrig = " + STR(IIF(THIS.this_lLocalobrig,1,2),1) + ", " + ;
+                "obrigfiscs = " + STR(IIF(THIS.this_lObrigfiscs,1,2),1) + ", " + ;
                 "nchkdims = " + STR(IIF(THIS.this_lNchkdims,1,0),1) + ", " + ;
                 "nchkimps = " + STR(IIF(THIS.this_lNchkimps,1,0),1) + ", " + ;
                 "nchkpess = " + STR(IIF(THIS.this_lNchkpess,1,0),1) + ", " + ;
                 "nchktems = " + STR(IIF(THIS.this_lNchktems,1,0),1) + ", " + ;
                 "nfixfigs = " + STR(IIF(THIS.this_lNfixfigs,1,0),1) + ", " + ;
                 "nchkcerts = " + STR(IIF(THIS.this_lNchkcerts,1,0),1) + ", " + ;
-                "ngenerics = " + STR(IIF(THIS.this_lNgenerics,1,0),1) + ", " + ;
+                "ngenerics = " + STR(IIF(THIS.this_lNgenerics,1,2),1) + ", " + ;
                 "obrdimes = " + STR(IIF(THIS.this_lObrdimes,1,0),1) + ", " + ;
                 "obrcclas = " + STR(IIF(THIS.this_lObrcclas,1,0),1) + ", " + ;
                 "obrcolec = " + STR(IIF(THIS.this_lObrcolec,1,0),1) + ", " + ;
@@ -785,11 +813,11 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "padmargems = " + FormatarNumeroSQL(THIS.this_nPadmargens) + ", " + ;
                 "ajpvens = " + STR(IIF(THIS.this_lAjpvens,1,0),1) + ", " + ;
                 "tpcalcps = " + FormatarNumeroSQL(THIS.this_nTpcalcps, 0) + ", " + ;
-                "dwvendas = " + STR(IIF(THIS.this_lDwvendas,1,0),1) + ", " + ;
+                "dwvendas = " + STR(IIF(THIS.this_lDwvendas,1,2),1) + ", " + ;
                 "sugestaos = " + STR(IIF(THIS.this_lSugestoas,1,0),1) + ", " + ;
-                "icustos = " + STR(IIF(THIS.this_lIcustos,1,0),1) + ", " + ;
-                "cvestims = " + STR(IIF(THIS.this_lCvestims,1,0),1) + ", " + ;
-                "fabrproprs = " + STR(IIF(THIS.this_lFabrproprs,1,0),1) + ", " + ;
+                "icustos = " + STR(IIF(THIS.this_lIcustos,1,2),1) + ", " + ;
+                "cvestims = " + STR(IIF(THIS.this_lCvestims,1,2),1) + ", " + ;
+                "fabrproprs = " + STR(IIF(THIS.this_lFabrproprs,1,2),1) + ", " + ;
                 "dsccompras = " + FormatarNumeroSQL(THIS.this_nDsccompras, 0) + ", " + ;
                 "moecusts = " + EscaparSQL(THIS.this_cMoecusts) + ", " + ;
                 "cmoeds = " + EscaparSQL(THIS.this_cCmoeds) + ", " + ;
@@ -824,27 +852,27 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "vldvarpeso = " + STR(IIF(THIS.this_lVldvarpeso,1,0),1) + ", " + ;
                 "diasgar = " + FormatarNumeroSQL(THIS.this_nDiasgar) + ", " + ;
                 "diasents = " + FormatarNumeroSQL(THIS.this_nDiasents) + ", " + ;
-                "atupretam = " + STR(IIF(THIS.this_lAtupretam,1,0),1) + ", " + ;
+                "atupretam = " + STR(IIF(THIS.this_lAtupretam,1,2),1) + ", " + ;
                 "atucodide = " + STR(IIF(THIS.this_lAtucodide,1,0),1) + ", " + ;
                 "codideobr = " + STR(IIF(THIS.this_lCodideobr,1,0),1) + ", " + ;
                 "logalt = " + STR(IIF(THIS.this_lLogalt,1,0),1) + ", " + ;
                 "localpdr = " + EscaparSQL(THIS.this_cLocalpdr) + ", " + ;
                 "loclivre = " + STR(IIF(THIS.this_lLoclivre,1,0),1) + ", " + ;
                 "chkinstala = " + STR(IIF(THIS.this_lChkinstala,1,0),1) + ", " + ;
-                "chkinstalas = " + STR(IIF(THIS.this_lChkinstalas,1,0),1) + ", " + ;
+                "chkinstalas = " + STR(IIF(THIS.this_lChkinstalas,1,2),1) + ", " + ;
                 "chkinstal2 = " + STR(IIF(THIS.this_lChkinstal2,1,0),1) + ", " + ;
-                "nagmts = " + STR(IIF(THIS.this_lNagmts,1,0),1) + ", " + ;
-                "pesmts = " + STR(IIF(THIS.this_lPesmts,1,0),1) + ", " + ;
-                "respcads = " + STR(IIF(THIS.this_lRespcads,1,0),1) + ", " + ;
+                "nagmts = " + STR(IIF(THIS.this_lNagmts,1,2),1) + ", " + ;
+                "pesmts = " + STR(IIF(THIS.this_lPesmts,1,2),1) + ", " + ;
+                "respcads = " + STR(IIF(THIS.this_lRespcads,1,2),1) + ", " + ;
                 "patricustos = " + STR(IIF(THIS.this_lPatricustos,1,0),1) + ", " + ;
                 "patrireals = " + STR(IIF(THIS.this_lPatrireals,1,0),1) + ", " + ;
                 "patricusto = " + STR(IIF(THIS.this_lPatricusto,1,0),1) + ", " + ;
-                "servprds = " + STR(IIF(THIS.this_lServprds,1,0),1) + ", " + ;
+                "servprds = " + STR(IIF(THIS.this_lServprds,1,2),1) + ", " + ;
                 "despacfs = " + STR(IIF(THIS.this_lDespacfs,1,0),1) + ", " + ;
                 "despacgs = " + STR(IIF(THIS.this_lDespacgs,1,0),1) + ", " + ;
                 "frtsegfs = " + STR(IIF(THIS.this_lFrtsegfs,1,0),1) + ", " + ;
                 "frtseggs = " + STR(IIF(THIS.this_lFrtseggs,1,0),1) + ", " + ;
-                "prdrefcmp = " + STR(IIF(THIS.this_lPrdrefcmp,1,0),1) + ", " + ;
+                "prdrefcmp = " + STR(IIF(THIS.this_lPrdrefcmp,1,2),1) + ", " + ;
                 "cfggergprs = " + EscaparSQL(THIS.this_cCfggergprs) + ", " + ;
                 "titulospro = " + EscaparSQL(THIS.this_cTitulospro) + ", " + ;
                 "prodmostr = " + STR(IIF(THIS.this_lProdmostr,1,0),1) + ", " + ;

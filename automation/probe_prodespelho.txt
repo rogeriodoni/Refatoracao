@@ -1,0 +1,27 @@
+A: inicio
+B: conn=1
+C: form OK
+D: moeda real = [AU]
+
+=== preenchido SO pela aba Componente ===
+   custofs    obtido=[123.456] esperado=[123.456]  OK
+   moecusfs   obtido=[AU] esperado=[AU]  OK
+   pvens      obtido=[99.99999] esperado=[99.99999]  OK
+   moevs      obtido=[AU] esperado=[AU]  OK
+   moepvs     obtido=[AU] esperado=[AU]  OK
+   moedas     obtido=[AU] esperado=[AU]  OK
+
+=== preenchido SO pelas abas Principal/Fiscal ===
+   custofs    obtido=[7.777] esperado=[7.777]  OK
+   moecusfs   obtido=[AU] esperado=[AU]  OK
+   moedas     obtido=[AU] esperado=[AU]  OK
+
+=== BOParaForm escreve nos DOIS lados ===
+   Principal Mctotal=[AU]  Componente Moecusf=[AU]  OK (iguais)
+   Fiscal Mvalor=[AU]  Componente Moeda=[AU]  OK (iguais)
+
+=== LimparCampos zera o gemeo ===
+   Componente Moecusf=[]  OK
+
+TOTAL DE DIVERGENCIAS = 0
+Z: fim

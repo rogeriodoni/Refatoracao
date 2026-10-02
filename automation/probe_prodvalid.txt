@@ -1,0 +1,22 @@
+A: inicio
+B: conn=1
+C: grupo NEUTRO = [998]
+   base valida              valido=.T. (esperado .T.)  msg=[]  OK
+   descricao vazia          valido=.F. (esperado .F.)  msg=[Descrição Do Produto Não Pode Ficar Em Branco!!!]  OK
+   unidade 1 vazia          valido=.F. (esperado .F.)  msg=[Unidade Inválida!!!]  OK
+   ean13 sem duplicata      valido=.T. (esperado .T.)  msg=[]  OK
+   forma do SQL de duplicata: valor=5797 SQLEXEC=1 linhas=1  OK (encontra a duplicata)
+   moeda venda invalida     valido=.F. (esperado .F.)  msg=[Moeda do Preço de Venda Inválida!!!]  OK
+   moeda estimado invalida  valido=.F. (esperado .F.)  msg=[Moeda Do Valor Estimado Incorreta!!!]  OK
+   moeda fator invalida     valido=.F. (esperado .F.)  msg=[Moeda do Fator de Venda Inválida!!!]  OK
+
+TOTAL DE DIVERGENCIAS = 0
+
+=== regras ligadas por configuracao ===
+   peso medio           -- nenhum grupo com [obrpesoms = 1] no banco (regra nao exercitada)
+   cod. pai             -- nenhum grupo com [obrconjuts = 1] no banco (regra nao exercitada)
+   localizacao          -- nenhum grupo com [localobrig = 1] no banco (regra nao exercitada)
+   fornecedor           -- nenhum grupo com [fornecs = 1] no banco (regra nao exercitada)
+   moeda custo comp     grupo=[ALO] valido=.F. msg=[Moeda de Custo da Composição Inválida!!!]  OK (acusou)
+   6 digitos            -- nenhum grupo com [servprds = 1] no banco (regra nao exercitada)
+Z: fim

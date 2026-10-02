@@ -1418,7 +1418,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Left        = 288
                 .Width       = 94
                 .Height      = 22
-                .Value       = 1
+                .Value       = 2   && SCX legado: Value = 2 (Nao) - Erro180 sweep
                 .BackStyle   = 0
                 .Visible     = .F.
                 WITH .Buttons(1)
@@ -1482,7 +1482,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Left        = 621
                 .Width       = 94
                 .Height      = 22
-                .Value       = 1
+                .Value       = 2   && SCX legado: Value = 2 (Nao) - Erro180 sweep
                 .BackStyle   = 0
                 .Visible     = .F.
                 WITH .Buttons(1)
@@ -1514,7 +1514,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Left        = 621
                 .Width       = 94
                 .Height      = 22
-                .Value       = 1
+                .Value       = 2   && SCX legado: Value = 2 (Nao) - Erro180 sweep
                 .BackStyle   = 0
                 .Visible     = .F.
                 WITH .Buttons(1)
@@ -2839,7 +2839,16 @@ DEFINE CLASS FormLpr AS FormBase
         TRY
             THIS.this_cPcEscolha                         = "INSERIR"
             THIS.this_cLprecosAtual                       = ""
-            THIS.this_oBusinessObject.this_lNovoRegistro  = .T.
+
+            *-- Erro180 (sweep): antes daqui o metodo so ligava this_lNovoRegistro
+            *-- na mao e NUNCA punha this_lEmEdicao - e BusinessBase.Salvar()
+            *-- comeca com IF !THIS.this_lEmEdicao / ExibirFalha / RETURN .F..
+            *-- Medido no VFP9: Salvar() devolvia .F. com "Nao esta em modo de
+            *-- edicao", ou seja a INCLUSAO NUNCA GRAVAVA. NovoRegistro() eh o
+            *-- caminho canonico: liga os dois flags E dispara o hook
+            *-- InicializarValoresPadrao, que aplica os defaults do ramo INSERIR
+            *-- do legado (formulas/ncomiss/nvencs = 2).
+            THIS.this_oBusinessObject.NovoRegistro()
             THIS.this_oBusinessObject.this_cLprecos       = ""
             THIS.AlternarPagina(2)
         CATCH TO loException
@@ -2906,6 +2915,13 @@ DEFINE CLASS FormLpr AS FormBase
 
                 IF loc_lProsseguir
                     IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cLprecos)
+                        *-- Erro180 (sweep): faltava o EditarRegistro(), que eh
+                        *-- quem liga this_lEmEdicao. Sem ele Salvar() recusava
+                        *-- com "Nao esta em modo de edicao" e a ALTERACAO
+                        *-- tambem nao gravava. CarregarPorCodigo ja repos
+                        *-- this_lNovoRegistro = .F., entao o guard do
+                        *-- EditarRegistro passa.
+                        THIS.this_oBusinessObject.EditarRegistro()
                         THIS.this_cPcEscolha    = "ALTERAR"
                         THIS.this_cLprecosAtual = loc_cLprecos
                         THIS.AlternarPagina(2)

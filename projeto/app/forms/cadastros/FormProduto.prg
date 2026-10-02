@@ -36,6 +36,7 @@ DEFINE CLASS FormProduto AS FormBase
     this_cModoAtual           = "LISTA"
     this_nDivisaoAtual        = 1        && Aba ativa do pgf_4c_Divisoes (1..8)
     this_cUltimoGrupoValidado = ""       && Guarda de reentrancia do filtro de grupo (regra #45)
+    this_cUltimoCodigoValidado = ""      && Erro185: idem para o codigo do produto
 
     *-- ThisForm.Tipo2 do legado: quando .T. a tela opera sobre SigCdPrc
     *-- (produtos de custo) em vez de SigCdPro. O legado recebe isso pelo 3o
@@ -404,7 +405,13 @@ DEFINE CLASS FormProduto AS FormBase
                 .FontSize  = 8
                 .Visible   = .T.
             ENDWITH
-            BINDEVENT(.txt_4c_Cgru, "KeyPress", THIS, "ValidarGrupoFiltro")
+            *-- Erro182: era "KeyPress" - o handler dispara a CADA tecla digitada e
+            *-- nem le o par_nKeyCode, entao o picker de grupo abria no primeiro
+            *-- caractere e a cada caractere seguinte. O legado dispara no
+            *-- LostFocus do getCgru (PreparaDados), nunca em KeyPress; e
+            *-- BINDEVENT em "Valid" nao dispara de forma confiavel em TextBox
+            *-- (regra #3), por isso LostFocus.
+            BINDEVENT(.txt_4c_Cgru, "LostFocus", THIS, "ValidarGrupoFiltro")
 
             .AddObject("txt_4c_Dgru", "TextBox")
             WITH .txt_4c_Dgru
@@ -417,7 +424,8 @@ DEFINE CLASS FormProduto AS FormBase
                 .FontSize  = 8
                 .Visible   = .T.
             ENDWITH
-            BINDEVENT(.txt_4c_Dgru, "KeyPress", THIS, "ValidarGrupoPorDescricao")
+            *-- Erro182: idem - legado dispara no LostFocus do getDgru.
+            BINDEVENT(.txt_4c_Dgru, "LostFocus", THIS, "ValidarGrupoPorDescricao")
 
             .AddObject("lbl_4c_UltimaAlteracao", "Label")
             WITH .lbl_4c_UltimaAlteracao
@@ -661,7 +669,7 @@ DEFINE CLASS FormProduto AS FormBase
     * achar, abre o picker (FormBuscaAuxiliar Modo 1) para o usuario escolher.
     * Regra #45: so revalida se o valor realmente mudou.
     *===========================================================================
-    PROCEDURE ValidarGrupoFiltro(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE ValidarGrupoFiltro()
         LOCAL loc_oFiltros, loc_cValor, loc_oBusca, loException
         loc_oFiltros = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros
         loc_cValor   = PADR(ALLTRIM(loc_oFiltros.txt_4c_Cgru.Value), 3)
@@ -712,6 +720,11 @@ DEFINE CLASS FormProduto AS FormBase
                 loException.Message, "FormProduto.ValidarGrupoFiltro")
         ENDTRY
 
+        *-- Erro182: escolher o grupo tem de RECARREGAR a lista - no legado o
+        *-- getCgru.LostFocus chama PreparaDados, que roda o SqlDados.
+        *-- A chamada eh UMA SO e fica FORA do TRY (cobre tambem o caminho do
+        *-- CATCH). Posta tambem DENTRO do TRY, cada escolha de grupo rodava o
+        *-- SELECT e religava a grade DUAS vezes.
         THIS.CarregarLista()
     ENDPROC
 
@@ -719,7 +732,7 @@ DEFINE CLASS FormProduto AS FormBase
     * ValidarGrupoPorDescricao - LostFocus de txt_4c_Dgru (filtro de grupo por
     * descricao) - mesmo padrao de ValidarGrupoFiltro, buscando por dgrus.
     *===========================================================================
-    PROCEDURE ValidarGrupoPorDescricao(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE ValidarGrupoPorDescricao()
         LOCAL loc_oFiltros, loc_cValor, loc_oBusca, loException
         loc_oFiltros = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros
         loc_cValor   = ALLTRIM(loc_oFiltros.txt_4c_Dgru.Value)
@@ -806,6 +819,35 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT exige metodo publico (CLAUDE.md #3)
     *===========================================================================
     PROCEDURE BtnIncluirClick()
+        LOCAL loc_cGrupo, loc_oPg
+
+        *-- Erro184: o grupo do produto NOVO vem do FILTRO da pagina Lista.
+        *-- Legado (Pagina.Lista.Grupo_op.Click, opcao 1 = Incluir):
+        *--   pGru = Iif(This.Value = 1, Padr(...cntFiltros.getCgru.Value, 3), ;
+        *--              crListaPro.CGrus)
+        *--   ...
+        *--   If Not Empty(pGru)
+        *--       Replace Cgrus With pGru In crSigCdPro
+        *--       .pgDados.getCgru.refresh
+        *--   EndIf
+        *-- O LimparCampos zera o txt_4c_Cgru da aba Dados e nada o repunha,
+        *-- entao o usuario filtrava o grupo, clicava Incluir e a ficha abria
+        *-- com o Grupo em branco.
+        loc_cGrupo = PADR(ALLTRIM( ;
+            THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Cgru.Value), 3)
+
+        *-- Guard do legado, do MESMO bloco: sem grupo ele nem entra na ficha
+        *--   If Not ThisForm.Parametrizado And (Not ThisForm.ConGP And ;
+        *--       (Empty(pGru) And This.Value <> 5))
+        *--       If Empty(pGru) / =MessageBox('Grupo Invalido!!!', ...)
+        *--       ThisForm.mAtivapagina1 / Return 0
+        *-- Sem ele o cadastro gravaria cgrus em branco (char(3) NOT NULL
+        *-- aceita '', entao o INSERT passa e o produto nasce sem grupo).
+        IF EMPTY(loc_cGrupo)
+            MsgAviso("Grupo Inv" + CHR(225) + "lido!!!")
+            RETURN
+        ENDIF
+
         THIS.this_oBusinessObject.NovoRegistro()
 
         *-- Modo ANTES de HabilitarCampos (Problema 19): o metodo decide a
@@ -813,6 +855,18 @@ DEFINE CLASS FormProduto AS FormBase
         THIS.this_cModoAtual = "INCLUIR"
 
         THIS.LimparCampos()
+
+        *-- DEPOIS do LimparCampos, que zera o campo
+        loc_oPg = THIS.ObterPaginaDados()
+        loc_oPg.txt_4c_Cgru.Value = ALLTRIM(loc_cGrupo)
+
+        *-- Defaults do INSERIR que dependem do grupo (unidade e Consigna).
+        *-- Vem ANTES do PreencherDescricoesLookup, que le a unidade para
+        *-- montar a descricao dela.
+        THIS.AplicarDefaultsInclusao(loc_cGrupo)
+
+        THIS.PreencherDescricoesLookup()
+
         THIS.HabilitarCampos(.T.)
         THIS.AjustarBotoesPorModo()
         THIS.AlternarPagina(2)
@@ -1249,7 +1303,11 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cpro, "KeyPress", THIS, "ValidarCodigoProdutoDados")
+        *-- Erro185: era "KeyPress", que dispararia a consulta de duplicidade a
+        *-- CADA tecla. O legado valida no getCpro.Valid (ao sair do campo); em
+        *-- TextBox o BINDEVENT em "Valid" nao dispara de forma confiavel
+        *-- (CLAUDE.md #3), por isso LostFocus - mesma escolha do Erro182.
+        BINDEVENT(par_oPagina.txt_4c_Cpro, "LostFocus", THIS, "ValidarCodigoProdutoDados")
 
         par_oPagina.AddObject("txt_4c_Dpro", "TextBox")
         WITH par_oPagina.txt_4c_Dpro
@@ -2276,12 +2334,28 @@ DEFINE CLASS FormProduto AS FormBase
             .BackStyle   = 0
             .Visible     = .T.
         ENDWITH
+        *-- Erro183: o botao saiu da migracao como texto puro "Consulta", sem
+        *-- Picture, sem fonte e com a geometria do GRUPO (80x76 em Left 0).
+        *-- Transcrito do SCX (pgDados.cmdProduto.Command1 = "btnProduto"):
+        *-- Caption "Pes\<quisa", Picture geral_procura_60.jpg, 75x75 em Left 5,
+        *-- Comic Sans MS 8 bold+italic, WordWrap, ForeColor 90,90,90,
+        *-- BackColor branco, Themes .F. (regra #25 - o icone vem do legado).
         WITH par_oPagina.obj_4c_CmdProduto.Buttons(1)
-            .Caption = "Consulta"
-            .Top     = 0
-            .Left    = 0
-            .Width   = 80
-            .Height  = 76
+            .Caption     = "Pes\<quisa"
+            .Picture     = gc_4c_CaminhoIcones + "geral_procura_60.jpg"
+            .ToolTipText = "Produto"
+            .Top         = 0
+            .Left        = 5
+            .Width       = 75
+            .Height      = 75
+            .FontName    = "Comic Sans MS"
+            .FontSize    = 8
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .F.
         ENDWITH
 
         *-- Cod. Pai / Conjunto (Say37 + getConjunto + cmdConjunto + cmdLocConj)
@@ -2374,7 +2448,1587 @@ DEFINE CLASS FormProduto AS FormBase
         ENDWITH
         BINDEVENT(par_oPagina.obj_4c_CmdLocConj, "Click", THIS, "BtnLocalizarConjuntoClick")
 
+        *=======================================================================
+        * Erro183 - BLOCO A: coluna da direita (Inativo-Apos, Estoque Min/Max,
+        * Qtde. Minima, Conjunto, Lancamento).
+        *
+        * A migracao parou na "primeira metade" dos 176 controles do pgDados
+        * (o proprio comentario do metodo dizia "a segunda metade entra na
+        * Fase 6") e a Fase 6 nunca entregou: 94 controles ficaram de fora.
+        * Posicoes e propriedades TRANSCRITAS do SCX legado (sem deslocamento -
+        * o PageFrame interno ja alinha a origem com a do legado).
+        *=======================================================================
+
+        *-- "Inativo - Apos" (getDtSituas) - datetime, ao lado do Opc_situacao
+        par_oPagina.AddObject("txt_4c_DtSituas", "TextBox")
+        WITH par_oPagina.txt_4c_DtSituas
+            .Top           = 115
+            .Left          = 918
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Estoque Minimo (cmdMinimo) e Quantidade Maxima (cmdmaximo)
+        par_oPagina.AddObject("obj_4c_CmdMinimo", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdMinimo
+            .ButtonCount = 1
+            .Top         = 139
+            .Left        = 919
+            .Width       = 38
+            .Height      = 40
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdMinimo.Buttons(1)
+            .Caption     = ""
+            .Picture     = gc_4c_CaminhoIcones + "geral_palete_26.jpg"
+            .ToolTipText = "Estoque M" + CHR(237) + "nimo"
+            .Top         = 0
+            .Left        = 0
+            .Width       = 40
+            .Height      = 40
+            .FontSize    = 7
+            .WordWrap    = .T.
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .F.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Cmdmaximo", "CommandGroup")
+        WITH par_oPagina.obj_4c_Cmdmaximo
+            .ButtonCount = 1
+            .Top         = 139
+            .Left        = 959
+            .Width       = 38
+            .Height      = 40
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Cmdmaximo.Buttons(1)
+            .Caption     = ""
+            .Picture     = gc_4c_CaminhoIcones + "geral_empilha_26.jpg"
+            .ToolTipText = "Quantidade M" + CHR(225) + "xima"
+            .Top         = 0
+            .Left        = 0
+            .Width       = 40
+            .Height      = 40
+            .FontSize    = 7
+            .WordWrap    = .T.
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .F.
+        ENDWITH
+
+        *-- Qtde. Minima (Say13 + getQmin + CmdQtMin) - qmins numeric(9,3)
+        par_oPagina.AddObject("lbl_4c_Label13", "Label")
+        WITH par_oPagina.lbl_4c_Label13
+            .Caption   = "Qtde. M" + CHR(237) + "nima :"
+            .Top       = 191
+            .Left      = 558
+            .Width     = 72
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Qmin", "TextBox")
+        WITH par_oPagina.txt_4c_Qmin
+            .Top           = 187
+            .Left          = 633
+            .Width         = 80
+            .Height        = 23
+            .InputMask     = "999,999.99"
+            .MaxLength     = 10
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("cmd_4c_CmdQtMin", "CommandButton")
+        WITH par_oPagina.cmd_4c_CmdQtMin
+            .Caption       = ". . ."
+            .Top           = 187
+            .Left          = 716
+            .Width         = 25
+            .Height        = 23
+            .FontBold      = .T.
+            .SpecialEffect = 0
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Label do getObs3, que ja existia sem legenda (Say22)
+        par_oPagina.AddObject("lbl_4c_Label22", "Label")
+        WITH par_oPagina.lbl_4c_Label22
+            .Caption   = "Obs. Componente :"
+            .Top       = 215
+            .Left      = 534
+            .Width     = 96
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Conjunto (Say36 + getCnjLacto + Commandgroup2/3)
+        *-- ATENCAO: a coluna CnjLacto do ControlSource legado NAO EXISTE no
+        *-- banco deste ambiente (conferido no INFORMATION_SCHEMA de
+        *-- DB_MBAHIA.dbo.SIGCDPRO, nao so no docs/schema.sql). O controle eh
+        *-- criado para nao divergir da tela legada, mas fica SEM bind e SEM
+        *-- entrada no ProdutoBO - inventar coluna violaria o PILAR 2 e
+        *-- gravar num campo inexistente derrubaria o INSERT inteiro.
+        par_oPagina.AddObject("lbl_4c_Label36", "Label")
+        WITH par_oPagina.lbl_4c_Label36
+            .Caption   = "Conjunto :"
+            .Top       = 191
+            .Left      = 788
+            .Width     = 53
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_CnjLacto", "TextBox")
+        WITH par_oPagina.txt_4c_CnjLacto
+            .Top           = 187
+            .Left          = 844
+            .Width         = 52
+            .Height        = 22
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Commandgroup2", "CommandGroup")
+        WITH par_oPagina.obj_4c_Commandgroup2
+            .ButtonCount = 1
+            .Top         = 187
+            .Left        = 897
+            .Width       = 27
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Commandgroup2.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_adicao_26.jpg"
+            .ToolTipText   = "Gerar Conjunto"
+            .Top           = -1
+            .Left          = -1
+            .Width         = 29
+            .Height        = 26
+            .FontName      = "Small Fonts"
+            .FontSize      = 7
+            .SpecialEffect = 0
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Commandgroup3", "CommandGroup")
+        WITH par_oPagina.obj_4c_Commandgroup3
+            .ButtonCount = 1
+            .Top         = 187
+            .Left        = 924
+            .Width       = 27
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BackColor   = RGB(255, 255, 255)
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Commandgroup3.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_lupa_16.jpg"
+            .ToolTipText   = "Localizar Conjunto"
+            .Top           = -1
+            .Left          = -1
+            .Width         = 29
+            .Height        = 26
+            .FontName      = "Small Fonts"
+            .FontSize      = 7
+            .SpecialEffect = 0
+            .BackColor     = RGB(240, 240, 240)
+        ENDWITH
+
+        *-- Lancamento (Say21 + getLancamento) - lancamento char(30), Format K!
+        par_oPagina.AddObject("lbl_4c_Label21", "Label")
+        WITH par_oPagina.lbl_4c_Label21
+            .Caption   = "Lan" + CHR(231) + "amento :"
+            .Top       = 215
+            .Left      = 774
+            .Width     = 67
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Lancamento", "TextBox")
+        WITH par_oPagina.txt_4c_Lancamento
+            .Top               = 211
+            .Left              = 844
+            .Width             = 156
+            .Height            = 22
+            .Format            = "K!"
+            .MaxLength         = 30
+            .SpecialEffect     = 1
+            .DisabledBackColor = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(0, 0, 255)
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Data de Lancamento (Say38 + Get_DtLacto) - dtlacto datetime
+        par_oPagina.AddObject("lbl_4c_Label38", "Label")
+        WITH par_oPagina.lbl_4c_Label38
+            .Caption   = "Data de Lan" + CHR(231) + "amento :"
+            .Top       = 239
+            .Left      = 809
+            .Width     = 108
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_DtLacto", "TextBox")
+        WITH par_oPagina.txt_4c_DtLacto
+            .Top           = 235
+            .Left          = 920
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Fim de Lancamento (Say26 + Get_FimDtLacto) - fimdtlacto datetime
+        par_oPagina.AddObject("lbl_4c_Label26", "Label")
+        WITH par_oPagina.lbl_4c_Label26
+            .Caption   = "Fim de Lan" + CHR(231) + "amento :"
+            .Top       = 263
+            .Left      = 816
+            .Width     = 101
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_FimDtLacto", "TextBox")
+        WITH par_oPagina.txt_4c_FimDtLacto
+            .Top           = 259
+            .Left          = 920
+            .Width         = 80
+            .Height        = 23
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Origem do Lancamento (GetOrigemLac) - origemlac char(40)
+        par_oPagina.AddObject("txt_4c_OrigemLac", "TextBox")
+        WITH par_oPagina.txt_4c_OrigemLac
+            .Top               = 284
+            .Left              = 844
+            .Width             = 156
+            .Height            = 21
+            .MaxLength         = 40
+            .SpecialEffect     = 1
+            .DisabledBackColor = RGB(255, 255, 255)
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Visible           = .T.
+        ENDWITH
+
+        *=======================================================================
+        * Erro183 - BLOCO B: centro/esquerda (Descritivo 2, Caracteristicas,
+        * Cod. Macro, Categoria/Site, Cor/Tam, Pesos, Acabamento, Classificacao).
+        * MaxLength vem da LARGURA DA COLUNA no banco (regra #19), nao do
+        * MaxLength = 0 do SCX, que no legado significa "sem limite".
+        *=======================================================================
+
+        *-- Descritivo 2 (Say51 + getDpro4s)
+        *-- ATENCAO: a coluna dpro4s NAO EXISTE neste banco (conferido no
+        *-- INFORMATION_SCHEMA). Controle criado para nao divergir da tela
+        *-- legada, mas SEM bind - ver nota do txt_4c_CnjLacto.
+        par_oPagina.AddObject("lbl_4c_Label51", "Label")
+        WITH par_oPagina.lbl_4c_Label51
+            .Caption   = "Descritivo 2 :"
+            .Top       = 167
+            .Left      = 35
+            .Width     = 65
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Dpro4s", "TextBox")
+        WITH par_oPagina.txt_4c_Dpro4s
+            .Top               = 163
+            .Left              = 102
+            .Width             = 399
+            .Height            = 22
+            .Format            = "K!"
+            .MaxLength         = 50
+            .SpecialEffect     = 1
+            .DisabledBackColor = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(0, 0, 255)
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Caracteristicas do Produto (cmdCaracts)
+        par_oPagina.AddObject("obj_4c_CmdCaracts", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdCaracts
+            .ButtonCount = 1
+            .Top         = 189
+            .Left        = 340
+            .Width       = 42
+            .Height      = 42
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BackColor   = RGB(255, 255, 255)
+            .ToolTipText = "Caracter" + CHR(237) + "sticas do Produto"
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdCaracts.Buttons(1)
+            .Caption         = ""
+            .Picture         = gc_4c_CaminhoIcones + "geral_caixa_26.jpg"
+            .ToolTipText     = "Caracter" + CHR(237) + "sticas do Produto"
+            .Top             = 0
+            .Left            = 0
+            .Width           = 40
+            .Height          = 40
+            .FontName        = "Small Fonts"
+            .FontSize        = 7
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .BackColor       = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Cod. Macro (Say52 + getCodMacro + cmdMacro + cmdLocMacro)
+        par_oPagina.AddObject("lbl_4c_Label52", "Label")
+        WITH par_oPagina.lbl_4c_Label52
+            .Caption   = "Cod. Macro :"
+            .Top       = 236
+            .Left      = 383
+            .Width     = 64
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_CodMacro", "TextBox")
+        WITH par_oPagina.txt_4c_CodMacro
+            .Top           = 232
+            .Left          = 449
+            .Width         = 52
+            .Height        = 22
+            .Alignment     = 3
+            .MaxLength     = 6
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_CmdMacro", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdMacro
+            .ButtonCount = 1
+            .Top         = 230
+            .Left        = 501
+            .Width       = 27
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdMacro.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_subnivel_26.jpg"
+            .ToolTipText   = "Gerar Cod. Macro"
+            .Top           = -1
+            .Left          = -1
+            .Width         = 29
+            .Height        = 26
+            .FontName      = "Small Fonts"
+            .FontSize      = 7
+            .SpecialEffect = 0
+            .BackColor     = RGB(162, 214, 242)
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_CmdLocMacro", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdLocMacro
+            .ButtonCount = 1
+            .Top         = 230
+            .Left        = 529
+            .Width       = 27
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BackColor   = RGB(255, 255, 255)
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdLocMacro.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_lupa_16.jpg"
+            .ToolTipText   = "Localizar Cod. Pai."
+            .Top           = -1
+            .Left          = -1
+            .Width         = 29
+            .Height        = 26
+            .FontName      = "Small Fonts"
+            .FontSize      = 7
+            .SpecialEffect = 0
+            .BackColor     = RGB(240, 240, 240)
+        ENDWITH
+
+        *-- Colecao/Categoria (Say45 + getCategoria + getDCategoria) e os dois
+        *-- codigos do Site (Say48 + getCodCtgSite + getCodDptSite)
+        par_oPagina.AddObject("lbl_4c_Label45", "Label")
+        WITH par_oPagina.lbl_4c_Label45
+            .Caption   = "Cole" + CHR(231) + CHR(227) + "o :"
+            .Top       = 281
+            .Left      = 53
+            .Width     = 47
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Categoria", "TextBox")
+        WITH par_oPagina.txt_4c_Categoria
+            .Top           = 278
+            .Left          = 102
+            .Width         = 80
+            .Height        = 22
+            .Format        = "K"
+            .MaxLength     = 6
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_DCategoria", "TextBox")
+        WITH par_oPagina.txt_4c_DCategoria
+            .Top           = 278
+            .Left          = 183
+            .Width         = 196
+            .Height        = 22
+            .Format        = "K"
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Say48 "Site:" nao declara Width/Alignment no SCX (classe say =
+        *-- AutoSize/esquerda). Regra #23: AutoSize eh no-op em Label criado
+        *-- por AddObject, entao Alignment = 0 + Width que caiba o texto.
+        par_oPagina.AddObject("lbl_4c_Label48", "Label")
+        WITH par_oPagina.lbl_4c_Label48
+            .Caption   = "Site:"
+            .Top       = 281
+            .Left      = 395
+            .Width     = 28
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_CodCtgSite", "TextBox")
+        WITH par_oPagina.txt_4c_CodCtgSite
+            .Top           = 278
+            .Left          = 424
+            .Width         = 38
+            .Height        = 22
+            .MaxLength     = 2
+            .SpecialEffect = 1
+            .ToolTipText   = "Categorias do Site"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_CodDptSite", "TextBox")
+        WITH par_oPagina.txt_4c_CodDptSite
+            .Top           = 278
+            .Left          = 463
+            .Width         = 38
+            .Height        = 22
+            .MaxLength     = 2
+            .SpecialEffect = 1
+            .ToolTipText   = "Departamentos do Site"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Cor / Tamanho (Say42 + getCor + Say43 + getTam + cmdTamanho)
+        par_oPagina.AddObject("lbl_4c_Label42", "Label")
+        WITH par_oPagina.lbl_4c_Label42
+            .Caption   = "Cor :"
+            .Top       = 328
+            .Left      = 361
+            .Width     = 28
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Cor", "TextBox")
+        WITH par_oPagina.txt_4c_Cor
+            .Top           = 324
+            .Left          = 390
+            .Width         = 38
+            .Height        = 22
+            .MaxLength     = 4
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_Label43", "Label")
+        WITH par_oPagina.lbl_4c_Label43
+            .Caption   = "Tam:"
+            .Top       = 328
+            .Left      = 431
+            .Width     = 30
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Tam", "TextBox")
+        WITH par_oPagina.txt_4c_Tam
+            .Top           = 324
+            .Left          = 463
+            .Width         = 38
+            .Height        = 22
+            .MaxLength     = 4
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_CmdTamanho", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdTamanho
+            .ButtonCount = 1
+            .Top         = 323
+            .Left        = 502
+            .Width       = 27
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BackColor   = RGB(255, 255, 255)
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdTamanho.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_adicao_26.jpg"
+            .ToolTipText   = "Outros Tamanhos"
+            .Top           = -1
+            .Left          = -1
+            .Width         = 29
+            .Height        = 26
+            .FontName      = "Small Fonts"
+            .FontSize      = 7
+            .SpecialEffect = 0
+            .BackColor     = RGB(162, 214, 242)
+        ENDWITH
+
+        *-- Peso Bruto (Say35 + getPesoBs) e Peso Liquido (Say34 + getPmedio)
+        par_oPagina.AddObject("lbl_4c_Label35", "Label")
+        WITH par_oPagina.lbl_4c_Label35
+            .Caption   = "Peso Bruto :"
+            .Top       = 351
+            .Left      = 326
+            .Width     = 61
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Peso", "TextBox")
+        WITH par_oPagina.txt_4c_Peso
+            .Top           = 347
+            .Left          = 390
+            .Width         = 111
+            .Height        = 22
+            .InputMask     = "99,999.999"
+            .MaxLength     = 10
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_Label34", "Label")
+        WITH par_oPagina.lbl_4c_Label34
+            .Caption   = "Peso Liquido :"
+            .Top       = 374
+            .Left      = 319
+            .Width     = 68
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Pmedio", "TextBox")
+        WITH par_oPagina.txt_4c_Pmedio
+            .Top           = 370
+            .Left          = 390
+            .Width         = 111
+            .Height        = 22
+            .InputMask     = "99,999.999"
+            .MaxLength     = 10
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Acabamento (lblAcabamento + get_codacb + get_Dacb)
+        *-- O SCX declara Width = 104 E Alignment = 1 neste label: right-align
+        *-- LEGITIMO (regra #23), por isso o Left = -4 negativo e correto.
+        par_oPagina.AddObject("lbl_4c_LblAcabamento", "Label")
+        WITH par_oPagina.lbl_4c_LblAcabamento
+            .Caption     = "Acabamento :"
+            .Top         = 374
+            .Left        = -4
+            .Width       = 104
+            .Height      = 15
+            .BackStyle   = 0
+            .Alignment   = 1
+            .AutoSize    = .F.
+            .ForeColor   = RGB(90, 90, 90)
+            .ToolTipText = "Acabamento"
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .Visible     = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c__codacb", "TextBox")
+        WITH par_oPagina.txt_4c__codacb
+            .Top           = 370
+            .Left          = 102
+            .Width         = 31
+            .Height        = 22
+            .MaxLength     = 3
+            .SpecialEffect = 1
+            .ToolTipText   = "Acabamento"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c__Dacb", "TextBox")
+        WITH par_oPagina.txt_4c__Dacb
+            .Top           = 370
+            .Left          = 134
+            .Width         = 150
+            .Height        = 22
+            .SpecialEffect = 1
+            .ToolTipText   = "Acabamento"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao da Classificacao (Get_DClass) - acompanha txt_4c_Class,
+        *-- que ja existia sozinho. Sem ControlSource no legado: eh descricao
+        *-- de lookup, preenchida por PreencherDescricoesLookup.
+        par_oPagina.AddObject("txt_4c_DClass", "TextBox")
+        WITH par_oPagina.txt_4c_DClass
+            .Top           = 393
+            .Left          = 134
+            .Width         = 150
+            .Height        = 22
+            .SpecialEffect = 1
+            .ToolTipText   = "Classifica" + CHR(231) + CHR(227) + "o"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *=======================================================================
+        * Erro183 - BLOCO C: Produto Web, Inf. Tamanho, Dimensao, Situacao e as
+        * colunas de marcacao do Site e do Segmento.
+        *
+        * Os CheckBox do legado sao AutoSize = .T.; MEDIDO no VFP9 que AutoSize
+        * eh NO-OP tambem em CheckBox criado por AddObject (fica nos 100x17 do
+        * default, como ja documentado para Label na regra #23), entao Width e
+        * Height vao EXPLICITOS. Os 100px nao invadem o vizinho: as colunas do
+        * legado ficam em Left 633 / 734 / 906, com 101px de passo.
+        *
+        * Os OptionGroup ficam SEM ForeColor (regra #33 - a classe nao tem a
+        * propriedade); a cor vai nos Buttons(N), como o proprio SCX faz.
+        *=======================================================================
+
+        *-- Produto Web (Say29 + Fwoption1) - prodwebs numeric(1,0), 1..4.
+        *-- Option3/Option4 nascem invisiveis no legado - transcrito igual.
+        par_oPagina.AddObject("lbl_4c_Label29", "Label")
+        WITH par_oPagina.lbl_4c_Label29
+            .Caption   = "Produto Web :"
+            .Top       = 335
+            .Left      = 827
+            .Width     = 72
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Fwoption1", "OptionGroup")
+        WITH par_oPagina.obj_4c_Fwoption1
+            .ButtonCount = 4
+            .Top         = 330
+            .Left        = 899
+            .Width       = 87
+            .Height      = 24
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .ToolTipText = "Setar se produto WEB e quais campos s" + CHR(227) + ;
+                "o exportados para e-commerce"
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Fwoption1.Buttons(1)
+            .Caption   = "Sim"
+            .Top       = 5
+            .Left      = 5
+            .Width     = 40
+            .Height    = 15
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+        WITH par_oPagina.obj_4c_Fwoption1.Buttons(2)
+            .Caption   = "N" + CHR(227) + "o"
+            .Top       = 5
+            .Left      = 48
+            .Width     = 40
+            .Height    = 15
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+        WITH par_oPagina.obj_4c_Fwoption1.Buttons(3)
+            .Caption   = "S" + CHR(243) + " Valor"
+            .Top       = 4
+            .Left      = 89
+            .Width     = 70
+            .Height    = 17
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .F.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Fwoption1.Buttons(4)
+            .Caption   = "S" + CHR(243) + " Estoque"
+            .Top       = 4
+            .Left      = 89
+            .Width     = 89
+            .Height    = 17
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Inf. Tamanho (lblObrTamSer + optObrTamSer) - obrtamser numeric(1,0)
+        par_oPagina.AddObject("lbl_4c_LblObrTamSer", "Label")
+        WITH par_oPagina.lbl_4c_LblObrTamSer
+            .Caption   = "Inf. Tamanho :"
+            .Top       = 359
+            .Left      = 825
+            .Width     = 74
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_OptObrTamSer", "OptionGroup")
+        WITH par_oPagina.obj_4c_OptObrTamSer
+            .ButtonCount = 2
+            .Top         = 359
+            .Left        = 899
+            .Width       = 93
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .ToolTipText = "Quando a Op" + CHR(231) + CHR(227) + "o estiver " + ;
+                "configurada como SIM e o produto for um Servi" + CHR(231) + "o " + ;
+                "o sistema vai pedir para informar o Tamanho DE e Tamanho " + ;
+                "PARA nas Movimenta" + CHR(231) + CHR(245) + "es de Conserto"
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_OptObrTamSer.Buttons(1)
+            .Caption   = "Sim"
+            .Top       = 0
+            .Left      = 5
+            .Width     = 40
+            .Height    = 15
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+        WITH par_oPagina.obj_4c_OptObrTamSer.Buttons(2)
+            .Caption   = "N" + CHR(227) + "o"
+            .Top       = 0
+            .Left      = 47
+            .Width     = 40
+            .Height    = 15
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+
+        *-- Dimensao (Say27 + fwget6/5/4/7 + os quatro rotulos ppp/aaa/ccc/ccc)
+        *-- Fwget7 (espessus) fica SEM bind: coluna inexistente neste banco.
+        par_oPagina.AddObject("lbl_4c_Label27", "Label")
+        WITH par_oPagina.lbl_4c_Label27
+            .Caption   = "Dimens" + CHR(227) + "o : "
+            .Top       = 384
+            .Left      = 572
+            .Width     = 58
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Fwget6", "TextBox")
+        WITH par_oPagina.txt_4c_Fwget6
+            .Top           = 380
+            .Left          = 633
+            .Width         = 58
+            .Height        = 23
+            .InputMask     = "999.99"
+            .MaxLength     = 6
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_LblProfundidade", "Label")
+        WITH par_oPagina.lbl_4c_LblProfundidade
+            .Caption   = "ppp"
+            .Top       = 384
+            .Left      = 693
+            .Width     = 20
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Fwget5", "TextBox")
+        WITH par_oPagina.txt_4c_Fwget5
+            .Top           = 380
+            .Left          = 720
+            .Width         = 58
+            .Height        = 23
+            .InputMask     = "999.99"
+            .MaxLength     = 6
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_LblAltura", "Label")
+        WITH par_oPagina.lbl_4c_LblAltura
+            .Caption   = "aaa"
+            .Top       = 384
+            .Left      = 781
+            .Width     = 20
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Fwget4", "TextBox")
+        WITH par_oPagina.txt_4c_Fwget4
+            .Top           = 380
+            .Left          = 808
+            .Width         = 58
+            .Height        = 23
+            .InputMask     = "999.99"
+            .MaxLength     = 6
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_LblComprimento", "Label")
+        WITH par_oPagina.lbl_4c_LblComprimento
+            .Caption   = "ccc"
+            .Top       = 384
+            .Left      = 869
+            .Width     = 17
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("txt_4c_Fwget7", "TextBox")
+        WITH par_oPagina.txt_4c_Fwget7
+            .Top           = 380
+            .Left          = 893
+            .Width         = 58
+            .Height        = 23
+            .InputMask     = "999.99"
+            .MaxLength     = 6
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_LblEspessura", "Label")
+        WITH par_oPagina.lbl_4c_LblEspessura
+            .Caption   = "ccc"
+            .Top       = 384
+            .Left      = 954
+            .Width     = 17
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Situacao (Say39) e Segmento (Say50) + Site (Say49)
+        par_oPagina.AddObject("lbl_4c_Label39", "Label")
+        WITH par_oPagina.lbl_4c_Label39
+            .Caption   = "Situa" + CHR(231) + CHR(227) + "o : "
+            .Top       = 408
+            .Left      = 577
+            .Width     = 53
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_Label50", "Label")
+        WITH par_oPagina.lbl_4c_Label50
+            .Caption   = "Segmento :"
+            .Top       = 409
+            .Left      = 845
+            .Width     = 57
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("lbl_4c_Label49", "Label")
+        WITH par_oPagina.lbl_4c_Label49
+            .Caption   = "Site :"
+            .Top       = 457
+            .Left      = 602
+            .Width     = 27
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Coluna Left = 633 (Situacao / Site)
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Get_Consig", "Consigna", ;
+            408, 633, 8, .F., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox1", ;
+            "N" + CHR(227) + "o Comprar", 423, 633, 8, .F., .T., ;
+            "Produto Descontinuado")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox3", "Mostruario", ;
+            438, 633, 8, .F., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox4", "Off", ;
+            457, 633, 8, .T., .T., "")
+        *-- chkAtivoSite nasce INVISIVEL no legado (Visible = .F.)
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_ChkAtivoSite", "Ativo", ;
+            471, 633, 9, .T., .F., "")
+
+        *-- Coluna Left = 734
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_ChkFabrProprs", ;
+            "Fabr. Pr" + CHR(243) + "pria", 408, 734, 8, .F., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_ChkSemConsulta", ;
+            "Sem Consultas", 423, 734, 8, .F., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_ChkEncoms", ;
+            "Exc. Encomenda", 439, 734, 8, .F., .T., ;
+            "Produtos criados para atender produtos exclusivos encomenda.")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox11", ;
+            "Disp. Encomenda", 455, 734, 8, .F., .T., ;
+            "Referencia dispon" + CHR(237) + "vel para encomenda, produto comercializado")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox10", ;
+            "Brinco Espelh" + CHR(225) + "vel", 471, 734, 8, .F., .T., "")
+
+        *-- Coluna Left = 906 (Segmento)
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox5", "Masculino", ;
+            409, 906, 9, .T., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox6", "Feminino", ;
+            425, 906, 8, .T., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox7", "Unissex", ;
+            441, 906, 8, .T., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox8", "Baby", ;
+            456, 906, 8, .T., .T., "")
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox9", "Kids", ;
+            472, 906, 8, .T., .T., "")
+
+        *-- Produto Novo (Fwcheckbox2) - fica la em cima, ao lado do Descritivo
+        THIS.CriarCheckBoxDados(par_oPagina, "chk_4c_Fwcheckbox2", ;
+            "Produto Novo", 145, 799, 9, .T., .T., "")
+
+        *=======================================================================
+        * Erro183 - BLOCO D: faixa inferior (Descricao de Compra, Descricao
+        * Completa, Caracteristica, Titulo) + Imagem Principal / Imagem Tecnica
+        * + o botao "Arquivos" da barra do topo.
+        *
+        * Os quatro rotulos desta faixa sao WordWrap de DUAS linhas. Regra #23:
+        * com WordWrap = .T., AutoSize = .T. DESCARTA a Height e o texto sai
+        * cortado numa linha so - por isso AutoSize = .F. com Width E Height
+        * transcritos do SCX.
+        *=======================================================================
+
+        *-- Linha separadora acima da faixa de memos
+        par_oPagina.AddObject("shp_4c_Shape1", "Shape")
+        WITH par_oPagina.shp_4c_Shape1
+            .Top           = 441
+            .Left          = -7
+            .Width         = 511
+            .Height        = 2
+            .BackStyle     = 0
+            .BorderWidth   = 1
+            .DrawMode      = 14
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao de Compra (Say31 + getdsccompras) - dsccompras text
+        par_oPagina.AddObject("lbl_4c_Label31", "Label")
+        WITH par_oPagina.lbl_4c_Label31
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o de : Compra ."
+            .Top       = 445
+            .Left      = 12
+            .Width     = 88
+            .Height    = 28
+            .WordWrap  = .T.
+            .Alignment = 1
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Getdsccompras", "EditBox")
+        WITH par_oPagina.obj_4c_Getdsccompras
+            .Top           = 445
+            .Left          = 102
+            .Width         = 400
+            .Height        = 44
+            .Format        = "K!"
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao Completa (Say33 + getDPro3s) - dpro3s text
+        par_oPagina.AddObject("lbl_4c_Label33", "Label")
+        WITH par_oPagina.lbl_4c_Label33
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o : Completa ."
+            .Top       = 490
+            .Left      = 12
+            .Width     = 88
+            .Height    = 28
+            .WordWrap  = .T.
+            .Alignment = 1
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_GetDPro3s", "EditBox")
+        WITH par_oPagina.obj_4c_GetDPro3s
+            .Top           = 490
+            .Left          = 102
+            .Width         = 400
+            .Height        = 44
+            .Format        = "K!"
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Caracteristica (Say32 + getObsCompras) - obscompras text
+        par_oPagina.AddObject("lbl_4c_Label32", "Label")
+        WITH par_oPagina.lbl_4c_Label32
+            .Caption   = "Caracteristica : "
+            .Top       = 535
+            .Left      = 12
+            .Width     = 88
+            .Height    = 28
+            .WordWrap  = .T.
+            .Alignment = 1
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_GetObsCompras", "EditBox")
+        WITH par_oPagina.obj_4c_GetObsCompras
+            .Top           = 535
+            .Left          = 102
+            .Width         = 400
+            .Height        = 44
+            .Format        = "K!"
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Titulo (Say44 + Get_ObsMkt) - obsmkt char(100)
+        par_oPagina.AddObject("lbl_4c_Label44", "Label")
+        WITH par_oPagina.lbl_4c_Label44
+            .Caption   = "T" + CHR(237) + "tulo :"
+            .Top       = 581
+            .Left      = 16
+            .Width     = 84
+            .Height    = 29
+            .WordWrap  = .T.
+            .Alignment = 1
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Get_ObsMkt", "EditBox")
+        WITH par_oPagina.obj_4c_Get_ObsMkt
+            .Top           = 580
+            .Left          = 102
+            .Width         = 400
+            .Height        = 44
+            .Format        = "K!"
+            .MaxLength     = 100
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Botoes "Montagem" (CmdMonta monta a Caracteristica, cmdMontaTitulo
+        *-- monta o Titulo) - mesmos Picture/Caption, ToolTip diferente
+        par_oPagina.AddObject("obj_4c_CmdMonta", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdMonta
+            .ButtonCount = 1
+            .Top         = 553
+            .Left        = 10
+            .Width       = 89
+            .Height      = 23
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdMonta.Buttons(1)
+            .Caption         = "Montagem"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_seta_direita_20.jpg"
+            .ToolTipText     = "Monta Caracter" + CHR(237) + "stica"
+            .Top             = 2
+            .Left            = 3
+            .Width           = 85
+            .Height          = 19
+            .FontSize        = 7
+            .WordWrap        = .T.
+            .SpecialEffect   = 0
+            .PicturePosition = 4
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_CmdMontaTitulo", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdMontaTitulo
+            .ButtonCount = 1
+            .Top         = 599
+            .Left        = 11
+            .Width       = 89
+            .Height      = 23
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdMontaTitulo.Buttons(1)
+            .Caption         = "Montagem"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_seta_direita_20.jpg"
+            .ToolTipText     = "Monta T" + CHR(237) + "tulo"
+            .Top             = 2
+            .Left            = 3
+            .Width           = 85
+            .Height          = 19
+            .FontSize        = 7
+            .WordWrap        = .T.
+            .SpecialEffect   = 0
+            .PicturePosition = 4
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+        ENDWITH
+
+        *-- "Imagem Principal" (Say40) - rotulo do shp_4c_ShpFig/img_4c_ImgFigJpg
+        *-- que ja existiam sem legenda
+        par_oPagina.AddObject("lbl_4c_Label40", "Label")
+        WITH par_oPagina.lbl_4c_Label40
+            .Caption   = "Imagem Principal"
+            .Top       = 489
+            .Left      = 600
+            .Width     = 101
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Capturar Imagem do Produto pela WebCam (cmdgFigCam)
+        par_oPagina.AddObject("obj_4c_CmdgFigCam", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdgFigCam
+            .ButtonCount = 1
+            .Top         = 506
+            .Left        = 775
+            .Width       = 42
+            .Height      = 41
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdgFigCam.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_processar_32.jpg"
+            .ToolTipText   = "Capturar Imagem do Produto - WebCam"
+            .Top           = 2
+            .Left          = 2
+            .Width         = 37
+            .Height        = 37
+            .FontSize      = 7
+            .WordWrap      = .T.
+            .SpecialEffect = 0
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+        ENDWITH
+
+        *-- Imagem Tecnica (Say41 + Shape2 + ImgFigTec + Commandgroup1).
+        *-- Os QUATRO nascem invisiveis no legado (Visible = .F.) - transcrito.
+        par_oPagina.AddObject("lbl_4c_Label41", "Label")
+        WITH par_oPagina.lbl_4c_Label41
+            .Caption   = "Imagem T" + CHR(233) + "cnica"
+            .Top       = 574
+            .Left      = 844
+            .Width     = 110
+            .Height    = 15
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .FontBold  = .T.
+            .ForeColor = RGB(36, 84, 155)
+            .FontName  = "Verdana"
+            .FontSize  = 8
+            .Visible   = .F.
+        ENDWITH
+
+        par_oPagina.AddObject("shp_4c_Shape2", "Shape")
+        WITH par_oPagina.shp_4c_Shape2
+            .Top           = 566
+            .Left          = 927
+            .Width         = 46
+            .Height        = 41
+            .BackStyle     = 0
+            .BorderWidth   = 2
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        par_oPagina.AddObject("img_4c_ImgFigTec", "Image")
+        WITH par_oPagina.img_4c_ImgFigTec
+            .Top     = 567
+            .Left    = 928
+            .Width   = 44
+            .Height  = 38
+            .Stretch = 1
+            .Enabled = .F.
+            .Visible = .F.
+        ENDWITH
+
+        par_oPagina.AddObject("obj_4c_Commandgroup1", "CommandGroup")
+        WITH par_oPagina.obj_4c_Commandgroup1
+            .ButtonCount = 1
+            .Top         = 574
+            .Left        = 914
+            .Width       = 46
+            .Height      = 41
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Visible     = .F.
+        ENDWITH
+        WITH par_oPagina.obj_4c_Commandgroup1.Buttons(1)
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_picture_26.jpg"
+            .ToolTipText   = "Capturar Imagem T" + CHR(233) + "cnica"
+            .Top           = 2
+            .Left          = 2
+            .Width         = 37
+            .Height        = 37
+            .FontSize      = 7
+            .WordWrap      = .T.
+            .SpecialEffect = 0
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+        ENDWITH
+
+        *-- Botao "Arquivos" da barra do topo (cmdArquivos), irmao do
+        *-- obj_4c_CmdProduto ("Pesquisa") - a migracao perdeu o par inteiro
+        par_oPagina.AddObject("obj_4c_CmdArquivos", "CommandGroup")
+        WITH par_oPagina.obj_4c_CmdArquivos
+            .ButtonCount   = 1
+            .Top           = 38
+            .Left          = 679
+            .Width         = 80
+            .Height        = 76
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 1
+            .AutoSize      = .F.
+            .Visible       = .T.
+        ENDWITH
+        WITH par_oPagina.obj_4c_CmdArquivos.Buttons(1)
+            .Caption     = "Arquivos"
+            .Picture     = gc_4c_CaminhoIcones + "geral_arquivo_60.jpg"
+            .ToolTipText = "Arquivos Relacionados ao Produto"
+            .Top         = 0
+            .Left        = 5
+            .Width       = 75
+            .Height      = 75
+            .FontName    = "Comic Sans MS"
+            .FontSize    = 8
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .F.
+        ENDWITH
+
         THIS.TornarControlesVisiveis(par_oPagina)
+    ENDPROC
+
+    *===========================================================================
+    * CriarCheckBoxDados - Cria um CheckBox da aba Principal (Erro183)
+    *
+    * Os 16 CheckBox do bloco Site/Segmento/Situacao do legado so diferem em
+    * Caption / Top / Left / FontSize / FontBold / Visible; o resto eh igual
+    * nos 16 (Tahoma, Alignment 0, BackStyle 0, ForeColor 90,90,90).
+    *
+    * Width/Height vao EXPLICITOS porque AutoSize eh no-op em controle criado
+    * por AddObject - MEDIDO no VFP9 (automation\MedirAutoSizeChk.prg): com
+    * AutoSize = .T. os 16 captions ficaram todos nos 100x17 do default.
+    *
+    * .Value = 0 (NUMERICO) de proposito: as colunas de marcacao de SigCdPro
+    * sao numeric(1,0), nao bit. Nascer logico faria o CheckBox devolver .T./.F.
+    * para uma property numerica do BO.
+    *===========================================================================
+    PROTECTED PROCEDURE CriarCheckBoxDados(par_oPagina, par_cNome, par_cCaption, ;
+            par_nTop, par_nLeft, par_nFontSize, par_lBold, par_lVisivel, par_cTip)
+        par_oPagina.AddObject(par_cNome, "CheckBox")
+
+        STORE par_cCaption TO ("par_oPagina." + par_cNome + ".Caption")
+        STORE par_nTop     TO ("par_oPagina." + par_cNome + ".Top")
+        STORE par_nLeft    TO ("par_oPagina." + par_cNome + ".Left")
+        STORE 100          TO ("par_oPagina." + par_cNome + ".Width")
+        STORE 17           TO ("par_oPagina." + par_cNome + ".Height")
+        STORE 0            TO ("par_oPagina." + par_cNome + ".Value")
+        STORE 0            TO ("par_oPagina." + par_cNome + ".Alignment")
+        STORE 0            TO ("par_oPagina." + par_cNome + ".BackStyle")
+        STORE .F.          TO ("par_oPagina." + par_cNome + ".AutoSize")
+        STORE "Tahoma"     TO ("par_oPagina." + par_cNome + ".FontName")
+        STORE par_nFontSize TO ("par_oPagina." + par_cNome + ".FontSize")
+        STORE par_lBold    TO ("par_oPagina." + par_cNome + ".FontBold")
+        STORE RGB(90, 90, 90) TO ("par_oPagina." + par_cNome + ".ForeColor")
+        STORE par_lVisivel TO ("par_oPagina." + par_cNome + ".Visible")
+
+        IF !EMPTY(par_cTip)
+            STORE par_cTip TO ("par_oPagina." + par_cNome + ".ToolTipText")
+        ENDIF
     ENDPROC
 
     *===========================================================================
@@ -6369,10 +8023,42 @@ DEFINE CLASS FormProduto AS FormBase
     * fora dele so normaliza o codigo digitado - o legado (getCpro.When) trata
     * o proprio codigo como chave, sem lookup externo.
     *===========================================================================
+    *===========================================================================
+    * ValidarCodigoProdutoDados - LostFocus de txt_4c_Cpro
+    *
+    * Erro185: transcricao do getCpro.Valid do legado (case INSERIR), que avisa
+    * do codigo duplicado ao SAIR do campo, antes de o usuario preencher a ficha
+    * inteira:
+    *   ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crTmp', 'CPros', lcCdProduto)
+    *   If (Reccount('crTmp') > 0)
+    *       =MessageBox('Produto Ja Cadastrado!!!', 0+48, '')
+    *       Return 0
+    *
+    * A guarda que REALMENTE impede a violacao da PK vive em
+    * ProdutoBO.ValidarDados - esta aqui eh so o aviso antecipado.
+    * this_cUltimoCodigoValidado evita reconsultar/reavisar a cada ida e volta
+    * do foco com o mesmo valor (mesmo padrao da regra #45 usada no grupo).
+    *===========================================================================
     PROCEDURE ValidarCodigoProdutoDados(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_cValor
         loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1
         loc_oPg.txt_4c_Cpro.Value = ALLTRIM(loc_oPg.txt_4c_Cpro.Value)
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_Cpro.Value)
+
+        *-- so no INCLUIR: no ALTERAR o codigo existe por definicao
+        IF THIS.this_cModoAtual != "INCLUIR" OR EMPTY(loc_cValor)
+            THIS.this_cUltimoCodigoValidado = ""
+            RETURN
+        ENDIF
+
+        IF loc_cValor == THIS.this_cUltimoCodigoValidado
+            RETURN
+        ENDIF
+        THIS.this_cUltimoCodigoValidado = loc_cValor
+
+        IF THIS.this_oBusinessObject.ExisteProduto(loc_cValor)
+            MsgAviso("Produto J" + CHR(225) + " Cadastrado!!!")
+        ENDIF
     ENDPROC
 
     PROCEDURE ValidarProdutoEquivalente(par_nKeyCode, par_nShiftAltCtrl)
@@ -6685,39 +8371,52 @@ DEFINE CLASS FormProduto AS FormBase
     ENDPROC
 
     PROCEDURE ValidarMoedaCustoFComposicao(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg, loc_cValor
+        LOCAL loc_oPg, loc_oGem, loc_cValor
         loc_oPg    = THIS.ObterPaginaComposicao()
         loc_cValor = PADR(ALLTRIM(loc_oPg.txt_4c_Moecusf.Value), 3)
         THIS.ExecutarLookupGenerico(loc_oPg.txt_4c_Moecusf, .NULL., "SigCdMoe", ;
             "CMoes", "", "Moeda", "cursor_4c_BuscaMoeCustoFComp", "CMoes", ;
             loc_cValor, "")
+        *-- Erro187: gemeo em pgDados.getMctotal (mesmo ControlSource no legado).
+        *-- Em variavel: VFP9 nao aceita metodo() seguido de .Propriedade.
+        loc_oGem = THIS.ObterPaginaDados()
+        THIS.EspelharParaGemeo(loc_oPg.txt_4c_Moecusf, loc_oGem.txt_4c_Mctotal)
     ENDPROC
 
     PROCEDURE ValidarMoedaVendaComposicao(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg, loc_cValor
+        LOCAL loc_oPg, loc_oGem, loc_cValor
         loc_oPg    = THIS.ObterPaginaComposicao()
         loc_cValor = PADR(ALLTRIM(loc_oPg.txt_4c_Moeda.Value), 3)
         THIS.ExecutarLookupGenerico(loc_oPg.txt_4c_Moeda, .NULL., "SigCdMoe", ;
             "CMoes", "", "Moeda", "cursor_4c_BuscaMoeVendaComp", "CMoes", ;
             loc_cValor, "")
+        *-- Erro187: gemeo em pgDadosFiscais.GetMvalor (coluna moedas)
+        loc_oGem = THIS.ObterPaginaDadosFiscais()
+        THIS.EspelharParaGemeo(loc_oPg.txt_4c_Moeda, loc_oGem.txt_4c_Mvalor)
     ENDPROC
 
     PROCEDURE ValidarMoedaVendaVComposicao(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg, loc_cValor
+        LOCAL loc_oPg, loc_oGem, loc_cValor
         loc_oPg    = THIS.ObterPaginaComposicao()
         loc_cValor = PADR(ALLTRIM(loc_oPg.txt_4c_Moev.Value), 3)
         THIS.ExecutarLookupGenerico(loc_oPg.txt_4c_Moev, .NULL., "SigCdMoe", ;
             "CMoes", "", "Moeda", "cursor_4c_BuscaMoeVendaVComp", "CMoes", ;
             loc_cValor, "")
+        *-- Erro187: gemeo em pgDados.getMpvenda (coluna moevs)
+        loc_oGem = THIS.ObterPaginaDados()
+        THIS.EspelharParaGemeo(loc_oPg.txt_4c_Moev, loc_oGem.txt_4c_Mpvenda)
     ENDPROC
 
     PROCEDURE ValidarMoedaVendaPVComposicao(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg, loc_cValor
+        LOCAL loc_oPg, loc_oGem, loc_cValor
         loc_oPg    = THIS.ObterPaginaComposicao()
         loc_cValor = PADR(ALLTRIM(loc_oPg.txt_4c_Moepv.Value), 3)
         THIS.ExecutarLookupGenerico(loc_oPg.txt_4c_Moepv, .NULL., "SigCdMoe", ;
             "CMoes", "", "Moeda", "cursor_4c_BuscaMoeVendaPVComp", "CMoes", ;
             loc_cValor, "")
+        *-- Erro187: gemeo em pgDados.getMfvenda (coluna moepvs)
+        loc_oGem = THIS.ObterPaginaDados()
+        THIS.EspelharParaGemeo(loc_oPg.txt_4c_Moepv, loc_oGem.txt_4c_Mfvenda)
     ENDPROC
 
     *-- Feitio de Venda (Getftio legado - SigPrFti.Tipos <> 1)
@@ -6768,6 +8467,107 @@ DEFINE CLASS FormProduto AS FormBase
     *===========================================================================
     PROTECTED PROCEDURE ObterPaginaDadosFiscais()
         RETURN THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page3
+    ENDPROC
+
+    *===========================================================================
+    * Getters das demais abas (Erro184) - a ordem das Pages esta fixada em
+    * ConfigurarPaginaDados: 1 pgDados, 2 pgComposicao, 3 pgDadosFiscais,
+    * 4 PgDadosFaseP, 5 PgDadosConsP, 6 pgCusto, 7 pgDesigner, 8 pgServico.
+    *===========================================================================
+    PROTECTED PROCEDURE ObterPaginaFaseP()
+        RETURN THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4
+    ENDPROC
+
+    PROTECTED PROCEDURE ObterPaginaConsP()
+        RETURN THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page5
+    ENDPROC
+
+    PROTECTED PROCEDURE ObterPaginaDesigner()
+        RETURN THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page7
+    ENDPROC
+
+    *===========================================================================
+    * ValorNumerico - Le um controle cujo .Value pode chegar como C ou N
+    *
+    * MEDIDO no VFP9: ComboBox criado por AddObject nasce com .Value de tipo C
+    * e CheckBox com .Value de tipo N, mas AMBOS passam a ter o tipo do que for
+    * atribuido. Como o cbo_4c_CmbMontaDescs eh editavel, o usuario pode deixar
+    * texto onde o BO espera numero - esta funcao normaliza os dois casos.
+    *===========================================================================
+    *===========================================================================
+    * Campos ESPELHADOS - duas telas, UMA coluna (Erro187)
+    *
+    * No SCX legado SEIS colunas tem DOIS controles, em paginas diferentes,
+    * compartilhando o MESMO ControlSource - sao duas VISTAS do mesmo campo:
+    *
+    *   custofs  : pgDados.getCtotal      <-> pgComposicao.getCustof
+    *   pvens    : pgDados.getPvenda      <-> pgComposicao.getPven
+    *   moecusfs : pgDados.getMctotal     <-> pgComposicao.getMoecusf
+    *   moevs    : pgDados.getMpvenda     <-> pgComposicao.getMoev
+    *   moepvs   : pgDados.getMfvenda     <-> pgComposicao.getMoepv
+    *   moedas   : pgDadosFiscais.GetMvalor <-> pgComposicao.getMoeda
+    *
+    * Com ControlSource o legado nunca diverge: digitar em um atualiza o cursor
+    * e o outro passa a exibir o mesmo valor. O migrado nao tem ControlSource e
+    * lia SO UM dos dois - quem preenchesse a moeda pela aba Componente via
+    * "Moeda do Total de Custo Invalida!!!" na gravacao, com o campo preenchido
+    * na tela. Estes dois helpers reproduzem o par: ler aceita qualquer um dos
+    * lados, gravar escreve nos DOIS.
+    *===========================================================================
+    PROTECTED PROCEDURE LerCampoEspelhado(par_oCtrlA, par_oCtrlB)
+        LOCAL loc_cA, loc_cB, loc_cValor
+        loc_cA = ""
+        loc_cB = ""
+
+        IF VARTYPE(par_oCtrlA) = "O"
+            loc_cA = ALLTRIM(TRANSFORM(par_oCtrlA.Value))
+        ENDIF
+        IF VARTYPE(par_oCtrlB) = "O"
+            loc_cB = ALLTRIM(TRANSFORM(par_oCtrlB.Value))
+        ENDIF
+
+        *-- o lado PREENCHIDO ganha; com os dois preenchidos eles sao iguais,
+        *-- porque EscreverCampoEspelhado e EspelharParaGemeo mantem o par em dia
+        loc_cValor = IIF(EMPTY(loc_cA), loc_cB, loc_cA)
+
+        RETURN loc_cValor
+    ENDPROC
+
+    PROTECTED PROCEDURE EscreverCampoEspelhado(par_oCtrlA, par_oCtrlB, par_cValor)
+        IF VARTYPE(par_oCtrlA) = "O"
+            par_oCtrlA.Value = par_cValor
+        ENDIF
+        IF VARTYPE(par_oCtrlB) = "O"
+            par_oCtrlB.Value = par_cValor
+        ENDIF
+    ENDPROC
+
+    *===========================================================================
+    * EspelharParaGemeo - copia o valor de um lado do par para o outro
+    * Chamado pelos validadores dos campos da aba Componente (LostFocus), que
+    * eh o equivalente ao refresh que o ControlSource compartilhado faz sozinho.
+    *===========================================================================
+    PROTECTED PROCEDURE EspelharParaGemeo(par_oOrigem, par_oDestino)
+        IF VARTYPE(par_oOrigem) = "O" AND VARTYPE(par_oDestino) = "O"
+            par_oDestino.Value = par_oOrigem.Value
+        ENDIF
+    ENDPROC
+
+    PROTECTED PROCEDURE ValorNumerico(par_uValor)
+        LOCAL loc_cTipo, loc_nValor
+        loc_cTipo  = VARTYPE(par_uValor)
+        loc_nValor = 0
+
+        DO CASE
+            CASE loc_cTipo = "N"
+                loc_nValor = par_uValor
+            CASE loc_cTipo = "L"
+                loc_nValor = IIF(par_uValor, 1, 0)
+            CASE loc_cTipo = "C"
+                loc_nValor = VAL(STRTRAN(ALLTRIM(par_uValor), ",", "."))
+        ENDCASE
+
+        RETURN loc_nValor
     ENDPROC
 
     *===========================================================================
@@ -7012,7 +8812,10 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            *-- Erro183: era "Tahoma". O SCX declara Comic Sans MS nos OITO
+            *-- Option (Option1..8.FontName), e a fonte eh o que da a cara da
+            *-- barra de abas - trocar descaracteriza a tela (PILAR 1).
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7035,7 +8838,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7058,7 +8861,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7081,7 +8884,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7104,7 +8907,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7127,7 +8930,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7150,7 +8953,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7173,7 +8976,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Width         = 75
             .Height        = 75
             .Style         = 1
-            .FontName      = "Tahoma"
+            .FontName      = "Comic Sans MS"
             .FontSize      = 8
             .FontBold      = .T.
             .FontItalic    = .T.
@@ -7303,7 +9106,8 @@ DEFINE CLASS FormProduto AS FormBase
     * (sao calculados, nao existem em SigCdPro).
     *===========================================================================
     PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_lResultado, loc_oPg, loc_oBO, loException
+        LOCAL loc_lResultado, loc_oPg, loc_oPgFis, loc_oPgCmp, loc_oPgFas, ;
+            loc_oPgCon, loc_oPgDes, loc_oBO, loException
         loc_lResultado = .F.
 
         TRY
@@ -7347,12 +9151,17 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oBO.this_cObsetqs  = ALLTRIM(loc_oPg.txt_4c_Obs3.Value)          && obsetqs
 
             *-- Custo / venda e suas moedas -----------------------------------
-            loc_oBO.this_nCustofs  = ALLTRIM(loc_oPg.txt_4c_Ctotal.Value)   && custofs
-            loc_oBO.this_cMoecusfs = ALLTRIM(loc_oPg.txt_4c_Mctotal.Value)       && moecusfs
-            loc_oBO.this_nPvens    = ALLTRIM(loc_oPg.txt_4c_Pvenda.Value)   && pvens
-            loc_oBO.this_cMoevs    = ALLTRIM(loc_oPg.txt_4c_Mpvenda.Value)       && moevs
+            *-- Erro187: custofs, moecusfs, pvens, moevs e moepvs tem o par na
+            *-- aba Componente (ControlSource compartilhado no legado) - ler so
+            *-- o lado de ca ignorava o que o usuario digitou la.
+            loc_oPgCmp = THIS.ObterPaginaComposicao()
+
+            loc_oBO.this_nCustofs  = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Ctotal,  loc_oPgCmp.txt_4c_Custof)   && custofs
+            loc_oBO.this_cMoecusfs = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Mctotal, loc_oPgCmp.txt_4c_Moecusf)  && moecusfs
+            loc_oBO.this_nPvens    = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Pvenda,  loc_oPgCmp.txt_4c_Pven)     && pvens
+            loc_oBO.this_cMoevs    = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Mpvenda, loc_oPgCmp.txt_4c_Moev)     && moevs
             loc_oBO.this_nFvendas  = ALLTRIM(loc_oPg.txt_4c_Fvenda.Value)   && fvendas
-            loc_oBO.this_cMoepvs   = ALLTRIM(loc_oPg.txt_4c_Mfvenda.Value)       && moepvs
+            loc_oBO.this_cMoepvs   = THIS.LerCampoEspelhado(loc_oPg.txt_4c_Mfvenda, loc_oPgCmp.txt_4c_Moepv)    && moepvs
 
             *-- Auditoria: data/usuario de inclusao e de alteracao.
             *-- Os carimbos sao aplicados pelo BO (AplicarCarimboInclusao /
@@ -7362,6 +9171,168 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oBO.this_cUsuincs  = ALLTRIM(loc_oPg.txt_4c_Usuario.Value)            && UsuIncs
             loc_oBO.this_dDtalts   = ConverterParaData(loc_oPg.txt_4c_DataAlts.Value) && dtalts
             loc_oBO.this_cUsuaalts = ALLTRIM(loc_oPg.txt_4c_UsuaAlts.Value)           && usuaalts
+
+            *-- Erro183 / BLOCO A: campos da coluna da direita. O ProdutoBO ja
+            *-- tinha as properties e ja levava TODAS estas colunas no INSERT e
+            *-- no UPDATE - faltava so o campo na tela e esta transferencia,
+            *-- entao ate aqui elas gravavam sempre o valor default.
+            *-- txt_4c_CnjLacto NAO entra: a coluna CnjLacto nao existe neste
+            *-- banco (conferido no INFORMATION_SCHEMA).
+            loc_oBO.this_dDtsituas  = ConverterParaData(loc_oPg.txt_4c_DtSituas.Value)   && dtsituas
+            loc_oBO.this_nQmins     = ALLTRIM(loc_oPg.txt_4c_Qmin.Value)                 && qmins
+            loc_oBO.this_cLancamento = ALLTRIM(loc_oPg.txt_4c_Lancamento.Value)          && lancamento
+            loc_oBO.this_dDtlacto   = ConverterParaData(loc_oPg.txt_4c_DtLacto.Value)    && dtlacto
+            loc_oBO.this_dFimdtlacto = ConverterParaData(loc_oPg.txt_4c_FimDtLacto.Value) && fimdtlacto
+            loc_oBO.this_cOrigemlac = ALLTRIM(loc_oPg.txt_4c_OrigemLac.Value)            && origemlac
+
+            *-- Erro183 / BLOCO B. txt_4c_Dpro4s NAO entra: coluna dpro4s
+            *-- inexistente neste banco. txt_4c_DCategoria/_Dacb/DClass sao
+            *-- descricoes de lookup, sem coluna propria em SigCdPro.
+            loc_oBO.this_cCategoria  = ALLTRIM(loc_oPg.txt_4c_Categoria.Value)   && categoria
+            loc_oBO.this_cCodctgsite = ALLTRIM(loc_oPg.txt_4c_CodCtgSite.Value)  && codctgsite
+            loc_oBO.this_cCoddptsite = ALLTRIM(loc_oPg.txt_4c_CodDptSite.Value)  && coddptsite
+            loc_oBO.this_cCodmacro   = ALLTRIM(loc_oPg.txt_4c_CodMacro.Value)    && codmacro
+            loc_oBO.this_cCodcors    = ALLTRIM(loc_oPg.txt_4c_Cor.Value)         && codcors
+            loc_oBO.this_cCodtams    = ALLTRIM(loc_oPg.txt_4c_Tam.Value)         && codtams
+            loc_oBO.this_cCodacbs    = ALLTRIM(loc_oPg.txt_4c__codacb.Value)     && codacbs
+            loc_oBO.this_nPesobs     = ALLTRIM(loc_oPg.txt_4c_Peso.Value)        && pesobs
+            loc_oBO.this_nPesoms     = ALLTRIM(loc_oPg.txt_4c_Pmedio.Value)      && pesoms
+
+            *-- Erro183 / BLOCO C. Os OptionGroup gravam o INDICE 1-based da
+            *-- opcao, que eh exatamente o que o legado guarda nestas colunas
+            *-- numeric(1,0) via ControlSource. Os CheckBox nascem com .Value
+            *-- NUMERICO (0/1), entao vao direto para as properties this_n*.
+            *-- FORA: txt_4c_Fwget7 (espessus), chk_4c_Fwcheckbox10 (BrcEsp) e
+            *-- chk_4c_Fwcheckbox11 (DispEnc) - colunas inexistentes no banco.
+            loc_oBO.this_nProdwebs    = loc_oPg.obj_4c_Fwoption1.Value       && prodwebs
+            loc_oBO.this_nObrtamser   = loc_oPg.obj_4c_OptObrTamSer.Value    && obrtamser
+            loc_oBO.this_nTamps       = ALLTRIM(loc_oPg.txt_4c_Fwget6.Value) && tamps
+            loc_oBO.this_nTamhs       = ALLTRIM(loc_oPg.txt_4c_Fwget5.Value) && tamhs
+            loc_oBO.this_nTamls       = ALLTRIM(loc_oPg.txt_4c_Fwget4.Value) && tamls
+            loc_oBO.this_nConsigs     = loc_oPg.chk_4c_Get_Consig.Value      && consigs
+            loc_oBO.this_nFabrproprs  = loc_oPg.chk_4c_ChkFabrProprs.Value   && fabrproprs
+            loc_oBO.this_nForalinha   = loc_oPg.chk_4c_Fwcheckbox1.Value     && foralinha
+            loc_oBO.this_nSemconsulta = loc_oPg.chk_4c_ChkSemConsulta.Value  && semconsulta
+            loc_oBO.this_nMostruario  = loc_oPg.chk_4c_Fwcheckbox3.Value     && mostruario
+            loc_oBO.this_nEncoms      = loc_oPg.chk_4c_ChkEncoms.Value       && encoms
+            loc_oBO.this_nProdoff     = loc_oPg.chk_4c_Fwcheckbox4.Value     && prodoff
+            loc_oBO.this_nAtivosite   = loc_oPg.chk_4c_ChkAtivoSite.Value    && ativosite
+            loc_oBO.this_nSegmasc     = loc_oPg.chk_4c_Fwcheckbox5.Value     && segmasc
+            loc_oBO.this_nSegfem      = loc_oPg.chk_4c_Fwcheckbox6.Value     && segfem
+            loc_oBO.this_nSeguni      = loc_oPg.chk_4c_Fwcheckbox7.Value     && seguni
+            loc_oBO.this_nSeginf      = loc_oPg.chk_4c_Fwcheckbox8.Value     && seginf
+            loc_oBO.this_nSegkids     = loc_oPg.chk_4c_Fwcheckbox9.Value     && segkids
+            *-- a property do BO chama-se this_nProtnovo (e nao "Prodnovo"):
+            *-- eh assim que ela entra no INSERT/UPDATE da coluna prodnovo
+            loc_oBO.this_nProtnovo    = loc_oPg.chk_4c_Fwcheckbox2.Value     && prodnovo
+
+            *-- Erro183 / BLOCO D: os memos da faixa inferior. dsccompras,
+            *-- dpro3s e obscompras sao TEXT (sem LEFT no BO); obsmkt eh
+            *-- char(100), e o BO ja aplica o LEFT(...,100).
+            loc_oBO.this_mDsccompras = ALLTRIM(loc_oPg.obj_4c_Getdsccompras.Value)  && dsccompras
+            loc_oBO.this_mDpro3s     = ALLTRIM(loc_oPg.obj_4c_GetDPro3s.Value)      && dpro3s
+            loc_oBO.this_mObscompras = ALLTRIM(loc_oPg.obj_4c_GetObsCompras.Value)  && obscompras
+            loc_oBO.this_cObsmkt     = ALLTRIM(loc_oPg.obj_4c_Get_ObsMkt.Value)     && obsmkt
+
+            *-- Erro184: aba FISCAL (pgDadosFiscais) ------------------------
+            *-- O FormParaBO so cobria a aba Principal: os 17 campos que o
+            *-- legado liga a SigCdPro pela pgDadosFiscais nunca chegavam ao BO.
+            *-- O sintoma reportado foi a Classificacao Fiscal: ValidarDados
+            *-- lia this_cClfiscals (sempre vazio) e acusava "A Classificacao
+            *-- Fiscal Necessita Ser Preenchida Neste Grupo!!!" com o campo
+            *-- preenchido na tela. O resto da aba gravava em branco, calado.
+            *-- FORA: get_CodImpPro, get_DCodImpPro, get_codnacpro, get_coddcr
+            *-- e o Fwoption1 (TpCodPro) - as 5 colunas nao existem neste banco
+            *-- (conferido no INFORMATION_SCHEMA). cmbIpi e getIPPTCST nao tem
+            *-- ControlSource no SCX - nao sao bind direto.
+            loc_oPgFis = THIS.ObterPaginaDadosFiscais()
+
+            loc_oBO.this_cClfiscals = ALLTRIM(loc_oPgFis.txt_4c_Clfiscal.Value)    && clfiscals
+            loc_oBO.this_cOrigmercs = ALLTRIM(loc_oPgFis.txt_4c_Origmerc.Value)    && origmercs
+            loc_oBO.this_cTptribs   = ALLTRIM(loc_oPgFis.txt_4c_TpTrib.Value)      && tptribs
+            loc_oBO.this_cSittricms = ALLTRIM(loc_oPgFis.txt_4c_Sittricm.Value)    && sittricms
+            loc_oBO.this_cCodservs  = ALLTRIM(loc_oPgFis.txt_4c_Codigo.Value)      && codservs
+            loc_oBO.this_cTeors     = ALLTRIM(loc_oPgFis.txt_4c_Teor.Value)        && teors
+            loc_oBO.this_cMetals    = ALLTRIM(loc_oPgFis.txt_4c_Metal.Value)       && metals
+            loc_oBO.this_mDescfis   = ALLTRIM(loc_oPgFis.obj_4c_Mgetdescfi.Value)  && descfis
+            loc_oBO.this_nValors    = ALLTRIM(loc_oPgFis.txt_4c_Valor.Value)       && valors
+            *-- Erro187: moedas tem o par na aba Componente (getMoeda)
+            loc_oBO.this_cMoedas    = THIS.LerCampoEspelhado(loc_oPgFis.txt_4c_Mvalor, ;
+                                          loc_oPgCmp.txt_4c_Moeda)                 && moedas
+            loc_oBO.this_nIcms      = ALLTRIM(loc_oPgFis.txt_4c_Icms.Value)        && icms
+            loc_oBO.this_cDescecfs  = ALLTRIM(loc_oPgFis.txt_4c_DescEcfs.Value)    && descecfs
+            loc_oBO.this_nAliqipis  = ALLTRIM(loc_oPgFis.txt_4c_AliqIPI.Value)     && aliqipis
+            loc_oBO.this_cExtipi    = ALLTRIM(loc_oPgFis.txt_4c_Extipi.Value)      && extipi
+            loc_oBO.this_cIats      = ALLTRIM(loc_oPgFis.txt_4c_Iat.Value)         && iats
+            loc_oBO.this_cGruccus   = ALLTRIM(loc_oPgFis.txt_4c__gruccus.Value)    && gruccus
+            loc_oBO.this_cContaccus = ALLTRIM(loc_oPgFis.txt_4c__contaccus.Value)  && contaccus
+
+            *-- Erro184: aba COMPONENTE (pgComposicao) ----------------------
+            loc_oPgCmp = THIS.ObterPaginaComposicao()
+
+            loc_oBO.this_nMarkupa    = ALLTRIM(loc_oPgCmp.txt_4c_MarkupA.Value)    && markupa
+            loc_oBO.this_nPcuss      = ALLTRIM(loc_oPgCmp.txt_4c_Pcus.Value)       && pcuss
+            loc_oBO.this_nFcustos    = ALLTRIM(loc_oPgCmp.txt_4c_Fcusto.Value)     && fcustos
+            loc_oBO.this_cMoecs      = ALLTRIM(loc_oPgCmp.txt_4c_Moec.Value)       && moecs
+            loc_oBO.this_cMoepcs     = ALLTRIM(loc_oPgCmp.txt_4c_Moepc.Value)      && moepcs
+            loc_oBO.this_cCftios     = ALLTRIM(loc_oPgCmp.txt_4c_Ftio.Value)       && cftios
+            loc_oBO.this_cMftios     = ALLTRIM(loc_oPgCmp.txt_4c_Mftio.Value)      && mftios
+            loc_oBO.this_nPftios     = ALLTRIM(loc_oPgCmp.txt_4c_Pftio.Value)      && pftios
+            loc_oBO.this_nMargems    = ALLTRIM(loc_oPgCmp.txt_4c_Margem.Value)     && margems
+            loc_oBO.this_cMatprincs  = ALLTRIM(loc_oPgCmp.txt_4c_MatP.Value)       && matprincs
+            loc_oBO.this_nPvideals   = ALLTRIM(loc_oPgCmp.txt_4c_Pvideal.Value)    && pvideals
+            loc_oBO.this_cCftiocs    = ALLTRIM(loc_oPgCmp.txt_4c_Cmkpc.Value)      && cftiocs
+            loc_oBO.this_nPftiocs    = ALLTRIM(loc_oPgCmp.txt_4c__pftioc.Value)    && pftiocs
+            loc_oBO.this_cStatus     = ALLTRIM(loc_oPgCmp.txt_4c_Status.Value)     && status
+            loc_oBO.this_nEncargos   = ALLTRIM(loc_oPgCmp.txt_4c_Encarg.Value)     && encargos
+            loc_oBO.this_nFatuals    = ALLTRIM(loc_oPgCmp.txt_4c_FAtuals.Value)    && fatuals
+            loc_oBO.this_nFideals    = ALLTRIM(loc_oPgCmp.txt_4c_FIdeals.Value)    && fideals
+            loc_oBO.this_nPrecode    = ALLTRIM(loc_oPgCmp.txt_4c_PrecoDe.Value)    && precode
+            loc_oBO.this_nCustocp    = ALLTRIM(loc_oPgCmp.txt_4c_CustoCp.Value)    && custocp
+            loc_oBO.this_nVarpesoms  = ALLTRIM(loc_oPgCmp.txt_4c_VarPesoMs.Value)  && varpesoms
+
+            *-- container "Materia Prima" (cntMtPrima legado)
+            loc_oBO.this_cCompos     = ALLTRIM(loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Compos.Value)   && compos
+            loc_oBO.this_nMontadescs = THIS.ValorNumerico(loc_oPgCmp.cnt_4c_MtPrima.cbo_4c_CmbMontaDescs.Value)
+            loc_oBO.this_nDigimaxs   = ALLTRIM(loc_oPgCmp.cnt_4c_MtPrima.txt_4c_DigiMaxs.Value)  && digimaxs
+            loc_oBO.this_nOrdcompos  = ALLTRIM(loc_oPgCmp.cnt_4c_MtPrima.txt_4c_OrdCompos.Value) && ordcompos
+            loc_oBO.this_nCasas      = ALLTRIM(loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Casas.Value)     && casas
+
+            *-- Erro184: aba PROCESSO (PgDadosFaseP) ------------------------
+            loc_oPgFas = THIS.ObterPaginaFaseP()
+
+            loc_oBO.this_nQtminfabs  = ALLTRIM(loc_oPgFas.txt_4c_Qmin.Value)       && qtminfabs
+            loc_oBO.this_nPesopdrs   = ALLTRIM(loc_oPgFas.txt_4c_PesoPdrs.Value)   && pesopdrs
+            loc_oBO.this_nPesobris   = ALLTRIM(loc_oPgFas.txt_4c_PesoBris.Value)   && pesobris
+            loc_oBO.this_nPesometal  = ALLTRIM(loc_oPgFas.txt_4c_PesoMetal.Value)  && pesometal
+            loc_oBO.this_cCodgarras  = ALLTRIM(loc_oPgFas.txt_4c_CodGarras.Value)  && codgarras
+            loc_oBO.this_cConquilhas = ALLTRIM(loc_oPgFas.txt_4c_Conquilha.Value)  && conquilhas
+            loc_oBO.this_nVolumes    = ALLTRIM(loc_oPgFas.txt_4c_Volumes.Value)    && volumes
+            loc_oBO.this_nTents      = ALLTRIM(loc_oPgFas.txt_4c_TEnts.Value)      && tents
+            loc_oBO.this_nDiasgar    = ALLTRIM(loc_oPgFas.txt_4c_DiasGar.Value)    && diasgar
+            loc_oBO.this_nLtminsv    = ALLTRIM(loc_oPgFas.txt_4c_LtMinsV.Value)    && ltminsv
+            loc_oBO.this_nVultcomps  = ALLTRIM(loc_oPgFas.txt_4c_Vucp.Value)       && vultcomps
+            loc_oBO.this_cMultcomps  = ALLTRIM(loc_oPgFas.txt_4c_Mucp.Value)       && multcomps
+            *-- UltComps eh datetime: regra #16, nunca TTOD() direto
+            loc_oBO.this_dUltcomps   = ConverterParaData(loc_oPgFas.txt_4c_DtUcp.Value)  && ultcomps
+            *-- CheckBox/OptionGroup ligados a colunas numeric(1,0)
+            loc_oBO.this_nVarias     = THIS.ValorNumerico(loc_oPgFas.chk_4c_Fwoption1.Value)     && varias
+            loc_oBO.this_nCravcers   = THIS.ValorNumerico(loc_oPgFas.chk_4c_OpcCravCera.Value)   && cravcers
+            loc_oBO.this_nProdvars   = loc_oPgFas.obj_4c_Fwoption2.Value                         && prodvars
+
+            *-- Erro184: aba CONSUMO (PgDadosConsP) -------------------------
+            loc_oPgCon = THIS.ObterPaginaConsP()
+
+            loc_oBO.this_nQtdcpnts   = ALLTRIM(loc_oPgCon.txt_4c_Qtcpnt.Value)     && qtdcpnts
+            *-- chkfunds eh BIT: a property do BO eh LOGICA, o CheckBox.Value
+            *-- eh numerico - converter, nunca atribuir direto (CLAUDE.md)
+            loc_oBO.this_lChkfunds   = (THIS.ValorNumerico(loc_oPgCon.chk_4c_ChkFund.Value) = 1) && chkfunds
+
+            *-- Erro184: aba DESIGNER (pgDesigner) --------------------------
+            *-- Unico campo com coluna neste banco. DesLacto, CriaLacto e
+            *-- DtAprAmo nao existem em SigCdPro (INFORMATION_SCHEMA).
+            loc_oPgDes = THIS.ObterPaginaDesigner()
+            loc_oBO.this_mObsinsp    = ALLTRIM(loc_oPgDes.obj_4c_GetObsInsp.Value) && obsinsp
 
             loc_oBO.MarcarComoAlterado()
             loc_lResultado = .T.
@@ -7384,7 +9355,8 @@ DEFINE CLASS FormProduto AS FormBase
     * por PreencherDescricoesLookup(), que consulta as tabelas de apoio.
     *===========================================================================
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_lResultado, loc_oPg, loc_oBO, loException
+        LOCAL loc_lResultado, loc_oPg, loc_oPgFis, loc_oPgCmp, loc_oPgFas, ;
+            loc_oPgCon, loc_oPgDes, loc_oBO, loException
         loc_lResultado = .F.
 
         TRY
@@ -7428,18 +9400,170 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oPg.txt_4c_Obs3.Value = ALLTRIM(loc_oBO.this_cObsetqs)
 
             *-- Custo / venda e suas moedas -----------------------------------
-            loc_oPg.txt_4c_Ctotal.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nCustofs, 3)
-            loc_oPg.txt_4c_Mctotal.Value  = ALLTRIM(loc_oBO.this_cMoecusfs)
-            loc_oPg.txt_4c_Pvenda.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPvens, 5)
-            loc_oPg.txt_4c_Mpvenda.Value  = ALLTRIM(loc_oBO.this_cMoevs)
+            *-- Erro187: estes cinco tem GEMEO na aba Componente (ControlSource
+            *-- compartilhado no legado) - escrever nos DOIS, senao o usuario ve
+            *-- o valor numa aba e vazio na outra.
+            loc_oPgCmp = THIS.ObterPaginaComposicao()
+
+            THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Ctotal, loc_oPgCmp.txt_4c_Custof, ;
+                THIS.FormatarNumeroTexto(loc_oBO.this_nCustofs, 3))
+            THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Mctotal, loc_oPgCmp.txt_4c_Moecusf, ;
+                ALLTRIM(loc_oBO.this_cMoecusfs))
+            THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Pvenda, loc_oPgCmp.txt_4c_Pven, ;
+                THIS.FormatarNumeroTexto(loc_oBO.this_nPvens, 5))
+            THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Mpvenda, loc_oPgCmp.txt_4c_Moev, ;
+                ALLTRIM(loc_oBO.this_cMoevs))
             loc_oPg.txt_4c_Fvenda.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nFvendas, 3)
-            loc_oPg.txt_4c_Mfvenda.Value  = ALLTRIM(loc_oBO.this_cMoepvs)
+            THIS.EscreverCampoEspelhado(loc_oPg.txt_4c_Mfvenda, loc_oPgCmp.txt_4c_Moepv, ;
+                ALLTRIM(loc_oBO.this_cMoepvs))
 
             *-- Auditoria -----------------------------------------------------
             loc_oPg.txt_4c_DtIncs.Value   = THIS.FormatarDataTexto(loc_oBO.this_dDtincs)
             loc_oPg.txt_4c_Usuario.Value  = ALLTRIM(loc_oBO.this_cUsuincs)
             loc_oPg.txt_4c_DataAlts.Value = THIS.FormatarDataTexto(loc_oBO.this_dDtalts)
             loc_oPg.txt_4c_UsuaAlts.Value = ALLTRIM(loc_oBO.this_cUsuaalts)
+
+            *-- Erro183 / BLOCO A: espelho exato das linhas acrescentadas em
+            *-- FormParaBO (mesma ordem). txt_4c_CnjLacto fica de fora: coluna
+            *-- CnjLacto inexistente neste banco.
+            loc_oPg.txt_4c_DtSituas.Value   = THIS.FormatarDataTexto(loc_oBO.this_dDtsituas)
+            loc_oPg.txt_4c_Qmin.Value       = THIS.FormatarNumeroTexto(loc_oBO.this_nQmins, 3)
+            loc_oPg.txt_4c_Lancamento.Value = ALLTRIM(loc_oBO.this_cLancamento)
+            loc_oPg.txt_4c_DtLacto.Value    = THIS.FormatarDataTexto(loc_oBO.this_dDtlacto)
+            loc_oPg.txt_4c_FimDtLacto.Value = THIS.FormatarDataTexto(loc_oBO.this_dFimdtlacto)
+            loc_oPg.txt_4c_OrigemLac.Value  = ALLTRIM(loc_oBO.this_cOrigemlac)
+
+            *-- Erro183 / BLOCO B - espelho de FormParaBO
+            loc_oPg.txt_4c_Categoria.Value  = ALLTRIM(loc_oBO.this_cCategoria)
+            loc_oPg.txt_4c_CodCtgSite.Value = ALLTRIM(loc_oBO.this_cCodctgsite)
+            loc_oPg.txt_4c_CodDptSite.Value = ALLTRIM(loc_oBO.this_cCoddptsite)
+            loc_oPg.txt_4c_CodMacro.Value   = ALLTRIM(loc_oBO.this_cCodmacro)
+            loc_oPg.txt_4c_Cor.Value        = ALLTRIM(loc_oBO.this_cCodcors)
+            loc_oPg.txt_4c_Tam.Value        = ALLTRIM(loc_oBO.this_cCodtams)
+            loc_oPg.txt_4c__codacb.Value    = ALLTRIM(loc_oBO.this_cCodacbs)
+            loc_oPg.txt_4c_Peso.Value       = THIS.FormatarNumeroTexto(loc_oBO.this_nPesobs, 3)
+            loc_oPg.txt_4c_Pmedio.Value     = THIS.FormatarNumeroTexto(loc_oBO.this_nPesoms, 3)
+
+            *-- Erro183 / BLOCO C - espelho de FormParaBO
+            loc_oPg.obj_4c_Fwoption1.Value     = loc_oBO.this_nProdwebs
+            loc_oPg.obj_4c_OptObrTamSer.Value  = loc_oBO.this_nObrtamser
+            loc_oPg.txt_4c_Fwget6.Value        = THIS.FormatarNumeroTexto(loc_oBO.this_nTamps, 2)
+            loc_oPg.txt_4c_Fwget5.Value        = THIS.FormatarNumeroTexto(loc_oBO.this_nTamhs, 2)
+            loc_oPg.txt_4c_Fwget4.Value        = THIS.FormatarNumeroTexto(loc_oBO.this_nTamls, 2)
+            loc_oPg.chk_4c_Get_Consig.Value    = loc_oBO.this_nConsigs
+            loc_oPg.chk_4c_ChkFabrProprs.Value = loc_oBO.this_nFabrproprs
+            loc_oPg.chk_4c_Fwcheckbox1.Value   = loc_oBO.this_nForalinha
+            loc_oPg.chk_4c_ChkSemConsulta.Value = loc_oBO.this_nSemconsulta
+            loc_oPg.chk_4c_Fwcheckbox3.Value   = loc_oBO.this_nMostruario
+            loc_oPg.chk_4c_ChkEncoms.Value     = loc_oBO.this_nEncoms
+            loc_oPg.chk_4c_Fwcheckbox4.Value   = loc_oBO.this_nProdoff
+            loc_oPg.chk_4c_ChkAtivoSite.Value  = loc_oBO.this_nAtivosite
+            loc_oPg.chk_4c_Fwcheckbox5.Value   = loc_oBO.this_nSegmasc
+            loc_oPg.chk_4c_Fwcheckbox6.Value   = loc_oBO.this_nSegfem
+            loc_oPg.chk_4c_Fwcheckbox7.Value   = loc_oBO.this_nSeguni
+            loc_oPg.chk_4c_Fwcheckbox8.Value   = loc_oBO.this_nSeginf
+            loc_oPg.chk_4c_Fwcheckbox9.Value   = loc_oBO.this_nSegkids
+            loc_oPg.chk_4c_Fwcheckbox2.Value   = loc_oBO.this_nProtnovo
+
+            *-- Erro183 / BLOCO D - espelho de FormParaBO
+            loc_oPg.obj_4c_Getdsccompras.Value = ALLTRIM(loc_oBO.this_mDsccompras)
+            loc_oPg.obj_4c_GetDPro3s.Value     = ALLTRIM(loc_oBO.this_mDpro3s)
+            loc_oPg.obj_4c_GetObsCompras.Value = ALLTRIM(loc_oBO.this_mObscompras)
+            loc_oPg.obj_4c_Get_ObsMkt.Value    = ALLTRIM(loc_oBO.this_cObsmkt)
+
+            *-- Erro184 / aba FISCAL - espelho exato de FormParaBO.
+            *-- Sem esta metade o Alterar/Visualizar abriria a aba Fiscal em
+            *-- branco e o Salvar seguinte apagaria o que estava gravado.
+            loc_oPgFis = THIS.ObterPaginaDadosFiscais()
+
+            loc_oPgFis.txt_4c_Clfiscal.Value   = ALLTRIM(loc_oBO.this_cClfiscals)
+            loc_oPgFis.txt_4c_Origmerc.Value   = ALLTRIM(loc_oBO.this_cOrigmercs)
+            loc_oPgFis.txt_4c_TpTrib.Value     = ALLTRIM(loc_oBO.this_cTptribs)
+            loc_oPgFis.txt_4c_Sittricm.Value   = ALLTRIM(loc_oBO.this_cSittricms)
+            loc_oPgFis.txt_4c_Codigo.Value     = ALLTRIM(loc_oBO.this_cCodservs)
+            loc_oPgFis.txt_4c_Teor.Value       = ALLTRIM(loc_oBO.this_cTeors)
+            loc_oPgFis.txt_4c_Metal.Value      = ALLTRIM(loc_oBO.this_cMetals)
+            loc_oPgFis.obj_4c_Mgetdescfi.Value = ALLTRIM(loc_oBO.this_mDescfis)
+            loc_oPgFis.txt_4c_Valor.Value      = THIS.FormatarNumeroTexto(loc_oBO.this_nValors, 2)
+            *-- Erro187: moedas tem gemeo na aba Componente (getMoeda).
+            *-- Em variavel: VFP9 nao aceita metodo() seguido de .Propriedade.
+            THIS.EscreverCampoEspelhado(loc_oPgFis.txt_4c_Mvalor, ;
+                loc_oPgCmp.txt_4c_Moeda, ALLTRIM(loc_oBO.this_cMoedas))
+            loc_oPgFis.txt_4c_Icms.Value       = THIS.FormatarNumeroTexto(loc_oBO.this_nIcms, 2)
+            loc_oPgFis.txt_4c_DescEcfs.Value   = ALLTRIM(loc_oBO.this_cDescecfs)
+            loc_oPgFis.txt_4c_AliqIPI.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nAliqipis, 2)
+            loc_oPgFis.txt_4c_Extipi.Value     = ALLTRIM(loc_oBO.this_cExtipi)
+            loc_oPgFis.txt_4c_Iat.Value        = ALLTRIM(loc_oBO.this_cIats)
+            loc_oPgFis.txt_4c__gruccus.Value   = ALLTRIM(loc_oBO.this_cGruccus)
+            loc_oPgFis.txt_4c__contaccus.Value = ALLTRIM(loc_oBO.this_cContaccus)
+
+            *-- Erro184 / aba COMPONENTE - espelho de FormParaBO
+            loc_oPgCmp = THIS.ObterPaginaComposicao()
+
+            loc_oPgCmp.txt_4c_MarkupA.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nMarkupa, 3)
+            loc_oPgCmp.txt_4c_Pcus.Value      = THIS.FormatarNumeroTexto(loc_oBO.this_nPcuss, 5)
+            loc_oPgCmp.txt_4c_Fcusto.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nFcustos, 5)
+            loc_oPgCmp.txt_4c_Moec.Value      = ALLTRIM(loc_oBO.this_cMoecs)
+            loc_oPgCmp.txt_4c_Moepc.Value     = ALLTRIM(loc_oBO.this_cMoepcs)
+            loc_oPgCmp.txt_4c_Ftio.Value      = ALLTRIM(loc_oBO.this_cCftios)
+            loc_oPgCmp.txt_4c_Mftio.Value     = ALLTRIM(loc_oBO.this_cMftios)
+            loc_oPgCmp.txt_4c_Pftio.Value     = THIS.FormatarNumeroTexto(loc_oBO.this_nPftios, 3)
+            loc_oPgCmp.txt_4c_Margem.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nMargems, 6)
+            loc_oPgCmp.txt_4c_MatP.Value      = ALLTRIM(loc_oBO.this_cMatprincs)
+            loc_oPgCmp.txt_4c_Pvideal.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPvideals, 5)
+            loc_oPgCmp.txt_4c_Cmkpc.Value     = ALLTRIM(loc_oBO.this_cCftiocs)
+            loc_oPgCmp.txt_4c__pftioc.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPftiocs, 3)
+            loc_oPgCmp.txt_4c_Status.Value    = ALLTRIM(loc_oBO.this_cStatus)
+            loc_oPgCmp.txt_4c_Encarg.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nEncargos, 4)
+            loc_oPgCmp.txt_4c_FAtuals.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nFatuals, 5)
+            loc_oPgCmp.txt_4c_FIdeals.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nFideals, 5)
+            loc_oPgCmp.txt_4c_PrecoDe.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPrecode, 5)
+            loc_oPgCmp.txt_4c_CustoCp.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nCustocp, 5)
+            loc_oPgCmp.txt_4c_VarPesoMs.Value = THIS.FormatarNumeroTexto(loc_oBO.this_nVarpesoms, 2)
+
+            loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Compos.Value    = ALLTRIM(loc_oBO.this_cCompos)
+            *-- o ComboBox nasce com .Value de tipo C (medido); gravar NUMERICO
+            *-- aqui fixa o tipo que o FormParaBO vai ler de volta
+            loc_oPgCmp.cnt_4c_MtPrima.cbo_4c_CmbMontaDescs.Value = loc_oBO.this_nMontadescs
+            loc_oPgCmp.cnt_4c_MtPrima.txt_4c_DigiMaxs.Value  = THIS.FormatarNumeroTexto(loc_oBO.this_nDigimaxs, 0)
+            loc_oPgCmp.cnt_4c_MtPrima.txt_4c_OrdCompos.Value = THIS.FormatarNumeroTexto(loc_oBO.this_nOrdcompos, 0)
+            loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Casas.Value     = THIS.FormatarNumeroTexto(loc_oBO.this_nCasas, 0)
+
+            *-- Erro184 / aba PROCESSO - espelho de FormParaBO
+            loc_oPgFas = THIS.ObterPaginaFaseP()
+
+            loc_oPgFas.txt_4c_Qmin.Value       = THIS.FormatarNumeroTexto(loc_oBO.this_nQtminfabs, 3)
+            loc_oPgFas.txt_4c_PesoPdrs.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPesopdrs, 3)
+            loc_oPgFas.txt_4c_PesoBris.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nPesobris, 3)
+            loc_oPgFas.txt_4c_PesoMetal.Value  = THIS.FormatarNumeroTexto(loc_oBO.this_nPesometal, 3)
+            loc_oPgFas.txt_4c_CodGarras.Value  = ALLTRIM(loc_oBO.this_cCodgarras)
+            loc_oPgFas.txt_4c_Conquilha.Value  = ALLTRIM(loc_oBO.this_cConquilhas)
+            loc_oPgFas.txt_4c_Volumes.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nVolumes, 0)
+            loc_oPgFas.txt_4c_TEnts.Value      = THIS.FormatarNumeroTexto(loc_oBO.this_nTents, 0)
+            loc_oPgFas.txt_4c_DiasGar.Value    = THIS.FormatarNumeroTexto(NVL(loc_oBO.this_nDiasgar, 0), 0)
+            loc_oPgFas.txt_4c_LtMinsV.Value    = THIS.FormatarNumeroTexto(loc_oBO.this_nLtminsv, 3)
+            loc_oPgFas.txt_4c_Vucp.Value       = THIS.FormatarNumeroTexto(loc_oBO.this_nVultcomps, 2)
+            loc_oPgFas.txt_4c_Mucp.Value       = ALLTRIM(loc_oBO.this_cMultcomps)
+            loc_oPgFas.txt_4c_DtUcp.Value      = THIS.FormatarDataTexto(loc_oBO.this_dUltcomps)
+            loc_oPgFas.chk_4c_Fwoption1.Value  = loc_oBO.this_nVarias
+            *-- Normalizacao do legado (Grupo_op.Click, caminho comum de carga):
+            *--   opc_CravCera.Value = Iif(CrSigCdPro.CravCers = 0, 2, CravCers)
+            *-- CravCers = 0 nao existe na tela: vira 2 (o estado "nao").
+            loc_oPgFas.chk_4c_OpcCravCera.Value = ;
+                IIF(THIS.ValorNumerico(loc_oBO.this_nCravcers) = 0, 2, ;
+                    THIS.ValorNumerico(loc_oBO.this_nCravcers))
+            loc_oPgFas.obj_4c_Fwoption2.Value  = loc_oBO.this_nProdvars
+
+            *-- Erro184 / aba CONSUMO - espelho de FormParaBO
+            loc_oPgCon = THIS.ObterPaginaConsP()
+
+            loc_oPgCon.txt_4c_Qtcpnt.Value   = THIS.FormatarNumeroTexto(loc_oBO.this_nQtdcpnts, 0)
+            *-- property LOGICA -> CheckBox.Value NUMERICO
+            loc_oPgCon.chk_4c_ChkFund.Value  = IIF(loc_oBO.this_lChkfunds, 1, 0)
+
+            *-- Erro184 / aba DESIGNER - espelho de FormParaBO
+            loc_oPgDes = THIS.ObterPaginaDesigner()
+            loc_oPgDes.obj_4c_GetObsInsp.Value = ALLTRIM(loc_oBO.this_mObsinsp)
 
             *-- Descricoes dos lookups (nao existem em SigCdPro)
             THIS.PreencherDescricoesLookup()
@@ -7464,7 +9588,14 @@ DEFINE CLASS FormProduto AS FormBase
     *===========================================================================
     PROTECTED PROCEDURE FormatarNumeroTexto(par_nValor, par_nDecimais)
         LOCAL loc_nValor, loc_nDec, loc_cTexto
-        loc_nValor = IIF(VARTYPE(par_nValor) = "N", par_nValor, 0)
+        *-- Erro184: era IIF(VARTYPE(...) = "N", par_nValor, 0), que ZERAVA
+        *-- qualquer valor de tipo Caractere. Os TextBox numericos desta tela
+        *-- sao de texto e o FormParaBO guarda a STRING na property this_n*
+        *-- (o FormatarNumeroSQL converte na gravacao), entao depois de um
+        *-- FormParaBO as properties numericas ficam de tipo "C" - e o
+        *-- BOParaForm seguinte devolvia o campo VAZIO. ValorNumerico aceita
+        *-- C, N e L; com numero o resultado eh identico ao de antes.
+        loc_nValor = THIS.ValorNumerico(par_nValor)
         loc_nDec   = IIF(VARTYPE(par_nDecimais) = "N", par_nDecimais, 0)
         loc_cTexto = ""
 
@@ -7494,6 +9625,105 @@ DEFINE CLASS FormProduto AS FormBase
         ENDIF
 
         RETURN loc_cTexto
+    ENDPROC
+
+    *===========================================================================
+    * AplicarDefaultsInclusao - Defaults do ramo INSERIR do legado que dependem
+    * do GRUPO, e por isso so podem ser aplicados depois que ele eh conhecido
+    * (Erro184).
+    *
+    * Legado (Pagina.Lista.Grupo_op.Click, If ThisForm.pcEscolha = 'INSERIR'):
+    *   Replace ... Cunis With Iif(!Empty(crSigCdGrp.cUniPs), crSigCdGrp.cUniPs,
+    *                              crSigCdPam.CUnis), ...
+    *               Consigs With 1 In crSigCdPro
+    *   If Not Empty(Substr(crSigCdGrp.CfgGerGprs, 11, 3)) And
+    *      Empty(...get_Cunip.Value)
+    *       ...get_Cunip.Value = Substr(crSigCdGrp.CfgGerGprs, 11, 3)
+    *
+    * O que NAO depende do grupo (Datas, DtIncs, Situas, CravCers, UsuIncs)
+    * ja vive em ProdutoBO.InicializarValoresPadrao.
+    *
+    * Consigs eh obrigatorio AQUI e nao no BO: desde que a aba Principal passou
+    * a ter o CheckBox "Consigna" (Erro183), o FormParaBO le o controle e
+    * sobrescreve o default do BO - sem esta linha todo produto novo nasceria
+    * com Consigs = 0 em vez de 1.
+    *===========================================================================
+    PROTECTED PROCEDURE AplicarDefaultsInclusao(par_cGrupo)
+        LOCAL loc_oPg, loc_oPgFas, loc_cSQL, loc_nResultado, loc_cUni, ;
+            loc_cUnip, loException
+
+        TRY
+            loc_oPg = THIS.ObterPaginaDados()
+
+            *-- "Consigs With 1"
+            loc_oPg.chk_4c_Get_Consig.Value = 1
+
+            *-- "CravCers With 2" do mesmo Replace do legado. O controle vive na
+            *-- aba Processo; desde que ela passou a ser transferida (Erro184),
+            *-- deixar o CheckBox em 0 sobrescrevia o default 2 do BO.
+            *-- Em variavel: o VFP9 nao aceita metodo() seguido de .Propriedade
+            *-- na mesma expressao (Syntax error).
+            loc_oPgFas = THIS.ObterPaginaFaseP()
+            loc_oPgFas.chk_4c_OpcCravCera.Value = 2
+
+            loc_cUni  = ""
+            loc_cUnip = ""
+
+            IF !EMPTY(par_cGrupo)
+                IF USED("cursor_4c_GrpDefault")
+                    USE IN cursor_4c_GrpDefault
+                ENDIF
+
+                loc_cSQL = "SELECT cunips, cfggergprs FROM SigCdGrp" + ;
+                    " WHERE cgrus = " + EscaparSQL(PADR(ALLTRIM(par_cGrupo), 3))
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrpDefault")
+
+                IF loc_nResultado >= 0 AND USED("cursor_4c_GrpDefault") ;
+                        AND RECCOUNT("cursor_4c_GrpDefault") > 0
+                    GO TOP IN cursor_4c_GrpDefault
+                    loc_cUni = ALLTRIM(NVL(cursor_4c_GrpDefault.cunips, ""))
+                    *-- Substr(CfgGerGprs, 11, 3) do legado - SEM ALLTRIM antes,
+                    *-- a posicao 11 eh contada na coluna CRUA
+                    loc_cUnip = SUBSTR(NVL(cursor_4c_GrpDefault.cfggergprs, "") + ;
+                        SPACE(13), 11, 3)
+                ENDIF
+
+                IF USED("cursor_4c_GrpDefault")
+                    USE IN cursor_4c_GrpDefault
+                ENDIF
+            ENDIF
+
+            *-- Iif(!Empty(crSigCdGrp.cUniPs), crSigCdGrp.cUniPs, crSigCdPam.CUnis)
+            IF EMPTY(loc_cUni)
+                IF USED("cursor_4c_PamDefault")
+                    USE IN cursor_4c_PamDefault
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, ;
+                    "SELECT TOP 1 cunis FROM SigCdPam", "cursor_4c_PamDefault")
+                IF loc_nResultado >= 0 AND USED("cursor_4c_PamDefault") ;
+                        AND RECCOUNT("cursor_4c_PamDefault") > 0
+                    GO TOP IN cursor_4c_PamDefault
+                    loc_cUni = ALLTRIM(NVL(cursor_4c_PamDefault.cunis, ""))
+                ENDIF
+                IF USED("cursor_4c_PamDefault")
+                    USE IN cursor_4c_PamDefault
+                ENDIF
+            ENDIF
+
+            IF !EMPTY(loc_cUni)
+                loc_oPg.txt_4c_Cuni.Value = loc_cUni
+            ENDIF
+
+            *-- o legado so preenche a 2a unidade quando ela esta VAZIA
+            IF !EMPTY(loc_cUnip) AND EMPTY(ALLTRIM(loc_oPg.txt_4c_Cunip.Value))
+                loc_oPg.txt_4c_Cunip.Value = ALLTRIM(loc_cUnip)
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao aplicar os valores padr" + CHR(227) + "o da " + ;
+                "inclus" + CHR(227) + "o:" + CHR(13) + loException.Message, ;
+                "FormProduto.AplicarDefaultsInclusao")
+        ENDTRY
     ENDPROC
 
     *===========================================================================
@@ -7600,7 +9830,8 @@ DEFINE CLASS FormProduto AS FormBase
     * LimparCampos - Zera todos os campos da aba Dados Principais
     *===========================================================================
     PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oPg, loException
+        LOCAL loc_oPg, loc_oPgFis, loc_oPgCmp, loc_oPgFas, loc_oPgCon, ;
+            loc_oPgDes, loException
 
         TRY
             loc_oPg = THIS.ObterPaginaDados()
@@ -7640,13 +9871,148 @@ DEFINE CLASS FormProduto AS FormBase
             *-- Situacao volta para Ativo (default do legado ao incluir)
             loc_oPg.obj_4c_Opc_situacao.Value = 1
 
+            *-- Erro184: a aba FISCAL tambem tem de ser limpa. Enquanto ela nao
+            *-- era transferida para o BO isso nao aparecia; agora que o
+            *-- FormParaBO le estes campos, deixar os valores do produto
+            *-- ANTERIOR na tela faria o Incluir gravar os dados fiscais dele.
+            loc_oPgFis = THIS.ObterPaginaDadosFiscais()
+
+            STORE "" TO loc_oPgFis.txt_4c_Clfiscal.Value,  loc_oPgFis.txt_4c_Dclfiscal.Value, ;
+                        loc_oPgFis.txt_4c_Origmerc.Value,  loc_oPgFis.txt_4c_Dorigmerc.Value, ;
+                        loc_oPgFis.txt_4c_Sittricm.Value,  loc_oPgFis.txt_4c_Dsittricm.Value, ;
+                        loc_oPgFis.txt_4c_TpTrib.Value,    loc_oPgFis.txt_4c_Codigo.Value
+
+            STORE "" TO loc_oPgFis.txt_4c_Teor.Value,      loc_oPgFis.txt_4c_DesTeor.Value, ;
+                        loc_oPgFis.txt_4c_Metal.Value,     loc_oPgFis.txt_4c_DesMetal.Value, ;
+                        loc_oPgFis.txt_4c_Valor.Value,     loc_oPgFis.txt_4c_Mvalor.Value
+
+            STORE "" TO loc_oPgFis.txt_4c_Icms.Value,      loc_oPgFis.txt_4c_AliqIPI.Value, ;
+                        loc_oPgFis.txt_4c_Extipi.Value,    loc_oPgFis.txt_4c_Iat.Value, ;
+                        loc_oPgFis.txt_4c_DescEcfs.Value,  loc_oPgFis.obj_4c_Mgetdescfi.Value
+
+            STORE "" TO loc_oPgFis.txt_4c__gruccus.Value,  loc_oPgFis.txt_4c__dgruccus.Value, ;
+                        loc_oPgFis.txt_4c__contaccus.Value, loc_oPgFis.txt_4c__dcontaccus.Value
+
+            *-- sem bind (colunas inexistentes neste banco), mas visiveis
+            STORE "" TO loc_oPgFis.txt_4c__CodImpPro.Value, loc_oPgFis.txt_4c__DCodImpPro.Value, ;
+                        loc_oPgFis.txt_4c__codnacpro.Value, loc_oPgFis.txt_4c__dcodnacpro.Value, ;
+                        loc_oPgFis.txt_4c__coddcr.Value,    loc_oPgFis.txt_4c_IPPTCST.Value
+
+            *-- Erro184: as abas Componente, Processo, Consumo e Designer
+            *-- tambem passaram a ser transferidas; sem limpar aqui, o Incluir
+            *-- levaria os valores do produto ANTERIOR para o registro novo.
+            loc_oPgCmp = THIS.ObterPaginaComposicao()
+
+            STORE "" TO loc_oPgCmp.txt_4c_MarkupA.Value, loc_oPgCmp.txt_4c_Pcus.Value, ;
+                        loc_oPgCmp.txt_4c_Fcusto.Value,  loc_oPgCmp.txt_4c_Moec.Value, ;
+                        loc_oPgCmp.txt_4c_Moepc.Value,   loc_oPgCmp.txt_4c_Ftio.Value
+
+            STORE "" TO loc_oPgCmp.txt_4c_Mftio.Value,   loc_oPgCmp.txt_4c_Pftio.Value, ;
+                        loc_oPgCmp.txt_4c_Margem.Value,  loc_oPgCmp.txt_4c_MatP.Value, ;
+                        loc_oPgCmp.txt_4c_Pvideal.Value, loc_oPgCmp.txt_4c_Cmkpc.Value
+
+            STORE "" TO loc_oPgCmp.txt_4c__pftioc.Value, loc_oPgCmp.txt_4c_Status.Value, ;
+                        loc_oPgCmp.txt_4c_Encarg.Value,  loc_oPgCmp.txt_4c_FAtuals.Value, ;
+                        loc_oPgCmp.txt_4c_FIdeals.Value, loc_oPgCmp.txt_4c_PrecoDe.Value
+
+            *-- Erro187: os GEMEOS dos campos espelhados (mesma coluna que
+            *-- Ctotal/Mctotal/Pvenda/Mpvenda/Mfvenda/Mvalor das outras abas)
+            STORE "" TO loc_oPgCmp.txt_4c_Custof.Value,  loc_oPgCmp.txt_4c_Moecusf.Value, ;
+                        loc_oPgCmp.txt_4c_Pven.Value,    loc_oPgCmp.txt_4c_Moev.Value, ;
+                        loc_oPgCmp.txt_4c_Moepv.Value,   loc_oPgCmp.txt_4c_Moeda.Value
+
+            STORE "" TO loc_oPgCmp.txt_4c_CustoCp.Value, loc_oPgCmp.txt_4c_VarPesoMs.Value, ;
+                        loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Compos.Value, ;
+                        loc_oPgCmp.cnt_4c_MtPrima.txt_4c_DigiMaxs.Value, ;
+                        loc_oPgCmp.cnt_4c_MtPrima.txt_4c_OrdCompos.Value, ;
+                        loc_oPgCmp.cnt_4c_MtPrima.txt_4c_Casas.Value
+
+            *-- NUMERICO, nao "": o combo le de volta como numero
+            loc_oPgCmp.cnt_4c_MtPrima.cbo_4c_CmbMontaDescs.Value = 0
+
+            loc_oPgFas = THIS.ObterPaginaFaseP()
+
+            STORE "" TO loc_oPgFas.txt_4c_Qmin.Value,      loc_oPgFas.txt_4c_PesoPdrs.Value, ;
+                        loc_oPgFas.txt_4c_PesoBris.Value,  loc_oPgFas.txt_4c_PesoMetal.Value, ;
+                        loc_oPgFas.txt_4c_CodGarras.Value, loc_oPgFas.txt_4c_Conquilha.Value
+
+            STORE "" TO loc_oPgFas.txt_4c_Volumes.Value,   loc_oPgFas.txt_4c_TEnts.Value, ;
+                        loc_oPgFas.txt_4c_DiasGar.Value,   loc_oPgFas.txt_4c_LtMinsV.Value, ;
+                        loc_oPgFas.txt_4c_Vucp.Value,      loc_oPgFas.txt_4c_Mucp.Value, ;
+                        loc_oPgFas.txt_4c_DtUcp.Value
+
+            STORE 0 TO loc_oPgFas.chk_4c_Fwoption1.Value, ;
+                       loc_oPgFas.chk_4c_OpcCravCera.Value, ;
+                       loc_oPgFas.obj_4c_Fwoption2.Value
+
+            loc_oPgCon = THIS.ObterPaginaConsP()
+            loc_oPgCon.txt_4c_Qtcpnt.Value  = ""
+            loc_oPgCon.chk_4c_ChkFund.Value = 0
+
+            loc_oPgDes = THIS.ObterPaginaDesigner()
+            loc_oPgDes.obj_4c_GetObsInsp.Value = ""
+
             *-- Guarda de reentrancia dos lookups (regra #45)
-            THIS.this_cUltimoGrupoValidado = ""
+            THIS.this_cUltimoGrupoValidado  = ""
+            THIS.this_cUltimoCodigoValidado = ""
 
         CATCH TO loException
             MostrarErro("Erro ao limpar os campos:" + CHR(13) + ;
                 loException.Message, "FormProduto.LimparCampos")
         ENDTRY
+    ENDPROC
+
+    *===========================================================================
+    * AplicarEnabledRecursivo - Liga/desliga TODO controle editavel do container
+    *
+    * Equivalente do mObjEnabled(.pagina.dados) do Framework legado, que o
+    * SIGCDPRO chama sobre o container inteiro em vez de manter lista.
+    *
+    * O que NAO eh tocado:
+    *   - Label / Shape / Image / Line: nao sao editaveis, e desabilitar um
+    *     Label acinzentaria a legenda, mudando a aparencia da tela;
+    *   - Grid: recebe ReadOnly em vez de Enabled. Um Grid desabilitado nao
+    *     ROLA, e no legado a grade continua navegavel em CONSULTAR (o
+    *     mObjEnabled sempre passa .t. - quem barra a edicao sao os "When").
+    *     Alem disso Grid NAO tem ControlCount: recursar nele estoura
+    *     "Property CONTROLCOUNT is not found".
+    *===========================================================================
+    PROTECTED PROCEDURE AplicarEnabledRecursivo(par_oContainer, par_lHabilitar)
+        LOCAL loc_nI, loc_oObj, loc_cBase
+
+        IF VARTYPE(par_oContainer) != "O" OR ;
+                !PEMSTATUS(par_oContainer, "ControlCount", 5)
+            RETURN
+        ENDIF
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObj = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oObj) != "O"
+                LOOP
+            ENDIF
+
+            loc_cBase = UPPER(loc_oObj.BaseClass)
+
+            IF INLIST(loc_cBase, "LABEL", "SHAPE", "IMAGE", "LINE", "SEPARATOR")
+                LOOP
+            ENDIF
+
+            IF loc_cBase == "GRID"
+                IF PEMSTATUS(loc_oObj, "ReadOnly", 5)
+                    loc_oObj.ReadOnly = !par_lHabilitar
+                ENDIF
+                LOOP
+            ENDIF
+
+            IF PEMSTATUS(loc_oObj, "Enabled", 5)
+                loc_oObj.Enabled = par_lHabilitar
+            ENDIF
+
+            IF PEMSTATUS(loc_oObj, "ControlCount", 5)
+                THIS.AplicarEnabledRecursivo(loc_oObj, par_lHabilitar)
+            ENDIF
+        ENDFOR
     ENDPROC
 
     *===========================================================================
@@ -7666,7 +10032,7 @@ DEFINE CLASS FormProduto AS FormBase
     * enquanto se INCLUI ou se PROCURA - em ALTERAR ele eh a chave.
     *===========================================================================
     PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oPg, loc_lEdita, loc_lProcura, loc_lChave, loException
+        LOCAL loc_oPg, loc_lEdita, loc_lProcura, loc_lChave, loc_nI, loException
 
         TRY
             loc_oPg      = THIS.ObterPaginaDados()
@@ -7674,6 +10040,24 @@ DEFINE CLASS FormProduto AS FormBase
             loc_lEdita   = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .F.) ;
                            AND !loc_lProcura
             loc_lChave   = (loc_lEdita AND THIS.this_cModoAtual == "INCLUIR") OR loc_lProcura
+
+            *-- Erro188: a lista manual abaixo so cobria os controles que a aba
+            *-- Principal tinha ANTES do Erro183, e NENHUMA das outras 7 abas -
+            *-- em VISUALIZAR os 94 controles acrescentados e as abas Fiscal /
+            *-- Componente / Processo / Consumo / Custo / Designer / Servico
+            *-- continuavam editaveis.
+            *--
+            *-- O legado nao mantem lista: chama mObjEnabled(.pagina.dados, .t.)
+            *-- sobre o container INTEIRO e bloqueia a edicao pelos 194 "When"
+            *-- de cada controle. Aqui o equivalente eh o Enabled, entao a
+            *-- varredura precisa ser RECURSIVA sobre as 8 abas - lista manual
+            *-- envelhece a cada controle novo, como envelheceu.
+            *-- As excecoes (chave, campos plProcurar e campos calculados) sao
+            *-- reaplicadas DEPOIS, por cima da varredura.
+            FOR loc_nI = 1 TO THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.PageCount
+                THIS.AplicarEnabledRecursivo( ;
+                    THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Pages(loc_nI), loc_lEdita)
+            ENDFOR
 
             *-- Campos plProcurar: editaveis em INCLUIR/ALTERAR e em BUSCAR
             loc_oPg.txt_4c_Cpro.Enabled     = loc_lChave
@@ -7868,7 +10252,8 @@ DEFINE CLASS FormProduto AS FormBase
     * Regra #34: alcancar membro por NOME exige EVALUATE, nunca Controls(nome).
     *===========================================================================
     PROTECTED PROCEDURE FocarCampoValidacao()
-        LOCAL loc_oPg, loc_oCampo, loc_cCampo, loc_lProsseguir, loException
+        LOCAL loc_oPg, loc_oCampo, loc_cCampo, loc_cPagina, loc_nDivisao, ;
+            loc_lProsseguir, loException
         loc_lProsseguir = .T.
 
         TRY
@@ -7878,19 +10263,39 @@ DEFINE CLASS FormProduto AS FormBase
                 loc_lProsseguir = .F.
             ENDIF
 
-            *-- So a aba Dados Principais existe neste form; campos das outras
-            *-- abas (FISCAL / COMPOSICAO) sao ignorados sem erro.
-            IF loc_lProsseguir
-                IF !(UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cPaginaFoco)) == "DADOS")
-                    loc_lProsseguir = .F.
-                ENDIF
+            *-- Erro186: antes so a aba DADOS era atendida (o comentario dizia
+            *-- que "so a aba Dados Principais existe neste form", o que deixou
+            *-- de ser verdade quando as 8 abas foram construidas). As regras
+            *-- novas apontam para FISCAL e COMPOSICAO, entao o foco tem de
+            *-- saber abrir a aba certa - como o legado faz com ActivePage.
+            loc_cPagina = UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cPaginaFoco))
+            loc_nDivisao = 0
+
+            DO CASE
+                CASE loc_cPagina == "DADOS"
+                    loc_nDivisao = 1
+                CASE loc_cPagina == "COMPOSICAO"
+                    loc_nDivisao = 2
+                CASE loc_cPagina == "FISCAL"
+                    loc_nDivisao = 3
+            ENDCASE
+
+            IF loc_lProsseguir AND loc_nDivisao = 0
+                loc_lProsseguir = .F.
             ENDIF
 
             IF loc_lProsseguir
-                loc_oPg = THIS.ObterPaginaDados()
+                DO CASE
+                    CASE loc_nDivisao = 2
+                        loc_oPg = THIS.ObterPaginaComposicao()
+                    CASE loc_nDivisao = 3
+                        loc_oPg = THIS.ObterPaginaDadosFiscais()
+                    OTHERWISE
+                        loc_oPg = THIS.ObterPaginaDados()
+                ENDCASE
 
                 IF PEMSTATUS(loc_oPg, loc_cCampo, 5)
-                    THIS.IrParaDivisao(1)
+                    THIS.IrParaDivisao(loc_nDivisao)
 
                     *-- Regra #34: membro por NOME so via EVALUATE. E o
                     *-- resultado precisa de uma variavel - VFP9 nao aceita
@@ -8157,8 +10562,28 @@ DEFINE CLASS FormProduto AS FormBase
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
 
+            *-- Erro182 (1/3): DESARMAR a Column7 ANTES de mexer no RecordSource.
+            *-- Ao (re)atribuir o RecordSource o VFP religa as colunas aos campos
+            *-- do cursor NA ORDEM, e a 7a apanha "colecoes" (char). Com o
+            *-- CheckBox ainda montado como CurrentControl isso estoura
+            *-- "Error with CHK_4C_INATIVO - Value : Data type mismatch" - medido
+            *-- no VFP9: o 1o carregamento passava e o SEGUNDO quebrava, deixando
+            *-- a grade com as colunas auto-ligadas e "Header1" em todas.
+            IF loc_oGrid.ColumnCount >= 7
+                loc_oGrid.Column7.CurrentControl = "Text1"
+                loc_oGrid.Column7.ControlSource  = ""
+            ENDIF
+
             loc_oGrid.RecordSource = ""
-            loc_oGrid.ColumnCount = 6
+            *-- Erro182 (2/3): estava 6, mas a grade tem SETE colunas - a 7a eh o
+            *-- checkbox "I" (Inativo) criado em ConfigurarPaginaLista com
+            *-- AddObject + CurrentControl. Com ColumnCount = 6 o VFP DESTROI a
+            *-- Column7 (e o chk_4c_Inativo junto), e a linha seguinte estourava
+            *-- "Unknown member COLUMN7." dentro do TRY: o usuario via o dialogo
+            *-- de erro e a grade ficava com as 6 colunas restantes exibindo
+            *-- "Header1", porque a excecao abortava antes das larguras e dos
+            *-- captions.
+            loc_oGrid.ColumnCount = 7
             loc_oGrid.RecordSource = "cursor_4c_Dados"
 
             loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cpros"
@@ -8167,15 +10592,31 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.sgrus"
             loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.reffs"
             loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.usuaalts"
-            loc_oGrid.Column7.chk_4c_Inativo.ControlSource = "cursor_4c_Dados.situas = 2"
+            *-- Erro182: quem tem ControlSource eh a COLUMN, nao o controle
+            *-- interno. Atribuir em chk_4c_Inativo.ControlSource estoura
+            *-- "Parent object will not allow this property setting". E sem o
+            *-- ControlSource na Column o VFP auto-liga a 7a coluna ao 7o campo
+            *-- do cursor (colecoes, char), o que derruba o CheckBox com
+            *-- "Error with CHK_4C_INATIVO - Value : Data type mismatch".
+            *-- Expressao como ControlSource torna a coluna somente-leitura,
+            *-- que eh o que o legado faz (Column7.ReadOnly = .T.).
+            loc_oGrid.Column7.ControlSource = "cursor_4c_Dados.situas = 2"
 
-            loc_oGrid.Column1.Width = 90
-            loc_oGrid.Column2.Width = 380
-            loc_oGrid.Column3.Width = 50
-            loc_oGrid.Column4.Width = 70
-            loc_oGrid.Column5.Width = 140
-            loc_oGrid.Column6.Width = 100
-            loc_oGrid.Column7.Width = 30
+            *-- Erro182 (3/3): so DEPOIS de a Column7 estar ligada a uma
+            *-- expressao LOGICA eh que o CheckBox pode voltar a ser o
+            *-- CurrentControl (regra #18 - sem CurrentControl a coluna segue
+            *-- desenhando o Text1). Mexer no ColumnCount destroi o objeto posto
+            *-- por AddObject no Init, entao recriar aqui, de forma idempotente.
+            IF !PEMSTATUS(loc_oGrid.Column7, "chk_4c_Inativo", 5)
+                loc_oGrid.Column7.AddObject("chk_4c_Inativo", "CheckBox")
+            ENDIF
+            WITH loc_oGrid.Column7
+                .chk_4c_Inativo.Caption = ""
+                .chk_4c_Inativo.Enabled = .F.
+                .CurrentControl = "chk_4c_Inativo"
+                .Sparse         = .F.
+                .ReadOnly       = .T.
+            ENDWITH
 
             loc_oGrid.Column1.Header1.Caption = "Produto"
             loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
@@ -8186,6 +10627,19 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oGrid.Column7.Header1.Caption = "I"
 
             THIS.FormatarGridLista(loc_oGrid)
+
+            *-- Erro182: as larguras vem DEPOIS do FormatarGridLista (regra #41).
+            *-- Ele mexe em Grid.FontName/FontSize, e isso faz o VFP RECALCULAR
+            *-- as larguras das colunas - medido: definidas antes, as 7 voltavam
+            *-- para 45/75 e a grade abria com as colunas fora do tamanho.
+            loc_oGrid.Column1.Width = 90
+            loc_oGrid.Column2.Width = 380
+            loc_oGrid.Column3.Width = 50
+            loc_oGrid.Column4.Width = 70
+            loc_oGrid.Column5.Width = 140
+            loc_oGrid.Column6.Width = 100
+            loc_oGrid.Column7.Width = 30
+
             THIS.AtualizarContadorProdutos()
 
             loc_oGrid.Refresh()
@@ -8341,7 +10795,9 @@ DEFINE CLASS FormProduto AS FormBase
             IF VARTYPE(loc_oObjeto) = "O"
                 loc_cNome = UPPER(loc_oObjeto.Name)
 
-                IF loc_cNome == "GRD_4C_RELOGIOS"
+                IF loc_cNome == "GRD_4C_RELOGIOS" OR ;
+                        INLIST(loc_cNome, "CHK_4C_CHKATIVOSITE", "LBL_4C_LABEL41", ;
+                            "SHP_4C_SHAPE2", "IMG_4C_IMGFIGTEC", "OBJ_4C_COMMANDGROUP1")
                     *-- grade alternativa (produto tipo "relogios") sobreposta
                     *-- ao grd_4c_Compo no mesmo Top/Left - fica oculta por
                     *-- padrao (regra #28/#30 do CLAUDE.md: nunca duas grades
@@ -8349,6 +10805,11 @@ DEFINE CLASS FormProduto AS FormBase
                     *-- ColumnCount) - recursar nela estourava "Property
                     *-- CONTROLCOUNT is not found" (Erro178). So pula, sem
                     *-- recursao e sem tocar Visible.
+                    *
+                    *-- Erro183: os quatro controles da "Imagem Tecnica" e o
+                    *-- chkAtivoSite nascem com Visible = .F. NO PROPRIO SCX.
+                    *-- Sem esta excecao este metodo os ligaria, mostrando na
+                    *-- tela um bloco que o legado mantem oculto.
                 ELSE
                     IF INLIST(loc_cNome, "CNT_4C_MENSAGEM", "CNT_4C_ACABADO", ;
                             "CNT_4C_QTMIN", "CNT_4C_BOTOESLATERAL")
@@ -8364,7 +10825,12 @@ DEFINE CLASS FormProduto AS FormBase
                             ENDFOR
                         ENDIF
 
-                        IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                        *-- Erro183: o GRUPO fica visivel, mas NAO se recursa
+                        *-- nele - o Fwoption1 do legado tem Option3/Option4
+                        *-- com Visible = .F. ("So Valor" / "So Estoque"), e a
+                        *-- recursao os ligaria.
+                        IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND ;
+                                !INLIST(loc_cNome, "OBJ_4C_FWOPTION1")
                             THIS.TornarControlesVisiveis(loc_oObjeto)
                         ENDIF
                     ENDIF

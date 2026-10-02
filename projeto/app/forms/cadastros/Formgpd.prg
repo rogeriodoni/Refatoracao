@@ -1039,13 +1039,85 @@ DEFINE CLASS FormGpd AS FormBase
     ENDPROC
 
     *==========================================================================
+    * ObterFiltroGrandeGrupo - Valor corrente do filtro "Grande Grupo :" da Lista
+    * (legado: Pagina.Lista.cntFiltros.Container1.Get_Gde.Value)
+    *==========================================================================
+    PROCEDURE ObterFiltroGrandeGrupo()
+        LOCAL loc_cGde
+        loc_cGde = ""
+        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
+            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
+                loc_cGde = ALLTRIM(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.Value)
+            ENDIF
+        ENDIF
+        RETURN loc_cGde
+    ENDPROC
+
+    *==========================================================================
+    * ValidarGrandeGrupoSelecionado - Guard do Grupo_op.Click legado
+    *
+    * O legado poe esta checagem no TOPO do Click do grupo de botoes CRUD, ou
+    * seja ela vale para TODAS as opcoes (Incluir/Visualizar/Alterar/Excluir/
+    * Procurar) - a acao nem comeca sem Grande Grupo escolhido:
+    *
+    *   lcMercs = This.Parent.cntFiltros.Container1.Get_Gde.Value
+    *   If Empty(lcMercs)
+    *       MessageBox('Grande Grupo Invalido !!!',48,'Campo Obrigatorio')
+    *       This.Parent.cntFiltros.Container1.Get_gde.SetFocus
+    *       Return 0
+    *   EndIf
+    *
+    * Erro180: o migrado so tinha o guard no BtnBuscarClick (Erro177). Pelos
+    * outros quatro botoes dava para entrar com o filtro VAZIO - e ai o registro
+    * incluido nascia com mercs em branco, sem Grande Grupo nenhum.
+    *==========================================================================
+    PROCEDURE ValidarGrandeGrupoSelecionado()
+        LOCAL loc_lOk
+        loc_lOk = !EMPTY(THIS.ObterFiltroGrandeGrupo())
+        IF !loc_lOk
+            MsgAviso("Grande Grupo Inv" + CHR(225) + "lido !!!", ;
+                "Campo Obrigat" + CHR(243) + "rio")
+            TRY
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
+                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
+                        THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.SetFocus()
+                    ENDIF
+                ENDIF
+            CATCH TO loc_oErro
+                *-- SetFocus falha se a Lista nao estiver ativa; nao eh erro de negocio
+            ENDTRY
+        ENDIF
+        RETURN loc_lOk
+    ENDPROC
+
+    *==========================================================================
     * BtnIncluirClick - Abre Page2 para incluir novo registro
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnIncluirClick()
+        IF !THIS.ValidarGrandeGrupoSelecionado()
+            RETURN
+        ENDIF
+
         THIS.this_oBusinessObject.NovoRegistro()
         THIS.LimparCampos()
         THIS.this_cModoAtual = "INCLUIR"
+
+        *-- Erro180: o registro novo nasce associado ao Grande Grupo do filtro.
+        *-- Legado (Grupo_op.Click, ramo If ThisForm.pcEscolha = 'INSERIR'):
+        *--   Replace mercs    With lcMercs, cestoqs  With 1, bpesos   With 2,
+        *--           atucomps With 1,       fornecs  With 2, avalests With 1,
+        *--           etidups  With 2,       mtprimas With 3 In CrSigCdGrp
+        *-- Os 7 valores CONSTANTES moram em gpdBO.InicializarValoresPadrao (hook
+        *-- que NovoRegistro ja chama); so o `mercs` depende da TELA - eh o valor
+        *-- do filtro "Grande Grupo :" da Lista. Sem ele o grupo incluido nascia
+        *-- sem Grande Grupo nenhum, que eh o defeito reportado.
+        THIS.this_oBusinessObject.this_cMercs = PADR(THIS.ObterFiltroGrandeGrupo(), 3)
+
+        *-- BOParaForm espelha os defaults nos controles (inclusive a descricao do
+        *-- Grande Grupo). Roda DEPOIS de LimparCampos, senao seria sobrescrito.
+        THIS.BOParaForm()
+
         THIS.HabilitarCampos(.T.)
         THIS.AjustarBotoesPorModo()
         THIS.pgf_4c_Paginas.Page2.opt_4c_Navegacao.Value = 1
@@ -1058,6 +1130,10 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
+        IF !THIS.ValidarGrandeGrupoSelecionado()
+            RETURN
+        ENDIF
+
         LOCAL loc_cCodigo
         loc_cCodigo = ""
 
@@ -1086,6 +1162,10 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnAlterarClick()
+        IF !THIS.ValidarGrandeGrupoSelecionado()
+            RETURN
+        ENDIF
+
         LOCAL loc_cCodigo
         loc_cCodigo = ""
 
@@ -1115,6 +1195,10 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnExcluirClick()
+        IF !THIS.ValidarGrandeGrupoSelecionado()
+            RETURN
+        ENDIF
+
         LOCAL loc_cCodigo
         loc_cCodigo = ""
 
@@ -1151,25 +1235,15 @@ DEFINE CLASS FormGpd AS FormBase
         *--     Case InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')
         *--         ...Get_Codigo.Value = []
         *--         ...Get_Codigo.SetFocus
-        LOCAL loc_oPg1, loc_cGde
+        LOCAL loc_oPg1
 
         TRY
             *-- Legado (Grupo_op.Click, vale para TODAS as opcoes): sem Grande Grupo
-            *-- escolhido a acao nem comeca.
-            loc_cGde = ""
-            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
-                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
-                    loc_cGde = ALLTRIM(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.Value)
-                ENDIF
-            ENDIF
-
-            IF EMPTY(loc_cGde)
-                MsgAviso("Grande Grupo Inv" + CHR(225) + "lido !!!", "Campo Obrigat" + CHR(243) + "rio")
-                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5)
-                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Gde", 5)
-                        THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde.SetFocus()
-                    ENDIF
-                ENDIF
+            *-- escolhido a acao nem comeca. Erro180: o guard virou metodo unico
+            *-- (ValidarGrandeGrupoSelecionado), usado tambem por Incluir/
+            *-- Visualizar/Alterar/Excluir - onde faltava.
+            IF !THIS.ValidarGrandeGrupoSelecionado()
+                *-- mensagem e SetFocus ja foram dados pelo guard
             ELSE
                 THIS.this_oBusinessObject.NovoRegistro()
                 THIS.LimparCampos()
@@ -1292,6 +1366,7 @@ DEFINE CLASS FormGpd AS FormBase
         IF THIS.this_oBusinessObject.Salvar()
             THIS.SalvarCrMontagem(THIS.this_oBusinessObject.this_cCgrus)
             THIS.SalvarSigcdcpo(THIS.this_oBusinessObject.this_cCgrus)
+            THIS.SalvarSigCdPsg(THIS.this_oBusinessObject.this_cCgrus)
             THIS.SalvarLocalProD(THIS.this_oBusinessObject.this_cCgrus)
             MsgInfo("Registro salvo com sucesso!")
             THIS.AlternarPagina(1)
@@ -1702,7 +1777,13 @@ DEFINE CLASS FormGpd AS FormBase
             THIS.this_oBusinessObject.this_lCvestims = (loc_oPg6.obj_4c_Fwoption3.Value = 1)
         ENDIF
         IF PEMSTATUS(loc_oPg6, "obj_4c_Fwoption6", 5)
-            THIS.this_oBusinessObject.this_lNgenerics = (loc_oPg6.obj_4c_Fwoption6.Value = 2)
+            *-- Erro180 (sweep): estava INVERTIDO. O SCX declara
+            *-- fwoption6.Option1.Caption = "Nenhum" (Value 1) e Option2 =
+            *-- "Peso Medio" (Value 2), e o BO le com (ngenerics = 1). Com
+            *-- (Value = 2) aqui, a opcao 2 da tela virava 1 no banco e
+            *-- vice-versa - o migrado guardava o OPOSTO do legado, sem erro
+            *-- nenhum. Agora .T. = opcao 1, coerente com a leitura do BO.
+            THIS.this_oBusinessObject.this_lNgenerics = (loc_oPg6.obj_4c_Fwoption6.Value = 1)
         ENDIF
         IF PEMSTATUS(loc_oPg6, "obj_4c_OptInstalas", 5)
             THIS.this_oBusinessObject.this_lChkinstalas = (loc_oPg6.obj_4c_OptInstalas.Value = 1)
@@ -1840,7 +1921,7 @@ DEFINE CLASS FormGpd AS FormBase
             THIS.this_oBusinessObject.this_nBpesos = loc_oPgProd.cbo_4c_Bpesos.ListIndex
         ENDIF
         IF PEMSTATUS(loc_oPgProd, "cbo_4c_Fornecs", 5)
-            THIS.this_oBusinessObject.this_lFornecs = (loc_oPgProd.cbo_4c_Fornecs.ListIndex = 1)
+            THIS.this_oBusinessObject.this_nFornecs = loc_oPgProd.cbo_4c_Fornecs.ListIndex
         ENDIF
         IF PEMSTATUS(loc_oPgProd, "cbo_4c_Montadescs", 5)
             THIS.this_oBusinessObject.this_nMontadescs = loc_oPgProd.cbo_4c_Montadescs.ListIndex
@@ -1849,7 +1930,7 @@ DEFINE CLASS FormGpd AS FormBase
             THIS.this_oBusinessObject.this_nMncompos = loc_oPgProd.cbo_4c_Mncompos.ListIndex
         ENDIF
         IF PEMSTATUS(loc_oPgProd, "opt_4c_Etidups", 5)
-            THIS.this_oBusinessObject.this_lEtidups = (loc_oPgProd.opt_4c_Etidups.Value = 1)
+            THIS.this_oBusinessObject.this_nEtidups = loc_oPgProd.opt_4c_Etidups.Value
         ENDIF
         IF PEMSTATUS(loc_oPgProd, "opt_4c_Sugestaos", 5)
             THIS.this_oBusinessObject.this_lSugestoas = (loc_oPgProd.opt_4c_Sugestaos.Value = 1)
@@ -2177,7 +2258,8 @@ DEFINE CLASS FormGpd AS FormBase
             loc_oPg6B.obj_4c_Fwoption3.Value = IIF(THIS.this_oBusinessObject.this_lCvestims, 1, 2)
         ENDIF
         IF PEMSTATUS(loc_oPg6B, "obj_4c_Fwoption6", 5)
-            loc_oPg6B.obj_4c_Fwoption6.Value = IIF(THIS.this_oBusinessObject.this_lNgenerics, 2, 1)
+            *-- Erro180 (sweep): par do FormParaBO acima - .T. = opcao 1 ("Nenhum")
+            loc_oPg6B.obj_4c_Fwoption6.Value = IIF(THIS.this_oBusinessObject.this_lNgenerics, 1, 2)
         ENDIF
         IF PEMSTATUS(loc_oPg6B, "obj_4c_OptInstalas", 5)
             loc_oPg6B.obj_4c_OptInstalas.Value = IIF(THIS.this_oBusinessObject.this_lChkinstalas, 1, 2)
@@ -2345,7 +2427,8 @@ DEFINE CLASS FormGpd AS FormBase
                 IIF(THIS.this_oBusinessObject.this_nBpesos >= 1, THIS.this_oBusinessObject.this_nBpesos, 1)
         ENDIF
         IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Fornecs", 5)
-            loc_oPgProdB.cbo_4c_Fornecs.ListIndex = IIF(THIS.this_oBusinessObject.this_lFornecs, 1, 2)
+            loc_oPgProdB.cbo_4c_Fornecs.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nFornecs >= 1, THIS.this_oBusinessObject.this_nFornecs, 1)
         ENDIF
         IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Montadescs", 5)
             loc_oPgProdB.cbo_4c_Montadescs.ListIndex = ;
@@ -2356,7 +2439,8 @@ DEFINE CLASS FormGpd AS FormBase
                 IIF(THIS.this_oBusinessObject.this_nMncompos >= 1, THIS.this_oBusinessObject.this_nMncompos, 1)
         ENDIF
         IF PEMSTATUS(loc_oPgProdB, "opt_4c_Etidups", 5)
-            loc_oPgProdB.opt_4c_Etidups.Value = IIF(THIS.this_oBusinessObject.this_lEtidups, 1, 2)
+            loc_oPgProdB.opt_4c_Etidups.Value = ;
+                IIF(THIS.this_oBusinessObject.this_nEtidups >= 1, THIS.this_oBusinessObject.this_nEtidups, 1)
         ENDIF
         IF PEMSTATUS(loc_oPgProdB, "opt_4c_Sugestaos", 5)
             loc_oPgProdB.opt_4c_Sugestaos.Value = IIF(THIS.this_oBusinessObject.this_lSugestoas, 1, 2)
@@ -2487,6 +2571,10 @@ DEFINE CLASS FormGpd AS FormBase
         IF USED("cursor_4c_SigCdPsg")
             SELECT cursor_4c_SigCdPsg
             ZAP
+            *-- Erro179: esvaziar o cursor nao repinta a grade (regra #21a) e a
+            *-- Column1 tem de voltar trancada - o legado so a libera no
+            *-- cmdSInserir.Click, uma linha de cada vez.
+            THIS.RepintarGradesSubGrupos(.T.)
         ENDIF
         IF USED("cursor_4c_Prazos")
             SELECT cursor_4c_Prazos
@@ -8300,31 +8388,129 @@ DEFINE CLASS FormGpd AS FormBase
             .Visible   = .F.
         ENDWITH
 
-        *-- Grid de SubGrupos (grd_4c_SigCdPsg)
-        *-- Legado: Top=122+29=151, Left=149, Width=592, Height=462
+        *-- Grid de SubGrupos (grdSigCdPsg da pgSubGru)
+        *-- Legado: Top=122+29=151, Left=149, Width=592, Height=462, ColumnCount=6
+        *--
+        *-- Erro179/180: a grade estava SEM RecordSource e SEM ControlSource
+        *-- nenhum, com 3 colunas mudas e FontName "Courier New" que o legado nao
+        *-- tem - a aba abria com um retangulo vazio. No legado ela eh ligada ao
+        *-- MESMO cursor da aba Cadastro (CrSigCdPsg, [Select * From SigCdPsg]) e
+        *-- mostra as 4 colunas que SO existem aqui: nfaixainis/nfaixafins/
+        *-- npars/nminpars. Por isso o cursor carrega as 11 colunas da tabela.
+        *--
+        *-- Bind (mgradesgru legado):
+        *--   Column1 codigos | Column2 descricaos | Column3 nFaixaInis
+        *--   Column4 nFaixaFins | Column5 nPars   | Column6 nMinPars
+        IF !USED("cursor_4c_SigCdPsg")
+            CREATE CURSOR cursor_4c_SigCdPsg ;
+                (cgrus c(3), codigos c(6), descricaos c(20), cidchaves c(20), ;
+                 cgrucods c(9), nfaixafins n(11,2), nfaixainis n(11,2), ;
+                 pesoprods n(1,0), marckupa n(8,2), nminpars n(11,2), npars n(2,0))
+        ENDIF
         loc_oPg.AddObject("grd_4c_SigCdPsg", "Grid")
         WITH loc_oPg.grd_4c_SigCdPsg
-            .Top         = 151
-            .Left        = 149
-            .Width       = 592
-            .Height      = 462
-            .ColumnCount = 3
-            .DeleteMark  = .F.
-            .RecordMark  = .F.
-            .ReadOnly    = .T.
-            .FontName    = "Courier New"
-            .FontSize    = 9
-            .Visible     = .F.
-            .Column1.Width     = 80
-            .Column1.Movable   = .F.
-            .Column1.Resizable = .F.
-            .Column2.Width     = 350
-            .Column2.Movable   = .F.
-            .Column2.Resizable = .F.
-            .Column3.Width     = 120
-            .Column3.Movable   = .F.
-            .Column3.Resizable = .F.
+            .Top           = 151
+            .Left          = 149
+            .Width         = 592
+            .Height        = 462
+            .ColumnCount   = 6
+            .DeleteMark    = .F.
+            .RecordMark    = .F.
+            .RowHeight     = 17
+            .ScrollBars    = 2
+            .GridLines     = 3
+            .GridLineColor = RGB(238, 238, 238)
+            .FontSize      = 8
+            *-- Grid.ReadOnly propaga para as colunas e sobrescreve o que for
+            *-- definido antes dele (regra #18): vem ANTES dos Column.ReadOnly.
+            .ReadOnly      = .F.
+            .RecordSource  = "cursor_4c_SigCdPsg"
+            .Visible       = .F.
         ENDWITH
+        WITH loc_oPg.grd_4c_SigCdPsg
+            .Column1.ControlSource     = "cursor_4c_SigCdPsg.codigos"
+            .Column1.Width             = 75
+            .Column1.Movable           = .F.
+            .Column1.Resizable         = .F.
+            .Column1.ReadOnly          = .T.
+            .Column1.Format            = "!K"
+            .Column1.Header1.Caption   = "Sub-Grupo"
+            .Column1.Header1.FontName  = "Tahoma"
+            .Column1.Header1.FontSize  = 8
+            .Column1.Header1.Alignment = 2
+            .Column1.Text1.BorderStyle = 0
+            .Column1.Text1.Margin      = 0
+            .Column1.Text1.ReadOnly    = .T.
+
+            .Column2.ControlSource     = "cursor_4c_SigCdPsg.descricaos"
+            .Column2.Width             = 180
+            .Column2.Movable           = .F.
+            .Column2.Resizable         = .F.
+            .Column2.Format            = "!K"
+            .Column2.Header1.Caption   = "Descri" + CHR(231) + CHR(227) + "o"
+            .Column2.Header1.FontName  = "Tahoma"
+            .Column2.Header1.FontSize  = 8
+            .Column2.Header1.Alignment = 2
+            .Column2.Text1.BorderStyle = 0
+            .Column2.Text1.Margin      = 0
+
+            .Column3.ControlSource     = "cursor_4c_SigCdPsg.nfaixainis"
+            .Column3.Width             = 87
+            .Column3.Format            = "K"
+            .Column3.InputMask         = "999,999,999.99"
+            .Column3.Header1.Caption   = "Faixa Inicial"
+            .Column3.Header1.FontName  = "Tahoma"
+            .Column3.Header1.FontSize  = 8
+            .Column3.Header1.Alignment = 2
+            .Column3.Text1.BorderStyle = 0
+            .Column3.Text1.Format      = "K"
+            .Column3.Text1.InputMask   = "999,999,999.99"
+            .Column3.Text1.Margin      = 0
+
+            .Column4.ControlSource     = "cursor_4c_SigCdPsg.nfaixafins"
+            .Column4.Width             = 87
+            .Column4.Format            = "K"
+            .Column4.InputMask         = "999,999,999.99"
+            .Column4.Header1.Caption   = "Faixa Final"
+            .Column4.Header1.FontName  = "Tahoma"
+            .Column4.Header1.FontSize  = 8
+            .Column4.Header1.Alignment = 2
+            .Column4.Text1.BorderStyle = 0
+            .Column4.Text1.Format      = "K"
+            .Column4.Text1.InputMask   = "999,999,999.99"
+            .Column4.Text1.Margin      = 0
+
+            .Column5.ControlSource     = "cursor_4c_SigCdPsg.npars"
+            .Column5.Width             = 50
+            .Column5.Format            = "K"
+            .Column5.InputMask         = "99"
+            .Column5.Header1.Caption   = "Max Pars"
+            .Column5.Header1.FontName  = "Tahoma"
+            .Column5.Header1.FontSize  = 8
+            .Column5.Header1.Alignment = 2
+            .Column5.Text1.BorderStyle = 0
+            .Column5.Text1.Format      = "K"
+            .Column5.Text1.InputMask   = "99"
+            .Column5.Text1.Margin      = 0
+            .Column5.Text1.ToolTipText = "Quantidade m" + CHR(225) + ;
+                "xima de parcelas na Etiqueta"
+
+            .Column6.ControlSource     = "cursor_4c_SigCdPsg.nminpars"
+            .Column6.Width             = 75
+            .Column6.Format            = "K"
+            .Column6.InputMask         = "99,999,999.99"
+            .Column6.Header1.Caption   = "Vr Min Par"
+            .Column6.Header1.FontName  = "Tahoma"
+            .Column6.Header1.FontSize  = 8
+            .Column6.Header1.Alignment = 2
+            .Column6.Text1.BorderStyle = 0
+            .Column6.Text1.Format      = "K"
+            .Column6.Text1.InputMask   = "99,999,999.99"
+            .Column6.Text1.Margin      = 0
+            .Column6.Text1.ToolTipText = "Valor m" + CHR(237) + ;
+                "nimo de cada parcela na etiqueta"
+        ENDWITH
+        BINDEVENT(loc_oPg.grd_4c_SigCdPsg.Column1.Text1, "Valid", THIS, "SubGrupoCodigoValid")
 
         *-- Botoes inserir/excluir subgrupo
         loc_oPg.AddObject("cmg_4c_BotoesSgrus", "CommandGroup")
@@ -8744,7 +8930,148 @@ DEFINE CLASS FormGpd AS FormBase
     * BtnSubGrupoClick - Clique em botoes de sub-grupo
     *==========================================================================
     PROCEDURE BtnSubGrupoClick()
-        MsgAviso("Edi" + CHR(231) + CHR(227) + "o de sub-grupos em desenvolvimento.")
+        LOCAL loc_oPg7
+        loc_oPg7 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page7
+        IF PEMSTATUS(loc_oPg7, "cmg_4c_BotoesSgrus", 5)
+            IF loc_oPg7.cmg_4c_BotoesSgrus.Value = 1
+                THIS.SubGrupoInserirClick()
+            ELSE
+                THIS.SubGrupoExcluirClick()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * SubGrupoInserirClick - "+" da aba SubGrupos
+    *
+    * Transcrito do legado (pgSubGru.cmdgCompo.cmdSInserir.Click + .When) - eh o
+    * MESMO codigo do "+" da aba Cadastro, sobre o MESMO cursor; muda so a grade
+    * que recebe o Refresh/SetFocus. Ate o `When` le o get_codigo da pgCadastro.
+    *==========================================================================
+    PROCEDURE SubGrupoInserirClick()
+        LOCAL loc_oPg7, loc_oGrd, loc_cCgrus, loc_cCodigos, loc_cGruCods
+        IF !USED("cursor_4c_SigCdPsg")
+            RETURN
+        ENDIF
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        loc_cCgrus = THIS.ObterCodigoGrupoEmEdicao()
+        IF EMPTY(loc_cCgrus)
+            MsgAviso("Informe o c" + CHR(243) + "digo do grupo antes de incluir " + ;
+                "sub-grupos.", "Sub-Grupo")
+            RETURN
+        ENDIF
+
+        loc_cCodigos = SPACE(6)
+        loc_cGruCods = PADR(loc_cCgrus, 3) + loc_cCodigos
+        INSERT INTO cursor_4c_SigCdPsg ;
+            (cgrucods, cgrus, codigos, descricaos, cidchaves) ;
+            VALUES (loc_cGruCods, PADR(loc_cCgrus, 3), loc_cCodigos, ;
+                    SPACE(20), fUniqueIds())
+
+        THIS.RepintarGradesSubGrupos(.F.)
+        TRY
+            loc_oPg7 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page7
+            IF PEMSTATUS(loc_oPg7, "grd_4c_SigCdPsg", 5)
+                loc_oGrd = loc_oPg7.grd_4c_SigCdPsg
+                IF loc_oGrd.Visible AND loc_oGrd.ColumnCount >= 1
+                    loc_oGrd.Column1.SetFocus()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            *-- SetFocus falha se a aba nao estiver ativa; nao eh erro de negocio
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * SubGrupoExcluirClick - "lixeira" da aba SubGrupos
+    *
+    * Legado (pgSubGru.cmdgCompo.cmdSexcluir.Click): confirma e apaga do cursor.
+    * Diferente do "-" da aba Cadastro, este NAO consulta SigCdPro antes - o
+    * legado so faz essa checagem na pgCadastro. Transcrito como esta.
+    *==========================================================================
+    PROCEDURE SubGrupoExcluirClick()
+        LOCAL loc_cSGru
+        IF !USED("cursor_4c_SigCdPsg")
+            RETURN
+        ENDIF
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF RECCOUNT("cursor_4c_SigCdPsg") = 0 OR EOF("cursor_4c_SigCdPsg")
+            RETURN
+        ENDIF
+        loc_cSGru = ALLTRIM(cursor_4c_SigCdPsg.codigos)
+        IF MsgConfirma("Deseja excluir o SubGrupo [" + loc_cSGru + "] ?", "Confirmar")
+            SELECT cursor_4c_SigCdPsg
+            DELETE
+            PACK
+            GO TOP
+            THIS.RepintarGradesSubGrupos(.T.)
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * SubGrupoCodigoValid - Column1.Text1.Valid da grade da aba SubGrupos
+    *
+    * Legado: If !(This.Parent.ReadOnly) / CursorQuery('SigCdPsg',,'cgrucods',
+    *         CrSigCdPsg.cgrus + CrSigCdPsg.codigos) -> 'SubGrupo ja cadastrado'
+    * A chave consultada eh POSICIONAL (cgrus char(3) + codigos char(6) = char(9),
+    * regra #42), por isso PADR em vez de ALLTRIM nas partes.
+    *==========================================================================
+    PROCEDURE SubGrupoCodigoValid()
+        LOCAL loc_lOk, loc_oPg7, loc_cChave, loc_nRet, loc_nRecno
+        loc_lOk = .T.
+        IF !USED("cursor_4c_SigCdPsg")
+            RETURN loc_lOk
+        ENDIF
+        loc_oPg7 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page7
+        IF !PEMSTATUS(loc_oPg7, "grd_4c_SigCdPsg", 5)
+            RETURN loc_lOk
+        ENDIF
+        IF loc_oPg7.grd_4c_SigCdPsg.Column1.ReadOnly
+            RETURN loc_lOk
+        ENDIF
+        IF EMPTY(ALLTRIM(cursor_4c_SigCdPsg.codigos))
+            RETURN loc_lOk
+        ENDIF
+
+        *-- duplicidade dentro do proprio cursor (linhas ainda nao gravadas)
+        loc_nRecno = RECNO("cursor_4c_SigCdPsg")
+        loc_cChave = PADR(cursor_4c_SigCdPsg.cgrus, 3) + ;
+                     PADR(cursor_4c_SigCdPsg.codigos, 6)
+        SELECT cursor_4c_SigCdPsg
+        SCAN FOR PADR(cgrus, 3) + PADR(codigos, 6) == loc_cChave ;
+                 AND RECNO() <> loc_nRecno
+            loc_lOk = .F.
+            EXIT
+        ENDSCAN
+        IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT("cursor_4c_SigCdPsg")
+            GO loc_nRecno IN cursor_4c_SigCdPsg
+        ENDIF
+
+        *-- e no servidor (o CursorQuery do legado)
+        IF loc_lOk
+            TRY
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT cgrucods FROM SigCdPsg WHERE cgrucods = " + ;
+                    EscaparSQL(loc_cChave), "cursor_4c_ChkSgru")
+                IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ChkSgru") > 0
+                    loc_lOk = .F.
+                ENDIF
+                IF USED("cursor_4c_ChkSgru")
+                    USE IN cursor_4c_ChkSgru
+                ENDIF
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro")
+            ENDTRY
+        ENDIF
+
+        IF !loc_lOk
+            MsgAviso("SubGrupo j" + CHR(225) + " cadastrado !!!", "Sub-Grupo")
+        ENDIF
+        RETURN loc_lOk
     ENDPROC
 
     *==========================================================================
@@ -11144,11 +11471,19 @@ DEFINE CLASS FormGpd AS FormBase
         ENDWITH
 
         *-- Grid sub-grupos inline (grdSigCdPsg: Top=137+29=166, Left=525, W=372, H=445)
-        *-- cursor schema: SigCdPsg (cidchaves c20 PK, marckupa n8.2)
+        *-- Erro179: a estrutura espelha as 11 colunas de SigCdPsg (TODAS NOT NULL -
+        *-- regra #22) e a MESMA lista que o SELECT de CarregarSigCdPsgCad usa, porque
+        *-- a recarga eh ZAP + APPEND FROM DBF() no PROPRIO alias (nunca SQLEXEC sobre
+        *-- ele) - fechar/recriar o alias derruba RecordSource/ControlSource e zera o
+        *-- ColumnCount, deixando a grade um retangulo branco.
+        *-- No legado o cursor eh UM so (CrSigCdPsg, [Select * From SigCdPsg]): as
+        *-- colunas nfaixa*/npars/nminpars sao editadas na aba SubGrupos e precisam
+        *-- trafegar aqui para nao serem zeradas na regravacao.
         IF !USED("cursor_4c_SigCdPsg")
             CREATE CURSOR cursor_4c_SigCdPsg ;
                 (cgrus c(3), codigos c(6), descricaos c(20), cidchaves c(20), ;
-                 cgrucods c(9), marckupa n(8,2), pesoprods n(1,0))
+                 cgrucods c(9), nfaixafins n(11,2), nfaixainis n(11,2), ;
+                 pesoprods n(1,0), marckupa n(8,2), nminpars n(11,2), npars n(2,0))
         ENDIF
         loc_oPg1.AddObject("grd_4c_PsgCad", "Grid")
         WITH loc_oPg1.grd_4c_PsgCad
@@ -11370,6 +11705,22 @@ DEFINE CLASS FormGpd AS FormBase
 
     *==========================================================================
     * CarregarSigCdPsgCad - Carrega cursor_4c_SigCdPsg com sub-grupos do grupo
+    *
+    * Erro179: a versao anterior fazia SQLEXEC(..., "cursor_4c_SigCdPsg") DIRETO
+    * sobre o alias ligado a grade. SQLEXEC FECHA e RECRIA o alias: medido no
+    * VFP9, a grade saia de ColumnCount=4 (com RecordSource, ControlSource,
+    * headers e o CheckBox da Column3) para ColumnCount=0 - um retangulo branco
+    * sem cabecalho, sem coluna e sem como digitar. E como nada rebinda depois,
+    * a grade ficava morta pelo resto da vida do form: quem entrasse em ALTERAR
+    * uma vez via a grade vazia tambem no INCLUIR seguinte.
+    *
+    * O legado resolve rebindando tudo (mgradesgru: RecordSource=''+Requery+
+    * RecordSource+4 ControlSource+Refresh). Aqui nao da para copiar isso
+    * literalmente porque recriar as Columns destruiria o Check1 adicionado por
+    * AddObject na Column3 (regra #18). A forma equivalente e mais segura eh
+    * NAO derrubar o alias: SQLEXEC vai para um cursor temporario e o alias da
+    * grade eh recarregado com ZAP + APPEND FROM DBF() - que preserva estrutura,
+    * RecordSource, ControlSource e CurrentControl.
     *==========================================================================
     PROCEDURE CarregarSigCdPsgCad(par_cCgrus)
         LOCAL loc_cSql, loc_nRet, loc_lProsseguir
@@ -11378,24 +11729,111 @@ DEFINE CLASS FormGpd AS FormBase
         ENDIF
         loc_lProsseguir = .T.
         TRY
+            IF USED("cursor_4c_PsgTmp")
+                USE IN cursor_4c_PsgTmp
+            ENDIF
+
             SELECT cursor_4c_SigCdPsg
             ZAP
+
             IF EMPTY(ALLTRIM(par_cCgrus))
                 loc_lProsseguir = .F.
             ENDIF
             IF loc_lProsseguir
+                *-- Lista IDENTICA a do CREATE CURSOR (o APPEND FROM casa por nome)
                 loc_cSql = "SELECT cgrus, codigos, descricaos, cidchaves, cgrucods, " + ;
-                           "marckupa, pesoprods " + ;
+                           "nfaixafins, nfaixainis, pesoprods, marckupa, " + ;
+                           "nminpars, npars " + ;
                            "FROM SigCdPsg " + ;
                            "WHERE cgrus = " + EscaparSQL(ALLTRIM(par_cCgrus)) + ;
                            " ORDER BY codigos"
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdPsg")
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_PsgTmp")
                 IF loc_nRet < 0
                     MsgErro("Erro ao carregar sub-grupos.", "Erro")
+                ELSE
+                    IF USED("cursor_4c_PsgTmp") AND RECCOUNT("cursor_4c_PsgTmp") > 0
+                        SELECT cursor_4c_SigCdPsg
+                        APPEND FROM DBF("cursor_4c_PsgTmp")
+                    ENDIF
                 ENDIF
             ENDIF
+
+            IF USED("cursor_4c_PsgTmp")
+                USE IN cursor_4c_PsgTmp
+            ENDIF
+
+            *-- Legado (mgradesgru): Go Top + Refresh fecham TODO caminho que
+            *-- popula o cursor - sem isso a grade nao repinta (regra #21a).
+            SELECT cursor_4c_SigCdPsg
+            GO TOP
+            THIS.RepintarGradesSubGrupos(.T.)
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ObterCodigoGrupoEmEdicao - Codigo do grupo que esta na ficha (Get_Codigo
+    * legado). Em INCLUIR o valor so chega ao BO no FormParaBO, depois do
+    * Confirmar - por isso o TEXTBOX eh a fonte primaria, como no legado.
+    *==========================================================================
+    PROCEDURE ObterCodigoGrupoEmEdicao()
+        LOCAL loc_oPg1, loc_cCgrus
+        loc_cCgrus = ""
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1
+        IF PEMSTATUS(loc_oPg1, "txt_4c_Cgrus", 5)
+            loc_cCgrus = ALLTRIM(loc_oPg1.txt_4c_Cgrus.Value)
+        ENDIF
+        IF EMPTY(loc_cCgrus)
+            loc_cCgrus = ALLTRIM(THIS.this_oBusinessObject.this_cCgrus)
+        ENDIF
+        RETURN loc_cCgrus
+    ENDPROC
+
+    *==========================================================================
+    * RepintarGradesSubGrupos - Repinta as DUAS grades ligadas a
+    * cursor_4c_SigCdPsg (aba Cadastro e aba SubGrupos) e reaplica o estado de
+    * edicao da Column1 em ambas.
+    *
+    * As duas compartilham o cursor, como no legado (CrSigCdPsg alimenta
+    * pgCadastro.grdSigCdPsg E pgSubGru.grdSigCdPsg): popular ou esvaziar o
+    * cursor por um lado tem de repintar o outro, senao a aba que nao esta em
+    * foco fica exibindo o conteudo antigo (regra #21a).
+    *
+    * par_lTravarCodigo: .T. tranca a Column1 (estado de entrada em ALTERAR);
+    *   .F. libera para digitacao (o que o cmdSInserir.Click legado faz ao criar
+    *   a linha em branco).
+    *==========================================================================
+    PROCEDURE RepintarGradesSubGrupos(par_lTravarCodigo)
+        LOCAL loc_oErroRep
+        TRY
+            THIS.RepintarUmaGradePsg( ;
+                THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1, ;
+                "grd_4c_PsgCad", par_lTravarCodigo)
+            THIS.RepintarUmaGradePsg( ;
+                THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page7, ;
+                "grd_4c_SigCdPsg", par_lTravarCodigo)
+        CATCH TO loc_oErroRep
+            *-- repintar nunca pode derrubar o fluxo de carga
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * RepintarUmaGradePsg - auxiliar de RepintarGradesSubGrupos
+    *==========================================================================
+    PROTECTED PROCEDURE RepintarUmaGradePsg(par_oPagina, par_cGrade, par_lTravar)
+        LOCAL loc_oGrd, loc_oErroRep2
+        TRY
+            IF PEMSTATUS(par_oPagina, par_cGrade, 5)
+                *-- membro por NOME: EVALUATE para LEITURA (regras #15 e #34)
+                loc_oGrd = EVALUATE("par_oPagina." + par_cGrade)
+                IF loc_oGrd.ColumnCount >= 1
+                    loc_oGrd.Column1.ReadOnly = par_lTravar
+                ENDIF
+                loc_oGrd.Refresh()
+            ENDIF
+        CATCH TO loc_oErroRep2
+            *-- uma grade ausente nao pode impedir o refresh da outra
         ENDTRY
     ENDPROC
 
@@ -11435,17 +11873,61 @@ DEFINE CLASS FormGpd AS FormBase
 
     *==========================================================================
     * PsgCadInserirClick - Insere linha em branco no cursor_4c_SigCdPsg
+    *
+    * Transcrito do legado (pgCadastro.cmdgCompo.cmdSInserir.Click + .When):
+    *
+    *   When : InList(pcEscolha,'INSERIR','ALTERAR') And Not Empty(get_codigo.Value)
+    *   Click: Insert Into CrSigCdPsg (cgrucods,cgrus,codigos,descricaos,cidchaves)
+    *          .Column1.ReadOnly = .F. / .Refresh / .Column1.SetFocus
+    *
+    * Erro179: faltavam as TRES ultimas linhas. Sem `Column1.ReadOnly = .F.` a
+    * coluna do codigo fica travada (o SCX declara ReadOnly=.T. como default) e
+    * o usuario nao consegue digitar NADA na linha recem-criada - era o "nao
+    * consigo realizar a inclusao nessa grid". Faltava tambem cgrucods, e o
+    * cidchaves usava SYS(2015) no lugar do fUniqueIds() do legado (regra #22).
     *==========================================================================
     PROCEDURE PsgCadInserirClick()
+        LOCAL loc_oPg1, loc_oGrd, loc_cCgrus, loc_cCodigos, loc_cGruCods
         IF !USED("cursor_4c_SigCdPsg")
             RETURN
         ENDIF
-        LOCAL loc_cCgrus
-        loc_cCgrus = ALLTRIM(THIS.this_oBusinessObject.this_cCgrus)
-        SELECT cursor_4c_SigCdPsg
-        APPEND BLANK
-        REPLACE cgrus WITH loc_cCgrus
-        REPLACE cidchaves WITH SYS(2015)
+
+        *-- Guard do When legado: so em INSERIR/ALTERAR e com o codigo do grupo
+        *-- preenchido. O legado le o TEXTBOX (get_codigo.Value), nao o cursor -
+        *-- em INCLUIR o codigo so chega ao BO no FormParaBO, depois do Confirmar.
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        loc_oPg1   = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page1
+        loc_cCgrus = THIS.ObterCodigoGrupoEmEdicao()
+        IF EMPTY(loc_cCgrus)
+            MsgAviso("Informe o c" + CHR(243) + "digo do grupo antes de incluir " + ;
+                "sub-grupos.", "Sub-Grupo")
+            RETURN
+        ENDIF
+
+        *-- cgrucods eh chave POSICIONAL char(9) = cgrus char(3) + codigos char(6)
+        *-- (regra #42): PADR explicito, nunca ALLTRIM nas partes.
+        loc_cCodigos = SPACE(6)
+        loc_cGruCods = PADR(loc_cCgrus, 3) + loc_cCodigos
+
+        INSERT INTO cursor_4c_SigCdPsg ;
+            (cgrucods, cgrus, codigos, descricaos, cidchaves) ;
+            VALUES (loc_cGruCods, PADR(loc_cCgrus, 3), loc_cCodigos, ;
+                    SPACE(20), fUniqueIds())
+
+        *-- Libera a Column1, repinta e poe o foco - as 3 linhas do legado.
+        THIS.RepintarGradesSubGrupos(.F.)
+        TRY
+            IF PEMSTATUS(loc_oPg1, "grd_4c_PsgCad", 5)
+                loc_oGrd = loc_oPg1.grd_4c_PsgCad
+                IF loc_oGrd.Visible AND loc_oGrd.ColumnCount >= 1
+                    loc_oGrd.Column1.SetFocus()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            *-- SetFocus falha se a aba nao estiver ativa; nao eh erro de negocio
+        ENDTRY
     ENDPROC
 
     *==========================================================================
@@ -14723,25 +15205,53 @@ DEFINE CLASS FormGpd AS FormBase
     * par_cCgrus: codigo do grupo (SigCdGrp.cgrus)
     *==========================================================================
     PROCEDURE CarregarSigcdcpo(par_cCgrus)
-        LOCAL loc_cSql, loc_nRet, loc_lProsseguir
+        LOCAL loc_cSql, loc_nRet, loc_lProsseguir, loc_oPg9
         IF !USED("crSigcdcpo")
             RETURN
         ENDIF
         loc_lProsseguir = .T.
         TRY
+            *-- Erro179 (mesmo defeito da aba Cadastro, achado pela auditoria do
+            *-- pattern #211): SQLEXEC direto sobre "crSigcdcpo" FECHA e RECRIA o
+            *-- alias ligado a grd_4c_Compos, e o Grid cai de ColumnCount=4 para
+            *-- 0 - medido no VFP9. A aba Compos abria um retangulo branco assim
+            *-- que o usuario entrasse num grupo com composicao. Recarga pelo
+            *-- cursor TEMPORARIO + ZAP + APPEND FROM DBF() preserva o bind.
+            IF USED("crSigcdcpoTmp")
+                USE IN crSigcdcpoTmp
+            ENDIF
+
             SELECT crSigcdcpo
             ZAP
+
             IF EMPTY(ALLTRIM(par_cCgrus))
                 loc_lProsseguir = .F.
             ENDIF
             IF loc_lProsseguir
+                *-- Lista IDENTICA a do CREATE CURSOR (o APPEND FROM casa por nome)
                 loc_cSql = "SELECT cidchaves, compos, fxfins, fxinis, grupos, tipos, valors, vltps " + ;
                     "FROM sigcdcpo WHERE grupos = " + EscaparSQL(ALLTRIM(par_cCgrus))
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpo")
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpoTmp")
                 IF loc_nRet < 0
                     MsgErro("Falha ao carregar composi" + CHR(231) + CHR(245) + "es.", ;
                         "FormGpd.CarregarSigcdcpo")
+                ELSE
+                    IF USED("crSigcdcpoTmp") AND RECCOUNT("crSigcdcpoTmp") > 0
+                        SELECT crSigcdcpo
+                        APPEND FROM DBF("crSigcdcpoTmp")
+                    ENDIF
                 ENDIF
+            ENDIF
+
+            IF USED("crSigcdcpoTmp")
+                USE IN crSigcdcpoTmp
+            ENDIF
+
+            SELECT crSigcdcpo
+            GO TOP
+            loc_oPg9 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
+            IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                loc_oPg9.grd_4c_Compos.Refresh()
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao carregar composi" + CHR(231) + CHR(245) + "es:" + ;
@@ -14817,6 +15327,98 @@ DEFINE CLASS FormGpd AS FormBase
         CATCH TO loc_oErro
             MsgErro("Erro ao salvar composi" + CHR(231) + CHR(245) + "es:" + ;
                 CHR(13) + loc_oErro.Message, "FormGpd.SalvarSigcdcpo")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * SalvarSigCdPsg - Grava os sub-grupos editados na grade da aba Cadastro
+    *
+    * Erro179: NAO EXISTIA. A grade permitia (depois das correcoes acima)
+    * incluir, digitar e excluir sub-grupos, mas nada disso chegava ao banco -
+    * o Confirmar gravava SigCdGrp, crMontagem, SigCdCpo e LocalProD e ignorava
+    * cursor_4c_SigCdPsg.
+    *
+    * Transcrito do legado (msv_inserir / msv_alterar, identicos neste trecho):
+    *   Select crSigCdPsg
+    *   Delete From CrSigCdPsg Where codigos = Space(6)
+    *   Replace All CrSigCdPsg.cgrucods With CrSigCdPsg.cgrus + CrSigCdPsg.codigos
+    *   ThisForm.poDataMgr.Update('CrSigCdPsg')
+    *
+    * A linha em branco criada pelo botao "+" e nunca preenchida eh DESCARTADA
+    * (Where codigos = Space(6)) - o legado nao grava sub-grupo sem codigo.
+    * O Update do Fortyus vira DELETE do grupo + INSERT linha a linha, mesmo
+    * idiom de SalvarSigcdcpo/SalvarLocalProD deste form. O INSERT cobre as 11
+    * colunas de SigCdPsg, TODAS NOT NULL (regra #22).
+    *==========================================================================
+    PROCEDURE SalvarSigCdPsg(par_cCgrus)
+        LOCAL loc_lResultado, loc_cSql, loc_nRet, loc_cCid, loc_cCgrus
+        loc_lResultado = .T.
+
+        IF !USED("cursor_4c_SigCdPsg")
+            RETURN
+        ENDIF
+        loc_cCgrus = ALLTRIM(par_cCgrus)
+        IF EMPTY(loc_cCgrus)
+            RETURN
+        ENDIF
+
+        TRY
+            SELECT cursor_4c_SigCdPsg
+
+            *-- Legado: Delete From CrSigCdPsg Where codigos = Space(6)
+            DELETE FROM cursor_4c_SigCdPsg WHERE EMPTY(ALLTRIM(codigos))
+
+            *-- Legado: Replace All cgrucods With cgrus + codigos
+            *-- chave POSICIONAL char(9) = char(3) + char(6), sem ALLTRIM (regra #42)
+            SELECT cursor_4c_SigCdPsg
+            REPLACE ALL cgrucods WITH PADR(cgrus, 3) + PADR(codigos, 6) ;
+                IN cursor_4c_SigCdPsg
+
+            loc_cSql = "DELETE FROM SigCdPsg WHERE cgrus = " + EscaparSQL(loc_cCgrus)
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSql)
+            IF loc_nRet < 0
+                MsgErro("Falha ao limpar sub-grupos anteriores." + CHR(13) + ;
+                    CapturarErroSQL(), "FormGpd.SalvarSigCdPsg")
+                loc_lResultado = .F.
+            ENDIF
+
+            IF loc_lResultado
+                SELECT cursor_4c_SigCdPsg
+                SCAN FOR !DELETED()
+                    loc_cCid = ALLTRIM(cursor_4c_SigCdPsg.cidchaves)
+                    IF EMPTY(loc_cCid)
+                        loc_cCid = fUniqueIds()
+                        REPLACE cidchaves WITH loc_cCid IN cursor_4c_SigCdPsg
+                    ENDIF
+                    loc_cSql = "INSERT INTO SigCdPsg " + ;
+                        "(cgrus, codigos, descricaos, cidchaves, cgrucods, " + ;
+                        "nfaixafins, nfaixainis, pesoprods, marckupa, " + ;
+                        "nminpars, npars) VALUES (" + ;
+                        EscaparSQL(PADR(cursor_4c_SigCdPsg.cgrus, 3)) + ", " + ;
+                        EscaparSQL(PADR(cursor_4c_SigCdPsg.codigos, 6)) + ", " + ;
+                        EscaparSQL(LEFT(cursor_4c_SigCdPsg.descricaos, 20)) + ", " + ;
+                        EscaparSQL(LEFT(loc_cCid, 20)) + ", " + ;
+                        EscaparSQL(PADR(cursor_4c_SigCdPsg.cgrucods, 9)) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.nfaixafins, 2) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.nfaixainis, 2) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.pesoprods, 0) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.marckupa, 2) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.nminpars, 2) + ", " + ;
+                        FormatarNumeroSQL(cursor_4c_SigCdPsg.npars, 0) + ")"
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSql)
+                    IF loc_nRet < 0
+                        MsgErro("Falha ao gravar o sub-grupo '" + ;
+                            ALLTRIM(cursor_4c_SigCdPsg.codigos) + "'." + CHR(13) + ;
+                            CapturarErroSQL(), "FormGpd.SalvarSigCdPsg")
+                        loc_lResultado = .F.
+                        EXIT
+                    ENDIF
+                    SELECT cursor_4c_SigCdPsg
+                ENDSCAN
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao salvar sub-grupos:" + CHR(13) + loc_oErro.Message, ;
+                "FormGpd.SalvarSigCdPsg")
         ENDTRY
     ENDPROC
 

@@ -23,16 +23,13 @@ PROCEDURE Main()
 
     * Exibe mensagem de inicializacao
     WAIT WINDOW "Inicializando sistema..." NOWAIT
-
+    
     * Carrega configuracoes
     DO config.prg
-
     * Configura ambiente
     ConfigurarAmbiente()
-
     * Configura SET's globais
     ConfigurarSETs()
-SET STEP ON 
     * Conecta ao banco de dados
     IF !ConectarBancoDados()
         WAIT CLEAR
@@ -47,7 +44,6 @@ SET STEP ON
 
     * Exibe tela de apresentacao (splash screen) - opcional
     * DO splash.prg
-    SET STEP ON 
 
     * Abre menu principal
     CriarMenuPrincipal()

@@ -1,0 +1,15 @@
+A: inicio
+B: conn=1
+C: grupo=[997]  codigo JA EXISTENTE=[036]
+D: ExisteProduto([036]) = .T.  (esperado .T.)
+   ExisteProduto([E185INEDITO]) = .F.  (esperado .F.)
+E: Salvar com codigo duplicado = .F.  msg=[Produto Já Cadastrado!!!]  OK (barrado pelo sistema)
+F: aviso no LostFocus com codigo duplicado -> ver DIALOGOS abaixo
+G: ValidarDados, NOVO com codigo inedito = .T.  msg=[]  OK (nao barra pelo codigo)
+H: ValidarDados, ALTERAR do [036] = .T.  msg=[]  OK (alteracao livre)
+J: ValidarDados, NOVO com codigo [036] = .F.  msg=[Produto Já Cadastrado!!!]  OK (barra)
+I: linhas gravadas com E185INEDITO = 0  (esperado 0)
+DIALOGOS: [01/10/2026 12:32:57 PM] Salvar: Produto Já Cadastrado!!!
+[01/10/2026 12:32:57 PM] Atenção: Produto Já Cadastrado!!!
+
+Z: fim

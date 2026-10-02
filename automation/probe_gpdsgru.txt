@@ -1,0 +1,41 @@
+A: inicio
+
+=== 01-apos-Init
+  RECCOUNT cursor = 0
+  RecordSource=[cursor_4c_SigCdPsg]  ColumnCount=6  Grid.ReadOnly=.F.
+  Col1 CS=[cursor_4c_SigCdPsg.codigos] W=75 Cap=[Sub-Grupo] RO=.T.
+  Col2 CS=[cursor_4c_SigCdPsg.descricaos] W=180 Cap=[Descrição] RO=.F.
+  Col3 CS=[cursor_4c_SigCdPsg.nfaixainis] W=87 Cap=[Faixa Inicial] RO=.F.
+  Col4 CS=[cursor_4c_SigCdPsg.nfaixafins] W=87 Cap=[Faixa Final] RO=.F.
+  Col5 CS=[cursor_4c_SigCdPsg.npars] W=50 Cap=[Max Pars] RO=.F.
+  Col6 CS=[cursor_4c_SigCdPsg.nminpars] W=75 Cap=[Vr Min Par] RO=.F.
+
+=== 02-apos-+-da-aba-SubGrupos
+  RECCOUNT cursor = 1
+  RecordSource=[cursor_4c_SigCdPsg]  ColumnCount=6  Grid.ReadOnly=.F.
+  Col1 CS=[cursor_4c_SigCdPsg.codigos] W=75 Cap=[Sub-Grupo] RO=.F.
+  Col2 CS=[cursor_4c_SigCdPsg.descricaos] W=180 Cap=[Descrição] RO=.F.
+  Col3 CS=[cursor_4c_SigCdPsg.nfaixainis] W=87 Cap=[Faixa Inicial] RO=.F.
+  Col4 CS=[cursor_4c_SigCdPsg.nfaixafins] W=87 Cap=[Faixa Final] RO=.F.
+  Col5 CS=[cursor_4c_SigCdPsg.npars] W=50 Cap=[Max Pars] RO=.F.
+  Col6 CS=[cursor_4c_SigCdPsg.nminpars] W=75 Cap=[Vr Min Par] RO=.F.
+
+=== 03-BANCO (SQLEXEC=1 linhas=1)
+   cod=[SG9601] desc=[SUB DA ABA SGRU] cgrucods=[Z96SG9601]
+   fxini=10.50 fxfim=99.75 npars=7 nminpars=33.25 markup=5.50
+
+=== 04-apos-recarga (ALTERAR)
+  RECCOUNT cursor = 1
+  RecordSource=[cursor_4c_SigCdPsg]  ColumnCount=6  Grid.ReadOnly=.F.
+  Col1 CS=[cursor_4c_SigCdPsg.codigos] W=75 Cap=[Sub-Grupo] RO=.T.
+  Col2 CS=[cursor_4c_SigCdPsg.descricaos] W=180 Cap=[Descrição] RO=.F.
+  Col3 CS=[cursor_4c_SigCdPsg.nfaixainis] W=87 Cap=[Faixa Inicial] RO=.F.
+  Col4 CS=[cursor_4c_SigCdPsg.nfaixafins] W=87 Cap=[Faixa Final] RO=.F.
+  Col5 CS=[cursor_4c_SigCdPsg.npars] W=50 Cap=[Max Pars] RO=.F.
+  Col6 CS=[cursor_4c_SigCdPsg.nminpars] W=75 Cap=[Vr Min Par] RO=.F.
+   cursor: cod=[SG9601] fxini=10.50 npars=7 nminpars=33.25
+   grd_4c_PsgCad: ColumnCount=4 RS=[cursor_4c_SigCdPsg]
+   limpeza Z96 executada
+DIALOGOS: [30/09/2026 12:47:40 PM] Informação: Registro salvo com sucesso!
+
+Z: fim

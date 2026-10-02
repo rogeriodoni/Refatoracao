@@ -560,6 +560,89 @@ DEFINE CLASS ProdutoBO AS BusinessBase
     *
     * Retorna .T. quando o cursor cursor_4c_CfgGrupo ficou disponivel.
     *====================================================================
+    *====================================================================
+    * ValorNum - Normaliza um valor que pode chegar C, N ou L (Erro186)
+    *
+    * O FormParaBO guarda a STRING do TextBox nas properties this_n* (o
+    * FormatarNumeroSQL converte na gravacao), entao as comparacoes
+    * numericas das validacoes NAO podem assumir tipo N.
+    *====================================================================
+    PROTECTED PROCEDURE ValorNum(par_uValor)
+        LOCAL loc_cTipo, loc_nValor
+        loc_cTipo  = VARTYPE(par_uValor)
+        loc_nValor = 0
+
+        DO CASE
+            CASE loc_cTipo = "N"
+                loc_nValor = par_uValor
+            CASE loc_cTipo = "L"
+                loc_nValor = IIF(par_uValor, 1, 0)
+            CASE loc_cTipo = "C"
+                loc_nValor = VAL(STRTRAN(ALLTRIM(par_uValor), ",", "."))
+        ENDCASE
+
+        RETURN loc_nValor
+    ENDPROC
+
+    *====================================================================
+    * ExisteRegistro - Equivalente do poDataMgr.ChkRegister do legado
+    * .T. quando ha ao menos uma linha com <par_cCampo> = <par_cValor>.
+    *====================================================================
+    PROTECTED PROCEDURE ExisteRegistro(par_cTabela, par_cCampo, par_cValor)
+        LOCAL loc_cSQL, loc_nResultado, loc_lExiste, loc_oErro
+        loc_lExiste = .F.
+
+        TRY
+            IF USED("cursor_4c_ChkReg")
+                USE IN cursor_4c_ChkReg
+            ENDIF
+
+            loc_cSQL = "SELECT TOP 1 " + par_cCampo + " FROM " + par_cTabela + ;
+                " WHERE " + par_cCampo + " = " + EscaparSQL(ALLTRIM(par_cValor))
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkReg")
+
+            IF loc_nResultado >= 0 AND USED("cursor_4c_ChkReg")
+                loc_lExiste = (RECCOUNT("cursor_4c_ChkReg") > 0)
+            ENDIF
+
+            IF USED("cursor_4c_ChkReg")
+                USE IN cursor_4c_ChkReg
+            ENDIF
+        CATCH TO loc_oErro
+            loc_lExiste = .F.
+        ENDTRY
+
+        RETURN loc_lExiste
+    ENDPROC
+
+    *====================================================================
+    * ExecutarConsultaAuxiliar - Roda um SELECT de apoio das validacoes
+    * Devolve o NUMERO DE LINHAS (-1 em falha), deixando o cursor aberto
+    * para o chamador ler.
+    *====================================================================
+    PROTECTED PROCEDURE ExecutarConsultaAuxiliar(par_cSQL, par_cCursor)
+        LOCAL loc_nResultado, loc_nLinhas, loc_oErro
+        loc_nLinhas = -1
+
+        TRY
+            IF USED(par_cCursor)
+                USE IN (par_cCursor)
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, par_cSQL, par_cCursor)
+
+            IF loc_nResultado >= 0 AND USED(par_cCursor)
+                GO TOP IN (par_cCursor)
+                loc_nLinhas = RECCOUNT(par_cCursor)
+            ENDIF
+        CATCH TO loc_oErro
+            loc_nLinhas = -1
+        ENDTRY
+
+        RETURN loc_nLinhas
+    ENDPROC
+
     PROTECTED PROCEDURE CarregarConfigGrupo()
         LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
@@ -570,8 +653,15 @@ DEFINE CLASS ProdutoBO AS BusinessBase
             ENDIF
 
             IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                *-- Erro186: alem dos obrigatorios do Obrigatorios() legado,
+                *-- a consulta traz agora os campos usados pelas validacoes do
+                *-- Salva.Click (C.C., peso medio, cod. pai, localizacao,
+                *-- unidade 2, fornecedor, moedas, pisos de preco, servico).
                 loc_cSQL = "SELECT cgrus, dgrus, mercs, obrsgrus, obrigfiscs, obridecs," + ;
-                    " obrcclas, obrfinps, obrlinha, obrcolec, obrdimes, ajpvens, cfggergprs" + ;
+                    " obrcclas, obrfinps, obrlinha, obrcolec, obrdimes, ajpvens, cfggergprs," + ;
+                    " grctobccs, obrpesoms, obrconjuts, localobrig, vldconjuts, nchkpess," + ;
+                    " fornecs, omoecs, omoecusfs, omoedas, omoevs, servprds," + ;
+                    " pcuss, fcustos, custofs, pmargems, pvideals, markupa, pvens" + ;
                     " FROM SigCdGrp WHERE cgrus = " + ;
                     EscaparSQL(LEFT(ALLTRIM(THIS.this_cCgrus), 3))
 
@@ -726,6 +816,26 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                 THIS.this_cPaginaFoco   = "DADOS"
                 THIS.this_cCampoFoco    = "txt_4c_Cpro"
                 loc_lValido = .F.
+            ENDIF
+
+            *-- Erro185: codigo DUPLICADO na inclusao.
+            *-- cpros eh a PRIMARY KEY (sigcdpro_cpros). Sem esta checagem o
+            *-- INSERT chegava ao SQL Server e o usuario via o erro CRU do ODBC
+            *-- ("Violacao da restricao PRIMARY KEY ... chave duplicada (9999)"),
+            *-- em vez da mensagem do sistema.
+            *-- O legado barra em getCpro.Valid (case INSERIR):
+            *--   ThisForm.poDataMgr.CursorQuery('SigCdPro','crTmp','CPros',lcCdProduto)
+            *--   If (Reccount('crTmp') > 0)
+            *--       =MessageBox('Produto Ja Cadastrado!!!', 0+48, '')
+            *-- So vale para registro NOVO: no ALTERAR o codigo existe por
+            *-- definicao e a checagem recusaria toda alteracao.
+            IF loc_lValido AND THIS.this_lNovoRegistro
+                IF THIS.ExisteProduto(THIS.this_cCpros)
+                    THIS.this_cMensagemErro = "Produto J" + CHR(225) + " Cadastrado!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Cpro"
+                    loc_lValido = .F.
+                ENDIF
             ENDIF
 
             *-- Grupo do produto: o legado exige o grupo antes de qualquer campo
@@ -895,6 +1005,25 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                 loc_lValido = .F.
             ENDIF
 
+            *===============================================================
+            * Erro186: validacoes do Salva.Click do legado
+            *
+            * Ate aqui o migrado so tinha o Obrigatorios(). O legado valida
+            * MAIS 24 regras dentro do proprio Salva.Click, todas perdidas na
+            * migracao - o produto gravava com os campos em branco ou
+            * inconsistentes, calado. Transcritas na MESMA ORDEM do legado.
+            *
+            * FICARAM DE FORA (dependem do que ainda nao foi migrado):
+            *   - Servico Obrigatorio (ObrServico) -> grade de servicos
+            *   - chkforcomp, itens/moedas/duplicados da composicao,
+            *     componentes obrigatorios por grupo -> grades de composicao
+            *   - ordem das fases e processos -> grade de processos
+            *   - faixa de markup do feitio -> composicao
+            *===============================================================
+            IF loc_lValido
+                loc_lValido = THIS.ValidarRegrasGravacao()
+            ENDIF
+
             IF USED("cursor_4c_CfgGrupo")
                 USE IN cursor_4c_CfgGrupo
             ENDIF
@@ -906,6 +1035,496 @@ DEFINE CLASS ProdutoBO AS BusinessBase
         ENDTRY
 
         RETURN loc_lValido
+    ENDPROC
+
+    *====================================================================
+    * ValidarRegrasGravacao - Regras do Salva.Click do legado (Erro186)
+    *
+    * Chamada por ValidarDados DEPOIS das regras do Obrigatorios(), com o
+    * cursor_4c_CfgGrupo ja aberto no grupo do produto.
+    *
+    * Regra #1: nenhum RETURN dentro do TRY - tudo pelo flag loc_lOk.
+    *====================================================================
+    PROTECTED PROCEDURE ValidarRegrasGravacao()
+        LOCAL loc_lOk, loc_cCfg, loc_cGrCt, loc_nLinhas, loc_cSQL, loc_oErro
+        LOCAL loc_nPiso, loc_nValor
+        loc_lOk = .T.
+
+        TRY
+            IF !USED("cursor_4c_CfgGrupo") OR RECCOUNT("cursor_4c_CfgGrupo") = 0
+                *-- sem a config nao ha o que validar aqui; ValidarDados ja
+                *-- recusou o grupo inexistente antes de chegar neste ponto
+                loc_lOk = .T.
+            ELSE
+                GO TOP IN cursor_4c_CfgGrupo
+                loc_cCfg  = PADR(NVL(cursor_4c_CfgGrupo.cfggergprs, ""), 200)
+                loc_cGrCt = PADR(NVL(cursor_4c_CfgGrupo.grctobccs, ""), 21)
+
+                *-- 1) Grupo e Conta do C.C. (GrCtObCCs posicao 21)
+                IF loc_lOk AND !EMPTY(SUBSTR(loc_cGrCt, 21, 1)) AND ;
+                   (EMPTY(ALLTRIM(THIS.this_cGruccus)) OR EMPTY(ALLTRIM(THIS.this_cContaccus)))
+                    THIS.this_cMensagemErro = "Grupo e Conta do C.C. N" + CHR(227) + ;
+                        "o Pode Ficar Em Branco!!!"
+                    THIS.this_cPaginaFoco   = "FISCAL"
+                    THIS.this_cCampoFoco    = "txt_4c__gruccus"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 2) Peso Medio Obrigatorio
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.obrpesoms, 0) = 1 AND ;
+                   THIS.ValorNum(THIS.this_nPesoms) = 0
+                    THIS.this_cMensagemErro = "Peso M" + CHR(233) + "dio Obrigat" + ;
+                        CHR(243) + "rio!!!"
+                    THIS.this_cPaginaFoco   = "COMPOSICAO"
+                    THIS.this_cCampoFoco    = "txt_4c_Pmedio"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 3) Cod. Pai Obrigatorio
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.obrconjuts, 0) = 1 AND ;
+                   EMPTY(ALLTRIM(THIS.this_cConjunts))
+                    THIS.this_cMensagemErro = "Cod. Pai Obrigat" + CHR(243) + "rio!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Conjunto"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 4) Descricao do Produto em branco
+                IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cDpros))
+                    THIS.this_cMensagemErro = "Descri" + CHR(231) + CHR(227) + ;
+                        "o Do Produto N" + CHR(227) + "o Pode Ficar Em Branco!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Dpro"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 5) ALTERAR: produto com movimentacao nao troca de unidade
+                IF loc_lOk AND !THIS.this_lNovoRegistro
+                    IF THIS.ExisteRegistro("SigMvItn", "cpros", THIS.this_cCpros) OR ;
+                       THIS.ExisteRegistro("SigMvHst", "cpros", THIS.this_cCpros)
+                        loc_cSQL = "SELECT cunis, cunips FROM SigCdPro WHERE cpros = " + ;
+                            EscaparSQL(LEFT(ALLTRIM(THIS.this_cCpros), 14))
+                        loc_nLinhas = THIS.ExecutarConsultaAuxiliar(loc_cSQL, "cursor_4c_UniAnt")
+
+                        IF loc_nLinhas > 0
+                            IF ALLTRIM(NVL(cursor_4c_UniAnt.cunis, "")) != ALLTRIM(THIS.this_cCunis) OR ;
+                               ALLTRIM(NVL(cursor_4c_UniAnt.cunips, "")) != ALLTRIM(THIS.this_cCunips)
+                                THIS.this_cMensagemErro = "Produto com movimenta" + CHR(231) + ;
+                                    CHR(227) + "o de estoque. N" + CHR(227) + ;
+                                    "o " + CHR(233) + " permitido mudar as unidades."
+                                THIS.this_cPaginaFoco   = "DADOS"
+                                THIS.this_cCampoFoco    = "txt_4c_Cuni"
+                                loc_lOk = .F.
+                            ENDIF
+                        ENDIF
+
+                        IF USED("cursor_4c_UniAnt")
+                            USE IN cursor_4c_UniAnt
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+                *-- 6) EAN13 ja cadastrado em OUTRO produto
+                IF loc_lOk AND THIS.ValorNum(THIS.this_nEan13) != 0
+                    loc_cSQL = "SELECT cpros, dpros FROM SigCdPro WHERE ean13 = " + ;
+                        FormatarNumeroSQL(THIS.this_nEan13, 0) + " AND NOT cpros = " + ;
+                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cCpros), 14))
+                    loc_nLinhas = THIS.ExecutarConsultaAuxiliar(loc_cSQL, "cursor_4c_Ean13")
+
+                    IF loc_nLinhas > 0
+                        THIS.this_cMensagemErro = "C" + CHR(243) + "digo EAN13 J" + CHR(225) + ;
+                            " Cadastrado com o Produto" + CHR(13) + ;
+                            ALLTRIM(NVL(cursor_4c_Ean13.cpros, "")) + " - " + ;
+                            ALLTRIM(NVL(cursor_4c_Ean13.dpros, ""))
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "txt_4c_EAN13"
+                        loc_lOk = .F.
+                    ENDIF
+
+                    IF USED("cursor_4c_Ean13")
+                        USE IN cursor_4c_Ean13
+                    ENDIF
+                ENDIF
+
+                *-- 7) Localizacao obrigatoria para o grupo
+                IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cLocals)) AND ;
+                   NVL(cursor_4c_CfgGrupo.localobrig, 0) = 1
+                    THIS.this_cMensagemErro = "A Localiza" + CHR(231) + CHR(227) + ;
+                        "o do Produto Necessita Ser Informada Para Este Grupo!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Local"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 8) Produto WEB: caracteristica, titulo e descricao (VTEX)
+                IF loc_lOk AND THIS.ValorNum(THIS.this_nProdwebs) = 1
+                    IF EMPTY(ALLTRIM(THIS.this_mObscompras))
+                        THIS.this_cMensagemErro = "A Caracteristica do Produto deve ser " + ;
+                            "informada para esse Produto!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "obj_4c_GetObsCompras"
+                        loc_lOk = .F.
+                    ENDIF
+
+                    IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cObsmkt))
+                        THIS.this_cMensagemErro = "O Titulo do Produto deve ser Informada " + ;
+                            "para esse Produto!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "obj_4c_Get_ObsMkt"
+                        loc_lOk = .F.
+                    ENDIF
+
+                    IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_mDpro3s))
+                        THIS.this_cMensagemErro = "A Descri" + CHR(231) + CHR(227) + ;
+                            "o do Produto deve ser informada para esse Produto!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "obj_4c_GetDPro3s"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                *-- 9) Consistencia com o Cod. Pai (VldConjuts)
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.vldconjuts, 0) = 1 AND ;
+                   !EMPTY(ALLTRIM(THIS.this_cConjunts))
+                    loc_cSQL = "SELECT cgrus, codcors, colecoes, categoria FROM SigCdPro" + ;
+                        " WHERE conjunts = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cConjunts), 6)) + ;
+                        " AND cpros <> " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cCpros), 14))
+                    loc_nLinhas = THIS.ExecutarConsultaAuxiliar(loc_cSQL, "cursor_4c_Conj")
+
+                    IF loc_nLinhas > 0
+                        IF ALLTRIM(NVL(cursor_4c_Conj.cgrus, "")) != ALLTRIM(THIS.this_cCgrus)
+                            THIS.this_cMensagemErro = "O Grupo Informado " + CHR(233) + ;
+                                " Diferente do Grupo j" + CHR(225) + " Informado Para o C" + ;
+                                CHR(243) + "d. Pai : " + ALLTRIM(THIS.this_cConjunts) + ;
+                                ", Favor Verificar!!!"
+                            THIS.this_cPaginaFoco = "DADOS"
+                            THIS.this_cCampoFoco  = "txt_4c_Cgru"
+                            loc_lOk = .F.
+                        ENDIF
+
+                        IF loc_lOk AND ALLTRIM(NVL(cursor_4c_Conj.codcors, "")) != ALLTRIM(THIS.this_cCodcors)
+                            THIS.this_cMensagemErro = "A Cor/Metal Informada " + CHR(233) + ;
+                                " Diferente da Cor/Metal j" + CHR(225) + " Informado Para o C" + ;
+                                CHR(243) + "d. Pai : " + ALLTRIM(THIS.this_cConjunts) + ;
+                                ", Favor Verificar!!!"
+                            THIS.this_cPaginaFoco = "DADOS"
+                            THIS.this_cCampoFoco  = "txt_4c_Cor"
+                            loc_lOk = .F.
+                        ENDIF
+
+                        IF loc_lOk AND ALLTRIM(NVL(cursor_4c_Conj.colecoes, "")) != ALLTRIM(THIS.this_cColecoes)
+                            THIS.this_cMensagemErro = "O Grupo de Venda/Cole" + CHR(231) + ;
+                                CHR(227) + "o Informado " + CHR(233) + " Diferente do Grupo de " + ;
+                                "Venda/Cole" + CHR(231) + CHR(227) + "o j" + CHR(225) + ;
+                                " Informado Para o C" + CHR(243) + "d. Pai : " + ;
+                                ALLTRIM(THIS.this_cConjunts) + ", Favor Verificar!!!"
+                            THIS.this_cPaginaFoco = "DADOS"
+                            THIS.this_cCampoFoco  = "txt_4c_Col"
+                            loc_lOk = .F.
+                        ENDIF
+
+                        IF loc_lOk AND ALLTRIM(NVL(cursor_4c_Conj.categoria, "")) != ALLTRIM(THIS.this_cCategoria)
+                            THIS.this_cMensagemErro = "A Categoria Informada " + CHR(233) + ;
+                                " Diferente da Categoria j" + CHR(225) + " Informado Para o C" + ;
+                                CHR(243) + "d. Pai : " + ALLTRIM(THIS.this_cConjunts) + ;
+                                ", Favor Verificar!!!"
+                            THIS.this_cPaginaFoco = "DADOS"
+                            THIS.this_cCampoFoco  = "txt_4c_Categoria"
+                            loc_lOk = .F.
+                        ENDIF
+                    ENDIF
+
+                    IF USED("cursor_4c_Conj")
+                        USE IN cursor_4c_Conj
+                    ENDIF
+                ENDIF
+
+                *-- 10) Situacao x Situacao da Classificacao (SigCdCls)
+                IF loc_lOk AND !EMPTY(ALLTRIM(THIS.this_cCclass))
+                    loc_cSQL = "SELECT situas FROM SigCdCls WHERE cods = " + ;
+                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cCclass), 3))
+                    loc_nLinhas = THIS.ExecutarConsultaAuxiliar(loc_cSQL, "cursor_4c_Cls")
+
+                    IF loc_nLinhas > 0
+                        loc_nValor = THIS.ValorNum(THIS.this_nSituas)
+
+                        DO CASE
+                            CASE NVL(cursor_4c_Cls.situas, 0) = 1 AND loc_nValor != 1
+                                THIS.this_cMensagemErro = "Essa Situa" + CHR(231) + CHR(227) + ;
+                                    "o S" + CHR(243) + " Pode Ser Utilizada Em Produtos Ativos!!!"
+                                THIS.this_cPaginaFoco = "DADOS"
+                                THIS.this_cCampoFoco  = "txt_4c_Class"
+                                loc_lOk = .F.
+
+                            CASE NVL(cursor_4c_Cls.situas, 0) = 2 AND loc_nValor != 2
+                                THIS.this_cMensagemErro = "Essa Situa" + CHR(231) + CHR(227) + ;
+                                    "o S" + CHR(243) + " Pode Ser Utilizada Em Produtos Inativos!!!"
+                                THIS.this_cPaginaFoco = "DADOS"
+                                THIS.this_cCampoFoco  = "txt_4c_Class"
+                                loc_lOk = .F.
+                        ENDCASE
+                    ENDIF
+
+                    IF USED("cursor_4c_Cls")
+                        USE IN cursor_4c_Cls
+                    ENDIF
+                ENDIF
+
+                *-- 11) IPI: aliquota igual a da classificacao / excecao da TIPI
+                IF loc_lOk AND !EMPTY(ALLTRIM(THIS.this_cClfiscals)) AND ;
+                   THIS.ValorNum(THIS.this_nAliqipis) != 0
+                    loc_cSQL = "SELECT aipis, ipiprods FROM SigCdClf WHERE codigos = " + ;
+                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cClfiscals), 10))
+                    loc_nLinhas = THIS.ExecutarConsultaAuxiliar(loc_cSQL, "cursor_4c_Clf")
+
+                    IF loc_nLinhas > 0
+                        IF THIS.ValorNum(THIS.this_nAliqipis) = NVL(cursor_4c_Clf.aipis, 0)
+                            THIS.this_cMensagemErro = "Al" + CHR(237) + "quota de IPI informada " + ;
+                                "no produto id" + CHR(234) + "ntica " + CHR(224) + ;
+                                " classifica" + CHR(231) + CHR(227) + "o, deixe zero e ser" + ;
+                                CHR(225) + " utilizada a classifica" + CHR(231) + CHR(227) + "o!"
+                            THIS.this_cPaginaFoco = "FISCAL"
+                            THIS.this_cCampoFoco  = "txt_4c_AliqIPI"
+                            loc_lOk = .F.
+                        ENDIF
+
+                        IF loc_lOk AND UPPER(ALLTRIM(NVL(cursor_4c_Clf.ipiprods, ""))) == "S" AND ;
+                           EMPTY(ALLTRIM(THIS.this_cExtipi))
+                            THIS.this_cMensagemErro = "Exce" + CHR(231) + CHR(227) + ;
+                                "o da TIPI do produto deve ser informada!"
+                            THIS.this_cPaginaFoco = "FISCAL"
+                            THIS.this_cCampoFoco  = "txt_4c_Extipi"
+                            loc_lOk = .F.
+                        ENDIF
+                    ENDIF
+
+                    IF USED("cursor_4c_Clf")
+                        USE IN cursor_4c_Clf
+                    ENDIF
+                ENDIF
+
+                *-- 12) INCLUIR: Peso Liquido obrigatorio (nChkPess)
+                IF loc_lOk AND THIS.this_lNovoRegistro AND ;
+                   NVL(cursor_4c_CfgGrupo.nchkpess, 0) = 1 AND ;
+                   THIS.ValorNum(THIS.this_nPesoms) = 0
+                    THIS.this_cMensagemErro = "Peso Liquido Invalido !!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Pmedio"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 13) Unidade 1
+                IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cCunis))
+                    THIS.this_cMensagemErro = "Unidade Inv" + CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Cuni"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 14) Unidade 2 (CfgGerGprs posicao 10)
+                IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cCunips)) AND ;
+                   INT(VAL(SUBSTR(loc_cCfg, 10, 1))) = 1
+                    THIS.this_cMensagemErro = "Unidade 2 Inv" + CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Cunip"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 15) Fornecedor
+                IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cIfors)) AND ;
+                   NVL(cursor_4c_CfgGrupo.fornecs, 0) = 1
+                    THIS.this_cMensagemErro = "Fornecedor Inv" + CHR(225) + "lido!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Ifor"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 16) Valor de Venda quando o parametro exige (SigCdPam.PrVendas = 'N')
+                IF loc_lOk
+                    loc_nLinhas = THIS.ExecutarConsultaAuxiliar( ;
+                        "SELECT TOP 1 prvendas FROM SigCdPam", "cursor_4c_Pam")
+
+                    IF loc_nLinhas > 0 AND ;
+                       UPPER(ALLTRIM(NVL(cursor_4c_Pam.prvendas, ""))) == "N"
+                        IF EMPTY(ALLTRIM(THIS.this_cMoevs)) OR THIS.ValorNum(THIS.this_nPvens) = 0
+                            THIS.this_cMensagemErro = "Valor de Venda Inv" + CHR(225) + "lido!!!"
+                            THIS.this_cPaginaFoco   = "DADOS"
+                            THIS.this_cCampoFoco    = "txt_4c_Pvenda"
+                            loc_lOk = .F.
+                        ENDIF
+                    ENDIF
+
+                    IF USED("cursor_4c_Pam")
+                        USE IN cursor_4c_Pam
+                    ENDIF
+                ENDIF
+
+                *-- 17) Moeda do Valor Estimado
+                IF loc_lOk AND THIS.ValorNum(THIS.this_nValors) != 0
+                    IF EMPTY(ALLTRIM(THIS.this_cMoedas)) OR ;
+                       !THIS.ExisteRegistro("SigCdMoe", "cmoes", THIS.this_cMoedas)
+                        THIS.this_cMensagemErro = "Moeda Do Valor Estimado Incorreta!!!"
+                        THIS.this_cPaginaFoco   = "FISCAL"
+                        THIS.this_cCampoFoco    = "txt_4c_Mvalor"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                *-- 18) Moeda do Preco de Venda
+                IF loc_lOk AND THIS.ValorNum(THIS.this_nPvens) != 0
+                    IF EMPTY(ALLTRIM(THIS.this_cMoevs)) OR ;
+                       !THIS.ExisteRegistro("SigCdMoe", "cmoes", THIS.this_cMoevs)
+                        THIS.this_cMensagemErro = "Moeda do Pre" + CHR(231) + "o de Venda Inv" + ;
+                            CHR(225) + "lida!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "txt_4c_Mpvenda"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                *-- 19) Moeda do Fator de Venda
+                IF loc_lOk AND THIS.ValorNum(THIS.this_nFvendas) != 0
+                    IF EMPTY(ALLTRIM(THIS.this_cMoepvs)) OR ;
+                       !THIS.ExisteRegistro("SigCdMoe", "cmoes", THIS.this_cMoepvs)
+                        THIS.this_cMensagemErro = "Moeda do Fator de Venda Inv" + CHR(225) + "lida!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "txt_4c_Mfvenda"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                *-- 20) Moedas obrigatorias por configuracao do grupo
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.omoecs, 0) = 1 AND ;
+                   EMPTY(ALLTRIM(THIS.this_cMoecs))
+                    THIS.this_cMensagemErro = "Moeda de Custo da Composi" + CHR(231) + CHR(227) + ;
+                        "o Inv" + CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "COMPOSICAO"
+                    THIS.this_cCampoFoco    = "txt_4c_Moec"
+                    loc_lOk = .F.
+                ENDIF
+
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.omoecusfs, 0) = 1 AND ;
+                   EMPTY(ALLTRIM(THIS.this_cMoecusfs))
+                    THIS.this_cMensagemErro = "Moeda do Total de Custo Inv" + CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "COMPOSICAO"
+                    THIS.this_cCampoFoco    = "txt_4c_Mctotal"
+                    loc_lOk = .F.
+                ENDIF
+
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.omoedas, 0) = 1 AND ;
+                   EMPTY(ALLTRIM(THIS.this_cMoedas))
+                    THIS.this_cMensagemErro = "Moeda do Pre" + CHR(231) + "o Ideal de Venda Inv" + ;
+                        CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "COMPOSICAO"
+                    THIS.this_cCampoFoco    = "txt_4c_Mvalor"
+                    loc_lOk = .F.
+                ENDIF
+
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.omoevs, 0) = 1 AND ;
+                   EMPTY(ALLTRIM(THIS.this_cMoevs))
+                    THIS.this_cMensagemErro = "Moeda do Pre" + CHR(231) + "o Atual de Venda Inv" + ;
+                        CHR(225) + "lida!!!"
+                    THIS.this_cPaginaFoco   = "COMPOSICAO"
+                    THIS.this_cCampoFoco    = "txt_4c_Mpvenda"
+                    loc_lOk = .F.
+                ENDIF
+
+                *-- 21) Pisos definidos no grupo (o grupo recusa valor ABAIXO)
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.pcuss, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nPcuss)
+                        THIS.this_cMensagemErro = "Pre" + CHR(231) + "o Composi" + CHR(231) + ;
+                            CHR(227) + "o Abaixo do Estabelecido Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "COMPOSICAO"
+                        THIS.this_cCampoFoco    = "txt_4c_Pcus"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.fcustos, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nFcustos)
+                        THIS.this_cMensagemErro = "Fator de Custo Abaixo do Estabelecido " + ;
+                            "Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "COMPOSICAO"
+                        THIS.this_cCampoFoco    = "txt_4c_Fcusto"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.custofs, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nCustofs)
+                        THIS.this_cMensagemErro = "Total de Custo Abaixo do Estabelecido " + ;
+                            "Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "txt_4c_Ctotal"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.pmargems, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nMargems)
+                        THIS.this_cMensagemErro = "Markup Ideal Abaixo do Estabelecido " + ;
+                            "Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "COMPOSICAO"
+                        THIS.this_cCampoFoco    = "txt_4c_Margem"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.pvideals, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nPvideals)
+                        THIS.this_cMensagemErro = "Pre" + CHR(231) + "o Ideal Abaixo do " + ;
+                            "Estabelecido Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "COMPOSICAO"
+                        THIS.this_cCampoFoco    = "txt_4c_Pvideal"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.markupa, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nMarkupa)
+                        THIS.this_cMensagemErro = "Markup Aplicado Abaixo do Estabelecido " + ;
+                            "Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "COMPOSICAO"
+                        THIS.this_cCampoFoco    = "txt_4c_MarkupA"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                IF loc_lOk
+                    loc_nPiso = NVL(cursor_4c_CfgGrupo.pvens, 0)
+                    IF loc_nPiso > 0 AND loc_nPiso > THIS.ValorNum(THIS.this_nPvens)
+                        THIS.this_cMensagemErro = "Pre" + CHR(231) + "o Atual Abaixo do " + ;
+                            "Estabelecido Para Este Grupo!!!"
+                        THIS.this_cPaginaFoco   = "DADOS"
+                        THIS.this_cCampoFoco    = "txt_4c_Pvenda"
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
+
+                *-- 22) Grupo de servico: codigo do produto com ate 6 digitos
+                IF loc_lOk AND NVL(cursor_4c_CfgGrupo.servprds, 0) = 1 AND ;
+                   LEN(ALLTRIM(THIS.this_cCpros)) > 6
+                    THIS.this_cMensagemErro = "Codigo do Produto Inv" + CHR(225) + ;
+                        "lido. Este Grupo Permite apenas 6 digitos!!!"
+                    THIS.this_cPaginaFoco   = "DADOS"
+                    THIS.this_cCampoFoco    = "txt_4c_Cpro"
+                    loc_lOk = .F.
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = "Erro ao validar as regras de grava" + CHR(231) + ;
+                CHR(227) + "o: " + loc_oErro.Message
+            loc_lOk = .F.
+        ENDTRY
+
+        RETURN loc_lOk
     ENDPROC
 
     *====================================================================

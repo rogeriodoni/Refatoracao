@@ -124,6 +124,30 @@ DEFINE CLASS LprBO AS BusinessBase
     *--------------------------------------------------------------------------
     * CarregarDoCursor - Mapeia campos do cursor para propriedades do BO
     *--------------------------------------------------------------------------
+    *==========================================================================
+    * InicializarValoresPadrao - Defaults do registro NOVO (hook de NovoRegistro)
+    *
+    * Transcrito do ramo INSERIR do Click do CommandGroup CRUD legado
+    * (SIGCDLPR, Grupo_op.Click):
+    *
+    *   If ThisForm.pcEscolha = 'INSERIR'
+    *       Replace CrSigCdLpc.formulas With 2, ;
+    *               CrSigCdLpc.ncomiss  With 2, ;
+    *               CrSigCdLpc.nvencs   With 2, ...
+    *
+    * Os tres sao colunas numeric(1,0) de DUAS opcoes, ligadas no SCX a
+    * OptionGroup "Sim"/"Nao" com ButtonCount = 2 e Value = 2 - ControlSource
+    * numerico grava o INDICE 1-based, entao valem 1 ou 2, NUNCA 0. O migrador
+    * descartou o Replace e as properties ficaram em 0: toda lista de preco nova
+    * nascia com formula/comissao/vencimento em 0, valor que nao existe no
+    * dominio. Sem erro e sem aviso.
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarValoresPadrao()
+        THIS.this_nFormulas = 2   && formulas = 2 (Nao)
+        THIS.this_nComiss   = 2   && ncomiss  = 2 (Nao)
+        THIS.this_nNvencs   = 2   && nvencs   = 2 (Nao)
+    ENDPROC
+
     PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
