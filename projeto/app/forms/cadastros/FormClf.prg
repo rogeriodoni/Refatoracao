@@ -1161,7 +1161,17 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_IVA.Column1.Controls(1)
+        *-- Erro188: os sete blocos de formatacao de CELULA desta tela estavam
+        *-- em "Column<N>.Controls(1)", que NAO eh a caixa de texto - eh o
+        *-- CABECALHO. Medido no VFP9 (2026-10-06), Grid criado por AddObject:
+        *--     Column1.ControlCount = 2
+        *--     Controls(1) -> Header1 (BaseClass Header)
+        *--     Controls(2) -> Text1   (BaseClass Textbox)
+        *-- Como Header TEM FontName/FontSize/Alignment/ForeColor/BackColor, os
+        *-- blocos passavam sem erro e formatavam o cabecalho de novo: a celula
+        *-- ficava na fonte default, e nas tres colunas de UF o ".Alignment = 3"
+        *-- ainda SOBRESCREVIA o ".Alignment = 2" posto no Header1 logo acima.
+        WITH loc_oPagina.grd_4c_IVA.Column1.Text1
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Alignment   = 3
@@ -1179,7 +1189,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_IVA.Column2.Controls(1)
+        WITH loc_oPagina.grd_4c_IVA.Column2.Text1
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Alignment   = 3
@@ -1198,7 +1208,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_IVA.Column3.Controls(1)
+        WITH loc_oPagina.grd_4c_IVA.Column3.Text1
             .FontName  = "Tahoma"
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
@@ -1215,7 +1225,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_IVA.Column4.Controls(1)
+        WITH loc_oPagina.grd_4c_IVA.Column4.Text1
             .FontName  = "Tahoma"
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
@@ -1260,7 +1270,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_Reducao.Column1.Controls(1)
+        WITH loc_oPagina.grd_4c_Reducao.Column1.Text1
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Alignment   = 3
@@ -1277,7 +1287,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_Reducao.Column2.Controls(1)
+        WITH loc_oPagina.grd_4c_Reducao.Column2.Text1
             .FontName  = "Tahoma"
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
@@ -1294,7 +1304,7 @@ DEFINE CLASS FormClf AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
         ENDWITH
-        WITH loc_oPagina.grd_4c_Reducao.Column3.Controls(1)
+        WITH loc_oPagina.grd_4c_Reducao.Column3.Text1
             .FontName  = "Tahoma"
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
@@ -2266,7 +2276,7 @@ DEFINE CLASS FormClf AS FormBase
     PROCEDURE IvaCol1KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 115  && F4
-            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_IVA.Column1.Controls(1))
+            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_IVA.Column1.Text1)
         ENDIF
     ENDPROC
 
@@ -2276,7 +2286,7 @@ DEFINE CLASS FormClf AS FormBase
     PROCEDURE IvaCol2KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 115  && F4
-            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_IVA.Column2.Controls(1))
+            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_IVA.Column2.Text1)
         ENDIF
     ENDPROC
 
@@ -2286,13 +2296,18 @@ DEFINE CLASS FormClf AS FormBase
     PROCEDURE RedCol1KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 115  && F4
-            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_Reducao.Column1.Controls(1))
+            THIS.AbrirLookupUF(THIS.pgf_4c_Paginas.Page2.grd_4c_Reducao.Column1.Text1)
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
     * IvaGridKeyPress - Handler KeyPress do grd_4c_IVA (nivel Grid)
-    * VFP9 nao permite BINDEVENT em Column.Controls(1).KeyPress durante init
+    *
+    * O F4 eh tratado no nivel do GRID, nao por coluna: durante o Init nao da
+    * para fazer BINDEVENT no KeyPress do controle da coluna, entao o handler
+    * le o ActiveColumn para saber em qual celula o usuario esta.
+    * Os IvaCol1KeyPress/IvaCol2KeyPress/RedCol1KeyPress acima existem mas NAO
+    * tem BINDEVENT nenhum - sao o caminho por-coluna que nao foi usado.
     *--------------------------------------------------------------------------
     PROCEDURE IvaGridKeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
@@ -2301,10 +2316,10 @@ DEFINE CLASS FormClf AS FormBase
         IF par_nKeyCode = 115  && F4
             loc_nCol = loc_oPg2.grd_4c_IVA.ActiveColumn
             IF loc_nCol = 1
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column1.Controls(1))
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column1.Text1)
             ENDIF
             IF loc_nCol = 2
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column2.Controls(1))
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column2.Text1)
             ENDIF
         ENDIF
     ENDPROC
@@ -2318,13 +2333,24 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF par_nKeyCode = 115  && F4
             IF loc_oPg2.grd_4c_Reducao.ActiveColumn = 1
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_Reducao.Column1.Controls(1))
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_Reducao.Column1.Text1)
             ENDIF
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
     * AbrirLookupUF - Abre FormBuscaAuxiliar em SigCdUfs para selecao de estado
+    *
+    * par_oCampo tem de ser o TextBox da coluna (Column<N>.Text1), NUNCA
+    * Column<N>.Controls(1) - este eh o Header1, que nao tem .Value nem
+    * .Refresh de controle. Erro188: os seis call sites passavam o Header, e o
+    * "loc_cAtual = PADR(ALLTRIM(par_oCampo.Value), 2)" abaixo estourava
+    * "Property VALUE is not found" - caia no CATCH e o usuario via
+    * "Erro ao abrir lookup UF" ao apertar F4 nas duas grades.
+    *
+    * Medido no VFP9 (2026-10-06) que escrever em Column.Text1.Value GRAVA no
+    * cursor ligado pelo ControlSource - entao a selecao do picker persiste:
+    *     cursor.estaso = [AA] -> Column1.Text1.Value = "SP" -> cursor = [SP]
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupUF
         LPARAMETERS par_oCampo

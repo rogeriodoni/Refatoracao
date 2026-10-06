@@ -185,11 +185,17 @@ DEFINE CLASS FormProduto AS FormBase
         *-- Container dos botoes CRUD (Grupo_op legado). Left canonico 542:
         *-- os 5 botoes (5/80/155/230/305 x 75) terminam em 922, exatamente
         *-- onde comeca o botao Encerrar do cnt_4c_Saida (917 + 5).
+        *--
+        *-- Erro188: o container foi ALARGADO para a esquerda (542 -> 467,
+        *-- 390 -> 465) para caber o "Copiar um Produto" (cmdAcabado legado),
+        *-- que fica ANTES do Incluir. Os cinco botoes CRUD andaram +75 dentro
+        *-- do container, de forma que a posicao ABSOLUTA deles nao mudou:
+        *-- Incluir continua em 467 + 80 = 547, como antes (542 + 5).
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
             .Top           = 29
-            .Left          = 542
-            .Width         = 390
+            .Left          = 467
+            .Width         = 465
             .Height        = 85
             .BackStyle = 1
             .BackColor = RGB(255, 255, 255)
@@ -198,11 +204,16 @@ DEFINE CLASS FormProduto AS FormBase
             .Visible       = .T.
         ENDWITH
 
-        *-- Botao Incluir (Left=5)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
-            .Caption         = "Incluir"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+        *-- Botao "Copiar um Produto" (cmdAcabado legado: Top=4, Left=482,
+        *-- Picture geral_duplicar_60.jpg). No legado ele nasce Visible = .F. e
+        *-- o Init liga conforme a permissao:
+        *--   llAcabado = Not ThisForm.Tipo2 And fChecaAcesso('SigCdPro','ACABADO')
+        *--   ThisForm.Pagina.Lista.cmdAcabado.Visible = llAcabado
+        *-- Aqui a mesma regra, com o fChecaAcesso do projeto.
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Acabado", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Acabado
+            .Caption         = "Copiar um Produto"
+            .Picture         = gc_4c_CaminhoIcones + "geral_duplicar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 5
@@ -219,15 +230,16 @@ DEFINE CLASS FormProduto AS FormBase
             .MousePointer    = 15
             .WordWrap        = .T.
             .AutoSize        = .F.
-            .Visible         = .T.
+            .ToolTipText     = "Gera um produto novo a partir do selecionado"
+            .Visible         = (!THIS.this_lTipo2 AND fChecaAcesso("SigCdPro", "ACABADO"))
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Acabado, "Click", THIS, "BtnAcabadoClick")
 
-        *-- Botao Visualizar (Left=80)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
-            .Caption         = "Visualizar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+        *-- Botao Incluir (Left=80 - o 5 original mais os 75 do Copiar)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+            .Caption         = "Incluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 80
@@ -246,13 +258,13 @@ DEFINE CLASS FormProduto AS FormBase
             .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
 
-        *-- Botao Alterar (Left=155)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
-            .Caption         = "Alterar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
+        *-- Botao Visualizar (Left=155)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
+            .Caption         = "Visualizar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 155
@@ -271,13 +283,13 @@ DEFINE CLASS FormProduto AS FormBase
             .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
 
-        *-- Botao Excluir (Left=230)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
-            .Caption         = "Excluir"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+        *-- Botao Alterar (Left=230)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
+            .Caption         = "Alterar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 230
@@ -296,9 +308,34 @@ DEFINE CLASS FormProduto AS FormBase
             .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+
+        *-- Botao Excluir (Left=305)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
+            .Caption         = "Excluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 305
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
 
-        *-- Botao Buscar (Left=305). NAO abre picker (Erro167/Erro177): o legado
+        *-- Botao Buscar (Left=380). NAO abre picker (Erro167/Erro177): o legado
         *-- (PROCEDURE msv_procurar) faz busca POR EXEMPLO na propria pagina de
         *-- Dados, com os campos plProcurar editaveis - ver ADENDO de Erro178.
         loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
@@ -307,7 +344,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 305
+            .Left            = 380
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"
@@ -481,6 +518,11 @@ DEFINE CLASS FormProduto AS FormBase
             ENDWITH
             BINDEVENT(.txt_4c_DtFim, "LostFocus", THIS, "RecarregarListaFiltrada")
 
+            *-- Erro188: Value = 2 ("Ativos"). O SCX declara optFilSituas.Value
+            *-- = 2 e a tela legada abre com "Ativos" marcado - o migrado abria
+            *-- em "Geral", trazendo tambem os inativos. Geometria dos tres
+            *-- OptionButton transcrita do SCX (Top -1/13/27, Left 6,
+            *-- Width 43/48/57, BorderStyle = 0).
             .AddObject("opt_4c_FilSituas", "OptionGroup")
             WITH .opt_4c_FilSituas
                 .ButtonCount = 3
@@ -489,54 +531,68 @@ DEFINE CLASS FormProduto AS FormBase
                 .Width       = 78
                 .Height      = 46
                 .BackStyle   = 0
-                .Value       = 1
+                .BorderStyle = 0
+                .Value       = 2
                 .Visible     = .T.
             ENDWITH
             WITH .opt_4c_FilSituas.Buttons(1)
-                .Caption   = "Geral"
-                .Top       = 2
-                .Left      = 2
-                .Width     = 70
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .FontName  = "Tahoma"
-                .FontSize  = 8
+                .Caption     = "Geral"
+                .Top         = -1
+                .Left        = 6
+                .Width       = 43
+                .Height      = 15
+                .AutoSize    = .T.
+                .BackStyle   = 0
+                .ToolTipText = "Elimina Filtro de Produtos Ativos / Inativos"
+                .ForeColor   = RGB(90, 90, 90)
+                .FontName    = "Tahoma"
+                .FontSize    = 8
             ENDWITH
             WITH .opt_4c_FilSituas.Buttons(2)
-                .Caption   = "Ativos"
-                .Top       = 17
-                .Left      = 2
-                .Width     = 70
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .FontName  = "Tahoma"
-                .FontSize  = 8
+                .Caption     = "Ativos"
+                .Top         = 13
+                .Left        = 6
+                .Width       = 48
+                .Height      = 15
+                .AutoSize    = .T.
+                .BackStyle   = 0
+                .ToolTipText = "Filtrar Produtos Ativos"
+                .ForeColor   = RGB(90, 90, 90)
+                .FontName    = "Tahoma"
+                .FontSize    = 8
             ENDWITH
             WITH .opt_4c_FilSituas.Buttons(3)
-                .Caption   = "Inativos"
-                .Top       = 32
-                .Left      = 2
-                .Width     = 70
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .FontName  = "Tahoma"
-                .FontSize  = 8
+                .Caption     = "Inativos"
+                .Top         = 27
+                .Left        = 6
+                .Width       = 57
+                .Height      = 15
+                .AutoSize    = .T.
+                .BackStyle   = 0
+                .ToolTipText = "Filtrar Produtos Inativos"
+                .ForeColor   = RGB(90, 90, 90)
+                .FontName    = "Tahoma"
+                .FontSize    = 8
             ENDWITH
             BINDEVENT(.opt_4c_FilSituas, "InteractiveChange", THIS, "RecarregarListaFiltrada")
         ENDWITH
 
-        *-- Grade de produtos (Grade legada). Left=26/Width=860 nao sobrepoe o
-        *-- cnt_4c_Saida (Left=917). Colunas conforme pColuna do legado
-        *-- (regra #35 do CLAUDE.md - o header vem do runtime, nao do SCX).
+        *-- Grade de produtos (Grade legada).
+        *-- Erro188: a geometria vem do SCX de producao (Grade.Top=173 +29 de
+        *-- compensacao do PageFrame externo, FontName="Tahoma" sobrepondo o
+        *-- "Verdana" da classe frmcadastro). Left/Width seguem a tela legada
+        *-- em execucao (imagem de referencia correcoes\erro188_modular.PNG):
+        *-- a grade termina em 958 para o painel de legenda (cnt_4c_Legenda)
+        *-- caber a direita dela, como no legado.
         loc_oPagina.AddObject("grd_4c_Dados", "Grid")
         *-- ColumnCount FORA do WITH (Problema 36: dentro do WITH nao cria colunas)
         loc_oPagina.grd_4c_Dados.ColumnCount = 7
         WITH loc_oPagina.grd_4c_Dados
-            .Top                = 195
-            .Left               = 26
-            .Width              = 860
-            .Height             = 400
-            .FontName           = "Verdana"
+            .Top                = 202
+            .Left               = 38
+            .Width              = 920
+            .Height             = 409
+            .FontName           = "Tahoma"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
             .BackColor          = RGB(255, 255, 255)
@@ -555,35 +611,410 @@ DEFINE CLASS FormProduto AS FormBase
             .Visible            = .T.
         ENDWITH
 
-        *-- Coluna 7 (checkbox "I" = Inativo): AddObject + CurrentControl
+        *-- Coluna 7 (checkbox "I" = ImpEtiqs): AddObject + CurrentControl
         *-- obrigatorios para o controle aparecer (regra #18 do CLAUDE.md).
         loc_oPagina.grd_4c_Dados.Column7.AddObject("chk_4c_Inativo", "CheckBox")
         WITH loc_oPagina.grd_4c_Dados.Column7
             .CurrentControl = "chk_4c_Inativo"
             .Sparse         = .F.
             .ReadOnly       = .T.
+            .chk_4c_Inativo.Caption = ""
             .chk_4c_Inativo.Enabled = .F.
         ENDWITH
+
+        *-- Erro188: headers, larguras e cores das colunas TAMBEM aqui, no Init.
+        *-- CarregarLista() so roda quando o usuario escolhe um grupo (o legado
+        *-- exige isso em PreparaDados), entao sem este bloco a tela ABRE com as
+        *-- sete colunas exibindo "Header1" e a largura default - foi o que a
+        *-- screenshot do Erro188 mostrou. VincularGradeLista() repete o bloco
+        *-- porque atribuir RecordSource reseta caption e Width (regra #41).
+        THIS.FormatarColunasLista(loc_oPagina.grd_4c_Dados)
 
         BINDEVENT(loc_oPagina.grd_4c_Dados, "DblClick", THIS, "BtnVisualizarClick")
         BINDEVENT(loc_oPagina.grd_4c_Dados, "AfterRowColChange", THIS, "GridDadosAfterRowColChange")
 
+        *-- Erro188: painel de legenda de cores (Botoes legado - tres TextBox de
+        *-- 22x22 so com BackColor, a direita da grade). Cada quadrado explica
+        *-- uma cor de linha da lista; os ToolTipText sao transcritos do Init do
+        *-- legado (With ThisForm.Pagina.Lista.botoes / .botaoN.ToolTipText).
+        *-- Entra em cnt_4c_Legenda, nao "cnt_4c_Botoes", que ja eh a botoeira
+        *-- CRUD do topo.
+        loc_oPagina.AddObject("cnt_4c_Legenda", "Container")
+        WITH loc_oPagina.cnt_4c_Legenda
+            .Top           = 201
+            .Left          = 960
+            .Width         = 24
+            .Height        = 71
+            .BackStyle     = 0
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("txt_4c_LegInativo", "TextBox")
+            WITH .txt_4c_LegInativo
+                .Top           = 3
+                .Left          = 2
+                .Width         = 22
+                .Height        = 22
+                .BackColor     = RGB(255, 0, 0)
+                .SpecialEffect = 1
+                .ReadOnly      = .T.
+                .Enabled       = .F.
+                .DisabledBackColor = RGB(255, 0, 0)
+                .ToolTipText   = "Produto Inativo "
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            .AddObject("txt_4c_LegEncomenda", "TextBox")
+            WITH .txt_4c_LegEncomenda
+                .Top           = 24
+                .Left          = 2
+                .Width         = 22
+                .Height        = 22
+                .BackColor     = RGB(255, 255, 185)
+                .SpecialEffect = 1
+                .ReadOnly      = .T.
+                .Enabled       = .F.
+                .DisabledBackColor = RGB(255, 255, 185)
+                .ToolTipText   = "Produto Encomend" + CHR(225) + "vel "
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            .AddObject("txt_4c_LegEquivalente", "TextBox")
+            WITH .txt_4c_LegEquivalente
+                .Top           = 46
+                .Left          = 2
+                .Width         = 22
+                .Height        = 22
+                .BackColor     = RGB(0, 0, 192)
+                .SpecialEffect = 1
+                .ReadOnly      = .T.
+                .Enabled       = .F.
+                .DisabledBackColor = RGB(0, 0, 192)
+                .ToolTipText   = "Produto equivalente preenchido"
+                .Themes        = .F.
+                .Visible       = .T.
+            ENDWITH
+        ENDWITH
+
         *-- Rodape: contador de produtos selecionados/listados (lblProdutos legado)
+        *-- Erro188: Left=43 e FontBold do SCX; Top logo abaixo da grade
+        *-- (202 + 409 = 611), como na tela legada em execucao.
         loc_oPagina.AddObject("lbl_4c_Produtos", "Label")
         WITH loc_oPagina.lbl_4c_Produtos
             .Caption   = "Produtos Selecionados : 0"
-            .Top       = 600
-            .Left      = 35
+            .Top       = 612
+            .Left      = 43
             .Width     = 250
             .Height    = 15
             .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
             .FontName  = "Tahoma"
             .FontSize  = 8
+            .FontBold  = .T.
             .Visible   = .T.
         ENDWITH
 
+        *-- Painel flutuante "Copiar um Produto" (CntAcabado legado).
+        *-- Criado POR ULTIMO para desenhar por cima da grade; nasce oculto e so
+        *-- aparece no clique do cmd_4c_Acabado (por isso esta na lista de
+        *-- excecoes do TornarControlesVisiveis).
+        THIS.ConfigurarPainelCopia(loc_oPagina)
+
         THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *===========================================================================
+    * ConfigurarPainelCopia - Painel CntAcabado do legado (Copiar um Produto)
+    *
+    * Geometria transcrita do SCX (CntAcabado Top=252 Left=208 600x166; +29 de
+    * compensacao do PageFrame externo no Top). A linha de cima mostra o produto
+    * de ORIGEM (campos desabilitados) e a de baixo o produto NOVO.
+    *===========================================================================
+    PROTECTED PROCEDURE ConfigurarPainelCopia(par_oPagina)
+        par_oPagina.AddObject("cnt_4c_Acabado", "Container")
+
+        WITH par_oPagina.cnt_4c_Acabado
+            .Top           = 281
+            .Left          = 208
+            .Width         = 600
+            .Height        = 166
+            .BackStyle     = 1
+            .BackColor     = RGB(255, 255, 255)
+            .BorderColor   = RGB(36, 84, 155)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Os labels sao criados FORA do WITH, com o container passado por
+        *-- parametro (regra #33: WITH aninhado sequestra o escopo do ponto).
+        *-- Negrito nos cabecalhos de coluna, normal nas legendas de linha,
+        *-- como no SCX.
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopRef",   "Refer" + CHR(234) + "ncia", 18, 108, 63, .T.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopGru",   "Grupo",            18, 223, 36, .T.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopRefF",  "Ref. Fornecedor",  18, 272, 91, .T.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopGVen",  "Grupo de Venda",   18, 431, 91, .T.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopCor",   "Cor",              18, 541, 21, .T.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopAtual", "Produto Atual :",  39,  30, 75, .F.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopNovo",  "Novo Produto :",   68,  30, 75, .F.)
+        THIS.CriarLabelCopia(par_oPagina.cnt_4c_Acabado, "lbl_4c_CopSitua", ;
+            "Situa" + CHR(231) + CHR(227) + "o :", 101, 55, 60, .F.)
+
+        *-- Linha do produto de ORIGEM (desabilitada, como no legado)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopOldPro",  36, 108, 108, 14, .F.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopOldGru",  36, 223,  41, 10, .F.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopOldRef",  36, 272, 152, 20, .F.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopOldCol",  36, 431,  80, 10, .F.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopOldCor",  36, 541,  38,  4, .F.)
+
+        *-- Linha do produto NOVO (editavel)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopNewPro",  65, 108, 108, 14, .T.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopNewGru",  65, 223,  41,  3, .T.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopNewRef",  65, 272, 152, 20, .T.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopNewCol",  65, 431,  80, 10, .T.)
+        THIS.CriarTextoCopia(par_oPagina.cnt_4c_Acabado, "txt_4c_CopNewCor",  65, 541,  38,  4, .T.)
+
+        *-- Format "K!" do getNewReffs/getOldReffs legado (maiusculas)
+        par_oPagina.cnt_4c_Acabado.txt_4c_CopNewRef.Format = "K!"
+        par_oPagina.cnt_4c_Acabado.txt_4c_CopOldRef.Format = "K!"
+
+        *-- Situacao do produto novo (Opc_situacao legado: 1 Ativo / 2 Inativo)
+        par_oPagina.cnt_4c_Acabado.AddObject("opt_4c_CopSitua", "OptionGroup")
+        WITH par_oPagina.cnt_4c_Acabado.opt_4c_CopSitua
+            .ButtonCount = 2
+            .Top         = 102
+            .Left        = 102
+            .Width       = 129
+            .Height      = 17
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .AutoSize    = .F.
+            .Value       = 1
+            .Visible     = .T.
+        ENDWITH
+        WITH par_oPagina.cnt_4c_Acabado.opt_4c_CopSitua.Buttons(1)
+            .Caption   = "Ativ\<o"
+            .Top       = 1
+            .Left      = 5
+            .Width     = 43
+            .Height    = 15
+            .AutoSize  = .T.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+        WITH par_oPagina.cnt_4c_Acabado.opt_4c_CopSitua.Buttons(2)
+            .Caption   = "I\<nativo"
+            .Top       = 0
+            .Left      = 63
+            .Width     = 61
+            .Height    = 17
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+
+        *-- Mensagens de resultado (lblOk / lblNotOk legado) - sobrepostas no
+        *-- mesmo Top/Left, so uma visivel por vez
+        par_oPagina.cnt_4c_Acabado.AddObject("lbl_4c_CopOk", "Label")
+        WITH par_oPagina.cnt_4c_Acabado.lbl_4c_CopOk
+            .Caption   = "Novo Produto Criado!"
+            .Top       = 125
+            .Left      = 17
+            .Width     = 306
+            .Height    = 17
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .F.
+        ENDWITH
+
+        par_oPagina.cnt_4c_Acabado.AddObject("lbl_4c_CopNotOk", "Label")
+        WITH par_oPagina.cnt_4c_Acabado.lbl_4c_CopNotOk
+            .Caption   = "Novo Produto N" + CHR(227) + "o Foi Criado!"
+            .Top       = 125
+            .Left      = 17
+            .Width     = 306
+            .Height    = 17
+            .Alignment = 2
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 0, 0)
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Confirmar / Cancelar (CmdOk / CmdCancel legado, 40x40)
+        par_oPagina.cnt_4c_Acabado.AddObject("cmd_4c_CopOk", "CommandButton")
+        WITH par_oPagina.cnt_4c_Acabado.cmd_4c_CopOk
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "geral_escudo_ok_32.jpg"
+            .Top           = 103
+            .Left          = 499
+            .Width         = 40
+            .Height        = 40
+            .FontName      = "Verdana"
+            .FontSize      = 8
+            .WordWrap      = .T.
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+            .SpecialEffect = 0
+            .ToolTipText   = "Confirmar a C" + CHR(243) + "pia"
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(par_oPagina.cnt_4c_Acabado.cmd_4c_CopOk, "Click", THIS, "BtnCopiaOkClick")
+
+        par_oPagina.cnt_4c_Acabado.AddObject("cmd_4c_CopCancel", "CommandButton")
+        WITH par_oPagina.cnt_4c_Acabado.cmd_4c_CopCancel
+            .Caption       = ""
+            .Picture       = gc_4c_CaminhoIcones + "cadastro_sair_32.jpg"
+            .Top           = 103
+            .Left          = 539
+            .Width         = 40
+            .Height        = 40
+            .FontName      = "Verdana"
+            .FontSize      = 8
+            .WordWrap      = .T.
+            .Cancel        = .T.
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+            .SpecialEffect = 0
+            .ToolTipText   = "Cancelar a C" + CHR(243) + "pia"
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(par_oPagina.cnt_4c_Acabado.cmd_4c_CopCancel, "Click", THIS, "BtnCopiaCancelClick")
+    ENDPROC
+
+    *===========================================================================
+    * CriarLabelCopia / CriarTextoCopia - fabricas dos controles do painel de
+    * copia. Existem para o metodo acima caber numa tela: as 8 legendas e os 10
+    * campos so diferem em Caption/Top/Left/Width.
+    *===========================================================================
+    PROTECTED PROCEDURE CriarLabelCopia(par_oCnt, par_cNome, par_cCaption, ;
+            par_nTop, par_nLeft, par_nWidth, par_lBold)
+        IF VARTYPE(par_oCnt) != "O"
+            RETURN
+        ENDIF
+
+        IF PEMSTATUS(par_oCnt, par_cNome, 5)
+            RETURN
+        ENDIF
+
+        par_oCnt.AddObject(par_cNome, "Label")
+
+        STORE par_cCaption      TO ("par_oCnt." + par_cNome + ".Caption")
+        STORE par_nTop          TO ("par_oCnt." + par_cNome + ".Top")
+        STORE par_nLeft         TO ("par_oCnt." + par_cNome + ".Left")
+        STORE par_nWidth        TO ("par_oCnt." + par_cNome + ".Width")
+        STORE 15                TO ("par_oCnt." + par_cNome + ".Height")
+        STORE 0                 TO ("par_oCnt." + par_cNome + ".BackStyle")
+        STORE .F.               TO ("par_oCnt." + par_cNome + ".AutoSize")
+        STORE 0                 TO ("par_oCnt." + par_cNome + ".Alignment")
+        STORE "Tahoma"          TO ("par_oCnt." + par_cNome + ".FontName")
+        STORE 8                 TO ("par_oCnt." + par_cNome + ".FontSize")
+        STORE par_lBold         TO ("par_oCnt." + par_cNome + ".FontBold")
+        STORE RGB(90, 90, 90)   TO ("par_oCnt." + par_cNome + ".ForeColor")
+        STORE .T.               TO ("par_oCnt." + par_cNome + ".Visible")
+    ENDPROC
+
+    PROTECTED PROCEDURE CriarTextoCopia(par_oCnt, par_cNome, par_nTop, ;
+            par_nLeft, par_nWidth, par_nMax, par_lEditavel)
+        IF VARTYPE(par_oCnt) != "O"
+            RETURN
+        ENDIF
+
+        par_oCnt.AddObject(par_cNome, "TextBox")
+
+        STORE par_nTop   TO ("par_oCnt." + par_cNome + ".Top")
+        STORE par_nLeft  TO ("par_oCnt." + par_cNome + ".Left")
+        STORE par_nWidth TO ("par_oCnt." + par_cNome + ".Width")
+        STORE 23         TO ("par_oCnt." + par_cNome + ".Height")
+        *-- Erro188/regra #19: MaxLength eh em CARACTERES (largura da coluna no
+        *-- schema), nunca o Width em pixels.
+        STORE par_nMax   TO ("par_oCnt." + par_cNome + ".MaxLength")
+        STORE 1          TO ("par_oCnt." + par_cNome + ".SpecialEffect")
+        STORE "Tahoma"   TO ("par_oCnt." + par_cNome + ".FontName")
+        STORE 8          TO ("par_oCnt." + par_cNome + ".FontSize")
+        STORE ""         TO ("par_oCnt." + par_cNome + ".Value")
+        STORE 0          TO ("par_oCnt." + par_cNome + ".Alignment")
+        STORE par_lEditavel TO ("par_oCnt." + par_cNome + ".Enabled")
+        STORE RGB(224, 235, 235) TO ("par_oCnt." + par_cNome + ".DisabledBackColor")
+        STORE RGB(90, 90, 90)    TO ("par_oCnt." + par_cNome + ".DisabledForeColor")
+        STORE .T.        TO ("par_oCnt." + par_cNome + ".Visible")
+    ENDPROC
+
+    *===========================================================================
+    * FormatarColunasLista - Headers, larguras, fontes e cores das 7 colunas da
+    * grade da Lista.
+    *
+    * Erro188. Chamado em DOIS pontos, de proposito:
+    *   1) ConfigurarPaginaLista - para a tela ABRIR formatada, antes de haver
+    *      cursor (o legado so consulta depois de o usuario escolher o grupo);
+    *   2) VincularGradeLista    - porque atribuir RecordSource faz o VFP
+    *      recalcular Width e resetar o Header1.Caption (regra #41).
+    *
+    * Larguras e Alignment transcritos do SCX (Pagina.Lista.Grade.ColumnN.Width
+    * = 110/408/40/70/150/100/16, Column7.Alignment = 3). Os captions saem do
+    * PROCEDURE montagrades do legado, NAO do desenho do SCX: o legado troca
+    * "Usuario" por "Grp.Venda" na Column6 em tempo de execucao (regra #35).
+    *
+    * Column1.Header1.BackColor = RGB(220,255,220): no legado eh a marca da
+    * coluna pela qual a lista esta ordenada (BuscaPor = 1 -> CPros), aplicada
+    * em Pagina.Lista.Grupo_op.Click. A ordenacao aqui eh sempre por cpros.
+    *===========================================================================
+    PROTECTED PROCEDURE FormatarColunasLista(par_oGrid)
+        LOCAL loc_nI, loc_cCol
+
+        IF VARTYPE(par_oGrid) != "O" OR par_oGrid.ColumnCount < 7
+            RETURN
+        ENDIF
+
+        par_oGrid.Column1.Header1.Caption = "Produto"
+        par_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+        par_oGrid.Column3.Header1.Caption = "Grupo"
+        par_oGrid.Column4.Header1.Caption = "Subgrp."
+        par_oGrid.Column5.Header1.Caption = "Ref. Fornecedor"
+        par_oGrid.Column6.Header1.Caption = "Grp.Venda"
+        par_oGrid.Column7.Header1.Caption = "I"
+
+        FOR loc_nI = 1 TO 7
+            loc_cCol = "par_oGrid.Column" + ALLTRIM(STR(loc_nI))
+            STORE "Tahoma"          TO (loc_cCol + ".FontName")
+            STORE 8                 TO (loc_cCol + ".FontSize")
+            STORE .F.               TO (loc_cCol + ".Movable")
+            STORE .F.               TO (loc_cCol + ".Resizable")
+            STORE .T.               TO (loc_cCol + ".ReadOnly")
+            STORE "Tahoma"          TO (loc_cCol + ".Header1.FontName")
+            STORE 8                 TO (loc_cCol + ".Header1.FontSize")
+            STORE 2                 TO (loc_cCol + ".Header1.Alignment")
+            STORE RGB(90, 90, 90)   TO (loc_cCol + ".Header1.ForeColor")
+        ENDFOR
+
+        par_oGrid.Column7.Alignment = 3
+
+        *-- Coluna da ordenacao corrente destacada em verde claro
+        par_oGrid.Column1.Header1.BackColor = RGB(220, 255, 220)
+
+        *-- Larguras por ULTIMO: qualquer mexida em RecordSource/fonte faz o
+        *-- VFP recalcular para o default 90 (regra #41 / Erro182).
+        par_oGrid.Column1.Width = 110
+        par_oGrid.Column2.Width = 408
+        par_oGrid.Column3.Width = 40
+        par_oGrid.Column4.Width = 70
+        par_oGrid.Column5.Width = 150
+        par_oGrid.Column6.Width = 100
+        par_oGrid.Column7.Width = 16
     ENDPROC
 
     *===========================================================================
@@ -991,6 +1422,259 @@ DEFINE CLASS FormProduto AS FormBase
     *===========================================================================
     PROCEDURE BtnEncerrarClick()
         THIS.Release()
+    ENDPROC
+
+    *===========================================================================
+    * BtnAcabadoClick - "Copiar um Produto" (cmdAcabado.Click legado)
+    *
+    * Abre o painel de copia carregando a linha de ORIGEM com o produto
+    * selecionado na grade e sugerindo o codigo do produto NOVO conforme a
+    * codificacao do grupo (SigCdGrp.CodProds).
+    *
+    * Transcricao fiel das guardas do legado:
+    *   - sem produto na lista, nao faz nada
+    *   - grupo vem do FILTRO; se vazio, do produto selecionado
+    *   - ValidaDepartamento barra grupo fora do departamento do usuario
+    *   - o resto da Lista fica desabilitado enquanto o painel esta aberto
+    *
+    * PUBLIC: BINDEVENT exige metodo publico (CLAUDE.md #3)
+    *===========================================================================
+    PROCEDURE BtnAcabadoClick()
+        LOCAL loc_oPagina, loc_oCnt, loc_cGrupo, loc_cCodigo, loc_cRef, ;
+            loc_cCor, loc_cCol, loc_cSugerido, loc_lSegue, loException
+
+        *-- CLAUDE.md regra #1: nada de RETURN dentro de TRY/CATCH (o VFP9
+        *-- estoura "RETURN/RETRY statement not allowed in TRY/CATCH" em
+        *-- RUNTIME - medido no Erro188). As guardas usam a flag loc_lSegue.
+        loc_lSegue = .T.
+
+        TRY
+            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0 OR ;
+                    EMPTY(ALLTRIM(NVL(cursor_4c_Dados.cpros, "")))
+                MsgAviso("Para Copiar Um Produto " + CHR(233) + " Necess" + CHR(225) + ;
+                    "rio Que Exista Ao Menos Um De Origem!!!", ;
+                    "Procedimento Errado!!!")
+                loc_lSegue = .F.
+            ENDIF
+
+            IF loc_lSegue
+                loc_cCodigo = ALLTRIM(NVL(cursor_4c_Dados.cpros, ""))
+                loc_cRef    = ALLTRIM(NVL(cursor_4c_Dados.reffs, ""))
+                loc_cCor    = ALLTRIM(NVL(cursor_4c_Dados.codcors, ""))
+                loc_cCol    = ALLTRIM(NVL(cursor_4c_Dados.colecoes, ""))
+
+                *-- legado: o grupo vem do filtro; vazio, do proprio produto
+                loc_cGrupo = ALLTRIM(loc_oPagina.cnt_4c_Filtros.txt_4c_Cgru.Value)
+                IF EMPTY(loc_cGrupo)
+                    loc_cGrupo = ALLTRIM(NVL(cursor_4c_Dados.cgrus, ""))
+                ENDIF
+
+                IF !THIS.this_oBusinessObject.ValidarDepartamentoGrupo(loc_cGrupo)
+                    MsgAviso("Usuario N" + CHR(227) + "o Possui Permiss" + CHR(227) + ;
+                        "o para Acessar os Dados do Grupo.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o - Grupo Inv" + CHR(225) + "lido!!!")
+                    loc_lSegue = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lSegue
+                *-- Sugestao do codigo novo. CONSOME o contador de SIGSYSEQ,
+                *-- igual ao legado (fGerUniqueKey dentro do cmdAcabado.Click).
+                loc_cSugerido = THIS.this_oBusinessObject.SugerirCodigoCopia(loc_cGrupo)
+
+                loc_oCnt = loc_oPagina.cnt_4c_Acabado
+
+                WITH loc_oCnt
+                    .txt_4c_CopOldPro.Value = loc_cCodigo
+                    .txt_4c_CopOldGru.Value = ALLTRIM(NVL(cursor_4c_Dados.cgrus, ""))
+                    .txt_4c_CopOldRef.Value = loc_cRef
+                    .txt_4c_CopOldCol.Value = loc_cCol
+                    .txt_4c_CopOldCor.Value = loc_cCor
+
+                    .txt_4c_CopNewPro.Value = loc_cSugerido
+                    .txt_4c_CopNewGru.Value = loc_cGrupo
+                    .txt_4c_CopNewRef.Value = loc_cRef
+                    .txt_4c_CopNewCol.Value = loc_cCol
+                    .txt_4c_CopNewCor.Value = loc_cCor
+
+                    .opt_4c_CopSitua.Value   = 1
+                    .opt_4c_CopSitua.Enabled = .T.
+
+                    .lbl_4c_CopOk.Visible    = .F.
+                    .lbl_4c_CopNotOk.Visible = .F.
+
+                    .txt_4c_CopNewPro.Enabled = .T.
+                    .txt_4c_CopNewGru.Enabled = .T.
+                    .txt_4c_CopNewRef.Enabled = .T.
+                    .txt_4c_CopNewCol.Enabled = .T.
+                    .txt_4c_CopNewCor.Enabled = .T.
+                    .cmd_4c_CopOk.Enabled     = .T.
+                    .cmd_4c_CopCancel.Enabled = .T.
+
+                    .Visible = .T.
+                    .ZOrder(0)
+                ENDWITH
+
+                THIS.HabilitarListaParaCopia(.F.)
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao abrir a c" + CHR(243) + "pia de produto:" + CHR(13) + ;
+                loException.Message + CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
+                "FormProduto.BtnAcabadoClick")
+        ENDTRY
+    ENDPROC
+
+    *===========================================================================
+    * HabilitarListaParaCopia - Liga/desliga o resto da pagina Lista enquanto o
+    * painel de copia esta aberto (bloco "With ThisForm.Pagina.Lista" do legado,
+    * presente tanto no cmdAcabado.Click quanto no CmdOk/CmdCancel).
+    *===========================================================================
+    PROTECTED PROCEDURE HabilitarListaParaCopia(par_lLigar)
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        WITH loc_oPagina
+            .grd_4c_Dados.Enabled = par_lLigar
+            .cnt_4c_Botoes.Enabled = par_lLigar
+            .cnt_4c_Saida.Enabled  = par_lLigar
+            .cnt_4c_Filtros.txt_4c_Cgru.Enabled  = par_lLigar
+            .cnt_4c_Filtros.txt_4c_Dgru.Enabled  = par_lLigar
+            .cnt_4c_Filtros.txt_4c_DtIni.Enabled = par_lLigar
+            .cnt_4c_Filtros.txt_4c_DtFim.Enabled = par_lLigar
+        ENDWITH
+    ENDPROC
+
+    *===========================================================================
+    * BtnCopiaOkClick - Confirma a copia (CntAcabado.CmdOk.Click legado)
+    * PUBLIC: BINDEVENT exige metodo publico (CLAUDE.md #3)
+    *===========================================================================
+    PROCEDURE BtnCopiaOkClick()
+        LOCAL loc_oCnt, loc_cNovo, loc_cGrupo, loc_cRef, loc_cCor, loc_cCol, ;
+            loc_cOrigem, loc_nSitua, loc_nMin, loc_lOk, loc_lSegue, loException
+
+        *-- CLAUDE.md regra #1: sem RETURN dentro de TRY/CATCH; as quatro
+        *-- guardas do legado viram a flag loc_lSegue.
+        loc_lSegue = .T.
+
+        TRY
+            loc_oCnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Acabado
+
+            loc_cOrigem = ALLTRIM(loc_oCnt.txt_4c_CopOldPro.Value)
+            loc_cNovo   = ALLTRIM(loc_oCnt.txt_4c_CopNewPro.Value)
+            loc_cGrupo  = ALLTRIM(loc_oCnt.txt_4c_CopNewGru.Value)
+            loc_cRef    = ALLTRIM(loc_oCnt.txt_4c_CopNewRef.Value)
+            loc_cCor    = ALLTRIM(loc_oCnt.txt_4c_CopNewCor.Value)
+            loc_cCol    = ALLTRIM(loc_oCnt.txt_4c_CopNewCol.Value)
+            loc_nSitua  = loc_oCnt.opt_4c_CopSitua.Value
+
+            *-- Guarda 1 do legado: nova referencia obrigatoria
+            IF EMPTY(loc_cNovo)
+                MsgAviso("Nova refer" + CHR(234) + "ncia " + CHR(233) + ;
+                    " obrigat" + CHR(243) + "ria.", "Aviso")
+                loc_lSegue = .F.
+            ENDIF
+
+            *-- Guarda 2 do legado: tamanho minimo da Ref. do Fornecedor no grupo
+            *--   lnMin = Int(Val(Substr(TmpGruPro.CfgGerGprs, 3, 2)))
+            IF loc_lSegue
+                loc_nMin = THIS.this_oBusinessObject.ObterMinimoReferencia(loc_cGrupo)
+                IF loc_nMin > 0 AND LEN(loc_cRef) < loc_nMin
+                    MsgAviso("A Ref. do Fornecedor Necessita Ser Preenchida" + CHR(13) + ;
+                        "Com No M" + CHR(237) + "nimo " + ALLTRIM(STR(loc_nMin)) + ;
+                        " Caracteres Neste Grupo!!!", "Dados Incompletos!!!")
+                    loc_lSegue = .F.
+                ENDIF
+            ENDIF
+
+            *-- Guarda 3 do legado: a nova referencia nao pode existir
+            IF loc_lSegue
+                IF THIS.this_oBusinessObject.ExisteProduto(loc_cNovo)
+                    MsgAviso("A Nova Refer" + CHR(234) + "ncia Informada J" + CHR(225) + ;
+                        " Est" + CHR(225) + " Cadastrada!!!", "Aviso")
+                    loc_lSegue = .F.
+                ENDIF
+            ENDIF
+
+            *-- Confirmacao, com o mesmo texto do legado
+            IF loc_lSegue
+                IF !MsgConfirma("Ser" + CHR(225) + " Gerado Um Novo Produto Com a Refer" + ;
+                        CHR(234) + "ncia : [" + loc_cNovo + "]" + CHR(13) + ;
+                        "Com a Situa" + CHR(231) + CHR(227) + "o : [" + ;
+                        IIF(loc_nSitua = 1, "ATIVA", "N" + CHR(195) + "O ATIVA") + "]" + CHR(13) + ;
+                        "Confirma a Gera" + CHR(231) + CHR(227) + "o ?", ;
+                        "Solicita" + CHR(231) + CHR(227) + "o de Confirma" + CHR(231) + CHR(227) + "o...")
+                    loc_lSegue = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lSegue
+                loc_lOk = THIS.this_oBusinessObject.CopiarProduto(loc_cOrigem, loc_cNovo, ;
+                    loc_cGrupo, loc_cRef, loc_cCor, loc_cCol, loc_nSitua)
+
+                WITH loc_oCnt
+                    .lbl_4c_CopOk.Visible     = loc_lOk
+                    .lbl_4c_CopNotOk.Visible  = !loc_lOk
+                    .cmd_4c_CopOk.Enabled     = .F.
+                    .txt_4c_CopNewPro.Enabled = .F.
+                    .txt_4c_CopNewGru.Enabled = .F.
+                    .txt_4c_CopNewRef.Enabled = .F.
+                    .txt_4c_CopNewCol.Enabled = .F.
+                    .txt_4c_CopNewCor.Enabled = .F.
+                    .opt_4c_CopSitua.Enabled  = .F.
+                    .Refresh()
+                ENDWITH
+
+                IF loc_lOk
+                    *-- o legado recarrega a lista depois de gerar o produto
+                    THIS.CarregarLista()
+                    MsgInfo("Produto [" + ALLTRIM(loc_cNovo) + "] criado com sucesso.", ;
+                        "Copiar um Produto")
+                    THIS.FecharPainelCopia()
+                ENDIF
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao copiar o produto:" + CHR(13) + ;
+                loException.Message + CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
+                "FormProduto.BtnCopiaOkClick")
+        ENDTRY
+    ENDPROC
+
+    *===========================================================================
+    * BtnCopiaCancelClick - Fecha o painel sem copiar (CmdCancel.Click legado)
+    * PUBLIC: BINDEVENT exige metodo publico (CLAUDE.md #3)
+    *===========================================================================
+    PROCEDURE BtnCopiaCancelClick()
+        THIS.FecharPainelCopia()
+    ENDPROC
+
+    *===========================================================================
+    * FecharPainelCopia - Esconde o painel e devolve a Lista ao estado normal.
+    * Fica num metodo so porque o legado repete o MESMO bloco no CmdOk e no
+    * CmdCancel (e nos dois ramos do CmdOk).
+    *===========================================================================
+    PROTECTED PROCEDURE FecharPainelCopia()
+        LOCAL loc_oCnt
+        loc_oCnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Acabado
+
+        WITH loc_oCnt
+            .Visible                  = .F.
+            .cmd_4c_CopOk.Enabled     = .F.
+            .cmd_4c_CopCancel.Enabled = .F.
+            .lbl_4c_CopOk.Visible     = .F.
+            .lbl_4c_CopNotOk.Visible  = .F.
+            .txt_4c_CopNewPro.Enabled = .F.
+            .txt_4c_CopNewGru.Enabled = .F.
+            .txt_4c_CopNewRef.Enabled = .F.
+            .txt_4c_CopNewCol.Enabled = .F.
+            .txt_4c_CopNewCor.Enabled = .F.
+            .opt_4c_CopSitua.Enabled  = .F.
+        ENDWITH
+
+        THIS.HabilitarListaParaCopia(.T.)
     ENDPROC
 
     *===========================================================================
@@ -4055,9 +4739,19 @@ DEFINE CLASS FormProduto AS FormBase
         LOCAL par_oPagina
         par_oPagina = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page2
 
-        *-- Grade principal de componentes (grdCompo legado, 14 colunas)
+        *-- Grade principal de componentes (grdCompo legado, 15 colunas)
+        *--
+        *-- Erro188: a 15a coluna ("P" = Pedra/Componente Principal) foi
+        *-- acrescentada a partir do SCX de producao (17/04/2026). Ela NAO cabia
+        *-- nas larguras que a migracao tinha inventado - as 14 somavam
+        *-- exatamente os 943 do Grid -, entao as larguras voltaram para as do
+        *-- SCX legado, que ja reservam o espaco:
+        *--   105/180/24/73/59/58/31/80/[9]/58/59/24/24/100/15
+        *-- A Column9 fica nos 24 do migrado (e nela que mora o CheckBox
+        *-- chk_4c_Etiqueta); total 914, dentro dos 943 com folga para a barra
+        *-- de rolagem vertical.
         par_oPagina.AddObject("grd_4c_Compo", "Grid")
-        par_oPagina.grd_4c_Compo.ColumnCount = 14
+        par_oPagina.grd_4c_Compo.ColumnCount = 15
         WITH par_oPagina.grd_4c_Compo
             .Top                = 117
             .Left               = 6
@@ -4079,35 +4773,101 @@ DEFINE CLASS FormProduto AS FormBase
             .ReadOnly           = .F.
             .Visible            = .T.
 
-            .Column1.Width  = 85
+            .Column1.Width  = 105
             .Column1.Header1.Caption = "Material"
-            .Column2.Width  = 224
+            .Column2.Width  = 180
             .Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-            .Column3.Width  = 30
+            .Column3.Width  = 24
             .Column3.Header1.Caption = "Un"
-            .Column4.Width  = 65
+            .Column4.Width  = 73
             .Column4.Header1.Caption = "Valor"
-            .Column5.Width  = 55
+            .Column4.InputMask = "9999999.999"
+            .Column5.Width  = 59
             .Column5.Header1.Caption = "Qtde."
-            .Column6.Width  = 65
+            .Column5.InputMask = "9999.999"
+            .Column6.Width  = 58
             .Column6.Header1.Caption = "Total"
-            .Column7.Width  = 32
+            .Column6.InputMask = "9999999.999"
+            .Column7.Width  = 31
             .Column7.Header1.Caption = "Moe"
-            .Column8.Width  = 120
+            .Column8.Width  = 80
             .Column8.Header1.Caption = "Observa" + CHR(231) + CHR(227) + "o"
             .Column9.Width  = 24
             .Column9.Header1.Caption = "E"
-            .Column10.Width = 55
+            .Column10.Width = 58
             .Column10.Header1.Caption = "Consumo"
-            .Column11.Width = 45
+            .Column10.InputMask = "99999"
+            .Column11.Width = 59
             .Column11.Header1.Caption = "Qtde."
-            .Column12.Width = 30
+            .Column12.Width = 24
             .Column12.Header1.Caption = "Un"
-            .Column13.Width = 28
+            .Column12.ReadOnly = .T.
+            .Column13.Width = 24
             .Column13.Header1.Caption = "Ord"
-            .Column14.Width = 85
+            .Column13.Format    = "K"
+            .Column13.InputMask = "99"
+            .Column14.Width = 100
             .Column14.Header1.Caption = "Material"
+
+            *-- Erro188: Column15 "P" (Pedra / Componente Principal).
+            *-- Format "M" faz o InputMask virar a LISTA de valores aceitos
+            *-- (CLAUDE.md regra #24): aqui so "N" ou "S", exatamente como o
+            *-- SCX declara. Format/InputMask vao no COLUMN, nunca em
+            *-- Controls(1), que nao expoe essas duas propriedades.
+            .Column15.Width = 15
+            .Column15.Header1.Caption   = "P"
+            .Column15.Header1.Alignment = 2
+            .Column15.Format    = "M"
+            .Column15.InputMask = "N,S"
         ENDWITH
+
+        *-- Text1 da Column15, como o SCX declara: sem borda, margem 0.
+        *--
+        *-- Erro188: tem de ser ".Text1" (ou Controls(2)), NUNCA Controls(1).
+        *-- Medido no VFP9 em 2026-10-06, Grid criado por AddObject:
+        *--     Column1.ControlCount = 2
+        *--     Controls(1) -> Name=Header1, BaseClass=Header
+        *--     Controls(2) -> Name=Text1,   BaseClass=Textbox
+        *-- ou seja, Controls(1) eh o CABECALHO. Por isso BorderStyle/Margin/
+        *-- Value "nao existem" nele: sao do TextBox, nao do Header. Escrever
+        *-- em Controls(1) estoura "Property BORDERSTYLE is not found" DENTRO
+        *-- do Init - o CREATEOBJECT devolve .F. e a tela nao abre.
+        WITH par_oPagina.grd_4c_Compo.Column15.Text1
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *===================================================================
+        * PENDENCIA DE BANCO - Column15 ("P"), Erro188
+        *
+        * Esta grade inteira esta SEM RecordSource/ControlSource (Fase 9 =
+        * so a camada visual), entao a Column15 nasce igual as outras 14.
+        * Quando a fase de DADOS for feita, a ligacao dela NAO pode ser
+        * inventada:
+        *
+        *   legado (montagrades do SCX de producao):
+        *       .Column15.ControlSource = 'crSigPrCpo.CompoPrinc'
+        *   e o cursor eh "Select *, ... From SigPrCpo" - SEM apelido.
+        *   O resto do legado trata CompoPrinc como CHAR 'N'/'S':
+        *       Update crSigPrCpo Set CompoPrinc = [N] Where Not CompoPrinc = [S]
+        *       If crSigPrCpo.CompoPrinc = 'S'
+        *
+        * Medido no servidor 192.168.200.10 em 2026-10-06:
+        *   SigPrCpo.CompoPrinc     -> NAO EXISTE em NENHUM dos 118 bancos
+        *   SigPrCpo.PedraPrincipal -> existe em 68 bancos (DB_MBAHIA inclusive),
+        *                              mas eh numeric(1,0) e o SCX legado NAO a
+        *                              referencia em lugar nenhum
+        *
+        * Ou seja, NAO sao a mesma coluna com grafias diferentes: sao nome E
+        * tipo diferentes. Apontar a Column15 para PedraPrincipal seria inventar
+        * mapeamento (violacao do PILAR 2 e da regra #22). A ligacao depende de
+        * criar SigPrCpo.CompoPrinc char no banco alvo - mesma pendencia da aba
+        * "Complemento" do SCX novo.
+        *===================================================================
 
         *-- Coluna 9 ("E" = Etiq/Instalas): AddObject + CurrentControl
         *-- obrigatorios para o checkbox aparecer (regra #18 do CLAUDE.md).
@@ -10591,16 +11351,31 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cgrus"
             loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.sgrus"
             loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.reffs"
-            loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.usuaalts"
+            *-- Erro188: era "usuaalts" (o caption DESENHADO no SCX eh
+            *-- "Usuario"). O PROCEDURE montagrades do legado sobrescreve a
+            *-- coluna em tempo de execucao:
+            *--     .Column6.ControlSource   = 'crListaPro.Colecoes'
+            *--     .Column6.Header1.Caption = 'Grp.Venda'
+            *-- Regra #35: a pagina Lista segue o runtime do legado, nao o
+            *-- desenho do SCX. A tela legada em execucao mostra "Grp.Venda".
+            loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.colecoes"
             *-- Erro182: quem tem ControlSource eh a COLUMN, nao o controle
             *-- interno. Atribuir em chk_4c_Inativo.ControlSource estoura
             *-- "Parent object will not allow this property setting". E sem o
             *-- ControlSource na Column o VFP auto-liga a 7a coluna ao 7o campo
             *-- do cursor (colecoes, char), o que derruba o CheckBox com
             *-- "Error with CHK_4C_INATIVO - Value : Data type mismatch".
-            *-- Expressao como ControlSource torna a coluna somente-leitura,
-            *-- que eh o que o legado faz (Column7.ReadOnly = .T.).
-            loc_oGrid.Column7.ControlSource = "cursor_4c_Dados.situas = 2"
+            *--
+            *-- Erro188: a coluna "I" eh ImpEtiqs (imprime etiqueta), nao
+            *-- "situas = 2" - montagrades legado: .Column7.ControlSource =
+            *-- 'crListaPro.ImpEtiqs'. SigCdPro.impetiqs eh "bit", que o driver
+            *-- devolve ora Logico ora Numerico (regra #13), por isso a
+            *-- comparacao explicita: a expressao devolve LOGICO nos dois casos
+            *-- e mantem a coluna somente-leitura, como o legado
+            *-- (Column7.ReadOnly = .T.).
+            loc_oGrid.Column7.ControlSource = ;
+                "IIF(VARTYPE(cursor_4c_Dados.impetiqs) = 'L', " + ;
+                "cursor_4c_Dados.impetiqs, cursor_4c_Dados.impetiqs = 1)"
 
             *-- Erro182 (3/3): so DEPOIS de a Column7 estar ligada a uma
             *-- expressao LOGICA eh que o CheckBox pode voltar a ser o
@@ -10618,27 +11393,15 @@ DEFINE CLASS FormProduto AS FormBase
                 .ReadOnly       = .T.
             ENDWITH
 
-            loc_oGrid.Column1.Header1.Caption = "Produto"
-            loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-            loc_oGrid.Column3.Header1.Caption = "Grupo"
-            loc_oGrid.Column4.Header1.Caption = "Subgrp."
-            loc_oGrid.Column5.Header1.Caption = "Ref. Fornecedor"
-            loc_oGrid.Column6.Header1.Caption = "Usu" + CHR(225) + "rio"
-            loc_oGrid.Column7.Header1.Caption = "I"
-
             THIS.FormatarGridLista(loc_oGrid)
 
-            *-- Erro182: as larguras vem DEPOIS do FormatarGridLista (regra #41).
-            *-- Ele mexe em Grid.FontName/FontSize, e isso faz o VFP RECALCULAR
-            *-- as larguras das colunas - medido: definidas antes, as 7 voltavam
-            *-- para 45/75 e a grade abria com as colunas fora do tamanho.
-            loc_oGrid.Column1.Width = 90
-            loc_oGrid.Column2.Width = 380
-            loc_oGrid.Column3.Width = 50
-            loc_oGrid.Column4.Width = 70
-            loc_oGrid.Column5.Width = 140
-            loc_oGrid.Column6.Width = 100
-            loc_oGrid.Column7.Width = 30
+            *-- Erro188: captions, fontes, cores e larguras vem DEPOIS do
+            *-- FormatarGridLista (regra #41). Ele mexe em Grid.FontName/
+            *-- FontSize, e isso faz o VFP RECALCULAR as larguras das colunas -
+            *-- medido (Erro182): definidas antes, as 7 voltavam para 45/75 e a
+            *-- grade abria com as colunas fora do tamanho. Bloco unico e
+            *-- compartilhado com ConfigurarPaginaLista.
+            THIS.FormatarColunasLista(loc_oGrid)
 
             THIS.AtualizarContadorProdutos()
 

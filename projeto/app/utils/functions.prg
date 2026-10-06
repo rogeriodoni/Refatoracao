@@ -1253,6 +1253,63 @@ FUNCTION fVerificaBloqueio(pDat, pCnx)
 ENDFUNC
 
 *==============================================================================
+* fDigVerificador - Digito verificador do codigo de barras interno (Cbars)
+*
+* Chamada do legado (sigcdpro.scx, CntAcabado.CmdOk.Click - Copiar um Produto):
+*
+*     ThisForm.Inicio = fGerUniqueKey('SigCdPro')
+*     Cbar  = Transform(ThisForm.Inicio, '@L 9999999999999')
+*     Cbar1 = fDigVerificador(Cbar)
+*     Cbar2 = Cbar + Transform(Cbar1, '@L 9')
+*     Replace Cbars With Val(Cbar2)
+*
+* ou seja: SigCdPro.Cbars numeric(14,0) = 13 digitos de sequencia + 1 digito.
+*
+* O fonte legado NAO veio no acervo (regra #27 do CLAUDE.md). O algoritmo foi
+* DETERMINADO PELOS DADOS, nao adivinhado - modulo 11 com pesos 2..9 ciclicos
+* da DIREITA para a esquerda, digito = 11 - (soma MOD 11), e 0 quando passa de 9:
+*
+*     SELECT TOP 2000 cbars FROM SigCdPro WHERE cbars > 0    (DB_MBAHIA, 2026-10-06)
+*     -> 255 linhas, 255 conferem, 0 divergencias.
+*
+* Medido tambem o EAN-13 (modulo 10, pesos 1/3): 28 de 255. NAO eh esse.
+*
+* Par: par_cNumero - os digitos da sequencia (so os numericos sao considerados)
+* Ret: o digito verificador, numerico 0..9
+*==============================================================================
+FUNCTION fDigVerificador(par_cNumero)
+    LOCAL loc_cNum, loc_nI, loc_nSoma, loc_nPeso, loc_cDig, loc_nDig
+
+    loc_cNum = ALLTRIM(IIF(VARTYPE(par_cNumero) = "C", par_cNumero, ;
+        IIF(VARTYPE(par_cNumero) = "N", TRANSFORM(par_cNumero), "")))
+
+    *-- fica so com os digitos (o legado passa Transform(...,'@L 999...'),
+    *-- que ja vem zero-preenchido, mas o helper nao pode depender disso)
+    loc_cDig = ""
+    FOR loc_nI = 1 TO LEN(loc_cNum)
+        IF ISDIGIT(SUBSTR(loc_cNum, loc_nI, 1))
+            loc_cDig = loc_cDig + SUBSTR(loc_cNum, loc_nI, 1)
+        ENDIF
+    ENDFOR
+
+    IF EMPTY(loc_cDig)
+        RETURN 0
+    ENDIF
+
+    loc_nSoma = 0
+    loc_nPeso = 2
+    FOR loc_nI = LEN(loc_cDig) TO 1 STEP -1
+        loc_nSoma = loc_nSoma + VAL(SUBSTR(loc_cDig, loc_nI, 1)) * loc_nPeso
+        loc_nPeso = IIF(loc_nPeso = 9, 2, loc_nPeso + 1)
+    ENDFOR
+
+    loc_nDig = 11 - MOD(loc_nSoma, 11)
+    loc_nDig = IIF(loc_nDig > 9, 0, loc_nDig)
+
+    RETURN loc_nDig
+ENDFUNC
+
+*==============================================================================
 * fUniqueIds - Gera identificador unico para registros
 * Portada de Framework\sigfuncs.PRG - adaptada para nova arquitetura
 * Usa go_4c_Sistema.cCodEmpresa em vez de _EMPR

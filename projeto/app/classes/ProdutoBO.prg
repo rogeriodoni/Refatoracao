@@ -241,6 +241,13 @@ DEFINE CLASS ProdutoBO AS BusinessBase
 
     *-- Controle interno (nao sao colunas da tabela)
     this_cChaveOriginal      = ""   && cpros como veio do banco (WHERE do UPDATE/DELETE)
+
+    *-- Erro188: acumulador do lote SQL da "Copiar um Produto". Os INSERT das
+    *-- 8 tabelas sao MONTADOS aqui e enviados num SQLEXEC unico, porque so
+    *-- dentro de um mesmo lote da para garantir atomicidade neste ambiente -
+    *-- ver o comentario de CopiarProduto.
+    this_cLoteCopia          = ""
+    this_lLoteCopiaFalhou    = .F.
     this_cCampoFoco          = ""   && campo que o form deve focar quando a validacao recusa
     this_cPaginaFoco         = ""   && pagina desse campo: DADOS / FISCAL / COMPOSICAO
     *====================================================================
@@ -2310,6 +2317,816 @@ DEFINE CLASS ProdutoBO AS BusinessBase
         ENDTRY
 
         RETURN loc_lExiste
+    ENDPROC
+
+    *====================================================================
+    * ==================================================================
+    * COPIAR UM PRODUTO (cmdAcabado legado) - Erro188
+    * ==================================================================
+    *
+    * Transcricao de SIGCDPRO.Pagina.Lista.cmdAcabado.Click e
+    * SIGCDPRO.Pagina.Lista.CntAcabado.CmdOk.Click.
+    *
+    * O legado faz a copia carregando cada tabela filha num cursor remoto
+    * (poDataMgr.CursorQuery) e repetindo Scatter Memvar / Insert From
+    * Memvar com cIdChaves novo, descarregando tudo no Update() do fim.
+    * Aqui a copia eh SERVER-SIDE (INSERT ... SELECT por linha de origem),
+    * pelos mesmos motivos de sempre: nao trazer 181 colunas - varias
+    * delas "text" - ao VFP so para devolver.
+    *
+    * A chave Fortyus (cIdChaves/pkChaves) continua vindo de fUniqueIds()
+    * do VFP, UMA POR LINHA: um INSERT de conjunto repetiria a chave e
+    * colidiria no indice unico (regra #22 do CLAUDE.md).
+    *====================================================================
+
+    *====================================================================
+    * ObterConfigGrupo - Le a configuracao do grupo de produto (SigCdGrp)
+    *
+    * Legado: [Select CGrus, Mercs, CodProds, IdeCPros, CfgGerGprs
+    *          From SigCdGrp Where CGrus = '<grupo>']
+    *
+    * Deixa o cursor "cursor_4c_CfgGrupo" aberto para o chamador ler.
+    *====================================================================
+    PROCEDURE ObterConfigGrupo(par_cGrupo)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("cursor_4c_CfgGrupo")
+                USE IN cursor_4c_CfgGrupo
+            ENDIF
+
+            loc_cSQL = "SELECT cgrus, mercs, codprods, idecpros, cfggergprs" + ;
+                " FROM SigCdGrp WHERE cgrus = " + ;
+                EscaparSQL(PADR(ALLTRIM(NVL(par_cGrupo, "")), 3))
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CfgGrupo")
+
+            IF loc_nResultado >= 0
+                GO TOP IN cursor_4c_CfgGrupo
+                loc_lSucesso = (RECCOUNT("cursor_4c_CfgGrupo") > 0)
+            ELSE
+                THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + "o (SigCdGrp):" + ;
+                    CHR(13) + CapturarErroSQL()
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * ValidarDepartamentoGrupo - Permissao do usuario sobre o grande grupo
+    *
+    * Transcricao literal do PROCEDURE ValidaDepartamento do legado:
+    *   1) Mercs (grande grupo) do grupo informado           -> SigCdGrp
+    *   2) Deptos do usuario logado, ignorando branco        -> SigCdUsu
+    *   3) se o usuario TEM departamento, o grande grupo tem de estar
+    *      liberado para ele                                 -> SigDptGg
+    * Usuario sem departamento cadastrado => acesso liberado (o legado nem
+    * entra no bloco).
+    *====================================================================
+    PROCEDURE ValidarDepartamentoGrupo(par_cGrupo)
+        LOCAL loc_cSQL, loc_nResultado, loc_cGGrupo, loc_cDepto, loc_lRetorno, loc_oErro
+        loc_lRetorno = .T.
+
+        TRY
+            *-- 1) grande grupo (Mercs) do grupo
+            IF !THIS.ObterConfigGrupo(par_cGrupo)
+                *-- grupo inexistente: o legado devolve o Mercs em branco e
+                *-- segue; nao eh "sem permissao"
+                loc_cGGrupo = ""
+            ELSE
+                loc_cGGrupo = ALLTRIM(NVL(cursor_4c_CfgGrupo.mercs, ""))
+            ENDIF
+
+            *-- 2) departamento do usuario
+            IF USED("cursor_4c_DeptoUsu")
+                USE IN cursor_4c_DeptoUsu
+            ENDIF
+
+            loc_cSQL = "SELECT deptos FROM SigCdUsu" + ;
+                " WHERE usuarios = " + EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ;
+                " AND NOT deptos = " + EscaparSQL(SPACE(10))
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DeptoUsu")
+
+            IF loc_nResultado < 0
+                THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + "o (SigCdUsu):" + ;
+                    CHR(13) + CapturarErroSQL()
+                loc_lRetorno = .F.
+            ELSE
+                GO TOP IN cursor_4c_DeptoUsu
+
+                IF RECCOUNT("cursor_4c_DeptoUsu") > 0
+                    loc_cDepto = ALLTRIM(NVL(cursor_4c_DeptoUsu.deptos, ""))
+
+                    *-- 3) o departamento libera algum grande grupo?
+                    IF USED("cursor_4c_AceGru")
+                        USE IN cursor_4c_AceGru
+                    ENDIF
+
+                    loc_cSQL = "SELECT DISTINCT codgrupo FROM SigDptGg" + ;
+                        " WHERE coddepto = " + EscaparSQL(loc_cDepto)
+
+                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AceGru")
+
+                    IF loc_nResultado < 0
+                        THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + "o (SigDptGg):" + ;
+                            CHR(13) + CapturarErroSQL()
+                        loc_lRetorno = .F.
+                    ELSE
+                        *-- Guard do legado: so restringe se o departamento tiver
+                        *-- ALGUMA liberacao cadastrada. Sem nenhuma, passa.
+                        IF RECCOUNT("cursor_4c_AceGru") > 0
+                            IF USED("cursor_4c_AceGru2")
+                                USE IN cursor_4c_AceGru2
+                            ENDIF
+
+                            loc_cSQL = "SELECT a.codgrupo FROM SigDptGg a" + ;
+                                " INNER JOIN SigCdGpr b ON a.codgrupo = b.codigos" + ;
+                                " WHERE a.coddepto = " + EscaparSQL(loc_cDepto) + ;
+                                " AND a.codgrupo = " + EscaparSQL(loc_cGGrupo)
+
+                            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AceGru2")
+
+                            IF loc_nResultado < 0
+                                THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + "o (SigDptGg/SigCdGpr):" + ;
+                                    CHR(13) + CapturarErroSQL()
+                                loc_lRetorno = .F.
+                            ELSE
+                                loc_lRetorno = (RECCOUNT("cursor_4c_AceGru2") > 0)
+                            ENDIF
+
+                            IF USED("cursor_4c_AceGru2")
+                                USE IN cursor_4c_AceGru2
+                            ENDIF
+                        ENDIF
+                    ENDIF
+
+                    IF USED("cursor_4c_AceGru")
+                        USE IN cursor_4c_AceGru
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            IF USED("cursor_4c_DeptoUsu")
+                USE IN cursor_4c_DeptoUsu
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            loc_lRetorno = .F.
+        ENDTRY
+
+        RETURN loc_lRetorno
+    ENDPROC
+
+    *====================================================================
+    * SugerirCodigoCopia - Codigo do produto NOVO sugerido pela copia
+    *
+    * Transcricao do bloco de cmdAcabado.Click que monta lcNewCPros a
+    * partir do tipo de codificacao do grupo (SigCdGrp.CodProds, com
+    * fallback em SigCdPam.CodProds):
+    *
+    *   6             -> "AUTOMATICO" (o legado delega para CopiarTipo6)
+    *   2             -> DigAuts do grande grupo (ou DigProds do parametro)
+    *                    + grupo + sequencia de 5
+    *   4             -> IdeCPros do grupo + sequencia de 8
+    *   5             -> IdeCPros do grupo + sequencia de 5
+    *   outros        -> vazio (o usuario digita)
+    *
+    * fGerUniqueKey eh o contador PERSISTIDO em dbo.SIGSYSEQ - chamar aqui
+    * JA CONSOME o numero, exatamente como no legado.
+    *====================================================================
+    PROCEDURE SugerirCodigoCopia(par_cGrupo)
+        LOCAL loc_cGrupo, loc_nTpPro, loc_cIde, loc_cDigProds, loc_cMercs, ;
+            loc_cRet, loc_cSQL, loc_nResultado, loc_oErro
+        loc_cRet = ""
+
+        TRY
+            loc_cGrupo = ALLTRIM(NVL(par_cGrupo, ""))
+
+            *-- CLAUDE.md regra #1: nada de RETURN dentro de TRY/CATCH
+            IF THIS.ObterConfigGrupo(loc_cGrupo)
+                loc_nTpPro = VAL(TRANSFORM(NVL(cursor_4c_CfgGrupo.codprods, 0)))
+                loc_cIde   = ALLTRIM(NVL(cursor_4c_CfgGrupo.idecpros, ""))
+                loc_cMercs = ALLTRIM(NVL(cursor_4c_CfgGrupo.mercs, ""))
+
+                *-- fallback do legado: grupo vazio OU CodProds zerado -> parametro
+                IF EMPTY(loc_cGrupo) OR loc_nTpPro = 0
+                    loc_nTpPro = THIS.ObterCodProdsParametro()
+                ENDIF
+
+                DO CASE
+                    CASE loc_nTpPro = 6
+                        loc_cRet = "AUTOMATICO"
+
+                    CASE loc_nTpPro = 2 AND !EMPTY(loc_cGrupo)
+                        loc_cDigProds = THIS.ObterDigAutsGrandeGrupo(loc_cMercs)
+                        loc_cRet = ALLTRIM(loc_cDigProds + loc_cGrupo + ;
+                            TRANSFORM(fGerUniqueKey("PRODUTO" + loc_cGrupo), "@L 99999"))
+
+                    CASE loc_nTpPro = 4 AND !EMPTY(loc_cGrupo)
+                        loc_cRet = ALLTRIM(loc_cIde + ;
+                            TRANSFORM(fGerUniqueKey("PRODUTO" + loc_cIde), "@L 99999999"))
+
+                    CASE loc_nTpPro = 5 AND !EMPTY(loc_cGrupo)
+                        loc_cRet = ALLTRIM(loc_cIde + ;
+                            TRANSFORM(fGerUniqueKey("PRODUTO" + loc_cIde), "@L 99999"))
+
+                    OTHERWISE
+                        loc_cRet = ""
+                ENDCASE
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            loc_cRet = ""
+        ENDTRY
+
+        RETURN loc_cRet
+    ENDPROC
+
+    *====================================================================
+    * ObterCodProdsParametro - crSigCdPam.CodProds do legado (SigCdPam)
+    *====================================================================
+    PROTECTED PROCEDURE ObterCodProdsParametro()
+        LOCAL loc_nRet, loc_nResultado
+        loc_nRet = 0
+
+        IF USED("cursor_4c_PamCod")
+            USE IN cursor_4c_PamCod
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, ;
+            "SELECT TOP 1 codprods FROM SigCdPam", "cursor_4c_PamCod")
+
+        IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_PamCod") > 0
+            GO TOP IN cursor_4c_PamCod
+            loc_nRet = VAL(TRANSFORM(NVL(cursor_4c_PamCod.codprods, 0)))
+        ENDIF
+
+        IF USED("cursor_4c_PamCod")
+            USE IN cursor_4c_PamCod
+        ENDIF
+
+        RETURN loc_nRet
+    ENDPROC
+
+    *====================================================================
+    * ObterDigAutsGrandeGrupo - DigAuts do grande grupo (SigCdGpr), com
+    * fallback em SigCdPam.DigProds - transcricao do legado:
+    *   lcDigProds = Iif(Empty(LocalGGrp.DigAuts), crSigCdPam.DigProds,
+    *                    LocalGGrp.DigAuts)
+    *====================================================================
+    PROTECTED PROCEDURE ObterDigAutsGrandeGrupo(par_cMercs)
+        LOCAL loc_cRet, loc_nResultado
+        loc_cRet = ""
+
+        IF USED("cursor_4c_GprDig")
+            USE IN cursor_4c_GprDig
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, ;
+            "SELECT digauts FROM SigCdGpr WHERE codigos = " + ;
+            EscaparSQL(ALLTRIM(NVL(par_cMercs, ""))), "cursor_4c_GprDig")
+
+        IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_GprDig") > 0
+            GO TOP IN cursor_4c_GprDig
+            loc_cRet = ALLTRIM(NVL(cursor_4c_GprDig.digauts, ""))
+        ENDIF
+
+        IF USED("cursor_4c_GprDig")
+            USE IN cursor_4c_GprDig
+        ENDIF
+
+        IF EMPTY(loc_cRet)
+            IF USED("cursor_4c_PamDig")
+                USE IN cursor_4c_PamDig
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, ;
+                "SELECT TOP 1 digprods FROM SigCdPam", "cursor_4c_PamDig")
+
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_PamDig") > 0
+                GO TOP IN cursor_4c_PamDig
+                loc_cRet = ALLTRIM(NVL(cursor_4c_PamDig.digprods, ""))
+            ENDIF
+
+            IF USED("cursor_4c_PamDig")
+                USE IN cursor_4c_PamDig
+            ENDIF
+        ENDIF
+
+        RETURN loc_cRet
+    ENDPROC
+
+    *====================================================================
+    * ObterMinimoReferencia - Tamanho minimo da Ref. do Fornecedor do grupo
+    * Legado: lnMin = Int(Val(Substr(TmpGruPro.CfgGerGprs, 3, 2)))
+    *====================================================================
+    PROCEDURE ObterMinimoReferencia(par_cGrupo)
+        LOCAL loc_nMin
+        loc_nMin = 0
+
+        IF THIS.ObterConfigGrupo(par_cGrupo)
+            loc_nMin = INT(VAL(SUBSTR(ALLTRIM(NVL(cursor_4c_CfgGrupo.cfggergprs, "")) + ;
+                SPACE(5), 3, 2)))
+        ENDIF
+
+        RETURN loc_nMin
+    ENDPROC
+
+    *====================================================================
+    * GerarCodigoBarras - Cbars do produto NOVO
+    *
+    * Legado (CmdOk.Click):
+    *   ThisForm.Inicio = fGerUniqueKey('SigCdPro')
+    *   Cbar  = Transform(ThisForm.Inicio, '@L 9999999999999')
+    *   Cbar1 = fDigVerificador(Cbar)
+    *   Cbar2 = Cbar + Transform(Cbar1, '@L 9')
+    *   Set Decimals To 0 / Replace Cbars With Val(Cbar2) / Set Decimals To 2
+    *
+    * O SET DECIMALS do legado existe porque o Replace era num cursor VFP;
+    * aqui o valor vai para o SQL via FormatarNumeroSQL(..., 0), que ja
+    * formata sem casas - mas o VAL() precisa dos 14 digitos INTEIROS, e
+    * por isso a conta eh feita com os dois pedacos ja em texto.
+    *====================================================================
+    PROCEDURE GerarCodigoBarras()
+        LOCAL loc_nSeq, loc_cBar, loc_nDig, loc_cBar2
+        loc_nSeq = fGerUniqueKey("SigCdPro")
+
+        IF loc_nSeq <= 0
+            RETURN 0
+        ENDIF
+
+        loc_cBar  = TRANSFORM(loc_nSeq, "@L 9999999999999")
+        loc_nDig  = fDigVerificador(loc_cBar)
+        loc_cBar2 = loc_cBar + TRANSFORM(loc_nDig, "@L 9")
+
+        RETURN VAL(loc_cBar2)
+    ENDPROC
+
+    *====================================================================
+    * MontarInsertCopia - Monta "INSERT INTO T (cols) SELECT exprs FROM T
+    * WHERE <where>", trocando por EXPRESSAO as colunas sobrepostas.
+    *
+    * par_cTabela     - nome da tabela (origem E destino: eh auto-copia)
+    * par_cOverrides  - "col=<expr SQL>|col=<expr SQL>|..." (col sem aspas,
+    *                   expr ja no formato final de SQL Server)
+    * par_cWhere      - clausula WHERE, sem a palavra WHERE
+    *
+    * A lista de colunas vem do INFORMATION_SCHEMA em tempo de execucao, de
+    * proposito: SigCdPro tem 181 colunas e fixa-las aqui garantiria que o
+    * dia em que o schema mudar o INSERT quebra em silencio. Medido em
+    * 2026-10-06: nenhuma das 8 tabelas da copia tem coluna IDENTITY,
+    * computada ou timestamp, entao todas podem ser escritas.
+    *
+    * Devolve "" se nao conseguir ler as colunas (o chamador aborta).
+    *====================================================================
+    PROTECTED PROCEDURE MontarInsertCopia(par_cTabela, par_cOverrides, par_cWhere)
+        LOCAL loc_cTab, loc_cCols, loc_cExprs, loc_cCol, loc_cOvr, loc_nPos, ;
+            loc_cChave, loc_cValor, loc_nResultado, loc_cSQL, ;
+            loc_nUsados, loc_nPedidos
+
+        loc_cTab = ALLTRIM(par_cTabela)
+
+        IF USED("cursor_4c_ColsCopia")
+            USE IN cursor_4c_ColsCopia
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, ;
+            "SELECT COLUMN_NAME AS col FROM INFORMATION_SCHEMA.COLUMNS" + ;
+            " WHERE TABLE_NAME = " + EscaparSQL(loc_cTab) + ;
+            " ORDER BY ORDINAL_POSITION", "cursor_4c_ColsCopia")
+
+        IF loc_nResultado < 0 OR RECCOUNT("cursor_4c_ColsCopia") = 0
+            THIS.this_cMensagemErro = "N" + CHR(227) + "o foi poss" + CHR(237) + ;
+                "vel ler as colunas de " + loc_cTab + ":" + CHR(13) + CapturarErroSQL()
+            RETURN ""
+        ENDIF
+
+        loc_cCols  = ""
+        loc_cExprs = ""
+        loc_nUsados = 0
+
+        SELECT cursor_4c_ColsCopia
+        SCAN
+            loc_cCol = ALLTRIM(cursor_4c_ColsCopia.col)
+
+            *-- procura a coluna na lista de overrides ("col=expr|col=expr")
+            loc_cValor = ""
+            loc_cOvr   = "|" + ALLTRIM(NVL(par_cOverrides, "")) + "|"
+            loc_nPos   = AT("|" + LOWER(loc_cCol) + "=", LOWER(loc_cOvr))
+
+            IF loc_nPos > 0
+                loc_cValor  = SUBSTR(loc_cOvr, loc_nPos + LEN(loc_cCol) + 2)
+                loc_cValor  = LEFT(loc_cValor, AT("|", loc_cValor) - 1)
+                loc_nUsados = loc_nUsados + 1
+            ELSE
+                loc_cValor = loc_cCol
+            ENDIF
+
+            loc_cCols  = loc_cCols  + IIF(EMPTY(loc_cCols),  "", ", ") + loc_cCol
+            loc_cExprs = loc_cExprs + IIF(EMPTY(loc_cExprs), "", ", ") + loc_cValor
+        ENDSCAN
+
+        IF USED("cursor_4c_ColsCopia")
+            USE IN cursor_4c_ColsCopia
+        ENDIF
+
+        *-- Todo override tem de ter casado com uma coluna REAL. Sem esta
+        *-- conferencia, errar a grafia de um campo (regra #22: margens x
+        *-- margems, ems x ens) nao da erro nenhum - o override eh ignorado e
+        *-- a copia nasce com o valor do produto ORIGINAL naquele campo, o que
+        *-- eh silencioso e so aparece como "o produto copiado veio errado".
+        loc_nPedidos = 0
+        IF !EMPTY(NVL(par_cOverrides, ""))
+            loc_nPedidos = OCCURS("|", ALLTRIM(par_cOverrides)) + 1
+        ENDIF
+
+        IF loc_nUsados < loc_nPedidos
+            THIS.this_cMensagemErro = "Copia de " + loc_cTab + ": " + ;
+                TRANSFORM(loc_nPedidos - loc_nUsados) + " de " + ;
+                TRANSFORM(loc_nPedidos) + " campos a sobrepor n" + CHR(227) + ;
+                "o existem na tabela." + CHR(13) + ALLTRIM(par_cOverrides)
+            RETURN ""
+        ENDIF
+
+        loc_cSQL = "INSERT INTO " + loc_cTab + " (" + loc_cCols + ")" + ;
+            " SELECT " + loc_cExprs + " FROM " + loc_cTab + ;
+            " WHERE " + par_cWhere
+
+        RETURN loc_cSQL
+    ENDPROC
+
+    *====================================================================
+    * CopiarTabelaFilha - Clona as linhas de uma tabela filha do produto
+    *
+    * Uma linha de origem por INSERT, para que cada registro novo receba
+    * a SUA chave Fortyus (regra #22: chave repetida colide no indice).
+    *
+    * par_cTabela   - tabela filha
+    * par_cCampoPro - coluna que guarda o produto (cpros / produtos)
+    * par_cCampoPk  - coluna da chave Fortyus (cidchaves / pkchaves)
+    * par_cOrigem   - produto de origem
+    * par_cNovo     - produto novo
+    * par_cExtra    - overrides ADICIONAIS ("col=expr|...") ou ""
+    * par_cFiltro   - condicao extra no SELECT de origem, ou ""
+    *====================================================================
+    PROTECTED PROCEDURE CopiarTabelaFilha(par_cTabela, par_cCampoPro, par_cCampoPk, ;
+            par_cOrigem, par_cNovo, par_cExtra, par_cFiltro)
+        LOCAL loc_cSQL, loc_nResultado, loc_cPk, loc_cOvr, loc_lOk
+        loc_lOk = .T.
+
+        IF USED("cursor_4c_PkCopia")
+            USE IN cursor_4c_PkCopia
+        ENDIF
+
+        loc_cSQL = "SELECT " + par_cCampoPk + " AS pk FROM " + par_cTabela + ;
+            " WHERE " + par_cCampoPro + " = " + EscaparSQL(par_cOrigem)
+
+        IF !EMPTY(NVL(par_cFiltro, ""))
+            loc_cSQL = loc_cSQL + " AND " + par_cFiltro
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PkCopia")
+
+        IF loc_nResultado < 0
+            THIS.this_cMensagemErro = "Erro ao ler " + par_cTabela + ":" + ;
+                CHR(13) + CapturarErroSQL()
+            RETURN .F.
+        ENDIF
+
+        SELECT cursor_4c_PkCopia
+        SCAN WHILE loc_lOk
+            loc_cPk = ALLTRIM(NVL(cursor_4c_PkCopia.pk, ""))
+
+            loc_cOvr = par_cCampoPro + "=" + EscaparSQL(par_cNovo) + ;
+                "|" + par_cCampoPk + "=" + EscaparSQL(fUniqueIds())
+
+            IF !EMPTY(NVL(par_cExtra, ""))
+                loc_cOvr = loc_cOvr + "|" + par_cExtra
+            ENDIF
+
+            loc_cSQL = THIS.MontarInsertCopia(par_cTabela, loc_cOvr, ;
+                par_cCampoPk + " = " + EscaparSQL(loc_cPk))
+
+            IF EMPTY(loc_cSQL)
+                loc_lOk = .F.
+            ELSE
+                *-- NAO executa aqui: acumula no lote (ver CopiarProduto)
+                THIS.this_cLoteCopia = THIS.this_cLoteCopia + loc_cSQL + ";" + CHR(13) + CHR(10)
+            ENDIF
+        ENDSCAN
+
+        IF USED("cursor_4c_PkCopia")
+            USE IN cursor_4c_PkCopia
+        ENDIF
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *====================================================================
+    * CopiarProduto - Gera um produto NOVO a partir de um existente
+    *
+    * Transcricao de CntAcabado.CmdOk.Click. Tudo numa transacao: o legado
+    * so descarrega os cursores no Update()/mSv_Inserir do fim, entao ou
+    * nasce o produto inteiro (com composicao, fases, matrizes, titulos,
+    * tarefas, caracteristicas e arquivos) ou nao nasce nada.
+    *
+    * Par: par_cOrigem   - cpros do produto de origem
+    *      par_cNovo     - cpros do produto novo
+    *      par_cGrupo    - grupo novo ("" mantem o do original)
+    *      par_cRef      - Ref. Fornecedor nova ("" mantem)
+    *      par_cCor      - Cor padrao nova ("" mantem)
+    *      par_cColecao  - Grupo de Venda novo ("" mantem)
+    *      par_nSituacao - 1 ativo / 2 inativo
+    *====================================================================
+    PROCEDURE CopiarProduto(par_cOrigem, par_cNovo, par_cGrupo, par_cRef, ;
+            par_cCor, par_cColecao, par_nSituacao)
+        LOCAL loc_cOrigem, loc_cNovo, loc_cGrupo, loc_cRef, loc_cCor, loc_cColecao, ;
+            loc_nSituacao, loc_cOvr, loc_cSQL, loc_nResultado, loc_lOk, loc_oErro, ;
+            loc_nCbars, loc_cMercs, loc_cGrupoOrig, loc_lLimpaEq
+        loc_lOk     = .F.
+
+        TRY
+            loc_cOrigem   = PADR(ALLTRIM(NVL(par_cOrigem, "")), 14)
+            loc_cNovo     = PADR(ALLTRIM(NVL(par_cNovo, "")), 14)
+            loc_cGrupo    = PADR(ALLTRIM(NVL(par_cGrupo, "")), 3)
+            loc_cRef      = PADR(ALLTRIM(NVL(par_cRef, "")), 40)
+            loc_cCor      = ALLTRIM(NVL(par_cCor, ""))
+            loc_cColecao  = ALLTRIM(NVL(par_cColecao, ""))
+            loc_nSituacao = IIF(VARTYPE(par_nSituacao) = "N" AND par_nSituacao > 0, ;
+                par_nSituacao, 1)
+
+            IF EMPTY(ALLTRIM(loc_cOrigem)) OR EMPTY(ALLTRIM(loc_cNovo))
+                THIS.this_cMensagemErro = "Produto de origem e novo produto s" + ;
+                    CHR(227) + "o obrigat" + CHR(243) + "rios."
+                THIS.ExibirFalha("Copiar um Produto")
+                THIS.this_lErroExibido = .T.
+            ELSE
+                *-- grupo do ORIGINAL, para decidir se o grupo muda
+                loc_cGrupoOrig = THIS.ObterGrupoDoProduto(loc_cOrigem)
+
+                *-- Mercs do grupo novo (o legado so troca Mercs junto com CGrus)
+                loc_cMercs = ""
+                IF !EMPTY(ALLTRIM(loc_cGrupo)) AND ;
+                        PADR(loc_cGrupoOrig, 3) <> loc_cGrupo
+                    IF THIS.ObterConfigGrupo(loc_cGrupo)
+                        loc_cMercs = ALLTRIM(NVL(cursor_4c_CfgGrupo.mercs, ""))
+                    ENDIF
+                ENDIF
+
+                loc_nCbars  = THIS.GerarCodigoBarras()
+                loc_lLimpaEq = !THIS.ParametroMantemEquivalente()
+
+                *-- ============ MONTAGEM DO LOTE ============
+                THIS.this_cLoteCopia = ""
+
+                IF .T.
+                    *-- 1) o PRODUTO. Overrides transcritos do CmdOk.Click:
+                    *--    Cpros / CGrus / Mercs / Reffs / CodCors / Colecoes /
+                    *--    Situas, mais o bloco Replace do fim (Datas, DtIncs,
+                    *--    Flagctabs, Transps, UltComps, UsuIncs, ProdNovo,
+                    *--    Compos, Descfis, vUltComps, Cbars) e os campos que o
+                    *--    legado zera (Conjunts, CodMacro, CnjLacto).
+                    loc_cOvr = "cpros=" + EscaparSQL(loc_cNovo)
+
+                    IF !EMPTY(ALLTRIM(loc_cGrupo)) AND PADR(loc_cGrupoOrig, 3) <> loc_cGrupo
+                        loc_cOvr = loc_cOvr + "|cgrus=" + EscaparSQL(loc_cGrupo)
+                        IF !EMPTY(loc_cMercs)
+                            loc_cOvr = loc_cOvr + "|mercs=" + EscaparSQL(LEFT(loc_cMercs, 3))
+                        ENDIF
+                    ENDIF
+
+                    IF !EMPTY(ALLTRIM(loc_cRef))
+                        loc_cOvr = loc_cOvr + "|reffs=" + EscaparSQL(loc_cRef)
+                    ENDIF
+
+                    *-- codcors eh char(4) e colecoes char(10) (medido no banco)
+                    IF !EMPTY(loc_cCor)
+                        loc_cOvr = loc_cOvr + "|codcors=" + EscaparSQL(LEFT(loc_cCor, 4))
+                    ENDIF
+
+                    *-- Erro188: o legado escreve "m.Colocoes" (com O no lugar do
+                    *-- E) nesta linha. Como Insert From Memvar so casa campo de
+                    *-- nome IGUAL, o Grupo de Venda digitado no dialogo NUNCA era
+                    *-- aplicado no legado - o campo existia e nao fazia nada.
+                    *-- Aqui a grafia certa (colecoes) eh usada de proposito.
+                    IF !EMPTY(loc_cColecao)
+                        loc_cOvr = loc_cOvr + "|colecoes=" + EscaparSQL(LEFT(loc_cColecao, 10))
+                    ENDIF
+
+                    *-- Bloco Replace do fim do CmdOk.Click + os campos que o
+                    *-- legado zera. Os LEFT() respeitam a largura REAL da
+                    *-- coluna (medida no banco em 2026-10-06, regra #19):
+                    *-- usuincs char(10), compos char(30), conjunts char(6),
+                    *-- codmacro char(6), cproeqs char(14).
+                    *--
+                    *-- "CnjLacto", que o legado tambem zera (m.CnjLacto = []),
+                    *-- NAO EXISTE em SigCdPro - conferido no INFORMATION_SCHEMA
+                    *-- do DB_MBAHIA. Por isso nao entra aqui: MontarInsertCopia
+                    *-- recusa override de coluna inexistente, de proposito.
+                    loc_cOvr = loc_cOvr + ;
+                        "|situas="    + FormatarNumeroSQL(loc_nSituacao, 0) + ;
+                        "|descfis=NULL" + ;
+                        "|conjunts="  + EscaparSQL("") + ;
+                        "|codmacro="  + EscaparSQL("") + ;
+                        "|datas=GETDATE()" + ;
+                        "|dtincs=GETDATE()" + ;
+                        "|flagctabs=1" + ;
+                        "|transps=0" + ;
+                        "|ultcomps=NULL" + ;
+                        "|usuincs="   + EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ;
+                        "|prodnovo="  + FormatarNumeroSQL(1, 0) + ;
+                        "|compos="    + EscaparSQL("   ") + ;
+                        "|vultcomps=" + FormatarNumeroSQL(0, 2) + ;
+                        "|cbars="     + FormatarNumeroSQL(loc_nCbars, 0)
+
+                    IF loc_lLimpaEq
+                        loc_cOvr = loc_cOvr + "|cproeqs=" + EscaparSQL(" ")
+                    ENDIF
+
+                    loc_cSQL = THIS.MontarInsertCopia("SigCdPro", loc_cOvr, ;
+                        "cpros = " + EscaparSQL(loc_cOrigem))
+
+                    IF EMPTY(loc_cSQL)
+                        loc_lOk = .F.
+                    ELSE
+                        THIS.this_cLoteCopia = loc_cSQL + ";" + CHR(13) + CHR(10)
+                        loc_lOk = .T.
+                    ENDIF
+
+                    *-- 2) as tabelas filhas, na mesma ordem do legado
+                    IF loc_lOk
+                        loc_lOk = THIS.CopiarTabelaFilha("SigPrCpo", "cpros", "cidchaves", ;
+                            loc_cOrigem, loc_cNovo, "dtmovs=GETDATE()", "")
+                    ENDIF
+
+                    IF loc_lOk
+                        *-- SigCdPrf guarda o produto em "produtos", nao em "cpros"
+                        loc_lOk = THIS.CopiarTabelaFilha("SigCdPrf", "produtos", "cidchaves", ;
+                            loc_cOrigem, loc_cNovo, "", "")
+                    ENDIF
+
+                    IF loc_lOk
+                        *-- o legado so copia matriz com Qtds > 0
+                        loc_lOk = THIS.CopiarTabelaFilha("SigPrMtz", "cpros", "cidchaves", ;
+                            loc_cOrigem, loc_cNovo, "", "qtds > 0")
+                    ENDIF
+
+                    IF loc_lOk
+                        *-- ProCarTits eh chave composta: produto + caracteristica
+                        *-- + titulo. Erro188/regra #19: cpros(14) + ccars(20) +
+                        *-- ctits(20) da 54 e a coluna eh char(50) - no VFP o
+                        *-- Insert truncava sozinho, no SQL Server o INSERT seria
+                        *-- RECUSADO com "String or binary data would be
+                        *-- truncated". Dai o LEFT(...,50) explicito.
+                        loc_lOk = THIS.CopiarTabelaFilha("SigCdPft", "cpros", "cidchaves", ;
+                            loc_cOrigem, loc_cNovo, ;
+                            "procartits=LEFT(" + EscaparSQL(loc_cNovo) + ;
+                            " + ccars + ctits, 50)", "")
+                    ENDIF
+
+                    IF loc_lOk
+                        loc_lOk = THIS.CopiarTabelaFilha("SigPrTar", "cpros", "pkchaves", ;
+                            loc_cOrigem, loc_cNovo, "", "")
+                    ENDIF
+
+                    IF loc_lOk
+                        loc_lOk = THIS.CopiarTabelaFilha("SigPrCar", "cpros", "pkchaves", ;
+                            loc_cOrigem, loc_cNovo, "", "")
+                    ENDIF
+
+                    IF loc_lOk
+                        loc_lOk = THIS.CopiarTabelaFilha("SigPrArq", "cpros", "pkchaves", ;
+                            loc_cOrigem, loc_cNovo, "", "")
+                    ENDIF
+
+                    *-- ============ EXECUCAO ATOMICA DO LOTE ============
+                    *-- Erro188: os 8 INSERT vao num SQLEXEC UNICO, com o
+                    *-- controle de transacao em T-SQL. Medido em 2026-10-06:
+                    *--
+                    *--   SQLGETPROP(0, "Transactions") = 2  (MANUAL)
+                    *--   @@TRANCOUNT numa conexao recem-aberta = 1
+                    *--
+                    *-- ou seja, o VFP JA abre uma transacao por conta propria.
+                    *-- Um "BEGIN TRANSACTION" via SQLEXEC so ANINHA (TRANCOUNT
+                    *-- 2) e o "COMMIT" correspondente volta para 1 sem efetivar
+                    *-- nada - a primeira versao deste metodo fazia isso e NAO
+                    *-- era atomica: medido, o produto ficou gravado mesmo com
+                    *-- ROLLBACK depois. Por isso:
+                    *--   - SAVE TRANSACTION quando ja ha transacao aberta
+                    *--     (o caso normal aqui), para o ROLLBACK desfazer SO a
+                    *--     copia e nao a transacao do resto da aplicacao;
+                    *--   - BEGIN/COMMIT proprios so se TRANCOUNT = 0;
+                    *--   - THROW no CATCH para o erro chegar ao SQLEXEC.
+                    IF loc_lOk AND !EMPTY(THIS.this_cLoteCopia)
+                        loc_cSQL = "SET NOCOUNT ON;" + CHR(13) + CHR(10) + ;
+                            "DECLARE @nivel int = @@TRANCOUNT;" + CHR(13) + CHR(10) + ;
+                            "IF @nivel = 0 BEGIN TRANSACTION" + CHR(13) + CHR(10) + ;
+                            "ELSE SAVE TRANSACTION Cop4c;" + CHR(13) + CHR(10) + ;
+                            "BEGIN TRY" + CHR(13) + CHR(10) + ;
+                            THIS.this_cLoteCopia + ;
+                            "IF @nivel = 0 COMMIT TRANSACTION;" + CHR(13) + CHR(10) + ;
+                            "END TRY" + CHR(13) + CHR(10) + ;
+                            "BEGIN CATCH" + CHR(13) + CHR(10) + ;
+                            "IF @nivel = 0 BEGIN IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION; END" + CHR(13) + CHR(10) + ;
+                            "ELSE BEGIN IF XACT_STATE() = 1 ROLLBACK TRANSACTION Cop4c; END;" + CHR(13) + CHR(10) + ;
+                            "THROW;" + CHR(13) + CHR(10) + ;
+                            "END CATCH"
+
+                        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+                        IF loc_nResultado < 0
+                            THIS.this_cMensagemErro = "Erro ao gerar o produto novo:" + ;
+                                CHR(13) + CapturarErroSQL()
+                            loc_lOk = .F.
+                        ELSE
+                            THIS.this_cCpros         = ALLTRIM(loc_cNovo)
+                            THIS.this_cChaveOriginal = ALLTRIM(loc_cNovo)
+                            THIS.RegistrarAuditoria("INSERT")
+                            loc_lOk = .T.
+                        ENDIF
+                    ELSE
+                        loc_lOk = .F.
+                    ENDIF
+
+                    THIS.this_cLoteCopia = ""
+
+                    IF !loc_lOk AND !EMPTY(THIS.this_cMensagemErro)
+                        THIS.ExibirFalha("Copiar um Produto")
+                        THIS.this_lErroExibido = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cLoteCopia = ""
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MostrarErro(loc_oErro, "ProdutoBO.CopiarProduto")
+            THIS.this_lErroExibido = .T.
+            loc_lOk = .F.
+        ENDTRY
+
+        RETURN loc_lOk
+    ENDPROC
+
+    *====================================================================
+    * ObterGrupoDoProduto - cgrus de um produto (para saber se o grupo
+    * realmente mudou na copia)
+    *====================================================================
+    PROTECTED PROCEDURE ObterGrupoDoProduto(par_cCodigo)
+        LOCAL loc_cRet, loc_nResultado
+        loc_cRet = ""
+
+        IF USED("cursor_4c_GrpPro")
+            USE IN cursor_4c_GrpPro
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, ;
+            "SELECT cgrus FROM SigCdPro WHERE cpros = " + ;
+            EscaparSQL(PADR(ALLTRIM(NVL(par_cCodigo, "")), 14)), "cursor_4c_GrpPro")
+
+        IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_GrpPro") > 0
+            GO TOP IN cursor_4c_GrpPro
+            loc_cRet = ALLTRIM(NVL(cursor_4c_GrpPro.cgrus, ""))
+        ENDIF
+
+        IF USED("cursor_4c_GrpPro")
+            USE IN cursor_4c_GrpPro
+        ENDIF
+
+        RETURN loc_cRet
+    ENDPROC
+
+    *====================================================================
+    * ParametroMantemEquivalente - CrSigCdPac.SemEqs = 2 do legado
+    * Legado: If CrSigCdPac.SemEqs <> 2 / Replace CProEqs With ' '
+    * ou seja, SO com SemEqs = 2 o produto copiado conserva o equivalente.
+    *====================================================================
+    PROTECTED PROCEDURE ParametroMantemEquivalente()
+        LOCAL loc_lRet, loc_nResultado
+        loc_lRet = .F.
+
+        IF USED("cursor_4c_PacEq")
+            USE IN cursor_4c_PacEq
+        ENDIF
+
+        loc_nResultado = SQLEXEC(gnConnHandle, ;
+            "SELECT TOP 1 semeqs FROM SigCdPac", "cursor_4c_PacEq")
+
+        IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_PacEq") > 0
+            GO TOP IN cursor_4c_PacEq
+            loc_lRet = (VAL(TRANSFORM(NVL(cursor_4c_PacEq.semeqs, 0))) = 2)
+        ENDIF
+
+        IF USED("cursor_4c_PacEq")
+            USE IN cursor_4c_PacEq
+        ENDIF
+
+        RETURN loc_lRet
     ENDPROC
 
 ENDDEFINE
