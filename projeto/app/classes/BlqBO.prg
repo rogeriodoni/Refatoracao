@@ -139,9 +139,13 @@ DEFINE CLASS BlqBO AS BusinessBase
             THIS.this_cCidChaves = fUniqueIds()
             THIS.this_cUsuIncs   = ALLTRIM(gc_4c_UsuarioLogado)
 
+            *-- UsuAlts eh NOT NULL sem DEFAULT (regra #22): sem ele o SQL Server
+            *-- recusava TODA inclusao. Legado (Grupo_op.Click INSERIR) so preenche
+            *-- Codigos/CidChaves/UsuIncs/DtIncs - UsuAlts nasce em BRANCO e so
+            *-- recebe o usuario no ALTERAR; DtAlts fica NULL.
             loc_cSQL = "INSERT INTO SigCdBlq" + ;
                        " (Codigos, CidChaves, dtInicial, dtFinal, inativo," + ;
-                       "  UsuIncs, DtIncs)" + ;
+                       "  UsuIncs, DtIncs, UsuAlts)" + ;
                        " VALUES (" + ;
                        EscaparSQL(THIS.this_cCodigos) + ", " + ;
                        EscaparSQL(THIS.this_cCidChaves) + ", " + ;
@@ -149,7 +153,8 @@ DEFINE CLASS BlqBO AS BusinessBase
                        FormatarDataSQL(THIS.this_dDtFinal) + ", " + ;
                        IIF(THIS.this_lInativo, "1", "0") + ", " + ;
                        EscaparSQL(THIS.this_cUsuIncs) + ", " + ;
-                       "GETDATE())"
+                       "GETDATE(), " + ;
+                       EscaparSQL("") + ")"
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ins")
 
