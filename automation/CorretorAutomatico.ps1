@@ -3023,7 +3023,14 @@ function Corrigir-ContainerVisibleAusente {
             for ($j = $i - 1; $j -ge [Math]::Max(0, $i - 30); $j--) {
                 if ($Linhas[$j] -match '(?i)WITH\s+.*\.(cnt_4c_\w+)\s*$') {
                     $containerName = $Matches[1]
-                    $ehContainer = $true
+                    # Erro501 (sweep 2026-10-06): so o bloco de CONFIGURACAO logo apos o
+                    # AddObject conta - eh ali que o container nasce invisivel. Antes qualquer
+                    # WITH do container sem .Visible ganhava .Visible = .T., inclusive em metodo
+                    # de RUNTIME: no FormSigPrGlp o LimparCampos passou a reabrir os paineis
+                    # Container2/Container5 que o RestaurarGradePrincipal tinha fechado.
+                    $k = $j - 1
+                    while ($k -ge 0 -and ($Linhas[$k] -match '^\s*$' -or $Linhas[$k] -match '^\s*(\*|&&)')) { $k-- }
+                    $ehContainer = ($k -ge 0 -and $Linhas[$k] -match ('(?i)AddObject\s*\(\s*"' + [regex]::Escape($containerName) + '"\s*,\s*"Container"'))
                     break
                 }
                 # Detectar se eh WITH para Page (Page1, Page2, etc) - Pages NAO tem Visible
@@ -12590,9 +12597,17 @@ function Corrigir-BotoesCrudLeftAbsoluto {
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $ln = $Linhas[$i]
 
-        # Detectar entrada em WITH .*cmd_4c_<botao> (qualquer profundidade de path)
-        $mWith = [regex]::Match($ln, '(?i)^\s*WITH\s+.*\.(cmd_4c_(?:Incluir|Visualizar|Alterar|Excluir|Buscar|Encerrar))\s*$')
+        # Detectar entrada em WITH <...>.cnt_4c_Botoes|Saida.cmd_4c_<botao>
+        # Erro501 (sweep 2026-10-06): antes aceitava QUALQUER caminho, inclusive
+        # "WITH THIS.cmd_4c_Excluir" - botao direto no FORM, cujo Left eh relativo ao form
+        # e nao ao container. No FormSigPrCar o Excluir foi de 330 para 230 e passou a
+        # cobrir o Inserir (255..330). O pai imediato tem de ser o container canonico.
+        $mWith = [regex]::Match($ln, '(?i)^\s*WITH\s+.*\.(cnt_4c_(?:Botoes|Saida))\.(cmd_4c_(?:Incluir|Visualizar|Alterar|Excluir|Buscar|Encerrar))\s*$')
         if ($mWith.Success) {
+            # cmd_4c_Encerrar so em cnt_4c_Saida; os CRUD so em cnt_4c_Botoes
+            $paiOk = if ($mWith.Groups[2].Value -match '(?i)Encerrar') { $mWith.Groups[1].Value -match '(?i)Saida' } else { $mWith.Groups[1].Value -match '(?i)Botoes' }
+            if (-not $paiOk) { $inWith = $false; $botaoAtual = ""; continue }
+            $mWith = [regex]::Match($ln, '(?i)\.(cmd_4c_\w+)\s*$')
             $botaoAtual = $mWith.Groups[1].Value.ToLower()
             # normalizar case para bater com hashtable (chave com maiuscula)
             foreach ($k in $leftCanonico.Keys) {

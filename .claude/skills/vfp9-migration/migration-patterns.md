@@ -13541,3 +13541,31 @@ no mesmo fluxo - copiar os grupos para variaveis imediatamente. E testar a funca
 registrar: o defeito era visivel na primeira execucao.
 
 Deteccao rapida no projeto: `Select-String ... -Pattern 'this_\w+\s+\.Value'` (deve dar 0).
+
+## 238. Sweep do Corretor desfez consertos manuais - 7 patterns erravam o CONTEXTO (Erro501 2026-10-06)
+
+O sweep (`CorrigirTodosFormularios.ps1`, 972 arquivos) rodou depois do Erro501 e, na 1a tentativa,
+desfez consertos feitos a mao no Formgpd (Erro171-179) e no FormProduto (Erro188). Interrompido em 191/972,
+os patterns foram corrigidos e o sweep rodou de novo.
+
+| pattern | antes | agora |
+|---|---|---|
+| #74 LostFocusLookupBusca | `"LostFocus"` -> `"KeyPress"` | WARNING-only |
+| #107 ContainerBotoesOverlayGrid | overlap contra grid de QUALQUER pai | so grid e container do MESMO pai; so o WITH da propria grid |
+| #68 ContainerBorderStyle | qualquer WITH aninhado apos AddObject Container | WITH mais interno + classe do AddObject |
+| ContainerThemes | ligava em WITH cnt_X, desligava no 1o ENDWITH | idem #68 |
+| #87 OptionGroupWidthAcomoda | aumentava a largura | WARNING-only |
+| #54 ContainerVisibleAusente | qualquer WITH cnt_X sem Visible | so o WITH logo apos o AddObject |
+| AUTO-182 BotoesCrudLeftAbsoluto | `WITH .*\.cmd_4c_Excluir` | pai tem de ser `cnt_4c_Botoes`/`cnt_4c_Saida` |
+
+Helpers novos no Corretor (reusar): `Get-ClassePorNomeAddObject` (nome -> classe, `<<ambiguo>>` se
+reaproveitado) e `Get-AlvoDoWith` (ultimo segmento do WITH; vazio para variavel/THIS).
+
+**Armadilhas do teste de pattern**:
+- arquivo fora de `\forms\` roda em **MODO SEGURO** (so sintaxe) - copiar para `<tmp>\forms\cadastros\`;
+- o Corretor HEAD precisa estar em pasta `automation\` irma para `Get-RaizRepo4c` resolver;
+- `git diff --no-index` sai com 1 quando ha diferenca - nao eh falha.
+
+Resultado do 2o sweep: 12 arquivos alterados, 10 legitimos (BackStyle 1->0 canonico, `_EMPR`, ShowWindow,
+"Encerrar", Themes #99, metodos de BO REPORT) e 2 regressoes revertidas (#54 no FormSigPrGlp, AUTO-182 no
+FormSigPrCar) - que motivaram as duas ultimas linhas da tabela. Ver CLAUDE.md regra **#44**.

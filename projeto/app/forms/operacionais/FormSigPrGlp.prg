@@ -3014,7 +3014,6 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                         .grd_4c_DispGrupo.Refresh()
                         .grd_4c_DispGrupo.Column5.SetFocus()
                         .grd_4c_DispGrupo.Refresh()
-                        .Visible     = .T.
                     ENDWITH
                 ENDIF
             ENDIF
@@ -4703,13 +4702,11 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .txt_4c_GetDGrupo.Value = ""
                 .txt_4c_GetDConta.Value = ""
                 .lbl_4c_Label1.Caption  = "Estoque Dispon" + CHR(237) + "vel"
-                .Visible     = .T.
             ENDWITH
 
             WITH THIS.cnt_4c_Container2
                 .txt_4c_QtPedida.Value = 0
                 .txt_4c_QtSelec.Value  = 0
-                .Visible     = .T.
             ENDWITH
 
             WITH THIS.cnt_4c_Container5
@@ -4717,7 +4714,6 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .txt_4c_QtSelec.Value   = 0
                 .txt_4c_GetDGrupo.Value = ""
                 .txt_4c_GetDConta.Value = ""
-                .Visible     = .T.
             ENDWITH
 
             THIS.Refresh()

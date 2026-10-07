@@ -917,6 +917,31 @@ Estoura so ao CARREGAR registro (`BOParaForm`), entao INCLUIR funciona e o teste
 
 Auto-fix: CorretorAutomatico **#213** (desfaz a mutilacao; #73 corrigido). Deteccao: `this_\w+\s+\.Value` no projeto deve dar 0. Skill: secao **237**. Origem: Erro501 (2026-10-06, `FormUfs` 22 sites + `FormTml` 5 + `FormSre` 1 + `FormTbv` 1).
 
+### 44. Pattern do CorretorAutomatico decide pelo CONTEXTO certo — e se valida contra form CONSERTADO A MAO antes do sweep
+O sweep de 2026-10-06 rodou o Corretor nos 972 arquivos e **desfez consertos manuais**. Nenhum pattern estava errado na premissa; todos erravam o **contexto** em que a premissa vale:
+
+| pattern | contexto errado | estrago |
+|---|---|---|
+| #74 | qualquer `BINDEVENT LostFocus` em lookup | trocou para KeyPress e desfez Erro172/188 (regras #35/#37) |
+| #107 | grid de QUALQUER pai (`Top` eh relativo ao pai) | barra canonica do Formgpd virou branca opaca |
+| #68, ContainerThemes | WITH EXTERNO em vez do mais interno | tirou `.BorderStyle` de OptionGroup e `.Themes` de TextBox |
+| #54 | qualquer `WITH cnt_X`, inclusive em metodo de RUNTIME | `LimparCampos` reabria paineis fechados (FormSigPrGlp) |
+| AUTO-182 | `WITH THIS.cmd_X` (botao direto no form) | Excluir foi parar em cima do Inserir (FormSigPrCar) |
+| #87 | "Width >= botoes+10" sem saber o legado | sobrescreveu larguras transcritas do SCX |
+
+E dois patterns **brigavam entre si** (#107 punha `BackStyle = 1`, ContainerTransparente voltava a `0`) — o par se anulava e escondia o defeito.
+
+**Regras ao escrever/alterar pattern**:
+1. Propriedade "inexistente na classe": olhar o alvo do **WITH mais interno** e a classe com que ele foi criado (`Get-ClassePorNomeAddObject` + `Get-AlvoDoWith`), nunca "estou dentro de algum container".
+2. Comparar `Top`/`Left` so entre controles do **mesmo pai** (mesma expressao antes do nome no WITH).
+3. Injecao de propriedade "de nascimento" (`Visible`): so no bloco WITH **logo apos** o `AddObject`.
+4. Se a escolha eh de DESENHO (evento, largura do legado) e nao de sintaxe: **WARNING**, nunca auto-fix.
+5. Antes de sweep: rodar o Corretor em COPIA de forms consertados a mao (Formgpd, FormProduto) num caminho com `\forms\` (senao cai no MODO SEGURO e o teste nao testa nada) e exigir **zero** mudanca nao explicada. Comparar Corretor do HEAD x novo.
+
+**Ao auditar sweep**: `git diff --ignore-cr-at-eol` (o Corretor regrava tudo com CRLF — `git status` lista centenas de `.prg` sem mudanca real) e classificar CADA hunk: legitimo / regressao. `.bak` sao rastreados pelo git — o sweep os regrava.
+
+Origem: sweep do Erro501 (2026-10-06). Regressoes revertidas: FormSigPrGlp (`Visible` x4), FormSigPrCar (`Left`). Skill: secao **238**.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
