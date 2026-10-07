@@ -679,7 +679,23 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .Column2.Text1.Margin      = 0
             .Column2.Text1.ReadOnly    = .T.
         ENDWITH
-        BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GradeAfterRowColChange")
+
+        *-- Celula Ocorrencia com Valid PROPRIO (legado: Gradeoco.Column2.Text1.Valid
+        *-- abre o fwBuscaExt). Antes a validacao estava num BINDEVENT de
+        *-- AfterRowColChange, que recebe a coluna de DESTINO: ao sair da Ocorrencia
+        *-- chegava 2 e o picker nunca abria (Erro191). BINDEVENT em Valid de
+        *-- TextBox de Column nao eh confiavel -> classe com o evento embutido.
+        loc_oGrid.Column1.AddObject("txt_4c_Ocorrencia", "TextBoxOcorrencia_4c")
+        WITH loc_oGrid.Column1.txt_4c_Ocorrencia
+            .FontName    = "Verdana"
+            .FontSize    = 8
+            .BorderStyle = 0
+            .Margin      = 0
+            .MaxLength   = 2        && SigClLan.cocos char(2)
+            .Visible     = .T.
+        ENDWITH
+        loc_oGrid.Column1.CurrentControl = "txt_4c_Ocorrencia"   && regra #18
+        loc_oGrid.Column1.Sparse         = .F.
 
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
@@ -751,6 +767,9 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
 
         IF par_nPagina = 1
             THIS.CarregarLista()
+        ELSE
+            *-- repintar com a Page2 JA visivel (Refresh em pagina oculta nao pinta)
+            THIS.AtualizarGradeOcorrencias()
         ENDIF
 
         loc_lSucesso = .T.
@@ -810,15 +829,31 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                         SKIP
                     ENDDO
                 ENDIF
-                GO TOP IN cursor_4c_OcoLocal
                 loc_lSucesso = .T.
             ENDIF
+            THIS.AtualizarGradeOcorrencias()
         CATCH TO loException
             MsgErro("Erro em CarregarPaginaDados: " + loException.Message, "Erro")
             loc_lSucesso = .F.
         ENDTRY
 
         RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarGradeOcorrencias - Go Top + Refresh da grade de ocorrencias
+    * Popular o cursor (ZAP + APPEND) NAO repinta a grade: com o form ja aberto,
+    * Visualizar/Alterar enchia cursor_4c_OcoLocal e a grade continuava vazia
+    * (Erro192, regra #21). Legado: "GradeOco.Refresh()" no Grupo_op.Click.
+    * Chamado em TODO caminho que popula o cursor e ao exibir a Page2.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AtualizarGradeOcorrencias()
+        IF USED("cursor_4c_OcoLocal")
+            GO TOP IN cursor_4c_OcoLocal
+        ENDIF
+        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "grd_4c_Ocorrencias", 5)
+            THIS.pgf_4c_Paginas.Page2.grd_4c_Ocorrencias.Refresh()
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -844,6 +879,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         IF USED("cursor_4c_OcoLocal")
             ZAP IN cursor_4c_OcoLocal
         ENDIF
+        THIS.AtualizarGradeOcorrencias()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1298,6 +1334,10 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             IF loc_lEditarOco
                 loc_oPagina.grd_4c_Ocorrencias.ReadOnly = .F.
                 loc_oPagina.grd_4c_Ocorrencias.Enabled  = .T.
+                *-- Grid.ReadOnly propaga para as colunas: repor DEPOIS. Descricao
+                *-- nao eh digitavel (legado: Column1.Text1.When = .F.)
+                loc_oPagina.grd_4c_Ocorrencias.Column1.ReadOnly = .F.
+                loc_oPagina.grd_4c_Ocorrencias.Column2.ReadOnly = .T.
             ELSE
                 loc_oPagina.grd_4c_Ocorrencias.ReadOnly = .T.
                 loc_oPagina.grd_4c_Ocorrencias.Enabled  = .F.
@@ -1314,34 +1354,35 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * GradeAfterRowColChange - Valida ocorrencia (Cocos) ao mover na grade
-    * Lookup em SigCcCco; verifica duplicidade; preenche descs automaticamente
+    * ValidarOcorrenciaGrade - Valid da celula Ocorrencia (TextBoxOcorrencia_4c)
+    * Transcreve Gradeoco.Column2.Text1.Valid do legado: so age se o valor mudou;
+    * lookup em SigCcCco (exato -> picker); ESC limpa; duplicidade limpa e
+    * mantem o foco na celula. PUBLIC: chamado pelo Valid do TextBox (Erro191).
+    * O valor digitado esta em par_oTxt.Value - o cursor so recebe DEPOIS do Valid.
     *--------------------------------------------------------------------------
-    PROCEDURE GradeAfterRowColChange
-        LPARAMETERS par_nColIndex
-        LOCAL loc_cCocos, loc_cDescs, loc_cSQL, loc_nRes
+    PROCEDURE ValidarOcorrenciaGrade(par_oTxt)
+        LOCAL loc_cCocos, loc_cSQL, loc_nRes, loc_lRetorno
         LOCAL loc_cCocosOk, loc_cDescsOk, loc_oBusca
         LOCAL loc_nPonteiro, loc_lDuplicado
-
-        *-- Processar lookup apenas quando o usuario editou Column1 (Cocos - campo editavel)
-        IF par_nColIndex != 1
-            RETURN
-        ENDIF
+        loc_lRetorno = .T.
 
         IF !USED("cursor_4c_OcoLocal") OR EOF("cursor_4c_OcoLocal")
-            RETURN
+            RETURN .T.
+        ENDIF
+
+        loc_cCocos = ALLTRIM(par_oTxt.Value)
+
+        *-- Legado: IF This.Value = ThisForm.CodAnt -> RETURN
+        IF loc_cCocos == ALLTRIM(par_oTxt.this_cValorAnterior)
+            RETURN .T.
         ENDIF
 
         SELECT cursor_4c_OcoLocal
-        loc_cCocos = ALLTRIM(cursor_4c_OcoLocal.Cocos)
-        loc_cDescs = ALLTRIM(cursor_4c_OcoLocal.descs)
 
         *-- Cocos vazio: limpar descs e sair
         IF EMPTY(loc_cCocos)
-            IF !EMPTY(loc_cDescs)
-                REPLACE descs WITH ""
-            ENDIF
-            RETURN
+            REPLACE descs WITH ""
+            RETURN .T.
         ENDIF
 
         loc_cCocosOk = ""
@@ -1424,18 +1465,24 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 GO loc_nPonteiro
             ENDIF
 
+            *-- O TextBox grava no ControlSource DEPOIS do Valid: o .Value tem de
+            *-- receber o mesmo que o cursor, senao o texto digitado volta por cima
             IF loc_lDuplicado
-                MsgAviso("J" + CHR(225) + " existe um registro com esta ocorr" + CHR(234) + "ncia!", ;
+                MsgAviso("J" + CHR(225) + " existe um registro com este grupo, conta e ocorr" + CHR(234) + "ncia ...", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
                 REPLACE Cocos WITH ""
                 REPLACE descs WITH ""
+                par_oTxt.Value = ""
+                loc_lRetorno   = .F.     && legado: Return 0 - fica na celula
             ELSE
                 REPLACE Cocos WITH loc_cCocosOk
                 REPLACE descs WITH loc_cDescsOk
+                par_oTxt.Value = loc_cCocosOk
             ENDIF
+            par_oTxt.this_cValorAnterior = par_oTxt.Value
 
             IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "grd_4c_Ocorrencias", 5)
-                THIS.pgf_4c_Paginas.Page2.grd_4c_Ocorrencias.Refresh()
+                THIS.pgf_4c_Paginas.Page2.grd_4c_Ocorrencias.Column2.Refresh()
             ENDIF
 
         CATCH TO loException
@@ -1445,6 +1492,8 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         IF USED("cursor_4c_BuscaCoco")
             USE IN cursor_4c_BuscaCoco
         ENDIF
+
+        RETURN loc_lRetorno
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1743,3 +1792,26 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
 
 ENDDEFINE
 
+*==============================================================================
+* TextBoxOcorrencia_4c - celula Ocorrencia da grd_4c_Ocorrencias (Erro191)
+* Transcreve Gradeoco.Column2.Text1 do legado: When guarda o valor anterior
+* (ThisForm.CodAnt) e Valid delega ao form. Eventos embutidos na classe porque
+* BINDEVENT em Valid de TextBox dentro de Column nao dispara de forma confiavel.
+*==============================================================================
+DEFINE CLASS TextBoxOcorrencia_4c AS TextBox
+    this_cValorAnterior = ""
+
+    PROCEDURE When()
+        THIS.this_cValorAnterior = NVL(THIS.Value, "")
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        LOCAL loc_lRetorno
+        loc_lRetorno = .T.
+        IF PEMSTATUS(THISFORM, "ValidarOcorrenciaGrade", 5)
+            loc_lRetorno = THISFORM.ValidarOcorrenciaGrade(THIS)
+        ENDIF
+        RETURN loc_lRetorno
+    ENDPROC
+ENDDEFINE

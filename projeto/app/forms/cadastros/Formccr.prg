@@ -10,7 +10,10 @@
 DEFINE CLASS Formccr AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    *-- Height: legado 600 + 72. A faixa do cabecalho da pagina Dados (regra #11)
+    *-- empurra o bloco Codigo/Classe/Tipo +66 e o PageFrame das abas junto; o
+    *-- PageFrame nao encolhe (a aba Cadastro usa os 485px do legado; o VFP9 o mede 489) - Erro190
+    Height      = 672
     Width       = 1000
     Caption     = "Grupos de Contas"
     AutoCenter  = .T.
@@ -343,7 +346,7 @@ DEFINE CLASS Formccr AS FormBase
             .Top                = 117
             .Left               = 26
             .Width              = 945
-            .Height             = 460
+            .Height             = 532
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -515,16 +518,16 @@ DEFINE CLASS Formccr AS FormBase
         *-- Label + TextBox Digito
         loc_oPg2.AddObject("lbl_4c_LblDigito", "Label")
         WITH loc_oPg2.lbl_4c_LblDigito
-            .Caption   = "D" + CHR(237) + "g:"
+            .Caption   = "D" + CHR(237) + "gito :"
             .Top       = 113
             .Left      = 176
-            .Width     = 35
+            .Width     = 38
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0     && legado: say AutoSize/esquerda (regra #23)
             .Visible   = .T.
         ENDWITH
 
@@ -694,19 +697,20 @@ DEFINE CLASS Formccr AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Caption   = "Simples"
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Left      = 5
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Top       = 3
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Width     = 65
+        *-- Legendas/posicoes transcritas do SCX (Opt_TpCods) - Erro190
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Caption   = "Autom" + CHR(225) + "tica"
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Left      = 3
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Top       = 4
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Width     = 75
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).ForeColor = RGB(90, 90, 90)
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(1).Themes    = .F.
 
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Caption   = "Composto"
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Left      = 75
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Top       = 3
-        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Width     = 70
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Caption   = "Manual"
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Left      = 88
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Top       = 4
+        loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).Width     = 58
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpCods.Buttons(2).ForeColor = RGB(90, 90, 90)
@@ -715,16 +719,16 @@ DEFINE CLASS Formccr AS FormBase
         *-- Label + OptionGroup Incluir Empresa
         loc_oPg2.AddObject("lbl_4c_LblTpEmps", "Label")
         WITH loc_oPg2.lbl_4c_LblTpEmps
-            .Caption   = "Incluir Empresa:"
+            .Caption   = "Incluir Empresa no C" + CHR(243) + "digo :"
             .Top       = 163
             .Left      = 318
-            .Width     = 90
+            .Width     = 140
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0     && legado: say AutoSize/esquerda (regra #23)
             .Visible   = .T.
         ENDWITH
 
@@ -741,28 +745,29 @@ DEFINE CLASS Formccr AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Caption   = "N" + CHR(227) + "o"
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Left      = 5
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Top       = 3
+        *-- Legado (ControlSource tpemps): 1=Sim, 2=Nao, 3=Codigo do Grupo LED - Erro190
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Caption   = "Sim"
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Left      = 3
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Top       = 4
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Width     = 40
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).ForeColor = RGB(90, 90, 90)
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(1).Themes    = .F.
 
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Caption   = "Sim"
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Caption   = "N" + CHR(227) + "o"
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Left      = 50
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Top       = 3
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Top       = 4
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Width     = 40
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).ForeColor = RGB(90, 90, 90)
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(2).Themes    = .F.
 
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Caption   = "Obrigat" + CHR(243) + "rio"
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Left      = 95
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Top       = 3
-        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Width     = 85
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Caption   = "Codigo do Grupo LED"
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Left      = 101
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Top       = 4
+        loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).Width     = 119
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpEmps.Buttons(3).ForeColor = RGB(90, 90, 90)
@@ -797,8 +802,9 @@ DEFINE CLASS Formccr AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Caption   = "Pessoa F" + CHR(237) + "sica"
-        loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Left      = 5
+        *-- Legendas/posicoes transcritas do SCX (Opt_TpCads) - Erro190
+        loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Caption   = "Empresa"
+        loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Left      = 3
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Top       = 3
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Width     = 70
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).FontName  = "Tahoma"
@@ -806,10 +812,10 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).ForeColor = RGB(90, 90, 90)
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(1).Themes    = .F.
 
-        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Caption   = "Pessoa Jur" + CHR(237) + "dica"
-        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Left      = 80
+        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Caption   = "C/C"
+        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Left      = 88
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Top       = 3
-        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Width     = 70
+        loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).Width     = 50
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).FontName  = "Tahoma"
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).FontSize  = 8
         loc_oPg2.obj_4c_Opt_TpCads.Buttons(2).ForeColor = RGB(90, 90, 90)
@@ -819,6 +825,12 @@ DEFINE CLASS Formccr AS FormBase
         THIS.CriarPageFrameInterno(loc_oPg2)
 
         THIS.TornarControlesVisiveis(loc_oPg2)
+
+        *-- Regras de dependencia do legado (Erro190). InteractiveChange porque
+        *-- BINDEVENT em Valid nao dispara de forma confiavel (regra #35).
+        BINDEVENT(loc_oPg2.obj_4c_Opt_TpCods, "InteractiveChange", THIS, "TpCodsInteractiveChange")
+        BINDEVENT(loc_oPg2.pgf_4c_1.Page3.Opt_GBals, "InteractiveChange", THIS, "AplicarRegrasDependentes")
+        BINDEVENT(loc_oPg2.pgf_4c_1.Page1.obj_4c_Opt_Coletor, "InteractiveChange", THIS, "AplicarRegrasDependentes")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -829,11 +841,13 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg2.AddObject("pgf_4c_1", "PageFrame")
         loc_oPgf1 = par_oPg2.pgf_4c_1
 
+        *-- Legado: PageFrame1 Top=117 Height=485 (+29 da compensacao, +66 do
+        *-- deslocamento do bloco do topo sob a faixa do cabecalho) - Erro190
         WITH loc_oPgf1
-            .Top       = 146
+            .Top       = 212
             .Left      = 1
             .Width     = 998
-            .Height    = 454
+            .Height    = 485
             .Tabs      = .T.
             .PageCount = 4
             .Visible   = .T.
@@ -1699,28 +1713,31 @@ DEFINE CLASS Formccr AS FormBase
         BINDEVENT(par_oPg.txt_4c__molimc,   "DblClick",  THIS, "MoedaLimiteDblClick")
         BINDEVENT(par_oPg.txt_4c__molimc,   "KeyPress", THIS, "MoedaLimiteLostFocus")
 
-        *-- Grupo Padrao Contabil
+        *-- Label "Grupo Padrao :" (Say18) - eh a legenda do Opt_Coletor, nao do
+        *-- Get_grupo. O migrador tinha posto o Get_grupo (grupolms) aqui ao lado
+        *-- e inventado um label "Coletor:", tudo por cima do OptionGroup - Erro190
         par_oPg.AddObject("lbl_4c_LblGrupolms", "Label")
         WITH par_oPg.lbl_4c_LblGrupolms
-            .Caption = "Grupo Padr" + CHR(227) + "o:"
+            .Caption = "Grupo Padr" + CHR(227) + "o :"
             .Top = 19
             .Left = 678
-            .Width = 80
-            .Height = 17
+            .Width = 72
+            .Height = 15
             .FontName = "Tahoma"
             .FontSize = 8
             .ForeColor = RGB(90,90,90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0     && legado: say AutoSize/esquerda (regra #23)
             .Visible = .T.
         ENDWITH
 
+        *-- Get_grupo (crSigCdGcr.grupolms): 1o campo da linha Lim.Credito Grupo/Vr/Moeda
         par_oPg.AddObject("txt_4c_Grupo", "TextBox")
         WITH par_oPg.txt_4c_Grupo
             .Value = ""
-            .Top = 17
-            .Left = 760
-            .Width = 120
+            .Top = 196
+            .Left = 486
+            .Width = 97
             .Height = 23
             .MaxLength = 10
             .FontName = "Tahoma"
@@ -1735,22 +1752,9 @@ DEFINE CLASS Formccr AS FormBase
         BINDEVENT(par_oPg.txt_4c_Grupo, "KeyPress", THIS, "GrupoContabKeyPress")
         BINDEVENT(par_oPg.txt_4c_Grupo, "DblClick", THIS, "GrupoContabDblClick")
 
-        *-- Coletor (11 opcoes) - OptionGroup vertical
-        par_oPg.AddObject("lbl_4c_LblColetor", "Label")
-        WITH par_oPg.lbl_4c_LblColetor
-            .Caption = "Coletor:"
-            .Top = 8
-            .Left = 700
-            .Width = 50
-            .Height = 17
-            .FontName = "Tahoma"
-            .FontSize = 8
-            .ForeColor = RGB(90,90,90)
-            .BackStyle = 0
-            .Alignment = 1
-            .Visible = .T.
-        ENDWITH
-
+        *-- Opt_Coletor (crSigCdGcr.coletors) - Grupo Padrao, 11 opcoes verticais.
+        *-- Legendas/Tops transcritos do SCX; Value = coletors direto (1=Nenhum,
+        *-- 2=Cliente... - o When do optPreCad testa Value = 2) - Erro190
         par_oPg.AddObject("obj_4c_Opt_Coletor", "OptionGroup")
         loc_oOpt = par_oPg.obj_4c_Opt_Coletor
         WITH loc_oOpt
@@ -1765,7 +1769,7 @@ DEFINE CLASS Formccr AS FormBase
             .Visible = .T.
         ENDWITH
 
-        loc_oOpt.Buttons(1).Caption   = "N" + CHR(227) + "o"
+        loc_oOpt.Buttons(1).Caption   = "Nenhum"
         loc_oOpt.Buttons(1).Left      = 5
         loc_oOpt.Buttons(1).Top       = 5
         loc_oOpt.Buttons(1).Width     = 130
@@ -1774,7 +1778,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oOpt.Buttons(1).FontSize  = 8
         loc_oOpt.Buttons(1).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(1).Themes    = .F.
-        loc_oOpt.Buttons(2).Caption   = "Coletor 1"
+        loc_oOpt.Buttons(2).Caption   = "Cliente"
         loc_oOpt.Buttons(2).Left      = 5
         loc_oOpt.Buttons(2).Top       = 23
         loc_oOpt.Buttons(2).Width     = 130
@@ -1783,16 +1787,16 @@ DEFINE CLASS Formccr AS FormBase
         loc_oOpt.Buttons(2).FontSize  = 8
         loc_oOpt.Buttons(2).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(2).Themes    = .F.
-        loc_oOpt.Buttons(3).Caption   = "Coletor 2"
+        loc_oOpt.Buttons(3).Caption   = "Fornecedor"
         loc_oOpt.Buttons(3).Left      = 5
-        loc_oOpt.Buttons(3).Top       = 41
+        loc_oOpt.Buttons(3).Top       = 40
         loc_oOpt.Buttons(3).Width     = 130
         loc_oOpt.Buttons(3).AutoSize  = .F.
         loc_oOpt.Buttons(3).FontName  = "Tahoma"
         loc_oOpt.Buttons(3).FontSize  = 8
         loc_oOpt.Buttons(3).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(3).Themes    = .F.
-        loc_oOpt.Buttons(4).Caption   = "Coletor 3"
+        loc_oOpt.Buttons(4).Caption   = "Representante"
         loc_oOpt.Buttons(4).Left      = 5
         loc_oOpt.Buttons(4).Top       = 59
         loc_oOpt.Buttons(4).Width     = 130
@@ -1801,63 +1805,63 @@ DEFINE CLASS Formccr AS FormBase
         loc_oOpt.Buttons(4).FontSize  = 8
         loc_oOpt.Buttons(4).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(4).Themes    = .F.
-        loc_oOpt.Buttons(5).Caption   = "Coletor 4"
+        loc_oOpt.Buttons(5).Caption   = "Respons" + CHR(225) + "vel"
         loc_oOpt.Buttons(5).Left      = 5
-        loc_oOpt.Buttons(5).Top       = 77
+        loc_oOpt.Buttons(5).Top       = 78
         loc_oOpt.Buttons(5).Width     = 130
         loc_oOpt.Buttons(5).AutoSize  = .F.
         loc_oOpt.Buttons(5).FontName  = "Tahoma"
         loc_oOpt.Buttons(5).FontSize  = 8
         loc_oOpt.Buttons(5).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(5).Themes    = .F.
-        loc_oOpt.Buttons(6).Caption   = "Coletor 5"
+        loc_oOpt.Buttons(6).Caption   = "Mostru" + CHR(225) + "rio"
         loc_oOpt.Buttons(6).Left      = 5
-        loc_oOpt.Buttons(6).Top       = 95
+        loc_oOpt.Buttons(6).Top       = 97
         loc_oOpt.Buttons(6).Width     = 130
         loc_oOpt.Buttons(6).AutoSize  = .F.
         loc_oOpt.Buttons(6).FontName  = "Tahoma"
         loc_oOpt.Buttons(6).FontSize  = 8
         loc_oOpt.Buttons(6).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(6).Themes    = .F.
-        loc_oOpt.Buttons(7).Caption   = "Coletor 6"
+        loc_oOpt.Buttons(7).Caption   = "Entrega"
         loc_oOpt.Buttons(7).Left      = 5
-        loc_oOpt.Buttons(7).Top       = 113
+        loc_oOpt.Buttons(7).Top       = 116
         loc_oOpt.Buttons(7).Width     = 130
         loc_oOpt.Buttons(7).AutoSize  = .F.
         loc_oOpt.Buttons(7).FontName  = "Tahoma"
         loc_oOpt.Buttons(7).FontSize  = 8
         loc_oOpt.Buttons(7).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(7).Themes    = .F.
-        loc_oOpt.Buttons(8).Caption   = "Coletor 7"
+        loc_oOpt.Buttons(8).Caption   = "Atendimento"
         loc_oOpt.Buttons(8).Left      = 5
-        loc_oOpt.Buttons(8).Top       = 131
+        loc_oOpt.Buttons(8).Top       = 135
         loc_oOpt.Buttons(8).Width     = 130
         loc_oOpt.Buttons(8).AutoSize  = .F.
         loc_oOpt.Buttons(8).FontName  = "Tahoma"
         loc_oOpt.Buttons(8).FontSize  = 8
         loc_oOpt.Buttons(8).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(8).Themes    = .F.
-        loc_oOpt.Buttons(9).Caption   = "Coletor 8"
+        loc_oOpt.Buttons(9).Caption   = "Rateio"
         loc_oOpt.Buttons(9).Left      = 5
-        loc_oOpt.Buttons(9).Top       = 149
+        loc_oOpt.Buttons(9).Top       = 154
         loc_oOpt.Buttons(9).Width     = 130
         loc_oOpt.Buttons(9).AutoSize  = .F.
         loc_oOpt.Buttons(9).FontName  = "Tahoma"
         loc_oOpt.Buttons(9).FontSize  = 8
         loc_oOpt.Buttons(9).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(9).Themes    = .F.
-        loc_oOpt.Buttons(10).Caption   = "Coletor 9"
+        loc_oOpt.Buttons(10).Caption   = "Jobs"
         loc_oOpt.Buttons(10).Left      = 5
-        loc_oOpt.Buttons(10).Top       = 167
+        loc_oOpt.Buttons(10).Top       = 171
         loc_oOpt.Buttons(10).Width     = 130
         loc_oOpt.Buttons(10).AutoSize  = .F.
         loc_oOpt.Buttons(10).FontName  = "Tahoma"
         loc_oOpt.Buttons(10).FontSize  = 8
         loc_oOpt.Buttons(10).ForeColor = RGB(90, 90, 90)
         loc_oOpt.Buttons(10).Themes    = .F.
-        loc_oOpt.Buttons(11).Caption   = "Coletor 10"
+        loc_oOpt.Buttons(11).Caption   = "Bancos/Disponibilidades"
         loc_oOpt.Buttons(11).Left      = 5
-        loc_oOpt.Buttons(11).Top       = 185
+        loc_oOpt.Buttons(11).Top       = 190
         loc_oOpt.Buttons(11).Width     = 130
         loc_oOpt.Buttons(11).AutoSize  = .F.
         loc_oOpt.Buttons(11).FontName  = "Tahoma"
@@ -5396,13 +5400,17 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPg2.txt_4c_Interno.Value = ""
             loc_oPg2.txt_4c_Classes.Value = ""
             loc_oPg2.txt_4c_DClasses.Value = ""
-            loc_oPg2.obj_4c_Opt_TpCods.Value = 1
-            loc_oPg2.obj_4c_Opt_TpEmps.Value = 1
+            *-- Padroes do INSERIR: transcritos do "Replace ... In CrSigCdGcr" do
+            *-- Pagina.Lista.Grupo_op.Click legado (Erro190). TpCods=2 (Manual) e,
+            *-- como a codificacao nao eh Automatica, TpEmps fica 0.
+            loc_oPg2.obj_4c_Opt_TpCods.Value = 2
+            loc_oPg2.obj_4c_Opt_TpEmps.Value = 0
             loc_oPg2.obj_4c_Opt_TpCads.Value = 1
             THIS.LimparAbaGeral(loc_oPg2)
             THIS.LimparAbaCadastro(loc_oPg2)
             THIS.LimparAbaEstoque(loc_oPg2)
             THIS.LimparAbaFaturamento(loc_oPg2)
+            THIS.AplicarRegrasDependentes()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "LimparDados")
         ENDTRY
@@ -5416,24 +5424,27 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPgAba = par_oPg2.pgf_4c_1.Page1
 
         TRY
-            loc_oPgAba.obj_4c_Opt_Comple.Value    = 1
-            loc_oPgAba.obj_4c_Opt_Pessoais.Value  = 1
-            loc_oPgAba.obj_4c_Opt_RefBancs.Value  = 1
-            loc_oPgAba.obj_4c_Opt_FollowUp.Value  = 1
-            loc_oPgAba.obj_4c_Opt_Fiscais.Value   = 1
-            loc_oPgAba.obj_4c_Opt_Empresa.Value   = 1
-            loc_oPgAba.obj_4c_Opt_Contabs.Value   = 1
-            loc_oPgAba.obj_4c_Opt_Caracteris.Value = 1
+            *-- 2 = Nao (padroes do INSERIR legado - Erro190). InfCads/FichaTecs
+            *-- nao estao no Replace do legado: ficam como estavam.
+            loc_oPgAba.obj_4c_Opt_Comple.Value    = 2
+            loc_oPgAba.obj_4c_Opt_Pessoais.Value  = 2
+            loc_oPgAba.obj_4c_Opt_RefBancs.Value  = 2
+            loc_oPgAba.obj_4c_Opt_FollowUp.Value  = 2
+            loc_oPgAba.obj_4c_Opt_Fiscais.Value   = 2
+            loc_oPgAba.obj_4c_Opt_Empresa.Value   = 2
+            loc_oPgAba.obj_4c_Opt_Contabs.Value   = 2
+            loc_oPgAba.obj_4c_Opt_Caracteris.Value = 2
             loc_oPgAba.obj_4c_Fwoption1.Value     = 1
             loc_oPgAba.obj_4c_Fwoption2.Value     = 1
-            loc_oPgAba.obj_4c_Opt_DadosCom.Value  = 1
-            loc_oPgAba.obj_4c_Opt_Respos.Value    = 1
-            loc_oPgAba.obj_4c_Opt_LimCre.Value    = 1
-            loc_oPgAba.obj_4c_Opt_Comi.Value      = 1
-            loc_oPgAba.obj_4c_Opt_Cargo.Value     = 1
-            loc_oPgAba.obj_4c_Opt_ChkLimCr.Value  = 1
-            loc_oPgAba.obj_4c_OptPreCad.Value     = 1
-            loc_oPgAba.obj_4c_Opt_Coletor.Value   = 1
+            loc_oPgAba.obj_4c_Opt_DadosCom.Value  = 2
+            loc_oPgAba.obj_4c_Opt_Respos.Value    = 2
+            loc_oPgAba.obj_4c_Opt_LimCre.Value    = 2
+            loc_oPgAba.obj_4c_Opt_Comi.Value      = 2
+            loc_oPgAba.obj_4c_Opt_Cargo.Value     = 2
+            loc_oPgAba.obj_4c_Opt_ChkLimCr.Value  = 2
+            *-- LEAD: o legado nao preenche; a coluna precad tem DEFAULT 0 no banco
+            loc_oPgAba.obj_4c_OptPreCad.Value     = 0
+            loc_oPgAba.obj_4c_Opt_Coletor.Value   = 2    && Cliente
             loc_oPgAba.txt_4c_Vrlimc.Value = 0
             loc_oPgAba.txt_4c__molimc.Value = ""
             loc_oPgAba.txt_4c__cd_moeda.Value = ""
@@ -5453,9 +5464,11 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPgAba = par_oPg2.pgf_4c_1.Page2
 
         TRY
-            loc_oPgAba.Opt_CPFObrig.Value   = 1
-            loc_oPgAba.fwoption2.Value       = 1
-            loc_oPgAba.optCalcIMeds.Value    = 1
+            *-- Padroes do INSERIR legado (Erro190): CPFObrigs/rgobrigs/CalcIMeds/
+            *-- CEPObris/mfotos/IntConts = 2, Observas = 1
+            loc_oPgAba.Opt_CPFObrig.Value   = 2
+            loc_oPgAba.fwoption2.Value       = 2
+            loc_oPgAba.optCalcIMeds.Value    = 2
             loc_oPgAba.getObrMails.Value     = 1
             loc_oPgAba.getObrNome.Value      = 1
             loc_oPgAba.Fwoption15.Value      = 1
@@ -5472,12 +5485,12 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPgAba.Fwoption9.Value       = 1
             loc_oPgAba.Fwoption11.Value      = 1
             loc_oPgAba.Fwoption10.Value      = 1
-            loc_oPgAba.Opt_CEPObrig.Value    = 1
+            loc_oPgAba.Opt_CEPObrig.Value    = 2
             loc_oPgAba.getObrIbge.Value      = 1
             loc_oPgAba.Fwoption4.Value       = 1
             loc_oPgAba.Fwoption5.Value       = 1
             loc_oPgAba.Fwoption16.Value      = 1
-            loc_oPgAba.Opt_MFotos.Value      = 1
+            loc_oPgAba.Opt_MFotos.Value      = 2
             loc_oPgAba.fwoption1.Value       = 1
             loc_oPgAba.optCpffixo.Value      = 1
             loc_oPgAba.getSituas.Value       = ""
@@ -5485,7 +5498,7 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPgAba.optAceJob.Value       = 1
             loc_oPgAba.OptAlertaCad.Value    = 1
             loc_oPgAba.Getcontint.Value      = ""
-            loc_oPgAba.Opt_Integ.Value       = 1
+            loc_oPgAba.Opt_Integ.Value       = 2
             loc_oPgAba.Fwoption3.Value       = 1
             loc_oPgAba.optVincPgRcs.Value    = 1
             loc_oPgAba.OptTitBaixado.Value   = 1
@@ -5503,18 +5516,20 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPgAba = par_oPg2.pgf_4c_1.Page3
 
         TRY
-            loc_oPgAba.Opt_LimEsto.Value   = 1
+            *-- Padroes do INSERIR legado (Erro190): VerEsts/CalcSalds/tipoinvs = 1,
+            *-- demais = 2. GerBals = 2 esconde o bloco OS/Alianca/Fundicao.
+            loc_oPgAba.Opt_LimEsto.Value   = 2
             loc_oPgAba.Opt_VerEst.Value    = 1
-            loc_oPgAba.Opt_EstPAcab.Value  = 1
-            loc_oPgAba.opt_ChkLimest.Value = 1
-            loc_oPgAba.Opt_CCusto.Value    = 1
-            loc_oPgAba.Opt_GBals.Value     = 1
-            loc_oPgAba.Opt_UnifBal.Value   = 1
-            loc_oPgAba.Opt_FalPers.Value   = 1
-            loc_oPgAba.Opt_BlqDivOp.Value  = 1
+            loc_oPgAba.Opt_EstPAcab.Value  = 2
+            loc_oPgAba.opt_ChkLimest.Value = 2
+            loc_oPgAba.Opt_CCusto.Value    = 2
+            loc_oPgAba.Opt_GBals.Value     = 2
+            loc_oPgAba.Opt_UnifBal.Value   = 2
+            loc_oPgAba.Opt_FalPers.Value   = 2
+            loc_oPgAba.Opt_BlqDivOp.Value  = 2
             loc_oPgAba.Opt_Saldo.Value     = 1
-            loc_oPgAba.Opt_Relevante.Value = 1
-            loc_oPgAba.Opt_BlqConGV.Value  = 1
+            loc_oPgAba.Opt_Relevante.Value = 2
+            loc_oPgAba.Opt_BlqConGV.Value  = 2
             loc_oPgAba.Opt_Patrim.Value    = 1
             loc_oPgAba.OpTipoInvs.Value    = 1
             loc_oPgAba.Chk_TrfPeso.Value   = 1
@@ -5626,7 +5641,8 @@ DEFINE CLASS Formccr AS FormBase
 
             *-- Tipos (1-based index = valor numerico + 1)
             loc_oPg2.obj_4c_Opt_TpCods.Value = IIF(loc_oBO.this_nTpcods = 0, 1, loc_oBO.this_nTpcods)
-            loc_oPg2.obj_4c_Opt_TpEmps.Value = IIF(loc_oBO.this_nTpemps = 0, 1, loc_oBO.this_nTpemps)
+            *-- Legado: .Opt_TpEmps.Value = Iif(TpCods <> 1, 0, TpEmps) - Erro190
+            loc_oPg2.obj_4c_Opt_TpEmps.Value = IIF(loc_oPg2.obj_4c_Opt_TpCods.Value <> 1, 0, loc_oBO.this_nTpemps)
             loc_oPg2.obj_4c_Opt_TpCads.Value = IIF(loc_oBO.this_nTpcads = 0, 1, loc_oBO.this_nTpcads)
 
             *-- Aba Geral
@@ -5640,15 +5656,19 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPgAba.obj_4c_Opt_Contabs.Value   = IIF(loc_oBO.this_nContabs = 0, 1, loc_oBO.this_nContabs)
             loc_oPgAba.obj_4c_Opt_Caracteris.Value = IIF(loc_oBO.this_nCaracteris = 0, 1, loc_oBO.this_nCaracteris)
             loc_oPgAba.obj_4c_Fwoption1.Value     = IIF(loc_oBO.this_nInfcads = 0, 1, loc_oBO.this_nInfcads)
-            loc_oPgAba.obj_4c_Fwoption2.Value     = IIF(loc_oBO.this_nDadcoms = 0, 1, loc_oBO.this_nDadcoms)
+            *-- "Perfil :" = Geral.fwoption2, ControlSource FichaTecs (lia Dadcoms) - Erro190
+            loc_oPgAba.obj_4c_Fwoption2.Value     = IIF(loc_oBO.this_nFichatecs = 0, 1, loc_oBO.this_nFichatecs)
             loc_oPgAba.obj_4c_Opt_DadosCom.Value  = IIF(loc_oBO.this_nDadcoms = 0, 1, loc_oBO.this_nDadcoms)
             loc_oPgAba.obj_4c_Opt_Respos.Value    = IIF(loc_oBO.this_nRespos = 0, 1, loc_oBO.this_nRespos)
             loc_oPgAba.obj_4c_Opt_LimCre.Value    = IIF(loc_oBO.this_nLimcres = 0, 1, loc_oBO.this_nLimcres)
             loc_oPgAba.obj_4c_Opt_Comi.Value      = IIF(loc_oBO.this_nComis = 0, 1, loc_oBO.this_nComis)
             loc_oPgAba.obj_4c_Opt_Cargo.Value     = IIF(loc_oBO.this_nCargos = 0, 1, loc_oBO.this_nCargos)
             loc_oPgAba.obj_4c_Opt_ChkLimCr.Value  = IIF(loc_oBO.this_nChklimcrds = 0, 1, loc_oBO.this_nChklimcrds)
-            loc_oPgAba.obj_4c_OptPreCad.Value     = IIF(loc_oBO.this_nPrecad = 0, 1, loc_oBO.this_nPrecad)
-            loc_oPgAba.obj_4c_Opt_Coletor.Value   = IIF(loc_oBO.this_nColetors = 0, 1, loc_oBO.this_nColetors + 1)
+            *-- LEAD direto: 0 (DEFAULT do banco, 43 de 44 grupos) = nada marcado.
+            *-- Promover 0 a 1 exibia "Sim" e regravava todo grupo como LEAD - Erro190
+            loc_oPgAba.obj_4c_OptPreCad.Value     = loc_oBO.this_nPrecad
+            *-- Legado: ControlSource = crSigCdGcr.coletors direto (sem +1) - Erro190
+            loc_oPgAba.obj_4c_Opt_Coletor.Value   = IIF(loc_oBO.this_nColetors = 0, 1, loc_oBO.this_nColetors)
             loc_oPgAba.txt_4c_Vrlimc.Value        = loc_oBO.this_nVrlimcre
             loc_oPgAba.txt_4c__molimc.Value       = ALLTRIM(loc_oBO.this_cMolimcre)
             loc_oPgAba.txt_4c__cd_moeda.Value     = ALLTRIM(loc_oBO.this_cCommoedas)
@@ -5727,9 +5747,12 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPgAba.Fwoption13.Value    = IIF(loc_oBO.this_nTel2obr = 0, 1, loc_oBO.this_nTel2obr)
             loc_oPgAba.Fwoption6.Value     = IIF(loc_oBO.this_nNascobr = 0, 1, loc_oBO.this_nNascobr)
             loc_oPgAba.Fwoption7.Value     = IIF(loc_oBO.this_nSexobr = 0, 1, loc_oBO.this_nSexobr)
+            *-- Fwoption15 (RazObr): coluna nao existe em SigCdGcr no banco nem no
+            *-- schema - o legado eh mais novo que o banco; fica so visual (Erro190)
             loc_oPgAba.Fwoption15.Value    = 1
             loc_oPgAba.Fwoption16.Value    = IIF(loc_oBO.this_nChkendds = 0, 1, loc_oBO.this_nChkendds)
-            loc_oPgAba.fwoption2.Value     = 1
+            *-- Cadastro.fwoption2 = rgobrigs (estava fixo em 1 e nunca era gravado) - Erro190
+            loc_oPgAba.fwoption2.Value     = IIF(loc_oBO.this_nRgobrigs = 0, 1, loc_oBO.this_nRgobrigs)
             loc_oPgAba.OptAlertaCad.Value  = IIF(loc_oBO.this_nDefhideshow = 0, 1, loc_oBO.this_nDefhideshow)
             loc_oPgAba.getMsgAlertaC.Value = ""
             loc_oPgAba.Getcontint.Value    = ALLTRIM(loc_oBO.this_cContconts)
@@ -5771,6 +5794,8 @@ DEFINE CLASS Formccr AS FormBase
             loc_oPgAba.cnt_4c_OsAlfun.chk_Os.Value       = IIF(SUBSTR(loc_oBO.this_cOsalfuns, 1, 1) = "1", 1, 0)
             loc_oPgAba.cnt_4c_OsAlfun.chk_Alianca.Value  = IIF(SUBSTR(loc_oBO.this_cOsalfuns, 2, 1) = "1", 1, 0)
             loc_oPgAba.cnt_4c_OsAlfun.chk_Fundicao.Value = IIF(SUBSTR(loc_oBO.this_cOsalfuns, 3, 1) = "1", 1, 0)
+
+            THIS.AplicarRegrasDependentes()
 
             *-- Aba Faturamento: desempacotar cfgfisXXX
             loc_oPgAba = loc_oPg2.pgf_4c_1.Page4
@@ -5872,14 +5897,15 @@ DEFINE CLASS Formccr AS FormBase
             loc_oBO.this_nContabs     = NVL(loc_oPgAba.obj_4c_Opt_Contabs.Value, 1)
             loc_oBO.this_nCaracteris  = NVL(loc_oPgAba.obj_4c_Opt_Caracteris.Value, 1)
             loc_oBO.this_nInfcads     = NVL(loc_oPgAba.obj_4c_Fwoption1.Value, 1)
+            loc_oBO.this_nFichatecs   = NVL(loc_oPgAba.obj_4c_Fwoption2.Value, 1)    && Erro190: Perfil
             loc_oBO.this_nDadcoms     = NVL(loc_oPgAba.obj_4c_Opt_DadosCom.Value, 1)
             loc_oBO.this_nRespos      = NVL(loc_oPgAba.obj_4c_Opt_Respos.Value, 1)
             loc_oBO.this_nLimcres     = NVL(loc_oPgAba.obj_4c_Opt_LimCre.Value, 1)
             loc_oBO.this_nComis       = NVL(loc_oPgAba.obj_4c_Opt_Comi.Value, 1)
             loc_oBO.this_nCargos      = NVL(loc_oPgAba.obj_4c_Opt_Cargo.Value, 1)
             loc_oBO.this_nChklimcrds  = NVL(loc_oPgAba.obj_4c_Opt_ChkLimCr.Value, 1)
-            loc_oBO.this_nPrecad      = NVL(loc_oPgAba.obj_4c_OptPreCad.Value, 1)
-            loc_oBO.this_nColetors    = NVL(loc_oPgAba.obj_4c_Opt_Coletor.Value, 1) - 1
+            loc_oBO.this_nPrecad      = NVL(loc_oPgAba.obj_4c_OptPreCad.Value, 0)
+            loc_oBO.this_nColetors    = NVL(loc_oPgAba.obj_4c_Opt_Coletor.Value, 1)    && Erro190: sem -1
             loc_oBO.this_nVrlimcre    = NVL(loc_oPgAba.txt_4c_Vrlimc.Value, 0)
             loc_oBO.this_cMolimcre    = ALLTRIM(NVL(loc_oPgAba.txt_4c__molimc.Value, ""))
             loc_oBO.this_cCommoedas   = ALLTRIM(NVL(loc_oPgAba.txt_4c__cd_moeda.Value, ""))
@@ -5905,6 +5931,7 @@ DEFINE CLASS Formccr AS FormBase
 
             *-- Outros campos aba Cadastro
             loc_oBO.this_nCpfobrigs   = NVL(loc_oPgAba.Opt_CPFObrig.Value, 1)
+            loc_oBO.this_nRgobrigs    = NVL(loc_oPgAba.fwoption2.Value, 1)    && Erro190: RG/IE
             loc_oBO.this_nCalcimeds   = NVL(loc_oPgAba.optCalcIMeds.Value, 1)
             loc_oBO.this_nChkendds    = NVL(loc_oPgAba.Fwoption4.Value, 1)
             loc_oBO.this_nChkendrs    = NVL(loc_oPgAba.Fwoption5.Value, 1)
@@ -6814,6 +6841,52 @@ DEFINE CLASS Formccr AS FormBase
             IF USED("cursor_4c_BuscaCntFat")
                 USE IN cursor_4c_BuscaCntFat
             ENDIF
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TpCodsInteractiveChange - Opt_TpCods.InteractiveChange do legado: trocar a
+    * codificacao zera/repoe o "Incluir Empresa" (Sim so na Automatica)
+    *--------------------------------------------------------------------------
+    PROCEDURE TpCodsInteractiveChange()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        TRY
+            loc_oPg2.obj_4c_Opt_TpEmps.Value = IIF(loc_oPg2.obj_4c_Opt_TpCods.Value = 1, 1, 0)
+            THIS.AplicarRegrasDependentes()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "TpCodsInteractiveChange")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarRegrasDependentes - visibilidade/habilitacao que o legado amarra a
+    * outros campos (Grupo_op.Click + Opt_TpCods.InteractiveChange +
+    * Opt_GBals.Valid + optPreCad.When). Chamado no Incluir, no carregar e nos
+    * cliques - PUBLIC por causa do BINDEVENT (regra #3).
+    *--------------------------------------------------------------------------
+    PROCEDURE AplicarRegrasDependentes()
+        LOCAL loc_oPg2, loc_lAuto, loc_lEdicao
+        loc_oPg2    = THIS.pgf_4c_Paginas.Page2
+        loc_lEdicao = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+        TRY
+            *-- Codificacao Automatica (1): mostra Digito e "Incluir Empresa no Codigo"
+            loc_lAuto = (loc_oPg2.obj_4c_Opt_TpCods.Value = 1)
+            loc_oPg2.lbl_4c_LblTpEmps.Visible  = loc_lAuto
+            loc_oPg2.obj_4c_Opt_TpEmps.Visible = loc_lAuto
+            loc_oPg2.obj_4c_Opt_TpEmps.Enabled = loc_lAuto
+            loc_oPg2.lbl_4c_LblDigito.Visible  = loc_lAuto
+            loc_oPg2.txt_4c_Digito.Visible     = loc_lAuto
+            loc_oPg2.txt_4c_Digito.Enabled     = loc_lAuto
+
+            *-- Gera Balanco = Sim (1): mostra OS / Alianca / Fundicao
+            loc_oPg2.pgf_4c_1.Page3.cnt_4c_OsAlfun.Visible = (loc_oPg2.pgf_4c_1.Page3.Opt_GBals.Value = 1)
+
+            *-- LEAD so editavel quando o Grupo Padrao eh Cliente (Coletor = 2)
+            loc_oPg2.pgf_4c_1.Page1.obj_4c_OptPreCad.Enabled = loc_lEdicao AND ;
+                (loc_oPg2.pgf_4c_1.Page1.obj_4c_Opt_Coletor.Value = 2)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "AplicarRegrasDependentes")
         ENDTRY
     ENDPROC
 

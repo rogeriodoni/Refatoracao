@@ -349,6 +349,8 @@ Origem: Erro158 — o defeito estava em **249 sites de 107 forms** e foi corrigi
 
 Sem auto-fix. Origem: Erro158.
 
+**Reincidiu no Erro192 (FormSIGPRLNC) com um agravante**: Visualizar/Alterar populam o cursor com a pagina Dados OCULTA e so depois trocam o `ActivePage` - e `Refresh` em pagina oculta nao pinta. O metodo unico tem de rodar tambem no `AlternarPagina(2)`, DEPOIS do `ActivePage`. Instanciar e ler o cursor NAO pega (o cursor esta certo): so pega exibindo o form e executando o fluxo com ele visivel. Ver regra #46.
+
 ### 22. INSERT do BO tem de cobrir TODA coluna NOT NULL - a lista vem do SCHEMA, nunca do legado
 O legado grava o registro INTEIRO (`AddCursor` sem query = `SELECT *` + `TABLEUPDATE`), entao coluna que nao aparece na tela continua sendo gravada em branco. O BO migrado lista so as colunas da tela; se alguma das ausentes for `NOT NULL` sem `DEFAULT`, o SQL Server recusa o INSERT inteiro e **o cadastro nao inclui nada**.
 
@@ -928,6 +930,7 @@ O sweep de 2026-10-06 rodou o Corretor nos 972 arquivos e **desfez consertos man
 | #54 | qualquer `WITH cnt_X`, inclusive em metodo de RUNTIME | `LimparCampos` reabria paineis fechados (FormSigPrGlp) |
 | AUTO-182 | `WITH THIS.cmd_X` (botao direto no form) | Excluir foi parar em cima do Inserir (FormSigPrCar) |
 | #87 | "Width >= botoes+10" sem saber o legado | sobrescreveu larguras transcritas do SCX |
+| #58 GridRecordMark | PRIMEIRO `ENDWITH` apos o WITH do grid (o de uma `WITH .Column1` aninhada) | `.RecordMark` dentro da coluna abortou o `ConfigurarPaginaDados` do FormLpr: metade da pagina Dados nunca era criada (Erro191-FormLpr, 2026-10-07; 2a vez - Erro17 foi o ENDWITH de CommandButton) |
 
 E dois patterns **brigavam entre si** (#107 punha `BackStyle = 1`, ContainerTransparente voltava a `0`) — o par se anulava e escondia o defeito.
 
@@ -941,6 +944,29 @@ E dois patterns **brigavam entre si** (#107 punha `BackStyle = 1`, ContainerTran
 **Ao auditar sweep**: `git diff --ignore-cr-at-eol` (o Corretor regrava tudo com CRLF — `git status` lista centenas de `.prg` sem mudanca real) e classificar CADA hunk: legitimo / regressao. `.bak` sao rastreados pelo git — o sweep os regrava.
 
 Origem: sweep do Erro501 (2026-10-06). Regressoes revertidas: FormSigPrGlp (`Visible` x4), FormSigPrCar (`Left`). Skill: secao **238**.
+
+### 45. OptionGroup: legenda, ordem e coluna vem do DUMP; pagina sob a faixa desce em BLOCO
+Tres defeitos irmaos no `Formccr` (Erro190), todos compilando limpo:
+
+1. **Faixa do cabecalho (regra #11) desloca o BLOCO inteiro**: os campos do topo desceram +66 e o PageFrame das abas ficou no Top do SCX - as abas cobriram Codigo/Classe/Tipo. O PageFrame desce os mesmos +N e mantem a Height do SCX; o resto vira `Form.Height`. Conferir instanciando: nenhum filho direto da pagina com `Top + Height > PageFrame.Top`.
+2. **OptionGroup com ControlSource direto: a ORDEM do botao EH o valor gravado.** Transcrever `OptionN.Caption/Left/Top` do dump. Legenda inventada ou Sim/Nao trocados gravam o oposto do que o usuario marcou. Mapeamento `Value = coluna` DIRETO, na coluna do `ControlSource` - sem `+1`/`-1` (coletors), sem ler a coluna de outro controle (Perfil lia `Dadcoms`, era `FichaTecs`), sem controle fixo em 1 fora do `FormParaBO` (`rgobrigs`). `IIF(col = 0, 1, col)` em coluna com `DEFAULT 0` exibe "Sim" e REGRAVA Sim.
+3. **Padroes do INCLUIR vem do `Replace ... In <cursor>` do legado** (`Grupo_op.Click`, `Case 'INSERIR'`), nao de "1 em tudo". Regras de dependencia (`InteractiveChange`/`Valid`/`When` que escondem/habilitam) num metodo PUBLIC unico, chamado no fim do `LimparDados`, do `BOParaForm` e por `BINDEVENT InteractiveChange`.
+
+**Prova barata do mapeamento**: `SELECT DISTINCT <col>` no banco (so leitura). `coletors` = {1,2,3,11} provou que o `-1` estava errado - nunca gravaria 11. Coluna com valores so 1..N e migrado subtraindo 1 = suspeito forte. **ControlSource do legado pode citar coluna que o banco NAO tem** (`LeadCad`, `RazObr`: dump mais novo que o banco) - conferir `INFORMATION_SCHEMA` antes de "corrigir" o BO.
+
+Sem auto-fix (legenda/ordem/coluna dependem do dump; o deslocamento depende do layout). Suspeitos ainda abertos (2026-10-07, `-1` em coluna 1-based): `FormMda` (`SigCdFs.Tpdescs` = {1,2}), `Formpag` (`SigOpFp.Valpends`/`Bxcomis` = {1,2}, `Emichqs`/`Impbols`/`Trocos` = {2}). Skill: secao **239**. Origem: Erro190.
+
+### 46. Celula de grade valida no `Valid` do TextBox da coluna - NUNCA em `AfterRowColChange`
+`AfterRowColChange` dispara DEPOIS de entrar na celula nova e o `nColIndex` eh a coluna de **DESTINO**. Com `IF par_nColIndex != 1 / RETURN`, sair da coluna 1 entrega 2 e o lookup **nunca roda**; quando roda, valida a linha para onde o usuario foi. Sintoma: digita o codigo e nada abre (*"a grid nao habilita para escolher"*). Compila limpo.
+
+Fazer como o legado (`Valid` do TextBox da coluna): TextBox subclasse com `When`/`Valid` embutidos, posto com `Column.AddObject` + `CurrentControl` + `Sparse = .F.` (regra #18), delegando a metodo PUBLIC do form (BINDEVENT em `Valid` de TextBox de Column nao eh confiavel - `TextBoxGridLookup.prg`). Duas armadilhas:
+
+1. Dentro do `Valid` o valor digitado esta em `par_oTxt.Value` - o cursor so recebe DEPOIS. Ler do cursor valida o valor antigo.
+2. O codigo escolhido tem de voltar para `par_oTxt.Value` alem do `REPLACE`, senao o texto digitado sobrescreve o cursor.
+
+E `Grid.ReadOnly = .F.` propaga: a coluna que o legado trava (`When = .F.`) volta a `ReadOnly = .T.` DEPOIS dele.
+
+`AfterRowColChange` SEM filtro de coluna (carregar detalhe da linha corrente) eh o uso certo - 11 dos 12 handlers do projeto que fazem SQL nele. WARNING: CorretorAutomatico **#214**. `FormLpr.GradeAfterRowColChange` tinha o mesmo defeito - corrigido (Erro191-FormLpr, 2026-10-07: celulas Codigo/Descricao da grade de Venda com `TextBoxProdutoLpr_4c`, reinstaladas no `VincularGrade` porque ele refaz `ColumnCount`). Skill: secao **240**. Origem: Erro191 (FormSIGPRLNC); na mesma grade, Erro192 = regra #21.
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

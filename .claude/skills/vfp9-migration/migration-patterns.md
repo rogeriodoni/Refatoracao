@@ -13569,3 +13569,153 @@ reaproveitado) e `Get-AlvoDoWith` (ultimo segmento do WITH; vazio para variavel/
 Resultado do 2o sweep: 12 arquivos alterados, 10 legitimos (BackStyle 1->0 canonico, `_EMPR`, ShowWindow,
 "Encerrar", Themes #99, metodos de BO REPORT) e 2 regressoes revertidas (#54 no FormSigPrGlp, AUTO-182 no
 FormSigPrCar) - que motivaram as duas ultimas linhas da tabela. Ver CLAUDE.md regra **#44**.
+
+## 239. Pagina Dados com faixa do cabecalho: PageFrame interno desce JUNTO; OptionGroup tem legenda, ordem e mapeamento do legado (Erro190 2026-10-07)
+
+Formccr ("Grupos de Contas", SIGCDCCR / task359). Tela abria com as abas por cima de Codigo/Classe/Tipo e com
+legendas que nao existem no legado. Seis defeitos da mesma familia - o migrador olhou o desenho e nao o dump.
+
+**(a) Faixa do cabecalho (regra #11) deslocou o bloco do topo e esqueceu o PageFrame.** Os campos do topo
+desceram +66 (legado 14..114 -> 109..209 na Page2) para caber sob a faixa; o `pgf_4c_1` ficou no Top 146
+(117 + 29). Mover tudo em BLOCO; o PageFrame mantem a Height do SCX (485 - a aba Cadastro vai ate 458) e o
+que nao cabe vira `Form.Height` (600 -> 672) + grade da Lista (460 -> 532).
+
+```foxpro
+* ERRADO                         * CERTO
+.Top    = 146                     .Top    = 212     && 117 + 29 + 66 (mesmo deslocamento do bloco)
+.Height = 454                     .Height = 485     && legado; Form.Height cresce
+```
+
+Conferencia barata (instanciando): nenhum filho direto da Page2 com `Top + Height > pgf.Top`, e
+`pgf.PageHeight >= maior Top+Height` de cada aba. O VFP9 mede o PageFrame com +4 (485 -> 489).
+
+**(b) OptionGroup com legendas inventadas e botoes reordenados.** `Simples/Composto` (legado
+`Automatica/Manual`), `Pessoa Fisica/Juridica` (`Empresa / C/C`), `Nao/Sim/Obrigatorio`
+(`Sim/Nao/Codigo do Grupo LED` - Sim e Nao TROCADOS), `Nao/Coletor 1..10` (`Nenhum/Cliente/Fornecedor/
+Representante/Responsavel/Mostruario/Entrega/Atendimento/Rateio/Jobs/Bancos/Disponibilidades`). Com
+ControlSource direto, a ordem do botao EH o valor gravado: trocar a ordem grava o oposto. Transcrever
+`OptionN.Caption/Left/Top` do dump. Um label "Coletor:" inventado e o TextBox `grupolms` posto ao lado
+de "Grupo Padrao :" completavam a sobreposicao - "Grupo Padrao :" (Say18) eh a legenda do Opt_Coletor.
+
+**(c) Mapeamento valor x coluna inventado.**
+
+| controle | migrado | legado (ControlSource) |
+|---|---|---|
+| Opt_Coletor | `coletors + 1` / `Value - 1` | `coletors` direto (1 = Nenhum, 2 = Cliente, 11 = Bancos) |
+| Geral.fwoption2 "Perfil" | lia `Dadcoms`, nunca gravava | `FichaTecs` |
+| Cadastro.fwoption2 "RG/IE" | fixo em 1, nunca gravado | `rgobrigs` |
+| optPreCad "LEAD" | `IIF(precad = 0, 1, precad)` -> exibia Sim | `precad` direto; coluna com `DEFAULT 0`, 43 de 44 grupos com 0 |
+
+Prova no banco (so leitura): `coletors` tem 1, 2, 3 e **11** - o `-1` nunca gravaria 11. Registros salvos
+pela tela migrada antes do conserto podem estar deslocados.
+
+**(d) ControlSource do legado pode citar coluna que o banco NAO tem.** `LeadCad` e `RazObr` nao existem em
+SigCdGcr (nem no schema nem no `INFORMATION_SCHEMA`): o dump eh de versao mais nova do legado. Nao
+"corrigir" o BO para a grafia do legado (quebraria o UPDATE) - o BO ja usa `precad`; `RazObr` fica so visual,
+com comentario.
+
+**(e) Padroes do INCLUIR.** O migrado punha 1 em todo OptionGroup ("Sim" em tudo). O legado define no
+`Pagina.Lista.Grupo_op.Click`:
+
+```foxpro
+If ThisForm.pcEscolha = 'INSERIR'
+    Replace TpCods With 2, TpCads With 1, Complems With 2, ..., VerEsts With 1, CalcSalds With 1, ;
+            Observas With 1, tipoinvs With 1, ... In CrSigCdGcr
+```
+
+Transcrever coluna a coluna para `LimparDados`/`LimparAba*`; mapear coluna -> controle pelo `FormParaBO`.
+
+**(f) Regras de dependencia num metodo so.** `Opt_TpCods.InteractiveChange` (esconde Digito e "Incluir
+Empresa", zera TpEmps), `Opt_GBals.Valid` (esconde OS/Alianca/Fundicao), `optPreCad.When` (so com
+Coletor = 2) e o bloco equivalente do `Grupo_op.Click` viraram `AplicarRegrasDependentes()` PUBLIC, chamado
+no fim do `LimparDados`, no fim do `BOParaForm` e por `BINDEVENT(..., "InteractiveChange", ...)`.
+
+**Harness**: `BOParaForm`/`FormParaBO` sao PROTECTED no FormBase - a subclasse herda a visibilidade mesmo
+declarando `PROCEDURE` sem modificador; expor por subclasse de teste. VFP9 interativo aberto segura o
+`.fxp` do form e faz o `COMPILE` do harness travar: compilar uma COPIA no scratch.
+
+Sem auto-fix: legenda, ordem e coluna vem do dump, e "o PageFrame acompanhou o bloco?" depende do layout.
+
+**Suspeitos abertos** (2026-10-07, `-1` no FormParaBO contra coluna que no banco so tem 1..N - mesmo defeito do coletors,
+nao corrigidos por falta de conferencia no dump): `FormMda` `SigCdFs.Tpdescs` = {1,2}; `Formpag` `SigOpFp.Valpends`/`Bxcomis` = {1,2},
+`Emichqs`/`Impbols`/`Trocos` = {2}. Colunas so com 0 no banco nao decidem nada. Consulta: `SELECT DISTINCT <col> FROM <tabela>`.
+
+## 240. Celula de grade: validar no Valid do TextBox da coluna, nunca em AfterRowColChange; e repintar a grade DEPOIS de exibir a pagina (Erro191/Erro192 2026-10-07)
+
+FormSIGPRLNC ("Cadastro de Lancamentos", SigClLan / task309). Dois defeitos na mesma grade de ocorrencias,
+reportados em sequencia: (1) digitar a ocorrencia e nada abrir; (2) gravar e, ao reabrir, a grade vir vazia.
+
+### (a) Erro191 - lookup de celula ligado ao AfterRowColChange
+
+```foxpro
+* ERRADO (como saiu da migracao)
+BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GradeAfterRowColChange")
+PROCEDURE GradeAfterRowColChange
+    LPARAMETERS par_nColIndex
+    IF par_nColIndex != 1      && nColIndex eh a coluna de DESTINO
+        RETURN                 && ao SAIR da coluna 1 chega 2 -> nunca valida
+    ENDIF
+    loc_cCocos = cursor_4c_OcoLocal.Cocos   && e le a linha de DESTINO
+```
+
+`AfterRowColChange` dispara DEPOIS de entrar na celula nova e recebe a coluna **para onde** o usuario foi
+(ajuda do VFP). O legado valida no `Valid` do TextBox da coluna (`Gradeoco.Column2.Text1.Valid`, que eh a
+1a coluna exibida por `ColumnOrder = 1`): se o valor mudou e nao esta vazio, `fwBuscaExt` com busca exata,
+picker se nao achou, ESC limpa, duplicidade avisa/limpa e `Return 0` (fica na celula).
+
+```foxpro
+* CERTO - TextBox com o evento embutido (BINDEVENT em Valid de TextBox de Column nao eh confiavel)
+loc_oGrid.Column1.AddObject("txt_4c_Ocorrencia", "TextBoxOcorrencia_4c")
+loc_oGrid.Column1.CurrentControl = "txt_4c_Ocorrencia"   && regra #18
+loc_oGrid.Column1.Sparse         = .F.
+
+DEFINE CLASS TextBoxOcorrencia_4c AS TextBox
+    this_cValorAnterior = ""
+    PROCEDURE When()
+        THIS.this_cValorAnterior = NVL(THIS.Value, "")      && legado: ThisForm.CodAnt
+    ENDPROC
+    PROCEDURE Valid()
+        RETURN THISFORM.ValidarOcorrenciaGrade(THIS)         && metodo PUBLIC
+    ENDPROC
+ENDDEFINE
+```
+
+Duas armadilhas ao mover para o Valid:
+- **O valor digitado esta em `par_oTxt.Value`**: o TextBox so grava no `ControlSource` DEPOIS do Valid. Ler do
+  cursor valida o valor ANTIGO.
+- **Devolver o codigo escolhido para `par_oTxt.Value`** alem do `REPLACE`: senao o texto digitado ("a")
+  sobrescreve o cursor logo depois do Valid.
+
+E o `Grid.ReadOnly = .F.` do `HabilitarCampos` propaga para as colunas: a coluna nao digitavel do legado
+(Descricao, `When = .F.`) tem de voltar a `ReadOnly = .T.` DEPOIS dele.
+
+`AfterRowColChange` continua certo para mestre-detalhe (carregar o detalhe da linha corrente) - dos 12
+handlers do projeto que fazem SQL/picker nele, 11 sao isso. So o filtro por coluna denuncia o defeito.
+WARNING: CorretorAutomatico **#214**. `FormLpr.GradeAfterRowColChange` tinha o mesmo formato (o comentario descrevia `par_nColIndex` como "coluna origem") e foi corrigido: celulas Codigo/Descricao da grade de Venda com TextBox proprio, REINSTALADO no `VincularGrade` (que refaz `ColumnCount`/`RecordSource` e pode recriar as colunas); na grade de Compra as duas colunas ficaram `ReadOnly` (legado: `When = .F.`). No caminho apareceu um `.RecordMark = .F.` dentro de `WITH .Column1` - Column nao tem RecordMark (regra #33) e o erro abortava o `ConfigurarPaginaDados` ali: botoes Inserir/Excluir/Copiar, OptionGroups e TODOS os BINDEVENTs da pagina nunca eram criados.
+
+### (b) Erro192 - cursor cheio, grade vazia (reincidencia da regra #21)
+
+O testador gravou, reabriu e viu a grade vazia - "nao sei se foi gravado". **Estava gravado** (conferido em
+`SigClLan`) e o cursor da grade tinha a linha (RECCOUNT 1, RECNO 1). Visualizar/Alterar fazem ZAP + APPEND no
+cursor com a Page2 ainda OCULTA e so depois trocam o `ActivePage`; sem `Refresh` a grade nao repinta.
+Reproduzido no VFP9 com o form visivel (fluxo Incluir -> Cancelar -> Visualizar) e captura de tela.
+
+```foxpro
+PROTECTED PROCEDURE AtualizarGradeOcorrencias()
+    IF USED("cursor_4c_OcoLocal")
+        GO TOP IN cursor_4c_OcoLocal
+    ENDIF
+    THIS.pgf_4c_Paginas.Page2.grd_4c_Ocorrencias.Refresh()
+ENDPROC
+* chamado: fim do CarregarPaginaDados, fim do LimparCampos (apos ZAP)
+* e no AlternarPagina(2) DEPOIS do ActivePage - Refresh em pagina oculta nao pinta
+```
+
+**Harness que pega**: instanciar e inspecionar o cursor NAO pega - o cursor esta certo. So pega exibindo
+o form (subclasse com `WindowType = 0`), executando o fluxo com ele VISIVEL e capturando a tela
+(handshake por arquivo-flag entre o VFP e o PowerShell). Com `Show()` DEPOIS da carga a grade pinta e o
+defeito some - por isso a ordem do teste importa.
+
+**Diagnostico do dado**: antes de mexer no codigo, consultar a tabela (so leitura) - aqui a gravacao estava
+certa e o problema era so de exibicao. No Erro191 a mesma consulta revelou `SigCcCco` vazia no banco: o
+lookup de ocorrencia nao tinha o que mostrar, nem no legado (cadastrar pelo `FormOCO`).

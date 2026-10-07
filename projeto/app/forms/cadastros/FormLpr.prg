@@ -1186,12 +1186,15 @@ DEFINE CLASS FormLpr AS FormBase
                 .ReadOnly     = .F.
                 .GridLines    = 1
                 .DeleteMark   = .F.
+                .RecordMark   = .F.     && era em WITH .Column1: Column nao tem RecordMark ->
+                                        && "Property RECORDMARK is not found" abortava o
+                                        && ConfigurarPaginaDados aqui e NADA abaixo era
+                                        && criado (botoes, OptionGroups, BINDEVENTs)
                 .Visible      = .T.
                 .FontName     = "Tahoma"
                 .FontSize     = 8
                 WITH .Column1
                     .Width = 100
-                    .RecordMark   = .F.
                 ENDWITH
                 WITH .Column2
                     .Width = 250
@@ -2251,6 +2254,10 @@ DEFINE CLASS FormLpr AS FormBase
                         loc_oGrid.Column5.ControlSource = "cursor_4c_Itens.pcuss"
                         loc_oGrid.Column6.ControlSource = "cursor_4c_Itens.moevs"
                         loc_oGrid.Column7.ControlSource = "cursor_4c_Itens.pvens"
+                        *-- Legado: GradeC.Column1/Column2.Text1.When = .F. - Codigo e
+                        *-- Descricao nao sao digitaveis na grade de compra (Erro191)
+                        loc_oGrid.Column1.ReadOnly = .T.
+                        loc_oGrid.Column2.ReadOnly = .T.
                     ELSE
                         loc_oGrid.RecordSource = ""
                     ENDIF
@@ -2285,6 +2292,8 @@ DEFINE CLASS FormLpr AS FormBase
                         loc_oGrid.Column7.ControlSource = "cursor_4c_Itens.vencfs"
                         loc_oGrid.Column8.ControlSource = "cursor_4c_Itens.cgrus"
                         loc_oGrid.Column9.ControlSource = "cursor_4c_Itens.precode"
+                        *-- Celulas Codigo/Descricao com Valid proprio (Erro191)
+                        THIS.InstalarCelulasProduto(loc_oGrid)
                     ELSE
                         loc_oGrid.RecordSource = ""
                     ENDIF
@@ -2606,79 +2615,196 @@ DEFINE CLASS FormLpr AS FormBase
     ENDPROC
 
     *==========================================================================
-    * GradeAfterRowColChange - Handler AfterRowColChange dos grids Grade/GradeC
-    * par_nColIndex: coluna que ficou ativa ANTES do usuario sair (coluna origem)
-    * Quando sai da coluna 1 (cpros): busca produto e pre-preenche campos
+    * GradeAfterRowColChange - AfterRowColChange de grd_4c_Grade/grd_4c_GradeC
+    * Legado (Grade/GradeC.AfterRowColChange): so limpa as caixas de busca.
+    * A validacao do produto NAO mora aqui: nColIndex eh a coluna de DESTINO, e
+    * com "IF par_nColIndex = 1" o lookup so rodava ao ENTRAR na coluna 1,
+    * validando a linha de destino (Erro191/regra #46). Ela esta no Valid da
+    * celula (TextBoxProdutoLpr_4c -> ValidarProdutoGrade).
     *==========================================================================
     PROCEDURE GradeAfterRowColChange(par_nColIndex)
-        LOCAL loc_cCpros, loc_nResult, loc_cSQL, loc_lContinuar
-        loc_cCpros     = ""
-        loc_lContinuar = .T.
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
         TRY
-            IF par_nColIndex = 1 AND USED("cursor_4c_Itens") AND ;
-               !EOF("cursor_4c_Itens") AND !BOF("cursor_4c_Itens")
-                SELECT cursor_4c_Itens
-                loc_cCpros = ALLTRIM(TratarNulo(cpros, "C"))
+            loc_oPg2.txt_4c_Txtcpros.Value = ""
+            loc_oPg2.txt_4c_Txtdpros.Value = ""
+            loc_oPg2.txt_4c_Txtcpros.Refresh()
+            loc_oPg2.txt_4c_Txtdpros.Refresh()
+        CATCH TO loException
+            MsgErro(loException.Message, "FormLpr.GradeAfterRowColChange")
+        ENDTRY
+    ENDPROC
 
-                IF !EMPTY(loc_cCpros)
-                    *-- Verificar grupo em modo venda (bloqueado para certos grupos)
-                    IF THIS.this_cCompVenda <> "C"
-                        IF !THIS.this_oBusinessObject.ChecaGrpVenda(loc_cCpros)
-                            SELECT cursor_4c_Itens
-                            REPLACE cpros WITH "", dpros WITH ""
-                            loc_lContinuar = .F.
+    *==========================================================================
+    * InstalarCelulasProduto - poe TextBoxProdutoLpr_4c nas colunas Codigo (1) e
+    * Descricao (2) da grade de VENDA. Chamado no VincularGrade: o ColumnCount/
+    * RecordSource de la pode recriar as colunas, entao reinstala sempre que
+    * faltar (idempotente). CurrentControl + Sparse = .F. (regra #18).
+    *==========================================================================
+    PROTECTED PROCEDURE InstalarCelulasProduto(par_oGrid)
+        LOCAL loc_nCol, loc_oCol
+        FOR loc_nCol = 1 TO 2
+            loc_oCol = par_oGrid.Columns(loc_nCol)
+            IF !PEMSTATUS(loc_oCol, "txt_4c_Produto", 5)
+                loc_oCol.AddObject("txt_4c_Produto", "TextBoxProdutoLpr_4c")
+            ENDIF
+            WITH loc_oCol.txt_4c_Produto
+                .this_cCampo = IIF(loc_nCol = 1, "cpros", "dpros")
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .BorderStyle = 0
+                .Margin      = 0
+                .MaxLength   = IIF(loc_nCol = 1, 14, 40)   && cpros c(14) / dpros c(40)
+                .Visible     = .T.
+            ENDWITH
+            loc_oCol.CurrentControl = "txt_4c_Produto"
+            loc_oCol.Sparse         = .F.
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * PodeEditarProdutoGrade - When de Grade.Column1/Column2.Text1 do legado:
+    *   Empty(cpros) And pcEscolha = INSERIR  Or  (pcEscolha = ALTERAR And !Flags)
+    *==========================================================================
+    PROCEDURE PodeEditarProdutoGrade()
+        LOCAL loc_lPode, loc_lFlags
+        loc_lPode  = .F.
+        loc_lFlags = .F.
+        IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+            loc_lFlags = (TratarNulo(cursor_4c_Dados.flags, "N") = 1)
+        ENDIF
+        IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
+            loc_lPode = (EMPTY(cursor_4c_Itens.cpros) AND THIS.this_cPcEscolha = "INSERIR") OR ;
+                        (THIS.this_cPcEscolha = "ALTERAR" AND !loc_lFlags)
+        ENDIF
+        RETURN loc_lPode
+    ENDPROC
+
+    *==========================================================================
+    * ValidarProdutoGrade - Valid das celulas Codigo/Descricao da grade de venda
+    * Transcreve Grade.Column1.Text1.Valid (busca por cpros) e Column2.Text1.Valid
+    * (busca por dpros) do legado. O valor digitado esta em par_oTxt.Value - o
+    * cursor so recebe DEPOIS do Valid; o resultado volta para par_oTxt.Value.
+    * Retorno .F. = fica na celula (legado: Return .F. / Return 0).
+    *==========================================================================
+    PROCEDURE ValidarProdutoGrade(par_oTxt)
+        LOCAL loc_cCampo, loc_cValor, loc_lRetorno, loc_oBusca, loc_lEscolheu
+        LOCAL loc_nRecno, loc_nDup, loc_cCpros, loc_oGrid
+        loc_cCampo   = par_oTxt.this_cCampo
+        loc_cValor   = ALLTRIM(NVL(par_oTxt.Value, ""))
+        loc_lRetorno = .T.
+
+        IF !USED("cursor_4c_Itens") OR EOF("cursor_4c_Itens")
+            RETURN .T.
+        ENDIF
+        *-- Legado: If This.Value = ThisForm.AntCPro/AntDPro -> Return
+        IF loc_cValor == ALLTRIM(par_oTxt.this_cValorAnterior)
+            RETURN .T.
+        ENDIF
+
+        loc_oGrid = par_oTxt.Parent.Parent
+        TRY
+            SELECT cursor_4c_Itens
+            loc_nRecno = RECNO()
+
+            DO CASE
+            CASE EMPTY(loc_cValor) AND loc_cCampo = "cpros"
+                *-- Codigo apagado: limpa a linha (ordems 255 = linha vazia, vai ao fim)
+                IF !EMPTY(par_oTxt.this_cValorAnterior)
+                    REPLACE dpros WITH "", pvens WITH 0, precode WITH 0, moevs WITH "", ;
+                            comiss WITH 0, ordems WITH 255 IN cursor_4c_Itens
+                ENDIF
+
+            CASE EMPTY(loc_cValor)
+                *-- Descricao apagada: o legado nao faz nada
+
+            OTHERWISE
+                *-- Descricao: produto ja na lista (Seek em dpros, prefixo)
+                IF loc_cCampo = "dpros"
+                    LOCATE FOR dpros = loc_cValor AND RECNO() <> loc_nRecno
+                    IF FOUND()
+                        MsgAviso("Produto " + ALLTRIM(cursor_4c_Itens.cpros) + " j" + CHR(225) + ;
+                                 " cadastrado nessa Lista de Pre" + CHR(231) + "os !!!", "Aten" + CHR(231) + CHR(227) + "o")
+                        par_oTxt.Value = ""
+                        loc_lRetorno   = .F.
+                    ENDIF
+                    GO loc_nRecno IN cursor_4c_Itens
+                ENDIF
+
+                IF loc_lRetorno
+                    loc_lEscolheu = .F.
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdPro", ;
+                        "cursor_4c_BuscaProdGrade", loc_cCampo, loc_cValor, "Produtos")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        IF !loc_oBusca.this_lAchouRegistro
+                            IF loc_cCampo = "cpros"
+                                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                            ELSE
+                                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                            ENDIF
+                            loc_oBusca.Show()
                         ENDIF
+                        loc_lEscolheu = loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaProdGrade")
+                        loc_oBusca.Release()
                     ENDIF
 
-                    IF loc_lContinuar
-                        *-- Buscar produto no catalogo e pre-preencher campos da linha
-                        loc_cSQL = "SELECT cpros, dpros, pvens, pcuss, moevs, cgrus, reffs, ean13" + ;
-                                   " FROM SigCdPro WHERE cpros = " + EscaparSQL(loc_cCpros)
-                        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_VldPro")
-
-                        IF loc_nResult >= 0 AND RECCOUNT("cursor_4c_VldPro") > 0
-                            SELECT cursor_4c_Itens
-                            REPLACE dpros WITH ALLTRIM(cursor_4c_VldPro.dpros)
-                            IF EMPTY(ALLTRIM(TratarNulo(moevs, "C")))
-                                REPLACE moevs WITH ALLTRIM(cursor_4c_VldPro.moevs)
-                            ENDIF
-                            IF EMPTY(ALLTRIM(TratarNulo(cgrus, "C")))
-                                REPLACE cgrus WITH ALLTRIM(cursor_4c_VldPro.cgrus)
-                            ENDIF
-                            IF THIS.this_cCompVenda = "C"
-                                *-- Modo compra: custo atual + reffs + ean
-                                IF TratarNulo(pcuss, "N") = 0
-                                    REPLACE pcuss WITH TratarNulo(cursor_4c_VldPro.pcuss, "N")
-                                ENDIF
-                                IF EMPTY(ALLTRIM(TratarNulo(reffs, "C")))
-                                    REPLACE reffs WITH ALLTRIM(cursor_4c_VldPro.reffs)
-                                ENDIF
-                                IF TratarNulo(ean13, "N") = 0
-                                    REPLACE ean13 WITH TratarNulo(cursor_4c_VldPro.ean13, "N")
-                                ENDIF
-                            ELSE
-                                *-- Modo venda: preco de venda
-                                IF TratarNulo(pvens, "N") = 0
-                                    REPLACE pvens WITH TratarNulo(cursor_4c_VldPro.pvens, "N")
-                                ENDIF
-                            ENDIF
+                    IF loc_lEscolheu
+                        loc_cCpros = cursor_4c_BuscaProdGrade.cpros
+                        *-- Legado: grupo bloqueado so quando o produto MUDOU (This.Tag)
+                        IF !(par_oTxt.Tag == PADR(loc_cValor, par_oTxt.MaxLength)) ;
+                           AND !THIS.this_oBusinessObject.ChecaGrpVenda(loc_cCpros)
+                            loc_lRetorno = .F.
                         ELSE
-                            SELECT cursor_4c_Itens
-                            REPLACE dpros WITH ""
+                            *-- pvens sem fArredondamento: funcao global do legado
+                            *-- (SIGFUNCS) nao portada; eh CALCULO, nao ganha stub
+                            *-- (regra #27). Pendencia registrada no Erro191-FormLpr.
+                            REPLACE cpros   WITH loc_cCpros, ;
+                                    cgrus   WITH cursor_4c_BuscaProdGrade.cgrus, ;
+                                    ordems  WITH 0, ;
+                                    dpros   WITH cursor_4c_BuscaProdGrade.dpros, ;
+                                    pvens   WITH NVL(cursor_4c_BuscaProdGrade.pvens, 0), ;
+                                    moevs   WITH NVL(cursor_4c_BuscaProdGrade.moevs, ""), ;
+                                    precode WITH NVL(cursor_4c_BuscaProdGrade.precode, 0) ;
+                                    IN cursor_4c_Itens
+                            par_oTxt.Value = ALLTRIM(EVALUATE("cursor_4c_BuscaProdGrade." + loc_cCampo))
                         ENDIF
-
-                        IF USED("cursor_4c_VldPro")
-                            USE IN cursor_4c_VldPro
-                        ENDIF
+                    ELSE
+                        par_oTxt.Value = ""     && legado: LastKey() = 27 -> This.Value = ''
+                    ENDIF
+                    IF USED("cursor_4c_BuscaProdGrade")
+                        USE IN cursor_4c_BuscaProdGrade
                     ENDIF
                 ENDIF
-            ENDIF
 
+                *-- Codigo: produto repetido na lista (legado: Select ... Where Recno() <> lnRecno)
+                IF loc_lRetorno AND loc_cCampo = "cpros" AND !EMPTY(par_oTxt.Value)
+                    SELECT cursor_4c_Itens
+                    COUNT FOR cpros = PADR(par_oTxt.Value, 14) AND RECNO() <> loc_nRecno TO loc_nDup
+                    GO loc_nRecno IN cursor_4c_Itens
+                    IF loc_nDup > 0
+                        MsgAviso("O Produto " + CHR(34) + ALLTRIM(par_oTxt.Value) + CHR(34) + " J" + CHR(225) + ;
+                                 " Est" + CHR(225) + " Em Uso Nesta Lista!!!", "Aten" + CHR(231) + CHR(227) + "o!!!")
+                        par_oTxt.Value = SPACE(14)
+                        loc_lRetorno   = .F.     && legado: Return 0 - fica na celula
+                        *-- Desvio consciente: o legado ja tinha feito o Replace e
+                        *-- deixava descricao/preco do produto RECUSADO na linha;
+                        *-- aqui a linha volta a ficar vazia (ordems 255 = vazia)
+                        REPLACE cpros WITH "", cgrus WITH "", dpros WITH "", pvens WITH 0, ;
+                                moevs WITH "", precode WITH 0, ordems WITH 255 IN cursor_4c_Itens
+                    ENDIF
+                ENDIF
+            ENDCASE
+
+            par_oTxt.this_cValorAnterior = par_oTxt.Value
+            loc_oGrid.Refresh()
         CATCH TO loException
-            MsgErro("Erro na grade (col " + TRANSFORM(par_nColIndex) + "):" + ;
-                    CHR(13) + loException.Message, "FormLpr.GradeAfterRowColChange")
+            MsgErro(loException.Message, "FormLpr.ValidarProdutoGrade")
         ENDTRY
+
+        RETURN loc_lRetorno
     ENDPROC
 
     *==========================================================================
@@ -3548,3 +3674,40 @@ DEFINE CLASS FormLpr AS FormBase
 
 ENDDEFINE
 
+*==============================================================================
+* TextBoxProdutoLpr_4c - celulas Codigo (cpros) e Descricao (dpros) da grade de
+* VENDA do FormLpr (Erro191). Transcreve Grade.Column1/Column2.Text1 do legado:
+*   GotFocus -> This.Tag = Padr(This.Value, 14|40)
+*   When     -> guarda o valor anterior (ThisForm.AntCPro/AntDPro) e libera
+*               conforme modo/Flags (THISFORM.PodeEditarProdutoGrade)
+*   Valid    -> THISFORM.ValidarProdutoGrade
+* Eventos embutidos na classe: BINDEVENT em Valid de TextBox dentro de Column
+* nao dispara de forma confiavel (TextBoxGridLookup.prg).
+*==============================================================================
+DEFINE CLASS TextBoxProdutoLpr_4c AS TextBox
+    this_cCampo         = "cpros"
+    this_cValorAnterior = ""
+
+    PROCEDURE GotFocus()
+        THIS.Tag = PADR(NVL(THIS.Value, ""), IIF(THIS.this_cCampo = "cpros", 14, 40))
+    ENDPROC
+
+    PROCEDURE When()
+        LOCAL loc_lPode
+        THIS.this_cValorAnterior = NVL(THIS.Value, "")
+        loc_lPode = .T.
+        IF PEMSTATUS(THISFORM, "PodeEditarProdutoGrade", 5)
+            loc_lPode = THISFORM.PodeEditarProdutoGrade()
+        ENDIF
+        RETURN loc_lPode
+    ENDPROC
+
+    PROCEDURE Valid()
+        LOCAL loc_lRetorno
+        loc_lRetorno = .T.
+        IF PEMSTATUS(THISFORM, "ValidarProdutoGrade", 5)
+            loc_lRetorno = THISFORM.ValidarProdutoGrade(THIS)
+        ENDIF
+        RETURN loc_lRetorno
+    ENDPROC
+ENDDEFINE

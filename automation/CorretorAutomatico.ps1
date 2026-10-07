@@ -3270,53 +3270,115 @@ function Corrigir-GridRecordMarkDeleteMark {
     o pattern encontrava o ENDWITH do CommandButton adjacente (padrao
     classico: cmd_4c_SelXxx logo abaixo do grid) e injetava .RecordMark
     dentro de WITH de CommandButton, causando "Property RECORDMARK is not
-    found" em runtime â€” engolido silenciosamente por CATCH em
+    found" em runtime - engolido silenciosamente por CATCH em
     InicializarForm, resultando em "VARTYPE retornou: L" no menu (Erro17
     Formsigrepes.prg 2026-07-02). Agora exige `WITH <gridName>` explicito
     entre o AddObject e o ENDWITH.
+
+    PROFUNDIDADE DE WITH (Erro191-FormLpr, 2026-10-07): a versao anterior
+    injetava antes do PRIMEIRO ENDWITH apos o WITH do grid - que, quando o
+    grid tem `WITH .Column1 ... ENDWITH` aninhado, eh o ENDWITH da COLUNA.
+    O pattern pos `.RecordMark = .F.` dentro de `WITH .Column1` no FormLpr
+    (grd_4c_Grade). Column nao tem RecordMark: o erro abortava o
+    ConfigurarPaginaDados ali e NADA abaixo era criado - botoes Inserir/
+    Excluir/Copiar, 4 OptionGroups, container de Compra e todos os BINDEVENTs
+    da pagina. A grade vizinha (grd_4c_GradeC) escapou so porque ja declarava
+    RecordMark. Agora: (1) acha o ENDWITH que FECHA o WITH do grid contando a
+    profundidade; (2) so considera RecordMark/DeleteMark declarados no nivel
+    do grid (depth 0) ou qualificados pelo nome do grid; (3) janela ate 400
+    linhas, sem atravessar PROCEDURE/ENDPROC; (4) REPARA: RecordMark/
+    DeleteMark cujo WITH mais interno eh Column/Header/Text/controle eh
+    removido (a injecao da mesma passada recoloca no nivel do grid).
+    Calibracao: no projeto o reparo so tem 1 alvo historico (FormLpr HEAD,
+    linha 1194), ja corrigido a mao.
     #>
     param([string[]]$Linhas)
 
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # --- (4) REPARO: RecordMark/DeleteMark dentro de WITH que nao eh grid ---
+    $pilha = New-Object System.Collections.Stack
+    $remover = @()
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        # Detecta: AddObject("grd_4c_...", "Grid")
-        if ($Linhas[$i] -match '(?i)AddObject\(\s*"(grd_4c_\w+)"\s*,\s*"Grid"\s*\)') {
-            $gridName = $Matches[1]
-            # Busca o ENDWITH do WITH block deste grid (proximo ENDWITH)
-            $temRecordMark = $false
-            $temDeleteMark = $false
-            $temWithGrid = $false
-            $endWithIdx = -1
-            for ($j = $i + 1; $j -lt [Math]::Min($i + 30, $Linhas.Count); $j++) {
-                if ($Linhas[$j] -match "(?i)^\s*WITH\s+.*\.$([regex]::Escape($gridName))\s*$") {
-                    $temWithGrid = $true
-                }
-                if ($Linhas[$j] -match '(?i)\.RecordMark\s*=') { $temRecordMark = $true }
-                if ($Linhas[$j] -match '(?i)\.DeleteMark\s*=') { $temDeleteMark = $true }
-                if ($Linhas[$j] -match '(?i)^\s*ENDWITH\s*$') {
-                    $endWithIdx = $j
-                    break
-                }
-            }
-            # SAFETY GUARD: so injeta se houver WITH explicito do proprio grid
-            # (previne injecao em ENDWITH de CommandButton adjacente quando grid
-            # eh configurado via helper como ConfigurarGrdP1).
-            if ($endWithIdx -gt 0 -and $temWithGrid -and (!$temRecordMark -or !$temDeleteMark)) {
-                $indent = $Linhas[$endWithIdx] -replace '^(\s*).*', '$1'
-                $propIndent = $indent + "    "
-                $novasLinhas = [System.Collections.ArrayList]@()
-                for ($k = 0; $k -lt $Linhas.Count; $k++) {
-                    if ($k -eq $endWithIdx -and !$temRecordMark) {
-                        [void]$novasLinhas.Add("${propIndent}.RecordMark   = .F.")
-                        if (!$temDeleteMark) {
-                            [void]$novasLinhas.Add("${propIndent}.DeleteMark   = .F.")
-                        }
-                        Add-Correcao -Tipo "GRID_RECORDMARK_DELETEMARK" -Linha ($k + 1) -Original "(ausente)" -Corrigido ".RecordMark = .F. + .DeleteMark = .F." -Descricao "Grid $gridName sem RecordMark/DeleteMark - barras de marcacao visiveis"
-                    }
-                    [void]$novasLinhas.Add($Linhas[$k])
-                }
-                $Linhas = $novasLinhas.ToArray()
+        $x = $Linhas[$i]
+        if ($x -match '^\s*(\*|&&)') { continue }
+        if ($x -match '(?i)^\s*(PROCEDURE|FUNCTION|ENDPROC|ENDFUNC)\b') { $pilha.Clear(); continue }
+        if ($x -match '(?i)^\s*WITH\s+(.+?)\s*$') { $pilha.Push($Matches[1]); continue }
+        if ($x -match '(?i)^\s*ENDWITH\b') { if ($pilha.Count -gt 0) { [void]$pilha.Pop() }; continue }
+        if ($x -match '(?i)^\s*\.(RecordMark|DeleteMark)\s*=' -and $pilha.Count -gt 0) {
+            $alvo = [string]$pilha.Peek()
+            if ($alvo -match '(?i)(^|\.)(Column\d+|Columns\(.+\)|Header\d+|Text\d+|(txt|cmd|lbl|cnt|opt|chk|obj|cbo|lst|edt|img|shp)_4c_\w+)\s*$') {
+                $remover += $i
+                Add-Correcao -Tipo "GRID_RECORDMARK_EM_COLUNA" -Linha ($i + 1) -Original $x.Trim() -Corrigido "(removido - RecordMark/DeleteMark so existem no Grid)" -Descricao ("Pattern GridRecordMarkDeleteMark (reparo): .RecordMark/.DeleteMark dentro de WITH $alvo. Column/Header/controle nao tem a propriedade: " + "'Property RECORDMARK is not found' abortava o metodo de configuracao ali e tudo abaixo deixava de ser criado. Origem: Erro191-FormLpr.")
             }
         }
+    }
+    if ($remover.Count -gt 0) {
+        $Linhas = @(for ($k = 0; $k -lt $Linhas.Count; $k++) { if ($remover -notcontains $k) { $Linhas[$k] } })
+    }
+
+    # --- injecao no nivel do grid ---
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        # Detecta: AddObject("grd_4c_...", "Grid")
+        if ($Linhas[$i] -notmatch '(?i)AddObject\(\s*"(grd_4c_\w+)"\s*,\s*"Grid"\s*\)') { continue }
+        $gridName = $Matches[1]
+        $limite = [Math]::Min($i + 400, $Linhas.Count)
+
+        # SAFETY GUARD: WITH explicito do proprio grid, antes do fim do metodo
+        $withIdx = -1
+        for ($j = $i + 1; $j -lt $limite; $j++) {
+            if ($Linhas[$j] -match '(?i)^\s*(PROCEDURE|FUNCTION|ENDPROC|ENDFUNC)\b') { break }
+            if ($Linhas[$j] -match "(?i)^\s*WITH\s+.*\b$([regex]::Escape($gridName))\s*$") { $withIdx = $j; break }
+        }
+        if ($withIdx -lt 0) { continue }
+
+        # ENDWITH que FECHA o WITH do grid (pula os aninhados) + props no nivel do grid
+        $temRecordMark = $false
+        $temDeleteMark = $false
+        $endWithIdx = -1
+        $prof = 0
+        for ($j = $withIdx + 1; $j -lt $limite; $j++) {
+            $x = $Linhas[$j]
+            if ($x -match '(?i)^\s*(PROCEDURE|FUNCTION|ENDPROC|ENDFUNC)\b') { break }
+            if ($x -match '^\s*(\*|&&)') { continue }
+            if ($x -match '(?i)^\s*WITH\s+') { $prof++; continue }
+            if ($x -match '(?i)^\s*ENDWITH\b') {
+                if ($prof -eq 0) { $endWithIdx = $j; break }
+                $prof--
+                continue
+            }
+            if ($prof -eq 0) {
+                if ($x -match '(?i)^\s*\.RecordMark\s*=') { $temRecordMark = $true }
+                if ($x -match '(?i)^\s*\.DeleteMark\s*=') { $temDeleteMark = $true }
+            }
+        }
+        if ($endWithIdx -lt 0) { continue }
+
+        # forma qualificada em qualquer ponto do metodo (loc_oGrid.RecordMark / <...>.grd_4c_X.RecordMark)
+        $fimMetodo = $endWithIdx
+        while ($fimMetodo -lt $Linhas.Count - 1 -and $Linhas[$fimMetodo] -notmatch '(?i)^\s*(ENDPROC|ENDFUNC)\b') { $fimMetodo++ }
+        for ($j = $i; $j -le $fimMetodo; $j++) {
+            if ($Linhas[$j] -match "(?i)(\b$([regex]::Escape($gridName))|\bloc_oGrid\w*)\.RecordMark\s*=") { $temRecordMark = $true }
+            if ($Linhas[$j] -match "(?i)(\b$([regex]::Escape($gridName))|\bloc_oGrid\w*)\.DeleteMark\s*=") { $temDeleteMark = $true }
+        }
+        # Semantica da versao anterior PRESERVADA: so injeta quando falta
+        # RecordMark (DeleteMark vai junto, nunca sozinho). Injetar DeleteMark
+        # sozinho mutaria grids que o pattern nunca tocou (medido: FormSigPdM10
+        # grd_4c_MatGeral) - ampliar alcance exige conferir o legado (regra #44).
+        if ($temRecordMark) { continue }
+
+        $indent = $Linhas[$endWithIdx] -replace '^(\s*).*', '$1'
+        $propIndent = $indent + "    "
+        $novas = [System.Collections.ArrayList]@()
+        for ($k = 0; $k -lt $Linhas.Count; $k++) {
+            if ($k -eq $endWithIdx) {
+                if (!$temRecordMark) { [void]$novas.Add("${propIndent}.RecordMark   = .F.") }
+                if (!$temDeleteMark) { [void]$novas.Add("${propIndent}.DeleteMark   = .F.") }
+                Add-Correcao -Tipo "GRID_RECORDMARK_DELETEMARK" -Linha ($k + 1) -Original "(ausente)" -Corrigido ".RecordMark = .F. + .DeleteMark = .F." -Descricao "Grid $gridName sem RecordMark/DeleteMark - barras de marcacao visiveis"
+            }
+            [void]$novas.Add($Linhas[$k])
+        }
+        $Linhas = $novas.ToArray()
     }
     return $Linhas
 }
@@ -16448,6 +16510,60 @@ function Corrigir-PropertyBOComValueMutilada {
     }
     return $Linhas
 }
+
+# =============================================================================
+# Pattern #214 (Erro191, 2026-10-07, FormSIGPRLNC) - WARNING, nunca muta.
+# Validacao de CELULA de grade (lookup/picker ao sair da coluna) posta num
+# handler de AfterRowColChange que filtra pela coluna:
+#   PROCEDURE GradeAfterRowColChange(par_nColIndex)
+#       IF par_nColIndex != 1 / RETURN      <- nColIndex eh a coluna de DESTINO
+#       ... SQLEXEC / FormBuscaAuxiliar ...
+# O evento dispara DEPOIS de entrar na celula nova e recebe a coluna PARA ONDE o
+# usuario foi (ajuda do VFP: "the column into which the user moved"). Ao sair
+# da coluna 1 chega 2: o lookup nunca roda, e quando roda valida a linha de
+# DESTINO, nao a editada. Sintoma: digita o codigo e nada abre ("a grid nao
+# habilita para escolher"). Legado: Valid do TextBox da coluna.
+# Conserto (manual): TextBox subclasse com When/Valid embutidos na Column
+# (AddObject + CurrentControl + Sparse = .F., regra #18) delegando a um metodo
+# PUBLIC do form que le o valor de par_oTxt.Value (o cursor so recebe DEPOIS do
+# Valid) e devolve nele o codigo escolhido. BINDEVENT em Valid de TextBox de
+# Column nao eh confiavel - ver TextBoxGridLookup.prg.
+# NAO acusa AfterRowColChange sem filtro de coluna: carregar detalhe da linha
+# corrente (mestre-detalhe) eh o uso CERTO do evento. Calibracao 2026-10-07 nos
+# forms: 12 handlers de AfterRowColChange fazem SQL/picker; so 1 filtra coluna
+# (FormLpr.GradeAfterRowColChange - mesmo defeito, comentario diz "coluna
+# origem"); os outros 11 sao mestre-detalhe legitimos.
+# =============================================================================
+function Corrigir-AfterRowColChangeValidaCelula {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $handlers = @{}
+    foreach ($l in $Linhas) {
+        $mb = [regex]::Match($l, '(?i)BINDEVENT\s*\([^,]+,\s*"AfterRowColChange"\s*,\s*THIS\s*,\s*"([A-Za-z0-9_]+)"')
+        if ($mb.Success) { $handlers[$mb.Groups[1].Value.ToUpper()] = $true }
+    }
+    if ($handlers.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mp = [regex]::Match($Linhas[$i], '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+([A-Za-z0-9_]+)')
+        if (-not $mp.Success) { continue }
+        $nome = $mp.Groups[1].Value
+        if (-not $handlers.ContainsKey($nome.ToUpper())) { continue }
+
+        $fim = $i + 1
+        while ($fim -lt $Linhas.Count -and $Linhas[$fim] -notmatch '(?i)^\s*ENDPROC') { $fim++ }
+        $corpo = (($Linhas[$i..([Math]::Min($fim, $Linhas.Count - 1))]) | Where-Object { $_ -notmatch '^\s*(\*|&&)' }) -join "`n"
+
+        if ($corpo -notmatch '(?i)\b\w*ColIndex\s*(!=|<>|#|=)\s*\d') { continue }
+        if ($corpo -notmatch '(?i)(SQLEXEC|FormBuscaAuxiliar|\.Mostrar\s*\(|\.Show\s*\()') { continue }
+
+        Write-Host "[Pattern #214 WARN] linha $($i + 1): $nome valida celula em AfterRowColChange filtrando coluna" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-214-AFTERROWCOLCHANGE-VALIDA-CELULA" -Linha ($i + 1) -Original ("PROCEDURE " + $nome) -Corrigido "(nao mutado - mover para Valid de TextBox na Column)" -Descricao ("Pattern #214 WARNING: $nome esta ligado a AfterRowColChange, testa o indice da coluna e faz lookup " + "(SQLEXEC/picker). nColIndex eh a coluna de DESTINO: ao sair da coluna validada chega outro indice e o " + "lookup nunca roda; quando roda, valida a linha para onde o usuario foi. Legado: Valid do TextBox da " + "coluna. Conserto: TextBox subclasse com When/Valid na Column (AddObject + CurrentControl + Sparse = .F.) " + "delegando a metodo PUBLIC que le par_oTxt.Value e devolve nele o codigo escolhido. Skill: secao 240. " + "Origem: Erro191 (FormSIGPRLNC).")
+    }
+    return $Linhas
+}
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -16672,6 +16788,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-CursorBitFields -Linhas $linhas
     $linhas = Corrigir-BOParaFormCheckBoxLogico -Linhas $linhas
     $linhas = Corrigir-PropertyBOComValueMutilada -Linhas $linhas
+    $linhas = Corrigir-AfterRowColChangeValidaCelula -Linhas $linhas
     $linhas = Corrigir-ContainerBorderStyle -Linhas $linhas
     $linhas = Corrigir-PageFrameHeightTop29 -Linhas $linhas
     $linhas = Corrigir-ValidarParaValidarDados -Linhas $linhas
