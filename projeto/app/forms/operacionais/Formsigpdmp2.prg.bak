@@ -395,6 +395,19 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
     *        SigCdSvc|Qtps|SigCdTma|RepRetrab(oculta)|Cors|Tams
     * Cols 12/13 dinamicas: Width=1 ate SigCdGrp ter Cores/Tams=.T.
     *==========================================================================
+    *-- Erro188: as 13 colunas abaixo (e as 3 do ConfigurarContainer2) ligavam
+    *-- ControlSource e BINDEVENT em "loc_oCol.Controls(1)", que NAO eh a caixa
+    *-- de texto da coluna - eh o CABECALHO. Medido no VFP9 (2026-10-06), Grid
+    *-- criado por AddObject:
+    *--     Column.ControlCount = 2
+    *--     Controls(1) -> Header1 (BaseClass Header)
+    *--     Controls(2) -> Text1   (BaseClass Textbox)
+    *-- Header nao tem ControlSource/Format/GotFocus/Valid/When/KeyPress, entao
+    *-- a PRIMEIRA linha ja estourava "Property CONTROLSOURCE is not found" e o
+    *-- CATCH deste metodo abortava a configuracao INTEIRA: as colunas 2 a 13
+    *-- nunca eram alcancadas. O form abria (CREATEOBJECT devolvia objeto) com
+    *-- as duas grades mudas - sem ControlSource e sem nenhum dos lookups.
+    *-- Usar sempre ".Text1", nunca o indice.
     PROTECTED PROCEDURE ConfigurarGradePrincipal()
         LOCAL loc_oGrd, loc_oCol, loc_oCtrl, loc_oErro
 
@@ -419,150 +432,226 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
             ENDWITH
             BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GrdDadosAfterRowColChange")
 
-            *-- Coluna 1: Seq (somente leitura)
+            *--------------------------------------------------------------
+            * Erro188: as 13 colunas foram REMAPEADAS a partir do legado.
+            * O que havia aqui eram nomes INVENTADOS: nenhum dos 13
+            * ControlSource (Seq/SigCdPro/Descr/CUnida/SigCdRpo/CUniPs/Qtde/
+            * SigCdSvc/Qtps/SigCdTma/RepRetrab/Cors/Tams) existe em xNensi,
+            * que tem a estrutura de SigCdNei (43 colunas, medido no banco).
+            * Ficou invisivel desde a migracao porque a configuracao morria
+            * na coluna 1 com "Property CONTROLSOURCE is not found".
+            *
+            * Fonte: tasks\task143\sigpdmp2_form_codigo_fonte.txt
+            *   linhas 2274-2292 (ControlSource, com os comentarios do autor)
+            *   linhas 503-610   (Width / ColumnOrder / ReadOnly do SCX)
+            *   Header1.Caption de cada Column<N> do SCX
+            *
+            * ColumnOrder eh a ordem de EXIBICAO e difere da declaracao:
+            *   1 OF/Envelope | 2 Componente | 3 Cat. | 4 Cor | 5 Tam |
+            *   6 Tipo de Material | 7 Quantidade | 8 Uni | 9 Quantidade |
+            *   10 Uni | 11 Peso Fabr. | 12 Envelope | 13 Lote
+            *--------------------------------------------------------------
+
+            *-- Coluna 1: nops - Ordem de Producao (somente leitura)
             loc_oCol = loc_oGrd.Columns(1)
             WITH loc_oCol
-                .Width           = 35
+                .Width           = 80
+                .ColumnOrder     = 1
                 .ReadOnly        = .T.
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Format          = "L"
+                .InputMask       = "9999999999"
                 .Header1.Caption = "OF / Envelope"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCol.Controls(1).ControlSource = "xNensi.Seq"
+            loc_oCol.ControlSource = "xNensi.nops"
 
-            *-- Coluna 2: SigCdPro - produto (lookup)
+            *-- Coluna 2: cmats - Componente (lookup em SigCdPro)
             loc_oCol = loc_oGrd.Columns(2)
             WITH loc_oCol
-                .Width           = 70
+                .Width           = 108
+                .ColumnOrder     = 2
                 .ReadOnly        = .F.
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Componente"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.SigCdPro"
+            loc_oCol.ControlSource = "xNensi.cmats"
+            loc_oCtrl = loc_oCol.Text1
             BINDEVENT(loc_oCtrl, "GotFocus", THIS, "Col2GotFocus")
             BINDEVENT(loc_oCtrl, "Valid",    THIS, "Col2ValidarComponente")
             BINDEVENT(loc_oCtrl, "KeyPress", THIS, "Col2KeyPress")
 
-            *-- Coluna 3: Descr (somente leitura - derivada do produto)
+            *-- Coluna 3: nenvs - Envelope
             loc_oCol = loc_oGrd.Columns(3)
             WITH loc_oCol
-                .Width           = 200
-                .ReadOnly        = .T.
+                .Width           = 70
+                .ColumnOrder     = 12
+                .ReadOnly        = .F.
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Envelope"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCol.Controls(1).ControlSource = "xNensi.Descr"
+            loc_oCol.ControlSource = "xNensi.nenvs"
 
-            *-- Coluna 4: CUnida - unidade principal (somente leitura)
+            *-- Coluna 4: cunis - Unidade (somente leitura)
             loc_oCol = loc_oGrd.Columns(4)
             WITH loc_oCol
-                .Width           = 45
+                .Width           = 31
+                .ColumnOrder     = 8
                 .ReadOnly        = .T.
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Uni"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCol.Controls(1).ControlSource = "xNensi.CUnida"
+            loc_oCol.ControlSource = "xNensi.cunis"
 
-            *-- Coluna 5: SigCdRpo - roteiro/processo (lookup com logica CodAcb/Peso)
+            *-- Coluna 5: tpops - Tipo de Material
             loc_oCol = loc_oGrd.Columns(5)
             WITH loc_oCol
-                .Width           = 60
-                .ReadOnly        = .F.
-                .Header1.Caption = "Peso Fabr."
+                .Width           = 100
+                .ColumnOrder     = 6
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Tipo de Material"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.SigCdRpo"
-            BINDEVENT(loc_oCtrl, "GotFocus", THIS, "Col5GotFocus")
-            BINDEVENT(loc_oCtrl, "Valid",    THIS, "Col5ValidarRoteiro")
+            loc_oCol.ControlSource = "xNensi.tpops"
 
-            *-- Coluna 6: CUniPs - unidade de pecas (somente leitura)
+            *-- Coluna 6: qtds - Quantidade (Peso na Fase Anterior)
+            *-- InputMask do legado: '999,999' + '.' + Repl('9', lnCas), onde
+            *-- lnCas = Iif(CrSigCdOpd.CasQtds = 0, 3, CrSigCdOpd.CasQtds).
+            *-- Sem CrSigCdOpd disponivel aqui, fica o default de 3 casas; a
+            *-- mascara dinamica entra junto com o resto da logica do legado.
             loc_oCol = loc_oGrd.Columns(6)
             WITH loc_oCol
-                .Width           = 45
-                .ReadOnly        = .T.
-                .Header1.Caption = "Lote"
+                .Width           = 80
+                .ColumnOrder     = 7
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Quantidade"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCol.Controls(1).ControlSource = "xNensi.CUniPs"
+            loc_oCol.ControlSource = "xNensi.qtds"
+            loc_oCol.InputMask       = "999,999.999"
+            loc_oCol.Text1.InputMask = "999,999.999"
 
-            *-- Coluna 7: Qtde - quantidade principal
+            *-- Coluna 7: pesos - Peso Atual (balanca)
             loc_oCol = loc_oGrd.Columns(7)
             WITH loc_oCol
-                .Width           = 65
-                .ReadOnly        = .F.
-                .Header1.Caption = "Quantidade"
+                .Width           = 78
+                .ColumnOrder     = 11
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Peso Fabr."
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.Qtde"
-            loc_oCtrl.Format = "9999.999"
-            BINDEVENT(loc_oCtrl, "GotFocus", THIS, "Col7GotFocus")
-            BINDEVENT(loc_oCtrl, "Valid",    THIS, "Col7ValidarQuantidade")
+            loc_oCol.ControlSource = "xNensi.pesos"
+            loc_oCol.InputMask       = "999,999.999"
+            loc_oCol.Text1.InputMask = "999,999.999"
 
-            *-- Coluna 8: SigCdSvc - servico (lookup em crSigCdSvc do pai)
+            *-- Coluna 8: cats - Categoria
             loc_oCol = loc_oGrd.Columns(8)
             WITH loc_oCol
-                .Width           = 60
+                .Width           = 52
+                .ColumnOrder     = 3
                 .ReadOnly        = .F.
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Cat."
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.SigCdSvc"
-            BINDEVENT(loc_oCtrl, "When",  THIS, "Col8WhenServico")
-            BINDEVENT(loc_oCtrl, "Valid", THIS, "Col8ValidarServico")
+            loc_oCol.ControlSource = "xNensi.cats"
 
-            *-- Coluna 9: Qtps - quantidade em pecas
+            *-- Coluna 9: peso2s - Peso da Unidade
             loc_oCol = loc_oGrd.Columns(9)
             WITH loc_oCol
-                .Width           = 65
+                .Width           = 80
+                .ColumnOrder     = 9
                 .ReadOnly        = .F.
-                .Header1.Caption = "Saldo"
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Quantidade"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.Qtps"
-            loc_oCtrl.Format = "9999.999"
-            BINDEVENT(loc_oCtrl, "GotFocus", THIS, "Col9GotFocus")
-            BINDEVENT(loc_oCtrl, "Valid",    THIS, "Col9ValidarQtps")
+            loc_oCol.ControlSource = "xNensi.peso2s"
 
-            *-- Coluna 10: SigCdTma - tipo de material (lookup)
+            *-- Coluna 10: cunips - Unidade do Peso
             loc_oCol = loc_oGrd.Columns(10)
             WITH loc_oCol
-                .Width           = 60
-                .ReadOnly        = .F.
-                .Header1.Caption = "Tipo de Material"
+                .Width           = 31
+                .ColumnOrder     = 10
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Uni"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.SigCdTma"
-            BINDEVENT(loc_oCtrl, "GotFocus", THIS, "Col10GotFocus")
-            BINDEVENT(loc_oCtrl, "Valid",    THIS, "Col10ValidarTipoMaterial")
+            loc_oCol.ControlSource = "xNensi.cunips"
 
-            *-- Coluna 11: RepRetrab - sempre oculta (gerenciada via BO legado)
+            *-- Coluna 11: nlotes - Numero do Lote
             loc_oCol = loc_oGrd.Columns(11)
             WITH loc_oCol
-                .Width           = 1
-                .ReadOnly        = .T.
-                .Visible         = .F.
-                .Header1.Caption = ""
+                .ColumnOrder     = 13
+                .Movable         = .F.
+                .Resizable       = .F.
+                .Header1.Caption = "Lote"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCol.Controls(1).ControlSource = "xNensi.RepRetrab"
+            loc_oCol.ControlSource = "xNensi.nlotes"
 
-            *-- Coluna 12: Cors - cor (dinamica: Width=1 ate grupo ter Cores=.T.)
+            *-- Coluna 12: codcors - Codigo da Cor
             loc_oCol = loc_oGrd.Columns(12)
             WITH loc_oCol
-                .Width           = 1
-                .ReadOnly        = .F.
+                .Width           = 31
+                .ColumnOrder     = 4
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Cor"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.Cors"
+            loc_oCol.ControlSource = "xNensi.codcors"
+            loc_oCtrl = loc_oCol.Text1
             BINDEVENT(loc_oCtrl, "When",  THIS, "Col12WhenCor")
             BINDEVENT(loc_oCtrl, "Valid", THIS, "Col12ValidarCor")
 
-            *-- Coluna 13: Tams - tamanho (dinamica: Width=1 ate grupo ter Tams=.T.)
+            *-- Coluna 13: codtams - Codigo do Tamanho
             loc_oCol = loc_oGrd.Columns(13)
             WITH loc_oCol
-                .Width           = 1
-                .ReadOnly        = .F.
+                .Width           = 31
+                .ColumnOrder     = 5
+                .Movable         = .F.
+                .Resizable       = .F.
                 .Header1.Caption = "Tam"
+                .Header1.Alignment = 2
             ENDWITH
-            loc_oCtrl = loc_oCol.Controls(1)
-            loc_oCtrl.ControlSource = "xNensi.Tams"
+            loc_oCol.ControlSource = "xNensi.codtams"
+            loc_oCtrl = loc_oCol.Text1
             BINDEVENT(loc_oCtrl, "When",  THIS, "Col13WhenTamanho")
             BINDEVENT(loc_oCtrl, "Valid", THIS, "Col13ValidarTamanho")
+
+            *-- Larguras condicionais do legado (linhas 2294-2300 do dump):
+            *--     If csTmpUni.Qt = 0    -> Column9.Width = 1 / Column10.Width = 1
+            *--     If Not ThisForm.Infolote -> Column11.Width = 1
+            *--
+            *-- PENDENCIA: nenhuma das duas condicoes eh calculada ainda neste
+            *-- form. O cursor csTmpUni nao existe aqui (por isso o USED()), e
+            *-- THIS.InfoLote nasce .F. e ninguem a atualiza - no legado ela vem
+            *-- de uma consulta a CsTmpOpe no Init (dump linhas 2215 e 2262).
+            *-- Enquanto isso nao for portado, a coluna "Lote" fica oculta, que
+            *-- eh o MESMO estado inicial do legado - mas nunca reaparece.
+            IF USED("csTmpUni")
+                IF NVL(csTmpUni.Qt, 0) = 0
+                    loc_oGrd.Columns(9).Width  = 1
+                    loc_oGrd.Columns(10).Width = 1
+                ENDIF
+            ENDIF
+            IF !THIS.InfoLote
+                loc_oGrd.Columns(11).Width = 1
+            ENDIF
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao configurar grade principal")
@@ -621,7 +710,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
     *==========================================================================
     PROCEDURE Col2GotFocus()
         IF USED("xNensi") AND !EOF("xNensi")
-            THIS.AntValue = ALLTRIM(NVL(xNensi.SigCdPro, ""))
+            THIS.AntValue = ALLTRIM(NVL(xNensi.cmats, ""))
         ENDIF
     ENDPROC
 
@@ -641,7 +730,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                     loc_cCod = loc_oForm.this_cResultado
                     loc_oForm = .NULL.
                     IF !EMPTY(loc_cCod)
-                        REPLACE xNensi.SigCdPro WITH loc_cCod
+                        REPLACE xNensi.cmats WITH loc_cCod
                         THIS.Col2ValidarComponente()
                     ENDIF
                 ENDIF
@@ -661,11 +750,11 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
 
         TRY
             IF USED("xNensi") AND !EOF("xNensi")
-                loc_cCod = ALLTRIM(NVL(xNensi.SigCdPro, ""))
+                loc_cCod = ALLTRIM(NVL(xNensi.cmats, ""))
                 IF EMPTY(loc_cCod)
-                    REPLACE xNensi.Descr  WITH ""
-                    REPLACE xNensi.CUnida WITH ""
-                    REPLACE xNensi.CUniPs WITH ""
+                    REPLACE xNensi.cdescs  WITH ""
+                    REPLACE xNensi.cunis WITH ""
+                    REPLACE xNensi.cunips WITH ""
                     THIS.AntValue = ""
                 ELSE
                     IF THIS.poDataMgr.CursorQuery("SigCdPro", "cursor_4c_Prod", ;
@@ -673,9 +762,9 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                             "SigCdPro,Descr,CUnida,CUniPs,SigCdGrp") >= 1 ;
                             AND USED("cursor_4c_Prod") ;
                             AND RECCOUNT("cursor_4c_Prod") > 0
-                        REPLACE xNensi.Descr  WITH ALLTRIM(cursor_4c_Prod.Descr)
-                        REPLACE xNensi.CUnida WITH ALLTRIM(cursor_4c_Prod.CUnida)
-                        REPLACE xNensi.CUniPs WITH ALLTRIM(cursor_4c_Prod.CUniPs)
+                        REPLACE xNensi.cdescs  WITH ALLTRIM(cursor_4c_Prod.Descr)
+                        REPLACE xNensi.cunis WITH ALLTRIM(cursor_4c_Prod.CUnida)
+                        REPLACE xNensi.cunips WITH ALLTRIM(cursor_4c_Prod.CUniPs)
                         THIS.AjustarColunasCoresTamanhos(ALLTRIM(cursor_4c_Prod.SigCdGrp))
                         THIS.AntValue = loc_cCod
                         USE IN cursor_4c_Prod
@@ -683,7 +772,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                         IF USED("cursor_4c_Prod")
                             USE IN cursor_4c_Prod
                         ENDIF
-                        REPLACE xNensi.SigCdPro WITH THIS.AntValue
+                        REPLACE xNensi.cmats WITH THIS.AntValue
                         MsgAviso("Produto n" + CHR(227) + "o encontrado.", ;
                             "Aten" + CHR(231) + CHR(227) + "o")
                         loc_lRet = .F.
@@ -728,7 +817,48 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
     ENDPROC
 
     *==========================================================================
-    * Col5GotFocus - Armazena SigCdRpo anterior e peso associado
+    * ===== BLOCO DESLIGADO - PENDENTE DE RE-DERIVACAO DO LEGADO (Erro188) =====
+    *
+    * Os dez metodos abaixo (Col5*, Col7*, Col8*, Col9*, Col10*) NAO estao mais
+    * ligados por BINDEVENT. Nao foi perda de funcionalidade: eles nunca
+    * chegaram a rodar e nao tinham como funcionar.
+    *
+    *   1) Nasceram presos a colunas cujo SIGNIFICADO era inventado. Com a
+    *      grade remapeada a partir do legado, a coluna 5 passou a ser
+    *      "tpops / Tipo de Material" (nao "roteiro"), a 7 "pesos / Peso Atual"
+    *      (nao "quantidade"), a 8 "cats / Categoria" (nao "servico"), a 9
+    *      "peso2s / Peso da Unidade" e a 10 "cunips / Unidade do Peso".
+    *
+    *   2) Consultam TABELAS QUE NAO EXISTEM. Medido no DB_MBAHIA (677 tabelas,
+    *      2026-10-06): "SigCdTma" e "CodAcb" NAO EXISTEM. E leem campos que
+    *      tambem nao existem em xNensi (SigCdRpo, Qtde, Qtps, SigCdTma,
+    *      SigCdSvc).
+    *
+    * A logica de verdade esta no dump legado, por coluna, em
+    * tasks\task143\sigpdmp2_form_codigo_fonte.txt:
+    *
+    *   Column5.Text1  (Tipo de Material)  linhas 2706-2821  When + Valid
+    *   Column6.Text1  (Quantidade)        linhas 2822-2972  When + Valid
+    *   Column7.Text1  (Peso / balanca)    linhas 2973-3311  When + Valid + LostFocus
+    *   Column8.Text1  (Categoria)         linhas 3312-3417  When + Valid + LostFocus
+    *   Column9.Text1  (Peso da Unidade)   linhas 3418-3567  When + Valid
+    *   Column10.Text1 (Unidade do Peso)   linhas 3568-3581  When
+    *   Column11.Text1 (Lote)              linhas 3582-3626  When + Valid
+    *   Column3.Text1  (Envelope)          linhas 2591-2691  When + Valid + LostFocus
+    *   Column1.Text1 / Column4.Text1      When (somente leitura)
+    *
+    * Dependem de cursores que o form pai fornece (xMfas, TmpNens, CrSigCdOpd,
+    * csTmpUni, crSigCdPam) e do objeto Balanca (porta serial), entao a
+    * re-derivacao pede o form pai montado - nao da para fazer as cegas.
+    *
+    * Os tres que CONTINUAM ligados (Col2 Componente, Col12 Cor, Col13 Tamanho)
+    * sobreviveram porque a coluna manteve o significado e as tabelas que eles
+    * consultam sao reais (SigCdPro, SigCdCor, SigCdTam); neles so os nomes de
+    * campo foram remapeados para os reais de SigCdNei.
+    *==========================================================================
+
+    *==========================================================================
+    * Col5GotFocus - DESLIGADO (ver bloco acima)
     *==========================================================================
     PROCEDURE Col5GotFocus()
         IF USED("xNensi") AND !EOF("xNensi")
@@ -972,7 +1102,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
 
         TRY
             IF USED("xNensi") AND !EOF("xNensi")
-                loc_cCod = ALLTRIM(NVL(xNensi.Cors, ""))
+                loc_cCod = ALLTRIM(NVL(xNensi.codcors, ""))
                 IF !EMPTY(loc_cCod)
                     IF THIS.poDataMgr.CursorQuery("SigCdCor", "cursor_4c_Cor", ;
                             "SigCdCor", loc_cCod, "SigCdCor") >= 1 ;
@@ -983,7 +1113,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                         IF USED("cursor_4c_Cor")
                             USE IN cursor_4c_Cor
                         ENDIF
-                        REPLACE xNensi.Cors WITH ""
+                        REPLACE xNensi.codcors WITH ""
                         MsgAviso("Cor n" + CHR(227) + "o encontrada.", ;
                             "Aten" + CHR(231) + CHR(227) + "o")
                         loc_lRet = .F.
@@ -1019,7 +1149,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
 
         TRY
             IF USED("xNensi") AND !EOF("xNensi")
-                loc_cCod = ALLTRIM(NVL(xNensi.Tams, ""))
+                loc_cCod = ALLTRIM(NVL(xNensi.codtams, ""))
                 IF !EMPTY(loc_cCod)
                     IF THIS.poDataMgr.CursorQuery("SigCdTam", "cursor_4c_Tam", ;
                             "SigCdTam", loc_cCod, "SigCdTam") >= 1 ;
@@ -1030,7 +1160,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                         IF USED("cursor_4c_Tam")
                             USE IN cursor_4c_Tam
                         ENDIF
-                        REPLACE xNensi.Tams WITH ""
+                        REPLACE xNensi.codtams WITH ""
                         MsgAviso("Tamanho n" + CHR(227) + "o encontrado.", ;
                             "Aten" + CHR(231) + CHR(227) + "o")
                         loc_lRet = .F.
@@ -1264,8 +1394,31 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
             IF PEMSTATUS(THIS, "cnt_4c_Container2", 5)
                 THIS.cnt_4c_Container2.Visible = !THIS.cnt_4c_Container2.Visible
                 IF THIS.cnt_4c_Container2.Visible
-                    IF USED("TmpNens") AND PEMSTATUS(THIS.cnt_4c_Container2, "grd_4c_Lotes", 5)
-                        THIS.cnt_4c_Container2.grd_4c_Lotes.Refresh()
+                    *-- Erro188: o vinculo da grade de lotes eh feito AQUI, nao
+                    *-- no Init, igual ao legado (dump linhas 4578-4584), que so
+                    *-- liga `If !Eof()` em TmpLote. Antes o Init ligava em
+                    *-- TmpNens.Lote/Qtde/Prazo - cursor e campos que o legado
+                    *-- nao usa nesta grade.
+                    IF USED("TmpLote") AND PEMSTATUS(THIS.cnt_4c_Container2, "grd_4c_Lotes", 5)
+                        SELECT TmpLote
+                        GO TOP IN TmpLote
+                        IF !EOF("TmpLote")
+                            WITH THIS.cnt_4c_Container2.grd_4c_Lotes
+                                .RecordSource = "TmpLote"
+                                .Columns(1).ControlSource = "TmpLote.nLotes"
+                                .Columns(2).ControlSource = "TmpLote.cMats"
+                                .Columns(3).ControlSource = "TmpLote.SaldoF"
+                                *-- larguras por ULTIMO: RecordSource reseta
+                                *-- para o default 90 (regra #41)
+                                .Columns(1).Width = 160
+                                .Columns(2).Width = 120
+                                .Columns(3).Width = 120
+                                .Columns(1).Header1.Caption = "Lote"
+                                .Columns(2).Header1.Caption = "Componente"
+                                .Columns(3).Header1.Caption = "Saldo"
+                                .Refresh()
+                            ENDWITH
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -1913,13 +2066,28 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
             *-- Grade de lotes
             loc_oCnt.AddObject("grd_4c_Lotes", "GridBase")
             loc_oGrd = loc_oCnt.grd_4c_Lotes
+            *-- Erro188: o cursor eh TmpLote, nao TmpNens, e os campos sao
+            *-- nLotes / cMats / SaldoF (dump legado, linhas 4581-4584):
+            *--   thisform.container2.grdLotes.RecordSource = [TmpLote]
+            *--   ...column1.ControlSource = [TmpLote.nLotes]
+            *--   ...column2.ControlSource = [TmpLote.cMats]
+            *--   ...column3.ControlSource = [TmpLote.SaldoF]
+            *-- O legado liga isso em RUNTIME, quando abre o painel e so
+            *-- `If !Eof()` em TmpLote - por isso aqui fica so a ESTRUTURA
+            *-- (regra #41: ControlSource antes do cursor existir derruba o
+            *-- Init). O vinculo mora em BtnLotesClick.
             WITH loc_oGrd
                 .Top              = 10
                 .Left             = 5
                 .Width            = 420
                 .Height           = 218
-                .RecordSource     = "TmpNens"
                 .RecordSourceType = 1
+                *-- RecordSource VAZIO de proposito. Medido (Erro188): com
+                *-- RecordSourceType = 1 e RecordSource nao atribuido, o VFP
+                *-- liga a grade ao ALIAS CORRENTE no momento do AddObject e
+                *-- auto-preenche os ControlSource com os campos dele - o que
+                *-- faz a grade parecer configurada com o cursor errado.
+                .RecordSource     = ""
                 .ColumnCount      = 3
                 .DeleteMark       = .F.
                 .ReadOnly         = .F.
@@ -1928,23 +2096,23 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                 .Visible          = .T.
             ENDWITH
 
-            *-- Coluna 1: Lote
+            *-- Coluna 1: nLotes - Lote
             loc_oCol = loc_oGrd.Columns(1)
             loc_oCol.Width           = 160
             loc_oCol.Header1.Caption = "Lote"
-            loc_oCol.Controls(1).ControlSource = "TmpNens.Lote"
+            loc_oCol.Header1.Alignment = 2
 
-            *-- Coluna 2: Qtde do lote
+            *-- Coluna 2: cMats - Componente (o migrado dizia "Quantidade")
             loc_oCol = loc_oGrd.Columns(2)
             loc_oCol.Width           = 120
-            loc_oCol.Header1.Caption = "Quantidade"
-            loc_oCol.Controls(1).ControlSource = "TmpNens.Qtde"
+            loc_oCol.Header1.Caption = "Componente"
+            loc_oCol.Header1.Alignment = 2
 
-            *-- Coluna 3: Prazo/Vencimento
+            *-- Coluna 3: SaldoF - Saldo
             loc_oCol = loc_oGrd.Columns(3)
             loc_oCol.Width           = 120
             loc_oCol.Header1.Caption = "Saldo"
-            loc_oCol.Controls(1).ControlSource = "TmpNens.Prazo"
+            loc_oCol.Header1.Alignment = 2
 
             *-- Botao OK: fecha o painel de lotes
             loc_oCnt.AddObject("cmd_4c_OkLotes", "CommandButton")
@@ -2186,7 +2354,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .BorderStyle   = 1
-                .ControlSource = "xNensi.Cors"
+                .ControlSource = "xNensi.codcors"
                 .Value         = ""
                 .Visible       = .T.
             ENDWITH
@@ -2201,7 +2369,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .BorderStyle   = 1
-                .ControlSource = "xNensi.Tams"
+                .ControlSource = "xNensi.codtams"
                 .Value         = ""
                 .Visible       = .T.
             ENDWITH

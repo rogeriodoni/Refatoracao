@@ -197,7 +197,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Left          = 467
             .Width         = 465
             .Height        = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth   = 0
             .SpecialEffect = 0
@@ -370,7 +370,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Left          = 917
             .Width         = 90
             .Height        = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth   = 0
             .SpecialEffect = 0
@@ -1865,7 +1865,7 @@ DEFINE CLASS FormProduto AS FormBase
             .Left          = 848
             .Width         = 160
             .Height        = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth   = 0
             .SpecialEffect = 0

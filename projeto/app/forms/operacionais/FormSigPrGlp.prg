@@ -444,7 +444,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .Caption    = "\<Disponiveis"
                 .ForeColor  = RGB(90, 90, 90)
                 .BackColor  = RGB(255, 255, 255)
-                .Themes     = .F.
+                .Themes           = .T.
                 .Visible    = .T.
             ENDWITH
 
@@ -497,7 +497,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .PicturePosition = 13
                 .ForeColor       = RGB(90, 90, 90)
                 .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
+                .Themes           = .T.
                 .Visible         = .T.
             ENDWITH
 
@@ -516,7 +516,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .Caption    = "\<Total/Linhas"
                 .ForeColor  = RGB(90, 90, 90)
                 .BackColor  = RGB(255, 255, 255)
-                .Themes     = .F.
+                .Themes           = .T.
                 .Visible    = .T.
             ENDWITH
 
@@ -535,7 +535,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .Caption    = "\<Relat" + CHR(243) + "rio"
                 .ForeColor  = RGB(90, 90, 90)
                 .BackColor  = RGB(255, 255, 255)
-                .Themes     = .F.
+                .Themes           = .T.
                 .Visible    = .T.
             ENDWITH
 
@@ -554,7 +554,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .Caption    = "\<Processar"
                 .ForeColor  = RGB(90, 90, 90)
                 .BackColor  = RGB(255, 255, 255)
-                .Themes     = .F.
+                .Themes           = .T.
                 .Visible    = .T.
             ENDWITH
 
@@ -571,10 +571,10 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .WordWrap   = .T.
                 .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .Cancel     = .T.
-                .Caption    = "Sair"
+                .Caption    = "Encerrar"
                 .ForeColor  = RGB(90, 90, 90)
                 .BackColor  = RGB(255, 255, 255)
-                .Themes     = .F.
+                .Themes           = .T.
                 .Visible    = .T.
             ENDWITH
         CATCH TO loc_oErro
@@ -3014,6 +3014,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                         .grd_4c_DispGrupo.Refresh()
                         .grd_4c_DispGrupo.Column5.SetFocus()
                         .grd_4c_DispGrupo.Refresh()
+                        .Visible     = .T.
                     ENDWITH
                 ENDIF
             ENDIF
@@ -4702,11 +4703,13 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .txt_4c_GetDGrupo.Value = ""
                 .txt_4c_GetDConta.Value = ""
                 .lbl_4c_Label1.Caption  = "Estoque Dispon" + CHR(237) + "vel"
+                .Visible     = .T.
             ENDWITH
 
             WITH THIS.cnt_4c_Container2
                 .txt_4c_QtPedida.Value = 0
                 .txt_4c_QtSelec.Value  = 0
+                .Visible     = .T.
             ENDWITH
 
             WITH THIS.cnt_4c_Container5
@@ -4714,6 +4717,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
                 .txt_4c_QtSelec.Value   = 0
                 .txt_4c_GetDGrupo.Value = ""
                 .txt_4c_GetDConta.Value = ""
+                .Visible     = .T.
             ENDWITH
 
             THIS.Refresh()

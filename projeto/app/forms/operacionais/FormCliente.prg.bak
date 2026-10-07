@@ -14,11 +14,16 @@
 
 DEFINE CLASS FormCliente AS FormBase
 
-    *-- Propriedades visuais (aumentado para 1000x600 p/ acomodar layout
-    *-- Lista+Dados como no legado SIGCDCTA. Wrapper clsconta interno usa
-    *-- 768 de largura fixa; sobra 232 na direita para botoes CRUD topo.)
-    Height       = 600
-    Width        = 1000
+    *-- Propriedades visuais. O form hospeda DUAS vistas: a Lista (grid de
+    *-- clientes) e os Dados (wrapper clsconta). Quem manda no tamanho eh o
+    *-- clsconta, que com as 12 abas visiveis precisa de 1000 x 600 (medido -
+    *-- ver ConfigurarContaCls). Com o container em Left = 12 / Top = 132:
+    *--   Width  >= 12 + 1000 + 12 = 1024
+    *--   Height >= 132 + 600 + 8  = 740
+    *-- A vista Lista acompanha sozinha: cabecalho, botoes e grid sao todos
+    *-- dimensionados por THIS.Width / THIS.Height.
+    Height       = 740
+    Width        = 1024
     AutoCenter   = .T.
     Caption      = "Cadastro de Cliente"
     ShowWindow = 1
@@ -55,6 +60,48 @@ DEFINE CLASS FormCliente AS FormBase
     plAltCpf      = .F.       && permite alterar CPF/CNPJ apos INSERIR
     CodClis       = ""        && codigo do cliente corrente (usado pelo wrapper)
     tipopais      = .F.       && flag pais estrangeiro
+    *-- BuscaPor: por qual campo a ultima procura foi feita. O legado usa para
+    *-- escolher em que coluna da grade o foco cai (1=Codigo, 2=Descricao,
+    *-- 3=CPF/CNPJ, 4=Caracteristica). Erro167.
+    BuscaPor      = 1
+
+    *-- AlterouLgpd (Erro166): a UNICA property de ThisForm que o clsconta
+    *-- usa e NAO cria sozinho.
+    *--
+    *-- O p-code do clsconta toca 18 properties customizadas em ThisForm, e
+    *-- para 17 delas ele mesmo se vira, com o par guarda + AddProperty:
+    *--
+    *--     If Type('ThisForm.OldEmpresa') == 'U'
+    *--         ThisForm.AddProperty('OldEmpresa', ...)
+    *--     EndIf
+    *--
+    *-- (AlteraEmpresa, CodClis, CriouForm, FigName, Inicio, InsereAuto,
+    *--  MontouCampos, OldCargo, OldEmpresa, pcEscolha, pcLstSemChk1,
+    *--  pcLstSemChk2, peInicValue, plAltCpf, plAutoInclusao, pnRetGravacao,
+    *--  poWindowCli, PrimeiraEntrada, Ret2Pos, TipoCep, TipoCepTrab,
+    *--  tipopais, ValidaIE). Por isso nunca deram erro.
+    *--
+    *-- AlterouLgpd ficou de fora dessa lista: aparece CRU nos dois unicos
+    *-- lugares em que eh citada -
+    *--
+    *--   InteractiveChange dos controles de LGPD da pgframeDados1
+    *--     (ckAutEmail / ckAutSms / ckAutWhats / ckAutTeleg / lblAutCtt /
+    *--      cmgimgLgpd):
+    *--         If ThisForm.pcEscolha = 'ALTERAR'
+    *--             ThisForm.AlterouLgpd = .T.
+    *--         EndIf
+    *--
+    *--   mGravaDados, linha 22:
+    *--         If ThisForm.pcEscolha = 'ALTERAR' and ThisForm.AlterouLgpd
+    *--             Zap in CrSigCdLgp ... (grava o historico de consentimento)
+    *--
+    *-- Sem a property, gravar uma ALTERACAO estourava
+    *-- "Erro 1734: Property ALTEROULGPD is not found" em
+    *-- FORMCLIENTE.CNT_4C_CONTA.MGRAVADADOS.
+    *--
+    *-- O reset por ciclo de edicao fica em ChamarMLeDadosSeguro - ver o
+    *-- comentario la, que explica por que o legado nao precisava dele.
+    AlterouLgpd   = .F.       && LGPD: o usuario mexeu no consentimento?
 
     *-- Parametros recebidos em Init (armazenados para uso em InicializarForm)
     this_cCpf         = ""
@@ -64,6 +111,34 @@ DEFINE CLASS FormCliente AS FormBase
     this_cCli         = ""
     this_cTpBloqCar   = "0"
     this_cMudaCpfCgc  = "0"
+
+    *-- this_cTpCadCli: o 3o parametro do clsconta.mLeDados, e o que decide o
+    *-- FORMATO da tela inteira. Fonte unica: os 5 pontos que chamam mLeDados
+    *-- (InicializarForm / Incluir / Alterar / Visualizar / CarregarLista) leem
+    *-- daqui, entao trocar o modo eh mudar UMA linha.
+    *--
+    *--                      '0' (aqui)                  '1' (o que o SCX passa)
+    *--   Abas               as 12, visiveis             nenhuma
+    *--   pgframeDados.Top   0                           Form.Height - PageHeight
+    *--   Paginas 3..10      conforme crSigCdGcr         desabilitadas
+    *--   Navegacao          pelas abas                  cmdGCarac / cmdgPessoal
+    *--
+    *-- O `sigcdcli.scx` passa '1' - ele eh o cadastro RAPIDO de cliente, so a
+    *-- primeira pagina. Aqui a tela alvo eh a do sistema modular, que mostra as
+    *-- 12 abas (Dados Principais, Pessoais/Comerciais, Dados Bancarios,
+    *-- Follow-up, Conta Corrente, Dados Fiscais, Complemento, Empresa, Dados
+    *-- Contabeis, Informacoes Cadastrais, Caracteristicas, Perfil).
+    *--
+    *-- DIVERGENCIA DELIBERADA do SCX, decidida com o time. Duas consequencias
+    *-- que vem junto e nao sao regressao:
+    *--  1. O `mLeDados` passa a chamar `fAcessoContas(goSistema.Usuario,
+    *--     lcGrupo, 'C', lcIcli)` em ALTERAR - com '1' esse gate nem rodava.
+    *--     Usuario 4CONTROL tem acesso total; os demais passam pela regra real
+    *--     de SigSyAgc/SigSyAcc/SigCdAcG, que eh o comportamento do legado.
+    *--  2. O fallback de grupo que o mLeDados so faz com '1'
+    *--     (`lcGrupo = crSigCdPam.GrPadClis`) deixa de rodar la dentro - mas o
+    *--     `ChamarMLeDadosSeguro` ja resolve o grupo antes de chamar.
+    this_cTpCadCli    = "0"
 
     *============================================================
     PROCEDURE Init
@@ -78,6 +153,25 @@ DEFINE CLASS FormCliente AS FormBase
         THIS.this_cCli        = IIF(TYPE("par_cCli")        = "C", PADR(par_cCli, 10),        SPACE(10))
         THIS.this_cTpBloqCar  = IIF(TYPE("par_cTpBloqCar")  = "C", par_cTpBloqCar,            "0")
         THIS.this_cMudaCpfCgc = IIF(TYPE("par_cMudaCpfCgc") = "C", par_cMudaCpfCgc,           "0")
+
+        *-- Captura de erro do p-code legado (Erro163_Aba1_2).
+        *-- O clsconta eh p-code COMPILADO: erro em Valid/When/Click de la nao tem
+        *-- quem trate. Este handler registra em projeto\app\start\ErroLegado.log
+        *-- (ADDBS(gc_4c_CaminhoBase), junto dos demais diag logs) e deixa a
+        *-- execucao CONTINUAR, para a tela nao morrer com o usuario dentro dela.
+        *--
+        *-- So passou a funcionar depois da regra #29: enquanto o Show() do
+        *-- AbrirFormCliente ficava DENTRO do TRY do menu, o TRY/CATCH vencia o
+        *-- ON ERROR em toda a pilha e este handler NUNCA era chamado - o log
+        *-- ficava vazio e a tela fechava do mesmo jeito. Se um dia o log voltar a
+        *-- ficar vazio com a tela fechando, conferir ANTES se alguem reintroduziu
+        *-- um TRY em volta do Show().
+        *--
+        *-- MITIGACAO, nao correcao de causa raiz: ver o cabecalho de
+        *-- utils\RegistrarErroLegado.prg. Desinstalado no Destroy.
+        PUBLIC gn_4c_ErrosLegado
+        gn_4c_ErrosLegado = 0
+        ON ERROR DO RegistrarErroLegado WITH ERROR(), MESSAGE(), PROGRAM(), LINENO()
 
         RETURN DODEFAULT()
     ENDPROC
@@ -210,7 +304,13 @@ DEFINE CLASS FormCliente AS FormBase
                     ENDIF
                 ENDTRY
 
-                THIS.cnt_4c_Conta.pgframeDados.Top = 0
+                *-- Geometria dos tres CommandGroup de navegacao entre abas:
+                *-- so precisa correr UMA vez (o mLeDados nao mexe no interno).
+                THIS.ConfigurarBotoesNavegacaoAbas()
+
+                *-- Layout que o mLeDados DESTROI a cada chamada (ver metodo).
+                THIS.AplicarLayoutPosLeDados()
+
                 THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.ToolTipText = "F5 - Dados Pessoais/Comerciais"
 
                 *-- Ajustar navegacao inicial do PageFrame interno (pgframeDados)
@@ -235,7 +335,7 @@ DEFINE CLASS FormCliente AS FormBase
                 loc_lRetLeDados = .T.  && default sucesso se pulando mLeDados
                 IF loc_lIniciarEmDados
                     TRY
-                        loc_lRetLeDados = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        loc_lRetLeDados = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                             THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                         IF loc_nHDiag > 0
                             FPUTS(loc_nHDiag, "mLeDados: retornou=" + TRANSFORM(loc_lRetLeDados))
@@ -800,15 +900,195 @@ DEFINE CLASS FormCliente AS FormBase
             MsgErro("Erro ao carregar biblioteca de classes: " + loc_oErro.Message, "Erro")
         ENDTRY
 
+        *-- Dimensoes: as da CLASSE (1000 x 600), nao as do SCX (768 x 450).
+        *--
+        *-- O SCX legado encolhe o container para 768 x 450 porque roda com
+        *-- pcTpCadCli = '1': sem abas e so a pagina de Cadastro. Neste ponto o
+        *-- form passou a rodar com pcTpCadCli = '0' (as 12 abas visiveis, como
+        *-- no sistema modular), e ai 768 x 450 recorta conteudo.
+        *--
+        *-- Medido instanciando o clsconta no VFP9 e percorrendo Pages/Controls
+        *-- (maior Top+Height e Left+Width de cada pagina):
+        *--
+        *--   pgframeDados        802 de altura, 12 paginas
+        *--   Tabs = .T.       -> PageHeight 774 (faixa de abas = 28)
+        *--   pagina mais ALTA -> pgframeDados1  "Cadastro"  bottom = 567
+        *--   pagina mais LARGA-> pgframeDados2  "Pessoal"   right  = 986
+        *--
+        *-- Logo: 28 + 567 = 595 de altura e 986 de largura. A classe declara
+        *-- exatamente 1000 x 600 - ela ja esta dimensionada para o conjunto
+        *-- completo das 12 paginas. Com 768 x 450 ficariam de fora a coluna
+        *-- direita da pagina 1 (LGPD / Conta Inativa, x 768..960) e o rodape
+        *-- (Diretorio/Pasta de Arquivos, y 450..567).
         THIS.AddObject("cnt_4c_Conta", "clsconta")
         WITH THIS.cnt_4c_Conta
             .Top    = 132
             .Left   = 12
-            .Width  = 768
-            .Height = 450
+            .Width  = 1000
+            .Height = 600
             .Visible     = .T.
         ENDWITH
         *-- cnt_4c_Conta permanece oculto ate mLeDados retornar .T. em InicializarForm
+    ENDPROC
+
+    *============================================================
+    * AplicarLayoutPosLeDados - refaz o layout que o mLeDados do
+    * clsconta DESTROI a cada chamada (Erro165).
+    *
+    * O mLeDados (p-code do classresp.vcx) termina com:
+    *
+    *     .Tabs = (This.pcTpCadCli=='0')
+    *     .Top  = Iif(.Tabs, 0, ThisForm.Height - This.PgframeDados.PageHeight)
+    *
+    * Medido na classe: clsconta.pgframeDados.Height = 802 e o form tinha
+    * Height = 600 - com pcTpCadCli='1' o Tabs fica .F. e o Top vira
+    * 600 - 798 = -198. Ou seja: a pagina 1 sobe ~198px e o container
+    * RECORTA o topo dela. O usuario clicava Incluir e caia direto no
+    * bloco de endereco/contato (GetCEP.Top = 200 no SCX), sem
+    * Codigo / Nome / CPF na tela.
+    *
+    * NOTA: com this_cTpCadCli = "0" (o modo atual, ver a property) o
+    * proprio mLeDados ja cai no ramo `Iif(.Tabs, 0, ...)` e deixa o Top
+    * em 0 sozinho - este reset vira rede de seguranca, nao o conserto.
+    * Ele fica porque eh barato e porque volta a ser o conserto no minuto
+    * em que alguem devolver a property para "1". Pelo mesmo motivo os tres
+    * CommandGroup de navegacao continuam sendo reposicionados aqui, mesmo
+    * que com "0" o mLeDados os deixe invisiveis (quem navega sao as abas).
+    *
+    * O SCX legado resolve isso com um override de mledados no PROPRIO
+    * form, que roda DEPOIS do DoDefault (sigcdcli_form_codigo_fonte.txt):
+    *
+    *     PROCEDURE mledados
+    *     Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc
+    *     DoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)
+    *     thisform.cntConta.pgframeDados.Top = 0
+    *     ENDPROC
+    *
+    * Aqui o clsconta entra por AddObject (nao ha subclasse onde colocar
+    * o override), entao o reset roda no funil unico de chamadas -
+    * ChamarMLeDadosSeguro. Aplicar so no InicializarForm nao bastava: o
+    * mLeDados roda de novo em TODO Incluir/Alterar/Visualizar.
+    *
+    * O mLeDados tambem re-ancora os tres CommandGroup de navegacao com
+    * .Top = (This.Height - .Height - 4), por isso o Left/Top do SCX eh
+    * reaplicado junto.
+    *============================================================
+    PROCEDURE AplicarLayoutPosLeDados
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+            THIS.cnt_4c_Conta.pgframeDados.Top = 0
+        ENDIF
+
+        *-- BARRA DE NAVEGACAO ENTRE ABAS (Erro163_Aba1_3 / Erro165)
+        *--
+        *-- O pgframeDados do clsconta NAO mostra tabs: quem troca de aba
+        *-- sao estes tres CommandGroup. A migracao aplicou dezenas de
+        *-- overrides do SCX nos controles das PAGINAS e esqueceu os tres
+        *-- filhos DIRETOS do cntConta - entao eles ficaram no Left/Top da
+        *-- CLASSE, que eh fora da area do container:
+        *--
+        *--   botao         classe      SCX legado    cnt_4c_Conta
+        *--   cmdGCarac     891, 540 -> 633, 397      Width  = 768
+        *--   cmdGFtec      924, 540 -> 672, 397      Height = 450
+        *--   cmdgpessoal   957, 539 -> 711, 397
+        *--
+        *-- Container RECORTA filho fora da area, entao os tres sumiam da
+        *-- tela sem erro nenhum: o usuario entrava na aba de endereco e
+        *-- nao tinha como voltar para a aba 1 - so restava Salvar.
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGCarac", 5)
+            WITH THIS.cnt_4c_Conta.cmdGCarac
+                .Left = 633
+                .Top  = 397
+            ENDWITH
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGFtec", 5)
+            WITH THIS.cnt_4c_Conta.cmdGFtec
+                .Left = 672
+                .Top  = 397
+            ENDWITH
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5)
+            WITH THIS.cnt_4c_Conta.cmdgPessoal
+                .Left = 711
+                .Top  = 397
+            ENDWITH
+        ENDIF
+    ENDPROC
+
+    *============================================================
+    * ConfigurarBotoesNavegacaoAbas - overrides do SCX legado nos
+    * CommandButton INTERNOS dos tres CommandGroup de navegacao.
+    *
+    * O migrador copiou so o Left/Top do GRUPO e deixou o botao interno
+    * com a geometria da CLASSE (32x32 em 5,5 -> grupo AutoSize de 42).
+    * O SCX declara 40x40 em 5,5 (grupo AutoSize de 50), que eh o que faz
+    * o .Top = (Height - 50 - 4) do mLeDados cair em 396 - o mesmo 397 que
+    * o SCX declara no grupo. Sem estes overrides os tres botoes ficam
+    * menores e fora da linha desenhada pelo legado.
+    *
+    * Picture/ForeColor/BackColor transcritos do dump do SCX
+    * (tasks\task372\sigcdcli_form_codigo_fonte.txt, linhas 1873-1926) -
+    * o legado usa o MESMO x_planilha.bmp nos tres; quem distingue eh o
+    * ToolTipText, que o mLeDados preenche.
+    *============================================================
+    PROCEDURE ConfigurarBotoesNavegacaoAbas
+        LOCAL loc_i, loc_cGrupo, loc_cBotao, loc_oBtn
+        LOCAL ARRAY loc_aNav[3, 2]
+
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN
+        ENDIF
+
+        loc_aNav[1, 1] = "cmdGCarac"
+        loc_aNav[1, 2] = "cmdCarac"
+        loc_aNav[2, 1] = "cmdGFtec"
+        loc_aNav[2, 2] = "cmdFTec"
+        loc_aNav[3, 1] = "cmdgPessoal"
+        loc_aNav[3, 2] = "cmdPessoal"
+
+        FOR loc_i = 1 TO 3
+            loc_cGrupo = loc_aNav[loc_i, 1]
+            loc_cBotao = loc_aNav[loc_i, 2]
+
+            IF !PEMSTATUS(THIS.cnt_4c_Conta, loc_cGrupo, 5)
+                LOOP
+            ENDIF
+
+            *-- Regra #15: EVALUATE so para LEITURA (o "=" fica fora da string).
+            IF EVALUATE("VARTYPE(THIS.cnt_4c_Conta." + loc_cGrupo + ")") <> "O"
+                LOOP
+            ENDIF
+
+            loc_oBtn = .NULL.
+            IF EVALUATE("PEMSTATUS(THIS.cnt_4c_Conta." + loc_cGrupo + ", '" + loc_cBotao + "', 5)")
+                loc_oBtn = EVALUATE("THIS.cnt_4c_Conta." + loc_cGrupo + "." + loc_cBotao)
+            ENDIF
+
+            IF VARTYPE(loc_oBtn) = "O"
+                WITH loc_oBtn
+                    .Top               = 5
+                    .Left              = 5
+                    .Height            = 40
+                    .Width             = 40
+                    .FontName          = "Verdana"
+                    .FontSize          = 8
+                    .WordWrap          = .T.
+                    .Picture           = gc_4c_CaminhoIcones + "x_planilha.bmp"
+                    .ForeColor         = RGB(36, 84, 155)
+                    .BackColor         = RGB(255, 255, 255)
+                    .DisabledBackColor = RGB(255, 255, 255)
+                    .Themes            = .F.
+                ENDWITH
+            ENDIF
+
+            STORE RGB(255, 255, 255) TO ("THIS.cnt_4c_Conta." + loc_cGrupo + ".BackColor")
+            STORE .F.                TO ("THIS.cnt_4c_Conta." + loc_cGrupo + ".Themes")
+        ENDFOR
     ENDPROC
 
     *============================================================
@@ -890,6 +1170,17 @@ DEFINE CLASS FormCliente AS FormBase
     PROCEDURE BtnOkClick
         LOCAL loc_nRetorno, loc_cCpfCgc
 
+        *-- Modo PROCURAR: o Confirmar NAO grava, executa a busca (Erro167).
+        *-- No legado quem faz o desvio eh o Salva.Click do frmcadastro, que
+        *-- despacha para msv_<acao> - com pcEscolha='PROCURAR' cai no
+        *-- msv_procurar e o pnRetGravacao vai a 1 sem gravacao nenhuma:
+        *--     ThisForm.pnRetGravacao = Iif(InList(Thisform.pcEscolha,
+        *--         'INSERIR', 'ALTERAR', 'EXCLUIR'), 0, 1)
+        IF THIS.pcEscolha == "PROCURAR"
+            = THIS.MsvProcurar()
+            RETURN
+        ENDIF
+
         loc_nRetorno = THIS.cnt_4c_Conta.mValidaObj()
 
         IF loc_nRetorno >= 0
@@ -947,6 +1238,20 @@ DEFINE CLASS FormCliente AS FormBase
             ENDTRY
         ENDIF
 
+        *-- RollBack do legado (SIGCDCLI.Cancela.Click), que o migrador
+        *-- descartou junto com o .Release. Aqui o form NAO fecha - volta
+        *-- para a Lista - entao sem o RollBack os cursores bufferizados do
+        *-- clsconta (crSigCdCli e companhia) ficam SUJOS com o registro
+        *-- abandonado, e o proximo Incluir/Alterar herda a edicao cancelada.
+        TRY
+            IF VARTYPE(THIS.poDataMgr) = "O" AND !ISNULL(THIS.poDataMgr)
+                THIS.poDataMgr.RollBack()
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Regra #9: CATCH nunca silencioso.
+            THIS.DiagIncluir("RollBack no Cancelar falhou", loc_oErro)
+        ENDTRY
+
         THIS.RetCodCliente = " "
         *-- Voltar para Lista em vez de fechar form
         THIS.IrParaLista()
@@ -987,16 +1292,33 @@ DEFINE CLASS FormCliente AS FormBase
     ENDPROC
 
     *============================================================
-    * AlternarPagina - alterna entre as paginas do pgframeDados
-    * interno de clsconta (1 = Cadastro, 2 = Dados Pessoais/Comerciais).
+    * AlternarPagina - alterna entre a pagina de Cadastro e a de
+    * Dados Pessoais/Comerciais do pgframeDados interno do clsconta.
     *
-    * Chamada por KeyPress (F5) ou por logica interna do form.
-    * par_nPagina: se informada e valida (1..PageCount), navega
-    * diretamente; caso contrario, alterna entre 1 e 2.
+    * NAO mexer no ActivePage aqui (Erro165). O clsconta numera as
+    * paginas por PageOrder, que NAO bate com a ordem de declaracao:
+    *
+    *     pgframeDados1  (Cadastro)      PageOrder = 1
+    *     pgframeDados2  (Pessoal)       PageOrder = 3
+    *     pgframeDados7  (Complemento)   PageOrder = 2
+    *
+    * ActivePage eh o PageOrder, entao "ActivePage = 2" caia em
+    * Complemento, nao em Pessoal. Pior: depois disso o cmdPessoal.Click
+    * do VCX nao fazia mais nada, porque ele so age com ActivePage 1 ou 3
+    *
+    *     Case ...ActivePage==1 -> ActivePage = 3   && Dados Pessoais
+    *     Case ...ActivePage==3 -> ActivePage = 1   && volta p/ Cadastro
+    *
+    * e o F5 ficava morto na pagina errada. Quem decide o destino eh o
+    * cmdPessoal.Click - igual ao legado, que no KeyPress do SCX chama
+    * exatamente isso e mais nada.
+    *
+    * par_nPagina: 1 = Cadastro, 2 = Dados Pessoais/Comerciais.
+    * Omitido = alterna.
     *============================================================
     PROCEDURE AlternarPagina
         LPARAMETERS par_nPagina
-        LOCAL loc_oPgf, loc_nDestino
+        LOCAL loc_oPgf, loc_nDestino, loc_nAtual
 
         IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
             RETURN
@@ -1006,26 +1328,24 @@ DEFINE CLASS FormCliente AS FormBase
             RETURN
         ENDIF
 
-        loc_oPgf = THIS.cnt_4c_Conta.pgframeDados
+        loc_oPgf  = THIS.cnt_4c_Conta.pgframeDados
+        loc_nAtual = IIF(loc_oPgf.ActivePage = 3, 2, 1)
 
-        IF TYPE("par_nPagina") = "N" AND par_nPagina >= 1 AND par_nPagina <= loc_oPgf.PageCount
+        IF TYPE("par_nPagina") = "N" AND INLIST(par_nPagina, 1, 2)
             loc_nDestino = par_nPagina
         ELSE
-            loc_nDestino = IIF(loc_oPgf.ActivePage = 1, 2, 1)
+            loc_nDestino = IIF(loc_nAtual = 1, 2, 1)
         ENDIF
 
-        loc_oPgf.ActivePage = loc_nDestino
+        IF loc_nDestino = loc_nAtual
+            RETURN
+        ENDIF
 
-        *-- Delegar ao botao de comando correspondente do clsconta
-        *-- para preservar comportamento original (highlight, refresh, etc.)
-        DO CASE
-        CASE loc_nDestino = 2 AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
-             AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
+        *-- O toggle do VCX cobre os dois sentidos (1 <-> 3).
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
+           AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
             THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
-        CASE loc_nDestino = 1 AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgCadastro", 5) ;
-             AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgCadastro, "cmdCadastro", 5)
-            THIS.cnt_4c_Conta.cmdgCadastro.cmdCadastro.Click()
-        ENDCASE
+        ENDIF
     ENDPROC
 
     *============================================================
@@ -1033,8 +1353,14 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = -4  && F5 = Aba Dados Pessoais/Comerciais
+            *-- Legado (SIGCDCLI.KeyPress): chama o Click direto, sem
+            *-- tocar no ActivePage. Ver AlternarPagina.
             NODEFAULT
-            THIS.AlternarPagina(2)
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
+                THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1684,28 +2010,70 @@ DEFINE CLASS FormCliente AS FormBase
                 ENDWITH
             ENDIF
 
-            *-- GetEstado (TextBox UF/Estado)
+            *-- GetEstado (TextBox UF/Estado) + getUFIBGE (codigo IBGE da UF)
+            *--
+            *-- DESVIO DELIBERADO do SCX legado (Erro163_Aba1_2). Medido na tela:
+            *--   Say_end9 "UF :"   417..439
+            *--   GetEstado         483..507   <- SCX manda Left = 483
+            *--   getUFIBGE         508..533   <- SCX manda Left = 508
+            *--   Say14 "Contato :" 518..578   <- SCX NAO mexe: fica no 518 da classe
+            *-- O label Contato entra 15px DENTRO da caixa do codigo IBGE - eh o
+            *-- "35ontato :" que aparece na tela. A sobreposicao vem do proprio SCX
+            *-- (o migrado estava FIEL): o SCX desloca GetEstado/getUFIBGE para a
+            *-- direita mas nao desloca Say14/Get_Contato junto.
+            *--
+            *-- Aqui se usam os Left da CLASSE clsconta (framework.vcx), que sao
+            *-- coerentes com o resto da linha e NAO sao numero inventado:
+            *--   Say_end9 417..439 | GetEstado 445..469 | getUFIBGE 471..496 |
+            *--   Say14 518..578    -> 22px livres antes do label
+            *-- De quebra fecha o vao de 44px que havia entre "UF :" e o campo,
+            *-- restaurando o espacamento de 6px que a classe say pressupoe (#23).
+            *--
+            *-- Top continua o do SCX (269) - a linha vertical esta correta.
             IF PEMSTATUS(loc_oPg1, "GetEstado", 5)
                 WITH loc_oPg1.GetEstado
-                    .Left = 483
+                    .Left = 445    && classe clsconta; SCX dizia 483 (sobrepunha)
                     .Top  = 269
                 ENDWITH
             ENDIF
 
-            *-- getUFIBGE (TextBox codigo IBGE da UF)
             IF PEMSTATUS(loc_oPg1, "getUFIBGE", 5)
                 WITH loc_oPg1.getUFIBGE
-                    .Left = 508
+                    .Left = 471    && classe clsconta; SCX dizia 508 (sobrepunha)
                     .Top  = 269
                 ENDWITH
             ENDIF
 
-            *-- Get_Regiao (TextBox regiao)
+            *-- Get_Regiao (TextBox regiao) - OCULTO (Erro163_Aba1_2)
+            *--
+            *-- Medido: Get_Regiao 596..676 (Top 269) fica INTEIRO dentro de
+            *-- Get_Contato 565..717 (Top 268). O campo eh inalcancavel - o clique
+            *-- sempre cai no Contato, que desenha por cima.
+            *--
+            *-- Nao eh defeito da migracao: a geometria eh a do legado, e la o
+            *-- clsconta tem as tres linhas do get_regiao COMENTADAS (*!*) na
+            *-- rotina de permissao por campo (crFSigAcTel) e no bloco de campo
+            *-- obrigatorio - ou seja, o campo foi aposentado no legado e ficou
+            *-- soterrado em vez de removido. Esconder eh o que torna isso
+            *-- explicito. Decisao do usuario em 2026-09-18.
+            *--
+            *-- Say_end7 ("Regi" + CHR(227) + "o :") vai junto: label sem campo eh
+            *-- pior que nenhum dos dois. Ele fica em Top=250, na linha de cima.
+            *--
+            *-- Seguro aqui: TornarControlesVisiveis() so percorre os filhos
+            *-- DIRETOS do form (cnt_4c_Conta, cmg_4c_Sair...), nao entra na
+            *-- pgframeDados1, e ainda por cima roda ANTES deste metodo.
             IF PEMSTATUS(loc_oPg1, "Get_Regiao", 5)
                 WITH loc_oPg1.Get_Regiao
-                    .Left = 596
-                    .Top  = 269
+                    .Left    = 596
+                    .Top     = 269
+                    .Visible = .F.
+                    .Enabled = .F.
                 ENDWITH
+            ENDIF
+
+            IF PEMSTATUS(loc_oPg1, "Say_end7", 5)
+                loc_oPg1.Say_end7.Visible = .F.
             ENDIF
 
             *-- getDdds (TextBox DDD)
@@ -1953,10 +2321,40 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.cmg_4c_Sair.Visible = .F.
             ENDIF
             THIS.this_cModoAtual = "LISTA"
+            THIS.AjustarCaptionConfirmar()
             THIS.RefreshGridClientes()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "IrParaLista")
         ENDTRY
+    ENDPROC
+
+    *============================================================
+    * AjustarCaptionConfirmar - a legenda do botao de confirmar
+    * acompanha a ACAO em curso (Erro168).
+    *
+    * No legado a legenda nao eh fixa: o default da classe Grupo_Salva
+    * do frmcadastro eh "\<Confirmar", e o codigo a troca conforme o
+    * caso - o caminho de Pre-Cadastro, por exemplo, faz
+    *
+    *     With ThisForm.Pagina.Dados.Grupo_Salva
+    *         .Salva.Caption='\<Alterar'
+    *
+    * ao mudar pcEscolha para ALTERAR. Em PROCURAR o botao nao grava
+    * nada (ele dispara o msv_procurar), entao continuar escrito
+    * "Salvar" mente sobre o que o clique faz.
+    *
+    * NOTA: "Procurar" segue o PADRAO atestado (legenda = nome da acao)
+    * usando o termo do proprio legado - a opcao 5 do Grupo_op chama-se
+    * `procurar` e o Wait Window diz "Procurando Contas...". Nao eh
+    * transcricao literal de uma linha do acervo, porque o acervo so
+    * traz o caso de ALTERAR.
+    *============================================================
+    PROCEDURE AjustarCaptionConfirmar
+        IF !PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+            RETURN
+        ENDIF
+        THIS.cmg_4c_Sair.Buttons(1).Caption = ;
+            IIF(THIS.pcEscolha == "PROCURAR", "\<Procurar", "\<Salvar")
     ENDPROC
 
     *============================================================
@@ -1965,6 +2363,7 @@ DEFINE CLASS FormCliente AS FormBase
     PROCEDURE IrParaDados
         LOCAL loc_oErro
         TRY
+            THIS.AjustarCaptionConfirmar()
             IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5)
                 THIS.cnt_4c_ViewLista.Visible = .F.
             ENDIF
@@ -2053,7 +2452,10 @@ DEFINE CLASS FormCliente AS FormBase
             ENDIF
             RETURN .F.
         ENDIF
-        IF loc_cAcao <> "VISUALIZAR"
+        *-- PROCURAR nao exige acesso de alteracao, igual a VISUALIZAR: no
+        *-- Grupo_op do SIGCDCTA so as opcoes 3 (Alterar) e 4 (Excluir) passam
+        *-- pela checagem; a 5 (Procurar) eh leitura. Erro167.
+        IF !INLIST(loc_cAcao, "VISUALIZAR", "PROCURAR")
             IF !fChecaAcesso("SIGCDCTA", "ALTERAR")
                 MsgAviso("Usu" + CHR(225) + "rio N" + CHR(227) + "o Possui Acesso p/ Incluir / Alterar Dados de Clientes.")
                 RETURN .F.
@@ -2078,6 +2480,29 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROTECTED FUNCTION ChamarMLeDadosSeguro(par_cGrupo, par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
         LOCAL loc_cGrupo, loc_cCli, loc_cEscolhaSalva, loc_lRet, loc_lRestaurar
+
+        *-- Funil unico de todas as chamadas a mLeDados (Incluir/Alterar/Visualizar):
+        *-- reparar a Gradei ANTES, senao o mmontagrade aborta e leva o mLeDados junto.
+        THIS.RepararGradeiColunas()
+
+        *-- LGPD: comeca cada ciclo de edicao com o flag limpo (Erro166).
+        *--
+        *-- O legado nao tem este reset e nao precisa: o SIGCDCLI eh modal e
+        *-- vive UM cliente - abre, edita, grava, fecha. O flag nasce .F. com o
+        *-- form e morre com ele.
+        *--
+        *-- Aqui o form NAO fecha entre um registro e outro (Lista -> Dados ->
+        *-- Lista -> Dados). Sem limpar, o primeiro cliente em que alguem
+        *-- tocasse no consentimento deixaria AlterouLgpd = .T. para sempre, e
+        *-- todo ALTERAR seguinte gravaria uma linha de historico em CrSigCdLgp
+        *-- sem ninguem ter mexido em LGPD nenhuma - registro de consentimento
+        *-- falso, que eh justamente o que a tabela existe para nao ter.
+        *--
+        *-- Este eh o ponto certo: os 5 caminhos que chamam mLeDados
+        *-- (InicializarForm / Incluir / Alterar / Visualizar / CarregarLista)
+        *-- sao todos inicio de ciclo.
+        THIS.AlterouLgpd = .F.
+
         loc_cGrupo = ALLTRIM(IIF(TYPE("par_cGrupo") = "C", par_cGrupo, ""))
         loc_cCli   = ALLTRIM(IIF(TYPE("par_cCli")   = "C", par_cCli,   ""))
 
@@ -2102,6 +2527,12 @@ DEFINE CLASS FormCliente AS FormBase
         loc_lRet = THIS.cnt_4c_Conta.mLeDados( ;
             IIF(EMPTY(loc_cGrupo), par_cGrupo, PADR(loc_cGrupo, 10)), ;
             par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
+
+        *-- O mLeDados reposiciona o pgframeDados (Top = -195 com este form)
+        *-- e re-ancora os botoes de navegacao. Desfazer AQUI, no funil unico,
+        *-- eh o equivalente do override de mledados do SCX legado - que roda
+        *-- DEPOIS do DoDefault justamente por isso. Ver AplicarLayoutPosLeDados.
+        THIS.AplicarLayoutPosLeDados()
 
         IF loc_lRestaurar
             THIS.pcEscolha = loc_cEscolhaSalva
@@ -2189,6 +2620,249 @@ DEFINE CLASS FormCliente AS FormBase
                 USE IN cursor_4c_GrupoFiltro
             ENDIF
             MsgErro("Erro no lookup de Grupo:" + CHR(13) + loc_oErr.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * RepararGradeiColunas - Erro162_Aba1
+    *
+    * A VCX desenha clsconta.pgframeDados.pgframeDados7.Gradei com
+    * ColumnCount = 3 e um ComboBox "fwcombo1" (classe fwcombo,
+    * framework.vcx) nas Column1 e Column3. Em runtime a grade chega com
+    * ColumnCount = -1 (auto), e ai o mMontaGrade do legado faz:
+    *
+    *     .pgFrameDados7.GradeI.RecordSource = ''          && linha 18
+    *     ...
+    *     RecordSource = 'crSigClLcr'                      && linha 149
+    *     ...
+    *     With .Column1.fwcombo1                           && linha 180
+    *
+    * Com ColumnCount = -1 o VFP RECONSTROI as colunas a partir dos campos
+    * do cursor - viraram 6, com ControlSource em minusculas - e destroi as
+    * colunas desenhadas junto com os fwcombo1. A linha 180 entao estoura
+    * "Property FWCOMBO1 is not found", o mLeDados aborta ANTES do
+    *
+    *     Replace Grupos With crSigCdGcr.Codigos, TpCads ..., DataIncs ...,
+    *             Usuars ..., Emps ..., Consigs ..., Concilias ... In crSigCdCli
+    *
+    * e como eh um Replace SO, os SETE campos ficam em branco. O sintoma
+    * visivel era s?? o Grupo vazio na aba Cadastro ao clicar Incluir.
+    *
+    * Medido no VFP9 (2026-09-17), grid com cursor de 6 campos:
+    *   ColumnCount = 3 explicito -> apos RecordSource=''/RecordSource=cursor
+    *                                CC continua 3 e o combo SOBREVIVE
+    *   ColumnCount = -1          -> CC vira 6 e o combo eh DESTRUIDO
+    *   reparo (CC=3 + AddObject) -> sobrevive a um novo ciclo de RecordSource
+    *
+    * Por isso basta reparar UMA vez, antes do mLeDados: o proprio ciclo de
+    * RecordSource do mMontaGrade nao desfaz mais.
+    *
+    * Propriedades transcritas do dump da VCX (nao inventadas). A VCX NAO
+    * define CurrentControl em coluna nenhuma (0 ocorrencias no ClassResp),
+    * entao aqui tambem nao se define - quem cuida da exibicao eh a classe
+    * fwgrade do legado.
+    *============================================================
+    PROCEDURE RepararGradeiColunas
+        LOCAL loc_oGr, loc_oErro
+        TRY
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados7", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados7, "Gradei", 5)
+
+                loc_oGr = THIS.cnt_4c_Conta.pgframeDados.pgframeDados7.Gradei
+
+                *-- ColumnCount EXPLICITO: eh isso que impede o VFP de reconstruir
+                *-- as colunas quando o mMontaGrade atribuir o RecordSource.
+                IF loc_oGr.ColumnCount <> 3
+                    loc_oGr.ColumnCount = 3
+                ENDIF
+
+                IF loc_oGr.ColumnCount >= 3
+                    WITH loc_oGr
+                        .HeaderHeight = 18
+                        .RowHeight    = 22
+                        .Column1.FontSize = 8
+                        .Column1.Width    = 112
+                        .Column1.Sparse   = .F.
+                        .Column1.Header1.Alignment = 2
+                        .Column1.Header1.Caption   = "Grupo"
+                        .Column2.FontName = "Courier New"
+                        .Column2.Width    = 80
+                        .Column2.Header1.Alignment = 2
+                        .Column2.Header1.Caption   = "Limite Cr" + CHR(233) + "dito"
+                        .Column3.Header1.Alignment = 2
+                        .Column3.Header1.Caption   = "Moeda"
+                    ENDWITH
+
+                    IF !PEMSTATUS(loc_oGr.Column1, "fwcombo1", 5)
+                        loc_oGr.Column1.AddObject("fwcombo1", "fwcombo")
+                        WITH loc_oGr.Column1.fwcombo1
+                            .FontName    = "Arial"
+                            .FontSize    = 8
+                            .Left        = 4
+                            .Top         = 27
+                            .Visible     = .F.
+                            .BorderStyle = 0
+                        ENDWITH
+                    ENDIF
+
+                    IF !PEMSTATUS(loc_oGr.Column3, "fwcombo1", 5)
+                        loc_oGr.Column3.AddObject("fwcombo1", "fwcombo")
+                        WITH loc_oGr.Column3.fwcombo1
+                            .FontSize    = 8
+                            .Left        = 10
+                            .Top         = 26
+                            .Visible     = .F.
+                            .BorderStyle = 0
+                        ENDWITH
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao preparar a grade de Limite de Cr" + CHR(233) + "dito:" + CHR(13) + ;
+                loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * DiagIncluir - DIAGNOSTICO TEMPORARIO (Erro162_Aba1)
+    *
+    * Registra o estado logo apos o mLeDados do clsconta legado, para
+    * descobrir por que o campo Grupo da aba Cadastro fica vazio no
+    * INCLUIR. Get_Grupo tem ControlSource = "crSigCdCli.grupos", e quem
+    * preenche essa coluna eh um UNICO Replace do legado:
+    *
+    *   Select crSigCdGcr
+    *   Locate For Codigos = lcGrupo
+    *   ...
+    *   Replace Grupos With crSigCdGcr.Codigos, TpCads With ..., DataIncs ...,
+    *           Usuars ..., Emps With _Empr, Consigs ..., Concilias ... In crSigCdCli
+    *
+    * Sendo um Replace so, se ele nao rodar (ou se o Locate nao achar o
+    * grupo) os SETE campos ficam vazios - o Grupo sumido eh so o unico
+    * visivel. Por isso o log cobre os sete, e nao so Grupos.
+    *
+    * REMOVER depois de identificada a causa.
+    *============================================================
+    PROCEDURE DiagIncluir(par_cEtapa, par_oErro)
+        LOCAL loc_nH, loc_cLog, loc_cAliasAnt, loc_oE
+        TRY
+            loc_cAliasAnt = ALIAS()
+            loc_cLog = "=== " + TTOC(DATETIME()) + "  " + TRANSFORM(par_cEtapa) + " ===" + CHR(13) + CHR(10)
+            loc_cLog = loc_cLog + "  pcEscolha=[" + TRANSFORM(THIS.pcEscolha) + "]" + ;
+                       "  this_cGrupo=[" + TRANSFORM(THIS.this_cGrupo) + "]" + CHR(13) + CHR(10)
+
+            IF VARTYPE(par_oErro) = "O"
+                loc_cLog = loc_cLog + "  EXCECAO: " + par_oErro.Message + ;
+                           "  (linha " + TRANSFORM(par_oErro.LineNo) + ;
+                           ", proc " + TRANSFORM(par_oErro.Procedure) + ")" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- cursor de grupos: o Replace do legado le crSigCdGcr.Codigos
+            IF USED("crSigCdGcr")
+                SELECT crSigCdGcr
+                loc_cLog = loc_cLog + "  crSigCdGcr reccount=" + TRANSFORM(RECCOUNT("crSigCdGcr")) + ;
+                           " recno=" + TRANSFORM(RECNO("crSigCdGcr")) + ;
+                           " eof=" + TRANSFORM(EOF("crSigCdGcr")) + ;
+                           " Codigos=[" + TRANSFORM(crSigCdGcr.Codigos) + "]" + CHR(13) + CHR(10)
+                LOCATE FOR Codigos = PADR(ALLTRIM(THIS.this_cGrupo), 10)
+                loc_cLog = loc_cLog + "  LOCATE Codigos = PADR(grupo,10) -> achou=" + ;
+                           TRANSFORM(!EOF("crSigCdGcr"))
+                IF !EOF("crSigCdGcr")
+                    loc_cLog = loc_cLog + " Codigos=[" + TRANSFORM(crSigCdGcr.Codigos) + "]"
+                ENDIF
+                loc_cLog = loc_cLog + CHR(13) + CHR(10)
+            ELSE
+                loc_cLog = loc_cLog + "  crSigCdGcr NAO ESTA ABERTO" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- os SETE campos que o Replace unico do legado deveria gravar
+            IF USED("crSigCdCli")
+                SELECT crSigCdCli
+                loc_cLog = loc_cLog + "  crSigCdCli reccount=" + TRANSFORM(RECCOUNT("crSigCdCli")) + ;
+                           " recno=" + TRANSFORM(RECNO("crSigCdCli")) + ;
+                           " eof=" + TRANSFORM(EOF("crSigCdCli")) + CHR(13) + CHR(10)
+                IF RECCOUNT("crSigCdCli") > 0 AND !EOF("crSigCdCli")
+                    loc_cLog = loc_cLog + "    Grupos=["    + TRANSFORM(crSigCdCli.Grupos)    + "]" + ;
+                               " TpCads=["                  + TRANSFORM(crSigCdCli.TpCads)    + "]" + ;
+                               " Usuars=["                  + TRANSFORM(crSigCdCli.Usuars)    + "]" + CHR(13) + CHR(10)
+                    loc_cLog = loc_cLog + "    Emps=["      + TRANSFORM(crSigCdCli.Emps)      + "]" + ;
+                               " Consigs=["                 + TRANSFORM(crSigCdCli.Consigs)   + "]" + ;
+                               " Concilias=["               + TRANSFORM(crSigCdCli.Concilias) + "]" + ;
+                               " DataIncs=["                + TRANSFORM(crSigCdCli.DataIncs)  + "]" + CHR(13) + CHR(10)
+                ENDIF
+            ELSE
+                loc_cLog = loc_cLog + "  crSigCdCli NAO ESTA ABERTO" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- o que o campo da tela esta exibindo de fato
+            IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+                IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados1", 5)
+                    IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1, "Get_Grupo", 5)
+                        loc_cLog = loc_cLog + "  Get_Grupo.Value=[" + ;
+                                   TRANSFORM(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.Get_Grupo.Value) + "]" + ;
+                                   " ControlSource=[" + ;
+                                   THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.Get_Grupo.ControlSource + "]" + ;
+                                   CHR(13) + CHR(10)
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            loc_cLog = loc_cLog + "  _EMPR=[" + TRANSFORM(_EMPR) + "] SET(EXACT)=" + SET("EXACT") + CHR(13) + CHR(10)
+
+            *-- Gradei: e aqui que o mmontagrade estoura ("Property FWCOMBO1 is not
+            *-- found", linha 179). O legado faz, em ordem:
+            *--   linha  18: pgFrameDados7.GradeI.RecordSource = ''
+            *--   linha 149: RecordSource = 'crSigClLcr' + Column1..3.ControlSource
+            *--   linha 180: With .Column1.fwcombo1   <- estoura
+            *-- O erro NAO eh "alias nao encontrado", entao 149 executou. Resta saber
+            *-- se a atribuicao do RecordSource resetou as colunas e levou junto os
+            *-- fwcombo1 que a VCX define em Column1 e Column3.
+            LOCAL loc_oGr, loc_i
+            loc_cLog = loc_cLog + "  crSigClLcr USED=" + TRANSFORM(USED("crSigClLcr"))
+            IF USED("crSigClLcr")
+                loc_cLog = loc_cLog + " reccount=" + TRANSFORM(RECCOUNT("crSigClLcr"))
+            ENDIF
+            loc_cLog = loc_cLog + CHR(13) + CHR(10)
+
+            IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+                IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados7", 5)
+                    IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados7, "Gradei", 5)
+                        loc_oGr = THIS.cnt_4c_Conta.pgframeDados.pgframeDados7.Gradei
+                        loc_cLog = loc_cLog + "  Gradei ColumnCount=" + TRANSFORM(loc_oGr.ColumnCount) + ;
+                                   " RecordSource=[" + loc_oGr.RecordSource + "]" + ;
+                                   " Class=" + loc_oGr.Class + CHR(13) + CHR(10)
+                        FOR loc_i = 1 TO loc_oGr.ColumnCount
+                            loc_cLog = loc_cLog + "    Column" + TRANSFORM(loc_i) + ;
+                                       " fwcombo1=" + TRANSFORM(PEMSTATUS(EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i)), "fwcombo1", 5)) + ;
+                                       " ControlCount=" + TRANSFORM(EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".ControlCount")) + ;
+                                       " CurrentControl=[" + EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".CurrentControl") + "]" + ;
+                                       " ControlSource=[" + EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".ControlSource") + "]" + ;
+                                       CHR(13) + CHR(10)
+                        ENDFOR
+                    ELSE
+                        loc_cLog = loc_cLog + "  Gradei NAO EXISTE" + CHR(13) + CHR(10)
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            IF !EMPTY(loc_cAliasAnt) AND USED(loc_cAliasAnt)
+                SELECT (loc_cAliasAnt)
+            ENDIF
+
+            loc_nH = FOPEN(ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagIncluir.log", 2)
+            IF loc_nH < 0
+                loc_nH = FCREATE(ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagIncluir.log")
+            ELSE
+                =FSEEK(loc_nH, 0, 2)
+            ENDIF
+            IF loc_nH > 0
+                =FPUTS(loc_nH, loc_cLog)
+                =FCLOSE(loc_nH)
+            ENDIF
+        CATCH TO loc_oE
+            *-- diagnostico nunca pode derrubar o form
         ENDTRY
     ENDPROC
 
@@ -2580,7 +3254,7 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnIncluirClick - Limpar clsconta para inclusao de novo cliente
     *============================================================
     PROCEDURE BtnIncluirClick
-        LOCAL loc_lRet, loc_oErro
+        LOCAL loc_lRet, loc_oErro, loc_oErroMLe
         IF !THIS.ValidarPreAcao("INCLUIR")
             RETURN
         ENDIF
@@ -2593,11 +3267,22 @@ DEFINE CLASS FormCliente AS FormBase
             THIS.IrParaDados()
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                 TRY
-                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), THIS.this_cTpCadCli, ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                CATCH
-                    *-- exception nao-fatal (fwcombo1 etc.) — form usavel
+                    THIS.DiagIncluir("mLeDados OK", .NULL.)
+                CATCH TO loc_oErroMLe
+                    *-- exception nao-fatal (fwcombo1 etc.) — form usavel.
+                    *-- Regra #9: o CATCH NAO pode ser mudo. Ele engolia o erro e o
+                    *-- sintoma aparecia como campo em branco: o mLeDados do clsconta
+                    *-- legado grava Grupos/TpCads/DataIncs/Usuars/Emps/Consigs/
+                    *-- Concilias num UNICO Replace - abortado antes dele, os SETE
+                    *-- campos ficam vazios e vao para o banco assim, sem aviso.
+                    THIS.DiagIncluir("mLeDados LANCOU EXCECAO", loc_oErroMLe)
                     loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                    *-- a excecao pode ter saltado o reset feito no funil (Erro165):
+                    *-- o mLeDados reposiciona o pgframeDados perto do FIM, entao
+                    *-- ele pode ja ter rodado quando o erro estourou.
+                    THIS.AplicarLayoutPosLeDados()
                 ENDTRY
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Refresh()
@@ -2621,7 +3306,7 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnAlterarClick - Recarregar cliente em modo de alteracao
     *============================================================
     PROCEDURE BtnAlterarClick
-        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir
+        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir, loc_oErroMLe
         IF !THIS.ValidarPreAcao("ALTERAR")
             RETURN
         ENDIF
@@ -2647,10 +3332,14 @@ DEFINE CLASS FormCliente AS FormBase
 
                 IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                     TRY
-                        loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                             THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                    CATCH
+                    CATCH TO loc_oErroMLe
+                        *-- Regra #9: CATCH nunca silencioso.
+                        THIS.DiagIncluir("mLeDados (ALTERAR) LANCOU EXCECAO", loc_oErroMLe)
                         loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                        *-- ver AplicarLayoutPosLeDados (Erro165)
+                        THIS.AplicarLayoutPosLeDados()
                     ENDTRY
                     IF loc_lRet
                         THIS.cnt_4c_Conta.Refresh()
@@ -2703,7 +3392,7 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.pcEscolha       = "VISUALIZAR"
 
                 IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), THIS.this_cTpCadCli, ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                     IF loc_lRet
                         THIS.cnt_4c_Conta.Visible = .T.
@@ -2792,7 +3481,7 @@ DEFINE CLASS FormCliente AS FormBase
         LOCAL loc_lRet, loc_oErro
         TRY
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                     THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Visible = .T.
@@ -2884,42 +3573,79 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     * BtnBuscarClick - Abrir busca de cliente para carregar em edicao
     *============================================================
+    *============================================================
+    * BtnBuscarClick - entra em modo PROCURAR (Erro167).
+    *
+    * NAO abre picker. O legado (SIGCDCTA, Pagina.Lista.Grupo_op.Click,
+    * opcao 5) faz busca POR EXEMPLO: abre a ficha em branco, deixa o
+    * Codigo editavel e o usuario preenche UM campo; quem executa a
+    * consulta eh o Confirmar, via MsvProcurar.
+    *
+    *     If This.Value==5
+    *         Select crSigCdCli
+    *         Scatter Memo Memvar Blank
+    *         Insert Into crSigCdCli From Memvar
+    *     EndIf
+    *     ...
+    *     If (This.Value = 5)
+    *         .pgFrameDados1.Enabled = .t.
+    *         .ActivePage = .pgFrameDados1.PageOrder
+    *
+    * e, dentro do mLeDados:
+    *
+    *     Case (Thisform.pcEscolha = 'PROCURAR')
+    *         This.pgframeDados.pgframeDados1.GetCodigo.ReadOnly = .f.
+    *         This.pgFrameDados.pgFrameDados1.GetCodigo.SetFocus
+    *
+    * A migracao tinha inventado um FormBuscaAuxiliar no lugar - e sem
+    * filtro de Grupos, entao listava contas de outros grupos (GAVETA,
+    * COFRE...) com a tela filtrada em 11201/CLIENTES.
+    *============================================================
     PROCEDURE BtnBuscarClick
-        LOCAL loc_oBusca, loc_cCodigoCli, loc_lSelecionou, loc_oErro
+        LOCAL loc_lRet, loc_oErro, loc_oErroMLe
+
+        IF !THIS.ValidarPreAcao("PROCURAR")
+            RETURN
+        ENDIF
+
         TRY
-            loc_cCodigoCli = ""
-            loc_lSelecionou = .F.
+            THIS.pcEscolha       = "PROCURAR"
+            THIS.this_cModoAtual = "PROCURAR"
+            THIS.plaltcd         = .F.
+            THIS.this_cCli       = SPACE(10)
+            THIS.RetCodCliente   = " "
+            THIS.BuscaPor        = 1
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli", "cursor_4c_BuscaCli", "IClis", "", ;
-                "Sele" + CHR(231) + CHR(227) + "o de Cliente", .T., .T., "")
+            *-- registro em branco, como o legado faz para This.Value==5
+            IF USED("crSigCdCli")
+                SELECT crSigCdCli
+                SCATTER MEMO MEMVAR BLANK
+                INSERT INTO crSigCdCli FROM MEMVAR
+            ENDIF
 
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("RClis", "",           "Nome")
-                loc_oBusca.Show()
+            THIS.IrParaDados()
 
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
-                    SELECT cursor_4c_BuscaCli
-                    GO TOP IN cursor_4c_BuscaCli
-                    IF !EOF("cursor_4c_BuscaCli")
-                        loc_cCodigoCli = ALLTRIM(cursor_4c_BuscaCli.IClis)
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                TRY
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), ;
+                        THIS.this_cTpCadCli, THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                CATCH TO loc_oErroMLe
+                    *-- Regra #9: CATCH nunca silencioso.
+                    THIS.DiagIncluir("mLeDados (PROCURAR) LANCOU EXCECAO", loc_oErroMLe)
+                    loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                    THIS.AplicarLayoutPosLeDados()
+                ENDTRY
+
+                IF loc_lRet
+                    THIS.cnt_4c_Conta.Refresh()
+                    IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                        THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
                     ENDIF
-                    USE IN cursor_4c_BuscaCli
-                    loc_lSelecionou = !EMPTY(loc_cCodigoCli)
+                ELSE
+                    MsgErro("Erro ao inicializar formul" + CHR(225) + "rio para procura.", "Erro")
+                    THIS.IrParaLista()
                 ENDIF
-                loc_oBusca = .NULL.
             ENDIF
-
-            IF loc_lSelecionou
-                THIS.this_cCli       = PADR(loc_cCodigoCli, 10)
-                THIS.pcEscolha       = "ALTERAR"
-                THIS.this_cModoAtual = "ALTERAR"
-                THIS.plaltcd         = .T.
-                THIS.CarregarLista()
-                THIS.AjustarBotoesPorModo()
-            ENDIF
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -2929,8 +3655,324 @@ DEFINE CLASS FormCliente AS FormBase
     ENDPROC
 
     *============================================================
+    * MsvProcurar - executa a busca por exemplo do modo PROCURAR.
+    *
+    * Transcricao do msv_procurar do SIGCDCTA (ramo crSigCdGcr.TpCads=1,
+    * que eh o do cadastro / pgframeDados1). O legado chama esse metodo
+    * pela convencao msv_<acao> do frmcadastro, a partir do DoDefault()
+    * do botao Salva; aqui o BtnOkClick chama direto.
+    *
+    * DO CASE: o PRIMEIRO campo preenchido manda - a ordem eh regra, nao
+    * detalhe. E TODA consulta eh escopada pelo Grupo do filtro da lista.
+    *
+    *   1 getCodigo    IClis exato                       BuscaPor 1
+    *   2 getNome      Rtrim(RClis)   Like/=  + Grupos   BuscaPor 2
+    *   3 getCpfCgc    Cpfs = exato            + Grupos   BuscaPor 3
+    *   4 getRazao     Rtrim(Razaos)  Like/=  + Grupos   BuscaPor 2
+    *   5 get_Contato  Rtrim(Contato) Like/=  + Grupos   BuscaPor 1
+    *
+    * Retorna .T. se executou uma consulta (mesmo sem achados) e .F. se
+    * nao havia criterio nenhum ou o usuario cancelou o dialogo de modo.
+    *============================================================
+    PROCEDURE MsvProcurar
+        LOCAL loc_oPg1, loc_cGru, loc_cVal, loc_cQry, loc_nOk, loc_cCol
+        LOCAL loc_cNomeRaz, loc_lExecutou, loc_oErro
+
+        loc_lExecutou = .F.
+
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN .F.
+        ENDIF
+        IF !PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5) OR ;
+           !PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados1", 5)
+            RETURN .F.
+        ENDIF
+        loc_oPg1 = THIS.cnt_4c_Conta.pgframeDados.pgframeDados1
+
+        loc_cGru = ALLTRIM(THIS.this_cGrupo)
+        IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
+            loc_cGru = ALLTRIM(NVL(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value, ""))
+        ENDIF
+
+        *-- O nome do controle da Razao Social tem acento NA CLASSE do VCX
+        *-- (GetRazao com a-til). Regra #4 proibe o literal acentuado no .prg,
+        *-- entao o nome eh montado com CHR() e lido por EVALUATE - que eh o
+        *-- uso CERTO de EVALUATE (leitura; o "=" fica fora da string, #15).
+        loc_cNomeRaz = "GetRaz" + CHR(227) + "o"
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+
+        TRY
+            DO CASE
+            *-- 1) Codigo: exato, sem dialogo de modo
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "GetCodigo"))
+                loc_cVal = THIS.ValorControle(loc_oPg1, "GetCodigo")
+                loc_cQry = "Select * From SigCdCli Where IClis = " + EscaparSQL(loc_cVal)
+                THIS.BuscaPor = 1
+                loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+
+            *-- 2) Nome
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "GetNome"))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, "GetNome"), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(RClis) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 2
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            *-- 3) CPF/CNPJ: exato, sem dialogo (o legado tambem nao pergunta)
+            CASE !EMPTY(STRTRAN(STRTRAN(STRTRAN( ;
+                    THIS.ValorControle(loc_oPg1, "GetCPFCGC"), ".", ""), "/", ""), "-", ""))
+                loc_cVal = THIS.ValorControle(loc_oPg1, "GetCPFCGC")
+                loc_cQry = "Select * From SigCdCli Where Cpfs = " + EscaparSQL(loc_cVal) + ;
+                           IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                THIS.BuscaPor = 3
+                loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+
+            *-- 4) Razao Social
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, loc_cNomeRaz))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, loc_cNomeRaz), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(Razaos) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 2
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            *-- 5) Contato
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "Get_Contato"))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, "Get_Contato"), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(Contato) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 1
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            OTHERWISE
+                MsgAviso("Informe ao menos um dado para procurar " + ;
+                    "(C" + CHR(243) + "digo, Nome, CPF/CNPJ, Raz" + CHR(227) + "o Social ou Contato).", ;
+                    "Procurar")
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em MsvProcurar")
+            loc_lExecutou = .F.
+        ENDTRY
+
+        RETURN loc_lExecutou
+    ENDPROC
+
+    *============================================================
+    * ValorControle - le .Value de um controle da pagina por NOME.
+    * Devolve sempre CHARACTER com ALLTRIM, ou "" se o controle nao
+    * existir. Regra #15: EVALUATE aqui eh LEITURA, uso correto.
+    *============================================================
+    PROCEDURE ValorControle(par_oPai, par_cNome)
+        LOCAL loc_uVal
+        IF VARTYPE(par_oPai) <> "O" OR TYPE("par_cNome") <> "C"
+            RETURN ""
+        ENDIF
+        IF !PEMSTATUS(par_oPai, par_cNome, 5)
+            RETURN ""
+        ENDIF
+        loc_uVal = EVALUATE("par_oPai." + par_cNome + ".Value")
+        RETURN IIF(VARTYPE(loc_uVal) = "C", ALLTRIM(loc_uVal), "")
+    ENDPROC
+
+    *============================================================
+    * PerguntarModoProcura - dialogo de modo de casamento.
+    * Equivale ao `Do Form SigOpCtd With lcMsg, ThisForm` do legado,
+    * que nao veio no acervo. Devolve 1..4 ou 0 (cancelou).
+    *============================================================
+    PROCEDURE PerguntarModoProcura(par_cGrupo)
+        LOCAL loc_oDlg, loc_cMsg, loc_nRet
+        loc_nRet = 0
+
+        *-- texto identico ao do legado
+        loc_cMsg = IIF(EMPTY(ALLTRIM(NVL(par_cGrupo, ""))), ;
+            "Procura Sem Grupo Definido", ;
+            'Procura No Grupo "' + ALLTRIM(par_cGrupo) + '"')
+
+        loc_oDlg = .NULL.
+        TRY
+            loc_oDlg = CREATEOBJECT("FormOpcaoBusca", loc_cMsg)
+        CATCH
+            loc_oDlg = .NULL.
+        ENDTRY
+
+        *-- Regra #29: Show() de form MODAL fica FORA do TRY - toda a vida da
+        *-- tela roda dentro dessa chamada, e um TRY em volta faria qualquer
+        *-- erro de runtime la dentro derrubar a referencia e fechar o dialogo.
+        IF VARTYPE(loc_oDlg) = "O"
+            loc_oDlg.Show()
+            *-- LER antes de soltar: o dialogo faz Hide(), nao Release() - o objeto
+            *-- fica vivo justamente para esta leitura (Erro168).
+            loc_nRet = loc_oDlg.this_nRetorno
+            loc_oDlg.Release()
+            loc_oDlg = .NULL.
+        ENDIF
+
+        RETURN loc_nRet
+    ENDPROC
+
+    *============================================================
+    * MontarTermoProcura - monta o termo com os curingas, EXATAMENTE
+    * como o legado:
+    *   lcTmp = Iif(pnRetorno = 2 or 3, '%', '') + Alltrim(valor) +
+    *           Iif(pnRetorno = 1 or 3, '%', '')
+    * Modo 4 (exato) nao recebe curinga nenhum.
+    *============================================================
+    PROCEDURE MontarTermoProcura(par_cValor, par_nModo)
+        LOCAL loc_cVal
+        loc_cVal = ALLTRIM(IIF(TYPE("par_cValor") = "C", par_cValor, ""))
+        IF par_nModo = 4
+            RETURN loc_cVal
+        ENDIF
+        RETURN IIF(INLIST(par_nModo, 2, 3), "%", "") + loc_cVal + ;
+               IIF(INLIST(par_nModo, 1, 3), "%", "")
+    ENDPROC
+
+    *============================================================
+    * ExecutarProcura - roda a consulta em crTmpProc e mescla os
+    * achados na lista.
+    *
+    * O legado acumula em crProcurar e depois insere no crSigCdCli
+    * (o cursor da grade), para que os achados aparecam MESMO fora do
+    * filtro de data da lista:
+    *
+    *     If Not Seek(lcChv, 'crSigCdCli', 'IClis')
+    *         ... Select <colunas> From SigCdCli Where Iclis = ...
+    *         Scatter MemVar Memo / Insert Into crSigCdCli From MemVar
+    *
+    * Aqui o merge eh direto de crTmpProc para crSigCdCli, sem o
+    * intermediario - o crProcurar do legado existe para acumular entre
+    * varias procuras seguidas na mesma sessao da tela, que este form
+    * nao tem (cada Procurar recomeca).
+    *============================================================
+    PROCEDURE ExecutarProcura(par_cQuery)
+        LOCAL loc_nRet, loc_nAchados, loc_cCli, loc_oErro, loc_aErr
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+
+        loc_nRet = -1
+        IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O"
+            loc_nRet = THIS.poDataMgr.SqlExecute(par_cQuery, "crTmpProc")
+        ELSE
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_nRet = SQLEXEC(gnConnHandle, par_cQuery, "crTmpProc")
+            ENDIF
+        ENDIF
+
+        IF loc_nRet < 1 OR !USED("crTmpProc")
+            *-- Regra #9: nao engolir. O texto do SQL Server ajuda a distinguir
+            *-- "nao achou" de "consulta falhou".
+            DIMENSION loc_aErr[1]
+            AERROR(loc_aErr)
+            MsgErro("Falha ao executar a procura." + CHR(13) + ;
+                IIF(ALEN(loc_aErr, 1) >= 2 AND VARTYPE(loc_aErr[2]) = "C", loc_aErr[2], ""), ;
+                "Procurar")
+            RETURN .F.
+        ENDIF
+
+        SELECT crTmpProc
+        GO TOP IN crTmpProc
+        loc_nAchados = RECCOUNT("crTmpProc")
+
+        IF loc_nAchados = 0
+            MsgInfo("Nenhuma conta encontrada com os dados informados.", "Procurar")
+            USE IN crTmpProc
+            RETURN .T.
+        ENDIF
+
+        loc_cCli = ALLTRIM(NVL(crTmpProc.IClis, ""))
+        THIS.CodClis = loc_cCli
+
+        *-- volta para a Lista e recarrega pelo grupo; em seguida acrescenta
+        *-- os achados que a requery por Grupos/data nao trouxe.
+        THIS.pcEscolha       = "PROCURAR"
+        THIS.this_cModoAtual = "LISTA"
+        THIS.IrParaLista()
+        THIS.MesclarAchadosNaLista()
+
+        *-- posiciona a grade no primeiro achado
+        IF USED("crSigCdCli") AND !EMPTY(loc_cCli)
+            SELECT crSigCdCli
+            LOCATE FOR ALLTRIM(NVL(crSigCdCli.IClis, "")) == loc_cCli
+            IF FOUND("crSigCdCli") AND PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_ViewLista, "grd_4c_Clientes", 5)
+                THIS.cnt_4c_ViewLista.grd_4c_Clientes.Refresh()
+            ENDIF
+        ENDIF
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *============================================================
+    * MesclarAchadosNaLista - insere em crSigCdCli os registros de
+    * crTmpProc que a requery da lista nao trouxe (achado fora do
+    * filtro de data, ou de outro grupo). Espelha o bloco do legado
+    * que percorre crProcurar e completa o crSigCdCli.
+    *============================================================
+    PROCEDURE MesclarAchadosNaLista
+        LOCAL loc_cCli, loc_oErro, loc_nAreaAnt
+
+        IF !USED("crTmpProc") OR !USED("crSigCdCli")
+            RETURN
+        ENDIF
+
+        loc_nAreaAnt = SELECT(0)
+        TRY
+            SELECT crTmpProc
+            GO TOP IN crTmpProc
+            SCAN
+                loc_cCli = ALLTRIM(NVL(crTmpProc.IClis, ""))
+                IF EMPTY(loc_cCli)
+                    LOOP
+                ENDIF
+
+                SELECT crSigCdCli
+                LOCATE FOR ALLTRIM(NVL(crSigCdCli.IClis, "")) == loc_cCli
+                IF !FOUND("crSigCdCli")
+                    SELECT crTmpProc
+                    SCATTER MEMVAR MEMO
+                    INSERT INTO crSigCdCli FROM MEMVAR
+                ENDIF
+                SELECT crTmpProc
+            ENDSCAN
+            GO TOP IN crSigCdCli
+        CATCH TO loc_oErro
+            *-- Regra #9: CATCH nunca silencioso. Merge parcial nao impede o
+            *-- usuario de ver o que a requery normal ja trouxe.
+            THIS.DiagIncluir("MesclarAchadosNaLista falhou", loc_oErro)
+        ENDTRY
+        SELECT (loc_nAreaAnt)
+    ENDPROC
+
+    *============================================================
     PROCEDURE Destroy
     *============================================================
+        *-- Desinstala a captura de erro do p-code legado instalada no Init.
+        *-- Tem de vir ANTES do resto: o handler so vale enquanto esta tela vive,
+        *-- nunca para o sistema inteiro (Erro163_Aba1_2).
+        ON ERROR
+
         IF !ISNULL(THIS.this_oBusinessObject)
             THIS.this_oBusinessObject = .NULL.
         ENDIF

@@ -376,7 +376,10 @@ DEFINE CLASS empBO AS BusinessBase
 
             *-- Page2: E-commerce / Bloqueio / Subtempo / Imagens
             THIS.this_nEcommerce        = TratarNulo(nchkecomm,      "N")
-            THIS.this_lBlqDt            = (TratarNulo(blqdatas,      "N") <> 0)
+            *-- Erro180 (sweep): blqdatas eh numeric de DUAS opcoes (op_blqdt:
+            *-- ButtonCount = 2, Option1 = "Sim"), logo vale 1 ou 2 - nunca 0.
+            *-- Com "<> 0" o valor 2 ("Nao") era lido como .T. ("Sim").
+            THIS.this_lBlqDt            = (TratarNulo(blqdatas,      "N") = 1)
             THIS.this_nTempoSub         = TratarNulo(nrlocsorts,     "N")
 
             *-- Page3: CFOP / Moeda / Mrcf
@@ -645,7 +648,7 @@ DEFINE CLASS empBO AS BusinessBase
 
             loc_cVals = loc_cVals + ;
                         FormatarNumeroSQL(THIS.this_nEcommerce, 0) + "," + ;
-                        FormatarNumeroSQL(IIF(THIS.this_lBlqDt, 1, 0), 0) + "," + ;
+                        FormatarNumeroSQL(IIF(THIS.this_lBlqDt, 1, 2), 0) + "," + ;
                         FormatarNumeroSQL(THIS.this_nTempoSub, 0) + ","
 
             loc_cVals = loc_cVals + ;
@@ -899,7 +902,7 @@ DEFINE CLASS empBO AS BusinessBase
 
             loc_cSQL = loc_cSQL + ;
                        "  nchkecomm="      + FormatarNumeroSQL(THIS.this_nEcommerce, 0) + "," + ;
-                       "  blqdatas="       + FormatarNumeroSQL(IIF(THIS.this_lBlqDt, 1, 0), 0) + "," + ;
+                       "  blqdatas="       + FormatarNumeroSQL(IIF(THIS.this_lBlqDt, 1, 2), 0) + "," + ;
                        "  nrlocsorts="     + FormatarNumeroSQL(THIS.this_nTempoSub, 0) + ","
 
             loc_cSQL = loc_cSQL + ;

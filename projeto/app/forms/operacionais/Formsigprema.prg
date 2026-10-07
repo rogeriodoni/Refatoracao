@@ -780,7 +780,7 @@ DEFINE CLASS Formsigprema AS FormBase
                 .ForeColor       = RGB(36, 84, 155)
                 .BackColor       = RGB(255, 255, 255)
                 .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
-                .Themes          = .F.
+                .Themes           = .T.
                 .DisabledPicture = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
                 .Visible         = .T.
             ENDWITH
@@ -802,7 +802,7 @@ DEFINE CLASS Formsigprema AS FormBase
                 .ForeColor       = RGB(36, 84, 155)
                 .BackColor       = RGB(255, 255, 255)
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Themes          = .F.
+                .Themes           = .T.
                 .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .Visible         = .T.
             ENDWITH

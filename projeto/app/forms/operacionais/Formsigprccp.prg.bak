@@ -202,7 +202,9 @@ DEFINE CLASS Formsigprccp AS FormBase
 		WITH THIS.cnt_4c_Cabecalho
 			.Top         = 0
 			.Left        = 0
-			.Width       = THIS.Width
+			*-- 1100, nao THIS.Width (1000): valor EXATO do SCX legado -
+			*-- cntSombra eh mais larga que o proprio form (Erro178)
+			.Width       = 1100
 			.Height      = 80
 			.BackStyle   = 1
 			.BackColor   = RGB(100, 100, 100)
@@ -843,15 +845,16 @@ DEFINE CLASS Formsigprccp AS FormBase
 
 		THIS.AddObject("txt_4c_Variacao", "TextBox")
 		WITH THIS.txt_4c_Variacao
-			.Top       = 189
-			.Left      = 539
-			.Width     = 80
-			.Height    = 23
-			.Alignment = 3
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.InputMask = "999.99"
-			.Value     = 0
+			.Top           = 189
+			.Left          = 539
+			.Width         = 80
+			.Height        = 23
+			.Alignment     = 3
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.InputMask     = "999.99"
+			.SpecialEffect = 1
+			.Value         = 0
 		ENDWITH
 
 		*-- Codigo MKP / Feitio (Get_Feitio) - SigPrFti.cods char(2),
@@ -872,28 +875,30 @@ DEFINE CLASS Formsigprccp AS FormBase
 
 		THIS.AddObject("txt_4c_Feitio", "TextBox")
 		WITH THIS.txt_4c_Feitio
-			.Top       = 189
-			.Left      = 709
-			.Width     = 24
-			.Height    = 23
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.MaxLength = 2
-			.Value     = ""
+			.Top           = 189
+			.Left          = 709
+			.Width         = 24
+			.Height        = 23
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.MaxLength     = 2
+			.SpecialEffect = 1
+			.Value         = ""
 		ENDWITH
 
 		*-- Moeda (GetMoedai/GetMoedaf) - SigCdPro.moedas/moevs char(3)
 		*-- (qual dos dois campos eh filtrado depende de obj_4c_OpcaoMoeda)
 		THIS.AddObject("txt_4c_MoedaI", "TextBox")
 		WITH THIS.txt_4c_MoedaI
-			.Top       = 213
-			.Left      = 145
-			.Width     = 31
-			.Height    = 23
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.MaxLength = 3
-			.Value     = ""
+			.Top           = 213
+			.Left          = 145
+			.Width         = 31
+			.Height        = 23
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.MaxLength     = 3
+			.SpecialEffect = 1
+			.Value         = ""
 		ENDWITH
 
 		THIS.AddObject("lbl_4c_Moeda", "Label")
@@ -926,14 +931,15 @@ DEFINE CLASS Formsigprccp AS FormBase
 
 		THIS.AddObject("txt_4c_MoedaF", "TextBox")
 		WITH THIS.txt_4c_MoedaF
-			.Top       = 213
-			.Left      = 198
-			.Width     = 31
-			.Height    = 23
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.MaxLength = 3
-			.Value     = ""
+			.Top           = 213
+			.Left          = 198
+			.Width         = 31
+			.Height        = 23
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.MaxLength     = 3
+			.SpecialEffect = 1
+			.Value         = ""
 		ENDWITH
 
 		*-- Opcao de Moeda para a faixa acima (fwoption1 no legado):
@@ -1118,15 +1124,16 @@ DEFINE CLASS Formsigprccp AS FormBase
 
 		THIS.AddObject("txt_4c_Reajuste", "TextBox")
 		WITH THIS.txt_4c_Reajuste
-			.Top       = 300
-			.Left      = 148
-			.Width     = 80
-			.Height    = 23
-			.Alignment = 3
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.InputMask = "999,999.999"
-			.Value     = 0
+			.Top           = 300
+			.Left          = 148
+			.Width         = 80
+			.Height        = 23
+			.Alignment     = 3
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.InputMask     = "999,999.999"
+			.SpecialEffect = 1
+			.Value         = 0
 		ENDWITH
 
 		*-- Novo Encargo (get_Encargo)
@@ -1146,15 +1153,16 @@ DEFINE CLASS Formsigprccp AS FormBase
 
 		THIS.AddObject("txt_4c_NovoEncargo", "TextBox")
 		WITH THIS.txt_4c_NovoEncargo
-			.Top       = 300
-			.Left      = 326
-			.Width     = 80
-			.Height    = 23
-			.Alignment = 3
-			.FontName  = loc_cFonte
-			.FontSize  = 8
-			.InputMask = "999,999.99"
-			.Value     = 0
+			.Top           = 300
+			.Left          = 326
+			.Width         = 80
+			.Height        = 23
+			.Alignment     = 3
+			.FontName      = loc_cFonte
+			.FontSize      = 8
+			.InputMask     = "999,999.99"
+			.SpecialEffect = 1
+			.Value         = 0
 		ENDWITH
 
 		*-- Atualiza Val.Venda (Opc_pven) - Sim/Nao - Value=2 default

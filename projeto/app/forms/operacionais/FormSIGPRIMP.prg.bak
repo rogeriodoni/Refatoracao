@@ -290,8 +290,11 @@ DEFINE CLASS FormSIGPRIMP AS FormBase
             .Width         = 288
             .RowSourceType = 0
             .RowSource     = ""
-            .ForeColor     = RGB(0, 0, 0)
-            .BackColor     = RGB(255, 255, 255)
+            *-- ListBox NAO tem ForeColor nem BackColor (medido no VFP9): as cores
+            *-- moram em ItemForeColor / ItemBackColor. Atribuir estourava
+            *-- "Property FORECOLOR is not found" no Init e a tela nao abria.
+            *-- O legado (SIGPRIMP.Arquivos) so declara BorderColor. Erro170.
+            .BorderColor   = RGB(100, 100, 100)
             .Sorted        = .T.
             .MultiSelect   = .F.
         ENDWITH

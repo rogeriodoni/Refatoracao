@@ -215,7 +215,7 @@ DEFINE CLASS Formsigprema AS FormBase
     ControlBox  = .F.
     MaxButton   = .F.
     MinButton   = .F.
-    Caption     = "Processamento e Gera" + CHR(231) + CHR(227) + "o de Email"
+    Caption     = "Processamento e Gera" + CHR(231) + "ao de Email"
     FontName    = "Tahoma"
     FontSize    = 8
 
@@ -251,6 +251,11 @@ DEFINE CLASS Formsigprema AS FormBase
                                 "o Com o Servidor de Banco de Dados...", ;
                                 "Conex" + CHR(227) + "o")
                     ENDIF
+                ENDIF
+
+                *-- Imagem de fundo (legado: new_background.jpg)
+                IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
+                    THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
                 ENDIF
 
                 THIS.ConfigurarCabecalho()
@@ -336,7 +341,7 @@ DEFINE CLASS Formsigprema AS FormBase
             WITH THIS.cnt_4c_Sombra
                 .Top         = 0
                 .Left        = 0
-                .Width       = THIS.Width
+                .Width       = 1100
                 .Height      = 80
                 .BackColor   = RGB(100, 100, 100)
                 .BackStyle   = 1
@@ -775,7 +780,7 @@ DEFINE CLASS Formsigprema AS FormBase
                 .ForeColor       = RGB(36, 84, 155)
                 .BackColor       = RGB(255, 255, 255)
                 .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
-                .Themes          = .T.
+                .Themes          = .F.
                 .DisabledPicture = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
                 .Visible         = .T.
             ENDWITH
@@ -797,7 +802,7 @@ DEFINE CLASS Formsigprema AS FormBase
                 .ForeColor       = RGB(36, 84, 155)
                 .BackColor       = RGB(255, 255, 255)
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Themes          = .T.
+                .Themes          = .F.
                 .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .Visible         = .T.
             ENDWITH

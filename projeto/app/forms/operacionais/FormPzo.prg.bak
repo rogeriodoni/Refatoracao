@@ -1418,6 +1418,10 @@ DEFINE CLASS FormPzo AS FormBase
     *   Shape3: linha separadora Desp.Acess (Top=365, Left=315, 194x2)
     *   Shape4: linha separadora Seguro (Top=365, Left=586, 194x2)
     *==========================================================================
+    *-- ATENCAO: Shape NAO tem ShapeType (medido no VFP9) - a propriedade eh do VB,
+    *-- nao do VFP, onde o equivalente eh Curvature (0 = retangulo, ja eh o default).
+    *-- Atribuir estourava "Property SHAPETYPE is not found" no Init e a tela nao
+    *-- abria. O legado nao declara ShapeType em nenhum dos Shapes. Erro170.
     PROTECTED PROCEDURE ConfigurarFormas()
         *-- Borda decorativa ao redor do container Encerrar
         THIS.AddObject("shp_4c_Shape5", "Shape")
@@ -1426,7 +1430,6 @@ DEFINE CLASS FormPzo AS FormBase
             .Left        = 903
             .Width       = 86
             .Height      = 86
-            .ShapeType   = 0
             .FillStyle   = 1
             .BorderColor = RGB(53, 53, 53)
             .BorderWidth = 2
@@ -1440,7 +1443,6 @@ DEFINE CLASS FormPzo AS FormBase
             .Left        = 44
             .Width       = 194
             .Height      = 2
-            .ShapeType   = 0
             .FillStyle   = 0
             .BackColor   = RGB(90, 90, 90)
             .BorderColor = RGB(90, 90, 90)
@@ -1455,7 +1457,6 @@ DEFINE CLASS FormPzo AS FormBase
             .Left        = 315
             .Width       = 194
             .Height      = 2
-            .ShapeType   = 0
             .FillStyle   = 0
             .BackColor   = RGB(90, 90, 90)
             .BorderColor = RGB(90, 90, 90)
@@ -1470,7 +1471,6 @@ DEFINE CLASS FormPzo AS FormBase
             .Left        = 586
             .Width       = 194
             .Height      = 2
-            .ShapeType   = 0
             .FillStyle   = 0
             .BackColor   = RGB(90, 90, 90)
             .BorderColor = RGB(90, 90, 90)

@@ -2809,7 +2809,7 @@ DEFINE CLASS FormCliente AS FormBase
                 ENDIF
             ENDIF
 
-            loc_cLog = loc_cLog + "  _EMPR=[" + TRANSFORM(_EMPR) + "] SET(EXACT)=" + SET("EXACT") + CHR(13) + CHR(10)
+            loc_cLog = loc_cLog + "  go_4c_Sistema.cCodEmpresa=[" + TRANSFORM(go_4c_Sistema.cCodEmpresa) + "] SET(EXACT)=" + SET("EXACT") + CHR(13) + CHR(10)
 
             *-- Gradei: e aqui que o mmontagrade estoura ("Property FWCOMBO1 is not
             *-- found", linha 179). O legado faz, em ordem:

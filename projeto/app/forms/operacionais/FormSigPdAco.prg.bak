@@ -384,8 +384,10 @@ DEFINE CLASS FormSigPdAco AS FormBase
             .Height        = 79
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
+            *-- ListBox NAO tem ForeColor nem BackColor (medido no VFP9): as cores
+            *-- moram em ItemForeColor / ItemBackColor. Atribuir estourava
+            *-- "Property FORECOLOR is not found" no Init e a tela nao abria.
+            *-- O legado (SIGPDACO.Arquivos) nao declara cor nenhuma. Erro170.
             .RowSourceType = 1
             .Sorted        = .T.
         ENDWITH
