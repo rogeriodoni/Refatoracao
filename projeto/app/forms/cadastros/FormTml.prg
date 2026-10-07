@@ -1793,13 +1793,13 @@ DEFINE CLASS FormTml AS FormBase
             loc_oPagina.txt_4c_EntSai.Value       = loc_oBO.this_cAnaEsGrps
             loc_oPagina.txt_4c_AnProds.Value      = loc_oBO.this_cCtrlpds
             loc_oPagina.txt_4c_Valor.Value        = loc_oBO.this_nValors
-            loc_oPagina.chk_4c_Chk_produzido.Value  = (loc_oBO.this_nProdzs .Value  = IIF(loc_oBO.this_nProdzs = 1, 1, 0))
-            loc_oPagina.chk_4c_Chk_trabalhado.Value = (loc_oBO.this_nTrabas .Value = IIF(loc_oBO.this_nTrabas = 1, 1, 0))
-            loc_oPagina.chk_4c_Chk_modelagem.Value  = (loc_oBO.this_nModels .Value  = IIF(loc_oBO.this_nModels = 1, 1, 0))
+            loc_oPagina.chk_4c_Chk_produzido.Value  = IIF(loc_oBO.this_nProdzs = 1, 1, 0)
+            loc_oPagina.chk_4c_Chk_trabalhado.Value = IIF(loc_oBO.this_nTrabas = 1, 1, 0)
+            loc_oPagina.chk_4c_Chk_modelagem.Value  = IIF(loc_oBO.this_nModels = 1, 1, 0)
             loc_oPagina.txt_4c_Dev.Value           = loc_oBO.this_cChkDevs
             loc_oPagina.txt_4c_EmpPad.Value        = loc_oBO.this_cEmps
-            loc_oPagina.chk_4c_Chk_duplicidade.Value = (loc_oBO.this_nDupTpOps .Value = IIF(loc_oBO.this_nDupTpOps = 1, 1, 0))
-            loc_oPagina.chk_4c_Chk_retrabalho.Value  = (loc_oBO.this_nRetrab .Value  = IIF(loc_oBO.this_nRetrab = 1, 1, 0))
+            loc_oPagina.chk_4c_Chk_duplicidade.Value = IIF(loc_oBO.this_nDupTpOps = 1, 1, 0)
+            loc_oPagina.chk_4c_Chk_retrabalho.Value  = IIF(loc_oBO.this_nRetrab = 1, 1, 0)
 
             *-- Descricao do Grupo (SigCdGcr.descrs) - somente consulta, sem abrir lookup
             loc_oPagina.txt_4c_G.Value = ""

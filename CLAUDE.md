@@ -904,6 +904,19 @@ A 2a linha eh o caso MAJORITARIO (`ALLTRIM(<coluna lida>)` guardado numa propert
 
 Origem: Erro177 (2026-09-25, `SigMvSbnBO.MontarChaveEmpDopNums` / `FormSigMvSbn` — grade de itens, descricao e imagem do produto sempre vazias). Sweep: 116 arquivos citam `EmpDopNums`; com a forma perigosa so ha **1 outro** site (`PGRBO.prg:237,294`), que ESCREVE a chave e nao foi verificado.
 
+### 43. Property de BO NAO tem `.Value` — e pattern do CorretorAutomatico NUNCA reusa `$Matches` apos outro `-match`
+```foxpro
+* ERRADO - compila limpo; "Unknown member THIS_NGER50" ao clicar Alterar/Visualizar
+loc_oPagina.chk_4c_ChkGer50.Value = (THIS.this_oBusinessObject.this_nGer50 .Value = IIF(THIS.this_oBusinessObject.this_nGer50 = 1, 1, 0))
+* CERTO
+loc_oPagina.chk_4c_ChkGer50.Value = IIF(THIS.this_oBusinessObject.this_nGer50 = 1, 1, 0)
+```
+Estoura so ao CARREGAR registro (`BOParaForm`), entao INCLUIR funciona e o teste superficial passa.
+
+**Quem gerou foi o proprio CorretorAutomatico #73**, nao o LLM: ele fazia um segundo `-match` antes do replace, o PowerShell **sobrescreveu `$Matches`** (`$Matches[0]` virou so `= 1`) e o replace trocou esse `= 1` por `.Value = IIF(...)`. Ao escrever pattern: copiar os grupos de `$Matches` para variaveis IMEDIATAMENTE e testar a funcao com uma linha real antes de registrar. Diante de defeito identico em varios forms, com o MESMO padding estranho, suspeitar do corretor antes do migrador.
+
+Auto-fix: CorretorAutomatico **#213** (desfaz a mutilacao; #73 corrigido). Deteccao: `this_\w+\s+\.Value` no projeto deve dar 0. Skill: secao **237**. Origem: Erro501 (2026-10-06, `FormUfs` 22 sites + `FormTml` 5 + `FormSre` 1 + `FormTbv` 1).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

@@ -1435,7 +1435,7 @@ DEFINE CLASS FormSre AS FormBase
             loc_oPg2.txt_4c_Inicials.Value  = ALLTRIM(loc_oBO.this_cInicials)
             loc_oPg2.txt_4c_Finals.Value    = ALLTRIM(loc_oBO.this_cFinals)
 
-            loc_oPg2.chk_4c_Ck_BlqInss.Value = (loc_oBO.this_nBlqinss .Value = IIF(loc_oBO.this_nBlqinss = 1, 1, 0))
+            loc_oPg2.chk_4c_Ck_BlqInss.Value = IIF(loc_oBO.this_nBlqinss = 1, 1, 0)
 
             *-- OptionGroups: usa valor gravado se dentro da faixa, senao default
             loc_oPg2.obj_4c_Op_TipoNF.Value    = IIF(BETWEEN(loc_oBO.this_nTiponfs, 1, 4), loc_oBO.this_nTiponfs, 1)

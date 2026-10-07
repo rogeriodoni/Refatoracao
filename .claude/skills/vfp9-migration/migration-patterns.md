@@ -13504,3 +13504,40 @@ ELSE
 ENDIF
 ```
 
+
+## 237. Property de BO NAO tem `.Value` - e o CorretorAutomatico #73 era quem mutilava a linha (Erro501 2026-10-06)
+
+Ao clicar **Alterar** no `FormUfs`: `Program Error - Unknown member THIS_NGER50`. O `BOParaForm` tinha:
+
+```foxpro
+* ERRADO - compila limpo, estoura so ao CARREGAR registro (Alterar/Visualizar)
+loc_oPagina.chk_4c_ChkGer50.Value = (THIS.this_oBusinessObject.this_nGer50 .Value = IIF(THIS.this_oBusinessObject.this_nGer50 = 1, 1, 0))
+* CERTO
+loc_oPagina.chk_4c_ChkGer50.Value = IIF(THIS.this_oBusinessObject.this_nGer50 = 1, 1, 0)
+```
+
+**A causa NAO foi o LLM - foi o proprio corretor.** O pattern **#73** (`Corrigir-BOParaFormCheckBoxLogico`)
+converte `chk.Value = (bo.x = 1)` em `IIF(bo.x = 1, 1, 0)`, mas fazia um SEGUNDO `-match` (`$expr -match '=\s*[01]'`)
+antes do replace. Em PowerShell todo `-match` bem-sucedido **sobrescreve `$Matches`**: `$Matches[0]` deixava de
+ser `.Value = (bo.x = 1)` e virava so `= 1`, e o replace trocava esse `= 1` por `.Value = IIF(...)`:
+
+```
+entrada : chk.Value    = (bo.this_nGer50 = 1)
+saida   : chk.Value    = (bo.this_nGer50 .Value    = IIF(bo.this_nGer50 = 1, 1, 0))
+```
+
+O padding do meio (`.Value    =`) eh o `$prefix` original reinserido - assinatura inconfundivel da mutilacao.
+
+**Alcance**: 29 sites em 4 forms (`FormUfs` 22, `FormTml` 5, `FormSre` 1, `FormTbv` 1 - este dentro de `WITH`,
+`.this_nChkRetorno .Value`). Todos em `BOParaForm`, todos so estouram ao abrir registro existente - INCLUIR
+funciona, por isso passa por teste superficial.
+
+**Conserto**: #73 guarda `$Matches[0]` numa variavel ANTES do segundo `-match` e reconstroi a linha por
+`Substring` (sem replace por regex). Pattern **#213** (`Corrigir-PropertyBOComValueMutilada`) desfaz as linhas ja
+mutiladas - mantem so o `IIF`, exigindo a MESMA property dos dois lados (`\1`), por isso eh mutacao segura.
+
+**Licao para quem escreve pattern no CorretorAutomatico**: NUNCA usar `$Matches` depois de outro `-match`/`-notmatch`
+no mesmo fluxo - copiar os grupos para variaveis imediatamente. E testar a funcao com uma linha real antes de
+registrar: o defeito era visivel na primeira execucao.
+
+Deteccao rapida no projeto: `Select-String ... -Pattern 'this_\w+\s+\.Value'` (deve dar 0).

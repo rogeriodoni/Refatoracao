@@ -46,6 +46,8 @@
 #  72. CREATE CURSOR campo N(1,0) onde schema.sql diz BIT -> L (BIT = LOGICAL no VFP9)
 #      Tambem corrige Check1.Value = 0 -> .F. e Check1.Value = 1 -> .T. para campos BIT
 #  73. BOParaForm CheckBox.Value = (expr logica) -> IIF(expr, 1, 0) (manter tipo NUMERICO)
+#      (Erro501: corrigido $Matches sobrescrito que mutilava a linha - ver #213)
+# 213. chk.Value = (bo.this_nX .Value = IIF(bo.this_nX = 1,1,0)) -> chk.Value = IIF(...) (linha mutilada pelo #73 antigo)
 #
 # PARAMETROS:
 #   -ArquivoPrg : Caminho do arquivo .prg a corrigir
@@ -4466,6 +4468,11 @@ function Corrigir-BOParaFormCheckBoxLogico {
             # Pattern: .Value = (algo = algo)  onde o resultado seria LOGICAL
             # GUARD: pular se ja tem IIF
             if ($linha -notmatch '(?i)IIF\s*\(' -and $linha -match '(?i)(\.Value\s*=\s*)\(([^)]+)\)\s*$') {
+                # Erro501: guardar o match INTEIRO e o indice AGORA. O "-match" do teste
+                # abaixo SOBRESCREVE $Matches (vira so "= 1"), e o replace antigo trocava
+                # "= 1" por ".Value = IIF(...)" -> chk.Value = (bo.x .Value = IIF(bo.x = 1, 1, 0))
+                # = "Unknown member THIS_NX" em runtime ao clicar Alterar.
+                $matchInteiro = $Matches[0]
                 $prefix = $Matches[1]
                 $expr = $Matches[2]
 
@@ -4473,7 +4480,8 @@ function Corrigir-BOParaFormCheckBoxLogico {
                 if ($expr -match '=\s*[01]' -or $expr -match '(?i)=\s*\.T\.' -or $expr -match '(?i)=\s*\.F\.') {
                     $linhaOriginal = $linha
                     $novoValor = "IIF($expr, 1, 0)"
-                    $linha = $linha -replace [regex]::Escape($Matches[0]), "${prefix}${novoValor}"
+                    $idx = $linha.LastIndexOf($matchInteiro)
+                    $linha = $linha.Substring(0, $idx) + $prefix + $novoValor
 
                     Add-Correcao -Tipo "BOPARAFORM_CHECKBOX_LOGICO" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() -Descricao "BOParaForm CheckBox.Value = (expr logica) atribui LOGICAL. Convertido para IIF(expr, 1, 0) para manter NUMERICO (Pattern #73)"
                 }
@@ -16329,6 +16337,32 @@ function Test-GradeEditavelHandler {
     Write-Host "[Pattern #212 WARN] linha $($Ini + 1): $Nome insere linha na grade mas nao libera Column.ReadOnly (legado tem $NLegado site(s))" -ForegroundColor Yellow
     Add-Correcao -Tipo "WARN-212-GRADE-EDITAVEL-SEM-LIBERAR-COLUNA" -Linha ($Ini + 1) -Original ("PROCEDURE " + $Nome) -Corrigido "(nao mutado - qual coluna liberar vem do dump do SCX legado)" -Descricao ("Pattern #212 WARNING: o handler $Nome insere linha no cursor da grade (INSERT INTO / APPEND BLANK) mas " + "NAO contem nenhum .ReadOnly = .F., e este arquivo declara Column<N>.ReadOnly = .T.. O dump do legado " + "($Dump) tem $NLegado ocorrencia(s) de Column<N>.ReadOnly = .F. - conferir se alguma pertence a este " + "handler. No legado o cmdSInserir.Click NAO termina no Insert Into: vem logo depois um bloco With <grade> " + "com .Column1.ReadOnly = .F. + .Refresh + .Column1.SetFocus. Sem o ReadOnly = .F. a coluna fica TRAVADA e " + "o usuario nao consegue digitar NADA na linha recem-criada - compila limpo, nao da erro, e o sintoma " + "reportado eh `"nao consigo realizar a inclusao nessa grid`". Conferir tambem, no mesmo handler: o guard " + "do .When do botao (InList(pcEscolha,'INSERIR','ALTERAR') MAIS campo-chave preenchido, lido do TEXTBOX e " + "nao do BO - em INCLUIR o valor so chega ao BO no FormParaBO), as colunas do INSERT que nao aparecem na " + "tela (regra #22) e o gerador de PK, que eh fUniqueIds() e nao SYS(2015). E quem TRANCA tem de destrancar " + "no caminho de volta (regra #40): o reset para .T. mora no funil que repinta a grade, nunca so no botao " + "que insere. Skill: secao 230. Origem: Erro179 (Formgpd).")
 }
+# =============================================================================
+# Pattern #213 (Erro501, 2026-10-06, FormUfs) - AUTO-FIX.
+# Linha mutilada pelo Pattern #73 antigo ($Matches sobrescrito):
+#   ERRADO:  chk.Value = (bo.this_nX .Value = IIF(bo.this_nX = 1, 1, 0))
+#   CORRETO: chk.Value = IIF(bo.this_nX = 1, 1, 0)
+# Property de BO nao tem .Value -> "Unknown member THIS_NX" em RUNTIME, so ao
+# carregar um registro (Alterar/Visualizar). Compila limpo. O IIF de dentro ja eh
+# exatamente a atribuicao pretendida, e o \1 exige que seja a MESMA property dos
+# dois lados - sem ambiguidade, por isso eh mutacao e nao WARNING.
+# Cobre tambem a forma dentro de WITH (.this_nX .Value = IIF(.this_nX = 1, 1, 0)).
+# =============================================================================
+function Corrigir-PropertyBOComValueMutilada {
+    param([string[]]$Linhas)
+
+    $re = '\(\s*((?:THIS|loc_\w+)?\.[\w.]*this_\w+)\s+\.Value\s*=\s*(IIF\(\s*\1\s*=\s*1\s*,\s*1\s*,\s*0\s*\))\s*\)'
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -notmatch $re) { continue }
+        $nova = [regex]::Replace($linha, $re, '$2')
+        Write-Host "[Pattern #213] linha $($i + 1): property de BO com .Value mutilada -> IIF direto" -ForegroundColor Green
+        Add-Correcao -Tipo "PROPERTY_BO_COM_VALUE_MUTILADA" -Linha ($i + 1) -Original $linha.Trim() -Corrigido $nova.Trim() -Descricao ("Pattern #213: linha mutilada pelo Pattern #73 antigo - (bo.this_nX .Value = IIF(...)) referencia " + ".Value numa property NUMERICA de BO e estoura `"Unknown member THIS_NX`" ao carregar registro " + "(Alterar/Visualizar). Mantido so o IIF, que eh a atribuicao pretendida. Origem: Erro501 (FormUfs).")
+        $Linhas[$i] = $nova
+    }
+    return $Linhas
+}
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -16552,6 +16586,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ValidandoUIGuard -Linhas $linhas
     $linhas = Corrigir-CursorBitFields -Linhas $linhas
     $linhas = Corrigir-BOParaFormCheckBoxLogico -Linhas $linhas
+    $linhas = Corrigir-PropertyBOComValueMutilada -Linhas $linhas
     $linhas = Corrigir-ContainerBorderStyle -Linhas $linhas
     $linhas = Corrigir-PageFrameHeightTop29 -Linhas $linhas
     $linhas = Corrigir-ValidarParaValidarDados -Linhas $linhas
