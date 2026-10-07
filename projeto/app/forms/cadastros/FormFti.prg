@@ -190,7 +190,7 @@ DEFINE CLASS FormFti AS FormBase
             .Left        =  542
             .Width       = 385
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
@@ -203,7 +203,7 @@ DEFINE CLASS FormFti AS FormBase
             .Left        = 917
             .Width       = 90
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.

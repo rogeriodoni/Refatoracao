@@ -2507,7 +2507,7 @@ DEFINE CLASS FormTbv AS FormBase
             loc_oPg.txt_4c_Dtval.Value          = .this_dDataTermino
             loc_oPg.txt_4c_PrazoMs.Value        = .this_nPrazoMedio
             loc_oPg.obj_4c_Chk_Acesso.Value     = .this_nChkAcesso
-            loc_oPg.chk_4c_ChkAplicado.Value    = (.this_nChkRetorno .Value    = IIF(.this_nChkRetorno = 1, 1, 0))
+            loc_oPg.chk_4c_ChkAplicado.Value    = IIF(.this_nChkRetorno = 1, 1, 0)
             loc_oPg.txt_4c_Ajuste.Value         = .this_nAjuste
             loc_oPg.txt_4c_Fator.Value          = .this_nFator
             loc_oPg.txt_4c_MoeFat.Value         = .this_cMoedaFator

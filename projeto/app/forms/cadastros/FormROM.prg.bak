@@ -1232,10 +1232,10 @@ DEFINE CLASS FormROM AS FormBase
 
             IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
                 WITH loc_oPg1.cnt_4c_Periodo
-                    IF PEMSTATUS(.Self, "txt_4c_DataIni", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataIni", 5)
                         loc_dIni = .txt_4c_DataIni.Value
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_DataFim", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataFim", 5)
                         loc_dFim = .txt_4c_DataFim.Value
                     ENDIF
                     .Visible     = .T.
@@ -1296,22 +1296,22 @@ DEFINE CLASS FormROM AS FormBase
 
             *-- Habilitars botoes de chave para edicao
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "cmd_4c_InsChave", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_InsChave", 5)
                     .cmd_4c_InsChave.Enabled = !loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "cmd_4c_DelChave", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_DelChave", 5)
                     .cmd_4c_DelChave.Enabled = !loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "grd_4c_Chaves", 5)
+                IF PEMSTATUS(loc_oPg2, "grd_4c_Chaves", 5)
                     .grd_4c_Chaves.Column1.ReadOnly = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "cmd_4c_Confirmar", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_Confirmar", 5)
                     .cmd_4c_Confirmar.Enabled = !loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "cmd_4c_Video", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_Video", 5)
                     .cmd_4c_Video.Enabled = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "cmd_4c_Imprimir", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_Imprimir", 5)
                     .cmd_4c_Imprimir.Enabled = loc_lReadOnly
                 ENDIF
             ENDWITH
@@ -1339,14 +1339,14 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
         WITH loc_oPg2
-            IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
+            IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
                 .txt_4c_Datas.ReadOnly = par_lReadOnly
             ENDIF
-            IF PEMSTATUS(.Self, "txt_4c_Valor", 5)
+            IF PEMSTATUS(loc_oPg2, "txt_4c_Valor", 5)
                 .txt_4c_Valor.ReadOnly = par_lReadOnly
             ENDIF
             *-- Container Rec
-            IF PEMSTATUS(.Self, "cnt_4c_Rec", 5)
+            IF PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
                 IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_DepOrig", 5)
                     .cnt_4c_Rec.txt_4c_DepOrig.ReadOnly = par_lReadOnly
                 ENDIF
@@ -1358,7 +1358,7 @@ DEFINE CLASS FormROM AS FormBase
                 ENDIF
             ENDIF
             *-- Container Rom
-            IF PEMSTATUS(.Self, "cnt_4c_Rom", 5)
+            IF PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
                 IF PEMSTATUS(.cnt_4c_Rom, "txt_4c_CodTransp", 5)
                     .cnt_4c_Rom.txt_4c_CodTransp.ReadOnly = par_lReadOnly
                 ENDIF
@@ -1366,7 +1366,7 @@ DEFINE CLASS FormROM AS FormBase
                     .cnt_4c_Rom.txt_4c_Contas.ReadOnly = par_lReadOnly
                 ENDIF
             ENDIF
-            IF PEMSTATUS(.Self, "chk_4c_Correios", 5)
+            IF PEMSTATUS(loc_oPg2, "chk_4c_Correios", 5)
                 .chk_4c_Correios.ReadOnly = par_lReadOnly
             ENDIF
         ENDWITH
@@ -1391,39 +1391,39 @@ DEFINE CLASS FormROM AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Codigo", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Codigo", 5)
                     .txt_4c_Codigo.Value = loc_oBO.this_cCodigo
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
                     .txt_4c_Datas.Value = IIF(EMPTY(loc_oBO.this_dDatas), DATE(), loc_oBO.this_dDatas)
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Valor", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Valor", 5)
                     .txt_4c_Valor.Value = loc_oBO.this_nValor
                 ENDIF
 
                 IF THIS.this_cTipoRomaneio == "R"
-                    IF PEMSTATUS(.Self, "cnt_4c_Rec", 5)
+                    IF PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
                         WITH .cnt_4c_Rec
-                            IF PEMSTATUS(.Self, "txt_4c_DepOrig", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_DepOrig", 5)
                                 .txt_4c_DepOrig.Value  = loc_oBO.this_cDepOrig
                                 .txt_4c_DDepOrig.Value = IIF(!EMPTY(loc_oBO.this_cDepOrig), ;
                                     loc_oBO.BuscarDepartamento(loc_oBO.this_cDepOrig), "")
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_DepDest", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_DepDest", 5)
                                 .txt_4c_DepDest.Value  = loc_oBO.this_cDepDest
                                 .txt_4c_DDepDest.Value = IIF(!EMPTY(loc_oBO.this_cDepDest), ;
                                     loc_oBO.BuscarDepartamento(loc_oBO.this_cDepDest), "")
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_Obs", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_Obs", 5)
                                 .txt_4c_Obs.Value = loc_oBO.this_cObs
                             ENDIF
                             .Visible     = .T.
                         ENDWITH
                     ENDIF
                 ELSE
-                    IF PEMSTATUS(.Self, "cnt_4c_Rom", 5)
+                    IF PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
                         WITH .cnt_4c_Rom
-                            IF PEMSTATUS(.Self, "txt_4c_CodTransp", 5)
+                            IF PEMSTATUS(.cnt_4c_Rom, "txt_4c_CodTransp", 5)
                                 .txt_4c_CodTransp.Value = loc_oBO.this_cCodTransp
                                 IF !EMPTY(loc_oBO.this_cCodTransp)
                                     loc_cResultado = loc_oBO.BuscarTransportadora(loc_oBO.this_cCodTransp)
@@ -1439,7 +1439,7 @@ DEFINE CLASS FormROM AS FormBase
                                     .txt_4c_DCodTransp.Value = ""
                                 ENDIF
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
+                            IF PEMSTATUS(.cnt_4c_Rom, "txt_4c_Contas", 5)
                                 .txt_4c_Contas.Value = loc_oBO.this_cContas
                                 IF !EMPTY(loc_oBO.this_cContas)
                                     loc_cResultado = loc_oBO.BuscarCliente(loc_oBO.this_cContas)
@@ -1453,7 +1453,7 @@ DEFINE CLASS FormROM AS FormBase
                     ENDIF
                 ENDIF
 
-                IF PEMSTATUS(.Self, "grd_4c_Chaves", 5)
+                IF PEMSTATUS(loc_oPg2, "grd_4c_Chaves", 5)
                     .grd_4c_Chaves.Refresh()
                 ENDIF
             ENDWITH
@@ -1473,24 +1473,24 @@ DEFINE CLASS FormROM AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
                     loc_oBO.this_dDatas = .txt_4c_Datas.Value
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Valor", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Valor", 5)
                     loc_oBO.this_nValor = .txt_4c_Valor.Value
                 ENDIF
                 loc_oBO.this_cTipo = THIS.this_cTipoRomaneio
 
                 IF THIS.this_cTipoRomaneio == "R"
-                    IF PEMSTATUS(.Self, "cnt_4c_Rec", 5)
+                    IF PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
                         WITH .cnt_4c_Rec
-                            IF PEMSTATUS(.Self, "txt_4c_DepOrig", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_DepOrig", 5)
                                 loc_oBO.this_cDepOrig = ALLTRIM(.txt_4c_DepOrig.Value)
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_DepDest", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_DepDest", 5)
                                 loc_oBO.this_cDepDest = ALLTRIM(.txt_4c_DepDest.Value)
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_Obs", 5)
+                            IF PEMSTATUS(.cnt_4c_Rec, "txt_4c_Obs", 5)
                                 loc_oBO.this_cObs = ALLTRIM(.txt_4c_Obs.Value)
                             ENDIF
                             .Visible     = .T.
@@ -1499,12 +1499,12 @@ DEFINE CLASS FormROM AS FormBase
                     loc_oBO.this_cCodTransp = ""
                     loc_oBO.this_cContas    = ""
                 ELSE
-                    IF PEMSTATUS(.Self, "cnt_4c_Rom", 5)
+                    IF PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
                         WITH .cnt_4c_Rom
-                            IF PEMSTATUS(.Self, "txt_4c_CodTransp", 5)
+                            IF PEMSTATUS(.cnt_4c_Rom, "txt_4c_CodTransp", 5)
                                 loc_oBO.this_cCodTransp = ALLTRIM(.txt_4c_CodTransp.Value)
                             ENDIF
-                            IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
+                            IF PEMSTATUS(.cnt_4c_Rom, "txt_4c_Contas", 5)
                                 loc_oBO.this_cContas = ALLTRIM(.txt_4c_Contas.Value)
                             ENDIF
                             .Visible     = .T.
@@ -2075,7 +2075,7 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
             WITH loc_oPg1.cnt_4c_Periodo
-                IF PEMSTATUS(.Self, "txt_4c_DataIni", 5) AND PEMSTATUS(.Self, "txt_4c_DataFim", 5)
+                IF PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataIni", 5) AND PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataFim", 5)
                     IF .txt_4c_DataIni.Value > .txt_4c_DataFim.Value
                         .txt_4c_DataFim.Value = .txt_4c_DataIni.Value
                     ENDIF
@@ -2090,7 +2090,7 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
             WITH loc_oPg1.cnt_4c_Periodo
-                IF PEMSTATUS(.Self, "txt_4c_DataIni", 5) AND PEMSTATUS(.Self, "txt_4c_DataFim", 5)
+                IF PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataIni", 5) AND PEMSTATUS(loc_oPg1.cnt_4c_Periodo, "txt_4c_DataFim", 5)
                     IF .txt_4c_DataFim.Value < .txt_4c_DataIni.Value
                         .txt_4c_DataIni.Value = .txt_4c_DataFim.Value
                     ENDIF

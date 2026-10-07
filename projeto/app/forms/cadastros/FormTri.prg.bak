@@ -56,6 +56,7 @@ DEFINE CLASS FormTri AS FormBase
                     THIS.CarregarLista()
                 ENDIF
 
+                THIS.pgf_4c_Paginas.Visible = .T.
                 THIS.pgf_4c_Paginas.ActivePage = 1
                 THIS.this_cModoAtual = "LISTA"
                 loc_lSucesso = .T.
@@ -538,7 +539,8 @@ DEFINE CLASS FormTri AS FormBase
             .Left        = 842
             .Width       = 160
             .Height      = 85
-            .BackStyle   = 0
+            .BackStyle = 1
+            .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -571,7 +573,7 @@ DEFINE CLASS FormTri AS FormBase
         *-- Botao Cancelar - Left=80
         loc_oPagina.cnt_4c_BotoesAcao.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar
-            .Caption         = "Cancelar"
+            .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
             .Top             = 5

@@ -638,7 +638,8 @@ DEFINE CLASS FormMoe AS FormBase
             .FontName   = "Tahoma"
             .FontSize   = 8
             .FontItalic = .F.
-            .InputMask  = "N,S"
+            .Format    = "M"
+            .InputMask = "N,S"
             .Visible    = .T.
         ENDWITH
 
@@ -960,7 +961,8 @@ DEFINE CLASS FormMoe AS FormBase
             .FontName   = "Tahoma"
             .FontSize   = 8
             .FontItalic = .F.
-            .InputMask  = "N,S,A,P"
+            .Format    = "M"
+            .InputMask = "N,S,A,P"
             .Visible    = .T.
         ENDWITH
 
@@ -1340,6 +1342,8 @@ DEFINE CLASS FormMoe AS FormBase
     * Verifica se moeda permite cotacao antes de prosseguir
     *==========================================================================
     PROCEDURE BtnCambioClick()
+        LOCAL loc_cMoeda, loc_oForm, loc_oErro
+
         IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR BOF("cursor_4c_Dados")
             MsgAviso("Selecione uma moeda para acessar o c" + CHR(226) + "mbio!", ;
                 "Aten" + CHR(231) + CHR(227) + "o")
@@ -1352,8 +1356,29 @@ DEFINE CLASS FormMoe AS FormBase
                 "C" + CHR(226) + "mbio")
             RETURN
         ENDIF
-        MsgInfo("Form de C" + CHR(226) + "mbio (SIGPRCOT) pendente de migra" + ;
-            CHR(231) + CHR(227) + "o.", "C" + CHR(226) + "mbio")
+
+        *-- Abre o dialogo de gestao de cotacoes (SIGPRCOT). TRY cobre so a
+        *-- CRIACAO - Show() de form modal fica FORA do TRY (regra #29: TRY
+        *-- em volta de Show() modal faz a tela fechar a cada erro de
+        *-- runtime dentro dela). FormSIGPRCOT.Destroy ja reabilita este
+        *-- form pai (THIS.Enabled = .T.) ao encerrar, por qualquer caminho.
+        loc_cMoeda = ALLTRIM(cursor_4c_Dados.cmoes)
+        loc_oForm  = .NULL.
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSIGPRCOT", THIS, loc_cMoeda)
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de C" + CHR(226) + "mbio:" + CHR(13) + CHR(13) + ;
+                "Erro: " + loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            THIS.Enabled = .F.
+            loc_oForm.Show()
+        ENDIF
     ENDPROC
 
     *==========================================================================

@@ -936,6 +936,9 @@ DEFINE CLASS FormRPT AS FormBase
                     THIS.pgf_4c_Paginas.Page1.Enabled = .F.
                 ENDCASE
 
+                *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+                THIS.AjustarBotoesPorModo()
+
                 loc_lSucesso = .T.
             ENDIF
 

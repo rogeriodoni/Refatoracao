@@ -609,8 +609,11 @@ DEFINE CLASS FormDup AS FormBase
                 .Left          = 173
                 .Width         = 560
                 .Height        = 2
-                .FillColor     = RGB(150, 150, 150)
-                .ForeColor     = RGB(150, 150, 150)
+                *-- Shape NAO tem ForeColor (medido no VFP9): atribuir estoura
+                *-- "Property FORECOLOR is not found" no Init e a tela nao abre.
+                *-- O legado nao declara cor nenhuma nestes separadores - so
+                *-- BorderWidth = 2, com a borda preta default. Erro170.
+                .BorderWidth   = 2
                 .BackStyle     = 0
                 .BorderStyle   = 1
                 .SpecialEffect = 0
@@ -892,8 +895,11 @@ DEFINE CLASS FormDup AS FormBase
                 .Left          = 173
                 .Width         = 560
                 .Height        = 2
-                .FillColor     = RGB(150, 150, 150)
-                .ForeColor     = RGB(150, 150, 150)
+                *-- Shape NAO tem ForeColor (medido no VFP9): atribuir estoura
+                *-- "Property FORECOLOR is not found" no Init e a tela nao abre.
+                *-- O legado nao declara cor nenhuma nestes separadores - so
+                *-- BorderWidth = 2, com a borda preta default. Erro170.
+                .BorderWidth   = 2
                 .BackStyle     = 0
                 .BorderStyle   = 1
                 .SpecialEffect = 0
@@ -1160,8 +1166,11 @@ DEFINE CLASS FormDup AS FormBase
                 .Left          = 174
                 .Width         = 262
                 .Height        = 2
-                .FillColor     = RGB(150, 150, 150)
-                .ForeColor     = RGB(150, 150, 150)
+                *-- Shape NAO tem ForeColor (medido no VFP9): atribuir estoura
+                *-- "Property FORECOLOR is not found" no Init e a tela nao abre.
+                *-- O legado nao declara cor nenhuma nestes separadores - so
+                *-- BorderWidth = 2, com a borda preta default. Erro170.
+                .BorderWidth   = 2
                 .BackStyle     = 0
                 .BorderStyle   = 1
                 .SpecialEffect = 0
@@ -1174,8 +1183,11 @@ DEFINE CLASS FormDup AS FormBase
                 .Left          = 437
                 .Width         = 217
                 .Height        = 2
-                .FillColor     = RGB(150, 150, 150)
-                .ForeColor     = RGB(150, 150, 150)
+                *-- Shape NAO tem ForeColor (medido no VFP9): atribuir estoura
+                *-- "Property FORECOLOR is not found" no Init e a tela nao abre.
+                *-- O legado nao declara cor nenhuma nestes separadores - so
+                *-- BorderWidth = 2, com a borda preta default. Erro170.
+                .BorderWidth   = 2
                 .BackStyle     = 0
                 .BorderStyle   = 1
                 .SpecialEffect = 0
@@ -1645,8 +1657,11 @@ DEFINE CLASS FormDup AS FormBase
                 .Left          = 173
                 .Width         = 263
                 .Height        = 2
-                .FillColor     = RGB(150, 150, 150)
-                .ForeColor     = RGB(150, 150, 150)
+                *-- Shape NAO tem ForeColor (medido no VFP9): atribuir estoura
+                *-- "Property FORECOLOR is not found" no Init e a tela nao abre.
+                *-- O legado nao declara cor nenhuma nestes separadores - so
+                *-- BorderWidth = 2, com a borda preta default. Erro170.
+                .BorderWidth   = 2
                 .BackStyle     = 0
                 .BorderStyle   = 1
                 .SpecialEffect = 0

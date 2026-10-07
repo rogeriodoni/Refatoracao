@@ -1,12 +1,12 @@
 *==============================================================================
-* FormSET.prg - Formulario de Cadastro de Setores
+* FormSetor.prg - Formulario de Cadastro de Setores
 * Migrado de: SIGCDSET.SCX (frmcadastro)
 * Tabela principal: SigCdSet (Setores)
 * Tabela filha: SigCdSei (Localizacoes do Setor)
 * Lookup: SigPrLcl (Localizacoes - Codigos/Descricaos)
 *==============================================================================
 
-DEFINE CLASS FormSET AS FormBase
+DEFINE CLASS FormSetor AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY: exatos do original)
     Height      = 600
@@ -50,7 +50,7 @@ DEFINE CLASS FormSET AS FormBase
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
                 MostrarErro("Erro ao criar SETBO" + CHR(13) + ;
                     "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
-                    "FormSET.InicializarForm")
+                    "FormSetor.InicializarForm")
             ELSE
                 THIS.ConfigurarPageFrame()
                 THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
@@ -67,10 +67,10 @@ DEFINE CLASS FormSET AS FormBase
             ENDIF
 
         CATCH TO loException
-            MostrarErro("Erro ao inicializar FormSET:" + CHR(13) + ;
+            MostrarErro("Erro ao inicializar FormSetor:" + CHR(13) + ;
                 loException.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loException.LineNo), ;
-                "FormSET.InicializarForm")
+                "FormSetor.InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
@@ -673,7 +673,7 @@ DEFINE CLASS FormSET AS FormBase
             ENDIF
         CATCH TO loException
             MostrarErro("Erro ao carregar lista:" + CHR(13) + loException.Message, ;
-                "FormSET.CarregarLista")
+                "FormSetor.CarregarLista")
             loc_lResultado = .F.
         ENDTRY
 
@@ -695,15 +695,21 @@ DEFINE CLASS FormSET AS FormBase
             THIS.pgf_4c_Paginas.ActivePage = par_nPagina
 
             IF par_nPagina = 1
+                *-- Erro176: BtnSalvarClick volta para a Lista SEM trocar o modo,
+                *-- entao a normalizacao para "LISTA" fica aqui (padrao canonico)
+                THIS.this_cModoAtual = "LISTA"
                 IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
                     THIS.CarregarLista()
                 ENDIF
             ENDIF
 
+            *-- Erro176: reabilita os botoes CRUD ao VOLTAR para a Lista
+            THIS.AjustarBotoesPorModo()
+
             loc_lResultado = .T.
         CATCH TO loException
             MostrarErro("Erro ao alternar p" + CHR(225) + "gina:" + CHR(13) + ;
-                loException.Message, "FormSET.AlternarPagina")
+                loException.Message, "FormSetor.AlternarPagina")
         ENDTRY
 
         RETURN loc_lResultado
@@ -772,7 +778,7 @@ DEFINE CLASS FormSET AS FormBase
             loc_lCarregou = THIS.this_oBusinessObject.CarregarPorCodigo(loc_cSetores)
         CATCH TO loException
             MostrarErro("Erro ao carregar setor:" + CHR(13) + loException.Message, ;
-                "FormSET.BtnVisualizarClick")
+                "FormSetor.BtnVisualizarClick")
         ENDTRY
 
         IF loc_lCarregou
@@ -808,7 +814,7 @@ DEFINE CLASS FormSET AS FormBase
             loc_lCarregou = THIS.this_oBusinessObject.CarregarPorCodigo(loc_cSetores)
         CATCH TO loException
             MostrarErro("Erro ao carregar setor:" + CHR(13) + loException.Message, ;
-                "FormSET.BtnAlterarClick")
+                "FormSetor.BtnAlterarClick")
         ENDTRY
 
         IF loc_lCarregou
@@ -857,7 +863,7 @@ DEFINE CLASS FormSET AS FormBase
             loc_lCarregou = THIS.this_oBusinessObject.CarregarPorCodigo(loc_cSetores)
         CATCH TO loException
             MostrarErro("Erro ao carregar setor:" + CHR(13) + loException.Message, ;
-                "FormSET.BtnExcluirClick")
+                "FormSetor.BtnExcluirClick")
         ENDTRY
 
         IF loc_lCarregou
@@ -969,7 +975,7 @@ DEFINE CLASS FormSET AS FormBase
             ENDIF
         CATCH TO loException
             MostrarErro("Erro ao salvar Setor:" + CHR(13) + loException.Message, ;
-                "FormSET.BtnSalvarClick")
+                "FormSetor.BtnSalvarClick")
         ENDTRY
 
         IF loc_lSucesso
@@ -1245,7 +1251,7 @@ DEFINE CLASS FormSET AS FormBase
             ENDIF
         CATCH TO loException
             MostrarErro("Erro ao abrir lookup de localiza" + CHR(231) + CHR(245) + "es:" + ;
-                CHR(13) + loException.Message, "FormSET.AbrirLookupLocalizacao")
+                CHR(13) + loException.Message, "FormSetor.AbrirLookupLocalizacao")
         ENDTRY
     ENDPROC
 
@@ -1283,7 +1289,7 @@ DEFINE CLASS FormSET AS FormBase
             loc_lAchou = THIS.this_oBusinessObject.BuscarLocalizacao(loc_cLocais)
         CATCH TO loException
             MostrarErro("Erro ao validar localiza" + CHR(231) + CHR(227) + "o:" + ;
-                CHR(13) + loException.Message, "FormSET.ValidarLocalizacaoGrid")
+                CHR(13) + loException.Message, "FormSetor.ValidarLocalizacaoGrid")
             loc_lProsseguir = .F.
         ENDTRY
 

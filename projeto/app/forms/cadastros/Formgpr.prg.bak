@@ -917,18 +917,25 @@ DEFINE CLASS Formgpr AS FormBase
             .ButtonCount = 2
             .BackStyle   = 0
             .Visible     = .T.
+            * legado Opc_Cpq: Option1/Option2 Tahoma 8, BackStyle 0, ForeColor 90,90,90
             WITH .Buttons(1)
-                .Caption = "Sim"
-                .Width   = 46
-                .Height  = 20
+                .Caption   = "Sim"
+                .Width     = 46
+                .Height    = 20
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
             WITH .Buttons(2)
-                .Caption = "N" + CHR(227) + "o"
-                .Width   = 46
-                .Height  = 20
-                .Left    = 49
-                .FontName = "Tahoma"
-                .FontSize = 8
+                .Caption   = "N" + CHR(227) + "o"
+                .Width     = 46
+                .Height    = 20
+                .Left      = 49
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
         ENDWITH
 
@@ -965,18 +972,25 @@ DEFINE CLASS Formgpr AS FormBase
             .ButtonCount = 2
             .BackStyle   = 0
             .Visible     = .T.
+            * legado Opc_FalhaAdm: Option1/Option2 Tahoma 8, BackStyle 0, ForeColor 90,90,90
             WITH .Buttons(1)
-                .Caption = "Sim"
-                .Width   = 46
-                .Height  = 20
+                .Caption   = "Sim"
+                .Width     = 46
+                .Height    = 20
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
             WITH .Buttons(2)
-                .Caption = "N" + CHR(227) + "o"
-                .Width   = 46
-                .Height  = 20
-                .Left    = 49
-                .FontName = "Tahoma"
-                .FontSize = 8
+                .Caption   = "N" + CHR(227) + "o"
+                .Width     = 46
+                .Height    = 20
+                .Left      = 49
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
         ENDWITH
 
@@ -1013,18 +1027,25 @@ DEFINE CLASS Formgpr AS FormBase
             .ButtonCount = 2
             .BackStyle   = 0
             .Visible     = .T.
+            * legado fwoption1: Option1/Option2 Tahoma 8, BackStyle 0, ForeColor 90,90,90
             WITH .Buttons(1)
-                .Caption = "Sim"
-                .Width   = 46
-                .Height  = 20
+                .Caption   = "Sim"
+                .Width     = 46
+                .Height    = 20
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
             WITH .Buttons(2)
-                .Caption = "N" + CHR(227) + "o"
-                .Width   = 46
-                .Height  = 20
-                .Left    = 49
-                .FontName = "Tahoma"
-                .FontSize = 8
+                .Caption   = "N" + CHR(227) + "o"
+                .Width     = 46
+                .Height    = 20
+                .Left      = 49
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
         ENDWITH
 
@@ -1063,17 +1084,26 @@ DEFINE CLASS Formgpr AS FormBase
             .ButtonCount = 2
             .BackStyle   = 0
             .Visible     = .F.
-            .ForeColor   = RGB(255, 0, 0)
+            * OptionGroup NAO tem ForeColor (medido no VFP9) - a cor vai nos Buttons,
+            * exatamente como o legado declara (fwoption2.Option1/Option2.ForeColor = 255,0,0)
             WITH .Buttons(1)
-                .Caption = "Sim"
-                .Width   = 46
-                .Height  = 20
+                .Caption   = "Sim"
+                .Width     = 46
+                .Height    = 20
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(255, 0, 0)
             ENDWITH
             WITH .Buttons(2)
-                .Caption = "N" + CHR(227) + "o"
-                .Width   = 46
-                .Height  = 20
-                .Left    = 49
+                .Caption   = "N" + CHR(227) + "o"
+                .Width     = 46
+                .Height    = 20
+                .Left      = 49
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(255, 0, 0)
             ENDWITH
         ENDWITH
 
@@ -1088,17 +1118,26 @@ DEFINE CLASS Formgpr AS FormBase
             .ButtonCount = 2
             .BackStyle   = 0
             .Visible     = .F.
-            .ForeColor   = RGB(255, 0, 0)
+            * OptionGroup NAO tem ForeColor (medido no VFP9) - a cor vai nos Buttons,
+            * exatamente como o legado declara (fwoption3.Option1/Option2.ForeColor = 255,0,0)
             WITH .Buttons(1)
-                .Caption = "Sim"
-                .Width   = 46
-                .Height  = 20
+                .Caption   = "Sim"
+                .Width     = 46
+                .Height    = 20
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(255, 0, 0)
             ENDWITH
             WITH .Buttons(2)
-                .Caption = "N" + CHR(227) + "o"
-                .Width   = 46
-                .Height  = 20
-                .Left    = 49
+                .Caption   = "N" + CHR(227) + "o"
+                .Width     = 46
+                .Height    = 20
+                .Left      = 49
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(255, 0, 0)
             ENDWITH
         ENDWITH
 

@@ -3129,21 +3129,52 @@ function Corrigir-CreateObjectVsDefineClass {
 # =============================================================================
 # #56 Container.Themes = .F. -> Container nao tem Themes em VFP9
 # =============================================================================
+# -----------------------------------------------------------------------------
+# Helpers de ESCOPO DE WITH (Erro501, sweep 2026-10-06)
+# Os patterns de "propriedade que Container nao tem" decidiam pelo WITH EXTERNO:
+# ContainerThemes ligava em qualquer WITH ...cnt_4c_X e so desligava no 1o ENDWITH;
+# ContainerBorderStyle ficava ligado por TODOS os WITH aninhados apos um AddObject
+# de Container. No FormProduto removeram .BorderStyle de um OptionGroup e .Themes de
+# um TextBox - ambos TEM essas propriedades (automation\propriedades_baseclasses.txt).
+# O certo eh olhar o alvo do WITH MAIS INTERNO e a classe com que ele foi criado.
+# -----------------------------------------------------------------------------
+function Get-ClassePorNomeAddObject {
+    # nome (minusculo) -> classe (minuscula); nome reaproveitado com classes diferentes
+    # vira '<<ambiguo>>' e nao eh mutado (mesmo cuidado da regra #33).
+    param([string[]]$Linhas)
+    $mapa = @{}
+    foreach ($l in $Linhas) {
+        foreach ($m in [regex]::Matches($l, '(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"(\w+)"')) {
+            $nome = $m.Groups[1].Value.ToLower(); $cls = $m.Groups[2].Value.ToLower()
+            if ($mapa.ContainsKey($nome) -and $mapa[$nome] -ne $cls) { $mapa[$nome] = '<<ambiguo>>' }
+            else { $mapa[$nome] = $cls }
+        }
+    }
+    return $mapa
+}
+function Get-AlvoDoWith {
+    # "WITH loc_oPg.cnt_4c_X.opt_4c_Y" -> "opt_4c_y"; WITH de variavel/THIS -> "" (desconhecido)
+    param([string]$Linha)
+    $m = [regex]::Match($Linha, '(?i)^\s*WITH\s+(.+?)\s*(&&.*)?$')
+    if (-not $m.Success) { return $null }
+    $expr = $m.Groups[1].Value
+    if ($expr -notmatch '\.') { return "" }
+    return ($expr -split '\.')[-1].Trim().ToLower()
+}
+
 function Corrigir-ContainerThemes {
     param([string[]]$Linhas)
 
     $resultado = @()
-    $dentroWithContainer = $false
+    $classes = Get-ClassePorNomeAddObject -Linhas $Linhas
+    $pilha = New-Object System.Collections.Stack
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        # Detectar WITH para Container (cnt_4c_*)
-        if ($Linhas[$i] -match '(?i)WITH\s+.*\.(cnt_4c_\w+)\s*$') {
-            $dentroWithContainer = $true
-        }
-        if ($Linhas[$i] -match '(?i)^\s*ENDWITH\s*$') {
-            $dentroWithContainer = $false
-        }
-        # Remover .Themes dentro de WITH para Container
+        $alvo = Get-AlvoDoWith -Linha $Linhas[$i]
+        if ($null -ne $alvo) { $pilha.Push($alvo) }
+        elseif ($Linhas[$i] -match '(?i)^\s*ENDWITH\b' -and $pilha.Count -gt 0) { [void]$pilha.Pop() }
+        # So remove se o WITH MAIS INTERNO aponta para objeto criado como Container
+        $dentroWithContainer = ($pilha.Count -gt 0 -and $classes[$pilha.Peek()] -eq 'container')
         if ($dentroWithContainer -and $Linhas[$i] -match '(?i)^\s*\.Themes\s*=') {
             Add-Correcao -Tipo "CONTAINER_THEMES" -Linha ($i + 1) -Original $Linhas[$i].Trim() -Corrigido "(removido)" -Descricao "Container nao tem .Themes em VFP9 - propriedade inexistente"
             continue
@@ -3602,11 +3633,14 @@ function Corrigir-OptionGroupWidthAcomodaBotoes {
         if ($ajustesPorLinha.ContainsKey($i)) {
             $info = $ajustesPorLinha[$i]
             # Preservar indentacao
+            # WARNING-only desde o sweep do Erro501 (2026-10-06): o auto-fix sobrescrevia
+            # larguras TRANSCRITAS do SCX legado (FormProduto: 129->134, 93->97, 151->188,
+            # uma delas fixada no proprio Erro188 horas antes). A regra "Width >= botao
+            # mais largo + 10" nao sabe o valor do legado e ignora AutoSize = .T. nos
+            # Buttons (largura declarada nao eh a renderizada). PILAR 1: conferir no dump.
             if ($linha -match '(?i)^(\s*\.Width\s*=\s*)\d+\s*$') {
-                $novaLinha = $Matches[1] + $info.Novo.ToString()
-                Add-Correcao -Tipo "OPTIONGROUP-WIDTH-ACOMODA" -Linha ($i+1) -Original "(auto-fix)" -Corrigido "(auto-fix)" -Descricao "OptionGroup $($info.NomeOg).Width=$($info.Antigo) -> $($info.Novo) (acomodar Buttons + 10 margem)"
-                [void]$resultado.Add($novaLinha)
-                continue
+                Write-Host "[Pattern #87 WARN] linha $($i + 1): OptionGroup $($info.NomeOg).Width=$($info.Antigo) < botoes+10 ($($info.Novo)) - nao mutado" -ForegroundColor Yellow
+                Add-Correcao -Tipo "WARN-87-OPTIONGROUP-WIDTH" -Linha ($i+1) -Original $linha.Trim() -Corrigido "(nao mutado - conferir Width no dump do SCX legado)" -Descricao "Pattern #87 WARNING: OptionGroup $($info.NomeOg).Width=$($info.Antigo) menor que MAX(Buttons.Left+Width)+10 = $($info.Novo). Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
             }
         }
         [void]$resultado.Add($linha)
@@ -4509,8 +4543,10 @@ function Corrigir-ContainerBorderStyle {
     param([string[]]$Linhas)
 
     $resultado = @()
-    $dentroContainer = $false
-    $contadorEndWith = 0
+    # Erro501: decide pelo WITH MAIS INTERNO (ver Get-ClassePorNomeAddObject). Antes
+    # qualquer WITH aninhado depois de um AddObject "Container" contava como Container.
+    $classes = Get-ClassePorNomeAddObject -Linhas $Linhas
+    $pilha = New-Object System.Collections.Stack
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
@@ -4521,26 +4557,12 @@ function Corrigir-ContainerBorderStyle {
             continue
         }
 
-        # Detectar AddObject com Container
-        if ($linha -match '(?i)AddObject\s*\(\s*"[^"]+"\s*,\s*"Container"\s*\)') {
-            $dentroContainer = $true
-            $contadorEndWith = 0
-        }
+        $alvo = Get-AlvoDoWith -Linha $linha
+        if ($null -ne $alvo) { $pilha.Push($alvo) }
+        elseif ($linha -match '(?i)^\s*ENDWITH\b' -and $pilha.Count -gt 0) { [void]$pilha.Pop() }
+        $dentroContainer = ($pilha.Count -gt 0 -and $classes[$pilha.Peek()] -eq 'container')
 
-        # Detectar WITH (incrementar nivel)
-        if ($dentroContainer -and $linha -match '(?i)^\s*WITH\b') {
-            $contadorEndWith++
-        }
-
-        # Detectar ENDWITH (decrementar nivel)
-        if ($dentroContainer -and $linha -match '(?i)^\s*ENDWITH\b') {
-            $contadorEndWith--
-            if ($contadorEndWith -le 0) {
-                $dentroContainer = $false
-            }
-        }
-
-        # Remover .BorderStyle dentro de contexto Container
+        # Remover .BorderStyle so quando o alvo do WITH interno eh Container
         if ($dentroContainer -and $linha -match '(?i)^\s*\.BorderStyle\s*=') {
             Add-Correcao -Tipo "CONTAINER-BORDERSTYLE" -Linha ($i+1) -Original "(auto-fix)" -Corrigido "(auto-fix)" -Descricao "Removido .BorderStyle de Container (propriedade nao existe em VFP9)"
             continue
@@ -4707,7 +4729,8 @@ function Corrigir-CheckBoxInitLogico {
 
 # =============================================================================
 # Pattern #74: BINDEVENT "LostFocus" em handler lookup FormBuscaAuxiliar (task017/018)
-# Troca LostFocus -> KeyPress. Ajuste manual do handler (params + guard) ainda necessario.
+# WARNING-only desde 2026-10-06 (sweep Erro501). Antes trocava LostFocus -> KeyPress e
+# desfazia consertos manuais (regras #35/#37 escolhem LostFocus de proposito).
 # =============================================================================
 function Corrigir-LostFocusLookupBusca {
     param([string[]]$Linhas)
@@ -4753,6 +4776,30 @@ function Corrigir-LostFocusLookupBusca {
 
     if ($handlersLookup.Count -eq 0) { return $Linhas }
 
+    # Erro501 (sweep 2026-10-06): trocar o evento SEM trocar a assinatura do handler
+    # gera codigo QUEBRADO - BINDEVENT KeyPress passa (nKeyCode, nShiftAltCtrl) e o
+    # handler sem esses parametros estoura em runtime a cada tecla (regra #3). E o
+    # LostFocus em lookup eh DESENHO, nao defeito: regras #35/#37 (Erro172/173) o
+    # escolheram de proposito, com guarda de reentrancia. No sweep o #74 desfez esses
+    # consertos no Formgpd e no FormProduto (4 BINDEVENTs). Agora so muta quando o
+    # handler JA declara 2+ parametros (assinatura de KeyPress); senao vira WARNING.
+    $paramsPorHandler = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mp = [regex]::Match($Linhas[$i], '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+(\w+)\s*(\(([^)]*)\))?')
+        if (-not $mp.Success) { continue }
+        $lista = $mp.Groups[3].Value
+        if (-not $mp.Groups[2].Success) {
+            # sem parenteses: procurar LPARAMETERS/PARAMETERS nas linhas seguintes
+            for ($k = $i + 1; $k -lt [Math]::Min($i + 6, $Linhas.Count); $k++) {
+                $ml = [regex]::Match($Linhas[$k], '(?i)^\s*L?PARAMETERS\s+(.+)$')
+                if ($ml.Success) { $lista = $ml.Groups[1].Value; break }
+                if ($Linhas[$k] -match '(?i)^\s*(PROCEDURE|ENDPROC|FUNCTION)\b') { break }
+            }
+        }
+        $n = @($lista -split ',' | ? { $_.Trim() -ne '' }).Count
+        $paramsPorHandler[$mp.Groups[1].Value.ToUpper()] = $n
+    }
+
     $resultado = @()
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
@@ -4764,12 +4811,16 @@ function Corrigir-LostFocusLookupBusca {
         # BINDEVENT(..., "LostFocus", ..., "<handlerLookup>")
         $m = [regex]::Match($linha, '(?i)BINDEVENT\s*\([^,]+,\s*"LostFocus"\s*,\s*[^,]+,\s*"(\w+)"')
         if ($m.Success -and $handlersLookup -contains $m.Groups[1].Value) {
-            $nova = $linha -replace '(?i)"LostFocus"', '"KeyPress"'
-            Add-Correcao -Tipo "LOSTFOCUS-LOOKUP" -Linha ($i+1) -Original "(auto-fix)" -Corrigido "(auto-fix)" -Descricao "BINDEVENT LostFocus -> KeyPress para handler $($m.Groups[1].Value) (evita recursao com FormBuscaAuxiliar). IMPORTANTE: adicionar manualmente parametros (par_nKeyCode, par_nShiftAltCtrl) e guard ENTER/TAB/F4 no handler."
-            $resultado += $nova
+            # WARNING-only: nem a assinatura decide. FormProduto.ValidarCodigoProdutoDados declara
+            # (par_nKeyCode, par_nShiftAltCtrl) e mesmo assim eh ligado a LostFocus DE PROPOSITO,
+            # com comentario dizendo por que (Erro182). A escolha do evento eh de quem escreveu.
+            $nParams = $paramsPorHandler[$m.Groups[1].Value.ToUpper()]
+            $motivo = if ($nParams -lt 2) { "o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3)" } else { "a escolha do evento eh de desenho, nao de sintaxe" }
+            Write-Host "[Pattern #74 WARN] linha $($i + 1): $($m.Groups[1].Value) em LostFocus - nao mutado" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-74-LOSTFOCUS-LOOKUP" -Linha ($i + 1) -Original $linha.Trim() -Corrigido "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)" -Descricao ("Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup $($m.Groups[1].Value). NAO trocado para KeyPress: " + $motivo + ". LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto.")
+            $resultado += $linha
             continue
         }
-
         $resultado += $linha
     }
 
@@ -7078,9 +7129,18 @@ function Corrigir-ContainerBotoesOverlayGrid {
     # Coleta apenas grid.Top e grid.Height do WITH block imediato
     $gridBBoxes = New-Object System.Collections.ArrayList
 
+    # Erro501 (sweep 2026-10-06): Top/Height sao RELATIVOS AO PAI. Comparar o container
+    # com TODA grid do arquivo acusou overlap entre a barra cnt_4c_Botoes da Page1
+    # (Top 29..114) e grids de OUTRAS paginas/containers internos, e tornou opaca a barra
+    # canonica do Formgpd (FormCor usa BackStyle = 0 - regra #11, ela fica sobre a faixa
+    # do cabecalho). O caso original (FormBuscaAuxiliar) era form plano, sem paginas.
+    # Agora cada bbox guarda o PAI (expressao antes de .grd_4c_X/.cnt_4c_X no WITH) e so
+    # se compara grid e container do MESMO pai. Tambem so conta o WITH da PROPRIA grid
+    # (linha terminando no nome dela), nao "WITH grd.Column3".
     $dentroGrid = $false
     $gridTop = 0
     $gridHeight = 0
+    $gridPai = ""
     $temTop = $false
     $temHeight = $false
 
@@ -7090,8 +7150,9 @@ function Corrigir-ContainerBotoesOverlayGrid {
 
         if (-not $dentroGrid) {
             if ($lTrimmed.StartsWith('WITH ', [System.StringComparison]::OrdinalIgnoreCase) `
-                -and $l.IndexOf('grd_4c_', [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                -and $l -match '(?i)^\s*WITH\s+(.+)\.grd_4c_\w+\s*$') {
                 $dentroGrid = $true
+                $gridPai = $Matches[1].Trim().ToLower()
                 $gridTop = 0; $gridHeight = 0
                 $temTop = $false; $temHeight = $false
             }
@@ -7100,7 +7161,7 @@ function Corrigir-ContainerBotoesOverlayGrid {
 
         if ($lTrimmed.StartsWith('ENDWITH', [System.StringComparison]::OrdinalIgnoreCase)) {
             if ($temTop -and $temHeight) {
-                [void]$gridBBoxes.Add(@{ Top = $gridTop; Bottom = $gridTop + $gridHeight })
+                [void]$gridBBoxes.Add(@{ Top = $gridTop; Bottom = $gridTop + $gridHeight; Pai = $gridPai })
             }
             $dentroGrid = $false
             continue
@@ -7162,11 +7223,12 @@ function Corrigir-ContainerBotoesOverlayGrid {
 
         if (-not $dentroCnt) {
             if ($lTrimmed.StartsWith('WITH ', [System.StringComparison]::OrdinalIgnoreCase) `
-                -and $l -match '(?i)WITH\s+[\w\.]*\.?(cnt_4c_\w+)\s*$') {
-                $candidato = $Matches[1].ToLower()
+                -and $l -match '(?i)^\s*WITH\s+(?:(.+)\.)?(cnt_4c_\w+)\s*$') {
+                $candidato = $Matches[2].ToLower()
                 if ($containersComBotao.ContainsKey($candidato)) {
                     $dentroCnt = $true
                     $cntNome = $candidato
+                    $cntPai = "$($Matches[1])".Trim().ToLower()
                     $cntTop = 0; $cntHeight = 0
                     $temCntTop = $false; $temCntHeight = $false
                     $linhaBackStyle0 = -1
@@ -7183,6 +7245,7 @@ function Corrigir-ContainerBotoesOverlayGrid {
                 # Verifica overlap com algum grid
                 $overlap = $false
                 foreach ($gb in $gridBBoxes) {
+                    if ($gb.Pai -ne $cntPai) { continue }   # outro pai: coordenadas nao comparaveis
                     if ($cntTop -lt $gb.Bottom -and $cntBottom -gt $gb.Top) {
                         $overlap = $true
                         break

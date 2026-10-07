@@ -819,15 +819,15 @@ DEFINE CLASS FormPAT AS FormBase
 
             IF PEMSTATUS(loc_oPg1, "cnt_4c_Filtros", 5)
                 WITH loc_oPg1.cnt_4c_Filtros
-                    IF PEMSTATUS(.Self, "txt_4c_Empr", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_Empr", 5)
                         loc_cEmpr = ALLTRIM(.txt_4c_Empr.Value)
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_DtIni", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_DtIni", 5)
                         IF !EMPTY(.txt_4c_DtIni.Value)
                             loc_cDtIni = FormatarDataSQL(.txt_4c_DtIni.Value)
                         ENDIF
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_DtFim", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_DtFim", 5)
                         IF !EMPTY(.txt_4c_DtFim.Value)
                             loc_cDtFim = FormatarDataSQL(.txt_4c_DtFim.Value + 1)
                         ENDIF
@@ -918,31 +918,31 @@ DEFINE CLASS FormPAT AS FormBase
 
             *-- Ajustar ReadOnly conforme modo
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
                     .txt_4c_Datas.ReadOnly = .T.
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Emps", 5)
                     .txt_4c_Emps.ReadOnly = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_DEmps", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_DEmps", 5)
                     .txt_4c_DEmps.ReadOnly = .T.
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Codvends", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Codvends", 5)
                     .txt_4c_Codvends.ReadOnly = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_DVends", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_DVends", 5)
                     .txt_4c_DVends.ReadOnly = .T.
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Clientes", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Clientes", 5)
                     .txt_4c_Clientes.ReadOnly = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "opt_4c_Vendconcs", 5)
+                IF PEMSTATUS(loc_oPg2, "opt_4c_Vendconcs", 5)
                     .opt_4c_Vendconcs.Enabled = !loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "edt_4c_Perguntas", 5)
+                IF PEMSTATUS(loc_oPg2, "edt_4c_Perguntas", 5)
                     .edt_4c_Perguntas.ReadOnly = loc_lReadOnly
                 ENDIF
-                IF PEMSTATUS(.Self, "cmd_4c_Confirmar", 5)
+                IF PEMSTATUS(loc_oPg2, "cmd_4c_Confirmar", 5)
                     .cmd_4c_Confirmar.Enabled = !loc_lReadOnly
                 ENDIF
             ENDWITH
@@ -1007,7 +1007,7 @@ DEFINE CLASS FormPAT AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
                     IF VARTYPE(loc_oBO.this_tDatas) = "T" AND !EMPTY(loc_oBO.this_tDatas)
                         .txt_4c_Datas.Value = TTOC(loc_oBO.this_tDatas)
                     ELSE
@@ -1018,23 +1018,23 @@ DEFINE CLASS FormPAT AS FormBase
                         ENDIF
                     ENDIF
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Emps", 5)
                     .txt_4c_Emps.Value = loc_oBO.this_cEmps
                     .txt_4c_DEmps.Value = IIF(!EMPTY(loc_oBO.this_cEmps), ;
                         loc_oBO.BuscarDescEmpresa(loc_oBO.this_cEmps), "")
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Codvends", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Codvends", 5)
                     .txt_4c_Codvends.Value = loc_oBO.this_cCodvends
                     .txt_4c_DVends.Value = IIF(!EMPTY(loc_oBO.this_cCodvends), ;
                         loc_oBO.BuscarDescVendedor(loc_oBO.this_cCodvends), "")
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Clientes", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Clientes", 5)
                     .txt_4c_Clientes.Value = loc_oBO.this_cClientes
                 ENDIF
-                IF PEMSTATUS(.Self, "opt_4c_Vendconcs", 5)
+                IF PEMSTATUS(loc_oPg2, "opt_4c_Vendconcs", 5)
                     .opt_4c_Vendconcs.Value = IIF(loc_oBO.this_nVendconcs = 1, 1, 2)
                 ENDIF
-                IF PEMSTATUS(.Self, "edt_4c_Perguntas", 5)
+                IF PEMSTATUS(loc_oPg2, "edt_4c_Perguntas", 5)
                     .edt_4c_Perguntas.Value = loc_oBO.this_cPerguntas
                 ENDIF
             ENDWITH
@@ -1054,19 +1054,19 @@ DEFINE CLASS FormPAT AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Emps", 5)
                     loc_oBO.this_cEmps = ALLTRIM(.txt_4c_Emps.Value)
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Codvends", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Codvends", 5)
                     loc_oBO.this_cCodvends = ALLTRIM(.txt_4c_Codvends.Value)
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Clientes", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Clientes", 5)
                     loc_oBO.this_cClientes = ALLTRIM(.txt_4c_Clientes.Value)
                 ENDIF
-                IF PEMSTATUS(.Self, "opt_4c_Vendconcs", 5)
+                IF PEMSTATUS(loc_oPg2, "opt_4c_Vendconcs", 5)
                     loc_oBO.this_nVendconcs = .opt_4c_Vendconcs.Value
                 ENDIF
-                IF PEMSTATUS(.Self, "edt_4c_Perguntas", 5)
+                IF PEMSTATUS(loc_oPg2, "edt_4c_Perguntas", 5)
                     loc_oBO.this_cPerguntas = ALLTRIM(.edt_4c_Perguntas.Value)
                 ENDIF
             ENDWITH
@@ -1281,7 +1281,7 @@ DEFINE CLASS FormPAT AS FormBase
             RETURN
         ENDIF
         WITH loc_oPg1.cnt_4c_Filtros
-            IF PEMSTATUS(.Self, "txt_4c_DtIni", 5) AND PEMSTATUS(.Self, "txt_4c_DtFim", 5)
+            IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_DtIni", 5) AND PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_DtFim", 5)
                 loc_dIni = .txt_4c_DtIni.Value
                 loc_dFim = .txt_4c_DtFim.Value
                 IF !EMPTY(loc_dIni) AND !EMPTY(loc_dFim)
