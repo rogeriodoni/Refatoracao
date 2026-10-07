@@ -22,10 +22,10 @@
     varrer as chamadas sem abrir o VFP. Eh o que este script faz.
 
 .PARAMETER FrameworkDir
-    Pasta dos VCX/VCT legado. Default C:\4c\Framework (ignora Framework_old).
+    Pasta dos VCX/VCT legado. Default <repo>\Framework (ignora Framework_old).
 
 .PARAMETER ProjetoDir
-    Raiz do projeto novo. Default C:\4c\projeto\app.
+    Raiz do projeto novo. Default <repo>\projeto\app.
 
 .PARAMETER TodosVCT
     Por default varre SO os VCX que o projeto realmente carrega (descobertos
@@ -44,7 +44,7 @@
     Lista tambem as que JA existem, com o arquivo que as define.
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File C:\4c\automation\VerificarFuncoesLegadoVCX.ps1
+    powershell -ExecutionPolicy Bypass -File <repo>\automation\VerificarFuncoesLegadoVCX.ps1
 
 .NOTES
     Como CORRIGIR o que este script acusar: criar um wrapper
@@ -61,8 +61,8 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$FrameworkDir = 'C:\4c\Framework',
-    [string]$ProjetoDir   = 'C:\4c\projeto\app',
+    [string]$FrameworkDir = "$(Split-Path -Parent $PSScriptRoot)\Framework",
+    [string]$ProjetoDir   = "$(Split-Path -Parent $PSScriptRoot)\projeto\app",
     [string]$Prefixo      = 'f',
     [switch]$TodosVCT,
     [switch]$MostrarResolvidas

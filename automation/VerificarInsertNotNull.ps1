@@ -35,7 +35,7 @@ param(
     [string]$Banco    = "DB_MBAHIA",
     [string]$Usuario  = "4control",
     [string]$Senha    = "f2016jstcr%@",
-    [string]$PastaBOs = "C:\4c\projeto\app\classes"
+    [string]$PastaBOs = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\classes"
 )
 
 $ErrorActionPreference = "Stop"

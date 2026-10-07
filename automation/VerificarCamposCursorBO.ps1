@@ -43,8 +43,11 @@ param(
     [string]$Banco    = "DB_MBAHIA",
     [string]$Usuario  = "4control",
     [string]$Senha    = "f2016jstcr%@",
-    [string]$PastaBOs = "C:\4c\projeto\app\classes"
+    [string]$PastaBOs = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\classes"
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
@@ -75,7 +78,7 @@ $nDB = $qualquer.Count
 # esta no schema e o legado usa com o mesmo nome significa migrado FIEL: a
 # divergencia eh de BANCO/ambiente e nao se conserta no codigo.
 # UTF-16: ler com Get-Content -Raw (grep/findstr devolvem ZERO silenciosamente).
-$schemaFile = "C:\4c\docs\schema.sql"
+$schemaFile = "$($RaizRepo4c)\docs\schema.sql"
 if (Test-Path $schemaFile) {
     $sch = Get-Content $schemaFile -Raw
     foreach ($mt in [regex]::Matches($sch, '(?is)CREATE TABLE \[dbo\]\.\[(\w+)\]\s*\((.*?)\r?\n\)')) {
@@ -136,7 +139,7 @@ foreach ($arq in (Get-ChildItem -Path $PastaBOs -Filter '*BO.prg' -File)) {
     # campo do legado, que nao sao colunas de tabela nenhuma (TmpCabec do
     # SigPrGl2 tem Contav, DConta, Peso, Entregas...). Sem esta fonte o script
     # acusa um BO que esta FIEL ao legado.
-    $dump = Get-ChildItem -Path "C:\4c\tasks" -Recurse -Filter "*_form_codigo_fonte.txt" -ErrorAction SilentlyContinue |
+    $dump = Get-ChildItem -Path "$($RaizRepo4c)\tasks" -Recurse -Filter "*_form_codigo_fonte.txt" -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -match "(?i)^$([regex]::Escape($radical))_form_codigo_fonte\.txt$" } |
             Sort-Object FullName | Select-Object -Last 1
     if ($dump) {

@@ -9,14 +9,17 @@
 # exigencia" - sem isso a contagem infla e a sobreposicao com ramo existente
 # passa despercebida.
 
-$src = 'C:\4c\automation\OrquestradorMigracao.ps1'
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
+$src = "$($RaizRepo4c)\automation\OrquestradorMigracao.ps1"
 $ast = [System.Management.Automation.Language.Parser]::ParseFile($src, [ref]$null, [ref]$null)
 $funcs = $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $false)
 foreach ($f in $funcs) { . ([scriptblock]::Create($f.Extent.Text)) }
 "funcoes carregadas (sem executar o corpo do script): $($funcs.Count)"
 
-$tasksDir  = 'C:\4c\tasks'
-$projeto   = 'C:\4c\projeto'
+$tasksDir  = "$($RaizRepo4c)\tasks"
+$projeto   = "$($RaizRepo4c)\projeto"
 $casamDump = @()
 $deltaReal = @()
 

@@ -4,6 +4,9 @@
 # hoje falharia por BtnCancelarClick/CarregarLista ausentes e passaria a ser
 # dispensado). Sem isso nao ha como afirmar "zero regressao".
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 $ErrorActionPreference = 'Continue'
 
 # As duas funcoes auxiliares sao copiadas aqui para nao depender de dot-source
@@ -34,7 +37,7 @@ function Get-NBotoes {
 $linhasSaida = @()
 $nCasa = 0; $nMuda = 0; $nNoop = 0
 
-Get-ChildItem "C:\4c\tasks" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+Get-ChildItem "$($RaizRepo4c)\tasks" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
     $task = $_
     Get-ChildItem (Join-Path $task.FullName "*_form_codigo_fonte.txt") -ErrorAction SilentlyContinue | ForEach-Object {
         $dump = $_
@@ -62,8 +65,8 @@ Get-ChildItem "C:\4c\tasks" -Directory -ErrorAction SilentlyContinue | ForEach-O
         $nCasa++
 
         # --- lado .prg: localizar o form migrado ---
-        $prg = @(Get-ChildItem "C:\4c\projeto\app\forms" -Recurse -Filter "Form$base.prg" -ErrorAction SilentlyContinue) +
-               @(Get-ChildItem "C:\4c\projeto\app\forms" -Recurse -Filter "$base.prg" -ErrorAction SilentlyContinue)
+        $prg = @(Get-ChildItem "$($RaizRepo4c)\projeto\app\forms" -Recurse -Filter "Form$base.prg" -ErrorAction SilentlyContinue) +
+               @(Get-ChildItem "$($RaizRepo4c)\projeto\app\forms" -Recurse -Filter "$base.prg" -ErrorAction SilentlyContinue)
         if ($prg.Count -eq 0) {
             $linhasSaida += "SEM-PRG  $($task.Name)/$base"
             return
@@ -94,5 +97,5 @@ Get-ChildItem "C:\4c\tasks" -Directory -ErrorAction SilentlyContinue | ForEach-O
 
 $linhasSaida += ""
 $linhasSaida += "RESUMO: lado-dump casa=$nCasa | MUDA resultado=$nMuda | NO-OP=$nNoop"
-$linhasSaida | Set-Content "C:\4c\automation\delta_calculadora_f8.txt" -Encoding utf8
+$linhasSaida | Set-Content "$($RaizRepo4c)\automation\delta_calculadora_f8.txt" -Encoding utf8
 $linhasSaida | ForEach-Object { Write-Output $_ }

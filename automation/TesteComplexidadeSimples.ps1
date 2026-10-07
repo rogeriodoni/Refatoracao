@@ -2,7 +2,7 @@
 # Teste direto da função Get-ComplexidadeArquivo
 
 param(
-    [string]$ArquivoTxt = "C:\4c\tasks\task012\sigmvcab_form_codigo_fonte.txt"
+    [string]$ArquivoTxt = "$(Split-Path -Parent $PSScriptRoot)\tasks\task012\sigmvcab_form_codigo_fonte.txt"
 )
 
 # Carrega apenas a função de complexidade (copia o código)

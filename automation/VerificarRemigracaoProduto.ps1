@@ -10,16 +10,19 @@
 #
 # USO:
 #   .\VerificarRemigracaoProduto.ps1
-#   .\VerificarRemigracaoProduto.ps1 -TaskDir C:\4c\tasks\task569
+#   .\VerificarRemigracaoProduto.ps1 -TaskDir <repo>\tasks\task569
 #
 # SAIDA: exit 0 se tudo passou, 1 se alguma frente falhou.
 #==============================================================================
 
 param(
-    [string]$TaskDir = "C:\4c\tasks\task569",
-    [string]$Prg     = "C:\4c\projeto\app\forms\cadastros\FormProduto.prg",
+    [string]$TaskDir = "$(Split-Path -Parent $PSScriptRoot)\tasks\task569",
+    [string]$Prg     = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\forms\cadastros\FormProduto.prg",
     [string]$Backup  = ""
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 $falhas = 0
@@ -41,7 +44,7 @@ Write-Host "Arquivo: $Prg  ($([math]::Round((Get-Item $Prg).Length/1KB)) KB, $((
 Titulo "1) COMPLETUDE - controles por pagina (legado x gerado)"
 
 $layout = Join-Path $TaskDir "layout.json"
-if (-not (Test-Path $layout)) { $layout = "C:\4c\tasks\task504\layout.json" }
+if (-not (Test-Path $layout)) { $layout = "$($RaizRepo4c)\tasks\task504\layout.json" }
 $j = Get-Content $layout -Raw | ConvertFrom-Json
 
 # metodo do .prg que preenche cada pagina do legado
@@ -96,7 +99,7 @@ foreach ($pg in $paginas.Keys) {
 #------------------------------------------------------------------------------
 Titulo "1b) pgDados - controles do legado ausentes no .prg"
 
-$mapPath = "C:\4c\projeto\app\utils\mapeamentos\FormProduto_mapeamento.json"
+$mapPath = "$($RaizRepo4c)\projeto\app\utils\mapeamentos\FormProduto_mapeamento.json"
 $mapa = $null
 if (Test-Path $mapPath) { $mapa = (Get-Content $mapPath -Raw | ConvertFrom-Json).mapeamento }
 
@@ -189,7 +192,7 @@ if ($Backup -and (Test-Path $Backup)) {
 #------------------------------------------------------------------------------
 Titulo "4) BO - ProdutoBO.prg regenerado"
 
-$boPath = "C:\4c\projeto\app\classes\ProdutoBO.prg"
+$boPath = "$($RaizRepo4c)\projeto\app\classes\ProdutoBO.prg"
 if (-not (Test-Path $boPath)) {
     Write-Host "   FALHA ProdutoBO.prg nao existe" -ForegroundColor Red
     $falhas++

@@ -13,7 +13,7 @@
 .PARAMETER BOFile
     Caminho do arquivo .prg do Business Object
 .PARAMETER SchemaFile
-    Caminho do schema.sql (default: C:\4c\docs\schema.sql)
+    Caminho do schema.sql (default: <repo>\docs\schema.sql)
 .PARAMETER DbServer
     Servidor SQL Server (opcional). Ex: "192.168.15.101,1435"
 .PARAMETER DbName
@@ -25,7 +25,7 @@
 .OUTPUTS
     Array de strings com problemas encontrados. Vazio = sem problemas.
 .EXAMPLE
-    $problemas = & .\ValidadorSQLSchema.ps1 -FormFile "C:\4c\projeto\app\forms\cadastros\FormCor.prg"
+    $problemas = & .\ValidadorSQLSchema.ps1 -FormFile "<repo>\projeto\app\forms\cadastros\FormCor.prg"
 .EXAMPLE
     $problemas = & .\ValidadorSQLSchema.ps1 -FormFile "FormCor.prg" -DbServer "192.168.15.101,1435" -DbName "DB_MBAHIA" -DbUser "sa" -DbPass "pwd"
 #>
@@ -35,7 +35,7 @@ param(
 
     [string]$BOFile = "",
 
-    [string]$SchemaFile = "C:\4c\docs\schema.sql",
+    [string]$SchemaFile = "$(Split-Path -Parent $PSScriptRoot)\docs\schema.sql",
 
     [string]$DbServer = "",
     [string]$DbName = "",

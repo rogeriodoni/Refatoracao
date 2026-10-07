@@ -2,7 +2,7 @@
 # Motivo: PowerShell 5.1 pt-BR le .ps1 sem BOM como CP1252; byte 0x94 (UTF-8 de chars como └─)
 # vira aspa curva e o parser quebra silenciosamente. Ver memory/feedback_ps1_utf8_bom.md.
 
-param([string]$Pasta = "C:\4c\automation")
+param([string]$Pasta = "$(Split-Path -Parent $PSScriptRoot)\automation")
 
 $problemas = @()
 $corrigidos = @()

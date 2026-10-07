@@ -1,10 +1,13 @@
 # Script para remover BOM UTF-8 de arquivos VFP
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 $arquivos = @(
-    "C:\4c\projeto\app\utils\TesteAutomatico.prg",
-    "C:\4c\projeto\app\utils\ValidarUIFidelity.prg",
-    "C:\4c\automation\vfp_helpers\TestFormWrapper.prg",
-    "C:\4c\automation\vfp_helpers\ValidarCompilacao.prg"
+    "$($RaizRepo4c)\projeto\app\utils\TesteAutomatico.prg",
+    "$($RaizRepo4c)\projeto\app\utils\ValidarUIFidelity.prg",
+    "$($RaizRepo4c)\automation\vfp_helpers\TestFormWrapper.prg",
+    "$($RaizRepo4c)\automation\vfp_helpers\ValidarCompilacao.prg"
 )
 
 foreach ($arquivo in $arquivos) {

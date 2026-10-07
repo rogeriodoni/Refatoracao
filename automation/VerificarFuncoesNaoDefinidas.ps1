@@ -26,8 +26,11 @@
 #==============================================================================
 
 param(
-    [string]$Caminho = "C:\4c\projeto\app"
+    [string]$Caminho = "$(Split-Path -Parent $PSScriptRoot)\projeto\app"
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
@@ -125,7 +128,7 @@ foreach ($arq in $arquivos) {
             if ($nome -notmatch $regexNamespace) { continue }
             $tipo = if ($metodos.ContainsKey($k)) { 'METODO-SEM-THIS' } else { 'NAO-DEFINIDA' }
             $achados += [PSCustomObject]@{
-                Arquivo = $arq.FullName.Replace('C:\4c\', '')
+                Arquivo = $arq.FullName.Replace("$($RaizRepo4c)\", '')
                 Linha   = $nLinha
                 Nome    = $nome
                 Tipo    = $tipo

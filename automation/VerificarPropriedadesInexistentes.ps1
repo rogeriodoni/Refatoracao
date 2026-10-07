@@ -30,7 +30,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string] $Caminho = 'C:\4c\projeto\app',
+    [string] $Caminho = "$(Split-Path -Parent $PSScriptRoot)\projeto\app",
     [string] $TabelaPropriedades = (Join-Path $PSScriptRoot 'propriedades_baseclasses.txt')
 )
 

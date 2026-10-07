@@ -1,13 +1,16 @@
 # audit_frx_missing.ps1
 # Scan all REPORT BOs + forms for FRX names, find missing in reports/, copy from Fortyus
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 $ErrorActionPreference = 'Stop'
 
-$reportsDir = 'C:\4c\projeto\app\reports'
+$reportsDir = "$($RaizRepo4c)\projeto\app\reports"
 $fortyusDir = 'C:\4install\FortyusMC\Fortyus'
 $scanDirs = @(
-    'C:\4c\projeto\app\classes',
-    'C:\4c\projeto\app\forms\relatorios',
-    'C:\4c\projeto\app\forms\operacionais'
+    "$($RaizRepo4c)\projeto\app\classes",
+    "$($RaizRepo4c)\projeto\app\forms\relatorios",
+    "$($RaizRepo4c)\projeto\app\forms\operacionais"
 )
 
 # Extract FRX names from source code

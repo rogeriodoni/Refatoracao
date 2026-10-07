@@ -11,6 +11,9 @@
 # DATA: 2026-02-05
 #==============================================================================
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 $ErrorActionPreference = "Stop"
 
 Write-Host "========================================" -ForegroundColor Cyan
@@ -20,8 +23,8 @@ Write-Host ""
 
 # Limpa FXP primeiro
 Write-Host "Limpando arquivos .FXP..." -ForegroundColor Yellow
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
 Write-Host "FXP limpos!" -ForegroundColor Green
 Write-Host ""
 
@@ -45,7 +48,7 @@ PUBLIC gb_4c_ValidandoUI
 gb_4c_ValidandoUI = .T.
 
 *-- Carrega configuracoes
-CD C:\4c\projeto\app\start
+CD {{RAIZ}}\projeto\app\start
 DO config.prg
 
 *-- Lista de forms para testar
@@ -64,7 +67,7 @@ loc_aForms[11] = "FormSIGBLCTA"
 loc_aForms[12] = "FormProcessamentoBloqueioContas"
 
 *-- Arquivo de resultado
-loc_cResultado = "C:\4c\automation\teste_forms_resultado.txt"
+loc_cResultado = "{{RAIZ}}\automation\teste_forms_resultado.txt"
 SET TEXTMERGE ON
 SET TEXTMERGE TO (loc_cResultado) NOSHOW
 
@@ -138,8 +141,10 @@ ENDIF
 RELEASE gb_4c_ValidandoUI
 QUIT
 '@
+# {{RAIZ}}: o here-string acima eh LITERAL (codigo VFP com $ proprios) - a raiz entra aqui
+$vfpScript = $vfpScript.Replace('{{RAIZ}}', $RaizRepo4c)
 
-$scriptPath = "C:\4c\automation\TestarForms.prg"
+$scriptPath = "$($RaizRepo4c)\automation\TestarForms.prg"
 $vfpScript | Out-File -FilePath $scriptPath -Encoding ASCII
 
 Write-Host "Executando teste de formularios..." -ForegroundColor Cyan
@@ -154,7 +159,7 @@ if (Test-Path $vfpExe) {
     Start-Sleep -Seconds 2
 
     # Mostra resultado
-    $resultFile = "C:\4c\automation\teste_forms_resultado.txt"
+    $resultFile = "$($RaizRepo4c)\automation\teste_forms_resultado.txt"
     if (Test-Path $resultFile) {
         Write-Host ""
         Write-Host "========================================" -ForegroundColor Cyan

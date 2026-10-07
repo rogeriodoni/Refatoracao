@@ -7,8 +7,11 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$FromEtapa = "05_migracao"
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
 
-$taskPath = "C:\4c\tasks\$TaskId"
+
+$taskPath = "$($RaizRepo4c)\tasks\$TaskId"
 $stateFile = Join-Path $taskPath "task_state.json"
 
 if (-not (Test-Path $stateFile)) {

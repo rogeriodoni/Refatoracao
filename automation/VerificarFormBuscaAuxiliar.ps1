@@ -39,7 +39,7 @@
 ===============================================================================
 #>
 [CmdletBinding()]
-param([string] $Caminho = 'C:\4c\projeto\app')
+param([string] $Caminho = "$(Split-Path -Parent $PSScriptRoot)\projeto\app")
 
 $ErrorActionPreference = 'Stop'
 

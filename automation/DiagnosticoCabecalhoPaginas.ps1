@@ -19,7 +19,7 @@
 #==============================================================================
 param(
     [switch]$SoFaltantes,
-    [string]$Pasta = 'C:\4c\projeto\app\forms\cadastros'
+    [string]$Pasta = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\forms\cadastros"
 )
 $ErrorActionPreference = 'Stop'
 

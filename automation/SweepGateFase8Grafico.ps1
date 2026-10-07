@@ -14,8 +14,8 @@
 # uma migracao real).
 # =============================================================================
 param(
-    [string]$Orquestrador = "C:\4c\automation\OrquestradorMigracao.ps1",
-    [string]$TasksDir     = "C:\4c\tasks"
+    [string]$Orquestrador = "$(Split-Path -Parent $PSScriptRoot)\automation\OrquestradorMigracao.ps1",
+    [string]$TasksDir     = "$(Split-Path -Parent $PSScriptRoot)\tasks"
 )
 
 $ErrorActionPreference = "Stop"

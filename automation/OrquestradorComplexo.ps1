@@ -33,6 +33,9 @@ param(
     [Parameter(Mandatory=$false)]
     [int]$MaxRetries = 2
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $PSCommandPath
@@ -525,9 +528,9 @@ O resultado sera validado automaticamente e **fases com TODOs/stubs serao REJEIT
 - Tipo: $($script:formType)
 
 ## ARQUIVOS DE REFERENCIA
-- CLAUDE.md: C:\4c\CLAUDE.md (regras do projeto - LER OBRIGATORIAMENTE)
+- CLAUDE.md: $($RaizRepo4c)\CLAUDE.md (regras do projeto - LER OBRIGATORIAMENTE)
 - Codigo Original: $TaskPath\${baseName}_form_codigo_fonte.txt
-- Schema SQL: C:\4c\docs\schema.sql
+- Schema SQL: $($RaizRepo4c)\docs\schema.sql
 
 ## TAREFA
 $($allPlaceholders.Descricao)

@@ -5,13 +5,16 @@
 # NAO dot-source o orquestrador (dispara migracao real) - so as definicoes de
 # funcao, via AST.
 
-$src = 'C:\4c\automation\OrquestradorMigracao.ps1'
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
+$src = "$($RaizRepo4c)\automation\OrquestradorMigracao.ps1"
 $ast = [System.Management.Automation.Language.Parser]::ParseFile($src, [ref]$null, [ref]$null)
 $funcs = $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $false)
 foreach ($f in $funcs) { . ([scriptblock]::Create($f.Extent.Text)) }
 
-$txtLegadoF8 = Get-Content 'C:\4c\tasks\task608\SIGPREST_form_codigo_fonte.txt' -Raw
-$conteudo    = Get-Content 'C:\4c\projeto\app\forms\operacionais\FormSIGPREST.prg' -Raw
+$txtLegadoF8 = Get-Content "$($RaizRepo4c)\tasks\task608\SIGPREST_form_codigo_fonte.txt" -Raw
+$conteudo    = Get-Content "$($RaizRepo4c)\projeto\app\forms\operacionais\FormSIGPREST.prg" -Raw
 $FormType    = 'OPERACIONAL'
 
 $metodosFinals    = @("BtnCancelarClick", "FormParaBO", "BOParaForm", "CarregarLista")

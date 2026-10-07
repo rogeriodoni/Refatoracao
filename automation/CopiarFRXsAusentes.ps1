@@ -15,8 +15,8 @@
 # =============================================================================
 
 param(
-    [string]$ProjetoReports = "C:\4c\projeto\app\reports",
-    [string]$BOsDir = "C:\4c\projeto\app\classes",
+    [string]$ProjetoReports = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\reports",
+    [string]$BOsDir = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\classes",
     [string[]]$LegadoDirs = @(
         "C:\4install\FortyusMC\Fortyus",
         "C:\4install\WorkSpace\FortyusMC\Fortyus"

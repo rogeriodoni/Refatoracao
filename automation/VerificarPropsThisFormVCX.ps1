@@ -43,9 +43,9 @@
 #>
 [CmdletBinding()]
 param(
-    [string] $Vcx     = 'C:\4c\Framework\classresp.vcx',
+    [string] $Vcx     = "$(Split-Path -Parent $PSScriptRoot)\Framework\classresp.vcx",
     [string] $Classe  = 'clsconta',
-    [string] $Form    = 'C:\4c\projeto\app\forms\operacionais\FormCliente.prg',
+    [string] $Form    = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\forms\operacionais\FormCliente.prg",
     [string] $Vfp9    = 'C:\Program Files (x86)\Microsoft Visual FoxPro 9\vfp9.exe'
 )
 

@@ -11,11 +11,11 @@
 #
 # Uso:
 #   powershell -ExecutionPolicy Bypass -File VerificarGateFase8Task613.ps1 `
-#       -DumpLegado C:\4c\tasks\task613\SigPrGf2_form_codigo_fonte.txt `
-#       -FormMigrado C:\4c\projeto\app\forms\operacionais\FormSigPrGf2.prg
+#       -DumpLegado <repo>\tasks\task613\SigPrGf2_form_codigo_fonte.txt `
+#       -FormMigrado <repo>\projeto\app\forms\operacionais\FormSigPrGf2.prg
 # =============================================================================
 param(
-    [string]$Orquestrador = "C:\4c\automation\OrquestradorMigracao.ps1",
+    [string]$Orquestrador = "$(Split-Path -Parent $PSScriptRoot)\automation\OrquestradorMigracao.ps1",
     [Parameter(Mandatory = $true)][string]$DumpLegado,
     [Parameter(Mandatory = $true)][string]$FormMigrado
 )

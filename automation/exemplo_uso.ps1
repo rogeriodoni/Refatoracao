@@ -6,6 +6,9 @@
 # DATA: 2026-01-22
 #==============================================================================
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 Write-Host @"
 
 ╔══════════════════════════════════════════════════════════════════════╗
@@ -32,7 +35,7 @@ Write-Host "Comando:" -ForegroundColor Cyan
 Write-Host "  .\OrquestradorMigracao.ps1" -ForegroundColor White
 Write-Host ""
 Write-Host "O que faz:" -ForegroundColor Cyan
-Write-Host "  1. Busca proximo arquivo em C:\4c\origem\" -ForegroundColor Gray
+Write-Host "  1. Busca proximo arquivo em $($RaizRepo4c)\origem\" -ForegroundColor Gray
 Write-Host "  2. Cria nova task (ex: task001)" -ForegroundColor Gray
 Write-Host "  3. Executa todas as 8 etapas" -ForegroundColor Gray
 Write-Host "  4. Gera relatorios e solicitacao de teste manual" -ForegroundColor Gray
@@ -112,18 +115,18 @@ Write-Host "══════════════════════�
 Write-Host ""
 
 Write-Host "Comando:" -ForegroundColor Cyan
-Write-Host "  cat C:\4c\tasks\task001\task_state.json | ConvertFrom-Json | ConvertTo-Json -Depth 10" -ForegroundColor White
+Write-Host "  cat $($RaizRepo4c)\tasks\task001\task_state.json | ConvertFrom-Json | ConvertTo-Json -Depth 10" -ForegroundColor White
 Write-Host ""
 Write-Host "Ou usar TaskManager:" -ForegroundColor Cyan
 Write-Host "  . .\TaskManager.ps1" -ForegroundColor White
-Write-Host "  Get-TaskState -TaskId 'task001' -TasksDir 'C:\4c\tasks'" -ForegroundColor White
+Write-Host "  Get-TaskState -TaskId 'task001' -TasksDir '$($RaizRepo4c)\tasks'" -ForegroundColor White
 Write-Host ""
 
 $resposta = Read-Host "Deseja ver tasks disponiveis? (s/N)"
 if ($resposta -eq "s") {
     Write-Host ""
     Write-Host "Tasks disponiveis:" -ForegroundColor Green
-    Get-ChildItem -Path "C:\4c\tasks" -Directory | ForEach-Object {
+    Get-ChildItem -Path "$($RaizRepo4c)\tasks" -Directory | ForEach-Object {
         $stateFile = Join-Path $_.FullName "task_state.json"
         if (Test-Path $stateFile) {
             $state = Get-Content $stateFile -Raw | ConvertFrom-Json
@@ -150,7 +153,7 @@ Write-Host "══════════════════════�
 Write-Host ""
 
 Write-Host "Comando:" -ForegroundColor Cyan
-Write-Host "  cat C:\4c\tasks\task001\logs\05_migracao.log" -ForegroundColor White
+Write-Host "  cat $($RaizRepo4c)\tasks\task001\logs\05_migracao.log" -ForegroundColor White
 Write-Host ""
 Write-Host "Logs disponiveis por etapa:" -ForegroundColor Cyan
 Write-Host "  01_moverArquivos.log" -ForegroundColor Gray
@@ -165,7 +168,7 @@ Write-Host ""
 
 $resposta = Read-Host "Deseja ver logs de alguma task? Digite ID (ou ENTER para pular)"
 if ($resposta) {
-    $logsPath = "C:\4c\tasks\$resposta\logs"
+    $logsPath = "$($RaizRepo4c)\tasks\$resposta\logs"
     if (Test-Path $logsPath) {
         Write-Host ""
         Write-Host "Logs disponiveis para $resposta:" -ForegroundColor Green
@@ -198,15 +201,15 @@ Write-Host "══════════════════════�
 Write-Host ""
 
 Write-Host "Comando:" -ForegroundColor Cyan
-Write-Host "  start C:\4c\tasks\task001\validacao_ui_report.html" -ForegroundColor White
+Write-Host "  start $($RaizRepo4c)\tasks\task001\validacao_ui_report.html" -ForegroundColor White
 Write-Host ""
 Write-Host "Ou ver JSON:" -ForegroundColor Cyan
-Write-Host "  cat C:\4c\tasks\task001\validacao_ui_report.json | ConvertFrom-Json" -ForegroundColor White
+Write-Host "  cat $($RaizRepo4c)\tasks\task001\validacao_ui_report.json | ConvertFrom-Json" -ForegroundColor White
 Write-Host ""
 
 $resposta = Read-Host "Deseja abrir relatorio de alguma task? Digite ID (ou ENTER para pular)"
 if ($resposta) {
-    $htmlFile = "C:\4c\tasks\$resposta\validacao_ui_report.html"
+    $htmlFile = "$($RaizRepo4c)\tasks\$resposta\validacao_ui_report.html"
     if (Test-Path $htmlFile) {
         Write-Host "Abrindo relatorio HTML..." -ForegroundColor Green
         Start-Process $htmlFile
@@ -303,15 +306,15 @@ Write-Host "  .\OrquestradorMigracao.ps1 -TaskId 'taskXXX'" -ForegroundColor Whi
 Write-Host ""
 
 Write-Host "Ver estado de task:" -ForegroundColor Yellow
-Write-Host "  cat C:\4c\tasks\taskXXX\task_state.json | ConvertFrom-Json | Format-List" -ForegroundColor White
+Write-Host "  cat $($RaizRepo4c)\tasks\taskXXX\task_state.json | ConvertFrom-Json | Format-List" -ForegroundColor White
 Write-Host ""
 
 Write-Host "Ver logs:" -ForegroundColor Yellow
-Write-Host "  cat C:\4c\tasks\taskXXX\logs\*.log" -ForegroundColor White
+Write-Host "  cat $($RaizRepo4c)\tasks\taskXXX\logs\*.log" -ForegroundColor White
 Write-Host ""
 
 Write-Host "Abrir relatorio UI:" -ForegroundColor Yellow
-Write-Host "  start C:\4c\tasks\taskXXX\validacao_ui_report.html" -ForegroundColor White
+Write-Host "  start $($RaizRepo4c)\tasks\taskXXX\validacao_ui_report.html" -ForegroundColor White
 Write-Host ""
 
 Write-Host "Para mais informacoes, consulte:" -ForegroundColor Cyan

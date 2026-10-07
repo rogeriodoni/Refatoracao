@@ -1,11 +1,14 @@
-# RunLoop.ps1 - Executa OrquestradorMigracao.ps1 em loop ate esvaziar C:\4c\origem
-$logFile = "C:\4c\automation\logs\pipeline_loop_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
-$origemDir = "C:\4c\origem"
+# RunLoop.ps1 - Executa OrquestradorMigracao.ps1 em loop ate esvaziar <repo>\origem
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
+$logFile = "$($RaizRepo4c)\automation\logs\pipeline_loop_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
+$origemDir = "$($RaizRepo4c)\origem"
 $contador = 0
 
 # Criar pasta de logs se nao existir
-if (-not (Test-Path "C:\4c\automation\logs")) {
-    New-Item -ItemType Directory -Path "C:\4c\automation\logs" -Force | Out-Null
+if (-not (Test-Path "$($RaizRepo4c)\automation\logs")) {
+    New-Item -ItemType Directory -Path "$($RaizRepo4c)\automation\logs" -Force | Out-Null
 }
 
 Write-Host "=== PIPELINE LOOP ===" | Tee-Object -FilePath $logFile
@@ -16,7 +19,7 @@ Write-Host ""
 # Pre-flight: garantir BOM UTF-8 em todos os .ps1 (evita falha de parser CP1252)
 # VerificarEncodingPS1.ps1 usa `throw` em falha - nao checar $LASTEXITCODE (carrega de comando anterior do shell)
 try {
-    & "C:\4c\automation\VerificarEncodingPS1.ps1" 2>&1 | Tee-Object -FilePath $logFile -Append
+    & "$($RaizRepo4c)\automation\VerificarEncodingPS1.ps1" 2>&1 | Tee-Object -FilePath $logFile -Append
 }
 catch {
     throw "Verificacao de encoding falhou: $_"
@@ -42,7 +45,7 @@ while ($true) {
     Write-Host "============================================================" | Tee-Object -FilePath $logFile -Append
 
     try {
-        & "C:\4c\automation\OrquestradorMigracao.ps1" 2>&1 | Tee-Object -FilePath $logFile -Append
+        & "$($RaizRepo4c)\automation\OrquestradorMigracao.ps1" 2>&1 | Tee-Object -FilePath $logFile -Append
         Write-Host " [$contador] $proximo - CONCLUIDO ($(Get-Date))" | Tee-Object -FilePath $logFile -Append
     }
     catch {
@@ -60,7 +63,7 @@ if ($contador -gt 0) {
     Write-Host " EXECUTANDO RETROSPECTIVA AUTOMATICA..." | Tee-Object -FilePath $logFile -Append
     Write-Host "============================================================" | Tee-Object -FilePath $logFile -Append
     try {
-        & "C:\4c\automation\Retrospectiva.ps1" -UltimasNTasks $contador 2>&1 | Tee-Object -FilePath $logFile -Append
+        & "$($RaizRepo4c)\automation\Retrospectiva.ps1" -UltimasNTasks $contador 2>&1 | Tee-Object -FilePath $logFile -Append
     }
     catch {
         Write-Host " [AVISO] Retrospectiva falhou: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append

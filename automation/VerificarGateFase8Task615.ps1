@@ -17,9 +17,9 @@
 #   powershell -ExecutionPolicy Bypass -File VerificarGateFase8Task615.ps1
 # =============================================================================
 param(
-    [string]$Orquestrador = "C:\4c\automation\OrquestradorMigracao.ps1",
-    [string]$DumpLegado   = "C:\4c\tasks\task615\SigPrGlo_form_codigo_fonte.txt",
-    [string]$FormMigrado  = "C:\4c\projeto\app\forms\operacionais\FormSigPrGlo.prg"
+    [string]$Orquestrador = "$(Split-Path -Parent $PSScriptRoot)\automation\OrquestradorMigracao.ps1",
+    [string]$DumpLegado   = "$(Split-Path -Parent $PSScriptRoot)\tasks\task615\SigPrGlo_form_codigo_fonte.txt",
+    [string]$FormMigrado  = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\forms\operacionais\FormSigPrGlo.prg"
 )
 
 $ErrorActionPreference = "Stop"

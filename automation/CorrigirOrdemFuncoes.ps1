@@ -3,8 +3,11 @@
 # PROPOSITO: Corrigir ordem de definição de funções no OrquestradorMigracao.ps1
 #==============================================================================
 
-$arquivo = "C:\4c\automation\OrquestradorMigracao.ps1"
-$backup = "C:\4c\automation\OrquestradorMigracao.ps1.backup_antes_correcao_ordem"
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
+$arquivo = "$($RaizRepo4c)\automation\OrquestradorMigracao.ps1"
+$backup = "$($RaizRepo4c)\automation\OrquestradorMigracao.ps1.backup_antes_correcao_ordem"
 
 Write-Host "Corrigindo ordem de funcoes..." -ForegroundColor Cyan
 

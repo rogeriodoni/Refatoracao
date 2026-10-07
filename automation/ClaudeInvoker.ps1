@@ -54,6 +54,9 @@ param(
     [Parameter(Mandatory=$false)]
     [switch]$FailFastOnUsageLimit = $false
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
@@ -171,7 +174,7 @@ try {
 
     # Executa Claude CLI
     # NOTA: Claude CLI le de stdin, entao precisamos passar o prompt via pipeline
-    Write-Log "Executando: claude --model $Model --dangerously-skip-permissions --add-dir C:\4c"
+    Write-Log "Executando: claude --model $Model --dangerously-skip-permissions --add-dir $($RaizRepo4c)"
     Write-Log "Tamanho total do prompt: $($fullPrompt.Length) caracteres"
 
     $startTime = Get-Date
@@ -188,24 +191,27 @@ try {
         Write-Log "Invocando Claude CLI (tentativa $($rlRetry + 1)/$($RateLimitMaxRetries + 1))..."
 
         # Executa com timeout real usando background job
-        # CRITICO: Set-Location "C:\4c" dentro do job para que o Claude CLI
-        # rode com CWD=C:\4c (sandbox permite acesso ao diretorio de trabalho).
-        # Sem isso, o job herda CWD do usuario (ex: Documents) e o sandbox bloqueia C:\4c.
+        # CRITICO: Set-Location na RAIZ DO REPO dentro do job para que o Claude CLI
+        # rode com CWD=<repo> (sandbox permite acesso ao diretorio de trabalho).
+        # Sem isso, o job herda CWD do usuario (ex: Documents) e o sandbox bloqueia o repo.
+        # A raiz vai como PARAMETRO: o job roda em outro processo e nao enxerga $RaizRepo4c.
+        # Ate 2026-10-06 era "C:\4c" fixo - pasta-PAI do repo, onde NAO ha CLAUDE.md:
+        # o migrador rodava SEM as regras do projeto (C:\4c\refatoracao\CLAUDE.md).
         # NOTA: Passamos model e flags como strings separadas ao inves de array,
         # porque Start-Job -ArgumentList achata arrays em argumentos posicionais.
         $invokeBlock = [scriptblock]::Create('
-            param($prompt, $modelName, $maxTokens)
-            Set-Location "C:\4c"
+            param($prompt, $modelName, $maxTokens, $raizRepo)
+            Set-Location $raizRepo
             # CRITICO: Remove variavel CLAUDECODE para permitir execucao
             # quando invocado de dentro de outra sessao Claude Code
             Remove-Item Env:CLAUDECODE -ErrorAction SilentlyContinue
             # CRITICO: Define limite maximo de tokens de output para evitar
             # "Claude response exceeded the XXXXX output token maximum"
             $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS = "$maxTokens"
-            $out = $prompt | & claude --model $modelName --dangerously-skip-permissions --add-dir "C:\4c" 2>&1
+            $out = $prompt | & claude --model $modelName --dangerously-skip-permissions --add-dir $raizRepo 2>&1
             return @{ ExitCode = $LASTEXITCODE; Output = $out }
         ')
-        $job = Start-Job -ScriptBlock $invokeBlock -ArgumentList $fullPrompt, $Model, $MaxOutputTokens
+        $job = Start-Job -ScriptBlock $invokeBlock -ArgumentList $fullPrompt, $Model, $MaxOutputTokens, $RaizRepo4c
         $completed = $job | Wait-Job -Timeout $Timeout
 
         if (-not $completed) {

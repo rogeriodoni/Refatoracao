@@ -15,6 +15,9 @@ param(
     [Parameter(Mandatory=$false)]
     [switch]$IgnoreErrors  # Continuar mesmo se task falhar
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Continue"
 
@@ -56,7 +59,7 @@ $inicioGeral = Get-Date
 
 while ($processados -lt $MaxTasks) {
     # Verifica se ainda ha arquivos na origem
-    $arquivosRestantes = @(Get-ChildItem -Path "C:\4c\origem" -Filter "*.scx" -ErrorAction SilentlyContinue)
+    $arquivosRestantes = @(Get-ChildItem -Path "$($RaizRepo4c)\origem" -Filter "*.scx" -ErrorAction SilentlyContinue)
 
     if ($arquivosRestantes.Count -eq 0) {
         Write-Host ""
@@ -81,7 +84,7 @@ while ($processados -lt $MaxTasks) {
     $duracaoTask = ($fimTask - $inicioTask).TotalMinutes
 
     # Identifica ultima task criada
-    $ultimaTask = Get-ChildItem -Path "C:\4c\tasks" -Directory |
+    $ultimaTask = Get-ChildItem -Path "$($RaizRepo4c)\tasks" -Directory |
                   Sort-Object CreationTime -Descending |
                   Select-Object -First 1
 
@@ -147,14 +150,14 @@ Write-Host ""
 Write-Host "Proximos passos:" -ForegroundColor Yellow
 Write-Host "  1. Revisar tasks com problemas (se houver)" -ForegroundColor Gray
 Write-Host "  2. Gerar dashboard de todas as tasks:" -ForegroundColor Gray
-Write-Host "     Get-ChildItem C:\4c\tasks | ForEach { cat `$_.FullName\task_state.json }" -ForegroundColor DarkGray
+Write-Host "     Get-ChildItem $($RaizRepo4c)\tasks | ForEach { cat `$_.FullName\task_state.json }" -ForegroundColor DarkGray
 Write-Host "  3. Revisar relatorios de validacao UI" -ForegroundColor Gray
 Write-Host "  4. Executar testes manuais (amostragem)" -ForegroundColor Gray
 Write-Host "  5. Commit em lote do codigo aprovado" -ForegroundColor Gray
 Write-Host ""
 
 # Salva resumo em arquivo
-$resumoFile = "C:\4c\automation\resumo_lote_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".txt"
+$resumoFile = "$($RaizRepo4c)\automation\resumo_lote_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".txt"
 
 $resumoContent = @"
 RESUMO DO LOTE AUTOMATICO

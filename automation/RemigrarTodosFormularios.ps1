@@ -28,11 +28,14 @@ param(
     [Parameter(Mandatory=$false)]
     [switch]$Sequencial  # Processa uma task por vez (padrao: paralelo)
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
 $scriptDir = Split-Path -Parent $PSCommandPath
-$tasksPath = "C:\4c\tasks"
+$tasksPath = "$($RaizRepo4c)\tasks"
 $resetScript = Join-Path $scriptDir "ResetTask.ps1"
 $orquestradorScript = Join-Path $scriptDir "OrquestradorMigracao.ps1"
 
@@ -131,8 +134,8 @@ $null = Read-Host
 #------------------------------------------------------------------------------
 
 Write-Host "Limpando arquivos .FXP..." -ForegroundColor Yellow
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
 Write-Host "FXP limpos!" -ForegroundColor Green
 Write-Host ""
 
@@ -260,7 +263,7 @@ Write-Host "  Falhas:   $falhas" -ForegroundColor $(if ($falhas -gt 0) { "Red" }
 Write-Host ""
 
 # Salva log
-$logFile = "C:\4c\automation\logs\remigracao_$(Get-Date -Format 'yyyyMMdd_HHmmss').json"
+$logFile = "$($RaizRepo4c)\automation\logs\remigracao_$(Get-Date -Format 'yyyyMMdd_HHmmss').json"
 $logDir = Split-Path $logFile
 if (-not (Test-Path $logDir)) {
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null

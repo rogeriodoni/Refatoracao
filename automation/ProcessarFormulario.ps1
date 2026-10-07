@@ -13,7 +13,7 @@
 #   4. Cliente NÃO precisa saber qual é usado
 #
 # SAÍDA:
-#   - Task completa em C:\4c\tasks\taskXXX\
+#   - Task completa em <repo>\tasks\taskXXX\
 #   - Relatório de validação
 #   - Código migrado 100%
 #
@@ -23,7 +23,7 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [string]$Arquivo,  # Ex: "sigmvcab.scx" ou "C:\4c\origem\sigmvcab.scx"
+    [string]$Arquivo,  # Ex: "sigmvcab.scx" ou "<repo>\origem\sigmvcab.scx"
 
     [Parameter(Mandatory=$false)]
     [switch]$ForcarComplexo,  # Força processamento complexo mesmo se arquivo pequeno
@@ -31,6 +31,9 @@ param(
     [Parameter(Mandatory=$false)]
     [switch]$DryRun  # Apenas analisa, não processa
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $PSCommandPath
@@ -51,8 +54,8 @@ $config = @{
 
     # Caminhos
     Paths = @{
-        Origem = "C:\4c\origem"
-        Tasks = "C:\4c\tasks"
+        Origem = "$($RaizRepo4c)\origem"
+        Tasks = "$($RaizRepo4c)\tasks"
         Automation = $scriptDir
         OrquestradorSimples = Join-Path $scriptDir "OrquestradorMigracao.ps1"
         OrquestradorComplexo = Join-Path $scriptDir "OrquestradorComplexo.ps1"
@@ -96,7 +99,7 @@ function Get-ArquivoCompleto {
         return $CaminhoRelativo
     }
 
-    # Tenta em C:\4c\origem
+    # Tenta em <repo>\origem
     $tentativa1 = Join-Path $config.Paths.Origem $CaminhoRelativo
     if (Test-Path $tentativa1) {
         return $tentativa1
@@ -127,7 +130,7 @@ function Get-ComplexidadeFormulario {
     try {
         # Executar ExtractSCXCode
         $vfpScript = @"
-SET PROCEDURE TO C:\4c\projeto\app\utils\ExtractSCXCode.prg ADDITIVE
+SET PROCEDURE TO $($RaizRepo4c)\projeto\app\utils\ExtractSCXCode.prg ADDITIVE
 DO ExtractSCXCode WITH "$CaminhoSCX", "$tempDir\"
 QUIT
 "@

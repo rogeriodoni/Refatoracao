@@ -5,12 +5,15 @@
 #==============================================================================
 
 param([int]$Parallel = 4)
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
-. "C:\4c\automation\CorretorAutomatico.ps1"
+. "$($RaizRepo4c)\automation\CorretorAutomatico.ps1"
 
-$basePath = "C:\4c\projeto\app"
+$basePath = "$($RaizRepo4c)\projeto\app"
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  SWEEP - Pattern #170 (Framework path)" -ForegroundColor Cyan

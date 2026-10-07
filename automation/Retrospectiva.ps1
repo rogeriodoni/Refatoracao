@@ -9,16 +9,19 @@
     Fase 3: Recovery - tenta recuperar tasks falhadas com Claude CLI + re-teste
 
 .PARAMETER TasksDir
-    Diretorio das tasks (default: C:\4c\tasks)
+    Diretorio das tasks (default: <repo>\tasks)
 .PARAMETER OutputDir
-    Diretorio para salvar relatorios (default: C:\4c\automation\retrospectivas)
+    Diretorio para salvar relatorios (default: <repo>\automation\retrospectivas)
 #>
 param(
-    [string]$TasksDir = "C:\4c\tasks",
-    [string]$OutputDir = "C:\4c\automation\retrospectivas",
-    [string]$AutomationDir = "C:\4c\automation",
+    [string]$TasksDir = "$(Split-Path -Parent $PSScriptRoot)\tasks",
+    [string]$OutputDir = "$(Split-Path -Parent $PSScriptRoot)\automation\retrospectivas",
+    [string]$AutomationDir = "$(Split-Path -Parent $PSScriptRoot)\automation",
     [int]$UltimasNTasks = 20
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 # ============================================================================
 # Configuracao
@@ -548,7 +551,7 @@ if ($stillFailed.Count -ge 1 -and $config) {
 
     # Ler artefatos atuais para contexto
     $skillPatterns = ""
-    $skillPatternsFile = "C:\4c\.claude\skills\vfp9-migration\migration-patterns.md"
+    $skillPatternsFile = "$($RaizRepo4c)\.claude\skills\vfp9-migration\migration-patterns.md"
     if (Test-Path $skillPatternsFile) {
         $skillPatterns = Get-Content $skillPatternsFile -Raw -Encoding UTF8
         # Truncar para nao estourar contexto
@@ -556,7 +559,7 @@ if ($stillFailed.Count -ge 1 -and $config) {
     }
 
     $corretorPatterns = ""
-    $corretorPatternsFile = "C:\4c\.claude\skills\vfp9-migration\corretor-patterns.md"
+    $corretorPatternsFile = "$($RaizRepo4c)\.claude\skills\vfp9-migration\corretor-patterns.md"
     if (Test-Path $corretorPatternsFile) {
         $corretorPatterns = Get-Content $corretorPatternsFile -Raw -Encoding UTF8
         if ($corretorPatterns.Length -gt 5000) { $corretorPatterns = $corretorPatterns.Substring(0, 5000) + "`n... (truncado)" }

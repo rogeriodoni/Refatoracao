@@ -21,18 +21,21 @@
 #==============================================================================
 
 param(
-    [string]$TaskDir = "C:\4c\tasks\task569",
+    [string]$TaskDir = "$(Split-Path -Parent $PSScriptRoot)\tasks\task569",
     [string]$Model   = "sonnet",
     [int]$Timeout    = 3600
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
-$config     = Get-Content "C:\4c\automation\config.json" -Raw | ConvertFrom-Json
+$config     = Get-Content "$($RaizRepo4c)\automation\config.json" -Raw | ConvertFrom-Json
 $promptFile = Join-Path $TaskDir "fase_6_prompt.md"
 $outputFile = Join-Path $TaskDir "fase_6_output_rerun.txt"
 $logFile    = Join-Path $TaskDir "logs\05_migracao_fase6_rerun.log"
-$alvo       = "C:\4c\projeto\app\forms\cadastros\FormProduto.prg"
+$alvo       = "$($RaizRepo4c)\projeto\app\forms\cadastros\FormProduto.prg"
 
 if (-not (Test-Path $promptFile)) { throw "prompt da Fase 6 nao encontrado: $promptFile" }
 if (-not (Test-Path $alvo))       { throw "FormProduto.prg nao encontrado: $alvo" }
@@ -41,9 +44,9 @@ if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Forc
 
 # Mesmo contexto que o orquestrador monta para as fases de Form
 $contextFiles = @(
-    "C:\4c\docs\FORMCOR_LICOES_APRENDIDAS.md",
-    "C:\4c\docs\migration_guide.md",
-    "C:\4c\docs\framework_frmcadastro_layout.md",
+    "$($RaizRepo4c)\docs\FORMCOR_LICOES_APRENDIDAS.md",
+    "$($RaizRepo4c)\docs\migration_guide.md",
+    "$($RaizRepo4c)\docs\framework_frmcadastro_layout.md",
     (Join-Path $TaskDir "comportamento.json"),
     (Join-Path $TaskDir "layout.json")
 )
@@ -57,7 +60,7 @@ $antesLinhas = (Get-Content $alvo).Count
 Write-Host "ANTES : $antesLinhas linhas  ($antesHash)" -ForegroundColor Cyan
 Write-Host "Contexto: $($contextFiles.Count) arquivo(s) | Modelo: $Model" -ForegroundColor Cyan
 
-& "C:\4c\automation\ClaudeInvoker.ps1" `
+& "$($RaizRepo4c)\automation\ClaudeInvoker.ps1" `
     -PromptFile $promptFile `
     -OutputFile $outputFile `
     -Model $Model `

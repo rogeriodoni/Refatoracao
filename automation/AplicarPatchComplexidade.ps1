@@ -16,6 +16,9 @@
 #   OrquestradorMigracao.ps1 passa a ter detecção automática interna
 #==============================================================================
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 $ErrorActionPreference = "Stop"
 
 $scriptDir = Split-Path -Parent $PSCommandPath
@@ -126,7 +129,7 @@ Write-Host "  - Formulário COMPLEXO → Redireciona para OrquestradorComplexo.p
 Write-Host ""
 Write-Host "PRÓXIMOS PASSOS:" -ForegroundColor Cyan
 Write-Host "  1. Testar com formulário simples: .\OrquestradorMigracao.ps1" -ForegroundColor White
-Write-Host "  2. Testar com formulário complexo (sigmvcab): colocar em C:\4c\origem\" -ForegroundColor White
+Write-Host "  2. Testar com formulário complexo (sigmvcab): colocar em $($RaizRepo4c)\origem\" -ForegroundColor White
 Write-Host "  3. Executar: .\OrquestradorMigracao.ps1" -ForegroundColor White
 Write-Host ""
 

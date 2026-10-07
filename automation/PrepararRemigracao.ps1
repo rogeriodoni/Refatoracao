@@ -19,13 +19,16 @@ param(
     [switch]$ManterTasks,      # Não limpa tasks antigas
     [switch]$ManterForms       # Não limpa forms gerados
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
-$tasksPath = "C:\4c\tasks"
-$origemPath = "C:\4c\origem"
-$formsPath = "C:\4c\projeto\app\forms\cadastros"
-$classesPath = "C:\4c\projeto\app\classes"
+$tasksPath = "$($RaizRepo4c)\tasks"
+$origemPath = "$($RaizRepo4c)\origem"
+$formsPath = "$($RaizRepo4c)\projeto\app\forms\cadastros"
+$classesPath = "$($RaizRepo4c)\projeto\app\classes"
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  PREPARAR REMIGRACAO COMPLETA" -ForegroundColor Cyan
@@ -177,9 +180,9 @@ Write-Host ""
 #------------------------------------------------------------------------------
 
 Write-Host "5. Limpando arquivos .FXP..." -ForegroundColor Yellow
-$fxpCount = (Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue).Count
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
-Get-ChildItem -Path "C:\4c\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
+$fxpCount = (Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue).Count
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.fxp" -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path "$($RaizRepo4c)\projeto\app" -Recurse -Filter "*.FXP" -ErrorAction SilentlyContinue | Remove-Item -Force
 Write-Host "  FXP limpos: $fxpCount arquivos" -ForegroundColor White
 Write-Host ""
 

@@ -23,8 +23,8 @@
 #==============================================================================
 
 param(
-    [string]$Schema  = "C:\4c\docs\schema.sql",
-    [string]$Classes = "C:\4c\projeto\app\classes"
+    [string]$Schema  = "$(Split-Path -Parent $PSScriptRoot)\docs\schema.sql",
+    [string]$Classes = "$(Split-Path -Parent $PSScriptRoot)\projeto\app\classes"
 )
 
 $ErrorActionPreference = "Stop"

@@ -11,6 +11,9 @@
 # NOVO: Função de Detecção de Complexidade
 #------------------------------------------------------------------------------
 
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 function Get-ComplexidadeFormulario {
     param([string]$CaminhoSCX)
 
@@ -31,7 +34,7 @@ function Get-ComplexidadeFormulario {
     try {
         # Executar ExtractSCXCode
         $vfpScript = @"
-CD C:\4c\projeto\app\utils
+CD $($RaizRepo4c)\projeto\app\utils
 SET PROCEDURE TO ExtractSCXCode.prg ADDITIVE
 DO ExtractSCXCode WITH "$CaminhoSCX", "$tempDir\"
 QUIT
@@ -194,7 +197,7 @@ if ($usarProcessamentoComplexo) {
         Write-Host "  - Procedures: $($analiseComplexidade.NumProcedures)" -ForegroundColor Yellow
         Write-Host ""
         Write-Host "SOLUÇÃO:" -ForegroundColor Cyan
-        Write-Host "  1. Usar metodologia manual: C:\4c\docs\METODOLOGIA_ARQUIVOS_GRANDES.md" -ForegroundColor Cyan
+        Write-Host "  1. Usar metodologia manual: $($RaizRepo4c)\docs\METODOLOGIA_ARQUIVOS_GRANDES.md" -ForegroundColor Cyan
         Write-Host "  2. OU implementar OrquestradorComplexo.ps1" -ForegroundColor Cyan
         Write-Host ""
         exit 1

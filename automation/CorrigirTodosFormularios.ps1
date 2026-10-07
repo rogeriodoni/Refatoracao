@@ -33,8 +33,21 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Modo: $(if ($Parallel -le 1) { 'SEQUENCIAL' } else { "PARALELO ($Parallel workers)" })" -ForegroundColor Yellow
 Write-Host ""
 
-$basePath = "C:\4c\projeto\app"
-$corretorScript = "C:\4c\automation\CorretorAutomatico.ps1"
+# Caminhos RELATIVOS ao proprio script (automation\ -> raiz do repo). Ate 2026-10-06
+# eram fixos em C:\4c\projeto\app e C:\4c\automation, que deixaram de existir quando
+# o repo passou a viver em C:\4c\refatoracao - e como os Get-ChildItem abaixo usam
+# -ErrorAction SilentlyContinue, o sweep achava ZERO arquivos e terminava "com sucesso".
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$basePath = Join-Path $repoRoot "projeto\app"
+$corretorScript = Join-Path $PSScriptRoot "CorretorAutomatico.ps1"
+
+foreach ($p in @("$basePath\forms", "$basePath\classes", $corretorScript)) {
+    if (-not (Test-Path $p)) {
+        Write-Host "ERRO: caminho nao encontrado: $p" -ForegroundColor Red
+        Write-Host "      (repoRoot calculado: $repoRoot)" -ForegroundColor Red
+        exit 1
+    }
+}
 
 # Pattern #116: valida integridade do stub fwprogressbar antes do sweep.
 # O stub em classes/fwprogressbar.prg DEVE expor todos os membros da interface

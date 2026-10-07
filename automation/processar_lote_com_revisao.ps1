@@ -10,6 +10,9 @@ param(
     [Parameter(Mandatory=$false)]
     [int]$Quantidade = 999  # Processar ate acabar arquivos em origem
 )
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Continue"
 
@@ -34,12 +37,12 @@ $falhas = 0
 
 for ($i = 1; $i -le $Quantidade; $i++) {
     # Verifica se ainda ha arquivos na origem
-    $arquivosRestantes = @(Get-ChildItem -Path "C:\4c\origem" -Filter "*.scx" -ErrorAction SilentlyContinue)
+    $arquivosRestantes = @(Get-ChildItem -Path "$($RaizRepo4c)\origem" -Filter "*.scx" -ErrorAction SilentlyContinue)
 
     if ($arquivosRestantes.Count -eq 0) {
         Write-Host ""
         Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Yellow
-        Write-Host " Nenhum arquivo restante em C:\4c\origem\" -ForegroundColor Yellow
+        Write-Host " Nenhum arquivo restante em $($RaizRepo4c)\origem\" -ForegroundColor Yellow
         Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Yellow
         break
     }
@@ -68,7 +71,7 @@ for ($i = 1; $i -le $Quantidade; $i++) {
     }
 
     # Identifica qual task foi criada (ultima task)
-    $ultimaTask = Get-ChildItem -Path "C:\4c\tasks" -Directory |
+    $ultimaTask = Get-ChildItem -Path "$($RaizRepo4c)\tasks" -Directory |
                   Sort-Object CreationTime -Descending |
                   Select-Object -First 1
 
@@ -100,8 +103,8 @@ for ($i = 1; $i -le $Quantidade; $i++) {
 
         Write-Host ""
         Write-Host "REVISAR AGORA:" -ForegroundColor Yellow
-        Write-Host "  1. Estado: cat C:\4c\tasks\$($ultimaTask.Name)\task_state.json" -ForegroundColor Gray
-        Write-Host "  2. Validacao UI: start C:\4c\tasks\$($ultimaTask.Name)\validacao_ui_report.html" -ForegroundColor Gray
+        Write-Host "  1. Estado: cat $($RaizRepo4c)\tasks\$($ultimaTask.Name)\task_state.json" -ForegroundColor Gray
+        Write-Host "  2. Validacao UI: start $($RaizRepo4c)\tasks\$($ultimaTask.Name)\validacao_ui_report.html" -ForegroundColor Gray
         Write-Host "  3. Teste manual: Abrir formulario no VFP" -ForegroundColor Gray
     }
 

@@ -5,11 +5,14 @@
 #==============================================================================
 
 param([int]$Parallel = 4)
+# Raiz do repo = pai de automation\ (era C:\4c\ fixo ate 2026-10-06; o repo vive em C:\4c\refatoracao)
+$RaizRepo4c = Split-Path -Parent $PSScriptRoot
+
 
 $ErrorActionPreference = "Stop"
 
-$basePath = "C:\4c\projeto\app\forms\relatorios"
-$corretorScript = "C:\4c\automation\CorretorAutomatico.ps1"
+$basePath = "$($RaizRepo4c)\projeto\app\forms\relatorios"
+$corretorScript = "$($RaizRepo4c)\automation\CorretorAutomatico.ps1"
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  SWEEP - Forms REPORT" -ForegroundColor Cyan

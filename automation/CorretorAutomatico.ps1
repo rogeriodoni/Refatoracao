@@ -54,8 +54,8 @@
 #   -TaskDir    : DiretÃ³rio da task (para salvar log de correÃ§Ãµes)
 #
 # EXEMPLOS:
-#   .\CorretorAutomatico.ps1 -ArquivoPrg "C:\4c\projeto\app\forms\cadastros\FormCor.prg"
-#   .\CorretorAutomatico.ps1 -ArquivoPrg "C:\4c\projeto\app\classes\CorBO.prg" -TaskDir "C:\4c\tasks\task1"
+#   .\CorretorAutomatico.ps1 -ArquivoPrg "<repo>\projeto\app\forms\cadastros\FormCor.prg"
+#   .\CorretorAutomatico.ps1 -ArquivoPrg "<repo>\projeto\app\classes\CorBO.prg" -TaskDir "<repo>\tasks\task1"
 #
 # AUTOR: Sistema de Migracao Automatizada
 # DATA: 2026-02-04
@@ -63,7 +63,7 @@
 # POLITICA OBRIGATORIA - SWEEP RETROATIVO:
 #   Ao adicionar um novo pattern OU corrigir um pattern existente neste arquivo,
 #   eh OBRIGATORIO rodar imediatamente:
-#       powershell.exe -ExecutionPolicy Bypass -File C:\4c\automation\CorrigirTodosFormularios.ps1
+#       powershell.exe -ExecutionPolicy Bypass -File <repo>\automation\CorrigirTodosFormularios.ps1
 #   Sem isso, forms ja migrados continuam com o anti-pattern ate serem testados manualmente.
 #   Historico: task018/UfsBO.prg (PUBLIC FUNCTION) e task001/FormDepartamento.prg (ELSEIF)
 #   passaram porque novos patterns/correcoes nao foram aplicados retroativamente.
@@ -83,6 +83,12 @@ $ErrorActionPreference = "Stop"
 # Estrutura para armazenar correÃ§Ãµes aplicadas
 #------------------------------------------------------------------------------
 
+# Raiz do repositorio = pasta-pai de automation\. Ate 2026-10-06 os caminhos eram fixos
+# em C:\4c\..., que deixou de existir quando o repo passou a viver em C:\4c\refatoracao:
+# os patterns que dependem de schema.sql/vbmp/tasks/classes degradavam EM SILENCIO.
+# $PSScriptRoot dentro de funcao resolve para a pasta DESTE arquivo, tambem quando o
+# script eh dot-sourced (CorrigirTodosFormularios.ps1) - por isso funcao, nao variavel.
+function Get-RaizRepo4c { Split-Path -Parent $PSScriptRoot }
 $script:Correcoes = @()
 
 function Add-Correcao {
@@ -619,7 +625,7 @@ function Corrigir-NomeClasseBO {
         # Se existe um .prg com DEFINE CLASS diferente do analise.json, o DEFINE CLASS vence
         $classesDir = Join-Path (Split-Path $TaskDir -Parent | Split-Path -Parent) "projeto\app\classes"
         if (-not (Test-Path $classesDir)) {
-            $classesDir = "C:\4c\projeto\app\classes"
+            $classesDir = Join-Path (Get-RaizRepo4c) "projeto\app\classes"
         }
         $boFiles = Get-ChildItem -Path $classesDir -Filter "*BO.prg" -ErrorAction SilentlyContinue
         foreach ($bf in $boFiles) {
@@ -3075,7 +3081,7 @@ function Corrigir-LparametersNoProcedure {
 function Corrigir-CreateObjectVsDefineClass {
     param([string[]]$Linhas, [string]$TaskDir)
 
-    $classesDir = "C:\4c\projeto\app\classes"
+    $classesDir = Join-Path (Get-RaizRepo4c) "projeto\app\classes"
     if (-not (Test-Path $classesDir)) { return $Linhas }
 
     # Carrega todos os BO files e seus DEFINE CLASS names
@@ -4303,7 +4309,7 @@ function Get-BitColumnsFromSchema {
         return $script:BitColumnsCache
     }
 
-    $schemaPath = "C:\4c\docs\schema.sql"
+    $schemaPath = Join-Path (Get-RaizRepo4c) "docs\schema.sql"
     $bitColumns = New-Object System.Collections.Generic.HashSet[string]([System.StringComparer]::OrdinalIgnoreCase)
 
     if (-not (Test-Path $schemaPath)) {
@@ -7628,7 +7634,7 @@ function Corrigir-CommandButtonRecordMarkInvalido {
 #==============================================================================
 function Corrigir-FwProgressBarStubMembros {
     param(
-        [string]$StubPath = "C:\4c\projeto\app\classes\fwprogressbar.prg"
+        [string]$StubPath = (Join-Path (Get-RaizRepo4c) "projeto\app\classes\fwprogressbar.prg")
     )
 
     if (-not (Test-Path $StubPath)) {
@@ -9535,7 +9541,7 @@ function Corrigir-ReportBOCabecalhoAusente {
 
     if ($frxBases.Count -eq 0) { return $Linhas }
 
-    # Diretorio de reports (relativo a este script em C:\4c\automation\)
+    # Diretorio de reports (relativo a este script, em <repo>\automation\)
     $reportsDir = Join-Path $PSScriptRoot "..\projeto\app\reports"
     if (-not (Test-Path $reportsDir)) { return $Linhas }
 
@@ -10998,7 +11004,7 @@ function Corrigir-UsuarPublicNaoDeclarado {
     }
 
     # Guard 3: config.prg NAO declara Usuar como PUBLIC (nem faz assignment Usuar = ...)
-    $configPath = "C:\4c\projeto\app\start\config.prg"
+    $configPath = Join-Path (Get-RaizRepo4c) "projeto\app\start\config.prg"
     if (-not (Test-Path $configPath)) { return $Linhas }
 
     $configContent = Get-Content -Path $configPath -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -11052,7 +11058,7 @@ function Corrigir-SigacessPrgNaoCarregado {
     }
 
     # Guard 3: config.prg NAO contem referencia a sigacess.PRG
-    $configPath = "C:\4c\projeto\app\start\config.prg"
+    $configPath = Join-Path (Get-RaizRepo4c) "projeto\app\start\config.prg"
     if (-not (Test-Path $configPath)) { return $Linhas }
 
     $configContent = Get-Content -Path $configPath -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -11206,7 +11212,7 @@ function Corrigir-CrSigCdPamNaoPopulado {
     # Aceita as mesmas 3 formas de populacao do guard 3.
     $boPopula = $false
     if ($mBO.Success) {
-        $classesDir = "C:\4c\projeto\app\classes"
+        $classesDir = Join-Path (Get-RaizRepo4c) "projeto\app\classes"
         if (Test-Path $classesDir) {
             $rxDefine = [regex]"(?i)DEFINE\s+CLASS\s+$nomeBO\s+AS\s+"
             $boFiles = Get-ChildItem -Path $classesDir -Filter "*BO.prg" -ErrorAction SilentlyContinue
@@ -13790,7 +13796,7 @@ function Get-HelpersUtils {
     if ($null -ne $script:HelpersUtils) { return $script:HelpersUtils }
 
     $h = @{}
-    $dir = "C:\4c\projeto\app\utils"
+    $dir = Join-Path (Get-RaizRepo4c) "projeto\app\utils"
     if (Test-Path $dir) {
         foreach ($a in (Get-ChildItem -Path $dir -Filter "*.prg" -ErrorAction SilentlyContinue |
                         Where-Object { $_.Name -notmatch '\.bak$' })) {
@@ -13835,7 +13841,7 @@ function Get-CatalogoFuncoesProjeto {
     }
 
     $globais = @{}; $metodos = @{}; $declares = @{}
-    $raiz = "C:\4c\projeto\app"
+    $raiz = Join-Path (Get-RaizRepo4c) "projeto\app"
     if (Test-Path $raiz) {
         $arqs = Get-ChildItem -Path $raiz -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
                 Where-Object { $_.Name -notmatch '\.bak$' }
@@ -13862,7 +13868,7 @@ function Test-FuncaoGlobalDefinida {
     # Retorna 'GLOBAL', 'METODO' ou '' (nao encontrado).
     param([string]$Nome)
 
-    $raiz = "C:\4c\projeto\app"
+    $raiz = Join-Path (Get-RaizRepo4c) "projeto\app"
     if (-not (Test-Path $raiz)) { return '' }
     $alvo = $Nome.ToLower()
 
@@ -14006,7 +14012,7 @@ function Get-CatalogoTabelasSchema {
     if ($null -ne $script:CatalogoTabelas) { return $script:CatalogoTabelas }
 
     $cat = @{}
-    $arq = "C:\4c\docs\schema.sql"
+    $arq = Join-Path (Get-RaizRepo4c) "docs\schema.sql"
     if (Test-Path $arq) {
         try {
             $texto = Get-Content $arq -Raw
@@ -15143,7 +15149,7 @@ function Corrigir-PictureArquivoInexistente {
     if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
     if ((Split-Path $Arquivo -Leaf) -notmatch '^(?i)Form.*\.prg$') { return $Linhas }
 
-    $dirIcones = "C:\4c\vbmp"
+    $dirIcones = Join-Path (Get-RaizRepo4c) "vbmp"
     if (-not (Test-Path $dirIcones)) { return $Linhas }
 
     # inventario real (case-insensitive)
@@ -16337,6 +16343,7 @@ function Test-GradeEditavelHandler {
     Write-Host "[Pattern #212 WARN] linha $($Ini + 1): $Nome insere linha na grade mas nao libera Column.ReadOnly (legado tem $NLegado site(s))" -ForegroundColor Yellow
     Add-Correcao -Tipo "WARN-212-GRADE-EDITAVEL-SEM-LIBERAR-COLUNA" -Linha ($Ini + 1) -Original ("PROCEDURE " + $Nome) -Corrigido "(nao mutado - qual coluna liberar vem do dump do SCX legado)" -Descricao ("Pattern #212 WARNING: o handler $Nome insere linha no cursor da grade (INSERT INTO / APPEND BLANK) mas " + "NAO contem nenhum .ReadOnly = .F., e este arquivo declara Column<N>.ReadOnly = .T.. O dump do legado " + "($Dump) tem $NLegado ocorrencia(s) de Column<N>.ReadOnly = .F. - conferir se alguma pertence a este " + "handler. No legado o cmdSInserir.Click NAO termina no Insert Into: vem logo depois um bloco With <grade> " + "com .Column1.ReadOnly = .F. + .Refresh + .Column1.SetFocus. Sem o ReadOnly = .F. a coluna fica TRAVADA e " + "o usuario nao consegue digitar NADA na linha recem-criada - compila limpo, nao da erro, e o sintoma " + "reportado eh `"nao consigo realizar a inclusao nessa grid`". Conferir tambem, no mesmo handler: o guard " + "do .When do botao (InList(pcEscolha,'INSERIR','ALTERAR') MAIS campo-chave preenchido, lido do TEXTBOX e " + "nao do BO - em INCLUIR o valor so chega ao BO no FormParaBO), as colunas do INSERT que nao aparecem na " + "tela (regra #22) e o gerador de PK, que eh fUniqueIds() e nao SYS(2015). E quem TRANCA tem de destrancar " + "no caminho de volta (regra #40): o reset para .T. mora no funil que repinta a grade, nunca so no botao " + "que insere. Skill: secao 230. Origem: Erro179 (Formgpd).")
 }
+
 # =============================================================================
 # Pattern #213 (Erro501, 2026-10-06, FormUfs) - AUTO-FIX.
 # Linha mutilada pelo Pattern #73 antigo ($Matches sobrescrito):
@@ -16371,7 +16378,7 @@ function Get-TaskDirDoForm {
 
     if ($null -eq $script:MapaFormTask) {
         $script:MapaFormTask = @{}
-        $raizTasks = 'C:\4c\tasks'
+        $raizTasks = Join-Path (Get-RaizRepo4c) "tasks"
         if (Test-Path $raizTasks) {
             foreach ($t in (Get-ChildItem $raizTasks -Directory -ErrorAction SilentlyContinue | Sort-Object Name)) {
                 $j = Join-Path $t.FullName 'analise.json'
