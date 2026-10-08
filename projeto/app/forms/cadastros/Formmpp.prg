@@ -520,6 +520,7 @@ DEFINE CLASS Formmpp AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPg2.txt_4c_Codigos
             .Value         = ""
+            .Format = "K!"
             .Top           = 213
             .Left          = 383
             .Width         = 150
@@ -555,6 +556,7 @@ DEFINE CLASS Formmpp AS FormBase
         loc_oPg2.AddObject("txt_4c_Descrs", "TextBox")
         WITH loc_oPg2.txt_4c_Descrs
             .Value         = ""
+            .Format = "K!"
             .Top           = 238
             .Left          = 383
             .Width         = 290

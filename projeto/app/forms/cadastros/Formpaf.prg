@@ -460,6 +460,7 @@ DEFINE CLASS Formpaf AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
+            .Format = "K!"
             .Top           = 201
             .Left          = 268
             .Width         = 150

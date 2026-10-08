@@ -492,6 +492,7 @@ DEFINE CLASS FormPai AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
             .Value         = ""
+            .Format = "K!"
             .InputMask = "99999"
             .Top           = 174
             .Left          = 371
@@ -526,6 +527,7 @@ DEFINE CLASS FormPai AS FormBase
         loc_oPagina.AddObject("txt_4c_Descs", "TextBox")
         WITH loc_oPagina.txt_4c_Descs
             .Value         = ""
+            .Format = "K!"
             .Top           = 201
             .Left          = 371
             .Width         = 290

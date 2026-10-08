@@ -473,6 +473,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 31
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -487,6 +488,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 117
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -517,6 +519,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 150
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -546,6 +549,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 35
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -560,6 +564,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 146
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -589,6 +594,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 35
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -603,6 +609,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             .Width    = 146
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.

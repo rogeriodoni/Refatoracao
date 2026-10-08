@@ -568,6 +568,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oAba.txt_4c_Codigos
             .Value         = ""
+            .Format = "!K"
             .Top           = 11
             .Left          = 92
             .Width         = 80
@@ -583,6 +584,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oAba.txt_4c_Descricao
             .Value         = ""
+            .Format = "!K"
             .Top           = 11
             .Left          = 173
             .Width         = 324
@@ -669,6 +671,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__PIS", "TextBox")
         WITH loc_oAba.txt_4c__PIS
             .Value         = 0
+            .Format = "!K"
             .Top           = 53
             .Left          = 168
             .Width         = 50
@@ -699,6 +702,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__COFINS", "TextBox")
         WITH loc_oAba.txt_4c__COFINS
             .Value         = 0
+            .Format = "!K"
             .Top           = 53
             .Left          = 303
             .Width         = 50
@@ -789,6 +793,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__CSLL", "TextBox")
         WITH loc_oAba.txt_4c__CSLL
             .Value         = 0
+            .Format = "!K"
             .Top           = 53
             .Left          = 661
             .Width         = 50
@@ -2263,6 +2268,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__PIS", "TextBox")
         WITH loc_oAba.txt_4c__PIS
             .Value         = ""
+            .Format = "!K"
             .Top           = 21
             .Left          = 228
             .Width         = 50
@@ -2292,6 +2298,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__COFINS", "TextBox")
         WITH loc_oAba.txt_4c__COFINS
             .Value         = ""
+            .Format = "!K"
             .Top           = 21
             .Left          = 344
             .Width         = 50
@@ -2321,6 +2328,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oAba.AddObject("txt_4c__CSLL", "TextBox")
         WITH loc_oAba.txt_4c__CSLL
             .Value         = ""
+            .Format = "!K"
             .Top           = 21
             .Left          = 439
             .Width         = 50
@@ -2486,6 +2494,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oRPA.AddObject("txt_4c_CodRecPis", "TextBox")
         WITH loc_oRPA.txt_4c_CodRecPis
             .Value         = ""
+            .Format = "!K"
             .Top           = 91
             .Left          = 169
             .Width         = 50
@@ -2515,6 +2524,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oRPA.AddObject("txt_4c_CodRecCof", "TextBox")
         WITH loc_oRPA.txt_4c_CodRecCof
             .Value         = ""
+            .Format = "!K"
             .Top           = 91
             .Left          = 285
             .Width         = 50
@@ -2544,6 +2554,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oRPA.AddObject("txt_4c_CodRecCsll", "TextBox")
         WITH loc_oRPA.txt_4c_CodRecCsll
             .Value         = ""
+            .Format = "!K"
             .Top           = 92
             .Left          = 382
             .Width         = 50
@@ -2573,6 +2584,7 @@ DEFINE CLASS FormSRV AS FormBase
         loc_oRPA.AddObject("txt_4c_CodRecIrrf", "TextBox")
         WITH loc_oRPA.txt_4c_CodRecIrrf
             .Value         = ""
+            .Format = "!K"
             .Top           = 91
             .Left          = 483
             .Width         = 50

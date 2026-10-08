@@ -545,6 +545,7 @@ DEFINE CLASS FormSIGREEQR AS FormBase
             .Width    = 33
             .Height   = 25
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -559,6 +560,7 @@ DEFINE CLASS FormSIGREEQR AS FormBase
             .Width    = 107
             .Height   = 23
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.

@@ -285,6 +285,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 31
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 3
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -302,6 +303,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 289
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 40
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -399,6 +401,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 31
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 3
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -416,6 +419,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 156
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 15
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -450,6 +454,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 82
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 10
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -481,6 +486,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             .Width         = 31
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 10
             .InputMask     = "999"
             .FontName      = "Tahoma"

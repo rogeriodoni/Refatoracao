@@ -1120,6 +1120,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 80
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1135,6 +1136,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 316
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1165,6 +1167,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 80
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1180,6 +1183,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 316
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1300,6 +1304,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 31
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1315,6 +1320,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 365
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1358,6 +1364,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 31
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1373,6 +1380,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 365
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1403,6 +1411,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 52
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1418,6 +1427,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 344
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1448,6 +1458,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 108
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1463,6 +1474,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 288
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)
@@ -1524,6 +1536,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 31
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)

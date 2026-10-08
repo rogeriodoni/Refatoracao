@@ -865,6 +865,7 @@ DEFINE CLASS Formpag AS FormBase
                 .MaxLength = 15
                 .Visible   = .T.
                 .InputMask = "!!!!!!!!!!!!!!!"
+                .Format = "K!"
             ENDWITH
 
             && --- Mascara / Valor ---

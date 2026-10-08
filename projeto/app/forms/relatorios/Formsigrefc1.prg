@@ -336,6 +336,7 @@ DEFINE CLASS Formsigrefc1 AS FormBase
             .Width         = 31
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 3
             .InputMask     = "!"
             .FontName      = "Tahoma"
@@ -354,6 +355,7 @@ DEFINE CLASS Formsigrefc1 AS FormBase
             .Width         = 289
             .Height        = 23
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 40
             .FontName      = "Tahoma"
             .FontSize      = 8

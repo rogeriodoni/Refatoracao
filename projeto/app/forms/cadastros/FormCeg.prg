@@ -643,6 +643,7 @@ DEFINE CLASS FormCeg AS FormBase
         loc_oPg2.AddObject("txt_4c_DEmps", "TextBox")
         WITH loc_oPg2.txt_4c_DEmps
             .Value     = ""
+            .Format = "K!"
             .Top       = 306
             .Left      = 215
             .Width     = 290

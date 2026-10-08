@@ -700,6 +700,7 @@ DEFINE CLASS FormEVE AS FormBase
         loc_oPg2.AddObject("txt_4c_Status", "TextBox")
         WITH loc_oPg2.txt_4c_Status
             .Value         = ""
+            .Format = "K!"
             .Top           = 298
             .Left          = 365
             .Width         = 184

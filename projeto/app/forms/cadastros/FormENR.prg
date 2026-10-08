@@ -595,6 +595,7 @@ DEFINE CLASS FormENR AS FormBase
         loc_oPg2.AddObject("txt_4c_Bairro", "TextBox")
         WITH loc_oPg2.txt_4c_Bairro
             .Value       = ""
+            .Format = "K!"
             .Top         = 268
             .Left        = 226
             .Width       = 272

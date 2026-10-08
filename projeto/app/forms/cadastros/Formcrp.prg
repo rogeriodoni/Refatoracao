@@ -527,6 +527,7 @@ DEFINE CLASS Formcrp AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
             .Value     = ""
+            .Format = "K!"
             .Top       = 217
             .Left      = 383
             .Width     = 150
@@ -560,6 +561,7 @@ DEFINE CLASS Formcrp AS FormBase
         loc_oPagina.AddObject("txt_4c_Descrs", "TextBox")
         WITH loc_oPagina.txt_4c_Descrs
             .Value     = ""
+            .Format = "K!"
             .Top       = 243
             .Left      = 383
             .Width     = 290
@@ -628,6 +630,7 @@ DEFINE CLASS Formcrp AS FormBase
         loc_oPagina.AddObject("txt_4c_CdGrupo", "TextBox")
         WITH loc_oPagina.txt_4c_CdGrupo
             .Value          = ""
+            .Format = "K!"
             .Top            = 269
             .Left           = 383
             .Width          = 31
@@ -647,6 +650,7 @@ DEFINE CLASS Formcrp AS FormBase
         loc_oPagina.AddObject("txt_4c_DsGrupo", "TextBox")
         WITH loc_oPagina.txt_4c_DsGrupo
             .Value          = ""
+            .Format = "K!"
             .Top            = 269
             .Left           = 416
             .Width          = 150

@@ -764,6 +764,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
             WITH loc_oPagina.txt_4c_Moeda
                 .Value     = ""
+                .Format = "K!"
                 .Top       = 192
                 .Left      = 316
                 .Width     = 31
@@ -777,6 +778,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_DMoeda", "TextBox")
             WITH loc_oPagina.txt_4c_DMoeda
                 .Value     = ""
+                .Format = "K!"
                 .Top       = 192
                 .Left      = 348
                 .Width     = 115

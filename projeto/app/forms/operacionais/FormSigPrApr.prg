@@ -807,6 +807,7 @@ DEFINE CLASS FormSigPrApr AS FormBase
             .ForeColor = RGB(0, 0, 0)
             .MaxLength = 25
             .Value     = ""
+            .Format = "K!"
         ENDWITH
         BINDEVENT(THIS.txt_4c_Promo, "KeyPress", THIS, "TxtPromoKeyPress")
 

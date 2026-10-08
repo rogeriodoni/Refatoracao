@@ -1482,6 +1482,7 @@ DEFINE CLASS Formsigmvdis AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .Visible   = .T.
         ENDWITH
         BINDEVENT(loc_oPgN.txt_4c_ProdutoInicial, "KeyPress", THIS, "ValidarProdutoInicial")
@@ -1535,6 +1536,7 @@ DEFINE CLASS Formsigmvdis AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .Visible   = .T.
         ENDWITH
 
@@ -1550,6 +1552,7 @@ DEFINE CLASS Formsigmvdis AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .Visible   = .T.
         ENDWITH
 
@@ -1769,6 +1772,7 @@ DEFINE CLASS Formsigmvdis AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .Visible   = .T.
         ENDWITH
 

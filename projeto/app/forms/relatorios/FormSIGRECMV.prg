@@ -396,6 +396,7 @@ DEFINE CLASS FormSIGRECMV AS FormBase
             .Width         = 31
             .Height        = 21
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 10
             .SpecialEffect = 1
             .FontName      = "Tahoma"
@@ -414,6 +415,7 @@ DEFINE CLASS FormSIGRECMV AS FormBase
             .Width         = 115
             .Height        = 21
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 60
             .SpecialEffect = 1
             .FontName      = "Tahoma"
@@ -471,6 +473,7 @@ DEFINE CLASS FormSIGRECMV AS FormBase
             .Width         = 150
             .Height        = 21
             .Value         = ""
+            .Format = "K!"
             .MaxLength     = 20
             .SpecialEffect = 1
             .FontName      = "Tahoma"

@@ -415,6 +415,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 10
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -430,6 +431,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 20
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -459,6 +461,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 10
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -474,6 +477,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 40
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -503,6 +507,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 3
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -518,6 +523,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 20
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -693,6 +699,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 3
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)
@@ -708,6 +715,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             .Height    = 25
             .MaxLength = 15
             .Value     = ""
+            .Format = "!"
             .FontName  = "Courier New"
             .FontSize  = 9
             .BackColor = RGB(255, 255, 255)

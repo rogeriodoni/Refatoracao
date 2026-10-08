@@ -529,6 +529,7 @@ DEFINE CLASS FormFpg AS FormBase
         loc_oPagina.AddObject("txt_4c__cd_grupo", "TextBox")
         WITH loc_oPagina.txt_4c__cd_grupo
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 10
             .Top       = 209
             .Left      = 254
@@ -547,6 +548,7 @@ DEFINE CLASS FormFpg AS FormBase
         loc_oPagina.AddObject("txt_4c__ds_grupo", "TextBox")
         WITH loc_oPagina.txt_4c__ds_grupo
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 20
             .Top       = 209
             .Left      = 335

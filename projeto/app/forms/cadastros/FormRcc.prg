@@ -521,6 +521,7 @@ DEFINE CLASS FormRcc AS FormBase
         loc_oPagina.AddObject("txt_4c_Desc", "TextBox")
         WITH loc_oPagina.txt_4c_Desc
             .Value         = ""
+            .Format = "K!"
             .Top           = 136
             .Left          = 146
             .Width         = 150

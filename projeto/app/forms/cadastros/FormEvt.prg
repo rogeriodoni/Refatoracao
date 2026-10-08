@@ -539,6 +539,7 @@ DEFINE CLASS FormEvt AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg2.txt_4c_Codigo
             .Value         = ""
+            .Format = "K!"
             .Top           = 166
             .Left          = 443
             .Width         = 96
@@ -577,6 +578,7 @@ DEFINE CLASS FormEvt AS FormBase
         loc_oPg2.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPg2.txt_4c_Descricao
             .Value         = ""
+            .Format = "K!"
             .Top           = 192
             .Left          = 443
             .Width         = 179

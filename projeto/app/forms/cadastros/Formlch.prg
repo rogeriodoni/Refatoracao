@@ -2739,6 +2739,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .Format = "K!"
             .InputMask = "!!!!!!!!!!!!!!!"
             .FontName = "Tahoma"
             .FontSize = 8

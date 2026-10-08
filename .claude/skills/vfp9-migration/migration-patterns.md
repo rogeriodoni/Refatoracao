@@ -14050,3 +14050,31 @@ proprio (`my $x = do { open ...; local $/; <$fh> };`).
 
 `Formsigpdmp2.prg` ja estava com LF puro no repo (3170 linhas, 0 CRLF) antes do sweep - o script
 seguiu a convencao do proprio arquivo. Nao confundir com quebra de CRLF.
+
+### Sweep dos `Format` com `!` (severidade MEDIA)
+
+Mesmo metodo do sweep de `InputMask`, e o gate de nome precisou de **um refinamento**: o legado
+nomeia o controle pelo CAMPO, que nos `Sig*` termina em `s` (`getCods`, `getDescs`, `getRazas`), e o
+migrado escreve por extenso (`txt_4c_Codigo`, `txt_4c_Descricao`). O `index()` simples rejeitava esses
+pares CORRETOS. Conserto: tirar o `s` final dos dois nucleos e aceitar tambem **prefixo** com minimo
+de 3 chars - `cod`/`codigo` casa, `cod`/`descricao` continua fora.
+
+Resultado: **236 `Format` em 84 forms**, mais **2 `InputMask`** que o gate refinado recuperou
+(`Formgpr.getDescs` e `formcor.Get_Grupo`). A auditoria foi de MEDIA 344 -> **194** e ALTA 285 -> 284.
+Os 85 forms compilam limpo. So linhas ADICIONADAS: +238, -0, e a composicao conferida eh exatamente
+236 `.Format` + 2 `.InputMask`, nada mais.
+
+Ficaram fora 23 pares em que a geometria casa e o nome nao - quase todos sao o migrado ACRESCENTANDO
+prefixo de contexto (`get_dgrupo` -> `txt_4c_FiltroDescGrupo`, `Get_CdLinha` -> `txt_4c_DetCodLinha`),
+plausiveis mas nao confirmaveis por regra; estao em `automation\erro197_format_revisar.tsv`. Mais 19
+forms sem offset confiavel.
+
+**Armadilhas de contagem** (as tres apareceram e as tres enganam):
+1. `git diff --numstat <lista>` eh **case-sensitive** no pathspec. O `ls` do shell casa
+   `FormSRV.prg` com o arquivo real `FormSrv.prg`, o git nao - e esses arquivos somem da contagem.
+   Medir com `git diff -- <diretorio>`.
+2. O CorretorAutomatico **regrava o `.bak`** ao rodar; se o `.bak` eh rastreado (e aqui eh), ele
+   entra no `git diff` e duplica as linhas na contagem. Restaurar antes de medir.
+3. Dois arquivos do projeto (`FormCTA.prg`, `Formsigpdmp2.prg`) **ja estavam com LF puro** no repo
+   (6397 e 3170 linhas, zero CRLF) antes de qualquer sweep. O script segue a convencao do proprio
+   arquivo - nao confundir com quebra de CRLF.

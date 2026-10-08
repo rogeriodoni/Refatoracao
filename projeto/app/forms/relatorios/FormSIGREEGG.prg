@@ -397,6 +397,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 10
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -412,6 +413,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 20
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -441,6 +443,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 10
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -456,6 +459,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 40
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -485,6 +489,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 10
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -500,6 +505,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 40
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -609,6 +615,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 3
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -624,6 +631,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
             .Height    = 23
             .MaxLength = 15
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)

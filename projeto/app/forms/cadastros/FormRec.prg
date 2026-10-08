@@ -512,6 +512,7 @@ DEFINE CLASS FormRec AS FormBase
         loc_oPagina.AddObject("txt_4c_CdGrupo", "TextBox")
         WITH loc_oPagina.txt_4c_CdGrupo
             .Value     = ""
+            .Format = "K!"
             .Top       = 222
             .Left      = 253
             .Width     = 79
@@ -531,6 +532,7 @@ DEFINE CLASS FormRec AS FormBase
         loc_oPagina.AddObject("txt_4c_DsGrupo", "TextBox")
         WITH loc_oPagina.txt_4c_DsGrupo
             .Value     = ""
+            .Format = "K!"
             .Top       = 222
             .Left      = 335
             .Width     = 150

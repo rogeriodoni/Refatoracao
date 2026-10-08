@@ -541,6 +541,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 10
             .Top       = 109
             .Left      = 382
@@ -591,6 +592,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Moeda
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 3
             .Top       = 109
             .Left      = 764
@@ -622,6 +624,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_Ano", "TextBox")
         WITH loc_oPagina.txt_4c_Ano
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 4
             .Top       = 136
             .Left      = 382

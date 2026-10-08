@@ -733,6 +733,7 @@ DEFINE CLASS Formcrf AS FormBase
             .BackColor = RGB(255, 255, 255)
             .MaxLength = 20
             .Value     = ""
+            .Format = "K!"
             .InputMask = "XXXXXXXXXXXXXX"
         ENDWITH
 

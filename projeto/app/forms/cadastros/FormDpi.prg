@@ -492,6 +492,7 @@ DEFINE CLASS FormDpi AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = ""
+            .Format = "K!"
             .Top           = 166
             .Left          = 400
             .Width         = 40
@@ -526,6 +527,7 @@ DEFINE CLASS FormDpi AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
+            .Format = "K!"
             .Top           = 192
             .Left          = 400
             .Width         = 264

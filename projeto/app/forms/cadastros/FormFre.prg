@@ -559,6 +559,7 @@ DEFINE CLASS FormFre AS FormBase
         loc_oPagina.AddObject("txt_4c_Cidade", "TextBox")
         WITH loc_oPagina.txt_4c_Cidade
             .Value         = ""
+            .Format = "K!"
             .Top           = 174
             .Left          = 359
             .Width         = 220

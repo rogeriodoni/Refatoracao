@@ -2656,6 +2656,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Prod", "TextBox")
         WITH loc_oPg3.txt_4c_Prod
             .Value     = ""
+            .Format = "K!"
             .Top       = 483
             .Left      = 112
             .Width     = 108

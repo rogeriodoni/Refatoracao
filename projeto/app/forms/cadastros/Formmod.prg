@@ -503,6 +503,7 @@ DEFINE CLASS Formmod AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
             .Value         = ""
+            .Format = "K!"
             .Top           = 166
             .Left          = 443
             .Width         = 72
@@ -534,6 +535,7 @@ DEFINE CLASS Formmod AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
+            .Format = "K!"
             .Top           = 192
             .Left          = 443
             .Width         = 179

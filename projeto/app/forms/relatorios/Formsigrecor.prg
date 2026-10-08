@@ -415,6 +415,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 79
                 .Height      = 25
                 .Value       = ""
+                .Format = "!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)
@@ -430,6 +431,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 290
                 .Height      = 25
                 .Value       = ""
+                .Format = "!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)
@@ -460,6 +462,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 79
                 .Height      = 25
                 .Value       = ""
+                .Format = "!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)
@@ -475,6 +478,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 290
                 .Height      = 25
                 .Value       = ""
+                .Format = "!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)
@@ -505,6 +509,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 31
                 .Height      = 25
                 .Value       = ""
+                .Format = "K!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)
@@ -520,6 +525,7 @@ DEFINE CLASS Formsigrecor AS FormBase
                 .Width       = 115
                 .Height      = 25
                 .Value       = ""
+                .Format = "K!"
                 .FontName    = "Tahoma"
                 .FontSize    = 8
                 .ForeColor   = RGB(90, 90, 90)

@@ -540,6 +540,7 @@ DEFINE CLASS FormPrm AS FormBase
         loc_oPagina.AddObject("txt_4c_Promos", "TextBox")
         WITH loc_oPagina.txt_4c_Promos
             .Value     = ""
+            .Format = "!"
             .Top       = 159
             .Left      = 101
             .Width     = 185
@@ -571,6 +572,7 @@ DEFINE CLASS FormPrm AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
+            .Format = "!"
             .Top       = 183
             .Left      = 101
             .Width     = 31
@@ -634,6 +636,7 @@ DEFINE CLASS FormPrm AS FormBase
         loc_oPagina.AddObject("txt_4c_LPrecos", "TextBox")
         WITH loc_oPagina.txt_4c_LPrecos
             .Value     = ""
+            .Format = "!"
             .Top       = 183
             .Left      = 466
             .Width     = 220

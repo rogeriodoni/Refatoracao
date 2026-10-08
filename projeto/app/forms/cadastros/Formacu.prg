@@ -678,6 +678,7 @@ DEFINE CLASS Formacu AS FormBase
             loc_oAba.AddObject("txt_4c_Filtro", "TextBox")
             WITH loc_oAba.txt_4c_Filtro
                 .Value     = ""
+                .Format = "K!"
                 .Top       = 11
                 .Left      = 70
                 .Width     = 902

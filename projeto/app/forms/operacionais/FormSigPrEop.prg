@@ -551,6 +551,7 @@ DEFINE CLASS FormSigPrEop AS FormBase
             .Alignment = 0
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .ReadOnly  = .T.
             .TabStop   = .F.
         ENDWITH
@@ -583,6 +584,7 @@ DEFINE CLASS FormSigPrEop AS FormBase
             .Alignment = 0
             .ForeColor = RGB(0, 0, 0)
             .Value     = ""
+            .Format = "K!"
             .ReadOnly  = .T.
             .TabStop   = .F.
         ENDWITH

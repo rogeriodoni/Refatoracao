@@ -373,6 +373,7 @@ DEFINE CLASS FormCTA AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_Grupo, "KeyPress", THIS, "TxtGrupoFiltroKeyPress")
@@ -390,6 +391,7 @@ DEFINE CLASS FormCTA AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .Value         = ""
+            .Format = "K!"
             .ReadOnly      = .T.
             .Visible       = .T.
         ENDWITH

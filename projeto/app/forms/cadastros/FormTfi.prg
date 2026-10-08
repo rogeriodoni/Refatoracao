@@ -567,6 +567,7 @@ DEFINE CLASS FormTfi AS FormBase
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .Value         = ""
+            .Format = "!"
             .Visible       = .T.
         ENDWITH
 
@@ -656,6 +657,7 @@ DEFINE CLASS FormTfi AS FormBase
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .Value         = ""
+            .Format = "!"
             .Visible       = .T.
         ENDWITH
 
@@ -685,6 +687,7 @@ DEFINE CLASS FormTfi AS FormBase
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .Value         = ""
+            .Format = "!"
             .Visible       = .T.
         ENDWITH
 

@@ -2354,6 +2354,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Value     = ""
+            .Format = "!"
             .InputMask = "XX"
         ENDWITH
 
@@ -2504,6 +2505,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Value     = ""
+            .Format = "K!"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_NumerosVol", "TextBox")
@@ -2517,6 +2519,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Value     = ""
+            .Format = "K!"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_PesoLiq", "TextBox")

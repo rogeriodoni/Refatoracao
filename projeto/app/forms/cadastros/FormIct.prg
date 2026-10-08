@@ -770,6 +770,7 @@ DEFINE CLASS FormIct AS FormBase
         loc_oCnt.AddObject("txt_4c_Movs", "TextBox")
         WITH loc_oCnt.txt_4c_Movs
             .Value     = ""
+            .Format = "!"
             .Top       = 211
             .Left      = 190
             .Width     = 26

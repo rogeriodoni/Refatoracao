@@ -537,6 +537,7 @@ DEFINE CLASS FormMtp AS FormBase
         loc_oPagina.AddObject("txt_4c_Tipos", "TextBox")
         WITH loc_oPagina.txt_4c_Tipos
             .Value     = ""
+            .Format = "!K"
             .Top       = 173
             .Left      = 299
             .Width     = 24

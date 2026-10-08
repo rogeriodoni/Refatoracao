@@ -318,6 +318,7 @@ DEFINE CLASS Formsigrefc2 AS FormBase
             .Width    = 31
             .Height   = 23
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.

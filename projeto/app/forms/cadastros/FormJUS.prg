@@ -539,6 +539,7 @@ DEFINE CLASS FormJUS AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
+            .Format = "K!"
             .Top       = 115
             .Left      = 215
             .Width     = 31

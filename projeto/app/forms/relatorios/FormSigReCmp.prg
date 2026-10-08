@@ -432,6 +432,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 150
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)
@@ -858,6 +859,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 31
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .MaxLength     = 3
                 .FontName      = "Tahoma"
                 .FontSize      = 8
@@ -874,6 +876,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 361
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)
@@ -905,6 +908,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 31
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .MaxLength     = 3
                 .FontName      = "Tahoma"
                 .FontSize      = 8
@@ -921,6 +925,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 361
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)
@@ -952,6 +957,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 52
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .InputMask     = "XXXXXXX"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
@@ -968,6 +974,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 341
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)

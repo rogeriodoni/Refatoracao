@@ -622,6 +622,7 @@ DEFINE CLASS FormCor AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value         = ""
+            .InputMask = "!!!!!!!!!!"
             .Top           = 237
             .Left          = 387
             .Width         = 80

@@ -518,6 +518,7 @@ DEFINE CLASS FormSIGRECND AS FormBase
             .Width       = 31
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .MaxLength   = 3
             .FontName    = "Tahoma"
             .FontSize    = 8
@@ -538,6 +539,7 @@ DEFINE CLASS FormSIGRECND AS FormBase
             .Width       = 115
             .Height      = 25
             .Value       = ""
+            .Format = "K!"
             .MaxLength   = 15
             .FontName    = "Tahoma"
             .FontSize    = 8

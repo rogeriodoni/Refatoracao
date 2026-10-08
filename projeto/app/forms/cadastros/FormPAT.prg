@@ -687,6 +687,7 @@ DEFINE CLASS FormPAT AS FormBase
             .ForeColor     = RGB(90, 90, 90)
             .ToolTipText   = "Nome do Cliente"
             .Visible       = .T.
+            .Format = "K!"
         ENDWITH
 
         *-- Label + OptionGroup Venda Concluida
@@ -765,6 +766,7 @@ DEFINE CLASS FormPAT AS FormBase
             .FontSize      = 8
             .ForeColor     = RGB(90, 90, 90)
             .Visible       = .T.
+            .Format = "K!"
         ENDWITH
 
         *-- Botoes Confirmar e Cancelar

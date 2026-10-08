@@ -531,6 +531,7 @@ DEFINE CLASS FormOpd AS FormBase
         loc_oPagina.AddObject("txt_4c_Nopes", "TextBox")
         WITH loc_oPagina.txt_4c_Nopes
             .Value     = 0
+            .Format = "!K"
             .Top       = 146
             .Left      = 203
             .Width     = 37
@@ -551,6 +552,7 @@ DEFINE CLASS FormOpd AS FormBase
         loc_oPagina.AddObject("txt_4c_Dopes", "TextBox")
         WITH loc_oPagina.txt_4c_Dopes
             .Value     = ""
+            .Format = "!K"
             .Top       = 146
             .Left      = 243
             .Width     = 150

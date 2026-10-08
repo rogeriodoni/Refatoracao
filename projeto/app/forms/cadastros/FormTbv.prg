@@ -2451,6 +2451,7 @@ DEFINE CLASS FormTbv AS FormBase
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .Visible       = .T.
+                .Format = "!K"
             ENDWITH
         ENDWITH
     ENDPROC

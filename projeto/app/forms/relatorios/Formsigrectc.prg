@@ -563,6 +563,7 @@ DEFINE CLASS Formsigrectc AS FormBase
             .Width         = 35
             .Height        = 25
             .Value         = ""
+            .Format = "!"
             .FontName      = "Tahoma"
             .FontSize      = 9
             .ForeColor     = RGB(90,90,90)
@@ -581,6 +582,7 @@ DEFINE CLASS Formsigrectc AS FormBase
             .Width         = 301
             .Height        = 25
             .Value         = ""
+            .Format = "!"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .ForeColor     = RGB(90,90,90)
@@ -662,12 +664,14 @@ DEFINE CLASS Formsigrectc AS FormBase
         WITH loc_oPag.txt_4c_Cemps
             .Format    = "!"
             .MaxLength = 3
+            .Format = "!"
         ENDWITH
 
         *-- get_razas: formato uppercase + limite de 40 caracteres
         WITH loc_oPag.txt_4c_Razas
             .Format    = "!"
             .MaxLength = 40
+            .Format = "!"
         ENDWITH
 
         *-- TabIndex: ordem de tabulacao identica ao codigo fonte original

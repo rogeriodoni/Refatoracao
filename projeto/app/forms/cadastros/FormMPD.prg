@@ -2556,6 +2556,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 78
                 .Height = 21
                 .Visible = .T.
+                .Format = "!K"
             ENDWITH
             loc_oPg.AddObject("txt_4c_GrupoDest", "TextBox")
             WITH loc_oPg.txt_4c_GrupoDest
@@ -2600,6 +2601,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 78
                 .Height = 21
                 .Visible = .T.
+                .Format = "!K"
             ENDWITH
             loc_oPg.AddObject("txt_4c_GrupoVend", "TextBox")
             WITH loc_oPg.txt_4c_GrupoVend
@@ -3776,6 +3778,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 108
                 .Height = 23
                 .Visible = .T.
+                .Format = "K!"
             ENDWITH
             loc_oPg.AddObject("txt_4c_Difp", "TextBox")
             WITH loc_oPg.txt_4c_Difp

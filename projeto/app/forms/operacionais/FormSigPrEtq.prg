@@ -242,6 +242,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
             .Height    = 22
             .MaxLength = 30
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
@@ -258,6 +259,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
             .Height    = 22
             .MaxLength = 30
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
@@ -353,6 +355,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
             .Height    = 23
             .MaxLength = 3
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
@@ -369,6 +372,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
             .Height    = 23
             .MaxLength = 20
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)

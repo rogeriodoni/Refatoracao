@@ -536,6 +536,7 @@ DEFINE CLASS FormDsp AS FormBase
             .MaxLength = 20
             .ReadOnly  = .T.
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -591,6 +592,7 @@ DEFINE CLASS FormDsp AS FormBase
             .MaxLength = 40
             .ReadOnly  = .T.
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.

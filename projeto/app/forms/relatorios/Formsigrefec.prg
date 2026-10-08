@@ -345,6 +345,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .Width       = 31
             .Height      = 23
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .ToolTipText = "C" + CHR(243) + "digo da Empresa (F4=Buscar)"
@@ -359,6 +360,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .Width     = 289
             .Height    = 23
             .Value     = ""
+            .Format = "K!"
             .ReadOnly  = .T.
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -445,6 +447,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .Width       = 82
             .Height      = 23
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .ToolTipText = "Usu" + CHR(225) + "rio (F4=Buscar)"
@@ -473,6 +476,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .Width       = 94
             .Height      = 23
             .Value       = ""
+            .Format = "K!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .ToolTipText = "Forma de Pagamento (F4=Buscar)"

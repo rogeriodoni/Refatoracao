@@ -1800,6 +1800,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "!K"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label24", "Label")
@@ -1945,6 +1946,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label34", "Label")
@@ -2018,6 +2020,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label5", "Label")
@@ -2067,6 +2070,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontSize = 8
             .Visible  = .T.
             .InputMask = "!!!!!!!!!!!!!!!"
+            .Format = "K!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Grupo, "KeyPress", THIS, "KeyPressGrupoEmp")
 
@@ -2142,6 +2146,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontSize = 8
             .Visible  = .T.
             .InputMask = "!!!!!!!!!!!!!!!"
+            .Format = "K!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Class, "KeyPress", THIS, "KeyPressClassEmp")
 
@@ -2217,6 +2222,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("cmd_4c_CmdCtaCtg", "CommandButton")
@@ -3695,6 +3701,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c__CodServs, "KeyPress", THIS, "KeyPressCodServs")
 
@@ -3929,6 +3936,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c__TpTrans, "KeyPress", THIS, "KeyPressTpTrans")
 
@@ -3956,6 +3964,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontSize = 8
             .Visible  = .T.
             .InputMask = "999.99"
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label35", "Label")
@@ -4415,6 +4424,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         *-- Operacao Atual Cupom Fiscal / Dope_int
@@ -4527,6 +4537,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         *-- Container Email Padrao
@@ -5465,6 +5476,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontSize  = 8
             .Visible   = .T.
             .InputMask = "99"
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label23", "Label")
@@ -5489,6 +5501,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "K!"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label29", "Label")
@@ -5589,6 +5602,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .Format = "!K"
         ENDWITH
 
         *-- Header: Dados Para NF-e

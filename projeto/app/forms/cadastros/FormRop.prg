@@ -582,6 +582,7 @@ DEFINE CLASS FormRop AS FormBase
         loc_oPagina.AddObject("txt_4c__ds_grupo", "TextBox")
         WITH loc_oPagina.txt_4c__ds_grupo
             .Value       = ""
+            .Format = "K!"
             .Top         = 181
             .Left        = 361
             .Width       = 213
@@ -653,6 +654,7 @@ DEFINE CLASS FormRop AS FormBase
         loc_oPagina.AddObject("txt_4c_Gde", "TextBox")
         WITH loc_oPagina.txt_4c_Gde
             .Value       = ""
+            .Format = "!K"
             .Top         = 231
             .Left        = 328
             .Width       = 33

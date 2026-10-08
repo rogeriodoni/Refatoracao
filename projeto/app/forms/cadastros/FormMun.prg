@@ -533,6 +533,7 @@ DEFINE CLASS FormMun AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
             .Value         = ""
+            .Format = "K!"
             .Top           = 158
             .Left          = 347
             .Width         = 60

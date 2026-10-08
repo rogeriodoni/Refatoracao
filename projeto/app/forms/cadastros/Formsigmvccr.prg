@@ -889,6 +889,7 @@ DEFINE CLASS Formsigmvccr AS FormBase
             .Width     = 15
             .Height    = 21
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 1
             .InputMask = "!"
             .FontName  = "Tahoma"
@@ -1134,6 +1135,7 @@ DEFINE CLASS Formsigmvccr AS FormBase
             .Width     = 15
             .Height    = 21
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 1
             .ReadOnly  = .T.
             .FontName  = "Tahoma"
@@ -1285,6 +1287,7 @@ DEFINE CLASS Formsigmvccr AS FormBase
             .Width     = 31
             .Height    = 21
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 3
             .FontName  = "Tahoma"
             .FontSize  = 8

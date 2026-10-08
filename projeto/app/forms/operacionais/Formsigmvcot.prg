@@ -1936,6 +1936,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 
@@ -1965,6 +1966,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 
@@ -2133,6 +2135,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 
@@ -2294,6 +2297,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 
@@ -2406,6 +2410,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 
@@ -6737,6 +6742,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(0, 0, 128)
             .Value         = ""
+            .Format = "K!"
             .Visible       = .T.
         ENDWITH
 

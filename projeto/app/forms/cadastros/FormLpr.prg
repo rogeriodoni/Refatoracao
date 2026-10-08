@@ -998,6 +998,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Lpreco", "TextBox")
             WITH loc_oPagina.txt_4c_Lpreco
                 .Value     = ""
+                .Format = "K!"
                 .Top       = 145
                 .Left      = 205
                 .Width     = 290
@@ -1079,6 +1080,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Txtcpros", "TextBox")
             WITH loc_oPagina.txt_4c_Txtcpros
                 .Value     = ""
+                .Format = "!K"
                 .Top       = 261
                 .Left      = 108
                 .Width     = 119
@@ -1092,6 +1094,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Txtdpros", "TextBox")
             WITH loc_oPagina.txt_4c_Txtdpros
                 .Value     = ""
+                .Format = "!K"
                 .Top       = 261
                 .Left      = 230
                 .Width     = 342

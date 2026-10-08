@@ -473,6 +473,7 @@ DEFINE CLASS FormDIC AS FormBase
         loc_oPagina.AddObject("txt_4c_Idioma", "TextBox")
         WITH loc_oPagina.txt_4c_Idioma
             .Value       = ""
+            .Format = "!"
             .Top         = 168
             .Left        = 116
             .Width       = 87
@@ -509,6 +510,7 @@ DEFINE CLASS FormDIC AS FormBase
         loc_oPagina.AddObject("txt_4c_Expressao", "TextBox")
         WITH loc_oPagina.txt_4c_Expressao
             .Value       = ""
+            .Format = "!"
             .Top         = 208
             .Left        = 116
             .Width       = 525
@@ -545,6 +547,7 @@ DEFINE CLASS FormDIC AS FormBase
         loc_oPagina.AddObject("txt_4c_Traducao", "TextBox")
         WITH loc_oPagina.txt_4c_Traducao
             .Value       = ""
+            .Format = "!"
             .Top         = 251
             .Left        = 117
             .Width       = 525

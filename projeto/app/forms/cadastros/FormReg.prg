@@ -511,6 +511,7 @@ DEFINE CLASS FormReg AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
+            .Format = "!"
             .Top       = 111
             .Left      = 97
             .Width     = 80
@@ -544,6 +545,7 @@ DEFINE CLASS FormReg AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value     = ""
+            .Format = "!"
             .Top       = 111
             .Left      = 267
             .Width     = 150

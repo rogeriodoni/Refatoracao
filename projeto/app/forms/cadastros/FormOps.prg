@@ -657,6 +657,7 @@ DEFINE CLASS FormOps AS FormBase
         loc_oPagina.AddObject("txt_4c_Desc", "TextBox")
         WITH loc_oPagina.txt_4c_Desc
             .Value     = ""
+            .Format = "K!"
             .Top       = 141
             .Left      = 303
             .Width     = 179
@@ -957,6 +958,7 @@ DEFINE CLASS FormOps AS FormBase
         loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Moeda
             .Value     = ""
+            .Format = "K!"
             .Top       = 269
             .Left      = 448
             .Width     = 34

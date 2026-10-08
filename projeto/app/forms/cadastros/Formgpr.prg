@@ -516,6 +516,7 @@ DEFINE CLASS Formgpr AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .Top           = 114
             .Left          = 405
             .Width         = 290

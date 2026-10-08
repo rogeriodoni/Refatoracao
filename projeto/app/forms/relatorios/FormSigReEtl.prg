@@ -716,6 +716,7 @@ DEFINE CLASS FormSigReEtl AS FormBase
             .Height        = 22
             .MaxLength     = 6
             .Value         = ""
+            .Format = "!K"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1
@@ -802,6 +803,7 @@ DEFINE CLASS FormSigReEtl AS FormBase
             .Height        = 22
             .MaxLength     = 6
             .Value         = ""
+            .Format = "!K"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1
@@ -816,6 +818,7 @@ DEFINE CLASS FormSigReEtl AS FormBase
             .Height        = 22
             .MaxLength     = 30
             .Value         = ""
+            .Format = "!K"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1

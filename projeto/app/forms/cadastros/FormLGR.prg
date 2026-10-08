@@ -573,6 +573,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
+            .Format = "K!"
             .Top       = 177
             .Left      = 312
             .Width     = 157
@@ -603,6 +604,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Modelo", "TextBox")
         WITH loc_oPagina.txt_4c_Modelo
             .Value     = ""
+            .Format = "!"
             .Top       = 204
             .Left      = 312
             .Width     = 150

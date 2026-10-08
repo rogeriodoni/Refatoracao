@@ -520,6 +520,7 @@ DEFINE CLASS FormACE AS FormBase
         loc_oPg2.AddObject("txt_4c_DEmpresa", "TextBox")
         WITH loc_oPg2.txt_4c_DEmpresa
             .Value     = ""
+            .Format = "K!"
             .Top       = 78
             .Left      = 264
             .Width     = 290

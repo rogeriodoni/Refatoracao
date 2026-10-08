@@ -391,6 +391,7 @@ DEFINE CLASS FormSIGREAPR AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Value    = ""
+            .Format = "!K"
             .Visible  = .T.
         ENDWITH
 
@@ -404,6 +405,7 @@ DEFINE CLASS FormSIGREAPR AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Value    = ""
+            .Format = "!K"
             .Visible  = .T.
         ENDWITH
 
@@ -530,6 +532,7 @@ DEFINE CLASS FormSIGREAPR AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Value    = ""
+            .Format = "K!"
             .Visible  = .T.
         ENDWITH
 
@@ -543,6 +546,7 @@ DEFINE CLASS FormSIGREAPR AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Value    = ""
+            .Format = "K!"
             .Visible  = .T.
         ENDWITH
 

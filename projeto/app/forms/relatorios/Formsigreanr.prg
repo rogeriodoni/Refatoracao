@@ -456,6 +456,7 @@ DEFINE CLASS Formsigreanr AS FormBase
             .Width       = 290
             .Height      = 23
             .Value       = ""
+            .Format = "!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .ForeColor   = RGB(90, 90, 90)

@@ -689,6 +689,7 @@ DEFINE CLASS FormUsu AS FormBase
         loc_oPg2.AddObject("txt_4c_RClis", "TextBox")
         WITH loc_oPg2.txt_4c_RClis
             .Value         = ""
+            .Format = "K!"
             .Top           = 317
             .Left          = 459
             .Width         = 290

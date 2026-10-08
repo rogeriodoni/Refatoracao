@@ -588,6 +588,7 @@ DEFINE CLASS FormTop AS FormBase
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)
             .Value         = ""
+            .Format = "!K"
             .Visible       = .T.
         ENDWITH
 

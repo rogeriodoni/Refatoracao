@@ -428,6 +428,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
                 .Width         = 184
                 .Height        = 25
                 .Value         = ""
+                .Format = "K!"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .SpecialEffect = 0

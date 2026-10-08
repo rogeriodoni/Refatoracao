@@ -481,6 +481,7 @@ DEFINE CLASS FormUSA AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Value     = ""
+            .Format = "K!"
             .ReadOnly  = .T.
             .TabStop   = .F.
             .Visible   = .T.
@@ -524,6 +525,7 @@ DEFINE CLASS FormUSA AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Value     = ""
+            .Format = "K!"
             .ReadOnly  = .T.
             .TabStop   = .F.
             .Visible   = .T.

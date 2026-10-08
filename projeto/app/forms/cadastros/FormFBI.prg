@@ -541,6 +541,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 157
             .Height    = 23
             .Value     = ""
+            .Format = "K!"
             .MaxLength = 20
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -740,6 +741,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 220
             .Height    = 23
             .Value     = ""
+            .Format = "!"
             .MaxLength = 30
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -809,6 +811,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 59
             .Height    = 23
             .Value     = ""
+            .Format = "!"
             .MaxLength = 7
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -841,6 +844,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 80
             .Height    = 21
             .Value     = ""
+            .Format = "!"
             .MaxLength = 10
             .FontName  = "Tahoma"
             .FontSize  = 8

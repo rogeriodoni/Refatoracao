@@ -4861,6 +4861,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("Get_Agrupa", "TextBox")
         WITH par_oPg.Get_Agrupa
             .Value = ""
+            .Format = "!K"
             .Top = 362
             .Left = 480
             .Width = 150

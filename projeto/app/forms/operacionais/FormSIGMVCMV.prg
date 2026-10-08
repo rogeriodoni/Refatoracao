@@ -419,6 +419,7 @@ DEFINE CLASS FormSIGMVCMV AS FormBase
             .SpecialEffect = 1
             .BorderColor   = RGB(36, 84, 155)
             .Value         = ""
+            .Format = "K!"
             .TabIndex      = 10
             .Visible       = .T.
         ENDWITH

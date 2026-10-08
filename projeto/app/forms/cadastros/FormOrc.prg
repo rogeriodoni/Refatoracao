@@ -526,6 +526,7 @@ DEFINE CLASS FormOrc AS FormBase
         loc_oPagina.AddObject("txt_4c_Emps", "TextBox")
         WITH loc_oPagina.txt_4c_Emps
             .Value     = ""
+            .Format = "!K"
             .Top       = 189
             .Left      = 65
             .Width     = 31
@@ -554,6 +555,7 @@ DEFINE CLASS FormOrc AS FormBase
         loc_oPagina.AddObject("txt_4c_Mes", "TextBox")
         WITH loc_oPagina.txt_4c_Mes
             .Value     = ""
+            .Format = "!K"
             .Top       = 189
             .Left      = 133
             .Width     = 24
@@ -582,6 +584,7 @@ DEFINE CLASS FormOrc AS FormBase
         loc_oPagina.AddObject("txt_4c_Ano", "TextBox")
         WITH loc_oPagina.txt_4c_Ano
             .Value     = ""
+            .Format = "!K"
             .Top       = 189
             .Left      = 193
             .Width     = 38
@@ -610,6 +613,7 @@ DEFINE CLASS FormOrc AS FormBase
         loc_oPagina.AddObject("txt_4c_Titulo", "TextBox")
         WITH loc_oPagina.txt_4c_Titulo
             .Value     = ""
+            .Format = "K!"
             .Top       = 189
             .Left      = 278
             .Width     = 280
@@ -638,6 +642,7 @@ DEFINE CLASS FormOrc AS FormBase
         loc_oPagina.AddObject("txt_4c_Cd_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Cd_Moeda
             .Value     = ""
+            .Format = "!K"
             .Top       = 189
             .Left      = 609
             .Width     = 31

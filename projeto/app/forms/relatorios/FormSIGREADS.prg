@@ -850,6 +850,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .Width     = 150
             .Height    = 25
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -879,6 +880,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .Width     = 31
             .Height    = 25
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)
@@ -893,6 +895,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .Width     = 115
             .Height    = 25
             .Value     = ""
+            .Format = "K!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackColor = RGB(255, 255, 255)

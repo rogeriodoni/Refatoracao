@@ -663,6 +663,7 @@ DEFINE CLASS Formsigrecrp AS FormBase
             .Width    = 31
             .Height   = 21
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -675,6 +676,7 @@ DEFINE CLASS Formsigrecrp AS FormBase
             .Width    = 290
             .Height   = 21
             .Value    = ""
+            .Format = "K!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.

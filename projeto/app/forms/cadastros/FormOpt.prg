@@ -1259,6 +1259,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrupoOs", "TextBox")
         WITH loc_oPagina.txt_4c_DGrupoOs
             .Value     = ""
+            .Format = "K!"
             .Top       = 295
             .Left      = 227
             .Width     = 290
@@ -1303,6 +1304,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c__ds_grupo", "TextBox")
         WITH loc_oPagina.txt_4c__ds_grupo
             .Value     = ""
+            .Format = "K!"
             .Top       = 296
             .Left      = 701
             .Width     = 290
@@ -2782,6 +2784,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrupoT", "TextBox")
         WITH loc_oPagina.txt_4c_DGrupoT
             .Value     = ""
+            .Format = "K!"
             .Top       = 678
             .Left      = 701
             .Width     = 290

@@ -450,6 +450,7 @@ DEFINE CLASS FormTpt AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Value     = ""
+            .Format = "!K"
             .Visible   = .T.
         ENDWITH
 
