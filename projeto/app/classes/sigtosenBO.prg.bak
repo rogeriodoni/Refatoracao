@@ -214,7 +214,7 @@ DEFINE CLASS sigtosenBO AS BusinessBase
             ELSE
                 loc_cSQL = "Select b.Cemps, b.Razas, b.Tipos, b.Logos" + ;
                            " From SigCdAcE a" + ;
-                           " Inner Join SigCdEmp b On b.Cemps = a.Cemps" + ;
+                           " Inner Join SigCdEmp b On b.Cemps = a.Emps" + ;
                            " Where a.Usuarios = '" + ALLTRIM(par_cUsuario) + "'" + ;
                            " And Not b.Ativas = 2" + ;
                            " Order By b.Cemps"

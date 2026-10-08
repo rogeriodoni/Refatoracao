@@ -423,7 +423,7 @@ DEFINE CLASS acuBO AS BusinessBase
             loc_nResultado = SQLEXEC(gnConnHandle, ;
                 "SELECT e.usuarios, e.emps, e.pkchaves, c.razas" + ;
                 " FROM sigcdace e" + ;
-                " LEFT JOIN sigcdemp c ON RTRIM(c.cemps) = RTRIM(e.cemps)" + ;
+                " LEFT JOIN sigcdemp c ON RTRIM(c.cemps) = RTRIM(e.emps)" + ;
                 " WHERE e.usuarios = " + EscaparSQL(par_cUsuarios), ;
                 "cursor_4c_EmpresasUsu")
             IF loc_nResultado >= 0

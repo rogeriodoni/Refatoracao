@@ -1,8 +1,14 @@
 ﻿{
-    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCEP.prg",
-    "timestamp":  "2026-07-24T22:31:52",
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\f1c1250e-361c-4dc7-a1dd-461b11f90c8e\\scratchpad\\p216\\forms\\cadastros\\FormCEP.prg",
+    "timestamp":  "2026-10-08T16:58:34",
     "correcoes":  [
-
+                      {
+                          "Tipo":  "WARN-216-FORMAT-INPUTMASK-AUSENTE",
+                          "Linha":  0,
+                          "Original":  "(form inteiro)",
+                          "Corrigido":  "(nao mutado - o valor sai do dump, controle a controle)",
+                          "Descricao":  "Pattern #216 WARNING: o dump do legado declara 9 Format e 1 InputMask nao-vazios, mas este .prg tem 0 e 0 - faltam 9 Format e 1 InputMask. Severidade ALTA (InputMask muda o que eh digitado/gravado). O migrador descarta essas duas propriedades e o defeito so aparece na TELA: no FormCEP o CEP exibia \"07083280\" em vez de \"07083-280\" (InputMask = \"99999-999\") e os campos aceitavam minuscula onde o legado forca MAIUSCULA (Format = \"K!\"). Compila limpo, nenhum outro gate pega. NAO auto-fixado: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -\u003e objeto migrado eh HUMANO porque o PILAR 3 manda renomear (getTipoNomes -\u003e txt_4c_TipoNomes) - casar por nome nunca funciona (regras #30/#39). Conferir no dump e transcrever. Cuidado: \"Format = \u0027\u0027\" / \"InputMask = \u0027\u0027\" no dump sao override VAZIO do Form Designer, nao formatacao - ignorar. Auditoria em lote: automation\\VerificarFormatInputMask.ps1. Skill: secao 243. Origem: Erro197 (FormCEP)."
+                      }
                   ],
-    "totalCorrecoes":  0
+    "totalCorrecoes":  1
 }

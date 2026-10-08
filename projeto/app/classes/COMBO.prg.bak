@@ -79,7 +79,7 @@ DEFINE CLASS COMBO AS BusinessBase
                        " a.metaemps, a.pctvd1, a.pctvd2, a.moedas, a.CodGerente," + ;
                        " ISNULL(b.Razas, '') AS Razas" + ;
                        " FROM sigcmcab a" + ;
-                       " LEFT JOIN SigCdEmp b ON b.Cemps = a.cemps" + ;
+                       " LEFT JOIN SigCdEmp b ON b.Cemps = a.emps" + ;
                        loc_cWhere + ;
                        " ORDER BY a.cods"
 
@@ -119,7 +119,7 @@ DEFINE CLASS COMBO AS BusinessBase
                        " a.metaemps, a.pctvd1, a.pctvd2, a.moedas, a.CodGerente," + ;
                        " ISNULL(b.Razas, '') AS Razas, ISNULL(c.DMoes, '') AS DMoes" + ;
                        " FROM sigcmcab a" + ;
-                       " LEFT JOIN SigCdEmp b ON b.Cemps = a.cemps" + ;
+                       " LEFT JOIN SigCdEmp b ON b.Cemps = a.emps" + ;
                        " LEFT JOIN SigCdMoe c ON c.CMoes = a.moedas" + ;
                        " WHERE a.pkchaves = " + EscaparSQL(par_cCodigo)
 
