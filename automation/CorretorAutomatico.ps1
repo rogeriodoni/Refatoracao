@@ -16564,6 +16564,72 @@ function Corrigir-AfterRowColChangeValidaCelula {
     }
     return $Linhas
 }
+
+# =============================================================================
+# Pattern #215 (Erro195, 2026-10-08, FormCco) - WARNING, nunca muta.
+# Handler ligado a BINDEVENT "KeyPress" que abre o picker (FormBuscaAuxiliar /
+# AbrirBusca* / AbrirLookup*) SEM testar par_nKeyCode dispara o dialogo a CADA
+# TECLA: digitando 11101, o picker sobe no primeiro "1" e o usuario nao termina
+# de digitar o codigo. O legado valida no `Valid` do campo, ou seja ao SAIR.
+#
+# NAO muta de proposito: trocar o evento automaticamente eh exatamente o que o
+# Pattern #74 fazia (LostFocus -> KeyPress) e foi ele quem CRIOU este defeito,
+# desfazendo a correcao do code-review da task357 - rebaixado a WARNING em
+# 2026-10-06. O evento certo, e se existe um F3 separado, vem do dump do legado.
+# A assinatura NAO conta como teste de tecla: declarar par_nKeyCode sem olhar
+# para ele foi o que fez a 1a versao do detector dar zero achado.
+# Auditoria em lote: automation\VerificarLookupEmKeyPress.ps1. Skill: secao 241.
+# =============================================================================
+function Corrigir-LookupEmKeyPressSemTecla {
+    param([string[]]$Linhas)
+
+    $abrePicker = @{}
+    $testaTecla = @{}
+    $proc = $null
+    foreach ($l in $Linhas) {
+        if ($l -match '^\s*(?:PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+(\w+)') {
+            $proc = $Matches[1].ToUpper()
+            continue
+        }
+        if (-not $proc) { continue }
+        if ($l -match '^\s*(\*|&&)') { continue }
+        if ($l -match '^\s*L?PARAMETERS\b') { continue }
+
+        if ($l -match '\bINLIST\s*\(\s*par_nKeyCode' -or
+            $l -match '\b(?:par_n)?[Kk]ey[Cc]ode\s*(?:==|=|<|>|!=|<>|#)' -or
+            $l -match '\bLASTKEY\s*\(') {
+            $testaTecla[$proc] = $true
+        }
+        if ($l -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"' -or
+            $l -match '(?i)THIS\.(?:Abrir\w*|\w*Lookup\w*|\w*Busca\w*)\s*\(') {
+            $abrePicker[$proc] = $true
+        }
+    }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        $m = [regex]::Match($linha, '(?i)BINDEVENT\s*\([^,]+,\s*"KeyPress"\s*,\s*[^,]+,\s*"(\w+)"')
+        if (-not $m.Success) { continue }
+
+        $nome = $m.Groups[1].Value
+        $k    = $nome.ToUpper()
+        if (-not $abrePicker[$k]) { continue }
+        if ($testaTecla[$k]) { continue }
+
+        $extra = if ($nome -match '(?i)LostFocus$') {
+            "O handler eh BATIZADO ${nome}: nome terminando em LostFocus ligado a KeyPress eh a assinatura da mutacao do Pattern #74 antigo - defeito inequivoco. "
+        } else {
+            "Conferir o dump do legado antes de trocar: Valid -> LostFocus; F3/F4 -> manter KeyPress, mas DENTRO de IF par_nKeyCode = <tecla>. "
+        }
+
+        Write-Host "[Pattern #215 WARN] linha $($i + 1): $nome abre picker em KeyPress sem testar tecla" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-215-LOOKUP-EM-KEYPRESS-SEM-TECLA" -Linha ($i + 1) -Original $linha.Trim() -Corrigido "(nao mutado - o evento certo vem do dump do legado)" -Descricao ("Pattern #215 WARNING: $nome esta ligado a BINDEVENT `"KeyPress`", abre picker " + "(FormBuscaAuxiliar / AbrirBusca* / AbrirLookup*) e NUNCA testa par_nKeyCode/LASTKEY() - entao o dialogo " + "sobe a CADA TECLA e o usuario nao consegue terminar de digitar o codigo (digitando 11101 o picker abre " + "no primeiro 1). Compila limpo e nenhum gate pega. " + $extra + "Ao trocar para `"LostFocus`", TIRAR " + "(par_nKeyCode, par_nShiftAltCtrl) da assinatura - LostFocus nao passa parametro - e instalar a guarda de " + "reentrancia this_lEmLookup (regra #37): o picker eh MODAL, tira o foco e redispara o proprio LostFocus, " + "e o irmao de F3 chama o MESMO funil. Com RETURN antecipado no corpo, por o corpo num <Nome>Exec() e " + "deixar um wrapper fino liberar a flag - set no topo / clear antes do ENDPROC TRAVA a flag ligada e MATA " + "o lookup. NAO auto-fixado de proposito: foi o Pattern #74 (LostFocus -> KeyPress), hoje WARNING, que " + "criou este defeito. Auditoria: automation\\VerificarLookupEmKeyPress.ps1. Skill: secao 241. " + "Origem: Erro195 (FormCco; sweep de 47 handlers em 13 forms).")
+    }
+
+    return $Linhas
+}
+
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -16789,6 +16855,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-BOParaFormCheckBoxLogico -Linhas $linhas
     $linhas = Corrigir-PropertyBOComValueMutilada -Linhas $linhas
     $linhas = Corrigir-AfterRowColChangeValidaCelula -Linhas $linhas
+    $linhas = Corrigir-LookupEmKeyPressSemTecla -Linhas $linhas
     $linhas = Corrigir-ContainerBorderStyle -Linhas $linhas
     $linhas = Corrigir-PageFrameHeightTop29 -Linhas $linhas
     $linhas = Corrigir-ValidarParaValidarDados -Linhas $linhas

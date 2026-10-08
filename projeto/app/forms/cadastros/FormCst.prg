@@ -21,6 +21,8 @@ DEFINE CLASS FormCst AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -625,8 +627,8 @@ DEFINE CLASS FormCst AS FormBase
                 .Visible       = .T.
             ENDWITH
 
-            BINDEVENT(loc_oPagina.txt_4c_CodMoeda,  "KeyPress", THIS, "CodMoedaLostFocus")
-            BINDEVENT(loc_oPagina.txt_4c_DescMoeda, "KeyPress", THIS, "DescMoedaLostFocus")
+            BINDEVENT(loc_oPagina.txt_4c_CodMoeda,  "LostFocus", THIS, "CodMoedaLostFocus")
+            BINDEVENT(loc_oPagina.txt_4c_DescMoeda, "LostFocus", THIS, "DescMoedaLostFocus")
 
             THIS.TornarControlesVisiveis(loc_oPagina)
 
@@ -1042,8 +1044,21 @@ DEFINE CLASS FormCst AS FormBase
     * CodMoedaLostFocus - Handler LostFocus de txt_4c_CodMoeda
     * Busca descricao da moeda pelo codigo digitado
     *===========================================================================
-    PROCEDURE CodMoedaLostFocus
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CodMoedaLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CodMoedaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CodMoedaLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CodMoedaLostFocusExec()
         LOCAL loc_oPagina, loc_cCodigo
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_CodMoeda.Value)
@@ -1061,8 +1076,21 @@ DEFINE CLASS FormCst AS FormBase
     * DescMoedaLostFocus - Handler LostFocus de txt_4c_DescMoeda
     * Busca moeda pela descricao digitada
     *===========================================================================
-    PROCEDURE DescMoedaLostFocus
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DescMoedaLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DescMoedaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DescMoedaLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DescMoedaLostFocusExec()
         LOCAL loc_oPagina, loc_cDescricao
         loc_oPagina    = THIS.pgf_4c_Paginas.Page2
         loc_cDescricao = ALLTRIM(loc_oPagina.txt_4c_DescMoeda.Value)

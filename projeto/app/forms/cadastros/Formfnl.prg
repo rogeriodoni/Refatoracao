@@ -21,6 +21,8 @@ DEFINE CLASS Formfnl AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -750,9 +752,9 @@ DEFINE CLASS Formfnl AS FormBase
         BINDEVENT(loc_oPagina.txt_4c_Vincs, "KeyPress", THIS, "ValidarVincs")
 
         *-- BINDEVENTs para lookup de Rel. Gerencial (LostFocus + F4)
-        BINDEVENT(loc_oPagina.txt_4c_CodRelGer, "KeyPress", THIS, "CodRelGerLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_CodRelGer, "LostFocus", THIS, "CodRelGerLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_CodRelGer, "KeyPress",  THIS, "CodRelGerKeyPress")
-        BINDEVENT(loc_oPagina.txt_4c_DesRelGer, "KeyPress", THIS, "DesRelGerLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DesRelGer, "LostFocus", THIS, "DesRelGerLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_DesRelGer, "KeyPress",  THIS, "DesRelGerKeyPress")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
@@ -1312,9 +1314,11 @@ DEFINE CLASS Formfnl AS FormBase
     * Abre lookup via F4 (keycode 28 no VFP9)
     *===========================================================================
     PROCEDURE CodRelGerKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupRelGerPorCodigo()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================
@@ -1322,9 +1326,11 @@ DEFINE CLASS Formfnl AS FormBase
     * Abre lookup via F4 (keycode 28 no VFP9)
     *===========================================================================
     PROCEDURE DesRelGerKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupRelGerPorDescricao()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================
@@ -1332,7 +1338,21 @@ DEFINE CLASS Formfnl AS FormBase
     * Busca SigFiRlg por Ordems; se nao encontrado, abre picker.
     * Equivale ao GetCodRelGer.Valid do original.
     *===========================================================================
-    PROCEDURE CodRelGerLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CodRelGerLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CodRelGerLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CodRelGerLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CodRelGerLostFocusExec()
         LOCAL loc_oPg2, loc_nCod, loc_cImps, loc_cSQL, loc_nResult
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_nCod  = 0
@@ -1396,7 +1416,21 @@ DEFINE CLASS Formfnl AS FormBase
     * Equivale ao GetDesRelGer.Valid do original.
     * Ativo apenas quando CodRelGer estiver vazio (When do original).
     *===========================================================================
-    PROCEDURE DesRelGerLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DesRelGerLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DesRelGerLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DesRelGerLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DesRelGerLostFocusExec()
         LOCAL loc_oPg2, loc_cDes, loc_cImps, loc_cSQL, loc_nResult
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_cDes  = ""

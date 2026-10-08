@@ -24,6 +24,8 @@ DEFINE CLASS FormUpd AS FormBase
     *-- Guardas de lookup (Problema 45: evita reabrir picker sem o valor mudar)
     this_cUltimoCodigoFaseValidado    = ""
     this_cUltimaDescricaoFaseValidada = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -750,7 +752,7 @@ DEFINE CLASS FormUpd AS FormBase
             .Visible       = .T.
         ENDWITH
         *-- Lookup Fase (SigCdGcr, filtro GerBals=1) - transcrito de getCodigos.Valid
-        BINDEVENT(loc_oPagina.txt_4c_Codigo, "KeyPress", THIS, "CodigoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Codigo, "LostFocus", THIS, "CodigoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Codigo, "KeyPress",  THIS, "CodigoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Codigo, "DblClick",  THIS, "CodigoDblClick")
 
@@ -776,7 +778,7 @@ DEFINE CLASS FormUpd AS FormBase
             .Visible       = .T.
         ENDWITH
         *-- Lookup reverso por Descricao - transcrito de GetDescrs.Valid
-        BINDEVENT(loc_oPagina.txt_4c_Descricao, "KeyPress", THIS, "DescricaoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Descricao, "LostFocus", THIS, "DescricaoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Descricao, "KeyPress",  THIS, "DescricaoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Descricao, "DblClick",  THIS, "DescricaoDblClick")
 
@@ -1254,7 +1256,21 @@ DEFINE CLASS FormUpd AS FormBase
     * guarda contra reabrir o picker quando o valor nao mudou)
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
-    PROCEDURE CodigoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CodigoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CodigoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CodigoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CodigoLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Codigo.Value)
 
@@ -1275,9 +1291,11 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE CodigoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupFase()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================
@@ -1285,7 +1303,9 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE CodigoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupFase()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================
@@ -1349,7 +1369,21 @@ DEFINE CLASS FormUpd AS FormBase
     * (Problema 45: guarda contra reabrir o picker quando o valor nao mudou)
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
-    PROCEDURE DescricaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DescricaoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DescricaoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DescricaoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DescricaoLostFocusExec()
         LOCAL loc_cValor
 
         IF !THIS.pgf_4c_Paginas.Page2.txt_4c_Descricao.Enabled
@@ -1375,9 +1409,11 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE DescricaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupFasePorDescricao()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================
@@ -1385,7 +1421,9 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE DescricaoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupFasePorDescricao()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *===========================================================================

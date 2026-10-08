@@ -968,6 +968,28 @@ E `Grid.ReadOnly = .F.` propaga: a coluna que o legado trava (`When = .F.`) volt
 
 `AfterRowColChange` SEM filtro de coluna (carregar detalhe da linha corrente) eh o uso certo - 11 dos 12 handlers do projeto que fazem SQL nele. WARNING: CorretorAutomatico **#214**. `FormLpr.GradeAfterRowColChange` tinha o mesmo defeito - corrigido (Erro191-FormLpr, 2026-10-07: celulas Codigo/Descricao da grade de Venda com `TextBoxProdutoLpr_4c`, reinstaladas no `VincularGrade` porque ele refaz `ColumnCount`). Skill: secao **240**. Origem: Erro191 (FormSIGPRLNC); na mesma grade, Erro192 = regra #21.
 
+### 47. Lookup vai em `"LostFocus"` - em `"KeyPress"` sem testar a tecla o picker abre a CADA TECLA
+O legado valida o campo no **`Valid`**, ou seja ao SAIR dele. Ligado a `"KeyPress"`, o handler que abre `FormBuscaAuxiliar` so por o campo nao estar vazio dispara o dialogo a cada caractere: digitando `11101` o picker sobe no primeiro `1` e **o usuario nao consegue terminar de digitar o codigo**. Compila limpo, nao da erro, nao entra em log.
+
+```foxpro
+* ERRADO (FormCco)                                      * CERTO
+BINDEVENT(txt_4c_Grupo, "KeyPress",  THIS, "ValidarGrupo")   BINDEVENT(txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupo")
+PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)      PROCEDURE ValidarGrupo()
+```
+
+| o handler testa `par_nKeyCode` / `LASTKEY()`? | diagnostico |
+|---|---|
+| sim (`IF par_nKeyCode = 114`) | F3/F4 legitimo - nao mexer |
+| **nao**, e abre picker | **defeito** - trocar para `"LostFocus"` |
+
+A **assinatura nao conta** como teste: declarar `par_nKeyCode` sem olhar para ele foi o que fez a 1a versao do detector dar ZERO achado. Ao trocar o evento, TIRAR os parametros (`LostFocus` nao passa nenhum); o inverso eh que quebra - handler SEM parametro em `KeyPress` estoura a cada tecla (regra #3).
+
+**Guarda de reentrancia eh obrigatoria aqui** (regra #37): o picker eh MODAL, tira o foco e redispara o proprio `LostFocus`, e o irmao de F3 chama o MESMO funil - sem guarda abrem DOIS dialogos. `set no topo / clear antes do ENDPROC` **nao serve** quando o corpo tem `RETURN` antecipado: a flag trava ligada e MATA o lookup pelo resto da vida do form. Padrao imune a RETURN - corpo em `<Nome>Exec()` e wrapper fino liberando a flag; o irmao de F3 liga/desliga a flag em volta do proprio corpo, **exceto** quando ele chama `THIS.<X>LostFocus()` (ja coberto pelo wrapper, ligar a flag ali mataria o F3).
+
+**Nao foi o migrador: foi o CorretorAutomatico.** O code-review da task357 JA tinha corrigido o FormCco para `LostFocus`; o **#74** antigo (auto-fix `LostFocus -> KeyPress`) desfez no passe seguinte. Diante do mesmo defeito em varios forms, suspeitar do corretor antes do migrador (regra #43). Nao confundir com o guard de valor-nao-mudou ("Problema 45" dos prompts): sao complementares.
+
+Sweep 2026-10-08: **47** handlers batizados `<X>LostFocus` ligados a `"KeyPress"` em 13 forms (`FormCRC` 2, `FormCst` 2, `FormFea` 1, `FormFornecedor` 1, `FormPrl` 1, `FormUfd` 5, `FormUpd` 2, `Formccr` 4, `Formepd` 6, `Formfnl` 2, `Formsigpdmp6` 10, `Formsigprcom` 5, `Formdmo` 6) - em 37 o controle ja tinha irmao `<X>KeyPress` de F3, ou seja o binding era pura duplicacao. Restam **182** sites `Validar*` com o mesmo defeito, que dependem do dump. Auditoria: `automation\VerificarLookupEmKeyPress.ps1`. WARNING: CorretorAutomatico **#215**. Skill: secao **241**. Origem: Erro195 (FormCco).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

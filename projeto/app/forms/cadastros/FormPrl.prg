@@ -21,6 +21,8 @@ DEFINE CLASS FormPrl AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Apenas delega ao FormBase.Init() que chama InicializarForm()
@@ -1253,7 +1255,7 @@ DEFINE CLASS FormPrl AS FormBase
                 .Width         = 31
                 .Visible       = .T.
             ENDWITH
-            BINDEVENT(par_oCnt.txt_4c_CodigosEtq, "KeyPress", THIS, "CodigosEtqLostFocus")
+            BINDEVENT(par_oCnt.txt_4c_CodigosEtq, "LostFocus", THIS, "CodigosEtqLostFocus")
 
             *-- Label Quantidade
             par_oCnt.AddObject("lbl_4c_QuantEtq", "Label")
@@ -1656,8 +1658,21 @@ DEFINE CLASS FormPrl AS FormBase
     * CodigosEtqLostFocus - Valida codigo de localizacao ao sair do campo
     * Handler PUBLIC pois é alvo de BINDEVENT
     *--------------------------------------------------------------------------
-    PROCEDURE CodigosEtqLostFocus
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CodigosEtqLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CodigosEtqLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CodigosEtqLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CodigosEtqLostFocusExec()
         LOCAL loc_oCnt, loc_oTxt, loc_cValor, loc_cSQL, loc_nResult, loc_cEncontrado, loc_oErro
 
         loc_cEncontrado = ""

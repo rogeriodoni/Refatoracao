@@ -51,6 +51,8 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     this_cNomeContaos = ""   && Nome da conta de Origem (legado: TmpCli.RClis para Origem)
     this_cNomeContads = ""   && Nome da conta de Destino
     this_cNomeVends   = ""   && Nome da conta do Responsavel (vendedor/gerenciador)
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Captura parametros opcionais (suporte a abertura com parametros)
@@ -1811,28 +1813,28 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         BINDEVENT(loc_oPagina.txt_4c_Docu,                  "KeyPress", THIS, "DocuLostFocus")
 
         *-- BINDEVENTs: container Origem (grupo/conta/nome com F4/F5)
-        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_GrupoOrig,  "KeyPress", THIS, "GrupoOrigemLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_GrupoOrig,  "LostFocus", THIS, "GrupoOrigemLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_GrupoOrig,  "KeyPress",  THIS, "TeclaGrupoOrigemKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_ContaOrig,  "KeyPress", THIS, "ContaOrigemLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_ContaOrig,  "LostFocus", THIS, "ContaOrigemLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_ContaOrig,  "KeyPress",  THIS, "TeclaContaOrigemKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_DcontaOrig, "KeyPress", THIS, "DcontaOrigemLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Origem.txt_4c_DcontaOrig, "LostFocus", THIS, "DcontaOrigemLostFocus")
 
         *-- BINDEVENTs: container Destino (grupo/conta/nome com F4/F5)
-        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_GrupoDest,  "KeyPress", THIS, "GrupoDestinoLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_GrupoDest,  "LostFocus", THIS, "GrupoDestinoLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_GrupoDest,  "KeyPress",  THIS, "TeclaGrupoDestinoKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_ContaDest,  "KeyPress", THIS, "ContaDestinoLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_ContaDest,  "LostFocus", THIS, "ContaDestinoLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_ContaDest,  "KeyPress",  THIS, "TeclaContaDestinoKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_DcontaDest, "KeyPress", THIS, "DcontaDestinoLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Destino.txt_4c_DcontaDest, "LostFocus", THIS, "DcontaDestinoLostFocus")
 
         *-- BINDEVENTs: container Responsavel (grupo/conta/nome com F4/F5)
-        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_GrupoResp,  "KeyPress", THIS, "GrupoRespLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_GrupoResp,  "LostFocus", THIS, "GrupoRespLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_GrupoResp,  "KeyPress",  THIS, "TeclaGrupoRespKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_ContaResp,  "KeyPress", THIS, "ContaRespLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_ContaResp,  "LostFocus", THIS, "ContaRespLostFocus")
         BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_ContaResp,  "KeyPress",  THIS, "TeclaContaRespKP")
-        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_DcontaResp, "KeyPress", THIS, "DcontaRespLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Responsavel.txt_4c_DcontaResp, "LostFocus", THIS, "DcontaRespLostFocus")
 
         *-- BINDEVENTs: codigo observacao e botao CompoOp
-        BINDEVENT(loc_oPagina.txt_4c_Codobs,     "KeyPress", THIS, "CodobsLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Codobs,     "LostFocus", THIS, "CodobsLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Codobs,     "KeyPress",  THIS, "TeclaCodobsKP")
         BINDEVENT(loc_oPagina.cmd_4c_BtnCompoOp, "Click",     THIS, "BtnEtqCompoClick")
 
@@ -3125,7 +3127,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * GrupoOrigemLostFocus - Valida grupo de Origem ao sair do campo
     * Legado: Origem.Get_grupo.Valid - fwBuscaSel em TmpGccr (BalCodigo/Descrs)
     *--------------------------------------------------------------------------
-    PROCEDURE GrupoOrigemLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GrupoOrigemLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GrupoOrigemLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GrupoOrigemLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GrupoOrigemLostFocusExec()
         LOCAL loc_oPg2, loc_cGrupo, loc_oBusca, loc_nRet
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ""
@@ -3215,7 +3231,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * ContaOrigemLostFocus - Valida conta de Origem ao sair do campo
     * Legado: Origem.Get_conta.Valid - fwBuscaSel em TmpCli (BalCodigo/IClis/RClis)
     *--------------------------------------------------------------------------
-    PROCEDURE ContaOrigemLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ContaOrigemLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ContaOrigemLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ContaOrigemLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ContaOrigemLostFocusExec()
         LOCAL loc_oPg2, loc_cConta, loc_cGrupo, loc_oBusca, loc_nRet, loc_cNome, loc_cSQL
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ""
@@ -3319,7 +3349,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * DcontaOrigemLostFocus - Busca conta de Origem por nome ao sair do campo
     * Legado: Origem.Get_dconta.Valid - fwBuscaSel em TmpCli por BalNome/RClis
     *--------------------------------------------------------------------------
-    PROCEDURE DcontaOrigemLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DcontaOrigemLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DcontaOrigemLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DcontaOrigemLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DcontaOrigemLostFocusExec()
         LOCAL loc_oPg2, loc_cNome, loc_oBusca, loc_nRet, loc_cConta
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cNome  = ""
@@ -3392,7 +3436,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * GrupoDestinoLostFocus - Valida grupo de Destino ao sair do campo
     * Legado: Destino.Get_grupo.Valid - fwBuscaSel em TmpGccr
     *--------------------------------------------------------------------------
-    PROCEDURE GrupoDestinoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GrupoDestinoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GrupoDestinoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GrupoDestinoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GrupoDestinoLostFocusExec()
         LOCAL loc_oPg2, loc_cGrupo, loc_oBusca, loc_nRet
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ""
@@ -3482,7 +3540,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * ContaDestinoLostFocus - Valida conta de Destino ao sair do campo
     * Legado: Destino.Get_conta.Valid - fwBuscaSel em TmpCli
     *--------------------------------------------------------------------------
-    PROCEDURE ContaDestinoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ContaDestinoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ContaDestinoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ContaDestinoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ContaDestinoLostFocusExec()
         LOCAL loc_oPg2, loc_cConta, loc_cGrupo, loc_oBusca, loc_nRet, loc_cNome, loc_cSQL
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ""
@@ -3586,7 +3658,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * DcontaDestinoLostFocus - Busca conta de Destino por nome ao sair do campo
     * Legado: Destino.Get_dconta.Valid - fwBuscaSel em TmpCli por BalNome/RClis
     *--------------------------------------------------------------------------
-    PROCEDURE DcontaDestinoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DcontaDestinoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DcontaDestinoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DcontaDestinoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DcontaDestinoLostFocusExec()
         LOCAL loc_oPg2, loc_cNome, loc_oBusca, loc_nRet, loc_cConta
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cNome  = ""
@@ -3659,7 +3745,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * GrupoRespLostFocus - Valida grupo de Responsavel ao sair do campo
     * Legado: Responsavel.Get_grupo.Valid - fwBuscaSel em TmpGccr
     *--------------------------------------------------------------------------
-    PROCEDURE GrupoRespLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GrupoRespLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GrupoRespLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GrupoRespLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GrupoRespLostFocusExec()
         LOCAL loc_oPg2, loc_cGrupo, loc_oBusca, loc_nRet
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ""
@@ -3749,7 +3849,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * ContaRespLostFocus - Valida conta de Responsavel ao sair do campo
     * Legado: Responsavel.Get_conta.Valid - fwBuscaSel em TmpCli
     *--------------------------------------------------------------------------
-    PROCEDURE ContaRespLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ContaRespLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ContaRespLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ContaRespLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ContaRespLostFocusExec()
         LOCAL loc_oPg2, loc_cConta, loc_cGrupo, loc_oBusca, loc_nRet, loc_cNome, loc_cSQL
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ""
@@ -3853,7 +3967,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * DcontaRespLostFocus - Busca conta de Responsavel por nome ao sair do campo
     * Legado: Responsavel.Get_dconta.Valid - fwBuscaSel em TmpCli por BalNome
     *--------------------------------------------------------------------------
-    PROCEDURE DcontaRespLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DcontaRespLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DcontaRespLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DcontaRespLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DcontaRespLostFocusExec()
         LOCAL loc_oPg2, loc_cNome, loc_oBusca, loc_nRet, loc_cConta
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cNome  = ""
@@ -3927,7 +4055,21 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     * Legado: get_codobs.Valid - Query SigCdObs WHERE codigos BETWEEN pIni AND pFim
     *   depois fwBuscaSel se nao encontrado. Preenche Mm_obs com observas.
     *--------------------------------------------------------------------------
-    PROCEDURE CodobsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CodobsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CodobsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CodobsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CodobsLostFocusExec()
         LOCAL loc_oPg2, loc_nCod, loc_nRet, loc_oBusca, loc_cObs
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_nCod  = 0

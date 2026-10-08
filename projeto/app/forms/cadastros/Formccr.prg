@@ -30,6 +30,8 @@ DEFINE CLASS Formccr AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_oUltimoCntFat   = .NULL.
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -666,7 +668,7 @@ DEFINE CLASS Formccr AS FormBase
 
         BINDEVENT(loc_oPg2.txt_4c_Classes, "KeyPress",  THIS, "ClassesKeyPress")
         BINDEVENT(loc_oPg2.txt_4c_Classes, "DblClick",  THIS, "ClassesDblClick")
-        BINDEVENT(loc_oPg2.txt_4c_Classes, "KeyPress", THIS, "ClassesLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_Classes, "LostFocus", THIS, "ClassesLostFocus")
 
         *-- Label + OptionGroup Codificacao
         loc_oPg2.AddObject("lbl_4c_LblTpCods", "Label")
@@ -1708,10 +1710,10 @@ DEFINE CLASS Formccr AS FormBase
 
         BINDEVENT(par_oPg.txt_4c__cd_moeda, "KeyPress",  THIS, "MoedaComissaoKeyPress")
         BINDEVENT(par_oPg.txt_4c__cd_moeda, "DblClick",  THIS, "MoedaComissaoDblClick")
-        BINDEVENT(par_oPg.txt_4c__cd_moeda, "KeyPress", THIS, "MoedaComissaoLostFocus")
+        BINDEVENT(par_oPg.txt_4c__cd_moeda, "LostFocus", THIS, "MoedaComissaoLostFocus")
         BINDEVENT(par_oPg.txt_4c__molimc,   "KeyPress",  THIS, "MoedaLimiteKeyPress")
         BINDEVENT(par_oPg.txt_4c__molimc,   "DblClick",  THIS, "MoedaLimiteDblClick")
-        BINDEVENT(par_oPg.txt_4c__molimc,   "KeyPress", THIS, "MoedaLimiteLostFocus")
+        BINDEVENT(par_oPg.txt_4c__molimc,   "LostFocus", THIS, "MoedaLimiteLostFocus")
 
         *-- Label "Grupo Padrao :" (Say18) - eh a legenda do Opt_Coletor, nao do
         *-- Get_grupo. O migrador tinha posto o Get_grupo (grupolms) aqui ao lado
@@ -3547,7 +3549,7 @@ DEFINE CLASS Formccr AS FormBase
         ENDWITH
         BINDEVENT(par_oPg.getSituas, "KeyPress",  THIS, "SituacaoKeyPress")
         BINDEVENT(par_oPg.getSituas, "DblClick",  THIS, "SituacaoDblClick")
-        BINDEVENT(par_oPg.getSituas, "KeyPress", THIS, "SituacaoLostFocus")
+        BINDEVENT(par_oPg.getSituas, "LostFocus", THIS, "SituacaoLostFocus")
 
         *-- Caracteristicas (optCarac)
         par_oPg.AddObject("lbl_4c_LblCarac", "Label")
@@ -6196,22 +6198,40 @@ DEFINE CLASS Formccr AS FormBase
     * ClassesKeyPress - Abre picker de Classe (SigCdCss) ao pressionar F4
     *--------------------------------------------------------------------------
     PROCEDURE ClassesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 115
             THIS.AbrirBuscaClasses()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ClassesDblClick
     *--------------------------------------------------------------------------
     PROCEDURE ClassesDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirBuscaClasses()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ClassesLostFocus - Valida classe ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE ClassesLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ClassesLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ClassesLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ClassesLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ClassesLostFocusExec()
         LOCAL loc_oPg2, loc_cCls
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cCls = ALLTRIM(NVL(loc_oPg2.txt_4c_Classes.Value, ""))
@@ -6291,22 +6311,40 @@ DEFINE CLASS Formccr AS FormBase
     * MoedaComissaoKeyPress - Abre picker de Moeda Comissao ao F4
     *--------------------------------------------------------------------------
     PROCEDURE MoedaComissaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 115
             THIS.AbrirBuscaMoedaComissao()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * MoedaComissaoDblClick
     *--------------------------------------------------------------------------
     PROCEDURE MoedaComissaoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirBuscaMoedaComissao()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * MoedaComissaoLostFocus - Valida moeda comissao ao sair
     *--------------------------------------------------------------------------
-    PROCEDURE MoedaComissaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em MoedaComissaoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE MoedaComissaoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.MoedaComissaoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE MoedaComissaoLostFocusExec()
         LOCAL loc_oPgAba, loc_cMoe
         loc_oPgAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_1.Page1
         loc_cMoe   = ALLTRIM(NVL(loc_oPgAba.txt_4c__cd_moeda.Value, ""))
@@ -6381,22 +6419,40 @@ DEFINE CLASS Formccr AS FormBase
     * MoedaLimiteKeyPress - F4 para moeda limite de credito
     *--------------------------------------------------------------------------
     PROCEDURE MoedaLimiteKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 115
             THIS.AbrirBuscaMoedaLimite()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * MoedaLimiteDblClick
     *--------------------------------------------------------------------------
     PROCEDURE MoedaLimiteDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirBuscaMoedaLimite()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * MoedaLimiteLostFocus - Valida moeda limite ao sair
     *--------------------------------------------------------------------------
-    PROCEDURE MoedaLimiteLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em MoedaLimiteLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE MoedaLimiteLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.MoedaLimiteLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE MoedaLimiteLostFocusExec()
         LOCAL loc_oPgAba, loc_cMoe
         loc_oPgAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_1.Page1
         loc_cMoe   = ALLTRIM(NVL(loc_oPgAba.txt_4c__molimc.Value, ""))
@@ -6521,22 +6577,40 @@ DEFINE CLASS Formccr AS FormBase
     * SituacaoKeyPress - F4 abre picker de Situacao Padrao (SigCdCst)
     *--------------------------------------------------------------------------
     PROCEDURE SituacaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 115
             THIS.AbrirBuscaSituacao()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * SituacaoDblClick - DblClick abre picker de Situacao
     *--------------------------------------------------------------------------
     PROCEDURE SituacaoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirBuscaSituacao()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * SituacaoLostFocus - Valida Situacao ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE SituacaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em SituacaoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE SituacaoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.SituacaoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE SituacaoLostFocusExec()
         LOCAL loc_oPgAba, loc_cSit
         loc_oPgAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_1.Page2
         loc_cSit   = ALLTRIM(NVL(loc_oPgAba.getSituas.Value, ""))

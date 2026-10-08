@@ -28,6 +28,8 @@ DEFINE CLASS Formsigprcom AS FormBase
     this_lTemTam              = .F.
     this_cUltimoProdutoValid  = ""
     this_cUltimoDescProdValid = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -603,9 +605,9 @@ DEFINE CLASS Formsigprcom AS FormBase
         ENDWITH
 
         *-- BINDEVENT lookup Produto (codigo <-> descricao) - legado: get_produto.Valid / getDpro.Valid
-        BINDEVENT(loc_oPagina.txt_4c__Produto, "KeyPress", THIS, "ProdutoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c__Produto, "LostFocus", THIS, "ProdutoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c__Produto, "DblClick", THIS, "ProdutoDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_Dpro, "KeyPress", THIS, "DescricaoProdutoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Dpro, "LostFocus", THIS, "DescricaoProdutoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Dpro, "DblClick", THIS, "DescricaoProdutoDblClick")
 
         *-- Say11 "Fornecedor :"
@@ -776,9 +778,9 @@ DEFINE CLASS Formsigprcom AS FormBase
         loc_oGridItens.GridLines           = 3
         BINDEVENT(loc_oGridItens, "AfterRowColChange", THIS, "GradeItensAfterRowColChange")
         BINDEVENT(loc_oGridItens.Column1.Text1, "KeyPress", THIS, "GradeItensEmpresaLostFocus")
-        BINDEVENT(loc_oGridItens.Column3.Text1, "KeyPress", THIS, "GradeItensTamanhoLostFocus")
-        BINDEVENT(loc_oGridItens.Column4.Text1, "KeyPress", THIS, "GradeItensCorLostFocus")
-        BINDEVENT(loc_oGridItens.Column5.Text1, "KeyPress", THIS, "GradeItensDepartamentoLostFocus")
+        BINDEVENT(loc_oGridItens.Column3.Text1, "LostFocus", THIS, "GradeItensTamanhoLostFocus")
+        BINDEVENT(loc_oGridItens.Column4.Text1, "LostFocus", THIS, "GradeItensCorLostFocus")
+        BINDEVENT(loc_oGridItens.Column5.Text1, "LostFocus", THIS, "GradeItensDepartamentoLostFocus")
 
         *-- Container BotoesAcao (Grupo_Salva no legado) - Confirmar/Cancelar
         loc_oCntAcao = loc_oPagina.cnt_4c_BotoesAcao
@@ -1365,12 +1367,28 @@ DEFINE CLASS Formsigprcom AS FormBase
     * Lookup Produto (codigo) - legado: get_produto.Valid (fwbuscaext SigCdPro/cpros)
     * BINDEVENT em LostFocus (Valid nao dispara de forma confiavel via BINDEVENT)
     *===========================================================================
-    PROCEDURE ProdutoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ProdutoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ProdutoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ProdutoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ProdutoLostFocusExec()
         THIS.AbrirLookupProduto()
     ENDPROC
 
     PROCEDURE ProdutoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupProduto()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE AbrirLookupProduto()
@@ -1424,12 +1442,28 @@ DEFINE CLASS Formsigprcom AS FormBase
     *===========================================================================
     * Lookup Produto (descricao) - legado: getDpro.Valid (fwbuscaext SigCdPro/dpros)
     *===========================================================================
-    PROCEDURE DescricaoProdutoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DescricaoProdutoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DescricaoProdutoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DescricaoProdutoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DescricaoProdutoLostFocusExec()
         THIS.AbrirLookupProdutoPorDescricao()
     ENDPROC
 
     PROCEDURE DescricaoProdutoDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupProdutoPorDescricao()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE AbrirLookupProdutoPorDescricao()
@@ -1649,7 +1683,21 @@ DEFINE CLASS Formsigprcom AS FormBase
     * GradeItensTamanhoLostFocus - Lookup de Tamanho (SigCdTam) na grade
     * Legado: gradei.Column3.Text1.Valid (fwbuscaext)
     *===========================================================================
-    PROCEDURE GradeItensTamanhoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GradeItensTamanhoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GradeItensTamanhoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GradeItensTamanhoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GradeItensTamanhoLostFocusExec()
         LOCAL loc_oText, loc_cValor, loc_oBusca, loc_cCodigo
         loc_oText  = THIS.pgf_4c_Paginas.Page2.grd_4c_Itens.Column3.Text1
         loc_cValor = ALLTRIM(loc_oText.Value)
@@ -1684,7 +1732,21 @@ DEFINE CLASS Formsigprcom AS FormBase
     * GradeItensCorLostFocus - Lookup de Cor (SigCdCor) na grade
     * Legado: gradei.Column4.Text1.Valid (fwbuscaext)
     *===========================================================================
-    PROCEDURE GradeItensCorLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GradeItensCorLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GradeItensCorLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GradeItensCorLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GradeItensCorLostFocusExec()
         LOCAL loc_oText, loc_cValor, loc_oBusca, loc_cCodigo
         loc_oText  = THIS.pgf_4c_Paginas.Page2.grd_4c_Itens.Column4.Text1
         loc_cValor = ALLTRIM(loc_oText.Value)
@@ -1719,7 +1781,21 @@ DEFINE CLASS Formsigprcom AS FormBase
     * GradeItensDepartamentoLostFocus - Lookup de Departamento (SigCdDpt) na grade
     * Legado: gradei.Column5.Text1.Valid (fwbuscaext) + mNovaLinha (nova linha em branco)
     *===========================================================================
-    PROCEDURE GradeItensDepartamentoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GradeItensDepartamentoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GradeItensDepartamentoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GradeItensDepartamentoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GradeItensDepartamentoLostFocusExec()
         LOCAL loc_oText, loc_cValor, loc_oBusca, loc_cCodigo
         loc_oText  = THIS.pgf_4c_Paginas.Page2.grd_4c_Itens.Column5.Text1
         loc_cValor = ALLTRIM(loc_oText.Value)

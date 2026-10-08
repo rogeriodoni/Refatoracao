@@ -25,6 +25,7 @@ DEFINE CLASS FormCco AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_lClientesFiltro = .F.    && Parametro pCli do legado (filtrar por grupo)
+    this_lEmLookup       = .F.    && Guarda de reentrancia: picker modal aberto de LostFocus (regra #37)
 
     *==========================================================================
     * Init - Corrige Caption com acentos e delega ao FormBase
@@ -666,7 +667,9 @@ DEFINE CLASS FormCco AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(par_oPagina.txt_4c_Grupo, "KeyPress",  THIS, "TxtGrupoKeyPress")
-        BINDEVENT(par_oPagina.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupo")
+        *-- Legado: Get_Grupo.Valid (ao SAIR do campo). Em KeyPress o picker abria a
+        *-- cada tecla, antes do usuario terminar de digitar o codigo (Erro195).
+        BINDEVENT(par_oPagina.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupo")
 
         *-- lbl_4c_Priori (Say7: Left=268, Top=78 -> +28=106)
         par_oPagina.AddObject("lbl_4c_Priori", "Label")
@@ -736,7 +739,8 @@ DEFINE CLASS FormCco AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(par_oPagina.txt_4c_Emps, "KeyPress",  THIS, "TxtEmpsKeyPress")
-        BINDEVENT(par_oPagina.txt_4c_Emps, "KeyPress", THIS, "ValidarEmps")
+        *-- Legado: GetEmps.Valid (ao SAIR do campo) - mesmo defeito do Grupo (Erro195).
+        BINDEVENT(par_oPagina.txt_4c_Emps, "LostFocus", THIS, "ValidarEmps")
 
         *-- lbl_4c_FaixaDe (Say4: Left=275, Top=103 -> +28=131)
         par_oPagina.AddObject("lbl_4c_FaixaDe", "Label")
@@ -1405,10 +1409,20 @@ DEFINE CLASS FormCco AS FormBase
 
     *==========================================================================
     * ValidarGrupo - Verifica grupo ao sair do campo (LostFocus)
+    * Legado: Get_Grupo.Valid - so dispara com o campo preenchido, ao SAIR do
+    * campo. Ligado a KeyPress o picker abria a cada tecla (Erro195).
+    * Sem parametros: LostFocus nao passa nenhum.
     *==========================================================================
-    PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE ValidarGrupo()
         LOCAL loc_cGrupo, loc_oPg2, loc_lContinuar
         loc_cGrupo = ""
+
+        *-- Guarda de reentrancia: o picker eh MODAL e tira o foco do campo, o que
+        *-- redispara este proprio LostFocus (regra #37). A flag eh ligada dentro
+        *-- de AbrirBuscaGrupo, que eh o funil das DUAS entradas (F3 e LostFocus).
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
 
         loc_lContinuar = .T.
         TRY
@@ -1435,6 +1449,9 @@ DEFINE CLASS FormCco AS FormBase
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
 
+        *-- Funil das duas entradas (F3 e LostFocus): enquanto o picker MODAL esta
+        *-- aberto, o LostFocus do proprio campo nao pode abrir um segundo (regra #37)
+        THIS.this_lEmLookup = .T.
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGcr", "cursor_4c_BuscaGrupo", "Codigos", loc_cGrupo, ;
@@ -1460,6 +1477,8 @@ DEFINE CLASS FormCco AS FormBase
         CATCH TO loException
             MsgErro("Erro em FormCco.AbrirBuscaGrupo: " + loException.Message, "Erro")
         ENDTRY
+        *-- Liberar DEPOIS do ENDTRY, para valer tambem quando o CATCH dispara
+        THIS.this_lEmLookup = .F.
 
         IF USED("cursor_4c_BuscaGrupo")
             USE IN cursor_4c_BuscaGrupo
@@ -1477,10 +1496,18 @@ DEFINE CLASS FormCco AS FormBase
 
     *==========================================================================
     * ValidarEmps - Verifica empresa ao sair do campo (LostFocus)
+    * Legado: GetEmps.Valid - ao SAIR do campo, nao a cada tecla (Erro195).
+    * Sem parametros: LostFocus nao passa nenhum.
     *==========================================================================
-    PROCEDURE ValidarEmps(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE ValidarEmps()
         LOCAL loc_cEmps, loc_oPg2, loc_lContinuar
         loc_cEmps = ""
+
+        *-- Guarda de reentrancia (regra #37) - picker modal aberto de LostFocus.
+        *-- A flag eh ligada em AbrirBuscaEmps (funil de F3 e LostFocus).
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
 
         loc_lContinuar = .T.
         TRY
@@ -1507,6 +1534,8 @@ DEFINE CLASS FormCco AS FormBase
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_cEmps = ALLTRIM(loc_oPg2.txt_4c_Emps.Value)
 
+        *-- Funil das duas entradas (F3 e LostFocus) - guarda de reentrancia (regra #37)
+        THIS.this_lEmLookup = .T.
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdEmp", "cursor_4c_BuscaEmps", "Cemps", loc_cEmps, ;
@@ -1532,6 +1561,8 @@ DEFINE CLASS FormCco AS FormBase
         CATCH TO loException
             MsgErro("Erro em FormCco.AbrirBuscaEmps: " + loException.Message, "Erro")
         ENDTRY
+        *-- Liberar DEPOIS do ENDTRY, para valer tambem quando o CATCH dispara
+        THIS.this_lEmLookup = .F.
 
         IF USED("cursor_4c_BuscaEmps")
             USE IN cursor_4c_BuscaEmps

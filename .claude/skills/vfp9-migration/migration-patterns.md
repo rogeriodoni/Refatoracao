@@ -13719,3 +13719,89 @@ defeito some - por isso a ordem do teste importa.
 **Diagnostico do dado**: antes de mexer no codigo, consultar a tabela (so leitura) - aqui a gravacao estava
 certa e o problema era so de exibicao. No Erro191 a mesma consulta revelou `SigCcCco` vazia no banco: o
 lookup de ocorrencia nao tinha o que mostrar, nem no legado (cadastrar pelo `FormOCO`).
+
+## 241. Lookup ligado a "KeyPress" abre o picker a CADA TECLA - o legado valida no `Valid` (Erro195 2026-10-08)
+
+O legado valida o campo em `Valid`, ou seja **ao SAIR** dele. O migrado liga o mesmo handler a
+`"KeyPress"` e o `FormBuscaAuxiliar` sobe a cada caractere digitado:
+
+```foxpro
+* ERRADO (FormCco, como saiu da migracao)
+BINDEVENT(par_oPagina.txt_4c_Grupo, "KeyPress",  THIS, "TxtGrupoKeyPress")   && F3 - OK
+BINDEVENT(par_oPagina.txt_4c_Grupo, "KeyPress",  THIS, "ValidarGrupo")       && <- a cada tecla
+
+PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    IF !EMPTY(ALLTRIM(loc_oPg2.txt_4c_Grupo.Value))
+        THIS.AbrirBuscaGrupo()      && nao testa tecla nenhuma
+    ENDIF
+```
+
+Digitando `11101`, o picker ja abre no `1`. O usuario **nao consegue terminar de digitar o codigo**.
+Compila limpo, nao gera log e nenhum gate do pipeline pega.
+
+**Criterio**: handler ligado a `"KeyPress"` so pode abrir picker **dentro** de
+`IF par_nKeyCode = <F3/F4/Enter>`. Sem esse teste, o evento certo eh `"LostFocus"`.
+
+| o handler testa `par_nKeyCode`/`LASTKEY()`? | diagnostico |
+|---|---|
+| sim | F3/F4 legitimo - nao mexer |
+| **nao**, e abre picker | **defeito** - trocar para `"LostFocus"` |
+
+Ao trocar o evento, **tirar os parametros da assinatura**: `LostFocus` nao passa nenhum. (O inverso eh
+que quebra: handler SEM parametro ligado a `KeyPress` estoura a cada tecla - regra #3. Os 3 casos do
+sweep com `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` na linha seguinte ja estavam nesse estado.)
+
+**Sinal inequivoco**: handler BATIZADO `<X>LostFocus` ligado a `"KeyPress"`. No sweep de 2026-10-08
+foram **47** assim, em 13 forms - e em **37** deles o controle ja tinha um irmao `<X>KeyPress` so para
+o F3, ou seja o binding em KeyPress era pura duplicacao.
+
+### Guarda de reentrancia (regra #37) eh OBRIGATORIA aqui
+
+O picker eh MODAL e tira o foco do campo, o que **redispara o proprio LostFocus** e empilha um segundo
+dialogo. Pior: o irmao de F3 chama o MESMO funil, entao o modal aberto pelo F3 tambem dispara o
+LostFocus. A flag tem de cobrir as DUAS entradas.
+
+Com RETURN antecipado no corpo, `set no topo / clear antes do ENDPROC` **trava a flag ligada e MATA o
+lookup pelo resto da vida do form** - pior que o defeito original. Padrao seguro, imune a RETURN:
+
+```foxpro
+this_lEmLookup = .F.        && property da classe
+
+PROCEDURE GrupoLostFocus()              && alvo do BINDEVENT - PUBLIC
+    IF THIS.this_lEmLookup
+        RETURN
+    ENDIF
+    THIS.this_lEmLookup = .T.
+    THIS.GrupoLostFocusExec()           && corpo original, com seus RETURNs
+    THIS.this_lEmLookup = .F.           && sempre executa
+ENDPROC
+
+PROCEDURE GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)    && irmao F3
+    THIS.this_lEmLookup = .T.
+    IF par_nKeyCode = 28
+        THIS.AbrirLookupGrupoCodigo()
+    ENDIF
+    THIS.this_lEmLookup = .F.
+ENDPROC
+```
+
+**Excecao**: irmao que chama `THIS.<X>LostFocus()` em vez do funil (o `Tecla<X>KP` do `Formsigpdmp6`)
+**nao** pode ligar a flag - o wrapper devolveria sem abrir nada. Ja esta coberto pelo wrapper.
+
+### Causa raiz: o proprio CorretorAutomatico
+
+Nao foi o migrador. O code-review da task357 **ja tinha corrigido** o FormCco para `LostFocus`
+(`code_review_output_t1_FUNCTIONAL.txt`); a versao antiga do **pattern #74** (auto-fix
+`LostFocus -> KeyPress`) desfez no passe seguinte - os prompts t2/t3 mostram `KeyPress` de volta. O #74
+foi rebaixado a WARNING em 2026-10-06 (secao 238), entao nao reincide, mas o estrago ficou espalhado.
+Diante de defeito identico em varios forms, **suspeitar do corretor antes do migrador** (secao 237).
+
+### Nao confundir com o guard de valor-nao-mudou
+
+O "Problema 45" dos prompts (lookup reabrindo a cada perda de foco porque o valor nao mudou) eh
+**complementar**, nao alternativo: aquele reduz a frequencia em LostFocus; este diz que o evento
+estava errado desde o inicio.
+
+**Auditoria**: `automation\VerificarLookupEmKeyPress.ps1`. **Sem auto-fix** - o evento certo e a
+existencia (ou nao) de F3 vem do dump do legado, e trocar evento automaticamente foi exatamente o erro
+do #74. Restam **183 sites** com nome `Validar*`/outros fora do sweep dos 47.

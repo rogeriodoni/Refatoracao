@@ -25,6 +25,8 @@ DEFINE CLASS Formepd AS FormBase
 
     *-- Estado do formul?rio
     this_cModoAtual = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * INICIALIZA??O
@@ -771,7 +773,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_GrupoOs, "KeyPress", THIS, "TxtGrupoOsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_GrupoOs, "KeyPress", THIS, "TxtGrupoOsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_GrupoOs, "LostFocus", THIS, "TxtGrupoOsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_ContaOs", "TextBox")
         WITH loc_oCnt.txt_4c_ContaOs
@@ -785,7 +787,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_ContaOs, "KeyPress", THIS, "TxtContaOsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_ContaOs, "KeyPress", THIS, "TxtContaOsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_ContaOs, "LostFocus", THIS, "TxtContaOsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_NomeContaOs", "TextBox")
         WITH loc_oCnt.txt_4c_NomeContaOs
@@ -894,7 +896,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_GrupoDs, "KeyPress", THIS, "TxtGrupoDsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_GrupoDs, "KeyPress", THIS, "TxtGrupoDsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_GrupoDs, "LostFocus", THIS, "TxtGrupoDsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_ContaDs", "TextBox")
         WITH loc_oCnt.txt_4c_ContaDs
@@ -908,7 +910,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_ContaDs, "KeyPress", THIS, "TxtContaDsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_ContaDs, "KeyPress", THIS, "TxtContaDsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_ContaDs, "LostFocus", THIS, "TxtContaDsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_NomeContaDs", "TextBox")
         WITH loc_oCnt.txt_4c_NomeContaDs
@@ -1017,7 +1019,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_GrVends, "KeyPress", THIS, "TxtGrVendsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_GrVends, "KeyPress", THIS, "TxtGrVendsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_GrVends, "LostFocus", THIS, "TxtGrVendsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_Vends", "TextBox")
         WITH loc_oCnt.txt_4c_Vends
@@ -1031,7 +1033,7 @@ DEFINE CLASS Formepd AS FormBase
             .Visible  = .T.
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Vends, "KeyPress", THIS, "TxtVendsKeyPress")
-        BINDEVENT(loc_oCnt.txt_4c_Vends, "KeyPress", THIS, "TxtVendsLostFocus")
+        BINDEVENT(loc_oCnt.txt_4c_Vends, "LostFocus", THIS, "TxtVendsLostFocus")
 
         loc_oCnt.AddObject("txt_4c_NomeVends", "TextBox")
         WITH loc_oCnt.txt_4c_NomeVends
@@ -1532,15 +1534,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrupoOsKeyPress - F4 abre lookup de Grupos Cont" + CHR(225) + "beis (Origem)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrupoOsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrupoOs()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtGrupoOsLostFocus - Valida Grupo de Origem ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE TxtGrupoOsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtGrupoOsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtGrupoOsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtGrupoOsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtGrupoOsLostFocusExec()
         LOCAL loc_cGrupo, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ALLTRIM(loc_oPg2.cnt_4c_Origem.txt_4c_GrupoOs.Value)
@@ -1603,15 +1621,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtContaOsKeyPress - F4 abre lookup de Contas por C" + CHR(243) + "digo (Origem)
     *--------------------------------------------------------------------------
     PROCEDURE TxtContaOsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupContaOs()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtContaOsLostFocus - Valida Conta e preenche Nome de Origem ao sair
     *--------------------------------------------------------------------------
-    PROCEDURE TxtContaOsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtContaOsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtContaOsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtContaOsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtContaOsLostFocusExec()
         LOCAL loc_cConta, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ALLTRIM(loc_oPg2.cnt_4c_Origem.txt_4c_ContaOs.Value)
@@ -1726,15 +1760,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrupoDsKeyPress - F4 abre lookup de Grupos Contabeis (Destino)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrupoDsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrupoDs()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtGrupoDsLostFocus - Valida Grupo de Destino ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE TxtGrupoDsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtGrupoDsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtGrupoDsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtGrupoDsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtGrupoDsLostFocusExec()
         LOCAL loc_cGrupo, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ALLTRIM(loc_oPg2.cnt_4c_Destino.txt_4c_GrupoDs.Value)
@@ -1797,15 +1847,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtContaDsKeyPress - F4 abre lookup de Contas por Codigo (Destino)
     *--------------------------------------------------------------------------
     PROCEDURE TxtContaDsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupContaDs()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtContaDsLostFocus - Valida Conta e preenche Nome de Destino ao sair
     *--------------------------------------------------------------------------
-    PROCEDURE TxtContaDsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtContaDsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtContaDsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtContaDsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtContaDsLostFocusExec()
         LOCAL loc_cConta, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ALLTRIM(loc_oPg2.cnt_4c_Destino.txt_4c_ContaDs.Value)
@@ -1920,15 +1986,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrVendsKeyPress - F4 abre lookup de Grupos Contabeis (Responsavel)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrVendsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrVends()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtGrVendsLostFocus - Valida Grupo do Responsavel ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE TxtGrVendsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtGrVendsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtGrVendsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtGrVendsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtGrVendsLostFocusExec()
         LOCAL loc_cGrupo, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ALLTRIM(loc_oPg2.cnt_4c_Responsavel.txt_4c_GrVends.Value)
@@ -1991,15 +2073,31 @@ DEFINE CLASS Formepd AS FormBase
     * TxtVendsKeyPress - F4 abre lookup de Contas por Codigo (Responsavel)
     *--------------------------------------------------------------------------
     PROCEDURE TxtVendsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupVends()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TxtVendsLostFocus - Valida Conta e preenche Nome do Responsavel ao sair
     *--------------------------------------------------------------------------
-    PROCEDURE TxtVendsLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtVendsLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtVendsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtVendsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtVendsLostFocusExec()
         LOCAL loc_cConta, loc_oPg2, loc_cSQL, loc_nResult
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ALLTRIM(loc_oPg2.cnt_4c_Responsavel.txt_4c_Vends.Value)

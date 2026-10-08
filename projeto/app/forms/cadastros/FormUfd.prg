@@ -31,6 +31,8 @@ DEFINE CLASS FormUfd AS FormBase
     *-- Resultado temporario do lookup de UF (preenchido por ExecutarBuscaUf)
     this_cUfLookupCodigo    = ""
     this_cUfLookupDescricao = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -1141,25 +1143,25 @@ DEFINE CLASS FormUfd AS FormBase
         *-- UF Origem (SigCdUfs) - Get_OCodigo/Get_ONome do legado
         BINDEVENT(loc_oPagina.txt_4c_OCodigo, "KeyPress", THIS, "OCodigoLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_OCodigo, "DblClick", THIS, "OCodigoLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_OCodigo, "KeyPress", THIS, "OCodigoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_OCodigo, "LostFocus", THIS, "OCodigoLostFocus")
 
         BINDEVENT(loc_oPagina.txt_4c_ONome, "KeyPress", THIS, "ONomeLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_ONome, "DblClick", THIS, "ONomeLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_ONome, "KeyPress", THIS, "ONomeLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_ONome, "LostFocus", THIS, "ONomeLostFocus")
 
         *-- UF Destino (SigCdUfs) - Get_DCodigo/Get_DNome do legado
         BINDEVENT(loc_oPagina.txt_4c_DCodigo, "KeyPress", THIS, "DCodigoLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_DCodigo, "DblClick", THIS, "DCodigoLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_DCodigo, "KeyPress", THIS, "DCodigoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DCodigo, "LostFocus", THIS, "DCodigoLostFocus")
 
         BINDEVENT(loc_oPagina.txt_4c_DNome, "KeyPress", THIS, "DNomeLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_DNome, "DblClick", THIS, "DNomeLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_DNome, "KeyPress", THIS, "DNomeLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DNome, "LostFocus", THIS, "DNomeLostFocus")
 
         *-- CFO (SigCdCfo) - getCFO do legado
         BINDEVENT(loc_oPagina.txt_4c_CFO, "KeyPress", THIS, "CfoLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_CFO, "DblClick", THIS, "CfoLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_CFO, "KeyPress", THIS, "CfoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_CFO, "LostFocus", THIS, "CfoLostFocus")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
@@ -1216,16 +1218,34 @@ DEFINE CLASS FormUfd AS FormBase
     * (transcrito do legado: Get_OCodigo.Valid nunca reatribui o proprio codigo)
     *===========================================================================
     PROCEDURE OCodigoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfOrigemPorCodigo()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE OCodigoLookupDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupUfOrigemPorCodigo()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
-    PROCEDURE OCodigoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em OCodigoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE OCodigoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.OCodigoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE OCodigoLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_OCodigo.Value)
         IF loc_cValor == THIS.this_cUltOCodigo
@@ -1258,16 +1278,34 @@ DEFINE CLASS FormUfd AS FormBase
     * Lookup UF Origem por Nome (txt_4c_ONome) - preenche codigo E descricao
     *===========================================================================
     PROCEDURE ONomeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfOrigemPorNome()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE ONomeLookupDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupUfOrigemPorNome()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
-    PROCEDURE ONomeLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ONomeLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ONomeLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ONomeLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ONomeLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_ONome.Value)
         IF loc_cValor == THIS.this_cUltONome
@@ -1304,16 +1342,34 @@ DEFINE CLASS FormUfd AS FormBase
     * (transcrito do legado: Get_DCodigo.Valid reatribui ambos os campos)
     *===========================================================================
     PROCEDURE DCodigoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfDestinoPorCodigo()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE DCodigoLookupDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupUfDestinoPorCodigo()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
-    PROCEDURE DCodigoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DCodigoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DCodigoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DCodigoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DCodigoLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DCodigo.Value)
         IF loc_cValor == THIS.this_cUltDCodigo
@@ -1349,16 +1405,34 @@ DEFINE CLASS FormUfd AS FormBase
     * Lookup UF Destino por Nome (txt_4c_DNome) - preenche codigo E descricao
     *===========================================================================
     PROCEDURE DNomeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfDestinoPorNome()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE DNomeLookupDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupUfDestinoPorNome()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
-    PROCEDURE DNomeLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DNomeLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DNomeLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DNomeLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DNomeLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DNome.Value)
         IF loc_cValor == THIS.this_cUltDNome
@@ -1395,16 +1469,34 @@ DEFINE CLASS FormUfd AS FormBase
     * Transcrito do legado: getCFO.Valid remove pontos antes de comparar/buscar
     *===========================================================================
     PROCEDURE CfoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupCfo()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     PROCEDURE CfoLookupDblClick()
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         THIS.AbrirLookupCfo()
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
-    PROCEDURE CfoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em CfoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE CfoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.CfoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE CfoLostFocusExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(STRTRAN(THIS.pgf_4c_Paginas.Page2.txt_4c_CFO.Value, ".", ""))
         IF loc_cValor == THIS.this_cUltCfop

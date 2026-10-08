@@ -45,6 +45,8 @@ DEFINE CLASS FormFea AS FormBase
     this_dAntDtIni  = {}    && data inicial anterior
     this_dAntDtFin  = {}    && data final anterior
     this_cPEmps     = ""    && empresa ativa para filtro de balanco
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Apenas delega ao FormBase (que chama InicializarForm automaticamente)
@@ -4617,7 +4619,7 @@ DEFINE CLASS FormFea AS FormBase
                 .SpecialEffect = 0
                 .Visible       = .T.
             ENDWITH
-            BINDEVENT(par_oCnt.cnt_4c_Conversao.txt_4c_MOEDA, "KeyPress", THIS, "MoedaLostFocus")
+            BINDEVENT(par_oCnt.cnt_4c_Conversao.txt_4c_MOEDA, "LostFocus", THIS, "MoedaLostFocus")
             par_oCnt.cnt_4c_Conversao.AddObject("cmd_4c_Cotacao", "CommandButton")
             WITH par_oCnt.cnt_4c_Conversao.cmd_4c_Cotacao
                 .Caption         = ""
@@ -4907,7 +4909,21 @@ DEFINE CLASS FormFea AS FormBase
     * MoedaLostFocus - Lookup de Moeda (SigCdMoe) ao sair do campo
     * PUBLIC: BINDEVENT em txt_4c_MOEDA.LostFocus
     *==========================================================================
-    PROCEDURE MoedaLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em MoedaLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE MoedaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.MoedaLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE MoedaLostFocusExec()
         LOCAL loc_oCnt, loc_cMoeda, loc_oBusca
         TRY
             loc_oCnt  = THIS.pgf_4c_Paginas.Page2.cnt_4c_Resultado.cnt_4c_Conversao

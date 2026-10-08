@@ -24,6 +24,8 @@ DEFINE CLASS FormCRC AS FormBase
     *-- Propriedades de negocio
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Inicializa o formulario
@@ -698,9 +700,9 @@ DEFINE CLASS FormCRC AS FormBase
 
         *-- BINDEVENT lookups: Grupo (F4/LostFocus) e DGrupos (F4/LostFocus)
         BINDEVENT(loc_oPagina.txt_4c_Grupo,   "KeyPress",  THIS, "GrupoKeyPress")
-        BINDEVENT(loc_oPagina.txt_4c_Grupo,   "KeyPress", THIS, "GrupoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Grupo,   "LostFocus", THIS, "GrupoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_DGrupos, "KeyPress",  THIS, "DGruposKeyPress")
-        BINDEVENT(loc_oPagina.txt_4c_DGrupos, "KeyPress", THIS, "DGruposLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_DGrupos, "LostFocus", THIS, "DGruposLostFocus")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
@@ -1093,16 +1095,32 @@ DEFINE CLASS FormCRC AS FormBase
     * GrupoKeyPress - F4 abre lookup de SigCdGcr pelo codigo do grupo
     *==========================================================================
     PROCEDURE GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupGrupoCodigo()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *==========================================================================
     * GrupoLostFocus - Ao sair do campo Grupo, valida codigo e preenche descricao
     * Reproduz logica de getGrupos.Valid -> fAcessoContab('C', ...)
     *==========================================================================
-    PROCEDURE GrupoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em GrupoLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE GrupoLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GrupoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GrupoLostFocusExec()
         LOCAL loc_oPag2, loc_cCodigo, loc_cDescricao
         loc_oPag2      = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo    = ""
@@ -1135,16 +1153,32 @@ DEFINE CLASS FormCRC AS FormBase
     * DGruposKeyPress - F4 abre lookup de SigCdGcr pela descricao do grupo
     *==========================================================================
     PROCEDURE DGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
         IF par_nKeyCode = 28
             THIS.AbrirLookupGrupoDescrs()
         ENDIF
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *==========================================================================
     * DGruposLostFocus - Ao sair do campo DGrupos, pesquisa grupo por descricao
     * Reproduz logica de getDGrupos.Valid -> fAcessoContab('D', ...)
     *==========================================================================
-    PROCEDURE DGruposLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DGruposLostFocusExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DGruposLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DGruposLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DGruposLostFocusExec()
         LOCAL loc_oPag2, loc_cDescricao
         loc_oPag2      = THIS.pgf_4c_Paginas.Page2
         loc_cDescricao = ""
