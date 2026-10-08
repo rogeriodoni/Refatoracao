@@ -1,459 +1,498 @@
-*------------------------------------------------------------------------------
-* FormSIGPRIBL.prg - Formulario Operacional de Impressao de Boleto Bancario
+*==============================================================================
+* FormSIGPRIBL.prg - Impressao de Boleto Bancario
+* Origem: SIGPRIBL.SCX
 * Herda de: FormBase
-* Tipo: OPERACIONAL (layout flat, sem PageFrame)
-* Tabela: SigCnFBl (configuracao de boleto bancario)
-*------------------------------------------------------------------------------
+* Tipo: OPERACIONAL (form flat - sem PageFrame, sem grid no legado;
+*       unico container e a faixa de cabecalho cntSombra)
+*==============================================================================
+
 DEFINE CLASS FormSIGPRIBL AS FormBase
 
-    *-- Dimensoes e aparencia (TitleBar=0: sem barra de titulo - form modal flutuante)
-    Width        = 1000
-    Height       = 400
-    AutoCenter   = .T.
-    ShowTips     = .T.
-    BorderStyle  = 2
+    Width       = 1000
+    Height      = 400
+    AutoCenter  = .T.
+    BorderStyle = 2
+    TitleBar    = 0
     ShowWindow = 1
-    ControlBox   = .F.
-    Closable     = .F.
-    MaxButton    = .F.
-    MinButton    = .F.
-    TitleBar     = 0
-    WindowType   = 1
+    ControlBox  = .F.
+    Closable    = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    ShowTips    = .T.
+    WindowType  = 1
+    Caption     = "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio"
 
-    *-- Parametros recebidos na abertura
-    this_cChave1  = ""     && pcchave1: chave do movimento pai (Emps+Dopes+Numes)
-    this_xNform1  = .NULL. && pcnform1: ref ao form chamador (pode ser O ou C no legado)
+    *-- lcChave1 do legado: chave do movimento (Emps+Dopes+Numes) para o qual
+    *-- o boleto esta sendo impresso. Vazio = usa TprMvCab ja populado pelo
+    *-- form chamador antes de abrir este form.
+    this_cChave1 = ""
 
-    *-- Estado interno
-    this_cFPagsSel = ""    && FPags atualmente selecionado
+    *-- pcNform1 do legado: controle do form chamador, reabilitado ao encerrar
+    *-- (nao eh o form pai inteiro - no legado eh so o controle referenciado)
+    this_oControleChamador = .NULL.
 
-    *-- BO (nao utilizado diretamente; logica principal esta no form)
-    this_oBusinessObject = .NULL.
+    *-- fpags (char(12)) atualmente carregado em txt_4c_FPags/this_oBusinessObject
+    this_cFPagsSel = ""
 
-    *--------------------------------------------------------------------------
-    * Init - Recebe chave do movimento pai e referencia ao form chamador
-    *--------------------------------------------------------------------------
-    PROCEDURE Init
-        LPARAMETERS par_cChave1, par_cNform1
+    *-- Guarda de reentrancia do picker de lookup: Show() de form MODAL bloqueia
+    *-- e o foco sai/volta do campo, podendo re-disparar o handler e empilhar um
+    *-- segundo picker por cima do primeiro.
+    this_lLookupAberto = .F.
 
-        IF VARTYPE(par_cChave1) = "C"
-            THIS.this_cChave1 = par_cChave1
-        ENDIF
-        THIS.this_xNform1 = par_cNform1
+    *==========================================================================
+    * Init - recebe chave do movimento e controle do form chamador
+    *==========================================================================
+    PROCEDURE Init()
+        LPARAMETERS par_cChave1, par_oControleChamador
 
-        *-- Cursor auxiliar de movimentos a imprimir (compartilhado com SigPrIbl.prg)
-        IF !USED("TprMvCab")
-            CREATE CURSOR TprMvCab (Emps C(3), Dopes C(20), Numes N(6,0), Parcs C(2))
-        ENDIF
+        LOCAL loc_oErro
+        TRY
+            THIS.this_cChave1 = IIF(TYPE("par_cChave1") = "C", par_cChave1, "")
+            IF VARTYPE(par_oControleChamador) = "O"
+                THIS.this_oControleChamador = par_oControleChamador
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em Init")
+        ENDTRY
 
         RETURN DODEFAULT()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * InicializarForm - Configura o formulario operacional completo
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * InicializarForm - cria o Business Object, a faixa de cabecalho (unico
+    * container do legado) e os campos/CommandGroup do form (ConfigurarPagina-
+    * Lista). Form OPERACIONAL flat: sem PageFrame e sem grid, tudo direto em
+    * THIS.
+    *==========================================================================
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
         TRY
-            THIS.Caption = "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio"
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
 
-            IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
-                THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+            THIS.this_oBusinessObject = CREATEOBJECT("SIGPRIBLBO")
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.ConfigurarCabecalho()
+                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                THIS.ConfigurarPaginaLista()
+
+                *-- Ordem de tabulacao transcrita do TabIndex do SCX. Tem de
+                *-- rodar DEPOIS de todos os AddObject de ConfigurarPaginaLista
+                *-- /ConfigurarPageFrame, senao a atribuicao cai em controle que
+                *-- ainda nao existe.
+                THIS.ConfigurarPaginaDados()
+
+                *-- Cursor auxiliar de movimentos a imprimir (regra: mesma
+                *-- estrutura/ordem de campos em TODO CREATE CURSOR TprMvCab)
+                IF !USED("TprMvCab")
+                    CREATE CURSOR TprMvCab (Emps C(3), Dopes C(20), Numes N(6,0), Parcs C(2))
+                ENDIF
+
+                THIS.AtualizaBoleto("")
+
+                THIS.TornarControlesVisiveis(THIS)
+                THIS.Visible = .T.
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Falha ao criar SIGPRIBLBO.", "Erro em InicializarForm")
             ENDIF
-
-            THIS.ConfigurarCabecalho()
-            THIS.ConfigurarPageFrame()
-            THIS.TornarControlesVisiveis()
-            THIS.AtualizaBoleto("")
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em InicializarForm")
         ENDTRY
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarCabecalho - Cria container cinza superior com titulo
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarCabecalho - cnt_4c_Cabecalho equivalente ao cntSombra original
+    * Original: Top=0, Left=0, Width=1020, Height=80, BackColor=100,100,100
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarCabecalho()
-        THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH THIS.cnt_4c_Cabecalho
-            .Top        = 0
-            .Left       = 0
-            .Width      = 1020
-            .Height     = 80
-            .BorderWidth = 0
-            .BackStyle  = 1
-            .BackColor  = RGB(100, 100, 100)
+        LOCAL loc_oErro
+        TRY
+            THIS.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH THIS.cnt_4c_Cabecalho
+                .Top         = 0
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BackStyle   = 1
+                .BackColor   = RGB(100, 100, 100)
+                .BorderWidth = 0
+                .Visible     = .T.
+            ENDWITH
 
-            .AddObject("lbl_4c_LblSombra", "Label")
-            WITH .lbl_4c_LblSombra
+            THIS.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+            WITH THIS.cnt_4c_Cabecalho.lbl_4c_Sombra
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
                 .AutoSize      = .F.
-                .Top           = 18
-                .Left          = 10
-                .Width         = THIS.Width
+                .Caption       = THIS.Caption
                 .Height        = 40
-                .FontBold      = .T.
-                .FontName      = "Tahoma"
-                .FontSize      = 18
-                .FontUnderline = .F.
-                .WordWrap      = .T.
-                .Alignment     = 0
-                .BackStyle     = 0
+                .Left          = 10
+                .Top           = 18
+                .Width         = THIS.Width - 20
                 .ForeColor     = RGB(0, 0, 0)
-                .Caption       = "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio"
+                .Visible       = .T.
             ENDWITH
 
-            .AddObject("lbl_4c_LblTitulo", "Label")
-            WITH .lbl_4c_LblTitulo
-                .AutoSize      = .F.
-                .Top           = 17
-                .Left          = 10
-                .Width         = THIS.Width
-                .Height        = 46
+            THIS.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+            WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
                 .FontBold      = .T.
                 .FontName      = "Tahoma"
                 .FontSize      = 18
-                .FontUnderline = .F.
                 .WordWrap      = .T.
                 .Alignment     = 0
                 .BackStyle     = 0
+                .AutoSize      = .F.
+                .Caption       = THIS.Caption
+                .Height        = 46
+                .Left          = 10
+                .Top           = 17
+                .Width         = THIS.Width - 20
                 .ForeColor     = RGB(255, 255, 255)
-                .Caption       = "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio"
+                .ToolTipText   = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+                .Visible       = .T.
             ENDWITH
-        ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarCabecalho")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL (dialogo modal): nao tem PageFrame Page1/Page2.
-    * Delega para ConfigurarPageFrame (montagem flat) apenas se controles ainda
-    * nao foram criados, evitando duplicacao em caso de reentrada.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * TornarControlesVisiveis - torna visiveis os controles do container,
+    * recursivo (Pages de PageFrame e Controls de Container)
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_nP, loc_oObjeto
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oObjeto) = "O"
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+                IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPaginaLista - Ponto de entrada canonico do funil multi-fase.
+    * Form OPERACIONAL flat (sem PageFrame/Page1/Page2 no legado): delega para
+    * ConfigurarPageFrame(), que cria os campos e o CommandGroup diretamente em
+    * THIS. Guard por PEMSTATUS evita duplicar objetos em caso de reentrada.
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPaginaLista()
         IF !PEMSTATUS(THIS, "txt_4c_FPags", 5)
             THIS.ConfigurarPageFrame()
         ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Ponto de entrada canonico do pipeline (Fase 5)
-    * Form OPERACIONAL: nao possui Page2 separada com campos de edicao.
-    * Todos os controles (txt_4c_FPags, txt_4c_Locals, obj_4c_GetTxtCds,
-    * lbl_4c_*, obj_4c_CmdGImprimir) ja foram criados em ConfigurarPageFrame().
-    * Este metodo existe apenas por compatibilidade com o pipeline multi-fase.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        THIS.Refresh()
+    *==========================================================================
+    * ConfigurarPaginaDados - Form OPERACIONAL FLAT: o legado SIGPRIBL.SCX nao
+    * tem PageFrame nem Page2 (11 objetos ao todo, todos filhos DIRETOS do
+    * form), entao os campos de dados - txt_4c_FPags / txt_4c_Locals /
+    * obj_4c_GetTxtCds e seus labels - sao criados em ConfigurarPageFrame().
+    *
+    * O que sobra para este metodo eh a ORDEM DE TABULACAO: o SCX declara
+    * TabIndex nos 8 controles e o migrador descartou. Com AddObject o VFP9
+    * numera o TabIndex pela ORDEM DE CRIACAO, que nao tem relacao com a ordem
+    * do legado - nao da erro, nao entra em log e nao aparece em screenshot,
+    * so o Tab andando na ordem errada.
+    *
+    * TabIndex eh gravavel em runtime, e as atribuicoes tem de ser feitas em
+    * ordem ASCENDENTE e DEPOIS de todos os AddObject: cada atribuicao poe o
+    * controle na posicao pedida e empurra os demais para tras.
+    *
+    * TabIndex transcrito do dump (SECAO 2 de SIGPRIBL_form_codigo_fonte.txt):
+    *   Label2 = 1 | getFPags = 2 | Label3 = 3 | getLocals = 4
+    *   Label31 = 5 | getTxtCds = 6 | lblAviso = 7 | cmdGImprimir = 8
+    * Sem empate entre os focalizaveis - o SCX deste form nao repete TabIndex.
+    *==========================================================================
+    PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oErro
+        TRY
+            THIS.lbl_4c_Label2.TabIndex       = 1
+            THIS.txt_4c_FPags.TabIndex        = 2
+            THIS.lbl_4c_Label3.TabIndex       = 3
+            THIS.txt_4c_Locals.TabIndex       = 4
+            THIS.lbl_4c_Label31.TabIndex      = 5
+            THIS.obj_4c_GetTxtCds.TabIndex    = 6
+            THIS.lbl_4c_LblAviso.TabIndex     = 7
+            THIS.obj_4c_CmdGImprimir.TabIndex = 8
+
+            THIS.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarPaginaDados")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL: nao ha alternancia de paginas; recarrega configuracao
-    * do boleto e faz refresh dos controles com base no FPags atual.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * AlternarPagina - Ponto de entrada canonico do funil multi-fase.
+    * Form OPERACIONAL flat: nao ha paginas para alternar - recarrega a
+    * configuracao do boleto atualmente selecionado.
+    *==========================================================================
     PROCEDURE AlternarPagina(par_nPagina)
         THIS.AtualizaBoleto(THIS.this_cFPagsSel)
         THIS.Refresh()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Configura layout do form (OPERACIONAL flat, sem PageFrame real)
-    * Nome mantido por compatibilidade com pipeline; em forms OPERACIONAIS
-    * este metodo cria labels, TextBoxes, EditBox e CommandGroup diretamente
-    * no form (sem Page1/Page2). Equivalente a ConfigurarInterface em CRUD.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarPageFrame - Cria campos (Label2/getFPags/Label3/getLocals/
+    * Label31/getTxtCds/lblAviso) e o CommandGroup cmdGImprimir (Imprimir +
+    * Encerrar), direto em THIS (form flat, sem PageFrame no legado).
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
         LOCAL loc_oErro
         TRY
-            *-- lbl_4c_Label2: Condicao de Pagamento
             THIS.AddObject("lbl_4c_Label2", "Label")
             WITH THIS.lbl_4c_Label2
-                .AutoSize   = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .BackStyle  = 0
-                .Caption    = " Condi" + CHR(231) + CHR(227) + "o de Pagamento "
-                .Height     = 15
-                .Left       = 82
-                .Top        = 93
-                .Width      = 124
-                .ForeColor  = RGB(90, 90, 90)
+                .AutoSize  = .F.
+                .BorderStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Caption   = " Condi" + CHR(231) + CHR(227) + "o de Pagamento "
+                .Height    = 15
+                .Left      = 82
+                .Top       = 93
+                .Width     = 124
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
             ENDWITH
 
-            *-- txt_4c_FPags: TextBox de selecao da condicao de pagamento (lookup SigCnFBl)
             THIS.AddObject("txt_4c_FPags", "TextBox")
             WITH THIS.txt_4c_FPags
-                .FontName   = "Tahoma"
-                .Left       = 84
-                .MaxLength  = 12
-                .Top        = 110
-                .Width      = 94
-                .ForeColor  = RGB(0, 0, 0)
-                .Value      = ""
+                .FontName  = "Tahoma"
+                .Left      = 84
+                .MaxLength = 12
+                .Top       = 110
+                .Width     = 94
+                .ForeColor = RGB(0, 0, 0)
+                .Value     = ""
+                .Visible   = .T.
             ENDWITH
             BINDEVENT(THIS.txt_4c_FPags, "KeyPress", THIS, "TxtFPagsKeyPress")
+            BINDEVENT(THIS.txt_4c_FPags, "DblClick", THIS, "TxtFPagsDblClick")
 
-            *-- lbl_4c_Label3: Local de Pagamento
             THIS.AddObject("lbl_4c_Label3", "Label")
             WITH THIS.lbl_4c_Label3
-                .AutoSize   = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .BackStyle  = 0
-                .Caption    = " Local de Pagamento "
-                .Height     = 15
-                .Left       = 82
-                .Top        = 151
-                .Width      = 104
-                .ForeColor  = RGB(90, 90, 90)
+                .AutoSize  = .F.
+                .BorderStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Caption   = " Local de Pagamento "
+                .Height    = 15
+                .Left      = 82
+                .Top       = 151
+                .Width     = 104
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
             ENDWITH
 
-            *-- txt_4c_Locals: TextBox de local de pagamento (editavel, multi-linha via Height)
             THIS.AddObject("txt_4c_Locals", "TextBox")
             WITH THIS.txt_4c_Locals
-                .FontName   = "Tahoma"
-                .Left       = 84
-                .MaxLength  = 100
-                .Top        = 168
-                .Width      = 798
-                .Height     = 69
-                .ForeColor  = RGB(0, 0, 0)
-                .Value      = ""
-                .Enabled    = .F.
+                .FontName  = "Tahoma"
+                .Format    = "K"
+                .Left      = 84
+                .MaxLength = 100
+                .Top       = 168
+                .Width     = 798
+                .Height    = 69
+                .ForeColor = RGB(0, 0, 0)
+                .Value     = ""
+                .Enabled   = .F.
+                .Visible   = .T.
             ENDWITH
 
-            *-- lbl_4c_Label31: Texto de Responsabilidade do Cedente
             THIS.AddObject("lbl_4c_Label31", "Label")
             WITH THIS.lbl_4c_Label31
-                .AutoSize   = .T.
-                .FontName   = "Tahoma"
-                .FontSize   = 8
-                .BackStyle  = 0
-                .Caption    = " Texto de Responsabilidade do Cedente "
-                .Height     = 15
-                .Left       = 82
-                .Top        = 251
-                .Width      = 196
-                .ForeColor  = RGB(90, 90, 90)
+                .AutoSize  = .F.
+                .BorderStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .Caption   = " Texto de Responsabilidade do Cedente "
+                .Height    = 15
+                .Left      = 82
+                .Top       = 251
+                .Width     = 196
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
             ENDWITH
 
-            *-- obj_4c_GetTxtCds: EditBox de texto do cedente
             THIS.AddObject("obj_4c_GetTxtCds", "EditBox")
             WITH THIS.obj_4c_GetTxtCds
-                .FontName   = "Tahoma"
-                .Left       = 84
-                .Top        = 268
-                .Width      = 798
-                .Height     = 69
-                .ForeColor  = RGB(0, 0, 0)
-                .Value      = ""
-                .Enabled    = .F.
+                .FontName  = "Tahoma"
+                .Left      = 84
+                .Top       = 268
+                .Width     = 798
+                .Height    = 69
+                .ForeColor = RGB(0, 0, 0)
+                .Value     = ""
+                .Enabled   = .F.
+                .Visible   = .T.
             ENDWITH
 
-            *-- lbl_4c_LblAviso: aviso quando sem configuracao de boleto
             THIS.AddObject("lbl_4c_LblAviso", "Label")
             WITH THIS.lbl_4c_LblAviso
-                .AutoSize   = .T.
-                .FontBold   = .T.
-                .FontName   = "Tahoma"
-                .BackStyle  = 0
-                .Caption    = "N" + CHR(227) + "o Existe Configura" + CHR(231) + CHR(227) + "o de Boleto"
-                .Left       = 89
-                .Top        = 351
-                .Width      = 213
-                .ForeColor  = RGB(90, 90, 90)
-                .Visible    = .F.
+                .AutoSize  = .F.
+                .BorderStyle = 0
+                .FontBold  = .T.
+                .FontName  = "Tahoma"
+                .BackStyle = 0
+                .Caption   = "N" + CHR(227) + "o Existe Configura" + CHR(231) + CHR(227) + "o de Boleto"
+                .Left      = 89
+                .Top       = 351
+                .Width     = 213
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
             ENDWITH
 
-            *-- obj_4c_CmdGImprimir: CommandGroup com Imprimir + Encerrar
             THIS.AddObject("obj_4c_CmdGImprimir", "CommandGroup")
             WITH THIS.obj_4c_CmdGImprimir
-                .ButtonCount  = 2
-                .BackStyle    = 0
-                .BorderStyle  = 0
-                .Value        = 1
-                .Height       = 88
-                .Left         = 835
+                .ButtonCount   = 2
+                .BackStyle     = 0
+                .BorderStyle   = 0
+                .BorderColor   = RGB(136, 189, 188)
+                .Value         = 1
+                .Height        = 88
+                .Left          = 835
                 .SpecialEffect = 1
-                .Top          = 2
-                .Width        = 173
-                .Themes       = .F.
+                .Top           = -2
+                .Width         = 173
+                .Themes        = .F.
+                .Visible       = .T.
 
                 WITH .Buttons(1)
-                    .Top          = 5
-                    .Left         = 11
-                    .Height       = 75
-                    .Width        = 75
-                    .FontBold     = .T.
-                    .FontItalic   = .T.
-                    .Caption      = "\<Imprimir"
-                    .ToolTipText  = "Imprimir"
-                    .ForeColor    = RGB(90, 90, 90)
-                    .BackColor    = RGB(255, 255, 255)
-                    .Themes       = .F.
-                    .Picture      = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
-                    .Enabled      = .F.
+                    .Top         = 5
+                    .Left        = 11
+                    .Height      = 75
+                    .Width       = 75
+                    .FontBold    = .T.
+                    .FontItalic  = .T.
+                    .FontName    = "Comic Sans MS"
+                    .FontSize    = 8
+                    .Caption     = "\<Imprimir"
+                    .ToolTipText = "Imprimir"
+                    .ForeColor   = RGB(90, 90, 90)
+                    .BackColor   = RGB(255, 255, 255)
+                    .Themes      = .F.
+                    .Picture     = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
+                    .Enabled     = .F.
                 ENDWITH
 
                 WITH .Buttons(2)
-                    .Top          = 5
-                    .Left         = 87
-                    .Height       = 75
-                    .Width        = 75
-                    .FontBold     = .T.
-                    .FontItalic   = .T.
-                    .FontName     = "Tahoma"
-                    .FontSize     = 8
-                    .Caption      = "Encerrar"
-                    .ToolTipText  = "[ESC] Sair"
-                    .ForeColor    = RGB(90, 90, 90)
-                    .BackColor    = RGB(255, 255, 255)
-                    .Themes       = .F.
-                    .Cancel       = .T.
-                    .Picture      = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                    .Top         = 5
+                    .Left        = 87
+                    .Height      = 75
+                    .Width       = 75
+                    .FontBold    = .T.
+                    .FontItalic  = .T.
+                    .FontName    = "Comic Sans MS"
+                    .FontSize    = 8
+                    .Caption     = "Encerrar"
+                    .ToolTipText = "[ESC] Sair"
+                    .ForeColor   = RGB(90, 90, 90)
+                    .BackColor   = RGB(255, 255, 255)
+                    .Themes      = .F.
+                    .Cancel      = .T.
+                    .Picture     = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 ENDWITH
             ENDWITH
-
             BINDEVENT(THIS.obj_4c_CmdGImprimir.Buttons(1), "Click", THIS, "CmdImprimirClick")
             BINDEVENT(THIS.obj_4c_CmdGImprimir.Buttons(2), "Click", THIS, "CmdSaidaClick")
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em ConfigurarPageFrame")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarPageFrame")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * AtualizaBoleto - Recarrega config de SigCnFBl e habilita/desabilita controles
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * AtualizaBoleto - Recarrega a configuracao de SigCnFBl pela condicao de
+    * pagamento informada e habilita/desabilita os campos e o botao Imprimir
+    * conforme exista ou nao configuracao cadastrada (AtualizaBoleto do
+    * legado). Retorna .T. se encontrou configuracao para par_cCond.
+    *==========================================================================
     PROCEDURE AtualizaBoleto(par_cCond)
-        LOCAL loc_cFPags, loc_cSQL, loc_nRet, loc_oErro, loc_lAchou
+        LOCAL loc_cFPags, loc_lAchou, loc_oErro
         loc_lAchou = .F.
         TRY
             loc_cFPags = PADR(NVL(par_cCond, ""), 12)
             THIS.this_cFPagsSel = ALLTRIM(loc_cFPags)
 
-            IF USED("cursor_4c_Config")
-                USE IN cursor_4c_Config
-            ENDIF
-            IF USED("cursor_4c_ConfigTemp")
-                USE IN cursor_4c_ConfigTemp
-            ENDIF
-
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Config ( ;
-                FPags      C(12)  NULL, ;
-                cLocals    C(100) NULL, ;
-                cTxtCds    M      NULL, ;
-                cNomeImps  C(50)  NULL, ;
-                cFontePdrs C(20)  NULL, ;
-                nTamFontes N(3,0) NULL, ;
-                cTamFolha  C(30)  NULL, ;
-                cIdChaves  C(15)  NULL, ;
-                nLnLocals  N(6,2) NULL, ;
-                nClLocals  N(6,2) NULL, ;
-                nLnDtVencs N(6,2) NULL, ;
-                nClDtVencs N(6,2) NULL, ;
-                nLnDtDocs  N(6,2) NULL, ;
-                nClDtDocs  N(6,2) NULL, ;
-                nLnNrDocs  N(6,2) NULL, ;
-                nClNrDocs  N(6,2) NULL, ;
-                nLnVlDocs  N(6,2) NULL, ;
-                nClVlDocs  N(6,2) NULL, ;
-                nLnRazClis N(6,2) NULL, ;
-                nClRazClis N(6,2) NULL, ;
-                nLnCgcClis N(6,2) NULL, ;
-                nClCgcClis N(6,2) NULL, ;
-                nLnEndCobs N(6,2) NULL, ;
-                nClEndCobs N(6,2) NULL, ;
-                nLnBaiCobs N(6,2) NULL, ;
-                nClBaiCobs N(6,2) NULL, ;
-                nLnCidCobs N(6,2) NULL, ;
-                nClCidCobs N(6,2) NULL, ;
-                nLnEstCobs N(6,2) NULL, ;
-                nClEstCobs N(6,2) NULL, ;
-                nLnCepCobs N(6,2) NULL, ;
-                nClCepCobs N(6,2) NULL, ;
-                nLnTxtCds  N(6,2) NULL, ;
-                nClTxtCds  N(6,2) NULL  ;
-            )
-            SET NULL OFF
-
-            loc_cSQL = "SELECT FPags, cLocals, cTxtCds, cNomeImps, cFontePdrs," + ;
-                       " nTamFontes, cTamFolha, cIdChaves," + ;
-                       " nLnLocals, nClLocals, nLnDtVencs, nClDtVencs," + ;
-                       " nLnDtDocs, nClDtDocs, nLnNrDocs, nClNrDocs," + ;
-                       " nLnVlDocs, nClVlDocs, nLnRazClis, nClRazClis," + ;
-                       " nLnCgcClis, nClCgcClis, nLnEndCobs, nClEndCobs," + ;
-                       " nLnBaiCobs, nClBaiCobs, nLnCidCobs, nClCidCobs," + ;
-                       " nLnEstCobs, nClEstCobs, nLnCepCobs, nClCepCobs," + ;
-                       " nLnTxtCds, nClTxtCds" + ;
-                       " FROM SigCnFBl WHERE FPags = " + EscaparSQL(loc_cFPags)
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ConfigTemp")
-
-            IF loc_nRet > 0 AND USED("cursor_4c_ConfigTemp") AND RECCOUNT("cursor_4c_ConfigTemp") > 0
-                SELECT cursor_4c_Config
-                ZAP
-                APPEND FROM DBF("cursor_4c_ConfigTemp")
-                IF USED("cursor_4c_ConfigTemp")
-                    USE IN cursor_4c_ConfigTemp
-                ENDIF
-                SELECT cursor_4c_Config
-                GO TOP
-                loc_lAchou = .T.
-            ELSE
-                IF USED("cursor_4c_ConfigTemp")
-                    USE IN cursor_4c_ConfigTemp
-                ENDIF
+            IF !EMPTY(THIS.this_cFPagsSel)
+                loc_lAchou = THIS.this_oBusinessObject.CarregarPorFPags(loc_cFPags)
             ENDIF
 
             IF loc_lAchou
-                IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                    THIS.txt_4c_Locals.Enabled = .T.
-                    THIS.txt_4c_Locals.Value   = NVL(cursor_4c_Config.cLocals, "")
-                    THIS.txt_4c_Locals.Refresh()
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                    THIS.obj_4c_GetTxtCds.Enabled = .T.
-                    THIS.obj_4c_GetTxtCds.Value   = NVL(cursor_4c_Config.cTxtCds, "")
-                    THIS.obj_4c_GetTxtCds.Refresh()
-                ENDIF
-                IF PEMSTATUS(THIS, "lbl_4c_LblAviso", 5)
-                    THIS.lbl_4c_LblAviso.Visible = .F.
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_CmdGImprimir", 5)
-                    THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .T.
-                    THIS.obj_4c_CmdGImprimir.Refresh()
-                ENDIF
+                THIS.this_oBusinessObject.EditarRegistro()
+
+                THIS.txt_4c_Locals.Enabled = .T.
+                THIS.txt_4c_Locals.Value   = NVL(THIS.this_oBusinessObject.this_cLocals, "")
+                THIS.txt_4c_Locals.Refresh()
+
+                THIS.obj_4c_GetTxtCds.Enabled = .T.
+                THIS.obj_4c_GetTxtCds.Value   = NVL(THIS.this_oBusinessObject.this_cTxtCds, "")
+                THIS.obj_4c_GetTxtCds.Refresh()
+
+                THIS.lbl_4c_LblAviso.Visible = .F.
+
+                THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .T.
+                THIS.obj_4c_CmdGImprimir.Refresh()
             ELSE
-                IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                    THIS.txt_4c_Locals.Enabled = .F.
-                    THIS.txt_4c_Locals.Refresh()
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                    THIS.obj_4c_GetTxtCds.Enabled = .F.
-                    THIS.obj_4c_GetTxtCds.Refresh()
-                ENDIF
-                IF PEMSTATUS(THIS, "lbl_4c_LblAviso", 5)
-                    THIS.lbl_4c_LblAviso.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_CmdGImprimir", 5)
-                    THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .F.
-                    THIS.obj_4c_CmdGImprimir.Value = 2
-                    THIS.obj_4c_CmdGImprimir.Refresh()
-                ENDIF
+                THIS.txt_4c_Locals.Value   = ""
+                THIS.txt_4c_Locals.Enabled = .F.
+                THIS.txt_4c_Locals.Refresh()
+
+                THIS.obj_4c_GetTxtCds.Value   = ""
+                THIS.obj_4c_GetTxtCds.Enabled = .F.
+                THIS.obj_4c_GetTxtCds.Refresh()
+
+                THIS.lbl_4c_LblAviso.Visible = .T.
+
+                THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .F.
+                THIS.obj_4c_CmdGImprimir.Value = 2
+                THIS.obj_4c_CmdGImprimir.Refresh()
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em AtualizaBoleto")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em AtualizaBoleto")
         ENDTRY
+
+        RETURN loc_lAchou
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * TxtFPagsKeyPress - Handler do campo Condicao de Pagamento
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * TxtFPagsKeyPress - Handler do campo Condicao de Pagamento (getFPags do
+    * legado). Enter/Tab/F4: busca exata por fpags; achando, recarrega o
+    * boleto; nao achando, abre o picker (fwBuscaExt do legado).
+    *
+    * BINDEVENT em "Valid" nao dispara de forma confiavel em TextBox, por isso
+    * o Valid do legado vive aqui (Enter/Tab = sair do campo) mais o F4, e no
+    * TxtFPagsDblClick. O When do legado eh so um NoDefault, que nao nega foco
+    * nem altera comportamento - nada a transcrever.
+    *
+    * ORDEM invertida em relacao ao legado, DE PROPOSITO: o legado chama o
+    * picker primeiro (cujo Init resolve o match exato) e so depois
+    * AtualizaBoleto; aqui AtualizaBoleto roda primeiro e o picker so abre se
+    * ela nao achou. O resultado visto pelo usuario eh o mesmo - codigo valido
+    * carrega sem abrir dialogo nenhum (regra #37: Show() SO se nao resolveu),
+    * prefixo invalido abre o picker filtrado por LIKE - e evita uma segunda
+    * consulta. Nao "consertar" reordenando.
+    *==========================================================================
     PROCEDURE TxtFPagsKeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
 
@@ -461,47 +500,94 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
             RETURN
         ENDIF
 
-        LOCAL loc_cVal, loc_cSQL, loc_nRet, loc_lProcessar, loc_oErro
+        LOCAL loc_cVal, loc_lAchou, loc_lProcessar, loc_oErro
         loc_lProcessar = .T.
-        TRY
-            loc_cVal = ALLTRIM(NVL(THIS.txt_4c_FPags.Value, ""))
+        loc_lAchou     = .T.
 
-            IF EMPTY(loc_cVal)
-                THIS.AtualizaBoleto("")
-                loc_lProcessar = .F.
-            ENDIF
+        IF EMPTY(ALLTRIM(NVL(THIS.txt_4c_FPags.Value, "")))
+            THIS.AtualizaBoleto("")
+            loc_lProcessar = .F.
+        ENDIF
 
-            IF loc_lProcessar
-                *-- Busca exata primeiro
-                loc_cSQL = "SELECT TOP 1 FPags FROM SigCnFBl WHERE FPags = " + ;
-                           EscaparSQL(PADR(loc_cVal, 12))
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_FPagsExato")
-
-                IF loc_nRet > 0 AND USED("cursor_4c_FPagsExato") AND RECCOUNT("cursor_4c_FPagsExato") > 0
-                    SELECT cursor_4c_FPagsExato
-                    THIS.txt_4c_FPags.Value = ALLTRIM(NVL(FPags, ""))
-                    IF USED("cursor_4c_FPagsExato")
-                        USE IN cursor_4c_FPagsExato
-                    ENDIF
-                    THIS.AtualizaBoleto(THIS.txt_4c_FPags.Value)
-                ELSE
-                    IF USED("cursor_4c_FPagsExato")
-                        USE IN cursor_4c_FPagsExato
-                    ENDIF
-                    *-- Nao encontrado exato: abre lookup
-                    THIS.AbrirLookupFPags()
+        IF loc_lProcessar
+            TRY
+                loc_cVal  = ALLTRIM(NVL(THIS.txt_4c_FPags.Value, ""))
+                loc_lAchou = THIS.AtualizaBoleto(loc_cVal)
+                IF loc_lAchou
+                    THIS.txt_4c_FPags.Value = THIS.this_cFPagsSel
                 ENDIF
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro ao validar Condi" + CHR(231) + CHR(227) + "o de Pagamento")
+                loc_lAchou = .T.
+            ENDTRY
+
+            IF !loc_lAchou
+                THIS.AbrirLookupFPags()
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao validar Condi" + CHR(231) + CHR(227) + "o de Pagamento")
-        ENDTRY
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * AbrirLookupFPags - Abre FormBuscaAuxiliar para SigCnFBl
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * TxtFPagsDblClick - getFPags do legado. Duplo clique abre o mesmo picker
+    * do F4/Enter/Tab (padrao canonico de lookup do projeto).
+    *==========================================================================
+    PROCEDURE TxtFPagsDblClick()
+        IF THIS.txt_4c_FPags.Enabled
+            THIS.AbrirLookupFPags()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupFPags - Picker de condicoes de pagamento (SigCnFBl).
+    *
+    * Legado (getFPags.Valid):
+    *   loLista = CreateObject('fwBuscaExt', ...pnIdConn, 'SigCnFBl',
+    *                          'crListaRemota', 'FPags', This.Value, 'Selecao', .t.)
+    *   If Not loLista.plAchouRegistro
+    *       loLista.mAddColuna('FPags', '', 'Condicao')
+    *       loLista.Show()
+    *   EndIf
+    *   This.Value = Iif(Lastkey()=27, '', crListaRemota.FPags)
+    *   Use In crListaRemota
+    *   ThisForm.AtualizaBoleto(This.Value)
+    *
+    * Contrato FormBuscaAuxiliar (regras #36/#37 do CLAUDE.md):
+    *   - 1o argumento eh o HANDLE da conexao (gnConnHandle), NUNCA a tabela
+    *   - Show() SO quando this_lAchouRegistro = .F. (o Init ja resolve o match
+    *     exato de 1 registro, exatamente como o plAchouRegistro do fwBuscaExt)
+    *   - leitura do cursor SO sob a guarda this_lSelecionou, e ANTES do
+    *     Release() do picker
+    *
+    * O 7o argumento .t. que o legado passa ao fwBuscaExt NAO foi transcrito:
+    * em FormBuscaAuxiliar essa posicao eh par_lBuscaExata, parametro de outra
+    * semantica (hoje inerte, mas se vier a valer "so match exato" o picker
+    * abriria vazio para prefixo digitado - o defeito do Erro114). Falso
+    * cognato: mesma posicao, contrato diferente.
+    *
+    * UMA unica coluna, transcrita do dump: o legado NAO exibe clocals no
+    * picker (char(100) nao cabe na janela de 374px) - nao acrescentar coluna
+    * que ele nao tem (PILAR 1).
+    *
+    * Cancelar (ESC / Cancela / X) LIMPA o campo e zera a configuracao exibida,
+    * transcrevendo o Iif(Lastkey()=27, '', ...) do legado. Isto NAO eh a
+    * atribuicao-fora-da-guarda que a regra #37 proibe: ali zerar eh efeito
+    * colateral acidental, aqui eh o comportamento DELIBERADO do legado - a
+    * condicao de pagamento invalida nao pode ficar no campo com a tela
+    * mostrando os dados da anterior.
+    *==========================================================================
     PROCEDURE AbrirLookupFPags()
-        LOCAL loc_cVal, loc_oLookup, loc_oErro
+        LOCAL loc_cVal, loc_oLookup, loc_lSelecionou, loc_cEscolhido, loc_oErro
+
+        *-- Guarda de reentrancia ANTES do TRY (regra #1: nenhum RETURN dentro
+        *-- de TRY/CATCH)
+        IF THIS.this_lLookupAberto
+            RETURN
+        ENDIF
+        THIS.this_lLookupAberto = .T.
+
+        loc_lSelecionou = .F.
+        loc_cEscolhido  = ""
+
         TRY
             loc_cVal = ALLTRIM(NVL(THIS.txt_4c_FPags.Value, ""))
 
@@ -510,99 +596,115 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
             ENDIF
 
             loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCnFBl", ;
-                "cursor_4c_BuscaFPags", ;
-                "FPags", ;
-                loc_cVal, ;
+                "SigCnFBl", "cursor_4c_BuscaFPags", "fpags", loc_cVal, ;
                 "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oLookup) = "O"
-                loc_oLookup.mAddColuna("FPags",   "XXXXXXXXXXXX", "Condi" + CHR(231) + CHR(227) + "o")
-                loc_oLookup.mAddColuna("cLocals", "",             "Local de Pagamento")
-                loc_oLookup.Show()
+                IF !loc_oLookup.this_lAchouRegistro
+                    loc_oLookup.mAddColuna("fpags", "", "Condi" + CHR(231) + CHR(227) + "o")
+                    loc_oLookup.Show()
+                ENDIF
 
                 IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_BuscaFPags")
                     SELECT cursor_4c_BuscaFPags
-                    THIS.txt_4c_FPags.Value = ALLTRIM(NVL(FPags, ""))
-                    THIS.AtualizaBoleto(THIS.txt_4c_FPags.Value)
+                    IF !EOF("cursor_4c_BuscaFPags")
+                        loc_cEscolhido  = ALLTRIM(NVL(cursor_4c_BuscaFPags.fpags, ""))
+                        loc_lSelecionou = .T.
+                    ENDIF
                 ENDIF
+
                 loc_oLookup.Release()
             ENDIF
 
             IF USED("cursor_4c_BuscaFPags")
                 USE IN cursor_4c_BuscaFPags
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao abrir busca de Condi" + CHR(231) + CHR(227) + "o")
-        ENDTRY
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CmdImprimirClick - Confirma e imprime boletos bancarios
-    *--------------------------------------------------------------------------
+            *-- Legado: valor vem do cursor quando escolheu, VAZIO no cancelamento
+            THIS.txt_4c_FPags.Value = IIF(loc_lSelecionou, loc_cEscolhido, "")
+            THIS.txt_4c_FPags.Refresh()
+
+            *-- Legado: AtualizaBoleto roda em AMBOS os caminhos (recarrega a
+            *-- configuracao escolhida, ou apaga os campos quando cancelou)
+            THIS.AtualizaBoleto(THIS.txt_4c_FPags.Value)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + ;
+                CHR(13) + "Procedure: " + loc_oErro.Procedure, ;
+                "Erro ao abrir busca de Condi" + CHR(231) + CHR(227) + "o")
+        ENDTRY
+
+        *-- Libera a guarda tambem quando o CATCH disparou
+        THIS.this_lLookupAberto = .F.
+    ENDPROC
+    *==========================================================================
+    * CmdImprimirClick - cmdImprimir.Click do legado: confirma, grava Local de
+    * Pagamento/Texto do Cedente editados, confere impressora, e para cada
+    * movimento em TprMvCab monta o boleto (SigMvCab/SigMvPar/SigCdOpe/
+    * SigOpCdc/SigMvNfi/SigCdCli/SigOpFp) e chama a rotina de impressao
+    * matricial SigPrIbl.
+    *==========================================================================
     PROCEDURE CmdImprimirClick()
-        LOCAL loc_lConfirmado, loc_lTemImpressora, loc_lSucesso, loc_lProsseguir
-        LOCAL loc_cChave1, loc_nParcel, loc_nConta, loc_lTaOk
-        LOCAL loc_cSQL, loc_nRet, loc_cFonteP, loc_cFonteG
-        LOCAL loc_nTamFolha, loc_oErro, loc_laPrinters(1)
+        LOCAL loc_lProsseguir, loc_lTemImpressora, loc_i, loc_cChave1, loc_nParcel, loc_lTaOk
+        LOCAL loc_cSQL, loc_nRet, loc_cFonteP, loc_cFonteG, loc_nTamFolha
+        LOCAL loc_cContaCli, loc_xVenc, loc_cNumDoc, loc_nNfiscals, loc_lBoletoHabilitado
+        LOCAL loc_cEndCob, loc_cBaiCob, loc_cCidCob, loc_cEstCob, loc_cCepCob, loc_oErro
+        LOCAL ARRAY loc_aPrinters[1]
 
         IF !MsgConfirma("Confirma a Impress" + CHR(227) + "o do(s) Boleto(s) Banc" + CHR(225) + "rio(s)?")
-            THIS.txt_4c_Locals.SetFocus()
+            *-- Legado: ThisForm.getLocals.SetFocus. SetFocus em controle com
+            *-- Enabled = .F. estoura em VFP9; no legado isso nunca acontecia
+            *-- porque cmdImprimir fica desabilitado junto com getLocals quando
+            *-- nao ha configuracao de boleto, tornando este caminho inalcancavel.
+            IF THIS.txt_4c_Locals.Enabled
+                THIS.txt_4c_Locals.SetFocus()
+            ENDIF
             RETURN
         ENDIF
 
-        THIS.LockScreen = .T.
+        IF EMPTY(THIS.this_cFPagsSel) OR !THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
+            MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
+                CHR(225) + "lida antes de imprimir.", "Aviso")
+            RETURN
+        ENDIF
+
         loc_lProsseguir = .T.
+        THIS.LockScreen = .T.
         TRY
-            *-- Salva cLocals e cTxtCds editados de volta em SigCnFBl
-            IF !USED("cursor_4c_Config") OR RECCOUNT("cursor_4c_Config") = 0
-                MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
-                         CHR(225) + "lida antes de imprimir.", "Aviso")
-                THIS.LockScreen = .F.
+            *-- Grava Local de Pagamento/Texto do Cedente editados de volta em SigCnFBl
+            THIS.this_oBusinessObject.this_cLocals = THIS.txt_4c_Locals.Value
+            THIS.this_oBusinessObject.this_cTxtCds = THIS.obj_4c_GetTxtCds.Value
+
+            IF !THIS.this_oBusinessObject.Salvar()
+                IF !THIS.this_oBusinessObject.this_lErroExibido
+                    MsgErro("Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o")
+                ENDIF
                 loc_lProsseguir = .F.
             ENDIF
 
             IF loc_lProsseguir
-                SELECT cursor_4c_Config
-                REPLACE cLocals WITH THIS.txt_4c_Locals.Value
-                REPLACE cTxtCds WITH THIS.obj_4c_GetTxtCds.Value
-
-                loc_cSQL = "UPDATE SigCnFBl SET" + ;
-                           " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
-                           " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
-                           " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-                IF loc_nRet <= 0
-                    MsgAviso("Falha ao salvar. Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o")
-                    THIS.LockScreen = .F.
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            *-- Verifica se ha impressora de boleto configurada
-            IF loc_lProsseguir
                 loc_lTemImpressora = .F.
-                IF APRINTERS(loc_laPrinters) > 0
-                    LOCAL loc_i
-                    SELECT cursor_4c_Config
-                    FOR loc_i = 1 TO ALEN(loc_laPrinters, 1)
-                        IF UPPER(ALLTRIM(loc_laPrinters[loc_i, 1])) == UPPER(ALLTRIM(cursor_4c_Config.cNomeImps))
+                IF APRINTERS(loc_aPrinters) > 0
+                    FOR loc_i = 1 TO ALEN(loc_aPrinters, 1)
+                        IF UPPER(ALLTRIM(loc_aPrinters[loc_i, 1])) == ;
+                           UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cNomeImps))
                             loc_lTemImpressora = .T.
                             EXIT
                         ENDIF
                     ENDFOR
                 ENDIF
-
                 IF !loc_lTemImpressora
-                    MsgAviso("Nenhuma Impressora de Boleto Configurada ou Instalada.", "Aviso")
-                    THIS.LockScreen = .F.
+                    MsgAviso("Nenhuma Impressora de Boleto Configurada ou Instalada.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
                     loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            *-- Carrega movimentos a imprimir
             IF loc_lProsseguir
+                *-- Carrega movimento recebido na abertura do form (se houver)
                 IF !EMPTY(THIS.this_cChave1)
+                    IF !USED("TprMvCab")
+                        CREATE CURSOR TprMvCab (Emps C(3), Dopes C(20), Numes N(6,0), Parcs C(2))
+                    ENDIF
                     SELECT TprMvCab
                     ZAP
                     INSERT INTO TprMvCab (Emps, Dopes, Numes) VALUES ;
@@ -611,7 +713,6 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                          INT(VAL(SUBSTR(THIS.this_cChave1, 24, 6))))
                 ENDIF
 
-            *-- Cria cursor de dados do boleto (uma linha por parcela impressa)
                 IF USED("Crdados")
                     USE IN Crdados
                 ENDIF
@@ -633,27 +734,27 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                 )
                 SET NULL OFF
 
-            *-- Monta fontes de impressao a partir da configuracao
-                SELECT cursor_4c_Config
-                IF EMPTY(ALLTRIM(NVL(cursor_4c_Config.cFontePdrs, "")))
+                *-- Fontes de impressao conforme configuracao do boleto
+                IF EMPTY(ALLTRIM(NVL(THIS.this_oBusinessObject.this_cFontePdrs, "")))
                     loc_cFonteP = ""
                     loc_cFonteG = ""
                 ELSE
-                    IF NVL(cursor_4c_Config.nTamFontes, 0) = 0
-                        loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',9"
-                        loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',11"
+                    IF NVL(THIS.this_oBusinessObject.this_nTamFontes, 0) = 0
+                        loc_cFonteP = "Font '" + ALLTRIM(THIS.this_oBusinessObject.this_cFontePdrs) + "',9"
+                        loc_cFonteG = "Font '" + ALLTRIM(THIS.this_oBusinessObject.this_cFontePdrs) + "',11"
                     ELSE
-                        loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
-                                      ALLTRIM(STR(cursor_4c_Config.nTamFontes, 3))
-                        loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
-                                      ALLTRIM(STR(cursor_4c_Config.nTamFontes + 2, 3))
+                        loc_cFonteP = "Font '" + ALLTRIM(THIS.this_oBusinessObject.this_cFontePdrs) + "'," + ;
+                                      ALLTRIM(STR(THIS.this_oBusinessObject.this_nTamFontes, 3))
+                        loc_cFonteG = "Font '" + ALLTRIM(THIS.this_oBusinessObject.this_cFontePdrs) + "'," + ;
+                                      ALLTRIM(STR(THIS.this_oBusinessObject.this_nTamFontes + 2, 3))
                     ENDIF
                 ENDIF
-                loc_nTamFolha = VAL(ALLTRIM(SUBSTR(cursor_4c_Config.cTamFolha, ;
-                                    (AT("/", cursor_4c_Config.cTamFolha, 1) + 1), ;
-                                    (AT("/", cursor_4c_Config.cTamFolha, 2) - AT("/", cursor_4c_Config.cTamFolha, 1) - 1))))
+                loc_nTamFolha = VAL(ALLTRIM(SUBSTR(THIS.this_oBusinessObject.this_cTamFolha, ;
+                                    AT("/", THIS.this_oBusinessObject.this_cTamFolha, 1) + 1, ;
+                                    AT("/", THIS.this_oBusinessObject.this_cTamFolha, 2) - ;
+                                    AT("/", THIS.this_oBusinessObject.this_cTamFolha, 1) - 1)))
 
-            *-- Itera movimentos e gera dados de impressao
+                *-- Itera os movimentos a imprimir
                 SELECT TprMvCab
                 GO TOP
                 SCAN
@@ -662,28 +763,26 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                     IF VARTYPE(loc_nParcel) != "N"
                         loc_nParcel = 0
                     ENDIF
-    
-                    *-- Busca cabecalho do movimento
-                    loc_cSQL = "SELECT TOP 1 Emps, Dopes, Numes, Contaos, Contads, Nfiscals" + ;
-                               " FROM SigMvCab WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                               EscaparSQL(loc_cChave1)
+
+                    loc_cSQL = "SELECT TOP 1 emps, dopes, numes, contaos, contads" + ;
+                               " FROM SigMvCab WHERE empdopnums = " + EscaparSQL(loc_cChave1)
                     loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvCab")
                     IF loc_nRet <= 0 OR !USED("cursor_4c_MvCab") OR RECCOUNT("cursor_4c_MvCab") = 0
                         MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
-                                 "o Encontrou Movimenta" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+                            "o Encontrou Movimenta" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
                         IF USED("cursor_4c_MvCab")
                             USE IN cursor_4c_MvCab
                         ENDIF
                         LOOP
                     ENDIF
-    
-                    *-- Busca parcelas do movimento
-                    loc_cSQL = "SELECT Emps, Dopes, Numes, Parcs, Fpags, Vencs, Datas, Valos" + ;
-                               " FROM SigMvPar WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                               EscaparSQL(loc_cChave1) + " ORDER BY Parcs"
+
+                    loc_cSQL = "SELECT emps, dopes, numes, parcs, fpags, vencs, datas, valos" + ;
+                               " FROM SigMvPar WHERE empdopnums = " + EscaparSQL(loc_cChave1) + ;
+                               " ORDER BY parcs"
                     loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvPar")
                     IF loc_nRet <= 0 OR !USED("cursor_4c_MvPar") OR RECCOUNT("cursor_4c_MvPar") = 0
-                        MsgAviso("Nenhuma Forma de Pagamento Encontrada Nessa Opera" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+                        MsgAviso("Nenhuma Forma de Pagamento Encontrada Nessa Opera" + CHR(231) + CHR(227) + "o.", ;
+                            "Aten" + CHR(231) + CHR(227) + "o")
                         IF USED("cursor_4c_MvPar")
                             USE IN cursor_4c_MvPar
                         ENDIF
@@ -692,15 +791,47 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                         ENDIF
                         LOOP
                     ENDIF
-    
-                    *-- Busca nota fiscal do movimento
-                    loc_cSQL = "SELECT TOP 1 NFis, Emps, Dopes, Numes" + ;
-                               " FROM SigMvNfi WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                               EscaparSQL(loc_cChave1)
+
+                    *-- Operacao habilitada para impressao de boleto (SigCdOpe+SigOpCdc)
+                    loc_lBoletoHabilitado = .F.
+                    loc_nNfiscals = 0
+                    loc_cSQL = "SELECT TOP 1 dopes, nfiscals FROM SigCdOpe WHERE dopes = " + ;
+                               EscaparSQL(cursor_4c_MvPar.Dopes)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ope")
+                    IF loc_nRet > 0 AND USED("cursor_4c_Ope") AND RECCOUNT("cursor_4c_Ope") > 0
+                        loc_nNfiscals = NVL(cursor_4c_Ope.Nfiscals, 0)
+                        loc_cSQL = "SELECT TOP 1 dopes, impbols FROM SigOpCdc WHERE dopes = " + ;
+                                   EscaparSQL(cursor_4c_MvPar.Dopes)
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OpCdc")
+                        IF loc_nRet > 0 AND USED("cursor_4c_OpCdc") AND RECCOUNT("cursor_4c_OpCdc") > 0 ;
+                           AND NVL(cursor_4c_OpCdc.ImpBols, 0) = 1
+                            loc_lBoletoHabilitado = .T.
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_OpCdc")
+                        USE IN cursor_4c_OpCdc
+                    ENDIF
+                    IF USED("cursor_4c_Ope")
+                        USE IN cursor_4c_Ope
+                    ENDIF
+
+                    IF !loc_lBoletoHabilitado
+                        MsgAviso("Opera" + CHR(231) + CHR(227) + "o sem Impress" + CHR(227) + ;
+                            "o de Boleto Banc" + CHR(225) + "rio Habilitado.", "Aten" + CHR(231) + CHR(227) + "o")
+                        IF USED("cursor_4c_MvPar")
+                            USE IN cursor_4c_MvPar
+                        ENDIF
+                        IF USED("cursor_4c_MvCab")
+                            USE IN cursor_4c_MvCab
+                        ENDIF
+                        LOOP
+                    ENDIF
+
+                    loc_cSQL = "SELECT TOP 1 NFis FROM SigMvNfi WHERE empdopnums = " + EscaparSQL(loc_cChave1)
                     loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvNfi")
                     IF loc_nRet <= 0 OR !USED("cursor_4c_MvNfi") OR RECCOUNT("cursor_4c_MvNfi") = 0
                         MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-                                 "o possui Nota Fiscal Cadastrada.", "Aten" + CHR(231) + CHR(227) + "o")
+                            "o possui Nota Fiscal Cadastrada.", "Aten" + CHR(231) + CHR(227) + "o")
                         IF USED("cursor_4c_MvNfi")
                             USE IN cursor_4c_MvNfi
                         ENDIF
@@ -712,146 +843,125 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                         ENDIF
                         LOOP
                     ENDIF
-    
-                    *-- Busca dados do cliente (conta de origem ou destino conforme tipo NF)
+
+                    *-- Cursor/indice do template de posicoes de impressao
+                    IF USED("TmpImprime")
+                        USE IN TmpImprime
+                    ENDIF
+                    CREATE CURSOR TmpImprime ( ;
+                        Linha    N(6,2), ;
+                        Coluna   N(6,2), ;
+                        Conteudo C(100), ;
+                        Style    C(3), ;
+                        fontname C(64), ;
+                        fontsize I, ;
+                        linesize N(6,2), ;
+                        nheight  N(6,2) ;
+                    )
+                    INDEX ON (Linha * 1000000000) + (Coluna * 100) TAG Ordem
+
                     SELECT cursor_4c_MvCab
-                    LOCAL loc_cContaCli
-                    loc_cContaCli = IIF(NVL(cursor_4c_MvCab.Nfiscals, 0) = 1, ;
-                                        cursor_4c_MvCab.Contaos, cursor_4c_MvCab.Contads)
-                    loc_cSQL = "SELECT TOP 1 Iclis, Razaos, Cpfs," + ;
-                               " Endes, EndCobs, Bairs, BaiCobs, Cidas, CidCobs," + ;
-                               " Estas, EstCobs, Ceps, CepCobs" + ;
+                    loc_cContaCli = IIF(loc_nNfiscals = 1, cursor_4c_MvCab.Contaos, cursor_4c_MvCab.Contads)
+
+                    loc_cSQL = "SELECT TOP 1 Iclis, Razaos, Cpfs, Endes, EndCobs, Bairs, BaiCobs," + ;
+                               " Cidas, CidCobs, Estas, EstCobs, Ceps, CepCobs" + ;
                                " FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaCli)
                     loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cli")
-                    IF loc_nRet <= 0 OR !USED("cursor_4c_Cli") OR RECCOUNT("cursor_4c_Cli") = 0
-                        IF USED("cursor_4c_Cli")
-                            USE IN cursor_4c_Cli
-                        ENDIF
-                        IF USED("cursor_4c_MvNfi")
-                            USE IN cursor_4c_MvNfi
-                        ENDIF
-                        IF USED("cursor_4c_MvPar")
-                            USE IN cursor_4c_MvPar
-                        ENDIF
-                        IF USED("cursor_4c_MvCab")
-                            USE IN cursor_4c_MvCab
-                        ENDIF
-                        LOOP
-                    ENDIF
-    
-                    *-- Itera parcelas e insere dados para impressao
+
+                    SELECT Crdados
+                    ZAP
+
                     SELECT cursor_4c_MvPar
                     GO TOP
                     SCAN
                         loc_lTaOk = .T.
-                        IF loc_nParcel > 0
-                            IF cursor_4c_MvPar.Parcs != loc_nParcel
-                                loc_lTaOk = .F.
-                            ENDIF
+                        IF loc_nParcel > 0 AND cursor_4c_MvPar.Parcs != loc_nParcel
+                            loc_lTaOk = .F.
                         ENDIF
-    
+
                         IF loc_lTaOk
-                            *-- Verifica forma de pagamento habilita boleto
-                            loc_cSQL = "SELECT TOP 1 Fpags, ImpBols, ImpNotas" + ;
-                                       " FROM SigOpFp WHERE Fpags = " + ;
+                            loc_cSQL = "SELECT TOP 1 Fpags, ImpBols, ImpNotas FROM SigOpFp WHERE Fpags = " + ;
                                        EscaparSQL(cursor_4c_MvPar.Fpags)
                             loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OpFp")
-    
-                            IF loc_nRet > 0 AND USED("cursor_4c_OpFp") AND ;
-                               RECCOUNT("cursor_4c_OpFp") > 0 AND cursor_4c_OpFp.ImpBols
-    
-                                *-- Cria cursor TmpImprime e indice de ordenacao
+
+                            IF loc_nRet > 0 AND USED("cursor_4c_OpFp") AND RECCOUNT("cursor_4c_OpFp") > 0 ;
+                               AND NVL(cursor_4c_OpFp.ImpBols, 0) = 1
+
                                 IF USED("TmpImprime")
-                                    USE IN TmpImprime
+                                    SELECT TmpImprime
+                                    ZAP
                                 ENDIF
-                                CREATE CURSOR TmpImprime ( ;
-                                    Linha    N(6,2), ;
-                                    Coluna   N(6,2), ;
-                                    Conteudo C(100), ;
-                                    Style    C(3), ;
-                                    fontname C(64), ;
-                                    fontsize I, ;
-                                    linesize N(6,2), ;
-                                    nheight  N(6,2) ;
-                                )
-                                INDEX ON (Linha * 1000000000) + (Coluna * 100) TAG Ordem
-    
-                                LOCAL loc_xVenc
-                                SELECT cursor_4c_OpFp
+
                                 IF NVL(cursor_4c_OpFp.ImpNotas, 0) = 1
-                                    SELECT cursor_4c_MvPar
                                     loc_xVenc = DTOC(cursor_4c_MvPar.Vencs)
                                 ELSE
-                                    SELECT cursor_4c_MvPar
                                     loc_xVenc = ALLTRIM(NVL(cursor_4c_MvPar.FPags, ""))
                                 ENDIF
-    
-                                SELECT cursor_4c_MvNfi
-                                LOCAL loc_cNumDoc
-                                loc_cNumDoc = ALLTRIM(NVL(cursor_4c_MvNfi.NFis, "")) + "-" + ;
-                                              ALLTRIM(STR(NVL(cursor_4c_MvPar.Parcs, 0), 1))
-    
-                                SELECT cursor_4c_Cli
-                                LOCAL loc_cEndCob, loc_cBaiCob, loc_cCidCob, loc_cEstCob, loc_cCepCob
-                                loc_cEndCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EndCobs, ""))), ;
-                                                  cursor_4c_Cli.EndCobs, cursor_4c_Cli.Endes)
-                                loc_cBaiCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.BaiCobs, ""))), ;
-                                                  cursor_4c_Cli.BaiCobs, cursor_4c_Cli.Bairs)
-                                loc_cCidCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CidCobs, ""))), ;
-                                                  cursor_4c_Cli.CidCobs, cursor_4c_Cli.Cidas)
-                                loc_cEstCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EstCobs, ""))), ;
-                                                  cursor_4c_Cli.EstCobs, cursor_4c_Cli.Estas)
-                                loc_cCepCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CepCobs, ""))), ;
-                                                  cursor_4c_Cli.CepCobs, cursor_4c_Cli.Ceps)
-    
-                                SELECT cursor_4c_MvPar
-                                SELECT Crdados
-                                ZAP
-                                SELECT cursor_4c_Config
-                                INSERT INTO Crdados VALUES ( ;
-                                    cursor_4c_Config.cLocals, ;
-                                    m.loc_xVenc, ;
-                                    cursor_4c_MvPar.Datas, ;
-                                    m.loc_cNumDoc, ;
-                                    cursor_4c_MvPar.Valos, ;
-                                    cursor_4c_Cli.Razaos, ;
-                                    cursor_4c_Cli.Cpfs, ;
-                                    m.loc_cEndCob, ;
-                                    m.loc_cBaiCob, ;
-                                    m.loc_cCidCob, ;
-                                    m.loc_cEstCob, ;
-                                    m.loc_cCepCob, ;
-                                    THIS.obj_4c_GetTxtCds.Value ;
-                                )
-    
-                                *-- Preenche TmpImprime com posicoes configuradas
-                                SELECT cursor_4c_Config
-                                THIS.GrDetalhe(cursor_4c_Config.nLnLocals,  cursor_4c_Config.nClLocals,  "Crdados.clocal",  "", 60, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnDtVencs, cursor_4c_Config.nClDtVencs, "Crdados.Vencs",   "", 9,  1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnDtDocs,  cursor_4c_Config.nClDtDocs,  "Dtoc(Crdados.Datdoc)", "", 9, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnNrDocs,  cursor_4c_Config.nClNrDocs,  "Crdados.numdoc",  "", 9,  1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnVlDocs,  cursor_4c_Config.nClVlDocs,  "Transform(CrDados.Valor,'@Z 999,999,999.99')", "", 15, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnRazClis, cursor_4c_Config.nClRazClis, "AllTrim(Crdados.Razaos)",  "", 50, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnCgcClis, cursor_4c_Config.nClCgcClis, "AllTrim(Crdados.Cpfs)",    "", 20, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnEndCobs, cursor_4c_Config.nClEndCobs, "AllTrim(Crdados.EndCobs)", "", 80, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnBaiCobs, cursor_4c_Config.nClBaiCobs, "AllTrim(Crdados.BaiCobs)", "", 20, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnCidCobs, cursor_4c_Config.nClCidCobs, "AllTrim(Crdados.CidCobs)", "", 20, 1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnEstCobs, cursor_4c_Config.nClEstCobs, "AllTrim(Crdados.EstCobs)", "", 2,  1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnCepCobs, cursor_4c_Config.nClCepCobs, "AllTrim(Crdados.CepCobs)", "", 9,  1)
-                                THIS.GrDetalhe(cursor_4c_Config.nLnTxtCds,  cursor_4c_Config.nClTxtCds,  "Crdados.texto",   "", 60, 6)
-    
-                                *-- Chama rotina de impressao matricial SigPrIbl.prg
-                                DO SigPrIbl WITH "tmpimprime", ;
-                                    ALLTRIM(cursor_4c_Config.cNomeImps), ;
-                                    "to printer noconsole", ;
-                                    0, loc_nTamFolha, 0, 0, "crdados", 17
+
+                                *-- Legado: CrtmpNfis.NFis + '-' + Str(Crtmppar.parcs,1) - SEM
+                                *-- AllTrim. SigMvNfi.nfis eh char(6), mais "-" mais 1 digito da
+                                *-- EXATAMENTE os 8 de Crdados.numdoc C(8): a largura do destino
+                                *-- prova que o campo eh POSICIONAL e o padding faz parte dele
+                                *-- (CLAUDE.md regra #42). AllTrim encurtaria o numero do
+                                *-- documento impresso no boleto.
+                                loc_cNumDoc = NVL(cursor_4c_MvNfi.NFis, "") + "-" + ;
+                                              STR(NVL(cursor_4c_MvPar.Parcs, 0), 1)
+
+                                IF USED("cursor_4c_Cli") AND RECCOUNT("cursor_4c_Cli") > 0
+                                    loc_cEndCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EndCobs, ""))), ;
+                                        cursor_4c_Cli.EndCobs, cursor_4c_Cli.Endes)
+                                    loc_cBaiCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.BaiCobs, ""))), ;
+                                        cursor_4c_Cli.BaiCobs, cursor_4c_Cli.Bairs)
+                                    loc_cCidCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CidCobs, ""))), ;
+                                        cursor_4c_Cli.CidCobs, cursor_4c_Cli.Cidas)
+                                    loc_cEstCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EstCobs, ""))), ;
+                                        cursor_4c_Cli.EstCobs, cursor_4c_Cli.Estas)
+                                    loc_cCepCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CepCobs, ""))), ;
+                                        cursor_4c_Cli.CepCobs, cursor_4c_Cli.Ceps)
+
+                                    INSERT INTO Crdados VALUES ( ;
+                                        THIS.this_oBusinessObject.this_cLocals, loc_xVenc, cursor_4c_MvPar.Datas, ;
+                                        loc_cNumDoc, cursor_4c_MvPar.Valos, cursor_4c_Cli.Razaos, cursor_4c_Cli.Cpfs, ;
+                                        loc_cEndCob, loc_cBaiCob, loc_cCidCob, loc_cEstCob, loc_cCepCob, ;
+                                        THIS.this_oBusinessObject.this_cTxtCds)
+                                ENDIF
                             ENDIF
                             IF USED("cursor_4c_OpFp")
                                 USE IN cursor_4c_OpFp
                             ENDIF
                         ENDIF
                     ENDSCAN
-    
+
+                    *-- ATENCAO: as 13 linhas de posicao e a chamada da rotina de
+                    *-- impressao rodam UMA VEZ POR MOVIMENTO, DEPOIS do EndScan das
+                    *-- parcelas - exatamente onde o legado as tem (cmdImprimir.Click:
+                    *-- o EndScan de CrTmpPar fecha e so entao vem os ThisForm.GrDetalhe
+                    *-- e o "do SigPrIbl"). Crdados chega aqui com TODAS as parcelas
+                    *-- acumuladas e eh impresso de uma vez. NUNCA mover para dentro do
+                    *-- SCAN: ali SigPrIbl seria chamado uma vez por parcela sobre um
+                    *-- Crdados que cresce a cada volta, reimprimindo os boletos das
+                    *-- parcelas anteriores (a 1a sairia N vezes) - sem erro e sem log.
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnLocals,  THIS.this_oBusinessObject.this_nClLocals,  "Crdados.clocal",  "", 60, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnDtVencs, THIS.this_oBusinessObject.this_nClDtVencs, "Crdados.vencs",   "", 9,  1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnDtDocs,  THIS.this_oBusinessObject.this_nClDtDocs,  "Dtoc(Crdados.datdoc)", "", 9, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnNrDocs,  THIS.this_oBusinessObject.this_nClNrDocs,  "Crdados.numdoc",  "", 9,  1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnVlDocs,  THIS.this_oBusinessObject.this_nClVlDocs,  "Transform(Crdados.valor,'@Z 999,999,999.99')", "", 15, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnRazClis, THIS.this_oBusinessObject.this_nClRazClis, "AllTrim(Crdados.razaos)",  "", 50, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnCgcClis, THIS.this_oBusinessObject.this_nClCgcClis, "AllTrim(Crdados.cpfs)",    "", 20, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnEndCobs, THIS.this_oBusinessObject.this_nClEndCobs, "AllTrim(Crdados.endcobs)", "", 80, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnBaiCobs, THIS.this_oBusinessObject.this_nClBaiCobs, "AllTrim(Crdados.baicobs)", "", 20, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnCidCobs, THIS.this_oBusinessObject.this_nClCidCobs, "AllTrim(Crdados.cidcobs)", "", 20, 1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnEstCobs, THIS.this_oBusinessObject.this_nClEstCobs, "AllTrim(Crdados.estcobs)", "", 2,  1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnCepCobs, THIS.this_oBusinessObject.this_nClCepCobs, "AllTrim(Crdados.cepcobs)", "", 9,  1)
+                    THIS.GrDetalhe(THIS.this_oBusinessObject.this_nLnTxtCds,  THIS.this_oBusinessObject.this_nClTxtCds,  "Crdados.texto",   "", 60, 6)
+
+                    *-- Rotina de impressao matricial do legado (nao portada - CLAUDE.md
+                    *-- regra #27: ausencia tem de ficar visivel, nao escondida por um
+                    *-- stub que "finge" ter impresso).
+                    DO SigPrIbl WITH "tmpimprime", ;
+                        ALLTRIM(THIS.this_oBusinessObject.this_cNomeImps), ;
+                        "to printer noconsole", 0, loc_nTamFolha, 0, 0, "crdados", 17
+
                     IF USED("cursor_4c_Cli")
                         USE IN cursor_4c_Cli
                     ENDIF
@@ -865,46 +975,52 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                         USE IN cursor_4c_MvCab
                     ENDIF
                 ENDSCAN
-
-            *-- Reativa form pai e fecha
-                THIS.LockScreen = .F.
-                IF VARTYPE(THIS.this_xNform1) = "O" AND !ISNULL(THIS.this_xNform1)
-                    THIS.this_xNform1.Enabled = .T.
-                ENDIF
-                THIS.Release()
             ENDIF
         CATCH TO loc_oErro
-            THIS.LockScreen = .F.
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ao Imprimir")
+            loc_lProsseguir = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + ;
+                CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro ao Imprimir")
         ENDTRY
+
+        THIS.LockScreen = .F.
+        IF loc_lProsseguir
+            IF VARTYPE(THIS.this_oControleChamador) = "O"
+                THIS.this_oControleChamador.Enabled = .T.
+            ENDIF
+            THIS.Release()
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CmdSaidaClick - Confirma saida e fecha o formulario
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * CmdSaidaClick - cmdSaida.Click do legado: confirma abandono se a
+    * impressao ainda estiver habilitada, reabilita o controle do form
+    * chamador e encerra.
+    *==========================================================================
     PROCEDURE CmdSaidaClick()
         LOCAL loc_lPodeFechar, loc_oErro
+        loc_lPodeFechar = .F.
         TRY
             IF !THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
                 loc_lPodeFechar = .T.
             ELSE
                 loc_lPodeFechar = MsgConfirma("Deseja Abandonar as Impress" + CHR(245) + "es do Boleto?")
             ENDIF
-
-            IF loc_lPodeFechar
-                IF VARTYPE(THIS.this_xNform1) = "O" AND !ISNULL(THIS.this_xNform1)
-                    THIS.this_xNform1.Enabled = .T.
-                ENDIF
-                THIS.Release()
-            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao sair")
         ENDTRY
+
+        IF loc_lPodeFechar
+            IF VARTYPE(THIS.this_oControleChamador) = "O"
+                THIS.this_oControleChamador.Enabled = .T.
+            ENDIF
+            THIS.Release()
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * GrDetalhe - Insere linha de dados no cursor TmpImprime para impressao matricial
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * GrDetalhe - grdetalhe do legado: insere uma linha de posicao/conteudo no
+    * cursor TmpImprime, usado pela rotina de impressao matricial.
+    *==========================================================================
     PROCEDURE GrDetalhe(par_nLinha, par_nColuna, par_cDetalhe, par_cEstilo, par_nLineSize, par_nHeight)
         LOCAL loc_nLinha, loc_nColuna, loc_cDetalhe, loc_cEstilo, loc_oErro
         TRY
@@ -919,8 +1035,7 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
             IF !(loc_cEstilo == "*") AND (loc_nColuna != 0 OR loc_nLinha != 0)
                 IF USED("TmpImprime")
                     INSERT INTO TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ;
-                        VALUES (loc_nLinha, loc_nColuna, loc_cDetalhe, ;
-                                ALLTRIM(loc_cEstilo), par_nLineSize, par_nHeight)
+                        VALUES (loc_nLinha, loc_nColuna, loc_cDetalhe, ALLTRIM(loc_cEstilo), par_nLineSize, par_nHeight)
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -928,67 +1043,155 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL de impressao de boleto: a acao "Incluir/Confirmar" eh a
-    * propria impressao dos boletos bancarios. Delega para CmdImprimirClick, que
-    * confirma, salva a config editada em SigCnFBl e envia os movimentos para
-    * impressora matricial via SigPrIbl.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
+    *==========================================================================
+    * CarregarLista - Ponto de entrada canonico do funil multi-fase. Form
+    * OPERACIONAL flat: recarrega a configuracao do boleto atualmente
+    * selecionado.
+    *==========================================================================
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
         TRY
-            IF !THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
-                MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
-                         CHR(225) + "lida antes de imprimir.", "Aviso")
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.SetFocus()
-                ENDIF
-                loc_lProsseguir = .F.
+            THIS.AtualizaBoleto(THIS.this_cFPagsSel)
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao Carregar")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - Form OPERACIONAL flat: captura o fpags digitado.
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oErro
+        TRY
+            THIS.this_cFPagsSel = ALLTRIM(NVL(THIS.txt_4c_FPags.Value, ""))
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em FormParaBO")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Popula os campos a partir do this_oBusinessObject carregado.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oErro
+        TRY
+            THIS.txt_4c_FPags.Value     = ALLTRIM(NVL(THIS.this_oBusinessObject.this_cFPags, ""))
+            THIS.txt_4c_Locals.Value    = NVL(THIS.this_oBusinessObject.this_cLocals, "")
+            THIS.obj_4c_GetTxtCds.Value = NVL(THIS.this_oBusinessObject.this_cTxtCds, "")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em BOParaForm")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos - Habilita/desabilita os campos editaveis e o botao
+    * Imprimir conforme exista configuracao de boleto carregada.
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHabilitar, loc_oErro
+        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+        TRY
+            THIS.txt_4c_Locals.Enabled    = loc_lHabilitar
+            THIS.obj_4c_GetTxtCds.Enabled = loc_lHabilitar
+            THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = loc_lHabilitar
+            IF !loc_lHabilitar
+                THIS.obj_4c_CmdGImprimir.Value = 2
             ENDIF
-            IF loc_lProsseguir
-                THIS.CmdImprimirClick()
-            ENDIF
+            THIS.obj_4c_CmdGImprimir.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em HabilitarCampos")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos - Limpa a selecao corrente (equivalente a nao ter nenhuma
+    * configuracao de boleto carregada).
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oErro
+        TRY
+            THIS.this_cFPagsSel        = ""
+            THIS.txt_4c_FPags.Value    = ""
+            THIS.txt_4c_Locals.Value   = ""
+            THIS.txt_4c_Locals.Enabled = .F.
+            THIS.obj_4c_GetTxtCds.Value   = ""
+            THIS.obj_4c_GetTxtCds.Enabled = .F.
+            THIS.lbl_4c_LblAviso.Visible  = .T.
+            THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .F.
+            THIS.obj_4c_CmdGImprimir.Value = 2
+            THIS.obj_4c_CmdGImprimir.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em LimparCampos")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - Form OPERACIONAL flat: o "modo" eh determinado por
+    * existir ou nao configuracao de boleto carregada para o fpags atual.
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
+        LOCAL loc_lTemConfig, loc_oErro
+        TRY
+            loc_lTemConfig = !EMPTY(THIS.this_cFPagsSel) AND THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
+            THIS.lbl_4c_LblAviso.Visible = !loc_lTemConfig
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em AjustarBotoesPorModo")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnIncluirClick - Ponto de entrada canonico do funil multi-fase. Form
+    * OPERACIONAL de impressao de boleto: a acao "Incluir/Confirmar" eh a
+    * propria impressao - delega para CmdImprimirClick.
+    *==========================================================================
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_oErro
+
+        IF EMPTY(THIS.this_cFPagsSel) OR !THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
+            MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
+                CHR(225) + "lida antes de imprimir.", "Aviso")
+            THIS.txt_4c_FPags.SetFocus()
+            RETURN
+        ENDIF
+
+        TRY
+            THIS.CmdImprimirClick()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Incluir")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL: "Alterar" corresponde a recarregar a config do boleto
-    * atualmente selecionado (SigCnFBl) e permitir edicao de Local de Pagamento
-    * e Texto do Cedente. Se nenhum FPags esta selecionado, avisa o usuario.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnAlterarClick - Ponto de entrada canonico do funil multi-fase. Form
+    * OPERACIONAL: "Alterar" recarrega a configuracao do boleto selecionado e
+    * foca o campo de Local de Pagamento para edicao.
+    *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
+        LOCAL loc_oErro
+
+        IF EMPTY(THIS.this_cFPagsSel)
+            MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de alterar.", "Aviso")
+            THIS.txt_4c_FPags.SetFocus()
+            RETURN
+        ENDIF
+
         TRY
-            IF EMPTY(THIS.this_cFPagsSel)
-                MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de alterar.", "Aviso")
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.SetFocus()
-                ENDIF
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                THIS.AtualizaBoleto(THIS.this_cFPagsSel)
-                IF PEMSTATUS(THIS, "txt_4c_Locals", 5) AND THIS.txt_4c_Locals.Enabled
-                    THIS.txt_4c_Locals.SetFocus()
-                ENDIF
+            THIS.AtualizaBoleto(THIS.this_cFPagsSel)
+            IF THIS.txt_4c_Locals.Enabled
+                THIS.txt_4c_Locals.SetFocus()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Alterar")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL: "Visualizar" abre o picker (FormBuscaAuxiliar) de
-    * condicoes de pagamento cadastradas em SigCnFBl, permitindo o usuario
-    * escolher qual boleto configurar.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnVisualizarClick - Ponto de entrada canonico do funil multi-fase.
+    * "Visualizar" abre o picker de condicoes de pagamento cadastradas.
+    *==========================================================================
     PROCEDURE BtnVisualizarClick()
         LOCAL loc_oErro
         TRY
@@ -998,76 +1201,33 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Ponto de entrada canonico do pipeline
-    * Form OPERACIONAL: "Excluir" limpa a selecao corrente (equivalente a
-    * cancelar a configuracao ativa), desabilitando os campos e o botao
-    * Imprimir. Nao afeta dados persistidos em SigCnFBl.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnExcluirClick - Ponto de entrada canonico do funil multi-fase.
+    * "Excluir" limpa a selecao corrente (nao afeta dados persistidos).
+    *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
+        LOCAL loc_oErro
+
+        IF EMPTY(THIS.this_cFPagsSel)
+            RETURN
+        ENDIF
+        IF !MsgConfirma("Deseja limpar a Condi" + CHR(231) + CHR(227) + "o de Pagamento selecionada?")
+            RETURN
+        ENDIF
+
         TRY
-            IF EMPTY(THIS.this_cFPagsSel)
-                loc_lProsseguir = .F.
-            ENDIF
-            IF loc_lProsseguir
-                IF !MsgConfirma("Deseja limpar a Condi" + CHR(231) + CHR(227) + "o de Pagamento selecionada?")
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-            IF loc_lProsseguir
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.Value = ""
-                ENDIF
-                IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                    THIS.txt_4c_Locals.Value = ""
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                    THIS.obj_4c_GetTxtCds.Value = ""
-                ENDIF
-                THIS.AtualizaBoleto("")
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.SetFocus()
-                ENDIF
-            ENDIF
+            THIS.LimparCampos()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Excluir")
         ENDTRY
+
+        THIS.txt_4c_FPags.SetFocus()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna todos controles visiveis recursivamente
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oControl, loc_oRef
-        IF VARTYPE(par_oContainer) = "O"
-            loc_oRef = par_oContainer
-        ELSE
-            loc_oRef = THIS
-        ENDIF
-        FOR loc_i = 1 TO loc_oRef.ControlCount
-            loc_oControl = loc_oRef.Controls(loc_i)
-            IF VARTYPE(loc_oControl) = "O"
-                IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_CABECALHO")
-                    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                        THIS.TornarControlesVisiveis(loc_oControl)
-                    ENDIF
-                    LOOP
-                ENDIF
-                IF PEMSTATUS(loc_oControl, "Visible", 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oControl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnBuscarClick - Abre lookup de condicoes de pagamento (SigCnFBl)
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnBuscarClick - Ponto de entrada canonico do funil multi-fase. Abre o
+    * picker de condicoes de pagamento.
+    *==========================================================================
     PROCEDURE BtnBuscarClick()
         LOCAL loc_oErro
         TRY
@@ -1077,9 +1237,9 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnEncerrarClick - Fecha o formulario (confirma se impressao habilitada)
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnEncerrarClick - Ponto de entrada canonico do funil multi-fase.
+    *==========================================================================
     PROCEDURE BtnEncerrarClick()
         LOCAL loc_oErro
         TRY
@@ -1089,41 +1249,39 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnSalvarClick - Salva alteracoes de Local e Texto Cedente em SigCnFBl
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnSalvarClick - Salva Local de Pagamento/Texto do Cedente editados sem
+    * disparar a impressao (uso do funil multi-fase/testes).
+    *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_cSQL, loc_nRet, loc_oErro, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("cursor_4c_Config") OR RECCOUNT("cursor_4c_Config") = 0
-                MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de salvar.", "Aviso")
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.SetFocus()
-                ENDIF
-                loc_lProsseguir = .F.
-            ENDIF
+        LOCAL loc_oErro
 
-            IF loc_lProsseguir
-                loc_cSQL = "UPDATE SigCnFBl SET" + ;
-                           " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
-                           " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
-                           " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-                IF loc_nRet > 0
-                    MsgInfo("Dados salvos com sucesso.", "Salvo")
-                ELSE
-                    MsgAviso("Falha ao salvar. Verifique a conex" + CHR(227) + "o.", "Aviso")
+        IF EMPTY(THIS.this_cFPagsSel)
+            MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de salvar.", "Aviso")
+            THIS.txt_4c_FPags.SetFocus()
+            RETURN
+        ENDIF
+
+        TRY
+            THIS.this_oBusinessObject.this_cLocals = THIS.txt_4c_Locals.Value
+            THIS.this_oBusinessObject.this_cTxtCds = THIS.obj_4c_GetTxtCds.Value
+
+            IF THIS.this_oBusinessObject.Salvar()
+                MsgInfo("Dados salvos com sucesso.", "Salvo")
+            ELSE
+                IF !THIS.this_oBusinessObject.this_lErroExibido
+                    MsgErro("Falha ao salvar. Verifique a conex" + CHR(227) + "o.", "Erro")
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ao Salvar")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro ao Salvar")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnCancelarClick - Cancela edicao corrente, restaura valores do banco
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * BtnCancelarClick - Ponto de entrada canonico do funil multi-fase.
+    * Restaura os valores gravados (descarta edicao em andamento).
+    *==========================================================================
     PROCEDURE BtnCancelarClick()
         LOCAL loc_oErro
         TRY
@@ -1137,155 +1295,28 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarLista - Recarrega configuracao do boleto bancario atual
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            THIS.AtualizaBoleto(THIS.this_cFPagsSel)
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao Carregar")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - Extrai valores do formulario para propriedades internas
-    * (Form OPERACIONAL: nao usa BO CRUD; armazena em variaveis de estado)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oErro
-        TRY
-            THIS.this_cFPagsSel = ALLTRIM(NVL(THIS.txt_4c_FPags.Value, ""))
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em FormParaBO")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BOParaForm - Popula campos do formulario a partir do cursor de config
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oErro
-        TRY
-            IF USED("cursor_4c_Config") AND RECCOUNT("cursor_4c_Config") > 0
-                SELECT cursor_4c_Config
-                GO TOP
-                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                    THIS.txt_4c_FPags.Value = ALLTRIM(NVL(cursor_4c_Config.FPags, ""))
-                ENDIF
-                IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                    THIS.txt_4c_Locals.Value = NVL(cursor_4c_Config.cLocals, "")
-                ENDIF
-                IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                    THIS.obj_4c_GetTxtCds.Value = NVL(cursor_4c_Config.cTxtCds, "")
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em BOParaForm")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - Habilita ou desabilita campos conforme estado atual
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHabilitar, loc_oErro
-        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
-        TRY
-            IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                THIS.txt_4c_Locals.Enabled = loc_lHabilitar
-            ENDIF
-            IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                THIS.obj_4c_GetTxtCds.Enabled = loc_lHabilitar
-            ENDIF
-            IF PEMSTATUS(THIS, "obj_4c_CmdGImprimir", 5)
-                THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = loc_lHabilitar
-                IF !loc_lHabilitar
-                    THIS.obj_4c_CmdGImprimir.Value = 2
-                ENDIF
-                THIS.obj_4c_CmdGImprimir.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em HabilitarCampos")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * LimparCampos - Limpa todos os campos do formulario
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oErro
-        TRY
-            THIS.this_cFPagsSel = ""
-            IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                THIS.txt_4c_FPags.Value = ""
-            ENDIF
-            IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                THIS.txt_4c_Locals.Value   = ""
-                THIS.txt_4c_Locals.Enabled = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                THIS.obj_4c_GetTxtCds.Value   = ""
-                THIS.obj_4c_GetTxtCds.Enabled = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "lbl_4c_LblAviso", 5)
-                THIS.lbl_4c_LblAviso.Visible = .T.
-            ENDIF
-            IF PEMSTATUS(THIS, "obj_4c_CmdGImprimir", 5)
-                THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled = .F.
-                THIS.obj_4c_CmdGImprimir.Value = 2
-                THIS.obj_4c_CmdGImprimir.Refresh()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em LimparCampos")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Ajusta estado do botao Imprimir conforme config
-    * Form OPERACIONAL: o "modo" eh determinado por loc_lAchou em AtualizaBoleto
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo(par_cModo)
-        LOCAL loc_lTemConfig, loc_oErro
-        TRY
-            loc_lTemConfig = USED("cursor_4c_Config") AND RECCOUNT("cursor_4c_Config") > 0
-            THIS.HabilitarCampos(loc_lTemConfig)
-            IF PEMSTATUS(THIS, "lbl_4c_LblAviso", 5)
-                THIS.lbl_4c_LblAviso.Visible = !loc_lTemConfig
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em AjustarBotoesPorModo")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Destroy - Libera recursos ao fechar o formulario
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Destroy - reabilita o controle do form chamador (pcNform1 do legado) e
+    * libera os cursores auxiliares de impressao
+    *==========================================================================
     PROCEDURE Destroy()
-        IF VARTYPE(THIS.this_xNform1) = "O" AND !ISNULL(THIS.this_xNform1)
-            THIS.this_xNform1.Enabled = .T.
-        ENDIF
-
-        IF USED("cursor_4c_Config")
-            USE IN cursor_4c_Config
-        ENDIF
-        IF USED("cursor_4c_ConfigTemp")
-            USE IN cursor_4c_ConfigTemp
-        ENDIF
-        IF USED("cursor_4c_BuscaFPags")
-            USE IN cursor_4c_BuscaFPags
-        ENDIF
-        IF USED("Crdados")
-            USE IN Crdados
-        ENDIF
-        IF USED("TmpImprime")
-            USE IN TmpImprime
-        ENDIF
-
+        LOCAL loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oControleChamador) = "O"
+                THIS.this_oControleChamador.Enabled = .T.
+            ENDIF
+            IF USED("cursor_4c_BuscaFPags")
+                USE IN cursor_4c_BuscaFPags
+            ENDIF
+            IF USED("Crdados")
+                USE IN Crdados
+            ENDIF
+            IF USED("TmpImprime")
+                USE IN TmpImprime
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em Destroy")
+        ENDTRY
         DODEFAULT()
     ENDPROC
 

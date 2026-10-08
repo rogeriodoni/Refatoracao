@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The connectivity probe is still running in the background (consistent with the known "no route to this subnet" condition ÔÇö it typically hangs/times out rather than failing fast). I won't wait on it; the diagnosis doesn't depend on it.
+
+## Conclus├úo: n├úo ├® bug de c├│digo
+
+Este erro **n├úo ├® causado por `FormSIGPRIFF.prg` ou `SIGPRIFFBO.prg`**. Pelo log:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL: Codigo: 1526 ... DBNETLIB ... SQL Server inexistente ou acesso negado.
+Status: ERRO AO CRIAR OBJETO
+```
+
+O pr├®-flight de conex├úo SQL (`SQLSTRINGCONNECT` dentro de `TestFormWrapper.prg`, ETAPA 1B) falha **antes** de qualquer `CREATEOBJECT("FormSIGPRIFF")` ou `CREATEOBJECT("SIGPRIFFBO")` ser logado ÔÇö ou seja, o c├│digo do form/BO sob teste nunca chega a ser instanciado nem executado.
+
+Isso ├® uma falha de infraestrutura/rede j├í documentada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24`, onde est├í o SQL Server `DB_MBAHIA` (192.168.200.10). Recorrente desde 2026-08-02, em 100+ tasks, confirmado repetidamente via `Test-NetConnection` ÔÇö sempre falha, mesmo ap├│s revis├úo exaustiva do c├│digo. Uma task anterior (task623/FormSIGPRIBL) chegou a consumir 8 de 10 tentativas de `runtime_fix` presa neste mesmo erro, sem que nenhuma edi├º├úo de `.prg` tivesse qualquer efeito.
+
+**Por isso n├úo vou editar `FormSIGPRIFF.prg` nem `SIGPRIFFBO.prg`** ÔÇö seria "corrigir ├ás ciegas" um c├│digo que provavelmente est├í correto, arriscando introduzir regress├úo sem chance de resolver o sintoma real (o erro acontece antes do form rodar).
+
+**Recomenda├º├úo**: marcar a task626 como bloqueada/pausada por infraestrutura (sem rota de rede para 192.168.200.10:1433 na m├íquina do pipeline), n├úo como falha de migra├º├úo. Reexecutar o `runtime_fix` sobre o mesmo form s├│ vai repetir o mesmo resultado at├® algu├®m com acesso ├á rede/infra liberar a rota.

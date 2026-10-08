@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O form e o BO j├í estavam substancialmente completos ÔÇö o que faltava eram duas coisas reais, n├úo os m├®todos CRUD que o prompt gen├®rico da fase pede.
+
+## O que foi feito
+
+**1. Handlers renomeados pela A├ç├âO (`FormSigPrIbb.prg`)**
+- `CmdBtnImprimirClick` ÔåÆ **`BtnImprimirClick`**
+- `CmdOkClick` ÔåÆ **`BtnEncerrarClick`** (o objeto `ok` do SCX tem `Caption = "Encerrar"`)
+
+Os dois `BINDEVENT` foram atualizados no mesmo passo. Isto n├úo ├® cosm├®tico: o gate da Fase 8 deriva a raiz do verbo do `Caption`/`Name` do CommandButton do dump (`btnImprimir` ÔåÆ `Imprimi`) e cobra `PROCEDURE Btn<raiz>*Click` **ancorado em in├¡cio de linha** ÔÇö `CmdBtnImprimirClick` tem o verbo certo mas com o `Btn` no meio, ent├úo n├úo casava. S├│ o handler foi renomeado; os objetos (`cmd_4c_Ok`/`cmd_4c_BtnImprimir`) seguem como est├úo, para n├úo quebrar o `mapeamento.json`.
+
+**2. `Commit` ausente no BO (`SigPrIbbBO.AtualizarConfiguracaoBoleto`)** ÔÇö defeito mudo de verdade
+
+O `Procedure imprimir` legado faz **dois** testes em sequ├¬ncia, cada um com `Return 0` e a mesma mensagem: o `SqlExecute` do `UPDATE SigCnFBl` e, logo abaixo, `If (poDataMgr.Commit() < 1)`. O migrado tinha s├│ o primeiro. Como a conex├úo nasce em transa├º├úo manual (`SQLGETPROP(0,"Transactions") = 2` neste ambiente), o local de pagamento e o texto do cedente editados pelo usu├írio ficavam presos na transa├º├úo aberta e **sumiriam sem erro algum na tela**. Acrescentado `SQLCOMMIT`/`SQLROLLBACK` condicionados a `loc_lManual`, com `IF` aninhado (VFP9 n├úo faz curto-circuito em `AND`).
+
+## Verifica├º├úo
+
+- `COMPILE` limpo nos tr├¬s arquivos (BO, form, `menu.prg`), com `.fxp`/`.err` apagados antes.
+- Probe instanciando o form de verdade (`tasks/task622/probe_f8.prg`): instancia OK; os dois handlers novos existem e s├úo cham├íveis **de fora da classe**; os `BINDEVENT` apontam para `BTNIMPRIMIRCLICK`/`BTNENCERRARCLICK`; posicionando na 2┬¬ linha da grade o BO recebe `A VISTA / 7` (n├úo a primeira); `BtnImprimirClick` pede a confirma├º├úo citando a parcela **selecionada** e n├úo imprime; com a grade vazia ├® no-op silencioso (fiel ao `If Not Eof('crGrade')`); `BtnEncerrarClick` libera o form.
+
+**O caminho do `Commit` n├úo foi exercitado** ÔÇö o SQL Server (192.168.200.10) n├úo ├® alcan├º├ível desta m├íquina, e `AtualizarConfiguracaoBoleto` retorna no guard de `gnConnHandle` antes de chegar l├í. A mudan├ºa est├í provada s├│ por compila├º├úo e por paridade linha-a-linha com o dump legado.
+
+Registrei as duas li├º├Áes nas mem├│rias existentes (`feedback_handler_nomeado_pela_acao_nao_pelo_objeto_legado`, `feedback_conexao_sql_transactions_2_sem_commit`) em vez de criar arquivos novos.

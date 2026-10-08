@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico
+
+O erro reportado (`3 diferen├ºas visuais`) ├® o falso-positivo j├í catalogado na mem├│ria `feedback_titulo_nao_propagado_falso_positivo.md`:
+
+1. `cntSombra.Width`: SCX est├ítico = 1100, migrado = 1000 (`THIS.Width`) ÔÇö regra #11 do CLAUDE.md manda **sempre** `THIS.Width` no container do cabe├ºalho, nunca o literal do SCX (que nem casa com o pr├│prio `Width=1000` do form).
+2/3. `lblSombra.Caption` / `lblTitulo.Caption`: SCX est├ítico = `"Cadastro de Testes"` (res├¡duo de template da classe-base), migrado = `"Gera├º├úo de Movimenta├º├Áes de Estoque"`. O legado sobrescreve isso em runtime (`ThisForm.cntSombra.lblSombra/lblTitulo.Caption = ThisForm.Caption`, dump linhas 958-959) e o `FormSigPrGst.prg` j├í reproduz exatamente isso em `ConfigurarCabecalho()` (linhas 1241, 1257, 1275).
+
+**Causa raiz n├úo estava no form/BO** ÔÇö ambos j├í estavam corretos. A causa era o gate `ComparadorUI.prg::ValoresDiferentes`, que s├│ recentemente ganhou as exce├º├Áes para este padr├úo (Caption residual + Width do cabe├ºalho), e essa corre├º├úo j├í estava presente no working tree (n├úo commitada ainda), por├®m **feita depois** do log de erro usado nesta tarefa (log de 07/10 03:23; fix do gate de 08/10 03:34).
+
+## A├º├úo tomada
+
+N├úo alterei `FormSigPrGst.prg` nem `SigPrGstBO.prg` ÔÇö editar o Caption/Width ali para "casar" com o SCX est├ítico seria introduzir uma regress├úo real de UX (t├¡tulo errado / largura inconsistente com o form), exatamente o erro j├í documentado 12+ vezes na mem├│ria.
+
+Reexecutei a valida├º├úo (`ValidarUIFidelity.prg` via `VFPExecutor.ps1`) para confirmar: resultado agora ├® **0 erros, 0 diferen├ºas visuais, 159 avisos** ÔÇö o gate j├í corrige o falso positivo. Limpei os arquivos tempor├írios de reteste e os `.fxp` gerados.
+
+Nenhum c├│digo de produ├º├úo precisou de mudan├ºa; a corre├º├úo efetiva j├í est├í em `projeto/app/utils/ComparadorUI.prg` (ainda n├úo commitada).

@@ -1,0 +1,6 @@
+SET KEY ativo             -> visiveis = 1 (esperado 1)
+depois de SET ORDER TO    -> visiveis = 3 (3 = SET ORDER LIMPOU o key)
+SET FILTER ativo          -> visiveis = 1 (esperado 1)
+depois de SET ORDER TO    -> visiveis = 1 (se 1, o FILTER SOBREVIVE e o Processar veria so 1 item)
+depois de SET FILTER TO   -> visiveis = 3 (esperado 3)
+REPLACE ALL sob FILTER    -> linhas alteradas = 1 (1 = filtro restringiu; 3 = nao restringiu)

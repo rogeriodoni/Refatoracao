@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\sigpricoBO.prg` criado (9,19 KB, 166 linhas, CRLF), **compila limpo e instancia com sucesso no VFP9**.
+
+## O que o form legado ├®
+
+`sigprico.SCX` tem **zero m├®todos com c├│digo** ("Total de metodos/eventos com codigo: 0"), zero `ControlSource`, `DataEnvironment` sem tabela ÔÇö s├úo 24 controles `Image` exibindo arquivos de `vbmp\`. ├ë uma tela de **cat├ílogo/paleta de ├¡cones**. Conferi os 20 arquivos distintos referenciados: **todos existem** em `C:\4c\vbmp\` (regra #25 ÔÇö `.Picture` inexistente falha em sil├¬ncio).
+
+Por isso o BO **n├úo declara tabela** (`this_cTabela = ""`): inventar tabela/coluna/SQL violaria o PILAR 2 e a regra #22. O estado de neg├│cio ├® o pr├│prio cat├ílogo, declarado slot a slot com os nomes **transcritos literalmente** do dump.
+
+## 70 propriedades declaradas
+- **Identifica├º├úo**: `this_cTabela`/`this_cCampoChave` vazios, `this_cNomeFormLegado`, `this_cCaptionLegado` = `"Form1"` (caption real do SCX)
+- **Controle do cat├ílogo**: cursor, total (24), caminho resolvido, prefixo `..\vbmp\` do legado
+- **Registro corrente**: nome do objeto, arquivo, caminho completo, ├¡ndice, Top/Left/Width/Height/Stretch, flag de exist├¬ncia
+- **Resultado de verifica├º├úo**: encontrados/ausentes/lista/carregado
+- **24 `this_cArqImageN`** + **24 `this_cObjImageN`** ÔÇö a lacuna Image12/13/14 do legado ├® reproduzida de prop├│sito
+
+## Defeito real encontrado e corrigido durante a verifica├º├úo
+
+A primeira vers├úo **compilava limpo mas o `CREATEOBJECT` estourava** `Property THIS_LCATALOGOCARREGADO is not found`. Causa: um `;` no fim de um coment├írio `&&` ÔÇö
+
+```foxpro
+this_cListaAusentes     = ""   && Nomes ausentes separados por ;
+this_lCatalogoCarregado = .F.                  && <- engolida pela continua├º├úo
+```
+
+O `;` final ├® **continua├º├úo de linha em VFP9 mesmo dentro de coment├írio `&&`**, e engoliu a declara├º├úo seguinte. Reescrito o texto do coment├írio. Confirmado por `AMEMBERS`: **76 properties `this_` na inst├óncia = 70 do BO + 6 herdadas** de `BusinessBase` (as 8 da base menos `this_cTabela`/`this_cCampoChave`, redeclaradas) ÔÇö nenhuma outra declara├º├úo foi perdida.
+
+Prova de instancia├º├úo: `VARTYPE=O`, `CLASSE=Sigpricobo`, `PARENT=Businessbase`, `TABELA=[]`, `CAMINHO=[C:\4c\vbmp\]`, `TOTAL=24`, `ARQ1=[form4.ico]`, `ARQ27=[msgstop1.gif]`, `DATAACCESS=X` (NULL, correto sem tabela), `MSGERRO=[]`.
+
+**Nota para a Fase 2**: este BO se qualifica para a exce├º├úo *fail-closed* de BO somente-leitura do gate (o dump n├úo tem `TABLEUPDATE`, n├úo tem `.AddCursor(`, n├úo tem `Insert/Update/Delete` algum) ÔÇö o comportamento herdado de `BusinessBase` para `Inserir`/`Atualizar`/`ExecutarExclusao` j├í ├® o correto, e o cabe├ºalho do arquivo documenta isso sem usar a frase que o validador 05d rejeita.
+
+**Uma li├º├úo candidata a propagar** (regra nova, n├úo coberta pelo CLAUDE.md): `;` no fim de coment├írio `&&` ├® continua├º├úo de linha e engole a linha seguinte ÔÇö compila limpo, quebra s├│ no `CREATEOBJECT`. Posso rodar o `/propagate-lesson` e um sweep em `classes\`/`forms\` se quiser.

@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este ├® um erro de conectividade de rede, n├úo um bug de c├│digo ÔÇö e j├í ├® a **9┬¬ vez** que esse mesmo erro aparece (incluindo tasks anteriores, task614-618), sempre id├¬ntico.
+
+**Por qu├¬ n├úo h├í corre├º├úo de c├│digo poss├¡vel:**
+
+O log mostra a falha exatamente aqui:
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [...] SQL Server inexistente ou acesso negado.
+```
+
+Essa etapa (`SQLSTRINGCONNECT`) roda **antes** de qualquer `CREATEOBJECT("FormSigPrGlx")` ou `CREATEOBJECT("SigPrGlxBO")` dentro do `TestFormWrapper.prg`. O form e o BO nunca chegam a ser instanciados ÔÇö o c├│digo deles nunca ├® alcan├ºado. ├ë a m├íquina que roda o pipeline que n├úo tem rota de rede at├® `192.168.200.10:1433` (mesmo padr├úo documentado em 100+ tasks desde 2026-08-02, mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`).
+
+Nas 8 tentativas anteriores desta mesma task618/FormSigPrGlx, o conte├║do de `FormSigPrGlx.prg`/`SigPrGlxBO.prg` j├í foi revisado exaustivamente (RETURN dentro de TRY/CATCH, THIS. em m├®todos PROTECTED, BINDEVENT com handlers PUBLIC, EscaparSQL/FormatarNumeroSQL/FormatarDataSQL sem aspas extras, EVALUATE/.Self/Controls("nome") dentro de WITH, chaves posicionais com PADR sem ALLTRIM no meio ÔÇö regra #42) e nenhum defeito foi encontrado.
+
+**N├úo fiz nenhuma edi├º├úo nesta tentativa** ÔÇö editar o form/BO "├ás cegas" sem reproduzir o erro real seria exatamente o anti-padr├úo que a mem├│ria do projeto existe para evitar (regra de ouro: identificar causa raiz antes de corrigir). Resta apenas 1 tentativa (10/10) antes do pipeline esgotar o or├ºamento desta task por esse mesmo erro de rede.
+
+Se voc├¬ tiver acesso ├á m├íquina que roda o pipeline, o diagn├│stico recomendado ├® `Test-NetConnection 192.168.200.10 -Port 1433` ÔÇö nas tentativas anteriores isso nunca completou dentro do timeout, confirmando aus├¬ncia de rota.

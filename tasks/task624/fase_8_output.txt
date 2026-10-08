@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 conclu├¡da. Resumo do que medi e do que mudei.
+
+## O que a Fase 8 pede n├úo existe neste legado
+
+`sigprico.SCX` ├® um cat├ílogo est├ítico de 24 `Image` do `vbmp\`. Medido no dump, n├úo inferido:
+
+| evid├¬ncia | valor |
+|---|---|
+| `BaseClass: commandbutton` / `commandgroup` | **0** / **0** |
+| `.Click` | **0** |
+| m├®todos com c├│digo | **0** (o pr├│prio dump declara) |
+| `Class` do form | `form` puro |
+| campos / lookups / grid (`analise.json`) | `[]` / `[]` / `false` |
+
+`BtnBuscarClick`/`BtnEncerrarClick`/`BtnSalvarClick`/`BtnCancelarClick` pressup├Áem bot├úo; `FormParaBO`/`BOParaForm` pressup├Áem campo digit├ível; `HabilitarCampos`/`LimparCampos`/`CarregarLista`/`AjustarBotoesPorModo` pressup├Áem campo, lista e modo CRUD. Invent├í-los viola o PILAR 1; criar vazios ├® o stub proibido. **N├úo os criei.**
+
+## O trabalho real da fase: o ciclo de vida da janela estava inst├ível
+
+A classe carregava os valores de **teste** (`ShowWindow = 0`, `WindowType = 0`) e restaurava produ├º├úo em runtime ÔÇö a polaridade invertida do defeito j├í documentado. Dois problemas, ambos medidos:
+
+1. **`ShowWindow = 0` na classe n├úo para em p├®.** Rodei o `CorretorAutomatico` sobre uma **c├│pia**: ele injeta `ShowWindow = 1` na linha 43 e deixa o `= 0` na 48 ÔÇö duas declara├º├Áes contradit├│rias na mesma `DEFINE CLASS`, re-injetadas a cada passagem (o detector procura literalmente `= 1`).
+2. **`WindowType = 0` na classe** ├® o matador documentado (o `menu.prg` abre com `CREATEOBJECT` + LOCAL + `Show()`; em modeless a refer├¬ncia cai e a tela pisca e some). Funcionava **s├│** porque o `Init` resgatava.
+
+Apliquei o padr├úo can├┤nico do `Formsigprftp`: `ShowWindow = 1` / `WindowType = 1` na classe, o `Init` **rebaixa** para `WindowType = 0` no headless, e o caminho de produ├º├úo n├úo atribui propriedade nenhuma. Removi o override de `Load()` ÔÇö a premissa dele era o `ShowWindow = 0` que deixou de existir.
+
+**Medi├º├Áes** (`automation\ProbeIcoF8Polaridades.prg`), nas **duas** polaridades, porque atribui├º├úo dentro de guard de modo roda justamente no ramo que o harness n├úo exercita:
+
+| | `CREATEOBJECT` | `WindowType` | Images / Picture em disco | di├ílogos suprimidos |
+|---|---|---|---|---|
+| modo teste | `O` | 0 | 24 / 24 | nenhum |
+| produ├º├úo | `O` | 1 | 24 / 24 | nenhum |
+
+Sem travar no headless mesmo sem o `Load()`. `.FXP` apagado antes e recriado depois (12:32:56 contra `.prg` 12:32:16), ent├úo rodou o c├│digo novo. Compila limpo (form e BO, sem `.err`). `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes`: zero achados. `AbrirFormsigprico` no `menu.prg` tem `Show()` fora do `TRY`, correto. Corretor agora ├® no-op: uma ├║nica declara├º├úo de cada.
+
+Mudan├ºa isolada: **+57/ÔêÆ31**, quase tudo coment├írio registrando as medi├º├Áes; o c├│digo efetivo s├úo 4 pontos. (O `git diff` contra `HEAD` mostra ÔêÆ675 porque `HEAD` ainda tem a vers├úo de 725 linhas pr├®-rerun ÔÇö n├úo ├® minha mudan├ºa; guardei o estado imediatamente anterior em `automation\Formsigprico.prg.antes_fase8`.)
+
+## Tr├¬s coisas para voc├¬ decidir
+
+1. **`Caption = "Form1"`** ÔÇö ├® o que o SCX legado declara (default do Form Designer que o autor original nunca trocou), ent├úo mantive por PILAR 1. Mas o item de menu diz "Mapa Visual do Sistema" e a janela vai abrir como "Form1". Reproduzir fielmente um descuido cosm├®tico do legado ├® chamada sua, n├úo minha.
+2. **`WARN-168` do corretor** ("forma REPORT sem `fundo_cad_1003.jpg`") ├® falso positivo aqui ÔÇö ├® OPERACIONAL, e injetar fundo pintaria por cima do cat├ílogo de ├¡cones. N├úo agi; ├® WARNING, n├úo auto-fix.
+3. **O guard do orquestrador que me fez ser retentado.** A execu├º├úo sonnet estendeu `@(5,6,7)` para `@(5,6,7,8)` no `OrquestradorMigracao.ps1`, mas o processo j├í estava rodando com o c├│digo antigo em mem├│ria ÔÇö editar o gate durante a fase n├úo vale para ela mesma. A edi├º├úo est├í no arquivo e valer├í nas pr├│ximas execu├º├Áes; esta passagem passa porque eu alterei o form de verdade.
+
+Fora de escopo, mas vale saber: os **9 forms** que a Fase 7 levantou com `THIS.ShowWindow = x` em runtime (7 em produ├º├úo ÔÇö `FormICD`, `FormICN`, `FormSIGPRCIC`, `Formsigprcpd`, `Formsigprdft`, `FormSIGPREST`, `FormSigPrGlx` ÔÇö e 2 em modo teste, `FormHOR`/`FormICO`) continuam com o defeito. Cada um exige decidir o `ShowWindow` da `DEFINE CLASS` individualmente; n├úo toquei.

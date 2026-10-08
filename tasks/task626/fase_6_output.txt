@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 entregue em `projeto/app/forms/operacionais/FormSIGPRIFF.prg` (243 ÔåÆ 425 linhas, CRLF e ASCII puro preservados).
+
+## O que esta fase tinha de fazer ÔÇö e o que o legado tem
+
+Lookup: **zero**. O dump (4 objetos: dataenvironment, form1, Text1, Combo1) n├úo casa `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, `mAddColuna`, `sigacess()` nem `Acesso*()`. Campo a acrescentar: **zero** (os dois sa├¡ram na Fase 4). O que de fato faltava aos campos era **o comportamento deles** ÔÇö e aqui o legado n├úo tem bot├úo algum, ent├úo a captura da resposta mora no `KeyPress` de cada campo:
+
+```foxpro
+Text1.KeyPress : IF nKeyCode = 13 / Resposta = ThisForm.Text1.Value        / RELEASE WINDOWS
+Combo1.KeyPress: IF nKeyCode = 13 / Resposta = SUBSTR(Combo1.Value,1,1)    / RELEASE WINDOWS
+```
+
+Sem isso os campos existiam e **n├úo respondiam**: o di├ílogo s├│ fechava pela barra de t├¡tulo e o chamador recebia sempre vazio ÔåÆ *"Operacao Cancelada pelo Usuario"*, sem erro nenhum na tela.
+
+Entregues: `TxtRespostaKeyPress`, `CboOpcoesKeyPress` (PUBLIC, `LPARAMETERS` + guard de ENTER) ligados por `BINDEVENT` no fim de `ConfigurarControles`, e `ValidarRespostaDigitada`. O `RELEASE WINDOWS` virou `THIS.Hide()` ÔÇö form modal, o objeto fica vivo para o chamador ler a resposta (padr├úo do `FormSIGPRSTF`).
+
+## Achei o chamador real (o acervo tinha s├│ a refer├¬ncia)
+
+`C:\4install\FortyusMC\Fortyus\sigprtef.PRG` ├® o **├║nico** chamador, e linhas 181-199 fixam o contrato que `ValidarRespostaDigitada` transcreve: `DTOC(Valores)` exige DATE, `TRANSFORM(Valores,"99999999.99")` espera NUMERIC, `ALLTRIM(Valores)` exige CHARACTER ÔÇö tipo errado estoura erro 11 **no chamador**. Dois achados que mudaram o c├│digo:
+
+- **`Escolhas = "0:Sim;1:Nao;"`** (linha 175): o `SUBSTR(...,1,1)` do Combo ├® **regra**, n├úo detalhe ÔÇö a resposta ├® o *c├│digo* da op├º├úo, n├úo o texto.
+- **O modo `"M"` prevalece sobre `pcDado`**: o `Init` legado desvia para o Combo1 *antes* de olhar `pcDado`, e o chamador manda `ProximoComando = 20` (que for├ºa `lptipo = "M"`) com `TipoDados` j├í preenchido. O predicado reproduz isso.
+- `TamanhoMinimo` **n├úo** virou valida├º├úo: linhas 40-41 e 69 mostram que vem por refer├¬ncia da DLL do SiTef e o legado s├│ o usa dentro do `IIF(pcMaximo<pcMinimo,...)` do `MaxLength` ÔÇö nunca como piso de digita├º├úo. Inventar "m├¡nimo de N caracteres" seria mensagem que o legado nunca exibe.
+
+## Prova por runtime (`.fxp` apagado antes de cada rodada)
+
+| caso | resultado |
+|---|---|
+| caractere + ENTER | `Resposta=[12345678901]` tipo **C** |
+| caractere + tecla 65 | `Resposta=[]` ÔÇö n├úo captura |
+| modo "D" + ENTER | tipo **D** preservado (o `DTOC` do chamador funciona) |
+| modo "V" + ENTER | tipo **N** preservado (`1234.56`) |
+| modo "M", op├º├úo 2 (`1:Nao`) | `Resposta=[1]` LEN=1 ÔÇö o c├│digo, n├úo o texto |
+| modo "M" + tecla 65 | n├úo captura |
+| modo "M" sem escolha + ENTER | vazio = cancelamento, igual ao legado |
+
+Nenhum arquivo de erro do `FormBase` gerado. Os 5 modos de instancia├º├úo da Fase 5 re-rodados: **sem regress├úo**.
+
+Gate da Fase 6 rodado com o `case 6` extra├¡do VERBATIM para harness isolado (sem dot-source do orquestrador): passa pelo ramo **CAPTURA** ÔåÆ `VALIDADO=True`. Validador de completude: limpo nos dois arquivos.
+
+## Dois ajustes adjacentes
+
+- O validador `05d` reprovou o form por achar `pendente` **dentro de "independente"** (o regex n├úo tem `\b`). Reescrevi o coment├írio como "qualquer que seja o modo" e registrei a reincid├¬ncia na mem├│ria ÔÇö a palavra a evitar n├úo ├® s├│ `pendente`, ├® qualquer termo que a contenha.
+- `tasks/task626/mapeamento.json` apontava para `txt_4c_Text1`/`cbo_4c_Combo1`, nomes que **n├úo existem** no `.prg` (as Fases 4/5 criaram `txt_4c_Resposta`/`cbo_4c_Opcoes`). Corrigi no JSON, n├úo no `.prg` ÔÇö sen├úo a valida├º├úo de UI acusaria dois objetos ausentes no fim do pipeline.
+
+## Deixado de prop├│sito para a Fase 8
+
+ESC do form (`form1.KeyPress` ÔåÆ `RELEASE WINDOWS`) e o `RETURN(Resposta)` do `Unload` s├úo o **fluxo de sa├¡da**, n├úo comportamento de campo. A Fase 7 ("eventos dos bot├Áes") n├úo tem o que fazer neste legado ÔÇö j├í coberta pelo carve-out `Test-LegadoSemBotaoAlgum`, que lista `SIGPRIFF` nominalmente.

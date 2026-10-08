@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada. O gap real n├úo era no Form ÔÇö era no BO.
+
+## O que estava faltando
+
+`Formsigprila.prg` j├í estava completo desde a Fase 7. O que faltava eram as **7 rotinas de importa├º├úo** que `ExecutarRotinaImportacao` despacha: as Fases 1ÔÇô2 as deferiram e as Fases 3ÔÇô8 s├úo todas do Form, ent├úo nenhuma fase foi alocada a elas. Clicar "Processar" exibia *"M├®todo &lt;rotina&gt; n├úo localizado"* nas 7 op├º├Áes.
+
+`sigprilaBO.prg`: **170 ÔåÆ 3.466 linhas**. Transcritas de `tasks/task627/sigprila_form_codigo_fonte.txt` (~2.650 linhas de legado): `ListaPreco`, `AtuaPreco`, `GeraTransf`, `GeraPedido`, `Pedidocons`, `PedAcesso`, `PedidoFab`, mais `Cotacao` e `LimiteCreditoMatriz`.
+
+Comparando normalizado, `GeraPedido`/`Pedidocons`/`PedAcesso` s├úo a mesma rotina (diferem s├│ na coluna `Dop*` de `SigCdPac`) ÔÇö entram por um n├║cleo parametrizado em vez de ~1.200 linhas triplicadas. `GeraTransf` e `PedidoFab` s├úo estruturalmente distintas e ficaram separadas.
+
+## O que a verifica├º├úo pegou
+
+Dois defeitos meus, achados por medi├º├úo e n├úo por leitura:
+
+1. **`INSERT INTO SigMvCab` com 117 colunas e 116 valores.** Eu digitei as listas de preenchimento ├á m├úo. O SQL Server recusaria o INSERT inteiro. Troquei por listas **geradas do schema** com paridade conferida.
+2. **`ValorNumerico` pior que o legado.** `config.prg` faz `SET POINT TO ","`; minha "normaliza├º├úo" de v├¡rgulaÔåÆponto fazia `VAL("12,50")` devolver **12** em vez de 12,5. Voltei para `VAL()` puro, como o legado.
+
+Tamb├®m corrigi um bug pr├®-existente: `ObterChavePrimaria` aplicava `EscaparSQL` e `RegistrarAuditoria` do `BusinessBase` escapa de novo ÔÇö a chave ia para `LogAuditoria` com as aspas dentro do dado.
+
+**Medido** (`automation/ProbeIlaFase8.prg`, `ProbeIlaFormF8.prg`): compila limpo; form instancia; as 7 rotinas cham├íveis de fora e todas com `ValidaCols=.T.`; `EmpDopNums`=29 e `EmpGruEsts`=23 (regra #42); paridade coluna/valor OK nos 4 INSERT; soma de `Valos` no cabe├ºalho correta. Regra #22 conferida nos **8** INSERT contra `docs/schema.sql`; `ValidadorSQLSchema.ps1` passou (exit 0).
+
+## O que N├âO est├í provado ÔÇö e n├úo est├í escondido
+
+**Nada rodou contra o banco.** O SQL Server n├úo ├® alcan├º├ível desta m├íquina (`VerificarInsertNotNull.ps1` e `VerificarCamposCursorBO.ps1` morreram com `SqlException`). Est├í provado o texto do SQL contra o schema, n├úo uma importa├º├úo de verdade.
+
+Quatro aus├¬ncias do legado que **bloqueiam caminhos** em runtime, deliberadamente n├úo stubbadas:
+
+| Ausente | Efeito | Por qu├¬ n├úo stub |
+|---|---|---|
+| `SqlCalcP2` / `fRecalculaC` | Transfer├¬ncia/pedido com `Estoqs=1` estoura | Devolvem saldo/custo calculado ÔÇö stub gravaria estoque errado em sil├¬ncio (regra #27). J├í faltam para **8 BOs pr├®-existentes** |
+| `SigCdPac.DopAcePed` | `PedidoAcessorio` recusa com mensagem | A coluna n├úo existe no schema (682 tabelas lidas com `-Raw`, n├úo ├® o falso-negativo da regra #14). Apontar para outra coluna `Dop*` lan├ºaria sob a opera├º├úo errada |
+| `SigOpSen` | Limite de cr├®dito excedido **bloqueia** | Liberar sozinho viraria no-op de um controle financeiro |
+| `crSigClLcr` / `crTpmMvItn` | Ramo de limite de estoque parcial | Refer├¬ncias ├│rf├ús do pr├│prio legado; sob `USED()` |
+
+Tr├¬s diverg├¬ncias conscientes, comentadas no c├│digo: `Precificacao` grava em **um lote at├┤mico** no fim (o legado commita por linha e deixa planilha meio importada, irrevers├¡vel); `GeraPedido`/`PedAcesso` **n├úo validam a empresa de destino** ÔÇö bug de copy-paste do legado reproduzido fielmente, porque validar passaria a rejeitar linhas hoje importadas, e isso ├® decis├úo de voc├¬s; e os `Set Step On` do dump n├úo foram transcritos (abririam o depurador no meio do processamento).
+
+Os 3 arquivos novos em `automation/` (1 compile-check + 2 probes) n├úo est├úo commitados.

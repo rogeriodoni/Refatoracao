@@ -1,0 +1,26 @@
+PROBE FASE 8 FormSIGPRIFF - 07/10/2026 20:31:07
+========================================================================
+
+[A ESC(27) modo caractere]
+  tecla=27 -> Form.this_uResposta=[] VARTYPE=[C] EMPTY=.T. BO.this_uResposta=[] Visible=.F.
+
+[B tecla 65 no FORM]
+  tecla=65 -> Form.this_uResposta=[] VARTYPE=[C] EMPTY=.T. BO.this_uResposta=[] Visible=.F.
+
+[C ESC(27) modo M]
+  ListIndex=2 .Value=[1:Nao] tecla=27 -> Form.this_uResposta=[] VARTYPE=[C] EMPTY=.T.
+
+[D espelho CARACTERE]
+  digitado=[12345678901] VARTYPE=[C] -> Form.this_uResposta=[12345678901] VARTYPE=[C] BO=[12345678901] iguais=.T. Visible=.F.
+
+[E espelho MODO D]
+  digitado=[07/10/2026] VARTYPE=[D] -> Form.this_uResposta=[07/10/2026] VARTYPE=[D] BO=[07/10/2026] iguais=.T. Visible=.F.
+
+[F espelho MODO V]
+  digitado=[1234.56] VARTYPE=[N] -> Form.this_uResposta=[1234.56] VARTYPE=[N] BO=[1234.56] iguais=.T. Visible=.F.
+
+[G espelho MODO M]
+  ListIndex=2 .Value=[1:Nao] -> Form.this_uResposta=[1] VARTYPE=[C] LEN=1 BO=[1]
+
+[H Release/Destroy]
+  Release/Destroy OK (sem excecao)

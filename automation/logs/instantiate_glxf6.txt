@@ -1,0 +1,33 @@
+GLX FASE6 CHECK - inicio 06/10/2026 20:07:29
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O W=800 H=600 PageCount=6
+2a Page3 Caption=[Totais por Linha] Enabled=.F. ControlCount=4
+2b grd_4c_Linhas RecordSource=[cursor_4c_Linhas] Cols=5 ReadOnly=.T. C1=[cursor_4c_Linhas.Linhas] C5=[cursor_4c_Linhas.Produzir] W1=84
+2c cmd_4c_CancelaLin Left=704 Top=12 Caption=[Voltar]
+3a Page4 Caption=[Selecionar Estoque] Enabled=.F. ControlCount=9
+3b grd_4c_DispEstoque RecordSource=[cursor_4c_DispEstoque] Cols=5 C1=[cursor_4c_DispEstoque.Grupos] C5=[cursor_4c_DispEstoque.Utilizar] C5.ReadOnly=.F.
+3c txt_4c_Cpros CS=[TmpFinalg.Cpros] txt_4c_Qt_Selec Top=436
+4a Page5 Caption=[Disponivel/Tamanho] Enabled=.F. ControlCount=9
+4b grd_4c_DispTamanho RecordSource=[cursor_4c_DispTamanho] Cols=5 C1=[cursor_4c_DispTamanho.Cpros] C5=[cursor_4c_DispTamanho.Utilizar]
+5a Page6 Caption=[Requisição] Enabled=.F. ControlCount=5
+5b grd_4c_Pedra RecordSource=[cursor_4c_Requisicao] Cols=5 C1=[cursor_4c_Requisicao.Cpros] C2=[cursor_4c_Requisicao.Dpros] C5=[cursor_4c_Requisicao.Cpro2s]
+5c grd_4c_Pedra ReadOnly=.F. C1.RO=.F. C2.RO=.T. C4.RO=.F. C5.RO=.F.
+5 PAGE6 FALHOU: Alias is not found. LN=135
+6a PEMSTATUS AbrirLookupProdutoRequisicao: .T.
+6b PEMSTATUS AbrirLookupProdutoSubstituto: .T.
+6c PEMSTATUS GrdPedraProdutoKeyPress: .T.
+6d PEMSTATUS GrdPedraSubstitutoKeyPress: .T.
+6e this_lLookupEmCurso: .F.
+7a AEVENTS Column1.Text1: 2 binding(s)
+7b    evento=[KEYPRESS] delegate=[GRDPEDRAPRODUTOKEYPRESS]
+7c AEVENTS Column5.Text1: 2 binding(s)
+7d    evento=[KEYPRESS] delegate=[GRDPEDRASUBSTITUTOKEYPRESS]
+8a AbrirLookupProdutoSubstituto sem Column1: RETORNOU (guarda pegou)
+9a AbrirLookupProdutoRequisicao com campo vazio: RETORNOU (guarda pegou)
+10a AlternarPagina(6): ActivePage=1
+10b AlternarPagina(1): ActivePage=1
+11 RELEASE: OK (VARTYPE pos=X)
+DIALOGOS SUPRIMIDOS:
+[06/10/2026 08:07:29 PM] Atenção: Informe primeiro o Produto da requisição.
+
+FIM 06/10/2026 20:07:29

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í conclu├¡da e validada para `FormSigPrIbb`.
+
+## O que estava errado
+
+A Fase 4 anterior **j├í tinha gerado todo o conte├║do correto** ÔÇö o gate reprovou por **um ├║nico detalhe de nomenclatura**. SIGPRIBB ├® um form OPERACIONAL **plano** (sem PageFrame: todos os objetos s├úo filhos diretos do form ou do `cntSombra`), ent├úo ele cai no ramo **FLAT** do gate, que exige tr├¬s coisas:
+
+| Predicado | Exigido | Estado anterior |
+|---|---|---|
+| `AddObject("grd_4c_` | sim | Ô£à `grd_4c_Dados` |
+| `AddObject("cmd_4c_` | sim | Ô£à `cmd_4c_Ok`, `cmd_4c_BtnImprimir` |
+| m├®todo de carga `CarregarLista\|CarregarDados\|MontaGrade` | sim | ÔØî chamava-se **`CarregarGrid`** |
+
+O m├®todo existia e estava completo ÔÇö s├│ tinha um nome fora da lista can├┤nica. Renomeei `CarregarGrid` ÔåÆ **`CarregarDados`** (7 ocorr├¬ncias: declara├º├úo, chamada no `InicializarForm`, mensagem do CATCH e coment├írios). `CarregarDados` ├® o nome can├┤nico do projeto para OPERACIONAL e respeita o PILAR 3 ÔÇö o legado chama `MontaGrades` + `SelecionaDados`, e o m├®todo migrado funde os dois (precisa: o cursor tem de existir antes do bind, regra #41).
+
+## Corre├º├úo adicional que encontrei
+
+O arquivo tinha sido **achatado de CRLF para LF** pela Edit tool da fase anterior (os irm├úos `FormSigPrGst.prg`/`FormSigPrHpr.prg` s├úo CRLF). Restaurei o CRLF. O diff continua grande (952 ÔåÆ 738 linhas) mas isso ├® **leg├¡timo**: o HEAD guarda uma migra├º├úo *anterior* e diferente deste mesmo form, que a reescrita multi-fase substitui ÔÇö n├úo ├® artefato de line-ending.
+
+## Valida├º├Áes executadas
+
+- **Gate Fase 4**: PASSOU pelo ramo FLAT (32,39 KB) ÔÇö predicados replicados isoladamente (n├úo dot-sourcei o orquestrador, que dispararia uma migra├º├úo)
+- **Compila├º├úo**: `.fxp` novo para form e BO, **zero `.err`** (apaguei os `.fxp` antes e conferi timestamp)
+- **ValidadorSQLSchema**: PASSOU ÔÇö 683 tabelas lidas (acima do piso de sanidade, logo o UTF-16 foi lido certo), nenhuma coluna inv├ílida
+- **VerificarFuncoesNaoDefinidas** / **VerificarPropriedadesInexistentes**: exit 0, nenhum achado
+- **Completude**: nenhum TODO/stub/"n├úo implementado"
+- **Instancia├º├úo real** (`CREATEOBJECT`, sem `Show()` ÔÇö o form ├® modal e travaria): **13 controles**, batendo exatamente com os 13 filhos diretos do `layout.json`, todos `Visible=.T.`, grid com `ColumnCount=4`, BO criado. As colunas do `cursor_4c_Dados` (`FPags/Parcs/Vencs/Valos/CLocals/CTxtCds`) conferem com os `ControlSource` do grid e dos dois EditBox.
+
+## Dois pontos que n├úo pude verificar e que valem registro
+
+1. **`VerificarCamposCursorBO.ps1` n├úo rodou** ÔÇö exige SQL Server, e esta m├íquina n├úo tem rota para 192.168.200.10 (limita├º├úo j├í conhecida do ambiente de pipeline, n├úo deste form).
+2. **A grade nunca foi provada com dado real.** O `InicializarForm` pula `CarregarDados()` sob `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`, ent├úo instanciar prova que a tela *abre*, n├úo que a consulta *traz linha*. Vale notar que `CarregarParcelas` monta a chave com `PADR(...,29)` e o BO faz `EscaparSQL(THIS.this_cEmpDopNum)` sobre o valor j├í paddeado ÔÇö ou seja, est├í do lado certo da regra #42 (chave posicional) ÔÇö, mas confirmar isso exige conferir `RECCOUNT("cursor_4c_Dados") > 0` numa m├íquina com acesso ao banco.

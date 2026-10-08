@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 executada. O arquivo **n├úo estava completo** ÔÇö a execu├º├úo anterior desta fase concluiu "nada a fazer" e por isso o guard de NO-OP do orquestrador for├ºou este retry. Havia um defeito real.
+
+## O que faltava
+
+O `PROCEDURE processamento` legado termina com um passo de UI que a migra├º├úo perdeu:
+
+```foxpro
+Select * From MovAux Where Transacaos In ( Select Transacaos From dif2 ) Into Cursor diferenca
+If Reccount() > 0 And Messagebox("Visualizar as diferen├ºas na Tela?",4+32,"Visualizar") = 6
+    Do Form SigReDif With Thisform.DataSessionId
+Endif
+```
+
+O sintoma era **superf├¡cie de BO morta**: o `SigPrIctBO` j├í calculava `this_lPossuiDiferenca` / `this_nTotalDiferencas` em `VerificarDiferencas()` e j├í expunha `ObterCursorDiferencas()` / `ObterCursorMovimento()` ÔÇö e **nenhum ponto do Form consumia os quatro** (0 ocorr├¬ncias). O pr├│prio BO documentava, na linha 1455, que o despacho era do Form: *"para a tela de diferencas (equivalente ao 'Do Form SigReDif' do legado)"*. Resultado: transa├º├úo cont├íbil desbalanceada era detectada e o usu├írio nunca ficava sabendo ÔÇö sem erro, sem log.
+
+## Entregas (+177 linhas, ÔêÆ1)
+
+- **`ExibirDiferencas()`** ÔÇö chamado no **in├¡cio** de `AposProcessar()`, porque no legado vem **antes** do ramo `SemConta`. Guarda por `this_lPossuiDiferenca` (o `Reccount() > 0` do legado, fonte ├║nica no BO), `MsgConfirma` com texto/t├¡tulo exatos, e `CREATEOBJECT("FormSigReDif", THIS.DataSessionId)` com o **`Show()` fora do `TRY`** (regra #29 ÔÇö form modal).
+- **Alias de contrato** `movaux`/`dif2`: o `SigReDifBO.PrepararDados` os l├¬ por nome **literal** e recusa sem eles. Montados dos cursores do BO ÔÇö `dif2` ├® reconstru├¡do como `Transacaos` distintas de `cursor_4c_Diferenca`, porque `VerificarDiferencas()` fecha `cursor_4c_Dif2`. Sem prefixo `cursor_4c_`, mesma raz├úo de `SemConta`/`Cabecalho`.
+- **`LiberarCursoresDiferencas()`** ÔÇö fecha `movaux`/`dif2`/`crGrid`; antes de montar, depois do `Show()` e em `Destroy()`.
+- **`ORDER BY Contas, DataS`** no cursor `SemConta` do relat├│rio: o legado faz `Set Order to Conta` (TAG = `Contas + Dtos(DataS)`) antes de imprimir, e o `SELECT` sem `ORDER BY` entregava ordem de inser├º├úo.
+
+## Verifica├º├úo no VFP9
+
+| Teste | Resultado |
+|---|---|
+| `COMPILE` Form + BO (`.fxp` apagado antes) | `.fxp` recriado, **sem `.err`** |
+| Instancia├º├úo do form | `BaseClass=Form`, `Caption=[Integra├º├úo Cont├íbil]` |
+| `ExibirDiferencas()` chamado **de fora** | `.F.` sem diferen├ºa ÔÇö ├® PUBLIC de verdade (`PEMSTATUS` n├úo prova escopo) |
+| **Contrato com a tela filha** | `FormSigReDif` instanciou na sess├úo do pai e o BO populou `crGrid` com **2 linhas** vindas de `movaux`/`dif2` |
+| Di├ílogo em modo teste | capturado: `Visualizar: Visualizar as diferen├ºas na Tela?` ÔÇö recusa, a tela modal n├úo abre no harness |
+| Balan├ºo estrutural (sem coment├írios) | PROCEDURE/FUNCTION/TRY/IF/WITH/FOR/DO CASE/DEFINE CLASS todos pareados |
+| `RETURN` dentro de `TRY/ENDTRY` | nenhum (regra #1) |
+| TODO/FIXME/stub, literal acentuado | nenhum |
+| CRLF | 1481 CR = 1481 LF (intacto) |
+
+Dois pontos para registro: o `git diff` do arquivo mostra ~1286/620 linhas, mas isso ├® **pr├®-existente** ÔÇö `HEAD` tem uma vers├úo antiga de 810 linhas (LF-only) de uma migra├º├úo anterior; minha mudan├ºa ├® 177 adi├º├Áes e 1 remo├º├úo. E mantive os m├®todos CRUD (`CarregarLista`/`BtnSalvarClick`/`HabilitarCampos`/ÔÇª) **ausentes**: SIGPRICT n├úo tem lista, grade, modos de edi├º├úo nem registro em tabela, e cri├í-los seria casca vazia.
+
+Evid├¬ncias ficaram em `automation\CompileCheckIctF8.prg` e `automation\ProbeIctDiferencas.prg` (logs em `automation\logs\`).

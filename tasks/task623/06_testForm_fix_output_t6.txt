@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo ├® um bug de c├│digo ÔÇö ├® o mesmo erro de infraestrutura j├í documentado (project memory `project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): esta ├® a **6┬¬ tentativa** sobre o **mesmo task623/FormSIGPRIBL** com o **mesmo erro 1526**.
+
+O log mostra que a falha ocorre na `[ETAPA 1B] Conectando ao banco de dados` ÔÇö isto ├®, no pr├®-flight `SQLSTRINGCONNECT` do `TestFormWrapper.prg`, **antes** de `CREATEOBJECT("FormSIGPRIBL")`/`CREATEOBJECT("SIGPRIBLBO")` sequer rodarem. O c├│digo do form/BO nunca ├® alcan├ºado nesta etapa.
+
+Confirmei a causa de novo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+PingSucceeded    : False
+```
+A m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24` ÔÇö recorrente desde 2026-08-02 em 100+ tasks, nada relacionado ao FormSIGPRIBL/SIGPRIBLBO em si.
+
+O `git diff --stat` mostra bastante altera├º├úo n├úo-commitada nos dois arquivos, mas ├® churn do pr├│prio orquestrador entre tentativas, n├úo edi├º├úo minha ÔÇö e ├® irrelevante porque o erro ├® de rede, anterior a qualquer execu├º├úo do form.
+
+J├í houve revis├úo linha a linha exaustiva na tentativa 1/10 (TRY/CATCH, THIS. em PROTECTED, BINDEVENT PUBLIC, MaxLength vs schema, FormBuscaAuxiliar regras #36/#37, chave posicional regra #42, etc.) sem nenhum achado ligado a conectividade. Editar o c├│digo ├ás ciegas de novo, sem ele nunca ser executado, seria o anti-padr├úo que essa mem├│ria existe para evitar ÔÇö por isso n├úo alterei os arquivos. Registrei esta reincid├¬ncia na mem├│ria do projeto.
+
+Isso ├® uma quest├úo de infraestrutura (rota de rede para o SQL Server em 192.168.200.10) que precisa ser resolvida fora do pipeline de c├│digo ÔÇö vale avisar quem administra a m├íquina do pipeline.

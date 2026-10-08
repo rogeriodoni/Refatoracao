@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, the icon file exists. The file structure is balanced (PROCEDURE/ENDPROC, WITH/ENDWITH, TRY/ENDTRY, DEFINE CLASS/ENDDEFINE), pure ASCII with CHR() codes for accents, and CRLF line endings matching project convention.
+
+**Fase 3/8 conclu├¡da**: criei `C:\4c\projeto\app\forms\operacionais\Formsigprila.prg` com a estrutura base do form OPERACIONAL:
+
+- `DEFINE CLASS Formsigprila AS FormBase` ÔÇö dimens├Áes pixel-perfect do `layout.json` (800x350, n├úo os 1000x600 gen├®ricos e n├úo preenchidos do `analise.json`)
+- `Init()` ÔåÆ s├│ `DODEFAULT()`; `InicializarForm()` cria o `sigprilaBO`, aplica background e monta a casca
+- `ConfigurarPageFrame()` como ponto de entrada ├║nico (este legado n├úo tem PageFrame ÔÇö raiz `Class: form` gen├®rica, sem `BaseClass: pageframe`), seguindo o mesmo padr├úo j├í validado em `Formsigprsen.prg`
+- `ConfigurarCabecalho()` ÔÇö recria `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` com posi├º├Áes exatas do dump
+- `ConfigurarPainelPlanilha()` ÔÇö casca vazia de `cnt_4c_planilha` (conte├║do entra nas Fases 5-6)
+- `ConfigurarBotoes()` ÔÇö casca vazia de `obj_4c_Grupo_Botao` (CommandGroup, bot├Áes entram na Fase 4)
+- `TornarControlesVisiveis()` e `Destroy()` padr├úo
+
+Todos os nomes de objeto seguem exatamente o `mapeamento.json` da task (inclusive os nomes at├¡picos como `cnt_4c_planilha` min├║sculo e `obj_4c_Grupo_Botao`), para n├úo quebrar o `ValidarUIFidelity`. Nada de Grid/bot├Áes-CRUD/campos/eventos foi inclu├¡do, conforme o escopo desta fase.

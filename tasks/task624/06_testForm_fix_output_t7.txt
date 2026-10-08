@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The connectivity check is still hanging (consistent with the known unreachable route), so I won't wait on it to conclude.
+
+**Diagn├│stico: N├âO ├® bug de c├│digo.**
+
+O log mostra exatamente a assinatura conhecida de um problema de infraestrutura recorrente nesta m├íquina do pipeline:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+Status: ERRO AO CRIAR OBJETO
+```
+
+Esse erro ocorre no **pre-flight de conex├úo** (`SQLSTRINGCONNECT`), **antes** de qualquer `CREATEOBJECT("Formsigprico")` ou `CREATEOBJECT("sigpricoBO")` ser sequer tentado ÔÇö o c├│digo do form/BO nunca chega a rodar. Tenho registrado (mem├│ria de projeto) que a m├íquina que executa este pipeline n├úo tem rota de rede para `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA` (192.168.200.10:1433). Isso j├í foi reconfirmado dezenas de vezes entre 2026-08-02 e 2026-10-07 em 100+ tasks diferentes, inclusive ap├│s revis├úo linha a linha de forms completamente distintos sem achado nenhum relacionado.
+
+Al├®m disso, este form espec├¡fico (`Formsigprico`) ├® particularmente claro quanto a isso: ├® uma tela sem tabela nenhuma (`this_cTabela = ""`), um cat├ílogo est├ítico de ├¡cones ÔÇö n├úo haveria SQL algum a executar mesmo se chegasse a instanciar.
+
+Editar `Formsigprico.prg`/`sigpricoBO.prg` ├ás cegas n├úo vai resolver isso e arrisca introduzir regress├úo em c├│digo que j├í est├í correto ÔÇö por isso n├úo vou alterar os arquivos.
+
+**Recomenda├º├úo:** marcar esta task (task624) como bloqueada por infraestrutura (sem rota de rede para 192.168.200.10:1433 a partir da m├íquina do pipeline), n├úo como runtime_fix de c├│digo. Reexecutar o `runtime_fix` sobre o mesmo form s├│ vai repetir o mesmo resultado at├® algu├®m com acesso ├á infraestrutura de rede liberar a rota.

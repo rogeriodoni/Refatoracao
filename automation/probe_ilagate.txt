@@ -1,0 +1,25 @@
+=== PROBE Fase 8 - Formsigprila (BOParaForm + handlers Btn*) ===
+1) CREATEOBJECT -> VARTYPE=O Caption=[Importação de Planilha]
+2) estado pos-Init (tela <-> BO):
+   txt_4c_Planilha=[] BO.this_cArquivoPlanilha=[]
+   chk.Value=0 (tipo N) BO.this_lIncluiCabecalho=.F.
+   OptTipo.Value=1 BO.this_nTipoBusca=1
+   OptPreco.Value=1 BO.this_nTipoPreco=1
+3) depois do FormParaBO - BO recebeu:
+   arquivo=[C:\4c\automation\_nao_existe_.xls] cabecalho=.T. tipoBusca=3 tipoPreco=2 rotina=[ListaPreco]
+   depois do BOParaForm - tela reconstruida:
+   arquivo=[C:\4c\automation\_nao_existe_.xls] chk=1 OptTipo=3 OptPreco=2
+4) guarda 1-based: BO 0/99 -> OptTipo=1 OptPreco=1 (esperado 1 e 1)
+5) depois do Processamento (CriaPlanilha falha - .xls inexistente):
+   campo arquivo=[] BO.arquivo=[] (ambos vazios = cauda do legado)
+   criterios preservados: OptTipo=2 OptPreco=2 chk=1
+5b) CriaPlanilha recusa com tela(3/2/1) x BO(1/1/.F.) divergentes:
+    OptTipo=3 OptPreco=2 chk=1 (esperado 3 / 2 / 1 - o que o usuario marcou)
+6) handlers (PEMSTATUS 5 = existe / chamada real = PUBLIC):
+   BtnProcessarClick   existe=.T.
+   BtnEncerrarClick    existe=.T.
+   BtnGetPlanilhaClick existe=.T.
+   CboTiposInteractiveChange existe=.T.
+   CboTiposInteractiveChange() chamado de fora: OK (PUBLIC)
+7) BtnEncerrarClick() chamado de fora: OK (PUBLIC) - form liberado
+=== FIM - FALHAS: 0 ===

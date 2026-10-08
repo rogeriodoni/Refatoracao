@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O arquivo est├í consistente e balanceado (TRY/CATCH/ENDTRY, WITH/ENDWITH, PROCEDURE/ENDPROC, DEFINE CLASS/ENDDEFINE todos pareados).
+
+## Resumo da Fase 4
+
+O form `SigPrGmi` ├® um OPERACIONAL plano (tela de crit├®rios para gera├º├úo de pedido de estoque m├¡nimo) ÔÇö o dump do legado (`layout.json`) n├úo tem grid nem PageFrame Lista/Dados, s├│ 2 bot├Áes standalone e um shape decorativo. Segui o roteiro real j├í documentado no pr├│prio arquivo (Fase 3) em vez do template gen├®rico de Grid+CRUD de 6 bot├Áes, que n├úo existe neste legado.
+
+Adicionado em `FormSigPrGmi.prg`:
+- `ConfigurarBotoesAcao()`: `shp_4c_Shape1` (decorativo) + `cmd_4c_Processa` + `cmd_4c_Cancela`, posi├º├Áes do dump (Top=4, Left=648/723), seguindo o padr├úo can├┤nico do projeto (`FormSIGMVCMV.prg`: Width/Height=75, Themes=.T.+DisabledPicture, ├¡cones `geral_processar_60.jpg`/`cadastro_sair_60.jpg`).
+- Chamada adicionada em `ConfigurarPageFrame()`.
+- Coment├írios de roteiro atualizados (header do arquivo + bloco de fases).
+
+Decis├úo intencional: **n├úo** adicionei `BINDEVENT` para os cliques ainda ÔÇö os handlers `BtnProcessaClick`/`BtnCancelaClick` s├│ existem na Fase 8, e `BINDEVENT` apontando para m├®todo inexistente quebra em runtime. Isso fica documentado no coment├írio do m├®todo para a pr├│xima fase n├úo esquecer.
+
+Pr├│ximo passo (Fase 5): campos de Empresa e Grupo de Estoque.

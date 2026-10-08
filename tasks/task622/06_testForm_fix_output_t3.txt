@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo ÔÇö ├® rede
+
+O erro reportado (`Codigo: 1526`, "SQL Server inexistente ou acesso negado") acontece na **ETAPA 1B** do `TestFormWrapper.prg`, no pr├®-flight `SQLSTRINGCONNECT`, **antes** de qualquer `CREATEOBJECT("FormSigPrIbb")` ou `CREATEOBJECT("SigPrIbbBO")`. Ou seja: `FormSigPrIbb.prg` e `SigPrIbbBO.prg` nunca chegam a executar.
+
+Confirmei agora mesmo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False
+PingSucceeded:    False
+```
+
+A m├íquina que roda este pipeline n├úo tem rota para `192.168.200.0/24` ÔÇö ├® a mesma falha de infraestrutura registrada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`) em **100+ tasks desde 2026-08-02**, incluindo duas tentativas anteriores desta pr├│pria task622/FormSigPrIbb, ambas j├í revisadas linha a linha sem achar defeito de c├│digo relacionado.
+
+N├úo editei `FormSigPrIbb.prg`/`SigPrIbbBO.prg` ÔÇö "corrigir" um c├│digo que nunca ├® alcan├ºado seria o anti-padr├úo que essa mem├│ria existe para evitar, e arriscaria introduzir uma regress├úo real por causa de um sintoma que ├® puramente de rede. O que precisa ser corrigido ├® a rota de rede/firewall da m├íquina do pipeline at├® `192.168.200.10:1433`, fora do escopo deste reposit├│rio de c├│digo.
+
+Atualizei a mem├│ria do projeto com esta 3┬¬ reincid├¬ncia para o hist├│rico ficar completo.

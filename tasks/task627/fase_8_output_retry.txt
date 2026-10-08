@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O gate reprovava por um motivo diferente do que o prompt sugeria.
+
+## O que estava faltando
+
+Simulei o `case 8` do `OrquestradorMigracao.ps1` contra os arquivos reais (extra├¡ os 18 helpers `Test-Legado*` para um arquivo isolado ÔÇö dot-source do orquestrador dispara migra├º├úo). Resultado: o gate reconhece o SIGPRILA como **layout PROCESSADOR-LOTE** (crit├®rios digit├íveis + um bot├úo que l├¬ o `.xls` e grava em tabela real), e esse ramo dispensa `BtnCancelarClick`/`CarregarLista` ÔÇö mas **s├│ se a superf├¡cie dos quatro predicados ancorados estiver entregue**. Faltavam tr├¬s:
+
+| exigido (regex ancorada em in├¡cio de linha) | antes |
+|---|---|
+| `BOParaForm` | **ausente** |
+| `Btn(Salvar\|Confirmar\|Gravar\|Processa\|ÔÇª)Click` | `CmdProcessarClick` |
+| `Btn(Encerrar\|Cancelar\|Sair\|Fechar)Click` | `CmdEncerrarClick` |
+
+Os dez `AddCursor` do `Init` legado passam `''` na posi├º├úo do objeto de grade e o `List1` ├® `RowSourceType = 1` ÔÇö por isso os helpers (j├í ajustados numa sess├úo anterior citando esta task por nome) provam "sem grade", e nenhum outro ramo alcan├ºa.
+
+## O que mudei em `Formsigprila.prg`
+
+1. **Renomeei os tr├¬s handlers `Cmd*Click` ÔåÆ `Btn*Click`** (handler, `BINDEVENT`, chamada do ESC e coment├írios). N├úo ├® adapta├º├úo ao gate: a conven├º├úo do projeto ├® 875 arquivos com `BtnEncerrarClick` contra 37 com `CmdEncerrarClick`. Nenhuma refer├¬ncia externa ÔÇö `menu.prg` s├│ chama `CREATEOBJECT`.
+
+2. **`BOParaForm` real** ÔÇö o inverso do `FormParaBO` que j├í existia: devolve os quatro crit├®rios do BO aos controles, com convers├úo expl├¡cita (l├│gica ÔåÆ `Value` num├®rico do CheckBox) e piso/teto 1-based nos `OptionGroup`.
+
+3. **`FormParaBO` subiu para antes do `CriaPlanilha`** no `Processamento`, e a cauda (`getPlanilha.Value = ''` do legado) passou a limpar **s├│** a property, deixando o `BOParaForm` espelhar no campo. Antes a limpeza era escrita duas vezes.
+
+O item 3 tinha uma armadilha que n├úo ├® ├│bvia lendo o c├│digo: com o `FormParaBO` na posi├º├úo antiga, quando `CriaPlanilha` recusa o arquivo o BO guarda crit├®rio da execu├º├úo **anterior**, e o `BOParaForm` da cauda o devolveria por cima do que o usu├írio acabou de marcar. O teste 5b do probe come├ºa com tela (3/2/1) e BO (1/1/.F.) divergentes de prop├│sito para pegar exatamente isso.
+
+## Medido, n├úo lido
+
+- `COMPILE` limpo nos dois arquivos (`.fxp` apagado antes, timestamp conferido).
+- `automation\ProbeIlaFase8Gate.prg` (novo): form instancia, painel abre no estado do BO, ida-e-volta dos 4 crit├®rios preserva tudo, guarda 1-based converte BO 0/99 ÔåÆ 1/1, cauda do `Processamento` limpa o arquivo nos dois lados sem pisar no crit├®rio do usu├írio, e os handlers respondem a chamada de fora da classe (prova de `PUBLIC` ÔÇö `PEMSTATUS` sozinho n├úo prova escopo). **0 falhas.**
+- `ProbeIlaFormF8.prg` (pr├®-existente): as 7 rotinas continuam despachando, `ValidaCols = .T.` em todas.
+- `Test-CompletudeCodigo`: sem TODO/stub no Form e no BO.
+- `ValidadorSQLSchema.ps1`: 683 tabelas lidas, nenhuma coluna inv├ílida.
+- Simula├º├úo do gate: `PROCESSADOR-LOTE=True`, `metodosFaltantes` vazio ÔåÆ **FASE 8 PASSA**.
+
+Cuidado deliberado: n├úo escrevi `CarregarLista` nem `BtnCancelarClick` em lugar nenhum do arquivo. O gate casa esses nomes por substring no arquivo inteiro, ent├úo um coment├írio os satisfaria ÔÇö ├® a fraqueza conhecida do gate, e us├í-la seria fazer a fase passar sem entregar nada.
+
+## O que n├úo mudei e n├úo est├í escondido
+
+`sigprilaBO.prg` aparece modificado no git, mas ├® da execu├º├úo anterior desta fase (as 7 rotinas de importa├º├úo, 170 ÔåÆ 3.466 linhas) ÔÇö n├úo toquei nele. As aus├¬ncias que aquela execu├º├úo deixou documentadas continuam de p├® e continuam bloqueando caminhos em runtime de prop├│sito: `SqlCalcP2`/`fRecalculaC`, `SigCdPac.DopAcePed`, `SigOpSen`. **Nada rodou contra o banco** ÔÇö o SQL Server n├úo ├® alcan├º├ível desta m├íquina; est├í provado o texto do SQL contra o schema, n├úo uma importa├º├úo de verdade.

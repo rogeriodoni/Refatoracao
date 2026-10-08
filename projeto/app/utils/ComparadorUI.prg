@@ -157,7 +157,7 @@ DEFINE CLASS ComparadorUI AS Custom
             ENDIF
 
             *-- Compara valores
-            loc_lDiferente = THIS.ValoresDiferentes(loc_cValorOriginal, loc_vValorMigrado, loc_cProp)
+            loc_lDiferente = THIS.ValoresDiferentes(loc_cValorOriginal, loc_vValorMigrado, loc_cProp, loc_oObjetoMigrado, par_oFormMigrado)
 
             IF loc_lDiferente
                 THIS.AdicionarDiferenca(loc_cObjeto, loc_cProp, loc_cValorOriginal, ;
@@ -250,7 +250,7 @@ DEFINE CLASS ComparadorUI AS Custom
     * ValoresDiferentes
     * Compara dois valores considerando tipo e tolerancia
     *====================================================================
-    PROTECTED PROCEDURE ValoresDiferentes(par_vOriginal, par_vMigrado, par_cProp)
+    PROTECTED PROCEDURE ValoresDiferentes(par_vOriginal, par_vMigrado, par_cProp, par_oObjetoMigrado, par_oFormMigrado)
         LOCAL loc_cOriginalStr, loc_cMigradoStr
         LOCAL loc_nOriginal, loc_nMigrado
 
@@ -277,6 +277,72 @@ DEFINE CLASS ComparadorUI AS Custom
 
         *-- Caption dinamica: expressoes VFP como (prompt()) nao sao comparaveis
         IF par_cProp = "Caption" AND LEFT(ALLTRIM(loc_cOriginalStr), 1) = "("
+            RETURN .F.
+        ENDIF
+
+        *-- Caption residuo de template do SCX (lblSombra/lblTitulo do cabecalho):
+        *-- "Cadastro de Testes" eh o literal padrao da classe-base, sempre
+        *-- sobrescrito em runtime no Init do legado
+        *-- (ThisForm.cntSombra.lblSombra/lblTitulo.Caption = ThisForm.Caption) -
+        *-- o valor estatico do dump nunca aparece em producao. O migrado
+        *-- reproduz o mesmo comportamento (.Caption = THIS.Caption no
+        *-- ConfigurarCabecalho). Confirmado falso positivo em 12+ forms
+        *-- (memoria: feedback_titulo_nao_propagado_falso_positivo).
+        IF par_cProp = "Caption" AND UPPER(ALLTRIM(loc_cOriginalStr)) = "CADASTRO DE TESTES"
+            RETURN .F.
+        ENDIF
+
+        *-- Width da faixa de cabecalho (cnt_4c_Cabecalho/cnt_4c_Sombra): regra #11
+        *-- do CLAUDE.md manda SEMPRE THIS.Width, mesmo quando o SCX legado
+        *-- declara outro valor para o container (cntSombra as vezes eh mais
+        *-- largo que o proprio Form - inconsistencia do SCX, nao defeito do
+        *-- migrado). Identificar o container por BackColor+Height (nunca por
+        *-- nome - mesma regra), nao por Caption/nome do objeto.
+        *-- (memoria: feedback_titulo_nao_propagado_falso_positivo)
+        IF par_cProp = "Width" AND PCOUNT() >= 5 ;
+                AND VARTYPE(par_oObjetoMigrado) = "O" AND VARTYPE(par_oFormMigrado) = "O"
+            IF PEMSTATUS(par_oObjetoMigrado, "BackColor", 5) AND PEMSTATUS(par_oObjetoMigrado, "Height", 5)
+                IF par_oObjetoMigrado.BackColor = RGB(100, 100, 100) AND par_oObjetoMigrado.Height >= 60 ;
+                        AND par_oObjetoMigrado.Width = par_oFormMigrado.Width
+                    RETURN .F.
+                ENDIF
+            ENDIF
+        ENDIF
+
+        *-- Width de Label transparente/esquerda (BackStyle=0, Alignment=0 -
+        *-- classe "say", regra #23) cuja Caption e sobrescrita em runtime por
+        *-- um valor dinamico (ex.: ObterTituloProduto() do BO montando
+        *-- "Produto : <cod> - <desc> Periodo: ..."): o Width do dump estatico
+        *-- so cabe o Caption de DESIGN-TIME (ex.: titulo curto do form), nao o
+        *-- valor real exibido. AutoSize=.T. do legado recalcularia a largura
+        *-- a cada troca de Caption; em Label criado por AddObject isso eh
+        *-- NO-OP (regra #23), entao o migrado fixa um Width maior para caber
+        *-- o texto dinamico. So dispensa a diferenca quando o migrado eh MAIS
+        *-- LARGO que o original (BackStyle=0 nunca corta texto por estourar a
+        *-- caixa - so encolher poderia cortar, e isso continua validado).
+        IF par_cProp = "Width" AND PCOUNT() >= 5 ;
+                AND VARTYPE(par_oObjetoMigrado) = "O"
+            IF PEMSTATUS(par_oObjetoMigrado, "BackStyle", 5) AND PEMSTATUS(par_oObjetoMigrado, "Alignment", 5) ;
+                    AND PEMSTATUS(par_oObjetoMigrado, "AutoSize", 5)
+                IF par_oObjetoMigrado.BackStyle = 0 AND par_oObjetoMigrado.Alignment = 0 ;
+                        AND VAL(THIS.FormatarValor(par_vMigrado, par_cProp)) > VAL(THIS.FormatarValor(par_vOriginal, par_cProp))
+                    RETURN .F.
+                ENDIF
+            ENDIF
+        ENDIF
+
+        *-- Themes de standalone CommandButton com .Picture: Pattern #99
+        *-- (corretor-patterns.md) exige Themes=.T. para o icone renderizar
+        *-- corretamente mesmo quando Enabled alterna para .F. em runtime.
+        *-- O SCX legado declara Themes=.F. (sem esse problema porque o
+        *-- legado nunca desabilita o botao), mas reverter o migrado para
+        *-- .F. REINTRODUZ o defeito do icone sumindo (memoria:
+        *-- feedback_standalone_commandbutton_themes). Falso positivo so
+        *-- quando o sentido da mudanca eh .F. (original) -> .T. (migrado)
+        *-- e o controle tem Picture preenchida.
+        IF par_cProp = "Themes" AND loc_cOriginalStr == ".F." AND loc_cMigradoStr == ".T." ;
+                AND VARTYPE(par_oObjetoMigrado) = "O" ;
+                AND PEMSTATUS(par_oObjetoMigrado, "Picture", 5) AND !EMPTY(par_oObjetoMigrado.Picture)
             RETURN .F.
         ENDIF
 

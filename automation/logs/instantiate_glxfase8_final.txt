@@ -1,0 +1,22 @@
+GLX FASE8 FINAL - inicio 06/10/2026 20:47:48
+0 SETUP: OK
+1 INSTANCIA Probe: VARTYPE=O
+2 CURSORES populados: TmpFinalg=2 TmpSaldg=3 TmpSaldo=2
+3 CarregarLista retorno=.T.
+3a grade principal: RS=[TmpFinalg] ColCount=10 H1=[Produto] H10=[Qtd Estoque] W1=90 W10=76 C1.RO=.T. C7.RO=.F. C10.RO=.F.
+3b totais Page1: Qtd=180 Est=20 (esperado Qtd=180 Est=20)
+4 item1 (PROD001): linhas VISIVEIS em TmpSaldg=1 (esperado 1 de 3 - filtro SET KEY ativo)
+4b item2 (PROD002): linhas VISIVEIS em TmpSaldg=2 (esperado 2 - SET KEY reemitido na troca de linha)
+5 BOParaForm: Periodo=[Período: 0 meses] Pedras.Visible=.F. SelEstoque.Visible=.T. Caption=[Prévia da Globalização]
+6 FormParaBO retorno=.T.
+7a Column10Valid com -5 (negativo): nao estourou - Value restaurado=0 (esperado 0)
+7b Column10Valid com 40 (valido): TmpSaldo.Disps=60 (esperado 60) TmpFinalg.Produzir=60 (esperado 60)
+8 AEVENTS Column10.Text1=3 (Valid+LostFocus esperados; GotFocus NAO pode aparecer)
+   evento[1]=GOTFOCUS
+   evento[2]=VALID
+   evento[3]=LOSTFOCUS
+9 RELEASE: OK
+DIALOGOS SUPRIMIDOS:
+[06/10/2026 08:47:48 PM] Atenção: A quantidade não pode ser um valor negativo...
+
+FIM 06/10/2026 20:47:48

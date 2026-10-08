@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 executada. `FormSigPrIbb.prg` modificado: **+80 linhas** (`ConfigurarOrdemTabulacao()` + chamada + coment├írios de fase).
+
+## O que a fase tinha de fazer
+
+O prompt pede "metade dos campos da Page2 em `ConfigurarPaginaDados()`", mas `SIGPRIBB` ├® OPERACIONAL **flat** ÔÇö n├úo tem PageFrame nem Page1/Page2. Conferi os 26 objetos de `layout.json` um a um: os 6 campos soltos (`getEmps`/`getDopes`/`getNumes`/`getTotal` + os EditBox `getLocals`/`getTxtCds`), os 4 labels, grid, shape e os 2 bot├Áes **j├í foram todos entregues pelas Fases 3/4**, com Top/Left/Width/Height id├¬nticos ao dump. N├úo havia campo para acrescentar.
+
+O que as fases anteriores **descartaram** foi o `TabIndex`, que o SCX declara para 11 objetos. Com `AddObject` o VFP9 numera pela ordem de cria├º├úo ÔÇö sem erro, sem log, sem aparecer em screenshot, s├│ o Tab andando na ordem errada.
+
+## O defeito, medido
+
+| | `cmd_4c_Ok` (Encerrar) | `cmd_4c_BtnImprimir` |
+|---|---|---|
+| SCX legado | 11 | **10** |
+| antes (ordem de cria├º├úo) | **11** | 12 |
+| depois | 9 | **8** |
+
+Invertido. O usu├írio editava `obj_4c_GetTxtCds` (texto de responsabilidade do cedente), dava Tab e ca├¡a em **Encerrar**, que ├® `.Cancel = .T.` ÔÇö Enter/Espa├ºo ali fecha a tela e descarta a edi├º├úo. No legado o Tab cai em **Imprimir**. `txt_4c_Total` tamb├®m estava em 10 contra 3 do SCX.
+
+Numerei s├│ os 9 focaliz├íveis, em ordem ascendente e posi├º├Áes compactas: `Label` tem `TabIndex` mas **n├úo tem `TabStop`** (confirmado em `propriedades_baseclasses.txt` e no probe), ent├úo transcrever o dos labels seria inerte e embaralharia quem de fato para o Tab.
+
+## Verifica├º├úo
+
+- `COMPILE` sem `.ERR`, `.FXP` reescrito (timestamp conferido).
+- Form instanciado de verdade (cadeia m├¡nima, sem `ConfigurarAmbiente()`): `BaseClass=[Form]`, `ControlCount=13`, os 9 `TabIndex` exatamente em 1..9 na ordem do SCX.
+- Estado pr├®-fix medido numa c├│pia com a classe renomeada ÔÇö ├® de l├í que vem o "antes" da tabela, n├úo de dedu├º├úo.
+- Zero `TODO`/stub; `bytes>127 = 0` preservado.
+
+## Dois pontos para voc├¬
+
+**1. `sed -i` me apagou o CRLF e minha checagem n├úo pegou.** Os `.prg` s├úo CRLF; dois `sed -i` deixaram o arquivo em LF e o `diff` virou "818 linhas reescritas". Pior: `grep -c $'\r$'` devolveu **0** num arquivo com 738 CR, e eu registrei "LF puro" ÔÇö exatamente o contr├írio. Restaurei o CRLF (CR=818=LF=818) e recompilei/remedi depois. Estendi `feedback_edit_tool_normaliza_crlf_dos_prg` com os dois fatos: `sed -i` faz o mesmo que `Edit`/`Write`, e a detec├º├úo tem de **contar bytes** (`tr -cd '\r' | wc -c`), n├úo usar grep ancorado.
+
+**2. O guard de NO-OP vai barrar esta fase de novo em casos iguais, e isto n├úo era um deles.** Fui re-invocado com opus porque a execu├º├úo anterior da Fase 5 terminou sem tocar no arquivo ÔÇö e naquele momento ela estava **errada**, o `TabIndex` era trabalho de verdade. Mas `Test-LegadoSemCamposSoltos` devolve `$false` aqui (h├í 6 campos soltos), ent├úo a exce├º├úo do Erro179 n├úo cobre este form: se a Fase 5 voltar a n├úo ter trabalho num legado com campos soltos j├í entregues pela Fase 4, o retry ser├í queimado outra vez. N├úo mexi no orquestrador ÔÇö edit├í-lo n├úo desbloqueia a execu├º├úo em curso e a fase tinha trabalho leg├¡timo.
+
+Observa├º├úo ├á parte: o `HEAD` tem uma migra├º├úo anterior deste form (952 linhas, de 14/09) que as Fases 3/4 desta task substitu├¡ram por uma de 818 ÔÇö da├¡ o `git diff --stat` mostrar 724/858. Isso ├® das fases anteriores, n├úo desta; minha contribui├º├úo sobre o arquivo da Fase 4 s├úo os 80 linhas.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, the menu integration was already done in an earlier phase. Fase 7/8 is complete.
+
+## Summary
+
+Implemented the real button events for `FormSigPrIct.prg` (Integra├º├úo Cont├íbil), an OPERACIONAL processing/report form ÔÇö not a CRUD form, so the task template's generic "Incluir/Alterar/Visualizar/Excluir" instructions didn't apply here. Instead I followed the form's own documented roadmap (already laid out by earlier phases) and the project's established house pattern from `FormSigPrFem`/`FormSIGPGCNB`:
+
+- **`BtnProcessarClick`** (Processar button): validates the period, confirms, calls `SigPrIctBO.Processar()`, dispatches to `AposProcessar()`.
+- **`AposProcessar`**: reproduces the legacy `Processamento` tail ÔÇö shows the Imprimir/Encerrar/Visualizar toolbar when inconsistencies were found (disabling Processar/dates), otherwise shows the appropriate `MsgAviso` and calls `GravarArquivoContabil()` directly.
+- **`GravarArquivoContabil`**: UI half of legacy `gravar` (resets state, confirms, calls `BO.GravarArquivosContabeis()`).
+- **`BtnEncerrarClick`** / **`BtnEncerrarReportClick`** / **`BtnImprimirClick`** / **`BtnVisualizarClick`**: wired via `BINDEVENT` on each `CommandGroup.Buttons(N)`, matching the legacy's per-button `Click` handlers (verified against the actual `.SCT`/`.txt` source, not just the truncated `comportamento.json`).
+- **`PrepararCursoresRelatorio`** + **`ExecutarReportForm`**: build the literal-named `SemConta`/`Cabecalho` cursors the legacy `SIGPRICT.frx` binds to, and run the report with the canonical locale-isolation/menu-restore helper.
+- Also completed a repositioning step from the legacy `Init` (`cntBotoes.Top/Left`) that only became relevant once the show/hide toggle was implemented, and copied `SigPrIct.frx`/`.frt` from the legacy install into `projeto/app/reports/`.
+- Updated `Destroy()` to release the new literal-named cursors and call `BO.FinalizarProcesso()`.
+
+Menu wiring (`AbrirFormSigPrIct` in `menu.prg`) was already in place from an earlier phase.

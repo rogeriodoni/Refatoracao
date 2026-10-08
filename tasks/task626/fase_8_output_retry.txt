@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8 ÔÇö o que foi feito
+
+**Diagn├│stico primeiro.** Reproduzi o `case 8` do gate standalone (helpers extra├¡dos do `OrquestradorMigracao.ps1` ÔÇö sem dot-source, regra conhecida) contra o form entregue:
+
+```
+RESULTADO: validado=False  faltantes=[BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)]
+despachante=False exibicao=False visualizador=False ... grafico=False procLote=False
+semSalvar=True temLista=False temCampos=True semCrudLegado=True nBotoes=0 cliqueSoFecha=
+```
+
+O ├║nico faltante era **bot├úo de a├º├úo**, e o `SIGPRIFF` n├úo tem bot├úo algum (dump de 4 objetos: `dataenvironment`, `form1`, `Text1`, `Combo1`; zero `.Click`). Nenhum dos 11 ramos de exce├º├úo alcan├ºa: `despachante` exige **n├úo** ter campo, `exibicao`/`visualizador` exigem campo read-only, `calculadora`/`protocolo` exigem **UM** bot├úo. Satisfazer o gate exigiria inventar um bot├úo (viola PILAR 1) ou criar handler vazio (proibido pela completude).
+
+Descartei as duas hip├│teses alternativas medindo: **n├úo foi no-op** (form alterado ├ás 19:58, hash diferente) e **n├úo foi self-reference** ÔÇö o `.ps1` tem mtime 15:40 e o orquestrador desta task iniciou 17:54, logo o gate em mem├│ria era o mesmo do disco.
+
+**Conserto real no form (1):** o cabe├ºalho da Fase 8 anterior escreveu *"documentado como pendente"*, que o `Test-CompletudeCodigo` reprova (`Indicador de pendencia`). Reescrito; completude agora `True`. ├ë a 3┬¬ recorr├¬ncia dessa fam├¡lia no mesmo arquivo ÔÇö a varredura tem de rodar no fim de **cada** fase, n├úo uma vez por migra├º├úo.
+
+**Ramo novo no gate (12┬║):** `$legadoEntradaSemBotaoF8` ("di├ílogo-entrada"/input-box), em 3 pontos do `case 8` + mensagem pr├│pria. FAIL-CLOSED reusando `Test-LegadoSemBotaoAlgum` (a mesma prova em que o guard de no-op das Fases 7/8 j├í confia) + dump presente + sem lista + **com** campo + sem CRUD + sem bot├úo de gravar, exigindo do migrado os campos, os `BINDEVENT(..., "KeyPress")` e o `PROCEDURE KeyPress` do form. Corrigi tamb├®m o coment├írio do guard de no-op, que afirmava (errado) que o ramo despachante absorve todo legado sem bot├úo.
+
+**Delta medido** nos 625 dumps de `tasks\`: libera **2 dumps = 1 form distinto** (o pr├│prio SIGPRIFF, task301 e task626). Zero regress├úo nos forms de refer├¬ncia. Gate novo rodado standalone: `validado=True faltantes=[]`.
+
+**Entreg├ível validado por fora:** `COMPILE` do Form e do BO sem `.err`, `.fxp` gerados; probe instanciando os 5 modos e o fluxo de sa├¡da ÔÇö ESC(27) ÔåÆ resposta vazia (cancelamento) nos dois lugares; tecla 65 ÔåÆ no-op; ENTER ÔåÆ resposta espelhada FormÔåöBO com o tipo que o chamador espera (`C`/`D`/`N`/`C` por modo); `Release`/`Destroy` sem exce├º├úo.
+
+## O que voc├¬ precisa saber
+
+**Esta execu├º├úo ainda vai reportar "Fase 8 N├âO passou na valida├º├úo".** O PowerShell parseou o `OrquestradorMigracao.ps1` ├ás 17:54; edit├í-lo agora n├úo recarrega nada, ent├úo a valida├º├úo deste retry roda com o gate velho em mem├│ria. O ramo passa a valer **na pr├│xima task**. N├úo mexi no form para for├ºar a passagem ÔÇö a ├║nica forma seria inventar um bot├úo que o legado n├úo tem.
+
+Mem├│ria: criado `feedback_gate_fase8_dialogo_entrada_sem_botao.md` (+ linha no `MEMORY.md`) e adendo em `feedback_validador_completude_casa_pendente.md`.

@@ -1,0 +1,48 @@
+CP1
+=== CENARIO A: sem cursores ===
+form=O
+grdCab existe=.T.  grdIte existe=.T.
+cab.ColumnCount=7  cab.RecordSource=[]
+ite.ColumnCount=7  ite.RecordSource=[]
+  cab col1 W=  35 H=[Emp]
+  cab col2 W= 225 H=[Movimentação]
+  cab col3 W= 100 H=[Grupo Origem]
+  cab col4 W= 100 H=[Conta Origem]
+  cab col5 W= 100 H=[Grupo Destino]
+  cab col6 W= 100 H=[Conta Destino]
+  cab col7 W= 100 H=[Confirmação]
+  ite col1 W=  36 H=[]
+  ite col2 W= 120 H=[Produto]
+  ite col3 W= 403 H=[Descrição do Produto]
+  ite col4 W=  23 H=[M]
+  ite col5 W= 130 H=[Pr. Unit.]
+  ite col6 W= 100 H=[Quantidade]
+  ite col7 W= 130 H=[Total]
+botoes: grava=.T. cancela=.T.
+CarregarLista() sem cursores=.T.
+
+=== CENARIO B: com cursores do form pai ===
+form=O
+cab.RecordSource=[csCabec]
+ite.RecordSource=[csItens]
+  cab col1 W=  35 RO=.T. CS=[csCabec.EmpDs] H=[Emp]
+  cab col2 W= 225 RO=.T. CS=[csCabec.Dopes] H=[Movimentação]
+  cab col3 W= 100 RO=.T. CS=[csCabec.GrupoOs] H=[Grupo Origem]
+  cab col4 W= 100 RO=.T. CS=[csCabec.ContaOs] H=[Conta Origem]
+  cab col5 W= 100 RO=.T. CS=[csCabec.GrupoDs] H=[Grupo Destino]
+  cab col6 W= 100 RO=.T. CS=[csCabec.ContaDs] H=[Conta Destino]
+  cab col7 W= 100 RO=.T. CS=[csCabec.Gerado] H=[Confirmação]
+  ite col1 W=  36 RO=.T. CS=[csItens.CItens] H=[]
+  ite col2 W= 120 RO=.T. CS=[csItens.CPros] H=[Produto]
+  ite col3 W= 403 RO=.T. CS=[csItens.DPros] H=[Descrição do Produto]
+  ite col4 W=  23 RO=.T. CS=[csItens.Moedas] H=[M]
+  ite col5 W= 130 RO=.T. CS=[csItens.Units] H=[Pr. Unit.]
+  ite col6 W= 100 RO=.T. CS=[csItens.Qtds] H=[Quantidade]
+  ite col7 W= 130 RO=.T. CS=[csItens.Totas] H=[Total]
+DynamicBackColor col7=[IIF(EMPTY(csCabec.Gerado), RGB(255,255,255), RGB(255,255,204))]
+csCabec corrente=[MALOTE] itens visiveis=3 / contados=
+  SCAN em csItens com SET KEY = 2 linha(s) (esperado 2)
+csCabec corrente=[TRANSFERENCIA]
+  SCAN em csItens apos troca = 1 linha(s) (esperado 1)
+  ite col3 W=403 H=[Descrição do Produto] (apos re-bind)
+CPFIM

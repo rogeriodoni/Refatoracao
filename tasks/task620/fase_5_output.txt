@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö `FormSigPrGst`: nada a acrescentar no `.prg` (e o conserto foi no guard do orquestrador)
+
+**`FormSigPrGst.prg` ficou intocado, de prop├│sito.** O `SIGPRGST.SCX` n├úo tem campo solto nenhum: os **14** registros `BaseClass: textbox` do dump s├úo os 14 `Text1` das 14 colunas de `GrdCab`/`GrdIte`; fora deles o SCX tem s├│ 2 Label de cabe├ºalho, 1 Shape e 2 CommandButton ÔÇö todos j├í entregues nas Fases 3/4. "Metade dos campos" de um legado com zero campos ├® zero. Escrever algo aqui seria inventar campos (viola o PILAR 1) ou criar um `ConfigurarPaginaDados` vazio (stub disfar├ºado, proibido).
+
+Conferi a Fase 4 contra o dump coluna a coluna antes de concluir isso: o mapeamento `ColumnOrder` ÔåÆ posi├º├úo est├í certo nas duas grades (incluindo a assimetria de `Movable`/`Resizable`/`Text1.ReadOnly` das legado `Column3`/`Column7`), as larguras somam 760/798 e 942/980, e o `SetAll DynamicBackColor`, o `SET KEY TO csCabec.EmpdopNums`, o `GO TOP` e os `Refresh` do `Init` legado est├úo todos transcritos.
+
+### O que estava bloqueando (n├úo era o gate)
+
+O gate de conte├║do da Fase 5 **j├í passa** pelo ramo FLAT (`OPERACIONAL` + sem `pgf_4c_` + `.ControlSource =`, satisfeito pelo `Column.ControlSource` das grades). Quem disparou foi o **guard de NO-OP do Erro178** (`Invoke-MigracaoFase`), que roda *antes* do switch dos gates: exit code 0 + hash igual ÔçÆ for├ºa retry com opus e timeout 2x. Foi o que gerou esta invoca├º├úo ÔÇö o log mostra a run sonnet terminando em 143 s sem tocar no arquivo e o opus logo atr├ís.
+
+### Conserto (`automation/OrquestradorMigracao.ps1`)
+
+Duas fun├º├Áes novas junto das `Test-Legado*` ÔÇö `Test-LegadoSemCamposSoltos` e `Test-LegadoSemLookupAlgum` ÔÇö e o guard passou a s├│ **deixar de for├ºar** o retry nesse caso. N├úo libera fase nenhuma: o gate de conte├║do roda em seguida e continua tendo de passar.
+
+Fail-closed medido (619 dumps, 2026-10-07): s├│ `FormType = OPERACIONAL`, s├│ Fases 5 e 6, s├│ com dump presente. Libera 50 dumps = **30 forms legado distintos** na Fase 5 e 20 na Fase 6. Controles negativos todos reprovando como deviam: `SigCdCor` (CRUD, 7 campos soltos), `sigcdcli` (wrapper `clsconta` ÔÇö agrupador de VCX derruba a exce├º├úo, porque ali os campos moram no p-code e a fase *tem* trabalho), dump ausente, dump lixo, Fases 4 e 7, `FormType` CRUD/REPORT, e `SIGPRGST` com um textbox solto injetado. Na Fase 6 os 6 forms com lookup na c├®lula (`SigCdVca`, `SigPrCar`, `SigMvAte`, `sigprtam`, `SigCdGps`, `SIGCDTPG`) mant├¬m o retry.
+
+A armadilha de CRLF registrada na mem├│ria reapareceu e quase passou: a 1┬¬ vers├úo ancorava `[ \t]*$`, que em .NET multiline n├úo casa antes do `\r` ÔÇö a fun├º├úo devolvia `$true` para quase qualquer dump (142 forms, incluindo CRUD com campos soltos). Corrigido para `\s`, como o resto do arquivo.
+
+Arquivo parseia com 0 erros, BOM UTF-8 intacto e bytes >127 id├¬nticos ao baseline (2963).
+
+### Duas coisas para voc├¬ decidir
+
+- **A execu├º├úo em curso n├úo ├® afetada**: `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo esta mudan├ºa s├│ vale no pr├│ximo lan├ºamento do loop. A task620 segue normalmente ÔÇö depois do retry o orquestrador aceita a exist├¬ncia do arquivo e o gate FLAT valida a Fase 5.
+- A Fase 6 deste form tamb├®m n├úo ter├í nada a acrescentar (zero campos soltos, zero lookups no dump); as Fases 7/8 t├¬m trabalho real (os `Click` de `cmd_4c_CmdGrava`/`cmd_4c_CmdCancela`), como o pr├│prio cabe├ºalho do `.prg` j├í prev├¬.

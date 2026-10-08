@@ -1006,6 +1006,12 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 143 OF popMovimentos DO AbrirFormSigPrChr
 
+    DEFINE BAR 144 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 145 OF popMovimentos PROMPT "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio" ;
+           MESSAGE "Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio (SigCnFBl)"
+
+    ON SELECTION BAR 145 OF popMovimentos DO AbrirFormSIGPRIBL
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -5838,7 +5844,7 @@ PROCEDURE AbrirFormSigPrIbb()
     LOCAL loForm, loException
 
     TRY
-        loForm = CREATEOBJECT("FormSIGPRIBL")
+        loForm = CREATEOBJECT("FormSigPrIbb")
 
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + ;
@@ -11975,6 +11981,42 @@ PROCEDURE AbrirFormSigPrChr()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Consulta e Cancelamento de Cheques:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGPRIBL - Abre formulario de Impressao de Boleto Bancario
+* Via menu: sem chave de movimento e sem controle chamador (par_cChave1="",
+* par_oControleChamador=.NULL., defaults do Init) - o usuario escolhe a
+* Condicao de Pagamento na propria tela.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGPRIBL()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("FormSIGPRIBL")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

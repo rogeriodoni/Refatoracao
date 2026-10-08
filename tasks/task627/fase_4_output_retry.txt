@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 / task627 (SIGPRILA ÔåÆ Formsigprila)
+
+**N├úo modifiquei o form ÔÇö ele j├í estava correto e completo.** A reprova├º├úo era falso positivo do gate. Medi cada termo antes de tocar em qualquer coisa, como manda a regra da fam├¡lia.
+
+### Diagn├│stico
+
+`SIGPRILA` ├® um di├ílogo OPERACIONAL **flat de CAPTURA** (800x350): combo de tipo, GetFile, 2 OptionGroups, CheckBox e um ListBox. Zero `BaseClass: grid`, zero `pageframe`, zero `pColuna`/`Grade`/`grd`, `AddCursor` sem ligar grade. A Fase 3 j├í entregou a tela inteira ÔÇö casca, cabe├ºalho e o CommandGroup `\<Processar`/`Encerrar`. **N├úo h├í nada que a Fase 4 acrescente.**
+
+Os cinco ramos do gate estavam todos fechados: PAGINADO exigiria inventar PageFrame + `AlternarPagina`; FLAT, uma grade; DESPACHANTE exige "sem lista E sem campos" (tem 6); EXIBI├ç├âO exige todo campo ReadOnly (s├úo de digita├º├úo). Sobrava inventar UI (viola o PILAR 1) ou escrever m├®todo-adaptador vazio (proibido pela regra de completude) ÔÇö exatamente o que n├úo se faz.
+
+O ramo **CAPTURA** era o certo, e estava bloqueado por **dois termos, ambos do mesmo controle `List1`**:
+
+| termo | por que ├® falso positivo |
+|---|---|
+| `BaseClass: listbox` no regex estrito | quem define a origem das linhas ├® `RowSourceType`; `List1` tem **`RowSourceType = 1`** (value list) + `MoverBars = .T.`, e o `RowSource` ├® preenchido em runtime com uma **string** (`Alltrim(ComboTipo.ColunaLi)`), lida como `List1.List(nCnt,2)` para montar um `Create Table`. ├ë o seletor "Ordem das Colunas na Planilha / Clique e Arraste para Mudar" ÔÇö campo de **entrada** |
+| `Test-LegadoControlSourceLigaLista` | `List1.ControlSource = "TmpList"`, e **`TmpList` n├úo aparece mais nenhuma vez** nos 109 KB do dump (nenhum `Create Cursor`/`Select Into`/`Use`) ÔÇö resto de design time. Em ListBox/ComboBox o `ControlSource` guarda o valor *selecionado*, nunca a origem das linhas |
+
+O pr├│prio gate j├í tratava ComboBox assim: `BaseClass: combobox` nunca entrou no regex estrito, mesmo com `RowSourceType = 6`. A incoer├¬ncia era s├│ com ListBox.
+
+### Conserto (no harness, n├úo no `.prg`)
+
+`automation/OrquestradorMigracao.ps1`: novo helper `Test-LegadoListBoxLigaLista` (duas passadas, **fail-closed** ÔÇö ListBox sem `RowSourceType` no dump ou com valor fora de `{0,1}` mant├®m a exig├¬ncia de grade); token `listbox` removido dos **5** sites (F4, F5, F6, F8-protocolo, F8-gr├ífico); `listbox`/`combobox` somados ├á exclus├úo do `ControlSource`. `grid|pageframe` intocado.
+
+**Medi├º├úo (626 dumps):** 5 flipam, que s├úo s├│ **2 forms legado distintos** ÔÇö SIGPRILA (task197/302/627) e SIGPRIMP (task199/304, ListBox `Arquivos`, tamb├®m `RowSourceType = 1`). Zero vazamentos; "tem lista" 448 ÔåÆ 443. As 6 tasks de refer├¬ncia (570 DESPACHANTE, 573 EXIBI├ç├âO, 574 ├üRVORE, 581/586/615 CAPTURA) **inalteradas**. Encoding preservado: BOM intacto, 2963 bytes >127 antes e depois, zero erros de parse.
+
+### Verifica├º├úo do entreg├ível
+
+- Gate simulado ÔåÆ **Fase 4 PASSA** pelo ramo CAPTURA
+- `Test-CompletudeCodigo` ÔåÆ OK no form **e** no BO (nenhum TODO/stub/procedure vazia)
+- VFP9 real (`.FXP` apagado antes): `CREATEOBJECT` devolve objeto, `BaseClass=Form`, 800x350, 3 controles vis├¡veis, CommandGroup com `\<Processar`/`Encerrar`, t├¡tulo propagado, **sem `.ERR` e sem exce├º├úo**
+
+### ÔÜá´©Å Isto n├úo desbloqueia a execu├º├úo atual
+
+`RunLoop.ps1` (PID 22848) subiu em **2026-10-06 18:04**; o orquestrador foi gravado em **2026-10-07 20:38+**. O PowerShell j├í parseou o script inteiro, ent├úo task627 **vai reprovar de novo com o gate velho em mem├│ria** ÔÇö o conserto s├│ vale **depois de relan├ºar o loop**. Se a Fase 4 reprovar outra vez antes disso, ├® auto-refer├¬ncia, n├úo defeito do form.
+
+Registrei a li├º├úo em mem├│ria (`feedback_listbox_rowsourcetype_falso_positivo_de_lista`) como 7┬¬ recorr├¬ncia da fam├¡lia, incluindo as duas armadilhas de edi├º├úo que encontrei (here-string LF do bash contra arquivo CRLF; `\\s` em string PowerShell virando barra literal). Tamb├®m compactei o `MEMORY.md` a pedido do hook: 20,2 KB ÔåÆ 17,4 KB, com os 213 alvos de link conferidos byte a byte, nenhum perdido.

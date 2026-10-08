@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Esse erro **n├úo ├® um bug de c├│digo** ÔÇö ├® a mesma falha de infraestrutura j├í documentada em 100+ tasks desde 2026-08-02, e esta j├í ├® a **3┬¬ vez** que o `runtime_fix` ├® chamado sobre este mesmo task618/FormSigPrGlx com o erro id├¬ntico.
+
+**Confirma├º├úo:**
+- O erro (C├│digo 1526, "SQL Server inexistente ou acesso negado") ocorre na **ETAPA 1B** do `TestFormWrapper.prg`, no `SQLSTRINGCONNECT` da linha 131 ÔÇö um pre-flight gen├®rico do harness de teste, **antes** de qualquer `CREATEOBJECT("FormSigPrGlx")`/`CREATEOBJECT("SigPrGlxBO")`.
+- O `CREATEOBJECT(par_cFormClass)` s├│ acontece na ETAPA 2 (linha 166), que nunca ├® alcan├ºada porque h├í `RETURN` antecipado na linha 154 quando a conex├úo falha.
+- Ou seja: **nenhum c├│digo nosso chega a executar**. O form/BO nunca s├úo instanciados.
+
+**Verifica├º├úo feita nesta tentativa:**
+- Reconferi o `TestFormWrapper.prg` via grep ÔÇö mesma estrutura das tentativas anteriores.
+- Fiz um sweep de todos os `RETURN` bare em `FormSigPrGlx.prg` ÔÇö todos s├úo guards de valida├º├úo no topo de m├®todo, nenhum dentro de bloco `TRY/CATCH` (regra #1 do CLAUDE.md respeitada).
+- O conte├║do de `FormSigPrGlx.prg`/`SigPrGlxBO.prg` ├® id├¬ntico ao j├í revisado exaustivamente nas tentativas 1/10 e 2/10 (sem achados).
+
+**Nenhuma edi├º├úo foi feita.** Editar o form/BO as ciegas, sem reproduzir o erro real, seria o anti-padr├úo que esta situa├º├úo j├í documentou repetidamente ÔÇö a causa ├® falta de rota de rede da m├íquina do pipeline para `192.168.200.10:1433`, n├úo c├│digo.
+
+Atualizei a mem├│ria do projeto registrando esta 3┬¬ ocorr├¬ncia. Restam 7 tentativas antes do or├ºamento da task se esgotar por causa deste mesmo erro de rede ÔÇö recomendo que algu├®m verifique a conectividade da m├íquina do pipeline com o SQL Server, j├í que o c├│digo n├úo pode corrigir isso.

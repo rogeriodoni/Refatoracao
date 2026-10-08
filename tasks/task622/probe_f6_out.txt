@@ -1,0 +1,12 @@
+PROBE FASE 6 - FormSigPrIbb
+OK instanciou. BaseClass=[Form] DataSessionId=2
+PEM ValidarLocalPagamento = .T.
+PEM ValidarTextoCedente   = .T.
+MaxLength GetLocals       = 100  (esperado 100)
+MaxLength GetTxtCds       = 0  (esperado 0 = sem limite)
+LostFocus GetLocals: len antes=160 depois=100  (esperado 160 -> 100)
+BO TextoCedente: antes=[TEXTO ORIGINAL] depois=[TEXTO EDITADO PELO USUARIO]
+BO LocalPgto   : [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]
+BO FPagsAtual  : [30/60/90]
+Guarda reentrancia (esperado .F.) = .F.
+LostFocus com EOF: OK (nao estourou)

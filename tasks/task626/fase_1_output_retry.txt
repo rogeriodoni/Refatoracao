@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. `projeto/app/classes/SIGPRIFFBO.prg` criado (94 linhas, ASCII puro, CRLF).
+
+**O que o form ├®** ÔÇö `SIGPRIFF.SCX` n├úo ├® cadastro: ├® um di├ílogo gen├®rico de entrada (InputBox) sem tabela nenhuma. Os 4 objetos s├úo `form1` + `Text1` + `Combo1`, e o `Init` legado recebe `pcCab, pcTipo, pcTitulo, pcMaximo, pcMinimo, pcDado`. Confirmei o contrato no ├║nico chamador real, `C:\4install\FortyusMC\Fortyus\sigprtef.PRG:181`:
+
+```
+DO FORM SIGPRIFF WITH Escolhas,lptipo,lcTitulo,TamanhoMinimo,TamanhoMaximo,TipoDados TO Valores
+```
+
+**Entregue**: as 6 propriedades dos par├ómetros (`this_cCabecalho/cTipo/cTitulo/nMaximo/nMinimo/cDado`), a resposta, o array de op├º├Áes do modo `"M"` (`DIMENSION this_aOpcoes[1]` + `this_nQtdOpcoes`, espelhando o `PUBLIC laOpcoes[lnRep]`/`RowSource` do Combo1) e o `Init()` no padr├úo do projeto (`TRY` + `DODEFAULT()` + `RETURN` fora do TRY, `this_cTabela`/`this_cCampoChave` vazios para o `BusinessBase` n├úo instanciar `DataAccess`).
+
+**Verificado de fato, n├úo presumido**:
+- `COMPILE` no VFP9: `.fxp` gerado, zero erros (nenhum `.err`) ÔÇö inclusive as linhas de coment├írio `&&` isoladas e o `DIMENSION` como propriedade de classe;
+- `CREATEOBJECT("SIGPRIFFBO")` real: `VARTYPE=O`, `BaseClass=Custom`, Init executou (todas as propriedades no estado inicial, `this_oDataAccess` `.NULL.`), `ALEN(this_aOpcoes)=1`;
+- `this_uResposta` aceita Date, Numeric e Character (medido nos tr├¬s).
+- Apaguei o `.fxp` do teste (fases seguintes editam o `.prg`; `.fxp` velho faria rodar c├│digo antigo).
+
+**Dois pontos que valem sua aten├º├úo:**
+
+1. **O retorno tem tipo vari├ível, e isso ├® contrato.** O chamador faz `DTOC(Valores)` quando `TipoDados="D"` e `TRANSFORM(Valores,"99999999.99")` quando `="V"`. Por isso usei `this_uResposta` (variante) em vez do `this_cResposta` (caractere) da migra├º├úo anterior deste mesmo form, que est├í em `git show f87d3141` ÔÇö l├í a resposta era convertida para texto com `TRANSFORM`/`DTOC`, o que faria o `DTOC()` do chamador estourar erro 11 em runtime. Deixei a nota no cabe├ºalho para as fases 2-8 n├úo regredirem isso.
+
+2. **O chamador passa M├¡nimo/M├íximo em ordem trocada** em rela├º├úo aos `PARAMETERS` do form. N├úo ├® defeito: o legado resolve com `IIF(pcMaximo < pcMinimo, pcMinimo, pcMaximo)`, pegando o maior dos dois. Documentei explicitamente como "n├úo arrumar", porque ├® exatamente o tipo de coisa que um passe seguinte "corrige" e quebra.
+
+Contexto: BO e Form estavam **deletados do disco** (task re-enfileirada sobre form j├í migrado) ÔÇö a vers├úo antiga segue em `HEAD` s├│ como refer├¬ncia. Conferi tamb├®m que o `SIGPRIFF.scx` da task ├® o mais recente (1687 bytes, id├¬ntico em todas as 7 c├│pias de `4install`), ent├úo n├úo h├í o risco de SCX desatualizado.
+
+Faltam as fases 2 a 8 ÔÇö n├úo as executei porque o pedido era a Fase 1.

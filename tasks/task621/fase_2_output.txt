@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 is complete. `SigPrHprBO.prg` now has the full CRUD/domain method set, and it compiles cleanly in VFP9 (verified with a throwaway `COMPILE` check, since removed).
+
+Summary of what was added to `C:\4c\projeto\app\classes\SigPrHprBO.prg`:
+- `ObterChavePrimaria()` ÔÇö chave (`cidchaves`) usada por `RegistrarAuditoria`
+- `CarregarHistorico()` ÔÇö popula `cursor_4c_Dados` a partir de `SigMvHst` (filtro Grupo+Conta+Produto+Per├¡odo, chave posicional `empgruests`)
+- `BuscarProdutoUnidade()` ÔÇö resolve `SigCdPro`/`SigCdUni` (decide se a grade mostra Peso/Saldo Peso)
+- `ObterTituloProduto()` ÔÇö monta o caption do produto/per├¡odo
+- `CarregarDoCursor()` ÔÇö orquestra a resolu├º├úo da linha selecionada (equivalente ao `AfterRowColChange` legado)
+- `VerificarOperacaoCadastrada()` / `BuscarDocumentoMovimento()` ÔÇö resolve origem/destino via `SigMvCab` ou `SigCdNec`
+- `BuscarDescricoesGrupoConta()` ÔÇö descri├º├Áes via `SigCdGcr`/`SigCdCli`
+- `VerificarPermissaoAuditoria()` ÔÇö regra de supervisor/auditor
+- `CarregarSubniveis()` ÔÇö popula `cursor_4c_Subniveis` (SigMvPec x SigCdOpe)
+- `AtualizarAuditoria()` ÔÇö a ├║nica escrita real do form (UPDATE transacional em `SigMvHst`, com `RegistrarAuditoria`)
+- `VerificarDocumentoCadastrado()` ÔÇö equivalente ao `ChkRegister` legado
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()` do `BusinessBase` foram deixados n├úo sobrescritos, com coment├írio explicando o motivo (form de consulta, sem CRUD gen├®rico).
+
+Pr├│ximo passo ├® a Fase 3 (cria├º├úo do `FormSigPrHpr.prg`), que ainda n├úo existe.

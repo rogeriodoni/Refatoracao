@@ -1,765 +1,685 @@
-*================================================================================
-* SigPrHprBO.prg - Business Object: Historico de Produtos (SIGPRHPR)
-* Form: OPERACIONAL
-* Tabela principal: SigMvHst (UPDATE de auditoria)
-* Gerado: 17/07/2026
-*================================================================================
+*============================================================================
+* SigPrHprBO.prg - Business Object para Historico de Produtos (SIGPRHPR)
+*
+* Form OPERACIONAL (SIGPRHPR / FormSigPrHpr): tela de CONSULTA aberta por um
+* form pai (ThisForm.ParentForm) que ja definiu, antes de "Do Form SigPrHpr",
+* as variaveis PRIVATE pcCdGrupo/pcCdConta/pcCdProduto/pcDsProduto/pdDataIni/
+* pdDataFin (grupo, conta, produto e periodo cujo historico de movimentos
+* sera exibido - ver tasks/task621/SigPrHpr_form_codigo_fonte.txt,
+* Procedure Init). A tela mostra:
+*   - a grade principal grd_4c_Dados (CrSigMvHst no legado) com o historico
+*     de movimentos do produto no periodo;
+*   - a grade secundaria grd_4c_Subniveis (crSubniveis no legado) com os
+*     subniveis (SigMvPec x SigCdOpe) do documento selecionado;
+*   - origem/destino (Grupo/Conta) do documento de movimento corrente,
+*     resolvidos contra SigMvCab (ou SigCdNec quando o documento ainda nao
+*     foi efetivado) e descritos via SigCdGcr/SigCdCli;
+*   - o checkbox de Auditado, que GRAVA (UPDATE SigMvHst) auditors/dtaudits
+*     do registro corrente - a UNICA escrita real deste form.
+*
+* NAO existe uma unica "tabela principal" para efeito de Buscar()/
+* CarregarDoCursor() (this_cTabela permanece vazio, mesmo padrao adotado em
+* SigPrGstBO/SigPrGlxBO): o historico vem de SigMvHst filtrado por
+* Grupo+Conta+Produto+Periodo, e os cursores auxiliares (documento, grupo/
+* conta descritivos, subniveis) sao resolvidos a cada linha selecionada na
+* grade principal (AfterRowColChange do legado). this_cCampoChave aponta
+* para "cidchaves" (SigMvHst.cidchaves, PK), que eh o unico campo usado
+* para localizar o registro no UPDATE de auditoria.
+*
+* Herda de: BusinessBase
+* Criado em: Fase 1 - Propriedades e Init
+* Completado em: Fase 2 - Metodos CRUD/dominio (CarregarHistorico,
+* CarregarDoCursor, BuscarDocumentoMovimento, BuscarDescricoesGrupoConta,
+* VerificarPermissaoAuditoria, CarregarSubniveis, AtualizarAuditoria,
+* VerificarDocumentoCadastrado, ObterChavePrimaria, ObterTituloProduto)
+*============================================================================
 
 DEFINE CLASS SigPrHprBO AS BusinessBase
 
-    *-- Tabela e chave principal (SigMvHst recebe UPDATE de auditoria)
-    this_cTabela     = "SigMvHst"
-    this_cCampoChave = "cidchaves"
+    *==========================================================================
+    * Parametros recebidos do form pai (equivalente as PRIVATE pcCdGrupo/
+    * pcCdConta/pcCdProduto/pcDsProduto/pdDataIni/pdDataFin do legado -
+    * definidas pelo chamador ANTES de abrir esta tela)
+    *==========================================================================
+    this_cGrupo             = SPACE(10)  && pcCdGrupo  (SigMvHst.grupos char(10))
+    this_cConta             = SPACE(10)  && pcCdConta  (SigMvHst.estos  char(10))
+    this_cProduto           = SPACE(14)  && pcCdProduto (SigMvHst.cpros char(14))
+    this_cDescricaoProduto  = ""         && pcDsProduto (descricao exibida no titulo)
+    this_dDataIni           = {}         && pdDataIni  (inicio do periodo)
+    this_dDataFin           = {}         && pdDataFin  (fim do periodo)
 
-    *-- Parametros de contexto recebidos do form pai ao abrir
-    this_cCdGrupo    = ""
-    this_cCdConta    = ""
-    this_cCdProduto  = ""
-    this_cDsProduto  = ""
-    this_dDataIni    = {}
-    this_dDataFim    = {}
-    this_cCodEmpresa = ""
+    *==========================================================================
+    * Registro corrente da grade principal (equivalente a CrSigMvHst na
+    * linha ativa - usado por AfterRowColChange/chkAuditado.Click/
+    * btnDocumento.Click do legado)
+    *==========================================================================
+    this_cEmpsAtual         = SPACE(3)   && CrSigMvHst.emps
+    this_cEmposAtual        = SPACE(3)   && CrSigMvHst.empos
+    this_cDopesAtual        = SPACE(20)  && CrSigMvHst.dopes
+    this_nNumesAtual        = 0          && CrSigMvHst.numes
+    this_cCidChavesAtual    = SPACE(20)  && CrSigMvHst.cidchaves (PK - chave do UPDATE de auditoria)
+    this_cAuditorAtual      = SPACE(10)  && CrSigMvHst.auditors
+    this_dDtAuditAtual      = {}         && CrSigMvHst.dtaudits
+    this_cObsAtual          = ""         && CrSigMvHst.obs
+    this_cUsuarioMovAtual   = SPACE(10)  && CrSigMvHst.usuars
+    this_cNotaAtual         = SPACE(6)   && SigMvCab.notas do documento corrente
 
-    *-- Dados do registro corrente de SigMvHst (linha selecionada no grid)
-    this_cEmps       = ""
-    this_cEmpos      = ""
-    this_cGrupos     = ""
-    this_cEstos      = ""
-    this_cCpros      = ""
-    this_cDopes      = ""
-    this_nNumes      = 0
-    this_dDatas      = {}
-    this_cAuditors   = ""
-    this_dDtAudits   = {}
-    this_nQtds       = 0
-    this_cOpers      = ""
-    this_nSQtds      = 0
-    this_cObs        = ""
-    this_cUsuars     = ""
-    this_cCidChaves  = ""
-    this_nPesos      = 0
-    this_nSPesos     = 0
-    this_cCunis      = ""
-    this_cCunips     = ""
-    this_cCestos     = ""
-    this_cEmpDopNums = ""
-    this_cEmpGruEsts = ""
+    *==========================================================================
+    * Produto / unidade (equivalente a TmpPro/TmpUni do legado - resolvidos
+    * uma unica vez no Init para decidir se a grade mostra as colunas de
+    * Peso/Saldo Peso)
+    *==========================================================================
+    this_cUnidade           = SPACE(3)   && SigCdPro.cunis
+    this_cUnidadePeso       = SPACE(3)   && SigCdPro.cunips
+    this_cTipoEstoque       = SPACE(1)   && SigCdUni.cestos ("3" = controla peso)
 
-    *-- Dados do documento (SigMvCab ou SigCdNec)
-    this_cGrupoOri    = ""
-    this_cContaOri    = ""
-    this_cGrupoDes    = ""
-    this_cContaDes    = ""
-    this_cNotas       = ""
+    *==========================================================================
+    * Documento de origem/destino do movimento corrente (equivalente a
+    * CrSigMvCab resolvido no AfterRowColChange do legado - grupoos/
+    * contaos/grupods/contads - e suas descricoes via SigCdGcr/SigCdCli)
+    *==========================================================================
+    this_cGrupoOrigem       = SPACE(10)  && SigMvCab.grupoos
+    this_cContaOrigem       = SPACE(10)  && SigMvCab.contaos
+    this_cGrupoDestino      = SPACE(10)  && SigMvCab.grupods
+    this_cContaDestino      = SPACE(10)  && SigMvCab.contads
+    this_cDescGrupoOrigem   = SPACE(40)  && SigCdGcr.descrs (grupoos)
+    this_cDescContaOrigem   = SPACE(50)  && SigCdCli.rclis  (contaos)
+    this_cDescGrupoDestino  = SPACE(40)  && SigCdGcr.descrs (grupods)
+    this_cDescContaDestino  = SPACE(50)  && SigCdCli.rclis  (contads)
 
-    *-- Descricoes do contabil (SigCdGcr e SigCdCli)
-    this_cDesGrupoOri = ""
-    this_cDesContaOri = ""
-    this_cDesGrupoDes = ""
-    this_cDesContaDes = ""
+    *==========================================================================
+    * Permissao de auditoria (equivalente a llSupervis/llVisAudit do Init
+    * legado - decide se o chk_4c_Auditado fica visivel para o usuario
+    * corrente)
+    *==========================================================================
+    this_lUsuarioSupervisor = .F.        && Upper(Alltrim(Usuar)) = "4CONTROL"
+    this_lPodeAuditar       = .F.        && llVisAudit (resultado final da checagem)
 
-    *-- Controle interno de permissao e tipo de produto (Cestos='3' = produto peso)
-    this_lTemAuditoria = .F.
-    this_lEhPeso       = .F.
+    *==========================================================================
+    * Init - Inicializa o Business Object. Nao ha tabela/chave primaria
+    * unica para este processo de consulta (o historico vem de SigMvHst
+    * filtrado por Grupo+Conta+Produto+Periodo recebidos do form pai) -
+    * mesmo padrao adotado em SigPrGstBO.Init/SigPrGlxBO.Init. this_cCam
+    * poChave fica com "cidchaves" (SigMvHst.cidchaves), unico campo usado
+    * para localizar o registro no UPDATE de auditoria.
+    *==========================================================================
+    PROCEDURE Init()
+        LOCAL loc_lResultado, loc_oErro
 
-    *--------------------------------------------------------------------------
-    PROCEDURE Init
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
+        loc_lResultado = .F.
+
         TRY
             DODEFAULT()
-            THIS.this_cTabela     = "SigMvHst"
+
+            THIS.this_cTabela     = ""
             THIS.this_cCampoChave = "cidchaves"
-            THIS.this_cCodEmpresa = go_4c_Sistema.cCodEmpresa
 
-            *-- Cursor placeholder para grid de historico
-            *-- Estrutura espelha campos do SQLEXEC em CarregarHistorico
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Historico (;
-                emps      C(3)    NULL, ;
-                empos     C(3)    NULL, ;
-                grupos    C(10)   NULL, ;
-                estos     C(10)   NULL, ;
-                cpros     C(14)   NULL, ;
-                dopes     C(20)   NULL, ;
-                numes     N(6,0)  NULL, ;
-                datas     T       NULL, ;
-                auditors  C(10)   NULL, ;
-                dtaudits  T       NULL, ;
-                qtds      N(9,3)  NULL, ;
-                opers     C(1)    NULL, ;
-                sqtds     N(11,3) NULL, ;
-                obs       M       NULL, ;
-                usuars    C(10)   NULL, ;
-                cidchaves C(20)   NULL, ;
-                pesos     N(15,3) NULL, ;
-                spesos    N(15,3) NULL, ;
-                cunis     C(3)    NULL  ;
-            )
-            INDEX ON DTOS(datas) TAG datas
-            INDEX ON pesos TAG pesos
-            SET NULL OFF
+            THIS.this_cGrupo            = SPACE(10)
+            THIS.this_cConta            = SPACE(10)
+            THIS.this_cProduto          = SPACE(14)
+            THIS.this_cDescricaoProduto = ""
+            THIS.this_dDataIni          = {}
+            THIS.this_dDataFin          = {}
 
-            *-- Cursor placeholder para grid de subniveis
-            *-- Estrutura espelha crSubniveis do legado
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Subniveis (;
-                emps  C(3)   NULL, ;
-                dopes C(20)  NULL, ;
-                numes N(6,0) NULL  ;
-            )
-            INDEX ON emps TAG emps
-            SET NULL OFF
+            THIS.this_cEmpsAtual        = SPACE(3)
+            THIS.this_cEmposAtual       = SPACE(3)
+            THIS.this_cDopesAtual       = SPACE(20)
+            THIS.this_nNumesAtual       = 0
+            THIS.this_cCidChavesAtual   = SPACE(20)
+            THIS.this_cAuditorAtual     = SPACE(10)
+            THIS.this_dDtAuditAtual     = {}
+            THIS.this_cObsAtual         = ""
+            THIS.this_cUsuarioMovAtual  = SPACE(10)
+            THIS.this_cNotaAtual        = SPACE(6)
 
-            loc_lSucesso = .T.
+            THIS.this_cUnidade          = SPACE(3)
+            THIS.this_cUnidadePeso      = SPACE(3)
+            THIS.this_cTipoEstoque      = SPACE(1)
+
+            THIS.this_cGrupoOrigem      = SPACE(10)
+            THIS.this_cContaOrigem      = SPACE(10)
+            THIS.this_cGrupoDestino     = SPACE(10)
+            THIS.this_cContaDestino     = SPACE(10)
+            THIS.this_cDescGrupoOrigem  = SPACE(40)
+            THIS.this_cDescContaOrigem  = SPACE(50)
+            THIS.this_cDescGrupoDestino = SPACE(40)
+            THIS.this_cDescContaDestino = SPACE(50)
+
+            THIS.this_lUsuarioSupervisor = .F.
+            THIS.this_lPodeAuditar       = .F.
+
+            loc_lResultado = .T.
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            THIS.this_cMensagemErro = "Erro ao inicializar: " + loc_oErro.Message
+            loc_lResultado = .F.
         ENDTRY
-        RETURN loc_lSucesso
+
+        RETURN loc_lResultado
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE ObterChavePrimaria
-    *--------------------------------------------------------------------------
-        RETURN THIS.this_cCidChaves
+    *==========================================================================
+    * ObterChavePrimaria - chave usada por RegistrarAuditoria() apos o
+    * UPDATE de auditoria (AtualizarAuditoria) - SigMvHst.cidchaves do
+    * registro corrente da grade principal.
+    *
+    * PROTECTED porque o metodo da base tambem eh PROTECTED - subclasse nao
+    * alarga escopo de hook herdado.
+    *==========================================================================
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidChavesAtual)
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Copia dados da linha corrente do cursor para as props
-    * Assinatura canonica CRUD (par_cAliasCursor). Alias flexivel para
-    * cursor_4c_Historico ou qualquer outro cursor com estrutura de SigMvHst.
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lSucesso, loc_cAlias
-        loc_lSucesso = .F.
-        TRY
-            loc_cAlias = IIF(EMPTY(par_cAliasCursor), "cursor_4c_Historico", par_cAliasCursor)
-            IF USED(loc_cAlias) AND RECCOUNT(loc_cAlias) > 0
-                SELECT (loc_cAlias)
-                THIS.this_cEmps      = TratarNulo(emps, "C")
-                THIS.this_cEmpos     = TratarNulo(empos, "C")
-                THIS.this_cGrupos    = TratarNulo(grupos, "C")
-                THIS.this_cEstos     = TratarNulo(estos, "C")
-                THIS.this_cCpros     = TratarNulo(cpros, "C")
-                THIS.this_cDopes     = TratarNulo(dopes, "C")
-                IF VARTYPE(numes) = "N"
-                    THIS.this_nNumes = NVL(numes, 0)
-                ELSE
-                    THIS.this_nNumes = 0
-                ENDIF
-                THIS.this_dDatas     = NVL(datas, {})
-                THIS.this_cAuditors  = TratarNulo(auditors, "C")
-                THIS.this_dDtAudits  = NVL(dtaudits, {})
-                IF VARTYPE(qtds) = "N"
-                    THIS.this_nQtds  = NVL(qtds, 0)
-                ELSE
-                    THIS.this_nQtds  = 0
-                ENDIF
-                THIS.this_cOpers     = TratarNulo(opers, "C")
-                IF VARTYPE(sqtds) = "N"
-                    THIS.this_nSQtds = NVL(sqtds, 0)
-                ELSE
-                    THIS.this_nSQtds = 0
-                ENDIF
-                THIS.this_cObs       = TratarNulo(obs, "C")
-                THIS.this_cUsuars    = TratarNulo(usuars, "C")
-                THIS.this_cCidChaves = TratarNulo(cidchaves, "C")
-                IF VARTYPE(pesos) = "N"
-                    THIS.this_nPesos = NVL(pesos, 0)
-                ELSE
-                    THIS.this_nPesos = 0
-                ENDIF
-                IF TYPE(loc_cAlias + ".spesos") != "U"
-                    IF VARTYPE(spesos) = "N"
-                        THIS.this_nSPesos = NVL(spesos, 0)
-                    ELSE
-                        THIS.this_nSPesos = 0
+    *==========================================================================
+    * Inserir()/Atualizar()/ExecutarExclusao() do BusinessBase NAO sao
+    * sobrescritos aqui: este form eh de CONSULTA (historico de movimentos
+    * de SigMvHst), sem INSERT/UPDATE/DELETE genericos no legado. A UNICA
+    * escrita real (toggle de chk_4c_Auditado) tem semantica propria -
+    * AtualizarAuditoria(), mais abaixo, grava auditors/dtaudits em
+    * SigMvHst e chama RegistrarAuditoria("UPDATE") no sucesso. O
+    * comportamento padrao herdado de BusinessBase para Inserir/Atualizar/
+    * ExecutarExclusao ja eh o correto para este BO.
+    *==========================================================================
+
+    *==========================================================================
+    * ExecutarSQL - SQLEXEC preservando a area de trabalho corrente
+    * (equivalente a ThisForm.poDataMgr.SqlExecute do legado, que nao
+    * reseleciona a area depois - SQLEXEC() troca a area selecionada).
+    *==========================================================================
+    PROTECTED FUNCTION ExecutarSQL(par_cSQL, par_cCursor, par_cRotulo)
+        LOCAL loc_nRet, loc_lOk, loc_cAliasAnt
+
+        loc_cAliasAnt = ALIAS()
+
+        IF USED(par_cCursor)
+            USE IN (par_cCursor)
+        ENDIF
+        loc_nRet = SQLEXEC(gnConnHandle, par_cSQL, par_cCursor)
+
+        IF !EMPTY(loc_cAliasAnt) AND USED(loc_cAliasAnt)
+            SELECT (loc_cAliasAnt)
+        ENDIF
+
+        loc_lOk = (loc_nRet >= 0)
+
+        IF !loc_lOk
+            THIS.this_cMensagemErro = "Favor reinicializar o processo." + CHR(13) + ;
+                "(" + TRANSFORM(par_cRotulo) + ") " + CapturarErroSQL()
+        ENDIF
+
+        RETURN loc_lOk
+    ENDFUNC
+
+    *==========================================================================
+    * BuscarProdutoUnidade - produto/unidade do historico (TmpPro/TmpUni do
+    * legado) - decide via this_cTipoEstoque se a grade mostra as colunas
+    * de Peso/Saldo Peso (cestos = "3").
+    *==========================================================================
+    PROTECTED FUNCTION BuscarProdutoUnidade(par_cProduto)
+        LOCAL loc_lResultado, loc_cSQL
+
+        loc_lResultado = .F.
+
+        loc_cSQL = "SELECT cpros, cunis, cunips FROM SigCdPro WHERE cpros = " + EscaparSQL(par_cProduto)
+
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Produto", "Produto")
+            IF USED("cursor_4c_Produto") AND RECCOUNT("cursor_4c_Produto") > 0
+                SELECT cursor_4c_Produto
+                GO TOP
+                THIS.this_cUnidade     = PADR(TratarNulo(cunis, ""), 3)
+                THIS.this_cUnidadePeso = PADR(TratarNulo(cunips, ""), 3)
+                USE IN cursor_4c_Produto
+
+                loc_cSQL = "SELECT cestos FROM SigCdUni WHERE cunis = " + EscaparSQL(THIS.this_cUnidade)
+                IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Unidade", "Unidade")
+                    IF USED("cursor_4c_Unidade") AND RECCOUNT("cursor_4c_Unidade") > 0
+                        SELECT cursor_4c_Unidade
+                        GO TOP
+                        THIS.this_cTipoEstoque = TratarNulo(cestos, "")
+                        loc_lResultado = .T.
+                    ENDIF
+                    IF USED("cursor_4c_Unidade")
+                        USE IN cursor_4c_Unidade
                     ENDIF
                 ENDIF
-                IF TYPE(loc_cAlias + ".cunis") != "U"
-                    THIS.this_cCunis = TratarNulo(cunis, "C")
-                ENDIF
-                THIS.this_lTemAuditoria = (NOT EMPTY(ALLTRIM(THIS.this_cAuditors)))
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarDoCursor]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Este form eh OPERACIONAL de leitura (historico de produtos).
-    * Registros em SigMvHst sao gerados por movimentacoes de outros modulos,
-    * NUNCA inseridos manualmente por este cadastro. Assim, Inserir() bloqueia
-    * a operacao e retorna .F., garantindo que o form Salvar() (chamado pela
-    * FormBase por engano) nao corrompa o historico.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        THIS.this_cMensagemErro = "N" + CHR(227) + "o " + CHR(233) + " permitido incluir registros no hist" + CHR(243) + "rico de produtos. Movimenta" + CHR(231) + CHR(245) + "es s" + CHR(227) + "o geradas pelos m" + CHR(243) + "dulos operacionais."
-        RETURN .F.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - UPDATE em SigMvHst dos campos de auditoria (auditors/dtaudits).
-    * Aplica ou remove marca de auditor conforme this_lTemAuditoria.
-    * Registra evento em LogAuditoria via RegistrarAuditoria("UPDATE").
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nQueryOk, loc_cUsuario, loc_cChave
-        loc_lSucesso = .F.
-        TRY
-            loc_cChave = ALLTRIM(THIS.this_cCidChaves)
-            IF EMPTY(loc_cChave)
-                THIS.this_cMensagemErro = "Nenhum registro selecionado para atualizar."
             ELSE
-                loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")
-
-                IF THIS.this_lTemAuditoria
-                    *-- Marcar como auditado pelo usuario logado
-                    loc_cSQL = "UPDATE SigMvHst SET auditors = " + EscaparSQL(loc_cUsuario) + ;
-                               ", dtaudits = GETDATE() " + ;
-                               "WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-                ELSE
-                    *-- Remover marca de auditoria
-                    loc_cSQL = "UPDATE SigMvHst SET auditors = '          ', dtaudits = NULL " + ;
-                               "WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+                IF USED("cursor_4c_Produto")
+                    USE IN cursor_4c_Produto
                 ENDIF
-
-                loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "")
-                IF loc_nQueryOk < 1
-                    THIS.this_cMensagemErro = "Falha ao atualizar auditoria do hist" + CHR(243) + "rico."
-                ELSE
-                    *-- Sincronizar cursor local + props
-                    IF USED("cursor_4c_Historico")
-                        SELECT cursor_4c_Historico
-                        IF THIS.this_lTemAuditoria
-                            REPLACE auditors WITH loc_cUsuario, dtaudits WITH DATETIME()
-                            THIS.this_cAuditors = loc_cUsuario
-                            THIS.this_dDtAudits = DATETIME()
-                        ELSE
-                            REPLACE auditors WITH SPACE(10), dtaudits WITH {}
-                            THIS.this_cAuditors = ""
-                            THIS.this_dDtAudits = {}
-                        ENDIF
-                    ENDIF
-                    THIS.RegistrarAuditoria("UPDATE")
-                    loc_lSucesso = .T.
-                ENDIF
+                THIS.this_cMensagemErro = "Produto " + ALLTRIM(TratarNulo(par_cProduto, "")) + " n" + CHR(227) + "o encontrado."
             ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message + " [Atualizar]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+        ENDIF
 
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Override com GETDATE() nativo do SQL Server.
-    * Regra: NUNCA usar GETDATE() em campo DataHora
-    * (rejeita tipo T, gera INSERT NULL em NOT NULL). Lesson 2026-07-08.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_cChave, loc_cUsuario
-        loc_cChave = THIS.ObterChavePrimaria()
-        IF EMPTY(loc_cChave)
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * CarregarHistorico - equivalente ao bloco principal do Init legado:
+    * resolve produto/unidade, popula cursor_4c_Dados (CrSigMvHst) com o
+    * historico de movimentos filtrado por Grupo+Conta+Produto+Periodo e
+    * deixa o cursor posicionado no ULTIMO registro (Go Bottom legado), que
+    * eh quem o Form usa para carregar a linha inicial via
+    * CarregarDoCursor(). Chave empgruests eh POSICIONAL (emps(3)+
+    * grupos(10)+estos(10) = 23) - PADR explicito, nunca ALLTRIM nas partes
+    * (CLAUDE.md regra #42).
+    *==========================================================================
+    FUNCTION CarregarHistorico(par_cGrupo, par_cConta, par_cProduto, par_cDescricaoProduto, par_dDataIni, par_dDataFin)
+        LOCAL loc_lResultado, loc_cSQL, loc_cChave, loc_dFim
+
+        loc_lResultado = .F.
+
+        IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+            THIS.this_cMensagemErro = "Conex" + CHR(227) + "o com o banco de dados n" + CHR(227) + "o dispon" + CHR(237) + "vel."
             RETURN .F.
         ENDIF
-        loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")
-        loc_cSQL = "INSERT INTO LogAuditoria (Tabela, Operacao, ChaveRegistro, Usuario, DataHora) " + ;
-                   "VALUES (" + EscaparSQL(THIS.this_cTabela) + ", " + ;
-                   EscaparSQL(par_cOperacao) + ", " + ;
-                   EscaparSQL(loc_cChave) + ", " + ;
-                   EscaparSQL(loc_cUsuario) + ", GETDATE())"
-        SQLEXEC(gnConnHandle, loc_cSQL)
-        RETURN .T.
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarHistorico
-    *-- Carrega SigMvHst para cursor_4c_Historico conforme parametros do form pai
-    *-- Retorna .T. se OK
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk, loc_cSQL, loc_cEmpGruEst, loc_cDtIni, loc_cDtFim
-        loc_lSucesso = .F.
-        TRY
-            loc_cEmpGruEst = THIS.this_cCodEmpresa + THIS.this_cCdGrupo + THIS.this_cCdConta
-            loc_cDtIni     = FormatarDataSQL(THIS.this_dDataIni)
-            loc_cDtFim     = FormatarDataSQL(THIS.this_dDataFim)
+        THIS.this_cGrupo            = PADR(TratarNulo(par_cGrupo, ""), 10)
+        THIS.this_cConta            = PADR(TratarNulo(par_cConta, ""), 10)
+        THIS.this_cProduto          = PADR(TratarNulo(par_cProduto, ""), 14)
+        THIS.this_cDescricaoProduto = ALLTRIM(TratarNulo(par_cDescricaoProduto, ""))
+        THIS.this_dDataIni          = TratarNulo(par_dDataIni, {})
+        THIS.this_dDataFin          = TratarNulo(par_dDataFin, {})
 
-            loc_cSQL = "SELECT a.emps, a.empos, a.grupos, a.estos, a.cpros, " + ;
-                       "a.dopes, a.numes, a.datas, a.auditors, a.dtaudits, " + ;
-                       "a.qtds, a.opers, a.sqtds, a.obs, a.usuars, " + ;
-                       "a.cidchaves, a.pesos, a.spesos, '   ' AS cunis " + ;
-                       "FROM SigMvHst a " + ;
-                       "WHERE a.empgruests = " + EscaparSQL(loc_cEmpGruEst) + ;
-                       " AND a.cpros = " + EscaparSQL(THIS.this_cCdProduto) + ;
-                       " AND CAST(a.datas AS DATE) >= " + loc_cDtIni + ;
-                       " AND CAST(a.datas AS DATE) <= " + loc_cDtFim + ;
-                       " ORDER BY a.emps, a.grupos, a.estos, a.cidchaves, a.opers"
+        IF !THIS.BuscarProdutoUnidade(THIS.this_cProduto)
+            RETURN .F.
+        ENDIF
 
-            IF USED("cursor_4c_HistoricoTemp")
-                USE IN cursor_4c_HistoricoTemp
-            ENDIF
+        loc_dFim = DATETIME(YEAR(THIS.this_dDataFin), MONTH(THIS.this_dDataFin), DAY(THIS.this_dDataFin), 23, 59, 59)
 
-            loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_HistoricoTemp")
-            IF loc_nQueryOk < 1
-                MsgErro("Falha ao carregar hist" + CHR(243) + "rico de produtos.", "Erro")
-            ELSE
-                SELECT cursor_4c_Historico
-                ZAP
-                APPEND FROM DBF("cursor_4c_HistoricoTemp")
-                USE IN cursor_4c_HistoricoTemp
+        loc_cChave = PADR(go_4c_Sistema.cCodEmpresa, 3) + THIS.this_cGrupo + THIS.this_cConta
 
-                THIS.CarregarDadosProduto()
+        loc_cSQL = "SELECT a.emps, a.empos, a.grupos, a.estos, a.cpros, a.dopes, a.numes, " + ;
+            "a.datas, a.auditors, a.dtaudits, a.qtds, a.opers, a.sqtds, a.obs, " + ;
+            "a.usuars, a.cidchaves, a.pesos, a.spesos, SPACE(3) AS cunis " + ;
+            "FROM SigMvHst a " + ;
+            "WHERE a.empgruests = " + EscaparSQL(loc_cChave) + " " + ;
+            "AND a.cpros = " + EscaparSQL(THIS.this_cProduto) + " " + ;
+            "AND a.datas BETWEEN " + FormatarDataSQL(THIS.this_dDataIni) + " AND " + FormatarDataSQL(loc_dFim) + " " + ;
+            "ORDER BY a.emps, a.grupos, a.estos, a.cidchaves, a.opers"
 
-                IF NOT EMPTY(ALLTRIM(THIS.this_cCunis))
-                    SELECT cursor_4c_Historico
-                    REPLACE ALL cunis WITH THIS.this_cCunis
-                ENDIF
-
-                SELECT cursor_4c_Historico
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Dados", "Historico")
+            IF USED("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                REPLACE ALL cunis WITH THIS.this_cUnidade
+                INDEX ON Pesos TAG Pesos
                 INDEX ON DTOS(datas) TAG datas
-                INDEX ON pesos TAG pesos
                 GO BOTTOM
-
-                loc_lSucesso = .T.
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarHistorico]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+            loc_lResultado = .T.
+        ENDIF
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDadosProduto
-    *-- Carrega SigCdPro e SigCdUni para o produto corrente
-    *-- Preenche this_cCunis, this_cCunips, this_cCestos, this_lEhPeso
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_TmpPro")
-                USE IN cursor_4c_TmpPro
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * ObterTituloProduto - monta o Caption de lbl_4c_Produto (equivalente a
+    * ThisForm.lbl_Produto.Caption do Init legado): produto + descricao +
+    * periodo e, quando a unidade controla peso (cestos = "3"), tambem a
+    * unidade de peso.
+    *==========================================================================
+    FUNCTION ObterTituloProduto()
+        LOCAL loc_cTitulo
+
+        loc_cTitulo = "Produto : " + ALLTRIM(THIS.this_cProduto) + " - " + ALLTRIM(THIS.this_cDescricaoProduto) + ;
+            SPACE(10) + "Per" + CHR(237) + "odo: " + DTOC(THIS.this_dDataIni) + " " + CHR(224) + " " + DTOC(THIS.this_dDataFin)
+
+        IF THIS.this_cTipoEstoque == "3"
+            loc_cTitulo = loc_cTitulo + " Unid.Peso:" + ALLTRIM(THIS.this_cUnidadePeso)
+        ENDIF
+
+        RETURN loc_cTitulo
+    ENDFUNC
+
+    *==========================================================================
+    * CarregarDoCursor - equivalente ao AfterRowColChange do legado: le o
+    * registro CORRENTE de cursor_4c_Dados (a grade principal) e resolve
+    * tudo o que depende dele - documento de origem/destino, descricoes de
+    * grupo/conta, permissao de auditoria e subniveis.
+    *==========================================================================
+    FUNCTION CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lResultado
+
+        loc_lResultado = .F.
+
+        IF USED(par_cAliasCursor) AND !EOF(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+
+            THIS.this_cEmpsAtual       = PADR(TratarNulo(emps, ""), 3)
+            THIS.this_cEmposAtual      = PADR(TratarNulo(empos, ""), 3)
+            THIS.this_cDopesAtual      = PADR(TratarNulo(dopes, ""), 20)
+            THIS.this_nNumesAtual      = TratarNulo(numes, 0)
+            THIS.this_cCidChavesAtual  = PADR(TratarNulo(cidchaves, ""), 20)
+            THIS.this_cAuditorAtual    = PADR(TratarNulo(auditors, ""), 10)
+            THIS.this_dDtAuditAtual    = TratarNulo(dtaudits, {})
+            THIS.this_cObsAtual        = TratarNulo(obs, "")
+            THIS.this_cUsuarioMovAtual = PADR(TratarNulo(usuars, ""), 10)
+            THIS.this_cNotaAtual       = SPACE(6)
+
+            IF THIS.BuscarDocumentoMovimento()
+                THIS.BuscarDescricoesGrupoConta()
             ENDIF
-            loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                "SELECT cpros, cunis, cunips FROM SigCdPro WHERE cpros = " + ;
-                EscaparSQL(THIS.this_cCdProduto), "cursor_4c_TmpPro")
-            IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpPro") AND RECCOUNT("cursor_4c_TmpPro") > 0
-                SELECT cursor_4c_TmpPro
+
+            THIS.VerificarPermissaoAuditoria()
+            THIS.CarregarSubniveis()
+
+            loc_lResultado = .T.
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * VerificarOperacaoCadastrada - equivalente a
+    * ThisForm.poDataMgr.Cursorquery('SigCdOpe','CrOpe','Dopes',...,'Dopes')
+    * do legado: confirma se a operacao (Dopes) do movimento corrente esta
+    * cadastrada em SigCdOpe. Decide se o documento se resolve por
+    * SigMvCab (movimento ja efetivado) ou por SigCdNec (necessidade,
+    * ainda nao efetivada).
+    *==========================================================================
+    PROTECTED FUNCTION VerificarOperacaoCadastrada(par_cDopes)
+        LOCAL loc_lResultado, loc_cSQL
+
+        loc_lResultado = .F.
+
+        loc_cSQL = "SELECT COUNT(*) AS Total FROM SigCdOpe WHERE Dopes = " + ;
+            EscaparSQL(ALLTRIM(TratarNulo(par_cDopes, "")))
+
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_VerOpe", "VerificarOperacao")
+            IF USED("cursor_4c_VerOpe")
+                loc_lResultado = (NVL(cursor_4c_VerOpe.Total, 0) > 0)
+                USE IN cursor_4c_VerOpe
+            ENDIF
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * BuscarDocumentoMovimento - resolve o documento de origem/destino do
+    * movimento corrente (grupoos/contaos/grupods/contads), igual ao
+    * AfterRowColChange do legado: tenta SigMvCab (documento JA efetivado,
+    * chave EmpDopNums char(29) = emps(3)+dopes(20)+Str(numes,6)) e cai
+    * para SigCdNec (necessidade, ainda nao efetivada, chave EmpDnPs
+    * char(33) = emps(3)+dopes(20)+Str(numes,10)) quando a operacao nao
+    * esta cadastrada em SigCdOpe. As duas chaves sao POSICIONAIS - PADR
+    * explicito, nunca ALLTRIM nas partes (CLAUDE.md regra #42).
+    *==========================================================================
+    PROTECTED FUNCTION BuscarDocumentoMovimento()
+        LOCAL loc_lResultado, loc_cSQL, loc_cEmpDoc
+
+        loc_lResultado = .F.
+
+        loc_cEmpDoc = PADR(IIF(!EMPTY(THIS.this_cEmposAtual), THIS.this_cEmposAtual, THIS.this_cEmpsAtual), 3)
+
+        THIS.this_cGrupoOrigem  = SPACE(10)
+        THIS.this_cContaOrigem  = SPACE(10)
+        THIS.this_cGrupoDestino = SPACE(10)
+        THIS.this_cContaDestino = SPACE(10)
+        THIS.this_cNotaAtual    = SPACE(6)
+
+        IF THIS.VerificarOperacaoCadastrada(THIS.this_cDopesAtual)
+            loc_cSQL = "SELECT grupoos, contaos, grupods, contads, Notas FROM SigMvCab " + ;
+                "WHERE empdopnums = " + EscaparSQL(loc_cEmpDoc + PADR(THIS.this_cDopesAtual, 20) + STR(THIS.this_nNumesAtual, 6))
+        ELSE
+            loc_cSQL = "SELECT grupoos, contaos, grupods, contads, SPACE(6) AS Notas FROM SigCdNec " + ;
+                "WHERE empdnps = " + EscaparSQL(loc_cEmpDoc + PADR(THIS.this_cDopesAtual, 20) + STR(THIS.this_nNumesAtual, 10))
+        ENDIF
+
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Documento", "Documento")
+            IF USED("cursor_4c_Documento") AND RECCOUNT("cursor_4c_Documento") > 0
+                SELECT cursor_4c_Documento
                 GO TOP
-                THIS.this_cCunis  = NVL(cursor_4c_TmpPro.cunis, "")
-                THIS.this_cCunips = NVL(cursor_4c_TmpPro.cunips, "")
-            ELSE
-                THIS.this_cCunis  = ""
-                THIS.this_cCunips = ""
+                THIS.this_cGrupoOrigem  = PADR(TratarNulo(grupoos, ""), 10)
+                THIS.this_cContaOrigem  = PADR(TratarNulo(contaos, ""), 10)
+                THIS.this_cGrupoDestino = PADR(TratarNulo(grupods, ""), 10)
+                THIS.this_cContaDestino = PADR(TratarNulo(contads, ""), 10)
+                THIS.this_cNotaAtual    = PADR(TratarNulo(Notas, ""), 6)
+                loc_lResultado = .T.
             ENDIF
-            IF USED("cursor_4c_TmpPro")
-                USE IN cursor_4c_TmpPro
+            IF USED("cursor_4c_Documento")
+                USE IN cursor_4c_Documento
             ENDIF
+        ENDIF
 
-            THIS.this_cCestos = ""
-            IF NOT EMPTY(ALLTRIM(THIS.this_cCunis))
-                IF USED("cursor_4c_TmpUni")
-                    USE IN cursor_4c_TmpUni
-                ENDIF
-                loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                    "SELECT Cestos FROM SigCdUni WHERE cunis = " + ;
-                    EscaparSQL(THIS.this_cCunis), "cursor_4c_TmpUni")
-                IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpUni") AND RECCOUNT("cursor_4c_TmpUni") > 0
-                    SELECT cursor_4c_TmpUni
-                    GO TOP
-                    THIS.this_cCestos = NVL(cursor_4c_TmpUni.Cestos, "")
-                ENDIF
-                IF USED("cursor_4c_TmpUni")
-                    USE IN cursor_4c_TmpUni
-                ENDIF
-            ENDIF
+        RETURN loc_lResultado
+    ENDFUNC
 
-            THIS.this_lEhPeso = (THIS.this_cCestos = "3")
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarDadosProduto]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+    *==========================================================================
+    * BuscarDescricoesGrupoConta - descricoes de Grupo (SigCdGcr.descrs) e
+    * Conta (SigCdCli.rclis) de origem/destino do documento corrente.
+    *==========================================================================
+    PROTECTED FUNCTION BuscarDescricoesGrupoConta()
+        LOCAL loc_cSQL, loc_cGO, loc_cGD, loc_cCO, loc_cCD
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDadosLinhaSelecionada
-    *-- Copia dados do registro corrente de cursor_4c_Historico para props this_*
-    *-- Chamado pelo form apos AfterRowColChange
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_Historico") AND RECCOUNT("cursor_4c_Historico") > 0
-                SELECT cursor_4c_Historico
-                THIS.this_cEmps      = NVL(cursor_4c_Historico.emps, "")
-                THIS.this_cEmpos     = NVL(cursor_4c_Historico.empos, "")
-                THIS.this_cGrupos    = NVL(cursor_4c_Historico.grupos, "")
-                THIS.this_cEstos     = NVL(cursor_4c_Historico.estos, "")
-                THIS.this_cCpros     = NVL(cursor_4c_Historico.cpros, "")
-                THIS.this_cDopes     = NVL(cursor_4c_Historico.dopes, "")
-                THIS.this_nNumes     = NVL(cursor_4c_Historico.numes, 0)
-                THIS.this_dDatas     = NVL(cursor_4c_Historico.datas, {})
-                THIS.this_cAuditors  = NVL(cursor_4c_Historico.auditors, "")
-                THIS.this_dDtAudits  = NVL(cursor_4c_Historico.dtaudits, {})
-                THIS.this_nQtds      = NVL(cursor_4c_Historico.qtds, 0)
-                THIS.this_cOpers     = NVL(cursor_4c_Historico.opers, "")
-                THIS.this_nSQtds     = NVL(cursor_4c_Historico.sqtds, 0)
-                THIS.this_cObs       = NVL(cursor_4c_Historico.obs, "")
-                THIS.this_cUsuars    = NVL(cursor_4c_Historico.usuars, "")
-                THIS.this_cCidChaves = NVL(cursor_4c_Historico.cidchaves, "")
-                THIS.this_nPesos     = NVL(cursor_4c_Historico.pesos, 0)
-                THIS.this_nSPesos    = NVL(cursor_4c_Historico.spesos, 0)
-                THIS.this_cCunis     = NVL(cursor_4c_Historico.cunis, "")
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarDadosLinhaSelecionada]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+        loc_cGO = ALLTRIM(THIS.this_cGrupoOrigem)
+        loc_cGD = ALLTRIM(THIS.this_cGrupoDestino)
+        loc_cCO = ALLTRIM(THIS.this_cContaOrigem)
+        loc_cCD = ALLTRIM(THIS.this_cContaDestino)
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDocumento
-    *-- Carrega documento (SigMvCab ou SigCdNec) do registro corrente
-    *-- Tenta SigMvCab primeiro (empdopnums); se vazio, tenta SigCdNec (empdnps)
-    *-- Preenche this_cGrupoOri, this_cContaOri, this_cGrupoDes, this_cContaDes, this_cNotas
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk, loc_cEmpsEfetivo
-        LOCAL loc_cEmpDopNum, loc_cEmpDopNumLong
-        loc_lSucesso = .F.
-        TRY
-            THIS.this_cGrupoOri = ""
-            THIS.this_cContaOri = ""
-            THIS.this_cGrupoDes = ""
-            THIS.this_cContaDes = ""
-            THIS.this_cNotas    = ""
+        THIS.this_cDescGrupoOrigem  = SPACE(40)
+        THIS.this_cDescContaOrigem  = SPACE(50)
+        THIS.this_cDescGrupoDestino = SPACE(40)
+        THIS.this_cDescContaDestino = SPACE(50)
 
-            loc_cEmpsEfetivo   = IIF(NOT EMPTY(ALLTRIM(THIS.this_cEmpos)), THIS.this_cEmpos, THIS.this_cEmps)
-            loc_cEmpDopNum     = loc_cEmpsEfetivo + THIS.this_cDopes + STR(THIS.this_nNumes, 6)
-            loc_cEmpDopNumLong = loc_cEmpsEfetivo + THIS.this_cDopes + STR(THIS.this_nNumes, 10)
-
-            IF USED("cursor_4c_DocTemp")
-                USE IN cursor_4c_DocTemp
-            ENDIF
-
-            loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                "SELECT grupoos, contaos, grupods, contads, Notas " + ;
-                "FROM SigMvCab " + ;
-                "WHERE empdopnums = " + EscaparSQL(loc_cEmpDopNum), ;
-                "cursor_4c_DocTemp")
-
-            IF loc_nQueryOk >= 1 AND USED("cursor_4c_DocTemp") AND RECCOUNT("cursor_4c_DocTemp") = 0
-                USE IN cursor_4c_DocTemp
-                loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                    "SELECT grupoos, contaos, grupods, contads, '      ' AS Notas " + ;
-                    "FROM SigCdNec " + ;
-                    "WHERE empdnps = " + EscaparSQL(loc_cEmpDopNumLong), ;
-                    "cursor_4c_DocTemp")
-            ENDIF
-
-            IF loc_nQueryOk < 1
-                MsgErro("Falha ao carregar documento do movimento.", "Erro")
-            ELSE
-                IF USED("cursor_4c_DocTemp") AND RECCOUNT("cursor_4c_DocTemp") > 0
-                    SELECT cursor_4c_DocTemp
-                    GO TOP
-                    THIS.this_cGrupoOri = NVL(cursor_4c_DocTemp.grupoos, "")
-                    THIS.this_cContaOri = NVL(cursor_4c_DocTemp.contaos, "")
-                    THIS.this_cGrupoDes = NVL(cursor_4c_DocTemp.grupods, "")
-                    THIS.this_cContaDes = NVL(cursor_4c_DocTemp.contads, "")
-                    THIS.this_cNotas    = NVL(cursor_4c_DocTemp.Notas, "")
-                ENDIF
-                IF USED("cursor_4c_DocTemp")
-                    USE IN cursor_4c_DocTemp
-                ENDIF
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarDocumento]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDescricoesContabil
-    *-- Carrega descricoes de grupos (SigCdGcr) e contas (SigCdCli)
-    *-- Preenche this_cDesGrupoOri/Des e this_cDesContaOri/Des
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk
-        LOCAL loc_cGruOri, loc_cConOri, loc_cGruDes, loc_cConDes
-        loc_lSucesso = .F.
-        TRY
-            loc_cGruOri = THIS.this_cGrupoOri
-            loc_cConOri = THIS.this_cContaOri
-            loc_cGruDes = THIS.this_cGrupoDes
-            loc_cConDes = THIS.this_cContaDes
-
-            THIS.this_cDesGrupoOri = ""
-            THIS.this_cDesContaOri = ""
-            THIS.this_cDesGrupoDes = ""
-            THIS.this_cDesContaDes = ""
-
-            *-- Grupos via SigCdGcr (coluna descrs COM r)
-            IF USED("cursor_4c_TmpGcr")
-                USE IN cursor_4c_TmpGcr
-            ENDIF
-            IF NOT EMPTY(ALLTRIM(loc_cGruOri)) OR NOT EMPTY(ALLTRIM(loc_cGruDes))
-                loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                    "SELECT codigos, descrs FROM SigCdGcr " + ;
-                    "WHERE codigos = " + EscaparSQL(loc_cGruOri) + ;
-                    " OR codigos = " + EscaparSQL(loc_cGruDes), ;
-                    "cursor_4c_TmpGcr")
-                IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpGcr") AND RECCOUNT("cursor_4c_TmpGcr") > 0
-                    SELECT cursor_4c_TmpGcr
+        IF !EMPTY(loc_cGO) OR !EMPTY(loc_cGD)
+            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cGO) + ;
+                " OR codigos = " + EscaparSQL(loc_cGD)
+            IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Grupo", "Grupo")
+                IF USED("cursor_4c_Grupo")
                     INDEX ON codigos TAG codigos
-                    GO TOP
-                    THIS.this_cDesGrupoOri = IIF(SEEK(loc_cGruOri, "cursor_4c_TmpGcr", "codigos"), NVL(cursor_4c_TmpGcr.descrs, ""), "")
-                    THIS.this_cDesGrupoDes = IIF(SEEK(loc_cGruDes, "cursor_4c_TmpGcr", "codigos"), NVL(cursor_4c_TmpGcr.descrs, ""), "")
-                ENDIF
-                IF USED("cursor_4c_TmpGcr")
-                    USE IN cursor_4c_TmpGcr
+                    IF !EMPTY(loc_cGO) AND SEEK(loc_cGO, "cursor_4c_Grupo", "codigos")
+                        THIS.this_cDescGrupoOrigem = PADR(TratarNulo(cursor_4c_Grupo.descrs, ""), 40)
+                    ENDIF
+                    IF !EMPTY(loc_cGD) AND SEEK(loc_cGD, "cursor_4c_Grupo", "codigos")
+                        THIS.this_cDescGrupoDestino = PADR(TratarNulo(cursor_4c_Grupo.descrs, ""), 40)
+                    ENDIF
+                    USE IN cursor_4c_Grupo
                 ENDIF
             ENDIF
+        ENDIF
 
-            *-- Contas via SigCdCli
-            IF USED("cursor_4c_TmpCli")
-                USE IN cursor_4c_TmpCli
-            ENDIF
-            IF NOT EMPTY(ALLTRIM(loc_cConOri)) OR NOT EMPTY(ALLTRIM(loc_cConDes))
-                loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                    "SELECT iclis, rclis FROM SigCdCli " + ;
-                    "WHERE iclis = " + EscaparSQL(loc_cConOri) + ;
-                    " OR iclis = " + EscaparSQL(loc_cConDes), ;
-                    "cursor_4c_TmpCli")
-                IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpCli") AND RECCOUNT("cursor_4c_TmpCli") > 0
-                    SELECT cursor_4c_TmpCli
+        IF !EMPTY(loc_cCO) OR !EMPTY(loc_cCD)
+            loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCO) + ;
+                " OR iclis = " + EscaparSQL(loc_cCD)
+            IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_Conta", "Conta")
+                IF USED("cursor_4c_Conta")
                     INDEX ON iclis TAG iclis
-                    GO TOP
-                    THIS.this_cDesContaOri = IIF(SEEK(loc_cConOri, "cursor_4c_TmpCli", "iclis"), NVL(cursor_4c_TmpCli.rclis, ""), "")
-                    THIS.this_cDesContaDes = IIF(SEEK(loc_cConDes, "cursor_4c_TmpCli", "iclis"), NVL(cursor_4c_TmpCli.rclis, ""), "")
-                ENDIF
-                IF USED("cursor_4c_TmpCli")
-                    USE IN cursor_4c_TmpCli
+                    IF !EMPTY(loc_cCO) AND SEEK(loc_cCO, "cursor_4c_Conta", "iclis")
+                        THIS.this_cDescContaOrigem = PADR(TratarNulo(cursor_4c_Conta.rclis, ""), 50)
+                    ENDIF
+                    IF !EMPTY(loc_cCD) AND SEEK(loc_cCD, "cursor_4c_Conta", "iclis")
+                        THIS.this_cDescContaDestino = PADR(TratarNulo(cursor_4c_Conta.rclis, ""), 50)
+                    ENDIF
+                    USE IN cursor_4c_Conta
                 ENDIF
             ENDIF
+        ENDIF
 
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarDescricoesContabil]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+        RETURN .T.
+    ENDFUNC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarSubniveis
-    *-- Carrega SigMvPec para cursor_4c_Subniveis do registro corrente
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk, loc_cEdn, loc_cSQL
-        loc_lSucesso = .F.
-        TRY
-            SELECT cursor_4c_Subniveis
-            ZAP
+    *==========================================================================
+    * VerificarPermissaoAuditoria - equivalente ao bloco llSupervis/
+    * llVisAudit do AfterRowColChange legado. this_lUsuarioSupervisor e
+    * this_lPodeAuditar decidem se chk_4c_Auditado fica visivel/habilitado
+    * para o usuario corrente.
+    *==========================================================================
+    PROTECTED FUNCTION VerificarPermissaoAuditoria()
+        LOCAL loc_cUsuario
 
-            loc_cEdn = THIS.this_cEmps + THIS.this_cDopes + STR(THIS.this_nNumes, 6)
+        loc_cUsuario = UPPER(ALLTRIM(TratarNulo(gc_4c_UsuarioLogado, "")))
 
-            loc_cSQL = "SELECT a.EmpSubns AS Emps, b.Dopes, " + ;
-                       "RIGHT(STR(a.Codigos, 10), 6) AS Numes " + ;
-                       "FROM SigMvPec a, SigCdOpe b " + ;
-                       "WHERE a.EmpDopNums = " + EscaparSQL(loc_cEdn) + ;
-                       " AND LEFT(STR(a.Codigos, 10), 4) = STR(b.NDopes, 4) " + ;
-                       "ORDER BY 1, 2, 3"
+        * Richard em 29/11/2016 - Eliminando SUPERVIS (a consulta a
+        * SigCdUsu.supervis foi comentada no legado - *!* no fonte
+        * original - preservado: so o usuario 4CONTROL eh supervisor)
+        THIS.this_lUsuarioSupervisor = (loc_cUsuario == "4CONTROL")
 
+        IF THIS.this_lUsuarioSupervisor
+            THIS.this_lPodeAuditar = .T.
+        ELSE
+            IF EMPTY(THIS.this_cAuditorAtual) AND fChecaAcesso("SIGPRHPR", "AUDITORIA")
+                THIS.this_lPodeAuditar = .T.
+            ELSE
+                THIS.this_lPodeAuditar = (loc_cUsuario == UPPER(ALLTRIM(THIS.this_cAuditorAtual)))
+            ENDIF
+        ENDIF
+
+        RETURN .T.
+    ENDFUNC
+
+    *==========================================================================
+    * CarregarSubniveis - equivalente ao bloco final do AfterRowColChange
+    * legado: Zap In crSubniveis + Scan/Insert Into a partir de SigMvPec x
+    * SigCdOpe. Chave EmpDopNums eh POSICIONAL (emps(3)+dopes(20)+
+    * Str(numes,6) = 29) - PADR explicito, nunca ALLTRIM nas partes
+    * (CLAUDE.md regra #42).
+    *==========================================================================
+    FUNCTION CarregarSubniveis()
+        LOCAL loc_lResultado, loc_cSQL, loc_cEdn
+
+        loc_lResultado = .F.
+
+        IF USED("cursor_4c_Subniveis")
+            USE IN cursor_4c_Subniveis
+        ENDIF
+        SET NULL ON
+        CREATE CURSOR cursor_4c_Subniveis (Emps C(3), Dopes C(20), Numes N(6))
+        SET NULL OFF
+        INDEX ON Emps TAG Emps
+
+        loc_cEdn = PADR(THIS.this_cEmpsAtual, 3) + PADR(THIS.this_cDopesAtual, 20) + STR(THIS.this_nNumesAtual, 6)
+
+        loc_cSQL = "SELECT a.EmpSubns AS Emps, b.Dopes, RIGHT(STR(a.Codigos, 10), 6) AS Numes " + ;
+            "FROM SigMvPec a, SigCdOpe b " + ;
+            "WHERE a.EmpDopNums = " + EscaparSQL(loc_cEdn) + " " + ;
+            "AND LEFT(STR(a.Codigos, 10), 4) = STR(b.NDopes, 4) " + ;
+            "ORDER BY 1, 2, 3"
+
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_SubniveisTemp", "Subniveis")
             IF USED("cursor_4c_SubniveisTemp")
+                SELECT cursor_4c_SubniveisTemp
+                SCAN
+                    INSERT INTO cursor_4c_Subniveis (Emps, Dopes, Numes) ;
+                        VALUES (cursor_4c_SubniveisTemp.Emps, cursor_4c_SubniveisTemp.Dopes, VAL(cursor_4c_SubniveisTemp.Numes))
+                ENDSCAN
                 USE IN cursor_4c_SubniveisTemp
             ENDIF
+            loc_lResultado = .T.
+        ENDIF
 
-            loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SubniveisTemp")
-            IF loc_nQueryOk < 1
-                MsgErro("Falha ao carregar subniveis.", "Erro")
+        IF USED("cursor_4c_Subniveis")
+            GO TOP IN cursor_4c_Subniveis
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * AtualizarAuditoria - equivalente ao chkAuditado.Click do legado: grava
+    * (UPDATE SigMvHst) auditors/dtaudits do registro corrente - a UNICA
+    * escrita real deste form. BEGIN/COMMIT/ROLLBACK TRANSACTION em LOTE
+    * unico (os dois UPDATEs na mesma transacao).
+    *==========================================================================
+    FUNCTION AtualizarAuditoria(par_lMarcarAuditado)
+        LOCAL loc_lResultado, loc_cSQL, loc_nRet1, loc_nRet2
+
+        loc_lResultado = .F.
+
+        IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+            THIS.this_cMensagemErro = "Conex" + CHR(227) + "o com o banco de dados n" + CHR(227) + "o dispon" + CHR(237) + "vel."
+            RETURN .F.
+        ENDIF
+
+        IF EMPTY(THIS.this_cCidChavesAtual)
+            THIS.this_cMensagemErro = "Nenhum registro selecionado para auditoria."
+            RETURN .F.
+        ENDIF
+
+        SQLEXEC(gnConnHandle, "BEGIN TRANSACTION", "cursor_4c_Trn")
+        IF USED("cursor_4c_Trn")
+            USE IN cursor_4c_Trn
+        ENDIF
+
+        IF par_lMarcarAuditado
+            loc_cSQL = "UPDATE SigMvHst SET auditors = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChavesAtual)
+        ELSE
+            loc_cSQL = "UPDATE SigMvHst SET auditors = " + EscaparSQL(SPACE(10)) + ;
+                " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChavesAtual)
+        ENDIF
+        loc_nRet1 = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_UpdAud1")
+        IF USED("cursor_4c_UpdAud1")
+            USE IN cursor_4c_UpdAud1
+        ENDIF
+
+        IF par_lMarcarAuditado
+            loc_cSQL = "UPDATE SigMvHst SET dtaudits = GETDATE() WHERE cidchaves = " + ;
+                EscaparSQL(THIS.this_cCidChavesAtual)
+        ELSE
+            loc_cSQL = "UPDATE SigMvHst SET dtaudits = NULL WHERE cidchaves = " + ;
+                EscaparSQL(THIS.this_cCidChavesAtual)
+        ENDIF
+        loc_nRet2 = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_UpdAud2")
+        IF USED("cursor_4c_UpdAud2")
+            USE IN cursor_4c_UpdAud2
+        ENDIF
+
+        IF loc_nRet1 < 0 OR loc_nRet2 < 0
+            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION", "cursor_4c_Rb")
+            IF USED("cursor_4c_Rb")
+                USE IN cursor_4c_Rb
+            ENDIF
+            THIS.this_cMensagemErro = "Favor reinicializar o processo." + CHR(13) + CapturarErroSQL()
+            loc_lResultado = .F.
+        ELSE
+            SQLEXEC(gnConnHandle, "COMMIT TRANSACTION", "cursor_4c_Cmt")
+            IF USED("cursor_4c_Cmt")
+                USE IN cursor_4c_Cmt
+            ENDIF
+
+            IF par_lMarcarAuditado
+                THIS.this_cAuditorAtual = PADR(gc_4c_UsuarioLogado, 10)
+                THIS.this_dDtAuditAtual = DATETIME()
             ELSE
-                IF USED("cursor_4c_SubniveisTemp") AND RECCOUNT("cursor_4c_SubniveisTemp") > 0
-                    SELECT cursor_4c_SubniveisTemp
-                    SCAN
-                        INSERT INTO cursor_4c_Subniveis (emps, dopes, numes) ;
-                            VALUES (cursor_4c_SubniveisTemp.Emps, ;
-                                    cursor_4c_SubniveisTemp.Dopes, ;
-                                    VAL(cursor_4c_SubniveisTemp.Numes))
-                    ENDSCAN
-                ENDIF
-                IF USED("cursor_4c_SubniveisTemp")
-                    USE IN cursor_4c_SubniveisTemp
-                ENDIF
-                SELECT cursor_4c_Subniveis
-                GO TOP
-                loc_lSucesso = .T.
+                THIS.this_cAuditorAtual = SPACE(10)
+                THIS.this_dDtAuditAtual = {}
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [CarregarSubniveis]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE AuditarRegistro
-    *-- Marca registro corrente como auditado pelo usuario logado em SigMvHst
-    *-- Retorna .T. se OK
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk, loc_cSQL
-        loc_lSucesso = .F.
-        TRY
-            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
-                MsgAviso("Nenhum registro selecionado para auditar.", "Auditoria")
-            ELSE
-                loc_cSQL = "UPDATE SigMvHst SET auditors = " + ;
-                           EscaparSQL(gc_4c_UsuarioLogado) + ;
-                           " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-                loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "")
-                IF loc_nQueryOk < 1
-                    MsgErro("Falha ao registrar auditor.", "Erro de Auditoria")
-                ELSE
-                    loc_cSQL = "UPDATE SigMvHst SET dtaudits = GETDATE() " + ;
-                               "WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-                    loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "")
-                    IF loc_nQueryOk < 1
-                        MsgErro("Falha ao registrar data de auditoria.", "Erro de Auditoria")
-                    ELSE
-                        IF USED("cursor_4c_Historico")
-                            SELECT cursor_4c_Historico
-                            REPLACE auditors WITH gc_4c_UsuarioLogado
-                            REPLACE dtaudits WITH DATETIME()
-                        ENDIF
-                        THIS.this_cAuditors = gc_4c_UsuarioLogado
-                        THIS.this_dDtAudits = DATETIME()
-                        loc_lSucesso = .T.
-                    ENDIF
-                ENDIF
+            IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+                REPLACE cursor_4c_Dados.auditors WITH THIS.this_cAuditorAtual, ;
+                        cursor_4c_Dados.dtaudits  WITH THIS.this_dDtAuditAtual
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [AuditarRegistro]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE DesauditarRegistro
-    *-- Remove marca de auditoria do registro corrente em SigMvHst
-    *-- Retorna .T. se OK
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_nQueryOk, loc_cSQL
-        loc_lSucesso = .F.
-        TRY
-            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
-                MsgAviso("Nenhum registro selecionado.", "Auditoria")
-            ELSE
-                loc_cSQL = "UPDATE SigMvHst SET auditors = '          ' " + ;
-                           "WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-                loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "")
-                IF loc_nQueryOk < 1
-                    MsgErro("Falha ao remover auditor.", "Erro de Auditoria")
-                ELSE
-                    loc_cSQL = "UPDATE SigMvHst SET dtaudits = NULL " + ;
-                               "WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-                    loc_nQueryOk = SQLEXEC(gnConnHandle, loc_cSQL, "")
-                    IF loc_nQueryOk < 1
-                        MsgErro("Falha ao remover data de auditoria.", "Erro de Auditoria")
-                    ELSE
-                        IF USED("cursor_4c_Historico")
-                            SELECT cursor_4c_Historico
-                            REPLACE auditors WITH SPACE(10)
-                            REPLACE dtaudits WITH {}
-                        ENDIF
-                        THIS.this_cAuditors = ""
-                        THIS.this_dDtAudits = {}
-                        loc_lSucesso = .T.
-                    ENDIF
-                ENDIF
+            THIS.RegistrarAuditoria("UPDATE")
+            loc_lResultado = .T.
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *==========================================================================
+    * VerificarDocumentoCadastrado - equivalente a
+    * ThisForm.poDataMgr.ChkRegister(tabela, campo, valor) do legado:
+    * confirma se existe registro com a chave informada. Usado pelo botao
+    * Movimento para decidir entre abrir o documento ja efetivado
+    * (SigMvCab) ou a necessidade ainda em aberto (SigCdNec).
+    *==========================================================================
+    FUNCTION VerificarDocumentoCadastrado(par_cTabela, par_cCampoChave, par_cValorChave)
+        LOCAL loc_lResultado, loc_cSQL
+
+        loc_lResultado = .F.
+
+        loc_cSQL = "SELECT COUNT(*) AS Total FROM " + par_cTabela + ;
+            " WHERE " + par_cCampoChave + " = " + EscaparSQL(par_cValorChave)
+
+        IF THIS.ExecutarSQL(loc_cSQL, "cursor_4c_VerDoc", "VerificarDocumento")
+            IF USED("cursor_4c_VerDoc")
+                loc_lResultado = (NVL(cursor_4c_VerDoc.Total, 0) > 0)
+                USE IN cursor_4c_VerDoc
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [DesauditarRegistro]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+        ENDIF
 
-    *--------------------------------------------------------------------------
-    PROCEDURE VerificarPermissaoAuditoria
-    *-- Retorna .T. se o usuario logado pode auditar o registro corrente
-    *-- Supervisor (4CONTROL) sempre pode; outros: apenas registros sem auditor
-    *-- ou registros que o proprio usuario auditou
-    *--------------------------------------------------------------------------
-        LOCAL loc_lPermitido, loc_lSupervisor
-        loc_lPermitido  = .F.
-        TRY
-            loc_lSupervisor = (UPPER(ALLTRIM(gc_4c_UsuarioLogado)) = "4CONTROL")
-            IF loc_lSupervisor
-                loc_lPermitido = .T.
-            ELSE
-                IF EMPTY(ALLTRIM(THIS.this_cAuditors))
-                    loc_lPermitido = .T.
-                ELSE
-                    IF UPPER(ALLTRIM(gc_4c_UsuarioLogado)) = UPPER(ALLTRIM(THIS.this_cAuditors))
-                        loc_lPermitido = .T.
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [VerificarPermissaoAuditoria]", "Erro")
-        ENDTRY
-        RETURN loc_lPermitido
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE VerificarExistenciaDocumento
-    *-- Verifica se existe documento para o registro corrente
-    *-- Retorna "MOVCAB" se em SigMvCab, "NEC" se em SigCdNec, "" se nao encontrou
-    *--------------------------------------------------------------------------
-        LOCAL loc_cTipoDoc, loc_nQueryOk, loc_cEmpsEfetivo
-        LOCAL loc_cEmpDopNum, loc_cEmpDopNumLong
-        loc_cTipoDoc = ""
-        TRY
-            IF NOT (EMPTY(ALLTRIM(THIS.this_cEmps)) OR EMPTY(ALLTRIM(THIS.this_cDopes)) OR THIS.this_nNumes = 0)
-                loc_cEmpsEfetivo   = IIF(NOT EMPTY(ALLTRIM(THIS.this_cEmpos)), THIS.this_cEmpos, THIS.this_cEmps)
-                loc_cEmpDopNum     = loc_cEmpsEfetivo + THIS.this_cDopes + STR(THIS.this_nNumes, 6)
-                loc_cEmpDopNumLong = loc_cEmpsEfetivo + THIS.this_cDopes + STR(THIS.this_nNumes, 10)
-
-                IF USED("cursor_4c_TmpChk")
-                    USE IN cursor_4c_TmpChk
-                ENDIF
-                loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                    "SELECT COUNT(*) AS nExiste FROM SigMvCab WHERE EmpDopNums = " + ;
-                    EscaparSQL(loc_cEmpDopNum), "cursor_4c_TmpChk")
-                IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpChk") AND RECCOUNT("cursor_4c_TmpChk") > 0
-                    SELECT cursor_4c_TmpChk
-                    IF NVL(cursor_4c_TmpChk.nExiste, 0) > 0
-                        loc_cTipoDoc = "MOVCAB"
-                    ENDIF
-                ENDIF
-                IF USED("cursor_4c_TmpChk")
-                    USE IN cursor_4c_TmpChk
-                ENDIF
-
-                IF EMPTY(loc_cTipoDoc)
-                    loc_nQueryOk = SQLEXEC(gnConnHandle, ;
-                        "SELECT COUNT(*) AS nExiste FROM SigCdNec WHERE EmpDnPs = " + ;
-                        EscaparSQL(loc_cEmpDopNumLong), "cursor_4c_TmpChk")
-                    IF loc_nQueryOk >= 1 AND USED("cursor_4c_TmpChk") AND RECCOUNT("cursor_4c_TmpChk") > 0
-                        SELECT cursor_4c_TmpChk
-                        IF NVL(cursor_4c_TmpChk.nExiste, 0) > 0
-                            loc_cTipoDoc = "NEC"
-                        ENDIF
-                    ENDIF
-                    IF USED("cursor_4c_TmpChk")
-                        USE IN cursor_4c_TmpChk
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " [VerificarExistenciaDocumento]", "Erro")
-        ENDTRY
-        RETURN loc_cTipoDoc
-    ENDPROC
+        RETURN loc_lResultado
+    ENDFUNC
 
 ENDDEFINE

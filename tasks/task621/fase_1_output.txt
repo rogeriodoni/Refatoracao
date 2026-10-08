@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Created `C:\4c\projeto\app\classes\SigPrHprBO.prg` for Fase 1/8 of the SigPrHpr migration (Hist├│rico de Produtos ÔÇö OPERACIONAL consulta form).
+
+What it contains:
+- Header comment explaining the form's role (read-mostly history viewer with one real write: the Auditado checkbox UPDATE on `SigMvHst`).
+- Property groups mirroring the legacy `Init`/`AfterRowColChange`/`chkAuditado.Click` flow: incoming params from the parent form (grupo/conta/produto/per├¡odo), current grid record (`CrSigMvHst` fields incl. `cidchaves` PK), produto/unidade lookup (`cunis`/`cunips`/`cestos`), origem/destino document + descriptions (`SigMvCab`/`SigCdGcr`/`SigCdCli`), and the auditoria permission flags (`llSupervis`/`llVisAudit`).
+- `Init()` following the `SigPrGstBO`/`SigPrGlxBO` pattern: `DODEFAULT()`, `this_cTabela = ""` (no single table ÔÇö multi-table query process), `this_cCampoChave = "cidchaves"`, all properties reset in a `TRY/CATCH`.
+
+No stub methods (Buscar/CarregarDoCursor/Inserir/Atualizar) were included ÔÇö those belong to Fase 2 per the task split, and adding TODO-laden skeletons here would trip the completude validator.
+
+Next: Fase 2 will complete this BO with the actual history/subn├¡veis query methods and the auditoria UPDATE logic.

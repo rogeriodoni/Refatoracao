@@ -1,0 +1,16 @@
+=== PROBE Formsigprila + despacho para o BO ===
+1) CREATEOBJECT Formsigprila -> VARTYPE=O Caption=[Importação de Planilha]
+2) this_oBusinessObject = O classe=Sigprilabo
+3) despacho ComboTipo.Rotina -> metodo do BO (ValidaCols):
+   ListaPreco   -> ImportarListaPreco         ValidaCols=.T.
+   GeraTransf   -> ImportarTransferencia      ValidaCols=.T.
+   AtuaPreco    -> ImportarPrecificacao       ValidaCols=.T.
+   GeraPedido   -> ImportarPedidoTerceiro     ValidaCols=.T.
+   Pedidocons   -> ImportarPedidoConsignado   ValidaCols=.T.
+   PedidoFab    -> ImportarPedidoFabrica      ValidaCols=.T.
+   PedAcesso    -> ImportarPedidoAcessorio    ValidaCols=.T.
+   TODAS AS 7 ROTINAS DESPACHAM: .T.
+4) rotina inexistente -> ValidaCols=.F. (esperado .F., para exibir a mensagem do legado)
+5b) ComboTipo DENTRO da datasession do form: USED=.T. DataSessionId=2 linhas=7 1a=[ListaPreco]
+5) ComboTipo: USED=.F. linhas=0
+=== FIM OK ===

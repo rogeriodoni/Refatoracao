@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 is complete and verified. Nothing was committed (consistent with the rest of the in-progress work tree).
+
+## What was blocking the gate
+
+The gate requires four methods; the form had `BtnCancelarClick` and `FormParaBO` but was missing **`BOParaForm`** and **`CarregarLista`**. Both are now implemented from the legacy `Init` (which is where SIGPRGLX actually does this work), not invented:
+
+- **`CarregarLista()`** (PUBLIC) ÔÇö rebinds the Page1 grid to `TmpFinalg` in the order `ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header ÔåÆ ReadOnly` (the parent form recreates the cursor, so a plain `Refresh` would leave "Column1/Column2"), sets the summary-grid order, recomputes totals, and triggers the first row's detail panels.
+- **`BOParaForm()`** (PROTECTED ÔÇö `FormBase` declares it protected and VFP won't let a subclass widen it) ÔÇö title/banner, the `Per├¡odo: NN meses` label, and the real visibility of `Requisi├º├Áes`/`Estoques`/`Dispon├¡veis` from `SigCdPam`/`fChecaAcesso`.
+
+Supporting: added `this_nPacNMeses` and `ObterTipoEstoqueProduto()` to the BO (the `SigCdPro ÔåÆ cgrus ÔåÆ SigCdGrp.tipoestos` chain the legacy `When` uses).
+
+## Four real defects found while verifying
+
+I tested by exercising the handlers, not just instantiating ÔÇö which is what surfaced these:
+
+1. **`OldValue` doesn't exist in VFP9** on `Column`, `Column.Text1`, or `TextBox` (measured: `PEMSTATUS` = `.F.` on all three). 18 sites across 4 handlers ÔÇö all pre-existing from Fases 6ÔÇô7 ÔÇö would crash the moment a user edited a quantity. Replaced with a form property captured on `GotFocus`, which is the legacy's own mechanism.
+2. **`GotFocus` redirect bound to all 10 columns**, including the editable ones ÔÇö "Qtd Produ├º├úo", "Produzir Estq" and "Qtd Estoque" bounced the focus away and could never be typed into. The legacy redirects only columns 1/2/5/6/9.
+3. **`Column10` (Qtd Estoque) handlers missing entirely** ÔÇö one of the two editable columns had no `Valid`. Transcribed from the dump, including the asymmetries vs. Column7 (ceiling is `Saldo - Fabrs`; the summary cursor saturates-then-subtracts instead of zero-then-adds).
+4. **`SEEK` with `ALLTRIM`-concatenated keys** (rule #42) ÔÇö the padding is the key, so the lookups silently returned zero rows and the redistribution never ran.
+
+## One judgement call worth flagging
+
+The legacy filters the two summary grids with `SET KEY`, re-issued per row change. I measured that `SET KEY` is static (confirming it must be re-issued) but that a *partial-prefix* `SET KEY` goes empty under `SET EXACT ON`. It works here only because `DataSession = 2` leaves `EXACT` OFF ÔÇö a landmine, since the other standing guidance is to turn `EXACT` ON in private sessions. I used `SET FILTER ... ==` instead (the project's documented remedy, already used in the sibling `FormSigPrGlp`).
+
+That change has a non-obvious consequence I had to handle: **`SET ORDER TO` clears `SET KEY` but not `SET FILTER`** (measured), and `REPLACE ALL` under a filter touches only visible rows. The legacy relies on that `Set Order To` side-effect to release the cursor before `Processar`'s global passes ÔÇö so without an explicit `SET FILTER TO`, stock reservations would have been written for only the last item the user viewed, silently. Added the explicit clear at both `REPLACE ALL Reservs` sites in the BO.
+
+## Verification
+
+Both files compile clean. Two VFP9 harnesses pass:
+- new `InstantiateCheckGlxFase8Final.prg` ÔÇö `CarregarLista` returns `.T.` with correct headers/widths/ReadOnly, totals 180/20 as expected, per-item filter correctly shows 1 then 2 rows across a row change, `BOParaForm`/`FormParaBO` reachable via a `Probe` subclass, `Column10Valid` redistributes to the expected 60/60.
+- existing `InstantiateCheckGlxFase8Clicks.prg` ÔÇö no regression.
+
+I did **not** add a menu entry despite the prompt asking for one: this form takes 7 parameters and is opened by `FormSigPrGl2.BtnProcessarClick` with the parent's cursors ÔÇö a menu entry would open it broken.
+
+Two things I could not verify without the database (`192.168.200.10` isn't reachable from here): the `Per├¡odo: NN meses` value reads 0 in tests, and `ObterTipoEstoqueProduto` always returns 0, so the `Dispon├¡veis` button stays hidden. Both paths are exercised; only the live values are untested.

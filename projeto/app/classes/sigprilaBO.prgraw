@@ -1,0 +1,120 @@
+*============================================================================
+* sigprilaBO.prg - Business Object para Importacao de Planilhas (SIGPRILA)
+*
+* Form OPERACIONAL (SIGPRILA / Formsigprila): utilitario generico de
+* importacao de planilha Excel (.xls) que alimenta SETE rotinas distintas,
+* escolhidas pelo usuario no combo cntplanilha.cmbTipos (cursor ComboTipo,
+* montado em PreencheTipo a partir do array aComboTipo e filtrado por
+* fChecaAcesso):
+*   1) ListaPreco  - atualiza SigCdLpc/SigCdLpi (listas de preco)
+*   2) GeraTransf  - gera SigMvCab/SigMvItn/SigMvIts/SigMvHst de TRANSFERENCIA
+*   3) AtuaPreco   - atualiza pVens/PrecoDe de SigCdPro + SigPrTam + historico
+*                    em CrSigPrPre + grava CrSigImpPr (log de importacao)
+*   4) GeraPedido  - gera movimento de PEDIDO TERCEIRO (SigMvCab/SigMvItn/...)
+*   5) Pedidocons  - gera movimento de PEDIDO CONSIGNADO (mesma familia)
+*   6) PedidoFab   - gera movimento de PEDIDO FABRICA (mesma familia)
+*   7) PedAcesso   - gera movimento de PEDIDO ACESSORIO (mesma familia)
+*
+* NAO existe uma unica "tabela principal" para este processo (this_cTabela
+* permanece vazio) - cada rotina grava num conjunto diferente de tabelas de
+* movimento, conforme tasks/task627/comportamento.json. O cursor da propria
+* planilha (TmpPlanilha) tem estrutura DINAMICA, montada em runtime a partir
+* da coluna 3 (ColunaLi) do item escolhido em ComboTipo.
+*
+* Parametros do sistema usados pelas rotinas (carregados UMA UNICA VEZ no
+* Init, igual ao legado que faz "=ThisForm.Podatamgr.SqlExecute([Select *
+* From SigCdPac],[crSigCdPac])" e mantem o cursor vivo para o resto da vida
+* do form): cursor_4c_SigCdPac (SigCdPac - traz, entre outros, SigKeys e os
+* codigos de movimentacao padrao DopTrfPed/DopImpPlan/DopPedCon usados por
+* GeraPedido/GeraTransf/Pedidocons) e cursor_4c_SigCdPam (SigCdPam - usado
+* por LimiteCreditoMatriz: MoedaPs/ChqlCreds/MoeLimes/TpPrecos). Os metodos
+* que implementam cada rotina (fases seguintes) leem esses cursores
+* DIRETAMENTE (Select cursor_4c_SigCdPac / lcDopes = cursor_4c_SigCdPac.
+* DopTrfPed), exatamente como o legado le crSigCdPac/crSigCdPam - evita
+* duplicar cada campo de parametro numa property so para ser lido num unico
+* lugar.
+*
+* ATENCAO (a resolver na fase que implementar PedAcesso): o legado le
+* crSigCdPac.DopAcePed (dump, linha 3028), mas a coluna "dopaceped" NAO
+* aparece em docs/schema.sql dentro de SigCdPac (colunas Dop* existentes:
+* dopests, dopzers, dopetiqs, dopimpplan, dopvdaveco, dopecomm, doppenecom,
+* dopenvops, dopcortam, doppedcon, doprbt, doptrfped, dopbxbrest). Conferir
+* no banco (INFORMATION_SCHEMA) e no dump antes de implementar PedAcesso -
+* regra #14 do CLAUDE.md (grep no schema.sql da falso-negativo por ser
+* UTF-16; mas aqui a tabela foi lida com Get-Content -Raw e a coluna
+* realmente nao aparece. Pode ser tabela/ambiente, ou grafia divergente).
+*
+* Helpers globais que as rotinas vao precisar (fases seguintes) e que JA
+* EXISTEM em projeto\app\utils\functions.prg - nao reinventar: fUniqueIds,
+* fGerUniqueKey, fGerMascara, fDtoSQL, fChecaAcesso, fBuscarCotacao.
+* fCarregarCambio NAO foi portada (ver memoria) - a rotina Cotacao do
+* legado nao usa fCarregarCambio, usa fBuscarCotacao direto, entao essa
+* lacuna nao se aplica aqui.
+*
+* this_lPlanilha espelha ThisForm.Planilha do legado: a propriedade nunca e
+* setada para .T. em lugar nenhum do dump e o metodo ChecaPlanilha (chamado
+* no ramo .T. do cmdok.Click) nunca e definido - e um ramo morto do
+* framework legado, mantido aqui so para fidelidade de propriedades
+* (PILAR 1), sem comportamento associado.
+*
+* Herda de: BusinessBase
+* Criado em: Fase 1 - Propriedades e Init
+* Completado em: Fase 2+ - CarregarDoCursor / metodos de cada rotina de
+*                importacao / Inserir/Atualizar (quando aplicavel)
+*============================================================================
+
+DEFINE CLASS sigprilaBO AS BusinessBase
+
+    *==========================================================================
+    * Espelho de propriedades customizadas do form legado SIGPRILA
+    *==========================================================================
+    this_lPlanilha       = .F.       && ThisForm.Planilha - sempre .F. no legado (ramo morto, ver cabecalho)
+    this_cSigKey         = SPACE(3)  && ThisForm.SigKey <- cursor_4c_SigCdPac.SigKeys (Init) - usado para montar CIdChaves de historico (CrSigMvHst) em GeraPedido/GeraTransf/Pedidocons/PedidoFab/PedAcesso
+    this_nValorAcumulado = 0         && ThisForm.ValorAcumulado - acumulador de valor usado por LimiteCreditoMatriz, resetado no inicio de cada rotina de importacao de movimento
+
+    *==========================================================================
+    * Selecao feita pelo usuario na pagina de importacao (cntplanilha) -
+    * o Form preenche estas propriedades (FormParaBO, fase do Form) antes de
+    * chamar a rotina escolhida
+    *==========================================================================
+    this_nTipoBusca       = 1        && cntplanilha.OptTipo.Value   (1=Codigo, 2=Descritivo, 3=Referencia Forn.) - define qual coluna de SigCdPro casa com o produto da planilha
+    this_nTipoPreco       = 1        && cntplanilha.OptPreco.Value  (1=Venda, 2=Custo) - define se o valor gravado no movimento vem de PVens/Moevs ou de custofs/moecusfs
+    this_cArquivoPlanilha = ""       && cntplanilha.GetPlanilha.Value - caminho completo do arquivo .xls selecionado pelo usuario (GetFile)
+    this_lIncluiCabecalho = .F.      && cntplanilha.ChkCabecalho.Value - .T. = a 1a linha da planilha e cabecalho e deve ser descartada ao montar TmpPlanilha
+    this_cRotina          = ""       && ComboTipo.Rotina  do item selecionado em cmbTipos (ListaPreco/GeraTransf/AtuaPreco/GeraPedido/Pedidocons/PedidoFab/PedAcesso)
+    this_cColunaLi        = ""       && ComboTipo.ColunaLi do item selecionado - memo com a lista "Titulo,Campo c(N),..." que define a estrutura do cursor TmpPlanilha
+
+    *==========================================================================
+    * Init - Inicializa o Business Object. Nao ha tabela/chave primaria
+    * unica para este processo (cada rotina grava em tabelas de movimento
+    * diferentes), mas carrega uma unica vez os cursores de parametros do
+    * sistema (SigCdPac/SigCdPam) usados pelas rotinas de importacao
+    *==========================================================================
+    PROCEDURE Init()
+        DODEFAULT()
+
+        THIS.this_cTabela     = ""
+        THIS.this_cCampoChave = ""
+
+        IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+
+            IF USED("cursor_4c_SigCdPac")
+                USE IN cursor_4c_SigCdPac
+            ENDIF
+            SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPac", "cursor_4c_SigCdPac")
+
+            IF USED("cursor_4c_SigCdPac") AND !EOF("cursor_4c_SigCdPac")
+                THIS.this_cSigKey = PADR(TratarNulo(cursor_4c_SigCdPac.SigKeys, ""), 3)
+            ENDIF
+
+            IF USED("cursor_4c_SigCdPam")
+                USE IN cursor_4c_SigCdPam
+            ENDIF
+            SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_SigCdPam")
+
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+ENDDEFINE

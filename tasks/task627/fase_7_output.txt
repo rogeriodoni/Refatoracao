@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada em `projeto\app\forms\operacionais\Formsigprila.prg` (630 ÔåÆ 1.199 linhas).
+
+## O que foi entregue
+
+O template da fase pede os 4 `Btn*Click` de CRUD, mas o `SIGPRILA` **n├úo tem CRUD algum** ÔÇö confirmei no dump: sem `frmcadastro`, sem `Grupo_Op`, sem `pcEscolha`, sem `btn/cmdIncluir|Alterar|Visualizar`. Ent├úo portei os eventos que o legado **realmente tem** (3 bot├Áes: `cmdgetp` + `Grupo_Botao` com 2):
+
+| Legado (SE├ç├âO 3 do dump) | Migrado |
+|---|---|
+| `Grupo_Botao.cmdok.Click` | `CmdProcessarClick` ÔåÆ `Processamento()` |
+| `Grupo_Botao.cmdsair.Click` | `CmdEncerrarClick` ÔåÆ `Release()` |
+| `cntplanilha.cmdgetp.Click` | `CmdGetPlanilhaClick` ÔåÆ `GETFILE` |
+| `cmbTipos.InteractiveChange` | `CboTiposInteractiveChange` ÔåÆ `CompletaLista()` |
+| `SIGPRILA.KeyPress` (ESC) | `KeyPress` ÔåÆ `CmdEncerrarClick` |
+
+Mais os m├®todos de suporte que esses eventos acionam, transcritos do dump: `PreencheTipo` (as 7 rotinas com as strings de `ColunaLi` caractere a caractere ÔÇö s├úo regra de neg├│cio), `CompletaLista`, `CriaPlanilha`, `ValidaCols`, `Processamento`, `SelecionarTipo`, `ObterMetodoRotina`, `ExecutarRotinaImportacao` e `FormParaBO` (`PROTECTED` expl├¡cito ÔÇö `FormBase` n├úo deixa alargar escopo).
+
+## Verifica├º├úo (n├úo s├│ compila├º├úo)
+
+`COMPILE` limpo (`.fxp` apagado antes, timestamp conferido, zero `.err`) e **instanciei o form de verdade**:
+
+- `VARTYPE=O`; `ComboTipo` com 7 linhas; combo ligado
+- `CompletaLista` nas 7 rotinas: contagem de colunas da `List1` (7/11/6/9/9/10/9) e a visibilidade de Validar/Pre├ºo batem exatamente com o `INLIST` do legado
+- `FormParaBO` com tipos certos (`.T.` l├│gico do CheckBox num├®rico; 3 e 2 dos OptionGroups)
+- `CriaPlanilha` com arquivo inexistente devolve `.F.` e exibe a mensagem do legado, sem travar
+
+Dois desvios conscientes, ambos comentados no c├│digo: `KeyPreview = .T.` (o SCX n├úo declara, e sem isso o handler de ESC que o legado escreveu nunca dispararia), e o ramo morto `If Thisform.Planilha ÔåÆ ChecaPlanilha()` n├úo foi transcrito ÔÇö `ChecaPlanilha` **n├úo existe** no SCX e a chamada cairia na regra #13 em runtime.
+
+Achei e corrigi um ponto real no caminho: o `DELETE FILE` de `TmpPlanilha.dbf` solto (como no legado) estourava `Program Error` cru com o arquivo travado por outra sess├úo ÔÇö movi para dentro do `TRY`, onde a falha sai pela mensagem do pr├│prio legado ("Verifique se a planilha n├úo est├í aberta...").
+
+## O que ficou de fora ÔÇö e n├úo est├í escondido
+
+As **7 rotinas de importa├º├úo** (`ListaPreco`/`GeraTransf`/`AtuaPreco`/`GeraPedido`/`Pedidocons`/`PedidoFab`/`PedAcesso`, ~2.600 linhas do dump, linhas 598ÔÇô3.380, mais `LimiteCreditoMatriz` e `Cotacao`) **n├úo existem em `sigprilaBO`** ÔÇö as fases 1ÔÇô2 do BO as deferiram, e as fases 3ÔÇô8 s├úo todas do Form, ent├úo n├úo h├í fase restante prevista para elas.
+
+Hoje, clicar Processar roda `CriaPlanilha` + `ValidaCols` e exibe `"M├®todo <rotina> n├úo localizado"` ÔÇö que ├® **literalmente a mensagem do legado** para esse caso (o `ValidaCols` original faz `Vartype(pFrm.ReadMethod(pPar))=[C])`, ou seja, pergunta se o m├®todo existe). A aus├¬ncia aparece alta para o usu├írio em vez de gravar errado em sil├¬ncio (regra #17/#27), mas **a importa├º├úo em si ainda n├úo funciona**. O probe confirma: `existeNoBO=.F.` nas 7. Isso precisa de uma tarefa pr├│pria no BO ÔÇö cada rotina tem f├│rmulas e INSERTs que exigem transcri├º├úo literal e confer├¬ncia de colunas NOT NULL contra o schema.

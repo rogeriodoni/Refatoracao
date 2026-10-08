@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 est├í completa em `projeto/app/forms/operacionais/FormSigPrIbb.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O ramo FLAT do gate (`OrquestradorMigracao.ps1`, `case 6`) pede `OPERACIONAL` + sem PageFrame + `BINDEVENT` + (`AbrirLookup*/AbrirBusca*` **OU** (legado sem lookup **E** `.ControlSource =` **E** `PROCEDURE Validar\w+`)). Medi: s├│ faltava **`PROCEDURE Validar*`** ÔÇö e o gate est├í **certo**, n├úo ├® falso positivo. O `SIGPRIBB` tem dois campos digit├íveis de verdade (`getLocals`/`getTxtCds`, EditBox com `ControlSource` e sem `ReadOnly`/`When`), e faz├¬-los funcionar ├® a entrega desta fase.
+
+## O que entreguei
+
+**Lookups: nenhum** ÔÇö o dump n├úo casa `fwBusca*`/`mAddColuna`/`sigacess`/`Acesso*`. Os tr├¬s `fwget` s├úo `Enabled = .F.` e recebem partes do `EmpDopNums` do chamador. Inventar lookup violaria o PILAR 1, ent├úo documentei a aus├¬ncia no cabe├ºalho em vez de fabricar um.
+
+**Campos digit├íveis ÔÇö o que faltava:**
+- `obj_4c_GetLocals.MaxLength = 100`, tirado de `SigCnFBl.clocals char(100) NOT NULL` no schema (regra #19). Sem isso o excedente era cortado em sil├¬ncio pelo `ControlSource`. `obj_4c_GetTxtCds` fica sem limite de prop├│sito ÔÇö `ctxtcds` ├® `TEXT`.
+- `ValidarLocalPagamento` / `ValidarTextoCedente`, `PUBLIC`, ligados por `BINDEVENT` em `LostFocus` (n├úo `"Valid"`, regra #3), com guarda de reentr├óncia liberada **depois** do `ENDTRY`.
+- `SincronizarBOComTela()`: o legado lia `crGrade.CLocals/CTxtCds` direto no `Procedure imprimir`; aqui quem grava (`AtualizarConfiguracaoBoleto`) e imprime (`CarregarDadosImpressao`) l├¬ as propriedades `*Atual` do BO ÔÇö a edi├º├úo precisava de ponto expl├¡cito de sincroniza├º├úo. `Imprimir()` passou a usar o mesmo ponto, porque o bot├úo pode ser acionado por atalho sem o campo perder o foco.
+
+## Verifica├º├úo
+
+Compilou limpo no VFP9 (`.fxp` apagado antes, recriado depois; sem `.err`). Probe headless instanciando o form de verdade ÔÇö chamando o evento **nativo** `LostFocus()`, j├í que `AEVENTS` devolve 0 com `DataSession = 2`:
+
+```
+OK instanciou. BaseClass=[Form] DataSessionId=2
+MaxLength GetLocals       = 100
+LostFocus GetLocals: len antes=160 depois=100     <- BINDEVENT ligado
+BO TextoCedente: antes=[TEXTO ORIGINAL] depois=[TEXTO EDITADO PELO USUARIO]
+BO FPagsAtual  : [30/60/90]
+Guarda reentrancia = .F.
+LostFocus com EOF: OK (nao estourou)
+```
+
+Gate da Fase 6 simulado sobre os arquivos reais: `temLayoutFlat = True`. Sem TODO/stub; CRLF preservado.
+
+## Dois pontos fora do escopo que encontrei
+
+1. **`SigPrIbbBO.AtualizarConfiguracaoBoleto` diverge do legado.** O legado aborta a impress├úo com `If (SqlExecute(lcQuery,'') < 1)` ÔÇö ou seja, **0 linhas afetadas tamb├®m falha**. Isso acontece quando o `FPags` n├úo tem linha pr├│pria em `SigCnFBl` (o `selecionadados` caiu no fallback `Space(12)`). O migrado testa `IF loc_nRet < 0`, e `SQLEXEC` devolve 1 mesmo com 0 linhas afetadas ÔÇö ent├úo ele imprime onde o legado recusa. ├ë c├│digo da Fase 2; n├úo mexi.
+
+2. **`FormSigPrHpr.prg:1313-1314` (task621) tem um bug:** os dois `BINDEVENT` apontam para `"KeyPress"`, mas o segundo deveria ser `"LostFocus"` ÔÇö `DataLostFocus` nunca dispara ao sair do campo. Outra task, n├úo toquei.

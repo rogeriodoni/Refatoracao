@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Essa task bate exatamente no padr├úo documentado de uma mem├│ria de projeto: `project_sqlserver_200_10_inalcancavel_maquina_pipeline`.
+
+## Diagn├│stico
+
+**N├úo ├® bug de c├│digo.** O log mostra a assinatura exata do problema de infraestrutura conhecido:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+=== RESULTADO DO TESTE ===
+Status: ERRO AO CRIAR OBJETO
+```
+
+O erro ocorre na **ETAPA 1B** (pr├®-flight `SQLSTRINGCONNECT`), **antes** de qualquer `CREATEOBJECT("Formsigprila")` ou `CREATEOBJECT("sigprilaBO")` ser alcan├ºado ÔÇö ou seja, o c├│digo do form/BO nunca chega a rodar. Isso ├® confirmado pela mem├│ria: a m├íquina que executa o pipeline n├úo tem rota de rede para `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA` (`192.168.200.10`). Esse mesmo sintoma j├í se repetiu em 100+ tasks desde 2026-08-02, inclusive uma task (task623) que consumiu 8 de 10 tentativas de `runtime_fix` sem nenhuma edi├º├úo de `.prg` resolver ÔÇö porque o problema est├í fora do c├│digo.
+
+Confirmei isso agora rodando `Test-NetConnection 192.168.200.10 -Port 1433`, que j├í passou de 120s sem resposta (consistente com "sem rota", que costuma dar timeout em vez de falha r├ípida) ÔÇö vou deixar isso correndo em segundo plano e avisar quando concluir, mas o padr├úo j├í bate com o hist├│rico.
+
+## O que N├âO vou fazer
+
+Conforme a li├º├úo j├í registrada: **n├úo vou editar `Formsigprila.prg` ou `sigprilaBO.prg` "para satisfazer a tarefa"**. Isso ├® o antipadr├úo documentado ÔÇö editar c├│digo cegamente nesse cen├írio queima tentativas do orquestrador sem chance de corrigir o sintoma real, e pode introduzir regress├úo em c├│digo que j├í est├í correto (e de fato, a leitura do form/BO n├úo revelou nada relacionado a conectividade).
+
+## Recomenda├º├úo
+
+Essa task (task627 / `Formsigprila`) deveria ser marcada como **bloqueada/pausada por infraestrutura**, n├úo reenfileirada em `runtime_fix` ÔÇö reexecutar sobre o mesmo form s├│ vai repetir o mesmo erro 1526 at├® que algu├®m com acesso ├á rede/infra libere a rota para `192.168.200.0/24` nessa m├íquina do pipeline.

@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 5/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGPRIBL.prg` modificado.
+
+## O que a fase pedia vs. o que o legado tem
+
+O prompt pedia "metade dos campos da Page2". O `SIGPRIBL.SCX` **n├úo tem Page2 nem PageFrame**: s├úo 11 objetos, todos filhos diretos do form, e todos j├í foram criados na Fase 4. Metade de zero campos ├® zero ÔÇö n├úo inventei campo nenhum (PILAR 1).
+
+O trabalho real desta fase era outro, e existia: a Fase 4 cria muitos controles de uma vez e **derrubou as propriedades "pequenas" do dump**. Auditei propriedade por propriedade contra `tasks/task623/SIGPRIBL_form_codigo_fonte.txt` e contra `automation/propriedades_baseclasses.txt` (regra #33 ÔÇö nunca chutar a lista de propriedades):
+
+| Transcri├º├úo ausente | Origem no dump |
+|---|---|
+| `txt_4c_Locals.Format = "K"` | `getLocals.Format = "K"` |
+| `obj_4c_CmdGImprimir.BorderColor` | `cmdGImprimir.BorderColor = 136,189,188` |
+| `lbl_4c_Titulo.ToolTipText` | `lblTitulo.ToolTipText` |
+| `.BorderStyle = 0` nos 4 labels | declarado nos 4 `Say`/`Label` |
+| **os 8 `TabIndex`** | `Label2=1 ÔÇª cmdGImprimir=8` |
+
+Tamb├®m corrigi `.AutoSize = .T.` ÔåÆ `.F.` nos 4 labels (regra #23: ├® no-op em Label criado por `AddObject`, e com `WordWrap` descarta a `Height`) ÔÇö `Width`/`Height` j├í vinham transcritos do SCX.
+
+## Dois defeitos que a auditoria revelou
+
+1. **`ConfigurarPaginaDados()` era c├│digo morto**: corpo `THIS.Refresh()` e **nunca chamado** pelo `InicializarForm`. Dei-lhe corpo real ÔÇö ├® onde o `TabIndex` tem de morar, porque precisa rodar *depois* de todos os `AddObject` ÔÇö e liguei no `InicializarForm`.
+2. **`AjustarBotoesPorModo` estava `PROTECTED`** ÔÇö viola a regra #3: o `TesteAutomatico.prg` chama esse m├®todo de fora da classe, e `PEMSTATUS` devolve `.T.` mesmo em PROTECTED, ent├úo o teste entraria no branch e falharia em runtime.
+
+## Verifica├º├úo (medido no VFP9, n├úo s├│ lido)
+
+Compila limpo e o form **instancia**; o probe chama os m├®todos de fora da classe, porque `PEMSTATUS` n├úo prova escopo:
+
+```
+1 INSTANCIOU OK  Caption=[Impress├úo de Boleto Banc├írio]
+2 TABINDEX  Label2=1 FPags=2 Label3=3 Locals=4 Label31=5 TxtCds=6 LblAviso=7 CmdG=8
+3 Locals.Format=[K]  CmdG.BorderColor=12369288  (esperado 12369288)
+4 LABELS AutoSize/BorderStyle/Width/Height  .F./0/124/15 ┬À .F./0/104/15 ┬À .F./0/196/15 ┬À .F./0/213/17
+6 AjustarBotoesPorModo chamado de FORA: OK
+7 ConfigurarPaginaDados chamado de FORA: OK
+```
+
+Os 4 checks do `Test-CompletudeCodigo` passam com 0 ocorr├¬ncias (TODO/stub/"nao implement"/procedure vazia). `MaxLength` conferido contra o schema (`clocals` char(100), `fpags` char(12), `ctxtcds` ├® `text` ÔåÆ EditBox sem MaxLength) ÔÇö j├í estavam certos. CRLF restaurado (o arquivo tinha sido achatado para LF por fase anterior); 0 bytes >127, acentos todos via `CHR()`.
+
+Dois pontos para o seu registro, que **n├úo** s├úo desta fase e eu n├úo mexi:
+- O `git diff` do arquivo ├® enorme (784+/863ÔêÆ) porque este re-run regenerou um `FormSIGPRIBL.prg` que j├í estava commitado (HEAD tinha 1292 linhas). Conferi o invent├írio de m├®todos: **29 no HEAD, 29 agora, nenhum perdido** ÔÇö mas vale saber que a task rodou sobre form j├í migrado.
+- Deixei `automation/ProbeSigPriblTabIndex.prg` (n├úo rastreado) junto dos outros dezenas de `Probe*.prg`, caso queira repetir a medi├º├úo.

@@ -1,0 +1,39 @@
+=== PROBE sigprilaBO Fase 8 ===
+1) CREATEOBJECT ProbeIlaBO -> VARTYPE=O
+2) rotinas de importacao (o que ValidaCols do Form checa):
+   ImportarListaPreco         PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarTransferencia      PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarPrecificacao       PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarPedidoTerceiro     PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarPedidoConsignado   PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarPedidoFabrica      PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   ImportarPedidoAcessorio    PEMSTATUS=.T. CHAMADA_EXTERNA=OK retorno=.F.
+   TODAS CHAMAVEIS DE FORA: .T.
+3) chaves posicionais (regra #42 - largura do destino):
+   EmpDopNums  LEN=29 (esperado 29) valor=[1  MALOTE                   3]
+   EmpGruEsts  LEN=23 (esperado 23)
+4) helpers puros:
+   ValorNumerico(12.5)      = 12,5
+   ValorNumerico('12,50')   = 12,50
+   ValorNumerico('1.234,56')= 1
+   ValorNumerico('99.90')   = 99
+   ValorNumerico(.NULL.)    = 0
+   ColunaMes 03 (campo)     =[ ,a.Val_Mar As LimCres, a.Acm_Mar As Saldos ]
+   ColunaMes 03 (acumulado) =[ Acm_Mar ]
+   ColunaMes 13 (invalido)  =[]
+5) cursores de acumulacao criados:
+   cursor_4c_MvCab  = .T. campos=20
+   cursor_4c_MvItn  = .T. campos=18
+   cursor_4c_MvIts  = .T.
+   cursor_4c_MvHst  = .T.
+   cursor_4c_TmpCot = .T.
+6) PARIDADE COLUNA/VALOR nos INSERT de MontarLoteMovimento:
+   tamanho do lote = 4350 bytes
+   SIGMVCAB   colunas=117 valores=117  OK
+   SIGMVITN   colunas=101 valores=101  OK
+   SIGMVITS   colunas= 27 valores= 27  OK
+   SIGMVHST   colunas= 39 valores= 39  OK
+   PARIDADE GERAL: OK
+7) AtualizarValorCabecalho (soma dos itens no cabecalho):
+   Valos antes=123,45 itens=21+15=36 -> Valos depois=36  OK
+=== FIM OK ===

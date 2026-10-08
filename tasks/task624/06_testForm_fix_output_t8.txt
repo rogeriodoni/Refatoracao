@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este n├úo ├® um bug de c├│digo. O erro ocorre na **ETAPA 1B** (pr├®-flight de conex├úo SQL, antes de qualquer `CREATEOBJECT` do form/BO) com o erro 1526 do DBNETLIB ÔÇö assinatura id├¬ntica a um problema de infraestrutura j├í registrado em mem├│ria: a m├íquina que executa o pipeline n├úo tem rota de rede para `192.168.200.10` (SQL Server `DB_MBAHIA`), recorrente em 100+ tasks desde 2026-08-02.
+
+Confirma├º├Áes no log atual:
+- `[ETAPA 1B] Conectando ao banco de dados... ERRO - Falha na conexao SQL: Codigo: 1526`
+- Nenhum `CREATEOBJECT("Formsigprico")` ou `CREATEOBJECT("sigpricoBO")` chega a ser logado ÔÇö o form/BO nunca ├® alcan├ºado.
+- J├í s├úo 8/10 tentativas consumidas (mesmo padr├úo do incidente anterior task623/FormSIGPRIBL, que tamb├®m travou nesse mesmo erro).
+
+Disparei um `Test-NetConnection 192.168.200.10 -Port 1433` para reconfirmar (rodando em background, hist├│rico sempre `False`/`False`).
+
+**N├úo vou editar `Formsigprico.prg` ou `sigpricoBO.prg`** ÔÇö n├úo h├í nada no c├│digo desses arquivos relacionado a essa falha, e editar "para satisfazer a tarefa" seria o antipadr├úo que j├í causou regress├Áes anteriores sem resolver o sintoma real (o erro acontece antes do c├│digo do form rodar).
+
+Recomenda├º├úo: marcar a task624 como bloqueada/pausada por infraestrutura (sem rota para `192.168.200.0/24` a partir da m├íquina do pipeline) at├® algu├®m com acesso ├á rede liberar a rota. Reexecutar o `runtime_fix` sobre este form s├│ vai repetir o mesmo erro 1526.

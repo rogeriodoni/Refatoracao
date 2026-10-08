@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 4,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRGST",
+      "evento": "Procedure",
+      "linhas": 128,
+      "codigoOriginal": "llOks = .t.\n\nIf Empty(csCabec.Gerado) && Se Ainda Não Gerou o Pedido\n\n\t* Carregando o Cursor do SigCdEmb\n\tlcQuery = [Select Cods, Multis From SigCdEmb]\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdEmb]) < 1)\n\t\t=Messagebox([Falha na Conexão!!!], 0+48, [crSigCdEmb])\n\t\tReturn .f.\n\tEndIf\n\tSelect crSigCdEmb\n\tIndex On Cods Tag Cods\n\tGo Top In crSigCdEmb\n\n\tZap In crSigMvCab\n\tZap In crSigMvItn\n\tZap In crSigMvIts\n\tZap in CrSigMvPec\n\tZap in CrSigInBep\n\n\tloBarra = CreateObject([fwprogressbar], [Grav... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Cursorquery,UpDate,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGST",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Lparameters P1, P2, P3 && Rotina Criada Apenas Para Não Gerar Erro Nas Chamadas do SigMvCab.\nReturn .t.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGST",
+      "evento": "Init",
+      "linhas": 44,
+      "codigoOriginal": "Parameters poform\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Parentform = poform\nThisForm.PcEscolha = ThisForm.ParentForm.pcEscolha\nThisForm.Podatamgr = ThisForm.ParentForm.PodataMgr\nThisForm.GrupoOper = Space(10)\n\nSelect CsCabec\nGo Top\nSelect CsItens\nSet Key To CsCabec.EmpdopNums\nGo Top\n\nSelect CsCabec\n\nWith ThisForm.GrdCab\n\t.RecordSource          = [csCabec]\n\t.RecordSourceType      = 1\n\t.Column1.ControlSource = [cs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GrupoOper = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGST.GrdCab",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSelect CsItens\nSet Key To CsCabec.EmpdopNums\nGo Top\nThisForm.GrdIte.Refresh\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGST.CmdCancela",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Select Emps, Dopes, Numes ;\n  From csCabec ;\n Where Empty(Gerado) ;\n  Into Cursor LocalGerado\n\nlnFal = Reccount([LocalGerado])\n\nIf (lnFal > 0)\n\tIf MessageBox([Existem ] + Alltrim(Str(lnFal, 10)) + [ Operações Não Confirmadas!] + Chr(13) + ;\n\t\t\t\t  [Tem Certeza Que Não Deseja Gerar Esses Pedidos?], 4+32+256, [Atenção!!!]) <> 6\n\t\tReturn .f.\n\tElse\n\t\tfGravarLog([T], CrSigCdNec.Dopps, [AUTOMATICO], [A Geração de ] + Alltrim(Str(lnFal, 10)) + ;\n\t\t\t\t\t [ Operação Foi Cancelada Sem Confirmação])\n\tEndIf\nEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGST.CmdGrava",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lnNum, lcMsk\n\nSelect csCabec\nIf Eof([csCabec])\n\t=MessageBox([Selecione Um Pedido a Ser Gerado Na Grade e Tente Novamente], 16, [Atenção!!!])\n\tReturn .f.\nEndIf\n\nllRet = ThisForm.GerarPedido()\n\nIf llRet And Not Empty(csCabec.Gerado)\n\tDo Form SigMvCab With csCabec.GerDopes, csCabec.GerNumes, csCabec.GerEmps, .t., 3, ThisForm, .f., .t.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GerarPedido",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRGST.Procedure",
+      "queryOriginal": "\tlcQuery = [Select Cods, Multis From SigCdEmb]",
+      "tabelas": "SigCdEmb",
+      "colunas": "Cods,Multis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRGST.CmdCancela.Click",
+      "queryOriginal": "Select Emps, Dopes, Numes ; From csCabec ; Where Empty(Gerado) ; Into Cursor LocalGerado",
+      "tabelas": "csCabec",
+      "colunas": "Emps,Dopes,LocalGerado",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmb", "csCabec"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

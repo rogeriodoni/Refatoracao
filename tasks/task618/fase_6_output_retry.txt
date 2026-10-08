@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrGlx.prg` (803 ÔåÆ 1916 linhas).
+
+## O que faltava na tentativa anterior
+
+A Fase 6 reprovou por **dois** motivos, nenhum deles reportado no output:
+
+1. **Zero `BINDEVENT` no arquivo** ÔÇö o gate PAGINADO exige `ConfigurarPaginaDados` **E** `BINDEVENT`. A tentativa anterior concluiu "Page2 n├úo tem lookup" e adiou os lookups reais para "quando a Page6 for criada", deixando a fase sem entregar o que ela existe para entregar.
+2. **Falso positivo de completude herdado da Fase 5**: a linha 456 era `* placeholder).` ÔÇö quebra de frase que casou com o regex `^\s*\*-?-?\s*(TODO|FIXME|HACK|XXX|PLACEHOLDER)\b` do `Test-CompletudeCodigo`. Reescrevi a frase.
+
+## O que entreguei
+
+**Page6 (Requisi├º├úo Manual de Material)** ÔÇö ├® onde moram os **dois ├║nicos lookups do form**, transcritos de `GradePedra.Column1.Text1.Valid` e `Column5.Text1.Valid` (`fwBuscaExt` ÔåÆ `SigCdPro`): `FormBuscaAuxiliar` com `gnConnHandle` como 1┬║ argumento, guarda `this_lAchouRegistro` antes do `Show()`, atribui├º├úo s├│ sob `this_lSelecionou`, `REPLACE` de `Dpros`/`Cunis` (sem ele as colunas Descri├º├úo/Uni ficam vazias ÔÇö s├úo ReadOnly e n├úo t├¬m outra origem), `USE IN` + `Release()`. Mais `GarantirLinhaLivreRequisicao` (o `LostFocus` do legado) e guarda de reentr├óncia `this_lLookupEmCurso`.
+
+**Pages 3, 4 e 5** (Totais por Linha / Selecionar Estoque / Dispon├¡vel-Tamanho) ÔÇö campos restantes, grades, totalizadores e bot├Áes Voltar.
+
+Uma diverg├¬ncia deliberada de c├│digo (PILAR 3, documentada no fonte): o legado reusa o alias `TmpDisp` nas Pages 4 e 5 com **estruturas diferentes**; mant├¬-lo derrubaria o alias ligado ├á outra grade e zeraria o `ColumnCount` dela. Usei dois cursores (`cursor_4c_DispEstoque` / `cursor_4c_DispTamanho`) ÔÇö comportamento vis├¡vel id├¬ntico.
+
+## Defeito encontrado e corrigido (n├úo era da minha mudan├ºa)
+
+O probe de instancia├º├úo acusou `AlternarPagina FALHOU: Unrecognized command verb.` Medi no VFP9 (`automation/MedirProcParensLparameters.prg`):
+
+| forma | resultado |
+|---|---|
+| `PROCEDURE X(par)` + `LPARAMETERS par` | **estoura sempre** ÔÇö "Unrecognized command verb" |
+| `PROCEDURE X(par)` sozinho | OK |
+| `PROCEDURE X()` + `LPARAMETERS par` | OK |
+
+Compila limpo e s├│ quebra em runtime. `AlternarPagina` estava assim desde a Fase 3/4 ÔÇö e os dois handlers de `KeyPress` que escrevi herdaram o mesmo padr├úo do template do orquestrador, o que teria matado os lookups no primeiro keystroke. Corrigi os 3 sites. Varri `projeto/app` inteiro: **nenhum outro site quebrado** ÔÇö os outros 17 arquivos usam a forma de par├¬nteses vazios, que ├® segura.
+
+## Verifica├º├úo (medida, n├úo lida)
+
+- `COMPILE` no VFP9 real: sem `.err`, `.fxp` gerado.
+- Instancia├º├úo (`automation/InstantiateCheckGlxF6.prg`): form abre, `PageCount=6`, as 4 p├íginas novas existem com Caption/Enabled/geometria do legado, as 4 grades novas com `RecordSource`+`ControlSource`+`ColumnCount` ligados, os 4 m├®todos de lookup PUBLIC, `AEVENTS` confirma 2 bindings por coluna (KeyPress+DblClick), guardas de campo vazio e de produto-principal pegam (o script n├úo trava, logo o picker modal n├úo abriu), `Release()` sem erro.
+- `Test-CompletudeCodigo` replicado: 0 problemas. `VerificarFuncoesNaoDefinidas` / `VerificarPropriedadesInexistentes` / `VerificarFormBuscaAuxiliar`: nenhum achado neste form.
+
+Um "falha" no primeiro probe (`Alias is not found` ao contar `cursor_4c_Requisicao`) era artefato do instrumento: o form ├® `DataSession = 2`. Confirmei entrando na sess├úo do form ÔÇö os 5 cursores existem e a linha em branco inicial do legado (`Append Blank`) est├í l├í.
+
+Ponto em aberto para a Fase 7: `AlternarPagina(6)` deixa `ActivePage=1` porque as Pages 3-6 nascem `Enabled = .F.` (fiel ao SCX). Os handlers de navega├º├úo precisam habilitar a p├ígina antes de ativ├í-la, como o legado faz.

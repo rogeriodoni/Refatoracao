@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í conclu├¡da. O desfecho n├úo foi o que o prompt pedia, e isso ├® deliberado.
+
+## O que eu encontrei
+
+O form **j├í estava correto**. N├úo havia trabalho de Fase 7 pendente:
+
+| Bot├úo no legado (membro de CommandGroup) | Handler no migrado |
+|---|---|
+| `btnReport.Command1` = `btnImprimir` | `BtnImprimirClick` |
+| `btnReport.Command2` = `btnSair` | `BtnEncerrarReportClick` |
+| `btnReport.Command3` = `btnVisualizar` | `BtnVisualizarClick` |
+| `btnReport`(a├º├úo)`.Command1` = `Processar` | `BtnProcessarClick` |
+| `btnReport`(a├º├úo)`.Command2` = `Sair` | `BtnEncerrarClick` |
+
+5 bot├Áes, 5 handlers, todos reais (c├│digo legado transcrito em coment├írio) e wired por `BINDEVENT` no `Buttons(N)` certo. `COMPILE` limpo ap├│s apagar o `.fxp` velho (12.586 ÔåÆ 18.743 bytes ÔÇö o `.fxp` era de outra vers├úo) e `Test-CompletudeCodigo` OK em Form e BO.
+
+**N├úo adicionei `BtnIncluirClick`/`BtnAlterarClick`/`BtnExcluirClick`.** O SIGPRICT ├® "Integra├º├úo Cont├íbil": `Class: form` puro, zero `frmcadastro`/`Grupo_Op`/`pcEscolha`, nenhum bot├úo CRUD. Cri├í-los seria inventar bot├úo (viola o PILAR 1) ou gerar m├®todo vazio (proibido pela regra de completude) ÔÇö as duas coisas que esta pr├│pria fase valida.
+
+## O defeito era o gate
+
+Ele marcava o form como CRUD por causa de **um** nome: `btnVisualizar`. Mas esse ├® o `Command3` do grupo `btnReport` ÔÇö `Picture = relatorio_video_26.jpg`, `Click = Report Form SIGPRICT Preview`, irm├úos `btnImprimir`/`btnSair`. ├ë o **Video da toolbar do `frmrelatorio`**, n├úo o Visualizar de um registro.
+
+Antes de tocar em qualquer coisa fiz a checagem obrigat├│ria de gate editado mid-run: `.ps1` com `LastWriteTime` 12:22 contra o orquestrador desta task iniciado ~13:40 ÔÇö o gate **de disco** reprovava de verdade, ent├úo era caso de consertar.
+
+O conserto ├® uma fun├º├úo nova (`Test-VerbosCrudSaoTodosDeRelatorio`) que dispensa a evid├¬ncia de nome s├│ quando **todo** match tem `Click` com `REPORT FORM`, fail-closed em tr├¬s camadas (dump vazio, verbo sem `Click` no dump, e a evid├¬ncia estrutural fazendo short-circuit antes).
+
+Medido nos 623 dumps de `tasks\` antes de aplicar:
+
+- evid├¬ncia de nome muda em **5 dumps = 2 forms distintos**: `SigPrIct` e `SigPrItb`
+- em ambos, **todo** match ├® `[REPORT]`
+- **0 regress├Áes** (conferidos um a um: SIGCDCOR, sigcdcli, SigCdPro, SIGCDCAR, SigCdMoe, SIGCDSET, SigCdTam, SigPrCtr, SIGPRETQ, SIGMVCTH, SIGPRGST, SIGCDGPD, SigPrChr, SigCdGrp, sigprtam)
+
+Esses 2 forms s├úo exatamente os que a mem├│ria `feedback_gate_fase7_excluir_sozinho_nao_prova_crud` registrou como *narrowing* deliberado pendente. A variante que ela rejeitou ("exigir ÔëÑ2 verbos") mexia em 17 forms; esta ├® mais estreita ÔÇö olha o que o bot├úo **faz**, n├úo quantos irm├úos tem.
+
+Gate rodado standalone em processo novo: `validado = True` ("legado sem botao CRUD algum - validado pelos 5 handler(s)"), e `FormCor` continua passando pelos 4 nomes **sem** entrar no ramo de dispensa.
+
+## Dois pontos para voc├¬ decidir
+
+1. **Esta execu├º├úo ainda vai reprovar.** O orquestrador em mem├│ria tem o gate velho (`feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma`) ÔÇö o conserto s├│ vale da pr├│xima task em diante. O entreg├ível est├í validado por fora; n├úo h├í nada a corrigir no form.
+
+2. **A Fase 8 vai morder os mesmos 2 forms.** Ela mant├®m `$padroesCrudLegadoF8` com a lista crua ÔÇö sem fronteira final, sem olhar o dono, sem separar o verbo e agora sem olhar o `Click`; para o pr├│prio SIGPRICT ela casa `btnVisualizar` e classifica como CRUD. N├úo apliquei l├í porque ainda n├úo h├í reprova├º├úo medida guiando o *blast radius*, e as mem├│rias irm├ús s├úo expl├¡citas em n├úo alargar sem caso ÔÇö mas ├® a terceira mem├│ria consecutiva a apontar isso, e agora s├úo dois forms na fila. Se quiser, aplico o mesmo conserto na Fase 8 preventivamente, com a medi├º├úo completa antes.
+
+Alterei s├│ `automation/OrquestradorMigracao.ps1` (2 hunks: +70 do helper, +11/ÔêÆ1 no call site; BOM e CRLF preservados, 0 linhas removidas no splice) e gravei a li├º├úo em mem├│ria com o ├¡ndice atualizado. O form n├úo foi tocado.

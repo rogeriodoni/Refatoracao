@@ -1,0 +1,11 @@
+0 SETUP OK
+1 FORM INSTANCIADO - BaseClass=Form Caption=[Integração Contábil] DataSession=2 DataSessionId=2 (script=1)
+2 PEMSTATUS ExibirDiferencas          = .T.
+2 PEMSTATUS LiberarCursoresDiferencas = .T.
+2 CHAMADA EXTERNA ExibirDiferencas() -> .F. (esperado .F. - sem diferenca)
+3 alias de contrato montados - movaux=2 dif2=1
+3 FormSigReDif INSTANCIADO - Caption=[Diferenças Encontradas] DataSessionId=2
+3 crGrid USED=.T. RECCOUNT=2 (esperado 2 - as duas linhas da transacao desbalanceada)
+4 com this_lPossuiDiferenca=.T. em modo teste -> .F. (esperado .F.: MsgConfirma recusa, tela filha NAO abre)
+4 alias preservados (recusa nao mexe em nada): movaux=.T. dif2=.T. crGrid=.T. (esperado .T. .T. .T.)
+5 Form liberado - FIM

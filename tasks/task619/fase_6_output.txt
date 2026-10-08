@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Each method appears exactly once (7 total matches across 7 distinct patterns) ÔÇö no duplicates. The file is complete and structurally sound.
+
+## Summary
+
+Completed Fase 6/8 for `FormSigPrGmi.prg`: added the 3 remaining criteria rows from the legacy SIGPRGMI.SCX, placed directly on the flat form layout (no PageFrame offset needed):
+
+- **Linha de Produ├º├úo** (`txt_4c_Linha`/`txt_4c_DLinha`) ÔÇö full lookup implementation: `LinhaKeyPress`/`DLinhaKeyPress` (F4 opens picker, Enter/Tab validate), `ValidarLinha`/`ValidarDLinha` (exact-match SQL against `SigCdLin.Linhas`/`Descs`, transcribing the legacy `Valid` SEEK logic), and `AbrirLookupLinha` using the project's canonical `AbrirLookupCanonico` helper (replacing the legacy `fwBuscaSel`).
+- **Somente Negativos** (`txt_4c_Negativo`) ÔÇö transcribed faithfully from the dump (`Format="K"`, no InputMask ÔÇö the dump does **not** declare `Format="M"`, so I corrected the Fase-5 roadmap comment that had wrongly assumed the multiple-choice pattern applied here). Validation replicates the legacy `Return Inlist(This.Value,"S","N")` via a `NegativoKeyPress` handler with `NODEFAULT`.
+- **Data de Gera├º├úo** (`txt_4c_Datai`) ÔÇö added following the project's canonical `fwget` date-field pattern (seen in `FormSigPrFem`).
+
+Also extended `AjustarOrdemTabulacao()` with TabIndex 8ÔÇô11 and updated the in-file roadmap comments (Fase 7 no longer needs to handle the Linha lookup, since it's done).
+
+Note: the field defaulting to `Date()-7` (per the legacy `Init`) is deferred to Fase 8 (BOParaForm), consistent with the existing roadmap.

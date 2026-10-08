@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+**Causa raiz**: o erro n├úo estava no form nem no BO ÔÇö `FormSigPrIbb.prg` e `SigPrIbbBO.prg` j├í estavam corretos. As 5 "diferen├ºas visuais" eram todas falsos positivos do **gate** (`ComparadorUI.prg`):
+
+| # | Objeto | Propriedade | Diagn├│stico |
+|---|---|---|---|
+| 1 | `cntSombra` | Width 1008ÔåÆ1000 | regra #11 do CLAUDE.md (`Width = THIS.Width`) ÔÇö j├í tinha exce├º├úo no gate |
+| 2-3 | `lblSombra`/`lblTitulo` | Caption "Cadastro de Testes"ÔåÆt├¡tulo real | res├¡duo de template do SCX, sobrescrito em runtime ÔÇö j├í tinha exce├º├úo no gate |
+| 4-5 | `ok`/`btnImprimir` | Themes `.F.`ÔåÆ`.T.` | Pattern #99 (`corretor-patterns.md`): CommandButton standalone com `.Picture` precisa `Themes=.T.` pra n├úo perder o ├¡cone quando `Enabled` alterna ÔÇö **essa exce├º├úo estava faltando no gate** |
+
+As 3 primeiras j├í tinham exce├º├úo em `ValoresDiferentes()` (`ComparadorUI.prg`), mas a de `Themes` nunca tinha sido adicionada, apesar do padr├úo j├í estar documentado e aplicado em v├írias outras migra├º├Áes (mem├│ria `feedback_standalone_commandbutton_themes`: reverter para `.F.` reintroduziria o bug do ├¡cone sumindo).
+
+**Corre├º├úo aplicada**: adicionei a exce├º├úo faltante em `C:\4c\projeto\app\utils\ComparadorUI.prg` (`ValoresDiferentes`), sim├®trica ├ás j├í existentes ÔÇö ignora `Themes` quando a mudan├ºa ├® `.F.` (original) ÔåÆ `.T.` (migrado) e o controle tem `.Picture` preenchida.
+
+**Verifica├º├úo**: reexecutei `ValidarUIFidelity.prg` via VFP9 ÔÇö novo relat├│rio (`UIFidelity_FormSigPrIbb_20261008032118.html`) mostra **0 erros, 0 diferen├ºas, 65 avisos** (avisos n├úo-bloqueantes, de propriedades de Grid Column/Header/Text1 que a classe nativa VFP9 n├úo tem ÔÇö categoria conhecida e dentro do limite).
+
+Nenhuma linha de `FormSigPrIbb.prg` ou `SigPrIbbBO.prg` foi alterada.

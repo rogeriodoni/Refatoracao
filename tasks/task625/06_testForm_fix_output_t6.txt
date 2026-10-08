@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The network check is still running in the background (consistent with this being a route/firewall-level failure, which can take a while to time out). Per the memory, this confirmation is optional ÔÇö I have high confidence in the diagnosis already.
+
+## Conclusion
+
+**Task625 / FormSigPrIct is blocked by infrastructure, not code.** The runtime error (c├│digo 1526, DBNETLIB "SQL Server inexistente ou acesso negado") happens during the pipeline's pre-flight SQL connection check, before `CREATEOBJECT("FormSigPrIct")` or the BO are ever reached. No `.prg` edit can fix a network route.
+
+**Recommendation:**
+- Mark task625 as blocked/paused, not as a code-fix failure.
+- Re-running `runtime_fix` against this same form will just reproduce the identical error (6 attempts already spent on this signature).
+- Whoever has access to the pipeline machine's network config needs to open a route to `192.168.200.0/24` (or confirm DNS/firewall to `192.168.200.10:1433`) before this test stage can succeed.
+- I have not modified `FormSigPrIct.prg` or `SigPrIctBO.prg` ÔÇö they weren't the cause, and editing them blind would risk introducing a regression into otherwise-correct Fase 7/8 code.
+
+I'll let you know if the `Test-NetConnection` background check (still pending) turns up anything different from the historical pattern, but I don't expect it to change this recommendation.

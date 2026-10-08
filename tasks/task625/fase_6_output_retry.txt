@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is done and verified.
+
+## What was failing
+
+The previous attempt delivered the Data Final line correctly, but the Phase 6 gate still rejected it. Running the orchestrator's `case 6` block verbatim in an isolated harness (not dot-sourcing it ÔÇö that would fire a migration) pinpointed it: `SIGPRICT` matches the **CAPTURA** branch (`OPERACIONAL`, no PageFrame, no grid, no `ControlSource`, no lookup, 2 TextBox), and that branch's `$temSuperficieCapturaF6` requires `PROCEDURE Validar\w+`. Every other flag was already `True`; that one was the only `False`.
+
+## Why the gate was right, not a false positive
+
+The previous attempt deferred the validation to Phase 7/8 because in the legacy it sits inside `btnReport.Click`. But the rule *governs the two fields this phase delivers* ÔÇö `Get_DataI`/`Get_DataF` are the only digitable controls in the SCX, and the dump has no `Valid`, `When` or `LostFocus` on either, so the button's `Click` is the only place that rule exists. Deferring it ships two date boxes whose rule lives nowhere.
+
+## What I added
+
+`PROCEDURE ValidarPeriodo()` ÔÇö a literal transcription of the three guards repeated identically in both `btnReport.Click` handlers (empty Data Inicial ÔåÆ empty Data Final ÔåÆ Final < Inicial). The rule itself was already in `SigPrIctBO.ValidarPeriodo` from Phase 2 with the same order and the same three messages, so the form method does only what the BO can't: `FormParaBO()` *before* validating (the legacy reads `ThisForm.Get_DataI.value` ÔÇö the textbox is the source; without the mirror, clearing a field and pressing Processar would validate the old period), `MsgAviso` untitled (matching `Messagebox(...,0+48,'')`), and `SetFocus` on the legacy's three destinations. PUBLIC, since Phase 7/8 calls it from outside the class.
+
+I deliberately did **not** call it from the `KeyPress` handlers: the legacy doesn't validate field-by-field, so firing it there would show "Data Final Inv├ílida!!!" when tabbing out of Data Inicial ÔÇö a message the legacy never shows at that point. I also corrected four header/inline comments that still described the validation as Phase 7/8 work.
+
+## Verification
+
+- **Gate**: `temLayoutCapturaF6` measured `False` before, `True` after ÔÇö the pre-change file differs only in `temSuperficieCaptura`.
+- **Compile**: `.fxp` deleted first, VFP9 `COMPILE`, `.fxp` recreated with a fresh timestamp, no `.err`.
+- **Runtime** (6 scenarios, headless with `gb_4c_ModoTeste` + `gc_4c_ArquivoErroTeste`): form instantiates; all three guards return `.F.` and write the exact legacy strings to the dialog log ÔÇö `Data Inicial Inv├ílida!!!`, `Data Final Inv├ílida!!!`, `A Data Final N├úo Pode Ser Menor Que a Inicial!!!`; valid periods return `.T.`; the BO properties confirm the screenÔåÆBO mirror; native `txt_4c_DataI.KeyPress(13, 0)` proves the `BINDEVENT` is live.
+- **Completeness**: 0 TODO/FIXME markers, 0 empty procedures, 0 occurrences of "nao implement".
+- Diff against the pre-change file is purely additive (96 lines, nothing removed); CRLF preserved; file is pure ASCII (all accents via `CHR()`).
+
+Two things worth your attention, both outside this phase's scope:
+
+- **`FormSigPrIct` was already migrated before.** `HEAD` holds a different version of this file with a full CRUD surface (`BtnIncluirClick`, `ConfigurarPaginaLista`/`ConfigurarPaginaDados`, `CmdProcessarClick`, `gravar`ÔÇª). Phases 1ÔÇô5 of task625 rewrote it from scratch. The rewrite looks like the *better* reading ÔÇö the legacy dump has no PageFrame and no grid, so the old paginated layout was unfaithful ÔÇö but the old version had the Processar/Imprimir/Visualizar handlers that Phases 7ÔÇô8 now have to re-create. Worth a glance before 7/8 runs.
+- **`HEAD`'s copy of this file is LF-only**, so `git diff` shows the whole file as rewritten. That line-ending loss predates this task; the current file is correctly CRLF.

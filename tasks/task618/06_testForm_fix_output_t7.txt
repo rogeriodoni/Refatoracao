@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+N├úo fiz altera├º├Áes em `FormSigPrGlx.prg`/`SigPrGlxBO.prg`. O erro reportado **n├úo ├® um bug de c├│digo** ÔÇö ├® a falha de conectividade de rede j├í documentada extensivamente na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`):
+
+- O log mostra a falha logo ap├│s `[ETAPA 1B] Conectando ao banco de dados...`, com `Codigo: 1526` / `SQL Server inexistente ou acesso negado` (erro DBNETLIB).
+- Essa falha ocorre no `SQLSTRINGCONNECT` do pr├│prio `TestFormWrapper.prg`, **antes** de qualquer `CREATEOBJECT("FormSigPrGlx")` ou `CREATEOBJECT("SigPrGlxBO")` ÔÇö nosso c├│digo nunca chega a ser instanciado.
+- A m├íquina que executa o pipeline n├úo tem rota para `192.168.200.10:1433` ÔÇö padr├úo recorrente em 100+ tasks desde 2026-08-02, incluindo as 6 tentativas anteriores desta mesma task618/FormSigPrGlx, todas com revis├úo exaustiva do c├│digo sem encontrar defeito nenhum.
+
+Editar o form/BO "as ciegas" para um erro que ocorre antes do nosso c├│digo executar seria o anti-padr├úo que essa mem├│ria existe para evitar ÔÇö arriscaria introduzir regress├Áes num c├│digo j├í revisado seis vezes sem achado.
+
+Registrei esta 7┬¬ ocorr├¬ncia na mem├│ria do projeto. Restam 3 tentativas antes do or├ºamento da task se esgotar por causa deste mesmo problema de rede ÔÇö isso precisa ser resolvido na infraestrutura do pipeline (rota at├® 192.168.200.0/24), n├úo no c├│digo do form.

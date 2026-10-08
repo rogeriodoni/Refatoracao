@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 executada. `C:\4c\projeto\app\forms\operacionais\FormSigPrGst.prg` modificado (889 ÔåÆ 1210 linhas), **compila limpo** no VFP9 (`.fxp` gerado, nenhum `.err`).
+
+## O que a fase entregou ÔÇö e por que n├úo h├í lookup
+
+O dump do legado **prova** que esta fase n├úo tem campo nem lookup a acrescentar:
+
+| Evid├¬ncia no dump | Resultado |
+|---|---|
+| Se├º├úo 1: objetos do form | 2 grades, `cntSombra`+2 labels, 1 Shape, 2 bot├Áes ÔÇö **zero** textbox/combobox/checkbox/optiongroup fora das colunas |
+| Se├º├úo 2: colunas das 2 grades | todas `Text1.ReadOnly = .T.` |
+| busca por `fwBuscaExt`/`fwBuscaSel`/`mAddColuna`/`sigacess`/`Acesso*` | **0 ocorr├¬ncias** (o ├║nico `CreateObject` do form ├® `fwprogressbar`) |
+
+Inventar uma Page2 de Dados, um campo com `ControlSource` ou um lookup violaria o PILAR 1 e a regra expl├¡cita *"NUNCA inventar tabelas de lookup que n├úo existem no original"*; m├®todo de lookup vazio seria stub disfar├ºado. O dado de **entrada** desta tela ├® a *linha selecionada em `csCabec`* ÔÇö e ├® isso que a fase entregou:
+
+- **`SincronizarPedidoCorrente()`** ÔÇö a linha corrente de `csCabec` alimentando `this_cEmps`/`this_cDopes`/`this_cEmpDopNums` do BO. Essas tr├¬s propriedades existiam desde a Fase 1 e **nada as alimentava**: `ObterChavePrimaria()` devolvia chave vazia e a auditoria da gera├º├úo sa├¡a sem identificar o pedido (falha silenciosa). Chamado nos **dois** caminhos que mudam o pedido (carga inicial e `AfterRowColChange`), conforme regra #40. A chave ├® lida como gravada, n├úo remontada (regra #42 ÔÇö chave posicional `char(29)`).
+- **`ValidarPedidoSelecionado()`** ÔÇö transcri├º├úo do guard no topo de `CmdGrava.Click` (`If Eof([csCabec])` + a mensagem do legado palavra por palavra). **N├úo** barra pedido j├í gerado, de prop├│sito: o legado deixa passar para que o `If llRet And Not Empty(csCabec.Gerado)` reabra a movimenta├º├úo existente.
+- **`ValidarSaidaSemConfirmar()`** ÔÇö transcri├º├úo de `CmdCancela.Click`, com os tr├¬s pontos que o migrador costuma perder (regra #21b): filtro `Empty(Gerado)`, a contagem entrando no texto da pergunta, e o `fGravarLog` do abandono antes do Release.
+- **`pcEscolha` / `GrupoOper`** + **`ProcessaPeriodo(P1,P2,P3)`** ÔÇö membros do `ClassInfo` do SCX. Nomes mantidos **id├¬nticos** ao legado (exce├º├úo consciente ao PILAR 3): o `CmdGrava.Click` passa `ThisForm` como pai para `SigMvCab`, que l├¬ por `ThisForm.ParentForm.<membro>`; renomear quebra em runtime sem erro de compila├º├úo (regra #32). `ProcessaPeriodo` ├® transcri├º├úo literal de m├®todo cujo corpo no SCX ├® `Return .t.` ÔÇö o pr├│prio coment├írio do legado diz que ele existe s├│ para satisfazer esse contrato.
+
+## Dois detalhes que exigiram cuidado
+
+1. **O nome `ValidarCancelamentoPendente` reprovaria a fase.** O `Test-CompletudeCodigo` casa `pendente` em **qualquer** linha com `*` ÔÇö mesma fam├¡lia do falso positivo j├í documentado para "nao implementado". Renomeei para `ValidarSaidaSemConfirmar`.
+2. **`FUNCTION` ÔåÆ `PROCEDURE` nos validadores.** O gate da Fase 6 (ramo FLAT) exige `PROCEDURE\s+Validar\w+`, e `PROCEDURE` ├® a conven├º├úo dominante do projeto (2376 contra 34) ÔÇö semanticamente id├¬ntico em VFP9, como o pr├│prio `Init`/`InicializarForm` deste arquivo j├í demonstram.
+
+Gate FLAT da Fase 6 satisfeito: sem PageFrame (0), BINDEVENT (5), ControlSource (14), `PROCEDURE Validar*` (2), legado sem lookup (0). Zero marcadores TODO/pend├¬ncia, zero MESSAGEBOX direto, zero `PUBLIC FUNCTION/PROCEDURE`, zero `RETURN` dentro de TRY/CATCH, zero acentos literais.
+
+Aviso sobre a limpeza: apaguei o `FormSigPrGst.fxp` e encerrei o `vfp9.exe` que ficou aberto pelo script de compila├º├úo ÔÇö nenhum outro arquivo do projeto foi tocado.

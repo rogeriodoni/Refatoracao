@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete, but not by adding the four handlers ÔÇö they cannot exist in this form.
+
+## O que o legado ├®
+
+`sigprico.SCX` tem **s├│** `form` + `dataenvironment` + **24 `Image`**. Zero `commandbutton`, zero `commandgroup`, zero `.Click`, **0 m├®todos com c├│digo**, nenhum `ControlSource`, nenhuma tabela. ├ë uma paleta/cat├ílogo est├ítico de ├¡cones do `vbmp\`.
+
+Gerar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` ali seria inventar bot├úo (PILAR 1) ou escrever stub `MsgAviso` ÔÇö as duas coisas proibidas pelo pr├│prio prompt. O conserto foi no **gate**, como a fam├¡lia de li├º├Áes da Fase 7 j├í prescrevia.
+
+## Mudan├ºas
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö `Test-LegadoSemBotaoAlgum` + carve-out que baixa `$minHandlersF7` para 0. Fail-closed em 4 camadas: 1 bot├úo declarado reprova (o piso de 1 j├í cobre), qualquer `.Click` reprova, `Class` do form diferente de `form` puro reprova (`frmcadastro`/`frmrelatorio` **herdam** a barra sem declarar ÔÇö `SigCdTam` tem `nBotoes=0` e segue exigindo os 4 nomes), agrupador de VCX (`cls*`/`ClassLoc`) reprova.
+
+Medido nos **623 dumps**: libera **13 dumps = 7 forms distintos**, todos OPERACIONAL (`SIGCDFAPF`, `SIGCDFAPP`, `SIGPRALE`, `SigPrGloT`, `sigprico`, `SIGPRIFF`, `SigReGla`) ÔÇö conferidos um a um. Zero regress├úo em `SIGCDCOR`/`sigcdcli`/`SigCdPro`/`SIGCDCAR`/`SigCdMoe`/`SIGCDSET`/`SigCdTam`/`SigPrCtr`/`SIGPRETQ`/`SIGMVCTH`/`SIGPRGST`/`SIGCDGPD`.
+
+**`Formsigprico.prg`** ÔÇö achei e corrigi um defeito real: `THIS.ShowWindow = 2` no `Init`. Medido no VFP9: `ShowWindow` ├® **read-only em runtime** (`PEMSTATUS(...,1) = .T.`, a atribui├º├úo estoura *"Property SHOWWINDOW is read-only"*); s├│ `WindowType` aceita. A linha derrubava o `Init` inteiro, `CREATEOBJECT` devolvia `.F.` e a tela **nunca abria sob o harness**. O caso headless j├í estava resolvido no `Load()`.
+
+## Verificado medindo
+
+`COMPILE` limpo (`.fxp` apagados antes, timestamp conferido); o form **instancia**: 24 Image, 24/24 `Picture` existentes, BO criado, `Caption = "Form1"`. Os 24 `Picture` e os 24 `Top`/`Left` s├úo id├¬nticos ao dump (case-sensitive). Gate da Fase 7 simulado: `VALIDADO = True`. Orquestrador com parse limpo.
+
+## Dois achados fora do escopo ÔÇö decis├úo sua
+
+**1. Mesmo defeito de `ShowWindow` em 8 outros forms, 7 deles no caminho de PRODU├ç├âO.** `Formsigprftp` j├í documenta a medi├º├úo (`automation\medir_showwindow.txt`) e resolveu certo (na `DEFINE CLASS`), mas estes continuam:
+
+| forms | caminho | efeito |
+|---|---|---|
+| `FormICD`, `FormICN`, `FormSIGPRCIC`, `Formsigprcpd`, `Formsigprdft`, `FormSIGPREST`, `FormSigPrGlx` | `IF !(modo teste)` ÔåÆ **PRODU├ç├âO** | estoura a **cada** abertura pelo menu; o harness nunca v├¬, porque o guard pula em teste |
+| `FormHOR`, `FormICO` | modo teste | igual ao que corrigi |
+
+N├úo mexi: s├úo 8 forms alheios ├á task624 e cada um precisa do `ShowWindow` da classe decidido individualmente.
+
+**2. A task re-rodou sobre um form j├í migrado** (`HEAD` tem 725 linhas; a nova tem 193). Conferi que **nada real se perdeu**: as 530 linhas a mais eram PageFrame "Lista"/"Dados", cabe├ºalho, bot├úo "Encerrar", `Caption = "Mapa Visual"` e os 4 `Btn*Click` com `MsgAviso("...n├úo h├í opera├º├úo dispon├¡vel")` ÔÇö tudo inventado (o legado n├úo tem p├ígina, nem bot├úo, e o `Caption` ├® `"Form1"`). Os 24 Image s├úo os mesmos. A vers├úo nova ├® estritamente mais fiel.

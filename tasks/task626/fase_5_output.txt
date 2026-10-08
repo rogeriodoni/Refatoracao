@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5/8 ÔÇö FormSIGPRIFF (task626)
+
+### O que a fase era, neste legado
+O `SIGPRIFF.SCX` tem **4 objetos** (`dataenvironment`, `form1`, `Text1`, `Combo1`) ÔÇö ├® um InputBox modal de 409x50, sem PageFrame, sem Container, sem bot├úo, sem SQL. "Metade dos campos da Page2" aqui ├® **zero**: a Fase 4 j├í entregou os dois controles. N├úo inventei campo/Page/`ConfigurarPaginaDados` ÔÇö fiz a auditoria propriedade-por-propriedade do dump, que ├® o trabalho real que sobra num form FLAT.
+
+### Achado cr├¡tico: o form n├úo abria em modo nenhum
+`ConfigurarControles` tinha `.RowSource = "THIS.this_aOpcoesExibir"`. Medido no VFP9:
+
+```
+RowSource "THIS.<prop>"      -> ERRO: Property THIS_AOPCOESEXIBIR is not found
+RowSource "THISFORM.<prop>"  -> ListCount = 3
+```
+
+`THIS` na string do `RowSource` resolve contra o **pr├│prio ComboBox**. O erro estourava no `Init`, dentro do TRY do `InicializarForm` ÔåÆ `CREATEOBJECT` devolvia `.F.`. Confirmei rodando o probe contra o arquivo da Fase 4: **`FALHOU: CREATEOBJECT devolveu VARTYPE=L` nos 5 modos**. Compilava limpo ÔÇö era o sintoma "clica no menu e nada acontece".
+
+Mais dois, da mesma fam├¡lia, tamb├®m medidos:
+- `RowSourceType = 5` **n├úo reage ao `DIMENSION`**: populando 3 op├º├Áes com o `RowSource` j├í definido, `ListCount` fica em **1** (s├│ a 1┬¬ op├º├úo no dropdown) e vai a 3 s├│ ap├│s `.Requery()`.
+- `DIMENSION` no `DEFINE CLASS` nasce com elemento **l├│gico** ÔÇö o combo exibia o item `.F.`.
+
+Transcri├º├Áes que faltavam do dump: `Form.WindowState = 0` e `Text1.Value = ""` (o dump traz `Value =` vazio; os ramos `"D"`/`"V"` trocam o tipo do `.Value`, ent├úo o caractere precisa ser a base expl├¡cita). O dump **n├úo declara `TabIndex`** em Text1/Combo1 ÔÇö n├úo h├í ordem de tabula├º├úo a transcrever.
+
+### Prova por instancia├º├úo (n├úo por compila├º├úo)
+Os 5 modos do di├ílogo, depois do conserto:
+
+| caso | resultado |
+|---|---|
+| sem par├ómetro | abre, `ControlCount=2`, TextBox vis├¡vel, `.Value` C |
+| `"M"` + 3 op├º├Áes | combo vis├¡vel, `ListCount=3`, itens `[Debito][Credito][Dinheiro]` |
+| caractere, Max/Min trocados pelo chamador | `MaxLength=11` (o maior dos dois, como o `IIF` do legado) |
+| `"D"` | `.Value` tipo **D** |
+| `"V"` | `.Value` tipo **N** + `InputMask=999,999.99` |
+
+Geometria e `WindowType/WindowState` id├¬nticos ao dump em todos. `.fxp` apagado antes de cada rodada; nenhum arquivo de erro do `FormBase` foi gerado.
+
+O gate da Fase 5 passa pelo ramo **CAPTURA** (legado sem lista pelo teste estrito, com campo de entrada, piso de 1 campo = 1 no migrado, `InicializarForm` presente); validador de completude limpo (0 TODO, 0 pend├¬ncia, 0 procedure vazia).
+
+### Precisa da sua decis├úo: task626 ├® re-run de task301
+`tasks/task626/SIGPRIFF.scx` tem md5 **id├¬ntico** a `tasks/task301/SIGPRIFF.scx`, e a task301 est├í `COMPLETED`. O `FormSIGPRIFF.prg` **commitado em HEAD tem 505 linhas / 29 m├®todos** (Fases 3ÔÇô8) ÔÇö a **Fase 3 desta task o sobrescreveu** com um esqueleto de 198 linhas, sem nada no log. ├ë o `Write` destrutivo que a mem├│ria j├í previa, agora concretizado.
+
+N├úo desfiz, porque n├úo ├® perda l├¡quida: boa parte das 505 linhas era andaime fabricado para um InputBox de 2 controles (8 `Btn*Click` de CRUD, `ConfigurarPageFrame`/`PaginaLista`/`PaginaDados`, `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`CarregarLista`) ÔÇö UI que o legado nunca teve. O arquivo atual ├® mais fiel. O que se perdeu de verdade s├úo os handlers de **Enter/ESC** e o `ObterResposta()`, que as Fases 7-8 reconstroem; se preferir recuper├í-los agora, est├úo em `git show HEAD:projeto/app/forms/operacionais/FormSIGPRIFF.prg`. N├úo toquei no `task_state.json` (bookkeeping do orquestrador).
+
+### Arquivos
+- `projeto/app/forms/operacionais/FormSIGPRIFF.prg` ÔÇö fase entregue (CRLF e ASCII puro preservados: 243 CR / 243 LF)
+- `automation/medir_rowsource_array_property.prg`, `automation/medir_rowsource_array_requery.prg` ÔÇö as medi├º├Áes
+- `tasks/task626/probe_FormSIGPRIFF.prg` + `_resultado.txt` ÔÇö o probe dos 5 modos
+- Mem├│ria: nova `feedback_rowsource_array_property_thisform` (+ ├¡ndice) e `feedback_task_rerun_sobre_form_ja_migrado` atualizada com esta reincid├¬ncia

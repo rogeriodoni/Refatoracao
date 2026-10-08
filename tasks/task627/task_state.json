@@ -1,0 +1,267 @@
+﻿{
+    "taskId":  "task627",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-10-07T21:52:31",
+    "atualizadoEm":  "2026-10-08T02:51:23",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-10-07T21:52:35",
+                                            "fim":  "2026-10-07T21:52:35",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task627\\sigprila.sct",
+                                            "baseName":  "sigprila",
+                                            "scxFile":  "C:\\4c\\tasks\\task627\\sigprila.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-10-07T21:52:36",
+                                          "fim":  "2026-10-07T21:52:44",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigprila",
+                                          "txtFile":  "C:\\4c\\tasks\\task627\\sigprila_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-07T21:52:45",
+                                              "fim":  "2026-10-07T21:52:51",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task627\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-07T21:53:08",
+                                              "fim":  "2026-10-07T21:53:20",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task627\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task627\\meta_prompt.md",
+                                              "boClass":  "sigprilaBO",
+                                              "formClass":  "Formsigprila",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task627\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-07T21:53:20",
+                                              "fim":  "2026-10-07T21:53:27",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task627\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-10-07T21:53:28",
+                                               "fim":  "2026-10-07T21:53:34",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task627\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigprila_esqueleto.prg",
+                                                                "sigprilaBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-07T21:53:37",
+                                       "fim":  "2026-10-08T01:08:25",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprilaBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  107.25,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprila.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  3662
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-10-08T01:08:26",
+                                                  "fim":  "2026-10-08T01:09:14",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprilaBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprila.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-10-08T01:09:17",
+                                                 "fim":  "2026-10-08T01:09:20",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-08T01:19:45",
+                                       "fim":  "2026-10-08T02:36:01",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "autoSkipped":  true,
+                                       "erro":  "Teste de formulario falhou com exit code 1.",
+                                       "tentativasUsadas":  10,
+                                       "timedOut":  false
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-10-08T02:36:02",
+                                               "fim":  "2026-10-08T02:38:49",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task627\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-10-08T02:38:53",
+                                        "fim":  "2026-10-08T02:41:34",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 0 erros (limite 4), 3 diferencas visuais (limite 0), 71 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigprila_20261008023856.html",
+                                        "diferencas":  3,
+                                        "erros":  0,
+                                        "totalProblemas":  74,
+                                        "avisos":  71,
+                                        "recoveredAt":  "2026-10-08T02:51:23",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-10-07T21:52:52",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-10-07T21:52:59",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task627\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-10-07T21:53:00",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-07T21:53:07"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-10-08T01:09:15",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-10-08T01:09:16",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigprila_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprila.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task627\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-10-08T01:09:21",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-10-08T01:09:21",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-10-08T01:09:22",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-10-08T01:16:34",
+                                          "passes":  1,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_SOMBRA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_MvCab\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_MvItn\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_MvIts\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_MvHst\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_TmpCot\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_TmpTotal\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_PrNaoCad\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_PrSemCT\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [METODO-INEXISTENTE] Metodo \u0027THIS.SelecionarTipo()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterMetodoRotina()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.CriaPlanilha()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ValidaCols()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ExecutarRotinaImportacao()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027OptTipo\u0027 (parent: SIGPRILA.cntplanilha): Top original=80 vs migrado \u0027obj_4c_OptTipo\u0027 Top=5 (diff=75px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptTipo\u0027 (parent: SIGPRILA.cntplanilha): Left original=335 vs migrado \u0027obj_4c_OptTipo\u0027 Left=5 (diff=330px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptPreco\u0027 (parent: SIGPRILA.cntplanilha): Top original=140 vs migrado \u0027obj_4c_OptPreco\u0027 Top=5 (diff=135px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptPreco\u0027 (parent: SIGPRILA.cntplanilha): Left original=335 vs migrado \u0027obj_4c_OptPreco\u0027 Left=5 (diff=330px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  18
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-10-08T01:16:35",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-10-08T01:19:44",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprilaBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprila.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-10-08T02:38:50",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-08T02:38:52",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  18,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task627\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

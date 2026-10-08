@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 est├í completa. Os quatro handlers **n├úo** foram adicionados ÔÇö n├úo existem bot├Áes neste legado, e eu medi isso em vez de aceitar a afirma├º├úo da execu├º├úo anterior.
+
+## O que o legado ├®
+
+`sigprico.SCX`: `form` + `dataenvironment` + **24 `Image`** do `vbmp\`. Medido no dump:
+
+| evid├¬ncia | valor |
+|---|---|
+| `BaseClass: commandbutton` | **0** |
+| `BaseClass: commandgroup` | **0** |
+| `.Click` | **0** |
+| m├®todos com c├│digo | **0** (o pr├│prio dump declara) |
+| `frmcadastro` / `Grupo_Op` / `pcEscolha` | **0** |
+| `Class` do form | `form` puro |
+
+├ë um cat├ílogo est├ítico de ├¡cones. Gerar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` seria inventar bot├úo (PILAR 1) ou escrever stub `MsgAviso` ÔÇö as duas coisas proibidas pelo pr├│prio prompt.
+
+## O que verifiquei (medindo, n├úo lendo)
+
+- **Compila limpo** ÔÇö `.fxp` apagados antes, nenhum `.err` gerado. *(A armadilha do `.fxp` velho reapareceu ao vivo: o primeiro `COMPILE` rodou o `.fxp` antigo do pr├│prio script de check e devolveu resultado obsoleto.)*
+- **Instancia de verdade** (`automation\ProbeIcoF7.prg`): `CREATEOBJECT` ÔåÆ `O`, BO criado, `Caption = "Form1"`, `ControlCount = 24`, **24/24 `Picture` existentes em `vbmp\`**. Nenhum erro de runtime capturado.
+- **Fidelidade**: os 24 nomes de arquivo batem com o dump na mesma ordem, case-sensitive; os 24 `Top`/`Left`/`Width=18`/`Height=17`/`Stretch=2` batem com o `layout.json`. A lacuna Image12/13/14 ├® do legado e foi reproduzida.
+- **Auditorias** `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes`: zero achados para `sigprico`.
+- **Menu**: `BAR 67 OF popMovimentos` + `AbrirFormsigprico` existem, com `Show()` fora do `TRY` (regra #29).
+- **Carve-out do gate** (escrito pela execu├º├úo anterior): re-medi independentemente nos **623 dumps** ÔÇö libera 13 dumps = 7 forms distintos, todos OPERACIONAL, e **zero regress├úo** nos 14 CRUD de controle, inclusive o adversarial `SigCdTam` (nBotoes=0 mas `frmcadastro` + 6 `.Click`). Gate simulado: `VALIDADO = True`.
+
+## O que eu mudei
+
+**`automation/OrquestradorMigracao.ps1`** ÔÇö estendi o **guard de NO-OP** ├á Fase 7. O carve-out anterior consertou s├│ o *gate*; o guard (que roda **antes** do `switch`) continuava for├ºando uma re-execu├º├úo opus inteira em toda fase sem trabalho. Agora `$NumeroFase -in @(5, 6, 7)` e, na 7, delega a `Test-LegadoSemBotaoAlgum`, que j├í ├® fail-closed por si. Conferido: parse do orquestrador limpo, BOM e CRLF intactos (15220/15220 linhas), e os 5 casos de fronteira d├úo o esperado.
+
+Isso **n├úo libera fase nenhuma** ÔÇö o gate de conte├║do continua tendo de passar; s├│ deixa de queimar o retry.
+
+Mais `automation/CompileCheckSigPrIcoF7.prg` e `automation/ProbeIcoF7.prg` (compile + instancia├º├úo), na conven├º├úo do diret├│rio.
+
+## Dois pontos que ficam para voc├¬ decidir
+
+**1. `ShowWindow` ├® read-only em runtime e 7 forms de PRODU├ç├âO fazem a atribui├º├úo.** Confirmei independentemente contra `automation\medir_showwindow.txt` (`Property SHOWWINDOW is read-only.`) e inspecionei cada site:
+
+| forms | ramo | efeito |
+|---|---|---|
+| `FormICD`, `FormICN`, `FormSIGPRCIC`, `Formsigprcpd`, `Formsigprdft`, `FormSIGPREST`, `FormSigPrGlx` | `IF !(modo teste)` ÔåÆ **PRODU├ç├âO** | estoura a **cada** abertura pelo menu; o harness nunca v├¬, porque o guard pula em teste |
+| `FormHOR`, `FormICO` | modo teste | derruba o `Init` sob o harness |
+
+S├úo 9 forms alheios ├á task624 e cada um precisa do `ShowWindow` da `DEFINE CLASS` decidido individualmente (o padr├úo certo est├í no `Formsigprftp`) ÔÇö n├úo mexi.
+
+**2. A task re-rodou sobre um form j├í migrado.** `HEAD` tem 725 linhas, a vers├úo atual 193. Conferi que nada real se perdeu: as 530 linhas a mais eram PageFrame Lista/Dados, cabe├ºalho, bot├úo "Encerrar", `Caption = "Mapa Visual"` e os 4 `Btn*Click` com `MsgAviso` ÔÇö tudo inventado (o legado n├úo tem p├ígina, n├úo tem bot├úo, e o `Caption` ├® `"Form1"`). Os 24 `Image` s├úo os mesmos. A vers├úo nova ├® estritamente mais fiel, mas vale saber que a re-execu├º├úo aconteceu.

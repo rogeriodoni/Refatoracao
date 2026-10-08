@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is complete and structurally valid. 
+
+## Summary
+
+I completed Phase 2/8 for `SigPrIbbBO.prg` by adding the domain/CRUD layer on top of the Phase 1 properties:
+
+**Properties added:** `this_nTotalParcelas`, `this_nImpNotasAtual`, `this_oConfigBoleto`.
+
+**Methods added** (faithfully transcribed from `SigPrIbb_form_codigo_fonte.txt`, validated column-by-column against `docs/schema.sql`):
+- `ExecutarSQL()` ÔÇö alias-preserving SQLEXEC helper
+- `CarregarParcelas()` ÔÇö equivalent to legacy `SelecionaDados()`, builds `cursor_4c_Dados` with the 5-way join + per-row SigCnFBl lookup/fallback
+- `CarregarDoCursor()` ÔÇö equivalent to `AfterRowColChange`
+- `CarregarDadosDocumento()` ÔÇö equivalent to steps 1-5 of `imprimir()` (SigMvCab/SigMvNfi/SigCdOpe/SigCdCli/SigOpFp resolution, with the Cobran├ºaÔåÆNormal address fallback)
+- `AtualizarConfiguracaoBoleto()` ÔÇö the one real write (`UPDATE SigCnFBl`), calling `RegistrarAuditoria("UPDATE")`
+- `CarregarConfiguracaoLayout()` / `VerificarImpressoraDisponivel()` ÔÇö reuse the already-migrated `SIGPRIBLBO` (same `SigCnFBl` table) instead of duplicating ~30 layout-position properties
+- `CarregarDadosImpressao()`, `MontarLayoutImpressao()`, `InserirLinhaImpressao()`, `ObterTamanhoFolha()`, `ExecutarImpressaoMatricial()`, `ImprimirBoleto()` ÔÇö the rest of the print pipeline
+- `ObterChavePrimaria()` (PROTECTED, matching base)
+
+Following the established precedent in sibling BOs (`SigPrHprBO`), `Inserir()`/`Atualizar()`/`ExecutarExclusao()` from `BusinessBase` are intentionally **not** overridden ÔÇö this form has no generic entity CRUD; its one real write has its own documented semantic method instead. I verified structural balance (IF/ENDIF, TRY/ENDTRY, PROCEDURE/ENDPROC, FUNCTION/ENDFUNC all matched) and confirmed no `RETURN` appears inside any `TRY` block.

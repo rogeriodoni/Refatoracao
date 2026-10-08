@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O teste de conectividade j├í est├í travando (consistente com o hist├│rico ÔÇö nunca completa dentro do timeout por falta de rota). Isso s├│ refor├ºa o diagn├│stico.
+
+**Conclus├úo: este N├âO ├® um bug de c├│digo.**
+
+O log mostra a falha ocorrendo na etapa de pr├®-conex├úo SQL (`[ETAPA 1B] Conectando ao banco de dados...`, erro 1526 DBNETLIB), **antes** de qualquer `CREATEOBJECT("Formsigprico")` ou `CREATEOBJECT("sigpricoBO")` ser logado. Isso ├® confirmado pelo pr├│prio c├│digo revisado:
+
+- `Formsigprico.prg` e `sigpricoBO.prg` n├úo fazem **nenhum** SQLEXEC ÔÇö o BO explicitamente n├úo tem tabela (`this_cTabela = ""`), ├® s├│ um cat├ílogo est├ítico de ├¡cones.
+- A conex├úo que falha ├® o pr├®-flight gen├®rico do `TestFormWrapper.prg`, que tenta abrir `gnConnHandle` contra `192.168.200.10` (DB_MBAHIA) independentemente do form sob teste.
+
+Isso ├® exatamente a assinatura de um problema de infraestrutura j├í documentado: a m├íquina que executa o pipeline (etapa `06_testForm`) n├úo tem rota de rede para `192.168.200.0/24`, onde est├í o SQL Server. Recorrente desde 2026-08-02, confirmado em 100+ tasks, em formul├írios completamente distintos ÔÇö inclusive em casos onde o form/BO foi revisado linha a linha sem achado algum relacionado.
+
+**N├úo vou editar `Formsigprico.prg`/`sigpricoBO.prg` "para satisfazer a tarefa"** ÔÇö isso queimaria mais tentativas do orquestrador sem chance de corrigir o sintoma real (a rede), e arrisca introduzir regress├úo em c├│digo que j├í est├í correto.
+
+Recomenda├º├úo: marcar a task624 como bloqueada/pausada por infraestrutura (sem rota de rede para o SQL Server) at├® algu├®m com acesso ├á infra liberar a rota ÔÇö reexecutar o `runtime_fix` sobre este mesmo form s├│ vai repetir o mesmo erro.
