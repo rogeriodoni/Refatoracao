@@ -47,7 +47,7 @@ DEFINE CLASS CegBO AS BusinessBase
 			loc_cSQL = "SELECT a.cidchaves, a.priors, a.grupos, a.contas, a.emps," + ;
 			           " ISNULL(b.Razas, '') AS Razas" + ;
 			           " FROM SIGCDCEG a" + ;
-			           " LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.cemps)"
+			           " LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.emps)"
 
 			IF !EMPTY(par_cFiltro)
 				loc_cSQL = loc_cSQL + " WHERE RTRIM(a.grupos) LIKE " + ;
@@ -81,7 +81,7 @@ DEFINE CLASS CegBO AS BusinessBase
 			           " a.emps, a.tpcads," + ;
 			           " ISNULL(b.Razas, '') AS Razas" + ;
 			           " FROM SIGCDCEG a" + ;
-			           " LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.cemps)" + ;
+			           " LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.emps)" + ;
 			           " WHERE RTRIM(a.cidchaves) = " + EscaparSQL(ALLTRIM(par_cCidchaves))
 
 			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")

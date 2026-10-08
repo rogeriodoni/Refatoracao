@@ -13849,3 +13849,77 @@ intactos - ja estao cobertos pelo wrapper do alvo.
 Numeros da 2a leva: 182 BINDEVENT trocados, 182 wrappers de alvo, 105 irmaos com save/restore inline,
 8 irmaos com RETURN antecipado convertidos para `<Nome>Exec()` + wrapper, 58 properties. Os 71 forms
 das duas levas compilam limpo.
+
+## 242. `emps` x `cemps`: o prefixo da tabela NAO decide - e detector que existe nao limpa codigo velho (Erro196 2026-10-08)
+
+```
+Erro ao buscar prioridades:
+Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna 'cemps' invalido.
+```
+
+Erro do **SQL Server**, em RUNTIME. Compila limpo, nenhum gate de sintaxe pega, e a tela simplesmente
+nao abre.
+
+```foxpro
+* CegBO.Buscar, como saiu da migracao
+loc_cSQL = "SELECT a.cidchaves, a.priors, a.grupos, a.contas, a.emps," + ;   && <- emps CERTO
+           " ISNULL(b.Razas, '') AS Razas" + ;
+           " FROM SIGCDCEG a" + ;
+           " LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.cemps)"        && <- a.cemps NAO EXISTE
+```
+
+**Sinal classico**: dentro da MESMA string, o `SELECT` ja lista `a.emps` e so o `ON` do JOIN tem
+`a.cemps`. O migrador espelha o nome do lado mestre para o outro lado. Quando os dois divergem na
+mesma query, confiar no `SELECT`.
+
+### A convencao de prefixo eh falsa nos DOIS sentidos
+
+A secao 163 (Erro108) descreveu "MOVIMENTO `SigMv*` usa `emps`, MESTRE `SigCd*` usa `cemps`, com as
+excecoes `SigFiChc`/`SigFiTef`". Medido no schema canonico (682 tabelas), **a regra nao se sustenta**:
+
+| Tabela | prefixo sugere | coluna REAL |
+|---|---|---|
+| `SIGCDCEG` | Cd -> cemps | **emps** |
+| `SIGCDACE` | Cd -> cemps | **emps** |
+| `SIGCDCMI` | Cd -> cemps | **emps** |
+| `SIGCMCAB` | Cm -> ? | **emps** |
+| `SigCdEmp` | Cd -> cemps | cemps |
+| `SigFiTef` | Fi -> emps | cemps |
+
+Nao existe heuristica. `docs/schema.sql` (UTF-16, `Get-Content -Raw` - regra #14) eh a unica fonte.
+
+### O custo de auditar por prefixo
+
+O sweep do Erro108 (2026-08-12) liberou `CegBO`/`COMBO`/`ICMBO` como seguros com a justificativa
+*"`a` = Sig\*Cd\* master"* - a propria deducao por prefixo que aquela licao proibia. Resultado: **8
+sites em 5 BOs** ficaram quebrados por ~2 meses, ate o usuario abrir a tela.
+
+| BO | linha | tabela do alias | conserto |
+|---|---|---|---|
+| `CegBO` | 50, 84 | SIGCDCEG | `a.cemps` -> `a.emps` |
+| `acuBO` | 426 | SIGCDACE | `e.cemps` -> `e.emps` |
+| `COMBO` | 82, 122 | SIGCMCAB | `a.cemps` -> `a.emps` |
+| `ICMBO` | 65, 102 | SIGCDCMI | `a.cemps` -> `a.emps` |
+| `sigtosenBO` | 217 | SIGCDACE | `a.Cemps` -> `a.Emps` |
+
+### A licao META: detector que existe no pipeline NAO limpa o que ja foi gerado
+
+O `ValidadorSQLSchema.ps1` (etapa 05f) **ja pegava** este defeito - rodado a mao contra o `CegBO` do
+HEAD ele acusa as duas linhas com a mensagem exata. Mas ele so roda sobre o form **que esta sendo
+migrado**: nada reexamina os 457 BOs ja gerados. O proprio `propagate-lesson` documenta esse modo de
+falha no passo 5.6 (o `Corrigir-ElseIf` adicionado depois do `FormDepartamento`), e foi o que
+aconteceu de novo.
+
+**Ao adicionar ou corrigir um check do pipeline, rodar a varredura retroativa** - ou aceitar
+explicitamente que o acervo antigo segue sujo, e registrar isso.
+
+### Ferramentas
+
+`automation\VerificarColunaEmpresaSQL.ps1` - varre os 977 `.prg`, resolve cada alias pelo `FROM`/`JOIN`
+do proprio SQL (juntando as continuacoes de linha `;`) e confere a coluna na lista REAL do schema;
+aborta se o schema vier com menos de 100 tabelas (encoding errado - regra #14). Nao deduz nada por
+prefixo. Dos 68 aliases que ele nao resolve, so 1 usa `cemps` e eh `SELECT` VFP local sobre cursor de
+`SigCdEmp` (correto).
+
+**Provado contra o banco real**: a query antiga reproduz a mensagem exata do print; a corrigida roda.
+`SIGCDCEG` tem **0 registros** - a tela abre com a lista vazia, e isso eh dado, nao defeito.

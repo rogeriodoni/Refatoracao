@@ -10658,74 +10658,100 @@ function Corrigir-CursorColunaInexistente {
 # 'cemps' invalido"). Sweep confirmou 4 BOs afetados (sigrecogBO, sigrecsmBO,
 # SIGREDIRBO, CecBO). Complementa Pattern #160 (invented C prefix em cursor.col).
 #==============================================================================
+# Cache (por sessao) de quais tabelas tem 'emps' e/ou 'cemps', lido do schema
+# canonico. UTF-16: -Raw respeita o BOM (regra #14). Devolve $null quando o
+# schema nao esta disponivel ou veio truncado - nesse caso o pattern NAO opina,
+# em vez de inventar defeito.
+function Get-ColunasEmpresaSchema {
+    if ($null -ne $script:MapaColEmpresa) { return $script:MapaColEmpresa }
+
+    $schema = Join-Path (Get-RaizRepo4c) "docs\schema.sql"
+    if (-not (Test-Path $schema)) { $script:MapaColEmpresa = @{}; return $script:MapaColEmpresa }
+
+    $txt = Get-Content $schema -Raw
+    $mapa = @{}
+    foreach ($m in [regex]::Matches($txt, '(?is)CREATE TABLE \[dbo\]\.\[([A-Za-z0-9_]+)\]\((.*?)\r?\n\)')) {
+        $corpo = $m.Groups[2].Value
+        $mapa[$m.Groups[1].Value.ToLower()] = @{
+            emps  = ($corpo -match '(?i)\[emps\]\s+\[')
+            cemps = ($corpo -match '(?i)\[cemps\]\s+\[')
+        }
+    }
+    # schema curto demais = encoding errado (regra #14): nao opinar
+    if ($mapa.Count -lt 100) { $mapa = @{} }
+    $script:MapaColEmpresa = $mapa
+    return $script:MapaColEmpresa
+}
+
 function Corrigir-SigMvCempsJoinInvalido {
     param([string[]]$Linhas)
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
 
-    # Tabelas MOVIMENTO cuja coluna de empresa eh "emps" (sem C)
-    $tabelasMovimento = @(
-        'SigMvCab', 'SigMvItn', 'SigMvNfi', 'SigMvPar', 'SigMvCcr',
-        'SigMvCat', 'SigMvSlc', 'SigMvNat', 'SigMvPer', 'SigMvCbt',
-        'SigMvNiv', 'SigMvVfd', 'SigMvTvd', 'SigMvBai', 'SigMvBap',
-        'SigFiChc'  # Irregularidade: master mas usa emps sem C
-    )
+    # Erro196 (2026-10-08): a lista fixa de "tabelas movimento" era uma
+    # HEURISTICA DE PREFIXO e errava nos dois sentidos - SIGCDCEG/SIGCDACE/
+    # SIGCDCMI/SIGCMCAB sao mestre e usam 'emps' sem C, e nenhuma delas estava
+    # na lista. O sweep do Erro108 chegou a liberar CegBO/COMBO/ICMBO como
+    # seguros por esse raciocinio e deixou 8 sites quebrados por ~2 meses.
+    # Agora quem decide eh o schema.
+    $colsEmpresa = Get-ColunasEmpresaSchema
+    if ($colsEmpresa.Count -eq 0) { return $Linhas }
 
-    # Regex de JOIN suspeito: <alias>.cemps = <alias>.cemps dentro de aspas
-    $rxJoin = [regex]'(?i)([a-z_]\w*)\.cemps\s*=\s*([a-z_]\w*)\.cemps'
+    # Qualquer <alias>.emps / <alias>.cemps - nao so o par espelhado
+    $rxJoin = [regex]'(?i)\b([a-z_]\w*)\.(c?emps)\b'
 
+    # O alias tem de ser resolvido DENTRO DO MESMO STATEMENT, nunca por janela
+    # de N linhas: no sigtosenBO os dois ramos de um IF reusam o alias 'a' com
+    # TABELAS DIFERENTES a 4 linhas de distancia (SigCdEmp no IF, SigCdAcE no
+    # ELSE). Com janela de +-15 o pattern resolvia 'a' pelo ramo errado - perdia
+    # o defeito real E inventava um falso no codigo ja corrigido. Mesma colisao
+    # de alias/variavel das regras #11 e #44.
+    $blocos = @()
+    $buf = ""; $ini = 0
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        $linha = $Linhas[$i]
+        $l = $Linhas[$i]
+        if ($l -match '^\s*(\*|&&)') { continue }
+        if ($buf -eq "") { $ini = $i }
+        $buf += " " + $l
+        if ($l -notmatch ';\s*$') { $blocos += ,@($ini, $buf); $buf = "" }
+    }
+    if ($buf -ne "") { $blocos += ,@($ini, $buf) }
 
-        # Skip comentarios
-        if ($linha -match '^\s*\*') { continue }
+    foreach ($bloco in $blocos) {
+        $iBloco  = $bloco[0]
+        $sqlTxt  = $bloco[1]
 
-        # Skip se linha nao tem string SQL (aspas duplas com conteudo)
-        if ($linha -notmatch '"[^"]*cemps[^"]*"') { continue }
+        if ($sqlTxt -notmatch '(?i)"[^"]*\bc?emps\b[^"]*"') { continue }
+        if ($sqlTxt -notmatch '(?i)\b(FROM|JOIN)\s+') { continue }
 
-        $matches = $rxJoin.Matches($linha)
+        $matches = $rxJoin.Matches($sqlTxt)
         if ($matches.Count -eq 0) { continue }
 
         foreach ($m in $matches) {
-            $aliasEsq = $m.Groups[1].Value
-            $aliasDir = $m.Groups[2].Value
+            $alias = $m.Groups[1].Value
+            $col   = $m.Groups[2].Value.ToLower()
 
-            # Descobrir tabela dos aliases olhando linhas vizinhas (ate 15 acima/abaixo)
-            # Regex simples: FROM <Tabela> <alias> OU JOIN <Tabela> <alias>
-            $inicioContexto = [Math]::Max(0, $i - 15)
-            $fimContexto    = [Math]::Min($Linhas.Count - 1, $i + 15)
-            $contexto = ($Linhas[$inicioContexto..$fimContexto]) -join "`n"
+            $rxAlias = [regex]"(?i)(?:FROM|JOIN)\s+(\w+)\s+(?:AS\s+)?$([regex]::Escape($alias))\b"
+            $mA = $rxAlias.Match($sqlTxt)
+            if (-not $mA.Success) { continue }
 
-            $tabelaEsq = $null
-            $tabelaDir = $null
+            $tabela = $mA.Groups[1].Value
+            $chave  = $tabela.ToLower()
+            if (-not $colsEmpresa.ContainsKey($chave)) { continue }
 
-            $rxAliasEsq = [regex]"(?i)(?:FROM|JOIN)\s+(\w+)\s+$([regex]::Escape($aliasEsq))\b"
-            $mAE = $rxAliasEsq.Match($contexto)
-            if ($mAE.Success) { $tabelaEsq = $mAE.Groups[1].Value }
+            # A coluna escrita existe mesmo nessa tabela? Se sim, nada a dizer.
+            if ($colsEmpresa[$chave][$col]) { continue }
 
-            $rxAliasDir = [regex]"(?i)(?:FROM|JOIN)\s+(\w+)\s+$([regex]::Escape($aliasDir))\b"
-            $mAD = $rxAliasDir.Match($contexto)
-            if ($mAD.Success) { $tabelaDir = $mAD.Groups[1].Value }
+            $certa = if ($col -eq 'cemps') { 'emps' } else { 'cemps' }
+            if (-not $colsEmpresa[$chave][$certa]) { continue }   # nem uma nem outra: outro problema
 
-            # Se pelo menos um alias binds tabela MOVIMENTO -> WARNING
-            $suspeitoEsq = ($tabelaEsq -and ($tabelasMovimento -contains $tabelaEsq))
-            $suspeitoDir = ($tabelaDir -and ($tabelasMovimento -contains $tabelaDir))
-
-            if (-not ($suspeitoEsq -or $suspeitoDir)) { continue }
-
-            $ladoSuspeito = if ($suspeitoEsq) { "$aliasEsq=$tabelaEsq" } else { "$aliasDir=$tabelaDir" }
-            $fixSug = if ($suspeitoEsq) {
-                "$aliasEsq.cemps -> $aliasEsq.emps (tabela $tabelaEsq usa 'emps' sem C)"
-            } else {
-                "$aliasDir.cemps -> $aliasDir.emps (tabela $tabelaDir usa 'emps' sem C)"
-            }
-
-            Add-Correcao -Tipo "WARN-163-SIGMV-CEMPS" -Linha ($i + 1) `
+            $linha = $Linhas[$iBloco]
+            Add-Correcao -Tipo "WARN-163-COLUNA-EMPRESA" -Linha ($iBloco + 1) `
                 -Original $linha.Trim() `
-                -Corrigido "(REVISAR MANUAL) $fixSug" `
-                -Descricao "Pattern #163 WARNING: JOIN com <alias>.cemps onde alias binds tabela MOVIMENTO ($ladoSuspeito). Coluna 'cemps' nao existe em Sig*Mv*/SigFiChc — nome canonico eh 'emps' (sem C). SEMPRE consultar schema.sql. Origem: Erro108 (2026-08-12, sigrecogBO)."
+                -Corrigido "(REVISAR MANUAL) $alias.$col -> $alias.$certa (tabela $tabela tem '$certa')" `
+                -Descricao "Pattern #163 WARNING: '$alias.$col' mas o alias '$alias' binds a tabela '$tabela', que no schema canonico tem '$certa' e NAO tem '$col'. O SQL Server rejeita em RUNTIME com `"Nome de coluna '$col' invalido`" - compila limpo, nenhum gate de sintaxe pega. Causa tipica: o migrador ESPELHA o nome do lado mestre no outro lado do JOIN; conferir o SELECT da mesma query, que costuma ja estar certo. NAO deduzir por prefixo: medido no schema, SIGCDCEG/SIGCDACE/SIGCDCMI/SIGCMCAB sao mestre e usam 'emps' sem C, enquanto SigFiTef usa 'cemps' apesar do prefixo Fi - foi essa deducao que fez o sweep do Erro108 liberar CegBO/COMBO/ICMBO como seguros e deixar 8 sites quebrados por ~2 meses. Auditoria em lote: automation\VerificarColunaEmpresaSQL.ps1. Skill: secao 242. Origem: Erro108 (sigrecogBO), revisado no Erro196 (CegBO)."
 
-            Write-Host "[Pattern #163] Linha $($i + 1): JOIN suspeito ($ladoSuspeito) - REVISAR ('cemps' -> 'emps' no lado movimento)" -ForegroundColor Yellow
+            Write-Host "[Pattern #163] Linha $($iBloco + 1): $alias.$col mas $tabela tem '$certa' - REVISAR" -ForegroundColor Yellow
         }
     }
 

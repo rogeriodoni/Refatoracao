@@ -990,6 +990,33 @@ A **assinatura nao conta** como teste: declarar `par_nKeyCode` sem olhar para el
 
 Sweep 2026-10-08: **47** handlers batizados `<X>LostFocus` ligados a `"KeyPress"` em 13 forms (`FormCRC` 2, `FormCst` 2, `FormFea` 1, `FormFornecedor` 1, `FormPrl` 1, `FormUfd` 5, `FormUpd` 2, `Formccr` 4, `Formepd` 6, `Formfnl` 2, `Formsigpdmp6` 10, `Formsigprcom` 5, `Formdmo` 6) - em 37 o controle ja tinha irmao `<X>KeyPress` de F3, ou seja o binding era pura duplicacao. Numa 2a leva os **182** sites restantes (`Validar*` e afins, 58 forms) foram varridos tambem: nos 55 forms com dump o picker esta SEMPRE no `Valid` e os 8 `PROCEDURE KeyPress` do legado sao navegacao (F8/F9/Enter/Tab), nunca picker. A auditoria fecha em **ERRO=0 AVISO=0**. Nos irmaos a guarda eh **save/restore** (`loc_lEmLookupAnt`), nao set/clear: 18 deles tambem sao chamados de DENTRO do corpo do alvo (funil ligado a DblClick) e o clear interno liberaria a flag cedo demais - save/restore compoe sob aninhamento e eh identico quando nao ha. Auditoria: `automation\VerificarLookupEmKeyPress.ps1`. WARNING: CorretorAutomatico **#215**. Skill: secao **241**. Origem: Erro195 (FormCco).
 
+### 48. `emps` x `cemps`: o PREFIXO da tabela nao decide - e detector novo nao limpa codigo velho
+`Nome de coluna 'cemps' invalido` vem do SQL Server, em RUNTIME: compila limpo, nenhum gate de sintaxe pega, e a tela nao abre.
+
+```foxpro
+* ERRADO (CegBO) - o SELECT da MESMA query ja usa a.emps certo
+" FROM SIGCDCEG a LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.cemps)"
+* CERTO
+" FROM SIGCDCEG a LEFT JOIN SigCdEmp b ON RTRIM(b.Cemps) = RTRIM(a.emps)"
+```
+
+O migrador **espelha** o nome do lado mestre no outro lado do JOIN. Sinal classico: dentro da mesma string o `SELECT` esta certo e so o `ON` erra — quando os dois divergem, confiar no `SELECT`.
+
+**A convencao "`Cd` = mestre = `cemps`, `Mv` = movimento = `emps`" eh FALSA nos DOIS sentidos.** Medido no schema canonico:
+
+| Tabela | prefixo sugere | coluna REAL |
+|---|---|---|
+| `SIGCDCEG` / `SIGCDACE` / `SIGCDCMI` / `SIGCMCAB` | cemps | **emps** |
+| `SigCdEmp` | cemps | cemps |
+| `SigFiTef` | emps | **cemps** |
+| `SigMv*` / `SigFiChc` | emps | emps |
+
+So o `docs/schema.sql` decide (UTF-16, `Get-Content -Raw` — regra #14). **Resolver o alias DENTRO DO MESMO STATEMENT**, nunca por janela de N linhas: no `sigtosenBO` os dois ramos de um `IF` reusam o alias `a` com tabelas diferentes a 4 linhas de distancia (mesma colisao das regras #11/#44).
+
+**A licao META**: o `ValidadorSQLSchema.ps1` da etapa 05f **ja pegava** este defeito — rodado a mao contra o `CegBO` do HEAD ele acusa as duas linhas com a mensagem exata. Mas ele so roda sobre o form **que esta sendo migrado**: nada reexamina os 457 BOs ja gerados. Pior, o sweep do Erro108 chegou a liberar `CegBO`/`COMBO`/`ICMBO` como seguros *por prefixo* — a propria deducao que aquela licao proibia — e 8 sites ficaram quebrados por ~2 meses. **Ao adicionar ou corrigir um check do pipeline, rodar a varredura retroativa**, ou registrar explicitamente que o acervo antigo segue sujo.
+
+Sites corrigidos: `CegBO:50,84`, `acuBO:426`, `COMBO:82,122`, `ICMBO:65,102`, `sigtosenBO:217`. Auditoria: `automation\VerificarColunaEmpresaSQL.ps1`. WARNING: CorretorAutomatico **#163** (reescrito — schema no lugar da lista fixa). Skill: secao **242**. Origem: Erro196 (FormCeg); reincidencia do Erro108.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
