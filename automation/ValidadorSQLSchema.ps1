@@ -289,13 +289,28 @@ function Validate-SelectColumns {
         # Pattern: FROM TableName alias | JOIN TableName alias
         $aliasMap = @{}  # alias -> tablename_lower
 
+        # Um alias pode ser AMARRADO A DUAS TABELAS dentro do MESMO segmento
+        # quando ha subconsulta aninhada (Erro196/SigReEtlBO): o SELECT externo
+        # faz `FROM SigMvesl a` e o `NOT IN (...)` interno faz `FROM SigOpEtq A`.
+        # Sobrescrever o mapa elege a tabela errada e acusa coluna que existe -
+        # foi o UNICO achado (falso) da varredura retroativa dos 457 BOs.
+        # Mesma politica do <<AMBIGUO>> do VerificarPropriedadesInexistentes:
+        # alias com binding conflitante NAO eh checado, em vez de chutar.
+        $aliasAmbiguo = @{}
+        $registrarAlias = {
+            param($a, $t)
+            $a = $a.ToLower(); $t = $t.ToLower()
+            if ($aliasMap.ContainsKey($a) -and $aliasMap[$a] -ne $t) { $aliasAmbiguo[$a] = $true }
+            $aliasMap[$a] = $t
+        }
+
         $fromPattern = '(?i)\bFROM\s+(\w+)\s+(\w+)'
         $fromMatches = [regex]::Matches($segment, $fromPattern)
         foreach ($m in $fromMatches) {
             $table = $m.Groups[1].Value
             $alias = $m.Groups[2].Value
             if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
-                $aliasMap[$alias.ToLower()] = $table.ToLower()
+                & $registrarAlias $alias $table
             }
         }
 
@@ -306,7 +321,7 @@ function Validate-SelectColumns {
             $table = $m.Groups[1].Value
             $alias = $m.Groups[2].Value
             if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
-                $aliasMap[$alias.ToLower()] = $table.ToLower()
+                & $registrarAlias $alias $table
             }
         }
 
@@ -334,6 +349,10 @@ function Validate-SelectColumns {
             if ($prefix -in @('cursor_4c','dbo','loc','this','par','thisform','sys')) { continue }
             # Ignorar propriedades VFP
             if ($column -in @('value','caption','controlsource','enabled','visible','click','init')) { continue }
+
+            # Alias com binding conflitante neste segmento (subconsulta reusando
+            # a letra): nao da para saber a qual tabela a coluna pertence
+            if ($aliasAmbiguo.ContainsKey($prefix)) { continue }
 
             # Verificar se o prefixo eh um alias mapeado a uma tabela NESTE segmento
             if ($aliasMap.ContainsKey($prefix)) {

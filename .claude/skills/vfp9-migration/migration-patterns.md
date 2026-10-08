@@ -13923,3 +13923,26 @@ prefixo. Dos 68 aliases que ele nao resolve, so 1 usa `cemps` e eh `SELECT` VFP 
 
 **Provado contra o banco real**: a query antiga reproduz a mensagem exata do print; a corrigida roda.
 `SIGCDCEG` tem **0 registros** - a tela abre com a lista vazia, e isso eh dado, nao defeito.
+
+### Varredura retroativa dos 457 BOs: o acervo estava limpo
+
+Rodar o `ValidadorSQLSchema.ps1` sobre **todos** os 457 `*BO.prg` (~20 min) devolveu **1** achado, e
+ele era **falso positivo** - nenhum defeito de coluna real sobrou alem dos 8 corrigidos. Registrar
+isso evita refazer a varredura.
+
+O falso positivo revelou uma limitacao real do validador: **alias amarrado a DUAS tabelas no MESMO
+statement**, por causa de subconsulta aninhada.
+
+```foxpro
+* SigReEtlBO:292 - 'a' eh SigMvesl no SELECT externo...
+"SELECT a.locals, SUM(a.sqtds) AS qtde ... FROM SigMvesl a, SigCdpro b " + ;
+"WHERE ... AND a.Locals NOT IN(" + ;
+    "SELECT localizas FROM SigOpEtq A " + ;        && ...e SigOpEtq na subconsulta
+```
+
+O validador ja separava por `UNION ALL` (Erro163/Erro177), mas nao por subconsulta: o `aliasMap`
+sobrescrevia `a` com `SigOpEtq` e acusava `a.sqtds`, coluna que existe em `SigMvesl`. Conserto:
+binding conflitante marca o alias como **ambiguo e ele deixa de ser checado**, em vez de chutar uma
+das tabelas - mesma politica do `<<AMBIGUO>>` do `VerificarPropriedadesInexistentes.ps1` (regra #33).
+Validado nos tres sentidos: o falso positivo some, o defeito real do `CegBO` pre-fix continua sendo
+pego, e o `CegBO` corrigido fica calado.
