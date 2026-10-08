@@ -363,6 +363,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg1.AddObject("txt_4c_Estados", "TextBox")
         WITH loc_oPg1.txt_4c_Estados
             .Value     = ""
+            .Format    = "K!"
             .Top       = 121
             .Left      = 160
             .Width     = 30
@@ -587,6 +588,8 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_CEPS", "TextBox")
         WITH loc_oPg2.txt_4c_CEPS
             .Value     = ""
+            .Format    = "K!"
+            .InputMask = "99999-999"
             .Top       = 174
             .Left      = 275
             .Width     = 80
@@ -618,6 +621,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_TipoNomes", "TextBox")
         WITH loc_oPg2.txt_4c_TipoNomes
             .Value     = ""
+            .Format    = "K!"
             .Top       = 200
             .Left      = 275
             .Width     = 80
@@ -664,6 +668,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Nomes", "TextBox")
         WITH loc_oPg2.txt_4c_Nomes
             .Value     = ""
+            .Format    = "K!"
             .Top       = 226
             .Left      = 275
             .Width     = 430
@@ -695,6 +700,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Comples", "TextBox")
         WITH loc_oPg2.txt_4c_Comples
             .Value     = ""
+            .Format    = "K!"
             .Top       = 253
             .Left      = 275
             .Width     = 430
@@ -726,6 +732,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Bairros", "TextBox")
         WITH loc_oPg2.txt_4c_Bairros
             .Value     = ""
+            .Format    = "K!"
             .Top       = 279
             .Left      = 275
             .Width     = 220
@@ -757,6 +764,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Cidades", "TextBox")
         WITH loc_oPg2.txt_4c_Cidades
             .Value     = ""
+            .Format    = "K!"
             .Top       = 306
             .Left      = 275
             .Width     = 430
@@ -791,6 +799,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Estados", "TextBox")
         WITH loc_oPg2.txt_4c_Estados
             .Value     = ""
+            .Format    = "K!"
             .Top       = 333
             .Left      = 275
             .Width     = 24
@@ -823,6 +832,7 @@ DEFINE CLASS FormCEP AS FormBase
         loc_oPg2.AddObject("txt_4c_Nums", "TextBox")
         WITH loc_oPg2.txt_4c_Nums
             .Value     = ""
+            .Format    = "K!"
             .Top       = 359
             .Left      = 275
             .Width     = 80
@@ -1321,12 +1331,13 @@ DEFINE CLASS FormCEP AS FormBase
     * BtnSalvarClick - Salvar registro (Confirmar)
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPg2, loc_cCeps, loc_cTipo, loc_cNome, loc_cUF
-        loc_oPg2  = THIS.pgf_4c_Paginas.Page2
-        loc_cCeps = ALLTRIM(loc_oPg2.txt_4c_CEPS.Value)
-        loc_cTipo = ALLTRIM(loc_oPg2.txt_4c_TipoNomes.Value)
-        loc_cNome = ALLTRIM(loc_oPg2.txt_4c_Nomes.Value)
-        loc_cUF   = ALLTRIM(loc_oPg2.txt_4c_Estados.Value)
+        LOCAL loc_oPg2, loc_cCeps, loc_cTipo, loc_cNome, loc_cCidade, loc_cUF
+        loc_oPg2    = THIS.pgf_4c_Paginas.Page2
+        loc_cCeps   = ALLTRIM(loc_oPg2.txt_4c_CEPS.Value)
+        loc_cTipo   = ALLTRIM(loc_oPg2.txt_4c_TipoNomes.Value)
+        loc_cNome   = ALLTRIM(loc_oPg2.txt_4c_Nomes.Value)
+        loc_cCidade = ALLTRIM(loc_oPg2.txt_4c_Cidades.Value)
+        loc_cUF     = ALLTRIM(loc_oPg2.txt_4c_Estados.Value)
 
         *-- Validacoes obrigatorias ANTES do TRY (original: Click handler valida antes de DoDefault)
         IF THIS.this_cModoAtual = "INCLUIR" OR THIS.this_cModoAtual = "ALTERAR"
@@ -1348,6 +1359,15 @@ DEFINE CLASS FormCEP AS FormBase
                 MsgAviso("O Endere" + CHR(231) + "o N" + CHR(227) + "o Pode Ficar Em Branco!!!", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
                 loc_oPg2.txt_4c_Nomes.SetFocus()
+                RETURN
+            ENDIF
+
+            *-- Cidade: 4a validacao do Salva.Click legado, entre Endereco e UF.
+            *-- Estava ausente na migracao (Erro197).
+            IF EMPTY(loc_cCidade)
+                MsgAviso("A Cidade N" + CHR(227) + "o Pode Ficar Em Branco!!!", ;
+                         "Aten" + CHR(231) + CHR(227) + "o")
+                loc_oPg2.txt_4c_Cidades.SetFocus()
                 RETURN
             ENDIF
 

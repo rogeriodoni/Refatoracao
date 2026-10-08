@@ -10658,6 +10658,62 @@ function Corrigir-CursorColunaInexistente {
 # 'cemps' invalido"). Sweep confirmou 4 BOs afetados (sigrecogBO, sigrecsmBO,
 # SIGREDIRBO, CecBO). Complementa Pattern #160 (invented C prefix em cursor.col).
 #==============================================================================
+# =============================================================================
+# Pattern #216 (Erro197, 2026-10-08, FormCEP) - WARNING, nunca muta.
+# O migrador DESCARTA `Format` e `InputMask` declarados no SCX. No FormCEP os
+# 10 sumiram: o CEP exibia 07083280 sem mascara e os campos aceitavam
+# minuscula onde o legado forca MAIUSCULA (`Format = "K!"`).
+#
+# Compara por CONTAGEM contra o dump do legado, nunca por nome: o PILAR 3 manda
+# RENOMEAR os objetos (getTipoNomes -> txt_4c_TipoNomes), entao casar legado x
+# migrado pelo nome nunca funciona (regras #30/#39). Gate do DUMP, como
+# #202/#203/#204: sem dump, silencio.
+#
+# Ignora `Format = ""` / `InputMask = ""` - override VAZIO do Form Designer,
+# que nao eh formatacao e inflava a medicao em 678 sites.
+#
+# NAO muta: o valor certo eh por CONTROLE e sai do dump; o mapeamento objeto
+# legado -> objeto migrado eh humano. Auditoria em lote:
+# automation\VerificarFormatInputMask.ps1. Skill: secao 243.
+# =============================================================================
+function Corrigir-FormatInputMaskAusente {
+    param([string[]]$Linhas, [string]$Arquivo, [string]$TaskDir)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrWhiteSpace($Arquivo)) { return $Linhas }
+
+    if ([string]::IsNullOrEmpty($TaskDir)) { $TaskDir = Get-TaskDirDoForm -Arquivo $Arquivo }
+    if (-not $TaskDir -or -not (Test-Path $TaskDir)) { return $Linhas }
+
+    $cod = Get-ChildItem (Join-Path $TaskDir "*_form_codigo_fonte.txt") -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $cod) { return $Linhas }
+
+    $leg = Get-Content $cod.FullName -Raw
+    $legMask = @([regex]::Matches($leg, '(?im)^\s*InputMask\s*=\s*"[^"]+"')).Count
+    $legFmt  = @([regex]::Matches($leg, '(?im)^\s*Format\s*=\s*"[^"]+"')).Count
+    if (($legMask + $legFmt) -eq 0) { return $Linhas }
+
+    $txt = $Linhas -join "`n"
+    $migMask = @([regex]::Matches($txt, '(?im)^\s*\.InputMask\s*=')).Count
+    $migFmt  = @([regex]::Matches($txt, '(?im)^\s*\.Format\s*=')).Count
+
+    $faltaMask = $legMask - $migMask
+    $faltaFmt  = $legFmt  - $migFmt
+    if ($faltaMask -le 0 -and $faltaFmt -le 0) { return $Linhas }
+
+    $sev = if ($faltaMask -gt 0) { "ALTA (InputMask muda o que eh digitado/gravado)" }
+           elseif ($leg -match '(?im)^\s*Format\s*=\s*"[^"]*!') { "MEDIA (Format com '!' forca MAIUSCULA)" }
+           else { "BAIXA (Format sem '!' - so seleciona ao entrar)" }
+
+    Write-Host "[Pattern #216 WARN] dump declara InputMask=$legMask Format=$legFmt; o .prg tem $migMask/$migFmt - severidade $sev" -ForegroundColor Yellow
+    Add-Correcao -Tipo "WARN-216-FORMAT-INPUTMASK-AUSENTE" -Linha 0 `
+        -Original "(form inteiro)" `
+        -Corrigido "(nao mutado - o valor sai do dump, controle a controle)" `
+        -Descricao ("Pattern #216 WARNING: o dump do legado declara $legFmt Format e $legMask InputMask nao-vazios, mas este .prg tem $migFmt e $migMask - faltam $faltaFmt Format e $faltaMask InputMask. Severidade $sev. " + "O migrador descarta essas duas propriedades e o defeito so aparece na TELA: no FormCEP o CEP exibia `"07083280`" em vez de `"07083-280`" (InputMask = `"99999-999`") e os campos aceitavam minuscula onde o legado forca MAIUSCULA (Format = `"K!`"). Compila limpo, nenhum outro gate pega. " + "NAO auto-fixado: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -> objeto migrado eh HUMANO porque o PILAR 3 manda renomear (getTipoNomes -> txt_4c_TipoNomes) - casar por nome nunca funciona (regras #30/#39). Conferir no dump e transcrever. " + "Cuidado: `"Format = ''`" / `"InputMask = ''`" no dump sao override VAZIO do Form Designer, nao formatacao - ignorar. " + "Auditoria em lote: automation\VerificarFormatInputMask.ps1. Skill: secao 243. Origem: Erro197 (FormCEP).")
+
+    return $Linhas
+}
+
 # Cache (por sessao) de quais tabelas tem 'emps' e/ou 'cemps', lido do schema
 # canonico. UTF-16: -Raw respeita o BOM (regra #14). Devolve $null quando o
 # schema nao esta disponivel ou veio truncado - nesse caso o pattern NAO opina,
@@ -16993,6 +17049,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-LabelAlignmentSobreControle -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-FormatMultipleChoicePerdido -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
+    $linhas = Corrigir-FormatInputMaskAusente -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-PictureArquivoInexistente -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-SetPathMultiplasExpressoes -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-PropriedadeQueAClasseNaoTem -Linhas $linhas -Arquivo $Arquivo

@@ -13946,3 +13946,66 @@ binding conflitante marca o alias como **ambiguo e ele deixa de ser checado**, e
 das tabelas - mesma politica do `<<AMBIGUO>>` do `VerificarPropriedadesInexistentes.ps1` (regra #33).
 Validado nos tres sentidos: o falso positivo some, o defeito real do `CegBO` pre-fix continua sendo
 pego, e o `CegBO` corrigido fica calado.
+
+## 243. `Format` e `InputMask` do SCX descartados pelo migrador (Erro197 2026-10-08)
+
+Duas propriedades de UMA linha no dump, faceis de pular - e o defeito **so aparece na tela**. No
+`FormCEP` o migrador perdeu **os 10**:
+
+| controle legado | declarado no SCX | estava no migrado |
+|---|---|---|
+| `getCEPS` | `Format = "K!"` + `InputMask = "99999-999"` | nada |
+| `getTipoNomes`, `getNomes`, `getComples`, `getBairros`, `getCidades`, `getEstados`, `getNums` | `Format = "K!"` | nada |
+| `Lista.getEstados` | `Format = "K!"` | nada |
+
+Sintoma reportado: *"o campo tipo permite digitar qualquer caracter"* - o usuario digitou `sdssssss`
+e ficou minusculo. E o CEP exibia `07083280` em vez de `07083-280`.
+
+### Severidade - nao eh uniforme
+
+| o que falta | efeito | gravidade |
+|---|---|---|
+| `InputMask` | muda o que eh digitado **e gravado** | **ALTA** |
+| `Format` contendo `!` | forca MAIUSCULA - muda o dado | MEDIA |
+| `Format` so com `K` | seleciona o conteudo ao entrar | BAIXA (UX) |
+
+Medido no VFP9: `InputMask = "99999-999"` produz valor de **9 chars**, que eh exatamente a largura de
+`Ceps char(9)` - e o proprio BO documenta `ceps char(9) - CEP (ex: 41820-610)`, com hifen. Ou seja a
+mascara define o formato de ARMAZENAMENTO, nao so o de exibicao. Medido tambem: `Format` age na
+digitacao/exibicao e **nao** altera `.Value` atribuido por codigo.
+
+### Nao inventar restricao que o legado nao tem
+
+O rotulo do campo Tipo eh `(Ex.: R, AV, TV, AL)` - **Ex.** de EXEMPLO. No dump o `getTipoNomes` nao
+tem `Valid`, nao tem lista, nao tem `InList`: a unica regra eh *"O Tipo de Endereco Nao Pode Ficar Em
+Branco!!!"*. Transformar isso em lista fechada seria mudar comportamento (PILAR 1), nao corrigir
+defeito - e rejeitaria valores validos. **Diferente da regra #24**, onde `Format` contendo `M` faz do
+`InputMask` a lista de valores aceitos; ali a lista EXISTE no dump e so precisa ser transcrita.
+
+### `Format = ""` no dump NAO eh formatacao
+
+O Form Designer grava override VAZIO. Contar essas linhas inflou a primeira medicao em **678 sites**.
+Filtrar por `"[^"]+"`.
+
+### Alcance medido no projeto (2026-10-08)
+
+| severidade | sites | forms |
+|---|---|---|
+| ALTA (`InputMask`) | 541 | 78 |
+| MEDIA (`Format` com `!`) | 344 | 106 |
+| BAIXA (`Format` so UX) | 540 | 104 |
+
+**Sem sweep automatico**: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado ->
+objeto migrado eh HUMANO, porque o PILAR 3 manda renomear (`getTipoNomes` -> `txt_4c_TipoNomes`) -
+casar por nome nunca funciona (mesma razao das secoes 213 e 241/#39). Por isso a comparacao eh por
+CONTAGEM, que nao depende de nome.
+
+Ferramentas: `automation\VerificarFormatInputMask.ps1` (lote, com `-Form <classe>` e `-Detalhar` para
+listar objeto + valor do legado); CorretorAutomatico **#216** WARNING, com gate do dump como
+#202/#203/#204. Validado: dispara no `FormCEP` do HEAD com os numeros exatos (`InputMask=1 Format=9`)
+e fica calado no corrigido.
+
+### Achado vizinho no mesmo form
+
+Das 5 validacoes de obrigatoriedade do `Salva.Click` legado (CEP, Tipo, Endereco, Cidade, UF), a da
+**Cidade** nao tinha sido migrada. Transcrita na posicao do legado, entre Endereco e UF.

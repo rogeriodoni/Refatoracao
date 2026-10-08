@@ -1017,6 +1017,23 @@ So o `docs/schema.sql` decide (UTF-16, `Get-Content -Raw` — regra #14). **Reso
 
 Sites corrigidos: `CegBO:50,84`, `acuBO:426`, `COMBO:82,122`, `ICMBO:65,102`, `sigtosenBO:217`. Auditoria: `automation\VerificarColunaEmpresaSQL.ps1`. WARNING: CorretorAutomatico **#163** (reescrito — schema no lugar da lista fixa). Skill: secao **242**. Origem: Erro196 (FormCeg); reincidencia do Erro108.
 
+### 49. `Format` e `InputMask` do SCX: o migrador descarta os dois - e o defeito so aparece na TELA
+Duas propriedades de UMA linha no dump. No `FormCEP` os **10** sumiram: o CEP exibia `07083280` em vez de `07083-280` (`InputMask = "99999-999"`) e todos os campos aceitavam minuscula onde o legado forca MAIUSCULA (`Format = "K!"`). Compila limpo, nenhum gate pega.
+
+| o que falta | efeito | gravidade |
+|---|---|---|
+| `InputMask` | muda o que eh digitado **e gravado** | **ALTA** |
+| `Format` contendo `!` | forca MAIUSCULA - muda o dado | MEDIA |
+| `Format` so com `K` | seleciona o conteudo ao entrar | BAIXA (UX) |
+
+Medido no VFP9: `InputMask = "99999-999"` produz valor de **9 chars** = a largura de `Ceps char(9)`, e o BO documenta `ex: 41820-610` **com hifen** — a mascara define o formato de ARMAZENAMENTO, nao so o de exibicao. `Format` age na digitacao/exibicao e NAO altera `.Value` atribuido por codigo.
+
+**`Format = ""` / `InputMask = ""` no dump eh override VAZIO do Form Designer** — nao transcrever (contar essas linhas inflou a medicao em 678 sites).
+
+**Nao inventar restricao que o legado nao tem**: no `FormCEP` o rotulo `(Ex.: R, AV, TV, AL)` eh EXEMPLO; o campo Tipo nao tem `Valid` nem lista no dump, so *"nao pode ficar em branco"*. Fechar a lista seria mudar comportamento (PILAR 1). **Diferente da regra #24**, onde `Format` contendo `M` faz do `InputMask` a lista de valores validos — ali a lista EXISTE no dump.
+
+Alcance medido (2026-10-08): **ALTA 541 sites/78 forms, MEDIA 344/106, BAIXA 540/104**. **Sem sweep**: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -> migrado eh HUMANO (PILAR 3 renomeia) — por isso a comparacao eh por CONTAGEM. Auditoria: `automation\VerificarFormatInputMask.ps1` (`-Form <classe>`, `-Detalhar`). WARNING: CorretorAutomatico **#216**. Skill: secao **243**. Origem: Erro197 (FormCEP).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
