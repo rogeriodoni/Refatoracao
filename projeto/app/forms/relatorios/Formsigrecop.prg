@@ -381,6 +381,7 @@ DEFINE CLASS Formsigrecop AS FormBase
             .Width         = 31
             .Height        = 23
             .Value         = ""
+            .InputMask = "XXX"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .ForeColor     = RGB(0, 0, 0)

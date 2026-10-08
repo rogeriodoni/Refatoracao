@@ -822,6 +822,7 @@ DEFINE CLASS Formlch AS FormBase
             .Width = 70
             .Height = 21
             .Value = 0
+            .InputMask = "999999"
             .ReadOnly = .T.
             .FontName = "Tahoma"
             .FontSize = 8
@@ -850,6 +851,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 5
             .Value = ""
+            .InputMask = "!!!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -1514,6 +1516,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .InputMask = "!!!!!!!!!!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -1555,6 +1558,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .InputMask = "!!!!!!!!!!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -1693,6 +1697,7 @@ DEFINE CLASS Formlch AS FormBase
             .Width = 52
             .Height = 21
             .Value = 0
+            .InputMask = "999999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2272,6 +2277,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 20
             .Value = ""
+            .InputMask = "99999999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2285,6 +2291,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 20
             .Value = ""
+            .InputMask = "99999999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2312,6 +2319,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 5
             .Value = ""
+            .InputMask = "XXX"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2339,6 +2347,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .InputMask = "9999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2366,6 +2375,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 20
             .Value = ""
+            .InputMask = "9999999999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2393,6 +2403,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 20
             .Value = ""
+            .InputMask = "999999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2602,6 +2613,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .InputMask = "!!!!!!!!!!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.
@@ -2727,6 +2739,7 @@ DEFINE CLASS Formlch AS FormBase
             .Height = 21
             .MaxLength = 10
             .Value = ""
+            .InputMask = "!!!!!!!!!!!!!!!"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible = .T.

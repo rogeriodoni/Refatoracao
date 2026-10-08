@@ -1032,7 +1032,7 @@ Medido no VFP9: `InputMask = "99999-999"` produz valor de **9 chars** = a largur
 
 **Nao inventar restricao que o legado nao tem**: no `FormCEP` o rotulo `(Ex.: R, AV, TV, AL)` eh EXEMPLO; o campo Tipo nao tem `Valid` nem lista no dump, so *"nao pode ficar em branco"*. Fechar a lista seria mudar comportamento (PILAR 1). **Diferente da regra #24**, onde `Format` contendo `M` faz do `InputMask` a lista de valores validos — ali a lista EXISTE no dump.
 
-Alcance medido (2026-10-08): **ALTA 541 sites/78 forms, MEDIA 344/106, BAIXA 540/104**. **Sem sweep**: o valor certo eh por CONTROLE e sai do dump, e o mapeamento objeto legado -> migrado eh HUMANO (PILAR 3 renomeia) — por isso a comparacao eh por CONTAGEM. Auditoria: `automation\VerificarFormatInputMask.ps1` (`-Form <classe>`, `-Detalhar`). WARNING: CorretorAutomatico **#216**. Skill: secao **243**. Origem: Erro197 (FormCEP).
+Alcance medido (2026-10-08): ALTA 541 sites/78 forms, MEDIA 344/106, BAIXA 540/104. Os **ALTA foram varridos** casando por GEOMETRIA (`Left`+`Width`+`Top` com o offset do form, inferido pela moda) **E** por NOME como gate independente (o nome nao entra no casamento, e concordou em 264/282 = 94%): **265 aplicados em 48 forms, ALTA caiu para 285**. Nao entram: nome divergente da geometria (12, em `automationrro197_inputmask_revisar.tsv`), form sem offset confiavel (25) e sem par geometrico. MEDIA/BAIXA seguem sem sweep. A comparacao da auditoria eh por CONTAGEM porque o PILAR 3 renomeia os objetos. Auditoria: `automation\VerificarFormatInputMask.ps1` (`-Form <classe>`, `-Detalhar`). WARNING: CorretorAutomatico **#216**. Skill: secao **243**. Origem: Erro197 (FormCEP).
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

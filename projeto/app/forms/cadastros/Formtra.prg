@@ -619,6 +619,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Razao", "TextBox")
         WITH loc_oPagina.txt_4c_Razao
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .Top           = 143
             .Left          = 123
             .Width         = 290
@@ -654,6 +655,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Endereco", "TextBox")
         WITH loc_oPagina.txt_4c_Endereco
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .Top           = 171
             .Left          = 123
             .Width         = 290
@@ -687,6 +689,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Bairro", "TextBox")
         WITH loc_oPagina.txt_4c_Bairro
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXX"
             .Top           = 199
             .Left          = 123
             .Width         = 150
@@ -822,6 +825,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Tel1", "TextBox")
         WITH loc_oPagina.txt_4c_Tel1
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXX"
             .Top           = 282
             .Left          = 123
             .Width         = 150
@@ -855,6 +859,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Tel2", "TextBox")
         WITH loc_oPagina.txt_4c_Tel2
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXX"
             .Top           = 310
             .Left          = 123
             .Width         = 150
@@ -922,6 +927,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Ies", "TextBox")
         WITH loc_oPagina.txt_4c_Ies
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXX"
             .Top           = 338
             .Left          = 332
             .Width         = 150
@@ -962,6 +968,7 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPagina.AddObject("txt_4c_Fax", "TextBox")
         WITH loc_oPagina.txt_4c_Fax
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXX"
             .Top           = 535
             .Left          = 395
             .Width         = 87

@@ -920,6 +920,7 @@ DEFINE CLASS FormFap AS FormBase
 			loc_oPagina.cnt_4c_Container3.AddObject("txt_4c_Pfalha", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container3.txt_4c_Pfalha
 				.Value     = .F.
+			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 3
 				.Left      = 295
@@ -963,6 +964,7 @@ DEFINE CLASS FormFap AS FormBase
 			loc_oPagina.cnt_4c_Container1.AddObject("txt_4c_pesob", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container1.txt_4c_pesob
 				.Value     = .F.
+			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 5
 				.Left      = 103
@@ -1100,6 +1102,7 @@ DEFINE CLASS FormFap AS FormBase
 			loc_oPagina.cnt_4c_Container2.AddObject("txt_4c_Totccb", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container2.txt_4c_Totccb
 				.Value     = .F.
+			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 24
 				.Left      = 129
@@ -1129,6 +1132,7 @@ DEFINE CLASS FormFap AS FormBase
 			loc_oPagina.cnt_4c_Container2.AddObject("txt_4c_totscb", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container2.txt_4c_totscb
 				.Value     = .F.
+			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 23
 				.Left      = 332

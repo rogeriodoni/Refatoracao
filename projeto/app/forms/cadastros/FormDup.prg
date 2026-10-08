@@ -637,6 +637,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text5", "TextBox")
             WITH loc_oPagina.txt_4c_Text5
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 184
                 .Width    = 41
@@ -661,6 +662,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text6", "TextBox")
             WITH loc_oPagina.txt_4c_Text6
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 233
                 .Width    = 41
@@ -687,6 +689,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text1", "TextBox")
             WITH loc_oPagina.txt_4c_Text1
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 293
                 .Width    = 41
@@ -711,6 +714,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text2", "TextBox")
             WITH loc_oPagina.txt_4c_Text2
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 342
                 .Width    = 41
@@ -737,6 +741,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text9", "TextBox")
             WITH loc_oPagina.txt_4c_Text9
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 178
                 .Left     = 403
                 .Width    = 41
@@ -761,6 +766,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text10", "TextBox")
             WITH loc_oPagina.txt_4c_Text10
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 178
                 .Left     = 452
                 .Width    = 41
@@ -787,6 +793,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text7", "TextBox")
             WITH loc_oPagina.txt_4c_Text7
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 513
                 .Width    = 41
@@ -811,6 +818,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text8", "TextBox")
             WITH loc_oPagina.txt_4c_Text8
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 562
                 .Width    = 41
@@ -837,6 +845,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text3", "TextBox")
             WITH loc_oPagina.txt_4c_Text3
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 623
                 .Width    = 41
@@ -861,6 +870,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text4", "TextBox")
             WITH loc_oPagina.txt_4c_Text4
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 177
                 .Left     = 672
                 .Width    = 41
@@ -923,6 +933,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text15", "TextBox")
             WITH loc_oPagina.txt_4c_Text15
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 183
                 .Width    = 41
@@ -947,6 +958,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text16", "TextBox")
             WITH loc_oPagina.txt_4c_Text16
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 232
                 .Width    = 41
@@ -973,6 +985,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text17", "TextBox")
             WITH loc_oPagina.txt_4c_Text17
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 293
                 .Width    = 41
@@ -997,6 +1010,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text18", "TextBox")
             WITH loc_oPagina.txt_4c_Text18
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 342
                 .Width    = 41
@@ -1023,6 +1037,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text11", "TextBox")
             WITH loc_oPagina.txt_4c_Text11
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 403
                 .Width    = 41
@@ -1047,6 +1062,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text12", "TextBox")
             WITH loc_oPagina.txt_4c_Text12
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 452
                 .Width    = 41
@@ -1073,6 +1089,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text13", "TextBox")
             WITH loc_oPagina.txt_4c_Text13
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 248
                 .Left     = 516
                 .Width    = 41
@@ -1097,6 +1114,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text14", "TextBox")
             WITH loc_oPagina.txt_4c_Text14
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 248
                 .Left     = 565
                 .Width    = 41
@@ -1123,6 +1141,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text32", "TextBox")
             WITH loc_oPagina.txt_4c_Text32
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 626
                 .Width    = 41
@@ -1147,6 +1166,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text33", "TextBox")
             WITH loc_oPagina.txt_4c_Text33
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 249
                 .Left     = 675
                 .Width    = 41
@@ -1211,6 +1231,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text19", "TextBox")
             WITH loc_oPagina.txt_4c_Text19
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 183
                 .Width    = 41
@@ -1235,6 +1256,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text20", "TextBox")
             WITH loc_oPagina.txt_4c_Text20
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 232
                 .Width    = 41
@@ -1261,6 +1283,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text21", "TextBox")
             WITH loc_oPagina.txt_4c_Text21
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 293
                 .Width    = 41
@@ -1285,6 +1308,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text22", "TextBox")
             WITH loc_oPagina.txt_4c_Text22
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 342
                 .Width    = 41
@@ -1311,6 +1335,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text27", "TextBox")
             WITH loc_oPagina.txt_4c_Text27
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 403
                 .Width    = 41
@@ -1335,6 +1360,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text28", "TextBox")
             WITH loc_oPagina.txt_4c_Text28
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 452
                 .Width    = 41
@@ -1361,6 +1387,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text23", "TextBox")
             WITH loc_oPagina.txt_4c_Text23
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 516
                 .Width    = 41
@@ -1385,6 +1412,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text24", "TextBox")
             WITH loc_oPagina.txt_4c_Text24
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 565
                 .Width    = 41
@@ -1411,6 +1439,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text25", "TextBox")
             WITH loc_oPagina.txt_4c_Text25
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 626
                 .Width    = 41
@@ -1435,6 +1464,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text26", "TextBox")
             WITH loc_oPagina.txt_4c_Text26
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 283
                 .Left     = 675
                 .Width    = 41
@@ -1467,6 +1497,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text36", "TextBox")
             WITH loc_oPagina.txt_4c_Text36
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 343
                 .Left     = 184
                 .Width    = 41
@@ -1491,6 +1522,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text37", "TextBox")
             WITH loc_oPagina.txt_4c_Text37
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 343
                 .Left     = 233
                 .Width    = 41
@@ -1517,6 +1549,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text38", "TextBox")
             WITH loc_oPagina.txt_4c_Text38
                 .Value    = 0
+                .InputMask = "999"
                 .Top      = 343
                 .Left     = 298
                 .Width    = 41
@@ -1541,6 +1574,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text39", "TextBox")
             WITH loc_oPagina.txt_4c_Text39
                 .Value    = 0
+                .InputMask = "999"
                 .Top      = 343
                 .Left     = 369
                 .Width    = 41
@@ -1567,6 +1601,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text34", "TextBox")
             WITH loc_oPagina.txt_4c_Text34
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 345
                 .Left     = 443
                 .Width    = 41
@@ -1591,6 +1626,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text35", "TextBox")
             WITH loc_oPagina.txt_4c_Text35
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 345
                 .Left     = 492
                 .Width    = 41
@@ -1617,6 +1653,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text41", "TextBox")
             WITH loc_oPagina.txt_4c_Text41
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 345
                 .Left     = 556
                 .Width    = 41
@@ -1641,6 +1678,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text42", "TextBox")
             WITH loc_oPagina.txt_4c_Text42
                 .Value    = 0
+                .InputMask = "999.99"
                 .Top      = 345
                 .Left     = 605
                 .Width    = 41
@@ -1756,6 +1794,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text31", "TextBox")
             WITH loc_oPagina.txt_4c_Text31
                 .Value    = 0
+                .InputMask = "999"
                 .Top      = 445
                 .Left     = 384
                 .Width    = 41

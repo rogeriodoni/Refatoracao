@@ -500,6 +500,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         loc_oPagina.cnt_4c_Dados.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.cnt_4c_Dados.txt_4c_Codigo
             .Value     = ""
+            .InputMask = "9999999999"
             .Top       = 28
             .Left      = 11
             .Width     = 81

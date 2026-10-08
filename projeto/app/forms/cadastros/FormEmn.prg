@@ -1093,6 +1093,7 @@ DEFINE CLASS FormEmn AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .Value     = 0
+            .InputMask = "999,999.99"
             .ReadOnly  = .T.
             .Visible   = .T.
         ENDWITH

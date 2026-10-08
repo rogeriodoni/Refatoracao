@@ -1824,6 +1824,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999"
         ENDWITH
 
         loc_oCnt.AddObject("obj_4c_OpcaoCPFCGC", "OptionGroup")
@@ -1868,6 +1869,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.999.999/9999-99"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label23", "Label")
@@ -2064,6 +2066,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "!!!!!!!!!!!!!!!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Grupo, "KeyPress", THIS, "KeyPressGrupoEmp")
 
@@ -2138,6 +2141,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "!!!!!!!!!!!!!!!"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Class, "KeyPress", THIS, "KeyPressClassEmp")
 
@@ -2188,6 +2192,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "9999999999999"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label52", "Label")
@@ -2375,6 +2380,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99999-999"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label19", "Label")
@@ -2423,6 +2429,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999"
         ENDWITH
 
         *-- Linha 8: Endereco / Numero
@@ -2571,6 +2578,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .InputMask = "AA"
         ENDWITH
         BINDEVENT(loc_oCnt.txt_4c_Est, "KeyPress", THIS, "KeyPressUF")
 
@@ -2840,6 +2848,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         *-- Bloco de aliquotas (Mercadorias / Servicos / Aliquotas)
@@ -3022,6 +3031,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_MCSLL", "TextBox")
@@ -3033,6 +3043,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_MPIS", "TextBox")
@@ -3044,6 +3055,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_MCOFINS", "TextBox")
@@ -3055,6 +3067,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         *-- Servicos
@@ -3067,6 +3080,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_SCSLL", "TextBox")
@@ -3078,6 +3092,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_SPIS", "TextBox")
@@ -3089,6 +3104,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_SCOFINS", "TextBox")
@@ -3100,6 +3116,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         *-- Aliquotas (colunas)
@@ -3112,6 +3129,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c_ACSLL", "TextBox")
@@ -3123,6 +3141,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         *-- Container cntAlerta (Dados email Alerta)
@@ -3198,6 +3217,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999"
         ENDWITH
 
         loc_oCnt.cnt_4c_Alerta.AddObject("lbl_4c_Label52", "Label")
@@ -3793,6 +3813,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label3", "Label")
@@ -3857,6 +3878,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999999"
         ENDWITH
 
         *-- Empresa Sitef
@@ -3933,6 +3955,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999.99"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label35", "Label")
@@ -3971,6 +3994,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999.99"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label44", "Label")
@@ -4578,6 +4602,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999"
         ENDWITH
 
         loc_oCnt.cnt_4c_EmailPad.AddObject("lbl_4c_Label52", "Label")
@@ -5298,6 +5323,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         loc_oCnt.AddObject("txt_4c__PORCCONS", "TextBox")
@@ -5309,6 +5335,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "99.99"
         ENDWITH
 
         *-- Proximo Mapa Res. / Perfil / Indicador / Centro de Custo / Reg.Trib. / Tipo EFD
@@ -5437,6 +5464,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .InputMask = "99"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label23", "Label")
@@ -5536,6 +5564,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "9999"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label42", "Label")
@@ -5624,6 +5653,7 @@ DEFINE CLASS Formemp AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
+            .InputMask = "999"
         ENDWITH
 
         loc_oCnt.AddObject("lbl_4c_Label2", "Label")

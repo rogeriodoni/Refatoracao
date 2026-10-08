@@ -1151,6 +1151,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Vias", "TextBox")
         WITH loc_oPagina.txt_4c_Vias
             .Value    = 0
+            .InputMask = "99"
             .Top      = 258
             .Left     = 378
             .Width    = 24

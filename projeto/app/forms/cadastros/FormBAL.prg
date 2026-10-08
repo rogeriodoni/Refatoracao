@@ -641,6 +641,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg2.txt_4c_Codigo
             .Value         = 0
+            .InputMask = "9999999999"
             .Top           = 115
             .Left          = 336
             .Width         = 82
@@ -2206,6 +2207,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg3.txt_4c_Codigo
             .Value         = 0
+            .InputMask = "9999999999"
             .Top           = 158
             .Left          = 6
             .Width         = 82
@@ -2471,6 +2473,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Lidos", "TextBox")
         WITH loc_oPg3.txt_4c_Lidos
             .Value     = 0
+            .InputMask = "999,999,999.99"
             .Top       = 431
             .Left      = 453
             .Width     = 81
@@ -2501,6 +2504,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Qtde", "TextBox")
         WITH loc_oPg3.txt_4c_Qtde
             .Value     = 0
+            .InputMask = "999,999,999.99"
             .Top       = 431
             .Left      = 598
             .Width     = 81
@@ -2591,6 +2595,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Total", "TextBox")
         WITH loc_oPg3.txt_4c_Total
             .Value     = 0
+            .InputMask = "999,999.9"
             .Top       = 457
             .Left      = 427
             .Width     = 81
@@ -2740,6 +2745,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Qtd", "TextBox")
         WITH loc_oPg3.txt_4c_Qtd
             .Value         = 0
+            .InputMask = "999999.999"
             .Top           = 483
             .Left          = 427
             .Width         = 81
@@ -2787,6 +2793,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_PReal", "TextBox")
         WITH loc_oPg3.txt_4c_PReal
             .Value     = 0
+            .InputMask = "9999.99"
             .Top       = 485
             .Left      = 625
             .Width     = 61
@@ -2848,6 +2855,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg3.AddObject("txt_4c_Qtd2", "TextBox")
         WITH loc_oPg3.txt_4c_Qtd2
             .Value         = 0
+            .InputMask = "999999.999"
             .Top           = 508
             .Left          = 427
             .Width         = 81

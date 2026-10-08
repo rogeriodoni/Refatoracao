@@ -573,6 +573,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 31
             .Height    = 21
             .Value     = ""
+            .InputMask = "999"
             .MaxLength = 3
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -606,6 +607,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 38
             .Height    = 21
             .Value     = ""
+            .InputMask = "9999"
             .MaxLength = 4
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -672,6 +674,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 175
             .Height    = 23
             .Value     = ""
+            .InputMask = "99,999,999,999,999.99"
             .MaxLength = 30
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -704,6 +707,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 175
             .Height    = 23
             .Value     = ""
+            .InputMask = "99,999,999,999,999.99"
             .MaxLength = 30
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -966,6 +970,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Width     = 52
             .Height    = 23
             .Value     = ""
+            .InputMask = "999999"
             .MaxLength = 6
             .FontName  = "Tahoma"
             .FontSize  = 8

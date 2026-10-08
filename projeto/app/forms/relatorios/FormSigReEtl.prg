@@ -311,6 +311,7 @@ DEFINE CLASS FormSigReEtl AS FormBase
             .Height        = 22
             .MaxLength     = 3
             .Value         = ""
+            .InputMask = "XXX"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1

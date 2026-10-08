@@ -843,6 +843,7 @@ DEFINE CLASS FormOps AS FormBase
         loc_oPagina.AddObject("txt_4c_Ordem", "TextBox")
         WITH loc_oPagina.txt_4c_Ordem
             .Value     = 0
+            .InputMask = "999"
             .Top       = 217
             .Left      = 448
             .Width     = 34
@@ -918,6 +919,7 @@ DEFINE CLASS FormOps AS FormBase
         loc_oPagina.AddObject("txt_4c_NDopes", "TextBox")
         WITH loc_oPagina.txt_4c_NDopes
             .Value     = 0
+            .InputMask = "999"
             .Top       = 269
             .Left      = 303
             .Width     = 31

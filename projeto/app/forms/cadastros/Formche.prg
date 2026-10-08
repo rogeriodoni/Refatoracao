@@ -662,6 +662,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 64
             .Height      = 23
             .Value       = 0
+            .InputMask = "99999999"
             .ReadOnly    = .T.
             .FontName    = "Tahoma"
             .FontSize    = 8
@@ -747,6 +748,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 124
             .Height      = 23
             .Value       = ""
+            .InputMask = "!!!!!!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -845,6 +847,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 87
             .Height      = 23
             .Value       = ""
+            .InputMask = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -977,6 +980,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 32
             .Height      = 23
             .Value       = ""
+            .InputMask = "!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1115,6 +1119,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 252
             .Height      = 24
             .Value       = ""
+            .InputMask = "<99999999<9999999999>999999999999:"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1411,6 +1416,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 66
             .Height      = 24
             .Value       = 0
+            .InputMask = "999.99"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1437,6 +1443,7 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 66
             .Height      = 24
             .Value       = 0
+            .InputMask = "999.9999"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1

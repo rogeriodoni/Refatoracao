@@ -733,6 +733,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Width     = 55
             .Height    = 25
             .Value     = 0
+            .InputMask = "999.99"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -759,6 +760,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Width     = 59
             .Height    = 25
             .Value     = 0
+            .InputMask = "9999.99"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1019,6 +1021,7 @@ DEFINE CLASS FormCLC AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .InputMask = "!!!"
         ENDWITH
 
         *==========================================================================
@@ -1276,6 +1279,7 @@ DEFINE CLASS FormCLC AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .InputMask = "!!!"
         ENDWITH
 
         *-- BINDEVENTs para lookups em campos de texto (F4)

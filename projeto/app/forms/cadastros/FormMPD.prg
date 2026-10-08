@@ -3784,6 +3784,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 58
                 .Height = 23
                 .Visible = .T.
+                .InputMask = "99.99"
             ENDWITH
             loc_oPg.AddObject("txt_4c__limqtd", "TextBox")
             WITH loc_oPg.txt_4c__limqtd
@@ -3792,6 +3793,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 80
                 .Height = 21
                 .Visible = .T.
+                .InputMask = "999,999.999"
             ENDWITH
             loc_oPg.AddObject("txt_4c_DifPeso", "TextBox")
             WITH loc_oPg.txt_4c_DifPeso
@@ -3800,6 +3802,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 68
                 .Height = 23
                 .Visible = .T.
+                .InputMask = "9999.999"
             ENDWITH
             loc_oPg.AddObject("txt_4c_Tfalhas", "TextBox")
             WITH loc_oPg.txt_4c_Tfalhas
@@ -4180,6 +4183,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 31
                 .Height = 21
                 .Visible = .T.
+                .InputMask = "999"
             ENDWITH
             loc_oPg.AddObject("txt_4c_ObsInis", "TextBox")
             WITH loc_oPg.txt_4c_ObsInis
@@ -4188,6 +4192,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 31
                 .Height = 21
                 .Visible = .T.
+                .InputMask = "999"
             ENDWITH
             loc_oPg.AddObject("txt_4c_ObsFins", "TextBox")
             WITH loc_oPg.txt_4c_ObsFins
@@ -4196,6 +4201,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width = 31
                 .Height = 21
                 .Visible = .T.
+                .InputMask = "999"
             ENDWITH
             loc_oPg.AddObject("txt_4c_TpOp", "TextBox")
             WITH loc_oPg.txt_4c_TpOp

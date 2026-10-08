@@ -2163,6 +2163,7 @@ DEFINE CLASS FormFUN AS FormBase
         loc_oCnt.AddObject("txt_4c_Qtd", "TextBox")
         WITH loc_oCnt.txt_4c_Qtd
             .Value     = 0
+            .InputMask = "999,999.999"
             .Left      = 260
             .Top       = 4
             .Width     = 87
@@ -2211,6 +2212,7 @@ DEFINE CLASS FormFUN AS FormBase
         loc_oCnt.AddObject("txt_4c_Pecas", "TextBox")
         WITH loc_oCnt.txt_4c_Pecas
             .Value     = 0
+            .InputMask = "999,999.999"
             .Left      = 260
             .Top       = 25
             .Width     = 87
@@ -2349,6 +2351,7 @@ DEFINE CLASS FormFUN AS FormBase
         loc_oCnt.AddObject("txt_4c_Trf", "TextBox")
         WITH loc_oCnt.txt_4c_Trf
             .Value     = ""
+            .InputMask = "9999999999"
             .MaxLength = 20
             .Left      = 108
             .Top       = 273

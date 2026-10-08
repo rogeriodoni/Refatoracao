@@ -1919,6 +1919,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_ValorIPI", "TextBox")
@@ -1931,6 +1932,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_BaseICMS", "TextBox")
@@ -1943,6 +1945,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_PercICMS", "TextBox")
@@ -1955,6 +1958,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_ValorICMS", "TextBox")
@@ -1967,6 +1971,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         *-- Labels Totais (top=67)
@@ -2005,6 +2010,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_TotalNf", "TextBox")
@@ -2017,6 +2023,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         *-- Botao Dados (abre SigMvExp): top=17, left=516
@@ -2113,6 +2120,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_TSeguros", "TextBox")
@@ -2125,6 +2133,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_DespAces", "TextBox")
@@ -2137,6 +2146,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999.99"
         ENDWITH
 
         *-- Say26: "Transportador" (top=185, left=5)
@@ -2330,6 +2340,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Value     = ""
+            .InputMask = "!!!-9999"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_UfPlaca", "TextBox")
@@ -2343,6 +2354,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize  = 8
             .ReadOnly  = .T.
             .Value     = ""
+            .InputMask = "XX"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_TipoFrete", "TextBox")
@@ -2517,6 +2529,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "99,999.99"
         ENDWITH
 
         loc_oAba.AddObject("txt_4c_PesoBruto", "TextBox")
@@ -2529,6 +2542,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "99,999.99"
         ENDWITH
     ENDPROC
 
@@ -2591,6 +2605,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999,999.99"
         ENDWITH
 
         *-- Say3: "% I.S.S. :" (top=192, left=81)
@@ -2617,6 +2632,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999.99"
         ENDWITH
 
         *-- Say4: "Valor Total do I.S.S. :" (top=217, left=14)
@@ -2643,6 +2659,7 @@ DEFINE CLASS FormCNF AS FormBase
             .FontSize = 8
             .ReadOnly = .T.
             .Value    = 0
+            .InputMask = "999,999,999,999.99"
         ENDWITH
     ENDPROC
 

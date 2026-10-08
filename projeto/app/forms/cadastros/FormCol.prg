@@ -723,6 +723,7 @@ DEFINE CLASS FormCol AS FormBase
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .Value         = ""
+                .InputMask = "XXXXXXXXXX"
                 .Visible       = .T.
             ENDWITH
 

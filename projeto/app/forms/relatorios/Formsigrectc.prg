@@ -611,6 +611,7 @@ DEFINE CLASS Formsigrectc AS FormBase
             .Width         = 94
             .Height        = 25
             .Value         = ""
+            .InputMask = "!!!!!!!!!!!!"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .ForeColor     = RGB(90,90,90)
@@ -654,6 +655,7 @@ DEFINE CLASS Formsigrectc AS FormBase
         WITH loc_oPag.txt_4c_Fpags
             .InputMask = "!!!!!!!!!!!!"
             .MaxLength = 12
+            .InputMask = "!!!!!!!!!!!!"
         ENDWITH
 
         *-- get_cemps: formato uppercase + limite de 3 caracteres

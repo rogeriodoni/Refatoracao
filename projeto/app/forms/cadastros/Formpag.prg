@@ -664,6 +664,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 21
                 .MaxLength = 3
                 .Visible   = .T.
+                .InputMask = "999"
             ENDWITH
 
             loc_oPage.AddObject("lbl_g_InterDias", "Label")
@@ -682,6 +683,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 21
                 .MaxLength = 3
                 .Visible   = .T.
+                .InputMask = "999"
             ENDWITH
 
             loc_oPage.AddObject("lbl_g_Parcelas", "Label")
@@ -700,6 +702,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 21
                 .MaxLength = 2
                 .Visible   = .T.
+                .InputMask = "99"
             ENDWITH
 
             loc_oPage.AddObject("lbl_g_TipoUso", "Label")
@@ -861,6 +864,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 15
                 .Visible   = .T.
+                .InputMask = "!!!!!!!!!!!!!!!"
             ENDWITH
 
             && --- Mascara / Valor ---
@@ -898,6 +902,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 11
                 .Visible   = .T.
+                .InputMask = "9999,999.99"
             ENDWITH
 
             loc_oPage.AddObject("lbl_g_Desconto", "Label")
@@ -994,6 +999,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 5
                 .Visible   = .T.
+                .InputMask = "999.99"
             ENDWITH
             loc_oPage.AddObject("lbl_g_PVariaH", "Label")
             WITH loc_oPage.lbl_g_PVariaH
@@ -1020,6 +1026,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 6
                 .Visible   = .T.
+                .InputMask = "999.999"
             ENDWITH
 
             loc_oPage.AddObject("lbl_g_TaxJuros", "Label")
@@ -1038,6 +1045,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 8
                 .Visible   = .T.
+                .InputMask = "99.9999"
             ENDWITH
             loc_oPage.AddObject("lbl_g_TaxJurosH", "Label")
             WITH loc_oPage.lbl_g_TaxJurosH
@@ -1064,6 +1072,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 23
                 .MaxLength = 5
                 .Visible   = .T.
+                .InputMask = "999.99"
             ENDWITH
 
             && --- Banco / Agencia / NConta ---
@@ -2655,6 +2664,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Height    = 21
                 .MaxLength = 1
                 .Visible   = .T.
+                .InputMask = "99"
             ENDWITH
             loc_oPage.AddObject("txt_4c_Dfinalz", "TextBox")
             WITH loc_oPage.txt_4c_Dfinalz

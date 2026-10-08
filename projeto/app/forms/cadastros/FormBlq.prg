@@ -588,6 +588,7 @@ DEFINE CLASS FormBlq AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg2.txt_4c_Codigo
             .Value       = ""
+            .InputMask = "9999999999"
             .Top         = 166
             .Left        = 435
             .Width       = 82
@@ -659,6 +660,7 @@ DEFINE CLASS FormBlq AS FormBase
         loc_oPg2.AddObject("txt_4c_Dtinicial", "TextBox")
         WITH loc_oPg2.txt_4c_Dtinicial
             .Value     = {}
+            .InputMask = "99/99/9999"
             .Top       = 192
             .Left      = 435
             .Width     = 66
@@ -676,6 +678,7 @@ DEFINE CLASS FormBlq AS FormBase
         loc_oPg2.AddObject("txt_4c_Dtfinal", "TextBox")
         WITH loc_oPg2.txt_4c_Dtfinal
             .Value     = {}
+            .InputMask = "99/99/9999"
             .Top       = 192
             .Left      = 530
             .Width     = 66

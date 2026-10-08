@@ -458,6 +458,7 @@ DEFINE CLASS FormSIGREEQR AS FormBase
             .Width    = 33
             .Height   = 25
             .Value    = ""
+            .InputMask = "XXX"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.

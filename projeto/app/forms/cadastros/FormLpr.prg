@@ -979,6 +979,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
             WITH loc_oPagina.txt_4c_Codigo
                 .Value     = ""
+                .InputMask = "999999"
                 .Top       = 145
                 .Left      = 108
                 .Width     = 94
@@ -1574,6 +1575,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Juros", "TextBox")
             WITH loc_oPagina.txt_4c_Juros
                 .Value    = 0
+                .InputMask = "99.999"
                 .Top      = 198
                 .Left     = 294
                 .Width    = 69

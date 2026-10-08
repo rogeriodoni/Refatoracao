@@ -742,6 +742,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 24
             .MaxLength = 60
             .Value     = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -770,6 +771,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 24
             .MaxLength = 60
             .Value     = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1432,6 +1434,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 23
             .MaxLength = 2
             .Value     = ""
+            .InputMask = "99"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1729,6 +1732,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 23
             .MaxLength = 2
             .Value     = ""
+            .InputMask = "99"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1800,6 +1804,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 23
             .MaxLength = 2
             .Value     = ""
+            .InputMask = "99"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1871,6 +1876,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 23
             .MaxLength = 5
             .Value     = ""
+            .InputMask = "9999"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2119,6 +2125,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Height    = 23
             .MaxLength = 3
             .Value     = ""
+            .InputMask = "999"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.

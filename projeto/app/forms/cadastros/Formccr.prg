@@ -1628,6 +1628,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("txt_4c_Vrlimc", "TextBox")
         WITH par_oPg.txt_4c_Vrlimc
             .Value = 0
+            .InputMask = "999,999,999.99"
             .Top = 196
             .Left = 586
             .Width = 110
@@ -1644,6 +1645,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("txt_4c__molimc", "TextBox")
         WITH par_oPg.txt_4c__molimc
             .Value = ""
+            .InputMask = "!!!"
             .Top = 196
             .Left = 698
             .Width = 32
@@ -1677,6 +1679,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("txt_4c__cd_moeda", "TextBox")
         WITH par_oPg.txt_4c__cd_moeda
             .Value = ""
+            .InputMask = "!!!"
             .Top = 222
             .Left = 486
             .Width = 32
@@ -3534,6 +3537,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("getSituas", "TextBox")
         WITH par_oPg.getSituas
             .Value = ""
+            .InputMask = "!!!"
             .Top = 188
             .Left = 801
             .Width = 48
@@ -4554,6 +4558,7 @@ DEFINE CLASS Formccr AS FormBase
         par_oPg.AddObject("Get_DifPeso", "TextBox")
         WITH par_oPg.Get_DifPeso
             .Value = 0
+            .InputMask = "9999.999"
             .Top = 191
             .Left = 480
             .Width = 68

@@ -560,6 +560,7 @@ DEFINE CLASS FormBch AS FormBase
             .Height   = 24
             .ReadOnly = .T.
             .Value    = ""
+            .InputMask = "9999"
             .FontName = "Tahoma"
             .FontSize = 8
             .Visible  = .T.
@@ -621,6 +622,7 @@ DEFINE CLASS FormBch AS FormBase
             .Height    = 24
             .MaxLength = 15
             .Value     = ""
+            .InputMask = "!!!!!!!!!!!!!!!"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -935,6 +937,7 @@ DEFINE CLASS FormBch AS FormBase
             .FontName    = "Arial"
             .FontSize    = 9
             .Visible     = .T.
+            .InputMask = "!!!!!!!!!!!!!!!"
         ENDWITH
 
         loc_oPg3.AddObject("txt_4c_DataIniDisp", "TextBox")

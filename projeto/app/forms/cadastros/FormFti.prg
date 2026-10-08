@@ -788,6 +788,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_CdMoeda", "TextBox")
         WITH loc_oPagina.txt_4c_CdMoeda
             .Value     = ""
+            .InputMask = "!!!"
             .Top       = 167
             .Left      = 166
             .Width     = 32
@@ -871,6 +872,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Lucro", "TextBox")
         WITH loc_oPagina.txt_4c_Lucro
             .Value     = 0
+            .InputMask = "999.99"
             .Top       = 117
             .Left      = 647
             .Width     = 50

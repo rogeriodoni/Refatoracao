@@ -666,6 +666,7 @@ DEFINE CLASS FormTri AS FormBase
             .Width        = 290
             .Height       = 25
             .Value        = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .MaxLength    = 40
             .FontName     = "Tahoma"
             .FontSize     = 8

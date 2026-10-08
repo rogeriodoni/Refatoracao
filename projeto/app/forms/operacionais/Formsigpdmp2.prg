@@ -2305,6 +2305,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                 .FontSize    = 8
                 .BorderStyle = 1
                 .Value       = ""
+                .InputMask = "9999999999"
                 .Visible     = .T.
             ENDWITH
 

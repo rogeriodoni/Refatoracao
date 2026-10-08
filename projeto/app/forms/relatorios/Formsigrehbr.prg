@@ -1493,6 +1493,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             .Width       = 108
             .Height      = 25
             .Value       = ""
+            .InputMask = "99999999999999"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BackColor   = RGB(255, 255, 255)

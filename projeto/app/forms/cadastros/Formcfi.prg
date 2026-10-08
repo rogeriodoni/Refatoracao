@@ -655,6 +655,7 @@ DEFINE CLASS Formcfi AS FormBase
             .FontName  = "Verdana"
             .FontSize  = 8
             .Value     = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .Visible   = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Dsittricm, "KeyPress", THIS, "ValidarDsittricm")

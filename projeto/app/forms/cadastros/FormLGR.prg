@@ -632,6 +632,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Coo", "TextBox")
         WITH loc_oPagina.txt_4c_Coo
             .Value     = "000000"
+            .InputMask = "999999"
             .Top       = 231
             .Left      = 312
             .Width     = 50
@@ -661,6 +662,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Cnf", "TextBox")
         WITH loc_oPagina.txt_4c_Cnf
             .Value     = ""
+            .InputMask = "999999"
             .Top       = 258
             .Left      = 312
             .Width     = 50
@@ -690,6 +692,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Rg", "TextBox")
         WITH loc_oPagina.txt_4c_Rg
             .Value     = ""
+            .InputMask = "999999"
             .Top       = 285
             .Left      = 312
             .Width     = 50
@@ -719,6 +722,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Dcd", "TextBox")
         WITH loc_oPagina.txt_4c_Dcd
             .Value     = ""
+            .InputMask = "9999"
             .Top       = 312
             .Left      = 312
             .Width     = 38
@@ -748,6 +752,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPagina.AddObject("txt_4c_Rz", "TextBox")
         WITH loc_oPagina.txt_4c_Rz
             .Value     = ""
+            .InputMask = "999999"
             .Top       = 339
             .Left      = 312
             .Width     = 50
@@ -1453,6 +1458,7 @@ DEFINE CLASS FormLGR AS FormBase
         WITH loc_oPg2.txt_4c_Coo
             IF !EMPTY(ALLTRIM(.Value))
                 .Value = TRANSFORM(VAL(ALLTRIM(.Value)), "@L 999999")
+            .InputMask = "999999"
                 .Refresh()
             ENDIF
         ENDWITH
@@ -1470,6 +1476,7 @@ DEFINE CLASS FormLGR AS FormBase
         WITH loc_oPg2.txt_4c_Cnf
             IF !EMPTY(ALLTRIM(.Value))
                 .Value = TRANSFORM(VAL(ALLTRIM(.Value)), "@L 999999")
+            .InputMask = "999999"
                 .Refresh()
             ENDIF
         ENDWITH
@@ -1487,6 +1494,7 @@ DEFINE CLASS FormLGR AS FormBase
         WITH loc_oPg2.txt_4c_Rg
             IF !EMPTY(ALLTRIM(.Value))
                 .Value = TRANSFORM(VAL(ALLTRIM(.Value)), "@L 999999")
+            .InputMask = "999999"
                 .Refresh()
             ENDIF
         ENDWITH
@@ -1504,6 +1512,7 @@ DEFINE CLASS FormLGR AS FormBase
         WITH loc_oPg2.txt_4c_Dcd
             IF !EMPTY(ALLTRIM(.Value))
                 .Value = TRANSFORM(VAL(ALLTRIM(.Value)), "@L 9999")
+            .InputMask = "9999"
                 .Refresh()
             ENDIF
         ENDWITH
@@ -1521,6 +1530,7 @@ DEFINE CLASS FormLGR AS FormBase
         WITH loc_oPg2.txt_4c_Rz
             IF !EMPTY(ALLTRIM(.Value))
                 .Value = TRANSFORM(VAL(ALLTRIM(.Value)), "@L 999999")
+            .InputMask = "999999"
                 .Refresh()
             ENDIF
         ENDWITH

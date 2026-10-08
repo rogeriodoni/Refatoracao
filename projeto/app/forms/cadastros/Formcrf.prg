@@ -733,6 +733,7 @@ DEFINE CLASS Formcrf AS FormBase
             .BackColor = RGB(255, 255, 255)
             .MaxLength = 20
             .Value     = ""
+            .InputMask = "XXXXXXXXXXXXXX"
         ENDWITH
 
         *-- TextBox TotQt = txt_4c_TotQt (Top=148+29=177, Left=254, Width=80)
@@ -748,6 +749,7 @@ DEFINE CLASS Formcrf AS FormBase
             .ForeColor = RGB(90, 90, 90)
             .BackColor = RGB(255, 255, 255)
             .Value     = 0
+            .InputMask = "999,999.99"
         ENDWITH
 
         *-- OptionGroup Opt_Busca (Top=122+29=151, Left=414, Width=117)

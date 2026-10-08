@@ -542,6 +542,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .Width       = 80
             .Height      = 23
             .Value       = ""
+            .InputMask = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Enabled     = .F.

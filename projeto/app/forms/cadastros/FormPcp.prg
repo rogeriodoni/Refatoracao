@@ -620,6 +620,7 @@ DEFINE CLASS FormPcp AS FormBase
             loc_oPage.AddObject("txt_4c_Codigos", "TextBox")
             WITH loc_oPage.txt_4c_Codigos
                 .Value    = 0
+                .InputMask = "9999999999"
                 .Top      = 156
                 .Left     = 195
                 .Width    = 80

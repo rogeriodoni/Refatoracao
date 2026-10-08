@@ -1423,6 +1423,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.cnt_4c__Total.AddObject("txt_4c_TotCOc", "TextBox")
         WITH loc_oCnt.cnt_4c__Total.txt_4c_TotCOc
             .Value = 0
+            .InputMask = "999999"
             .ReadOnly = .T.
             .Top = 6
             .Left = 117
@@ -1437,6 +1438,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.cnt_4c__Total.AddObject("txt_4c_TotSOc", "TextBox")
         WITH loc_oCnt.cnt_4c__Total.txt_4c_TotSOc
             .Value = 0
+            .InputMask = "999999"
             .ReadOnly = .T.
             .Top = 29
             .Left = 117
@@ -1557,6 +1559,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_CCusto", "TextBox")
         WITH loc_oCnt.txt_4c_CCusto
             .Value = ""
+            .InputMask = "99,999.99"
             .ReadOnly = .T.
             .Top = 146
             .Left = 87
@@ -1571,6 +1574,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_CCusto2", "TextBox")
         WITH loc_oCnt.txt_4c_CCusto2
             .Value = ""
+            .InputMask = "99,999.99"
             .ReadOnly = .T.
             .Top = 146
             .Left = 240
@@ -1585,6 +1589,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_Dif", "TextBox")
         WITH loc_oCnt.txt_4c_Dif
             .Value = 0
+            .InputMask = "99,999.99"
             .ReadOnly = .T.
             .Top = 146
             .Left = 395
@@ -1599,6 +1604,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_PesReal", "TextBox")
         WITH loc_oCnt.txt_4c_PesReal
             .Value = 0
+            .InputMask = "9,999.99"
             .ReadOnly = .T.
             .Top = 171
             .Left = 87
@@ -1613,6 +1619,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_Peso", "TextBox")
         WITH loc_oCnt.txt_4c_Peso
             .Value = 0
+            .InputMask = "9,999.99"
             .ReadOnly = .T.
             .Top = 171
             .Left = 240
@@ -1831,6 +1838,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_BNCCusto", "TextBox")
         WITH loc_oCnt.txt_4c_BNCCusto
             .Value = ""
+            .InputMask = "9,999.99"
             .ReadOnly = .T.
             .Top = 39
             .Left = 339
@@ -1844,6 +1852,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_BNPesReal", "TextBox")
         WITH loc_oCnt.txt_4c_BNPesReal
             .Value = 0
+            .InputMask = "9,999.99"
             .ReadOnly = .T.
             .Top = 64
             .Left = 339
@@ -2287,6 +2296,7 @@ DEFINE CLASS Formint AS FormBase
         loc_oCnt.AddObject("txt_4c_ICCusto", "TextBox")
         WITH loc_oCnt.txt_4c_ICCusto
             .Value = ""
+            .InputMask = "9,999.99"
             .ReadOnly = .T.
             .Top = 46
             .Left = 329

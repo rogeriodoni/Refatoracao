@@ -380,6 +380,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
                 .Width         = 31
                 .Height        = 25
                 .Value         = ""
+                .InputMask = "XXX"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .SpecialEffect = 0
@@ -702,6 +703,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
                 .Width         = 86
                 .Height        = 25
                 .Value         = 0
+                .InputMask = "9999999999"
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .SpecialEffect = 0

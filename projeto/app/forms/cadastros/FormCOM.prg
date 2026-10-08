@@ -614,6 +614,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_Empresa", "TextBox")
             WITH loc_oPagina.txt_4c_Empresa
                 .Value     = ""
+                .InputMask = "XXX"
                 .Top       = 141
                 .Left      = 140
                 .Width     = 31

@@ -1071,6 +1071,7 @@ DEFINE CLASS FormLin AS FormBase
             loc_oAba.AddObject("txt_4c_Linhas", "TextBox")
             WITH loc_oAba.txt_4c_Linhas
                 .Value     = ""
+                .InputMask = "XXXXXXXXXX"
                 .Top       = 29
                 .Left      = 247
                 .Width     = 79
@@ -1099,6 +1100,7 @@ DEFINE CLASS FormLin AS FormBase
             loc_oAba.AddObject("txt_4c_Descs", "TextBox")
             WITH loc_oAba.txt_4c_Descs
                 .Value     = ""
+                .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
                 .Top       = 57
                 .Left      = 247
                 .Width     = 289

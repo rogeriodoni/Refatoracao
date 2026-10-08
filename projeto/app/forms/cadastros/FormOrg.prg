@@ -525,6 +525,7 @@ DEFINE CLASS FormOrg AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = ""
+            .InputMask = "!"
             .MaxLength     = 1
             .Top           = 158
             .Left          = 335
@@ -563,6 +564,7 @@ DEFINE CLASS FormOrg AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
+            .InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             .MaxLength     = 40
             .Top           = 186
             .Left          = 335

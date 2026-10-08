@@ -1408,6 +1408,7 @@ DEFINE CLASS FormGpe AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .InputMask = "999999"
         ENDWITH
 
         *-- COLUNA DIREITA: Auditoria (9 opcoes) - Left=424

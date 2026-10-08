@@ -611,6 +611,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text1", "TextBox")
         WITH loc_oPg2.txt_4c_Text1
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 64
             .Width    = 41
@@ -639,6 +640,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text2", "TextBox")
         WITH loc_oPg2.txt_4c_Text2
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 118
             .Width    = 41
@@ -668,6 +670,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text3", "TextBox")
         WITH loc_oPg2.txt_4c_Text3
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 179
             .Width    = 41
@@ -696,6 +699,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text4", "TextBox")
         WITH loc_oPg2.txt_4c_Text4
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 233
             .Width    = 41
@@ -725,6 +729,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text5", "TextBox")
         WITH loc_oPg2.txt_4c_Text5
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 294
             .Width    = 41
@@ -753,6 +758,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text6", "TextBox")
         WITH loc_oPg2.txt_4c_Text6
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 348
             .Width    = 41
@@ -782,6 +788,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text7", "TextBox")
         WITH loc_oPg2.txt_4c_Text7
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 409
             .Width    = 41
@@ -810,6 +817,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text8", "TextBox")
         WITH loc_oPg2.txt_4c_Text8
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 463
             .Width    = 41
@@ -839,6 +847,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text9", "TextBox")
         WITH loc_oPg2.txt_4c_Text9
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 524
             .Width    = 41
@@ -867,6 +876,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text10", "TextBox")
         WITH loc_oPg2.txt_4c_Text10
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 249
             .Left     = 578
             .Width    = 41
@@ -928,6 +938,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text11", "TextBox")
         WITH loc_oPg2.txt_4c_Text11
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 324
             .Left     = 64
             .Width    = 41
@@ -956,6 +967,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text12", "TextBox")
         WITH loc_oPg2.txt_4c_Text12
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 324
             .Left     = 118
             .Width    = 41
@@ -985,6 +997,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text13", "TextBox")
         WITH loc_oPg2.txt_4c_Text13
             .Value    = 0
+            .InputMask = "999"
             .Top      = 324
             .Left     = 179
             .Width    = 41
@@ -1014,6 +1027,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text14", "TextBox")
         WITH loc_oPg2.txt_4c_Text14
             .Value    = 0
+            .InputMask = "999"
             .Top      = 324
             .Left     = 246
             .Width    = 41
@@ -1075,6 +1089,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text15", "TextBox")
         WITH loc_oPg2.txt_4c_Text15
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 64
             .Width    = 41
@@ -1101,6 +1116,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text16", "TextBox")
         WITH loc_oPg2.txt_4c_Text16
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 118
             .Width    = 41
@@ -1129,6 +1145,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text17", "TextBox")
         WITH loc_oPg2.txt_4c_Text17
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 179
             .Width    = 41
@@ -1155,6 +1172,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text18", "TextBox")
         WITH loc_oPg2.txt_4c_Text18
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 233
             .Width    = 41
@@ -1183,6 +1201,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text19", "TextBox")
         WITH loc_oPg2.txt_4c_Text19
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 294
             .Width    = 41
@@ -1209,6 +1228,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text20", "TextBox")
         WITH loc_oPg2.txt_4c_Text20
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 348
             .Width    = 41
@@ -1237,6 +1257,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text21", "TextBox")
         WITH loc_oPg2.txt_4c_Text21
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 409
             .Width    = 41
@@ -1263,6 +1284,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text22", "TextBox")
         WITH loc_oPg2.txt_4c_Text22
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 398
             .Left     = 463
             .Width    = 41
@@ -1291,6 +1313,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text23", "TextBox")
         WITH loc_oPg2.txt_4c_Text23
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 397
             .Left     = 524
             .Width    = 41
@@ -1317,6 +1340,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text24", "TextBox")
         WITH loc_oPg2.txt_4c_Text24
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 397
             .Left     = 578
             .Width    = 41
@@ -1345,6 +1369,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text25", "TextBox")
         WITH loc_oPg2.txt_4c_Text25
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 432
             .Left     = 65
             .Width    = 41
@@ -1371,6 +1396,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text26", "TextBox")
         WITH loc_oPg2.txt_4c_Text26
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 432
             .Left     = 118
             .Width    = 41
@@ -1399,6 +1425,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text27", "TextBox")
         WITH loc_oPg2.txt_4c_Text27
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 432
             .Left     = 179
             .Width    = 41
@@ -1425,6 +1452,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text28", "TextBox")
         WITH loc_oPg2.txt_4c_Text28
             .Value    = 0
+            .InputMask = "999.99"
             .Top      = 432
             .Left     = 233
             .Width    = 41
@@ -1541,6 +1569,7 @@ DEFINE CLASS FormCfb AS FormBase
         loc_oPg2.AddObject("txt_4c_Text31", "TextBox")
         WITH loc_oPg2.txt_4c_Text31
             .Value    = 0
+            .InputMask = "999"
             .Top      = 537
             .Left     = 263
             .Width    = 41

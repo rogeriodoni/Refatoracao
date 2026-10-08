@@ -14009,3 +14009,44 @@ e fica calado no corrigido.
 
 Das 5 validacoes de obrigatoriedade do `Salva.Click` legado (CEP, Tipo, Endereco, Cidade, UF), a da
 **Cidade** nao tinha sido migrada. Transcrita na posicao do legado, entre Endereco e UF.
+
+### Sweep dos `InputMask` (severidade ALTA): casamento por GEOMETRIA + NOME
+
+A secao acima dizia que nao daria para varrer, porque o mapeamento objeto legado -> objeto migrado eh
+humano. Testado, da - para a MAIORIA - com um criterio duplo, e o que sobra fica explicito.
+
+**Casar por `Left` + `Width` NAO basta**: falha ate no `FormCEP`, onde a resposta eh conhecida, porque
+varios controles dividem `Left=275 Width=80`. Com `Top` entra o offset do PageFrame (secao 39), que
+**varia por form** (+29 nos CRUD, mas -85/-136 em REPORT FLAT). Solucao: inferir o offset por form,
+pela MODA dos deltas de `Top` entre os pares que casam por `Left`+`Width` de forma unica.
+
+**Guardas que separam acerto de chute:**
+1. `Left` + `Width` + (`Top` + offset) iguais, com **unicidade dos dois lados**.
+2. Offset so vale com **moda >= 2 amostras E majoritaria** - moda de 1 amostra nao desloca nada
+   (descartou 25 forms).
+3. **O NOME eh gate INDEPENDENTE**: o nucleo do nome legado tem de aparecer no migrado. O nome nao
+   participa do casamento, entao a concordancia vale como verificacao - e ela deu **264 de 282 (94%)**,
+   o que mede a precisao da geometria.
+
+Resultado (2026-10-08): **265 `InputMask` aplicados em 48 forms**; a auditoria caiu de **ALTA 541 para
+285**. Os 48 compilam limpo.
+
+O que NAO foi aplicado, de proposito:
+
+| motivo | qtd |
+|---|---|
+| nome diverge da geometria | 12 (listados em `automation\erro197_inputmask_revisar.tsv`) |
+| form sem offset confiavel | 25 forms |
+| sem par geometrico no migrado | o restante |
+
+Dos 12 com nome divergente, boa parte eh so limitacao do comparador (acento: `Get_Código` ->
+`txt_4c_Codigo`), mas ha suspeitos de verdade (`getCods` -> `txt_4c_Descricao`,
+`getCodSMuns` -> `txt_4c_Codigo`) - por isso nenhum entrou automaticamente.
+
+**Detalhe de implementacao que custou caro**: `local $/` dentro do laco, usado para slurpar o dump,
+**vazava para o resto da iteracao** e fazia a leitura do `.prg` devolver o arquivo inteiro num unico
+elemento - o laco linha a linha nao casava nada e o sweep aplicava ZERO em silencio. Slurpar em bloco
+proprio (`my $x = do { open ...; local $/; <$fh> };`).
+
+`Formsigpdmp2.prg` ja estava com LF puro no repo (3170 linhas, 0 CRLF) antes do sweep - o script
+seguiu a convencao do proprio arquivo. Nao confundir com quebra de CRLF.

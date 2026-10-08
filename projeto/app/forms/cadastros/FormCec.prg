@@ -724,6 +724,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget1", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget1
             .Value     = ""
+            .InputMask = "!!"
             .Top       = 279
             .Left      = 240
             .Width     = 24

@@ -637,6 +637,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_OpAnts", "TextBox")
         WITH loc_oPagina.txt_4c_OpAnts
             .Value     = ""
+            .InputMask = "!!!!!!!!!!!!!!!"
             .Top       = 140
             .Left      = 146
             .Width     = 150
@@ -934,6 +935,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_Hispad", "TextBox")
         WITH loc_oPagina.txt_4c_Hispad
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 215
             .Left      = 146
             .Width     = 80
@@ -1242,6 +1244,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_GrupoOs", "TextBox")
         WITH loc_oPagina.txt_4c_GrupoOs
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 295
             .Left      = 146
             .Width     = 79
@@ -1285,6 +1288,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 296
             .Left      = 621
             .Width     = 79
@@ -1328,6 +1332,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_ContaOs", "TextBox")
         WITH loc_oPagina.txt_4c_ContaOs
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 320
             .Left      = 146
             .Width     = 79
@@ -1371,6 +1376,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_Conta", "TextBox")
         WITH loc_oPagina.txt_4c_Conta
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 321
             .Left      = 621
             .Width     = 79
@@ -2706,6 +2712,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_Desconto", "TextBox")
         WITH loc_oPagina.txt_4c_Desconto
             .Value     = 0
+            .InputMask = "999.99"
             .Top       = 471
             .Left      = 771
             .Width     = 52
@@ -2732,6 +2739,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Moeda
             .Value     = ""
+            .InputMask = "!!!"
             .Top       = 496
             .Left      = 771
             .Width     = 32
@@ -2760,6 +2768,7 @@ DEFINE CLASS FormOpt AS FormBase
         loc_oPagina.AddObject("txt_4c_GrupoT", "TextBox")
         WITH loc_oPagina.txt_4c_GrupoT
             .Value     = ""
+            .InputMask = "!!!!!!!!!!"
             .Top       = 678
             .Left      = 621
             .Width     = 79
