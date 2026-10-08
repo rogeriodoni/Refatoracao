@@ -20,6 +20,8 @@ DEFINE CLASS Formsigmvdis AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -842,23 +844,23 @@ DEFINE CLASS Formsigmvdis AS FormBase
         *-- BINDEVENTs de lookup (F4/F5 via KeyPress + DblClick + validacao via LostFocus)
         BINDEVENT(loc_oPagina.txt_4c_CodProduto, "DblClick", THIS, "AbrirBuscaCodProduto")
         BINDEVENT(loc_oPagina.txt_4c_CodProduto, "KeyPress", THIS, "TeclaLookupCodProduto")
-        BINDEVENT(loc_oPagina.txt_4c_CodProduto, "KeyPress", THIS, "ValidarCodProduto")
+        BINDEVENT(loc_oPagina.txt_4c_CodProduto, "LostFocus", THIS, "ValidarCodProduto")
 
         BINDEVENT(loc_oPagina.txt_4c_CodCor, "DblClick", THIS, "AbrirBuscaCodCor")
         BINDEVENT(loc_oPagina.txt_4c_CodCor, "KeyPress", THIS, "TeclaLookupCodCor")
-        BINDEVENT(loc_oPagina.txt_4c_CodCor, "KeyPress", THIS, "ValidarCodCor")
+        BINDEVENT(loc_oPagina.txt_4c_CodCor, "LostFocus", THIS, "ValidarCodCor")
 
         BINDEVENT(loc_oPagina.txt_4c_CodTamanho, "DblClick", THIS, "AbrirBuscaCodTamanho")
         BINDEVENT(loc_oPagina.txt_4c_CodTamanho, "KeyPress", THIS, "TeclaLookupCodTamanho")
-        BINDEVENT(loc_oPagina.txt_4c_CodTamanho, "KeyPress", THIS, "ValidarCodTamanho")
+        BINDEVENT(loc_oPagina.txt_4c_CodTamanho, "LostFocus", THIS, "ValidarCodTamanho")
 
         BINDEVENT(loc_oPagina.txt_4c_EmpDestino, "DblClick", THIS, "AbrirBuscaEmpDestino")
         BINDEVENT(loc_oPagina.txt_4c_EmpDestino, "KeyPress", THIS, "TeclaLookupEmpDestino")
-        BINDEVENT(loc_oPagina.txt_4c_EmpDestino, "KeyPress", THIS, "ValidarEmpDestino")
+        BINDEVENT(loc_oPagina.txt_4c_EmpDestino, "LostFocus", THIS, "ValidarEmpDestino")
 
         BINDEVENT(loc_oPagina.txt_4c_Local, "DblClick", THIS, "AbrirBuscaLocal")
         BINDEVENT(loc_oPagina.txt_4c_Local, "KeyPress", THIS, "TeclaLookupLocal")
-        BINDEVENT(loc_oPagina.txt_4c_Local, "KeyPress", THIS, "ValidarLocal")
+        BINDEVENT(loc_oPagina.txt_4c_Local, "LostFocus", THIS, "ValidarLocal")
 
         THIS.ConfigurarPgPage1()
         THIS.ConfigurarPgPage2()
@@ -1335,7 +1337,7 @@ DEFINE CLASS Formsigmvdis AS FormBase
         ENDWITH
         BINDEVENT(loc_oGrid.Column4.Text1, "DblClick",  THIS, "AbrirBuscaLocalDistribui")
         BINDEVENT(loc_oGrid.Column4.Text1, "KeyPress",  THIS, "TeclaLookupLocalDistribui")
-        BINDEVENT(loc_oGrid.Column4.Text1, "KeyPress", THIS, "ValidarLocalDistribui")
+        BINDEVENT(loc_oGrid.Column4.Text1, "LostFocus", THIS, "ValidarLocalDistribui")
 
         *-- Filtro por Grupo (get_cgrupo/get_dgrupo no legado)
         loc_oPgN.AddObject("lbl_4c_FiltroGrupo", "Label")
@@ -1383,8 +1385,8 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
         BINDEVENT(loc_oPgN.txt_4c_FiltroCodGrupo, "DblClick",  THIS, "AbrirBuscaFiltroGrupo")
         BINDEVENT(loc_oPgN.txt_4c_FiltroCodGrupo, "KeyPress",  THIS, "TeclaLookupFiltroGrupo")
-        BINDEVENT(loc_oPgN.txt_4c_FiltroCodGrupo, "KeyPress", THIS, "ValidarFiltroCodGrupo")
-        BINDEVENT(loc_oPgN.txt_4c_FiltroDescGrupo, "KeyPress", THIS, "ValidarFiltroDescGrupo")
+        BINDEVENT(loc_oPgN.txt_4c_FiltroCodGrupo, "LostFocus", THIS, "ValidarFiltroCodGrupo")
+        BINDEVENT(loc_oPgN.txt_4c_FiltroDescGrupo, "LostFocus", THIS, "ValidarFiltroDescGrupo")
 
         *-- Filtro por Subgrupo (get_csgrupo/get_dsgrupo no legado)
         loc_oPgN.AddObject("lbl_4c_FiltroSubgrupo", "Label")
@@ -1432,8 +1434,8 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
         BINDEVENT(loc_oPgN.txt_4c_FiltroCodSubgrupo, "DblClick",  THIS, "AbrirBuscaFiltroSubgrupo")
         BINDEVENT(loc_oPgN.txt_4c_FiltroCodSubgrupo, "KeyPress",  THIS, "TeclaLookupFiltroSubgrupo")
-        BINDEVENT(loc_oPgN.txt_4c_FiltroCodSubgrupo, "KeyPress", THIS, "ValidarFiltroCodSubgrupo")
-        BINDEVENT(loc_oPgN.txt_4c_FiltroDescSubgrupo, "KeyPress", THIS, "ValidarFiltroDescSubgrupo")
+        BINDEVENT(loc_oPgN.txt_4c_FiltroCodSubgrupo, "LostFocus", THIS, "ValidarFiltroCodSubgrupo")
+        BINDEVENT(loc_oPgN.txt_4c_FiltroDescSubgrupo, "LostFocus", THIS, "ValidarFiltroDescSubgrupo")
 
         *-- Botao Filtrar (fwbtng "Filtrar" no legado)
         loc_oPgN.AddObject("cmd_4c_Filtrar", "CommandButton")
@@ -2551,13 +2553,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Produto (cpros) -> SigCdPro (cpros/dpros)
     PROCEDURE TeclaLookupCodProduto(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaCodProduto()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaCodProduto()
         LOCAL loc_oPg2, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValorAtual = ALLTRIM(loc_oPg2.txt_4c_CodProduto.Value)
 
@@ -2586,9 +2595,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaProduto")
             USE IN cursor_4c_BuscaProduto
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarCodProduto(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodProdutoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodProduto()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodProdutoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodProdutoExec()
         LOCAL loc_oPg2, loc_cValor, loc_cSQL, loc_nResultado
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValor = UPPER(ALLTRIM(loc_oPg2.txt_4c_CodProduto.Value))
@@ -2616,13 +2640,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Cor (codcors) -> SigCdCor (cods/descs)
     PROCEDURE TeclaLookupCodCor(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaCodCor()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaCodCor()
         LOCAL loc_oPg2, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValorAtual = ALLTRIM(loc_oPg2.txt_4c_CodCor.Value)
 
@@ -2651,9 +2682,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaCor")
             USE IN cursor_4c_BuscaCor
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarCodCor(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodCorExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodCor()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodCorExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodCorExec()
         LOCAL loc_oPg2, loc_cValor, loc_cSQL, loc_nResultado
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValor = UPPER(ALLTRIM(loc_oPg2.txt_4c_CodCor.Value))
@@ -2681,13 +2727,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Tamanho (codtams) -> SigCdTam (cods/descs)
     PROCEDURE TeclaLookupCodTamanho(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaCodTamanho()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaCodTamanho()
         LOCAL loc_oPg2, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValorAtual = ALLTRIM(loc_oPg2.txt_4c_CodTamanho.Value)
 
@@ -2716,9 +2769,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaTamanho")
             USE IN cursor_4c_BuscaTamanho
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarCodTamanho(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodTamanhoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodTamanho()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodTamanhoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodTamanhoExec()
         LOCAL loc_oPg2, loc_cValor, loc_cSQL, loc_nResultado
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValor = UPPER(ALLTRIM(loc_oPg2.txt_4c_CodTamanho.Value))
@@ -2746,13 +2814,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Empresa de destino (empds) -> SigCdEmp (cemps/razas)
     PROCEDURE TeclaLookupEmpDestino(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaEmpDestino()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaEmpDestino()
         LOCAL loc_oPg2, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValorAtual = ALLTRIM(loc_oPg2.txt_4c_EmpDestino.Value)
 
@@ -2781,9 +2856,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaEmpresa")
             USE IN cursor_4c_BuscaEmpresa
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarEmpDestino(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarEmpDestinoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarEmpDestino()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarEmpDestinoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarEmpDestinoExec()
         LOCAL loc_oPg2, loc_cValor, loc_cSQL, loc_nResultado
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValor = UPPER(ALLTRIM(loc_oPg2.txt_4c_EmpDestino.Value))
@@ -2811,13 +2901,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Local de estoque (locals) -> SigPrLcl (codigos/descricaos)
     PROCEDURE TeclaLookupLocal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaLocal()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaLocal()
         LOCAL loc_oPg2, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValorAtual = ALLTRIM(loc_oPg2.txt_4c_Local.Value)
 
@@ -2846,9 +2943,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaLocal")
             USE IN cursor_4c_BuscaLocal
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarLocal(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarLocalExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarLocal()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarLocalExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarLocalExec()
         LOCAL loc_oPg2, loc_cValor, loc_cSQL, loc_nResultado
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cValor = UPPER(ALLTRIM(loc_oPg2.txt_4c_Local.Value))
@@ -3218,13 +3330,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Filtro Grupo (get_cgrupo/get_dgrupo no legado) -> SigCdGrp (cgrus/dgrus)
     PROCEDURE TeclaLookupFiltroGrupo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaFiltroGrupo()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaFiltroGrupo()
         LOCAL loc_oPgN, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPgN = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValorAtual = ALLTRIM(loc_oPgN.txt_4c_FiltroCodGrupo.Value)
 
@@ -3254,9 +3373,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaFiltroGrupo")
             USE IN cursor_4c_BuscaFiltroGrupo
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarFiltroCodGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFiltroCodGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFiltroCodGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFiltroCodGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFiltroCodGrupoExec()
         LOCAL loc_oPgN, loc_cValor, loc_nResultado
         loc_oPgN  = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValor = UPPER(ALLTRIM(loc_oPgN.txt_4c_FiltroCodGrupo.Value))
@@ -3284,7 +3418,21 @@ DEFINE CLASS Formsigmvdis AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarFiltroDescGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFiltroDescGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFiltroDescGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFiltroDescGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFiltroDescGrupoExec()
         LOCAL loc_oPgN, loc_cValor, loc_nResultado
         loc_oPgN  = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValor = UPPER(ALLTRIM(loc_oPgN.txt_4c_FiltroDescGrupo.Value))
@@ -3314,13 +3462,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Filtro Subgrupo (get_csgrupo/get_dsgrupo no legado) -> SigCdPsg (codigos/descricaos)
     PROCEDURE TeclaLookupFiltroSubgrupo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaFiltroSubgrupo()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaFiltroSubgrupo()
         LOCAL loc_oPgN, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oPgN = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValorAtual = ALLTRIM(loc_oPgN.txt_4c_FiltroCodSubgrupo.Value)
 
@@ -3351,9 +3506,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaFiltroSubgrupo")
             USE IN cursor_4c_BuscaFiltroSubgrupo
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarFiltroCodSubgrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFiltroCodSubgrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFiltroCodSubgrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFiltroCodSubgrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFiltroCodSubgrupoExec()
         LOCAL loc_oPgN, loc_cValor, loc_nResultado
         loc_oPgN  = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValor = UPPER(ALLTRIM(loc_oPgN.txt_4c_FiltroCodSubgrupo.Value))
@@ -3381,7 +3551,21 @@ DEFINE CLASS Formsigmvdis AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarFiltroDescSubgrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFiltroDescSubgrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFiltroDescSubgrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFiltroDescSubgrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFiltroDescSubgrupoExec()
         LOCAL loc_oPgN, loc_cValor, loc_nResultado
         loc_oPgN  = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3
         loc_cValor = UPPER(ALLTRIM(loc_oPgN.txt_4c_FiltroDescSubgrupo.Value))
@@ -3450,13 +3634,20 @@ DEFINE CLASS Formsigmvdis AS FormBase
 
     *-- Coluna "Local" do grd_4c_Distribui -> SigPrLcl (codigos/descricaos)
     PROCEDURE TeclaLookupLocalDistribui(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaLocalDistribui()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirBuscaLocalDistribui()
         LOCAL loc_oGrid, loc_cValorAtual, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3.grd_4c_Distribui
         loc_cValorAtual = ALLTRIM(loc_oGrid.Column4.Text1.Value)
 
@@ -3485,9 +3676,24 @@ DEFINE CLASS Formsigmvdis AS FormBase
         IF USED("cursor_4c_BuscaLocalDistribui")
             USE IN cursor_4c_BuscaLocalDistribui
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
-    PROCEDURE ValidarLocalDistribui(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarLocalDistribuiExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarLocalDistribui()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarLocalDistribuiExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarLocalDistribuiExec()
         LOCAL loc_oGrid, loc_cValor, loc_nResultado
         loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page3.grd_4c_Distribui
         loc_cValor = UPPER(ALLTRIM(loc_oGrid.Column4.Text1.Value))

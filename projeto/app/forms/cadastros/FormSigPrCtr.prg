@@ -25,6 +25,8 @@ DEFINE CLASS FormSigPrCtr AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -961,7 +963,7 @@ DEFINE CLASS FormSigPrCtr AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .Value         = ""
         ENDWITH
-        BINDEVENT(loc_oAba1.txt_4c_Moeda, "KeyPress", THIS, "ValidarMoedaFornecedor")
+        BINDEVENT(loc_oAba1.txt_4c_Moeda, "LostFocus", THIS, "ValidarMoedaFornecedor")
 
         *-- Say2 "Diretorio :"
         loc_oAba1.AddObject("lbl_4c_Diretorio", "Label")
@@ -2827,7 +2829,21 @@ DEFINE CLASS FormSigPrCtr AS FormBase
     * fwbuscaext -> SigCdMoe). Padrao canonico FormBuscaAuxiliar: this_lAchouRegistro
     * ANTES do Show(), this_lSelecionou antes de atribuir o valor (regra #37).
     *===========================================================================
-    PROCEDURE ValidarMoedaFornecedor(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaFornecedorExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaFornecedor()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaFornecedorExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaFornecedorExec()
         LOCAL loc_oPagina, loc_oBusca
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2.pgf_4c_Detalhes.Page1

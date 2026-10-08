@@ -40,6 +40,8 @@ DEFINE CLASS Formsigreinr AS FormBase
     this_oRelatorio    = .NULL.
     this_cMensagemErro = ""
     this_nNumBal       = 0
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Armazena parametro, inicializa form via FormBase.Init()
@@ -569,7 +571,7 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_CodProduto, "KeyPress",  THIS, "TeclaCodProduto")
         BINDEVENT(loc_oPagina.txt_4c_CodProduto, "DblClick",  THIS, "AbrirBuscaCodProduto")
-        BINDEVENT(loc_oPagina.txt_4c_CodProduto, "KeyPress", THIS, "ValidarCodProduto")
+        BINDEVENT(loc_oPagina.txt_4c_CodProduto, "LostFocus", THIS, "ValidarCodProduto")
 
         *-- TextBox Descricao Produto (get_ds_codigo: Top=163 -> Page1: 78)
         loc_oPagina.AddObject("txt_4c_DsProduto", "TextBox")
@@ -593,7 +595,7 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_DsProduto, "KeyPress",  THIS, "TeclaDsProduto")
         BINDEVENT(loc_oPagina.txt_4c_DsProduto, "DblClick",  THIS, "AbrirBuscaDsProduto")
-        BINDEVENT(loc_oPagina.txt_4c_DsProduto, "KeyPress", THIS, "ValidarDsProduto")
+        BINDEVENT(loc_oPagina.txt_4c_DsProduto, "LostFocus", THIS, "ValidarDsProduto")
 
         *-- Rotulo "Local :" (Say5: Top=195 -> Page1: 110)
         loc_oPagina.AddObject("lbl_4c_Local", "Label")
@@ -632,7 +634,7 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_CodLocal, "KeyPress",  THIS, "TeclaCodLocal")
         BINDEVENT(loc_oPagina.txt_4c_CodLocal, "DblClick",  THIS, "AbrirBuscaCodLocal")
-        BINDEVENT(loc_oPagina.txt_4c_CodLocal, "KeyPress", THIS, "ValidarCodLocal")
+        BINDEVENT(loc_oPagina.txt_4c_CodLocal, "LostFocus", THIS, "ValidarCodLocal")
 
         *-- TextBox Descricao Local (get_Dlocal: Top=190 -> Page1: 105)
         loc_oPagina.AddObject("txt_4c_DsLocal", "TextBox")
@@ -655,7 +657,7 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_DsLocal, "KeyPress",  THIS, "TeclaDsLocal")
         BINDEVENT(loc_oPagina.txt_4c_DsLocal, "DblClick",  THIS, "AbrirBuscaDsLocal")
-        BINDEVENT(loc_oPagina.txt_4c_DsLocal, "KeyPress", THIS, "ValidarDsLocal")
+        BINDEVENT(loc_oPagina.txt_4c_DsLocal, "LostFocus", THIS, "ValidarDsLocal")
 
         *-- Rotulo "Etiqueta :" (Say8: Top=222 -> Page1: 137)
         loc_oPagina.AddObject("lbl_4c_Etiqueta", "Label")
@@ -1516,18 +1518,37 @@ DEFINE CLASS Formsigreinr AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaCodProduto(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaCodProduto()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE TeclaDsProduto(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaDsProduto()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirBuscaCodProduto()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirBuscaCodProdutoExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirBuscaCodProdutoExec()
         LOCAL loc_oPg, loc_cValor, loc_oForm, loc_nResult, loc_nBarra
         LOCAL lnbarra_val, lcpros_val
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
@@ -1591,7 +1612,18 @@ DEFINE CLASS Formsigreinr AS FormBase
         loc_oForm.Release()
     ENDPROC
 
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirBuscaDsProduto()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirBuscaDsProdutoExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsProdutoExec()
         LOCAL loc_oPg, loc_cValor, loc_oForm
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsProduto.Value)
@@ -1619,7 +1651,21 @@ DEFINE CLASS Formsigreinr AS FormBase
         loc_oForm.Release()
     ENDPROC
 
-    PROCEDURE ValidarCodProduto(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodProdutoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodProduto()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodProdutoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodProdutoExec()
         LOCAL loc_oPg, loc_cValor, lcpros_val, loc_nResult
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_CodProduto.Value)
@@ -1644,7 +1690,21 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarDsProduto(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDsProdutoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDsProduto()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsProdutoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDsProdutoExec()
         LOCAL loc_oPg, loc_cValor
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsProduto.Value)
@@ -1661,18 +1721,37 @@ DEFINE CLASS Formsigreinr AS FormBase
     *==========================================================================
 
     PROCEDURE TeclaCodLocal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaCodLocal()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE TeclaDsLocal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaDsLocal()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirBuscaCodLocal()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirBuscaCodLocalExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirBuscaCodLocalExec()
         LOCAL loc_oPg, loc_cValor, loc_oForm
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_CodLocal.Value)
@@ -1700,7 +1779,18 @@ DEFINE CLASS Formsigreinr AS FormBase
         loc_oForm.Release()
     ENDPROC
 
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirBuscaDsLocal()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirBuscaDsLocalExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsLocalExec()
         LOCAL loc_oPg, loc_cValor, loc_oForm
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsLocal.Value)
@@ -1728,7 +1818,21 @@ DEFINE CLASS Formsigreinr AS FormBase
         loc_oForm.Release()
     ENDPROC
 
-    PROCEDURE ValidarCodLocal(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodLocalExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodLocal()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodLocalExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodLocalExec()
         LOCAL loc_oPg, loc_cValor, lcodigos_val, loc_nResult
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_CodLocal.Value)
@@ -1753,7 +1857,21 @@ DEFINE CLASS Formsigreinr AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarDsLocal(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDsLocalExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDsLocal()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsLocalExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDsLocalExec()
         LOCAL loc_oPg, loc_cValor
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsLocal.Value)

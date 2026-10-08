@@ -38,6 +38,8 @@ DEFINE CLASS FormBch AS FormBase
     this_lIniciaLeitura = .F.
     this_cLeituraSerial = ""
     this_cTipoLeitora   = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -768,9 +770,9 @@ DEFINE CLASS FormBch AS FormBase
         ENDWITH
 
         *-- Valid handlers para campos de lookup (Fase 6)
-        BINDEVENT(loc_oPg2.txt_4c_Oper,   "KeyPress", THIS, "ValidOper")
-        BINDEVENT(loc_oPg2.txt_4c_Grupo,  "KeyPress", THIS, "ValidGrupo")
-        BINDEVENT(loc_oPg2.txt_4c_DGrupo, "KeyPress", THIS, "ValidDGrupo")
+        BINDEVENT(loc_oPg2.txt_4c_Oper,   "LostFocus", THIS, "ValidOper")
+        BINDEVENT(loc_oPg2.txt_4c_Grupo,  "LostFocus", THIS, "ValidGrupo")
+        BINDEVENT(loc_oPg2.txt_4c_DGrupo, "LostFocus", THIS, "ValidDGrupo")
         BINDEVENT(loc_oPg2.txt_4c_Conta,  "KeyPress", THIS, "ValidConta")
         BINDEVENT(loc_oPg2.txt_4c_DConta, "KeyPress", THIS, "ValidDConta")
 
@@ -2259,7 +2261,21 @@ DEFINE CLASS FormBch AS FormBase
     *--------------------------------------------------------------------------
     * ValidOper - Valid handler: lookup SigCdOpt por operacaos (code = char 15)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidOper(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidOperExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidOper()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidOperExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidOperExec()
         LOCAL loc_oPg2, loc_cCodigo, loc_oBusca, loc_nResultado, loc_lResultado
         loc_lResultado = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -2323,7 +2339,21 @@ DEFINE CLASS FormBch AS FormBase
     *--------------------------------------------------------------------------
     * ValidGrupo - Valid handler: lookup SigCdGcr por codigos, preenche DGrupo
     *--------------------------------------------------------------------------
-    PROCEDURE ValidGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidGrupoExec()
         LOCAL loc_oPg2, loc_cCodigo, loc_oBusca, loc_nResultado, loc_lResultado
         loc_lResultado = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -2404,7 +2434,21 @@ DEFINE CLASS FormBch AS FormBase
     * ValidDGrupo - Valid handler: busca reversa SigCdGcr por descrs
     * Ativo apenas quando txt_4c_Grupo estiver vazio em modo INCLUIR
     *--------------------------------------------------------------------------
-    PROCEDURE ValidDGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidDGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidDGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidDGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidDGrupoExec()
         LOCAL loc_oPg2, loc_oBusca, loc_lResultado
         loc_lResultado = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2

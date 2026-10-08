@@ -25,6 +25,8 @@ DEFINE CLASS FormFti AS FormBase
     this_cModoAtual      = "LISTA"
     this_cUltCodigo      = ""
     this_cAntValue       = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Inicializacao delegada ao FormBase (que chama InicializarForm)
@@ -796,7 +798,7 @@ DEFINE CLASS FormFti AS FormBase
             .MaxLength = 6
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_CdMoeda, "KeyPress", THIS, "ValidarCdMoeda")
+        BINDEVENT(loc_oPagina.txt_4c_CdMoeda, "LostFocus", THIS, "ValidarCdMoeda")
 
         *-- txt_4c_DsMoeda: descricao moeda (top=60+29=89, left=201, W=115, H=23)
         *-- When original: INSERIR E moeda vazia  |  Valid: fwbuscaext SigCdMoe por dmoes
@@ -813,7 +815,7 @@ DEFINE CLASS FormFti AS FormBase
             .MaxLength = 20
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_DsMoeda, "KeyPress", THIS, "ValidarDsMoeda")
+        BINDEVENT(loc_oPagina.txt_4c_DsMoeda, "LostFocus", THIS, "ValidarDsMoeda")
 
         *-- Label5: "Multiplicador : " (top=64+29=93, left=401, W=71, H=15)
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
@@ -2084,7 +2086,21 @@ DEFINE CLASS FormFti AS FormBase
     * ValidarCdMoeda - LostFocus de txt_4c_CdMoeda
     * Lookup em SigCdMoe por cmoes (codigo); preenche txt_4c_DsMoeda
     *==========================================================================
-    PROCEDURE ValidarCdMoeda(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCdMoedaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCdMoeda()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdMoedaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCdMoedaExec()
         LOCAL loc_cCd, loc_lResultado, loc_oBusca
         loc_lResultado = .F.
         loc_cCd        = ""
@@ -2136,7 +2152,21 @@ DEFINE CLASS FormFti AS FormBase
     * ValidarDsMoeda - LostFocus de txt_4c_DsMoeda
     * Lookup em SigCdMoe por dmoes (descricao); preenche txt_4c_CdMoeda
     *==========================================================================
-    PROCEDURE ValidarDsMoeda(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDsMoedaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDsMoeda()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsMoedaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDsMoedaExec()
         LOCAL loc_cDs, loc_lResultado, loc_oBusca
         loc_lResultado = .F.
         loc_cDs        = ""

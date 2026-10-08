@@ -29,6 +29,8 @@ DEFINE CLASS FormCVE AS FormBase
     *--------------------------------------------------------------------------
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - FormBase.Init() chama THIS.InicializarForm() via DODEFAULT
@@ -833,7 +835,7 @@ DEFINE CLASS FormCVE AS FormBase
 
             BINDEVENT(loc_oPagina.txt_4c_Usuars, "DblClick",  THIS, "AbrirBuscaUsuars")
             BINDEVENT(loc_oPagina.txt_4c_Usuars, "KeyPress",  THIS, "TeclaLookupUsuars")
-            BINDEVENT(loc_oPagina.txt_4c_Usuars, "KeyPress", THIS, "ValidarUsuars")
+            BINDEVENT(loc_oPagina.txt_4c_Usuars, "LostFocus", THIS, "ValidarUsuars")
 
             *-- Label: Per?odo (layout top=204 +29=233)
             loc_oPagina.AddObject("lbl_4c_Periodo2", "Label")
@@ -976,7 +978,7 @@ DEFINE CLASS FormCVE AS FormBase
 
             BINDEVENT(loc_oPagina.txt_4c_Setors, "DblClick",  THIS, "AbrirBuscaSetors")
             BINDEVENT(loc_oPagina.txt_4c_Setors, "KeyPress",  THIS, "TeclaLookupSetors")
-            BINDEVENT(loc_oPagina.txt_4c_Setors, "KeyPress", THIS, "ValidarSetors")
+            BINDEVENT(loc_oPagina.txt_4c_Setors, "LostFocus", THIS, "ValidarSetors")
 
             *-- Label: Adicional (layout top=278 +29=307)
             loc_oPagina.AddObject("lbl_4c_Adics", "Label")
@@ -1780,6 +1782,9 @@ DEFINE CLASS FormCVE AS FormBase
     *==========================================================================
     PROCEDURE AbrirBuscaUsuars()
         LOCAL loc_oPagina, loc_cValor, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_cValor  = UPPER(ALLTRIM(loc_oPagina.txt_4c_Usuars.Value))
@@ -1816,21 +1821,40 @@ DEFINE CLASS FormCVE AS FormBase
                 USE IN cursor_4c_BuscaUsu
             ENDIF
         ENDTRY
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
     * TeclaLookupUsuars - Dispara AbrirBuscaUsuars com F4 ou F5
     *==========================================================================
     PROCEDURE TeclaLookupUsuars(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaUsuars()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
     * ValidarUsuars - Valida codigo de usuario ao sair do campo
     *==========================================================================
-    PROCEDURE ValidarUsuars(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarUsuarsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarUsuars()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarUsuarsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarUsuarsExec()
         LOCAL loc_oPagina, loc_cValor, loc_cSQL, loc_nResultado, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -1915,6 +1939,9 @@ DEFINE CLASS FormCVE AS FormBase
     *==========================================================================
     PROCEDURE AbrirBuscaSetors()
         LOCAL loc_oPagina, loc_cValor, loc_oBusca
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_cValor  = UPPER(ALLTRIM(loc_oPagina.txt_4c_Setors.Value))
@@ -1949,21 +1976,40 @@ DEFINE CLASS FormCVE AS FormBase
                 USE IN cursor_4c_BuscaCrg
             ENDIF
         ENDTRY
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
     * TeclaLookupSetors - Dispara AbrirBuscaSetors com F4 ou F5
     *==========================================================================
     PROCEDURE TeclaLookupSetors(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaSetors()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
     * ValidarSetors - Valida codigo de cargo ao sair do campo
     *==========================================================================
-    PROCEDURE ValidarSetors(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarSetorsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarSetors()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarSetorsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarSetorsExec()
         LOCAL loc_oPagina, loc_cValor, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY

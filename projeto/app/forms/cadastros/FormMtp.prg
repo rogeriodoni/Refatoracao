@@ -22,6 +22,8 @@ DEFINE CLASS FormMtp AS FormBase
     this_oBusinessObject     = .NULL.
     this_cModoAtual          = "LISTA"
     this_cIdChaveSelecionado = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -583,7 +585,7 @@ DEFINE CLASS FormMtp AS FormBase
             .TabIndex  = 2
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupo")
+        BINDEVENT(loc_oPagina.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupo")
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress",  THIS, "GrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "DblClick",  THIS, "GrupoDblClick")
 
@@ -772,7 +774,7 @@ DEFINE CLASS FormMtp AS FormBase
             .TabIndex  = 7
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Moedas, "KeyPress", THIS, "ValidarMoedaPorCodigo")
+        BINDEVENT(loc_oPagina.txt_4c_Moedas, "LostFocus", THIS, "ValidarMoedaPorCodigo")
         BINDEVENT(loc_oPagina.txt_4c_Moedas, "KeyPress",  THIS, "MoedasKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Moedas, "DblClick",  THIS, "MoedasDblClick")
 
@@ -791,7 +793,7 @@ DEFINE CLASS FormMtp AS FormBase
             .TabIndex  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_DescMoe, "KeyPress", THIS, "ValidarMoedaPorDescricao")
+        BINDEVENT(loc_oPagina.txt_4c_DescMoe, "LostFocus", THIS, "ValidarMoedaPorDescricao")
         BINDEVENT(loc_oPagina.txt_4c_DescMoe, "KeyPress",  THIS, "DescMoeKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_DescMoe, "DblClick",  THIS, "DescMoeDblClick")
 
@@ -1131,7 +1133,21 @@ DEFINE CLASS FormMtp AS FormBase
     *===========================================================================
     * ValidarGrupo - LostFocus de txt_4c_Grupo: valida em SigCdGcr (gerbals=1)
     *===========================================================================
-    PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoExec()
         LOCAL loc_cValor, loc_oBusca
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
 
@@ -1173,7 +1189,21 @@ DEFINE CLASS FormMtp AS FormBase
     * ValidarMoedaPorCodigo - LostFocus de txt_4c_Moedas: valida Cmoes em SigCdMoe
     * Se encontrado, preenche txt_4c_DescMoe; se nao, abre picker
     *===========================================================================
-    PROCEDURE ValidarMoedaPorCodigo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaPorCodigoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaPorCodigo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaPorCodigoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaPorCodigoExec()
         LOCAL loc_oPag2, loc_cValor, loc_oBusca
         loc_oPag2  = THIS.pgf_4c_Paginas.Page2
         loc_cValor = ALLTRIM(loc_oPag2.txt_4c_Moedas.Value)
@@ -1229,7 +1259,21 @@ DEFINE CLASS FormMtp AS FormBase
     * ValidarMoedaPorDescricao - LostFocus de txt_4c_DescMoe: busca Dmoes em SigCdMoe
     * Se encontrado exato, preenche Moedas; se nao, abre picker
     *===========================================================================
-    PROCEDURE ValidarMoedaPorDescricao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaPorDescricaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaPorDescricao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaPorDescricaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaPorDescricaoExec()
         LOCAL loc_oPag2, loc_cValor, loc_oBusca
         loc_oPag2  = THIS.pgf_4c_Paginas.Page2
         loc_cValor = ALLTRIM(loc_oPag2.txt_4c_DescMoe.Value)
@@ -1365,16 +1409,24 @@ DEFINE CLASS FormMtp AS FormBase
     * GrupoKeyPress - Handler KeyPress de txt_4c_Grupo: abre lookup no F4
     *===========================================================================
     PROCEDURE GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupGrupo()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * GrupoDblClick - Handler DblClick de txt_4c_Grupo
     *===========================================================================
     PROCEDURE GrupoDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupGrupo()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1419,16 +1471,24 @@ DEFINE CLASS FormMtp AS FormBase
     * MoedasKeyPress - Handler KeyPress de txt_4c_Moedas: abre lookup no F4
     *===========================================================================
     PROCEDURE MoedasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupMoedaCodigo()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * MoedasDblClick - Handler DblClick de txt_4c_Moedas
     *===========================================================================
     PROCEDURE MoedasDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupMoedaCodigo()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1479,16 +1539,24 @@ DEFINE CLASS FormMtp AS FormBase
     * DescMoeKeyPress - Handler KeyPress de txt_4c_DescMoe: abre lookup no F4
     *===========================================================================
     PROCEDURE DescMoeKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupMoedaDescricao()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * DescMoeDblClick - Handler DblClick de txt_4c_DescMoe
     *===========================================================================
     PROCEDURE DescMoeDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupMoedaDescricao()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================

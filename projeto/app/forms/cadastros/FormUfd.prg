@@ -1218,17 +1218,21 @@ DEFINE CLASS FormUfd AS FormBase
     * (transcrito do legado: Get_OCodigo.Valid nunca reatribui o proprio codigo)
     *===========================================================================
     PROCEDURE OCodigoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfOrigemPorCodigo()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE OCodigoLookupDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupUfOrigemPorCodigo()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -1278,17 +1282,21 @@ DEFINE CLASS FormUfd AS FormBase
     * Lookup UF Origem por Nome (txt_4c_ONome) - preenche codigo E descricao
     *===========================================================================
     PROCEDURE ONomeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfOrigemPorNome()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE ONomeLookupDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupUfOrigemPorNome()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -1342,17 +1350,21 @@ DEFINE CLASS FormUfd AS FormBase
     * (transcrito do legado: Get_DCodigo.Valid reatribui ambos os campos)
     *===========================================================================
     PROCEDURE DCodigoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfDestinoPorCodigo()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE DCodigoLookupDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupUfDestinoPorCodigo()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -1405,17 +1417,21 @@ DEFINE CLASS FormUfd AS FormBase
     * Lookup UF Destino por Nome (txt_4c_DNome) - preenche codigo E descricao
     *===========================================================================
     PROCEDURE DNomeLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupUfDestinoPorNome()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE DNomeLookupDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupUfDestinoPorNome()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -1469,17 +1485,21 @@ DEFINE CLASS FormUfd AS FormBase
     * Transcrito do legado: getCFO.Valid remove pontos antes de comparar/buscar
     *===========================================================================
     PROCEDURE CfoLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupCfo()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE CfoLookupDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupCfo()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do

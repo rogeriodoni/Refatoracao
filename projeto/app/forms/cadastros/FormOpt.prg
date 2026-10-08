@@ -25,6 +25,8 @@ DEFINE CLASS FormOpt AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - REGRA CRITICA: Apenas RETURN DODEFAULT()
@@ -644,7 +646,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_OpAnts, "KeyPress", THIS, "ValidarOpAnts")
+        BINDEVENT(loc_oPagina.txt_4c_OpAnts, "LostFocus", THIS, "ValidarOpAnts")
 
         loc_oPagina.AddObject("lbl_4c_Label35", "Label")
         WITH loc_oPagina.lbl_4c_Label35
@@ -672,7 +674,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_OpContas, "KeyPress", THIS, "ValidarOpContas")
+        BINDEVENT(loc_oPagina.txt_4c_OpContas, "LostFocus", THIS, "ValidarOpContas")
 
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
@@ -727,7 +729,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_OpEntrada, "KeyPress", THIS, "ValidarOpEntrada")
+        BINDEVENT(loc_oPagina.txt_4c_OpEntrada, "LostFocus", THIS, "ValidarOpEntrada")
 
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
@@ -848,7 +850,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Fpg, "KeyPress", THIS, "ValidarFpg")
+        BINDEVENT(loc_oPagina.txt_4c_Fpg, "LostFocus", THIS, "ValidarFpg")
 
         loc_oPagina.AddObject("lbl_4c_Label28", "Label")
         WITH loc_oPagina.lbl_4c_Label28
@@ -1021,7 +1023,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Situa, "KeyPress", THIS, "ValidarSituacao")
+        BINDEVENT(loc_oPagina.txt_4c_Situa, "LostFocus", THIS, "ValidarSituacao")
 
         loc_oPagina.AddObject("lbl_4c_Label47", "Label")
         WITH loc_oPagina.lbl_4c_Label47
@@ -1077,7 +1079,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Central, "KeyPress", THIS, "ValidarCentral")
+        BINDEVENT(loc_oPagina.txt_4c_Central, "LostFocus", THIS, "ValidarCentral")
 
         loc_oPagina.AddObject("txt_4c_DCentral", "TextBox")
         WITH loc_oPagina.txt_4c_DCentral
@@ -1091,7 +1093,7 @@ DEFINE CLASS FormOpt AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_DCentral, "KeyPress", THIS, "ValidarDescCentral")
+        BINDEVENT(loc_oPagina.txt_4c_DCentral, "LostFocus", THIS, "ValidarDescCentral")
 
         *-- Linha separadora Line1 (original top=166; comp.=195)
         loc_oPagina.AddObject("lin_4c_Line1", "Shape")
@@ -2803,7 +2805,7 @@ DEFINE CLASS FormOpt AS FormBase
 
         *-- BINDEVENTs para controles da secao 2
         BINDEVENT(loc_oPagina.txt_4c_EmiCarta, "InteractiveChange", THIS, "AtualizarEstadoCarta")
-        BINDEVENT(loc_oPagina.txt_4c_Moeda,    "KeyPress",         THIS, "ValidarMoedas")
+        BINDEVENT(loc_oPagina.txt_4c_Moeda,    "LostFocus",         THIS, "ValidarMoedas")
         BINDEVENT(loc_oPagina.txt_4c_GrupoT,   "KeyPress",         THIS, "ValidarGrupoT")
         BINDEVENT(loc_oPagina.txt_4c_DGrupoT,  "KeyPress",         THIS, "ValidarDescGrupoT")
 
@@ -4028,7 +4030,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarOpAnts - LostFocus: Movimento Anterior (lookup SigCdOpt)
     *==========================================================================
-    PROCEDURE ValidarOpAnts(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOpAntsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOpAnts()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOpAntsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOpAntsExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4048,7 +4064,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarOpContas - LostFocus: Movimento de Titulos (lookup SIGOPOPE)
     *==========================================================================
-    PROCEDURE ValidarOpContas(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOpContasExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOpContas()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOpContasExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOpContasExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4069,7 +4099,21 @@ DEFINE CLASS FormOpt AS FormBase
     * ValidarOpEntrada - LostFocus: Movimento de Entrada (lookup SigCdOpt)
     * Exclui o proprio registro corrente do lookup
     *==========================================================================
-    PROCEDURE ValidarOpEntrada(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOpEntradaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOpEntrada()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOpEntradaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOpEntradaExec()
         LOCAL loc_oPg2, loc_cVal, loc_cFiltro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4096,7 +4140,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarFpg - LostFocus: Condicao de Pagamento (lookup SigOpFp)
     *==========================================================================
-    PROCEDURE ValidarFpg(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFpgExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFpg()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFpgExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFpgExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4116,7 +4174,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarSituacao - LostFocus: Situacao do Cliente (lookup SigCdCst)
     *==========================================================================
-    PROCEDURE ValidarSituacao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarSituacaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarSituacao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarSituacaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarSituacaoExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4190,7 +4262,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarCentral - LostFocus: Central de Credito por codigo (lookup SIGCCCCO)
     *==========================================================================
-    PROCEDURE ValidarCentral(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCentralExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCentral()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCentralExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCentralExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4210,7 +4296,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescCentral - LostFocus: Central de Credito por descricao
     *==========================================================================
-    PROCEDURE ValidarDescCentral(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDescCentralExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDescCentral()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescCentralExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDescCentralExec()
         LOCAL loc_oPg2, loc_cDesc
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4534,7 +4634,21 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarMoedas - LostFocus: Moeda (lookup SigCdMoe)
     *==========================================================================
-    PROCEDURE ValidarMoedas(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedasExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedas()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedasExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedasExec()
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 

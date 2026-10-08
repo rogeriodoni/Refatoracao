@@ -195,6 +195,8 @@ DEFINE CLASS FormSigMvVde AS FormBase
     * Propriedades de estado
     *--------------------------------------------------------------------------
     this_cModoAtual = "PROCURAR"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Cria o Business Object e delega ao FormBase.Init
@@ -1506,28 +1508,28 @@ DEFINE CLASS FormSigMvVde AS FormBase
     * (par_nKeyCode, par_nShiftAltCtrl) - entao o indice tem que ser literal.
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarLookups()
-        BINDEVENT(THIS.txt_4c_Conta0,  "KeyPress", THIS, "Conta0KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta0, "KeyPress", THIS, "DConta0KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta1,  "KeyPress", THIS, "Conta1KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta1, "KeyPress", THIS, "DConta1KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta2,  "KeyPress", THIS, "Conta2KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta2, "KeyPress", THIS, "DConta2KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta3,  "KeyPress", THIS, "Conta3KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta3, "KeyPress", THIS, "DConta3KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta4,  "KeyPress", THIS, "Conta4KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta4, "KeyPress", THIS, "DConta4KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta5,  "KeyPress", THIS, "Conta5KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta5, "KeyPress", THIS, "DConta5KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta6,  "KeyPress", THIS, "Conta6KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta6, "KeyPress", THIS, "DConta6KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta7,  "KeyPress", THIS, "Conta7KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta7, "KeyPress", THIS, "DConta7KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta8,  "KeyPress", THIS, "Conta8KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta8, "KeyPress", THIS, "DConta8KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta9,  "KeyPress", THIS, "Conta9KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta9, "KeyPress", THIS, "DConta9KeyPress")
-        BINDEVENT(THIS.txt_4c_Conta10,  "KeyPress", THIS, "Conta10KeyPress")
-        BINDEVENT(THIS.txt_4c_DConta10, "KeyPress", THIS, "DConta10KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta0,  "LostFocus", THIS, "Conta0KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta0, "LostFocus", THIS, "DConta0KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta1,  "LostFocus", THIS, "Conta1KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta1, "LostFocus", THIS, "DConta1KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta2,  "LostFocus", THIS, "Conta2KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta2, "LostFocus", THIS, "DConta2KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta3,  "LostFocus", THIS, "Conta3KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta3, "LostFocus", THIS, "DConta3KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta4,  "LostFocus", THIS, "Conta4KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta4, "LostFocus", THIS, "DConta4KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta5,  "LostFocus", THIS, "Conta5KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta5, "LostFocus", THIS, "DConta5KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta6,  "LostFocus", THIS, "Conta6KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta6, "LostFocus", THIS, "DConta6KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta7,  "LostFocus", THIS, "Conta7KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta7, "LostFocus", THIS, "DConta7KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta8,  "LostFocus", THIS, "Conta8KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta8, "LostFocus", THIS, "DConta8KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta9,  "LostFocus", THIS, "Conta9KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta9, "LostFocus", THIS, "DConta9KeyPress")
+        BINDEVENT(THIS.txt_4c_Conta10,  "LostFocus", THIS, "Conta10KeyPress")
+        BINDEVENT(THIS.txt_4c_DConta10, "LostFocus", THIS, "DConta10KeyPress")
     ENDPROC
 
     *==========================================================================
@@ -1778,91 +1780,399 @@ DEFINE CLASS FormSigMvVde AS FormBase
     * o indice literal. PUBLIC (BINDEVENT exige - regra #3) e com LPARAMETERS
     * via assinatura (regra do KeyPress handler).
     *==========================================================================
-    PROCEDURE Conta0KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta0KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta0KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta0KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta0KeyPressExec()
         THIS.ProcessarBuscaConta(0, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta0KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta0KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta0KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta0KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta0KeyPressExec()
         THIS.ProcessarBuscaDConta(0, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta1KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta1KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta1KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta1KeyPressExec()
         THIS.ProcessarBuscaConta(1, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta1KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta1KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta1KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta1KeyPressExec()
         THIS.ProcessarBuscaDConta(1, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta2KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta2KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta2KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta2KeyPressExec()
         THIS.ProcessarBuscaConta(2, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta2KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta2KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta2KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta2KeyPressExec()
         THIS.ProcessarBuscaDConta(2, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta3KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta3KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta3KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta3KeyPressExec()
         THIS.ProcessarBuscaConta(3, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta3KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta3KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta3KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta3KeyPressExec()
         THIS.ProcessarBuscaDConta(3, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta4KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta4KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta4KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta4KeyPressExec()
         THIS.ProcessarBuscaConta(4, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta4KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta4KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta4KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta4KeyPressExec()
         THIS.ProcessarBuscaDConta(4, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta5KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta5KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta5KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta5KeyPressExec()
         THIS.ProcessarBuscaConta(5, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta5KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta5KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta5KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta5KeyPressExec()
         THIS.ProcessarBuscaDConta(5, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta6KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta6KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta6KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta6KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta6KeyPressExec()
         THIS.ProcessarBuscaConta(6, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta6KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta6KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta6KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta6KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta6KeyPressExec()
         THIS.ProcessarBuscaDConta(6, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta7KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta7KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta7KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta7KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta7KeyPressExec()
         THIS.ProcessarBuscaConta(7, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta7KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta7KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta7KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta7KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta7KeyPressExec()
         THIS.ProcessarBuscaDConta(7, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta8KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta8KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta8KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta8KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta8KeyPressExec()
         THIS.ProcessarBuscaConta(8, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta8KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta8KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta8KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta8KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta8KeyPressExec()
         THIS.ProcessarBuscaDConta(8, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta9KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta9KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta9KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta9KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta9KeyPressExec()
         THIS.ProcessarBuscaConta(9, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta9KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta9KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta9KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta9KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta9KeyPressExec()
         THIS.ProcessarBuscaDConta(9, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE Conta10KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em Conta10KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE Conta10KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.Conta10KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE Conta10KeyPressExec()
         THIS.ProcessarBuscaConta(10, par_nKeyCode)
     ENDPROC
 
-    PROCEDURE DConta10KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em DConta10KeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE DConta10KeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.DConta10KeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE DConta10KeyPressExec()
         THIS.ProcessarBuscaDConta(10, par_nKeyCode)
     ENDPROC
 

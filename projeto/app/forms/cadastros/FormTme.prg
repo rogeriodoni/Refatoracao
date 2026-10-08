@@ -29,6 +29,8 @@ DEFINE CLASS FormTme AS FormBase
     this_cUltimoDirLeitura  = ""
     this_cUltimoDirRecepcao = ""
     this_cUltimoDirArquivar = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -845,7 +847,7 @@ DEFINE CLASS FormTme AS FormBase
             .Visible   = .T.
         ENDWITH
         BINDEVENT(par_oPagina.txt_4c_TransTipo, "KeyPress", THIS, "TeclaTransTipo")
-        BINDEVENT(par_oPagina.txt_4c_TransTipo, "KeyPress", THIS, "ValidarTransTipo")
+        BINDEVENT(par_oPagina.txt_4c_TransTipo, "LostFocus", THIS, "ValidarTransTipo")
 
         *-- Transporte - diretorio de geracao/gravacao (drivets)
         par_oPagina.AddObject("lbl_4c_Transporte", "Label")
@@ -1986,7 +1988,7 @@ DEFINE CLASS FormTme AS FormBase
 
         *-- Validacoes (LostFocus - fAcessoEmpresa NAO foi portada: coluna 1
         *-- fica sem lookup, campo simples)
-        BINDEVENT(loc_oPgN.grd_4c_Titulos.Column2.Text1, "KeyPress", THIS, "ValidarGradeTituloOperacao")
+        BINDEVENT(loc_oPgN.grd_4c_Titulos.Column2.Text1, "LostFocus", THIS, "ValidarGradeTituloOperacao")
         BINDEVENT(loc_oPgN.grd_4c_Titulos.Column3.Text1, "KeyPress", THIS, "ValidarGradeTituloSNA")
 
         *-- Legenda [S]im/[N]ao/[A]mbos (Label1/5/7/9 do legado)
@@ -2067,7 +2069,21 @@ DEFINE CLASS FormTme AS FormBase
     * in CsTitulo do legado).
     * PUBLIC: BINDEVENT exige metodo PUBLIC (CLAUDE.md regra #3)
     *===========================================================================
-    PROCEDURE ValidarGradeTituloOperacao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGradeTituloOperacaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGradeTituloOperacao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGradeTituloOperacaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGradeTituloOperacaoExec()
         LOCAL loc_oGrid, loc_cValor, loc_oBusca
 
         loc_oGrid  = THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page1.grd_4c_Titulos
@@ -2126,9 +2142,13 @@ DEFINE CLASS FormTme AS FormBase
     * PUBLIC; KeyPress sempre passa 2 parametros - CLAUDE.md regras #2/#38)
     *===========================================================================
     PROCEDURE TeclaTransTipo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaTransTipo(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_TransTipo.Value))
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -2136,7 +2156,21 @@ DEFINE CLASS FormTme AS FormBase
     * Valid legado: se preenchido, busca/valida em SigPrTrn). Guard evita
     * reabrir o lookup quando o valor nao mudou desde a ultima validacao.
     *===========================================================================
-    PROCEDURE ValidarTransTipo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarTransTipoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarTransTipo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarTransTipoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarTransTipoExec()
         LOCAL loc_cValor
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_TransTipo.Value)
 

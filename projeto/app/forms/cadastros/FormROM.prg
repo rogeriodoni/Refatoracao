@@ -27,6 +27,8 @@ DEFINE CLASS FormROM AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_cTipoRomaneio   = ""    && 'R'=Recebimento, ''=Romaneio
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Captura parametro de tipo antes de InicializarForm
@@ -830,7 +832,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "C" + CHR(243) + "digo Origem"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepOrig, "KeyPress", THIS, "ValidarDepOrig")
+        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepOrig, "LostFocus", THIS, "ValidarDepOrig")
 
         loc_oPagina.cnt_4c_Rec.AddObject("txt_4c_DDepOrig", "TextBox")
         WITH loc_oPagina.cnt_4c_Rec.txt_4c_DDepOrig
@@ -1918,7 +1920,21 @@ DEFINE CLASS FormROM AS FormBase
     *==========================================================================
     * Handlers de validacao de campos
     *==========================================================================
-    PROCEDURE ValidarDepOrig(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDepOrigExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDepOrig()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDepOrigExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDepOrigExec()
         LOCAL loc_cCod, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)

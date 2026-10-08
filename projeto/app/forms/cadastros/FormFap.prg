@@ -28,6 +28,8 @@ DEFINE CLASS FormFap AS FormBase
 
 	*-- Tipo de registro ('F' = default, conforme parametro original _Tipo)
 	this_cTipo = "F"
+	*-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+	this_lEmLookup = .F.
 
 	*====================================================================
 	* Init - Apenas delega ao FormBase (NAO chamar InicializarForm aqui!)
@@ -747,7 +749,7 @@ DEFINE CLASS FormFap AS FormBase
 				.ReadOnly  = .T.
 				.Visible   = .T.
 			ENDWITH
-			BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "KeyPress", THIS, "ValidarGrupo")
+			BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "LostFocus", THIS, "ValidarGrupo")
 			BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "KeyPress", THIS, "CdGrupoKeyPress")
 			BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "DblClick", THIS, "CdGrupoDblClick")
 
@@ -797,7 +799,7 @@ DEFINE CLASS FormFap AS FormBase
 				.ReadOnly  = .T.
 				.Visible   = .T.
 			ENDWITH
-			BINDEVENT(loc_oPagina.txt_4c_CdConta, "KeyPress", THIS, "ValidarConta")
+			BINDEVENT(loc_oPagina.txt_4c_CdConta, "LostFocus", THIS, "ValidarConta")
 			BINDEVENT(loc_oPagina.txt_4c_CdConta, "KeyPress", THIS, "CdContaKeyPress")
 			BINDEVENT(loc_oPagina.txt_4c_CdConta, "DblClick", THIS, "CdContaDblClick")
 
@@ -999,7 +1001,7 @@ DEFINE CLASS FormFap AS FormBase
 				.ReadOnly  = .T.
 				.Visible   = .T.
 			ENDWITH
-			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_ifor, "KeyPress", THIS, "ValidarIfor")
+			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_ifor, "LostFocus", THIS, "ValidarIfor")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_ifor, "KeyPress", THIS, "IforKeyPress")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_ifor, "DblClick", THIS, "IforDblClick")
 
@@ -1030,7 +1032,7 @@ DEFINE CLASS FormFap AS FormBase
 				.ReadOnly  = .T.
 				.Visible   = .T.
 			ENDWITH
-			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_tpmat, "KeyPress", THIS, "ValidarTpmat")
+			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_tpmat, "LostFocus", THIS, "ValidarTpmat")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_tpmat, "KeyPress", THIS, "TpmatKeyPress")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_tpmat, "DblClick", THIS, "TpmatDblClick")
 
@@ -1047,7 +1049,7 @@ DEFINE CLASS FormFap AS FormBase
 				.ReadOnly  = .T.
 				.Visible   = .T.
 			ENDWITH
-			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_dfor, "KeyPress", THIS, "ValidarDfor")
+			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_dfor, "LostFocus", THIS, "ValidarDfor")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_dfor, "KeyPress", THIS, "DforKeyPress")
 			BINDEVENT(loc_oPagina.cnt_4c_Container1.txt_4c_dfor, "DblClick", THIS, "DforDblClick")
 
@@ -1893,7 +1895,21 @@ DEFINE CLASS FormFap AS FormBase
 	* ValidarGrupo - LostFocus de txt_4c_CdGrupo: lookup em SigCdGcr
 	* (BalFalPers=1 conforme comportamento original do legado)
 	*====================================================================
-	PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+	*-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+	*-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoExec
+	*-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+	*-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+	*-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+	PROCEDURE ValidarGrupo()
+	    IF THIS.this_lEmLookup
+	        RETURN
+	    ENDIF
+	    THIS.this_lEmLookup = .T.
+	    THIS.ValidarGrupoExec()
+	    THIS.this_lEmLookup = .F.
+	ENDPROC
+
+	PROCEDURE ValidarGrupoExec()
 		LOCAL loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca
 		loc_cGrupo  = ""
 		loc_nResult = 0
@@ -2008,7 +2024,21 @@ DEFINE CLASS FormFap AS FormBase
 	* ValidarConta - LostFocus de txt_4c_CdConta
 	* Lookup em SigCdCli filtrado por Grupo (com BalFalPers=1 via SigCdGcr)
 	*====================================================================
-	PROCEDURE ValidarConta(par_nKeyCode, par_nShiftAltCtrl)
+	*-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+	*-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaExec
+	*-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+	*-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+	*-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+	PROCEDURE ValidarConta()
+	    IF THIS.this_lEmLookup
+	        RETURN
+	    ENDIF
+	    THIS.this_lEmLookup = .T.
+	    THIS.ValidarContaExec()
+	    THIS.this_lEmLookup = .F.
+	ENDPROC
+
+	PROCEDURE ValidarContaExec()
 		LOCAL loc_cConta, loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca
 		loc_cConta  = ""
 		loc_cGrupo  = ""
@@ -2113,7 +2143,21 @@ DEFINE CLASS FormFap AS FormBase
 	* ValidarIfor - LostFocus de txt_4c_ifor: lookup em SigCdCli por IClis
 	* Preenche txt_4c_dfor com RClis (nome da recuperadora)
 	*====================================================================
-	PROCEDURE ValidarIfor(par_nKeyCode, par_nShiftAltCtrl)
+	*-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+	*-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarIforExec
+	*-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+	*-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+	*-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+	PROCEDURE ValidarIfor()
+	    IF THIS.this_lEmLookup
+	        RETURN
+	    ENDIF
+	    THIS.this_lEmLookup = .T.
+	    THIS.ValidarIforExec()
+	    THIS.this_lEmLookup = .F.
+	ENDPROC
+
+	PROCEDURE ValidarIforExec()
 		LOCAL loc_cIfor, loc_nResult, loc_oPagina, loc_oBusca, loc_oCnt
 		loc_cIfor   = ""
 		loc_nResult = 0
@@ -2204,7 +2248,21 @@ DEFINE CLASS FormFap AS FormBase
 	* Ativo apenas quando txt_4c_ifor estiver vazio (busca por nome)
 	* Preenche txt_4c_ifor com IClis e txt_4c_dfor com RClis
 	*====================================================================
-	PROCEDURE ValidarDfor(par_nKeyCode, par_nShiftAltCtrl)
+	*-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+	*-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDforExec
+	*-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+	*-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+	*-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+	PROCEDURE ValidarDfor()
+	    IF THIS.this_lEmLookup
+	        RETURN
+	    ENDIF
+	    THIS.this_lEmLookup = .T.
+	    THIS.ValidarDforExec()
+	    THIS.this_lEmLookup = .F.
+	ENDPROC
+
+	PROCEDURE ValidarDforExec()
 		LOCAL loc_cDfor, loc_cIfor, loc_nResult, loc_oPagina, loc_oBusca, loc_oCnt
 		loc_cDfor   = ""
 		loc_cIfor   = ""
@@ -2295,7 +2353,21 @@ DEFINE CLASS FormFap AS FormBase
 	*====================================================================
 	* ValidarTpmat - LostFocus de txt_4c_tpmat: lookup em SigOpOpt (Situas=3)
 	*====================================================================
-	PROCEDURE ValidarTpmat(par_nKeyCode, par_nShiftAltCtrl)
+	*-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+	*-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarTpmatExec
+	*-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+	*-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+	*-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+	PROCEDURE ValidarTpmat()
+	    IF THIS.this_lEmLookup
+	        RETURN
+	    ENDIF
+	    THIS.this_lEmLookup = .T.
+	    THIS.ValidarTpmatExec()
+	    THIS.this_lEmLookup = .F.
+	ENDPROC
+
+	PROCEDURE ValidarTpmatExec()
 		LOCAL loc_cTpmat, loc_nResult, loc_oPagina, loc_oBusca, loc_oCnt
 		loc_cTpmat  = ""
 		loc_nResult = 0
@@ -2481,16 +2553,24 @@ DEFINE CLASS FormFap AS FormBase
 	* CdGrupoKeyPress - KeyPress em txt_4c_CdGrupo (F4 abre picker)
 	*====================================================================
 	PROCEDURE CdGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		IF par_nKeyCode = 28
 			THIS.AbrirLookupGrupo()
 		ENDIF
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
 	* CdGrupoDblClick - DblClick em txt_4c_CdGrupo (abre picker)
 	*====================================================================
 	PROCEDURE CdGrupoDblClick()
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		THIS.AbrirLookupGrupo()
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
@@ -2562,16 +2642,24 @@ DEFINE CLASS FormFap AS FormBase
 	* CdContaKeyPress - KeyPress em txt_4c_CdConta (F4 abre picker)
 	*====================================================================
 	PROCEDURE CdContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		IF par_nKeyCode = 28
 			THIS.AbrirLookupConta()
 		ENDIF
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
 	* CdContaDblClick - DblClick em txt_4c_CdConta (abre picker)
 	*====================================================================
 	PROCEDURE CdContaDblClick()
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		THIS.AbrirLookupConta()
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
@@ -2648,16 +2736,24 @@ DEFINE CLASS FormFap AS FormBase
 	* IforKeyPress - KeyPress em txt_4c_ifor (F4 abre picker)
 	*====================================================================
 	PROCEDURE IforKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		IF par_nKeyCode = 28
 			THIS.AbrirLookupIfor()
 		ENDIF
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
 	* IforDblClick - DblClick em txt_4c_ifor (abre picker)
 	*====================================================================
 	PROCEDURE IforDblClick()
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		THIS.AbrirLookupIfor()
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
@@ -2725,16 +2821,24 @@ DEFINE CLASS FormFap AS FormBase
 	* TpmatKeyPress - KeyPress em txt_4c_tpmat (F4 abre picker)
 	*====================================================================
 	PROCEDURE TpmatKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		IF par_nKeyCode = 28
 			THIS.AbrirLookupTpmat()
 		ENDIF
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
 	* TpmatDblClick - DblClick em txt_4c_tpmat (abre picker)
 	*====================================================================
 	PROCEDURE TpmatDblClick()
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		THIS.AbrirLookupTpmat()
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
@@ -2799,16 +2903,24 @@ DEFINE CLASS FormFap AS FormBase
 	* DforKeyPress - KeyPress em txt_4c_dfor (F4 abre picker por nome)
 	*====================================================================
 	PROCEDURE DforKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		IF par_nKeyCode = 28
 			THIS.AbrirLookupDfor()
 		ENDIF
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================
 	* DforDblClick - DblClick em txt_4c_dfor (abre picker por nome)
 	*====================================================================
 	PROCEDURE DforDblClick()
+	    LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+	    loc_lEmLookupAnt    = THIS.this_lEmLookup
+	    THIS.this_lEmLookup = .T.
 		THIS.AbrirLookupDfor()
+	    THIS.this_lEmLookup = loc_lEmLookupAnt
 	ENDPROC
 
 	*====================================================================

@@ -24,6 +24,8 @@ DEFINE CLASS FormRss AS FormBase
     this_cModoAtual               = "LISTA"
     this_cUltimoOrigemValidada    = ""
     this_cUltimoDestinoValidado   = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Inicializa o formulario via FormBase.Init()
@@ -525,7 +527,7 @@ DEFINE CLASS FormRss AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        BINDEVENT(loc_oPagina.txt_4c_Origem, "KeyPress", THIS, "ValidarOrigem")
+        BINDEVENT(loc_oPagina.txt_4c_Origem, "LostFocus", THIS, "ValidarOrigem")
         BINDEVENT(loc_oPagina.txt_4c_Origem, "KeyPress",  THIS, "OrigemKeyPress")
 
         *-- Label e TextBoxes para Grupo Destino (Say1, Get_Destino, Get_ddestino)
@@ -579,7 +581,7 @@ DEFINE CLASS FormRss AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        BINDEVENT(loc_oPagina.txt_4c_Destino, "KeyPress", THIS, "ValidarDestino")
+        BINDEVENT(loc_oPagina.txt_4c_Destino, "LostFocus", THIS, "ValidarDestino")
         BINDEVENT(loc_oPagina.txt_4c_Destino, "KeyPress",  THIS, "DestinoKeyPress")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
@@ -944,7 +946,21 @@ DEFINE CLASS FormRss AS FormBase
     * ValidarOrigem - LostFocus de txt_4c_Origem: valida codigo e busca descricao
     * Guard de repeticao via this_cUltimoOrigemValidada evita re-abertura do picker
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarOrigem(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOrigemExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOrigem()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOrigemExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOrigemExec()
         LOCAL loc_cGrupo, loc_oPagina2
         loc_cGrupo   = ""
         loc_oPagina2 = THIS.pgf_4c_Paginas.Page2
@@ -974,7 +990,18 @@ DEFINE CLASS FormRss AS FormBase
     * OrigemKeyPress - Abre lookup de Origem ao pressionar F4 (nKeyCode=115)
     * BINDEVENT requer parametros declarados
     *--------------------------------------------------------------------------
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE OrigemKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.OrigemKeyPressExec(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE OrigemKeyPressExec(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cGrupo, loc_oPagina2
 
         IF par_nKeyCode != 115
@@ -1048,7 +1075,21 @@ DEFINE CLASS FormRss AS FormBase
     * ValidarDestino - LostFocus de txt_4c_Destino: valida codigo e busca descricao
     * Guard de repeticao via this_cUltimoDestinoValidado evita re-abertura do picker
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDestino(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDestinoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDestino()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDestinoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDestinoExec()
         LOCAL loc_cGrupo, loc_oPagina2
         loc_cGrupo   = ""
         loc_oPagina2 = THIS.pgf_4c_Paginas.Page2
@@ -1078,7 +1119,18 @@ DEFINE CLASS FormRss AS FormBase
     * DestinoKeyPress - Abre lookup de Destino ao pressionar F4 (nKeyCode=115)
     * BINDEVENT requer parametros declarados
     *--------------------------------------------------------------------------
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE DestinoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.DestinoKeyPressExec(par_nKeyCode, par_nShiftAltCtrl)
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE DestinoKeyPressExec(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cGrupo, loc_oPagina2
 
         IF par_nKeyCode != 115

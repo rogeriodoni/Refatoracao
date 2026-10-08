@@ -33,6 +33,8 @@ DEFINE CLASS FormSigRePlc AS FormBase
     *-- Ultimo valor validado (guard adicional: evita reprocessar valor identico)
     this_cUltimoClasseValidado  = ""
     this_cUltimoDclasseValidado = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * INICIALIZARFORM - Cria todos os controles visuais e inicializa dados
@@ -408,8 +410,8 @@ DEFINE CLASS FormSigRePlc AS FormBase
     * CONFIGURAREVENTOS - BINDEVENT LostFocus para validacao dos campos de filtro
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarEventos
-        BINDEVENT(THIS.txt_4c_Classe,  "KeyPress", THIS, "ValidarClasse")
-        BINDEVENT(THIS.txt_4c_Dclasse, "KeyPress", THIS, "ValidarDclasse")
+        BINDEVENT(THIS.txt_4c_Classe,  "LostFocus", THIS, "ValidarClasse")
+        BINDEVENT(THIS.txt_4c_Dclasse, "LostFocus", THIS, "ValidarDclasse")
     ENDPROC
 
     *==========================================================================
@@ -478,8 +480,21 @@ DEFINE CLASS FormSigRePlc AS FormBase
     * Busca em cursor_4c_Tpgc por Classes. Se nao encontrado, abre lookup.
     * Se vazio, limpa txt_4c_Dclasse.
     *==========================================================================
-    PROCEDURE ValidarClasse
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarClasseExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarClasse()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarClasseExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarClasseExec()
         LOCAL loc_cValor
 
         *-- Guard: evitar processamento recursivo
@@ -533,8 +548,21 @@ DEFINE CLASS FormSigRePlc AS FormBase
     * Se vazio, limpa txt_4c_Classe.
     * Se nao encontrado, abre lookup por descricao.
     *==========================================================================
-    PROCEDURE ValidarDclasse
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDclasseExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDclasse()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDclasseExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDclasseExec()
         LOCAL loc_cValor
 
         *-- Guard: evitar processamento recursivo

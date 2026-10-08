@@ -26,6 +26,8 @@ DEFINE CLASS FormLGR AS FormBase
 
     *-- Estado do formulario
     this_cModoAtual = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Apenas DODEFAULT (FormBase.Init chama InicializarForm)
@@ -432,7 +434,7 @@ DEFINE CLASS FormLGR AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar,    "Click", THIS, "BtnEncerrarClick")
 
         *-- BINDEVENTs dos campos de filtro
-        BINDEVENT(loc_oPagina.txt_4c_SerieFab, "KeyPress", THIS, "ValidarSerieFab")
+        BINDEVENT(loc_oPagina.txt_4c_SerieFab, "LostFocus", THIS, "ValidarSerieFab")
         BINDEVENT(loc_oPagina.txt_4c_Dtini,    "KeyPress", THIS, "ValidarDtini")
         BINDEVENT(loc_oPagina.txt_4c_Dtfim,    "KeyPress", THIS, "ValidarDtfim")
 
@@ -847,7 +849,7 @@ DEFINE CLASS FormLGR AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
         *-- BINDEVENTs formatadores e lookups de campos Page2
-        BINDEVENT(loc_oPagina.txt_4c_Modelo, "KeyPress", THIS, "ValidarModelo")
+        BINDEVENT(loc_oPagina.txt_4c_Modelo, "LostFocus", THIS, "ValidarModelo")
         BINDEVENT(loc_oPagina.txt_4c_Coo,    "LostFocus", THIS, "FormatarCoo")
         BINDEVENT(loc_oPagina.txt_4c_Cnf,    "LostFocus", THIS, "FormatarCnf")
         BINDEVENT(loc_oPagina.txt_4c_Rg,     "LostFocus", THIS, "FormatarRg")
@@ -1272,7 +1274,21 @@ DEFINE CLASS FormLGR AS FormBase
     * ValidarSerieFab - LostFocus do campo serie em Page1
     * Valida serie contra SigFiMpf e abre picker se nao encontrar exato
     *==========================================================================
-    PROCEDURE ValidarSerieFab(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarSerieFabExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarSerieFab()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarSerieFabExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarSerieFabExec()
         LOCAL loc_oPg1, loc_cSerifab, loc_oBusca
         loc_oPg1     = THIS.pgf_4c_Paginas.Page1
         loc_cSerifab = ALLTRIM(loc_oPg1.txt_4c_SerieFab.Value)
@@ -1349,7 +1365,21 @@ DEFINE CLASS FormLGR AS FormBase
     * ValidarModelo - LostFocus do campo modelo em Page2
     * Busca em SigFiMpm e abre picker se nao encontrar exato
     *==========================================================================
-    PROCEDURE ValidarModelo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarModeloExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarModelo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarModeloExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarModeloExec()
         LOCAL loc_oPg2, loc_cModelo, loc_oBusca
         loc_oPg2    = THIS.pgf_4c_Paginas.Page2
         loc_cModelo = ALLTRIM(loc_oPg2.txt_4c_Modelo.Value)

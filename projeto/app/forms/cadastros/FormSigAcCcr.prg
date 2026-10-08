@@ -26,6 +26,8 @@ DEFINE CLASS FormSigAcCcr AS FormBase
     *-- Propriedades do formulario
     this_oBusinessObject = .NULL.
     this_cMensagemErro   = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init
@@ -473,7 +475,7 @@ DEFINE CLASS FormSigAcCcr AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupoUsuario")
+        BINDEVENT(loc_oPagina.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupoUsuario")
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress",  THIS, "txt_4c_Grupo_KeyPress")
 
         *-- Say3: "Nome :" (Top=149+29=178, Left=162)
@@ -507,7 +509,7 @@ DEFINE CLASS FormSigAcCcr AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Usuario, "KeyPress", THIS, "ValidarUsuario")
+        BINDEVENT(loc_oPagina.txt_4c_Usuario, "LostFocus", THIS, "ValidarUsuario")
         BINDEVENT(loc_oPagina.txt_4c_Usuario, "KeyPress",  THIS, "txt_4c_Usuario_KeyPress")
 
         *-- ======================== SECAO CONTA CORRENTE ========================
@@ -558,7 +560,7 @@ DEFINE CLASS FormSigAcCcr AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_GrConta, "KeyPress", THIS, "ValidarGrConta")
+        BINDEVENT(loc_oPagina.txt_4c_GrConta, "LostFocus", THIS, "ValidarGrConta")
         BINDEVENT(loc_oPagina.txt_4c_GrConta, "KeyPress",  THIS, "txt_4c_GrConta_KeyPress")
 
         *-- Get_DGrConta (Top=212+29=241, Left=287, Width=150) - campo descricao grupo
@@ -577,7 +579,7 @@ DEFINE CLASS FormSigAcCcr AS FormBase
             .Enabled     = .F.
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_DGrConta, "KeyPress", THIS, "ValidarDGrConta")
+        BINDEVENT(loc_oPagina.txt_4c_DGrConta, "LostFocus", THIS, "ValidarDGrConta")
         BINDEVENT(loc_oPagina.txt_4c_DGrConta, "KeyPress",  THIS, "txt_4c_DGrConta_KeyPress")
 
         *-- Say5: "Conta :" (Top=238+29=267, Left=160)
@@ -1013,7 +1015,21 @@ DEFINE CLASS FormSigAcCcr AS FormBase
     * ValidarGrupoUsuario - LostFocus de txt_4c_Grupo
     * Logica do legado: fwBuscaExt em SigCdGrA por campo "Grupos"
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupoUsuario(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoUsuarioExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoUsuario()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoUsuarioExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoUsuarioExec()
         LOCAL loc_cGrupo, loc_oBusca
         loc_cGrupo = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
 
@@ -1061,7 +1077,21 @@ DEFINE CLASS FormSigAcCcr AS FormBase
     * ValidarUsuario - LostFocus de txt_4c_Usuario
     * Logica do legado: fwBuscaExt em SigCdUsu por campo "Usuarios"
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarUsuario(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarUsuarioExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarUsuario()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarUsuarioExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarUsuarioExec()
         LOCAL loc_cUsuario, loc_oBusca
         loc_cUsuario = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Usuario.Value)
 
@@ -1111,7 +1141,21 @@ DEFINE CLASS FormSigAcCcr AS FormBase
     * Logica do legado: fwBuscaExt em SigCdGcr por campo "Codigos"
     * Apos selecao: preenche txt_4c_DGrConta (Descrs), carrega lista de contas
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrConta(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrContaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrConta()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrContaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrContaExec()
         LOCAL loc_cGrConta, loc_oBusca
         loc_cGrConta = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_GrConta.Value)
 
@@ -1169,7 +1213,21 @@ DEFINE CLASS FormSigAcCcr AS FormBase
     * Campo descricao do grupo: fwBuscaExt em SigCdGcr por campo "Descrs"
     * Apos selecao: preenche txt_4c_GrConta (Codigos)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDGrConta(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDGrContaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDGrConta()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDGrContaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDGrContaExec()
         LOCAL loc_cDescGr, loc_oBusca
         loc_cDescGr = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DGrConta.Value)
 
@@ -1364,30 +1422,46 @@ DEFINE CLASS FormSigAcCcr AS FormBase
 
     PROCEDURE txt_4c_Grupo_KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 115  && F4
             THIS.AbrirLookupGrupoAcesso()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE txt_4c_Usuario_KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 115  && F4
             THIS.AbrirLookupUsuario()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE txt_4c_GrConta_KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 115  && F4
             THIS.AbrirLookupGrConta()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE txt_4c_DGrConta_KeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 115  && F4
             THIS.AbrirLookupDGrConta()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE txt_4c_CdConta_KeyPress

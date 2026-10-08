@@ -28,6 +28,8 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *-- =========================================================================
     *-- INIT - Apenas DODEFAULT (FormBase.Init chama InicializarForm)
@@ -1144,9 +1146,9 @@ DEFINE CLASS Formmtz AS FormBase
 
         *-- Vincular validacao/lookup campos header
         BINDEVENT(loc_oPagina.txt_4c_Ano,    "KeyPress", THIS, "ValidarAnoMtz")
-        BINDEVENT(loc_oPagina.txt_4c_Sgrupo, "KeyPress", THIS, "ValidarGrupoMtz")
-        BINDEVENT(loc_oPagina.txt_4c_Sconta, "KeyPress", THIS, "ValidarContaMtz")
-        BINDEVENT(loc_oPagina.txt_4c_Moeda,  "KeyPress", THIS, "ValidarMoedaMtz")
+        BINDEVENT(loc_oPagina.txt_4c_Sgrupo, "LostFocus", THIS, "ValidarGrupoMtz")
+        BINDEVENT(loc_oPagina.txt_4c_Sconta, "LostFocus", THIS, "ValidarContaMtz")
+        BINDEVENT(loc_oPagina.txt_4c_Moeda,  "LostFocus", THIS, "ValidarMoedaMtz")
         BINDEVENT(loc_oPagina.txt_4c_Sgrupo, "KeyPress",  THIS, "TeclaF4Sgrupo")
         BINDEVENT(loc_oPagina.txt_4c_Sconta, "KeyPress",  THIS, "TeclaF4Sconta")
         BINDEVENT(loc_oPagina.txt_4c_Moeda,  "KeyPress",  THIS, "TeclaF4Moeda")
@@ -1759,8 +1761,21 @@ DEFINE CLASS Formmtz AS FormBase
     *-- Original: Get_sgrupo.Valid - CursorQuery em SigCdGcr para Classes
     *-- =========================================================================
 
-    PROCEDURE ValidarGrupoMtz
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoMtzExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoMtz()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoMtzExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoMtzExec()
         LOCAL loc_cGrupo, loc_cSQL, loc_lResultado, loc_oErro
         loc_lResultado = .F.
 
@@ -1858,9 +1873,13 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROCEDURE TeclaF4Sgrupo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaGrupoMtz()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- =========================================================================
@@ -1868,8 +1887,21 @@ DEFINE CLASS Formmtz AS FormBase
     *-- Original: Get_sconta.Valid - fAcessoContas + fChecarInativas
     *-- =========================================================================
 
-    PROCEDURE ValidarContaMtz
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaMtzExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaMtz()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaMtzExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaMtzExec()
         LOCAL loc_cConta, loc_cGrupo, loc_cSQL, loc_lResultado, loc_oErro
         loc_lResultado = .F.
 
@@ -1973,9 +2005,13 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROCEDURE TeclaF4Sconta(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaContaMtz()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- =========================================================================
@@ -1983,8 +2019,21 @@ DEFINE CLASS Formmtz AS FormBase
     *-- Original: getMoeda.Valid - fwBuscaExt('SigCdMoe','CMoes','DMoes')
     *-- =========================================================================
 
-    PROCEDURE ValidarMoedaMtz
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaMtzExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaMtz()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaMtzExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaMtzExec()
         LOCAL loc_cMoeda, loc_cSQL, loc_lResultado, loc_oErro
         loc_lResultado = .F.
 
@@ -2068,9 +2117,13 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROCEDURE TeclaF4Moeda(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaMoedaMtz()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- =========================================================================

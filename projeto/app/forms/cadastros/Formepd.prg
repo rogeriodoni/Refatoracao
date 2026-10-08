@@ -1534,11 +1534,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrupoOsKeyPress - F4 abre lookup de Grupos Cont" + CHR(225) + "beis (Origem)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrupoOsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrupoOs()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1621,11 +1623,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtContaOsKeyPress - F4 abre lookup de Contas por C" + CHR(243) + "digo (Origem)
     *--------------------------------------------------------------------------
     PROCEDURE TxtContaOsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupContaOs()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1760,11 +1764,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrupoDsKeyPress - F4 abre lookup de Grupos Contabeis (Destino)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrupoDsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrupoDs()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1847,11 +1853,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtContaDsKeyPress - F4 abre lookup de Contas por Codigo (Destino)
     *--------------------------------------------------------------------------
     PROCEDURE TxtContaDsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupContaDs()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1986,11 +1994,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtGrVendsKeyPress - F4 abre lookup de Grupos Contabeis (Responsavel)
     *--------------------------------------------------------------------------
     PROCEDURE TxtGrVendsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupGrVends()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2073,11 +2083,13 @@ DEFINE CLASS Formepd AS FormBase
     * TxtVendsKeyPress - F4 abre lookup de Contas por Codigo (Responsavel)
     *--------------------------------------------------------------------------
     PROCEDURE TxtVendsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
             THIS.AbrirLookupVends()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------

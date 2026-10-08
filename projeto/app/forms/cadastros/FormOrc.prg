@@ -27,6 +27,8 @@ DEFINE CLASS FormOrc AS FormBase
     this_cUltimoMesValidado   = ""
     this_cUltimoAnoValidado   = ""
     this_cUltimaMoedaValidada = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -821,8 +823,8 @@ DEFINE CLASS FormOrc AS FormBase
         BINDEVENT(loc_oPagina.txt_4c_Emps,     "KeyPress", THIS, "ValidarEmps")
         BINDEVENT(loc_oPagina.txt_4c_Mes,       "KeyPress", THIS, "ValidarMes")
         BINDEVENT(loc_oPagina.txt_4c_Ano,       "KeyPress", THIS, "ValidarAno")
-        BINDEVENT(loc_oPagina.txt_4c_Cd_Moeda,  "KeyPress", THIS, "ValidarMoedaCodigo")
-        BINDEVENT(loc_oPagina.txt_4c__ds_moeda, "KeyPress", THIS, "ValidarMoedaDesc")
+        BINDEVENT(loc_oPagina.txt_4c_Cd_Moeda,  "LostFocus", THIS, "ValidarMoedaCodigo")
+        BINDEVENT(loc_oPagina.txt_4c__ds_moeda, "LostFocus", THIS, "ValidarMoedaDesc")
         BINDEVENT(loc_oPagina.txt_4c__nVlTots,  "KeyPress", THIS, "VlTotsLostFocus")
         BINDEVENT(loc_oPagina.grd_4c_Grupos,    "AfterRowColChange", THIS, "GruposAfterRowColChange")
         BINDEVENT(loc_oPagina.grd_4c_Contas,    "AfterRowColChange", THIS, "ContasAfterRowColChange")
@@ -1503,7 +1505,21 @@ DEFINE CLASS FormOrc AS FormBase
     * ValidarMoedaCodigo - Valida codigo de moeda em SigCdMoe (LostFocus)
     * Se nao encontrado, abre lookup de selecao
     *===========================================================================
-    PROCEDURE ValidarMoedaCodigo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaCodigoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaCodigo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaCodigoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaCodigoExec()
         LOCAL loc_cCod, loc_nResult, loc_cSQL
         loc_cCod = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Cd_Moeda.Value)
 
@@ -1543,7 +1559,21 @@ DEFINE CLASS FormOrc AS FormBase
     * ValidarMoedaDesc - Valida descricao de moeda em SigCdMoe (LostFocus)
     * Se nao encontrado, abre lookup de selecao
     *===========================================================================
-    PROCEDURE ValidarMoedaDesc(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaDescExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoedaDesc()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaDescExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaDescExec()
         LOCAL loc_cDesc, loc_nResult, loc_cSQL
         loc_cDesc = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c__ds_moeda.Value)
 

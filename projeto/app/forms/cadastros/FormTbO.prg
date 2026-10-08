@@ -42,6 +42,8 @@ DEFINE CLASS FormTbO AS FormBase
     *-- Filtro de Operacao (Dopes) aplicado a lista via BtnBuscarClick.
     *-- Vazio = lista TODOS os vinculos (comportamento padrao de CarregarLista)
     this_cFiltroDopesAtual = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init
@@ -690,7 +692,7 @@ DEFINE CLASS FormTbO AS FormBase
         *-- Espelha GradeSubN.Column1.Text1.Valid do legado (fwBuscaExt em SigOpTdz)
         BINDEVENT(loc_oPagina.txt_4c_Tabds, "KeyPress",  THIS, "TabdsLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Tabds, "DblClick",  THIS, "TabdsLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_Tabds, "KeyPress", THIS, "ValidarTabds")
+        BINDEVENT(loc_oPagina.txt_4c_Tabds, "LostFocus", THIS, "ValidarTabds")
 
         *----------------------------------------------------------------------
         * CAMPO 3: Descricao (descrs) - FASE 6/8
@@ -773,16 +775,24 @@ DEFINE CLASS FormTbO AS FormBase
     * (PUBLIC - metodos chamados via BINDEVENT NAO podem ser PROTECTED)
     *--------------------------------------------------------------------------
     PROCEDURE TabdsLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupTabelaDesconto()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TabdsLookupDblClick - Abre lookup de Tabela de Desconto no duplo clique
     *--------------------------------------------------------------------------
     PROCEDURE TabdsLookupDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupTabelaDesconto()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -791,7 +801,21 @@ DEFINE CLASS FormTbO AS FormBase
     * se nao encontrar, abre a grade de selecao (fwBuscaExt). Guarda o ultimo
     * valor validado para nao reabrir o lookup repetidamente (Problema 45).
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarTabds(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarTabdsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarTabds()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarTabdsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarTabdsExec()
         LOCAL loc_oPagina, loc_cTabds
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cTabds  = ALLTRIM(loc_oPagina.txt_4c_Tabds.Value)

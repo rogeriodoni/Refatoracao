@@ -26,6 +26,8 @@ DEFINE CLASS FormDepartamento AS FormBase
     *-- Propriedades do formulario
     this_oBusinessObject = .NULL.
     this_cMensagemErro   = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init
@@ -555,7 +557,7 @@ DEFINE CLASS FormDepartamento AS FormBase
             .BorderColor   = RGB(100, 100, 100)
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Diretores, "KeyPress", THIS, "ValidarDiretor")
+        BINDEVENT(loc_oPagina.txt_4c_Diretores, "LostFocus", THIS, "ValidarDiretor")
 
         *-- Label4 (Obriga Subclas. Encerramento): Top=231+29=260, Left=265
         *-- Optiongroup1 (nChkSubs): Top=228+29=257, Left=416, Width=109, Height=24
@@ -1218,7 +1220,21 @@ DEFINE CLASS FormDepartamento AS FormBase
     * Legado: getDiretores.Valid -> fwBuscaExt em SigCdUsu filtro cAtivos<>'N'
     * Colunas: Usuarios (Diretor), NComps (Nome)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDiretor(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDiretorExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDiretor()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDiretorExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDiretorExec()
         LOCAL loc_cValor, loc_oBusca, loc_lContinuar
         loc_cValor = ""
 

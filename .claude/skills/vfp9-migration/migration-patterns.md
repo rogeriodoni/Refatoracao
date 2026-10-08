@@ -13804,4 +13804,48 @@ estava errado desde o inicio.
 
 **Auditoria**: `automation\VerificarLookupEmKeyPress.ps1`. **Sem auto-fix** - o evento certo e a
 existencia (ou nao) de F3 vem do dump do legado, e trocar evento automaticamente foi exatamente o erro
-do #74. Restam **183 sites** com nome `Validar*`/outros fora do sweep dos 47.
+do #74. Os **182** sites restantes (nome `Validar*` e afins, 58 forms) foram varridos numa 2a leva - a auditoria fecha em **ERRO=0 AVISO=0**.
+
+### 2a leva: os 182 `Validar*` (58 forms)
+
+Mesmo defeito, mesma conclusao, agora com evidencia por form. Dos 58:
+
+| evidencia no dump do legado | forms |
+|---|---|
+| picker dentro de `PROCEDURE Valid` (`fwBusca*`/`CreateObject`) | 49 |
+| picker dentro de `Valid` via helper legado (`fAcessoEmpresa`/`fAcessoContas`/`fAcessoContab`) | 6 |
+| dump achado fora do padrao de nome (`task397/sigcddpt`, `task486/sigcdrom`) | 2 |
+| **sem dump no acervo** (`FormSigRePlc`, 2 sites) - tratado por analogia com os outros relatorios | 1 |
+
+Os **8** forms que tem `PROCEDURE KeyPress` no legado foram abertos um a um: todos fazem **navegacao**
+(F8/F9 na Lista, Enter para pular linha na grade, Tab para o proximo controle) - **nenhum abre picker**.
+Ou seja, em nenhum dos 58 o legado aciona lookup por tecla.
+
+### A guarda dos IRMAOS tem de ser SAVE/RESTORE, nao set/clear
+
+Dos 116 irmaos (bindings no mesmo controle), **18** tambem sao chamados de DENTRO do corpo do alvo -
+o funil `AbrirBusca*` ligado a `DblClick` e invocado pelo handler de `LostFocus`. Com `set/clear`
+simples, o clear do funil libera a flag **enquanto o alvo ainda esta rodando**, reabrindo a janela que
+a guarda existe para fechar:
+
+```foxpro
+PROCEDURE AbrirBuscaCodProduto()                && irmao DblClick E funil do alvo
+    LOCAL loc_lEmLookupAnt
+    loc_lEmLookupAnt    = THIS.this_lEmLookup   && salva
+    THIS.this_lEmLookup = .T.
+    THIS.AbrirBuscaCodProdutoExec()
+    THIS.this_lEmLookup = loc_lEmLookupAnt      && restaura, nao .F.
+ENDPROC
+```
+
+Save/restore compoe sob aninhamento e eh **identico** a set/clear quando nao ha aninhamento - por isso
+os 41 irmaos da 1a leva foram convertidos tambem: uma convencao so no repo. O wrapper do ALVO continua
+com `set/clear` porque ele eh a raiz da cadeia (tem o `IF THIS.this_lEmLookup / RETURN` antes).
+
+**Irmao que DELEGA** (chama `THIS.<Alvo>LostFocus()` em vez do funil) **nao pode ligar a flag**: o
+wrapper devolveria sem abrir nada e o F3 morreria. Sao 3 (`Formsigprtef`, `Formsigrecom` x2), deixados
+intactos - ja estao cobertos pelo wrapper do alvo.
+
+Numeros da 2a leva: 182 BINDEVENT trocados, 182 wrappers de alvo, 105 irmaos com save/restore inline,
+8 irmaos com RETURN antecipado convertidos para `<Nome>Exec()` + wrapper, 58 properties. Os 71 forms
+das duas levas compilam limpo.

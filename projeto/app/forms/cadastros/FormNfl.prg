@@ -21,6 +21,8 @@ DEFINE CLASS FormNfl AS FormBase
     this_oBusinessObject        = .NULL.
     this_cModoAtual             = "LISTA"
     this_cUltimoSeriesValidado  = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     PROCEDURE Init()
@@ -801,12 +803,12 @@ DEFINE CLASS FormNfl AS FormBase
         *-- EmpPad (Outros, aba 10)
         BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "KeyPress", THIS, "EmpPadKeyPress")
         BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "DblClick", THIS, "EmpPadDblClick")
-        BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "KeyPress",    THIS, "EmpPadValid")
+        BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "LostFocus",    THIS, "EmpPadValid")
 
         *-- UnPesos (Transporte, aba 6)
         BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "KeyPress", THIS, "UnPesosKeyPress")
         BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "DblClick", THIS, "UnPesosDblClick")
-        BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "KeyPress",    THIS, "UnPesosValid")
+        BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "LostFocus",    THIS, "UnPesosValid")
 
         *-- CodImp 1-7 (Rodape, aba 7, bloco 1)
         loc_oRdp = loc_oAbas.Page7
@@ -2412,18 +2414,40 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROCEDURE EmpPadKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupEmpPad()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     PROCEDURE EmpPadDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupEmpPad()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
-    PROCEDURE EmpPadValid(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em EmpPadValidExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE EmpPadValid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.EmpPadValidExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE EmpPadValidExec()
         LOCAL loc_lResultado, loc_cVal, loc_nRes
         loc_lResultado = .T.
         TRY
@@ -2497,18 +2521,40 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROCEDURE UnPesosKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupUnPesos()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     PROCEDURE UnPesosDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupUnPesos()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
-    PROCEDURE UnPesosValid(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em UnPesosValidExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE UnPesosValid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.UnPesosValidExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE UnPesosValidExec()
         LOCAL loc_lResultado, loc_cVal, loc_nRes
         loc_lResultado = .T.
         TRY

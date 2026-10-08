@@ -30,6 +30,8 @@ DEFINE CLASS FormACE AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -512,7 +514,7 @@ DEFINE CLASS FormACE AS FormBase
             .ReadOnly  = .F.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Empresa, "KeyPress", THIS, "ValidarEmpresa")
+        BINDEVENT(loc_oPg2.txt_4c_Empresa, "LostFocus", THIS, "ValidarEmpresa")
 
         *-- TextBox descricao empresa (Get_DEmpresa original: top=49, left=264, width=290 -> top=78)
         loc_oPg2.AddObject("txt_4c_DEmpresa", "TextBox")
@@ -1077,7 +1079,21 @@ DEFINE CLASS FormACE AS FormBase
     * ValidarEmpresa - Handler LostFocus de txt_4c_Empresa
     * Busca descricao no SQL Server; se nao achar, abre lookup
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarEmpresaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarEmpresa()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarEmpresaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarEmpresaExec()
         LOCAL loc_oPg2, loc_cEmpresa, loc_cSQL, loc_nResult
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 

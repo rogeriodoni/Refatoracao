@@ -26,6 +26,8 @@ DEFINE CLASS FormCNQ AS FormBase
     this_cModoAtual      = "LISTA"
     this_cPkSelecionado  = ""
     this_cFiltroBusca    = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init
@@ -578,7 +580,7 @@ DEFINE CLASS FormCNQ AS FormBase
         ENDWITH
 
         *-- BINDEVENTs campos (LostFocus, F4 e DblClick para lookup de Tamanho/Aro)
-        BINDEVENT(loc_oPagina.txt_4c_CodTam, "KeyPress", THIS, "ValidarCodTam")
+        BINDEVENT(loc_oPagina.txt_4c_CodTam, "LostFocus", THIS, "ValidarCodTam")
         BINDEVENT(loc_oPagina.txt_4c_CodTam, "KeyPress",  THIS, "CodTamKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_CodTam, "DblClick",  THIS, "CodTamDblClick")
 
@@ -998,7 +1000,21 @@ DEFINE CLASS FormCNQ AS FormBase
     * ValidarCodTam - LostFocus: aciona lookup apenas se valor nao vazio
     * Legado: Get_codtam.Valid usava fwBuscaExt em SigCdTam (cods/descs)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarCodTam(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodTamExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodTam()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodTamExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodTamExec()
         LOCAL loc_oPg2, loc_cCodTam
         loc_oPg2    = THIS.pgf_4c_Paginas.Page2
         loc_cCodTam = ""
@@ -1016,16 +1032,24 @@ DEFINE CLASS FormCNQ AS FormBase
     * CodTamKeyPress - Handler de KeyPress: abre lookup ao pressionar F4 (28)
     *--------------------------------------------------------------------------
     PROCEDURE CodTamKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupCodTam()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * CodTamDblClick - Handler de DblClick: abre lookup de Tamanho/Aro
     *--------------------------------------------------------------------------
     PROCEDURE CodTamDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupCodTam()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------

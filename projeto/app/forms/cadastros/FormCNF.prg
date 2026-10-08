@@ -35,6 +35,8 @@ DEFINE CLASS FormCNF AS FormBase
     this_dEmisAteFiltro  = {}   && data fim do filtro de emissao
     this_cOpeFiltro      = "A"  && A=Ambas E=Entrada S=Saida
     this_lCancelasFiltro = .F.  && .T. = exibir canceladas tambem
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - inicializacao padrao (FormBase.Init chama InicializarForm)
@@ -846,7 +848,7 @@ DEFINE CLASS FormCNF AS FormBase
         LOCAL loc_oCnt
         loc_oCnt = loc_oPg1.cnt_4c_Filtros
         BINDEVENT(loc_oCnt.txt_4c_Emp,    "KeyPress",         THIS, "ValidarEmpresa")
-        BINDEVENT(loc_oCnt.txt_4c_Serie,  "KeyPress",         THIS, "ValidarSerie")
+        BINDEVENT(loc_oCnt.txt_4c_Serie,  "LostFocus",         THIS, "ValidarSerie")
         BINDEVENT(loc_oCnt.txt_4c_DtIni,  "KeyPress",         THIS, "ValidarDtIni")
         BINDEVENT(loc_oCnt.txt_4c_DtFim,  "KeyPress",         THIS, "ValidarDtFim")
         BINDEVENT(loc_oCnt.txt_4c_DtFim,  "When",              THIS, "DtFimWhenCheck")
@@ -1637,7 +1639,21 @@ DEFINE CLASS FormCNF AS FormBase
     * ValidarSerie - LostFocus de txt_4c_Serie: valida em SigCdSer
     * Legado: Get_Serie.Valid usa fwBuscaInt sobre cursor crSigCdSer
     *==========================================================================
-    PROCEDURE ValidarSerie(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarSerieExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarSerie()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarSerieExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarSerieExec()
         LOCAL loc_oCnt, loc_cSerie, loc_cSQL, loc_nResult, loc_lEncontrou
         loc_oCnt      = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros
         loc_cSerie    = ALLTRIM(loc_oCnt.txt_4c_Serie.Value)

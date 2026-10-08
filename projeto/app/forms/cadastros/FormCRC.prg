@@ -1095,11 +1095,13 @@ DEFINE CLASS FormCRC AS FormBase
     * GrupoKeyPress - F4 abre lookup de SigCdGcr pelo codigo do grupo
     *==========================================================================
     PROCEDURE GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupGrupoCodigo()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -1153,11 +1155,13 @@ DEFINE CLASS FormCRC AS FormBase
     * DGruposKeyPress - F4 abre lookup de SigCdGcr pela descricao do grupo
     *==========================================================================
     PROCEDURE DGruposKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupGrupoDescrs()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================

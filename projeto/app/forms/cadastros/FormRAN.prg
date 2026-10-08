@@ -21,6 +21,8 @@ DEFINE CLASS FormRAN AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -611,7 +613,7 @@ DEFINE CLASS FormRAN AS FormBase
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Tpan, "KeyPress", THIS, "ValidarTipoAnalise")
+        BINDEVENT(loc_oPagina.txt_4c_Tpan, "LostFocus", THIS, "ValidarTipoAnalise")
 
         loc_oPagina.AddObject("txt_4c_Dtpan", "TextBox")
         WITH loc_oPagina.txt_4c_Dtpan
@@ -629,7 +631,7 @@ DEFINE CLASS FormRAN AS FormBase
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Dtpan, "KeyPress", THIS, "ValidarDescricaoTipoAnalise")
+        BINDEVENT(loc_oPagina.txt_4c_Dtpan, "LostFocus", THIS, "ValidarDescricaoTipoAnalise")
 
         *----------------------------------------------------------------------
         * Linha 3: Responsavel (resps = iclis de SigCdCli)
@@ -666,7 +668,7 @@ DEFINE CLASS FormRAN AS FormBase
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Cdconta, "KeyPress", THIS, "ValidarResponsavel")
+        BINDEVENT(loc_oPagina.txt_4c_Cdconta, "LostFocus", THIS, "ValidarResponsavel")
 
         loc_oPagina.AddObject("txt_4c_Dsconta", "TextBox")
         WITH loc_oPagina.txt_4c_Dsconta
@@ -684,7 +686,7 @@ DEFINE CLASS FormRAN AS FormBase
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Dsconta, "KeyPress", THIS, "ValidarNomeResponsavel")
+        BINDEVENT(loc_oPagina.txt_4c_Dsconta, "LostFocus", THIS, "ValidarNomeResponsavel")
 
         *----------------------------------------------------------------------
         * Container2 - Amostragem
@@ -880,7 +882,7 @@ DEFINE CLASS FormRAN AS FormBase
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oCnt1.txt_4c_Nfund, "KeyPress", THIS, "ValidarFundicao")
+        BINDEVENT(loc_oCnt1.txt_4c_Nfund, "LostFocus", THIS, "ValidarFundicao")
 
         loc_oCnt1.AddObject("lbl_4c_NOpLabel", "Label")
         WITH loc_oCnt1.lbl_4c_NOpLabel
@@ -1497,7 +1499,21 @@ DEFINE CLASS FormRAN AS FormBase
     * ValidarTipoAnalise - Valida codigo do tipo de analise (txt_4c_Tpan)
     * Legado: Gettpan.Valid - fwBuscaExt on SigPrTpa by codigos
     *===========================================================================
-    PROCEDURE ValidarTipoAnalise(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarTipoAnaliseExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarTipoAnalise()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarTipoAnaliseExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarTipoAnaliseExec()
         LOCAL loc_oPagina, loc_cSQL, loc_nResult, loc_nCod
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1547,7 +1563,21 @@ DEFINE CLASS FormRAN AS FormBase
     * ValidarDescricaoTipoAnalise - Valida descricao do tipo de analise (txt_4c_Dtpan)
     * Legado: Getdtpan.Valid - fwBuscaExt on SigPrTpa by Descs
     *===========================================================================
-    PROCEDURE ValidarDescricaoTipoAnalise(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDescricaoTipoAnaliseExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDescricaoTipoAnalise()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescricaoTipoAnaliseExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDescricaoTipoAnaliseExec()
         LOCAL loc_oPagina, loc_cSQL, loc_nResult, loc_cDesc
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1639,7 +1669,21 @@ DEFINE CLASS FormRAN AS FormBase
     * ValidarResponsavel - Valida codigo do responsavel (txt_4c_Cdconta -> SigCdCli.iclis)
     * Legado: Getcdconta.Valid - fAcessoContas -> substituido por lookup direto SigCdCli
     *===========================================================================
-    PROCEDURE ValidarResponsavel(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarResponsavelExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarResponsavel()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarResponsavelExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarResponsavelExec()
         LOCAL loc_oPagina, loc_cSQL, loc_nResult, loc_cCod
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1689,7 +1733,21 @@ DEFINE CLASS FormRAN AS FormBase
     * ValidarNomeResponsavel - Valida nome do responsavel (txt_4c_Dsconta -> SigCdCli.rclis)
     * Legado: Getdsconta.Valid - fAcessoContas -> substituido por lookup direto
     *===========================================================================
-    PROCEDURE ValidarNomeResponsavel(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarNomeResponsavelExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarNomeResponsavel()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarNomeResponsavelExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarNomeResponsavelExec()
         LOCAL loc_oPagina, loc_cSQL, loc_nResult, loc_cNome
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1886,7 +1944,21 @@ DEFINE CLASS FormRAN AS FormBase
     * ValidarFundicao - Valida numero de fundicao (txt_4c_Nfund -> SigCdFun)
     * Legado: Getnfund.Valid - fwBuscaExt on SigCdFun by Codigos
     *===========================================================================
-    PROCEDURE ValidarFundicao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFundicaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFundicao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFundicaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFundicaoExec()
         LOCAL loc_oPagina, loc_oCnt1, loc_cSQL, loc_nResult, loc_nCod
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 

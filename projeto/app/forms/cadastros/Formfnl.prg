@@ -1314,11 +1314,13 @@ DEFINE CLASS Formfnl AS FormBase
     * Abre lookup via F4 (keycode 28 no VFP9)
     *===========================================================================
     PROCEDURE CodRelGerKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupRelGerPorCodigo()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1326,11 +1328,13 @@ DEFINE CLASS Formfnl AS FormBase
     * Abre lookup via F4 (keycode 28 no VFP9)
     *===========================================================================
     PROCEDURE DesRelGerKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupRelGerPorDescricao()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================

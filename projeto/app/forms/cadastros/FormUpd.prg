@@ -1291,11 +1291,13 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE CodigoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupFase()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1303,9 +1305,11 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE CodigoDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupFase()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1409,11 +1413,13 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE DescricaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupFasePorDescricao()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1421,9 +1427,11 @@ DEFINE CLASS FormUpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *===========================================================================
     PROCEDURE DescricaoDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupFasePorDescricao()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================

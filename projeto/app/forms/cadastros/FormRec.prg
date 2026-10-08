@@ -22,6 +22,8 @@ DEFINE CLASS FormRec AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - REGRA CRITICA: Apenas RETURN DODEFAULT()
@@ -520,7 +522,7 @@ DEFINE CLASS FormRec AS FormBase
             .ReadOnly  = .T.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "KeyPress", THIS, "ValidarCodigo")
+        BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "LostFocus", THIS, "ValidarCodigo")
         BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "KeyPress", THIS, "CdGrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_CdGrupo, "DblClick", THIS, "CdGrupoDblClick")
 
@@ -539,7 +541,7 @@ DEFINE CLASS FormRec AS FormBase
             .ReadOnly  = .T.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_DsGrupo, "KeyPress", THIS, "ValidarDescricao")
+        BINDEVENT(loc_oPagina.txt_4c_DsGrupo, "LostFocus", THIS, "ValidarDescricao")
         BINDEVENT(loc_oPagina.txt_4c_DsGrupo, "KeyPress", THIS, "DsGrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_DsGrupo, "DblClick", THIS, "DsGrupoDblClick")
 
@@ -867,9 +869,13 @@ DEFINE CLASS FormRec AS FormBase
     * PUBLIC obrigatorio: BINDEVENT requer PUBLIC (CLAUDE.md regra #3)
     *==========================================================================
     PROCEDURE CdGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4 em VFP9
             THIS.AbrirBuscaGrupo("")
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -877,7 +883,11 @@ DEFINE CLASS FormRec AS FormBase
     * PUBLIC obrigatorio: BINDEVENT requer PUBLIC (CLAUDE.md regra #3)
     *==========================================================================
     PROCEDURE CdGrupoDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirBuscaGrupo("")
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -886,10 +896,14 @@ DEFINE CLASS FormRec AS FormBase
     *==========================================================================
     PROCEDURE DsGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cDesc
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4 em VFP9
             loc_cDesc = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DsGrupo.Value)
             THIS.AbrirBuscaGrupo(loc_cDesc)
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -898,8 +912,12 @@ DEFINE CLASS FormRec AS FormBase
     *==========================================================================
     PROCEDURE DsGrupoDblClick()
         LOCAL loc_cDesc
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         loc_cDesc = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DsGrupo.Value)
         THIS.AbrirBuscaGrupo(loc_cDesc)
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
@@ -907,7 +925,21 @@ DEFINE CLASS FormRec AS FormBase
     * Equivale a get_cd_grupo.Valid (fAcessoContab 'C') do legado
     * PUBLIC obrigatorio: BINDEVENT requer metodo PUBLIC (CLAUDE.md regra #3)
     *==========================================================================
-    PROCEDURE ValidarCodigo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCodigoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCodigo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCodigoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCodigoExec()
         LOCAL loc_cCodigo, loc_oPagina
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_CdGrupo.Value)
@@ -936,7 +968,21 @@ DEFINE CLASS FormRec AS FormBase
     * Equivale a get_ds_grupo.Valid (fAcessoContab 'D') do legado
     * PUBLIC obrigatorio: BINDEVENT requer metodo PUBLIC (CLAUDE.md regra #3)
     *==========================================================================
-    PROCEDURE ValidarDescricao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDescricaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDescricao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescricaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDescricaoExec()
         LOCAL loc_cDesc, loc_oPagina
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cDesc = ALLTRIM(loc_oPagina.txt_4c_DsGrupo.Value)

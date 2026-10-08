@@ -39,6 +39,8 @@ DEFINE CLASS Formsigrecom AS FormBase
     *-- BO de relatorio (instanciado em InicializarForm)
     this_oRelatorio    = .NULL.
     this_cMensagemErro = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Delega para FormBase.Init() que chama THIS.InicializarForm()
@@ -391,7 +393,7 @@ DEFINE CLASS Formsigrecom AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_CdMoeda, "KeyPress", THIS, "TeclaCdMoeda")
-        BINDEVENT(loc_oPagina.txt_4c_CdMoeda, "KeyPress", THIS, "ValidarCdMoeda")
+        BINDEVENT(loc_oPagina.txt_4c_CdMoeda, "LostFocus", THIS, "ValidarCdMoeda")
 
         loc_oPagina.AddObject("txt_4c_DsMoeda", "TextBox")
         WITH loc_oPagina.txt_4c_DsMoeda
@@ -410,7 +412,7 @@ DEFINE CLASS Formsigrecom AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_DsMoeda, "KeyPress", THIS, "TeclaDsMoeda")
-        BINDEVENT(loc_oPagina.txt_4c_DsMoeda, "KeyPress", THIS, "ValidarDsMoeda")
+        BINDEVENT(loc_oPagina.txt_4c_DsMoeda, "LostFocus", THIS, "ValidarDsMoeda")
 
         *-- Vendedor
         loc_oPagina.AddObject("lbl_4c_Vendedor", "Label")
@@ -443,7 +445,7 @@ DEFINE CLASS Formsigrecom AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Vendedor, "KeyPress",  THIS, "TeclaVendedor")
-        BINDEVENT(loc_oPagina.txt_4c_Vendedor, "KeyPress", THIS, "ValidarVendedor")
+        BINDEVENT(loc_oPagina.txt_4c_Vendedor, "LostFocus", THIS, "ValidarVendedor")
 
         *-- Opcao (titulos dinamicos de SigCdPac)
         loc_oPagina.AddObject("lbl_4c_Opcao", "Label")
@@ -1081,6 +1083,9 @@ DEFINE CLASS Formsigrecom AS FormBase
     *   ESC(27) com campo vazio: fecha o formulario (comportamento original)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaVendedor(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaVendedor()
         ENDIF
@@ -1088,12 +1093,27 @@ DEFINE CLASS Formsigrecom AS FormBase
            EMPTY(THIS.pgf_4c_Paginas.Page1.txt_4c_Vendedor.Value)
             THIS.Release()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarCdMoeda - Busca moeda pelo codigo e preenche descricao (LostFocus)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarCdMoeda(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCdMoedaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCdMoeda()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdMoedaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCdMoedaExec()
         LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oErro
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_CdMoeda.Value)
 
@@ -1130,7 +1150,21 @@ DEFINE CLASS Formsigrecom AS FormBase
     *--------------------------------------------------------------------------
     * ValidarDsMoeda - Busca moeda pela descricao e preenche codigo (LostFocus)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDsMoeda(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDsMoedaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDsMoeda()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsMoedaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDsMoedaExec()
         LOCAL loc_cValor, loc_oErro
         loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_DsMoeda.Value)
 
@@ -1149,7 +1183,21 @@ DEFINE CLASS Formsigrecom AS FormBase
     *--------------------------------------------------------------------------
     * ValidarVendedor - Valida codigo de vendedor contra SigCdUsu (LostFocus)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarVendedor(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarVendedorExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarVendedor()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarVendedorExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarVendedorExec()
         LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oErro, loc_lEncontrou
         loc_cValor    = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Vendedor.Value)
         loc_lEncontrou = .F.

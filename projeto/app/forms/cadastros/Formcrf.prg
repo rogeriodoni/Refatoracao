@@ -31,6 +31,8 @@ DEFINE CLASS Formcrf AS FormBase
     *--------------------------------------------------------------------------
     this_cModoAtual   = "LISTA"
     this_cFiltroLista = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Apenas DODEFAULT (FormBase.Init chama InicializarForm)
@@ -879,7 +881,7 @@ DEFINE CLASS Formcrf AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
         *-- BINDEVENT: lookup Vendedor
-        BINDEVENT(loc_oPagina.txt_4c_Conta, "KeyPress", THIS, "ValidarConta")
+        BINDEVENT(loc_oPagina.txt_4c_Conta, "LostFocus", THIS, "ValidarConta")
 
         *-- BINDEVENT: busca de produto, quantidade, grid e opcao de busca
         BINDEVENT(loc_oPagina.txt_4c_Busca,    "KeyPress",         THIS, "ValidarBusca")
@@ -1328,8 +1330,21 @@ DEFINE CLASS Formcrf AS FormBase
     * ValidarConta - LostFocus do txt_4c_Conta: busca vendedor pelo codigo
     * Preenche txt_4c_DConta com nome; se multiplos resultados abre picker
     *==========================================================================
-    PROCEDURE ValidarConta
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarConta()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaExec()
         LOCAL loc_oPagina, loc_cCodigo
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Conta.Value)

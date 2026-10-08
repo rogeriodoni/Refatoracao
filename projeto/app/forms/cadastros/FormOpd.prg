@@ -22,6 +22,8 @@ DEFINE CLASS FormOpd AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -540,7 +542,7 @@ DEFINE CLASS FormOpd AS FormBase
             .ReadOnly  = .F.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Nopes, "KeyPress", THIS, "ValidarNopes")
+        BINDEVENT(loc_oPagina.txt_4c_Nopes, "LostFocus", THIS, "ValidarNopes")
         BINDEVENT(loc_oPagina.txt_4c_Nopes, "KeyPress", THIS, "NopesKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Nopes, "DblClick", THIS, "NopesDblClick")
 
@@ -560,7 +562,7 @@ DEFINE CLASS FormOpd AS FormBase
             .ReadOnly  = .F.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Dopes, "KeyPress", THIS, "ValidarDopes")
+        BINDEVENT(loc_oPagina.txt_4c_Dopes, "LostFocus", THIS, "ValidarDopes")
         BINDEVENT(loc_oPagina.txt_4c_Dopes, "KeyPress", THIS, "DopesKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Dopes, "DblClick", THIS, "DopesDblClick")
 
@@ -1085,7 +1087,21 @@ DEFINE CLASS FormOpd AS FormBase
     * ValidarNopes - Handler de LostFocus do txt_4c_Nopes
     * Busca SigCdOpe por Dopes; se nao achar abre picker
     *===========================================================================
-    PROCEDURE ValidarNopes(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarNopesExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarNopes()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarNopesExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarNopesExec()
         LOCAL loc_oPagina2, loc_cDopes, loc_cSQL, loc_nRes
         loc_oPagina2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1173,7 +1189,21 @@ DEFINE CLASS FormOpd AS FormBase
     * ValidarDopes - Handler de LostFocus do txt_4c_Dopes
     * Busca SigCdOpe por Dopes (LIKE); match unico preenche auto; multiplos abre picker
     *===========================================================================
-    PROCEDURE ValidarDopes(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDopesExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDopes()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDopesExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDopesExec()
         LOCAL loc_oPagina2, loc_cDopes, loc_cSQL, loc_nRes
         loc_oPagina2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1276,20 +1306,28 @@ DEFINE CLASS FormOpd AS FormBase
     * CRITICO: handler de BINDEVENT DEVE declarar parametros do evento
     *===========================================================================
     PROCEDURE NopesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             IF !THIS.pgf_4c_Paginas.Page2.txt_4c_Nopes.ReadOnly
                 THIS.AbrirBuscaNopes()
             ENDIF
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * NopesDblClick - Handler de DblClick do txt_4c_Nopes (abre picker)
     *===========================================================================
     PROCEDURE NopesDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF !THIS.pgf_4c_Paginas.Page2.txt_4c_Nopes.ReadOnly
             THIS.AbrirBuscaNopes()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -1297,20 +1335,28 @@ DEFINE CLASS FormOpd AS FormBase
     * CRITICO: handler de BINDEVENT DEVE declarar parametros do evento
     *===========================================================================
     PROCEDURE DopesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             IF !THIS.pgf_4c_Paginas.Page2.txt_4c_Dopes.ReadOnly
                 THIS.AbrirBuscaDopes()
             ENDIF
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * DopesDblClick - Handler de DblClick do txt_4c_Dopes (abre picker)
     *===========================================================================
     PROCEDURE DopesDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF !THIS.pgf_4c_Paginas.Page2.txt_4c_Dopes.ReadOnly
             THIS.AbrirBuscaDopes()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================

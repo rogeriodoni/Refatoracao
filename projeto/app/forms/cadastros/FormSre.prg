@@ -40,6 +40,8 @@ DEFINE CLASS FormSre AS FormBase
     this_cModoAtual        = "LISTA"
     this_cUltimoEmpValidado  = ""
     this_cUltimoDEmpValidado = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -633,10 +635,10 @@ DEFINE CLASS FormSre AS FormBase
         *-- contra reabertura em toda perda de foco sem valor alterado)
         BINDEVENT(loc_oPg2.txt_4c_Emps, "KeyPress", THIS, "EmpsKeyPress")
         BINDEVENT(loc_oPg2.txt_4c_Emps, "DblClick", THIS, "EmpsDblClick")
-        BINDEVENT(loc_oPg2.txt_4c_Emps, "KeyPress", THIS, "ValidarEmpresa")
+        BINDEVENT(loc_oPg2.txt_4c_Emps, "LostFocus", THIS, "ValidarEmpresa")
         BINDEVENT(loc_oPg2.txt_4c_DEmps, "KeyPress", THIS, "DEmpsKeyPress")
         BINDEVENT(loc_oPg2.txt_4c_DEmps, "DblClick", THIS, "DEmpsDblClick")
-        BINDEVENT(loc_oPg2.txt_4c_DEmps, "KeyPress", THIS, "ValidarDescricaoEmpresa")
+        BINDEVENT(loc_oPg2.txt_4c_DEmps, "LostFocus", THIS, "ValidarDescricaoEmpresa")
 
         *======================================================================
         *-- Modelo (getModelo: top=175+29=204, left=275, width=31)
@@ -1254,7 +1256,21 @@ DEFINE CLASS FormSre AS FormBase
     * lookup para o usuario selecionar. Equivale ao fAcessoEmpresa(...,'C',...)
     * do legado (sigacess.PRG).
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarEmpresaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarEmpresa()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarEmpresaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarEmpresaExec()
         LOCAL loc_oPg2, loc_cCod, loc_cSQL
 
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -1300,7 +1316,21 @@ DEFINE CLASS FormSre AS FormBase
     * pela razao social (Razas) e preenche o codigo (Cemps). Se nao encontrar,
     * abre o lookup. Equivale ao fAcessoEmpresa(...,'D',...) do legado.
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDescricaoEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDescricaoEmpresaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDescricaoEmpresa()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescricaoEmpresaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDescricaoEmpresaExec()
         LOCAL loc_oPg2, loc_cDesc, loc_cSQL
 
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
@@ -1398,23 +1428,39 @@ DEFINE CLASS FormSre AS FormBase
     * Handlers KeyPress/DblClick dos campos de Empresa (F4 abre o lookup)
     *--------------------------------------------------------------------------
     PROCEDURE EmpsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupEmpresa()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE EmpsDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupEmpresa()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE DEmpsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28  && F4
             THIS.AbrirLookupEmpresa()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE DEmpsDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupEmpresa()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------

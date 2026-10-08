@@ -105,6 +105,8 @@ DEFINE CLASS Formsigmvcot AS FormBase
     * (mesma causa do Erro173 documentado no projeto).
     *--------------------------------------------------------------------------
     this_lAbrindoLookupGrid = .F.
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Chama FormBase.Init() que dispara InicializarForm()
@@ -2598,7 +2600,7 @@ DEFINE CLASS Formsigmvcot AS FormBase
         *-- confiavel em TextBox (licao ja registrada no projeto).
         BINDEVENT(loc_oGrid.Column2.Text1, "KeyPress", THIS, "ValidarFornecedorCodigoGrid")
         BINDEVENT(loc_oGrid.Column3.Text1, "KeyPress", THIS, "ValidarFornecedorNomeGrid")
-        BINDEVENT(loc_oGrid.Column6.Text1, "KeyPress", THIS, "ValidarCondicaoPagtoGrid")
+        BINDEVENT(loc_oGrid.Column6.Text1, "LostFocus", THIS, "ValidarCondicaoPagtoGrid")
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2776,13 +2778,13 @@ DEFINE CLASS Formsigmvcot AS FormBase
         BINDEVENT(loc_oGrid.Column1.Text1, "GotFocus",   THIS, "GridCotacoesProdutoGotFocus")
         BINDEVENT(loc_oGrid.Column1.Text1, "KeyPress",  THIS, "GridCotacoesProdutoLostFocus")
         BINDEVENT(loc_oGrid.Column1.Text1, "DblClick",   THIS, "GridCotacoesProdutoDblClick")
-        BINDEVENT(loc_oGrid.Column1.Text1, "KeyPress",  THIS, "ValidarProdutoGrid")
+        BINDEVENT(loc_oGrid.Column1.Text1, "LostFocus",  THIS, "ValidarProdutoGrid")
 
         BINDEVENT(loc_oGrid.Column2.Text1,  "KeyPress", THIS, "GridCotacoesKeyPressComum")
         BINDEVENT(loc_oGrid.Column3.Text1,  "KeyPress", THIS, "GridCotacoesKeyPressComum")
         BINDEVENT(loc_oGrid.Column3.Text1,  "LostFocus", THIS, "RecalcularTotaisPorQuantidade")
         BINDEVENT(loc_oGrid.Column4.Text1,  "KeyPress", THIS, "GridCotacoesKeyPressComum")
-        BINDEVENT(loc_oGrid.Column4.Text1,  "KeyPress", THIS, "ValidarUnidadeGrid")
+        BINDEVENT(loc_oGrid.Column4.Text1,  "LostFocus", THIS, "ValidarUnidadeGrid")
         BINDEVENT(loc_oGrid.Column5.Text1,  "KeyPress", THIS, "GridCotacoesKeyPressComum")
         BINDEVENT(loc_oGrid.Column5.Header1, "DblClick", THIS, "SelecaoAutomaticaMelhorPreco")
         BINDEVENT(loc_oGrid.Column24.Text1, "KeyPress", THIS, "GridCotacoesKeyPressComum")
@@ -3362,21 +3364,29 @@ DEFINE CLASS Formsigmvcot AS FormBase
     * do KeyPress identico presente em TODAS as colunas do dump legado.
     *--------------------------------------------------------------------------
     PROCEDURE GridCotacoesKeyPressComum(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         DO CASE
             CASE par_nKeyCode = 9   && TAB
                 THIS.pgf_4c_Paginas.Page3.txt_4c_DPros.SetFocus()
             CASE par_nKeyCode = 15  && SHIFT+TAB
                 THIS.pgf_4c_Paginas.Page3.grd_4c_Fornecedores.Column2.SetFocus()
         ENDCASE
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE GridFornecsKeyPressComum(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         DO CASE
             CASE par_nKeyCode = 9   && TAB
                 THIS.pgf_4c_Paginas.Page3.grd_4c_Produtos.Column1.SetFocus()
             CASE par_nKeyCode = 15  && SHIFT+TAB
                 THIS.pgf_4c_Paginas.Page3.cbo_4c_Prioris.SetFocus()
         ENDCASE
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -3768,12 +3778,19 @@ DEFINE CLASS Formsigmvcot AS FormBase
     * (ValidarProdutoGrid) so roda quando a linha AINDA esta livre.
     *--------------------------------------------------------------------------
     PROCEDURE GridCotacoesProdutoGotFocus()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF USED("cursor_4c_Produtos") AND !EOF("cursor_4c_Produtos")
             THIS.this_cTagProduto = ALLTRIM(cursor_4c_Produtos.CPros)
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE GridCotacoesProdutoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF USED("cursor_4c_Produtos") AND !EOF("cursor_4c_Produtos")
             IF !EMPTY(cursor_4c_Produtos.EmpDopNums)
                 SELECT cursor_4c_Produtos
@@ -3781,14 +3798,19 @@ DEFINE CLASS Formsigmvcot AS FormBase
                 THIS.pgf_4c_Paginas.Page3.grd_4c_Produtos.Refresh()
             ENDIF
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE GridCotacoesProdutoDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         *-- Legado: Do Form SigOpCgp.Scx (tela de consulta de movimentacoes por
         *-- produto) - form de CONSULTA externo, nao portado nesta fase.
         MsgAviso("Consulta de movimenta" + CHR(231) + CHR(245) + "es por produto (SigOpCgp) " + ;
             "n" + CHR(227) + "o dispon" + CHR(237) + "vel nesta vers" + CHR(227) + "o.", ;
             "Aviso")
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -3796,7 +3818,21 @@ DEFINE CLASS Formsigmvcot AS FormBase
     * quando a linha AINDA nao esta vinculada a uma operacao (EmpDopNums
     * vazio) - transcrito literal do guard do legado.
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarProdutoGrid(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarProdutoGridExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarProdutoGrid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarProdutoGridExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarProdutoGridExec()
         LOCAL loc_oGrid, loc_cValor, loc_oBusca
 
         IF !USED("cursor_4c_Produtos") OR EOF("cursor_4c_Produtos")
@@ -3858,7 +3894,21 @@ DEFINE CLASS Formsigmvcot AS FormBase
     * o produto ja tem unidade cadastrada em SigCdPro, avisa quando o valor
     * digitado diverge (mesma checagem do legado, sem alterar o Value).
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarUnidadeGrid(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarUnidadeGridExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarUnidadeGrid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarUnidadeGridExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarUnidadeGridExec()
         LOCAL loc_oGrid, loc_cValor, loc_oBusca, loc_cSQL, loc_nResultado
 
         IF !USED("cursor_4c_Produtos") OR EOF("cursor_4c_Produtos")
@@ -4009,7 +4059,21 @@ DEFINE CLASS Formsigmvcot AS FormBase
     *--------------------------------------------------------------------------
     * ValidarCondicaoPagtoGrid - Column6 (FPags) do grd_4c_Fornecedores.
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarCondicaoPagtoGrid(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCondicaoPagtoGridExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCondicaoPagtoGrid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCondicaoPagtoGridExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCondicaoPagtoGridExec()
         LOCAL loc_oGrid, loc_cValor, loc_oBusca
 
         IF !USED("cursor_4c_Fornecedores") OR EOF("cursor_4c_Fornecedores")

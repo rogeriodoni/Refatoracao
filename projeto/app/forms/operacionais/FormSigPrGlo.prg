@@ -100,6 +100,8 @@ DEFINE CLASS FormSigPrGlo AS FormBase
     this_lAutomatico  = .F.   && .T. = processamento automatico (sem interacao)
     this_lPorDestino  = .F.   && .T. = globalizacao por destino
     this_lGerPorTp    = .F.   && .T. = "Processar Ordem de Producao por Tipo" (habilita cnt_4c_Container1)
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - recebe as flags de modo (equivalente a LParameters _Reserva,
@@ -1073,13 +1075,13 @@ DEFINE CLASS FormSigPrGlo AS FormBase
         BINDEVENT(THIS.cnt_4c_Operacao.txt_4c_Operacao, "KeyPress", THIS, "OperacaoKeyPress")
         BINDEVENT(THIS.cnt_4c_Container1.txt_4c_TpGOp,  "KeyPress", THIS, "TpGOpKeyPress")
 
-        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Grupo,  "KeyPress", THIS, "ConGrupoKeyPress")
-        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Conta,  "KeyPress", THIS, "ConContaKeyPress")
-        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Dconta, "KeyPress", THIS, "ConDcontaKeyPress")
+        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Grupo,  "LostFocus", THIS, "ConGrupoKeyPress")
+        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Conta,  "LostFocus", THIS, "ConContaKeyPress")
+        BINDEVENT(THIS.cnt_4c_Conta.txt_4c_Dconta, "LostFocus", THIS, "ConDcontaKeyPress")
 
-        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Grupo,  "KeyPress", THIS, "RespGrupoKeyPress")
-        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Conta,  "KeyPress", THIS, "RespContaKeyPress")
-        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Dconta, "KeyPress", THIS, "RespDcontaKeyPress")
+        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Grupo,  "LostFocus", THIS, "RespGrupoKeyPress")
+        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Conta,  "LostFocus", THIS, "RespContaKeyPress")
+        BINDEVENT(THIS.cnt_4c_Responsavel.txt_4c_Dconta, "LostFocus", THIS, "RespDcontaKeyPress")
 
         BINDEVENT(THIS.cnt_4c_Empresa.txt_4c_CdEmpresa, "KeyPress", THIS, "EmpresaCodKeyPress")
         BINDEVENT(THIS.cnt_4c_Empresa.txt_4c_DsEmpresa, "KeyPress", THIS, "EmpresaDescKeyPress")
@@ -1391,11 +1393,39 @@ DEFINE CLASS FormSigPrGlo AS FormBase
     * containers Conta/Responsavel. Nao ha campo de descricao visivel para
     * o Grupo no form - so validacao/preenchimento do codigo.
     *--------------------------------------------------------------------------
-    PROCEDURE ConGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ConGrupoKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ConGrupoKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ConGrupoKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ConGrupoKeyPressExec()
         THIS.ProcessarLookupGrupo(par_nKeyCode, THIS.cnt_4c_Conta.txt_4c_Grupo)
     ENDPROC
 
-    PROCEDURE RespGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em RespGrupoKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE RespGrupoKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.RespGrupoKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE RespGrupoKeyPressExec()
         THIS.ProcessarLookupGrupo(par_nKeyCode, THIS.cnt_4c_Responsavel.txt_4c_Grupo)
     ENDPROC
 
@@ -1436,14 +1466,42 @@ DEFINE CLASS FormSigPrGlo AS FormBase
     * Responsavel. Ao selecionar/casar, preenche a descricao (Rclis) no
     * txt_4c_Dconta irmao.
     *--------------------------------------------------------------------------
-    PROCEDURE ConContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ConContaKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ConContaKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ConContaKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ConContaKeyPressExec()
         WITH THIS.cnt_4c_Conta
             THIS.ProcessarLookupConta(par_nKeyCode, .txt_4c_Grupo, .txt_4c_Conta, .txt_4c_Dconta)
             .Visible     = .T.
         ENDWITH
     ENDPROC
 
-    PROCEDURE RespContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em RespContaKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE RespContaKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.RespContaKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE RespContaKeyPressExec()
         WITH THIS.cnt_4c_Responsavel
             THIS.ProcessarLookupConta(par_nKeyCode, .txt_4c_Grupo, .txt_4c_Conta, .txt_4c_Dconta)
             .Visible     = .T.
@@ -1493,14 +1551,42 @@ DEFINE CLASS FormSigPrGlo AS FormBase
     * Get_dconta.Valid (fAcessoContas modo 'D'). Ao casar/selecionar,
     * preenche TAMBEM o codigo (Iclis) no txt_4c_Conta irmao.
     *--------------------------------------------------------------------------
-    PROCEDURE ConDcontaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ConDcontaKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ConDcontaKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ConDcontaKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ConDcontaKeyPressExec()
         WITH THIS.cnt_4c_Conta
             THIS.ProcessarLookupContaPorDescricao(par_nKeyCode, .txt_4c_Grupo, .txt_4c_Conta, .txt_4c_Dconta)
             .Visible     = .T.
         ENDWITH
     ENDPROC
 
-    PROCEDURE RespDcontaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em RespDcontaKeyPressExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE RespDcontaKeyPress()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.RespDcontaKeyPressExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE RespDcontaKeyPressExec()
         WITH THIS.cnt_4c_Responsavel
             THIS.ProcessarLookupContaPorDescricao(par_nKeyCode, .txt_4c_Grupo, .txt_4c_Conta, .txt_4c_Dconta)
             .Visible     = .T.

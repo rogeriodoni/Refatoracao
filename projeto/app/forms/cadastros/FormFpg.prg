@@ -22,6 +22,8 @@ DEFINE CLASS FormFpg AS FormBase
     *-- Estado do formulario
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - REGRA CRITICA: apenas RETURN DODEFAULT()
@@ -621,7 +623,7 @@ DEFINE CLASS FormFpg AS FormBase
         BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "KeyPress",  THIS, "CdGrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "DblClick",  THIS, "CdGrupoDblClick")
         BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "KeyPress", THIS, "ValidarCdGrupo")
-        BINDEVENT(loc_oPagina.txt_4c__ds_grupo, "KeyPress", THIS, "ValidarDsGrupo")
+        BINDEVENT(loc_oPagina.txt_4c__ds_grupo, "LostFocus", THIS, "ValidarDsGrupo")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
@@ -1183,8 +1185,21 @@ DEFINE CLASS FormFpg AS FormBase
     * ValidarDsGrupo - LostFocus de txt_4c__ds_grupo
     * Valida descricao em SigCdGcr e preenche codigo (equivale fAcessoContab 'D')
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDsGrupo
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDsGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDsGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDsGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDsGrupoExec()
         LOCAL loc_oPagina, loc_cDescricao
         loc_oPagina   = THIS.pgf_4c_Paginas.Page2
         loc_cDescricao = ALLTRIM(loc_oPagina.txt_4c__ds_grupo.Value)

@@ -2037,7 +2037,9 @@ DEFINE CLASS FormDmo AS FormBase
     *==========================================================================
     PROCEDURE TxtOriGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cSel, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Origem.txt_4c_OriGrupo.Value)
@@ -2051,7 +2053,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtOriGrupoKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -2087,7 +2089,9 @@ DEFINE CLASS FormDmo AS FormBase
 
     PROCEDURE TxtOriContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cGrupo, loc_cDesc, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal   = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Origem.txt_4c_OriConta.Value)
@@ -2107,7 +2111,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtOriContaKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -2166,7 +2170,9 @@ DEFINE CLASS FormDmo AS FormBase
     *==========================================================================
     PROCEDURE TxtDesGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cSel, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Destino.txt_4c_DesGrupo.Value)
@@ -2180,7 +2186,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtDesGrupoKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -2216,7 +2222,9 @@ DEFINE CLASS FormDmo AS FormBase
 
     PROCEDURE TxtDesContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cGrupo, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal   = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Destino.txt_4c_DesConta.Value)
@@ -2231,7 +2239,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtDesContaKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -2290,7 +2298,9 @@ DEFINE CLASS FormDmo AS FormBase
     *==========================================================================
     PROCEDURE TxtRespGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cSel, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Responsavel.txt_4c_RespGrupo.Value)
@@ -2304,7 +2314,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtRespGrupoKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
@@ -2340,7 +2350,9 @@ DEFINE CLASS FormDmo AS FormBase
 
     PROCEDURE TxtRespContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cVal, loc_cGrupo, loc_oErro
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13
                 loc_cVal   = ALLTRIM(THIS.pgf_4c_Paginas.Page2.cnt_4c_Responsavel.txt_4c_RespConta.Value)
@@ -2355,7 +2367,7 @@ DEFINE CLASS FormDmo AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtRespContaKeyPress")
         ENDTRY
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do

@@ -24,6 +24,8 @@ DEFINE CLASS Formtra AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -1515,7 +1517,7 @@ DEFINE CLASS Formtra AS FormBase
         ENDWITH
         loc_oPagina.grd_4c_Estados.Column1.CurrentControl = "txt_4c_ColUf"
         loc_oPagina.grd_4c_Estados.Column1.Sparse         = .F.
-        BINDEVENT(loc_oPagina.grd_4c_Estados.Column1.txt_4c_ColUf, "KeyPress", THIS, "ValidarUfEstado")
+        BINDEVENT(loc_oPagina.grd_4c_Estados.Column1.txt_4c_ColUf, "LostFocus", THIS, "ValidarUfEstado")
 
         *-- Coluna Municipio (Column5) - controle customizado com lookup no LostFocus
         loc_oPagina.grd_4c_Estados.Column5.AddObject("txt_4c_ColMunicipio", "TextBox")
@@ -1529,7 +1531,7 @@ DEFINE CLASS Formtra AS FormBase
         ENDWITH
         loc_oPagina.grd_4c_Estados.Column5.CurrentControl = "txt_4c_ColMunicipio"
         loc_oPagina.grd_4c_Estados.Column5.Sparse         = .F.
-        BINDEVENT(loc_oPagina.grd_4c_Estados.Column5.txt_4c_ColMunicipio, "KeyPress", THIS, "ValidarMunicipioEstado")
+        BINDEVENT(loc_oPagina.grd_4c_Estados.Column5.txt_4c_ColMunicipio, "LostFocus", THIS, "ValidarMunicipioEstado")
 
         *-- Grid.ReadOnly ANTES de Column.ReadOnly (regra #18 - senao o Grid sobrescreve)
         loc_oPagina.grd_4c_Estados.ReadOnly  = .F.
@@ -1843,7 +1845,21 @@ DEFINE CLASS Formtra AS FormBase
     * ValidarUfEstado - Lookup do campo UF da grade de estados (Column1)
     * Legado: Column1.Text1.Valid - CreateObject('fwbuscaext', ..., 'SigCdUfs', ...)
     *===========================================================================
-    PROCEDURE ValidarUfEstado(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarUfEstadoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarUfEstado()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarUfEstadoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarUfEstadoExec()
         LOCAL loc_oBusca, loc_cUf
 
         IF !USED("cursor_4c_Estados")
@@ -1897,7 +1913,21 @@ DEFINE CLASS Formtra AS FormBase
     * Legado: Column5.Text1.Valid - join SigCdMun+SigCdUfs filtrado pela UF da
     * linha atual, seek exato ou fwbuscaint (grid) se nao achar
     *===========================================================================
-    PROCEDURE ValidarMunicipioEstado(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMunicipioEstadoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMunicipioEstado()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMunicipioEstadoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMunicipioEstadoExec()
         LOCAL loc_cUf, loc_cMunicipio, loc_cSQL, loc_nResultado, loc_oBusca
 
         IF !USED("cursor_4c_Estados")

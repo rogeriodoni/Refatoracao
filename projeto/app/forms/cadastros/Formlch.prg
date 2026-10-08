@@ -29,6 +29,8 @@ DEFINE CLASS Formlch AS FormBase
     *-- Estado do form
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - chama DODEFAULT() (FormBase.Init faz SET DATE BRITISH + SET CENTURY ON)
@@ -1011,7 +1013,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oOrig.txt_4c_GruOrig, "KeyPress", THIS, "ValidarGrupoOrig")
+        BINDEVENT(loc_oOrig.txt_4c_GruOrig, "LostFocus", THIS, "ValidarGrupoOrig")
 
         loc_oOrig.AddObject("txt_4c_DGruOrig", "TextBox")
         WITH loc_oOrig.txt_4c_DGruOrig
@@ -1052,7 +1054,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oOrig.txt_4c_ConOrig, "KeyPress", THIS, "ValidarContaOrig")
+        BINDEVENT(loc_oOrig.txt_4c_ConOrig, "LostFocus", THIS, "ValidarContaOrig")
 
         loc_oOrig.AddObject("txt_4c_CpfOrig", "TextBox")
         WITH loc_oOrig.txt_4c_CpfOrig
@@ -1137,7 +1139,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oDes.txt_4c_GruEmts, "KeyPress", THIS, "ValidarGrupoEmts")
+        BINDEVENT(loc_oDes.txt_4c_GruEmts, "LostFocus", THIS, "ValidarGrupoEmts")
 
         loc_oDes.AddObject("txt_4c_DGruEmts", "TextBox")
         WITH loc_oDes.txt_4c_DGruEmts
@@ -1178,7 +1180,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oDes.txt_4c_ConEmts, "KeyPress", THIS, "ValidarContaEmts")
+        BINDEVENT(loc_oDes.txt_4c_ConEmts, "LostFocus", THIS, "ValidarContaEmts")
 
         loc_oDes.AddObject("txt_4c_CpfEmts", "TextBox")
         WITH loc_oDes.txt_4c_CpfEmts
@@ -1263,7 +1265,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oDst.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupoDest")
+        BINDEVENT(loc_oDst.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupoDest")
 
         loc_oDst.AddObject("txt_4c_DGrupo", "TextBox")
         WITH loc_oDst.txt_4c_DGrupo
@@ -1304,7 +1306,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oDst.txt_4c_Conta, "KeyPress", THIS, "ValidarContaDest")
+        BINDEVENT(loc_oDst.txt_4c_Conta, "LostFocus", THIS, "ValidarContaDest")
 
         loc_oDst.AddObject("txt_4c_CpfDest", "TextBox")
         WITH loc_oDst.txt_4c_CpfDest
@@ -1390,7 +1392,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oCC.txt_4c_GrupoCcs, "KeyPress", THIS, "ValidarGrupoCC")
+        BINDEVENT(loc_oCC.txt_4c_GrupoCcs, "LostFocus", THIS, "ValidarGrupoCC")
 
         loc_oCC.AddObject("txt_4c_DGrupoCcs", "TextBox")
         WITH loc_oCC.txt_4c_DGrupoCcs
@@ -1431,7 +1433,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oCC.txt_4c_ContaCcs, "KeyPress", THIS, "ValidarContaCC")
+        BINDEVENT(loc_oCC.txt_4c_ContaCcs, "LostFocus", THIS, "ValidarContaCC")
 
         loc_oCC.AddObject("txt_4c_CpfCCs", "TextBox")
         WITH loc_oCC.txt_4c_CpfCCs
@@ -1516,7 +1518,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oCart.txt_4c_GruCart, "KeyPress", THIS, "ValidarGrupoCart")
+        BINDEVENT(loc_oCart.txt_4c_GruCart, "LostFocus", THIS, "ValidarGrupoCart")
 
         loc_oCart.AddObject("txt_4c_DGruCart", "TextBox")
         WITH loc_oCart.txt_4c_DGruCart
@@ -1557,7 +1559,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oCart.txt_4c_ConCart, "KeyPress", THIS, "ValidarContaCart")
+        BINDEVENT(loc_oCart.txt_4c_ConCart, "LostFocus", THIS, "ValidarContaCart")
 
         loc_oCart.AddObject("txt_4c_DConCart", "TextBox")
         WITH loc_oCart.txt_4c_DConCart
@@ -1811,7 +1813,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oEmiss.txt_4c_GruEmiss, "KeyPress", THIS, "ValidarGrupoEmiss")
+        BINDEVENT(loc_oEmiss.txt_4c_GruEmiss, "LostFocus", THIS, "ValidarGrupoEmiss")
 
         loc_oEmiss.AddObject("txt_4c_DGruEmiss", "TextBox")
         WITH loc_oEmiss.txt_4c_DGruEmiss
@@ -1852,7 +1854,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oEmiss.txt_4c_ConEmiss, "KeyPress", THIS, "ValidarContaEmiss")
+        BINDEVENT(loc_oEmiss.txt_4c_ConEmiss, "LostFocus", THIS, "ValidarContaEmiss")
 
         loc_oEmiss.AddObject("txt_4c_CpfEmiss", "TextBox")
         WITH loc_oEmiss.txt_4c_CpfEmiss
@@ -2772,7 +2774,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oRes.txt_4c_GruRes, "KeyPress", THIS, "ValidarGrupoRes")
+        BINDEVENT(loc_oRes.txt_4c_GruRes, "LostFocus", THIS, "ValidarGrupoRes")
 
         loc_oRes.AddObject("lbl_4c_SepRes", "Label")
         WITH loc_oRes.lbl_4c_SepRes
@@ -2801,7 +2803,7 @@ DEFINE CLASS Formlch AS FormBase
             .FontSize = 8
             .Visible = .T.
         ENDWITH
-        BINDEVENT(loc_oRes.txt_4c_ConRes, "KeyPress", THIS, "ValidarContaRes")
+        BINDEVENT(loc_oRes.txt_4c_ConRes, "LostFocus", THIS, "ValidarContaRes")
 
         loc_oRes.AddObject("txt_4c_DConRes", "TextBox")
         WITH loc_oRes.txt_4c_DConRes
@@ -4142,59 +4144,255 @@ DEFINE CLASS Formlch AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarGrupoOrig(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoOrigExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoOrig()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoOrigExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoOrigExec()
         THIS.BuscarDescGrupo("cnt_4c_Origem", "txt_4c_GruOrig", "txt_4c_DGruOrig")
     ENDPROC
 
-    PROCEDURE ValidarContaOrig(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaOrigExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaOrig()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaOrigExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaOrigExec()
         THIS.BuscarDescConta("cnt_4c_Origem", "txt_4c_ConOrig", "txt_4c_DConOrig", "txt_4c_GruOrig", "txt_4c_CpfOrig")
     ENDPROC
 
-    PROCEDURE ValidarGrupoEmts(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoEmtsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoEmts()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoEmtsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoEmtsExec()
         THIS.BuscarDescGrupo("cnt_4c_Despesa", "txt_4c_GruEmts", "txt_4c_DGruEmts")
     ENDPROC
 
-    PROCEDURE ValidarContaEmts(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaEmtsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaEmts()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaEmtsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaEmtsExec()
         THIS.BuscarDescConta("cnt_4c_Despesa", "txt_4c_ConEmts", "txt_4c_DConEmts", "txt_4c_GruEmts", "txt_4c_CpfEmts")
     ENDPROC
 
-    PROCEDURE ValidarGrupoDest(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoDestExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoDest()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoDestExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoDestExec()
         THIS.BuscarDescGrupo("cnt_4c_Destino", "txt_4c_Grupo", "txt_4c_DGrupo")
     ENDPROC
 
-    PROCEDURE ValidarContaDest(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaDestExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaDest()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaDestExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaDestExec()
         THIS.BuscarDescConta("cnt_4c_Destino", "txt_4c_Conta", "txt_4c_DConta", "txt_4c_Grupo", "txt_4c_CpfDest")
     ENDPROC
 
-    PROCEDURE ValidarGrupoCC(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoCCExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoCC()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoCCExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoCCExec()
         THIS.BuscarDescGrupo("cnt_4c_CCusto", "txt_4c_GrupoCcs", "txt_4c_DGrupoCcs")
     ENDPROC
 
-    PROCEDURE ValidarContaCC(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaCCExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaCC()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaCCExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaCCExec()
         THIS.BuscarDescConta("cnt_4c_CCusto", "txt_4c_ContaCcs", "txt_4c_DContaCcs", "txt_4c_GrupoCcs", "txt_4c_CpfCCs")
     ENDPROC
 
-    PROCEDURE ValidarGrupoCart(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoCartExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoCart()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoCartExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoCartExec()
         THIS.BuscarDescGrupo("cnt_4c_Carteira", "txt_4c_GruCart", "txt_4c_DGruCart")
     ENDPROC
 
-    PROCEDURE ValidarContaCart(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaCartExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaCart()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaCartExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaCartExec()
         THIS.BuscarDescConta("cnt_4c_Carteira", "txt_4c_ConCart", "txt_4c_DConCart", "txt_4c_GruCart", "")
     ENDPROC
 
-    PROCEDURE ValidarGrupoEmiss(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoEmissExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoEmiss()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoEmissExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoEmissExec()
         THIS.BuscarDescGrupo("cnt_4c_Emissor", "txt_4c_GruEmiss", "txt_4c_DGruEmiss")
     ENDPROC
 
-    PROCEDURE ValidarContaEmiss(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaEmissExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaEmiss()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaEmissExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaEmissExec()
         THIS.BuscarDescConta("cnt_4c_Emissor", "txt_4c_ConEmiss", "txt_4c_DConEmiss", "txt_4c_GruEmiss", "")
     ENDPROC
 
-    PROCEDURE ValidarGrupoRes(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoResExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoRes()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoResExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoResExec()
         THIS.BuscarDescGrupo("cnt_4c_Responsavel", "txt_4c_GruRes", "")
     ENDPROC
 
-    PROCEDURE ValidarContaRes(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaResExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaRes()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaResExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaResExec()
         THIS.BuscarDescConta("cnt_4c_Responsavel", "txt_4c_ConRes", "txt_4c_DConRes", "txt_4c_GruRes", "")
     ENDPROC
 

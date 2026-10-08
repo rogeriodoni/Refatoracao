@@ -27,6 +27,8 @@ DEFINE CLASS FormCeg AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_cCidchavesAtual = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -527,7 +529,7 @@ DEFINE CLASS FormCeg AS FormBase
             .Enabled   = .T.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupo")
+        BINDEVENT(loc_oPg2.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupo")
         BINDEVENT(loc_oPg2.txt_4c_Grupo, "KeyPress",  THIS, "TeclaGrupo")
 
         *-- Label e TextBox: Conta (Say3 / get_Conta no legado - Top=224+29=253)
@@ -562,7 +564,7 @@ DEFINE CLASS FormCeg AS FormBase
             .Enabled   = .T.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Conta, "KeyPress", THIS, "ValidarConta")
+        BINDEVENT(loc_oPg2.txt_4c_Conta, "LostFocus", THIS, "ValidarConta")
         BINDEVENT(loc_oPg2.txt_4c_Conta, "KeyPress",  THIS, "TeclaConta")
 
         *-- Label e TextBox: Prioridade (Say2 / Get_codigo no legado - Top=252+29=281)
@@ -633,7 +635,7 @@ DEFINE CLASS FormCeg AS FormBase
             .Enabled           = .T.
             .Visible           = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Emps, "KeyPress", THIS, "ValidarEmps")
+        BINDEVENT(loc_oPg2.txt_4c_Emps, "LostFocus", THIS, "ValidarEmps")
         BINDEVENT(loc_oPg2.txt_4c_Emps, "KeyPress",  THIS, "TeclaEmps")
 
         *-- TextBox: Nome da empresa (Get_DEmps no legado - Top=277+29=306, Left=215)
@@ -652,7 +654,7 @@ DEFINE CLASS FormCeg AS FormBase
             .Enabled   = .T.
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_DEmps, "KeyPress", THIS, "ValidarDEmps")
+        BINDEVENT(loc_oPg2.txt_4c_DEmps, "LostFocus", THIS, "ValidarDEmps")
         BINDEVENT(loc_oPg2.txt_4c_DEmps, "KeyPress",  THIS, "TeclaDEmps")
 
         *-- Label: Tipo (Say4 no legado - Top=309+29=338)
@@ -1257,7 +1259,21 @@ DEFINE CLASS FormCeg AS FormBase
     * ValidarGrupo - LostFocus handler para txt_4c_Grupo
     * Lookup em SigCdGcr (Grupos de Conta Corrente)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoExec()
         LOCAL loc_cGrupo, loc_oPg2
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
@@ -1274,9 +1290,13 @@ DEFINE CLASS FormCeg AS FormBase
     * TeclaGrupo - KeyPress handler para txt_4c_Grupo (F4 abre lookup)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaGrupo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaGrupo(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value))
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1322,7 +1342,21 @@ DEFINE CLASS FormCeg AS FormBase
     * ValidarConta - LostFocus handler para txt_4c_Conta
     * Lookup em SigCdCli (clientes - contas correntes via fAcessoContas)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarConta(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarConta()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaExec()
         LOCAL loc_cConta, loc_cGrupo, loc_oPg2
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
@@ -1340,12 +1374,16 @@ DEFINE CLASS FormCeg AS FormBase
     * TeclaConta - KeyPress handler para txt_4c_Conta (F4 abre lookup)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaConta(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             LOCAL loc_oPg2
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
             THIS.AbrirBuscaConta(ALLTRIM(loc_oPg2.txt_4c_Grupo.Value), ;
                                  ALLTRIM(loc_oPg2.txt_4c_Conta.Value))
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1391,7 +1429,21 @@ DEFINE CLASS FormCeg AS FormBase
     * ValidarEmps - LostFocus handler para txt_4c_Emps
     * Lookup em SigCdEmp por codigo (Cemps) - preenche tambem txt_4c_DEmps
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarEmps(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarEmpsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarEmps()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarEmpsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarEmpsExec()
         LOCAL loc_cEmps, loc_oPg2
         TRY
             loc_oPg2  = THIS.pgf_4c_Paginas.Page2
@@ -1408,9 +1460,13 @@ DEFINE CLASS FormCeg AS FormBase
     * TeclaEmps - KeyPress handler para txt_4c_Emps (F4 abre lookup)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaEmps(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaEmps(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Emps.Value))
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1458,7 +1514,21 @@ DEFINE CLASS FormCeg AS FormBase
     * ValidarDEmps - LostFocus handler para txt_4c_DEmps
     * Busca empresa por nome (Razas) - preenche tambem txt_4c_Emps
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDEmps(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDEmpsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDEmps()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDEmpsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDEmpsExec()
         LOCAL loc_cDEmps, loc_oPg2
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
@@ -1475,9 +1545,13 @@ DEFINE CLASS FormCeg AS FormBase
     * TeclaDEmps - KeyPress handler para txt_4c_DEmps (F4 abre lookup)
     *--------------------------------------------------------------------------
     PROCEDURE TeclaDEmps(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaDEmps(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_DEmps.Value))
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------

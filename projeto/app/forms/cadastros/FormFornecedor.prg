@@ -996,11 +996,13 @@ DEFINE CLASS FormFornecedor AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico (Problema 17)
     *=========================================================================
     PROCEDURE txt_4c_InfosKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28    && F4
             THIS.AbrirLookupInfos()
         ENDIF
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *=========================================================================

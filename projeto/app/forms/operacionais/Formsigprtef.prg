@@ -45,6 +45,8 @@ DEFINE CLASS Formsigprtef AS FormBase
     *-- Referencia ao controle modem/impressora fiscal (OLE ActiveX no legado)
     *-- Fornecido externamente; funcoes TEF (SigFiTefReq etc.) dependem deste objeto
     this_oModem = .NULL.
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     PROCEDURE Init
@@ -541,7 +543,7 @@ DEFINE CLASS Formsigprtef AS FormBase
             BINDEVENT(THIS.cmd_4c_Cancelar, "Click",    THIS, "CmdCancelarClick")
             BINDEVENT(THIS.cmd_4c_Cancelar, "When",     THIS, "CmdCancelarWhen")
             BINDEVENT(THIS.txt_4c_Redetef,  "KeyPress", THIS, "TxtRedetefKeyPress")
-            BINDEVENT(THIS.txt_4c_Redetef,  "KeyPress",    THIS, "TxtRedetefValid")
+            BINDEVENT(THIS.txt_4c_Redetef,  "LostFocus",    THIS, "TxtRedetefValid")
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ConfigurarEventos")
         ENDTRY
@@ -583,8 +585,21 @@ DEFINE CLASS Formsigprtef AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROCEDURE TxtRedetefValid
-    LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em TxtRedetefValidExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE TxtRedetefValid()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.TxtRedetefValidExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TxtRedetefValidExec()
     *==========================================================================
         LOCAL loc_lOk, loc_oErro
         loc_lOk = .T.

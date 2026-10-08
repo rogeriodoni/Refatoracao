@@ -26,6 +26,8 @@ DEFINE CLASS FormCOC AS FormBase
     this_cFiltroAtual    = ""
     this_cUltimoContas   = ""
     this_cUltimoDContas  = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - Inicializa o formulario
@@ -615,7 +617,7 @@ DEFINE CLASS FormCOC AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "TeclaGrupo")
-        BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupo")
+        BINDEVENT(loc_oPagina.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupo")
 
         *-- Label Conta
         *-- sayConta original: Top=184+29=213, Left=250
@@ -655,7 +657,7 @@ DEFINE CLASS FormCOC AS FormBase
             .Visible           = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Conta, "KeyPress", THIS, "TeclaContaC")
-        BINDEVENT(loc_oPagina.txt_4c_Conta, "KeyPress", THIS, "ValidarContaC")
+        BINDEVENT(loc_oPagina.txt_4c_Conta, "LostFocus", THIS, "ValidarContaC")
 
         *-- TextBox DConta - conta debito (sem label proprio, na mesma linha de Conta)
         *-- Get_dconta original: Top=181+29=210, Left=375, Width=250
@@ -677,7 +679,7 @@ DEFINE CLASS FormCOC AS FormBase
             .Visible           = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Dconta, "KeyPress", THIS, "TeclaDconta")
-        BINDEVENT(loc_oPagina.txt_4c_Dconta, "KeyPress", THIS, "ValidarDconta")
+        BINDEVENT(loc_oPagina.txt_4c_Dconta, "LostFocus", THIS, "ValidarDconta")
 
         *-- Label Movimento (Say1)
         *-- Say1 original: Top=212+29=241, Left=227
@@ -1129,15 +1131,33 @@ DEFINE CLASS FormCOC AS FormBase
     * TeclaGrupo - Trata F4 no campo Grupo para abrir lookup SigCdGcr
     *--------------------------------------------------------------------------
     PROCEDURE TeclaGrupo(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaGrupo()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarGrupo - Valida codigo do Grupo contra SigCdGcr ao sair do campo
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoExec()
         LOCAL loc_cGrupo
         loc_cGrupo = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
 
@@ -1193,15 +1213,33 @@ DEFINE CLASS FormCOC AS FormBase
     * TeclaContaC - Trata F4 no campo Conta para abrir lookup
     *--------------------------------------------------------------------------
     PROCEDURE TeclaContaC(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaContaC()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarContaC - Valida conta ao perder foco; habilita/desabilita dconta
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarContaC(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarContaCExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarContaC()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaCExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaCExec()
         LOCAL loc_cConta
         loc_cConta = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Conta.Value)
 
@@ -1282,15 +1320,33 @@ DEFINE CLASS FormCOC AS FormBase
     * TeclaDconta - Trata F4 no campo DConta para abrir lookup
     *--------------------------------------------------------------------------
     PROCEDURE TeclaDconta(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 63
             THIS.AbrirBuscaDconta()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarDconta - Valida dconta ao perder foco
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarDconta(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDcontaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDconta()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDcontaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDcontaExec()
         LOCAL loc_cDConta
         loc_cDConta = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Dconta.Value)
 

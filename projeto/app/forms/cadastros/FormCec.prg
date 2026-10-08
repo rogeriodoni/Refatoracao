@@ -21,6 +21,8 @@ DEFINE CLASS FormCec AS FormBase
     *-- Estado do formulario
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     PROCEDURE Init()
@@ -488,7 +490,7 @@ DEFINE CLASS FormCec AS FormBase
             .MaxLength = 3
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Empresa, "KeyPress", THIS, "ValidarEmpresaCec")
+        BINDEVENT(loc_oPagina.txt_4c_Empresa, "LostFocus", THIS, "ValidarEmpresaCec")
 
         loc_oPagina.AddObject("txt_4c_DesEmpresa", "TextBox")
         WITH loc_oPagina.txt_4c_DesEmpresa
@@ -1209,7 +1211,21 @@ DEFINE CLASS FormCec AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarEmpresaCec(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarEmpresaCecExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarEmpresaCec()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarEmpresaCecExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarEmpresaCecExec()
         LOCAL loc_oPagina, loc_cEmpresa, loc_cSQL, loc_nRes, loc_oBusca
         loc_oPagina  = THIS.pgf_4c_Paginas.Page2
         loc_cEmpresa = ALLTRIM(loc_oPagina.txt_4c_Empresa.Value)

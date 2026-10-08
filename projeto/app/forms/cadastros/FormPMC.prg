@@ -25,6 +25,8 @@ DEFINE CLASS FormPMC AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_cPkChaveAtual   = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init
@@ -688,7 +690,7 @@ DEFINE CLASS FormPMC AS FormBase
         *-- BINDEVENTs txt_4c_Cpros: F4/DblClick abre busca, LostFocus valida
         BINDEVENT(loc_oPagina.txt_4c_Cpros, "KeyPress",  THIS, "TeclaTxtCpros")
         BINDEVENT(loc_oPagina.txt_4c_Cpros, "DblClick",  THIS, "AbrirBuscaProduto")
-        BINDEVENT(loc_oPagina.txt_4c_Cpros, "KeyPress", THIS, "ValidarProduto")
+        BINDEVENT(loc_oPagina.txt_4c_Cpros, "LostFocus", THIS, "ValidarProduto")
 
         *-- BINDEVENTs botoes Page2
         BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnSalvarClick")
@@ -1268,16 +1270,31 @@ DEFINE CLASS FormPMC AS FormBase
     * TeclaTxtCpros - KeyPress de txt_4c_Cpros: F4(115) ou F5(116) abre busca
     *==========================================================================
     PROCEDURE TeclaTxtCpros(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF INLIST(par_nKeyCode, 115, 116)
             THIS.AbrirBuscaProduto()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *==========================================================================
     * AbrirBuscaProduto - Busca produto em SigCdPro via FormBuscaAuxiliar
     * Usa Pattern A canonico: SQL no caller + DefinirCursor + Mostrar
     *==========================================================================
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirBuscaProduto()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirBuscaProdutoExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirBuscaProdutoExec()
         LOCAL loc_oPg2, loc_cValor, loc_oBusca, loc_cSQL, loc_nResult
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1333,7 +1350,21 @@ DEFINE CLASS FormPMC AS FormBase
     * ValidarProduto - LostFocus de txt_4c_Cpros: verifica codigo em SigCdPro
     * Original: fwbuscaext abre lista se nao achou; campo vazio -> limpa
     *==========================================================================
-    PROCEDURE ValidarProduto(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarProdutoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarProduto()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarProdutoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarProdutoExec()
         LOCAL loc_oPg2, loc_cCpros, loc_cSQL, loc_nResult
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 

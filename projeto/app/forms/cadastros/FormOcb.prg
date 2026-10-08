@@ -21,6 +21,8 @@ DEFINE CLASS FormOcb AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -776,7 +778,7 @@ DEFINE CLASS FormOcb AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_GrContabil, "KeyPress", THIS, "GrContabilLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_GrContabil, "DblClick", THIS, "GrContabilLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_GrContabil, "KeyPress",    THIS, "ValidarGrContabil")
+        BINDEVENT(loc_oPagina.txt_4c_GrContabil, "LostFocus",    THIS, "ValidarGrContabil")
 
         *-- Grupo 8: GetAutos (autos char 1: S/N) - original Top=369 -> 369+29=398
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
@@ -1459,8 +1461,21 @@ DEFINE CLASS FormOcb AS FormBase
     * ValidarGrContabil - Handler Valid do txt_4c_GrContabil
     * Valida o grupo contabil digitado contra SigCdGcr
     *===========================================================================
-    PROCEDURE ValidarGrContabil
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrContabilExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrContabil()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrContabilExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrContabilExec()
         LOCAL loc_oPagina, loc_cValor, loc_nResult
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cValor  = ALLTRIM(loc_oPagina.txt_4c_GrContabil.Value)
@@ -1492,16 +1507,24 @@ DEFINE CLASS FormOcb AS FormBase
     * GrContabilLookupKeyPress - Handler KeyPress F4 no txt_4c_GrContabil
     *===========================================================================
     PROCEDURE GrContabilLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupGrContabil()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * GrContabilLookupDblClick - Handler DblClick no txt_4c_GrContabil
     *===========================================================================
     PROCEDURE GrContabilLookupDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupGrContabil()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================

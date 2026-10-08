@@ -1386,9 +1386,11 @@ DEFINE CLASS Formsigprcom AS FormBase
     ENDPROC
 
     PROCEDURE ProdutoDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupProduto()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirLookupProduto()
@@ -1461,9 +1463,11 @@ DEFINE CLASS Formsigprcom AS FormBase
     ENDPROC
 
     PROCEDURE DescricaoProdutoDblClick()
-        THIS.this_lEmLookup = .T.   && guarda de reentrancia do lookup (regra #37)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupProdutoPorDescricao()
-        THIS.this_lEmLookup = .F.
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     PROCEDURE AbrirLookupProdutoPorDescricao()

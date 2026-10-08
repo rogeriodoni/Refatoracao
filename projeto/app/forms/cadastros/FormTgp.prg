@@ -28,6 +28,8 @@ DEFINE CLASS FormTgp AS FormBase
     this_oBusinessObject       = .NULL.
     this_cModoAtual            = "LISTA"
     this_cUltimoNivelValidado  = ""
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -692,7 +694,7 @@ DEFINE CLASS FormTgp AS FormBase
         *-- (espelha PROCEDURE Valid do legado, que dispara ao sair do campo)
         BINDEVENT(loc_oPagina.txt_4c_Nivel, "KeyPress", THIS, "NivelLookupKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Nivel, "DblClick", THIS, "NivelLookupDblClick")
-        BINDEVENT(loc_oPagina.txt_4c_Nivel, "KeyPress", THIS, "ValidarNivel")
+        BINDEVENT(loc_oPagina.txt_4c_Nivel, "LostFocus", THIS, "ValidarNivel")
 
         *-- Label Gerar OP Sem Peso Medio (Say4 legado: Top=245, Left=160, Width=136)
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
@@ -866,16 +868,24 @@ DEFINE CLASS FormTgp AS FormBase
     * NivelLookupKeyPress - F4 abre lookup de Operacao de Producao (SigCdOpd)
     *===========================================================================
     PROCEDURE NivelLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupOperacao()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
     * NivelLookupDblClick - Duplo clique abre lookup de Operacao de Producao
     *===========================================================================
     PROCEDURE NivelLookupDblClick()
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupOperacao()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -884,7 +894,21 @@ DEFINE CLASS FormTgp AS FormBase
     * nao encontrar exato. Guard this_cUltimoNivelValidado evita reabrir o
     * lookup em toda perda de foco (Problema 45).
     *===========================================================================
-    PROCEDURE ValidarNivel(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarNivelExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarNivel()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarNivelExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarNivelExec()
         LOCAL loc_oTxt, loc_cValor
 
         loc_oTxt   = THIS.pgf_4c_Paginas.Page2.txt_4c_Nivel

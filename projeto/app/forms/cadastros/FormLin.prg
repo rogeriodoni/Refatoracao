@@ -24,6 +24,8 @@ DEFINE CLASS FormLin AS FormBase
     this_oBusinessObject    = .NULL.
     this_cModoAtual         = "LISTA"
     this_nBusca             = 1
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Inicializa o formulario
@@ -1469,7 +1471,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Visible         = .T.
             ENDWITH
 
-            BINDEVENT(loc_oAba.txt_4c_Pedidos,      "KeyPress", THIS, "ValidarOperacao")
+            BINDEVENT(loc_oAba.txt_4c_Pedidos,      "LostFocus", THIS, "ValidarOperacao")
             BINDEVENT(loc_oAba.txt_4c_TpCustos,     "KeyPress", THIS, "ValidarTpCusto")
             BINDEVENT(loc_oAba.txt_4c_TpVendas,     "KeyPress", THIS, "ValidarTpVenda")
             BINDEVENT(loc_oAba.txt_4c_AnaPes,       "KeyPress", THIS, "ValidarAnaPes")
@@ -1484,7 +1486,21 @@ DEFINE CLASS FormLin AS FormBase
     *==========================================================================
     * ValidarOperacao - Lookup em SigCdOpe para campo Pedido de Estoque Minimo
     *==========================================================================
-    PROCEDURE ValidarOperacao(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOperacaoExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOperacao()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOperacaoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOperacaoExec()
         LOCAL loc_cDopes, loc_oBusca, loc_lProsseguir
         loc_cDopes = ""
 

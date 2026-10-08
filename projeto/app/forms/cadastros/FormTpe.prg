@@ -48,6 +48,8 @@ DEFINE CLASS FormTpe AS FormBase
     this_oBusinessObject     = .NULL.
     this_cModoAtual          = "LISTA"
     this_nUltimoCobsValidado = 0
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *===========================================================================
     * Init - Inicializa o formulario
@@ -719,7 +721,7 @@ DEFINE CLASS FormTpe AS FormBase
         *-- BINDEVENT: Observacao - Valid legado abre fwBuscaExt automaticamente
         *-- ao sair do campo preenchido (nao ha F4 no legado, mas DblClick e F4
         *-- sao acrescentados como atalho adicional para o mesmo lookup).
-        BINDEVENT(loc_oPagina.txt_4c_Cobs, "KeyPress", THIS, "ValidarCobs")
+        BINDEVENT(loc_oPagina.txt_4c_Cobs, "LostFocus", THIS, "ValidarCobs")
         BINDEVENT(loc_oPagina.txt_4c_Cobs, "KeyPress", THIS, "CobsKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Cobs, "DblClick", THIS, "AbrirLookupObs")
 
@@ -794,9 +796,13 @@ DEFINE CLASS FormTpe AS FormBase
     * BINDEVENT exige LPARAMETERS com os parametros do evento (CLAUDE.md #3).
     *===========================================================================
     PROCEDURE CobsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt            && guarda de reentrancia (regra #37)
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         IF par_nKeyCode = 28
             THIS.AbrirLookupObs()
         ENDIF
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *===========================================================================
@@ -805,7 +811,21 @@ DEFINE CLASS FormTpe AS FormBase
     * abre fwBuscaExt (aqui: FormBuscaAuxiliar Modo 1) automaticamente.
     * Guarda contra reabertura em toda perda de foco sem mudanca (Problema 45).
     *===========================================================================
-    PROCEDURE ValidarCobs(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCobsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCobs()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCobsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCobsExec()
         LOCAL loc_oPagina, loc_nValor
 
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
@@ -831,7 +851,18 @@ DEFINE CLASS FormTpe AS FormBase
     *   Se nao achou exato -> mostra grid; senao preenche direto.
     *   Se ESC (LastKey=27) -> limpa ambos os campos.
     *===========================================================================
+    *-- Guarda de reentrancia (regra #37): enquanto o picker MODAL deste caminho
+    *-- esta aberto, o LostFocus do campo nao pode abrir um segundo. Save/restore
+    *-- porque este metodo tambem eh chamado de DENTRO do handler de LostFocus.
     PROCEDURE AbrirLookupObs()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupObsExec()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    PROCEDURE AbrirLookupObsExec()
         LOCAL loc_oPagina, loc_oBusca, loc_nCodigo
 
         loc_oPagina = THIS.pgf_4c_Paginas.Page2

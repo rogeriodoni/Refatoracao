@@ -41,6 +41,8 @@ DEFINE CLASS FormLpr AS FormBase
     this_lUpdateok          = .T.    && flag: ultima operacao Update foi bem-sucedida
     this_cNomeFrm           = ""     && identidade do form para DO FORM ... WITH
     this_cLprecosAtual      = ""     && lpreco selecionado na lista (para detalhe)
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *==========================================================================
     * Init - Inicializa o formulario
@@ -1123,9 +1125,9 @@ DEFINE CLASS FormLpr AS FormBase
             BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar,  "Click",     THIS, "BtnCancelarClick")
             BINDEVENT(loc_oPagina.txt_4c_Emps,    "KeyPress",                     THIS, "ValidarEmpresa")
             BINDEVENT(loc_oPagina.txt_4c_Lpreco,  "KeyPress",                     THIS, "ValidarLpreco")
-            BINDEVENT(loc_oPagina.txt_4c_Fpg,     "KeyPress",                     THIS, "ValidarFpg")
-            BINDEVENT(loc_oPagina.txt_4c_Txtcpros, "KeyPress",                    THIS, "ValidarCpros")
-            BINDEVENT(loc_oPagina.txt_4c_Txtdpros, "KeyPress",                    THIS, "ValidarDpros")
+            BINDEVENT(loc_oPagina.txt_4c_Fpg,     "LostFocus",                     THIS, "ValidarFpg")
+            BINDEVENT(loc_oPagina.txt_4c_Txtcpros, "LostFocus",                    THIS, "ValidarCpros")
+            BINDEVENT(loc_oPagina.txt_4c_Txtdpros, "LostFocus",                    THIS, "ValidarDpros")
             BINDEVENT(loc_oPagina.cmd_4c_Busca,   "Click",                         THIS, "BtnBuscaGradeClick")
 
             *----------------------------------------------------------------------
@@ -1877,7 +1879,21 @@ DEFINE CLASS FormLpr AS FormBase
     * ValidarFpg - LostFocus do txt_4c_Fpg (Cond. Pagamento)
     * Lookup em SigOpFp por fpags (campo fpags)
     *==========================================================================
-    PROCEDURE ValidarFpg(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarFpgExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarFpg()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarFpgExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarFpgExec()
         LOCAL loc_oPg2, loc_cFpg
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         loc_cFpg = ALLTRIM(loc_oPg2.txt_4c_Fpg.Value)
@@ -1952,7 +1968,21 @@ DEFINE CLASS FormLpr AS FormBase
     * ValidarCpros - LostFocus do txt_4c_Txtcpros (busca na grade por codigo)
     * Lookup em SigCdPro por cpros; preenche txt_4c_Txtdpros automaticamente
     *==========================================================================
-    PROCEDURE ValidarCpros(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarCprosExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarCpros()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCprosExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCprosExec()
         LOCAL loc_oPg2, loc_cCpros, loc_oBusca
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_cCpros = ALLTRIM(loc_oPg2.txt_4c_Txtcpros.Value)
@@ -2004,7 +2034,21 @@ DEFINE CLASS FormLpr AS FormBase
     * ValidarDpros - LostFocus do txt_4c_Txtdpros (busca na grade por descricao)
     * Ativo apenas quando txt_4c_Txtcpros estiver vazio
     *==========================================================================
-    PROCEDURE ValidarDpros(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarDprosExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarDpros()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDprosExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarDprosExec()
         LOCAL loc_oPg2, loc_cDpros, loc_oBusca
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_cDpros = ALLTRIM(loc_oPg2.txt_4c_Txtdpros.Value)

@@ -34,6 +34,8 @@ DEFINE CLASS Formche AS FormBase
 
     *-- Numero do lote corrente
     this_nNumLoteAtual = 0
+    *-- Guarda de reentrancia dos lookups abertos de LostFocus (regra #37, Erro195)
+    this_lEmLookup = .F.
 
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
@@ -750,7 +752,7 @@ DEFINE CLASS Formche AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_OperL, "KeyPress", THIS, "ValidarOperL")
+        BINDEVENT(loc_oPg2.txt_4c_OperL, "LostFocus", THIS, "ValidarOperL")
 
         *-- Operacao (S/N, readonly): lbl_4c_Label5 (top=45+29=74), txt_4c_Opera (top=41+29=70)
         loc_oPg2.AddObject("lbl_4c_Label5", "Label")
@@ -848,7 +850,7 @@ DEFINE CLASS Formche AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_GrupoT, "KeyPress", THIS, "ValidarGrupoT")
+        BINDEVENT(loc_oPg2.txt_4c_GrupoT, "LostFocus", THIS, "ValidarGrupoT")
 
         loc_oPg2.AddObject("txt_4c_DGrupoT", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoT
@@ -980,7 +982,7 @@ DEFINE CLASS Formche AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Moeda, "KeyPress", THIS, "ValidarMoeda")
+        BINDEVENT(loc_oPg2.txt_4c_Moeda, "LostFocus", THIS, "ValidarMoeda")
 
         *-- Cotacao: lbl_4c_Cotacao (top=431+29=460), txt_4c_Cotacao (top=427+29=456)
         loc_oPg2.AddObject("lbl_4c_Cotacao", "Label")
@@ -1223,7 +1225,7 @@ DEFINE CLASS Formche AS FormBase
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_GrupoOs, "KeyPress", THIS, "ValidarGrupoOs")
+        BINDEVENT(loc_oPg2.txt_4c_GrupoOs, "LostFocus", THIS, "ValidarGrupoOs")
 
         loc_oPg2.AddObject("txt_4c_DGrupoOs", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoOs
@@ -1318,7 +1320,7 @@ DEFINE CLASS Formche AS FormBase
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_GrupoDs, "KeyPress", THIS, "ValidarGrupoDs")
+        BINDEVENT(loc_oPg2.txt_4c_GrupoDs, "LostFocus", THIS, "ValidarGrupoDs")
 
         loc_oPg2.AddObject("txt_4c_DGrupoDs", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoDs
@@ -1494,7 +1496,7 @@ DEFINE CLASS Formche AS FormBase
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_GruJuro, "KeyPress", THIS, "ValidarGruJuro")
+        BINDEVENT(loc_oPg2.txt_4c_GruJuro, "LostFocus", THIS, "ValidarGruJuro")
 
         loc_oPg2.AddObject("txt_4c_DGruJuro", "TextBox")
         WITH loc_oPg2.txt_4c_DGruJuro
@@ -2653,7 +2655,21 @@ DEFINE CLASS Formche AS FormBase
     * ValidarOperL - LostFocus: lookup de operacao de carteira (SigCdOpt)
     * Preenche txt_4c_Opera (S/E/' ') e txt_4c_Moeda default da operacao
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarOperL(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarOperLExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarOperL()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarOperLExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarOperLExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -2706,7 +2722,21 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarMoeda - LostFocus: lookup de moeda (SigCdMoe) + cotacao
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarMoeda(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarMoedaExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarMoeda()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarMoedaExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarMoedaExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_nRet, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -2789,7 +2819,21 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarGrupoT - LostFocus: lookup de grupo terceiro (SigCdGcr)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupoT(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoTExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoT()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoTExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoTExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -2865,7 +2909,21 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarGrupoOs - LostFocus: lookup grupo contabil de origem (SigCdGcr)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupoOs(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoOsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoOs()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoOsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoOsExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -2969,7 +3027,21 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarGrupoDs - LostFocus: lookup grupo contabil de destino (SigCdGcr)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupoDs(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGrupoDsExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGrupoDs()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoDsExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoDsExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -3073,7 +3145,21 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarGruJuro - LostFocus: lookup grupo contabil de juros (SigCdGcr)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGruJuro(par_nKeyCode, par_nShiftAltCtrl)
+    *-- Guarda de reentrancia (regra #37): o picker eh MODAL e tira o foco do
+    *-- campo, o que redispara este proprio LostFocus. O corpo vive em ValidarGruJuroExec
+    *-- para que a flag seja SEMPRE liberada, inclusive nos RETURN antecipados.
+    *-- Ligado a "KeyPress" o lookup abria a cada tecla, antes de o usuario
+    *-- terminar de digitar o codigo (Erro195). Legado valida no Valid do campo.
+    PROCEDURE ValidarGruJuro()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGruJuroExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGruJuroExec()
         LOCAL loc_oLookup, loc_cVal, loc_oPg2, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
