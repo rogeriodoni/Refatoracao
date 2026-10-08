@@ -863,9 +863,11 @@ DEFINE CLASS FormBlq AS FormBase
         THIS.this_oBusinessObject.this_cCodigos   = ALLTRIM(loc_oPg2.txt_4c_Codigo.Value)
         THIS.this_oBusinessObject.this_dDtInicial = loc_oPg2.txt_4c_Dtinicial.Value
         THIS.this_oBusinessObject.this_dDtFinal   = loc_oPg2.txt_4c_Dtfinal.Value
-        *-- CheckBox.Value eh numerico (0/1); converter para logico pois
-        *-- prop this_lInativo eh logical (evita "Data type mismatch" no BO)
-        THIS.this_oBusinessObject.this_lInativo   = (loc_oPg2.chk_4c_Check1.Value = 1)
+        *-- CheckBox.Value chega numerico (0/1, LimparCampos) OU logico: o
+        *-- "(Value = 1)" estourava "Operator/operand type mismatch" no ALTERAR
+        *-- quando o Value era .T./.F. (Erro194, regra #13). ConverterParaLogico
+        *-- testa o VARTYPE.
+        THIS.this_oBusinessObject.this_lInativo   = ConverterParaLogico(loc_oPg2.chk_4c_Check1.Value)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -879,7 +881,9 @@ DEFINE CLASS FormBlq AS FormBase
         loc_oPg2.txt_4c_Codigo.Value    = ALLTRIM(loc_oBO.this_cCodigos)
         loc_oPg2.txt_4c_Dtinicial.Value = loc_oBO.this_dDtInicial
         loc_oPg2.txt_4c_Dtfinal.Value   = loc_oBO.this_dDtFinal
-        loc_oPg2.chk_4c_Check1.Value    = loc_oBO.this_lInativo
+        *-- numerico como no LimparCampos: o CheckBox nao alterna de tipo entre
+        *-- Incluir e Alterar (Erro194)
+        loc_oPg2.chk_4c_Check1.Value    = IIF(ConverterParaLogico(loc_oBO.this_lInativo), 1, 0)
         loc_oPg2.txt_4c_DtIncs.Value    = loc_oBO.this_dDtIncs
         loc_oPg2.txt_4c_Usuario.Value    = ALLTRIM(loc_oBO.this_cUsuIncs)
         loc_oPg2.txt_4c_DataAlts.Value   = loc_oBO.this_dDtAlts
@@ -1146,9 +1150,10 @@ DEFINE CLASS FormBlq AS FormBase
             RETURN loc_lResultado
         ENDIF
 
-        THIS.FormParaBO()
-
         TRY
+            *-- dentro do TRY: erro aqui fora dele virava o "Program Error" cru do
+            *-- VFP, e o "Ignore" deixava a gravacao seguir com o BO pela metade (Erro194)
+            THIS.FormParaBO()
             IF THIS.this_oBusinessObject.Salvar()
                 IF THIS.this_cModoAtual = "INCLUIR"
                     loc_oPg2.txt_4c_Codigo.Value = ALLTRIM(THIS.this_oBusinessObject.this_cCodigos)

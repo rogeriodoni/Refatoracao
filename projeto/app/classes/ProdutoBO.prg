@@ -1413,8 +1413,11 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                 IF loc_lOk AND NVL(cursor_4c_CfgGrupo.omoecusfs, 0) = 1 AND ;
                    EMPTY(ALLTRIM(THIS.this_cMoecusfs))
                     THIS.this_cMensagemErro = "Moeda do Total de Custo Inv" + CHR(225) + "lida!!!"
+                    *-- Erro189: legado foca pgComposicao.getMoeCusf; txt_4c_Mctotal
+                    *-- eh o gemeo da aba Principal e nao existe na Composicao, entao
+                    *-- o FocarCampoValidacao nao achava o campo e nao fazia nada
                     THIS.this_cPaginaFoco   = "COMPOSICAO"
-                    THIS.this_cCampoFoco    = "txt_4c_Mctotal"
+                    THIS.this_cCampoFoco    = "txt_4c_Moecusf"
                     loc_lOk = .F.
                 ENDIF
 
@@ -1422,8 +1425,10 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                    EMPTY(ALLTRIM(THIS.this_cMoedas))
                     THIS.this_cMensagemErro = "Moeda do Pre" + CHR(231) + "o Ideal de Venda Inv" + ;
                         CHR(225) + "lida!!!"
+                    *-- Erro189: legado foca pgComposicao.getMoeda (txt_4c_Mvalor eh
+                    *-- o gemeo da aba Fiscal)
                     THIS.this_cPaginaFoco   = "COMPOSICAO"
-                    THIS.this_cCampoFoco    = "txt_4c_Mvalor"
+                    THIS.this_cCampoFoco    = "txt_4c_Moeda"
                     loc_lOk = .F.
                 ENDIF
 
@@ -1431,8 +1436,10 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                    EMPTY(ALLTRIM(THIS.this_cMoevs))
                     THIS.this_cMensagemErro = "Moeda do Pre" + CHR(231) + "o Atual de Venda Inv" + ;
                         CHR(225) + "lida!!!"
+                    *-- Erro189: legado foca pgComposicao.getMoev (txt_4c_Mpvenda eh
+                    *-- o gemeo da aba Principal)
                     THIS.this_cPaginaFoco   = "COMPOSICAO"
-                    THIS.this_cCampoFoco    = "txt_4c_Mpvenda"
+                    THIS.this_cCampoFoco    = "txt_4c_Moev"
                     loc_lOk = .F.
                 ENDIF
 

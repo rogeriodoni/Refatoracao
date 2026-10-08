@@ -37,6 +37,7 @@ DEFINE CLASS FormProduto AS FormBase
     this_nDivisaoAtual        = 1        && Aba ativa do pgf_4c_Divisoes (1..8)
     this_cUltimoGrupoValidado = ""       && Guarda de reentrancia do filtro de grupo (regra #45)
     this_cUltimoCodigoValidado = ""      && Erro185: idem para o codigo do produto
+    this_lLookupEmCurso       = .F.      && Erro189: guarda de reentrancia de ExecutarLookupGenerico (regra #37)
 
     *-- ThisForm.Tipo2 do legado: quando .T. a tela opera sobre SigCdPrc
     *-- (produtos de custo) em vez de SigCdPro. O legado recebe isso pelo 3o
@@ -1295,6 +1296,7 @@ DEFINE CLASS FormProduto AS FormBase
         *-- Vem ANTES do PreencherDescricoesLookup, que le a unidade para
         *-- montar a descricao dela.
         THIS.AplicarDefaultsInclusao(loc_cGrupo)
+        THIS.AplicarMoedasPadraoGrupo(loc_cGrupo)
 
         THIS.PreencherDescricoesLookup()
 
@@ -1351,6 +1353,7 @@ DEFINE CLASS FormProduto AS FormBase
                 THIS.this_oBusinessObject.EditarRegistro()
                 THIS.this_cModoAtual = "ALTERAR"
                 THIS.BOParaForm()
+                THIS.AplicarMoedasPadraoGrupo(THIS.this_oBusinessObject.this_cCgrus)
                 THIS.HabilitarCampos(.T.)
                 THIS.AjustarBotoesPorModo()
                 THIS.AlternarPagina(2)
@@ -2110,7 +2113,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_CProEq, "KeyPress", THIS, "ValidarProdutoEquivalente")
+        BINDEVENT(par_oPagina.txt_4c_CProEq, "LostFocus", THIS, "ValidarProdutoEquivalente")
 
         *-- Grupo / Subgrupo / Linha / Colecao / Grupo de Venda (Mercs)
         par_oPagina.AddObject("lbl_4c_Label8", "Label")
@@ -2138,7 +2141,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cgru, "KeyPress", THIS, "ValidarGrupoDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Cgru, "LostFocus", THIS, "ValidarGrupoDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Dgru", "TextBox")
         WITH par_oPagina.txt_4c_Dgru
@@ -2151,7 +2154,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Dgru, "KeyPress", THIS, "ValidarGrupoDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Dgru, "LostFocus", THIS, "ValidarGrupoDadosPorDescricao")
 
         par_oPagina.AddObject("lbl_4c_Label9", "Label")
         WITH par_oPagina.lbl_4c_Label9
@@ -2178,7 +2181,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_CSGru, "KeyPress", THIS, "ValidarSubgrupoDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_CSGru, "LostFocus", THIS, "ValidarSubgrupoDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_DsGru", "TextBox")
         WITH par_oPagina.txt_4c_DsGru
@@ -2191,7 +2194,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DsGru, "KeyPress", THIS, "ValidarSubgrupoDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_DsGru, "LostFocus", THIS, "ValidarSubgrupoDadosPorDescricao")
 
         par_oPagina.AddObject("lbl_4c_Label16", "Label")
         WITH par_oPagina.lbl_4c_Label16
@@ -2218,7 +2221,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Lin, "KeyPress", THIS, "ValidarLinhaDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Lin, "LostFocus", THIS, "ValidarLinhaDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_DLin", "TextBox")
         WITH par_oPagina.txt_4c_DLin
@@ -2231,7 +2234,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DLin, "KeyPress", THIS, "ValidarLinhaDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_DLin, "LostFocus", THIS, "ValidarLinhaDadosPorDescricao")
 
         par_oPagina.AddObject("lbl_4c_Label17", "Label")
         WITH par_oPagina.lbl_4c_Label17
@@ -2258,7 +2261,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Col, "KeyPress", THIS, "ValidarColecaoDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Col, "LostFocus", THIS, "ValidarColecaoDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_DCol", "TextBox")
         WITH par_oPagina.txt_4c_DCol
@@ -2271,7 +2274,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DCol, "KeyPress", THIS, "ValidarColecaoDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_DCol, "LostFocus", THIS, "ValidarColecaoDadosPorDescricao")
 
         *-- Grande Grupo (Mercs) - preenchido automaticamente pelo grupo
         par_oPagina.AddObject("txt_4c_Merc", "TextBox")
@@ -2313,7 +2316,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Class, "KeyPress", THIS, "ValidarClassificacaoDados")
+        BINDEVENT(par_oPagina.txt_4c_Class, "LostFocus", THIS, "ValidarClassificacaoDados")
 
         par_oPagina.AddObject("lbl_4c_Label23", "Label")
         WITH par_oPagina.lbl_4c_Label23
@@ -2367,7 +2370,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Ifor, "KeyPress", THIS, "ValidarFornecedorDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Ifor, "LostFocus", THIS, "ValidarFornecedorDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Dfor", "TextBox")
         WITH par_oPagina.txt_4c_Dfor
@@ -2380,7 +2383,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Dfor, "KeyPress", THIS, "ValidarFornecedorDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Dfor, "LostFocus", THIS, "ValidarFornecedorDadosPorDescricao")
 
         par_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH par_oPagina.lbl_4c_Label12
@@ -2452,7 +2455,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_CodFinP, "KeyPress", THIS, "ValidarModeloDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_CodFinP, "LostFocus", THIS, "ValidarModeloDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_DesFinP", "TextBox")
         WITH par_oPagina.txt_4c_DesFinP
@@ -2465,7 +2468,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DesFinP, "KeyPress", THIS, "ValidarModeloDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_DesFinP, "LostFocus", THIS, "ValidarModeloDadosPorDescricao")
 
         *-- Unidade (1) / Unidade (2) - Get_Cuni/Get_Duni e Get_cunip/get_dunip
         par_oPagina.AddObject("lbl_4c_Label14", "Label")
@@ -2493,7 +2496,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cuni, "KeyPress", THIS, "ValidarUnidadeDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Cuni, "LostFocus", THIS, "ValidarUnidadeDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Duni", "TextBox")
         WITH par_oPagina.txt_4c_Duni
@@ -2506,7 +2509,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Duni, "KeyPress", THIS, "ValidarUnidadeDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Duni, "LostFocus", THIS, "ValidarUnidadeDadosPorDescricao")
 
         par_oPagina.AddObject("lbl_4c_Label18", "Label")
         WITH par_oPagina.lbl_4c_Label18
@@ -2533,7 +2536,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cunip, "KeyPress", THIS, "ValidarUnidadePedidoDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Cunip, "LostFocus", THIS, "ValidarUnidadePedidoDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c__dunip", "TextBox")
         WITH par_oPagina.txt_4c__dunip
@@ -2546,7 +2549,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c__dunip, "KeyPress", THIS, "ValidarUnidadePedidoDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c__dunip, "LostFocus", THIS, "ValidarUnidadePedidoDadosPorDescricao")
 
         *-- Local (Get_Local)
         par_oPagina.AddObject("lbl_4c_Label5", "Label")
@@ -2574,7 +2577,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Local, "KeyPress", THIS, "ValidarLocalDados")
+        BINDEVENT(par_oPagina.txt_4c_Local, "LostFocus", THIS, "ValidarLocalDados")
 
         *-- Situacao (opc_situacao) - Ativo/Inativo (situas)
         par_oPagina.AddObject("obj_4c_Opc_situacao", "OptionGroup")
@@ -2687,7 +2690,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Mctotal, "KeyPress", THIS, "ValidarMoedaCustoTotalDados")
+        BINDEVENT(par_oPagina.txt_4c_Mctotal, "LostFocus", THIS, "ValidarMoedaCustoTotalDados")
 
         par_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH par_oPagina.lbl_4c_Label4
@@ -2726,7 +2729,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Mpvenda, "KeyPress", THIS, "ValidarMoedaValorVendaDados")
+        BINDEVENT(par_oPagina.txt_4c_Mpvenda, "LostFocus", THIS, "ValidarMoedaValorVendaDados")
 
         par_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH par_oPagina.lbl_4c_Label6
@@ -2765,7 +2768,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Mfvenda, "KeyPress", THIS, "ValidarMoedaFatorVendaDados")
+        BINDEVENT(par_oPagina.txt_4c_Mfvenda, "LostFocus", THIS, "ValidarMoedaFatorVendaDados")
 
         *-- Estoque (calculado - somente leitura)
         par_oPagina.AddObject("lbl_4c_Label28", "Label")
@@ -3072,7 +3075,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize      = 8
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Conjunto, "KeyPress", THIS, "ValidarConjuntoDados")
+        BINDEVENT(par_oPagina.txt_4c_Conjunto, "LostFocus", THIS, "ValidarConjuntoDados")
 
         *-- cmdConjunto: gera um Cod. Pai novo (legado usa fGerUniqueKey)
         par_oPagina.AddObject("obj_4c_CmdConjunto", "CommandGroup")
@@ -5149,7 +5152,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moec, "KeyPress", THIS, "ValidarMoedaCustoComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moec, "LostFocus", THIS, "ValidarMoedaCustoComposicao")
 
         par_oPagina.AddObject("lbl_4c_Label22", "Label")
         WITH par_oPagina.lbl_4c_Label22
@@ -5176,7 +5179,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cmkpc, "KeyPress", THIS, "ValidarFeitioCustoComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Cmkpc, "LostFocus", THIS, "ValidarFeitioCustoComposicao")
 
         par_oPagina.AddObject("lbl_4c_LblValAdics", "Label")
         WITH par_oPagina.lbl_4c_LblValAdics
@@ -5325,7 +5328,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moepc, "KeyPress", THIS, "ValidarMoedaCustoPComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moepc, "LostFocus", THIS, "ValidarMoedaCustoPComposicao")
 
         par_oPagina.AddObject("txt_4c_Moecusf", "TextBox")
         WITH par_oPagina.txt_4c_Moecusf
@@ -5338,7 +5341,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moecusf, "KeyPress", THIS, "ValidarMoedaCustoFComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moecusf, "LostFocus", THIS, "ValidarMoedaCustoFComposicao")
 
         par_oPagina.AddObject("shp_4c_Shape6", "Shape")
         WITH par_oPagina.shp_4c_Shape6
@@ -5425,7 +5428,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Status, "KeyPress", THIS, "ValidarStatusComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Status, "LostFocus", THIS, "ValidarStatusComposicao")
 
         par_oPagina.AddObject("lbl_4c_LblMkpApl", "Label")
         WITH par_oPagina.lbl_4c_LblMkpApl
@@ -5697,7 +5700,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Ftio, "KeyPress", THIS, "ValidarFeitioVendaComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Ftio, "LostFocus", THIS, "ValidarFeitioVendaComposicao")
 
         par_oPagina.AddObject("txt_4c_Mftio", "TextBox")
         WITH par_oPagina.txt_4c_Mftio
@@ -5722,7 +5725,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moeda, "KeyPress", THIS, "ValidarMoedaVendaComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moeda, "LostFocus", THIS, "ValidarMoedaVendaComposicao")
 
         par_oPagina.AddObject("txt_4c_Moev", "TextBox")
         WITH par_oPagina.txt_4c_Moev
@@ -5735,7 +5738,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moev, "KeyPress", THIS, "ValidarMoedaVendaVComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moev, "LostFocus", THIS, "ValidarMoedaVendaVComposicao")
 
         par_oPagina.AddObject("txt_4c_Moepv", "TextBox")
         WITH par_oPagina.txt_4c_Moepv
@@ -5748,7 +5751,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Moepv, "KeyPress", THIS, "ValidarMoedaVendaPVComposicao")
+        BINDEVENT(par_oPagina.txt_4c_Moepv, "LostFocus", THIS, "ValidarMoedaVendaPVComposicao")
 
         par_oPagina.AddObject("lbl_4c_Label25", "Label")
         WITH par_oPagina.lbl_4c_Label25
@@ -5843,7 +5846,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_MatP, "KeyPress", THIS, "ValidarMaterialPrincipalComposicao")
+        BINDEVENT(par_oPagina.txt_4c_MatP, "LostFocus", THIS, "ValidarMaterialPrincipalComposicao")
 
         *-- Observacao da OF (getObsOFs - obsofs char(120))
         par_oPagina.AddObject("lbl_4c_Label4", "Label")
@@ -6537,7 +6540,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Conquilha, "KeyPress", THIS, "ValidarConquilhaDados")
+        BINDEVENT(par_oPagina.txt_4c_Conquilha, "LostFocus", THIS, "ValidarConquilhaDados")
 
         *-- Peso Brilhante / Peso Metal / Peso Pedra (getPesoBris/getPesoMetal/getPesoPdrs)
         par_oPagina.AddObject("lbl_4c_Label9", "Label")
@@ -6647,7 +6650,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Cor, "KeyPress", THIS, "ValidarCorPadraoDados")
+        BINDEVENT(par_oPagina.txt_4c_Cor, "LostFocus", THIS, "ValidarCorPadraoDados")
 
         *-- Peso Variavel (fwoption1 legado - checkbox, ControlSource Varias)
         par_oPagina.AddObject("chk_4c_Fwoption1", "CheckBox")
@@ -6691,7 +6694,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Tam, "KeyPress", THIS, "ValidarTamanhoPadraoDados")
+        BINDEVENT(par_oPagina.txt_4c_Tam, "LostFocus", THIS, "ValidarTamanhoPadraoDados")
 
         *-- Acabamento (get_codacb/get_Dacb - lookup SigCdAca)
         par_oPagina.AddObject("lbl_4c_LblAcabamento", "Label")
@@ -6720,7 +6723,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_CodAcb, "KeyPress", THIS, "ValidarAcabamentoDadosPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_CodAcb, "LostFocus", THIS, "ValidarAcabamentoDadosPorCodigo")
 
         par_oPagina.AddObject("txt_4c_DescAcb", "TextBox")
         WITH par_oPagina.txt_4c_DescAcb
@@ -6732,7 +6735,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DescAcb, "KeyPress", THIS, "ValidarAcabamentoDadosPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_DescAcb, "LostFocus", THIS, "ValidarAcabamentoDadosPorDescricao")
 
         *-- Cravacao em Cera (opc_CravCera legado - checkbox, ControlSource CravCers)
         par_oPagina.AddObject("chk_4c_OpcCravCera", "CheckBox")
@@ -7649,12 +7652,17 @@ DEFINE CLASS FormProduto AS FormBase
             .Left      = 206
             .Width     = 94
             .Height    = 23
+            *-- Erro189: Format/InputMask transcritos do getClfiscal legado.
+            *-- "R" tira os pontos do Value (medido: "7113.19.0000" na tela,
+            *-- "7113190000" no Value), que segue cabendo em clfiscals char(10).
+            .Format    = "R"
+            .InputMask = "9999.99.9999"
             .MaxLength = 10
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Clfiscal, "KeyPress", THIS, "ValidarClassificacaoFiscalPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Clfiscal, "LostFocus", THIS, "ValidarClassificacaoFiscalPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Dclfiscal", "TextBox")
         WITH par_oPagina.txt_4c_Dclfiscal
@@ -7667,7 +7675,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Dclfiscal, "KeyPress", THIS, "ValidarClassificacaoFiscalPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Dclfiscal, "LostFocus", THIS, "ValidarClassificacaoFiscalPorDescricao")
 
         *-- Origem da Mercadoria (getOrigmerc/getDorigmerc legado - SigCdOrg)
         par_oPagina.AddObject("lbl_4c_Label2", "Label")
@@ -7695,7 +7703,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Origmerc, "KeyPress", THIS, "ValidarOrigemMercadoriaPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Origmerc, "LostFocus", THIS, "ValidarOrigemMercadoriaPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Dorigmerc", "TextBox")
         WITH par_oPagina.txt_4c_Dorigmerc
@@ -7708,7 +7716,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Dorigmerc, "KeyPress", THIS, "ValidarOrigemMercadoriaPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Dorigmerc, "LostFocus", THIS, "ValidarOrigemMercadoriaPorDescricao")
 
         *-- Situacao Tributaria ICMS (getSittricm/getDsittricm/Get_CodServs
         *-- legado - SigCdIcm; Get_CodServs eh o codigo de servico que
@@ -7739,7 +7747,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Sittricm, "KeyPress", THIS, "ValidarSituacaoTributariaPorCodigo")
+        BINDEVENT(par_oPagina.txt_4c_Sittricm, "LostFocus", THIS, "ValidarSituacaoTributariaPorCodigo")
 
         par_oPagina.AddObject("txt_4c_Dsittricm", "TextBox")
         WITH par_oPagina.txt_4c_Dsittricm
@@ -7752,7 +7760,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Dsittricm, "KeyPress", THIS, "ValidarSituacaoTributariaPorDescricao")
+        BINDEVENT(par_oPagina.txt_4c_Dsittricm, "LostFocus", THIS, "ValidarSituacaoTributariaPorDescricao")
 
         *-- Codigo de Servicos para ICMS (Get_CodServs legado)
         par_oPagina.AddObject("lbl_4c_Label6", "Label")
@@ -7780,7 +7788,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Codigo, "KeyPress", THIS, "ValidarCodigoServicoIcmsDadosFiscais")
+        BINDEVENT(par_oPagina.txt_4c_Codigo, "LostFocus", THIS, "ValidarCodigoServicoIcmsDadosFiscais")
 
         *-- Aliquota ICMS (getIcms legado - icms numeric(5,2))
         par_oPagina.AddObject("lbl_4c_Label8", "Label")
@@ -7835,7 +7843,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_TpTrib, "KeyPress", THIS, "ValidarTipoTributacaoDadosFiscais")
+        BINDEVENT(par_oPagina.txt_4c_TpTrib, "LostFocus", THIS, "ValidarTipoTributacaoDadosFiscais")
 
         *-- IAT - Indicador de Arredondamento/Truncamento (getiat legado -
         *-- aceita so A, T ou espaco)
@@ -7865,7 +7873,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Iat, "KeyPress", THIS, "ValidarIatDadosFiscais")
+        BINDEVENT(par_oPagina.txt_4c_Iat, "LostFocus", THIS, "ValidarIatDadosFiscais")
 
         par_oPagina.AddObject("lbl_4c_Label42", "Label")
         WITH par_oPagina.lbl_4c_Label42
@@ -7935,7 +7943,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_AliqIPI, "KeyPress", THIS, "ValidarAliquotaIpiDadosFiscais")
+        BINDEVENT(par_oPagina.txt_4c_AliqIPI, "LostFocus", THIS, "ValidarAliquotaIpiDadosFiscais")
 
         *-- Excecao da TIPI (getextipi legado - extipi char(3). O legado
         *-- habilita o campo so quando SigCdClf.IpiProds = 'S' (When
@@ -8211,7 +8219,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_Mvalor, "KeyPress", THIS, "ValidarMoedaValorEstimadoDadosFiscais")
+        BINDEVENT(par_oPagina.txt_4c_Mvalor, "LostFocus", THIS, "ValidarMoedaValorEstimadoDadosFiscais")
 
         *-- IPPT/CST (getIPPTCST legado - When retorna .F. sempre, ou seja o
         *-- campo nunca recebe foco no legado; sem coluna correspondente em
@@ -8618,7 +8626,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize      = 8
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_DesLacto, "KeyPress", THIS, "ValidarDesenvolvidoPorLacto")
+        BINDEVENT(par_oPagina.txt_4c_DesLacto, "LostFocus", THIS, "ValidarDesenvolvidoPorLacto")
 
         par_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH par_oPagina.lbl_4c_Label5
@@ -8647,7 +8655,7 @@ DEFINE CLASS FormProduto AS FormBase
             .FontSize      = 8
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(par_oPagina.txt_4c_CriaLacto, "KeyPress", THIS, "ValidarCriadoPorLacto")
+        BINDEVENT(par_oPagina.txt_4c_CriaLacto, "LostFocus", THIS, "ValidarCriadoPorLacto")
 
         THIS.TornarControlesVisiveis(par_oPagina)
     ENDPROC
@@ -8722,6 +8730,20 @@ DEFINE CLASS FormProduto AS FormBase
             par_cCursor, par_cCampoBusca, par_cValorBusca, par_cFiltro)
         LOCAL loc_oBusca, loException
 
+        *-- Erro189: os handlers Validar* passaram de KeyPress para LostFocus
+        *-- (equivalente ao Valid do fwget legado). Em KeyPress o motor rodava a
+        *-- CADA tecla com o valor de ANTES dela: no 2o caractere o picker ja
+        *-- abria sobre o campo e a tecla pendente caia por cima do valor
+        *-- devolvido - o texto da Classificacao Fiscal saia sobreposto.
+        *-- Guarda de reentrancia (regra #37): o Show() modal tira o foco e o
+        *-- LostFocus pode disparar de novo, empilhando um 2o picker. E so age
+        *-- nos modos de edicao/procura - na Lista/Visualizar o legado nao
+        *-- valida (o When do fwget so libera em INSERIR/ALTERAR/PROCURAR).
+        IF THIS.this_lLookupEmCurso OR ;
+                INLIST(THIS.this_cModoAtual, "LISTA", "VISUALIZAR")
+            RETURN
+        ENDIF
+
         IF EMPTY(par_cValorBusca)
             par_oTxtCod.Value = ""
             IF VARTYPE(par_oTxtDesc) = "O"
@@ -8729,6 +8751,8 @@ DEFINE CLASS FormProduto AS FormBase
             ENDIF
             RETURN
         ENDIF
+
+        THIS.this_lLookupEmCurso = .T.
 
         TRY
             IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(par_cFiltro)
@@ -8775,6 +8799,9 @@ DEFINE CLASS FormProduto AS FormBase
             MostrarErro("Erro ao buscar " + par_cTitulo + ":" + CHR(13) + ;
                 loException.Message, "FormProduto.ExecutarLookupGenerico")
         ENDTRY
+
+        *-- limpa DEPOIS do ENDTRY: vale tambem quando o CATCH dispara
+        THIS.this_lLookupEmCurso = .F.
     ENDPROC
 
     *===========================================================================
@@ -10385,6 +10412,107 @@ DEFINE CLASS FormProduto AS FormBase
         ENDIF
 
         RETURN loc_cTexto
+    ENDPROC
+
+    *===========================================================================
+    * AplicarMoedasPadraoGrupo - Erro189. Transcricao do bloco final de
+    * Pagina.Lista.Grupo_op.Click do legado, que roda em INSERIR E em ALTERAR:
+    *
+    *   If Not Eof('crSigCdGrp') And Not Empty(crSigCdGrp.MoeCusts)
+    *       lcMcu = crSigCdGrp.MoeCusts
+    *       If (crSigCdGrp.oMoecs = 1) And Empty(crSigCdPro.Moecs) ...
+    *       If (crSigCdGrp.oMoeCusfs = 1) And Empty(crSigCdPro.MoeCusFs) ...
+    *   If Not Eof('crSigCdPam') And Not Empty(crSigCdPam.MoePadVens)
+    *       lcMvd = crSigCdPam.MoePadVens
+    *       If (crSigCdGrp.oMoedas = 1) And Empty(crSigCdPro.Moedas) ...
+    *       If (crSigCdGrp.oMoevs = 1) And Empty(crSigCdPro.Moevs) ...
+    *
+    * Sem ele, todo grupo com moeda obrigatoria (oMoe* = 1) recusava a
+    * gravacao com "Moeda ... Invalida!!!" num campo que o legado ja entrega
+    * preenchido. Os gemeos (mesmo ControlSource no legado - Erro187) recebem
+    * o mesmo valor.
+    *===========================================================================
+    PROTECTED PROCEDURE AplicarMoedasPadraoGrupo(par_cGrupo)
+        LOCAL loc_oPgCmp, loc_oPgDad, loc_oPgFis, loc_nResultado, ;
+            loc_cMcu, loc_cMvd, loException
+
+        TRY
+            IF !EMPTY(par_cGrupo)
+                loc_oPgCmp = THIS.ObterPaginaComposicao()
+                loc_oPgDad = THIS.ObterPaginaDados()
+                loc_oPgFis = THIS.ObterPaginaDadosFiscais()
+
+                IF USED("cursor_4c_GrpMoedas")
+                    USE IN cursor_4c_GrpMoedas
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, ;
+                    "SELECT moecusts, omoecs, omoecusfs, omoedas, omoevs" + ;
+                    " FROM SigCdGrp WHERE cgrus = " + ;
+                    EscaparSQL(PADR(ALLTRIM(par_cGrupo), 3)), "cursor_4c_GrpMoedas")
+
+                IF loc_nResultado >= 0 AND USED("cursor_4c_GrpMoedas") ;
+                        AND RECCOUNT("cursor_4c_GrpMoedas") > 0
+                    GO TOP IN cursor_4c_GrpMoedas
+
+                    *-- Moeda de custo: SigCdGrp.MoeCusts
+                    loc_cMcu = ALLTRIM(NVL(cursor_4c_GrpMoedas.moecusts, ""))
+                    IF !EMPTY(loc_cMcu)
+                        IF NVL(cursor_4c_GrpMoedas.omoecs, 0) = 1 AND ;
+                                EMPTY(ALLTRIM(loc_oPgCmp.txt_4c_Moec.Value))
+                            loc_oPgCmp.txt_4c_Moec.Value = loc_cMcu
+                        ENDIF
+                        IF NVL(cursor_4c_GrpMoedas.omoecusfs, 0) = 1 AND ;
+                                EMPTY(ALLTRIM(loc_oPgCmp.txt_4c_Moecusf.Value))
+                            loc_oPgCmp.txt_4c_Moecusf.Value = loc_cMcu
+                            THIS.EspelharParaGemeo(loc_oPgCmp.txt_4c_Moecusf, ;
+                                loc_oPgDad.txt_4c_Mctotal)
+                        ENDIF
+                    ENDIF
+
+                    *-- Moeda de venda: SigCdPam.MoePadVens
+                    IF NVL(cursor_4c_GrpMoedas.omoedas, 0) = 1 OR ;
+                            NVL(cursor_4c_GrpMoedas.omoevs, 0) = 1
+                        loc_cMvd = ""
+                        IF USED("cursor_4c_PamMoedas")
+                            USE IN cursor_4c_PamMoedas
+                        ENDIF
+                        loc_nResultado = SQLEXEC(gnConnHandle, ;
+                            "SELECT TOP 1 moepadvens FROM SigCdPam", "cursor_4c_PamMoedas")
+                        IF loc_nResultado >= 0 AND USED("cursor_4c_PamMoedas") ;
+                                AND RECCOUNT("cursor_4c_PamMoedas") > 0
+                            GO TOP IN cursor_4c_PamMoedas
+                            loc_cMvd = ALLTRIM(NVL(cursor_4c_PamMoedas.moepadvens, ""))
+                        ENDIF
+                        IF USED("cursor_4c_PamMoedas")
+                            USE IN cursor_4c_PamMoedas
+                        ENDIF
+
+                        IF !EMPTY(loc_cMvd)
+                            IF NVL(cursor_4c_GrpMoedas.omoedas, 0) = 1 AND ;
+                                    EMPTY(ALLTRIM(loc_oPgCmp.txt_4c_Moeda.Value))
+                                loc_oPgCmp.txt_4c_Moeda.Value = loc_cMvd
+                                THIS.EspelharParaGemeo(loc_oPgCmp.txt_4c_Moeda, ;
+                                    loc_oPgFis.txt_4c_Mvalor)
+                            ENDIF
+                            IF NVL(cursor_4c_GrpMoedas.omoevs, 0) = 1 AND ;
+                                    EMPTY(ALLTRIM(loc_oPgCmp.txt_4c_Moev.Value))
+                                loc_oPgCmp.txt_4c_Moev.Value = loc_cMvd
+                                THIS.EspelharParaGemeo(loc_oPgCmp.txt_4c_Moev, ;
+                                    loc_oPgDad.txt_4c_Mpvenda)
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+                IF USED("cursor_4c_GrpMoedas")
+                    USE IN cursor_4c_GrpMoedas
+                ENDIF
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao aplicar as moedas padr" + CHR(227) + "o do grupo:" + ;
+                CHR(13) + loException.Message, "FormProduto.AplicarMoedasPadraoGrupo")
+        ENDTRY
     ENDPROC
 
     *===========================================================================
