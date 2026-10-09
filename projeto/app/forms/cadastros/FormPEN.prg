@@ -1173,7 +1173,6 @@ DEFINE CLASS FormPEN AS FormBase
         loc_cDesc = THIS.this_oBusinessObject.BuscarDescGrupo(loc_cGrupos)
         IF EMPTY(loc_cDesc)
             MsgAviso("Grupo " + CHR(34) + loc_cGrupos + CHR(34) + " n" + CHR(227) + "o encontrado.", "Grupo")
-            loc_oPg2.txt_4c_Grupos.Value  = ""
             loc_oPg2.txt_4c_DGrupos.Value = ""
             loc_oPg2.txt_4c_Grupos.SetFocus()
         ELSE

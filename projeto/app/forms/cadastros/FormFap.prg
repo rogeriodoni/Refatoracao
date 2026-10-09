@@ -848,7 +848,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container4.AddObject("txt_4c_Prdz", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container4.txt_4c_Prdz
-				.Value     = .F.
+				.Value     = 0
 				.MaxLength = 15
 				.Top       = 3
 				.Left      = 104
@@ -891,7 +891,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container3.AddObject("txt_4c_PTrab", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container3.txt_4c_PTrab
-				.Value     = .F.
+				.Value     = 0
 				.MaxLength = 15
 				.Top       = 3
 				.Left      = 104
@@ -919,7 +919,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container3.AddObject("txt_4c_Pfalha", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container3.txt_4c_Pfalha
-				.Value     = .F.
+				.Value     = 0
 			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 3
@@ -963,7 +963,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container1.AddObject("txt_4c_pesob", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container1.txt_4c_pesob
-				.Value     = .F.
+				.Value     = 0
 			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 5
@@ -1101,7 +1101,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container2.AddObject("txt_4c_Totccb", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container2.txt_4c_Totccb
-				.Value     = .F.
+				.Value     = 0
 			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 24
@@ -1131,7 +1131,7 @@ DEFINE CLASS FormFap AS FormBase
 
 			loc_oPagina.cnt_4c_Container2.AddObject("txt_4c_totscb", "TextBox")
 			WITH loc_oPagina.cnt_4c_Container2.txt_4c_totscb
-				.Value     = .F.
+				.Value     = 0
 			    .InputMask = "999,999.99"
 				.MaxLength = 15
 				.Top       = 23
@@ -1789,7 +1789,7 @@ DEFINE CLASS FormFap AS FormBase
 	* BtnSalvarClick - Salvar (Confirmar) ou executar busca por codigo
 	*====================================================================
 	PROCEDURE BtnSalvarClick()
-		LOCAL loc_lSalvou, loc_oPagina, loc_cGrupo, loc_cConta, loc_cProduzido
+		LOCAL loc_lSalvou, loc_oPagina, loc_cGrupo, loc_cConta, loc_lPrdzVazio
 		loc_lSalvou = .F.
 		loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1835,7 +1835,7 @@ DEFINE CLASS FormFap AS FormBase
 		*-- Coletar valores para validacoes cruzadas
 		loc_cGrupo = ""
 		loc_cConta = ""
-		loc_cProduzido = ""
+		loc_lPrdzVazio = .T.
 		IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
 			loc_cGrupo = ALLTRIM(loc_oPagina.txt_4c_CdGrupo.Value)
 		ENDIF
@@ -1844,12 +1844,12 @@ DEFINE CLASS FormFap AS FormBase
 		ENDIF
 		IF PEMSTATUS(loc_oPagina, "cnt_4c_Container4", 5)
 			IF PEMSTATUS(loc_oPagina.cnt_4c_Container4, "txt_4c_Prdz", 5)
-				loc_cProduzido = ALLTRIM(TRANSFORM(loc_oPagina.cnt_4c_Container4.txt_4c_Prdz.Value))
+				loc_lPrdzVazio = EMPTY(loc_oPagina.cnt_4c_Container4.txt_4c_Prdz.Value)
 			ENDIF
 		ENDIF
 
 		*-- Validar Grupo (obrigatorio se Tipo='F' e Produzido vazio)
-		IF EMPTY(loc_cGrupo) AND THIS.this_cTipo = "F" AND EMPTY(loc_cProduzido)
+		IF EMPTY(loc_cGrupo) AND THIS.this_cTipo = "F" AND loc_lPrdzVazio
 			MsgAviso("Grupo inv" + CHR(225) + "lido!", "Valida" + CHR(231) + CHR(227) + "o")
 			IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
 				loc_oPagina.txt_4c_CdGrupo.SetFocus
@@ -1858,7 +1858,7 @@ DEFINE CLASS FormFap AS FormBase
 		ENDIF
 
 		*-- Validar Conta (obrigatoria se Tipo='F' e Produzido vazio)
-		IF EMPTY(loc_cConta) AND THIS.this_cTipo = "F" AND EMPTY(loc_cProduzido)
+		IF EMPTY(loc_cConta) AND THIS.this_cTipo = "F" AND loc_lPrdzVazio
 			MsgAviso("Conta inv" + CHR(225) + "lida!", "Valida" + CHR(231) + CHR(227) + "o")
 			IF PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
 				loc_oPagina.txt_4c_CdConta.SetFocus
@@ -2004,10 +2004,9 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						MsgAviso("Nenhum grupo encontrado!", "Aviso")
-						IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
-							loc_oPagina.txt_4c_CdGrupo.Value = ""
-						ENDIF
+						*-- Erro198: universo vazio NAO eh erro. Legado abre browse vazio e
+						*-- nunca avisa; apagar o codigo digitado impede o usuario de digitar
+						*-- (regra #37 + Pattern #114). Mantem o valor e limpa so a descricao.
 						IF PEMSTATUS(loc_oPagina, "txt_4c_DsGrupo", 5)
 							loc_oPagina.txt_4c_DsGrupo.Value = ""
 						ENDIF
@@ -2122,10 +2121,7 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						MsgAviso("Nenhuma conta encontrada para o grupo!", "Aviso")
-						IF PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
-							loc_oPagina.txt_4c_CdConta.Value = ""
-						ENDIF
+						*-- Erro198: universo vazio NAO eh erro - ver ValidarGrupoExec.
 						IF PEMSTATUS(loc_oPagina, "txt_4c_DsConta", 5)
 							loc_oPagina.txt_4c_DsConta.Value = ""
 						ENDIF
@@ -2228,10 +2224,7 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						MsgAviso("Nenhuma recuperadora encontrada!", "Aviso")
-						IF PEMSTATUS(loc_oCnt, "txt_4c_ifor", 5)
-							loc_oCnt.txt_4c_ifor.Value = ""
-						ENDIF
+						*-- Erro198: universo vazio NAO eh erro - ver ValidarGrupoExec.
 						IF PEMSTATUS(loc_oCnt, "txt_4c_dfor", 5)
 							loc_oCnt.txt_4c_dfor.Value = ""
 						ENDIF
@@ -2337,10 +2330,7 @@ DEFINE CLASS FormFap AS FormBase
 								ENDIF
 							ENDIF
 						ELSE
-							MsgAviso("Nenhuma recuperadora encontrada!", "Aviso")
-							IF PEMSTATUS(loc_oCnt, "txt_4c_dfor", 5)
-								loc_oCnt.txt_4c_dfor.Value = ""
-							ENDIF
+							*-- Erro198: universo vazio NAO eh erro - ver ValidarGrupoExec.
 						ENDIF
 
 						IF USED("cursor_4c_BuscaDfor")
@@ -2424,10 +2414,7 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						MsgAviso("Nenhum tipo de material encontrado!", "Aviso")
-						IF PEMSTATUS(loc_oCnt, "txt_4c_tpmat", 5)
-							loc_oCnt.txt_4c_tpmat.Value = ""
-						ENDIF
+						*-- Erro198: universo vazio NAO eh erro - ver ValidarGrupoExec.
 					ENDIF
 
 					IF USED("cursor_4c_BuscaTpmat")
@@ -2514,7 +2501,7 @@ DEFINE CLASS FormFap AS FormBase
 					loc_oPagina.cnt_4c_Container4.txt_4c_Prdz.ReadOnly = loc_lReadOnly
 					*-- Se passou a ser read-only, limpar valor (grupo/conta preenchem o fluxo)
 					IF loc_lReadOnly
-						loc_oPagina.cnt_4c_Container4.txt_4c_Prdz.Value = .F.
+						loc_oPagina.cnt_4c_Container4.txt_4c_Prdz.Value = 0
 					ENDIF
 				ENDIF
 			ENDIF

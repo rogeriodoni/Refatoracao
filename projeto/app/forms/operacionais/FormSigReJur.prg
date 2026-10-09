@@ -871,7 +871,6 @@ DEFINE CLASS FormSigReJur AS FormBase
             IF !THIS.this_oBusinessObject.VerificarAcessoGrupo(loc_cGrupo)
                 MsgAviso("Grupo n" + CHR(227) + "o encontrado.", ;
                          "Valida" + CHR(231) + CHR(227) + "o")
-                THIS.txt_4c_Grupo.Value  = ""
                 THIS.txt_4c_Dgrupo.Value = ""
             ELSE
                 loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrupo(loc_cGrupo)
@@ -981,7 +980,6 @@ DEFINE CLASS FormSigReJur AS FormBase
             IF !THIS.this_oBusinessObject.VerificarAcessoGrupo(loc_cGrupo)
                 MsgAviso("Grupo n" + CHR(227) + "o encontrado.", ;
                          "Valida" + CHR(231) + CHR(227) + "o")
-                THIS.txt_4c_SGRUPO.Value  = ""
                 THIS.txt_4c_Sdgrupo.Value = ""
             ELSE
                 loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrupo(loc_cGrupo)

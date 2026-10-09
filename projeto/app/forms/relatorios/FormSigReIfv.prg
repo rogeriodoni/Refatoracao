@@ -1622,7 +1622,6 @@ DEFINE CLASS FormSigReIfv AS FormBase
                 ENDIF
                 MsgAviso("Etiqueta n" + CHR(227) + "o Encontrada !!!", ;
                     "Valida" + CHR(231) + CHR(227) + "o")
-                loc_oPag.txt_4c_IBarra.Value = 0
                 RETURN
             ENDIF
             IF USED("cursor_4c_ValBarra")

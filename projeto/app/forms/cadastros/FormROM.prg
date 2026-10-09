@@ -1977,7 +1977,6 @@ DEFINE CLASS FormROM AS FormBase
                     ENDIF
                 ELSE
                     MsgAviso("Departamento n" + CHR(227) + "o encontrado.", "Origem")
-                    loc_oPg2.cnt_4c_Rec.txt_4c_DepOrig.Value  = ""
                     loc_oPg2.cnt_4c_Rec.txt_4c_DDepOrig.Value = ""
                     THIS.this_oBusinessObject.this_cDepOrig = ""
                 ENDIF
@@ -2009,7 +2008,6 @@ DEFINE CLASS FormROM AS FormBase
         loc_cDesc = THIS.this_oBusinessObject.BuscarDepartamento(loc_cCod)
         IF EMPTY(loc_cDesc)
             MsgAviso("Departamento n" + CHR(227) + "o encontrado.", "Destino")
-            loc_oPg2.cnt_4c_Rec.txt_4c_DepDest.Value  = ""
             loc_oPg2.cnt_4c_Rec.txt_4c_DDepDest.Value = ""
             THIS.this_oBusinessObject.this_cDepDest = ""
         ELSE
@@ -2042,7 +2040,6 @@ DEFINE CLASS FormROM AS FormBase
 
         IF EMPTY(loc_cRazao)
             MsgAviso("Transportadora n" + CHR(227) + "o encontrada.", "Transportadora")
-            loc_oPg2.cnt_4c_Rom.txt_4c_CodTransp.Value  = ""
             loc_oPg2.cnt_4c_Rom.txt_4c_DCodTransp.Value = ""
             IF PEMSTATUS(loc_oPg2, "chk_4c_Correios", 5)
                 loc_oPg2.chk_4c_Correios.Value = 0
@@ -2077,7 +2074,6 @@ DEFINE CLASS FormROM AS FormBase
 
         IF EMPTY(loc_cRClis)
             MsgAviso("Cliente n" + CHR(227) + "o encontrado.", "Cliente")
-            loc_oPg2.cnt_4c_Rom.txt_4c_Contas.Value  = ""
             loc_oPg2.cnt_4c_Rom.txt_4c_DContas.Value = ""
             THIS.this_oBusinessObject.this_cContas = ""
         ELSE

@@ -1153,9 +1153,6 @@ DEFINE CLASS FormRcc AS FormBase
                 ENDIF
             ELSE
                 MsgAviso("Empresa '" + loc_cEmpresa + "' n" + CHR(227) + "o encontrada.", "Aviso")
-                IF PEMSTATUS(loc_oPg2, "txt_4c_Empresa", 5)
-                    loc_oPg2.txt_4c_Empresa.Value = ""
-                ENDIF
                 IF PEMSTATUS(loc_oPg2, "txt_4c_DEmpresa", 5)
                     loc_oPg2.txt_4c_DEmpresa.Value    = ""
                     loc_oPg2.txt_4c_DEmpresa.ReadOnly = .F.
@@ -1215,9 +1212,6 @@ DEFINE CLASS FormRcc AS FormBase
                 MsgAviso("Mais de uma empresa encontrada. Digite o c" + CHR(243) + "digo.", "Aviso")
             ELSE
                 MsgAviso("Empresa '" + loc_cNome + "' n" + CHR(227) + "o encontrada.", "Aviso")
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DEmpresa", 5)
-                    loc_oPg2.txt_4c_DEmpresa.Value = ""
-                ENDIF
                 ENDIF
             ENDIF
 

@@ -4118,7 +4118,6 @@ DEFINE CLASS Formlch AS FormBase
                 "cursor_4c_ValidOper")
             IF loc_nRes < 0 OR RECCOUNT("cursor_4c_ValidOper") = 0
                 MsgAviso("Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada: " + loc_cOper, "")
-                loc_oPg2.txt_4c_Oper.Value = ""
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.ValidarOper")
@@ -4148,7 +4147,6 @@ DEFINE CLASS Formlch AS FormBase
                 "cursor_4c_ValidMoe")
             IF loc_nRes < 0 OR RECCOUNT("cursor_4c_ValidMoe") = 0
                 MsgAviso("Moeda n" + CHR(227) + "o encontrada: " + loc_cMoeda, "")
-                loc_oPg2.cnt_4c_Infos.txt_4c_Moeda.Value = ""
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.ValidarMoeda")
@@ -4433,7 +4431,6 @@ DEFINE CLASS Formlch AS FormBase
                 THIS.this_oBusinessObject.this_cDEmps = ALLTRIM(cursor_4c_ValidEmp.razas)
             ELSE
                 MsgAviso("Empresa n" + CHR(227) + "o encontrada: " + loc_cEmps, "")
-                loc_oPg2.cnt_4c_Empresa.txt_4c_Emps.Value = ""
                 IF VARTYPE(loc_oPg2.cnt_4c_Empresa.txt_4c_DEmps) = "O"
                     loc_oPg2.cnt_4c_Empresa.txt_4c_DEmps.Value = ""
                 ENDIF
@@ -4471,7 +4468,6 @@ DEFINE CLASS Formlch AS FormBase
                 ENDIF
             ELSE
                 MsgAviso("Cliente n" + CHR(227) + "o encontrado: " + loc_cConta, "")
-                loc_oPg2.cnt_4c_Conta.txt_4c_ContaIclis.Value = ""
                 IF VARTYPE(loc_oPg2.cnt_4c_Conta.txt_4c_CpfIclis) = "O"
                     loc_oPg2.cnt_4c_Conta.txt_4c_CpfIclis.Value = ""
                 ENDIF

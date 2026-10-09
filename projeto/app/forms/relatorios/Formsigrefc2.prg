@@ -848,7 +848,6 @@ DEFINE CLASS Formsigrefc2 AS FormBase
                     IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_Refc2NomV") = 0
                         MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Aviso")
                         loc_oPg1.txt_4c_CdEmpresa.Value  = ""
-                        loc_oPg1.txt_4c_NomEmpresa.Value = ""
                     ENDIF
                     *-- Multiplas ou nenhuma - abre lookup para selecao manual
                     THIS.AbrirBuscaEmpresa()

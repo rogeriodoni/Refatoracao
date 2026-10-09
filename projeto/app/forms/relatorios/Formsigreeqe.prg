@@ -628,14 +628,11 @@ DEFINE CLASS Formsigreeqe AS FormBase
             IF loc_lContinuar
                 THIS.this_oRelatorio.this_cEmpresa = loc_cValor
                 IF !THIS.this_oRelatorio.ValidarEmpresa()
-                    loc_oPagina.txt_4c_Empresa.Value      = ""
                     loc_oPagina.txt_4c_DesEmpresa.Value   = ""
                     loc_oPagina.txt_4c_DesEmpresa.Enabled = .T.
                     THIS.this_oRelatorio.this_cEmpresa    = ""
                     THIS.this_oRelatorio.this_cDesEmpresa = ""
                     THIS.this_oRelatorio.this_cTabela     = ""
-                    MsgAviso("Empresa n" + CHR(227) + "o encontrada." + CHR(13) + ;
-                        "Selecione da lista.", "Empresa Inv" + CHR(225) + "lida")
                     THIS.AbrirLookupEmpresa()
                 ELSE
                     loc_oPagina.txt_4c_DesEmpresa.Value   = THIS.this_oRelatorio.this_cDesEmpresa

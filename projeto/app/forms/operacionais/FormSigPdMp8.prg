@@ -1298,7 +1298,6 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
                 MsgAviso("Funcion" + CHR(225) + "rio n" + CHR(227) + "o encontrado " + ;
                          "no cadastro de contas.", ;
                          "Busca de Funcion" + CHR(225) + "rio")
-                THIS.grd_4c_Inc.Column4.Text1.Value = ""
             ENDIF
 
             IF PEMSTATUS(THIS, "grd_4c_Inc", 5)

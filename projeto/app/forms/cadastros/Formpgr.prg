@@ -4524,7 +4524,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cGrupo)
             MsgAviso("Grupo '" + loc_cGrupo + "' n" + CHR(227) + "o encontrado. Use F4 para pesquisar.")
-            loc_oPag3.txt_4c_GrEstoque.Value = ""
             loc_oPag3.txt_4c_DsEstoque.Value = ""
         ENDIF
     ENDPROC
@@ -4608,7 +4607,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cConta)
             MsgAviso("Conta '" + loc_cConta + "' n" + CHR(227) + "o encontrada. Use F4 para pesquisar.")
-            loc_oPag3.txt_4c_CdEstoque.Value = ""
             loc_oPag3.txt_4c_DsEstoque.Value = ""
         ENDIF
     ENDPROC
@@ -4690,7 +4688,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cFilial)
             MsgAviso("Filial '" + loc_cFilial + "' n" + CHR(227) + "o encontrada. Use F4 para pesquisar.")
-            loc_oPag3.txt_4c_FilEmps.Value = ""
         ENDIF
     ENDPROC
 
@@ -4761,7 +4758,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cConta)
             MsgAviso("Conta '" + loc_cConta + "' n" + CHR(227) + "o encontrada.")
-            loc_oCab.txt_4c_ContaHeader.Value = ""
         ENDIF
     ENDPROC
 
@@ -4871,7 +4867,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cFpg)
             MsgAviso("Forma de pagamento '" + loc_cFpg + "' n" + CHR(227) + "o encontrada. Use F4.")
-            loc_oPag2.txt_4c_Fpg.Value = ""
         ENDIF
     ENDPROC
 
@@ -4942,7 +4937,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cGrupo)
             MsgAviso("Grupo n" + CHR(227) + "o encontrado.")
-            loc_oPag1.txt_4c_GrupoPend.Value = ""
             loc_oPag1.txt_4c_NomeGrupoPend.Value = ""
         ENDIF
     ENDPROC
@@ -5006,7 +5000,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cConta)
             MsgAviso("Conta n" + CHR(227) + "o encontrada.")
-            loc_oPag1.txt_4c_ContaPend.Value = ""
             loc_oPag1.txt_4c_NomeContaPend.Value = ""
         ENDIF
     ENDPROC
@@ -5129,7 +5122,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cGrupo)
             MsgAviso("Grupo n" + CHR(227) + "o encontrado.")
-            loc_oCnt.txt_4c_GrupoNP.Value  = ""
             loc_oCnt.txt_4c_NGrupoNP.Value = ""
         ENDIF
     ENDPROC
@@ -5192,7 +5184,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cConta)
             MsgAviso("Conta n" + CHR(227) + "o encontrada.")
-            loc_oCnt.txt_4c_ContaNP.Value  = ""
             loc_oCnt.txt_4c_NContaNP.Value = ""
         ENDIF
     ENDPROC
@@ -5255,7 +5246,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cGrupo)
             MsgAviso("Grupo n" + CHR(227) + "o encontrado.")
-            loc_oCnt.txt_4c_GrupoCNP.Value  = ""
             loc_oCnt.txt_4c_NGrupoCNP.Value = ""
         ENDIF
     ENDPROC
@@ -5318,7 +5308,6 @@ DEFINE CLASS Formpgr AS FormBase
 
         IF !loc_lOk AND !EMPTY(loc_cConta)
             MsgAviso("Conta n" + CHR(227) + "o encontrada.")
-            loc_oCnt.txt_4c_ContaCNP.Value  = ""
             loc_oCnt.txt_4c_NContaCNP.Value = ""
         ENDIF
     ENDPROC

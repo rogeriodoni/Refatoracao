@@ -940,6 +940,7 @@ E dois patterns **brigavam entre si** (#107 punha `BackStyle = 1`, ContainerTran
 3. Injecao de propriedade "de nascimento" (`Visible`): so no bloco WITH **logo apos** o `AddObject`.
 4. Se a escolha eh de DESENHO (evento, largura do legado) e nao de sintaxe: **WARNING**, nunca auto-fix.
 5. Antes de sweep: rodar o Corretor em COPIA de forms consertados a mao (Formgpd, FormProduto) num caminho com `\forms\` (senao cai no MODO SEGURO e o teste nao testa nada) e exigir **zero** mudanca nao explicada. Comparar Corretor do HEAD x novo.
+6. Ancorar em **NOME** (de metodo, property, cursor, prefixo) casa a **FAMILIA**, nunca o especime: `(?:AbrirBusca|AbrirLookup)`, nao `AbrirBusca`. Pattern ancorado em UMA grafia fica **silenciosamente parcial** - nao falha, nao avisa, so nao corrige, e a licao consta como propagada enquanto o acervo segue sujo. O **#114** passou 3 meses e um v2 casando so `THIS\.AbrirBusca\w+` enquanto o migrador tambem escrevia `AbrirLookup<X>`: **23 sites em 7 forms** sobreviveram a dois sweeps. Mesmo erro em outra forma no MESMO bug: clear-field detectado so como `.Value = ""` ignorava `= SPACE(N)` e `= 0` (3 sites). Medir a cobertura **antes e depois** de ampliar - contagem que nao muda significa ampliacao inutil ou outro gargalo - e declarar por escrito qual variante ficou de fora. Irma da regra #48 (la o check nunca rodava retroativamente; aqui roda em tudo e casa de menos - mesmo resultado).
 
 **Ao auditar sweep**: `git diff --ignore-cr-at-eol` (o Corretor regrava tudo com CRLF — `git status` lista centenas de `.prg` sem mudanca real) e classificar CADA hunk: legitimo / regressao. `.bak` sao rastreados pelo git — o sweep os regrava.
 
@@ -1033,6 +1034,33 @@ Medido no VFP9: `InputMask = "99999-999"` produz valor de **9 chars** = a largur
 **Nao inventar restricao que o legado nao tem**: no `FormCEP` o rotulo `(Ex.: R, AV, TV, AL)` eh EXEMPLO; o campo Tipo nao tem `Valid` nem lista no dump, so *"nao pode ficar em branco"*. Fechar a lista seria mudar comportamento (PILAR 1). **Diferente da regra #24**, onde `Format` contendo `M` faz do `InputMask` a lista de valores validos — ali a lista EXISTE no dump.
 
 Alcance medido (2026-10-08): ALTA 541 sites/78 forms, MEDIA 344/106, BAIXA 540/104. Os **ALTA foram varridos** casando por GEOMETRIA (`Left`+`Width`+`Top` com o offset do form, inferido pela moda) **E** por NOME como gate independente (o nome nao entra no casamento, e concordou em 264/282 = 94%): **265 aplicados em 48 forms, ALTA caiu para 285**. Nao entram: nome divergente da geometria (12, em `automationrro197_inputmask_revisar.tsv`), form sem offset confiavel (25) e sem par geometrico. Os **MEDIA** (`Format` com `!`) tambem foram varridos, com o gate de nome refinado para `cods`->`codigo` (tirar o `s` final e aceitar prefixo): **236 aplicados em 84 forms**, MEDIA caiu para 194; 23 ficaram em `automationrro197_format_revisar.tsv`. BAIXA (`Format` so com `K`) segue sem sweep. A comparacao da auditoria eh por CONTAGEM porque o PILAR 3 renomeia os objetos. Auditoria: `automation\VerificarFormatInputMask.ps1` (`-Form <classe>`, `-Detalhar`). WARNING: CorretorAutomatico **#216**. Skill: secao **243**. Origem: Erro197 (FormCEP).
+
+### 50. Universo de lookup VAZIO nao eh erro - avisar e apagar o digitado impede o usuario de preencher
+No `ELSE` do lookup o migrador trata "nao achei" como ERRO: `MsgAviso("Nenhum X encontrado")` **+ apaga o codigo que o usuario acabou de digitar**. O usuario digita, sai do campo, leva o modal e o campo volta **VAZIO** - nao ha sequencia de teclas que resolva. Compila limpo, nenhum gate pega.
+
+```foxpro
+* ERRADO (FormFap.ValidarGrupoExec)          * CERTO
+ELSE                                         ELSE
+    MsgAviso("Nenhum grupo encontrado!")         *-- sem aviso; o codigo digitado FICA
+    loc_oPg.txt_4c_CdGrupo.Value = ""            loc_oPg.txt_4c_DsGrupo.Value = ""
+    loc_oPg.txt_4c_DsGrupo.Value = ""        ENDIF
+ENDIF
+```
+
+O legado **nunca avisa**: o `Valid` faz `Seek` e, falhando, abre o browse (`fwBuscaInt`/`fwBuscaExt`); so o `LastKey() == 27` (ESC) limpa.
+
+| situacao | o que fazer |
+|---|---|
+| ha picker logo depois | deixar **so** `THIS.AbrirLookup<X>()` / `AbrirBusca<X>()` - o picker JA eh o feedback e o digitado vira LIKE prefix |
+| nao ha picker | pode manter a mensagem, mas **NUNCA** apagar o codigo - limpar so a DESCRICAO |
+
+Apagar o digitado tambem viola a regra **#37**. **O clear nem sempre eh `= ""`** - tambem aparece como `= SPACE(N)` e `= 0` (campo numerico); olhar so `= ""` deixou 3 sites passar.
+
+**Universo vazio pode ser DADO, nao codigo** - medir antes de mexer no SQL. No `FormFap` o `WHERE BalFalPers = 1` devolve **0 das 44** linhas de `SigCdGcr` (todas gravam `2`), e esse filtro eh **FIEL** ao legado (`CursorQuery('SigCdGcr','TmpGccr','BalFalPers',1)` no `Init` do SCX, repetido em `SigReIfpBO`). Trocar o `1` seria inventar regra de negocio: o defeito de migracao eh so o modal + o apagamento.
+
+Separar campo digitado de campo descricao **sem depender do nome** (o PILAR 3 renomeia tudo): o digitado eh **LIDO** no handler (`<ctrl>.Value` do lado DIREITO) antes do `MsgAviso`; a descricao eh write-only - acertou 64 de 66 sites.
+
+Auto-fix: CorretorAutomatico **#217** (variante sem picker, remove so o clear) e **#114 v3** (com picker, remove mensagem e clear). Sweep 2026-10-09: **78 sites em 26 forms**. Skill: secao **244**. Origem: Erro198 (`FormFap` - *"no momento da inclusao nao consegue digitar o grupo"*).
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

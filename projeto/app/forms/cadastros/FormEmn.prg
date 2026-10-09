@@ -1711,7 +1711,6 @@ DEFINE CLASS FormEmn AS FormBase
                 THIS.ConfigurarRecordSourceGrid()
             ELSE
                 MsgAviso("Produto n" + CHR(227) + "o encontrado: " + ALLTRIM(par_cCPros), "Produto")
-                THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value = ""
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.CarregarDadosProduto")

@@ -3003,7 +3003,6 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
                 IF loc_nRet > 0 AND USED("cursor_4c_NltValid") AND RECCOUNT("cursor_4c_NltValid") = 0
                     MsgAviso("Lote " + TRANSFORM(loc_nLote) + " n" + CHR(227) + "o encontrado ou fechado.", "Aviso")
                     IF PEMSTATUS(loc_oCnt, "txt_4c_Lote", 5)
-                        loc_oCnt.txt_4c_Lote.Value = 0
                         loc_oCnt.txt_4c_Lote.SetFocus()
                     ENDIF
                 ELSE

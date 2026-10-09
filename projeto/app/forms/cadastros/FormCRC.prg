@@ -1140,7 +1140,6 @@ DEFINE CLASS FormCRC AS FormBase
         ELSE
             loc_cDescricao = THIS.this_oBusinessObject.BuscarDescricaoGrupo(loc_cCodigo)
             IF EMPTY(loc_cDescricao)
-                MsgAviso("Grupo n" + CHR(227) + "o encontrado!")
                 THIS.AbrirLookupGrupoCodigo()
             ELSE
                 IF PEMSTATUS(loc_oPag2, "txt_4c_DGrupos", 5)

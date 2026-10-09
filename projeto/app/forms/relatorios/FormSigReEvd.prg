@@ -572,8 +572,6 @@ DEFINE CLASS FormSigReEvd AS FormBase
                 IF FOUND()
                     loc_oPg.txt_4c_Grupo.Value = ALLTRIM(Codigos)
                 ELSE
-                    MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
-                    loc_oPg.txt_4c_Grupo.Value  = ""
                     loc_oPg.txt_4c_Conta.Value  = ""
                     loc_oPg.txt_4c_Dconta.Value = ""
                     THIS.AbrirLookupGrupo()
@@ -644,8 +642,6 @@ DEFINE CLASS FormSigReEvd AS FormBase
                     loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
                     loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
                 ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                    loc_oPg.txt_4c_Conta.Value  = ""
                     loc_oPg.txt_4c_Dconta.Value = ""
                     THIS.AbrirLookupConta()
                 ENDIF
@@ -723,9 +719,6 @@ DEFINE CLASS FormSigReEvd AS FormBase
                     loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
                     loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
                 ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                    loc_oPg.txt_4c_Conta.Value  = ""
-                    loc_oPg.txt_4c_Dconta.Value = ""
                     THIS.AbrirLookupDconta()
                 ENDIF
             ENDIF

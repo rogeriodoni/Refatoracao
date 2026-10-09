@@ -3032,7 +3032,6 @@ DEFINE CLASS FormFUN AS FormBase
                     loc_lSucesso = .T.
                 ELSE
                     MsgAviso("Cor '" + loc_cCodCor + "' n" + CHR(227) + "o encontrada.", "Cor")
-                    loc_oCnt5.txt_4c_Cor.Value = ""
                 ENDIF
 
                 IF USED("cursor_4c_BuscaCor")

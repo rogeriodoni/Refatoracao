@@ -862,7 +862,6 @@ DEFINE CLASS Formsigrehtc AS FormBase
         ENDIF
 
         MsgAviso("Grupo de estoque n" + CHR(227) + "o encontrado: " + loc_cCodigo, "Aviso")
-        THIS.txt_4c_CdGrEstoque.Value   = ""
         THIS.txt_4c_DsGrEstoque.Value   = ""
         THIS.txt_4c_DsGrEstoque.Enabled = .T.
         THIS.txt_4c_CdGrEstoque.SetFocus()
@@ -907,8 +906,6 @@ DEFINE CLASS Formsigrehtc AS FormBase
         ENDIF
 
         MsgAviso("Grupo de estoque n" + CHR(227) + "o encontrado.", "Aviso")
-        THIS.txt_4c_CdGrEstoque.Value   = ""
-        THIS.txt_4c_DsGrEstoque.Value   = ""
         THIS.txt_4c_DsGrEstoque.Enabled = .T.
         THIS.txt_4c_DsGrEstoque.SetFocus()
     ENDPROC

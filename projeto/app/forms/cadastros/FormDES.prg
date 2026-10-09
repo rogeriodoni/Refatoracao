@@ -873,7 +873,6 @@ DEFINE CLASS FormDES AS FormBase
             IF loc_nRes > 0 AND USED("cursor_4c_ValidaEmp")
                 IF RECCOUNT("cursor_4c_ValidaEmp") = 0
                     MsgAviso("Empresa '" + loc_cEmps + "' n" + CHR(227) + "o encontrada.", "")
-                    loc_oPg2.txt_4c_Emps.Value = ""
                     loc_oPg2.txt_4c_Emps.SetFocus()
                 ENDIF
                 USE IN cursor_4c_ValidaEmp

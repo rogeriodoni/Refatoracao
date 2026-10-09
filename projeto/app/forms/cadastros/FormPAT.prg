@@ -1314,7 +1314,6 @@ DEFINE CLASS FormPAT AS FormBase
         loc_cDesc = THIS.this_oBusinessObject.BuscarDescEmpresa(loc_cEmps)
         IF EMPTY(loc_cDesc)
             MsgAviso("Empresa " + CHR(34) + loc_cEmps + CHR(34) + " n" + CHR(227) + "o encontrada.", "Empresa")
-            loc_oPg2.txt_4c_Emps.Value  = ""
             loc_oPg2.txt_4c_DEmps.Value = ""
             loc_oPg2.txt_4c_Emps.SetFocus()
         ELSE
@@ -1340,7 +1339,6 @@ DEFINE CLASS FormPAT AS FormBase
         loc_cDesc = THIS.this_oBusinessObject.BuscarDescVendedor(loc_cCodvends)
         IF EMPTY(loc_cDesc)
             MsgAviso("Vendedor " + CHR(34) + loc_cCodvends + CHR(34) + " n" + CHR(227) + "o encontrado.", "Vendedor")
-            loc_oPg2.txt_4c_Codvends.Value = ""
             loc_oPg2.txt_4c_DVends.Value   = ""
             loc_oPg2.txt_4c_Codvends.SetFocus()
         ELSE

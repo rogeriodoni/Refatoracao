@@ -1881,7 +1881,6 @@ DEFINE CLASS FormRAN AS FormBase
 
             IF loc_nResult < 0 OR !USED("cursor_4c_OpeValida") OR RECCOUNT("cursor_4c_OpeValida") = 0
                 MsgAviso("Opera" + CHR(231) + CHR(227) + "o do lote n" + CHR(227) + "o encontrada!")
-                loc_oCnt1.txt_4c_Nlote.Value = 0
                 IF USED("cursor_4c_OpeValida")
                     USE IN cursor_4c_OpeValida
                 ENDIF
@@ -2097,7 +2096,6 @@ DEFINE CLASS FormRAN AS FormBase
                     USE IN cursor_4c_OpVal
                 ENDIF
                 MsgAviso("Op " + TRANSFORM(loc_nNops) + " n" + CHR(227) + "o encontrada!")
-                loc_oCnt1.txt_4c_Op.Value = 0
                 IF PEMSTATUS(loc_oCnt1, "txt_4c_Fase", 5)
                     loc_oCnt1.txt_4c_Fase.Value = ""
                 ENDIF

@@ -1365,7 +1365,6 @@ DEFINE CLASS Formcrf AS FormBase
 
         IF !USED("cursor_4c_Vendedores") OR RECCOUNT("cursor_4c_Vendedores") = 0
             MsgAviso("Vendedor n" + CHR(227) + "o encontrado!")
-            loc_oPagina.txt_4c_Conta.Value  = ""
             loc_oPagina.txt_4c_DConta.Value = ""
             IF USED("cursor_4c_Vendedores")
                 USE IN cursor_4c_Vendedores
@@ -1670,7 +1669,6 @@ DEFINE CLASS Formcrf AS FormBase
                 ENDIF
                 MsgAviso("Produto n" + CHR(227) + "o encontrado.")
                 loc_oPagina.txt_4c_DContas.Value = ""
-                loc_oPagina.txt_4c_Busca.Value   = ""
                 IF PEMSTATUS(loc_oPagina.txt_4c_Busca, "SetFocus", 5)
                     loc_oPagina.txt_4c_Busca.SetFocus()
                 ENDIF

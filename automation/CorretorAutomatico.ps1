@@ -2002,7 +2002,7 @@ function Corrigir-MsgAvisoAntesDoPicker {
             # Olhar ate 5 linhas apos o fim do MsgAviso por THIS.AbrirBusca<X>()
             $achouAbrirBusca = -1
             for ($j = $idxMsgAvisoEnd + 1; $j -lt [Math]::Min($idxMsgAvisoEnd + 6, $Linhas.Count); $j++) {
-                if ($Linhas[$j] -match '(?i)^\s*THIS\.AbrirBusca\w+\s*\(') {
+                if ($Linhas[$j] -match '(?i)^\s*THIS\.(?:AbrirBusca|AbrirLookup)\w+\s*\(') {
                     $achouAbrirBusca = $j
                     break
                 }
@@ -2024,7 +2024,7 @@ function Corrigir-MsgAvisoAntesDoPicker {
                 Add-Correcao -Tipo "MSGAVISO-ANTES-PICKER" -Linha ($i + 1) `
                     -Original $linha.Trim() `
                     -Corrigido "(MsgAviso$multiLinha + clear-field removidos)" `
-                    -Descricao "MsgAviso redundante antes de THIS.AbrirBusca handler - Pattern #114 v2 (suporte multi-linha via continuation `;`)"
+                    -Descricao "MsgAviso redundante antes de THIS.AbrirBusca handler - Pattern #114 v3 (AbrirBusca OU AbrirLookup, multi-linha via continuation `;`)"
 
                 # Detectar indent da linha MsgAviso para adicionar comentario
                 $indent = ""
@@ -16648,6 +16648,86 @@ function Corrigir-AfterRowColChangeValidaCelula {
 }
 
 # =============================================================================
+# =============================================================================
+# Pattern #217 (Erro198, 2026-10-09, FormFap) - AUTO-FIX.
+# Handler Validar<Campo> que, ao nao achar o codigo, exibe MsgAviso("...nao
+# encontrad...") e APAGA o valor que o usuario digitou. O usuario digita, leva
+# o modal e o campo volta vazio: nao consegue preencher NUNCA. O legado nunca
+# avisa - o Valid abre o browse e so o ESC limpa (regra #37 / skill secao 244).
+#
+# Escopo deliberadamente estreito - o Pattern #114 ja trata o caso em que um
+# picker vem logo depois (remove mensagem E clear); aqui so existe a mensagem,
+# entao ela FICA e some apenas o clear do campo DIGITADO. A descricao continua
+# sendo limpa.
+#
+# Como distinguir campo digitado de campo descricao sem depender do nome: o
+# digitado eh LIDO no proprio handler (<ctrl>.Value do lado DIREITO) antes do
+# MsgAviso; a descricao eh write-only. Essa regra acertou 64 dos 66 sites do
+# sweep; os 2 restantes (handler que recebe o valor por PARAMETRO) nao casam e
+# ficam intocados, que eh o comportamento desejado.
+# Linha comentada (* ou &&) nunca conta - o texto "MsgAviso" dentro de um
+# comentario explicando o anti-padrao gerou o unico falso positivo do sweep.
+# =============================================================================
+function Corrigir-ClearCampoDigitadoAposMsgAviso {
+    param([string[]]$Linhas)
+
+    $resultado = [System.Collections.ArrayList]::new()
+    # 1a passada: para cada linha, de qual PROCEDURE ela faz parte
+    $inicioProc = @{}
+    $cur = 0
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:PROCEDURE|FUNCTION)\s+[A-Za-z0-9_]+') { $cur = $i }
+        $inicioProc[$i] = $cur
+    }
+
+    $remover = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -notmatch '(?i)MsgAviso\s*\(') { continue }
+        if ($linha -notmatch '(?i)encontrad') { continue }
+
+        # controles LIDOS nesta procedure antes do MsgAviso = campos digitados
+        $lidos = @{}
+        for ($k = $inicioProc[$i]; $k -lt $i; $k++) {
+            if ($Linhas[$k] -match '^\s*(\*|&&)') { continue }
+            foreach ($m in [regex]::Matches($Linhas[$k], '([A-Za-z0-9_\.]+)\.Value(?!\s*=[^=])')) {
+                $lidos[$m.Groups[1].Value.ToLower()] = $true
+            }
+        }
+        if ($lidos.Count -eq 0) { continue }
+
+        # fim do MsgAviso multi-linha (continuation `;`)
+        $fimMsg = $i
+        while ($fimMsg -lt ($Linhas.Count - 1) -and $Linhas[$fimMsg] -match ';\s*$') { $fimMsg++ }
+
+        for ($j = $fimMsg + 1; $j -lt [Math]::Min($fimMsg + 10, $Linhas.Count); $j++) {
+            if ($Linhas[$j] -match '(?i)^\s*THIS\.(?:AbrirBusca|AbrirLookup)\w+\s*\(') { break }  # caso do #114
+            if ($Linhas[$j] -match '(?i)^\s*(ENDIF|ELSE|RETURN|ENDPROC|ENDTRY|CATCH|ENDWITH)\b') { break }
+            if ($Linhas[$j] -match '^\s*([A-Za-z0-9_\.]+)\.Value\s*=\s*(""|''''|SPACE\(\s*\d+\s*\)|0)\s*$') {
+                $ctrl = $matches[1]
+                if ($lidos.ContainsKey($ctrl.ToLower())) { $remover[$j] = $ctrl }
+            }
+        }
+    }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($remover.ContainsKey($i)) {
+            Add-Correcao -Tipo "CLEAR-CAMPO-DIGITADO-APOS-MSGAVISO" -Linha ($i + 1) `
+                -Original $Linhas[$i].Trim() `
+                -Corrigido "(linha removida)" `
+                -Descricao ("Pattern #217: MsgAviso(...nao encontrad...) seguido de clear do campo DIGITADO ($($remover[$i])) " +
+                            "impede o usuario de preencher - ele digita, leva o modal e o campo volta vazio. O legado nunca " +
+                            "avisa e so o ESC limpa (regra #37). A mensagem fica; some so o clear do codigo digitado - a " +
+                            "descricao continua sendo limpa. Skill: secao 244. Origem: Erro198 (FormFap).")
+            continue
+        }
+        [void]$resultado.Add($Linhas[$i])
+    }
+
+    return $resultado.ToArray()
+}
+
 # Pattern #215 (Erro195, 2026-10-08, FormCco) - WARNING, nunca muta.
 # Handler ligado a BINDEVENT "KeyPress" que abre o picker (FormBuscaAuxiliar /
 # AbrirBusca* / AbrirLookup*) SEM testar par_nKeyCode dispara o dialogo a CADA
@@ -16982,6 +17062,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-KeyPressGuardLookup -Linhas $linhas
     $linhas = Corrigir-CmgReportButtonsOverflow -Linhas $linhas
     $linhas = Corrigir-MsgAvisoAntesDoPicker -Linhas $linhas
+    $linhas = Corrigir-ClearCampoDigitadoAposMsgAviso -Linhas $linhas
     $linhas = Corrigir-SigCdGcrDescrsColuna -Linhas $linhas
     $linhas = Corrigir-ReportFormToPrintTypo -Linhas $linhas
     $linhas = Corrigir-ReportFormSemGuard -Linhas $linhas

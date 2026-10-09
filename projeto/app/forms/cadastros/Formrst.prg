@@ -1191,7 +1191,6 @@ DEFINE CLASS Formrst AS FormBase
                 loc_oPg2.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaCli.Rclis)
             ELSE
                 MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Aviso")
-                loc_oPg2.txt_4c_Codigo.Value = ""
                 loc_oPg2.txt_4c_Desc.Value   = ""
                 loc_oPg2.txt_4c_Codigo.SetFocus()
             ENDIF
@@ -1238,7 +1237,6 @@ DEFINE CLASS Formrst AS FormBase
                 loc_oPg2.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaCli.Rclis)
             ELSE
                 MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Aviso")
-                loc_oPg2.txt_4c_Desc.Value   = ""
                 loc_oPg2.txt_4c_Codigo.Value = ""
                 loc_oPg2.txt_4c_Desc.SetFocus()
             ENDIF

@@ -14078,3 +14078,100 @@ forms sem offset confiavel.
 3. Dois arquivos do projeto (`FormCTA.prg`, `Formsigpdmp2.prg`) **ja estavam com LF puro** no repo
    (6397 e 3170 linhas, zero CRLF) antes de qualquer sweep. O script segue a convencao do proprio
    arquivo - nao confundir com quebra de CRLF.
+
+## 244. Universo de lookup VAZIO nao eh erro - `MsgAviso("Nenhum X encontrado") + apagar o digitado` impede o usuario de preencher (Erro198 2026-10-09)
+
+Sintoma reportado: *"no momento da inclusao nao consegue digitar o grupo pois ja aparece a mensagem
+de nenhum grupo encontrado"*. O usuario digita o codigo, sai do campo, leva um modal e o campo
+**volta vazio** - nao ha sequencia de teclas que resolva.
+
+O handler `Validar<Campo>` (LostFocus) trata "a consulta nao devolveu linha" como ERRO:
+
+```foxpro
+* ERRADO (FormFap.ValidarGrupoExec, como saiu da migracao)
+IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+    ...
+ELSE
+    MsgAviso("Nenhum grupo encontrado!", "Aviso")
+    loc_oPagina.txt_4c_CdGrupo.Value = ""      && <- apaga o que o usuario digitou
+    loc_oPagina.txt_4c_DsGrupo.Value = ""
+ENDIF
+```
+
+O legado **nunca avisa**. O `Valid` do `getCdGrupo` faz `Seek` e, falhando, abre o browse
+(`fwBuscaInt`/`fwBuscaExt`); so o `LastKey() == 27` (ESC) limpa o campo. Mensagem nenhuma.
+
+| situacao | o que fazer |
+|---|---|
+| ha picker logo depois | deixar **so** `THIS.AbrirLookup<X>()` / `THIS.AbrirBusca<X>()` - o picker JA eh o feedback, e o valor digitado vira LIKE prefix |
+| nao ha picker | pode manter a mensagem, mas **NUNCA** apagar o codigo digitado - limpar so a DESCRICAO |
+
+Apagar o campo digitado tambem viola a regra **#37**: valor atribuido fora da guarda
+`this_lSelecionou` ZERA o campo e esvazia o que dependia dele (filtro/grade).
+
+**O universo pode estar vazio por DADO, nao por codigo** - distinguir antes de "consertar" o SQL.
+No `FormFap` o filtro `WHERE BalFalPers = 1` devolve **0 das 44** linhas de `SigCdGcr` porque todas
+gravam `2`; e esse filtro eh **FIEL** ao legado (`CursorQuery('SigCdGcr','TmpGccr','BalFalPers',1)`
+no `Init` do SCX, e o mesmo filtro aparece em `SigReIfpBO`). Trocar o `1` por outra coisa seria
+inventar regra de negocio. O defeito de migracao eh **so** o modal + o apagamento; o universo vazio
+se resolve marcando "Balanco Falhas/Perdas = Sim" em algum grupo no Cadastro de Grupo de Contas.
+Medicao que separa os dois casos (so leitura):
+
+```sql
+SELECT balfalpers, COUNT(*) FROM SigCdGcr GROUP BY balfalpers   -- 2 -> 44 linhas; 1 -> nenhuma
+```
+
+### Sweep
+
+**78 sites em 26 forms** (2026-10-09). Classificacao antes de mutar (regra do WARNING massivo):
+
+| forma | sites | tratamento |
+|---|---|---|
+| `MsgAviso` + clear + `AbrirLookup<X>()` | 23 | removidos mensagem **e** clear (Pattern #114) |
+| `MsgAviso` + clear, sem picker imediato | 49 | removido so o clear do campo digitado |
+| `.Value = SPACE(N)` / `= 0` como clear | (dentro dos 23) | mesma coisa - o clear nem sempre eh `= ""` |
+| texto `MsgAviso` dentro de COMENTARIO | 1 (`FormSigPrGlp`) | falso positivo, nao mexido |
+
+Para separar "campo digitado" de "campo descricao" sem depender do nome: o campo **digitado** eh
+LIDO no handler (`<ctrl>.Value` do lado direito) antes do `MsgAviso`; a **descricao** eh
+write-only. Essa regra acertou 64 dos 66 sites; os 2 restantes (`FormEmn`, `FormRAN`) sao os que o
+handler recebe por PARAMETRO ou limpa com `= 0`, e foram tratados a mao.
+
+Defeito vizinho encontrado no mesmo form: `.Value = .F.` em TextBox **numerico** (7 sites) - a caixa
+vira LOGICA e exibe `F` na tela (ou a mascara crua `999,999.99`); as colunas sao `numeric(11,2)`.
+E a validacao do legado `Empty(Get_Prdz.Value)` tinha virado `EMPTY(ALLTRIM(TRANSFORM(...Value)))`,
+que **nunca** eh vazio (`"0"`/`"F"`) - a regra "Grupo/Conta obrigatorios quando Produzido vazio"
+nunca disparava. Testar o numerico DIRETO, como o legado.
+
+Auto-fix: CorretorAutomatico **#114 v3**. Origem: Erro198 (`FormFap`, "Envio para Recuperacao").
+
+## 245. META - pattern do Corretor que casa por NOME de metodo erra na variante de nomenclatura (Erro198 2026-10-09)
+
+O Pattern **#114** existe desde o Erro20 (2026-07-02), ja teve um v2 para `MsgAviso` multi-linha, e
+mesmo assim **23 sites sobreviveram a dois sweeps**. A premissa estava certa; o **casamento** nao:
+
+```powershell
+# v2 - casa UM nome de metodo
+if ($Linhas[$j] -match '(?i)^\s*THIS\.AbrirBusca\w+\s*\(') {
+# v3 - casa a FAMILIA
+if ($Linhas[$j] -match '(?i)^\s*THIS\.(?:AbrirBusca|AbrirLookup)\w+\s*\(') {
+```
+
+O PILAR 3 manda renomear, e o migrador batiza o mesmo helper ora `AbrirBusca<X>`, ora
+`AbrirLookup<X>` - no acervo os dois convivem. Um pattern ancorado em UM dos nomes fica
+**silenciosamente parcial**: nao falha, nao avisa, so nao corrige. Pior que nao existir, porque a
+licao consta como "propagada" e ninguem reexamina.
+
+**Ao escrever ou revisar pattern que ancora em nome** (metodo, property, cursor, prefixo de
+objeto), cobrir a FAMILIA, nao o especime: `AbrirBusca|AbrirLookup`, `Validar|Checar`,
+`txt_4c_|get_`. E medir a cobertura **antes e depois** - se a contagem de achados nao muda ao
+ampliar, ou a ampliacao foi inutil, ou o detector tem outro gargalo.
+
+Mesmo erro, outras formas ja vistas: o clear-field detectado so como `= ""` ignorava `= SPACE(N)` e
+`= 0`; a auditoria do Erro195 que so olhava handlers batizados `<X>LostFocus`. Ancorar em nome eh
+sempre aproximacao - declarar qual variante ficou de fora.
+
+Irma da licao do **Erro196** (regra #48): la o check existia e **nunca rodava retroativamente**;
+aqui o check roda em tudo e **casa de menos**. Os dois produzem o mesmo resultado - acervo sujo com
+a licao marcada como aprendida. Ao ampliar um pattern, rodar o sweep retroativo
+(`automation\CorrigirTodosFormularios.ps1`) ou registrar por escrito que o acervo antigo segue sujo.

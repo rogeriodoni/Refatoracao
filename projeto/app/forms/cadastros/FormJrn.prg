@@ -1796,8 +1796,6 @@ DEFINE CLASS FormJrn AS FormBase
             IF loc_nResult > 0 AND RECCOUNT("cursor_4c_ValCgo") > 0
                 loc_oPagina.txt_4c_CodCgo.Value = ALLTRIM(cursor_4c_ValCgo.ccargs)
             ELSE
-                MsgAviso("Cargo n" + CHR(227) + "o encontrado.")
-                loc_oPagina.txt_4c_CodCgo.Value = ""
                 THIS.AbrirLookupCargo()
             ENDIF
 
@@ -1886,8 +1884,6 @@ DEFINE CLASS FormJrn AS FormBase
                 loc_oPagina.txt_4c_CodCli.Value = ALLTRIM(cursor_4c_ValCli.iclis)
                 loc_oPagina.txt_4c_DesCli.Value = ALLTRIM(cursor_4c_ValCli.rclis)
             ELSE
-                MsgAviso("Funcion" + CHR(225) + "rio n" + CHR(227) + "o encontrado.")
-                loc_oPagina.txt_4c_CodCli.Value = ""
                 loc_oPagina.txt_4c_DesCli.Value = ""
                 THIS.AbrirLookupFuncionario()
             ENDIF
@@ -1978,8 +1974,6 @@ DEFINE CLASS FormJrn AS FormBase
                 loc_oPagina.txt_4c_CodCli.Value = ALLTRIM(cursor_4c_ValDes.iclis)
                 loc_oPagina.txt_4c_DesCli.Value = ALLTRIM(cursor_4c_ValDes.rclis)
             ELSE
-                MsgAviso("Funcion" + CHR(225) + "rio n" + CHR(227) + "o encontrado.")
-                loc_oPagina.txt_4c_DesCli.Value = ""
                 loc_oPagina.txt_4c_CodCli.Value = ""
                 THIS.AbrirLookupFuncionarioPorNome()
             ENDIF

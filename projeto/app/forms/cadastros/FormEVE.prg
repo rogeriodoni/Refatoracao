@@ -1150,7 +1150,6 @@ DEFINE CLASS FormEVE AS FormBase
             loc_cDesc = THIS.this_oBusinessObject.ObterDescricaoGrupo(loc_cGrupo)
             IF EMPTY(loc_cDesc)
                 MsgAviso("Grupo n" + CHR(227) + "o encontrado!", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_oPg2.txt_4c_Grupo.Value  = ""
                 loc_oPg2.txt_4c_DGrupo.Value = ""
                 loc_oPg2.txt_4c_Grupo.SetFocus()
             ELSE
@@ -1226,7 +1225,6 @@ DEFINE CLASS FormEVE AS FormBase
             loc_cDesc = THIS.this_oBusinessObject.ObterDescricaoConta(loc_cConta)
             IF EMPTY(loc_cDesc)
                 MsgAviso("Conta n" + CHR(227) + "o encontrada!", "Aten" + CHR(231) + CHR(227) + "o")
-                loc_oPg2.txt_4c_Conta.Value  = ""
                 loc_oPg2.txt_4c_DConta.Value = ""
                 loc_oPg2.txt_4c_Conta.SetFocus()
             ELSE

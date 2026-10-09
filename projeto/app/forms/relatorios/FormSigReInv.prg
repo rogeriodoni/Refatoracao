@@ -1088,7 +1088,6 @@ DEFINE CLASS FormSigReInv AS FormBase
 
                 IF loc_nValFat = 0
                     MsgAviso("Moeda n" + CHR(227) + "o encontrada.", "Aviso")
-                    THIS.txt_4c_MoeFator.Value = ""
                     THIS.txt_4c_ValFator.Value = 0
                 ELSE
                     THIS.txt_4c_ValFator.Value = loc_nValFat
@@ -1117,7 +1116,6 @@ DEFINE CLASS FormSigReInv AS FormBase
                     THIS.txt_4c_MoedaDesc.Value = TmpMoe.DMoes
                 ELSE
                     MsgAviso("Moeda n" + CHR(227) + "o encontrada.", "Aviso")
-                    THIS.txt_4c_Moeda.Value     = ""
                     THIS.txt_4c_MoedaDesc.Value = ""
                 ENDIF
             ENDIF
@@ -1151,7 +1149,6 @@ DEFINE CLASS FormSigReInv AS FormBase
                 ELSE
                     MsgAviso("Descri" + CHR(231) + CHR(227) + "o de moeda n" + CHR(227) + "o encontrada.", "Aviso")
                     THIS.txt_4c_Moeda.Value     = ""
-                    THIS.txt_4c_MoedaDesc.Value = ""
                 ENDIF
             ENDIF
             THIS.txt_4c_Moeda.Refresh()

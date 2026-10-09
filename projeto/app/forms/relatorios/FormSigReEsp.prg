@@ -1800,8 +1800,6 @@ DEFINE CLASS FormSigReEsp AS FormBase
             IF loc_nRes > 0 AND RECCOUNT("cursor_4c_ValTpOpe") = 1
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsTpOpe.Value = ALLTRIM(cursor_4c_ValTpOpe.Descrs)
             ELSE
-                MsgAviso("C" + CHR(243) + "digo de tipo n" + CHR(227) + "o encontrado.")
-                THIS.pgf_4c_Paginas.Page1.txt_4c_CdTpOpe.Value = 0
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsTpOpe.Value = "TODOS"
                 THIS.AbrirLookupTpOpePorCodigo()
             ENDIF
@@ -1899,8 +1897,6 @@ DEFINE CLASS FormSigReEsp AS FormBase
             IF loc_nRes > 0 AND RECCOUNT("cursor_4c_ValEstoque") = 1
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_ValEstoque.nomes)
             ELSE
-                MsgAviso("C" + CHR(243) + "digo de conta n" + CHR(227) + "o encontrado.")
-                THIS.pgf_4c_Paginas.Page1.txt_4c_CdEstoque.Value = SPACE(10)
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsEstoque.Value = SPACE(40)
                 THIS.AbrirLookupEstoquePorCodigo()
             ENDIF
@@ -1998,8 +1994,6 @@ DEFINE CLASS FormSigReEsp AS FormBase
             IF loc_nRes > 0 AND RECCOUNT("cursor_4c_ValVendedor") = 1
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsVendedor.Value = ALLTRIM(cursor_4c_ValVendedor.nomes)
             ELSE
-                MsgAviso("C" + CHR(243) + "digo de vendedor n" + CHR(227) + "o encontrado.")
-                THIS.pgf_4c_Paginas.Page1.txt_4c_CdVendedor.Value = SPACE(10)
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsVendedor.Value = SPACE(40)
                 THIS.AbrirLookupVendedorPorCodigo()
             ENDIF
@@ -2132,8 +2126,6 @@ DEFINE CLASS FormSigReEsp AS FormBase
             IF loc_nRes > 0 AND RECCOUNT("cursor_4c_ValMoeda") = 1
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_ValMoeda.dmoes)
             ELSE
-                MsgAviso("C" + CHR(243) + "digo de moeda n" + CHR(227) + "o encontrado.")
-                THIS.pgf_4c_Paginas.Page1.txt_4c_CdMoeda.Value = SPACE(3)
                 THIS.pgf_4c_Paginas.Page1.txt_4c_DsMoeda.Value = SPACE(15)
                 THIS.AbrirLookupMoedaPorCodigo()
             ENDIF

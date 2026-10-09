@@ -3017,7 +3017,6 @@ DEFINE CLASS Formche AS FormBase
                 ELSE
                     MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Origem.", ;
                         "Conta Origem")
-                    loc_oPg2.txt_4c_ContaOs.Value  = ""
                     loc_oPg2.txt_4c_DCONTAOs.Value = ""
                     loc_oPg2.txt_4c_ContaOs.SetFocus()
                 ENDIF
@@ -3135,7 +3134,6 @@ DEFINE CLASS Formche AS FormBase
                 ELSE
                     MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Destino.", ;
                         "Conta Destino")
-                    loc_oPg2.txt_4c_ContaDs.Value  = ""
                     loc_oPg2.txt_4c_DCONTADs.Value = ""
                     loc_oPg2.txt_4c_ContaDs.SetFocus()
                 ENDIF
@@ -3253,7 +3251,6 @@ DEFINE CLASS Formche AS FormBase
                 ELSE
                     MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Juros.", ;
                         "Conta Juros")
-                    loc_oPg2.txt_4c_ConJuro.Value = ""
                     loc_oPg2.txt_4c_DJuro.Value   = ""
                     loc_oPg2.txt_4c_ConJuro.SetFocus()
                 ENDIF

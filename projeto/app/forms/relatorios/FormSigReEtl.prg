@@ -1442,8 +1442,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Empresa.Value   = ALLTRIM(cemps)
                     loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(razas)
                 ELSE
-                    MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Empresa")
-                    loc_oPg.txt_4c_Empresa.Value   = ""
                     loc_oPg.txt_4c_DsEmpresa.Value = ""
                     THIS.AbrirLookupEmpresa()
                 ENDIF
@@ -1506,8 +1504,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Grupo.Value   = ALLTRIM(codigos)
                     loc_oPg.txt_4c_DsGrupo.Value = ALLTRIM(descrs)
                 ELSE
-                    MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
-                    loc_oPg.txt_4c_Grupo.Value   = ""
                     loc_oPg.txt_4c_DsGrupo.Value = ""
                     THIS.AbrirLookupGrupo()
                 ENDIF
@@ -1570,8 +1566,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Conta.Value   = ALLTRIM(iclis)
                     loc_oPg.txt_4c_DsConta.Value = ALLTRIM(rclis)
                 ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                    loc_oPg.txt_4c_Conta.Value   = ""
                     loc_oPg.txt_4c_DsConta.Value = ""
                     THIS.AbrirLookupConta()
                 ENDIF
@@ -1634,8 +1628,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Col.Value   = ALLTRIM(Colecoes)
                     loc_oPg.txt_4c_DsCol.Value = ALLTRIM(Descs)
                 ELSE
-                    MsgAviso("Cole" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", "Grupo de Venda")
-                    loc_oPg.txt_4c_Col.Value   = ""
                     loc_oPg.txt_4c_DsCol.Value = ""
                     THIS.AbrirLookupCol()
                 ENDIF
@@ -1700,8 +1692,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_DsBase.Value = ALLTRIM(Descs)
                     loc_oPg.txt_4c_Nvl2.Enabled = .T.
                 ELSE
-                    MsgAviso("Base n" + CHR(227) + "o encontrada.", "Base")
-                    loc_oPg.txt_4c_Base.Value   = ""
                     loc_oPg.txt_4c_DsBase.Value = ""
                     loc_oPg.txt_4c_Nvl2.Enabled = .F.
                     THIS.AbrirLookupBase()
@@ -1790,7 +1780,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                 ENDIF
                 IF !loc_lEncontrou
                     MsgAviso("N" + CHR(237) + "vel 2 n" + CHR(227) + "o encontrado para a Base informada.", "")
-                    loc_oPg.txt_4c_Nvl2.Value   = ""
                     loc_oPg.txt_4c_DsNvl2.Value = ""
                     loc_oPg.txt_4c_Nvl3.Enabled = .F.
                 ENDIF
@@ -1846,7 +1835,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                 ENDIF
                 IF !loc_lEncontrou
                     MsgAviso("N" + CHR(237) + "vel 3 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 2 informado.", "")
-                    loc_oPg.txt_4c_Nvl3.Value   = ""
                     loc_oPg.txt_4c_DsNvl3.Value = ""
                     loc_oPg.txt_4c_Nvl4.Enabled = .F.
                 ENDIF
@@ -1900,7 +1888,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                 ENDIF
                 IF !loc_lEncontrou
                     MsgAviso("N" + CHR(237) + "vel 4 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 3 informado.", "")
-                    loc_oPg.txt_4c_Nvl4.Value   = ""
                     loc_oPg.txt_4c_DsNvl4.Value = ""
                 ENDIF
             ENDIF
@@ -1931,9 +1918,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Local.Value   = ALLTRIM(Codigos)
                     loc_oPg.txt_4c_DsLocal.Value = ALLTRIM(Descricaos)
                 ELSE
-                    MsgAviso("Localiza" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", ;
-                             "Localiza" + CHR(231) + CHR(227) + "o")
-                    loc_oPg.txt_4c_Local.Value   = ""
                     loc_oPg.txt_4c_DsLocal.Value = ""
                     THIS.AbrirLookupLocal()
                 ENDIF
@@ -1996,8 +1980,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_CSGru.Value  = ALLTRIM(codigos)
                     loc_oPg.txt_4c_DsSGru.Value = ALLTRIM(descs)
                 ELSE
-                    MsgAviso("Grande Grupo n" + CHR(227) + "o encontrado.", "Grande Grupo")
-                    loc_oPg.txt_4c_CSGru.Value  = ""
                     loc_oPg.txt_4c_DsSGru.Value = ""
                     THIS.AbrirLookupCSGru()
                 ENDIF
@@ -2060,8 +2042,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Cgru.Value = ALLTRIM(CGrus)
                     loc_oPg.txt_4c_Dgru.Value = ALLTRIM(DGrus)
                 ELSE
-                    MsgAviso("Grupo de Produto n" + CHR(227) + "o encontrado.", "Grupo de Produto")
-                    loc_oPg.txt_4c_Cgru.Value = ""
                     loc_oPg.txt_4c_Dgru.Value = ""
                     THIS.AbrirLookupCgru()
                 ENDIF
@@ -2131,8 +2111,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_CSubG.Value = ALLTRIM(Codigos)
                     loc_oPg.txt_4c_DSubG.Value = ALLTRIM(Descricaos)
                 ELSE
-                    MsgAviso("Subgrupo n" + CHR(227) + "o encontrado.", "Subgrupo")
-                    loc_oPg.txt_4c_CSubG.Value = ""
                     loc_oPg.txt_4c_DSubG.Value = ""
                     THIS.AbrirLookupCSubG()
                 ENDIF
@@ -2195,8 +2173,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_CdProduto.Value = ALLTRIM(CPros)
                     loc_oPg.txt_4c_DsProduto.Value = ALLTRIM(DPros)
                 ELSE
-                    MsgAviso("Produto n" + CHR(227) + "o encontrado.", "Produto")
-                    loc_oPg.txt_4c_CdProduto.Value = ""
                     loc_oPg.txt_4c_DsProduto.Value = ""
                     THIS.AbrirLookupCdProduto()
                 ENDIF
@@ -2259,8 +2235,6 @@ DEFINE CLASS FormSigReEtl AS FormBase
                     loc_oPg.txt_4c_Forn.Value   = ALLTRIM(iclis)
                     loc_oPg.txt_4c_DsForn.Value = ALLTRIM(rclis)
                 ELSE
-                    MsgAviso("Fornecedor n" + CHR(227) + "o encontrado.", "Fornecedor")
-                    loc_oPg.txt_4c_Forn.Value   = ""
                     loc_oPg.txt_4c_DsForn.Value = ""
                     THIS.AbrirLookupForn()
                 ENDIF
