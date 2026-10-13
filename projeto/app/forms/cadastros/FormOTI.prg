@@ -3670,7 +3670,7 @@ DEFINE CLASS FormOTI AS FormBase
             ENDIF
 
             IF loc_lProsseguir
-                IF loc_oPg2.chk_4c_Chk_Inativar.Value
+                IF loc_oPg2.chk_4c_Chk_Inativar.Value = 1
                     IF PEMSTATUS(loc_oPg2, "obj_4c_Opc_realprev", 5)
                         loc_oPg2.obj_4c_Opc_realprev.Value = 1
                     ENDIF

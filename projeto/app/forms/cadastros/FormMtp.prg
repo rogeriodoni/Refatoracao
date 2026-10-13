@@ -1337,7 +1337,7 @@ DEFINE CLASS FormMtp AS FormBase
         THIS.this_oBusinessObject.this_nFmaxs   = loc_oPag2.txt_4c_Fmaxs.Value
         THIS.this_oBusinessObject.this_nValors  = loc_oPag2.txt_4c_Valors.Value
         THIS.this_oBusinessObject.this_cMoedas  = ALLTRIM(loc_oPag2.txt_4c_Moedas.Value)
-        THIS.this_oBusinessObject.this_lGanhos  = loc_oPag2.chk_4c_Ganhos.Value
+        THIS.this_oBusinessObject.this_lGanhos  = (loc_oPag2.chk_4c_Ganhos.Value = 1)
     ENDPROC
 
     *===========================================================================
@@ -1355,7 +1355,7 @@ DEFINE CLASS FormMtp AS FormBase
         loc_oPag2.txt_4c_Valors.Value    = THIS.this_oBusinessObject.this_nValors
         loc_oPag2.txt_4c_Moedas.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cMoedas)
         loc_oPag2.txt_4c_DescMoe.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cDescMoe)
-        loc_oPag2.chk_4c_Ganhos.Value    = THIS.this_oBusinessObject.this_lGanhos
+        loc_oPag2.chk_4c_Ganhos.Value    = IIF(THIS.this_oBusinessObject.this_lGanhos, 1, 0)
     ENDPROC
 
     *===========================================================================

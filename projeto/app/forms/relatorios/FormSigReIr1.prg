@@ -1636,7 +1636,7 @@ DEFINE CLASS FormSigReIr1 AS FormBase
                 loc_oPg.obj_4c_OptgDescricao.Value   = .this_nDescricao
                 loc_oPg.obj_4c_OptgBarras.Value      = .this_nBarras
                 loc_oPg.obj_4c_OptgLocalizacao.Value = .this_nLocalizacao
-                loc_oPg.chk_4c_ChkImpImg.Value       = .this_lImprimirImagem
+                loc_oPg.chk_4c_ChkImpImg.Value       = IIF(.this_lImprimirImagem, 1, 0)
             ENDWITH
             THIS.TipoRelatorioChange()
             ENDIF

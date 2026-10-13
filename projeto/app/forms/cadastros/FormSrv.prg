@@ -3499,18 +3499,18 @@ DEFINE CLASS FormSRV AS FormBase
             loc_oBO.this_nBaseMinimaInss   = loc_oImp.txt_4c__VMinBInss.Value
             loc_oBO.this_nBaseMinimaCsll   = loc_oImp.txt_4c__vMinBCsll.Value
 
-            loc_oBO.this_lMensalPis    = loc_oImp.chk_4c_Chk_bpisms.Value
-            loc_oBO.this_lMensalCofins = loc_oImp.chk_4c_Chk_bcofinms.Value
-            loc_oBO.this_lMensalIrrf   = loc_oImp.chk_4c_Chk_birrfms.Value
-            loc_oBO.this_lMensalInss   = loc_oImp.chk_4c_Chk_binssms.Value
-            loc_oBO.this_lMensalCsll   = loc_oImp.chk_4c_Chk_bcsllms.Value
+            loc_oBO.this_lMensalPis    = (loc_oImp.chk_4c_Chk_bpisms.Value = 1)
+            loc_oBO.this_lMensalCofins = (loc_oImp.chk_4c_Chk_bcofinms.Value = 1)
+            loc_oBO.this_lMensalIrrf   = (loc_oImp.chk_4c_Chk_birrfms.Value = 1)
+            loc_oBO.this_lMensalInss   = (loc_oImp.chk_4c_Chk_binssms.Value = 1)
+            loc_oBO.this_lMensalCsll   = (loc_oImp.chk_4c_Chk_bcsllms.Value = 1)
 
-            loc_oBO.this_lLancFinPis    = loc_oImp.chk_4c_Chk_LancFinPis.Value
-            loc_oBO.this_lLancFinCofins = loc_oImp.chk_4c_Ck_LancFinCofins.Value
-            loc_oBO.this_lLancFinIrrf   = loc_oImp.chk_4c_Ck_LancFinIrrf.Value
-            loc_oBO.this_lLancFinInss   = loc_oImp.chk_4c_Ck_LancFinInss.Value
-            loc_oBO.this_lLancFinCsll   = loc_oImp.chk_4c_Ck_LancFinCsll.Value
-            loc_oBO.this_lLancFinIss    = loc_oImp.chk_4c_Ck_LancFinIss.Value
+            loc_oBO.this_lLancFinPis    = (loc_oImp.chk_4c_Chk_LancFinPis.Value = 1)
+            loc_oBO.this_lLancFinCofins = (loc_oImp.chk_4c_Ck_LancFinCofins.Value = 1)
+            loc_oBO.this_lLancFinIrrf   = (loc_oImp.chk_4c_Ck_LancFinIrrf.Value = 1)
+            loc_oBO.this_lLancFinInss   = (loc_oImp.chk_4c_Ck_LancFinInss.Value = 1)
+            loc_oBO.this_lLancFinCsll   = (loc_oImp.chk_4c_Ck_LancFinCsll.Value = 1)
+            loc_oBO.this_lLancFinIss    = (loc_oImp.chk_4c_Ck_LancFinIss.Value = 1)
 
             loc_oBO.this_cCodOcorPis    = ALLTRIM(loc_oImp.txt_4c__CodOcorPis.Value)
             loc_oBO.this_cCodOcorCofins = ALLTRIM(loc_oImp.txt_4c__CodOcorCofins.Value)
@@ -3602,18 +3602,18 @@ DEFINE CLASS FormSRV AS FormBase
             loc_oImp.txt_4c__VMinBInss.Value   = loc_oBO.this_nBaseMinimaInss
             loc_oImp.txt_4c__vMinBCsll.Value   = loc_oBO.this_nBaseMinimaCsll
 
-            loc_oImp.chk_4c_Chk_bpisms.Value    = loc_oBO.this_lMensalPis
-            loc_oImp.chk_4c_Chk_bcofinms.Value  = loc_oBO.this_lMensalCofins
-            loc_oImp.chk_4c_Chk_birrfms.Value   = loc_oBO.this_lMensalIrrf
-            loc_oImp.chk_4c_Chk_binssms.Value   = loc_oBO.this_lMensalInss
-            loc_oImp.chk_4c_Chk_bcsllms.Value   = loc_oBO.this_lMensalCsll
+            loc_oImp.chk_4c_Chk_bpisms.Value    = IIF(loc_oBO.this_lMensalPis, 1, 0)
+            loc_oImp.chk_4c_Chk_bcofinms.Value  = IIF(loc_oBO.this_lMensalCofins, 1, 0)
+            loc_oImp.chk_4c_Chk_birrfms.Value   = IIF(loc_oBO.this_lMensalIrrf, 1, 0)
+            loc_oImp.chk_4c_Chk_binssms.Value   = IIF(loc_oBO.this_lMensalInss, 1, 0)
+            loc_oImp.chk_4c_Chk_bcsllms.Value   = IIF(loc_oBO.this_lMensalCsll, 1, 0)
 
-            loc_oImp.chk_4c_Chk_LancFinPis.Value    = loc_oBO.this_lLancFinPis
-            loc_oImp.chk_4c_Ck_LancFinCofins.Value  = loc_oBO.this_lLancFinCofins
-            loc_oImp.chk_4c_Ck_LancFinIrrf.Value    = loc_oBO.this_lLancFinIrrf
-            loc_oImp.chk_4c_Ck_LancFinInss.Value    = loc_oBO.this_lLancFinInss
-            loc_oImp.chk_4c_Ck_LancFinCsll.Value    = loc_oBO.this_lLancFinCsll
-            loc_oImp.chk_4c_Ck_LancFinIss.Value     = loc_oBO.this_lLancFinIss
+            loc_oImp.chk_4c_Chk_LancFinPis.Value    = IIF(loc_oBO.this_lLancFinPis, 1, 0)
+            loc_oImp.chk_4c_Ck_LancFinCofins.Value  = IIF(loc_oBO.this_lLancFinCofins, 1, 0)
+            loc_oImp.chk_4c_Ck_LancFinIrrf.Value    = IIF(loc_oBO.this_lLancFinIrrf, 1, 0)
+            loc_oImp.chk_4c_Ck_LancFinInss.Value    = IIF(loc_oBO.this_lLancFinInss, 1, 0)
+            loc_oImp.chk_4c_Ck_LancFinCsll.Value    = IIF(loc_oBO.this_lLancFinCsll, 1, 0)
+            loc_oImp.chk_4c_Ck_LancFinIss.Value     = IIF(loc_oBO.this_lLancFinIss, 1, 0)
 
             loc_oImp.txt_4c__CodOcorPis.Value    = loc_oBO.this_cCodOcorPis
             loc_oImp.txt_4c__CodOcorCofins.Value = loc_oBO.this_cCodOcorCofins

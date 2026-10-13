@@ -859,7 +859,7 @@ DEFINE CLASS FormOET AS FormBase
             loc_oPg2.txt_4c_Descrs.Value = ALLTRIM(THIS.this_oBusinessObject.this_cDescrs)
         ENDIF
         IF PEMSTATUS(loc_oPg2, "chk_4c_Opt_Justif", 5)
-            loc_oPg2.chk_4c_Opt_Justif.Value = THIS.this_oBusinessObject.this_lJustifs
+            loc_oPg2.chk_4c_Opt_Justif.Value = IIF(THIS.this_oBusinessObject.this_lJustifs, 1, 0)
         ENDIF
     ENDPROC
 

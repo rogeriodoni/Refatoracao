@@ -1411,8 +1411,8 @@ DEFINE CLASS FormTpt AS FormBase
         loc_oBO.this_nTransporteOk       = loc_oPagina.txt_4c_TransporteOk.Value
         loc_oBO.this_nProximoTransporte  = loc_oPagina.txt_4c_ProxTransporte.Value
         loc_oBO.this_nProximoRecebe      = loc_oPagina.txt_4c_ProxRecebe.Value
-        loc_oBO.this_lNaoChecarSequencia = loc_oPagina.chk_4c_NaoChecarSequencia.Value
-        loc_oBO.this_lExecutarMudaConta  = loc_oPagina.chk_4c_ExecutarMudaConta.Value
+        loc_oBO.this_lNaoChecarSequencia = (loc_oPagina.chk_4c_NaoChecarSequencia.Value = 1)
+        loc_oBO.this_lExecutarMudaConta  = (loc_oPagina.chk_4c_ExecutarMudaConta.Value = 1)
         loc_oBO.this_cGeracao            = ALLTRIM(loc_oPagina.txt_4c_Geracao.Value)
         loc_oBO.this_cLeitura            = ALLTRIM(loc_oPagina.txt_4c_Leitura.Value)
         loc_oBO.this_cRecepcao           = ALLTRIM(loc_oPagina.txt_4c_Recepcao.Value)
@@ -1423,8 +1423,8 @@ DEFINE CLASS FormTpt AS FormBase
         loc_oBO.this_cFtpSenha           = ALLTRIM(loc_oPagina.txt_4c_Ftpsenha.Value)
         loc_oBO.this_cDirFtpEnvio        = ALLTRIM(loc_oPagina.txt_4c_DirFtpEnvio.Value)
         loc_oBO.this_cDirFtpRecepcao     = ALLTRIM(loc_oPagina.txt_4c_DirFtpRecepcao.Value)
-        loc_oBO.this_lLimpaDirLocal      = loc_oPagina.chk_4c_LimpaDirLocal.Value
-        loc_oBO.this_lLimpaDirFtp        = loc_oPagina.chk_4c_LimpaDirFtp.Value
+        loc_oBO.this_lLimpaDirLocal      = (loc_oPagina.chk_4c_LimpaDirLocal.Value = 1)
+        loc_oBO.this_lLimpaDirFtp        = (loc_oPagina.chk_4c_LimpaDirFtp.Value = 1)
     ENDPROC
 
     *===========================================================================
@@ -1444,8 +1444,8 @@ DEFINE CLASS FormTpt AS FormBase
         loc_oPagina.txt_4c_TransporteOk.Value       = loc_oBO.this_nTransporteOk
         loc_oPagina.txt_4c_ProxTransporte.Value     = loc_oBO.this_nProximoTransporte
         loc_oPagina.txt_4c_ProxRecebe.Value         = loc_oBO.this_nProximoRecebe
-        loc_oPagina.chk_4c_NaoChecarSequencia.Value = loc_oBO.this_lNaoChecarSequencia
-        loc_oPagina.chk_4c_ExecutarMudaConta.Value  = loc_oBO.this_lExecutarMudaConta
+        loc_oPagina.chk_4c_NaoChecarSequencia.Value = IIF(loc_oBO.this_lNaoChecarSequencia, 1, 0)
+        loc_oPagina.chk_4c_ExecutarMudaConta.Value  = IIF(loc_oBO.this_lExecutarMudaConta, 1, 0)
         loc_oPagina.txt_4c_Geracao.Value            = loc_oBO.this_cGeracao
         loc_oPagina.txt_4c_Leitura.Value            = loc_oBO.this_cLeitura
         loc_oPagina.txt_4c_Recepcao.Value           = loc_oBO.this_cRecepcao
@@ -1457,8 +1457,8 @@ DEFINE CLASS FormTpt AS FormBase
         loc_oPagina.txt_4c_Senha2.Value             = ""
         loc_oPagina.txt_4c_DirFtpEnvio.Value        = loc_oBO.this_cDirFtpEnvio
         loc_oPagina.txt_4c_DirFtpRecepcao.Value     = loc_oBO.this_cDirFtpRecepcao
-        loc_oPagina.chk_4c_LimpaDirLocal.Value      = loc_oBO.this_lLimpaDirLocal
-        loc_oPagina.chk_4c_LimpaDirFtp.Value        = loc_oBO.this_lLimpaDirFtp
+        loc_oPagina.chk_4c_LimpaDirLocal.Value      = IIF(loc_oBO.this_lLimpaDirLocal, 1, 0)
+        loc_oPagina.chk_4c_LimpaDirFtp.Value        = IIF(loc_oBO.this_lLimpaDirFtp, 1, 0)
     ENDPROC
 
     *===========================================================================

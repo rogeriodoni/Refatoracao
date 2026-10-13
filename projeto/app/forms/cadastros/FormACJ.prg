@@ -1142,7 +1142,7 @@ DEFINE CLASS FormACJ AS FormBase
             loc_oPg2.txt_4c_Razaos.Value         = ALLTRIM(loc_oBO.this_cRazaos)
             loc_oPg2.txt_4c_Usuars.Value         = ALLTRIM(loc_oBO.this_cUsuarsCriador)
             loc_oPg2.txt_4c_DataIncs.Value       = loc_cData
-            loc_oPg2.chk_4c_ChkInativos.Value    = loc_oBO.this_lInativas
+            loc_oPg2.chk_4c_ChkInativos.Value    = IIF(loc_oBO.this_lInativas, 1, 0)
             THIS.CarregarGridUsuarios()
         CATCH TO loc_oErro
             MsgErro("Erro ao exibir dados do JOB:" + CHR(13) + loc_oErro.Message, "Erro")

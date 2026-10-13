@@ -3172,7 +3172,7 @@ DEFINE CLASS FormBAL AS FormBase
                 loc_oPg2.txt_4c_ColecoesI.Value       = ALLTRIM(.this_cColecoesi)
                 loc_oPg2.txt_4c_ColecoesF.Value       = ALLTRIM(.this_cColecoesf)
                 loc_oPg2.obj_4c_GetObs.Value          = ALLTRIM(.this_cObs)
-                loc_oPg2.chk_4c_Fwcheckbox2.Value    = .this_lTratas
+                loc_oPg2.chk_4c_Fwcheckbox2.Value    = IIF(.this_lTratas, 1, 0)
                 loc_oPg2.chk_4c_Fwcheckbox1.Value    = IIF(.this_nSepestqs = 1, 1, 0)
                 loc_oPg2.chk_4c_Fwcheckbox3.Value    = IIF(.this_nLeitgructa = 1, 1, 0)
                 loc_oPg2.obj_4c_Opt_Agrupa.Value      = IIF(.this_nAgrupas > 0, .this_nAgrupas, 1)
@@ -3527,7 +3527,7 @@ DEFINE CLASS FormBAL AS FormBase
             loc_oPg3.txt_4c_Reffs.Value  = ""
             loc_oPg3.txt_4c_CodCor.Value = ""
             loc_oPg3.txt_4c_Ultima.Value = ""
-            IF !loc_oPg3.chk_4c_Chk_RepeteObs.Value
+            IF loc_oPg3.chk_4c_Chk_RepeteObs.Value != 1
                 loc_oPg3.obj_4c_Get_Obs.Value = ""
             ENDIF
         CATCH TO loc_oErro

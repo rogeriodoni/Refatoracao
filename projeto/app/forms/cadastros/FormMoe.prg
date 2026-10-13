@@ -1703,12 +1703,12 @@ DEFINE CLASS FormMoe AS FormBase
         WITH THIS.this_oBusinessObject
             loc_oPg2.txt_4c_Moeda.Value          = ALLTRIM(.this_cCodigo)
             loc_oPg2.txt_4c_Descricao.Value       = ALLTRIM(.this_cDescricao)
-            loc_oPg2.chk_4c_Cotacao.Value         = .this_lCotas
+            loc_oPg2.chk_4c_Cotacao.Value         = IIF(.this_lCotas, 1, 0)
             loc_oPg2.txt_4c_Fmult.Value           = ALLTRIM(.this_cFmults)
             loc_oPg2.obj_4c_SpnNordrels.Value     = .this_nNordrels
             loc_oPg2.txt_4c_MoeEq.Value           = ALLTRIM(.this_cMoeqs)
             loc_oPg2.txt_4c_Qtde.Value            = .this_nQtdeqs
-            loc_oPg2.chk_4c_Tabref.Value          = .this_lTabrefs
+            loc_oPg2.chk_4c_Tabref.Value          = IIF(.this_lTabrefs, 1, 0)
             loc_oPg2.txt_4c_FPG.Value             = ALLTRIM(.this_cFpags)
             loc_oPg2.txt_4c_Toleras.Value         = .this_nToleras
             loc_oPg2.obj_4c_OptTipo.Value         = IIF(.this_nConsultas >= 1 AND .this_nConsultas <= 2, .this_nConsultas, 1)

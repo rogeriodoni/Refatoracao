@@ -1200,7 +1200,7 @@ DEFINE CLASS FormRPT AS FormBase
                 ENDIF
 
                 IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
-                    loc_oSubPg1.chk_4c_Ativo.Value = THIS.this_oBusinessObject.this_lAtivo
+                    loc_oSubPg1.chk_4c_Ativo.Value = IIF(THIS.this_oBusinessObject.this_lAtivo, 1, 0)
                 ENDIF
 
                 IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtCriacao", 5)

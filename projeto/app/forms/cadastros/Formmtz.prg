@@ -1275,7 +1275,7 @@ DEFINE CLASS Formmtz AS FormBase
             loc_oPagina.txt_4c_Sconta.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cSContas)
             loc_oPagina.txt_4c_Sdconta.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cSDesconta)
             loc_oPagina.txt_4c_Moeda.Value     = ALLTRIM(THIS.this_oBusinessObject.this_cMoeda)
-            loc_oPagina.chk_4c_Inativa.Value    = THIS.this_oBusinessObject.this_lInativas
+            loc_oPagina.chk_4c_Inativa.Value    = IIF(THIS.this_oBusinessObject.this_lInativas, 1, 0)
             loc_oPagina.txt_4c_ValorTotal.Value = THIS.this_oBusinessObject.this_nValorTotal
 
             *-- Datas auditoria (readonly)

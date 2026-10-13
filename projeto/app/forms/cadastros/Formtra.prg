@@ -2067,8 +2067,8 @@ DEFINE CLASS Formtra AS FormBase
         loc_oPg.txt_4c_DirFtpRecepcao.Value        = loc_oBo.this_cDirFtpRecepcao
         loc_oPg.txt_4c_DriveGeracao.Value          = loc_oBo.this_cDriveGeracao
         loc_oPg.txt_4c_DriveLeitura.Value          = loc_oBo.this_cDriveLeitura
-        loc_oPg.chk_4c_LimpaDiretorioFtp.Value     = loc_oBo.this_lLimpaDiretorioFtp
-        loc_oPg.chk_4c_LimpaDiretorioLocal.Value   = loc_oBo.this_lLimpaDiretorioLocal
+        loc_oPg.chk_4c_LimpaDiretorioFtp.Value     = IIF(loc_oBo.this_lLimpaDiretorioFtp, 1, 0)
+        loc_oPg.chk_4c_LimpaDiretorioLocal.Value   = IIF(loc_oBo.this_lLimpaDiretorioLocal, 1, 0)
         loc_oPg.txt_4c_UrlTransp.Value             = loc_oBo.this_cUrlTransp
         loc_oPg.opt_4c_TipoTransporte.Value        = IIF(loc_oBo.this_nTipoTransporte >= 1 ;
             AND loc_oBo.this_nTipoTransporte <= 4, loc_oBo.this_nTipoTransporte, 1)

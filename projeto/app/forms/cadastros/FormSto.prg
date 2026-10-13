@@ -870,14 +870,14 @@ DEFINE CLASS FormSto AS FormBase
 
         loc_oBO.this_cCodigo         = ALLTRIM(loc_oPagina.txt_4c_Codigo.Value)
         loc_oBO.this_cDescricao      = ALLTRIM(loc_oPagina.txt_4c_Descricao.Value)
-        loc_oBO.this_lEntregaDomingo = loc_oPagina.chk_4c_ChkEntregaDo.Value
-        loc_oBO.this_lEntregaSegunda = loc_oPagina.chk_4c_ChkEntrega02.Value
-        loc_oBO.this_lEntregaTerca   = loc_oPagina.chk_4c_ChkEntrega03.Value
-        loc_oBO.this_lEntregaQuarta  = loc_oPagina.chk_4c_ChkEntrega04.Value
-        loc_oBO.this_lEntregaQuinta  = loc_oPagina.chk_4c_ChkEntrega05.Value
-        loc_oBO.this_lEntregaSexta   = loc_oPagina.chk_4c_ChkEntrega06.Value
-        loc_oBO.this_lEntregaSabado  = loc_oPagina.chk_4c_ChkEntregaSa.Value
-        loc_oBO.this_lEntregaFeriado = loc_oPagina.chk_4c_ChkEntregaFe.Value
+        loc_oBO.this_lEntregaDomingo = (loc_oPagina.chk_4c_ChkEntregaDo.Value = 1)
+        loc_oBO.this_lEntregaSegunda = (loc_oPagina.chk_4c_ChkEntrega02.Value = 1)
+        loc_oBO.this_lEntregaTerca   = (loc_oPagina.chk_4c_ChkEntrega03.Value = 1)
+        loc_oBO.this_lEntregaQuarta  = (loc_oPagina.chk_4c_ChkEntrega04.Value = 1)
+        loc_oBO.this_lEntregaQuinta  = (loc_oPagina.chk_4c_ChkEntrega05.Value = 1)
+        loc_oBO.this_lEntregaSexta   = (loc_oPagina.chk_4c_ChkEntrega06.Value = 1)
+        loc_oBO.this_lEntregaSabado  = (loc_oPagina.chk_4c_ChkEntregaSa.Value = 1)
+        loc_oBO.this_lEntregaFeriado = (loc_oPagina.chk_4c_ChkEntregaFe.Value = 1)
     ENDPROC
 
     *===========================================================================
@@ -890,14 +890,14 @@ DEFINE CLASS FormSto AS FormBase
 
         loc_oPagina.txt_4c_Codigo.Value      = loc_oBO.this_cCodigo
         loc_oPagina.txt_4c_Descricao.Value   = loc_oBO.this_cDescricao
-        loc_oPagina.chk_4c_ChkEntregaDo.Value = loc_oBO.this_lEntregaDomingo
-        loc_oPagina.chk_4c_ChkEntrega02.Value = loc_oBO.this_lEntregaSegunda
-        loc_oPagina.chk_4c_ChkEntrega03.Value = loc_oBO.this_lEntregaTerca
-        loc_oPagina.chk_4c_ChkEntrega04.Value = loc_oBO.this_lEntregaQuarta
-        loc_oPagina.chk_4c_ChkEntrega05.Value = loc_oBO.this_lEntregaQuinta
-        loc_oPagina.chk_4c_ChkEntrega06.Value = loc_oBO.this_lEntregaSexta
-        loc_oPagina.chk_4c_ChkEntregaSa.Value = loc_oBO.this_lEntregaSabado
-        loc_oPagina.chk_4c_ChkEntregaFe.Value = loc_oBO.this_lEntregaFeriado
+        loc_oPagina.chk_4c_ChkEntregaDo.Value = IIF(loc_oBO.this_lEntregaDomingo, 1, 0)
+        loc_oPagina.chk_4c_ChkEntrega02.Value = IIF(loc_oBO.this_lEntregaSegunda, 1, 0)
+        loc_oPagina.chk_4c_ChkEntrega03.Value = IIF(loc_oBO.this_lEntregaTerca, 1, 0)
+        loc_oPagina.chk_4c_ChkEntrega04.Value = IIF(loc_oBO.this_lEntregaQuarta, 1, 0)
+        loc_oPagina.chk_4c_ChkEntrega05.Value = IIF(loc_oBO.this_lEntregaQuinta, 1, 0)
+        loc_oPagina.chk_4c_ChkEntrega06.Value = IIF(loc_oBO.this_lEntregaSexta, 1, 0)
+        loc_oPagina.chk_4c_ChkEntregaSa.Value = IIF(loc_oBO.this_lEntregaSabado, 1, 0)
+        loc_oPagina.chk_4c_ChkEntregaFe.Value = IIF(loc_oBO.this_lEntregaFeriado, 1, 0)
     ENDPROC
 
     *===========================================================================

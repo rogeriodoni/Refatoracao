@@ -1864,10 +1864,10 @@ DEFINE CLASS Formsigregli AS FormBase
             THIS.cnt_4c_Etiquetas.obj_4c_Get_Boleto.Value     = .this_nBoleto
             THIS.cnt_4c_Etiquetas.obj_4c_Get_Processo.Value   = .this_nProcesso
             THIS.cnt_4c_Etiquetas.obj_4c_Get_Complemto.Value  = .this_nComplemto
-            THIS.cnt_4c_Etiquetas.chk_4c_Chknome.Value        = .this_lNome
-            THIS.cnt_4c_Etiquetas.chk_4c_Chk2Linhas.Value     = .this_l2Linhas
+            THIS.cnt_4c_Etiquetas.chk_4c_Chknome.Value        = IIF(.this_lNome, 1, 0)
+            THIS.cnt_4c_Etiquetas.chk_4c_Chk2Linhas.Value     = IIF(.this_l2Linhas, 1, 0)
             THIS.cnt_4c_Etiquetas.obj_4c_OptDescs.Value       = .this_nOptDescs
-            THIS.cnt_4c_Etiquetas.chk_4c_ChkDatager.Value     = .this_lDatager
+            THIS.cnt_4c_Etiquetas.chk_4c_ChkDatager.Value     = IIF(.this_lDatager, 1, 0)
 
             THIS.cnt_4c_Relacao.obj_4c_Get_Pedido.Value  = .this_nRelPedido
             THIS.cnt_4c_Relacao.obj_4c_Get_Resumo.Value  = .this_nResumo

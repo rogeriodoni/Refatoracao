@@ -2423,12 +2423,12 @@ DEFINE CLASS FormTme AS FormBase
             loc_oPg2.txt_4c_DirGeracao.Value  = THIS.this_oBusinessObject.this_cDirGeracao
             loc_oPg2.txt_4c_ClrArqOks.Value   = TRANSFORM(THIS.this_oBusinessObject.this_nTransporteOk)
             loc_oPg2.txt_4c_DirLeitura.Value  = THIS.this_oBusinessObject.this_cDirLeitura
-            loc_oPg2.chk_4c_Seqnum.Value      = THIS.this_oBusinessObject.this_lNaoChecarSequencia
+            loc_oPg2.chk_4c_Seqnum.Value      = IIF(THIS.this_oBusinessObject.this_lNaoChecarSequencia, 1, 0)
             loc_oPg2.txt_4c_DirRecepcao.Value = THIS.this_oBusinessObject.this_cDirRecepcao
             loc_oPg2.txt_4c_DirArquivar.Value = THIS.this_oBusinessObject.this_cDirArquivar
             loc_oPg2.txt_4c_Tpconexao.Value   = THIS.this_oBusinessObject.this_cTipoConexao
-            loc_oPg2.chk_4c_Chklocdel.Value   = THIS.this_oBusinessObject.this_lLimpaDirEnvio
-            loc_oPg2.chk_4c_Chkftpdel.Value   = THIS.this_oBusinessObject.this_lLimpaDirFtp
+            loc_oPg2.chk_4c_Chklocdel.Value   = IIF(THIS.this_oBusinessObject.this_lLimpaDirEnvio, 1, 0)
+            loc_oPg2.chk_4c_Chkftpdel.Value   = IIF(THIS.this_oBusinessObject.this_lLimpaDirFtp, 1, 0)
             loc_oPg2.txt_4c_Ftpend.Value      = THIS.this_oBusinessObject.this_cFtpEndereco
             loc_oPg2.txt_4c_Ftpusuario.Value  = THIS.this_oBusinessObject.this_cFtpUsuario
             loc_oPg2.txt_4c_Dirftpts.Value    = THIS.this_oBusinessObject.this_cDirFtpEnvio
@@ -2760,12 +2760,12 @@ DEFINE CLASS FormTme AS FormBase
         THIS.this_oBusinessObject.this_cDirGeracao         = ALLTRIM(loc_oPg2.txt_4c_DirGeracao.Value)
         THIS.this_oBusinessObject.this_nTransporteOk       = loc_oPg2.txt_4c_ClrArqOks.Value
         THIS.this_oBusinessObject.this_cDirLeitura         = ALLTRIM(loc_oPg2.txt_4c_DirLeitura.Value)
-        THIS.this_oBusinessObject.this_lNaoChecarSequencia = loc_oPg2.chk_4c_Seqnum.Value
+        THIS.this_oBusinessObject.this_lNaoChecarSequencia = (loc_oPg2.chk_4c_Seqnum.Value = 1)
         THIS.this_oBusinessObject.this_cDirRecepcao        = ALLTRIM(loc_oPg2.txt_4c_DirRecepcao.Value)
         THIS.this_oBusinessObject.this_cDirArquivar        = ALLTRIM(loc_oPg2.txt_4c_DirArquivar.Value)
         THIS.this_oBusinessObject.this_cTipoConexao        = UPPER(ALLTRIM(loc_oPg2.txt_4c_Tpconexao.Value))
-        THIS.this_oBusinessObject.this_lLimpaDirEnvio      = loc_oPg2.chk_4c_Chklocdel.Value
-        THIS.this_oBusinessObject.this_lLimpaDirFtp        = loc_oPg2.chk_4c_Chkftpdel.Value
+        THIS.this_oBusinessObject.this_lLimpaDirEnvio      = (loc_oPg2.chk_4c_Chklocdel.Value = 1)
+        THIS.this_oBusinessObject.this_lLimpaDirFtp        = (loc_oPg2.chk_4c_Chkftpdel.Value = 1)
         THIS.this_oBusinessObject.this_cFtpEndereco        = ALLTRIM(loc_oPg2.txt_4c_Ftpend.Value)
         THIS.this_oBusinessObject.this_cFtpUsuario         = ALLTRIM(loc_oPg2.txt_4c_Ftpusuario.Value)
         THIS.this_oBusinessObject.this_cDirFtpEnvio        = ALLTRIM(loc_oPg2.txt_4c_Dirftpts.Value)
