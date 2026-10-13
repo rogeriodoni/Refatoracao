@@ -274,10 +274,20 @@ DEFINE CLASS BusinessBase AS Custom
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * METODOS PROTEGIDOS (a serem implementados/sobrescritos nas subclasses)
+    * METODOS DE SUBCLASSE (a serem implementados/sobrescritos nas subclasses)
+    *
+    * LimparDados, ValidarDados, RegistrarAuditoria, Inserir e Atualizar NAO sao
+    * PROTECTED: ha forms que os chamam de fora (`THIS.this_oBusinessObject.
+    * ValidarDados()` antes do Salvar, Inserir/Atualizar direto em operacionais).
+    * Medido no VFP9: PROTECTED na base PREVALECE sobre o override publico da
+    * subclasse - `PEMSTATUS(oBO, "ValidarDados", 2)` = .T. mesmo com o BO
+    * declarando `PROCEDURE ValidarDados()` sem modificador - e a chamada externa
+    * compila limpo e estoura ao gravar com "Property VALIDARDADOS is not found"
+    * (Erro199: 48 sites em 29 forms). ExecutarExclusao CONTINUA protegido: de
+    * fora, sempre Excluir().
     *--------------------------------------------------------------------------
 
-    PROTECTED PROCEDURE LimparDados()
+    PROCEDURE LimparDados()
         * Subclasses devem limpar suas propriedades especificas
         THIS.this_cMensagemErro = ""
     ENDPROC
@@ -286,7 +296,7 @@ DEFINE CLASS BusinessBase AS Custom
         * Subclasses podem definir valores padrao para novos registros
     ENDPROC
 
-    PROTECTED PROCEDURE ValidarDados()
+    PROCEDURE ValidarDados()
         * Subclasses devem implementar suas validacoes especificas
         * Retornar .T. se valido, .F. se invalido
         * Definir THIS.this_cMensagemErro em caso de erro
@@ -317,7 +327,7 @@ DEFINE CLASS BusinessBase AS Custom
     * RegistrarAuditoria - Registra operacao no log de auditoria
     * Parametros: par_cOperacao = "INSERT", "UPDATE" ou "DELETE"
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
         LOCAL loc_cSQL, loc_cChave
 
         * Obter chave primaria do registro
@@ -350,14 +360,14 @@ DEFINE CLASS BusinessBase AS Custom
         RETURN ""
     ENDPROC
 
-    PROTECTED PROCEDURE Inserir()
+    PROCEDURE Inserir()
         * Subclasses devem implementar a logica de INSERT
         * Retornar .T. se sucesso, .F. se erro
         THIS.this_cMensagemErro = "M" + CHR(233) + "todo Inserir() n" + CHR(227) + "o implementado"
         RETURN .F.
     ENDPROC
 
-    PROTECTED PROCEDURE Atualizar()
+    PROCEDURE Atualizar()
         * Subclasses devem implementar a logica de UPDATE
         * Retornar .T. se sucesso, .F. se erro
         THIS.this_cMensagemErro = "M" + CHR(233) + "todo Atualizar() n" + CHR(227) + "o implementado"

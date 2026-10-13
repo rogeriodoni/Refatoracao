@@ -98,7 +98,7 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
     * Equivalente ao PROCEDURE processamento do legado SIGRECTP.
     * Tambem cria cursor crCabecalho para cabecalho do relatorio FRX.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE PrepararDados()
+    PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_oErro
         LOCAL loc_cSQL, loc_cWhere, loc_cJoin, loc_nResult
         LOCAL loc_cDtIniSQL, loc_cDtFimSQL

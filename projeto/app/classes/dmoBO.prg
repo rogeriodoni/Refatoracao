@@ -399,7 +399,7 @@ DEFINE CLASS dmoBO AS BusinessBase
     * Inserir - INSERT cabecalho do movimento de desmontagem em SigMvCab
     * Apenas o cabecalho minimo - campos de origem/destino sao atualizados por Atualizar()
     *==========================================================================
-    PROTECTED PROCEDURE Inserir()
+    PROCEDURE Inserir()
         LOCAL loc_lSucesso, loc_cSQL, loc_nNumes, loc_cMascNum, loc_oErro
         LOCAL loc_cEmps, loc_cDopes, loc_cIdChaves, loc_cEmpDopNums, loc_cEmpGopNums
         loc_lSucesso = .F.
@@ -462,7 +462,7 @@ DEFINE CLASS dmoBO AS BusinessBase
     *==========================================================================
     * Atualizar - UPDATE SigMvCab com dados de origem/destino/responsavel/data
     *==========================================================================
-    PROTECTED PROCEDURE Atualizar()
+    PROCEDURE Atualizar()
         LOCAL loc_lSucesso, loc_cSQL, loc_oErro
         LOCAL loc_cEmpDopNums, loc_cEmpGopNums, loc_lContinuar
         loc_lSucesso   = .F.

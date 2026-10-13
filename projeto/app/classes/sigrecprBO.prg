@@ -65,7 +65,7 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
     * PrepararDados - Monta SQL com filtros e popula CsRelatorio para impressao
     * Chamado por Imprimir() e Visualizar()
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE PrepararDados()
+    PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_cSQL, loc_cVerTipo, loc_cCampoDt
         LOCAL loc_cDataIni, loc_cDataFin, loc_nResult
 

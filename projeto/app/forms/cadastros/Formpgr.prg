@@ -1122,7 +1122,8 @@ DEFINE CLASS Formpgr AS FormBase
         IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
             IF MsgConfirma("Confirma exclus" + CHR(227) + "o do lan" + CHR(231) + ;
                     "amento '" + loc_cChave + "'?")
-                IF THIS.this_oBusinessObject.ExecutarExclusao()
+                *-- Excluir() (PUBLIC) - ExecutarExclusao() eh PROTECTED no BusinessBase
+                IF THIS.this_oBusinessObject.Excluir()
                     MsgSucesso("Lan" + CHR(231) + "amento exclu" + CHR(237) + "do com sucesso!")
                     THIS.CarregarLista()
                 ENDIF

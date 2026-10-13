@@ -59,7 +59,7 @@ DEFINE CLASS SigPdMp5BO AS BusinessBase
     *--------------------------------------------------------------------------
     * CarregarDoCursor - Carrega linha selecionada do grid (xMFas)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
 

@@ -109,7 +109,7 @@ DEFINE CLASS SigPrSddBO AS BusinessBase
     *==========================================================================
     * ValidarDados - Valida campos obrigatorios antes de salvar
     *==========================================================================
-    PROTECTED PROCEDURE ValidarDados()
+    PROCEDURE ValidarDados()
         LOCAL loc_cMensagem
 
         loc_cMensagem = ""

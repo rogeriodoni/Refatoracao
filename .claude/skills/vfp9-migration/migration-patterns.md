@@ -14175,3 +14175,67 @@ Irma da licao do **Erro196** (regra #48): la o check existia e **nunca rodava re
 aqui o check roda em tudo e **casa de menos**. Os dois produzem o mesmo resultado - acervo sujo com
 a licao marcada como aprendida. Ao ampliar um pattern, rodar o sweep retroativo
 (`automation\CorrigirTodosFormularios.ps1`) ou registrar por escrito que o acervo antigo segue sujo.
+
+## 246. Form chama metodo PROTECTED do BO - o PROTECTED da BusinessBase vale para a subclasse (Erro199 2026-10-12)
+
+Ao clicar Confirmar no `FormMtt` (Cadastro de Metal/Teor) o VFP exibia o **Program Error cru**:
+
+```
+Property VALIDARDADOS is not found.
+```
+
+```foxpro
+* FormMtt.BtnSalvarClick
+THIS.FormParaBO()
+IF THIS.this_oBusinessObject.ValidarDados()     && <- estoura aqui
+    IF THIS.this_oBusinessObject.Salvar()
+```
+
+O `MttBO` declara `PROCEDURE ValidarDados()` **sem** `PROTECTED` - lendo so o BO, parece publico.
+Mas a `BusinessBase` declarava `PROTECTED PROCEDURE ValidarDados()`, e **o PROTECTED da base
+prevalece**. Medido no VFP9 (2026-10-12):
+
+| declaracao | chamada de fora |
+|---|---|
+| base PROTECTED, BO sem modificador | **ERRO** `Property X is not found` |
+| base PROTECTED, BO nao redefine | **ERRO** |
+| base sem modificador, BO PROTECTED | **ERRO** |
+| base e BO sem modificador | OK |
+
+Ou seja: o metodo eh protegido se **qualquer** classe da cadeia o declarar PROTECTED. Compila limpo,
+nao entra em log e so estoura quando o usuario clica para gravar.
+
+**Para medir, `PEMSTATUS(obj, "Metodo", 2)`** - o atributo 2 eh *Protected*. O 4 eh *User-defined*
+e devolve `.T.` ate para `Excluir()`, que eh publico (a primeira medicao desta licao errou por isso).
+Instanciar BO sem conexao abre dialogo e trava o VFP headless: medir numa subclasse de teste com
+`PROCEDURE Init / RETURN .T.` - ela herda a visibilidade sem rodar SQL.
+
+**Alcance**: 48 sites em 29 forms - `Atualizar` 15, `Inserir` 14, `CarregarDoCursor` 6,
+`PrepararDados` 6 (relatorios), `ValidarDados` 4, `ExecutarExclusao`/`LimparDados`/
+`RegistrarAuditoria` 1 cada.
+
+**Conserto** (so permissao, nenhum fluxo reescrito):
+
+1. `BusinessBase`: sem `PROTECTED` em `LimparDados`, `ValidarDados`, `RegistrarAuditoria`, `Inserir`,
+   `Atualizar`. Continuam PROTECTED: `ExecutarExclusao`, `AntesDeGravar`, `DepoisDeGravar`,
+   `AntesDeExcluir`, `DepoisDeExcluir`, `InicializarValoresPadrao`, `ObterChavePrimaria`, `ExibirFalha`.
+2. No BO: tirar `PROTECTED` so dos metodos que algum form chama de fora (14 BOs).
+3. `ExecutarExclusao` chamado de fora (`Formpgr`) -> `Excluir()`, que eh PUBLIC e passa pelos hooks.
+
+```foxpro
+* ERRADO - BO
+PROTECTED PROCEDURE Inserir()          && e o form faz THIS.this_oBusinessObject.Inserir()
+* CERTO
+PROCEDURE Inserir()
+
+* ERRADO - form                        * CERTO
+IF oBO.ExecutarExclusao()              IF oBO.Excluir()
+```
+
+Preferir sempre `Salvar()`/`Excluir()`. Pre-validar no form com `oBO.ValidarDados()` antes do
+`Salvar()` eh legitimo quando o `ValidarDados` do BO exibe a propria mensagem: se o form chamasse so
+o `Salvar()`, a falha mostraria o `MsgAviso` do BO **e** o generico do `ExibirFalha` (dois dialogos).
+
+Auto-fix: CorretorAutomatico **#218** (no `*BO.prg`; WARNING para o que so a base protege).
+Auditoria: `automation\VerificarMetodoProtegidoChamadoDeFora.ps1` (sobe a heranca ate a raiz;
+exit 1 com pendencia). Regra #51 do CLAUDE.md.

@@ -1062,6 +1062,21 @@ Separar campo digitado de campo descricao **sem depender do nome** (o PILAR 3 re
 
 Auto-fix: CorretorAutomatico **#217** (variante sem picker, remove so o clear) e **#114 v3** (com picker, remove mensagem e clear). Sweep 2026-10-09: **78 sites em 26 forms**. Skill: secao **244**. Origem: Erro198 (`FormFap` - *"no momento da inclusao nao consegue digitar o grupo"*).
 
+### 51. Form NUNCA chama metodo PROTECTED do BO - o PROTECTED da BusinessBase vale para a subclasse
+`THIS.this_oBusinessObject.ValidarDados()` compila limpo e estoura ao GRAVAR com o Program Error cru `Property VALIDARDADOS is not found.` - mesmo com o `MttBO` declarando `PROCEDURE ValidarDados()` sem modificador. Medido no VFP9 (2026-10-12): o metodo eh protegido se **qualquer** classe da cadeia o declarar PROTECTED.
+
+| base | BO | chamada de fora |
+|---|---|---|
+| PROTECTED | sem modificador (ou nao redefine) | **ERRO** |
+| sem modificador | PROTECTED | **ERRO** |
+| sem modificador | sem modificador | OK |
+
+Na `BusinessBase` sao PUBLIC: `Salvar`, `Excluir`, `Buscar`, `CarregarDoCursor`, `NovoRegistro`, `EditarRegistro`, `CancelarEdicao`, `LimparDados`, `ValidarDados`, `RegistrarAuditoria`, `Inserir`, `Atualizar`. Continuam PROTECTED (nunca chamar de fora): `ExecutarExclusao` (-> `Excluir()`), `AntesDeGravar`, `DepoisDeGravar`, `AntesDeExcluir`, `DepoisDeExcluir`, `InicializarValoresPadrao`, `ObterChavePrimaria`, `ExibirFalha`. Metodo do BO que o form chama direto (`Inserir`, `Atualizar`, `CarregarPorCodigo`, `CarregarDoCursor`, `PrepararDados`, helpers) **nao leva PROTECTED no BO**.
+
+**Para medir, `PEMSTATUS(obj, "M", 2)`** (2 = Protected). O atributo 4 eh *User-defined* e da `.T.` ate em `Excluir()`. Instanciar BO sem conexao abre dialogo e trava o VFP headless - medir numa subclasse de teste com `Init` vazio.
+
+Auto-fix: CorretorAutomatico **#218** (tira o PROTECTED no `*BO.prg`; WARNING para o que so a base protege). Auditoria: `automation\VerificarMetodoProtegidoChamadoDeFora.ps1`. Skill: secao **246**. Origem: Erro199 (FormMtt) - **48 sites em 29 forms**.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
@@ -1074,7 +1089,7 @@ Auto-fix: CorretorAutomatico **#217** (variante sem picker, remove so o clear) e
 | ObterTodos() | `Buscar("")` |
 | Deletar/Remover() | `Excluir()` (PUBLIC, chama ExecutarExclusao internamente) |
 
-**IMPORTANTE**: Forms chamam `this_oBusinessObject.Excluir()` (PUBLIC). BOs sobrecarregam `ExecutarExclusao()` (PROTECTED). NUNCA chamar ExecutarExclusao() de fora do BO.
+**IMPORTANTE**: Forms chamam `this_oBusinessObject.Excluir()` (PUBLIC). BOs sobrecarregam `ExecutarExclusao()` (PROTECTED). NUNCA chamar ExecutarExclusao() de fora do BO. Metodo que o form chama de fora nunca pode ser PROTECTED em nenhum nivel da heranca (regra #51).
 
 ## config.prg - Dynamic Loading
 

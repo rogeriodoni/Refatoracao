@@ -16792,6 +16792,129 @@ function Corrigir-LookupEmKeyPressSemTecla {
     return $Linhas
 }
 
+# =============================================================================
+# Pattern #218 (Erro199, 2026-10-12, FormMtt) - AUTO-FIX no BO / WARNING no form.
+# Form que chama de FORA um metodo PROTECTED do BO compila limpo e estoura ao
+# gravar com "Property VALIDARDADOS is not found". Medido no VFP9: o PROTECTED
+# da classe base PREVALECE sobre o override sem modificador da subclasse, e o
+# PROTECTED declarado no proprio BO bloqueia igual. Eram 48 sites em 29 forms.
+#
+# Duas metades:
+# 1) Arquivo *BO.prg: indexa os forms do projeto (cache por execucao), descobre
+#    quais metodos de CADA classe do arquivo sao chamados de fora
+#    (<var> = CREATEOBJECT("<Classe>") + <var>.<Metodo>( ) e tira o PROTECTED
+#    da declaracao. Tirar PROTECTED so AMPLIA o acesso: nenhum caminho que ja
+#    funcionava muda, so passa a rodar a chamada que estourava.
+# 2) Metodos que a BusinessBase mantem PROTECTED (ExecutarExclusao e os hooks)
+#    nao se resolvem no BO - a base continua prevalecendo. Ai eh WARNING, nos
+#    dois arquivos: de fora, Excluir() no lugar de ExecutarExclusao(); os hooks
+#    rodam sozinhos dentro de Salvar()/Excluir().
+# Linha comentada nunca conta. Na base (businessbase.prg, modo SEGURO) o
+# pattern nao roda: LimparDados/ValidarDados/RegistrarAuditoria/Inserir/
+# Atualizar ja sao PUBLIC desde o Erro199. Skill: secao 246.
+# =============================================================================
+$script:BaseProtegidos218 = @('executarexclusao', 'antesdegravar', 'depoisdegravar', 'antesdeexcluir',
+    'depoisdeexcluir', 'inicializarvalorespadrao', 'obterchaveprimaria', 'exibirfalha')
+$script:IndiceChamadasBO218 = $null
+
+function Get-IndiceChamadasExternasBO {
+    if ($null -ne $script:IndiceChamadasBO218) { return $script:IndiceChamadasBO218 }
+    $indice = @{}
+    $dirForms = Join-Path (Get-RaizRepo4c) 'projeto\app\forms'
+    if (Test-Path $dirForms) {
+        foreach ($arq in Get-ChildItem $dirForms -Recurse -Filter *.prg) {
+            $linhasF = Get-Content $arq.FullName
+            $mapa = @{}
+            foreach ($lf in $linhasF) {
+                if ($lf -match '^\s*(\*|&&)') { continue }
+                foreach ($m in [regex]::Matches($lf, '(?i)([A-Za-z0-9_\.]+)\s*=\s*CREATEOBJECT\(\s*["'']([A-Za-z0-9_]+)["'']')) {
+                    $var = ($m.Groups[1].Value -replace '^(?i)THIS(FORM)?\.', '').ToLower()
+                    $mapa[$var] = $m.Groups[2].Value.ToLower()
+                }
+            }
+            if ($mapa.Count -eq 0) { continue }
+            for ($i = 0; $i -lt $linhasF.Count; $i++) {
+                if ($linhasF[$i] -match '^\s*(\*|&&)') { continue }
+                foreach ($m in [regex]::Matches($linhasF[$i], '(?i)(?:THIS(?:FORM)?\.)?([A-Za-z0-9_]+)\.([A-Za-z0-9_]+)\s*\(')) {
+                    $var = $m.Groups[1].Value.ToLower()
+                    $met = $m.Groups[2].Value.ToLower()
+                    if (-not $mapa.ContainsKey($var)) { continue }
+                    $cls = $mapa[$var]
+                    if (-not $indice.ContainsKey($cls)) { $indice[$cls] = @{} }
+                    if (-not $indice[$cls].ContainsKey($met)) { $indice[$cls][$met] = "$($arq.Name):$($i + 1)" }
+                }
+            }
+        }
+    }
+    $script:IndiceChamadasBO218 = $indice
+    return $indice
+}
+
+function Corrigir-MetodoProtegidoChamadoDeFora {
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    $nomeArq = if ($Arquivo) { Split-Path -Leaf $Arquivo } else { "" }
+
+    # --- metade do FORM: hook que so a base protege, chamado de fora -> WARNING
+    if ($Arquivo -match '(?i)\\forms\\') {
+        for ($i = 0; $i -lt $Linhas.Count; $i++) {
+            if ($Linhas[$i] -match '^\s*(\*|&&)') { continue }
+            $mm = [regex]::Match($Linhas[$i], '(?i)this_oBusinessObject\.([A-Za-z0-9_]+)\s*\(')
+            if (-not $mm.Success) { continue }
+            $met = $mm.Groups[1].Value
+            if ($script:BaseProtegidos218 -notcontains $met.ToLower()) { continue }
+            $sug = if ($met -ieq 'ExecutarExclusao') { 'trocar por Excluir() (PUBLIC)' } else { 'o hook roda sozinho dentro de Salvar()/Excluir() - nao chamar de fora' }
+            Write-Host "[Pattern #218 WARN] linha $($i + 1): this_oBusinessObject.$met() eh PROTECTED na BusinessBase" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-218-METODO-PROTEGIDO-BASE" -Linha ($i + 1) -Original $Linhas[$i].Trim() `
+                -Corrigido "(nao mutado - $sug)" `
+                -Descricao ("Pattern #218 WARNING: $met eh PROTECTED na BusinessBase e o PROTECTED da base prevalece sobre " +
+                            "o override do BO - a chamada compila limpo e estoura com 'Property $($met.ToUpper()) is not found'. " +
+                            "Skill: secao 246. Origem: Erro199.")
+        }
+        return $Linhas
+    }
+
+    # --- metade do BO: tirar PROTECTED do que os forms chamam de fora
+    if ($nomeArq -notlike '*BO.prg') { return $Linhas }
+    $indice = Get-IndiceChamadasExternasBO
+    if ($indice.Count -eq 0) { return $Linhas }
+
+    $classeAtual = ""
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mc = [regex]::Match($Linhas[$i], '(?i)^\s*DEFINE\s+CLASS\s+([A-Za-z0-9_]+)')
+        if ($mc.Success) { $classeAtual = $mc.Groups[1].Value.ToLower(); continue }
+        if ($Linhas[$i] -match '(?i)^\s*ENDDEFINE\b') { $classeAtual = ""; continue }
+        if (-not $classeAtual -or -not $indice.ContainsKey($classeAtual)) { continue }
+
+        $mp = [regex]::Match($Linhas[$i], '(?i)^(\s*)PROTECTED\s+((?:PROCEDURE|FUNCTION)\s+([A-Za-z0-9_]+).*)$')
+        if (-not $mp.Success) { continue }
+        $indent = $mp.Groups[1].Value
+        $resto  = $mp.Groups[2].Value
+        $met    = $mp.Groups[3].Value
+        if (-not $indice[$classeAtual].ContainsKey($met.ToLower())) { continue }
+        $site = $indice[$classeAtual][$met.ToLower()]
+
+        if ($script:BaseProtegidos218 -contains $met.ToLower()) {
+            Write-Host "[Pattern #218 WARN] linha $($i + 1): $met chamado de fora ($site) mas eh PROTECTED na BusinessBase" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-218-METODO-PROTEGIDO-BASE" -Linha ($i + 1) -Original $Linhas[$i].Trim() `
+                -Corrigido "(nao mutado - corrigir o form em $site)" `
+                -Descricao ("Pattern #218 WARNING: $met eh chamado de fora em $site, mas a BusinessBase o mantem PROTECTED " +
+                            "e o PROTECTED da base prevalece - tirar daqui nao resolve. ExecutarExclusao -> Excluir(); hooks " +
+                            "rodam dentro de Salvar()/Excluir(). Skill: secao 246. Origem: Erro199.")
+            continue
+        }
+
+        $novo = $indent + $resto
+        Add-Correcao -Tipo "METODO-PROTEGIDO-CHAMADO-DE-FORA" -Linha ($i + 1) -Original $Linhas[$i].Trim() `
+            -Corrigido $novo.Trim() `
+            -Descricao ("Pattern #218: $met eh chamado de fora em $site e estava PROTECTED - a chamada compila limpo e " +
+                        "estoura ao gravar com 'Property $($met.ToUpper()) is not found'. Tirar o PROTECTED so amplia o " +
+                        "acesso. Skill: secao 246. Origem: Erro199 (FormMtt).")
+        $Linhas[$i] = $novo
+    }
+    return $Linhas
+}
+
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -17142,6 +17265,9 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-BotoesCrudNaoReabilitadosNaVolta -Linhas $linhas -Arquivo $Arquivo
     $linhas = Avisar-SqlExecSobreAliasDeGrid -Linhas $linhas -Arquivo $Arquivo
     $linhas = Avisar-GradeEditavelSemLiberarColuna -Linhas $linhas -Arquivo $Arquivo
+    # #218 so na lista de forms/BO: a base (modo SEGURO) ja eh PUBLIC nos
+    # metodos que os forms chamam; o pattern age no *BO.prg e avisa no form.
+    $linhas = Corrigir-MetodoProtegidoChamadoDeFora -Linhas $linhas -Arquivo $Arquivo
 
     }
 

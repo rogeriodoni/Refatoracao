@@ -55,7 +55,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
     * PrepararDados - Executa processamento e popula Resultado e CsCabecalho
     * Replica logica completa do procedimento "processamento" do SIGRECRP.SCX
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE PrepararDados()
+    PROCEDURE PrepararDados()
         LOCAL loc_nResult, loc_cSQL
         LOCAL loc_nOper, loc_cOperacao
         LOCAL loc_cGrupo, loc_cConta, loc_cSgrupo, loc_cSconta

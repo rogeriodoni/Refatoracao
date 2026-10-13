@@ -179,7 +179,7 @@ DEFINE CLASS GpeBO AS BusinessBase
     * CarregarDoCursor - Mapeia cursor para propriedades do BO
     * OBRIGATORIO: SELECT (par_cAliasCursor) antes de acessar campos
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lResultado
         loc_lResultado = .F.
 

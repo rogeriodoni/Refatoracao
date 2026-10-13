@@ -327,7 +327,7 @@ DEFINE CLASS sigpdmp6BO AS BusinessBase
     * Inserir - INSERT em SigCdNec (PROTECTED)
     * Nota: cidchaves deve ser gerado antes (via fUniqueIds ou equivalente)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
+    PROCEDURE Inserir()
         LOCAL loc_cSQL, loc_nResult, loc_lSucesso
         loc_lSucesso = .F.
 
@@ -411,7 +411,7 @@ DEFINE CLASS sigpdmp6BO AS BusinessBase
     *--------------------------------------------------------------------------
     * Atualizar - UPDATE em SigCdNec (PROTECTED)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
+    PROCEDURE Atualizar()
         LOCAL loc_cSQL, loc_nResult, loc_lSucesso
         loc_lSucesso = .F.
 

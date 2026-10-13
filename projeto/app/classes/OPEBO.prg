@@ -627,7 +627,7 @@ DEFINE CLASS OPEBO AS BusinessBase
     *====================================================================
     * Inserir - Insere novo registro na tabela SigCdOpe
     *====================================================================
-    PROTECTED PROCEDURE Inserir()
+    PROCEDURE Inserir()
         LOCAL loc_lResultado, loc_cSQL, loc_cCols, loc_cVals, loc_nResult
         LOCAL loc_cDatatrans
         loc_lResultado = .F.
@@ -948,7 +948,7 @@ DEFINE CLASS OPEBO AS BusinessBase
     *====================================================================
     * Atualizar - Atualiza registro existente na tabela SigCdOpe
     *====================================================================
-    PROTECTED PROCEDURE Atualizar()
+    PROCEDURE Atualizar()
         LOCAL loc_lResultado, loc_cSQL, loc_cSet, loc_nResult, loc_cDatatrans
         loc_lResultado = .F.
         TRY

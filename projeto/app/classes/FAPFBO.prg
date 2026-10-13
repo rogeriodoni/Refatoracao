@@ -35,7 +35,7 @@ DEFINE CLASS FAPFBO AS BusinessBase
 	* CarregarDoCursor - Carrega dados do cursor para propriedades
 	* Sem campos mapeados neste form operacional
 	*====================================================================
-	PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+	PROCEDURE CarregarDoCursor(par_cAliasCursor)
 		LOCAL loc_lResultado, loc_oErro
 		loc_lResultado = .F.
 

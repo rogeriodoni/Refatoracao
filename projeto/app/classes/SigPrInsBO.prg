@@ -204,7 +204,7 @@ DEFINE CLASS SigPrInsBO AS BusinessBase
     * operacao (codigo do servico + valor) em vez de PK de tabela inexistente.
     * DataHora usa GETDATE() (SQL Server) - regra Erro35.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
         LOCAL loc_cQuery, loc_cUsuario, loc_cChave, loc_oErro
 
         TRY

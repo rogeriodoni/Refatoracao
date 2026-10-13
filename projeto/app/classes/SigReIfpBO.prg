@@ -93,7 +93,7 @@ DEFINE CLASS SigReIfpBO AS RelatorioBase
     * PrepararDados - Monta TmpRelat e dbCabecalho para os FRX de relatorio
     * Replica a logica do PROCEDURE processamento do form legado SIGREIFP
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE PrepararDados()
+    PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_cSQL, loc_nRes
         LOCAL loc_ldDti, loc_ldDtf, loc_lnNiv, loc_lcNiv
         LOCAL loc_lcTpM, loc_lcFor, loc_lcGrp

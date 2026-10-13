@@ -145,7 +145,7 @@ DEFINE CLASS acuBO AS BusinessBase
     *--------------------------------------------------------------------------
     * Inserir - INSERT na tabela sigcdusu (PROTECTED)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
+    PROCEDURE Inserir()
         LOCAL loc_lSucesso, loc_cSQL, loc_nResultado
         loc_lSucesso = .F.
 
@@ -192,7 +192,7 @@ DEFINE CLASS acuBO AS BusinessBase
     *--------------------------------------------------------------------------
     * Atualizar - UPDATE na tabela sigcdusu (PROTECTED)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
+    PROCEDURE Atualizar()
         LOCAL loc_lSucesso, loc_cSQL, loc_nResultado
         loc_lSucesso = .F.
 
