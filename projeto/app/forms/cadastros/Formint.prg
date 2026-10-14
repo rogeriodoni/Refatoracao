@@ -2570,8 +2570,8 @@ DEFINE CLASS Formint AS FormBase
             .this_cCgrufs   = ALLTRIM(loc_oPg2.txt_4c_GrupoFinal.Value)
             .this_cCggruis  = ALLTRIM(loc_oPg2.txt_4c_GGrupoInicial.Value)
             .this_cCggrufs  = ALLTRIM(loc_oPg2.txt_4c_GGrupoFinal.Value)
-            .this_nPrecois  = TRANSFORM(loc_oPg2.txt_4c_PrecoInicial.Value)
-            .this_nPrecofs  = TRANSFORM(loc_oPg2.txt_4c_PrecoFinal.Value)
+            .this_nPrecois  = VAL(TRANSFORM(loc_oPg2.txt_4c_PrecoInicial.Value))
+            .this_nPrecofs  = VAL(TRANSFORM(loc_oPg2.txt_4c_PrecoFinal.Value))
             .this_cEmps     = ALLTRIM(go_4c_Sistema.cCodEmpresa)
         ENDWITH
     ENDPROC

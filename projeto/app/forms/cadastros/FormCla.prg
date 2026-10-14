@@ -29,6 +29,9 @@ DEFINE CLASS FormCla AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
 
+    *-- Guarda de reentrancia dos lookups modais (regra #37)
+    this_lEmLookup       = .F.
+
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
     *--------------------------------------------------------------------------
@@ -51,6 +54,13 @@ DEFINE CLASS FormCla AS FormBase
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lResultado
         loc_lResultado = .F.
+
+        *-- DataSession = 2 nasce com os SETs no default do VFP e o FormBase so
+        *-- repoe DATE/CENTURY. Sem SET DELETED ON o DELETE do botao Excluir
+        *-- marca a linha mas ela continua visivel na grade e continua sendo
+        *-- varrida na gravacao - o grupo excluido voltava ao salvar.
+        SET DELETED ON
+        SET EXACT ON
 
         TRY
             THIS.Caption = "Cadastro de Classifica" + CHR(231) + CHR(227) + "o de Produto"
@@ -673,6 +683,9 @@ DEFINE CLASS FormCla AS FormBase
             .FontSize      = 8
             .Visible       = .T.
         ENDWITH
+        *-- Legado (getGdeGrps.Valid): o picker abre ao SAIR do campo. So com
+        *-- KeyPress/DblClick, digitar e sair nao fazia nada (Erro209).
+        BINDEVENT(loc_oPg2.txt_4c_GdeGrps, "LostFocus", THIS, "GdeGrpsLostFocus")
         BINDEVENT(loc_oPg2.txt_4c_GdeGrps, "KeyPress", THIS, "GdeGrpsKeyPress")
         BINDEVENT(loc_oPg2.txt_4c_GdeGrps, "DblClick", THIS, "GdeGrpsDblClick")
 
@@ -718,7 +731,17 @@ DEFINE CLASS FormCla AS FormBase
         ENDWITH
         loc_oGridGrp.Column2.Header1.Caption   = "Descri" + CHR(231) + CHR(227) + "o"
         loc_oGridGrp.Column2.Header1.Alignment = 2
-        BINDEVENT(loc_oGridGrp, "AfterRowColChange", THIS, "GridGruposAfterRowColChange")
+
+        *-- Celulas com Valid proprio (regra #46): no legado a busca de grupo
+        *-- mora no Valid do TextBox de cada coluna. Column.AddObject sozinho NAO
+        *-- exibe o controle - precisa de CurrentControl + Sparse (regra #18).
+        loc_oGridGrp.Column1.AddObject("txt_4c_CelCGrus", "TextBoxGrupoCla_4c")
+        loc_oGridGrp.Column1.CurrentControl = "txt_4c_CelCGrus"
+        loc_oGridGrp.Column1.Sparse         = .F.
+
+        loc_oGridGrp.Column2.AddObject("txt_4c_CelDGrus", "TextBoxDescGrupoCla_4c")
+        loc_oGridGrp.Column2.CurrentControl = "txt_4c_CelDGrus"
+        loc_oGridGrp.Column2.Sparse         = .F.
 
         *-------- cmd_4c_BtnCarregar: Carregar Grande Grupo (Top=180+29=209, Left=550) --
         loc_oPg2.AddObject("cmd_4c_BtnCarregar", "CommandButton")
@@ -1318,16 +1341,59 @@ DEFINE CLASS FormCla AS FormBase
     * GdeGrpsKeyPress - Abre lookup ao pressionar F4 no campo Grande Grupo
     *--------------------------------------------------------------------------
     PROCEDURE GdeGrpsKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28  && F4
+        *-- F4 = 115 (28 eh F1); o codigo errado deixava o atalho morto.
+        *-- Save/restore da flag: este handler tambem eh alcancado de dentro do
+        *-- proprio LostFocus, e um clear simples liberaria a guarda cedo demais.
+        LOCAL loc_lEmLookupAnt
+        IF INLIST(par_nKeyCode, 115, 116)  && F4, F5
+            loc_lEmLookupAnt = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupGdeGrps()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GdeGrpsLostFocus - equivale ao getGdeGrps.Valid do legado: ao sair do
+    *   campo com valor preenchido, resolve o Grande Grupo (e abre o picker
+    *   quando o codigo digitado nao casa exatamente).
+    *   Guarda de reentrancia (regra #37): o picker eh MODAL, tira o foco do
+    *   campo e redispara este proprio LostFocus.
+    *--------------------------------------------------------------------------
+    PROCEDURE GdeGrpsLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.GdeGrpsLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE GdeGrpsLostFocusExec()
+        LOCAL loc_oPg2
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+            *-- Legado: "If Not Empty(This.Value)" - campo vazio nao abre nada
+            IF PEMSTATUS(loc_oPg2, "txt_4c_GdeGrps", 5)
+                IF !EMPTY(ALLTRIM(loc_oPg2.txt_4c_GdeGrps.Value))
+                    THIS.AbrirLookupGdeGrps()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCla.GdeGrpsLostFocus")
+        ENDTRY
     ENDPROC
 
     *--------------------------------------------------------------------------
     * GdeGrpsDblClick - Abre lookup ao dar DblClick no campo Grande Grupo
     *--------------------------------------------------------------------------
     PROCEDURE GdeGrpsDblClick()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupGdeGrps()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1350,20 +1416,22 @@ DEFINE CLASS FormCla AS FormBase
                 "Grande Grupo")
 
             IF VARTYPE(loc_oBusca) = "O"
-                IF loc_oBusca.this_lAchouRegistro AND loc_oBusca.this_lSelecionou
-                    IF USED("cursor_4c_BuscaGdeGrp")
-                        loc_oPg2.txt_4c_GdeGrps.Value = ALLTRIM(cursor_4c_BuscaGdeGrp.Codigos)
-                    ENDIF
-                ELSE
-                    IF !loc_oBusca.this_lAchouRegistro
+                *-- Padrao canonico (regra #37): o Init ja tentou o match exato,
+                *-- entao so abre o dialogo quando nao resolveu, e so atribui sob
+                *-- a guarda this_lSelecionou - cancelar NAO apaga o digitado.
+                IF !loc_oBusca.this_lAchouRegistro
                     loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
                     loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGdeGrp")
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGdeGrp")
+                    IF RECCOUNT("cursor_4c_BuscaGdeGrp") > 0
+                        SELECT cursor_4c_BuscaGdeGrp
                         loc_oPg2.txt_4c_GdeGrps.Value = ALLTRIM(cursor_4c_BuscaGdeGrp.Codigos)
                     ENDIF
-                    ENDIF
                 ENDIF
+
                 loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
@@ -1376,145 +1444,189 @@ DEFINE CLASS FormCla AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * GridGruposAfterRowColChange - Valida coluna do grid de grupos ao navegar
+    * DescGrupoEditavel - When da celula Descricao (legado Column2.Text1.When):
+    *   so editavel em INCLUIR/ALTERAR e enquanto o CODIGO estiver vazio.
     *--------------------------------------------------------------------------
-    PROCEDURE GridGruposAfterRowColChange(par_nColIndex)
-        IF par_nColIndex = 1
-            THIS.ValidarCGrusGrid()
-        ELSE
-            IF par_nColIndex = 2
-            THIS.ValidarDGrusGrid()
-            ENDIF
+    FUNCTION DescGrupoEditavel()
+        LOCAL loc_lOk
+        loc_lOk = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+        IF loc_lOk AND USED("crGrdCdCom") AND !EOF("crGrdCdCom")
+            loc_lOk = EMPTY(ALLTRIM(crGrdCdCom.CGrus))
         ENDIF
-    ENDPROC
+
+        RETURN loc_lOk
+    ENDFUNC
 
     *--------------------------------------------------------------------------
-    * ValidarCGrusGrid - Ao sair de Column1 (CGrus): valida e preenche DGrus
-    * SigCdGrp: CGrus (pk), DGrus (desc)
+    * ValidarCGrusGridExec - Valid da celula "Grupo" (legado Column1.Text1.Valid)
+    *   par_oTxt eh o TextBox da coluna: dentro do Valid o valor digitado esta
+    *   em par_oTxt.Value e AINDA NAO chegou ao cursor (regra #46), por isso a
+    *   leitura NAO pode sair de crGrdCdCom.CGrus.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ValidarCGrusGrid()
-        LOCAL loc_oBusca, loc_cCGrus, loc_cDGrus
+    FUNCTION ValidarCGrusGridExec(par_oTxt)
+        LOCAL loc_oBusca, loc_cCGrus, loc_cDGrus, loc_lAchou
 
         IF !USED("crGrdCdCom") OR EOF("crGrdCdCom")
-            RETURN
+            RETURN .T.
         ENDIF
 
-        SELECT crGrdCdCom
-        loc_cCGrus = ALLTRIM(crGrdCdCom.CGrus)
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN .T.
+        ENDIF
+
+        loc_cCGrus = ALLTRIM(IIF(VARTYPE(par_oTxt) = "O", par_oTxt.Value, crGrdCdCom.CGrus))
+        loc_lAchou = .F.
 
         IF EMPTY(loc_cCGrus)
+            SELECT crGrdCdCom
             REPLACE DGrus WITH "" IN crGrdCdCom
-            RETURN
+            RETURN .T.
         ENDIF
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGrp", "cursor_4c_BuscaGrp", "CGrus", loc_cCGrus, ;
-                "Selecionar Grupo")
+                "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oBusca) = "O"
-                IF loc_oBusca.this_lAchouRegistro AND loc_oBusca.this_lSelecionou
-                    IF USED("cursor_4c_BuscaGrp")
-                        loc_cCGrus = ALLTRIM(cursor_4c_BuscaGrp.CGrus)
-                        loc_cDGrus = ALLTRIM(cursor_4c_BuscaGrp.DGrus)
-                        SELECT crGrdCdCom
-                        REPLACE CGrus WITH loc_cCGrus, DGrus WITH loc_cDGrus IN crGrdCdCom
-                    ENDIF
-                ELSE
-                    IF !loc_oBusca.this_lAchouRegistro
+                *-- Init ja resolveu o match exato; so abre o picker se nao achou
+                IF !loc_oBusca.this_lAchouRegistro
                     loc_oBusca.mAddColuna("CGrus", "", "Grupo")
                     loc_oBusca.mAddColuna("DGrus", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                    IF RECCOUNT("cursor_4c_BuscaGrp") > 0
+                        SELECT cursor_4c_BuscaGrp
                         loc_cCGrus = ALLTRIM(cursor_4c_BuscaGrp.CGrus)
                         loc_cDGrus = ALLTRIM(cursor_4c_BuscaGrp.DGrus)
                         SELECT crGrdCdCom
                         REPLACE CGrus WITH loc_cCGrus, DGrus WITH loc_cDGrus IN crGrdCdCom
-                    ELSE
-                        SELECT crGrdCdCom
-                        REPLACE DGrus WITH "" IN crGrdCdCom
-                    ENDIF
+                        *-- O codigo escolhido tem de voltar para a CELULA tambem,
+                        *-- senao o texto digitado sobrescreve o cursor (regra #46)
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = loc_cCGrus
+                        ENDIF
+                        loc_lAchou = .T.
                     ENDIF
                 ENDIF
+
                 loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormCla.ValidarCGrusGrid")
+            MsgErro(loc_oErro.Message, "FormCla.ValidarCGrusGridExec")
         ENDTRY
 
         IF USED("cursor_4c_BuscaGrp")
             USE IN cursor_4c_BuscaGrp
         ENDIF
 
-        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "grd_4c_Dados", 5)
-            THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-        ENDIF
-    ENDPROC
+        THIS.AvancarLinhaGrupo(loc_lAchou)
+
+        RETURN .T.
+    ENDFUNC
 
     *--------------------------------------------------------------------------
-    * ValidarDGrusGrid - Ao sair de Column2 (DGrus): valida e preenche CGrus
-    * SigCdGrp: CGrus (pk), DGrus (desc)
+    * ValidarDGrusGridExec - Valid da celula "Descricao" (legado Column2.Text1)
+    *   Espelho do anterior, buscando por DGrus.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ValidarDGrusGrid()
-        LOCAL loc_oBusca, loc_cCGrus, loc_cDGrus
+    FUNCTION ValidarDGrusGridExec(par_oTxt)
+        LOCAL loc_oBusca, loc_cCGrus, loc_cDGrus, loc_lAchou
 
         IF !USED("crGrdCdCom") OR EOF("crGrdCdCom")
-            RETURN
+            RETURN .T.
         ENDIF
 
-        SELECT crGrdCdCom
-        loc_cDGrus = ALLTRIM(crGrdCdCom.DGrus)
-
-        IF EMPTY(crGrdCdCom.CGrus) AND EMPTY(loc_cDGrus)
-            RETURN
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN .T.
         ENDIF
+
+        loc_cDGrus = ALLTRIM(IIF(VARTYPE(par_oTxt) = "O", par_oTxt.Value, crGrdCdCom.DGrus))
+        loc_lAchou = .F.
 
         IF EMPTY(loc_cDGrus)
+            SELECT crGrdCdCom
             REPLACE CGrus WITH "" IN crGrdCdCom
-            RETURN
+            RETURN .T.
         ENDIF
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGrp", "cursor_4c_BuscaGrp", "DGrus", loc_cDGrus, ;
-                "Selecionar Grupo")
+                "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oBusca) = "O"
-                IF loc_oBusca.this_lAchouRegistro AND loc_oBusca.this_lSelecionou
-                    IF USED("cursor_4c_BuscaGrp")
-                        loc_cCGrus = ALLTRIM(cursor_4c_BuscaGrp.CGrus)
-                        loc_cDGrus = ALLTRIM(cursor_4c_BuscaGrp.DGrus)
-                        SELECT crGrdCdCom
-                        REPLACE CGrus WITH loc_cCGrus, DGrus WITH loc_cDGrus IN crGrdCdCom
-                    ENDIF
-                ELSE
-                    IF !loc_oBusca.this_lAchouRegistro
+                IF !loc_oBusca.this_lAchouRegistro
                     loc_oBusca.mAddColuna("DGrus", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.mAddColuna("CGrus", "", "Grupo")
                     loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                    IF RECCOUNT("cursor_4c_BuscaGrp") > 0
+                        SELECT cursor_4c_BuscaGrp
                         loc_cCGrus = ALLTRIM(cursor_4c_BuscaGrp.CGrus)
                         loc_cDGrus = ALLTRIM(cursor_4c_BuscaGrp.DGrus)
                         SELECT crGrdCdCom
                         REPLACE CGrus WITH loc_cCGrus, DGrus WITH loc_cDGrus IN crGrdCdCom
-                    ELSE
-                        SELECT crGrdCdCom
-                        REPLACE CGrus WITH "" IN crGrdCdCom
-                    ENDIF
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = loc_cDGrus
+                        ENDIF
+                        loc_lAchou = .T.
                     ENDIF
                 ENDIF
+
                 loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormCla.ValidarDGrusGrid")
+            MsgErro(loc_oErro.Message, "FormCla.ValidarDGrusGridExec")
         ENDTRY
 
         IF USED("cursor_4c_BuscaGrp")
             USE IN cursor_4c_BuscaGrp
         ENDIF
 
-        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "grd_4c_Dados", 5)
-            THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
+        THIS.AvancarLinhaGrupo(loc_lAchou)
+
+        RETURN .T.
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * AvancarLinhaGrupo - bloco final dos dois Valid do legado: com a linha
+    *   resolvida e ENTER pressionado, desce uma linha e, no fim do cursor,
+    *   ACRESCENTA uma linha em branco. Eh o unico mecanismo de "incluir mais
+    *   um grupo" da tela - sem ele a grade ficava presa em um registro so.
+    *
+    *       If Not Empty(...) And (Lastkey()=13)
+    *           If Not Eof(crGrdCdCom)  -> Skip   + Keyboard '{DNARROW}'
+    *           If Eof(crGrdCdCom)      -> Append + Keyboard '{DNARROW}'
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AvancarLinhaGrupo(par_lResolvido)
+        LOCAL loc_oPg2
+
+        IF !par_lResolvido OR LASTKEY() != 13
+            RETURN
+        ENDIF
+
+        IF !USED("crGrdCdCom")
+            RETURN
+        ENDIF
+
+        SELECT crGrdCdCom
+        IF !EOF("crGrdCdCom")
+            SKIP IN crGrdCdCom
+            KEYBOARD "{DNARROW}"
+        ENDIF
+        IF EOF("crGrdCdCom")
+            APPEND BLANK IN crGrdCdCom
+            KEYBOARD "{DNARROW}"
+        ENDIF
+
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        IF PEMSTATUS(loc_oPg2, "grd_4c_Dados", 5)
+            loc_oPg2.grd_4c_Dados.Refresh()
         ENDIF
     ENDPROC
 

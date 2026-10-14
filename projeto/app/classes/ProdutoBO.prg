@@ -2453,7 +2453,7 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                             ENDIF
 
                             loc_cSQL = "SELECT a.codgrupo FROM SigDptGg a" + ;
-                                " INNER JOIN SigCdGpr b ON a.codgrupo = b.codigos" + ;
+                                " INNER JOIN SigCdGpr b ON a.codgrupo COLLATE DATABASE_DEFAULT = b.codigos" + ;
                                 " WHERE a.coddepto = " + EscaparSQL(loc_cDepto) + ;
                                 " AND a.codgrupo = " + EscaparSQL(loc_cGGrupo)
 

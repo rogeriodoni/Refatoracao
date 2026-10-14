@@ -103,9 +103,15 @@ DEFINE CLASS TCLBO AS BusinessBase
 
         IF loc_lValido
             *-- Click Confirmar: tamanho da classe depende do nivel
-            *-- nivel 1 -> substr('124',1,1)='1' (1 digito) | nivel 2 -> '2' (2 digitos) | nivel 3 -> '4' (4 digitos)
+            *-- nivel 1 -> 1 digito | nivel 2 -> 2 digitos | nivel 3 -> 3 digitos
+            *-- DESVIO DELIBERADO do SCX do acervo, que usa '124' (nivel 3 = 4 digitos).
+            *-- Medido em DB_MBAHIA.dbo.SigCdCss (2026-10-13, 24 registros): o tamanho da
+            *-- classe e IGUAL ao nivel - nivel 1 tem 1 caractere (5 reg), nivel 2 tem 2
+            *-- (7 reg) e nivel 3 tem 3 (12 reg). Com '124' nenhum dos 12 registros de
+            *-- nivel 3 poderia ser incluido por esta tela. Autorizado pelo usuario
+            *-- (Erro205, opcao 1: alinhar a producao). A mascara do FormTCL acompanha.
             loc_cClasseSemEspacos = STRTRAN(ALLTRIM(THIS.this_cClasse), " ", "")
-            loc_nTamanhoEsperado  = VAL(SUBSTR("124", THIS.this_nNivel, 1))
+            loc_nTamanhoEsperado  = VAL(SUBSTR("123", THIS.this_nNivel, 1))
             IF LEN(loc_cClasseSemEspacos) != loc_nTamanhoEsperado
                 MsgAviso("Classe Inv" + CHR(225) + "lida !!")
                 loc_lValido = .F.

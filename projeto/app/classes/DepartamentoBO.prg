@@ -298,7 +298,7 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
             IF !EMPTY(ALLTRIM(par_cCodigo))
                 loc_cSQL = "SELECT a.coddepto, a.codgrupo, b.descs" + ;
                            " FROM sigdptgg a" + ;
-                           " JOIN SigCdGpr b ON a.codgrupo = b.codigos" + ;
+                           " JOIN SigCdGpr b ON a.codgrupo COLLATE DATABASE_DEFAULT = b.codigos" + ;
                            " WHERE a.coddepto = " + EscaparSQL(ALLTRIM(par_cCodigo)) + ;
                            " ORDER BY a.codgrupo"
 

@@ -308,7 +308,7 @@ DEFINE CLASS CstBO AS BusinessBase
             loc_cSQL = "SELECT a.codigos, a.descricaos, a.consts, a.moedas," + ;
                 " b.dmoes AS descmoes" + ;
                 " FROM SigCdCnt a" + ;
-                " LEFT JOIN SigCdMoe b ON b.cmoes = a.moedas" + ;
+                " LEFT JOIN SigCdMoe b ON b.cmoes COLLATE DATABASE_DEFAULT = a.moedas" + ;
                 " WHERE a.codigos = " + EscaparSQL(par_cCodigo)
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")

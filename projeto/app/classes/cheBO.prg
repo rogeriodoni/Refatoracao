@@ -48,6 +48,11 @@ DEFINE CLASS cheBO AS BusinessBase
     *-- Chave interna (GUID - cidchaves)
     this_cCidChave  = ""
 
+    *-- Parametros da carteira (SigCdPam, tabela SINGLE-ROW)
+    this_cGruCart   = ""
+    this_cConCart   = ""
+    this_cMoedaCheq = ""
+
     PROCEDURE Init()
         DODEFAULT()
         THIS.this_cTabela     = "SigCqLcm"
@@ -261,8 +266,11 @@ DEFINE CLASS cheBO AS BusinessBase
             IF loc_nResult < 0
                 MsgErro("Erro ao inserir lote:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ELSE
-                THIS.RegistrarAuditoria("INSERT")
-                loc_lSucesso = .T.
+                *-- Os cheques da grade tambem fazem parte do registro
+                IF THIS.GravarCheques()
+                    THIS.RegistrarAuditoria("INSERT")
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em cheBO.Inserir:" + CHR(13) + loc_oErro.Message, "Erro")
@@ -307,11 +315,311 @@ DEFINE CLASS cheBO AS BusinessBase
             IF loc_nResult < 0
                 MsgErro("Erro ao atualizar lote:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ELSE
-                THIS.RegistrarAuditoria("UPDATE")
-                loc_lSucesso = .T.
+                IF THIS.GravarCheques()
+                    THIS.RegistrarAuditoria("UPDATE")
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em cheBO.Atualizar:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * CarregarParametrosCarteira - Grucarts/Concarts/MoedaCheqs de SigCdPam.
+    *   SigCdPam eh SINGLE-ROW: nunca filtrar por emps (nao tem a coluna).
+    *   Guarda o resultado nas properties para o SCAN nao reconsultar por linha.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION CarregarParametrosCarteira()
+        LOCAL loc_nRet, loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF USED("cursor_4c_PamCart")
+            USE IN cursor_4c_PamCart
+        ENDIF
+
+        loc_nRet = SQLEXEC(gnConnHandle, ;
+            "SELECT TOP 1 Grucarts, Concarts, MoedaCheqs FROM SigCdPam", ;
+            "cursor_4c_PamCart")
+
+        IF loc_nRet > 0 AND USED("cursor_4c_PamCart") AND RECCOUNT("cursor_4c_PamCart") > 0
+            SELECT cursor_4c_PamCart
+            GO TOP
+            THIS.this_cGruCart   = ALLTRIM(cursor_4c_PamCart.Grucarts)
+            THIS.this_cConCart   = ALLTRIM(cursor_4c_PamCart.Concarts)
+            THIS.this_cMoedaCheq = ALLTRIM(cursor_4c_PamCart.MoedaCheqs)
+            loc_lSucesso = .T.
+        ENDIF
+
+        IF USED("cursor_4c_PamCart")
+            USE IN cursor_4c_PamCart
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ObterNumCheque - numero interno (nums) de um cheque JA cadastrado em
+    *   SigChe, procurado pela chave fisica bancos+agencias+ncontas+ncheques.
+    *   Devolve "" quando o cheque ainda nao existe - quem chama decide entre
+    *   UPDATE (achou) e INSERT com nums novo (nao achou). nums eh a PK de
+    *   SigChe, entao reinserir com um nums existente violaria a chave.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION ObterNumCheque(par_cBanco, par_cAgencia, par_cConta, par_cCheque)
+        LOCAL loc_nRet, loc_cNum
+        loc_cNum = ""
+
+        IF USED("cursor_4c_CheExiste")
+            USE IN cursor_4c_CheExiste
+        ENDIF
+
+        loc_nRet = SQLEXEC(gnConnHandle, ;
+            "SELECT TOP 1 nums FROM SigChe" + ;
+            " WHERE bancos = "   + EscaparSQL(par_cBanco) + ;
+            " AND agencias = "   + EscaparSQL(par_cAgencia) + ;
+            " AND ncontas = "    + EscaparSQL(par_cConta) + ;
+            " AND ncheques = "   + EscaparSQL(par_cCheque), ;
+            "cursor_4c_CheExiste")
+
+        IF loc_nRet > 0 AND USED("cursor_4c_CheExiste") AND RECCOUNT("cursor_4c_CheExiste") > 0
+            SELECT cursor_4c_CheExiste
+            GO TOP
+            loc_cNum = ALLTRIM(cursor_4c_CheExiste.nums)
+        ENDIF
+
+        IF USED("cursor_4c_CheExiste")
+            USE IN cursor_4c_CheExiste
+        ENDIF
+
+        RETURN loc_cNum
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * GravarCheques - Persiste as linhas de TempChq do form.
+    *   Transcrito do PROCEDURE inserir do SCX legado (blocos crSigChe e
+    *   crInsSigCcChm). Chamado por Inserir() e por Atualizar().
+    *
+    *   Antes NADA disto existia: Inserir/Atualizar gravavam SO o cabecalho
+    *   SigCqLcm e os cheques digitados na grade eram descartados - por isso
+    *   ao reabrir o lote em Alterar a grade voltava vazia (Erro207).
+    *
+    *   SigCcChm eh regravada por lote (DELETE + INSERT), o mesmo ciclo de vida
+    *   que ExecutarExclusao ja usava, logo eh idempotente no Alterar.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION GravarCheques()
+        LOCAL loc_lSucesso, loc_nRet, loc_cSQL, loc_cNum, loc_nNumOs, loc_cCidChave
+        LOCAL loc_nRecAtual, loc_cTipo, loc_cMoedaChq, loc_nCotaChq, loc_nJuros, loc_lCheNovo
+        loc_lSucesso = .T.
+
+        TRY
+            IF !USED("TempChq")
+                THIS.this_cMensagemErro = "Cursor TempChq indispon" + CHR(237) + "vel."
+                loc_lSucesso = .F.
+            ENDIF
+
+            IF loc_lSucesso
+                THIS.CarregarParametrosCarteira()
+
+                *-- tipos: 'DB' na saida, 'CR' na entrada (legado crSigCqChm)
+                loc_cTipo = IIF(ALLTRIM(THIS.this_cOpera) == "S", "DB", "CR")
+
+                *-- Os ITENS do lote sao regravados do zero (idempotente no
+                *-- Alterar). SigChe NAO entra aqui: eh o cadastro permanente do
+                *-- cheque, chaveado por nums, e recebe UPDATE ou INSERT abaixo.
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "DELETE FROM SigCcChm WHERE numlotes = " + ;
+                    FormatarNumeroSQL(THIS.this_nNumLote))
+
+                IF loc_nRet < 0
+                    MsgErro("Erro ao limpar itens do lote:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    loc_lSucesso = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lSucesso
+                SELECT TempChq
+                loc_nRecAtual = RECNO("TempChq")
+                GO TOP
+
+                SCAN
+                    *-- Linha em branco da grade nao vira registro
+                    IF EMPTY(ALLTRIM(TempChq.Bancos)) AND EMPTY(ALLTRIM(TempChq.Agencias)) ;
+                            AND EMPTY(ALLTRIM(TempChq.NContas)) AND EMPTY(ALLTRIM(TempChq.NCheques))
+                        LOOP
+                    ENDIF
+
+                    loc_cNum      = THIS.ObterNumCheque(ALLTRIM(TempChq.Bancos), ;
+                                        ALLTRIM(TempChq.Agencias), ALLTRIM(TempChq.NContas), ;
+                                        ALLTRIM(TempChq.NCheques))
+                    loc_lCheNovo  = EMPTY(loc_cNum)
+                    IF loc_lCheNovo
+                        loc_cNum = TRANSFORM(fGerUniqueKey("busnum"), "@L 99999999")
+                    ENDIF
+                    loc_nNumOs    = fGerUniqueKey("SigMvCcr")
+                    loc_cCidChave = fUniqueIds()
+                    loc_nJuros    = TempChq.ValJuros
+
+                    *-- Legado: na ENTRADA a moeda/cotacao do cheque prevalece;
+                    *-- na SAIDA usa a do lote quando o cheque nao traz moeda.
+                    loc_cMoedaChq = IIF(ALLTRIM(THIS.this_cOpera) == "E", ALLTRIM(TempChq.moeds), ;
+                        IIF(EMPTY(ALLTRIM(TempChq.moeds)) OR ALLTRIM(TempChq.moeds) == "R", ;
+                            ALLTRIM(THIS.this_cMoeda), ALLTRIM(TempChq.moeds)))
+                    loc_nCotaChq  = IIF(ALLTRIM(THIS.this_cOpera) == "E", TempChq.cotas, THIS.this_nCotacao)
+
+                    IF EMPTY(loc_cMoedaChq)
+                        loc_cMoedaChq = ALLTRIM(THIS.this_cMoedaCheq)
+                    ENDIF
+                    IF loc_nCotaChq = 0
+                        loc_nCotaChq = 1
+                    ENDIF
+
+                    *-- Registro do cheque (SigChe). Cheque ja cadastrado eh
+                    *-- ATUALIZADO (nums eh a PK); so o inedito vira INSERT.
+                    *-- No INSERT, toda coluna NOT NULL sem property recebe
+                    *-- vazio/zero e datetime sem valor usa a sentinela
+                    *-- '19000101' (regra #22).
+                    IF !loc_lCheNovo
+                        loc_cSQL = "UPDATE SigChe SET" + ;
+                            " datas = "    + FormatarDataSQL(THIS.this_dDtMovs) + "," + ;
+                            " vencs = "    + FormatarDataSQL(TempChq.Vencs) + "," + ;
+                            " grupos = "   + EscaparSQL(ALLTRIM(THIS.this_cGrupoDs)) + "," + ;
+                            " contas = "   + EscaparSQL(ALLTRIM(THIS.this_cContaDs)) + "," + ;
+                            " grclis = "   + EscaparSQL(ALLTRIM(THIS.this_cGrupoOs)) + "," + ;
+                            " iclis = "    + EscaparSQL(ALLTRIM(THIS.this_cContaOs)) + "," + ;
+                            " gruorigs = " + EscaparSQL(ALLTRIM(THIS.this_cGrupoOs)) + "," + ;
+                            " conorigs = " + EscaparSQL(ALLTRIM(THIS.this_cContaOs)) + "," + ;
+                            " grupot = "   + EscaparSQL(ALLTRIM(TempChq.grupoT)) + "," + ;
+                            " contat = "   + EscaparSQL(ALLTRIM(TempChq.contaT)) + "," + ;
+                            " grucarts = " + EscaparSQL(THIS.this_cGruCart) + "," + ;
+                            " concarts = " + EscaparSQL(THIS.this_cConCart) + "," + ;
+                            " numos = "    + FormatarNumeroSQL(loc_nNumOs) + "," + ;
+                            " umovs = "    + EscaparSQL(ALLTRIM(THIS.this_cOperL)) + "," + ;
+                            " valors = "   + FormatarNumeroSQL(TempChq.Valors, 2) + "," + ;
+                            " moeds = "    + EscaparSQL(loc_cMoedaChq) + "," + ;
+                            " cotas = "    + FormatarNumeroSQL(loc_nCotaChq, 4) + "," + ;
+                            " dtalts = GETDATE()" + ;
+                            " WHERE nums = " + EscaparSQL(loc_cNum)
+
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+
+                        IF loc_nRet < 0
+                            MsgErro("Erro ao atualizar cheque " + ALLTRIM(TempChq.NCheques) + ":" + ;
+                                CHR(13) + CapturarErroSQL(), "Erro SQL")
+                            loc_lSucesso = .F.
+                            EXIT
+                        ENDIF
+                    ENDIF
+
+                    IF loc_lCheNovo
+                        loc_cSQL = "INSERT INTO SigChe (" + ;
+                        " bancos, agencias, ncontas, ncheques, datas, vencs, emps," + ;
+                        " grupos, contas, grclis, iclis, gruorigs, conorigs," + ;
+                        " grupot, contat, grucarts, concarts, numos, nums, umovs," + ;
+                        " valors, valpags, moeds, cotas, dtalts, dtemis," + ;
+                        " autos, conres, grures, copchs, fpags, grvends, vends," + ;
+                        " leituras, locals, nalineas, notas, ntrans, numeros," + ;
+                        " numolds, protocolos, tipoblq, custodia)" + ;
+                        " VALUES (" + ;
+                        EscaparSQL(ALLTRIM(TempChq.Bancos)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.Agencias)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.NContas)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.NCheques)) + "," + ;
+                        FormatarDataSQL(THIS.this_dDtMovs) + "," + ;
+                        FormatarDataSQL(TempChq.Vencs) + "," + ;
+                        EscaparSQL(go_4c_Sistema.cCodEmpresa) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cGrupoDs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cContaDs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cGrupoOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cContaOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cGrupoOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cContaOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.grupoT)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.contaT)) + "," + ;
+                        EscaparSQL(THIS.this_cGruCart) + "," + ;
+                        EscaparSQL(THIS.this_cConCart) + "," + ;
+                        FormatarNumeroSQL(loc_nNumOs) + "," + ;
+                        EscaparSQL(loc_cNum) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cOperL)) + "," + ;
+                        FormatarNumeroSQL(TempChq.Valors, 2) + "," + ;
+                        FormatarNumeroSQL(0, 2) + "," + ;
+                        EscaparSQL(loc_cMoedaChq) + "," + ;
+                        FormatarNumeroSQL(loc_nCotaChq, 4) + "," + ;
+                        "GETDATE(),'19000101'," + ;
+                        "0,'','','','','',''," + ;
+                        EscaparSQL(ALLTRIM(TempChq.leituras)) + ",'',0,'',0,''," + ;
+                        "''," + EscaparSQL(ALLTRIM(TempChq.Protocolos)) + ",0,'')"
+
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+
+                        IF loc_nRet < 0
+                            MsgErro("Erro ao gravar cheque " + ALLTRIM(TempChq.NCheques) + ":" + ;
+                                CHR(13) + CapturarErroSQL(), "Erro SQL")
+                            loc_lSucesso = .F.
+                            EXIT
+                        ENDIF
+                    ENDIF
+
+                    *-- Item da carteira (SigCcChm) - eh o que a grade do form le
+                    loc_cSQL = "INSERT INTO SigCcChm (" + ;
+                        " numlotes, cidchaves, nums, numos, tipos, usuarios, dtsis," + ;
+                        " datas, datatrans, vencs, emps, moeds, cotas," + ;
+                        " valtots, valconvs, valors, valjuros," + ;
+                        " bancos, agencias, ncontas, ncheques, obss," + ;
+                        " grupos, contas, grclis, iclis, grupot, contat," + ;
+                        " grucarts, concarts, autos, locals, notas, ntrans," + ;
+                        " protocolos, empdopnums)" + ;
+                        " VALUES (" + ;
+                        FormatarNumeroSQL(THIS.this_nNumLote) + "," + ;
+                        EscaparSQL(loc_cCidChave) + "," + ;
+                        EscaparSQL(loc_cNum) + "," + ;
+                        FormatarNumeroSQL(loc_nNumOs) + "," + ;
+                        EscaparSQL(loc_cTipo) + "," + ;
+                        EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + "," + ;
+                        "GETDATE()," + ;
+                        FormatarDataSQL(THIS.this_dData) + ",'19000101'," + ;
+                        FormatarDataSQL(TempChq.Vencs) + "," + ;
+                        EscaparSQL(go_4c_Sistema.cCodEmpresa) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cMoeda)) + "," + ;
+                        FormatarNumeroSQL(THIS.this_nCotacao, 4) + "," + ;
+                        FormatarNumeroSQL(THIS.this_nValor, 2) + "," + ;
+                        FormatarNumeroSQL(THIS.this_nValConv, 2) + "," + ;
+                        FormatarNumeroSQL(TempChq.Valors, 2) + "," + ;
+                        FormatarNumeroSQL(loc_nJuros, 2) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.Bancos)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.Agencias)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.NContas)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.NCheques)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.Obss)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cGrupoDs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cContaDs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cGrupoOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(THIS.this_cContaOs)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.grupoT)) + "," + ;
+                        EscaparSQL(ALLTRIM(TempChq.contaT)) + "," + ;
+                        EscaparSQL(THIS.this_cGruCart) + "," + ;
+                        EscaparSQL(THIS.this_cConCart) + "," + ;
+                        "0,'','',0," + ;
+                        EscaparSQL(ALLTRIM(TempChq.Protocolos)) + ",'')"
+
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+
+                    IF loc_nRet < 0
+                        MsgErro("Erro ao gravar item do lote " + ALLTRIM(TempChq.NCheques) + ":" + ;
+                            CHR(13) + CapturarErroSQL(), "Erro SQL")
+                        loc_lSucesso = .F.
+                        EXIT
+                    ENDIF
+                ENDSCAN
+
+                IF loc_nRecAtual > 0 AND loc_nRecAtual <= RECCOUNT("TempChq")
+                    GO loc_nRecAtual IN TempChq
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em cheBO.GravarCheques:" + CHR(13) + loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
         ENDTRY
 
         RETURN loc_lSucesso
@@ -327,6 +635,9 @@ DEFINE CLASS cheBO AS BusinessBase
         TRY
             THIS.RegistrarAuditoria("DELETE")
 
+            *-- So os ITENS do lote. SigChe eh o cadastro permanente do cheque
+            *-- (PK nums) e pode ser referenciado por outros lotes - o legado
+            *-- tambem nao apaga essa tabela ao excluir o lote.
             loc_cSQL = "DELETE FROM SigCcChm WHERE numlotes = " + ;
                 FormatarNumeroSQL(THIS.this_nNumLote)
             SQLEXEC(gnConnHandle, loc_cSQL)

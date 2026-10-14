@@ -70,8 +70,8 @@ foreach ($prg in (Get-ChildItem $Forms -Filter "*.prg" -Recurse -File | Sort-Obj
 
     $legMask  = @($legItens | Where-Object { $_.Prop -eq 'InputMask' })
     $legFmt   = @($legItens | Where-Object { $_.Prop -eq 'Format' })
-    $migMask  = @([regex]::Matches($mig, '(?im)^\s*\.InputMask\s*=')).Count
-    $migFmt   = @([regex]::Matches($mig, '(?im)^\s*\.Format\s*=')).Count
+    $migMask  = @([regex]::Matches($mig, '(?im)^\s*\.(?:\w+\.)*InputMask\s*=')).Count
+    $migFmt   = @([regex]::Matches($mig, '(?im)^\s*\.(?:\w+\.)*Format\s*=')).Count
 
     $faltaMask = $legMask.Count - $migMask
     $faltaFmt  = $legFmt.Count  - $migFmt

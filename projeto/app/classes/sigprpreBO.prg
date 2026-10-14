@@ -112,7 +112,7 @@ DEFINE CLASS sigprpreBO AS BusinessBase
                        " a.pvens, a.pvensant, a.usuals, a.ckatusite," + ;
                        " b.dpros, b.cgrus" + ;
                        " FROM sigprpre a" + ;
-                       " INNER JOIN SigCdPro b ON b.cpros = a.cpros" + ;
+                       " INNER JOIN SigCdPro b ON b.cpros COLLATE DATABASE_DEFAULT = a.cpros" + ;
                        " WHERE a.datas BETWEEN " + loc_cDataIni + " AND " + loc_cDataFim + ;
                        " AND a.cpros BETWEEN " + EscaparSQL(ALLTRIM(THIS.this_cFiltroCPro)) + ;
                        " AND " + EscaparSQL(loc_cProdF) + ;
@@ -152,7 +152,7 @@ DEFINE CLASS sigprpreBO AS BusinessBase
                        " a.pvens, a.pvensant, a.usuals, a.ckatusite," + ;
                        " b.dpros, b.cgrus" + ;
                        " FROM sigprpre a" + ;
-                       " INNER JOIN SigCdPro b ON b.cpros = a.cpros" + ;
+                       " INNER JOIN SigCdPro b ON b.cpros COLLATE DATABASE_DEFAULT = a.cpros" + ;
                        " WHERE a.cidchaves = " + EscaparSQL(ALLTRIM(par_cCidChaves))
 
             IF USED("cursor_4c_Carrega")

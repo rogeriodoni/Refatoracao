@@ -63,10 +63,10 @@ DEFINE CLASS ROMBO AS BusinessBase
                        "CASE WHEN ISNULL(a.nAceite,0)=1 THEN 'S' ELSE 'N' END AS aceite, " + ;
                        "a.CidChaves " + ;
                        "FROM SigCdRom a " + ;
-                       "LEFT JOIN SigPrTrp b ON a.CodTransp = b.ITras " + ;
-                       "LEFT JOIN SigCdCli c ON a.Contas = c.IClis " + ;
-                       "LEFT JOIN SigCdDpt h ON a.DepOrig = h.Codigos " + ;
-                       "LEFT JOIN SigCdDpt i ON a.DepDest = i.Codigos " + ;
+                       "LEFT JOIN SigPrTrp b ON a.CodTransp COLLATE DATABASE_DEFAULT = b.ITras " + ;
+                       "LEFT JOIN SigCdCli c ON a.Contas COLLATE DATABASE_DEFAULT = c.IClis " + ;
+                       "LEFT JOIN SigCdDpt h ON a.DepOrig COLLATE DATABASE_DEFAULT = h.Codigos " + ;
+                       "LEFT JOIN SigCdDpt i ON a.DepDest COLLATE DATABASE_DEFAULT = i.Codigos " + ;
                        "WHERE a.Datas BETWEEN " + loc_cDataIni + " AND " + loc_cDataFim + ;
                        " AND a.Tipo = " + EscaparSQL(par_cTipo) + ;
                        " ORDER BY a.Datas DESC, a.Codigo"
@@ -679,13 +679,13 @@ DEFINE CLASS ROMBO AS BusinessBase
                 "ISNULL(i.Descricaos,'') AS dDepDest " + ;
                 "FROM SigCdRom a " + ;
                 "JOIN SigCdRoI b ON a.Codigo = b.Codigo " + ;
-                "LEFT JOIN SigPrTrp c ON a.CodTransp = c.ITras " + ;
-                "LEFT JOIN SigCdCli d ON a.Contas = d.IClis " + ;
-                "LEFT JOIN SigMvNfi e ON b.Chave = e.nfechv " + ;
+                "LEFT JOIN SigPrTrp c ON a.CodTransp COLLATE DATABASE_DEFAULT = c.ITras " + ;
+                "LEFT JOIN SigCdCli d ON a.Contas COLLATE DATABASE_DEFAULT = d.IClis " + ;
+                "LEFT JOIN SigMvNfi e ON b.Chave COLLATE DATABASE_DEFAULT = e.nfechv " + ;
                 "LEFT JOIN SigMvCab f ON e.empdopnums = f.empdopnums " + ;
                 "LEFT JOIN SigCdCli g ON f.contads = g.IClis " + ;
-                "LEFT JOIN SigCdDpt h ON a.DepOrig = h.Codigos " + ;
-                "LEFT JOIN SigCdDpt i ON a.DepDest = i.Codigos " + ;
+                "LEFT JOIN SigCdDpt h ON a.DepOrig COLLATE DATABASE_DEFAULT = h.Codigos " + ;
+                "LEFT JOIN SigCdDpt i ON a.DepDest COLLATE DATABASE_DEFAULT = i.Codigos " + ;
                 "WHERE a.Codigo = " + EscaparSQL(par_cCodigo)
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "csRel")

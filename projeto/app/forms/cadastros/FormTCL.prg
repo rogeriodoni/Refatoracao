@@ -445,7 +445,6 @@ DEFINE CLASS FormTCL AS FormBase
             .Left          = 448
             .Width         = 17
             .Height        = 25
-            .InputMask     = "9"
             .SpecialEffect = 1
             .BorderColor   = RGB(100, 100, 100)
             .ForeColor     = RGB(0, 0, 0)
@@ -753,7 +752,7 @@ DEFINE CLASS FormTCL AS FormBase
 
     *--------------------------------------------------------------------------
     * AjustarMascaraClasse - Equivalente ao SIGCDTCL.Pagina.Dados.Get_classe.GotFocus
-    * do legado: monta InputMask conforme o nivel (1 digito/2 digitos/4 digitos)
+    * do legado: monta InputMask conforme o nivel (1/2/3 digitos - ver TCLBO.ValidarDados)
     * e limpa o valor se ele nao couber mais na nova mascara.
     * PUBLIC (sem PROTECTED) - OBRIGATORIO para BINDEVENT funcionar (CLAUDE.md #3)
     *--------------------------------------------------------------------------
@@ -773,8 +772,8 @@ DEFINE CLASS FormTCL AS FormBase
                     loc_oPg2.txt_4c_Classe.InputMask = "99"
                     loc_nMaxDig = 2
                 CASE loc_nNivel = 3
-                    loc_oPg2.txt_4c_Classe.InputMask = "9999"
-                    loc_nMaxDig = 4
+                    loc_oPg2.txt_4c_Classe.InputMask = "999"
+                    loc_nMaxDig = 3
             ENDCASE
 
             *-- So limpa o campo se diminuiu o tamanho de digitos possiveis
@@ -919,7 +918,7 @@ DEFINE CLASS FormTCL AS FormBase
 
             THIS.this_oBusinessObject.this_cClasse    = ALLTRIM(TRANSFORM(loc_oPg2.txt_4c_Classe.Value))
             THIS.this_oBusinessObject.this_cDescricao = ALLTRIM(loc_oPg2.txt_4c_Descr.Value)
-            THIS.this_oBusinessObject.this_nNivel     = TRANSFORM(loc_oPg2.txt_4c_Nivel.Value)
+            THIS.this_oBusinessObject.this_nNivel     = VAL(TRANSFORM(loc_oPg2.txt_4c_Nivel.Value))
             THIS.this_oBusinessObject.this_nOpBalanco = loc_oPg2.opt_4c_OpBalanco.Value
             THIS.this_oBusinessObject.this_nInvEmisCc = loc_oPg2.opt_4c_InvEmisCc.Value
         CATCH TO loc_oErro
@@ -949,7 +948,7 @@ DEFINE CLASS FormTCL AS FormBase
                 CASE THIS.this_oBusinessObject.this_nNivel = 2
                     loc_oPg2.txt_4c_Classe.InputMask = "99"
                 CASE THIS.this_oBusinessObject.this_nNivel = 3
-                    loc_oPg2.txt_4c_Classe.InputMask = "9999"
+                    loc_oPg2.txt_4c_Classe.InputMask = "999"
                 OTHERWISE
                     loc_oPg2.txt_4c_Classe.InputMask = ""
             ENDCASE

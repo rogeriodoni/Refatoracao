@@ -1272,7 +1272,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
 
         loc_oBO.this_cEmps      = ALLTRIM(loc_oPg.txt_4c_Emps.Value)
         loc_oBO.this_cDopes     = ALLTRIM(loc_oPg.txt_4c_Dopes.Value)
-        loc_oBO.this_nNumes     = TRANSFORM(loc_oPg.txt_4c_Numes.Value)
+        loc_oBO.this_nNumes     = VAL(TRANSFORM(loc_oPg.txt_4c_Numes.Value))
         loc_oBO.this_dDatas     = loc_oPg.txt_4c_Datas.Value
         loc_oBO.this_cGrupoos   = ALLTRIM(loc_oPg.txt_4c_GrupoOs.Value)
         loc_oBO.this_cContaos   = ALLTRIM(loc_oPg.txt_4c_ContaOs.Value)

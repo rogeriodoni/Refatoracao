@@ -160,8 +160,8 @@ DEFINE CLASS VcaBO AS BusinessBase
                 loc_cSQL = "SELECT a.iclis AS Iclis, a.resp AS Resp, a.pkchaves AS PkChaves," + ;
                            " c.rclis AS Rclis, b.deptos AS Deptos, b.ncomps AS Usuario" + ;
                            " FROM SigCdVca a" + ;
-                           " INNER JOIN SigCdUsu b ON a.resp = b.usuarios" + ;
-                           " INNER JOIN SigCdCli c ON a.iclis = c.iclis"
+                           " INNER JOIN SigCdUsu b ON a.resp COLLATE DATABASE_DEFAULT = b.usuarios" + ;
+                           " INNER JOIN SigCdCli c ON a.iclis COLLATE DATABASE_DEFAULT = c.iclis"
 
                 IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(par_cFiltro)
                     loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro

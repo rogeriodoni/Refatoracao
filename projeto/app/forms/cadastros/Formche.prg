@@ -11,7 +11,7 @@
 DEFINE CLASS Formche AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 654
+    Height      = 686
     Width       = 1000
     Caption     = "Carteira de Cheques"
     AutoCenter  = .T.
@@ -61,6 +61,14 @@ DEFINE CLASS Formche AS FormBase
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lResultado
         loc_lResultado = .F.
+
+        *-- DataSession = 2 nasce com os SETs no default do VFP e o FormBase so
+        *-- repoe DATE/CENTURY. Sem SET DELETED ON, o DELETE em TempChq (botao
+        *-- Excluir e limpeza de linhas em branco) marca a linha mas ela
+        *-- continua visivel na grade E continua sendo varrida pelo SCAN da
+        *-- gravacao - o cheque excluido voltava ao salvar.
+        SET DELETED ON
+        SET EXACT ON
 
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("cheBO")
@@ -380,11 +388,11 @@ DEFINE CLASS Formche AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oFiltros.txt_4c_DtInicial, "KeyPress", THIS, "DtInicialLostFocus")
+        BINDEVENT(loc_oFiltros.txt_4c_DtInicial, "LostFocus", THIS, "DtInicialLostFocus")
 
         loc_oFiltros.AddObject("lbl_4c_Sep", "Label")
         WITH loc_oFiltros.lbl_4c_Sep
-            .Caption   = "a"
+            .Caption   = CHR(224)
             .Top       = 10
             .Left      = 149
             .FontName  = "Tahoma"
@@ -407,7 +415,7 @@ DEFINE CLASS Formche AS FormBase
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oFiltros.txt_4c_DtFinal, "KeyPress", THIS, "DtFinalLostFocus")
+        BINDEVENT(loc_oFiltros.txt_4c_DtFinal, "LostFocus", THIS, "DtFinalLostFocus")
 
         *-- Botao LimpaDT: original top=85+29=114, left=290 (Limpar Data Transporte)
         loc_oPg1.AddObject("cmd_4c_LimpaDT", "CommandButton")
@@ -430,7 +438,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oGrid.Top         = 156
         loc_oGrid.Left        = 2
         loc_oGrid.Width       = 910
-        loc_oGrid.Height      = 460
+        loc_oGrid.Height      = 492
         loc_oGrid.ColumnCount = 6
 
         WITH loc_oGrid
@@ -862,12 +870,13 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 300
             .Height      = 23
             .Value       = ""
-            .ReadOnly    = .T.
+            .ReadOnly    = .F.
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DGrupoT, "LostFocus", THIS, "ValidarDGrupoT")
 
         *-- Total Bruto (readonly): lbl_4c_Label8 (top=97+29=126), txt_4c_Valor (top=93+29=122)
         loc_oPg2.AddObject("lbl_4c_Label8", "Label")
@@ -890,7 +899,6 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 124
             .Height      = 23
             .Value       = 0
-            .Format      = "Z"
             .InputMask   = "999,999,999.99"
             .ReadOnly    = .T.
             .FontName    = "Tahoma"
@@ -920,7 +928,6 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 113
             .Height      = 23
             .Value       = 0
-            .Format      = "Z"
             .InputMask   = "999,999,999.99"
             .ReadOnly    = .T.
             .FontName    = "Tahoma"
@@ -950,7 +957,6 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 117
             .Height      = 23
             .Value       = 0
-            .Format      = "Z"
             .InputMask   = "999,999,999.99"
             .ReadOnly    = .T.
             .FontName    = "Tahoma"
@@ -1009,14 +1015,13 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 118
             .Height      = 23
             .Value       = 0
-            .Format      = "Z"
-            .InputMask   = "99,999.9999"
+            .InputMask   = "99,999.9999999"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
             .Visible     = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Cotacao, "KeyPress", THIS, "CotacaoLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_Cotacao, "LostFocus", THIS, "CotacaoLostFocus")
 
         *-- Valor Convertido (readonly): lbl_4c_Label20 (top=456+29=485), txt_4c_ValConv (top=452+29=481)
         loc_oPg2.AddObject("lbl_4c_Label20", "Label")
@@ -1039,7 +1044,6 @@ DEFINE CLASS Formche AS FormBase
             .Width       = 118
             .Height      = 23
             .Value       = 0
-            .Format      = "Z"
             .InputMask   = "999,999,999.99"
             .ReadOnly    = .T.
             .FontName    = "Tahoma"
@@ -1052,14 +1056,14 @@ DEFINE CLASS Formche AS FormBase
         *-- ColumnCount FORA do WITH; ControlSource/RecordSource definidos em CarregarPaginaDados
         loc_oPg2.AddObject("grd_4c_GradeCheque", "Grid")
         loc_oGrid             = loc_oPg2.grd_4c_GradeCheque
-        loc_oGrid.Top         = 159
+        loc_oGrid.Top         = 237
         loc_oGrid.Left        = 9
         loc_oGrid.Width       = 985
         loc_oGrid.Height      = 244
         loc_oGrid.ColumnCount = 9
 
         WITH loc_oGrid
-            .FontName           = "Verdana"
+            .FontName           = "Courier New"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
             .BackColor          = RGB(255, 255, 255)
@@ -1070,18 +1074,9 @@ DEFINE CLASS Formche AS FormBase
             .HighlightStyle     = 2
             .DeleteMark         = .F.
             .RecordMark         = .F.
-            .RowHeight          = 16
+            .RowHeight          = 17
             .ScrollBars         = 3
             .Visible            = .T.
-            .Column1.Width      = 40
-            .Column2.Width      = 50
-            .Column3.Width      = 100
-            .Column4.Width      = 70
-            .Column5.Width      = 80
-            .Column6.Width      = 80
-            .Column7.Width      = 150
-            .Column8.Width      = 100
-            .Column9.Width      = 150
             .Column1.Header1.Caption = "Bco"
             .Column2.Header1.Caption = "Agenc"
             .Column3.Header1.Caption = "N" + CHR(186) + " Conta"
@@ -1092,6 +1087,13 @@ DEFINE CLASS Formche AS FormBase
             .Column8.Header1.Caption = "CPF/CNPJ"
             .Column9.Header1.Caption = "Nome Terceiro"
         ENDWITH
+
+        *-- Celula "No Conta": o legado completa a conta com zeros a esquerda ao
+        *-- sair do campo (Conta.Text1.Valid). Column.AddObject sozinho NAO faz o
+        *-- controle aparecer - precisa de CurrentControl + Sparse (regra #18).
+        loc_oGrid.Column3.AddObject("txt_4c_ContaChq", "TextBoxContaCheque_4c")
+        loc_oGrid.Column3.CurrentControl = "txt_4c_ContaChq"
+        loc_oGrid.Column3.Sparse         = .F.
 
         *-- Botao Excluir Cheque da grade (ExcCheque, top=376+29=405, left=939)
         loc_oPg2.AddObject("cmd_4c_ExcCheque", "CommandButton")
@@ -1209,23 +1211,27 @@ DEFINE CLASS Formche AS FormBase
         *-- Grupo Origem (top=456, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblGrupoOs", "Label")
         WITH loc_oPg2.lbl_4c_LblGrupoOs
-            .Top      = 537
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Grupo Orig.:"
+            .Top      = 538
+            .Left     = 38
+            .Width    = 75
+            .Height   = 15
+            .Caption  = "Grupo Origem :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_GrupoOs", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoOs
             .Top         = 534
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1236,14 +1242,15 @@ DEFINE CLASS Formche AS FormBase
         WITH loc_oPg2.txt_4c_DGrupoOs
             .Top         = 534
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DGrupoOs, "LostFocus", THIS, "ValidarDGrupoOs")
 
         *-- cmd_4c_Command1 PGV Origem (top=456, left=500, cobre linha Grupo+Conta Orig)
         loc_oPg2.AddObject("cmd_4c_Command1", "CommandButton")
@@ -1266,61 +1273,70 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblContaOs", "Label")
         WITH loc_oPg2.lbl_4c_LblContaOs
             .Top      = 562
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Conta Orig.:"
+            .Left     = 38
+            .Width    = 75
+            .Height   = 15
+            .Caption  = "Conta Origem :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_ContaOs", "TextBox")
         WITH loc_oPg2.txt_4c_ContaOs
             .Top         = 559
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_ContaOs, "KeyPress", THIS, "ValidarContaOs")
+        BINDEVENT(loc_oPg2.txt_4c_ContaOs, "LostFocus", THIS, "ValidarContaOs")
 
         loc_oPg2.AddObject("txt_4c_DCONTAOs", "TextBox")
         WITH loc_oPg2.txt_4c_DCONTAOs
             .Top         = 559
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DCONTAOs, "LostFocus", THIS, "ValidarDContaOs")
 
         *-- Grupo Destino (top=506, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblGrupoDs", "Label")
         WITH loc_oPg2.lbl_4c_LblGrupoDs
             .Top      = 587
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Grupo Dest.:"
+            .Left     = 36
+            .Width    = 77
+            .Height   = 15
+            .Caption  = "Grupo Destino :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_GrupoDs", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoDs
             .Top         = 584
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1331,14 +1347,15 @@ DEFINE CLASS Formche AS FormBase
         WITH loc_oPg2.txt_4c_DGrupoDs
             .Top         = 584
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DGrupoDs, "LostFocus", THIS, "ValidarDGrupoDs")
 
         *-- cmd_4c_Command2 PGV Destino (top=506, left=500, cobre linha Grupo+Conta Dest)
         loc_oPg2.AddObject("cmd_4c_Command2", "CommandButton")
@@ -1361,52 +1378,60 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblContaDs", "Label")
         WITH loc_oPg2.lbl_4c_LblContaDs
             .Top      = 612
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Conta Dest.:"
+            .Left     = 36
+            .Width    = 77
+            .Height   = 15
+            .Caption  = "Conta Destino :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_ContaDs", "TextBox")
         WITH loc_oPg2.txt_4c_ContaDs
             .Top         = 609
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_ContaDs, "KeyPress", THIS, "ValidarContaDs")
+        BINDEVENT(loc_oPg2.txt_4c_ContaDs, "LostFocus", THIS, "ValidarContaDs")
 
         loc_oPg2.AddObject("txt_4c_DCONTADs", "TextBox")
         WITH loc_oPg2.txt_4c_DCONTADs
             .Top         = 609
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DCONTADs, "LostFocus", THIS, "ValidarDContaDs")
 
         *-- Taxa a.m.% label + textbox (top=506, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxa", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxa
-            .Top      = 587
-            .Left     = 548
+            .Top      = 588
+            .Left     = 551
             .Width    = 80
-            .Height   = 18
-            .Caption  = "Taxa a.m.%:"
+            .Height   = 15
+            .Caption  = "Taxa a.m. (%) :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_Taxa", "TextBox")
@@ -1414,26 +1439,29 @@ DEFINE CLASS Formche AS FormBase
             .Top         = 584
             .Left        = 633
             .Width       = 66
-            .Height      = 24
+            .Height      = 23
             .Value       = 0
             .InputMask = "999.99"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Taxa, "KeyPress", THIS, "TaxaLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_Taxa, "LostFocus", THIS, "TaxaLostFocus")
 
         *-- Taxa a.d.% label + textbox (top=531, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxaDia", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxaDia
-            .Top      = 612
-            .Left     = 548
-            .Width    = 80
-            .Height   = 18
-            .Caption  = "Taxa a.d.%:"
+            .Top      = 613
+            .Left     = 553
+            .Width    = 78
+            .Height   = 15
+            .Caption  = "Taxa a.d. (%) :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_TaxaDia", "TextBox")
@@ -1441,14 +1469,14 @@ DEFINE CLASS Formche AS FormBase
             .Top         = 609
             .Left        = 633
             .Width       = 66
-            .Height      = 24
+            .Height      = 23
             .Value       = 0
             .InputMask = "999.9999"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_TaxaDia, "KeyPress", THIS, "TaxaDiaLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_TaxaDia, "LostFocus", THIS, "TaxaDiaLostFocus")
 
         *-- Indicadores S (Simples) / C (Composto) entre Taxa dia e IOF (top=552, left=717/743)
         loc_oPg2.AddObject("lbl_4c_TpJuroS", "Label")
@@ -1483,22 +1511,26 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblGruJuro", "Label")
         WITH loc_oPg2.lbl_4c_LblGruJuro
             .Top      = 637
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Grupo Juros:"
+            .Left     = 46
+            .Width    = 67
+            .Height   = 15
+            .Caption  = "Grupo Juros :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_GruJuro", "TextBox")
         WITH loc_oPg2.txt_4c_GruJuro
             .Top         = 634
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
@@ -1509,26 +1541,30 @@ DEFINE CLASS Formche AS FormBase
         WITH loc_oPg2.txt_4c_DGruJuro
             .Top         = 634
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DGruJuro, "LostFocus", THIS, "ValidarDGruJuro")
 
         *-- IOF a.m.% label + textbox (top=556, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxaIof", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxaIof
-            .Top      = 637
-            .Left     = 548
-            .Width    = 80
-            .Height   = 18
-            .Caption  = "IOF a.m.%:"
+            .Top      = 638
+            .Left     = 557
+            .Width    = 74
+            .Height   = 15
+            .Caption  = "IOF a.m. (%) :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_TaxaIof", "TextBox")
@@ -1536,52 +1572,58 @@ DEFINE CLASS Formche AS FormBase
             .Top         = 634
             .Left        = 633
             .Width       = 66
-            .Height      = 24
+            .Height      = 23
             .Value       = 0
+            .InputMask   = "999.99"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_TaxaIof, "KeyPress", THIS, "TaxaIofLostFocus")
+        BINDEVENT(loc_oPg2.txt_4c_TaxaIof, "LostFocus", THIS, "TaxaIofLostFocus")
 
         *-- Conta Juros (top=581, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblConJuro", "Label")
         WITH loc_oPg2.lbl_4c_LblConJuro
             .Top      = 662
-            .Left     = 9
-            .Width    = 100
-            .Height   = 18
-            .Caption  = "Conta Juros:"
+            .Left     = 46
+            .Width    = 67
+            .Height   = 15
+            .Caption  = "Conta Juros :"
             .FontName = "Tahoma"
             .FontSize = 8
             .AutoSize = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible  = .T.
         ENDWITH
 
         loc_oPg2.AddObject("txt_4c_ConJuro", "TextBox")
         WITH loc_oPg2.txt_4c_ConJuro
             .Top         = 659
             .Left        = 115
-            .Width       = 75
-            .Height      = 24
+            .Width       = 80
+            .Height      = 23
             .Value       = ""
+            .InputMask   = "!!!!!!!!!!"
             .FontName    = "Tahoma"
             .FontSize    = 8
             .BorderStyle = 1
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_ConJuro, "KeyPress", THIS, "ValidarConJuro")
+        BINDEVENT(loc_oPg2.txt_4c_ConJuro, "LostFocus", THIS, "ValidarConJuro")
 
         loc_oPg2.AddObject("txt_4c_DJuro", "TextBox")
         WITH loc_oPg2.txt_4c_DJuro
             .Top         = 659
             .Left        = 197
-            .Width       = 298
-            .Height      = 24
+            .Width       = 300
+            .Height      = 23
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8
-            .BorderStyle = 0
-            .ReadOnly    = .T.
+            .BorderStyle = 1
+            .ReadOnly    = .F.
         ENDWITH
+        BINDEVENT(loc_oPg2.txt_4c_DJuro, "LostFocus", THIS, "ValidarDConJuro")
 
         THIS.TornarControlesVisiveis(loc_oPg2)
 
@@ -1878,7 +1920,7 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * DtInicialLostFocus - Valida data inicial e recarrega lista
     *--------------------------------------------------------------------------
-    PROCEDURE DtInicialLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE DtInicialLostFocus()
         LOCAL loc_dIni, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -1911,7 +1953,7 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * DtFinalLostFocus - Valida data final e recarrega lista
     *--------------------------------------------------------------------------
-    PROCEDURE DtFinalLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE DtFinalLostFocus()
         LOCAL loc_dFim, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -1955,6 +1997,10 @@ DEFINE CLASS Formche AS FormBase
                 .txt_4c_Moeda.ReadOnly           = !par_lHabilitar
                 .txt_4c_Cotacao.ReadOnly         = !par_lHabilitar
                 .grd_4c_GradeCheque.ReadOnly     = !par_lHabilitar
+                *-- AllowAddNew eh o mecanismo do legado para INCLUIR MAIS CHEQUES:
+                *-- com a ultima linha preenchida, a seta para baixo acrescenta
+                *-- outra. Sem ele o lote ficava preso em UM cheque (Erro207).
+                .grd_4c_GradeCheque.AllowAddNew  = par_lHabilitar
                 .cmd_4c_ExcCheque.Enabled        = par_lHabilitar
                 .txt_4c_GrupoOs.ReadOnly         = !par_lHabilitar
                 .txt_4c_ContaOs.ReadOnly         = !par_lHabilitar
@@ -1965,11 +2011,34 @@ DEFINE CLASS Formche AS FormBase
                 .txt_4c_Taxa.ReadOnly            = !par_lHabilitar
                 .txt_4c_TaxaDia.ReadOnly         = !par_lHabilitar
                 .txt_4c_TaxaIof.ReadOnly         = !par_lHabilitar
+                *-- Campos de DESCRICAO: editaveis no legado (busca pelo nome),
+                *-- mas apenas em INSERIR/ALTERAR, como o When do SCX.
+                .txt_4c_DGrupoT.ReadOnly         = !par_lHabilitar
+                .txt_4c_DGrupoOs.ReadOnly        = !par_lHabilitar
+                .txt_4c_DCONTAOs.ReadOnly        = !par_lHabilitar
+                .txt_4c_DGrupoDs.ReadOnly        = !par_lHabilitar
+                .txt_4c_DCONTADs.ReadOnly        = !par_lHabilitar
+                .txt_4c_DGruJuro.ReadOnly        = !par_lHabilitar
+                .txt_4c_DJuro.ReadOnly           = !par_lHabilitar
                 .cmd_4c_BotConsulta.Enabled      = par_lHabilitar
                 .cmd_4c_Command1.Enabled         = par_lHabilitar
                 .cmd_4c_Command2.Enabled         = par_lHabilitar
                 .cmd_4c_Command3.Enabled         = par_lHabilitar
                 .cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = par_lHabilitar
+            ENDWITH
+
+            *-- Column.ReadOnly DEPOIS de Grid.ReadOnly: o do grid propaga para as
+            *-- colunas e sobrescreve. O SCX declara ColumnN.ReadOnly = .F. nas 9.
+            WITH loc_oPg2.grd_4c_GradeCheque
+                .Column1.ReadOnly = !par_lHabilitar
+                .Column2.ReadOnly = !par_lHabilitar
+                .Column3.ReadOnly = !par_lHabilitar
+                .Column4.ReadOnly = !par_lHabilitar
+                .Column5.ReadOnly = !par_lHabilitar
+                .Column6.ReadOnly = !par_lHabilitar
+                .Column7.ReadOnly = !par_lHabilitar
+                .Column8.ReadOnly = !par_lHabilitar
+                .Column9.ReadOnly = !par_lHabilitar
             ENDWITH
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formche.HabilitarCampos")
@@ -2060,116 +2129,8 @@ DEFINE CLASS Formche AS FormBase
                     .txt_4c_TaxaDia.Value  = loc_oBO.this_nTaxaDia
                     .txt_4c_TaxaIof.Value  = loc_oBO.this_nTaxaIof
                 ENDWITH
-                *-- Buscar descricao do Grupo Terceiro se codigo preenchido
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cGrupoT))
-                    IF USED("cursor_4c_GrupoTDesc")
-                        USE IN cursor_4c_GrupoTDesc
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cGrupoT)), ;
-                        "cursor_4c_GrupoTDesc")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_GrupoTDesc") > 0
-                        SELECT cursor_4c_GrupoTDesc
-                        loc_oPg2.txt_4c_DGrupoT.Value = ALLTRIM(cursor_4c_GrupoTDesc.descrs)
-                    ENDIF
-                    IF USED("cursor_4c_GrupoTDesc")
-                        USE IN cursor_4c_GrupoTDesc
-                    ENDIF
-                ENDIF
-                *-- Descricoes Grupo/Conta Origem
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cGrupoOs))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cGrupoOs)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DGrupoOs.Value = ALLTRIM(cursor_4c_DescAux.descrs)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cContaOs))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cContaOs)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DCONTAOs.Value = ALLTRIM(cursor_4c_DescAux.Rclis)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
-                *-- Descricoes Grupo/Conta Destino
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cGrupoDs))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cGrupoDs)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DGrupoDs.Value = ALLTRIM(cursor_4c_DescAux.descrs)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cContaDs))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cContaDs)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DCONTADs.Value = ALLTRIM(cursor_4c_DescAux.Rclis)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
-                *-- Descricoes Grupo/Conta Juros
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cGruJuro))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cGruJuro)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DGruJuro.Value = ALLTRIM(cursor_4c_DescAux.descrs)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
-                IF !EMPTY(ALLTRIM(loc_oBO.this_cConJuro))
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                        EscaparSQL(ALLTRIM(loc_oBO.this_cConJuro)), "cursor_4c_DescAux")
-                    IF loc_nRet > 0 AND RECCOUNT("cursor_4c_DescAux") > 0
-                        SELECT cursor_4c_DescAux
-                        loc_oPg2.txt_4c_DJuro.Value = ALLTRIM(cursor_4c_DescAux.Rclis)
-                    ENDIF
-                    IF USED("cursor_4c_DescAux")
-                        USE IN cursor_4c_DescAux
-                    ENDIF
-                ENDIF
+                *-- inicdesc() do legado: descricoes de Origem, Destino, Juros e Terceiro
+                THIS.IniciarDescricoes("")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formche.BOParaForm")
@@ -2291,42 +2252,85 @@ DEFINE CLASS Formche AS FormBase
     * BtnSalvarClick - Confirma e salva cabecalho do lote (SigCqLcm)
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lResultado, loc_oBO, loc_oPg2
-        loc_lResultado = .F.
+        LOCAL loc_lResultado, loc_oBO, loc_oPg2, loc_lProsseguir
+        loc_lResultado  = .F.
+        loc_lProsseguir = .T.
 
         TRY
             loc_oBO  = THIS.this_oBusinessObject
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+            *-- Cada validacao ABORTA a gravacao. Antes elas so atribuiam
+            *-- loc_lResultado = .F. (que ja era .F.) e a execucao seguia direto
+            *-- para FormParaBO + Salvar: o aviso aparecia e o registro gravava
+            *-- assim mesmo (Erro207). Flag em vez de RETURN por causa do TRY.
             IF EMPTY(ALLTRIM(loc_oPg2.txt_4c_OperL.Value))
                 MsgAviso("Opera" + CHR(231) + CHR(227) + "o de lote inv" + CHR(225) + "lida.", "Confirmar")
                 loc_oPg2.txt_4c_OperL.SetFocus()
-                loc_lResultado = .F.
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF EMPTY(loc_oPg2.txt_4c_Data.Value)
+            IF loc_lProsseguir AND EMPTY(loc_oPg2.txt_4c_Data.Value)
                 MsgAviso("Data base obrigat" + CHR(243) + "ria.", "Confirmar")
                 loc_oPg2.txt_4c_Data.SetFocus()
-                loc_lResultado = .F.
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF EMPTY(ALLTRIM(loc_oPg2.txt_4c_Moeda.Value))
+            IF loc_lProsseguir AND EMPTY(ALLTRIM(loc_oPg2.txt_4c_Moeda.Value))
                 MsgAviso("Moeda obrigat" + CHR(243) + "ria.", "Confirmar")
                 loc_oPg2.txt_4c_Moeda.SetFocus()
-                loc_lResultado = .F.
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("TempChq") OR RECCOUNT("TempChq") = 0
+            *-- Validacoes transcritas do Grupo_Salva.Salva.Click do legado
+            IF loc_lProsseguir
+                IF EMPTY(ALLTRIM(loc_oPg2.txt_4c_GrupoOs.Value)) ;
+                        OR EMPTY(ALLTRIM(loc_oPg2.txt_4c_ContaOs.Value)) ;
+                        OR EMPTY(ALLTRIM(loc_oPg2.txt_4c_GrupoDs.Value)) ;
+                        OR EMPTY(ALLTRIM(loc_oPg2.txt_4c_ContaDs.Value))
+                    MsgAviso("Grupos e Contas de Origem/Destino devem ser preenchidos", "Confirmar")
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                IF ALLTRIM(loc_oPg2.txt_4c_GrupoOs.Value) + ALLTRIM(loc_oPg2.txt_4c_ContaOs.Value) == ;
+                        ALLTRIM(loc_oPg2.txt_4c_GrupoDs.Value) + ALLTRIM(loc_oPg2.txt_4c_ContaDs.Value)
+                    MsgAviso("Conta Dep" + CHR(243) + "sito Inv" + CHR(225) + "lida !!", "Confirmar")
+                    loc_oPg2.txt_4c_ContaOs.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            *-- Conta de juros nao pode coincidir com origem nem destino
+            IF loc_lProsseguir AND loc_oPg2.txt_4c_TJUROS.Value != 0
+                IF ALLTRIM(loc_oPg2.txt_4c_GruJuro.Value) + ALLTRIM(loc_oPg2.txt_4c_ConJuro.Value) == ;
+                        ALLTRIM(loc_oPg2.txt_4c_GrupoOs.Value) + ALLTRIM(loc_oPg2.txt_4c_ContaOs.Value) ;
+                        OR ALLTRIM(loc_oPg2.txt_4c_GruJuro.Value) + ALLTRIM(loc_oPg2.txt_4c_ConJuro.Value) == ;
+                        ALLTRIM(loc_oPg2.txt_4c_GrupoDs.Value) + ALLTRIM(loc_oPg2.txt_4c_ContaDs.Value)
+                    MsgAviso("Conta Juros Inv" + CHR(225) + "lida !!", "Confirmar")
+                    loc_oPg2.txt_4c_ConJuro.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir AND !THIS.ExisteChequeNoLote()
                 MsgAviso("Nenhum cheque adicionado ao lote.", "Confirmar")
-                loc_lResultado = .F.
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.FormParaBO()
+            IF loc_lProsseguir
+                loc_lProsseguir = THIS.ValidarLinhasCheque()
+            ENDIF
 
-            IF loc_oBO.Salvar()
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AlternarPagina(1)
-                loc_lResultado = .T.
+            IF loc_lProsseguir
+                THIS.FormParaBO()
+
+                IF loc_oBO.Salvar()
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AlternarPagina(1)
+                    loc_lResultado = .T.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formche.BtnSalvarClick")
@@ -2334,6 +2338,99 @@ DEFINE CLASS Formche AS FormBase
 
         RETURN loc_lResultado
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExisteChequeNoLote - .T. se TempChq tem ao menos uma linha PREENCHIDA.
+    *   RECCOUNT() nao serve: a grade sempre carrega com uma linha em branco
+    *   (APPEND BLANK em CarregarPaginaDados), entao RECCOUNT eh 1 com o lote
+    *   vazio e a validacao "Nenhum cheque adicionado" nunca disparava.
+    *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * ValidarLinhasCheque - transcrito do Grupo_Salva.Salva.Click do legado:
+    *   linha totalmente vazia eh DELETADA; nas demais Bancos/Agencias/NContas/
+    *   NCheques tem de ter o tamanho exato, e Vencimento e Valor sao
+    *   obrigatorios. Devolve .F. (com aviso) na primeira linha invalida.
+    *--------------------------------------------------------------------------
+    FUNCTION ValidarLinhasCheque()
+        LOCAL loc_lOk, loc_oPg2
+        loc_lOk = .T.
+
+        IF USED("TempChq")
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+            SELECT TempChq
+            GO TOP
+
+            SCAN
+                IF EMPTY(ALLTRIM(TempChq.Bancos)) AND EMPTY(ALLTRIM(TempChq.Agencias)) ;
+                        AND EMPTY(ALLTRIM(TempChq.NContas)) AND EMPTY(ALLTRIM(TempChq.NCheques))
+                    DELETE
+                    LOOP
+                ENDIF
+
+                *-- Mesma normalizacao do Conta.Text1.Valid do legado, aqui como
+                *-- rede de seguranca: linha que nao passou pela celula (colada,
+                *-- vinda do banco ou preenchida por outro caminho) tambem fica
+                *-- com os 10 digitos antes da checagem de tamanho.
+                IF !EMPTY(ALLTRIM(TempChq.NContas))
+                    REPLACE TempChq.NContas WITH PADL(ALLTRIM(TempChq.NContas), 10, "0")
+                ENDIF
+
+                IF LEN(ALLTRIM(TempChq.Bancos)) != 3 OR LEN(ALLTRIM(TempChq.Agencias)) != 4 ;
+                        OR LEN(ALLTRIM(TempChq.NContas)) != 10 OR LEN(ALLTRIM(TempChq.NCheques)) != 6
+                    MsgAviso("Cheque com Dados Inv" + CHR(225) + "lidos !" + CHR(13) + CHR(13) + ;
+                        "Bco: "    + ALLTRIM(TempChq.Bancos)   + " (3 d" + CHR(237) + "gitos)" + CHR(13) + ;
+                        "Ag" + CHR(234) + "ncia: " + ALLTRIM(TempChq.Agencias) + " (4 d" + CHR(237) + "gitos)" + CHR(13) + ;
+                        "Conta: "  + ALLTRIM(TempChq.NContas)  + " (10 d" + CHR(237) + "gitos)" + CHR(13) + ;
+                        "Cheque: " + ALLTRIM(TempChq.NCheques) + " (6 d" + CHR(237) + "gitos)", ;
+                        "Confirmar")
+                    loc_lOk = .F.
+                    EXIT
+                ENDIF
+
+                IF EMPTY(TempChq.Vencs)
+                    MsgAviso("Vencimento Inv" + CHR(225) + "lido !", "Confirmar")
+                    loc_lOk = .F.
+                    EXIT
+                ENDIF
+
+                IF TempChq.Valors = 0
+                    MsgAviso("Valor Cheque Inv" + CHR(225) + "lido !", "Confirmar")
+                    loc_lOk = .F.
+                    EXIT
+                ENDIF
+            ENDSCAN
+
+            IF !loc_lOk
+                loc_oPg2.grd_4c_GradeCheque.SetFocus()
+            ENDIF
+
+            GO TOP IN TempChq
+            loc_oPg2.grd_4c_GradeCheque.Refresh()
+        ENDIF
+
+        RETURN loc_lOk
+    ENDFUNC
+
+    FUNCTION ExisteChequeNoLote()
+        LOCAL loc_lTem, loc_nRec
+        loc_lTem = .F.
+
+        IF USED("TempChq")
+            SELECT TempChq
+            loc_nRec = RECNO("TempChq")
+            SCAN
+                IF !EMPTY(ALLTRIM(TempChq.Bancos)) OR !EMPTY(ALLTRIM(TempChq.NCheques))
+                    loc_lTem = .T.
+                    EXIT
+                ENDIF
+            ENDSCAN
+            IF loc_nRec > 0 AND loc_nRec <= RECCOUNT("TempChq")
+                GO loc_nRec IN TempChq
+            ENDIF
+        ENDIF
+
+        RETURN loc_lTem
+    ENDFUNC
 
     *--------------------------------------------------------------------------
     * BtnCancelarClick - Cancela edicao e retorna para lista
@@ -2375,31 +2472,22 @@ DEFINE CLASS Formche AS FormBase
             ENDIF
 
             IF THIS.this_nNumLoteAtual > 0
-                *-- Carregar cheques via JOIN SigCcChm x SigChe x SigCdCli
+                *-- Tudo que a grade exibe ja esta em SigCcChm. A versao
+                *-- anterior buscava vencs/valors/... num LEFT JOIN com SigChe;
+                *-- como SigChe aceita mais de um registro para a mesma chave de
+                *-- cheque, o join DUPLICAVA linhas. O unico join que resta eh o
+                *-- do TERCEIRO (contat), para CPF/Nome - equivalente ao
+                *-- inicdesc('5') do legado.
                 loc_cSQL = ;
                     "SELECT c.bancos, c.agencias, c.ncontas, c.ncheques, c.obss, c.emps," + ;
-                    " ISNULL(h.vencs,  NULL)    AS vencs,"    + ;
-                    " ISNULL(h.valors,  0)      AS valors,"   + ;
-                    " ISNULL(h.valpags, 0)      AS valpags,"  + ;
-                    " ISNULL(h.iclis,   '')     AS iclis,"    + ;
-                    " ISNULL(h.grclis,  '')     AS grclis,"   + ;
-                    " ISNULL(h.contas,  '')     AS contas,"   + ;
-                    " ISNULL(h.grupos,  '')     AS grupos,"   + ;
-                    " ISNULL(h.nums,    '')     AS nums,"     + ;
-                    " ISNULL(h.grupot,  '')     AS grupot,"   + ;
-                    " ISNULL(h.contat,  '')     AS contat,"   + ;
-                    " ISNULL(h.moeds,   '')     AS moeds,"    + ;
-                    " ISNULL(h.cotas,    0)     AS cotas,"    + ;
-                    " ISNULL(h.grucarts, '')    AS grucarts," + ;
-                    " ISNULL(h.concarts, '')    AS concarts," + ;
-                    " ISNULL(h.protocolos, '')  AS protocolos," + ;
-                    " ISNULL(h.valjuros,  0)    AS valjuros," + ;
+                    " c.vencs, c.valors, c.valjuros, c.iclis, c.grclis," + ;
+                    " c.contas, c.grupos, c.nums, c.grupot, c.contat," + ;
+                    " c.moeds, c.cotas, c.grucarts, c.concarts, c.protocolos," + ;
+                    " 0 AS valpags," + ;
                     " ISNULL(cli.cpfs,   '')    AS cpft,"     + ;
                     " ISNULL(cli.rclis,  '')    AS nomet"     + ;
                     " FROM SigCcChm c"                        + ;
-                    " LEFT JOIN SigChe h ON h.bancos = c.bancos AND h.agencias = c.agencias" + ;
-                    " AND h.ncontas = c.ncontas AND h.ncheques = c.ncheques"                 + ;
-                    " LEFT JOIN SigCdCli cli ON cli.iclis = h.iclis"                         + ;
+                    " LEFT JOIN SigCdCli cli ON RTRIM(cli.iclis) = RTRIM(c.contat)"          + ;
                     " WHERE c.numlotes = " + FormatarNumeroSQL(THIS.this_nNumLoteAtual)      + ;
                     " ORDER BY c.bancos, c.agencias, c.ncontas, c.ncheques"
 
@@ -2464,6 +2552,53 @@ DEFINE CLASS Formche AS FormBase
                 .Column7.Header1.Caption = "Observa" + CHR(231) + CHR(227) + "o"
                 .Column8.Header1.Caption = "CPF/CNPJ"
                 .Column9.Header1.Caption = "Nome Terceiro"
+
+                *-- Format/InputMask transcritos do SCX (GradeCheque.<col>.Text1).
+                *-- O legado declara nos DOIS niveis porque a Column sozinha nao
+                *-- atualiza o Text1 ja instanciado.
+                .Column1.Format    = "999"
+                .Column1.InputMask = "999"
+                .Column2.Format    = "9999"
+                .Column2.InputMask = "9999"
+                .Column3.Format    = "9999999999"
+                .Column3.InputMask = "9999999999"
+                .Column4.Format    = "999999"
+                .Column4.InputMask = "999999"
+                .Column6.Format    = "999,999,999.99"
+                .Column6.InputMask = "999,999,999.99"
+                .Column8.Format    = "K"
+                .Column1.Text1.Format    = "999"
+                .Column1.Text1.InputMask = "999"
+                .Column1.Text1.Alignment = 3
+                .Column2.Text1.Format    = "9999"
+                .Column2.Text1.InputMask = "9999"
+                .Column3.Text1.Format    = "9999999999"
+                .Column3.Text1.InputMask = "9999999999"
+                .Column4.Text1.Format    = "999999"
+                .Column4.Text1.InputMask = "999999"
+                .Column6.Text1.Format    = "999,999,999.99"
+                .Column6.Text1.InputMask = "999,999,999.99"
+                .Column8.Text1.Format    = "K"
+
+                *-- Column.Width por ULTIMO: RecordSource/ControlSource recalculam
+                *-- as larguras para o default 90 (regra #41). Definidas no
+                *-- ConfigurarPaginaDados elas eram apagadas aqui.
+                .Column1.Width = 35
+                .Column2.Width = 40
+                .Column3.Width = 85
+                .Column4.Width = 70
+                .Column5.Width = 80
+                .Column6.Width = 110
+                .Column7.Width = 145
+                .Column8.Width = 150
+                .Column9.Width = 240
+
+                *-- ColumnOrder do SCX: Observacao vai para o FIM; CPF e Nome
+                *-- sobem para 7 e 8. Sem isto a ordem na tela diverge do legado.
+                .Column7.ColumnOrder = 9
+                .Column8.ColumnOrder = 7
+                .Column9.ColumnOrder = 8
+                .Column5.Bound       = .T.
             ENDWITH
 
             SELECT TempChq
@@ -2694,6 +2829,11 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Sem mAddColuna o grid nasce com ColumnCount = 0 e o picker
+                    *-- abre como caixa branca vazia. Colunas transcritas do legado
+                    *-- (Get_OperL.Valid: AddColuna Operacaos/Descrs).
+                    loc_oLookup.mAddColuna("Operacaos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -2707,13 +2847,30 @@ DEFINE CLASS Formche AS FormBase
                     SELECT cursor_4c_OperLPick
                     GO TOP
                     loc_oPg2.txt_4c_OperL.Value = ALLTRIM(cursor_4c_OperLPick.Operacaos)
+                    *-- Transcrito do legado (Get_OperL.Valid): a operacao carrega os
+                    *-- grupos/contas padrao de origem, destino e terceiro. Sem isto o
+                    *-- usuario escolhia o Movimento e os campos Grupo/Conta Orig.
+                    *-- continuavam vazios (Erro207).
+                    loc_oPg2.txt_4c_GrupoDs.Value = ALLTRIM(cursor_4c_OperLPick.grudeps)
+                    loc_oPg2.txt_4c_ContaDs.Value = ALLTRIM(cursor_4c_OperLPick.condeps)
+                    loc_oPg2.txt_4c_GrupoOs.Value = ALLTRIM(cursor_4c_OperLPick.grupoos)
+                    loc_oPg2.txt_4c_ContaOs.Value = ALLTRIM(cursor_4c_OperLPick.contaos)
+                    loc_oPg2.txt_4c_GrupoT.Value  = ALLTRIM(cursor_4c_OperLPick.grupot)
                     *-- opera: S=entrada(DB), E=saida, ' '=transferencia(TR)
                     loc_oPg2.txt_4c_Opera.Value = IIF(ALLTRIM(cursor_4c_OperLPick.tipos) = "TR", " ", ;
                         IIF(ALLTRIM(cursor_4c_OperLPick.tipos) = "DB", "S", "E"))
-                    *-- Moeda default da operacao
-                    IF !EMPTY(ALLTRIM(cursor_4c_OperLPick.moeds))
-                        loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_OperLPick.moeds)
+                    *-- Moeda default da operacao (coluna SigCdOpt.moedas, nao "moeds")
+                    IF !EMPTY(ALLTRIM(cursor_4c_OperLPick.moedas))
+                        loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_OperLPick.moedas)
                     ENDIF
+                    *-- Leitura de cheque por codigo de barras so com tpleituras = 2
+                    loc_oPg2.txt_4c_Cheque.Visible = (cursor_4c_OperLPick.tpleituras = 2)
+                    loc_oPg2.txt_4c_Cheque.Enabled = (cursor_4c_OperLPick.tpleituras = 2)
+                    *-- inicdesc('1'..'4') do legado: preenche as descricoes dos codigos
+                    THIS.IniciarDescricoes("1")
+                    THIS.IniciarDescricoes("2")
+                    THIS.IniciarDescricoes("3")
+                    THIS.IniciarDescricoes("4")
                 ENDIF
 
                 IF USED("cursor_4c_OperLPick")
@@ -2725,6 +2882,219 @@ DEFINE CLASS Formche AS FormBase
             MsgErro(loc_oErro.Message, "Formche.ValidarOperL")
         ENDTRY
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * IniciarDescricoes - equivalente ao inicdesc(pcDado) do legado
+    *   "1" = Origem, "2" = Destino, "3" = Juros, "4" = Terceiro
+    *   Vazio/ausente = todos. Preenche o textbox de descricao a partir do
+    *   codigo ja digitado; codigo vazio LIMPA a descricao (igual ao legado).
+    *--------------------------------------------------------------------------
+    PROCEDURE IniciarDescricoes(par_cDado)
+        LOCAL loc_cDado, loc_oPg2
+        TRY
+            loc_cDado = IIF(VARTYPE(par_cDado) = "C", ALLTRIM(par_cDado), "")
+            loc_oPg2  = THIS.pgf_4c_Paginas.Page2
+
+            IF EMPTY(loc_cDado) OR loc_cDado = "1"
+                loc_oPg2.txt_4c_DGrupoOs.Value = THIS.ObterDescricaoGrupo(loc_oPg2.txt_4c_GrupoOs.Value)
+                loc_oPg2.txt_4c_DCONTAOs.Value = THIS.ObterDescricaoConta(loc_oPg2.txt_4c_ContaOs.Value)
+            ENDIF
+
+            IF EMPTY(loc_cDado) OR loc_cDado = "2"
+                loc_oPg2.txt_4c_DGrupoDs.Value = THIS.ObterDescricaoGrupo(loc_oPg2.txt_4c_GrupoDs.Value)
+                loc_oPg2.txt_4c_DCONTADs.Value = THIS.ObterDescricaoConta(loc_oPg2.txt_4c_ContaDs.Value)
+            ENDIF
+
+            IF EMPTY(loc_cDado) OR loc_cDado = "3"
+                loc_oPg2.txt_4c_DGruJuro.Value = THIS.ObterDescricaoGrupo(loc_oPg2.txt_4c_GruJuro.Value)
+                loc_oPg2.txt_4c_DJuro.Value    = THIS.ObterDescricaoConta(loc_oPg2.txt_4c_ConJuro.Value)
+            ENDIF
+
+            IF EMPTY(loc_cDado) OR loc_cDado = "4"
+                loc_oPg2.txt_4c_DGrupoT.Value = THIS.ObterDescricaoGrupo(loc_oPg2.txt_4c_GrupoT.Value)
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formche.IniciarDescricoes")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Busca pela DESCRICAO (modo 'D' do legado)
+    *   No legado cada campo de descricao tem Valid proprio:
+    *     Get_dGrupo*  -> fAcessoContab(..., 'D', ...)  (SigCdGcr.Descrs)
+    *     Get_DCONTA*  -> fAcessoContas(..., 'D', ...)  (SigCdCli.Rclis)
+    *   e um When que so libera o campo em INSERIR/ALTERAR com o campo de CODIGO
+    *   vazio. A migracao tinha deixado esses campos ReadOnly e sem handler, logo
+    *   nao havia como localizar grupo/conta pelo nome (Erro207).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDGrupoT()
+        THIS.ResolverPorDescricao("txt_4c_GrupoT", "txt_4c_DGrupoT", ;
+            "cursor_4c_DGrupoTPick", "Grupo Terceiro", .T.)
+    ENDPROC
+
+    PROCEDURE ValidarDGrupoOs()
+        THIS.ResolverPorDescricao("txt_4c_GrupoOs", "txt_4c_DGrupoOs", ;
+            "cursor_4c_DGrupoOsPick", "Grupo Origem", .T.)
+    ENDPROC
+
+    PROCEDURE ValidarDGrupoDs()
+        THIS.ResolverPorDescricao("txt_4c_GrupoDs", "txt_4c_DGrupoDs", ;
+            "cursor_4c_DGrupoDsPick", "Grupo Destino", .T.)
+    ENDPROC
+
+    PROCEDURE ValidarDGruJuro()
+        THIS.ResolverPorDescricao("txt_4c_GruJuro", "txt_4c_DGruJuro", ;
+            "cursor_4c_DGruJuroPick", "Grupo Juros", .T.)
+    ENDPROC
+
+    PROCEDURE ValidarDContaOs()
+        THIS.ResolverPorDescricao("txt_4c_ContaOs", "txt_4c_DCONTAOs", ;
+            "cursor_4c_DContaOsPick", "Conta Origem", .F.)
+    ENDPROC
+
+    PROCEDURE ValidarDContaDs()
+        THIS.ResolverPorDescricao("txt_4c_ContaDs", "txt_4c_DCONTADs", ;
+            "cursor_4c_DContaDsPick", "Conta Destino", .F.)
+    ENDPROC
+
+    PROCEDURE ValidarDConJuro()
+        THIS.ResolverPorDescricao("txt_4c_ConJuro", "txt_4c_DJuro", ;
+            "cursor_4c_DConJuroPick", "Conta Juros", .F.)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ResolverPorDescricao - corpo unico da busca por descricao.
+    *   par_lGrupo = .T. consulta SigCdGcr (codigos/descrs); .F. consulta
+    *   SigCdCli (Iclis/Rclis). Preenche SEMPRE os dois campos do par.
+    *   Equivale ao When do legado: so age em INSERIR/ALTERAR e com o campo de
+    *   CODIGO vazio - com codigo preenchido a descricao eh apenas exibicao.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ResolverPorDescricao(par_cTxtCod, par_cTxtDesc, ;
+            par_cCursor, par_cTitulo, par_lGrupo)
+        LOCAL loc_oPg2, loc_cDesc, loc_cTabela, loc_cColCod, loc_cColDesc
+        LOCAL loc_oLookup, loc_lProsseguir
+        loc_lProsseguir = .T.
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+            IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                IF !EMPTY(ALLTRIM(EVALUATE("loc_oPg2." + par_cTxtCod + ".Value")))
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cDesc = ALLTRIM(EVALUATE("loc_oPg2." + par_cTxtDesc + ".Value"))
+                IF EMPTY(loc_cDesc)
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cTabela  = IIF(par_lGrupo, "SigCdGcr", "SigCdCli")
+                loc_cColCod  = IIF(par_lGrupo, "codigos", "Iclis")
+                loc_cColDesc = IIF(par_lGrupo, "descrs", "Rclis")
+
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", ;
+                    gnConnHandle, loc_cTabela, par_cCursor, ;
+                    loc_cColDesc, loc_cDesc, par_cTitulo)
+
+                IF VARTYPE(loc_oLookup) = "O"
+                    IF !loc_oLookup.this_lAchouRegistro
+                        loc_oLookup.mAddColuna(loc_cColDesc, "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oLookup.mAddColuna(loc_cColCod, "", "C" + CHR(243) + "digo")
+                        loc_oLookup.Show()
+                    ENDIF
+
+                    IF loc_oLookup.this_lSelecionou AND USED(par_cCursor)
+                        IF RECCOUNT(par_cCursor) > 0
+                            SELECT (par_cCursor)
+                            STORE ALLTRIM(EVALUATE(par_cCursor + "." + loc_cColCod)) ;
+                                TO ("loc_oPg2." + par_cTxtCod + ".Value")
+                            STORE ALLTRIM(EVALUATE(par_cCursor + "." + loc_cColDesc)) ;
+                                TO ("loc_oPg2." + par_cTxtDesc + ".Value")
+                        ENDIF
+                    ENDIF
+
+                    IF USED(par_cCursor)
+                        USE IN (par_cCursor)
+                    ENDIF
+                    loc_oLookup.Release()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Formche.ResolverPorDescricao")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterDescricaoGrupo - Descricao do grupo contabil (SigCdGcr.descrs)
+    *   Codigo vazio devolve "" - o legado LIMPA a descricao nesse caso.
+    *--------------------------------------------------------------------------
+    FUNCTION ObterDescricaoGrupo(par_cCodigo)
+        LOCAL loc_cCod, loc_cDesc, loc_nRet
+        loc_cDesc = ""
+        loc_cCod  = IIF(VARTYPE(par_cCodigo) = "C", ALLTRIM(par_cCodigo), "")
+
+        IF !EMPTY(loc_cCod)
+            IF USED("cursor_4c_DescGrupo")
+                USE IN cursor_4c_DescGrupo
+            ENDIF
+            loc_nRet = SQLEXEC(gnConnHandle, ;
+                "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
+                EscaparSQL(loc_cCod), "cursor_4c_DescGrupo")
+            IF loc_nRet > 0 AND USED("cursor_4c_DescGrupo") AND RECCOUNT("cursor_4c_DescGrupo") > 0
+                SELECT cursor_4c_DescGrupo
+                GO TOP
+                loc_cDesc = ALLTRIM(cursor_4c_DescGrupo.descrs)
+            ENDIF
+            IF USED("cursor_4c_DescGrupo")
+                USE IN cursor_4c_DescGrupo
+            ENDIF
+        ENDIF
+
+        RETURN loc_cDesc
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ObterDescricaoConta - Razao social da conta (SigCdCli.Rclis)
+    *--------------------------------------------------------------------------
+    FUNCTION ObterDescricaoConta(par_cConta)
+        LOCAL loc_cCta, loc_cDesc, loc_nRet
+        loc_cDesc = ""
+        loc_cCta  = IIF(VARTYPE(par_cConta) = "C", ALLTRIM(par_cConta), "")
+
+        IF !EMPTY(loc_cCta)
+            IF USED("cursor_4c_DescConta")
+                USE IN cursor_4c_DescConta
+            ENDIF
+            loc_nRet = SQLEXEC(gnConnHandle, ;
+                "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE Iclis = " + ;
+                EscaparSQL(loc_cCta), "cursor_4c_DescConta")
+            IF loc_nRet > 0 AND USED("cursor_4c_DescConta") AND RECCOUNT("cursor_4c_DescConta") > 0
+                SELECT cursor_4c_DescConta
+                GO TOP
+                loc_cDesc = ALLTRIM(cursor_4c_DescConta.Rclis)
+            ENDIF
+            IF USED("cursor_4c_DescConta")
+                USE IN cursor_4c_DescConta
+            ENDIF
+        ENDIF
+
+        RETURN loc_cDesc
+    ENDFUNC
 
     *--------------------------------------------------------------------------
     * ValidarMoeda - LostFocus: lookup de moeda (SigCdMoe) + cotacao
@@ -2761,6 +3131,10 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Colunas transcritas do legado (Get_Moeda.Valid: CMoes/DMoes).
+                    *-- Sem mAddColuna o picker abre com zero colunas.
+                    loc_oLookup.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("DMoes", "", "Nome")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -2774,23 +3148,24 @@ DEFINE CLASS Formche AS FormBase
                     SELECT cursor_4c_MoedaPick
                     GO TOP
                     loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_MoedaPick.CMoes)
-                    *-- Carregar cotacao mais recente
-                    IF USED("cursor_4c_CotacaoPick")
-                        USE IN cursor_4c_CotacaoPick
-                    ENDIF
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT TOP 1 CMoes, Valos FROM SigCdCot WHERE CMoes = " + ;
-                        EscaparSQL(ALLTRIM(cursor_4c_MoedaPick.CMoes)) + ;
-                        " ORDER BY Datas DESC, Horas DESC", ;
-                        "cursor_4c_CotacaoPick")
-                    IF loc_nRet > 0 AND USED("cursor_4c_CotacaoPick") AND RECCOUNT("cursor_4c_CotacaoPick") > 0
-                        SELECT cursor_4c_CotacaoPick
-                        loc_oPg2.txt_4c_Cotacao.Value = cursor_4c_CotacaoPick.Valos
-                    ELSE
-                        loc_oPg2.txt_4c_Cotacao.Value = 1
-                    ENDIF
-                    IF USED("cursor_4c_CotacaoPick")
-                        USE IN cursor_4c_CotacaoPick
+                    *-- Legado: so busca cotacao quando a moeda tem Cotas; senao 1.
+                    loc_oPg2.txt_4c_Cotacao.Value = 1
+                    IF ConverterParaLogico(cursor_4c_MoedaPick.Cotas)
+                        IF USED("cursor_4c_CotacaoPick")
+                            USE IN cursor_4c_CotacaoPick
+                        ENDIF
+                        loc_nRet = SQLEXEC(gnConnHandle, ;
+                            "SELECT TOP 1 CMoes, Valos FROM SigCdCot WHERE CMoes = " + ;
+                            EscaparSQL(ALLTRIM(cursor_4c_MoedaPick.CMoes)) + ;
+                            " ORDER BY Datas DESC, Horas DESC", ;
+                            "cursor_4c_CotacaoPick")
+                        IF loc_nRet > 0 AND USED("cursor_4c_CotacaoPick") AND RECCOUNT("cursor_4c_CotacaoPick") > 0
+                            SELECT cursor_4c_CotacaoPick
+                            loc_oPg2.txt_4c_Cotacao.Value = cursor_4c_CotacaoPick.Valos
+                        ENDIF
+                        IF USED("cursor_4c_CotacaoPick")
+                            USE IN cursor_4c_CotacaoPick
+                        ENDIF
                     ENDIF
                     THIS.CotacaoLostFocus()
                 ENDIF
@@ -2808,7 +3183,7 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * CotacaoLostFocus - LostFocus: recalcula ValConv = Valor / Cotacao
     *--------------------------------------------------------------------------
-    PROCEDURE CotacaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE CotacaoLostFocus()
         LOCAL loc_oPg2, loc_nCotacao
         TRY
             loc_oPg2     = THIS.pgf_4c_Paginas.Page2
@@ -2858,6 +3233,10 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Colunas do picker (legado fAcessoContab: Codigo/Descricao). Sem
+                    *-- mAddColuna o grid nasce com ColumnCount = 0 e a lista abre VAZIA.
+                    loc_oLookup.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -2895,9 +3274,11 @@ DEFINE CLASS Formche AS FormBase
             USE IN cursor_4c_ParamJuro
         ENDIF
 
+        *-- SigCdPam eh tabela de parametro SINGLE-ROW: nao tem coluna emps.
+        *-- O "WHERE emps = ..." inventado pelo migrador fazia o SELECT falhar,
+        *-- e o fallback silencioso usava sempre juros SIMPLES.
         loc_nRet = SQLEXEC(gnConnHandle, ;
-            "SELECT TOP 1 JuroCarts FROM SigCdPam WHERE emps = " + ;
-            EscaparSQL(go_4c_Sistema.cCodEmpresa), ;
+            "SELECT TOP 1 JuroCarts FROM SigCdPam", ;
             "cursor_4c_ParamJuro")
 
         IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ParamJuro") > 0
@@ -2948,6 +3329,10 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Colunas do picker (legado fAcessoContab: Codigo/Descricao). Sem
+                    *-- mAddColuna o grid nasce com ColumnCount = 0 e a lista abre VAZIA.
+                    loc_oLookup.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -2962,8 +3347,6 @@ DEFINE CLASS Formche AS FormBase
                     GO TOP
                     loc_oPg2.txt_4c_GrupoOs.Value  = ALLTRIM(cursor_4c_GrupoOsPick.codigos)
                     loc_oPg2.txt_4c_DGrupoOs.Value = ALLTRIM(cursor_4c_GrupoOsPick.descrs)
-                    loc_oPg2.txt_4c_ContaOs.Value  = ""
-                    loc_oPg2.txt_4c_DCONTAOs.Value = ""
                 ENDIF
 
                 IF USED("cursor_4c_GrupoOsPick")
@@ -2978,55 +3361,111 @@ DEFINE CLASS Formche AS FormBase
 
     *--------------------------------------------------------------------------
     * ValidarContaOs - LostFocus: valida conta de origem (SigCdCli, filtro grupo)
+    *   Legado: Get_ContaOs.Valid -> fAcessoContas(..., 'C', ...), que faz o SEEK
+    *   exato e, falhando, ABRE O BROWSE. Estava ligado a "KeyPress" sem testar
+    *   tecla: o aviso "Conta nao encontrada" disparava a cada caractere digitado
+    *   e o usuario nunca conseguia terminar de digitar (regra #47 / Erro207).
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarContaOs(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cVal, loc_cGrupo, loc_oPg2, loc_nRet, loc_lProsseguir
+    PROCEDURE ValidarContaOs()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ResolverConta("txt_4c_GrupoOs", "txt_4c_ContaOs", "txt_4c_DCONTAOs", ;
+            "cursor_4c_ContaOsVal", "Conta Origem", .T.)
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ResolverConta - corpo compartilhado dos tres campos de conta (Origem,
+    *   Destino e Juros). Reproduz fAcessoContas em modo 'C':
+    *     1) codigo vazio -> limpa SO a descricao
+    *     2) SEEK exato dentro do grupo -> preenche codigo + descricao
+    *     3) nao achou -> abre o picker filtrado pelo grupo
+    *   NUNCA apaga o codigo digitado (regra #50).
+    *   par_lAplicaJuros reproduz o trecho do legado que puxa SigCdCli.juros
+    *   para a Taxa a.m. quando a conta de ORIGEM eh resolvida.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ResolverConta(par_cTxtGrupo, par_cTxtConta, par_cTxtDesc, ;
+            par_cCursor, par_cTitulo, par_lAplicaJuros)
+        LOCAL loc_oPg2, loc_cVal, loc_cGrupo, loc_nRet, loc_lProsseguir, loc_oLookup
+        LOCAL loc_cFiltro, loc_nJuros
         loc_lProsseguir = .T.
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
-            loc_cVal   = ALLTRIM(loc_oPg2.txt_4c_ContaOs.Value)
-            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_GrupoOs.Value)
+            loc_cVal   = ALLTRIM(EVALUATE("loc_oPg2." + par_cTxtConta + ".Value"))
+            loc_cGrupo = ALLTRIM(EVALUATE("loc_oPg2." + par_cTxtGrupo + ".Value"))
+            loc_nJuros = 0
 
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Informe o Grupo de Origem antes da Conta.", "Conta Origem")
-                loc_oPg2.txt_4c_GrupoOs.SetFocus()
+            IF EMPTY(loc_cVal)
+                STORE "" TO ("loc_oPg2." + par_cTxtDesc + ".Value")
                 loc_lProsseguir = .F.
             ENDIF
 
+            *-- SEEK exato dentro do grupo
             IF loc_lProsseguir
-                IF EMPTY(loc_cVal)
-                    loc_oPg2.txt_4c_DCONTAOs.Value = ""
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                IF USED("cursor_4c_ContaOsVal")
-                    USE IN cursor_4c_ContaOsVal
+                IF USED(par_cCursor)
+                    USE IN (par_cCursor)
                 ENDIF
                 loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                    EscaparSQL(loc_cVal) + " AND grupos = " + EscaparSQL(loc_cGrupo), ;
-                    "cursor_4c_ContaOsVal")
+                    "SELECT TOP 1 Iclis, Rclis, juros FROM SigCdCli WHERE Iclis = " + ;
+                    EscaparSQL(loc_cVal) + ;
+                    IIF(EMPTY(loc_cGrupo), "", " AND grupos = " + EscaparSQL(loc_cGrupo)), ;
+                    par_cCursor)
 
-                IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ContaOsVal") > 0
-                    SELECT cursor_4c_ContaOsVal
+                IF loc_nRet > 0 AND USED(par_cCursor) AND RECCOUNT(par_cCursor) > 0
+                    SELECT (par_cCursor)
                     GO TOP
-                    loc_oPg2.txt_4c_ContaOs.Value  = ALLTRIM(cursor_4c_ContaOsVal.Iclis)
-                    loc_oPg2.txt_4c_DCONTAOs.Value = ALLTRIM(cursor_4c_ContaOsVal.Rclis)
-                ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Origem.", ;
-                        "Conta Origem")
-                    loc_oPg2.txt_4c_DCONTAOs.Value = ""
-                    loc_oPg2.txt_4c_ContaOs.SetFocus()
+                    STORE ALLTRIM(EVALUATE(par_cCursor + ".Iclis")) TO ("loc_oPg2." + par_cTxtConta + ".Value")
+                    STORE ALLTRIM(EVALUATE(par_cCursor + ".Rclis")) TO ("loc_oPg2." + par_cTxtDesc + ".Value")
+                    loc_nJuros      = EVALUATE(par_cCursor + ".juros")
+                    loc_lProsseguir = .F.
                 ENDIF
 
-                IF USED("cursor_4c_ContaOsVal")
-                    USE IN cursor_4c_ContaOsVal
+                IF USED(par_cCursor)
+                    USE IN (par_cCursor)
                 ENDIF
             ENDIF
+
+            *-- Nao achou: abre o browse, como o legado faz
+            IF loc_lProsseguir
+                loc_cFiltro = IIF(EMPTY(loc_cGrupo), "", ;
+                    "grupos = " + EscaparSQL(loc_cGrupo))
+
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", ;
+                    gnConnHandle, "SigCdCli", par_cCursor, ;
+                    "Iclis", loc_cVal, par_cTitulo, .F., .F., loc_cFiltro)
+
+                IF VARTYPE(loc_oLookup) = "O"
+                    IF !loc_oLookup.this_lAchouRegistro
+                        loc_oLookup.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
+                        loc_oLookup.mAddColuna("Rclis", "", "Nome")
+                        loc_oLookup.Show()
+                    ENDIF
+
+                    IF loc_oLookup.this_lSelecionou AND USED(par_cCursor)
+                        IF RECCOUNT(par_cCursor) > 0
+                            SELECT (par_cCursor)
+                            STORE ALLTRIM(EVALUATE(par_cCursor + ".Iclis")) TO ("loc_oPg2." + par_cTxtConta + ".Value")
+                            STORE ALLTRIM(EVALUATE(par_cCursor + ".Rclis")) TO ("loc_oPg2." + par_cTxtDesc + ".Value")
+                            loc_nJuros = EVALUATE(par_cCursor + ".juros")
+                        ENDIF
+                    ENDIF
+
+                    IF USED(par_cCursor)
+                        USE IN (par_cCursor)
+                    ENDIF
+                    loc_oLookup.Release()
+                ENDIF
+            ENDIF
+
+            *-- Legado (Get_ContaOs.Valid): juros do cadastro da conta vai p/ a taxa
+            IF par_lAplicaJuros AND loc_nJuros != 0
+                loc_oPg2.txt_4c_Taxa.Value = loc_nJuros
+                THIS.TaxaLostFocus()
+            ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Formche.ValidarContaOs")
+            MsgErro(loc_oErro.Message, "Formche.ResolverConta")
         ENDTRY
     ENDPROC
 
@@ -3065,6 +3504,10 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Colunas do picker (legado fAcessoContab: Codigo/Descricao). Sem
+                    *-- mAddColuna o grid nasce com ColumnCount = 0 e a lista abre VAZIA.
+                    loc_oLookup.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -3079,8 +3522,6 @@ DEFINE CLASS Formche AS FormBase
                     GO TOP
                     loc_oPg2.txt_4c_GrupoDs.Value  = ALLTRIM(cursor_4c_GrupoDsPick.codigos)
                     loc_oPg2.txt_4c_DGrupoDs.Value = ALLTRIM(cursor_4c_GrupoDsPick.descrs)
-                    loc_oPg2.txt_4c_ContaDs.Value  = ""
-                    loc_oPg2.txt_4c_DCONTADs.Value = ""
                 ENDIF
 
                 IF USED("cursor_4c_GrupoDsPick")
@@ -3095,56 +3536,17 @@ DEFINE CLASS Formche AS FormBase
 
     *--------------------------------------------------------------------------
     * ValidarContaDs - LostFocus: valida conta de destino (SigCdCli, filtro grupo)
+    *   Mesmo tratamento do ValidarContaOs (legado Get_ContaDs.Valid). O legado
+    *   NAO puxa juros nesta conta, so na de origem.
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarContaDs(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cVal, loc_cGrupo, loc_oPg2, loc_nRet, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            loc_oPg2   = THIS.pgf_4c_Paginas.Page2
-            loc_cVal   = ALLTRIM(loc_oPg2.txt_4c_ContaDs.Value)
-            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_GrupoDs.Value)
-
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Informe o Grupo de Destino antes da Conta.", "Conta Destino")
-                loc_oPg2.txt_4c_GrupoDs.SetFocus()
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                IF EMPTY(loc_cVal)
-                    loc_oPg2.txt_4c_DCONTADs.Value = ""
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                IF USED("cursor_4c_ContaDsVal")
-                    USE IN cursor_4c_ContaDsVal
-                ENDIF
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                    EscaparSQL(loc_cVal) + " AND grupos = " + EscaparSQL(loc_cGrupo), ;
-                    "cursor_4c_ContaDsVal")
-
-                IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ContaDsVal") > 0
-                    SELECT cursor_4c_ContaDsVal
-                    GO TOP
-                    loc_oPg2.txt_4c_ContaDs.Value  = ALLTRIM(cursor_4c_ContaDsVal.Iclis)
-                    loc_oPg2.txt_4c_DCONTADs.Value = ALLTRIM(cursor_4c_ContaDsVal.Rclis)
-                ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Destino.", ;
-                        "Conta Destino")
-                    loc_oPg2.txt_4c_DCONTADs.Value = ""
-                    loc_oPg2.txt_4c_ContaDs.SetFocus()
-                ENDIF
-
-                IF USED("cursor_4c_ContaDsVal")
-                    USE IN cursor_4c_ContaDsVal
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Formche.ValidarContaDs")
-        ENDTRY
+    PROCEDURE ValidarContaDs()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ResolverConta("txt_4c_GrupoDs", "txt_4c_ContaDs", "txt_4c_DCONTADs", ;
+            "cursor_4c_ContaDsVal", "Conta Destino", .F.)
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -3182,6 +3584,10 @@ DEFINE CLASS Formche AS FormBase
 
             IF loc_lProsseguir
                 IF !loc_oLookup.this_lSelecionou
+                    *-- Colunas do picker (legado fAcessoContab: Codigo/Descricao). Sem
+                    *-- mAddColuna o grid nasce com ColumnCount = 0 e a lista abre VAZIA.
+                    loc_oLookup.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oLookup.Show()
                     IF !loc_oLookup.this_lSelecionou
                         loc_oLookup.Release()
@@ -3196,8 +3602,6 @@ DEFINE CLASS Formche AS FormBase
                     GO TOP
                     loc_oPg2.txt_4c_GruJuro.Value  = ALLTRIM(cursor_4c_GruJuroPick.codigos)
                     loc_oPg2.txt_4c_DGruJuro.Value = ALLTRIM(cursor_4c_GruJuroPick.descrs)
-                    loc_oPg2.txt_4c_ConJuro.Value  = ""
-                    loc_oPg2.txt_4c_DJuro.Value    = ""
                 ENDIF
 
                 IF USED("cursor_4c_GruJuroPick")
@@ -3213,55 +3617,14 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * ValidarConJuro - LostFocus: valida conta de juros (SigCdCli, filtro grupo)
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarConJuro(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cVal, loc_cGrupo, loc_oPg2, loc_nRet, loc_lProsseguir
-        loc_lProsseguir = .T.
-        TRY
-            loc_oPg2   = THIS.pgf_4c_Paginas.Page2
-            loc_cVal   = ALLTRIM(loc_oPg2.txt_4c_ConJuro.Value)
-            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_GruJuro.Value)
-
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Informe o Grupo de Juros antes da Conta.", "Conta Juros")
-                loc_oPg2.txt_4c_GruJuro.SetFocus()
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                IF EMPTY(loc_cVal)
-                    loc_oPg2.txt_4c_DJuro.Value = ""
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                IF USED("cursor_4c_ConJuroVal")
-                    USE IN cursor_4c_ConJuroVal
-                ENDIF
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE iclis = " + ;
-                    EscaparSQL(loc_cVal) + " AND grupos = " + EscaparSQL(loc_cGrupo), ;
-                    "cursor_4c_ConJuroVal")
-
-                IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ConJuroVal") > 0
-                    SELECT cursor_4c_ConJuroVal
-                    GO TOP
-                    loc_oPg2.txt_4c_ConJuro.Value = ALLTRIM(cursor_4c_ConJuroVal.Iclis)
-                    loc_oPg2.txt_4c_DJuro.Value   = ALLTRIM(cursor_4c_ConJuroVal.Rclis)
-                ELSE
-                    MsgAviso("Conta n" + CHR(227) + "o encontrada no Grupo de Juros.", ;
-                        "Conta Juros")
-                    loc_oPg2.txt_4c_DJuro.Value   = ""
-                    loc_oPg2.txt_4c_ConJuro.SetFocus()
-                ENDIF
-
-                IF USED("cursor_4c_ConJuroVal")
-                    USE IN cursor_4c_ConJuroVal
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Formche.ValidarConJuro")
-        ENDTRY
+    PROCEDURE ValidarConJuro()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ResolverConta("txt_4c_GruJuro", "txt_4c_ConJuro", "txt_4c_DJuro", ;
+            "cursor_4c_ConJuroVal", "Conta Juros", .F.)
+        THIS.this_lEmLookup = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -3269,7 +3632,7 @@ DEFINE CLASS Formche AS FormBase
     * Composto (JuroCarts=2): TaxaDia = ((1+Taxa/100)^(1/30)-1)*100
     * Simples: TaxaDia = Taxa/30
     *--------------------------------------------------------------------------
-    PROCEDURE TaxaLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE TaxaLostFocus()
         LOCAL loc_oPg2, loc_nTaxa, loc_nTaxaDia, loc_nJuroCarts
         TRY
             loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -3301,7 +3664,7 @@ DEFINE CLASS Formche AS FormBase
     * Composto: TaxaMes = ((1+TaxaDia/100)^30 - 1)*100
     * Simples: TaxaMes = TaxaDia*30
     *--------------------------------------------------------------------------
-    PROCEDURE TaxaDiaLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE TaxaDiaLostFocus()
         LOCAL loc_oPg2, loc_nTaxaDia, loc_nTaxaMes, loc_nJuroCarts
         TRY
             loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -3331,7 +3694,7 @@ DEFINE CLASS Formche AS FormBase
     *--------------------------------------------------------------------------
     * TaxaIofLostFocus - LostFocus: valida taxa IOF (nao pode ser negativa)
     *--------------------------------------------------------------------------
-    PROCEDURE TaxaIofLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE TaxaIofLostFocus()
         LOCAL loc_oPg2
         TRY
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -3398,40 +3761,27 @@ DEFINE CLASS Formche AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnCommand1Click - PGV Origem: picker de Conta Origem filtrado por grupo
+    * BtnCommand1Click - PGV Origem
+    *   Legado (Command1.Click): exige a Conta de Origem preenchida e abre a tela
+    *   SigOpCgv passando essa conta. NAO eh um picker de conta - a versao anterior
+    *   abria um FormBuscaAuxiliar sobre SigCdCli, o que permitia TROCAR a conta
+    *   por este botao, coisa que o legado nao faz (Erro207).
+    *   SigOpCgv ainda nao foi migrada: a ausencia fica VISIVEL em vez de ser
+    *   substituida por um comportamento diferente em silencio.
     *--------------------------------------------------------------------------
     PROCEDURE BtnCommand1Click()
-        LOCAL loc_oPg2, loc_cGrupo, loc_cConta, loc_nRet, loc_oLookup1, loc_lProsseguir
-        loc_lProsseguir = .T.
+        LOCAL loc_oPg2, loc_cConta
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
-            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_GrupoOs.Value)
             loc_cConta = ALLTRIM(loc_oPg2.txt_4c_ContaOs.Value)
 
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Informe o Grupo de Origem.", "PGV Origem")
-                loc_oPg2.txt_4c_GrupoOs.SetFocus()
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                loc_oLookup1 = CREATEOBJECT("FormBuscaAuxiliar", ;
-                    gnConnHandle, "SigCdCli", "cursor_4c_ContaOsBtn", ;
-                    "Iclis", loc_cConta, ;
-                    "Conta Origem - Grupo: " + loc_cGrupo)
-
-                IF VARTYPE(loc_oLookup1) = "O"
-                    loc_oLookup1.Show()
-                    IF USED("cursor_4c_ContaOsBtn") AND RECCOUNT("cursor_4c_ContaOsBtn") > 0
-                        SELECT cursor_4c_ContaOsBtn
-                        GO TOP
-                        loc_oPg2.txt_4c_ContaOs.Value  = ALLTRIM(cursor_4c_ContaOsBtn.Iclis)
-                        loc_oPg2.txt_4c_DCONTAOs.Value = ALLTRIM(cursor_4c_ContaOsBtn.Rclis)
-                    ENDIF
-                    IF USED("cursor_4c_ContaOsBtn")
-                        USE IN cursor_4c_ContaOsBtn
-                    ENDIF
-                    loc_oLookup1.Release()
+            IF EMPTY(loc_cConta)
+                MsgAviso(CHR(201) + " necess" + CHR(225) + "rio selecionar a Conta de terceiro...", ;
+                    "PGV")
+            ELSE
+                IF INLIST(THIS.this_cModoAtual, "VISUALIZAR", "INCLUIR", "ALTERAR")
+                    MsgAviso("Tela de PGV (SigOpCgv) ainda n" + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                        "PGV")
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -3440,40 +3790,22 @@ DEFINE CLASS Formche AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnCommand2Click - PGV Destino: picker de Conta Destino filtrado por grupo
+    * BtnCommand2Click - PGV Destino
+    *   Espelho do BtnCommand1Click sobre a Conta de Destino (legado Command2.Click).
     *--------------------------------------------------------------------------
     PROCEDURE BtnCommand2Click()
-        LOCAL loc_oPg2, loc_cGrupo, loc_cConta, loc_nRet, loc_oLookup2, loc_lProsseguir
-        loc_lProsseguir = .T.
+        LOCAL loc_oPg2, loc_cConta
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
-            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_GrupoDs.Value)
             loc_cConta = ALLTRIM(loc_oPg2.txt_4c_ContaDs.Value)
 
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Informe o Grupo de Destino.", "PGV Destino")
-                loc_oPg2.txt_4c_GrupoDs.SetFocus()
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                loc_oLookup2 = CREATEOBJECT("FormBuscaAuxiliar", ;
-                    gnConnHandle, "SigCdCli", "cursor_4c_ContaDsBtn", ;
-                    "Iclis", loc_cConta, ;
-                    "Conta Destino - Grupo: " + loc_cGrupo)
-
-                IF VARTYPE(loc_oLookup2) = "O"
-                    loc_oLookup2.Show()
-                    IF USED("cursor_4c_ContaDsBtn") AND RECCOUNT("cursor_4c_ContaDsBtn") > 0
-                        SELECT cursor_4c_ContaDsBtn
-                        GO TOP
-                        loc_oPg2.txt_4c_ContaDs.Value  = ALLTRIM(cursor_4c_ContaDsBtn.Iclis)
-                        loc_oPg2.txt_4c_DCONTADs.Value = ALLTRIM(cursor_4c_ContaDsBtn.Rclis)
-                    ENDIF
-                    IF USED("cursor_4c_ContaDsBtn")
-                        USE IN cursor_4c_ContaDsBtn
-                    ENDIF
-                    loc_oLookup2.Release()
+            IF EMPTY(loc_cConta)
+                MsgAviso(CHR(201) + " necess" + CHR(225) + "rio selecionar a Conta de terceiro...", ;
+                    "PGV")
+            ELSE
+                IF INLIST(THIS.this_cModoAtual, "VISUALIZAR", "INCLUIR", "ALTERAR")
+                    MsgAviso("Tela de PGV (SigOpCgv) ainda n" + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                        "PGV")
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

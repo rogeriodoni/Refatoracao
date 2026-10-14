@@ -322,7 +322,7 @@ DEFINE CLASS SIGREDESBO AS RelatorioBase
                 "left join SigMvItd d with(nolock) " + ;
                 "  on b.empdopnums = d.empdopnums " + ;
                 "  and b.cpros = d.Cpros and b.citens = d.citens " + ;
-                "left join sigcddes e with(nolock) on d.codigo = e.codigo, " + ;
+                "left join sigcddes e with(nolock) on d.codigo COLLATE DATABASE_DEFAULT = e.codigo, " + ;
                 "SigCdOpe g with(nolock), " + ;
                 "SigCdTom h with(nolock), SigcdPro p with(nolock) " + ;
                 "left join SigCdPsg co with(nolock) " + ;

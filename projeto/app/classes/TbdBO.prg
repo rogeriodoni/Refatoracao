@@ -190,7 +190,7 @@ DEFINE CLASS TbdBO AS BusinessBase
 
 			loc_cSQL = "SELECT a.codigos AS codigos, a.cidchaves AS cidchaves," + ;
 			           " a.dopes AS dopes, b.descrs AS descrs" + ;
-			           " FROM SigCdTbd a INNER JOIN SigOpTdz b ON a.codigos = b.codigos" + ;
+			           " FROM SigCdTbd a INNER JOIN SigOpTdz b ON a.codigos COLLATE DATABASE_DEFAULT = b.codigos" + ;
 			           " WHERE RTRIM(a.dopes) = " + EscaparSQL(ALLTRIM(par_cDopes)) + ;
 			           " ORDER BY a.codigos"
 

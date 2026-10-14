@@ -208,6 +208,12 @@ DEFINE CLASS VENBO AS BusinessBase
 	* (Init: AddCursor lcQrycdVen + pColuna x11):
 	* codigo, codvens, nome (SigCdUsu.ncomps), emps, empreg (SigCdCli.emps),
 	* gruvens, dtini, dtfin, situas, cargo, usualts, dtalts
+	*
+	* COLLATE DATABASE_DEFAULT nos JOINs: SigCdVen esta em Latin1_General_CI_AS
+	* (default do DB_MBAHIA) e SigCdUsu/SigCdCli em SQL_Latin1_General_CP1_CI_AS.
+	* Sem o COLLATE o SQL Server recusa a comparacao ("conflito de ordenacao ...
+	* na operacao equal to") e a tela nao abre. A query LEGADA (lcQrycdVen) tem
+	* o mesmo defeito - medido contra o banco em 2026-10-13. Erro201.
 	*====================================================================
 	PROCEDURE Buscar(par_cFiltro)
 		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
@@ -229,8 +235,9 @@ DEFINE CLASS VENBO AS BusinessBase
 					" a.emps, c.emps AS empreg, a.gruvens, a.dtini, a.dtfin," + ;
 					" a.situas, a.cargo, a.usualts, a.dtalts" + ;
 					" FROM SigCdVen a" + ;
-					" LEFT JOIN SigCdUsu b ON a.codvens = b.usuarios" + ;
-					" LEFT JOIN SigCdCli c ON a.gruvens = c.grupos AND a.codvens = c.iclis"
+					" LEFT JOIN SigCdUsu b ON a.codvens COLLATE DATABASE_DEFAULT = b.usuarios" + ;
+					" LEFT JOIN SigCdCli c ON a.gruvens COLLATE DATABASE_DEFAULT = c.grupos" + ;
+					" AND a.codvens COLLATE DATABASE_DEFAULT = c.iclis"
 
 				IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
 					loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro

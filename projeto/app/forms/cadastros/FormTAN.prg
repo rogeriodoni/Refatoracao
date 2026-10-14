@@ -870,7 +870,7 @@ DEFINE CLASS FormTAN AS FormBase
         TRY
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
-            THIS.this_oBusinessObject.this_nCodigo    = ALLTRIM(TRANSFORM(loc_oPg2.txt_4c_Codigo.Value))
+            THIS.this_oBusinessObject.this_nCodigo    = VAL(TRANSFORM(loc_oPg2.txt_4c_Codigo.Value))
             THIS.this_oBusinessObject.this_cDescricao = ALLTRIM(loc_oPg2.txt_4c_Descricao.Value)
 
             loc_lResultado = .T.

@@ -1414,7 +1414,7 @@ DEFINE CLASS Formsigreinr AS FormBase
                 .this_cDsProduto  = ALLTRIM(loc_oPg.txt_4c_DsProduto.Value)
                 .this_cLocal      = ALLTRIM(loc_oPg.txt_4c_CodLocal.Value)
                 .this_cDsLocal    = ALLTRIM(loc_oPg.txt_4c_DsLocal.Value)
-                .this_nBarra      = TRANSFORM(loc_oPg.txt_4c_Barra.Value)
+                .this_nBarra      = VAL(TRANSFORM(loc_oPg.txt_4c_Barra.Value))
                 .this_nOptTpCusto = loc_oPg.optg_4c_TpCusto.Value
                 .this_nOptTpVenda = loc_oPg.optg_4c_TpVenda.Value
                 .this_nOptFoto    = loc_oPg.optg_4c_Foto.Value

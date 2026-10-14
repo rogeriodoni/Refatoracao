@@ -153,7 +153,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                        " b.rclis AS sDContas, a.Moeda, a.Inativas," + ;
                        " a.DtIncs, a.UsuIncs" + ;
                        " FROM SigCdMtz a" + ;
-                       " LEFT JOIN SigCdCli b ON a.sContas = b.IClis" + ;
+                       " LEFT JOIN SigCdCli b ON a.sContas COLLATE DATABASE_DEFAULT = b.IClis" + ;
                        " ORDER BY a.Ano, a.sGrupos, a.sContas"
 
             IF !EMPTY(par_cFiltro)
@@ -161,7 +161,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                            " b.rclis AS sDContas, a.Moeda, a.Inativas," + ;
                            " a.DtIncs, a.UsuIncs" + ;
                            " FROM SigCdMtz a" + ;
-                           " LEFT JOIN SigCdCli b ON a.sContas = b.IClis" + ;
+                           " LEFT JOIN SigCdCli b ON a.sContas COLLATE DATABASE_DEFAULT = b.IClis" + ;
                            " WHERE " + par_cFiltro + ;
                            " ORDER BY a.Ano, a.sGrupos, a.sContas"
             ENDIF
@@ -198,7 +198,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                        " b.rclis AS sDContas, a.Moeda, a.Inativas," + ;
                        " a.DtIncs, a.UsuIncs, a.DtAlts, a.UsuAlts, a.CidChaves" + ;
                        " FROM SigCdMtz a" + ;
-                       " LEFT JOIN SigCdCli b ON a.sContas = b.IClis" + ;
+                       " LEFT JOIN SigCdCli b ON a.sContas COLLATE DATABASE_DEFAULT = b.IClis" + ;
                        " WHERE a.Codigo = " + EscaparSQL(par_cCodigo)
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")

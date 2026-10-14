@@ -619,6 +619,7 @@ DEFINE CLASS CLCBO AS BusinessBase
                        " Toleras, Percents," + ;
                        " LocalA, GrupoA, ContaA, OperacaoA, GdeGrupoA, DataA, EtiquetaA, PalmA, DivisaoA," + ;
                        " LocalB, GrupoB, ContaB, OperacaoB, GdeGrupoB, DataB, EtiquetaB, PalmB, DivisaoB" + ;
+                       ", cidchaves" + ;
                        ") VALUES (" + ;
                        EscaparSQL(THIS.this_cCodigos)   + "," + ;
                        EscaparSQL(THIS.this_cEmps)      + "," + ;
@@ -645,7 +646,8 @@ DEFINE CLASS CLCBO AS BusinessBase
                        FormatarDataSQL(THIS.this_dDataB) + "," + ;
                        IIF(THIS.this_lEtiquetaB, "1", "0") + "," + ;
                        IIF(THIS.this_lPalmB, "1", "0")  + "," + ;
-                       FormatarNumeroSQL(THIS.this_nDivisaoB) + ;
+                       FormatarNumeroSQL(THIS.this_nDivisaoB) + "," + ;
+                       EscaparSQL(fUniqueIds()) + ;
                        ")"
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
@@ -842,14 +844,19 @@ DEFINE CLASS CLCBO AS BusinessBase
                 SCAN
                     SELECT (par_cCursorOrigem)
                     IF Marca
-                        loc_cSQL = "INSERT INTO SigLcLoE (Codigos, Locals, Emps, Grupos, Contas, Marca)" + ;
+                        *-- cIdChaves eh a PK de SigLcLoE (char 20) e eh NOT NULL:
+                        *-- sem ela o INSERT nem executa. O legado grava o mesmo
+                        *-- campo com fUniqueIds() (regra #22 - nunca string vazia,
+                        *-- senao o segundo registro colide no indice unico).
+                        loc_cSQL = "INSERT INTO SigLcLoE (Codigos, Locals, Emps, Grupos, Contas, Marca, cIdChaves)" + ;
                                    " VALUES (" + ;
                                    EscaparSQL(par_cCodigos) + "," + ;
                                    EscaparSQL(par_cLocal)   + "," + ;
                                    EscaparSQL(ALLTRIM(Emps))   + "," + ;
                                    EscaparSQL(ALLTRIM(Grupos)) + "," + ;
                                    EscaparSQL(ALLTRIM(Contas)) + "," + ;
-                                   "1)"
+                                   "1," + ;
+                                   EscaparSQL(fUniqueIds()) + ")"
                         loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
                         IF loc_nResultado < 0
                             MsgErro("Erro ao gravar estoque:" + CHR(13) + CapturarErroSQL(), "Erro SQL")

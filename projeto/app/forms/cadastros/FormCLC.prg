@@ -35,6 +35,9 @@ DEFINE CLASS FormCLC AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_lEstoqueBound   = .F.
+    this_lEmLookup       = .F.   && guarda de reentrancia dos lookups modais (regra #37)
+    this_cLocalAnteriorA = ""   && equivale ao This.Tag do getLocalA legado
+    this_cLocalAnteriorB = ""
     this_lOpeBound       = .F.
 
     *--------------------------------------------------------------------------
@@ -540,6 +543,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 6
             .Left      = 84
             .Width     = 150
+            .MaxLength = 3
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -841,6 +845,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 25
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -918,6 +923,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 50
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -929,6 +935,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 50
             .Left      = 148
             .Width     = 213
+            .MaxLength = 40
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -955,6 +962,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 75
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -966,6 +974,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 75
             .Left      = 148
             .Width     = 213
+            .MaxLength = 50
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -992,6 +1001,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 100
             .Left      = 66
             .Width     = 150
+            .MaxLength = 20
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1017,6 +1027,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 100
             .Left      = 329
             .Width     = 31
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1099,6 +1110,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 26
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1176,6 +1188,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 51
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1187,6 +1200,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 51
             .Left      = 148
             .Width     = 213
+            .MaxLength = 40
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1213,6 +1227,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 76
             .Left      = 66
             .Width     = 80
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1224,6 +1239,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 76
             .Left      = 148
             .Width     = 213
+            .MaxLength = 50
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1250,6 +1266,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 101
             .Left      = 66
             .Width     = 150
+            .MaxLength = 20
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1275,6 +1292,7 @@ DEFINE CLASS FormCLC AS FormBase
             .Top       = 101
             .Left      = 330
             .Width     = 31
+            .MaxLength = 10
             .Height    = 23
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1282,11 +1300,33 @@ DEFINE CLASS FormCLC AS FormBase
             .InputMask = "!!!"
         ENDWITH
 
-        *-- BINDEVENTs para lookups em campos de texto (F4)
-        BINDEVENT(loc_oPg2.cnt_4c_Codigos.txt_4c_Empresas,    "KeyPress", THIS, "EmpresasKeyPress")
+        *-- Lookups. No legado TODOS estes campos resolvem no Valid, ou seja ao
+        *-- SAIR do campo; o F4 eh atalho adicional. A versao anterior tinha so
+        *-- KeyPress, e ainda testando a tecla 28 (que eh F1, nao F4) - por isso
+        *-- nenhum deles abria (Erro211). Grupo/Conta/Operacao/Grande Grupo nao
+        *-- tinham handler NENHUM: eram caixas de texto inertes.
+        BINDEVENT(loc_oPg2.cnt_4c_Codigos.txt_4c_Empresas,     "LostFocus", THIS, "EmpresasLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_Codigos.txt_4c_Empresas,     "KeyPress", THIS, "EmpresasKeyPress")
+        BINDEVENT(loc_oPg2.cnt_4c_Codigos.txt_4c_Transitoria,  "LostFocus", THIS, "TransitoriaLostFocus")
         BINDEVENT(loc_oPg2.cnt_4c_Codigos.txt_4c_Transitoria,  "KeyPress", THIS, "TransitoriaKeyPress")
+
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_LocalA,        "LostFocus", THIS, "LocalALostFocus")
         BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_LocalA,        "KeyPress", THIS, "LocalAKeyPress")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_GrupoA,        "LostFocus", THIS, "GrupoALostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_DGrupoA,       "LostFocus", THIS, "DGrupoALostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_ContaA,        "LostFocus", THIS, "ContaALostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_DContaA,       "LostFocus", THIS, "DContaALostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_OperacaoA,     "LostFocus", THIS, "OperacaoALostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalA.txt_4c_GdeGrupoA,     "LostFocus", THIS, "GdeGrupoALostFocus")
+
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_LocalB,        "LostFocus", THIS, "LocalBLostFocus")
         BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_LocalB,        "KeyPress", THIS, "LocalBKeyPress")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_GrupoB,        "LostFocus", THIS, "GrupoBLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_DGrupoB,       "LostFocus", THIS, "DGrupoBLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_ContaB,        "LostFocus", THIS, "ContaBLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_DContaB,       "LostFocus", THIS, "DContaBLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_OperacaoB,     "LostFocus", THIS, "OperacaoBLostFocus")
+        BINDEVENT(loc_oPg2.cnt_4c_LocalB.txt_4c_GdeGrupoB,     "LostFocus", THIS, "GdeGrupoBLostFocus")
 
         *-- PageFrame Complementos (Operacoes Gerenciais + Estoques)
         THIS.ConfigurarComplementos(loc_oPg2)
@@ -1881,8 +1921,12 @@ DEFINE CLASS FormCLC AS FormBase
                     IF !EMPTY(ALLTRIM(cursor_4c_Operacoes.Cods)) OR ;
                        !EMPTY(ALLTRIM(cursor_4c_Operacoes.Operacoes))
 
-                        loc_cIdChave = TRANSFORM(DATETIME(), "YYYYMMDDHHMMSS") + ;
-                                       PADL(TRANSFORM(RECNO()), 4, "0")
+                        *-- Legado: Replace cIdChaves With fUniqueIds() In crSigLcLoI.
+                        *-- A versao anterior montava a chave como
+                        *-- TRANSFORM(DATETIME(),"YYYYMMDDHHMMSS") + RECNO(): duas
+                        *-- classificacoes gravadas no mesmo segundo com o mesmo
+                        *-- RECNO colidiriam na PK de SigLcLoI.
+                        loc_cIdChave = fUniqueIds()
 
                         loc_oBO.InserirOperacao(par_cCodigos, ;
                             loc_cIdChave, ;
@@ -2101,7 +2145,7 @@ DEFINE CLASS FormCLC AS FormBase
     * EmpresasKeyPress - F4 abre lookup de Empresa (campo Empresas)
     *--------------------------------------------------------------------------
     PROCEDURE EmpresasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
+        IF INLIST(par_nKeyCode, 115, 116)   && F4 = 115, F5 = 116 (28 eh F1)
             THIS.AbrirLookupEmpresa(.T.)
         ENDIF
     ENDPROC
@@ -2110,7 +2154,7 @@ DEFINE CLASS FormCLC AS FormBase
     * TransitoriaKeyPress - F4 abre lookup de Empresa Transitoria
     *--------------------------------------------------------------------------
     PROCEDURE TransitoriaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
+        IF INLIST(par_nKeyCode, 115, 116)   && F4 = 115, F5 = 116 (28 eh F1)
             THIS.AbrirLookupEmpresa(.F.)
         ENDIF
     ENDPROC
@@ -2159,7 +2203,7 @@ DEFINE CLASS FormCLC AS FormBase
     * LocalAKeyPress - F4 abre lookup de Local A
     *--------------------------------------------------------------------------
     PROCEDURE LocalAKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
+        IF INLIST(par_nKeyCode, 115, 116)   && F4 = 115, F5 = 116 (28 eh F1)
             THIS.AbrirLookupLocalA()
         ENDIF
     ENDPROC
@@ -2168,7 +2212,7 @@ DEFINE CLASS FormCLC AS FormBase
     * LocalBKeyPress - F4 abre lookup de Local B
     *--------------------------------------------------------------------------
     PROCEDURE LocalBKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28
+        IF INLIST(par_nKeyCode, 115, 116)   && F4 = 115, F5 = 116 (28 eh F1)
             THIS.AbrirLookupLocalB()
         ENDIF
     ENDPROC
@@ -2176,6 +2220,425 @@ DEFINE CLASS FormCLC AS FormBase
     *--------------------------------------------------------------------------
     * AbrirLookupLocalA - Lookup em SigCdLoc para Local A
     *--------------------------------------------------------------------------
+    *===========================================================================
+    * LOOKUPS DOS CAMPOS DE LOCAL "A" / "B"            (Erro211)
+    *
+    * No legado cada um destes campos resolve no Valid (ao SAIR do campo) e tem
+    * um When que so o libera depois que o Local daquele lado foi escolhido:
+    *
+    *   getGrupoA.When    -> Not Empty(getLocalA.Value)
+    *   getDGrupoA.When   -> Empty(getGrupoA.Value) And Not Empty(getLocalA.Value)
+    *   getContaA.When    -> Not Empty(getLocalA.Value)
+    *   getDContaA.When   -> Empty(getContaA.Value) And Not Empty(getLocalA.Value)
+    *   getOperacaoA.When -> Not Empty(getLocalA.Value)
+    *   getGdeGrupoA.When -> Not Empty(getLocalA.Value)
+    *
+    * A migracao entregou esses campos SEM handler nenhum - caixas de texto
+    * inertes - e sem a cadeia de dependencia, entao dava para digitar grupo com
+    * o Local vazio e nada acontecia.
+    *
+    * DIVERGENCIA CONSCIENTE DO LEGADO, DOCUMENTADA:
+    * o legado resolve grupo/conta/operacao no BANCO DO LOCAL escolhido
+    *     ThisForm.poDataAux = CreateObject('fSqlConector', TmpLocal.cIdConns)
+    *     =fAcessoContab(Usuar, 'C', ..., ThisForm.poDataAux)
+    * `fSqlConector` e `fAcessoMovmto` NAO foram portados, e o unico local
+    * cadastrado (SigCdLoc.Cods = 'GER') aponta para cIdConns = 'GER', que NAO
+    * existe em SigConn - ou seja, nem o legado conseguiria abrir a conexao
+    * neste banco. Aqui as consultas rodam na conexao PRINCIPAL (gnConnHandle),
+    * o que atende local cujo banco eh o proprio DB_MBAHIA. Suporte a local
+    * remoto depende de portar fSqlConector e de cadastrar a conexao.
+    *
+    * Nao se usa `fAcessoContab`/`fAcessoContas` como handler de lookup: elas
+    * auto-preenchem com o primeiro registro parcial em vez de abrir o picker.
+    * Padrao do projeto: match exato e, falhando, FormBuscaAuxiliar.
+    *===========================================================================
+
+    *---------------------------------------------------------------------------
+    * AjustarDependenciaLocais - equivale aos When do legado. Chamado depois de
+    *   qualquer mudanca de Local e no fim de HabilitarCampos.
+    *---------------------------------------------------------------------------
+    PROCEDURE AjustarDependenciaLocais()
+        LOCAL loc_oPg2, loc_lEdita
+        TRY
+            loc_oPg2   = THIS.pgf_4c_Paginas.Page2
+            loc_lEdita = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+            THIS.AjustarDependenciaLado(loc_oPg2.cnt_4c_LocalA, "A", loc_lEdita)
+            THIS.AjustarDependenciaLado(loc_oPg2.cnt_4c_LocalB, "B", loc_lEdita)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.AjustarDependenciaLocais")
+        ENDTRY
+    ENDPROC
+
+    PROTECTED PROCEDURE AjustarDependenciaLado(par_oCnt, par_cLado, par_lEdita)
+        LOCAL loc_lTemLocal, loc_lGrupoVazio, loc_lContaVazia
+        LOCAL loc_cL
+        loc_cL = par_cLado
+
+        loc_lTemLocal   = !EMPTY(ALLTRIM(EVALUATE("par_oCnt.txt_4c_Local" + loc_cL + ".Value")))
+        loc_lGrupoVazio =  EMPTY(ALLTRIM(EVALUATE("par_oCnt.txt_4c_Grupo" + loc_cL + ".Value")))
+        loc_lContaVazia =  EMPTY(ALLTRIM(EVALUATE("par_oCnt.txt_4c_Conta" + loc_cL + ".Value")))
+
+        STORE (par_lEdita AND loc_lTemLocal) TO ("par_oCnt.txt_4c_Grupo"    + loc_cL + ".Enabled")
+        STORE (par_lEdita AND loc_lTemLocal) TO ("par_oCnt.txt_4c_Conta"    + loc_cL + ".Enabled")
+        STORE (par_lEdita AND loc_lTemLocal) TO ("par_oCnt.txt_4c_Operacao" + loc_cL + ".Enabled")
+        STORE (par_lEdita AND loc_lTemLocal) TO ("par_oCnt.txt_4c_GdeGrupo" + loc_cL + ".Enabled")
+
+        *-- campos de DESCRICAO: so com o codigo correspondente vazio
+        STORE (par_lEdita AND loc_lTemLocal AND loc_lGrupoVazio) ;
+            TO ("par_oCnt.txt_4c_DGrupo" + loc_cL + ".Enabled")
+        STORE (par_lEdita AND loc_lTemLocal AND loc_lContaVazia) ;
+            TO ("par_oCnt.txt_4c_DConta" + loc_cL + ".Enabled")
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Local A / B - legado getLocalA.Valid: picker sobre SigCdLoc e, mudando o
+    *   local, remonta os estoques daquele lado.
+    *---------------------------------------------------------------------------
+    PROCEDURE LocalALostFocus()
+        THIS.ResolverLocal("A")
+    ENDPROC
+
+    PROCEDURE LocalBLostFocus()
+        THIS.ResolverLocal("B")
+    ENDPROC
+
+    PROTECTED PROCEDURE ResolverLocal(par_cLado)
+        LOCAL loc_oPg2, loc_oCnt, loc_cVal, loc_cAnt
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+            loc_oCnt = EVALUATE("loc_oPg2.cnt_4c_Local" + par_cLado)
+            loc_cVal = ALLTRIM(EVALUATE("loc_oCnt.txt_4c_Local" + par_cLado + ".Value"))
+            loc_cAnt = IIF(par_cLado == "A", THIS.this_cLocalAnteriorA, THIS.this_cLocalAnteriorB)
+
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") AND !EMPTY(loc_cVal)
+                IF THIS.ResolverCampoSimples(loc_oCnt, "txt_4c_Local" + par_cLado, ;
+                        "SigCdLoc", "Cods", "", "Sele" + CHR(231) + CHR(227) + "o", "Locais", "")
+                ENDIF
+            ENDIF
+
+            loc_cVal = ALLTRIM(EVALUATE("loc_oCnt.txt_4c_Local" + par_cLado + ".Value"))
+
+            *-- Legado: so remonta os estoques quando o local REALMENTE mudou
+            *-- (getLocalA.GotFocus guarda o valor em This.Tag e o Valid compara)
+            IF !(loc_cVal == loc_cAnt)
+                IF par_cLado == "A"
+                    THIS.this_cLocalAnteriorA = loc_cVal
+                ELSE
+                    THIS.this_cLocalAnteriorB = loc_cVal
+                ENDIF
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    STORE loc_cVal TO ("THIS.this_oBusinessObject.this_cLocal" + par_cLado)
+                    THIS.CarregarGridEstoques( ;
+                        ALLTRIM(loc_oPg2.cnt_4c_Codigos.txt_4c_Codigos.Value))
+                ENDIF
+            ENDIF
+
+            THIS.AjustarDependenciaLocais()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.ResolverLocal")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Grupo contabil (SigCdGcr) - por codigo e por descricao
+    *---------------------------------------------------------------------------
+    PROCEDURE GrupoALostFocus()
+        THIS.ResolverGrupo("A", .T.)
+    ENDPROC
+
+    PROCEDURE GrupoBLostFocus()
+        THIS.ResolverGrupo("B", .T.)
+    ENDPROC
+
+    PROCEDURE DGrupoALostFocus()
+        THIS.ResolverGrupo("A", .F.)
+    ENDPROC
+
+    PROCEDURE DGrupoBLostFocus()
+        THIS.ResolverGrupo("B", .F.)
+    ENDPROC
+
+    PROTECTED PROCEDURE ResolverGrupo(par_cLado, par_lPorCodigo)
+        LOCAL loc_oPg2, loc_oCnt, loc_cCampo, loc_cPar
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+                loc_oCnt = EVALUATE("loc_oPg2.cnt_4c_Local" + par_cLado)
+
+                IF par_lPorCodigo
+                    loc_cCampo = "txt_4c_Grupo"  + par_cLado
+                    loc_cPar   = "txt_4c_DGrupo" + par_cLado
+                    THIS.ResolverCampoSimples(loc_oCnt, loc_cCampo, "SigCdGcr", ;
+                        "codigos", "descrs", "Sele" + CHR(231) + CHR(227) + "o", ;
+                        "C" + CHR(243) + "digo", loc_cPar)
+                ELSE
+                    loc_cCampo = "txt_4c_DGrupo" + par_cLado
+                    loc_cPar   = "txt_4c_Grupo"  + par_cLado
+                    THIS.ResolverCampoSimples(loc_oCnt, loc_cCampo, "SigCdGcr", ;
+                        "descrs", "codigos", "Sele" + CHR(231) + CHR(227) + "o", ;
+                        "Descri" + CHR(231) + CHR(227) + "o", loc_cPar)
+                ENDIF
+
+                THIS.AjustarDependenciaLocais()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.ResolverGrupo")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Conta (SigCdCli) - por codigo e por razao social, filtrada pelo grupo
+    *---------------------------------------------------------------------------
+    PROCEDURE ContaALostFocus()
+        THIS.ResolverConta("A", .T.)
+    ENDPROC
+
+    PROCEDURE ContaBLostFocus()
+        THIS.ResolverConta("B", .T.)
+    ENDPROC
+
+    PROCEDURE DContaALostFocus()
+        THIS.ResolverConta("A", .F.)
+    ENDPROC
+
+    PROCEDURE DContaBLostFocus()
+        THIS.ResolverConta("B", .F.)
+    ENDPROC
+
+    PROTECTED PROCEDURE ResolverConta(par_cLado, par_lPorCodigo)
+        LOCAL loc_oPg2, loc_oCnt, loc_cGrupo, loc_cFiltro, loc_cCampo, loc_cPar
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                loc_oPg2   = THIS.pgf_4c_Paginas.Page2
+                loc_oCnt   = EVALUATE("loc_oPg2.cnt_4c_Local" + par_cLado)
+                loc_cGrupo = ALLTRIM(EVALUATE("loc_oCnt.txt_4c_Grupo" + par_cLado + ".Value"))
+
+                *-- Legado: fAcessoContas recebe o Grupo e so aceita conta dele
+                loc_cFiltro = IIF(EMPTY(loc_cGrupo), "", ;
+                    "grupos = " + EscaparSQL(loc_cGrupo))
+
+                IF par_lPorCodigo
+                    loc_cCampo = "txt_4c_Conta"  + par_cLado
+                    loc_cPar   = "txt_4c_DConta" + par_cLado
+                    THIS.ResolverCampoSimples(loc_oCnt, loc_cCampo, "SigCdCli", ;
+                        "Iclis", "Rclis", "Sele" + CHR(231) + CHR(227) + "o", ;
+                        "C" + CHR(243) + "digo", loc_cPar, loc_cFiltro)
+                ELSE
+                    loc_cCampo = "txt_4c_DConta" + par_cLado
+                    loc_cPar   = "txt_4c_Conta"  + par_cLado
+                    THIS.ResolverCampoSimples(loc_oCnt, loc_cCampo, "SigCdCli", ;
+                        "Rclis", "Iclis", "Sele" + CHR(231) + CHR(227) + "o", ;
+                        "Nome", loc_cPar, loc_cFiltro)
+                ENDIF
+
+                THIS.AjustarDependenciaLocais()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.ResolverConta")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Operacao (SigCdOpe.Dopes) - legado fAcessoMovmto, que consulta SigCdOpe
+    *---------------------------------------------------------------------------
+    PROCEDURE OperacaoALostFocus()
+        THIS.ResolverOperacao("A")
+    ENDPROC
+
+    PROCEDURE OperacaoBLostFocus()
+        THIS.ResolverOperacao("B")
+    ENDPROC
+
+    PROTECTED PROCEDURE ResolverOperacao(par_cLado)
+        LOCAL loc_oPg2, loc_oCnt
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+                loc_oCnt = EVALUATE("loc_oPg2.cnt_4c_Local" + par_cLado)
+                THIS.ResolverCampoSimples(loc_oCnt, "txt_4c_Operacao" + par_cLado, ;
+                    "SigCdOpe", "Dopes", "", "Sele" + CHR(231) + CHR(227) + "o", ;
+                    "Opera" + CHR(231) + CHR(227) + "o", "")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.ResolverOperacao")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Grande Grupo (SigCdGpr) - legado abre fwBuscaExt sobre Codigos/Descs
+    *---------------------------------------------------------------------------
+    PROCEDURE GdeGrupoALostFocus()
+        THIS.ResolverGdeGrupo("A")
+    ENDPROC
+
+    PROCEDURE GdeGrupoBLostFocus()
+        THIS.ResolverGdeGrupo("B")
+    ENDPROC
+
+    PROTECTED PROCEDURE ResolverGdeGrupo(par_cLado)
+        LOCAL loc_oPg2, loc_oCnt
+
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+                loc_oCnt = EVALUATE("loc_oPg2.cnt_4c_Local" + par_cLado)
+                THIS.ResolverCampoSimples(loc_oCnt, "txt_4c_GdeGrupo" + par_cLado, ;
+                    "SigCdGpr", "Codigos", "Descs", ;
+                    "Sele" + CHR(231) + CHR(227) + "o", "C" + CHR(243) + "digo", "")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.ResolverGdeGrupo")
+        ENDTRY
+
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * Empresa (SigCdEmp) e Conta Transitoria (SigCdCli)
+    *---------------------------------------------------------------------------
+    PROCEDURE EmpresasLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                THIS.ResolverCampoSimples(THIS.pgf_4c_Paginas.Page2.cnt_4c_Codigos, ;
+                    "txt_4c_Empresas", "SigCdEmp", "Cemps", "Razas", ;
+                    "Empresa", "C" + CHR(243) + "digo", "")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.EmpresasLostFocus")
+        ENDTRY
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE TransitoriaLostFocus()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        TRY
+            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                THIS.ResolverCampoSimples(THIS.pgf_4c_Paginas.Page2.cnt_4c_Codigos, ;
+                    "txt_4c_Transitoria", "SigCdCli", "Iclis", "Rclis", ;
+                    "Conta Transit" + CHR(243) + "ria", "C" + CHR(243) + "digo", "")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCLC.TransitoriaLostFocus")
+        ENDTRY
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    * ResolverCampoSimples - corpo unico de TODOS os lookups acima.
+    *   par_oCnt      container que hospeda os controles
+    *   par_cCampo    nome do TextBox que o usuario digitou
+    *   par_cTabela   tabela de consulta
+    *   par_cColBusca coluna pesquisada (a que corresponde ao campo digitado)
+    *   par_cColPar   coluna do campo PAR (descricao <-> codigo); "" se nao ha
+    *   par_cTitulo   titulo do dialogo
+    *   par_cRotulo   rotulo da 1a coluna do dialogo
+    *   par_cCampoPar nome do TextBox par; "" se nao ha
+    *   par_cFiltro   WHERE adicional do picker; "" se nao ha
+    *
+    *   Devolve .T. quando o campo ficou resolvido. NUNCA apaga o que o usuario
+    *   digitou se ele cancelar o dialogo (regra #50).
+    *---------------------------------------------------------------------------
+    PROTECTED FUNCTION ResolverCampoSimples(par_oCnt, par_cCampo, par_cTabela, ;
+            par_cColBusca, par_cColPar, par_cTitulo, par_cRotulo, par_cCampoPar, par_cFiltro)
+        LOCAL loc_cVal, loc_oBusca, loc_lOk, loc_cCursor, loc_cFiltro, loc_cPar
+        loc_lOk     = .F.
+        loc_cCursor = "cursor_4c_LkpCLC"
+        loc_cFiltro = IIF(VARTYPE(par_cFiltro) = "C", par_cFiltro, "")
+        loc_cPar    = IIF(VARTYPE(par_cCampoPar) = "C", par_cCampoPar, "")
+
+        loc_cVal = ALLTRIM(EVALUATE("par_oCnt." + par_cCampo + ".Value"))
+
+        IF EMPTY(loc_cVal)
+            *-- Campo esvaziado: o legado limpa tambem o par
+            IF !EMPTY(loc_cPar)
+                STORE "" TO ("par_oCnt." + loc_cPar + ".Value")
+            ENDIF
+        ELSE
+            IF USED(loc_cCursor)
+                USE IN (loc_cCursor)
+            ENDIF
+
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                par_cTabela, loc_cCursor, par_cColBusca, loc_cVal, ;
+                par_cTitulo, .F., .F., loc_cFiltro)
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna(par_cColBusca, "", par_cRotulo)
+                    IF !EMPTY(par_cColPar)
+                        loc_oBusca.mAddColuna(par_cColPar, "", "Descri" + CHR(231) + CHR(227) + "o")
+                    ENDIF
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED(loc_cCursor)
+                    IF RECCOUNT(loc_cCursor) > 0
+                        SELECT (loc_cCursor)
+                        STORE ALLTRIM(EVALUATE(loc_cCursor + "." + par_cColBusca)) ;
+                            TO ("par_oCnt." + par_cCampo + ".Value")
+                        IF !EMPTY(loc_cPar) AND !EMPTY(par_cColPar)
+                            STORE ALLTRIM(EVALUATE(loc_cCursor + "." + par_cColPar)) ;
+                                TO ("par_oCnt." + loc_cPar + ".Value")
+                        ENDIF
+                        loc_lOk = .T.
+                    ENDIF
+                ENDIF
+
+                IF USED(loc_cCursor)
+                    USE IN (loc_cCursor)
+                ENDIF
+                loc_oBusca.Release()
+            ENDIF
+        ENDIF
+
+        RETURN loc_lOk
+    ENDFUNC
+
     PROCEDURE AbrirLookupLocalA()
         LOCAL loc_oBusca, loc_oTxt
         loc_oTxt = THIS.pgf_4c_Paginas.Page2.cnt_4c_LocalA.txt_4c_LocalA
@@ -2735,6 +3198,11 @@ DEFINE CLASS FormCLC AS FormBase
         loc_oLocalB.txt_4c_GdeGrupoB.Enabled = par_lHabilitar
         loc_oLocalB.chk_4c_PalmB.Enabled     = par_lHabilitar
         loc_oLocalB.chk_4c_EtiquetaB.Enabled = par_lHabilitar
+
+        *-- Grupo/Conta/Operacao/Grande Grupo dependem do Local daquele lado
+        *-- (When do legado). Tem de vir DEPOIS das atribuicoes acima, senao
+        *-- elas sobrescrevem a dependencia.
+        THIS.AjustarDependenciaLocais()
     ENDPROC
 
     *--------------------------------------------------------------------------

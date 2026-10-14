@@ -112,7 +112,7 @@ DEFINE CLASS FpNBO AS BusinessBase
 
             loc_cSQL = "SELECT a.Dopes, a.Fpags, b.descrs " + ;
                        "FROM SigCdFpN a " + ;
-                       "INNER JOIN SigOpFp b ON a.Fpags = b.Fpags " + ;
+                       "INNER JOIN SigOpFp b ON a.Fpags COLLATE DATABASE_DEFAULT = b.Fpags " + ;
                        "WHERE a.Dopes = " + EscaparSQL(ALLTRIM(par_cDopes))
 
             loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_FpNTemp")

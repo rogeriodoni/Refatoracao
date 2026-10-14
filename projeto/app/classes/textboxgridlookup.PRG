@@ -465,3 +465,91 @@ DEFINE CLASS TextBoxGridMoedas AS TextBoxGridBase
         RETURN .T.
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxContaCheque_4c - celula "No Conta" da grade de cheques (Formche).
+*
+* O legado (SIGCDCHE.Pagina.Dados.GradeCheque.Conta.Text1.Valid) completa a
+* conta com ZEROS A ESQUERDA ao sair da celula:
+*     replace TEMPCHQ.NCONTAS with PADL(ALLTRIM(this.value),10,'0')
+* A coluna eh char(10) e o usuario digita so os digitos significativos. Sem a
+* normalizacao o valor fica com menos de 10 caracteres e a validacao de
+* gravacao (Len(AllTrim(NContas)) # 10, tambem do legado) recusa o lote com
+* "Cheque com Dados Invalidos !" - Erro208.
+*
+* Instalado com Column.AddObject + CurrentControl + Sparse = .F. (regra #18):
+* validacao de celula vive no Valid do TextBox da coluna, nunca em
+* AfterRowColChange (regra #46).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxContaCheque_4c AS TextBox
+    FontName    = "Courier New"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    Format      = "9999999999"
+    InputMask   = "9999999999"
+
+    PROCEDURE Valid()
+        IF !EMPTY(ALLTRIM(THIS.Value))
+            THIS.Value = PADL(ALLTRIM(THIS.Value), 10, "0")
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* Celulas da grade de grupos do FormCla (Cadastro de Classificacao de Produto).
+*
+* No legado a busca mora no Valid do TextBox de CADA coluna
+* (SIGCDCLA.Pagina.Dados.grdProdutos.ColumnN.Text1.Valid). O migrado tinha
+* ligado tudo a AfterRowColChange, que dispara DEPOIS de entrar na celula nova
+* e entrega a coluna de DESTINO: ao sair da coluna 1 o nColIndex ja eh 2 e o
+* handler chamava o validador ERRADO - o lookup do Grupo nunca rodava (Erro209).
+*
+* O corpo vive no form (ValidarCGrusGridExec / ValidarDGrusGridExec) e recebe o
+* proprio TextBox, porque dentro do Valid o valor digitado esta em THIS.Value e
+* ainda NAO chegou ao cursor.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxGrupoCla_4c AS TextBox
+    FontSize    = 8
+    FontItalic  = .F.
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCGrusGridExec", 5)
+            RETURN THISFORM.ValidarCGrusGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+DEFINE CLASS TextBoxDescGrupoCla_4c AS TextBox
+    FontSize    = 8
+    FontItalic  = .F.
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    *-- Legado (Column2.Text1.When): a descricao so eh editavel enquanto a
+    *-- coluna do CODIGO estiver vazia.
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "DescGrupoEditavel", 5)
+            RETURN THISFORM.DescGrupoEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarDGrusGridExec", 5)
+            RETURN THISFORM.ValidarDGrusGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE

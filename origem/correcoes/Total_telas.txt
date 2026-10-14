@@ -1,0 +1,56 @@
+
+Vou levantar isso do menu.prg.
+
+  Searched for 4 patterns, read 3 files, listed 1 directory, ran 9 shell commands
+
+Levantamento de telas por menu (projeto/app/menu/menu.prg)
+
+┌─────────────┬───────────────┬─────────────┬───────────────────────────┬─────────────┐
+│ Menu (PAD)  │ Itens de tela │ Com handler │ Classes de form distintas │ Separadores │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Arquivo     │ 1 (Sair)      │ 1           │ — (não é tela)            │ 0           │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Cadastros   │ 181           │ 181         │ 177                       │ 17          │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Movimentos  │ 74            │ 72          │ 70                        │ 69          │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Relatórios  │ 88            │ 86          │ 85                        │ 85          │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Ferramentas │ 8             │ 7           │ 6                         │ 6           │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ Ajuda       │ 1 (Sobre)     │ 1           │ — (não é tela)            │ 0           │
+├─────────────┼───────────────┼─────────────┼───────────────────────────┼─────────────┤
+│ TOTAL       │ 353           │ 348         │ 338                       │ 177         │
+└─────────────┴───────────────┴─────────────┴───────────────────────────┴─────────────┘
+
+Totais que importam
+
+- 345 itens de menu abrem tela (DO Abrir<Form> → CREATEOBJECT) — é o total de telas acessíveis pelo menu.
+- 338 classes de form distintas: 5 classes são reaproveitadas por mais de um item de menu (entradas diferentes do mesmo form, com parâmetro/modo distinto):
+  - Formcrp e Formmpp → 3 itens cada (principal / Contas / Movim)
+  - FormROM (ROM + ROM Recebimento), Formsigopdiv (Divisão + Reinicia), Formsigredtv (dtv + mat) → 2 itens cada
+- 3 itens de menu não são tela: Sair (SairSistema), Sobre (SobreSistema) e Testar Conexão BD (TestarConexaoBD) — em Ferramentas.
+- 5 itens são stubs sem ON SELECTION (aparecem no menu e não fazem nada):
+  - Movimentos: Pedidos (bar 3), Notas Fiscais (bar 4)
+  - Relatórios: Produtos (bar 4), Pedidos (bar 5)
+  - Ferramentas: Configurações (bar 1)
+- Os 348 handlers têm todos PROCEDURE definida no menu.prg — nenhum handler órfão.
+- Estrutura é plana: 6 popups, sem submenus aninhados.
+
+Para comparação — forms existentes no disco
+
+┌────────────────────┬───────────┐
+│       Pasta        │ Form*.prg │
+├────────────────────┼───────────┤
+│ forms/cadastros    │ 201       │
+├────────────────────┼───────────┤
+│ forms/operacionais │ 148       │
+├────────────────────┼───────────┤
+│ forms/relatorios   │ 101       │
+├────────────────────┼───────────┤
+│ Total              │ 450       │
+└────────────────────┴───────────┘
+
+Ou seja, 450 arquivos de form no projeto contra 338 classes alcançáveis pelo menu — a diferença são diálogos filhos, pickers e auxiliares (FormBuscaAuxiliar, FormErro, telas chamadas de dentro de outras), que não têm entrada própria de menu.
+
+✻ Cooked for 2m 29s · done 10:18

@@ -5757,10 +5757,10 @@ DEFINE CLASS FormCTA AS FormBase
         IF EMPTY(loc_cGrupo)
             RETURN
         ENDIF
-        *-- Validar grupo via lookup SigCdGrc
+        *-- Validar grupo via lookup SigCdGcr
         LOCAL loc_nRet2
         loc_nRet2 = SQLEXEC(gnConnHandle, ;
-            "SELECT TOP 1 codigos, descrs FROM SigCdGrc WHERE codigos = " + ;
+            "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
             EscaparSQL(PADR(loc_cGrupo, 10)), ;
             "cursor_4c_GrupoValida")
         IF loc_nRet2 > 0 AND RECCOUNT("cursor_4c_GrupoValida") > 0

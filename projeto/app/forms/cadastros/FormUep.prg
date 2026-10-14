@@ -366,6 +366,15 @@ DEFINE CLASS FormUep AS FormBase
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         *-- ColumnCount FORA do WITH (Problema 36: dentro do WITH nao cria colunas imediatamente)
         loc_oPagina.grd_4c_Lista.ColumnCount = 2
+        *-- Captions/larguras AQUI, nao so em CarregarLista: o legado define no
+        *-- Init via pColuna([Usuarios],...,[Usuario],080) / pColuna([Emps],...,
+        *-- [Empresa],80), independente de dado. Sem isto, quando Buscar() falha
+        *-- o grid abre com os headers default "Header1" (Erro203). CarregarLista
+        *-- REAPLICA porque RecordSource reseta Caption e Width (regra #41).
+        loc_oPagina.grd_4c_Lista.Column1.Header1.Caption = "Usu" + CHR(225) + "rio"
+        loc_oPagina.grd_4c_Lista.Column2.Header1.Caption = "Empresa"
+        loc_oPagina.grd_4c_Lista.Column1.Width = 600
+        loc_oPagina.grd_4c_Lista.Column2.Width = 280
         WITH loc_oPagina.grd_4c_Lista
             .Top                = 117
             .Left               = 26
