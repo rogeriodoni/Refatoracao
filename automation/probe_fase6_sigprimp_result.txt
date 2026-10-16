@@ -1,0 +1,19 @@
+=== PROBE FASE 6 - FormSIGPRIMP ===
+FXP BO   : OK
+FXP Form : OK
+ERR BO   : nenhum
+ERR Form : nenhum
+VARTYPE  : O
+--- metodos PUBLIC (PEMSTATUS attr 2 = PROTECTED) ---
+ValidarArquivoImportacao existe=.T. protected=.F.
+AtualizarEstadoBotoes    existe=.T. protected=.F.
+--- campo somente-leitura (When -> .f. do legado) ---
+txt ReadOnly=.T. TabStop=.F. Value=[]
+--- regra do When do btnMovEst ---
+vazio   : Validar=.F. Enabled=.F.
+cheio   : Validar=.T. Enabled=.T.
+espacos : Validar=.F. Enabled=.F.
+click vazio: saiu sem erro; Enabled=.F.
+--- botoes ocultos do legado (Visible .F.) ---
+Visualizar.Visible=.F. Imprimir.Visible=.F.
+--- dialogs suprimidos: nenhum ---

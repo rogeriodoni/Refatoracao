@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 investigada. **O entreg├ível est├í correto ÔÇö a reprova├º├úo foi defeito do GATE, n├úo do form.** N├úo toquei nos `.prg` (timestamps 02:54/03:00, anteriores a esta sess├úo).
+
+## Diagn├│stico
+
+O gate exige `@("BtnCancelarClick","FormParaBO","BOParaForm","CarregarLista")`. O form tem tr├¬s; falta s├│ **`BtnCancelarClick`** ÔÇö e o legado **n├úo tem bot├úo de Cancelar**: herda de `form` (n├úo de `frmcadastro`), sem Page2, sem modo de edi├º├úo, com 5 bot├Áes (`btnIncluir`/`btnExcluir`/`Exporta`/`btnProcessar`/`btnSair`).
+
+Os **10 ramos de exce├º├úo** pendem de `$semCrudLegadoF8`, que era `$false` porque `btnIncluir`/`btnExcluir` casam o padr├úo de verbo CRUD ÔÇö mas s├úo a **toolbar de LINHA da grade**. O desempate existente (`$soApagaLinhaGradeF8`) n├úo alcan├ºa pelos **dois** lados:
+
+| prova exigida | falha porque |
+|---|---|
+| `Excluir` ser o ├║nico verbo | tamb├®m casa `incluir` (o bot├úo que acrescenta linha ├® `btnIncluir`, n├úo `btnInserir`) |
+| escrita s├│ em cursor local | a tela persiste de verdade ÔÇö em **outro** bot├úo, `btnProcessar` |
+
+├ë o **g├¬meo exato** do defeito que a Fase 7 consertou nesta mesma task. A pergunta errada ├® "a *tela* grava?"; a certa ├® "o *bot├úo com nome de verbo CRUD* grava?".
+
+## Corre├º├úo (no gate, n├úo no form)
+
+Reusei o helper da Fase 7 em vez de criar predicado novo ÔÇö ganhou o switch `-IncluirVerboExcluir`, que inclui `Excluir` e casa o nome com o padr├úo do call site da Fase 8. Casar **sem** a guarda de fim-de-identificador ├® o lado seguro: `btnExcluirTudo` casa o prefixo, a busca do Click daquele nome falha e a camada 3 devolve `$false`. Com `$semCrudRealF8 = $true`, dispensa pelo ramo **FLUXO-UNICO**; a exig├¬ncia de bot├úo de a├º├úo **continua valendo** e ├® satisfeita pelo `BtnProcessarClick` real.
+
+**Medido nos 634 dumps**: `$semCrudRealF8` muda em 14 dumps/8 bases, mas o **veredicto** muda em **1 form** (`FormSigPrMdc`, task205/310/635 = mesmo `.prg`). Os outros 7 s├úo no-op ÔÇö `FormSigPrCar` j├í era dispensado por LINHA-IMEDIATA; os demais n├úo t├¬m nome faltando. **Zero regress├úo.** Fase 7 segue byte-id├¬ntica (5 dumps/2 bases, igual ao medido antes).
+
+## Verifica├º├úo do entreg├ível
+
+- **Compila limpo** ÔÇö `.fxp` apagados e regerados (03:14:44), nenhum `.err`.
+- **Instancia e funciona** ÔÇö probe de 20 passos: grade ligada a `cursor_4c_Contas`, Incluir/Excluir de linha, `ChkRepsClick`, round-trip `FormParaBO`/`BOParaForm`, `AjustarBotoesPorModo` nos **dois** sentidos (regra #40 ÔÇö PROCESSANDO desabilita, EDICAO reabilita), `AtualizarProgresso`, `LimparCampos`, `CarregarLista()` sem argumento, escopos corretos.
+- **Completude** (validador do pr├│prio gate): sem TODO/stub/procedure vazia nos dois arquivos.
+- **Auditorias**: FuncoesNaoDefinidas, MetodoProtegidoChamadoDeFora, PropriedadesInexistentes ÔÇö limpas.
+- `Column1/2.Width = 90` conferido contra o dump legado (linhas 386/389) e aplicado **depois** do `ControlSource` ÔÇö os 90 do probe s├úo fidelidade, n├úo reset.
+
+## Ressalva importante
+
+**Este conserto n├úo faz a Fase 8 passar neste run.** O PowerShell parseou o `.ps1` ao iniciar; os helpers est├úo `0` no `HEAD` e s├│ no working tree. A reprova├º├úo veio do gate de **disco** ÔÇö s├│ a pr├│xima task colhe o ramo. Li├º├úo registrada em mem├│ria (`feedback_gate_fase8_incluir_excluir_de_linha_de_grade`), incluindo duas armadilhas de medi├º├úo: resolver o nome do `.prg` pelo mapeamento real (`SIGCDDCC` ÔåÆ `FormDCC`, n├úo `FormSIGCDDCC` ÔÇö escondia 5 casos) e normalizar o CRLF que `Edit` injetou no `.ps1` (o `HEAD` dele ├® LF-only).
+
+**Pend├¬ncia herdada da Fase 2, n├úo resolvida aqui:** `BtnProcessarClick` mant├®m o SCAN multi-tabela inline com `SQLCOMMIT`/`SQLROLLBACK` em vez de delegar a `BO.ProcessarMudancaContas`, cujo `BEGIN/COMMIT TRANSACTION` via `SQLEXEC` nesta conex├úo (`Transactions=2`) s├│ aninha e n├úo protege. Unificar mexeria em c├│digo validado na Fase 2 ÔÇö fora do escopo desta fase.

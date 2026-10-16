@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**N├úo executei a Fase 3.** Obedecer ao `Write` do prompt teria destru├¡do o form.
+
+## Evid├¬ncia de re-run
+
+| | |
+|---|---|
+| SCX `md5 283e7a93ÔÇª` | id├¬ntica em **task204, task247, task309, task634** ÔÇö task309 `COMPLETED` |
+| Alvo `FormSIGPRLNC.prg` | **1817 linhas**, Fases 3-8 completas, **limpo em HEAD** (`git status` vazio) |
+| Gate da Fase 3 (`case 3`, ramo PAGINADO) | `ConfigurarPageFrame` (L91) + `InicializarForm` (L39) ÔåÆ **j├í entregue** |
+
+O prompt se contradiz: "Uso de Ferramentas" manda `Write`; "A├ç├âO OBRIGAT├ôRIA" manda `Read + Edit`. Vale a n├úo-destrutiva ÔÇö e aqui o risco era maior que nas 4 ocorr├¬ncias anteriores (todas OPERACIONAL), porque este form **carrega duas corre├º├Áes manuais de bug** que nenhuma fase regeneraria:
+
+- **Erro191 / regra #46** ÔÇö classe `TextBoxOcorrencia_4c` (L1801) com `When`/`Valid` embutidos na Column2 da grade
+- **Erro192 / regra #21** ÔÇö `AtualizarGradeOcorrencias()` no `ELSE` de `AlternarPagina` (L772), **depois** do `ActivePage = 2`
+
+## Auditoria da Fase 3 ÔÇö tudo limpo
+
+- Balanceamento `IF`/`PROCEDURE`/`TRY`/`WITH`/`DO CASE`/`SCAN`/`FOR`/`DEFINE CLASS`: todos `+0`
+- Zero `RETURN` dentro de `TRY` (#1); `Init()` s├│ `DODEFAULT()` (Problema 8); `Destroy()` termina em `DODEFAULT()`
+- Nenhum `BackColor` no `WITH` do PageFrame ÔÇö s├│ em `.Page1`/`.Page2` (Problema 24)
+- Faixa `cnt_4c_Cabecalho` nas **duas** p├íginas e como primeiro `AddObject` de cada (#11)
+- `cnt_4c_Saida` can├┤nico `917/90/85` + `cmd_4c_Encerrar` `5/5/75/75` "Encerrar" (#10)
+- Os 11 `.Picture` existem em `vbmp\` (#25); zero `.Self` (#38); zero `Controls("<nome>")` (#34); nenhum `MaxLength = Width` (#19)
+- Os 5 m├®todos chamados de fora pelo `TesteAutomatico` s├úo PUBLIC (#3)
+- **Compila├º├úo real**: `vfp9.exe -t` com `.fxp`/`.err` apagados antes ÔåÆ nasceu `.fxp`, nenhum `.err`
+
+**Falso positivo descartado medindo**: regra #40 n├úo se aplica ÔÇö o `AjustarBotoesPorModo` deste form n├úo desabilita por `this_cModoAtual`, s├│ por `loc_lTemRegistro`, e roda via `CarregarLista` no `AlternarPagina(1)`.
+
+Reposit├│rio intocado: os 201 `.FXP` de `forms\cadastros\` j├í estavam apagados do disco antes desta sess├úo; o `.fxp` que gerei para compilar foi removido. N├úo mexi em `task_state.json` ÔÇö o `status` ├® bookkeeping do orquestrador.
+
+Registrei a ocorr├¬ncia na mem├│ria existente (primeiro re-run sobre CRUD, com as duas corre├º├Áes manuais em risco e o checklist de auditoria que usei).

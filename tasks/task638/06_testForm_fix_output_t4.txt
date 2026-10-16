@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: isso n├úo ├® um bug de c├│digo
+
+Este erro **n├úo ├® causado por `FormSigPrMlu.prg` ou `SigPrMluBO.prg`**. O log mostra:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: [...] SQL Server inexistente ou acesso negado.
+Status: ERRO AO CRIAR OBJETO
+```
+
+Isso acontece no **pre-flight de conex├úo** (`SQLSTRINGCONNECT`), **antes** de qualquer `CREATEOBJECT` do form ou do BO ÔÇö ou seja, o c├│digo migrado nunca chega a ser executado.
+
+Confirmei agora mesmo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+PingSucceeded    : False
+SourceAddress    : 192.168.199.115
+```
+
+Isso ├® a mesma falha de infraestrutura j├í documentada na minha mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa o pipeline est├í na sub-rede `192.168.199.x` e **n├úo tem rota** para `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA`. Isso j├í recorreu em 100+ tasks desde 2026-08-02, inclusive nas 3 tentativas anteriores desta mesma task638.
+
+Mesmo assim, revisei o c├│digo novamente (n├úo confiando apenas no hist├│rico):
+- Reconferi a contagem colunas├ùvalores do `INSERT INTO SigMlItn` em `SigPrMluBO.Inserir()` ÔÇö **88 colunas ├ù 88 express├Áes de valor**, pareadas corretamente (o erro cl├íssico da regra #22 do CLAUDE.md n├úo se aplica aqui).
+- Revisei `FormSigPrMlu.prg`: funil `AjustarBotoesPorModo`, `FormParaBO`/`BOParaForm`, TRY/CATCH, checkbox de grid (regra #18), tudo consistente com os padr├Áes do projeto.
+
+N├úo encontrei nenhum defeito real de c├│digo. Editar os arquivos "para satisfazer a tarefa" seria o anti-padr├úo que a mem├│ria documenta ÔÇö arriscaria introduzir regress├úo em c├│digo correto sem chance de resolver o sintoma, j├í que o bloqueio ocorre antes do c├│digo rodar.
+
+**Recomenda├º├úo**: marcar esta task como bloqueada por infraestrutura (sem rota de rede para `192.168.200.10:1433` a partir da m├íquina do pipeline) e n├úo continuar consumindo tentativas de `runtime_fix` ÔÇö isso requer algu├®m com acesso ├á rede/infra para liberar a rota. J├í registrei esta ocorr├¬ncia (tentativa 4/10) na mem├│ria do projeto para rastreamento.

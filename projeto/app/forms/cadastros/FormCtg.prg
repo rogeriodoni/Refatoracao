@@ -826,6 +826,13 @@ DEFINE CLASS FormCtg AS FormBase
         LOCAL loc_oPagina, loc_cCodigo, loc_cDescricao, loc_nResult, loc_lProsseguir
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
+        *-- Inicializar AQUI, nao dentro do IF de INCLUIR: a checagem de codigo
+        *-- duplicado so roda em INCLUIR, entao em ALTERAR a variavel ficava com
+        *-- o default de LOCAL nao inicializada - medido no VFP9: .F. - e o
+        *-- "IF loc_lProsseguir" la embaixo nunca entrava. Resultado: o botao
+        *-- Confirmar nao fazia NADA em ALTERAR, sem erro nem mensagem. (Erro222)
+        loc_lProsseguir = .T.
+
         IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             RETURN
         ENDIF

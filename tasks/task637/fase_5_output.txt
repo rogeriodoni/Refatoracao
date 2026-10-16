@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5/8 conclu├¡da ÔÇö `FormSIGPRMEI.prg` modificado (41 inser├º├Áes, 18 remo├º├Áes), compilado e **medido no VFP9**.
+
+## O que a Fase 5 era, de fato
+
+O `SIGPRMEI.SCX` tem **8 objetos reais** e **zero campos de entrada** (nenhum TextBox/EditBox/ComboBox/Grid na ├írvore; `analise.json` confirma `campos`/`lookups`/`labels` vazios). "Metade dos campos da Page2" ├® metade de zero. A execu├º├úo anterior concluiu "no-op leg├¡timo" e n├úo tocou no arquivo ÔÇö o que dispara o guard de NO-OP do orquestrador e deixa dois problemas de p├®.
+
+Seguindo a li├º├úo j├í registrada no pipeline (`feedback_configurarpaginadados_stub_e_nunca_chamado`), o trabalho real aqui ├® **auditar propriedade por propriedade o que a Fase 4 derrubou** ÔÇö ela cria v├írios controles de uma vez e perde as propriedades "pequenas".
+
+## Diverg├¬ncias encontradas contra o dump ÔÇö todas corrigidas
+
+| Objeto | Propriedade | SCX | Estava | Gravidade |
+|---|---|---|---|---|
+| Command1/2 ÔåÆ bot├Áes | **FontName** | `Comic Sans MS` | `Tahoma` | PILAR 1 + can├┤nico do framework |
+| Command1 ÔåÆ Processar | **Left** | 345+5 = **350** | 340 | PILAR 1 |
+| Command2 ÔåÆ Encerrar | **Left** | 345+80 = **425** | 420 | PILAR 1 |
+| os 2 bot├Áes | **TabIndex** | 2, 3 | ausente | ordem do Tab sa├¡a da ordem de cria├º├úo |
+| cntSombra | Top/Left | 0 / 0 | **-1 / -1** (inventado) | PILAR 1 |
+| form | FontBold | `.F.` | ausente | fidelidade |
+| lblSombra/lblTitulo | Rotation | 0 | ausente | fidelidade |
+
+`ConfigurarPaginaDados` deixou de ser stub: recebeu a transcri├º├úo do `TabIndex` ÔÇö e **estava morto**, n├úo era chamado de lugar nenhum (nem ele nem `ConfigurarPaginaLista`). Ambos agora s├úo chamados pelo `InicializarForm` **depois** de todos os `AddObject`.
+
+Numerei **s├│ os focaliz├íveis**: `Label` tem `TabIndex` mas n├úo tem `TabStop`, ent├úo os tr├¬s `4` duplicados do SCX (`cmdBtnForm`/`Label2`/`Label1`) seriam inertes e ainda embaralhariam a sequ├¬ncia. Entre os dois focaliz├íveis n├úo h├í empate e a ordem relativa do legado fica preservada.
+
+## Verifica├º├úo
+
+Compila limpo (sem `.err`, `.fxp` novo) e o probe `automation\ProbeMeiF5.prg` **instancia o form** e mede: `TabIndex` = 1 e 2 (prova que `ConfigurarPaginaDados` roda), `Left` 350/425 com `FontName=[Comic Sans MS]`, `cnt_4c_Cabecalho` em 0,0, `Rotation`=0, `ControlCount=5` (os 5 filhos diretos do legado), e os 5 m├®todos que o harness chama de fora respondem. Zero bytes >127 (acentos via `CHR()`), CRLF 730/730 intacto, nenhum TODO.
+
+Dois pontos que **n├úo** mexi, por estarem fora do escopo desta fase:
+
+- **`gnConnHandle` ├® declarado em `main.prg`, n├úo em `config.prg`.** O probe inicial morreu com `Variable 'GNCONNHANDLE' is not found` na linha 70. N├úo ├® defeito do form: em produ├º├úo o `main.prg` declara, e `ValidarUIFidelity.prg:124` declara por conta pr├│pria ÔÇö o probe passou a fazer o mesmo. Vale registrar que 77 dos 93 forms operacionais usam a vari├ível sem guarda de `TYPE()`, ent├úo o padr├úo dominante ├® esse; adicionar guarda s├│ aqui divergiria do acervo.
+- **`ConfigurarPageFrame` faz `SetAll("FontName","Tahoma")` com `ControlCount = 0`** (roda antes dos `AddObject`) ÔÇö ├® no-op hoje e por isso n├úo conflita com o Comic Sans MS, mas ├® uma armadilha latente se algu├®m reordenar as chamadas. ├ë c├│digo da Fase 3.

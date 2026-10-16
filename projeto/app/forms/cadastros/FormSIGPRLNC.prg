@@ -26,6 +26,11 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     this_cContaAtual     = ""
     this_cGruContasAtual = ""
 
+    *-- Guarda de reentrancia dos lookups (regra #37/#47): FormBuscaAuxiliar eh
+    *-- MODAL, tira o foco e redispara o proprio LostFocus - sem a flag abrem
+    *-- DOIS dialogos. Liberada em wrapper fino, imune a RETURN antecipado.
+    this_lEmLookup       = .F.
+
     *--------------------------------------------------------------------------
     * Init - DODEFAULT() ja chama InicializarForm() via FormBase.Init()
     *--------------------------------------------------------------------------
@@ -123,7 +128,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         WITH loc_oPagina.cnt_4c_Cabecalho
             .Top         = 31
             .Left        = 0
-            .Width       = 1020
+            .Width       = THIS.Width
             .Height      = 80
             .BackColor   = RGB(100, 100, 100)
             .BackStyle   = 1
@@ -326,13 +331,15 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
 
         *-- Grid de lancamentos: Grupos/Contas distintos de SigClLan
-        *-- Top=117 (abaixo do cabecalho h=80 em top=31, com margem)
+        *-- Geometria transcrita dos overrides do SCX legado (Pagina.Lista.Grade):
+        *-- Top=101 / Left=29 / Width=940 / Height=480; Top recebe +29 da
+        *-- compensacao do PageFrame (pgf_4c_Paginas.Top = -29) -> 101+29 = 130.
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         WITH loc_oPagina.grd_4c_Lista
-            .Top                = 117
-            .Left               = 2
-            .Width              = 950
-            .Height             = 452
+            .Top                = 130
+            .Left               = 29
+            .Width              = 940
+            .Height             = 480
             .ColumnCount        = 3
             .FontName           = "Verdana"
             .FontSize           = 8
@@ -409,16 +416,19 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
 
 
 
-        *-- Container botoes de acao (Grupo_Salva: Left=844, Top=-3+29=26 -> canonico 38)
+        *-- Container botoes de acao (Grupo_Salva do dump: Left=844, Top=-3, AutoSize)
+        *-- Left/Width transcritos do dump + canonico cnt_4c_Salva do framework
+        *-- (Left=842..844, Width=160, Height=85, Top na faixa 29..33).
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 38
-            .Left        = 819
-            .Width       = 165
+            .Top         = 33
+            .Left        = 844
+            .Width       = 160
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
+            .TabIndex    = 10
             .Visible     = .T.
         ENDWITH
 
@@ -449,6 +459,8 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         *-- Botao Cancelar (Grupo_Salva.Cancelar: Left=80, Top=5)
         loc_oPagina.cnt_4c_BotoesAcao.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar
+            *-- Grupo_Salva.Cancelar do legado - "Encerrar" eh o botao de SAIDA da
+            *-- pagina Lista (cmd_4c_Encerrar/regra #10), nao este.
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
@@ -470,7 +482,9 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
 
-        *-- Label "Grupo : " (Say2: Top=130+29=159, Left=257)
+        *-- Label "Grupo : " (Say2: Top=130+29=159, Left=257, TabIndex=1)
+        *-- Say da classe 'say' eh AutoSize/esquerda: o dump nao declara Width nem
+        *-- Alignment, entao Alignment fica 0 (regra #23) - NAO inventar Alignment=1.
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Grupo : "
@@ -479,15 +493,21 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .Width     = 80
             .Height    = 18
             .AutoSize  = .F.
+            .Alignment = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
             .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .TabIndex  = 1
             .Visible   = .T.
         ENDWITH
 
-        *-- TextBox Grupo (Get_Grupos: Top=127+29=156, Left=300, Width=80)
+        *-- TextBox Grupo (Get_Grupos: Top=127+29=156, Left=300, Width=80, TabIndex=2)
+        *-- Format="K" transcrito do dump (regra #49). InputMask="" no dump eh
+        *-- override VAZIO do Form Designer - NAO transcrever.
+        *-- MaxLength vem da COLUNA do schema (SigClLan.grupos char(10)), nunca
+        *-- do Width em pixels (regra #19).
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value         = ""
@@ -500,13 +520,24 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .SpecialEffect = 1
+            .Format        = "K"
+            .MaxLength     = 10
+            .TabIndex      = 2
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupoLostFocus")
+        *-- O legado valida/abre o picker no Valid do campo, ou seja ao SAIR dele.
+        *-- Ligado a "KeyPress" (como estava) o handler so rodava com Enter/Tab e
+        *-- sair com o MOUSE nunca validava: a descricao ficava vazia e o codigo
+        *-- invalido passava. Evento certo eh LostFocus (regra #47).
+        BINDEVENT(loc_oPagina.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupoLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "KeyPress", THIS, "GrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Grupo, "DblClick", THIS, "GrupoDblClick")
+        *-- O When legado eh reavaliado a CADA chegada de foco: esvaziar o codigo
+        *-- tem de REABRIR o campo de descricao, e preenche-lo tem de fecha-lo.
+        BINDEVENT(loc_oPagina.txt_4c_Grupo, "InteractiveChange", THIS, "AtualizarCamposDescricao")
 
-        *-- TextBox Descricao do Grupo (Get_Desc_Gru: Top=127+29=156, Left=382, Width=360)
+        *-- TextBox Descricao do Grupo (Get_Desc_Gru: Top=127+29=156, Left=382, Width=360, TabIndex=3)
+        *-- MaxLength = SigCdGcr.descrs char(40)
         loc_oPagina.AddObject("txt_4c_Desc_Gru", "TextBox")
         WITH loc_oPagina.txt_4c_Desc_Gru
             .Value         = ""
@@ -519,11 +550,23 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .SpecialEffect = 1
-            .ReadOnly      = .T.
+            .Format        = "K"
+            .MaxLength     = 40
+            .TabIndex      = 3
+            .ReadOnly      = .T.     && estado INICIAL (modo LISTA) - ver AtualizarCamposDescricao
             .Visible       = .T.
         ENDWITH
+        *-- O legado NAO deixa a descricao travada para sempre: o Get_Desc_Gru tem
+        *-- When = IsEmpty(get_grupos.value) AND Inlist(pcEscolha, "PROCURAR") e um
+        *-- Valid proprio que chama fAcessoContab(...) - ou seja, o campo eh uma
+        *-- SEGUNDA porta de entrada do grupo, nao um rotulo. ReadOnly fixo apagava
+        *-- essa funcionalidade. Quem reavalia a condicao do When eh
+        *-- AtualizarCamposDescricao() (regra #45: dependencia num metodo unico).
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Gru, "LostFocus", THIS, "ValidarDescGrupoLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Gru, "KeyPress",  THIS, "DescGrupoKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Gru, "DblClick",  THIS, "DescGrupoDblClick")
 
-        *-- Label "Conta : " (Say3: Top=155+29=184, Left=257)
+        *-- Label "Conta : " (Say3: Top=155+29=184, Left=257, TabIndex=4)
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Conta : "
@@ -532,15 +575,18 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .Width     = 80
             .Height    = 18
             .AutoSize  = .F.
+            .Alignment = 0
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
             .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .TabIndex  = 4
             .Visible   = .T.
         ENDWITH
 
-        *-- TextBox Conta (Get_Contas: Top=152+29=181, Left=300, Width=80)
+        *-- TextBox Conta (Get_Contas: Top=152+29=181, Left=300, Width=80, TabIndex=5)
+        *-- MaxLength = SigClLan.contas char(10)
         loc_oPagina.AddObject("txt_4c_Contas", "TextBox")
         WITH loc_oPagina.txt_4c_Contas
             .Value         = ""
@@ -553,13 +599,19 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .SpecialEffect = 1
+            .Format        = "K"
+            .MaxLength     = 10
+            .TabIndex      = 5
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Contas, "KeyPress", THIS, "ValidarContaLostFocus")
+        *-- Lookup no LostFocus, nao no KeyPress - ver comentario do txt_4c_Grupo
+        BINDEVENT(loc_oPagina.txt_4c_Contas, "LostFocus", THIS, "ValidarContaLostFocus")
         BINDEVENT(loc_oPagina.txt_4c_Contas, "KeyPress", THIS, "ContaKeyPress")
         BINDEVENT(loc_oPagina.txt_4c_Contas, "DblClick", THIS, "ContaDblClick")
+        BINDEVENT(loc_oPagina.txt_4c_Contas, "InteractiveChange", THIS, "AtualizarCamposDescricao")
 
-        *-- TextBox Descricao da Conta (Get_Desc_Con: Top=152+29=181, Left=382, Width=360)
+        *-- TextBox Descricao da Conta (Get_Desc_Con: Top=152+29=181, Left=382, Width=360, TabIndex=6)
+        *-- MaxLength = SigCdCli.rclis char(50)
         loc_oPagina.AddObject("txt_4c_Desc_Con", "TextBox")
         WITH loc_oPagina.txt_4c_Desc_Con
             .Value         = ""
@@ -572,9 +624,19 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
             .SpecialEffect = 1
-            .ReadOnly      = .T.
+            .Format        = "K"
+            .MaxLength     = 50
+            .TabIndex      = 6
+            .ReadOnly      = .T.     && estado INICIAL (modo LISTA) - ver AtualizarCamposDescricao
             .Visible       = .T.
         ENDWITH
+        *-- Get_Desc_Con.When = IsEmpty(get_contas.value) AND
+        *-- Inlist(pcEscolha, "INSERIR", "PROCURAR"); o Valid chama
+        *-- fAcessoContas(Usuar, get_grupos.value, 'D', ...) - busca pela
+        *-- DESCRICAO (pTip='D') e FILTRADA pelo grupo corrente (pGrp).
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Con, "LostFocus", THIS, "ValidarDescContaLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Con, "KeyPress",  THIS, "DescContaKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c_Desc_Con, "DblClick",  THIS, "DescContaDblClick")
 
         *-- Botao Inserir Ocorrencia (inserir: Top=335+29=364, Left=629, 40x40)
         loc_oPagina.AddObject("cmd_4c_InserirOco", "CommandButton")
@@ -595,6 +657,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .SpecialEffect   = 0
             .MousePointer    = 15
             .ToolTipText     = "Inserir"
+            .TabIndex        = 8
             .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_InserirOco, "Click", THIS, "BtnInserirOcoClick")
@@ -618,6 +681,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .SpecialEffect   = 0
             .MousePointer    = 15
             .ToolTipText     = "Excluir"
+            .TabIndex        = 9
             .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_ExcluirOco, "Click", THIS, "BtnExcluirOcoClick")
@@ -638,6 +702,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .FontSize           = 8
             .Panel              = 1
             .RowHeight          = 16
+            .TabIndex           = 7
             .ScrollBars         = 2
             .GridLines          = 3
             .GridLineColor      = RGB(238, 238, 238)
@@ -697,6 +762,9 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         loc_oGrid.Column1.CurrentControl = "txt_4c_Ocorrencia"   && regra #18
         loc_oGrid.Column1.Sparse         = .F.
 
+        *-- Estado inicial dos campos de descricao conforme o When legado
+        THIS.AtualizarCamposDescricao()
+
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
 
@@ -712,8 +780,10 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 IF USED("cursor_4c_Dados")
                     USE IN cursor_4c_Dados
                 ENDIF
+                SET NULL ON
                 CREATE CURSOR cursor_4c_Dados (grupos C(10), contas C(10), cocos C(2), ;
                                                cidchaves C(20), grucontas C(20))
+                SET NULL OFF
                 loc_lSucesso = .T.
             ELSE
                 IF THIS.this_oBusinessObject.Buscar("")
@@ -766,11 +836,20 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         THIS.pgf_4c_Paginas.ActivePage = par_nPagina
 
         IF par_nPagina = 1
+            *-- Regra #40: o modo eh normalizado AQUI, no FUNIL, nao em cada caller.
+            *-- Toda chamada de AlternarPagina(1) deste form eh caminho de VOLTA
+            *-- (Salvar / Cancelar); sem repor o modo, AjustarBotoesPorModo
+            *-- trabalharia com "INSERIR"/"ALTERAR" ja de volta na Lista.
+            THIS.this_cModoAtual = "LISTA"
             THIS.CarregarLista()
         ELSE
             *-- repintar com a Page2 JA visivel (Refresh em pagina oculta nao pinta)
             THIS.AtualizarGradeOcorrencias()
         ENDIF
+
+        *-- Fora do ramo de sucesso do CarregarLista: se o Buscar do BO falhar, os
+        *-- botoes da Lista ainda precisam terminar num estado coerente (regra #40).
+        THIS.AjustarBotoesPorModo()
 
         loc_lSucesso = .T.
         RETURN loc_lSucesso
@@ -807,6 +886,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
 
             *-- Carregar descricoes via SQL
             THIS.IniciarDescricoes()
+            THIS.AtualizarCamposDescricao()
 
             *-- Carregar ocorrencias no cursor local (grid vinculado na Fase 6)
             IF USED("cursor_4c_OcoLocal")
@@ -880,6 +960,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             ZAP IN cursor_4c_OcoLocal
         ENDIF
         THIS.AtualizarGradeOcorrencias()
+        THIS.AtualizarCamposDescricao()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1066,6 +1147,12 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 RETURN
             ENDIF
 
+            *-- Espelha a ficha no BO antes de gravar. SalvarOcorrencias recebe
+            *-- grupo/conta por parametro, mas ObterChavePrimaria (auditoria) le as
+            *-- PROPERTIES - sem isto a auditoria sairia com a chave do registro
+            *-- anterior. FormParaBO eh o override do hook PROTECTED do FormBase.
+            THIS.FormParaBO()
+
             *-- 4o parametro: lista vazia so eh aceita em ALTERAR (remove todas as ocorrencias)
             IF THIS.this_oBusinessObject.SalvarOcorrencias(loc_cGrupos, loc_cContas, ;
                     "cursor_4c_OcoLocal", (THIS.this_cModoAtual = "ALTERAR"))
@@ -1180,15 +1267,25 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     *--------------------------------------------------------------------------
     * ValidarGrupoLostFocus - Valida/lookup do codigo de Grupo ao sair do campo
     * Substitui fAcessoContab() do legado usando SQL + FormBuscaAuxiliar
+    *
+    * Wrapper FINO: o corpo tem RETURN antecipado (campo vazio) e o picker eh
+    * MODAL - setar/limpar a flag no proprio corpo deixaria ela ligada para
+    * sempre nesse caminho, matando o lookup pelo resto da vida do form.
+    * Liberar aqui eh imune a RETURN (regra #47).
     *--------------------------------------------------------------------------
     PROCEDURE ValidarGrupoLostFocus
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+        IF THIS.this_lEmLookup
             RETURN
         ENDIF
-        IF !INLIST(par_nKeyCode, 13, 9)
-            RETURN
-        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarGrupoLostFocusExec - Corpo da validacao de Grupo
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarGrupoLostFocusExec
         LOCAL loc_oPagina, loc_cGrupo, loc_cSQL, loc_nRes, loc_oBusca
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_Grupo.Value)
@@ -1227,7 +1324,11 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                         loc_oPagina.txt_4c_Grupo.Value    = ALLTRIM(Codigos)
                         loc_oPagina.txt_4c_Desc_Gru.Value = ALLTRIM(Descrs)
                     ELSE
-                        loc_oPagina.txt_4c_Grupo.Value    = ""
+                        *-- Regra #50: dispensar o picker NAO eh erro. O codigo
+                        *-- DIGITADO fica (o legado nunca limpa: o Valid do
+                        *-- Get_Grupos so chama fAcessoContab). Apagar aqui obriga
+                        *-- o usuario a redigitar e ainda perde o prefixo LIKE da
+                        *-- proxima abertura. Limpar SO a descricao.
                         loc_oPagina.txt_4c_Desc_Gru.Value = ""
                     ENDIF
                     loc_oBusca.Release()
@@ -1245,15 +1346,21 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     *--------------------------------------------------------------------------
     * ValidarContaLostFocus - Valida/lookup do codigo de Conta ao sair do campo
     * Substitui fAcessoContas() do legado usando SQL + FormBuscaAuxiliar
+    * Wrapper FINO pelo mesmo motivo do ValidarGrupoLostFocus (regra #47).
     *--------------------------------------------------------------------------
     PROCEDURE ValidarContaLostFocus
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+        IF THIS.this_lEmLookup
             RETURN
         ENDIF
-        IF !INLIST(par_nKeyCode, 13, 9)
-            RETURN
-        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarContaLostFocusExec - Corpo da validacao de Conta
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarContaLostFocusExec
         LOCAL loc_oPagina, loc_cConta, loc_cSQL, loc_nRes, loc_oBusca
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cConta  = ALLTRIM(loc_oPagina.txt_4c_Contas.Value)
@@ -1292,7 +1399,9 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                         loc_oPagina.txt_4c_Contas.Value   = ALLTRIM(Iclis)
                         loc_oPagina.txt_4c_Desc_Con.Value = ALLTRIM(Rclis)
                     ELSE
-                        loc_oPagina.txt_4c_Contas.Value   = ""
+                        *-- Regra #50: idem Grupo. O legado (Get_Contas.Valid) so
+                        *-- AVISA "Conta Invalida (Acesso Negado)!!" quando
+                        *-- fAcessoContas recusa - nunca apaga o que foi digitado.
                         loc_oPagina.txt_4c_Desc_Con.Value = ""
                     ENDIF
                     loc_oBusca.Release()
@@ -1322,12 +1431,9 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         IF PEMSTATUS(loc_oPagina, "txt_4c_Contas", 5)
             loc_oPagina.txt_4c_Contas.Enabled = loc_lEditarIdentif
         ENDIF
-        IF PEMSTATUS(loc_oPagina, "txt_4c_Desc_Gru", 5)
-            loc_oPagina.txt_4c_Desc_Gru.ReadOnly = .T.
-        ENDIF
-        IF PEMSTATUS(loc_oPagina, "txt_4c_Desc_Con", 5)
-            loc_oPagina.txt_4c_Desc_Con.ReadOnly = .T.
-        ENDIF
+        *-- Descricoes NAO sao sempre read-only: o legado as abre como 2a porta de
+        *-- entrada (When de Get_Desc_Gru/Get_Desc_Con). Condicao num lugar so.
+        THIS.AtualizarCamposDescricao()
 
         *-- Grid de ocorrencias: editavel apenas em INSERIR/ALTERAR
         IF PEMSTATUS(loc_oPagina, "grd_4c_Ocorrencias", 5)
@@ -1602,7 +1708,14 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca
+        *-- Guarda de reentrancia SAVE/RESTORE (regra #47): este funil tambem eh
+        *-- chamado de F4/DblClick enquanto o LostFocus pode estar no ar; clear
+        *-- fixo liberaria a flag cedo demais e abriria um 2o picker.
+        *-- Setada DEPOIS dos RETURN de guarda acima, por isso nao trava ligada.
+        LOCAL loc_oBusca, loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+
         TRY
             IF USED("cursor_4c_BuscaGrupo")
                 USE IN cursor_4c_BuscaGrupo
@@ -1629,6 +1742,8 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         IF USED("cursor_4c_BuscaGrupo")
             USE IN cursor_4c_BuscaGrupo
         ENDIF
+
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1660,7 +1775,11 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca
+        *-- Guarda de reentrancia SAVE/RESTORE - ver AbrirLookupGrupo (regra #47)
+        LOCAL loc_oBusca, loc_lEmLookupAnt
+        loc_lEmLookupAnt    = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+
         TRY
             IF USED("cursor_4c_BuscaConta")
                 USE IN cursor_4c_BuscaConta
@@ -1687,6 +1806,301 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         IF USED("cursor_4c_BuscaConta")
             USE IN cursor_4c_BuscaConta
         ENDIF
+
+        THIS.this_lEmLookup = loc_lEmLookupAnt
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarCamposDescricao - Reavalia o "When" legado dos campos de descricao
+    *
+    * Legado:
+    *   Get_Desc_Gru.When = IsEmpty(get_grupos.value) AND Inlist(pcEscolha,"PROCURAR")
+    *   Get_Desc_Con.When = IsEmpty(get_contas.value) AND Inlist(pcEscolha,"INSERIR","PROCURAR")
+    *
+    * O When eh reavaliado pelo VFP a CADA chegada de foco. Aqui a condicao mora
+    * num metodo PUBLIC unico (regra #45), chamado em TODO caminho que mexe nos
+    * codigos: fim do ConfigurarPaginaDados, HabilitarCampos, LimparCampos,
+    * CarregarPaginaDados, os lookups e o InteractiveChange dos codigos.
+    * PUBLIC porque eh alvo de BINDEVENT (regra #3).
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarCamposDescricao()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+        IF PEMSTATUS(loc_oPagina, "txt_4c_Desc_Gru", 5)
+            loc_oPagina.txt_4c_Desc_Gru.ReadOnly = !THIS.DescGrupoPodeDigitar()
+        ENDIF
+        IF PEMSTATUS(loc_oPagina, "txt_4c_Desc_Con", 5)
+            loc_oPagina.txt_4c_Desc_Con.ReadOnly = !THIS.DescContaPodeDigitar()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DescGrupoPodeDigitar - Condicao do Get_Desc_Gru.When legado
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION DescGrupoPodeDigitar()
+        LOCAL loc_oPagina, loc_lPode
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        loc_lPode   = .F.
+
+        IF PEMSTATUS(loc_oPagina, "txt_4c_Grupo", 5)
+            loc_lPode = EMPTY(ALLTRIM(loc_oPagina.txt_4c_Grupo.Value)) AND ;
+                        INLIST(THIS.this_cModoAtual, "PROCURAR")
+        ENDIF
+
+        RETURN loc_lPode
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * DescContaPodeDigitar - Condicao do Get_Desc_Con.When legado
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION DescContaPodeDigitar()
+        LOCAL loc_oPagina, loc_lPode
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        loc_lPode   = .F.
+
+        IF PEMSTATUS(loc_oPagina, "txt_4c_Contas", 5)
+            loc_lPode = EMPTY(ALLTRIM(loc_oPagina.txt_4c_Contas.Value)) AND ;
+                        INLIST(THIS.this_cModoAtual, "INSERIR", "PROCURAR")
+        ENDIF
+
+        RETURN loc_lPode
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ValidarDescGrupoLostFocus - Valid de Get_Desc_Gru (2a porta de entrada)
+    *
+    * Wrapper FINO (regra #47): o corpo tem RETURN antecipado e o picker eh MODAL;
+    * setar/limpar a flag dentro do corpo a deixaria ligada nesses caminhos,
+    * matando o lookup pelo resto da vida do form.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDescGrupoLostFocus
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescGrupoLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDescGrupoLostFocusExec - Corpo do Valid de Get_Desc_Gru
+    *
+    * Legado: fAcessoContab(Usuar, 'C', this.value, get_grupos, get_desc_gru).
+    * O pTip = "C" do legado busca por SigCdGcr.Codigos (ver utils\functions.prg:
+    * "pTip - Tipo busca: C=Codigo, D=Descricao") - TRANSCRITO como esta, sem
+    * reescrever para "D" (regra #17). Eh divergencia PROPOSITAL do legado em
+    * relacao ao Get_Desc_Con, que passa "D"; o efeito util eh o mesmo porque o
+    * FormBuscaAuxiliar cai no fallback show-all quando nada casa, e a escolha no
+    * picker preenche codigo + descricao.
+    * fAcessoContab/fAcessoContas NAO servem como handler de lookup: elas
+    * auto-populam o primeiro registro sem o usuario escolher.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDescGrupoLostFocusExec
+        LOCAL loc_oPagina, loc_cTexto, loc_cSQL, loc_nRes, loc_oBusca
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+        *-- Campo ReadOnly ainda RECEBE foco e dispara LostFocus: reavaliar o When
+        IF NOT THIS.DescGrupoPodeDigitar()
+            RETURN
+        ENDIF
+
+        loc_cTexto = ALLTRIM(loc_oPagina.txt_4c_Desc_Gru.Value)
+        IF EMPTY(loc_cTexto)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr WHERE Codigos = " + EscaparSQL(loc_cTexto)
+            IF USED("cursor_4c_BuscaGrupo")
+                USE IN cursor_4c_BuscaGrupo
+            ENDIF
+            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGrupo")
+
+            IF loc_nRes >= 0 AND USED("cursor_4c_BuscaGrupo") AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+                SELECT cursor_4c_BuscaGrupo
+                loc_oPagina.txt_4c_Grupo.Value    = ALLTRIM(Codigos)
+                loc_oPagina.txt_4c_Desc_Gru.Value = ALLTRIM(Descrs)
+            ELSE
+                IF USED("cursor_4c_BuscaGrupo")
+                    USE IN cursor_4c_BuscaGrupo
+                ENDIF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGcr", "cursor_4c_BuscaGrupo", "Codigos", loc_cTexto, ;
+                    "Grupo de Conta Corrente")
+                IF VARTYPE(loc_oBusca) = "O"
+                    IF !loc_oBusca.this_lAchouRegistro
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                    ENDIF
+                    *-- Nada escolhido: o texto digitado FICA (regra #50) - o legado
+                    *-- nao avisa nem limpa; limpar deixaria o usuario sem saida.
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrupo") AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+                        SELECT cursor_4c_BuscaGrupo
+                        loc_oPagina.txt_4c_Grupo.Value    = ALLTRIM(Codigos)
+                        loc_oPagina.txt_4c_Desc_Gru.Value = ALLTRIM(Descrs)
+                    ENDIF
+                    loc_oBusca.Release()
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MsgErro("Erro ao validar descri" + CHR(231) + CHR(227) + "o do grupo: " + loException.Message, "Erro")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaGrupo")
+            USE IN cursor_4c_BuscaGrupo
+        ENDIF
+
+        *-- Codigo preenchido -> o When fecha o campo de descricao
+        THIS.AtualizarCamposDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DescGrupoKeyPress - F4 no campo de descricao abre o picker de Grupo
+    *--------------------------------------------------------------------------
+    PROCEDURE DescGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28  && F4
+            THIS.AbrirLookupDescGrupo()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DescGrupoDblClick - Handler DblClick de txt_4c_Desc_Gru
+    *--------------------------------------------------------------------------
+    PROCEDURE DescGrupoDblClick()
+        THIS.AbrirLookupDescGrupo()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirLookupDescGrupo - Picker de Grupo acionado pelo campo de descricao
+    * So age quando o When legado permite digitar ali; o picker em si eh o mesmo
+    * do campo de codigo (AbrirLookupGrupo), que ja traz a guarda SAVE/RESTORE.
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirLookupDescGrupo()
+        IF NOT THIS.DescGrupoPodeDigitar()
+            RETURN
+        ENDIF
+        THIS.AbrirLookupGrupo()
+        THIS.AtualizarCamposDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDescContaLostFocus - Valid de Get_Desc_Con (2a porta de entrada)
+    * Wrapper FINO pelo mesmo motivo do ValidarDescGrupoLostFocus (regra #47).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDescContaLostFocus
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarDescContaLostFocusExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDescContaLostFocusExec - Corpo do Valid de Get_Desc_Con
+    *
+    * Legado: fAcessoContas(Usuar, get_grupos.value, 'D', this.value,
+    *                       get_contas, get_desc_con)
+    * - pTip = "D" -> busca pela DESCRICAO (SigCdCli.rclis)
+    * - pGrp = get_grupos.value -> a consulta eh FILTRADA pelo grupo corrente
+    *   ("And a.Grupos = <grupo>" em utils\functions.prg), por isso o filtro
+    *   adicional do FormBuscaAuxiliar (9o argumento).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDescContaLostFocusExec
+        LOCAL loc_oPagina, loc_cTexto, loc_cGrupo, loc_cFiltro
+        LOCAL loc_cSQL, loc_nRes, loc_oBusca
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+        IF NOT THIS.DescContaPodeDigitar()
+            RETURN
+        ENDIF
+
+        loc_cTexto = ALLTRIM(loc_oPagina.txt_4c_Desc_Con.Value)
+        IF EMPTY(loc_cTexto)
+            RETURN
+        ENDIF
+
+        loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_Grupo.Value)
+        loc_cFiltro = ""
+        IF !EMPTY(loc_cGrupo)
+            loc_cFiltro = "grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT Iclis, Rclis FROM SigCdCli" + ;
+                       " WHERE RTRIM(Rclis) = " + EscaparSQL(loc_cTexto)
+            IF !EMPTY(loc_cFiltro)
+                loc_cSQL = loc_cSQL + " AND " + loc_cFiltro
+            ENDIF
+            IF USED("cursor_4c_BuscaConta")
+                USE IN cursor_4c_BuscaConta
+            ENDIF
+            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaConta")
+
+            IF loc_nRes >= 0 AND USED("cursor_4c_BuscaConta") AND RECCOUNT("cursor_4c_BuscaConta") = 1
+                SELECT cursor_4c_BuscaConta
+                loc_oPagina.txt_4c_Contas.Value   = ALLTRIM(Iclis)
+                loc_oPagina.txt_4c_Desc_Con.Value = ALLTRIM(Rclis)
+            ELSE
+                IF USED("cursor_4c_BuscaConta")
+                    USE IN cursor_4c_BuscaConta
+                ENDIF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdCli", "cursor_4c_BuscaConta", "Rclis", loc_cTexto, ;
+                    "Conta Corrente", .F., .F., loc_cFiltro)
+                IF VARTYPE(loc_oBusca) = "O"
+                    IF !loc_oBusca.this_lAchouRegistro
+                        loc_oBusca.mAddColuna("Iclis", "", "Conta")
+                        loc_oBusca.mAddColuna("Rclis", "", "Nome")
+                        loc_oBusca.Show()
+                    ENDIF
+                    *-- Nada escolhido: o texto digitado FICA (regra #50)
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaConta") AND RECCOUNT("cursor_4c_BuscaConta") > 0
+                        SELECT cursor_4c_BuscaConta
+                        loc_oPagina.txt_4c_Contas.Value   = ALLTRIM(Iclis)
+                        loc_oPagina.txt_4c_Desc_Con.Value = ALLTRIM(Rclis)
+                    ENDIF
+                    loc_oBusca.Release()
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MsgErro("Erro ao validar descri" + CHR(231) + CHR(227) + "o da conta: " + loException.Message, "Erro")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaConta")
+            USE IN cursor_4c_BuscaConta
+        ENDIF
+
+        THIS.AtualizarCamposDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DescContaKeyPress - F4 no campo de descricao abre o picker de Conta
+    *--------------------------------------------------------------------------
+    PROCEDURE DescContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28  && F4
+            THIS.AbrirLookupDescConta()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DescContaDblClick - Handler DblClick de txt_4c_Desc_Con
+    *--------------------------------------------------------------------------
+    PROCEDURE DescContaDblClick()
+        THIS.AbrirLookupDescConta()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirLookupDescConta - Picker de Conta acionado pelo campo de descricao
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirLookupDescConta()
+        IF NOT THIS.DescContaPodeDigitar()
+            RETURN
+        ENDIF
+        THIS.AbrirLookupConta()
+        THIS.AtualizarCamposDescricao()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1784,6 +2198,38 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     * Destroy - Libera o Business Object e chama destruicao da classe pai
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
+        *-- O form NAO declara DataSession = 2, entao roda na sessao CORRENTE: os
+        *-- cursores criados aqui SOBREVIVEM ao Release e ficariam abertos na
+        *-- sessao global, colidindo na proxima abertura da tela.
+        TRY
+            IF USED("cursor_4c_OcoLocal")
+                USE IN cursor_4c_OcoLocal
+            ENDIF
+            IF USED("cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+            IF USED("cursor_4c_Ocorrencias")
+                USE IN cursor_4c_Ocorrencias
+            ENDIF
+            IF USED("cursor_4c_TmpGrupo")
+                USE IN cursor_4c_TmpGrupo
+            ENDIF
+            IF USED("cursor_4c_TmpConta")
+                USE IN cursor_4c_TmpConta
+            ENDIF
+            IF USED("cursor_4c_BuscaGrupo")
+                USE IN cursor_4c_BuscaGrupo
+            ENDIF
+            IF USED("cursor_4c_BuscaConta")
+                USE IN cursor_4c_BuscaConta
+            ENDIF
+            IF USED("cursor_4c_BuscaCoco")
+                USE IN cursor_4c_BuscaCoco
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormSIGPRLNC.Destroy")
+        ENDTRY
+
         IF VARTYPE(THIS.this_oBusinessObject) = "O"
             THIS.this_oBusinessObject = .NULL.
         ENDIF

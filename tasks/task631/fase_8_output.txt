@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 executed. `FormSIGPRINT.prg` is complete and compiles clean.
+
+## What I found
+
+All Phase 8 deliverables were already present from phases 3ÔÇô7, so Phase 8 became an audit + consolidation pass. Verified inventory ÔÇö all 23 required methods present exactly once, each with real logic (no stubs/TODOs; the `TODO` grep hits are the substring in "me**todo** publico"):
+
+`Init` ┬À `InicializarForm` ┬À `ConfigurarPageFrame` ┬À `ConfigurarPaginaLista` ┬À `ConfigurarPaginaDados` ┬À `CarregarLista` ┬À `AlternarPagina` ┬À `FormParaBO` ┬À `BOParaForm` ┬À `BtnIncluir/Alterar/Visualizar/Excluir/Buscar/Encerrar/Salvar/CancelarClick` ┬À `HabilitarCampos` ┬À `LimparCampos` ┬À `AjustarBotoesPorModo` ┬À `FormatarGridLista` ┬À `TornarControlesVisiveis` ┬À `Destroy`
+
+`FormParaBO`/`BOParaForm` are complete: the BO has 5 properties and both methods map the 4 editable ones ÔÇö `this_cCidChaves` is correctly excluded (PK from `fUniqueIds()`, never from the screen).
+
+**Checks that passed:** no `RETURN` inside TRY/CATCH; no `ISEMPTY`/`MostrarAviso`/`.Self`/`Controls("nome")`; `MaxLength` 10/76 matches `cods char(10)`/`descrs char(76)`; `INSERT` covers all 5 NOT NULL columns of `SigOpIns` (read from `schema.sql` via `Get-Content -Raw`); lookup validation on `LostFocus`, not `KeyPress`; label `Alignment=1` is legitimate here ÔÇö the dump declares `Width` and all four Says end at x=160, 2px before the fields at 162. Seven pipeline audits (`VerificarFuncoesNaoDefinidas`, `InsertNotNull`, `FormBuscaAuxiliar`, `LookupEmKeyPress`, `ColunaEmpresaSQL`, `CamposCursorBO`, `TabelasInexistentes`) report zero SIGPRINT findings. Menu/config integration already in place (BAR 23 of `popCadastros`; `config.prg` loads via `ADIR`).
+
+## Three fixes applied
+
+1. **`CarregarLista` ÔÇö missing `GO TOP`.** The legacy closes the grid load with `Go Top In <cursor>` + `grade.Refresh`; only the `Refresh` had been transcribed. Without it, `ObterChaveSelecionada`/`BtnExcluirClick` can read a stale row position after a reload.
+2. **`FormatarGridLista` was a no-op for the cells.** It set `Grid.FontName`/`FontSize` only, which does not retroact over `Column`/`Header` objects created by `AddObject` ÔÇö the framework's Verdana 8 stayed on the frame while the cells rendered in the VFP default. Added `SetAll` for `Column` and `Header`. Note: I reasoned this from VFP semantics rather than measuring it; the `SetAll` is harmless either way, since it's a duplicate no-op if propagation did occur.
+3. **`Destroy` leaked `cursor_4c_Dados`.** `FormBase` uses no private datasession, so cursors outlive the form, and `cursor_4c_Dados` is a name shared by 100+ forms. Now closes it plus `cursor_4c_ChkCodigo`/`cursor_4c_Carrega`, matching `FormCor.Destroy`.
+
+Compiled both files in VFP9 after the edits: `FORM FXP: OK` / `BO FXP: OK`, no `.err` produced. Temp compile artifacts removed; `.fxp` deleted so the next test run can't execute stale p-code.

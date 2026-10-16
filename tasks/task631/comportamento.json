@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "SELECT csSigOpIns\nSET NEAR ON\nSEEK ThisForm.Pagina.Dados.getCods.Value\nSET near off",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim ***********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "LParameters lcAcesso\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpIns','CidChaves','crSigOpIns','Cods',.f.)\n\t\t.Requery('crSigOpIns')\n\tEndWith\n\n\tCreate Cursor csSigOpIns (Cods c(10), Descrs c(76), Tipo c(10))\n\tINDEX ON CODS TAG CODS\n\tSET ORDER TO Cods\n\n\tSELECT crSigOpIns\n\n\tSCAN  \n\t\tSCATTER MEMVA... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "LParameters Opcao\n\nSELECT crSigOpIns\nLOCATE FOR Cods = csSigOpIns.Cods\n\nIf !DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase (ThisForm.pcEscolha = 'INSERIR')\n\t\tThisForm.Pagina.Dados.optTipo.Value = 1\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\n\tCase (ThisForm.pcEscolha = 'PROCURAR')\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\n\tCase Inlist(ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\n\tCase (ThisForm.pcEscolha = 'ALTERAR')\n\t\tThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Click",
+      "linhas": 73,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\n\tIf IsEmpty(crSigOpIns.Cods)\n\t\t=MessageBox('Codigo Inválido!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf IsEmpty(crSigOpIns.Descrs)\n\t\t=MessageBox('Descrição Inválida!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getDescrs.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf IsEmpty(crSigOpIns.Mensas)\n\t\t=MessageBox('Mensagem Inválida!!! Atenção Esta Mensagem Será Utilizada na Impressão ' + Chr(13) + ;\n\t\t\t\t\t'da Solicitação!!! Portanto é Necess... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n* Fim ***********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINT.Pagina.Dados.getCods",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (ThisForm.pcEscolha = 'INSERIR') .And. ThisForm.podatamgr.ChkRegister('SigOpIns', 'Cods', This.Value)\n\t=MessageBox('Código Já Cadastrado!!!', 48, '')\n\tThis.Value = ''\n\tReturn 0\nEndif\n* Fim ***********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkRegister('SigOpIns'",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

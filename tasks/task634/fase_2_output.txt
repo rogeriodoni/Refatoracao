@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SIGPRLNCBO.prg` (681 linhas, ASCII + CRLF, **compila limpo no VFP9** ÔÇö `.fxp` gerado, nenhum `.err`).
+
+## O que foi feito
+
+**M├®todos CRUD completados** (todos com l├│gica real, sem stub/TODO):
+
+| M├®todo | Escopo | Origem no legado |
+|---|---|---|
+| `CarregarDoCursor` | public | mapeia as 5 colunas de `SigClLan` |
+| `Inserir` / `Atualizar` | **public** | `Insert Into crSigClLan (...)` do `Salva.Click` |
+| `ExecutarExclusao` | protected | DELETE por `cidchaves` |
+| `ExcluirPorGruContas` | public | `delete from SigClLan where grucontas = ...` |
+| `SalvarOcorrencias` | public | o ciclo delete-tudo + `Scan`/`Insert` do `Salva.Click` |
+| `ObterChavePrimaria` | protected | `cidchaves` para auditoria |
+| `ValidarDados` | public | "Obrigat├│rio Informar o Grupo / a Conta" |
+
+`RegistrarAuditoria` ├® chamado em Inserir / Atualizar / ExecutarExclusao e em cada INSERT de `SalvarOcorrencias`.
+
+## Defeitos que a Fase 1 tinha e foram corrigidos
+
+1. **`Inserir()`/`Atualizar()` estavam `PROTECTED`** ÔÇö na `BusinessBase` s├úo PUBLIC; declarar protegido na subclasse protege o m├®todo em toda a cadeia de heran├ºa e faria a chamada de fora estourar `Property INSERIR is not found` (regra #51). Removido.
+2. **`TratarNulo(grupos, "C")`** ÔÇö o 2┬║ argumento ├® o **valor padr├úo**, n├úo um c├│digo de tipo: com coluna nula a property receberia a literal `"C"`. Trocado para `""`.
+3. **`SalvarOcorrencias` falhava muda** no caso de cursor vazio em INCLUIR: preenchia `this_cMensagemErro` e ningu├®m exibia. Agora cai em `ExibirFalha()` no fim (regra #20).
+4. **`BuscarOcorrencias` usava `LEFT JOIN`** ÔÇö o legado ├® `from A, B where A.cocos = B.cods`, que ├® INNER JOIN. Trocado (um LEFT traria linha com `descs` nulo que o legado nunca mostra).
+
+## O que foi acrescentado
+
+- **`MontarGruContas()`** ÔÇö centraliza a chave **posicional** `grucontas char(20)` = `PADR(grupos,10) + PADR(contas,10)`, conforme a largura do destino. `ALLTRIM` nas partes devolveria zero linhas em sil├¬ncio.
+- **`BuscarDescricaoGrupo` / `BuscarDescricaoConta`** ÔÇö transcrevem o `inicdesc` do legado (`SigCdGcr.codigosÔåÆdescrs`, `SigCdCli.iclisÔåÆrclis`); estavam faltando.
+- **`LocalizarPorGruContas`** ÔÇö transcreve `LocateCursor('crSigClLan','grucontas',...)` (a PROCURAR do legado **posiciona** a grade, n├úo refaz consulta).
+- `LimparDados()` zerando as properties.
+
+## Confer├¬ncias feitas
+
+- Schema lido com `Get-Content -Raw` (UTF-16): `SigClLan` tem exatamente **5 colunas, todas NOT NULL**, e **todas** entram no INSERT ÔÇö `cidchaves` nunca vai vazio (`fUniqueIds()` rende 20 chars, exatamente a largura da PK).
+- Auditoria est├ítica: zero `RETURN` dentro de TRY/CATCH, TRY/PROC/FUNC/CASE balanceados, sem `ISEMPTY`, `.Self` ou `PUBLIC` dentro de `DEFINE CLASS`; nenhum caractere acentuado literal (todos via `CHR()`).
+- `config.prg` carrega `classes\*BO.prg` por `ADIR` ÔÇö n├úo precisa de `SET PROCEDURE` manual.
+
+Uma observa├º├úo para as fases seguintes: o legado monta o `grucontas` do DELETE a partir dos valores crus das caixas de texto (`get_grupos.Value + get_contas.value`), enquanto o INSERT usa as colunas `c(10)` do cursor. O BO padroniza nas duas pontas pelo formato do INSERT (10+10) ÔÇö ├® o ├║nico que casa com o dado gravado.

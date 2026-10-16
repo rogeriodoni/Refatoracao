@@ -1,450 +1,524 @@
 *==============================================================================
-* sigprmdpBO.prg - Business Object para Substitui??o de Refer?ncias de Produtos
-* Tabela: SigOpClC (opera??es de recalculo de custo/estoque)
-* Heran?a: BusinessBase
-* Data: 2026-07-17
+* Classe  : sigprmdpBO
+* Herda de: BusinessBase
+* Descricao: BO para substituicao de referencias (codigos) de produtos.
+*            Valida pares CprosAnt/CprosNov, importa de XLS e aplica UPDATE
+*            em multiplas tabelas do banco conforme catalogo ArqDBF, alem de
+*            registrar controle de recalculo de custo em SigOpClC.
+*            Form OPERACIONAL - sem Lista/Page1/Buscar(); this_cTabela so
+*            identifica SigOpClC, unica tabela gravada por Inserir/Atualizar.
 *==============================================================================
-* FASE 1: Propriedades e Init()
-*==============================================================================
-
 DEFINE CLASS sigprmdpBO AS BusinessBase
 
-    *-- Chave e tabela principal (SigOpClC: recalculo de custo/estoque)
-    this_cTabela      = "SigOpClC"
-    this_cCampoChave  = "CidChaves"
+    *-- Flags de configuracao do processamento (legado: checkcadpro/manterbarra/calculacusto)
+    this_lCheckCadPro   = .F.   && Pula a validacao do codigo de produto contra SigCdPro
+    this_lManterBarra   = .F.   && Mantem o codigo de barras do produto antigo no produto novo
+    this_lCalculaCusto  = .T.   && Recalcula custo (legado le de SigCdPaC.CalcCustos <> 3)
 
-    *-- Flags de controle de comportamento (parametros do form original)
-    this_lCheckCadPro   = .F.   && Se .T., pula valida??o do produto no SigCdPro
-    this_lManterBarra   = .F.   && Se .T., mant?m o c?digo de barras do produto antigo
-    this_lCalculaCusto  = .F.   && Se .T., recalcula custo ap?s substitui??o
+    *-- Estado do progresso (lido pelo Form para atualizar UI - cntResult/cntBarra)
+    this_cArquivoAtual  = ""    && Arquivo/campo em processamento (getArquivo.Value)
+    this_cProdutoAtual  = ""    && Produto em processamento (Get_Cpros.Value)
+    this_nProgresso     = 0     && Progresso 0-100 (lblPorcento.Caption / shpBarra.Width)
 
-    *-- Par de c?digos sendo processado no loop atual
-    this_cCprosAnt      = ""    && C?digo de produto antigo (Cpros char(14))
-    this_cCprosNov      = ""    && C?digo de produto novo (Cpros char(14))
+    *-- Caminho completo do ArqDBF.DBF (sem extensao) - setado por ValidarArqDBF
+    this_cArqDBFPath    = ""
 
-    *-- Atributos do produto antigo capturados antes do processamento
-    this_nBarraAnt      = 0     && C?digo de barras (Cbars) do produto antigo
+    *-- Par corrente de produtos (usado por CarregarDoCursor - espelha o cursor
+    *-- da grade csContas: CprosAnt C(14), CprosNov C(14), Flag L, BarraAnt N(8))
+    this_cProsAnt       = ""    && Codigo de referencia antigo (SigCdPro.Cpros, char(14))
+    this_cProsNov       = ""    && Codigo de referencia novo (SigCdPro.Cpros, char(14))
+    this_lFlag          = .F.   && Linha ja processada com sucesso (csContas.Flag)
+    this_nBarraAnt      = 0     && Codigo de barras do produto antigo (SigCdPro.Cbars)
 
-    *-- Estado de progresso do processamento em lote
-    this_nTotal         = 0     && Total de pares a processar (csContas * csCampos)
-    this_nProcessados   = 0     && Pares j? processados (para barra de progresso)
-    this_nErro          = 0     && C?digo do ?ltimo erro de SQL (< 1 = falha)
+    *-- Dados do registro de controle de custo gerado no processamento (tabela
+    *-- SigOpClC, unica tabela gravada diretamente por este BO - Inserir/Atualizar)
+    this_cCidChaves     = ""    && Chave unica do registro (SigOpClC.cidchaves, PK)
+    this_cCpros         = ""    && Codigo do produto enfileirado p/ recalculo (SigOpClC.cpros)
+    this_cEmps          = ""    && Empresa do registro de custo (SigOpClC.emps)
+    this_cEmpCpros      = ""    && Empresa + codigo do produto (SigOpClC.empcpros)
+    this_dDatas         = {}    && Data base do recalculo de custo (SigOpClC.datas)
+    this_cUsuars        = ""    && Usuario que gerou o registro (SigOpClC.usuars)
 
-    *-- Feedback visual do arquivo/campo sendo processado no momento
-    this_cArquivoAtual  = ""    && Nome do arquivo DBF sendo atualizado
-    this_cCampoAtual    = ""    && Nome do campo sendo atualizado no arquivo
-
-    *-- C?digo do usu?rio logado (capturado no Init para auditoria)
-    this_cUsuar         = ""    && Usuar - usu?rio logado
+    *-- .T. quando o par processado tinha linha(s) em SigMvEst referenciando
+    *-- o codigo antigo (ver ProcessarPar - regra #27: fRecalculaP/fRecalculaC
+    *-- nao vieram no acervo, e SigMvEst nao e tocado sem elas). O Form usa
+    *-- esta flag para avisar o usuario que o saldo precisa de revisao manual.
+    this_lSigMvEstPendente = .F.
 
     *--------------------------------------------------------------------------
-    * Init - Configura??o inicial do BO
+    * Init - sem Buscar()/this_oDataAccess (form OPERACIONAL, sem Lista/Page1).
+    * this_cTabela/this_cCampoChave apontam para SigOpClC so porque e a UNICA
+    * tabela que Inserir()/Atualizar() gravam diretamente (fila de recalculo
+    * de custo) - usados por RegistrarAuditoria() para montar o log.
     *--------------------------------------------------------------------------
     PROCEDURE Init()
+        THIS.this_cTabela     = "SigOpClC"
+        THIS.this_cCampoChave = "cidchaves"
         DODEFAULT()
-
-        this.this_cTabela     = "SigOpClC"
-        this.this_cCampoChave = "CidChaves"
-
-        *-- Captura usu?rio logado para auditoria (fGravarLog)
-        IF TYPE("gc_4c_UsuarioLogado") = "C" AND !EMPTY(gc_4c_UsuarioLogado)
-            this.this_cUsuar = gc_4c_UsuarioLogado
-        ENDIF
     ENDPROC
 
-
     *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega propriedades a partir de cursor (csContas)
+    * CarregarDoCursor - Carrega propriedades do BO a partir do cursor da
+    * grade de pares de substituicao (equivalente a csContas do legado).
+    * REGRA CRITICA: SELECT (par_cAliasCursor) ANTES de acessar campos.
     *--------------------------------------------------------------------------
     PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cCprosAnt = TratarNulo(CprosAnt, "C")
-            THIS.this_cCprosNov = TratarNulo(CprosNov, "C")
-            THIS.this_nBarraAnt = TratarNulo(BarraAnt, "N")
-            RETURN .T.
-        ENDIF
-        RETURN .F.
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cProsAnt  = TratarNulo(CprosAnt,  "")
+                THIS.this_cProsNov  = TratarNulo(CprosNov,  "")
+                THIS.this_lFlag     = TratarNulo(Flag,      .F.)
+                THIS.this_nBarraAnt = TratarNulo(BarraAnt,  0)
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "sigprmdpBO.CarregarDoCursor")
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna campo chave prim?ria de SigOpClC
+    * Inserir - Grava na fila de recalculo de custo (tabela SigOpClC), um
+    * registro por produto/empresa cujo custo precisa ser reprocessado apos a
+    * substituicao de referencia (legado: Insert Into CrSigOpClC no btnProcessar).
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF EMPTY(THIS.this_cCidChaves)
+                THIS.this_cCidChaves = fUniqueIds()
+            ENDIF
+            IF EMPTY(THIS.this_cEmpCpros)
+                THIS.this_cEmpCpros = THIS.this_cEmps + THIS.this_cCpros
+            ENDIF
+            IF EMPTY(THIS.this_cUsuars)
+                THIS.this_cUsuars = TratarNulo(gc_4c_UsuarioLogado, "")
+            ENDIF
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigOpClC (cidchaves, cpros, datas, empcpros, emps, usuars)
+                VALUES (
+                    <<EscaparSQL(LEFT(THIS.this_cCidChaves, 20))>>,
+                    <<EscaparSQL(LEFT(THIS.this_cCpros, 14))>>,
+                    <<FormatarDataSQL(THIS.this_dDatas)>>,
+                    <<EscaparSQL(LEFT(THIS.this_cEmpCpros, 17))>>,
+                    <<EscaparSQL(LEFT(THIS.this_cEmps, 3))>>,
+                    <<EscaparSQL(LEFT(THIS.this_cUsuars, 10))>>
+                )
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao inserir registro de recalculo de custo:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "sigprmdpBO.Inserir")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Atualiza um registro existente da fila de recalculo de custo
+    * (SigOpClC), localizado pela chave unica this_cCidChaves.
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF EMPTY(THIS.this_cEmpCpros)
+                THIS.this_cEmpCpros = THIS.this_cEmps + THIS.this_cCpros
+            ENDIF
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigOpClC
+                SET cpros    = <<EscaparSQL(LEFT(THIS.this_cCpros, 14))>>,
+                    datas    = <<FormatarDataSQL(THIS.this_dDatas)>>,
+                    empcpros = <<EscaparSQL(LEFT(THIS.this_cEmpCpros, 17))>>,
+                    emps     = <<EscaparSQL(LEFT(THIS.this_cEmps, 3))>>,
+                    usuars   = <<EscaparSQL(LEFT(THIS.this_cUsuars, 10))>>
+                WHERE cidchaves = <<EscaparSQL(LEFT(THIS.this_cCidChaves, 20))>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao atualizar registro de recalculo de custo:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "sigprmdpBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - chave real do registro gravado por Inserir/Atualizar
+    * (SigOpClC.cidchaves), usada por RegistrarAuditoria().
     *--------------------------------------------------------------------------
     FUNCTION ObterChavePrimaria()
-        RETURN THIS.this_cCampoChave
+        RETURN ALLTRIM(THIS.this_cCidChaves)
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * ValidarDados - Valida dados m?nimos antes de Inserir
+    * ValidarParSubstituicao - replica as 4 validacoes do SCAN csContas do
+    * btnProcessar.Click legado, na MESMA ordem. Devolve um codigo em vez de
+    * exibir a mensagem/posicionar o foco - isso e decisao do FORM (camadas).
+    * Grava THIS.this_nBarraAnt quando acha o produto antigo em SigCdPro
+    * (equivalente a "Replace BarraAnt With CrTmpPro.Cbars in CsContas").
+    *
+    * Retorno:
+    *   0 = par valido
+    *   1 = codigo antigo vazio, ou nao cadastrado em SigCdPro (e
+    *       this_lCheckCadPro = .F.)
+    *   2 = produto antigo sem codigo de barras (so quando this_lManterBarra)
+    *   3 = codigo novo vazio
+    *   4 = codigo antigo e novo iguais
+    *   5 = grupos do produto antigo/novo com controle de estoque (Cestoqs)
+    *       diferentes
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION ValidarDados()
-        IF EMPTY(THIS.this_cCprosNov)
-            THIS.this_cMensagemErro = "C" + CHR(243) + "digo do produto novo " + ;
-                CHR(233) + " obrigat" + CHR(243) + "rio."
+    FUNCTION ValidarParSubstituicao(par_cProsAnt, par_cProsNov)
+        LOCAL loc_cSQL, loc_nResultado, loc_nRetorno, loc_lProsseguir
+        loc_nRetorno = 0
+        loc_lProsseguir = .T.
+        THIS.this_nBarraAnt = 0
+
+        *-- REGRA CRITICA: nunca RETURN dentro de TRY/CATCH - usa flag
+        *-- loc_lProsseguir e um unico RETURN apos o ENDTRY.
+        TRY
+            IF EMPTY(par_cProsAnt)
+                loc_nRetorno = 1
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir AND !THIS.this_lCheckCadPro
+                loc_cSQL = "SELECT Cpros, Cbars FROM SigCdPro WHERE Cpros = " + ;
+                    EscaparSQL(LEFT(ALLTRIM(par_cProsAnt), 14))
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ValPro")
+                IF loc_nResultado < 1 OR !USED("cursor_4c_ValPro") OR RECCOUNT("cursor_4c_ValPro") = 0
+                    IF USED("cursor_4c_ValPro")
+                        USE IN cursor_4c_ValPro
+                    ENDIF
+                    loc_nRetorno = 1
+                    loc_lProsseguir = .F.
+                ELSE
+                    THIS.this_nBarraAnt = TratarNulo(cursor_4c_ValPro.Cbars, 0)
+                    USE IN cursor_4c_ValPro
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir AND THIS.this_lManterBarra AND THIS.this_nBarraAnt = 0
+                loc_nRetorno = 2
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir AND EMPTY(par_cProsNov)
+                loc_nRetorno = 3
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir AND UPPER(ALLTRIM(par_cProsAnt)) == UPPER(ALLTRIM(par_cProsNov))
+                loc_nRetorno = 4
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                *-- Grupos com controle de estoque (Cestoqs) diferentes entre o
+                *-- produto novo e o antigo bloqueiam a troca (legado: LocalPro/
+                *-- LocalPro2, Select a.Cgrus,b.Cestoqs From SigCdPro a, SigCdGrp b)
+                loc_cSQL = "SELECT b.Cestoqs FROM SigCdPro a INNER JOIN SigCdGrp b ON a.Cgrus = b.Cgrus" + ;
+                    " WHERE a.Cpros = " + EscaparSQL(LEFT(ALLTRIM(par_cProsNov), 14))
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+                IF USED("cursor_4c_LocalPro") AND RECCOUNT("cursor_4c_LocalPro") > 0
+                    loc_cSQL = "SELECT b.Cestoqs FROM SigCdPro a INNER JOIN SigCdGrp b ON a.Cgrus = b.Cgrus" + ;
+                        " WHERE a.Cpros = " + EscaparSQL(LEFT(ALLTRIM(par_cProsAnt), 14))
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro2")
+                    IF USED("cursor_4c_LocalPro2")
+                        IF RECCOUNT("cursor_4c_LocalPro2") > 0 AND ;
+                           cursor_4c_LocalPro2.Cestoqs != cursor_4c_LocalPro.Cestoqs
+                            loc_nRetorno = 5
+                        ENDIF
+                        USE IN cursor_4c_LocalPro2
+                    ENDIF
+                ENDIF
+                IF USED("cursor_4c_LocalPro")
+                    USE IN cursor_4c_LocalPro
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao validar par de refer" + CHR(234) + "ncias:" + CHR(13) + ;
+                loException.Message, "sigprmdpBO.ValidarParSubstituicao")
+            loc_nRetorno = 1
+        ENDTRY
+
+        RETURN loc_nRetorno
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * MapearTabelasAlvo - Equivalente ao
+    *     Select Arquivos, Campos From ArqDBF
+    *     Where (Tamanhos=10 Or Tamanhos=14) And Upper(Tipos)='C' And
+    *           Arquivos not in (...) And InList(Alltrim(Campos), <14 nomes>)
+    * do btnProcessar.Click legado. ArqDBF.DBF era um CATALOGO LOCAL do FoxPro
+    * (Sys(5)+Sys(2003)+'\ArqDBF.dbf') - nao existe no SQL Server (regra #14:
+    * so o schema.sql/INFORMATION_SCHEMA decide, nunca arquivo local). A MESMA
+    * lista de nomes de coluna e o MESMO filtro de tamanho sao aplicados aqui
+    * contra o metadado REAL e ATUAL do banco, em vez de um catalogo que podia
+    * estar desatualizado.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION MapearTabelasAlvo()
+        LOCAL loc_cSQL, loc_nResultado
+
+        IF USED("cursor_4c_Campos")
+            USE IN cursor_4c_Campos
+        ENDIF
+
+        TEXT TO loc_cSQL NOSHOW
+            SELECT TABLE_NAME AS Arquivos, COLUMN_NAME AS Campos
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE DATA_TYPE IN ('char', 'varchar')
+              AND CHARACTER_MAXIMUM_LENGTH IN (10, 14)
+              AND UPPER(COLUMN_NAME) IN ('CMATS','CODCONPADS','CODPDS','CODPROPADS',
+                  'CPROS','PRODUTO','PRODUTOS','CPROEQS','MATPRINCS','MATS',
+                  'MATSUBS','CODGARRAS','OUROS','BRILHANTES')
+              AND UPPER(TABLE_NAME) NOT IN ('SIGTEMPD','SIGTEMPC','SIGTEMPR')
+            ORDER BY TABLE_NAME
+        ENDTEXT
+
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Campos")
+        IF loc_nResultado < 0
+            MostrarErro("Erro ao mapear tabelas com refer" + CHR(234) + "ncia a produto:" + CHR(13) + ;
+                CapturarErroSQL(), "Erro SQL")
             RETURN .F.
         ENDIF
-        IF EMPTY(go_4c_Sistema.cCodEmpresa)
-            THIS.this_cMensagemErro = "Empresa n" + CHR(227) + "o configurada no sistema."
-            RETURN .F.
-        ENDIF
+
         RETURN .T.
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * Inserir - Insere pendencia de recalculo em SigOpClC
-    * Sobrescreve BusinessBase.Inserir (chamado por Salvar quando lNovoRegistro=.T.)
+    * ExisteReferencia - .T. se existe ao menos 1 linha de par_cTabela com
+    * par_cColuna = par_cValor. Equivalente ao
+    *     ThisForm.PodataMgr.CursorQuery('SigCdPro','CrTmpPro','Cpros', ... )
+    * e ao padrao "Select X From Y Where Y.X = 'valor' / Reccount(...) > 0"
+    * repetido no btnProcessar.Click legado.
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Inserir()
-        LOCAL loc_lSucesso, loc_oErro, loc_cSQL, loc_cCidChaves
+    PROTECTED FUNCTION ExisteReferencia(par_cTabela, par_cColuna, par_cValor)
+        LOCAL loc_cSQL, loc_nResultado, loc_lExiste
+        loc_lExiste = .F.
+
+        loc_cSQL = "SELECT TOP 1 " + par_cColuna + " FROM " + par_cTabela + ;
+            " WHERE " + par_cColuna + " = " + EscaparSQL(LEFT(ALLTRIM(par_cValor), 14))
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Existe")
+        IF loc_nResultado > 0 AND USED("cursor_4c_Existe")
+            loc_lExiste = (RECCOUNT("cursor_4c_Existe") > 0)
+        ENDIF
+        IF USED("cursor_4c_Existe")
+            USE IN cursor_4c_Existe
+        ENDIF
+
+        RETURN loc_lExiste
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * EnfileirarRecalculoPorPar - Equivalente ao bloco final do legado
+    * ("If Used('TmpCustPro') And Thisform.Calculacusto / Scan / Insert Into
+    * CrSigOpClC (...) "). TmpCustPro era populado DENTRO de fRecalculaC
+    * (funcao global do Fortyus que nao veio no acervo - regra #27); como nao
+    * ha como reproduzir o calculo em si, enfileiramos para recalculo externo
+    * TODA empresa que tem movimento historico (SigMvHst) para o codigo
+    * antigo OU o novo - e' o mesmo universo (Emps) que o legado varria via
+    * fRecalculaP/fRecalculaC para montar TmpCustPro.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE EnfileirarRecalculoPorPar(par_cProsAnt, par_cProsNov)
+        LOCAL loc_cSQL, loc_nResultado
+
+        IF !THIS.this_lCalculaCusto
+            RETURN
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT DISTINCT Emps FROM SigMvHst WHERE Cpros = " + ;
+                EscaparSQL(LEFT(ALLTRIM(par_cProsAnt), 14)) + " OR Cpros = " + ;
+                EscaparSQL(LEFT(ALLTRIM(par_cProsNov), 14))
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpsRecalc")
+            IF loc_nResultado > 0 AND USED("cursor_4c_EmpsRecalc")
+                SELECT cursor_4c_EmpsRecalc
+                SCAN
+                    THIS.this_cEmps   = TratarNulo(cursor_4c_EmpsRecalc.Emps, "")
+                    THIS.this_dDatas  = DATE()
+                    THIS.this_cUsuars = TratarNulo(gc_4c_UsuarioLogado, "")
+
+                    THIS.this_cCidChaves = ""
+                    THIS.this_cEmpCpros  = ""
+                    THIS.this_cCpros     = ALLTRIM(par_cProsAnt)
+                    THIS.Inserir()
+
+                    THIS.this_cCidChaves = ""
+                    THIS.this_cEmpCpros  = ""
+                    THIS.this_cCpros     = ALLTRIM(par_cProsNov)
+                    THIS.Inserir()
+                ENDSCAN
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao enfileirar recalculo de custo:" + CHR(13) + ;
+                loException.Message, "sigprmdpBO.EnfileirarRecalculoPorPar")
+        ENDTRY
+
+        IF USED("cursor_4c_EmpsRecalc")
+            USE IN cursor_4c_EmpsRecalc
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ProcessarPar - substitui par_cProsAnt por par_cProsNov em todas as
+    * tabelas mapeadas por MapearTabelasAlvo() (equivalente ao "Select
+    * Arquivos,Campos" + Scan do btnProcessar.Click legado).
+    *
+    * Casos especiais transcritos literalmente do legado:
+    *   SIGPRPRT          -> nunca atualizado (Loop incondicional).
+    *   SIGCDPRO/SIGPRCPO/SIGCDPRF/SIGCDPFT -> quando o codigo NOVO ja existe
+    *     como produto cadastrado em SigCdPro: se for SigCdPro.Cpros e
+    *     this_lManterBarra, transfere o codigo de barras (Cbars) do antigo
+    *     para o novo em vez de renomear; senao, se o codigo ANTIGO tambem
+    *     existir como produto distinto, pula a troca (preserva os dois
+    *     registros); caso contrario segue para o UPDATE generico.
+    *   SIGMVHST/SIGMVEST -> NAO recebem UPDATE/DELETE aqui. O legado dispara
+    *     fRecalculaP()/fRecalculaC() (recalculo de custo/estoque) e, so para
+    *     SIGMVEST, exclui as linhas do saldo antigo (a recriacao sob o
+    *     codigo novo acontecia DENTRO de fRecalculaP). Essas duas funcoes
+    *     globais do Fortyus NAO vieram no acervo (regra #27) - excluir
+    *     SIGMVEST sem a recriacao destruiria saldo de estoque em SILENCIO,
+    *     o que e pior que nao fazer nada. Em vez disso: SigMvHst participa
+    *     do UPDATE generico (o legado tambem faz isso - o bloco SIGMVHST
+    *     cai no Else por nao ter "Loop"); SigMvEst e so verificado (seta a
+    *     flag de alerta correspondente) para o FORM avisar o usuario.
+    *
+    * Toda a troca das demais tabelas vai num UNICO SQLEXEC (lote T-SQL com
+    * SAVE TRANSACTION) - BEGIN/COMMIT em chamadas SEPARADAS de SQLEXEC NAO
+    * dao atomicidade nesta conexao (Transactions=2, @@TRANCOUNT ja nasce 1,
+    * ver Erro188/ProdutoBO.CopiarProduto).
+    *--------------------------------------------------------------------------
+    FUNCTION ProcessarPar(par_cProsAnt, par_cProsNov)
+        LOCAL loc_cProsAntSQL, loc_cProsNovSQL, loc_cLote, loc_cSQL, ;
+              loc_cTabela, loc_cColuna, loc_nResultado, loc_lSucesso, loc_lProsseguir
+
         loc_lSucesso = .F.
+        loc_lProsseguir = .T.
+        loc_cProsAntSQL = EscaparSQL(LEFT(ALLTRIM(par_cProsAnt), 14))
+        loc_cProsNovSQL = EscaparSQL(LEFT(ALLTRIM(par_cProsNov), 14))
+        THIS.this_lSigMvEstPendente = .F.
+        THIS.this_cMensagemErro = ""
 
+        IF !THIS.MapearTabelasAlvo()
+            RETURN .F.
+        ENDIF
+
+        *-- REGRA CRITICA: nunca RETURN dentro de TRY/CATCH - usa flag
+        *-- loc_lProsseguir e um unico RETURN apos o ENDTRY.
         TRY
-            loc_cCidChaves = fUniqueIds()
+            loc_cLote = ""
 
-            loc_cSQL = "INSERT INTO SigOpClC (Emps, CPros, EmpCPros, Datas, Usuars, CidChaves) VALUES (" + ;
-                EscaparSQL(go_4c_Sistema.cCodEmpresa) + ", " + ;
-                EscaparSQL(THIS.this_cCprosNov) + ", " + ;
-                EscaparSQL(go_4c_Sistema.cCodEmpresa + THIS.this_cCprosNov) + ", " + ;
-                FormatarDataSQL(DATE()) + ", " + ;
-                EscaparSQL(THIS.this_cUsuar) + ", " + ;
-                EscaparSQL(loc_cCidChaves) + ")"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                THIS.this_cMensagemErro = "Erro ao inserir pend" + CHR(234) + "ncia de rec" + CHR(225) + "lculo."
-                loc_lSucesso = .F.
-            ENDIF
-
-            THIS.this_cCampoChave = loc_cCidChaves
-            THIS.RegistrarAuditoria("INSERT")
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro ao inserir em SigOpClC")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza pendencia em SigOpClC (data/usuario da requisicao)
-    * Sobrescreve BusinessBase.Atualizar (chamado por Salvar quando lNovoRegistro=.F.)
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Atualizar()
-        LOCAL loc_lSucesso, loc_oErro, loc_cSQL
-        loc_lSucesso = .F.
-
-        TRY
-            IF EMPTY(THIS.this_cCampoChave)
-                THIS.this_cMensagemErro = "Chave prim" + CHR(225) + "ria ausente para atualiza" + CHR(231) + CHR(227) + "o."
-                loc_lSucesso = .F.
-            ENDIF
-
-            loc_cSQL = "UPDATE SigOpClC SET " + ;
-                "CPros = " + EscaparSQL(THIS.this_cCprosNov) + ", " + ;
-                "EmpCPros = " + EscaparSQL(go_4c_Sistema.cCodEmpresa + THIS.this_cCprosNov) + ", " + ;
-                "Datas = " + FormatarDataSQL(DATE()) + ", " + ;
-                "Usuars = " + EscaparSQL(THIS.this_cUsuar) + " " + ;
-                "WHERE CidChaves = " + EscaparSQL(THIS.this_cCampoChave)
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                THIS.this_cMensagemErro = "Erro ao atualizar pend" + CHR(234) + "ncia de rec" + CHR(225) + "lculo."
-                loc_lSucesso = .F.
-            ENDIF
-
-            THIS.RegistrarAuditoria("UPDATE")
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro ao atualizar SigOpClC")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - Remove pend?ncia de rec?lculo de SigOpClC
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION ExecutarExclusao()
-        LOCAL loc_lSucesso, loc_oErro, loc_cSQL
-        loc_lSucesso = .F.
-
-        TRY
-            loc_cSQL = "DELETE FROM SigOpClC WHERE CidChaves = " + ;
-                EscaparSQL(THIS.this_cCampoChave)
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                THIS.this_cMensagemErro = "Erro ao excluir pend" + CHR(234) + "ncia de rec" + CHR(225) + "lculo."
-                loc_lSucesso = .F.
-            ENDIF
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao excluir de SigOpClC")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * InicializarCursorContas - Cria cursor local de pares de substitui??o
-    *--------------------------------------------------------------------------
-    FUNCTION InicializarCursorContas()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-
-        TRY
-            IF USED("csContas")
-                USE IN csContas
-            ENDIF
-
-            SET NULL ON
-            CREATE CURSOR csContas (CprosAnt C(14) NULL, CprosNov C(14) NULL, Flag L NULL, BarraAnt N(8) NULL)
-            SET NULL OFF
-
-            INDEX ON CprosAnt + CprosNov TAG Duplica
-            INDEX ON CprosAnt TAG CprosAnt
-            INDEX ON CprosNov TAG CprosNov
-            SET ORDER TO
-
-            INSERT INTO csContas (CprosAnt, CprosNov) VALUES ("", "")
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao inicializar cursor de substitui" + CHR(231) + CHR(245) + "es")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * BuscarCalcCustos - Busca configura??o de c?lculo de custos em SigCdPaC
-    * Seta this_lCalculaCusto = .T. se CalcCustos <> 3
-    *--------------------------------------------------------------------------
-    FUNCTION BuscarCalcCustos()
-        LOCAL loc_nCalcCustos, loc_oErro, loc_cSQL
-        loc_nCalcCustos = 0
-
-        TRY
-            loc_cSQL = "SELECT CalcCustos FROM SigCdPaC ORDER BY CalcCustos"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CalcCustos") > 0
-                IF USED("cursor_4c_CalcCustos") AND RECCOUNT("cursor_4c_CalcCustos") > 0
-                    SELECT cursor_4c_CalcCustos
-                    loc_nCalcCustos = NVL(CalcCustos, 0)
-                ENDIF
-                IF USED("cursor_4c_CalcCustos")
-                    USE IN cursor_4c_CalcCustos
-                ENDIF
-            ELSE
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (SigCdPaC)")
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao buscar configura" + CHR(231) + CHR(227) + "o de c" + CHR(225) + "lculo")
-        ENDTRY
-
-        THIS.this_lCalculaCusto = (loc_nCalcCustos <> 3)
-        RETURN loc_nCalcCustos
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ValidarParesNoGrid - Valida todos os pares em csContas antes do processamento
-    * Retorna "" se OK, mensagem de erro se houver inconsist?ncia
-    *--------------------------------------------------------------------------
-    FUNCTION ValidarParesNoGrid(par_lCheckCadPro, par_lManterBarra)
-        LOCAL loc_cMensagem, loc_oErro, loc_cSQL, loc_nErro, loc_cEstoqsNov
-        loc_cMensagem = ""
-
-        TRY
-            SELECT csContas
-            GO TOP
-
-            IF EOF()
-                loc_cMensagem = "N" + CHR(227) + "o Existem Contas a Serem Processadas!!!"
-                loc_lSucesso = loc_cMensagem
-            ENDIF
-
-            SELECT csContas
+            SELECT cursor_4c_Campos
             SCAN
-                IF EMPTY(csContas.CprosAnt)
-                    loc_cMensagem = "Existe Uma Referencia Antiga Inv" + CHR(225) + "lida!!!"
-                    loc_lSucesso = loc_cMensagem
-                ENDIF
+                loc_cTabela = ALLTRIM(cursor_4c_Campos.Arquivos)
+                loc_cColuna = ALLTRIM(cursor_4c_Campos.Campos)
 
-                IF !par_lCheckCadPro
-                    loc_cSQL = "SELECT TOP 1 Cpros, Cbars FROM SigCdPro WHERE Cpros = " + ;
-                        EscaparSQL(ALLTRIM(csContas.CprosAnt))
-                    loc_nErro = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpPro")
-                    IF loc_nErro < 1 OR (USED("cursor_4c_TmpPro") AND RECCOUNT("cursor_4c_TmpPro") = 0)
-                        IF USED("cursor_4c_TmpPro")
-                            USE IN cursor_4c_TmpPro
-                        ENDIF
-                        loc_cMensagem = "Existe Uma Referencia Antiga Inv" + CHR(225) + "lida!!!"
-                        loc_lSucesso = loc_cMensagem
-                    ENDIF
-                    IF USED("cursor_4c_TmpPro") AND RECCOUNT("cursor_4c_TmpPro") > 0
-                        SELECT cursor_4c_TmpPro
-                        REPLACE BarraAnt WITH NVL(cursor_4c_TmpPro.Cbars, 0) IN csContas
-                        USE IN cursor_4c_TmpPro
-                    ENDIF
-                ENDIF
-
-                IF par_lManterBarra AND csContas.BarraAnt = 0
-                    loc_cMensagem = "Existe Uma Referencia Antigo Sem Barra !!!"
-                    loc_lSucesso = loc_cMensagem
-                ENDIF
-
-                IF EMPTY(csContas.CprosNov)
-                    loc_cMensagem = "Existe Uma Referencia Nova Inv" + CHR(225) + "lida!!!"
-                    loc_lSucesso = loc_cMensagem
-                ENDIF
-
-                IF csContas.CprosAnt = csContas.CprosNov
-                    loc_cMensagem = "Existe Uma Referencia Antiga e Uma Referencia Nova Com o Mesmo C" + CHR(243) + "digo!!!"
-                    loc_lSucesso = loc_cMensagem
-                ENDIF
-
-                loc_cSQL = "SELECT a.Cgrus, b.Cestoqs FROM SigCdPro a " + ;
-                    "JOIN SigCdGrp b ON a.Cgrus = b.Cgrus " + ;
-                    "WHERE a.Cpros = " + EscaparSQL(ALLTRIM(csContas.CprosNov))
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro") > 0
-                    IF USED("cursor_4c_LocalPro") AND RECCOUNT("cursor_4c_LocalPro") > 0
-                        SELECT cursor_4c_LocalPro
-                        loc_cEstoqsNov = ALLTRIM(NVL(cursor_4c_LocalPro.Cestoqs, ""))
-                        USE IN cursor_4c_LocalPro
-
-                        loc_cSQL = "SELECT a.Cgrus, b.Cestoqs FROM SigCdPro a " + ;
-                            "JOIN SigCdGrp b ON a.Cgrus = b.Cgrus " + ;
-                            "WHERE a.Cpros = " + EscaparSQL(ALLTRIM(csContas.CprosAnt))
-                        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro2") > 0
-                            IF USED("cursor_4c_LocalPro2") AND RECCOUNT("cursor_4c_LocalPro2") > 0
-                                SELECT cursor_4c_LocalPro2
-                                IF ALLTRIM(NVL(cursor_4c_LocalPro2.Cestoqs, "")) <> loc_cEstoqsNov
-                                    USE IN cursor_4c_LocalPro2
-                                    loc_cMensagem = "Existe Uma Referencia Antiga e Uma Referencia Nova com Controle de Estoque diferente!!!"
-                                    loc_lSucesso = loc_cMensagem
-                                ENDIF
-                            ENDIF
-                            IF USED("cursor_4c_LocalPro2")
-                                USE IN cursor_4c_LocalPro2
-                            ENDIF
-                        ENDIF
-                    ELSE
-                        IF USED("cursor_4c_LocalPro")
-                            USE IN cursor_4c_LocalPro
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDSCAN
-        CATCH TO loc_oErro
-            loc_cMensagem = "Erro na valida" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_cMensagem
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * InserirPendencia - Insere linha em SigOpClC para rec?lculo posterior
-    * Chamado no loop de processamento para cada produto/empresa
-    *--------------------------------------------------------------------------
-    FUNCTION InserirPendencia(par_cEmps, par_cCpros, par_dData)
-        LOCAL loc_lSucesso, loc_oErro, loc_cSQL, loc_cCidChaves
-        loc_lSucesso = .F.
-
-        TRY
-            loc_cCidChaves = fUniqueIds()
-            loc_cSQL = "INSERT INTO SigOpClC (Emps, CPros, EmpCPros, Datas, Usuars, CidChaves) VALUES (" + ;
-                EscaparSQL(par_cEmps) + ", " + ;
-                EscaparSQL(par_cCpros) + ", " + ;
-                EscaparSQL(par_cEmps + par_cCpros) + ", " + ;
-                FormatarDataSQL(par_dData) + ", " + ;
-                EscaparSQL(THIS.this_cUsuar) + ", " + ;
-                EscaparSQL(loc_cCidChaves) + ")"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                loc_lSucesso = .F.
-            ENDIF
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao inserir pend" + CHR(234) + "ncia em SigOpClC")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ImportarXLS - Importa pares de substitui??o de planilha Excel para csContas
-    * Retorna n?mero de registros importados com sucesso
-    *--------------------------------------------------------------------------
-    FUNCTION ImportarXLS(par_cArquivoXLS, par_lCheckCadPro)
-        LOCAL loc_nImportados, loc_oErro, loc_cSQL, loc_cCprosAnt, loc_cCprosNov
-        loc_nImportados = 0
-
-        TRY
-            IF !FILE(par_cArquivoXLS)
-                MsgErro("Arquivo Excel n" + CHR(227) + "o encontrado: " + par_cArquivoXLS, "Erro")
-                loc_lSucesso = 0
-            ENDIF
-
-            IF USED("cursor_4c_Importa")
-                USE IN cursor_4c_Importa
-            ENDIF
-
-            CREATE CURSOR cursor_4c_Importa (CprosAnt C(14), CprosNov C(14))
-            INDEX ON CprosAnt TAG CprosAnt
-
-            SELECT cursor_4c_Importa
-            APPEND FROM (par_cArquivoXLS) TYPE XLS
-
-            SELECT cursor_4c_Importa
-            SCAN
-                loc_cCprosAnt = ALLTRIM(cursor_4c_Importa.CprosAnt)
-                loc_cCprosNov = ALLTRIM(cursor_4c_Importa.CprosNov)
-
-                IF EMPTY(loc_cCprosAnt) OR EMPTY(loc_cCprosNov) OR loc_cCprosAnt = loc_cCprosNov
+                IF UPPER(loc_cTabela) == "SIGPRPRT"
                     LOOP
                 ENDIF
 
-                IF !par_lCheckCadPro
-                    loc_cSQL = "SELECT TOP 1 Cpros FROM SigCdPro WHERE Cpros = " + ;
-                        EscaparSQL(loc_cCprosAnt)
-                    IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpPro") < 1
-                        IF USED("cursor_4c_TmpPro")
-                            USE IN cursor_4c_TmpPro
-                        ENDIF
+                IF UPPER(loc_cTabela) == "SIGMVEST"
+                    THIS.this_lSigMvEstPendente = THIS.this_lSigMvEstPendente OR ;
+                        THIS.ExisteReferencia(loc_cTabela, loc_cColuna, par_cProsAnt)
+                    LOOP
+                ENDIF
+
+                IF INLIST(UPPER(loc_cTabela), "SIGCDPRO", "SIGPRCPO", "SIGCDPRF", "SIGCDPFT") ;
+                   AND THIS.ExisteReferencia("SigCdPro", "Cpros", par_cProsNov)
+
+                    IF UPPER(loc_cTabela) == "SIGCDPRO" AND UPPER(loc_cColuna) == "CPROS" ;
+                       AND THIS.this_lManterBarra
+                        loc_cLote = loc_cLote + ;
+                            "UPDATE SigCdPro SET Cbars = " + FormatarNumeroSQL(THIS.this_nBarraAnt, 0) + ;
+                            " WHERE Cpros = " + loc_cProsNovSQL + "; " + ;
+                            "UPDATE SigCdPro SET Cbars = 0 WHERE Cpros = " + loc_cProsAntSQL + "; "
                         LOOP
                     ENDIF
-                    IF !USED("cursor_4c_TmpPro") OR RECCOUNT("cursor_4c_TmpPro") = 0
-                        IF USED("cursor_4c_TmpPro")
-                            USE IN cursor_4c_TmpPro
-                        ENDIF
+
+                    IF THIS.ExisteReferencia("SigCdPro", "Cpros", par_cProsAnt)
+                        *-- codigo antigo TAMBEM existe como produto distinto -
+                        *-- preserva os dois, nao mexe nesta coluna
                         LOOP
-                    ENDIF
-                    IF USED("cursor_4c_TmpPro")
-                        USE IN cursor_4c_TmpPro
                     ENDIF
                 ENDIF
 
-                SELECT csContas
-                SET ORDER TO Duplica
-                IF !SEEK(loc_cCprosAnt + loc_cCprosNov)
-                    APPEND BLANK
-                    REPLACE CprosAnt WITH loc_cCprosAnt, CprosNov WITH loc_cCprosNov
-                    loc_nImportados = loc_nImportados + 1
-                ENDIF
+                *-- UPDATE generico (legado: Update <tabela> Set <coluna> =
+                *-- 'novo' Where <coluna> = 'antigo' - com ou sem chave
+                *-- primaria o resultado final e o mesmo conjunto de linhas)
+                loc_cLote = loc_cLote + ;
+                    "UPDATE " + loc_cTabela + " SET " + loc_cColuna + " = " + loc_cProsNovSQL + ;
+                    " WHERE " + loc_cColuna + " = " + loc_cProsAntSQL + "; "
             ENDSCAN
 
-            SELECT csContas
-            SET ORDER TO
-            GO BOTTOM
+            IF !EMPTY(loc_cLote)
+                TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                    SET NOCOUNT ON;
+                    DECLARE @nivel4c int = @@TRANCOUNT;
+                    IF @nivel4c = 0 BEGIN TRANSACTION ELSE SAVE TRANSACTION Mdp4c;
+                    BEGIN TRY
+                        <<loc_cLote>>
+                        IF @nivel4c = 0 COMMIT TRANSACTION;
+                    END TRY
+                    BEGIN CATCH
+                        IF @nivel4c = 0
+                            BEGIN IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION END
+                        ELSE
+                            BEGIN IF XACT_STATE() = 1 ROLLBACK TRANSACTION Mdp4c END;
+                        THROW;
+                    END CATCH
+                ENDTEXT
 
-            IF USED("cursor_4c_Importa")
-                USE IN cursor_4c_Importa
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nResultado < 0
+                    THIS.this_cMensagemErro = "Erro ao atualizar refer" + CHR(234) + "ncias de produto:" + ;
+                        CHR(13) + CapturarErroSQL()
+                    MostrarErro(THIS.this_cMensagemErro, "Erro SQL")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao importar planilha Excel")
+
+            IF loc_lProsseguir
+                THIS.EnfileirarRecalculoPorPar(par_cProsAnt, par_cProsNov)
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            THIS.this_cMensagemErro = loException.Message
+            MostrarErro("Erro ao processar substitui" + CHR(231) + CHR(227) + "o:" + CHR(13) + ;
+                loException.Message, "sigprmdpBO.ProcessarPar")
         ENDTRY
 
-        RETURN loc_nImportados
+        IF USED("cursor_4c_Campos")
+            USE IN cursor_4c_Campos
+        ENDIF
+
+        RETURN loc_lSucesso
     ENDFUNC
 
 ENDDEFINE

@@ -1,934 +1,1503 @@
 *==============================================================================
-* FORMSIGPRMLU.PRG - Formulario Operacional: Unificacao de Mala Direta
-* Tipo: OPERACIONAL (flat popup modal 1000x600, sem PageFrame)
-* Migrado de SIGPRMLU.SCX
+* FormSigPrMlu.prg - Unificacao de Mala Direta
+* Origem: SIGPRMLU.SCX
+* Herda de: FormBase
+* Tipo: OPERACIONAL (layout proprio, sem PageFrame) - lista as malas diretas
+* cadastradas (SigMlItn, grid com checkbox de selecao na Column1) e permite
+* unificar duas ou mais malas marcadas numa mala NOVA (nome digitado em
+* cntNova.getNova), via SigPrMluBO.
 *
-* Pilares:
-*   UX   -> header cinza, grid 6 colunas, checkbox selecao, processar/encerrar
-*   BD   -> cursor_4c_Itn (SigMlItn via SigPrMluBO.BuscarMalas)
-*   CODE -> arquitetura em camadas (FormBase / SigPrMluBO)
+* Legado (Init): Lparameters pCodigos - parametro declarado mas NUNCA usado no
+* corpo (nao filtra cursor nem muda comportamento) - por isso o Init migrado
+* nao recebe parametro nenhum.
+*==============================================================================
+* Fases 4-8 (Grid/Checkbox/CommandGroups/container "Nome da Unificacao",
+* carga/ordenacao da grade e Processamento da unificacao) ja entregues abaixo.
+*
+* FASE 6 (campos restantes e lookups):
+*  - LOOKUP: nenhum. O dump original (SigPrMlu_form_codigo_fonte.txt) nao tem
+*    fwBuscaExt/fwBuscaSel/fwBuscaInt, mAddColuna, sigacess() nem Acesso*() -
+*    o unico CreateObject do form eh o fSqlConector (gerenciador de dados, ja
+*    coberto pelo BO). Inventar lookup aqui violaria o PILAR 1 e a regra
+*    "NUNCA inventar tabelas de lookup que nao existem no original".
+*  - CAMPOS: o unico campo DIGITAVEL do legado eh cntNova.getNova ("Nome da
+*    Unificacao") -> cnt_4c_Nova.txt_4c_Nova, criado em
+*    ConfigurarContainerNova() com Format = "K" e MaxLength = 20 transcritos
+*    do SCX (regra #49). Os 5 Text1 das Column2..Column6 sao celulas da grade
+*    e sao somente-leitura no legado (PROCEDURE When / Return(.f.)),
+*    reproduzidas como Column.ReadOnly = .T. em ConfigurarGridDados().
+*  - REGRA DO CAMPO: o getNova nao tem Valid/When/LostFocus - a regra que o
+*    governa mora DENTRO do cmdProcessar.Click do legado (tres guards:
+*    nenhuma mala marcada, uma so mala marcada, nome em branco). Ela eh de
+*    QUEM ela governa, nao de quem a chama: entregue nesta fase como o funil
+*    unico PUBLIC ValidarProcessamento(), que BtnProcessarClick apenas chama.
+*
+* FASE 7 (eventos principais dos botoes):
+*  - NAO EXISTEM BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/
+*    BtnExcluirClick porque o legado NAO TEM CRUD - e inventa-los violaria o
+*    PILAR 1. Prova, medida no dump e no layout.json da task:
+*      . "Class: form" PURO - nao herda de frmcadastro (de onde viria a barra
+*        Incluir/Alterar/Visualizar/Excluir/Procurar), nem de frmrelatorio.
+*      . nenhum objeto chamado cmdIncluir/cmdAlterar/cmdVisualizar/cmdExcluir,
+*        nenhum Grupo_Op e nenhuma referencia a pcEscolha no dump inteiro.
+*      . a superficie de botao do SCX sao 3 CommandGroup e nada mais:
+*        cmdProcessar (ButtonCount 1, "btnProcessar"), Commandgroup2
+*        (ButtonCount 1, "btnsair") e cmdBtnGrade (ButtonCount 2, "btnMarcar"
+*        + "btnDesmarcar") = 4 botoes, TODOS com handler nesta classe
+*        (BtnProcessarClick, BtnEncerrarClick, CmdSelTudoClick, CmdApagaTudoClick).
+*    Esta tela nao cadastra mala direta nenhuma: ela SELECIONA malas existentes
+*    (checkbox da Column1) e as UNIFICA numa nova. Quem inclui/altera/exclui
+*    mala direta eh o cadastro de Mala Direta, outro form.
+*  - O que esta fase entregou de verdade nos eventos dos botoes:
+*      . MarcarTodasAs() - funil unico dos DOIS botoes do cmdBtnGrade, que no
+*        legado compartilham UM Click so (o indice do botao eh o proprio valor
+*        gravado), com UPDATE-SQL no lugar de REPLACE ALL para nao jogar o
+*        ponteiro do cursor em EOF e fazer a grade saltar para o fim.
+*      . BtnProcessarClick() - reabilitacao INCONDICIONAL do botao Processar
+*        depois do ENDTRY, equivalente aos quatro "This.Enabled = .t." que o
+*        legado repete em cada caminho de saida do cmdProcessar.Click.
+*      . ValidarProcessamento() - TRY/CATCH que REPROVA quando a validacao nao
+*        consegue concluir, em vez de deixar o Program Error cru do VFP subir.
+*
+* FASE 8 (eventos auxiliares e consolidacao final):
+*  - RENOMEADOS para o nome CANONICO do projeto, que eh o VERBO da acao e nao
+*    o nome do objeto legado: CmdProcessarClick -> BtnProcessarClick (botao de
+*    acao, Caption "\<Processar", objeto legado cmdProcessar/btnProcessar) e
+*    CmdSairClick -> BtnEncerrarClick (Caption "Encerrar", objeto legado
+*    btnsair). CmdSelTudoClick/CmdApagaTudoClick FICAM com o prefixo Cmd: nao
+*    sao acao da tela, sao os dois botoes que marcam/desmarcam a grade, e esse
+*    eh o nome que o projeto ja usa para eles (FormSigPrSlp, Formsigrecmc,
+*    FormSIGREEQR).
+*  - FormParaBO() / BOParaForm() - FONTE UNICA da transferencia tela <-> BO.
+*    Nao sao convencao de Page2 de Dados importada a forca: o bloco EXISTE no
+*    legado, so nao tem esse nome (o cmdProcessar.Click le getNova.Value e
+*    conta as malas marcadas, e o Processamento reusa os dois). Depois desta
+*    fase o TextBox eh lido em UM lugar so - FormParaBO - e ValidarProcessamento
+*    e ProcessarUnificacao consomem as properties do BO.
+*  - LimparCampos() - zera o BO (SigPrMluBO.LimparDados, criado nesta fase) e
+*    deixa o BOParaForm refletir o BO vazio no campo. Substitui o
+*    "txt_4c_Nova.Value = ''" solto que havia no fim da unificacao.
+*  - AjustarBotoesPorModo() - funil unico do Enabled do botao Processar,
+*    derivado de this_cModoAtual ("LISTA"/"PROCESSANDO"), que ate a fase 7
+*    estava declarado e nunca era usado. Substitui as duas atribuicoes diretas
+*    a cmd_4c_Processar.Enabled (regra #40).
+*  - CORRIGIDO: o toggle do checkbox da grade estava no MouseDown, com o
+*    MouseUp so suprimindo o default - invertido em relacao ao legado
+*    (MouseDown so suprime o default; MouseUp e quem alterna, simulando
+*    Enter/tecla 13 como o legado faz de dentro do seu proprio MouseUp).
+*
+*  O QUE NAO SE APLICA, e por que (dump legado conferido, nao presumido):
+*  - Handler de CANCELAR: o SCX nao tem botao de cancelar/descartar. A
+*    superficie de botao do legado sao os 4 botoes dos 3 CommandGroup, todos
+*    com handler aqui. Nao ha Page2 de Dados nem modo de edicao a abandonar -
+*    o unico caminho de saida eh o Encerrar, e ele apenas fecha
+*    (btnsair.Click = "ThisForm.Release"). Inventar o botao violaria o PILAR 1
+*    e escrever o metodo vazio seria stub (proibido pela regra de completude).
+*  - HabilitarCampos(): nao existe no legado estado em que campo ou grade
+*    mudem de Enabled/ReadOnly. Os unicos "PROCEDURE When" do SCX sao os cinco
+*    "Return(.f.)" das celulas Column2..Column6, ja migrados como
+*    Column.ReadOnly = .T. em ConfigurarGridDados, e o unico Enabled que o
+*    legado move em runtime eh o do PROPRIO botao Processar - que virou
+*    AjustarBotoesPorModo. Implementar o metodo aqui seria ou um no-op (stub)
+*    ou a invencao de um estado desabilitado que o legado nao tem.
+*  - BtnBuscarClick(): a tela nao tem busca. A grade carrega a tabela inteira
+*    ("Select 0 as SelImp, * From SigMlItn", sem Where no Init legado) e a
+*    ordenacao por clique no cabecalho ja esta em OrdenarGrade/GradeHeader*Click.
 *==============================================================================
 
 DEFINE CLASS FormSigPrMlu AS FormBase
 
-    Width        = 1000
-    Height       = 600
-    BorderStyle  = 2
-    AutoCenter   = .T.
-    ShowTips     = .T.
-    TitleBar     = 0
-    ShowWindow   = 1
-    ControlBox   = .F.
-    Closable     = .F.
-    MaxButton    = .F.
-    MinButton    = .F.
-    ClipControls = .F.
-    WindowType   = 1
-    DataSession  = 2
+    *-- Dimensoes (PILAR 1: identico ao legado SIGPRMLU.SCX)
+    Width       = 794
+    Height      = 533
+    AutoCenter  = .T.
+    TitleBar    = 0
+    ShowWindow  = 1
+    WindowType  = 1
+    ControlBox  = .F.
+    Closable    = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    BorderStyle = 2
+    DataSession = 2
+    KeyPreview  = .T.
+    Caption     = "Unifica" + CHR(231) + CHR(227) + "o de Mala Direta"
 
-    *-- Ordem de ordenacao atual da grade (2=Codigos, 3=Descs, 4=UsuIns, 5=DatIns)
-    this_nOrdemGrade = 2
+    *-- Business Object
+    this_oBusinessObject = .NULL.
+
+    *-- Estado da tela. O legado NAO tem pcEscolha (nao herda de frmcadastro):
+    *-- os estados reais sao "LISTA" (grade de malas disponivel para selecao)
+    *-- e "PROCESSANDO" (unificacao em curso, com This.Enabled = .f. no
+    *-- CommandGroup cmdProcessar - grade e botoes travados durante o SCAN).
+    this_cModoAtual = "LISTA"
+
+    *-- Equivalente a ThisForm.GridOrder do legado (AcertaGrades/MontaGrades):
+    *-- coluna de ordenacao corrente da grade (2=Codigos, 3=Descs, 4=UsuIns,
+    *-- 5=DatIns). Legado inicializa GridOrder = 2 no Init.
+    this_nGridOrder = 2
 
     *==========================================================================
-    PROCEDURE Init
+    * Init - Legado: "Lparameters pCodigos" (declarado mas nunca referenciado
+    * no corpo do metodo nem em nenhum outro ponto do form) - nao ha parametro
+    * real para repassar.
+    *==========================================================================
+    PROCEDURE Init()
     *==========================================================================
         RETURN DODEFAULT()
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE InicializarForm
+    * ConfigurarCabecalho - Cria cnt_4c_Sombra com os labels de titulo
+    * Original: cntSombra Top=0, Left=0, Width=800, Height=80, BackColor=100,100,100
+    *   lblSombra  Top=18, Left=10, Width=769, Height=40, ForeColor=0,0,0 (sombra)
+    *   lblTitulo  Top=17, Left=10, Width=769, Height=46, ForeColor=255,255,255
     *==========================================================================
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+    *==========================================================================
+        LOCAL loc_oErro
         TRY
-            THIS.Caption = "Unifica" + CHR(231) + CHR(227) + "o de Mala Direta"
+            THIS.AddObject("cnt_4c_Sombra", "Container")
+            WITH THIS.cnt_4c_Sombra
+                .Top         = 0
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BackStyle   = 1
+                .BackColor   = RGB(100, 100, 100)
+                .BorderWidth = 0
+                .Visible     = .T.
+            ENDWITH
 
-            IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
-                THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
-            ENDIF
+            THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblSombra", "Label")
+            WITH THIS.cnt_4c_Sombra.lbl_4c_LblSombra
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .AutoSize      = .F.
+                .Caption       = THIS.Caption
+                .Height        = 40
+                .Left          = 10
+                .Top           = 18
+                .Width         = THIS.Width - 20
+                .ForeColor     = RGB(0, 0, 0)
+                .Visible       = .T.
+            ENDWITH
 
-            THIS.this_oBusinessObject = CREATEOBJECT("SigPrMluBO")
-            IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Falha ao criar SigPrMluBO", "Erro")
-            ELSE
-                THIS.ConfigurarCabecalho()
-                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
-                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-                THIS.ConfigurarBotoes()
-                THIS.ConfigurarCntNova()
-                THIS.ConfigurarGrade()
-                THIS.ConfigurarBtnGrade()
-                THIS.ConfigurarBINDEVENTs()
-                THIS.TornarControlesVisiveis()
-
-                THIS.this_oBusinessObject.BuscarMalas()
-                THIS.MontarGrade()
-
-                loc_lSucesso = .T.
-            ENDIF
-
+            THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblTitulo", "Label")
+            WITH THIS.cnt_4c_Sombra.lbl_4c_LblTitulo
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .AutoSize      = .F.
+                .Caption       = THIS.Caption
+                .Height        = 46
+                .Left          = 10
+                .Top           = 17
+                .Width         = THIS.Width - 20
+                .ForeColor     = RGB(255, 255, 255)
+                .ToolTipText   = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+                .Visible       = .T.
+            ENDWITH
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro em InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarCabecalho")
         ENDTRY
-
-        RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarCabecalho
+    * ConfigurarGridDados - Grade "grdselecoes" do legado: lista as malas
+    * diretas cadastradas (SigMlItn), com checkbox de selecao na Column1
+    * (SelImp) para escolher quais malas serao unificadas pelo cmd_4c_Processar.
+    * ControlSource/RecordSource ficam para CarregarLista() - cursor_4c_Dados
+    * ainda nao existe aqui (regra #41 do CLAUDE.md).
+    * Original: grdselecoes Top=159 Left=49 Width=660 Height=324
     *==========================================================================
-        LOCAL loc_oCab
-        THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        loc_oCab = THIS.cnt_4c_Cabecalho
-        WITH loc_oCab
-            .Top         = 0
-            .Left        = 0
-            .Width       = 1020
-            .Height      = 80
-            .BorderWidth = 0
-            .BackStyle   = 1
-            .BackColor   = RGB(100, 100, 100)
+    PROTECTED PROCEDURE ConfigurarGridDados()
+    *==========================================================================
+        LOCAL loc_oGrid
+
+        THIS.AddObject("grd_4c_Dados", "Grid")
+        loc_oGrid = THIS.grd_4c_Dados
+
+        WITH loc_oGrid
+            .Top               = 159
+            .Left              = 49
+            .Width             = 660
+            .Height            = 324
+            .ColumnCount       = 6
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .HeaderHeight      = 16
+            .RowHeight         = 16
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .ReadOnly          = .F.
+            .ScrollBars        = 2
+            .GridLineColor     = RGB(238, 238, 238)
+            .Visible           = .T.
         ENDWITH
-        loc_oCab.AddObject("lbl_4c_Sombra", "Label")
-        WITH loc_oCab.lbl_4c_Sombra
-            .AutoSize      = .F.
-            .Top           = 18
-            .Left          = 10
-            .Width         = 1000
-            .Height        = 40
-            .FontBold      = .T.
-            .FontName      = "Tahoma"
-            .FontSize      = 18
-            .FontUnderline = .F.
-            .WordWrap      = .T.
-            .Alignment     = 0
-            .BackStyle     = 0
-            .ForeColor     = RGB(0, 0, 0)
-            .Caption       = "Unifica" + CHR(231) + CHR(227) + "o de Mala Direta"
+
+        *-- Column1: checkbox de marcacao (SelImp). Pattern #185/#186
+        *-- (Erro146): CheckBox de Column exige AddObject + CurrentControl +
+        *-- Sparse = .F., e NAO alterna sem os 4 handlers de evento abaixo.
+        WITH loc_oGrid.Column1
+            .Width     = 15
+            .ReadOnly  = .F.
+            .Sparse    = .F.
+            .Movable   = .F.
+            .Resizable = .F.
+            .AddObject("chk_4c_Check1", "CheckBox")
+            .chk_4c_Check1.Top       = 9
+            .chk_4c_Check1.Left      = 2
+            .chk_4c_Check1.Height    = 17
+            .chk_4c_Check1.Width     = 22
+            .chk_4c_Check1.FontName  = "Tahoma"
+            .chk_4c_Check1.FontSize  = 8
+            .chk_4c_Check1.Alignment = 0
+            .chk_4c_Check1.Caption   = ""
+            .chk_4c_Check1.Value     = 0
+            .chk_4c_Check1.ReadOnly  = .F.
+            .chk_4c_Check1.Visible   = .T.
+            .CurrentControl    = "chk_4c_Check1"
+            .Header1.Caption   = ""
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
         ENDWITH
-        loc_oCab.AddObject("lbl_4c_Titulo", "Label")
-        WITH loc_oCab.lbl_4c_Titulo
-            .AutoSize      = .F.
-            .Top           = 17
-            .Left          = 10
-            .Width         = 1000
-            .Height        = 46
-            .FontBold      = .T.
-            .FontName      = "Tahoma"
-            .FontSize      = 18
-            .FontUnderline = .F.
-            .WordWrap      = .T.
-            .Alignment     = 0
-            .BackStyle     = 0
-            .ForeColor     = RGB(255, 255, 255)
-            .Caption       = "Unifica" + CHR(231) + CHR(227) + "o de Mala Direta"
+        THIS.BindToggleSelecao(THIS.grd_4c_Dados.Column1.chk_4c_Check1)
+
+        *-- Column2: Codigos
+        WITH loc_oGrid.Column2
+            .Width     = 80
+            .ReadOnly  = .T.
+            .Movable   = .F.
+            .Resizable = .F.
+            .FontName  = "Courier New"
+            .Header1.Caption   = "C" + CHR(243) + "digo"
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
         ENDWITH
+        IF PEMSTATUS(loc_oGrid.Column2, "Text1", 5)
+            WITH loc_oGrid.Column2.Text1
+                .FontName = "Courier New"
+                .FontSize = 8
+                .Margin   = 0
+            ENDWITH
+        ENDIF
+
+        *-- Column3: Descs
+        WITH loc_oGrid.Column3
+            .Width     = 260
+            .ReadOnly  = .T.
+            .Movable   = .F.
+            .Resizable = .F.
+            .FontName  = "Courier New"
+            .Header1.Caption   = "Descri" + CHR(231) + CHR(227) + "o"
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
+        ENDWITH
+        IF PEMSTATUS(loc_oGrid.Column3, "Text1", 5)
+            WITH loc_oGrid.Column3.Text1
+                .FontName = "Courier New"
+                .FontSize = 8
+            ENDWITH
+        ENDIF
+
+        *-- Column4: UsuIns
+        WITH loc_oGrid.Column4
+            .Width     = 120
+            .ReadOnly  = .T.
+            .Movable   = .F.
+            .Resizable = .F.
+            .FontName  = "Courier New"
+            .Header1.Caption   = "Usu" + CHR(225) + "rio"
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
+        ENDWITH
+        IF PEMSTATUS(loc_oGrid.Column4, "Text1", 5)
+            WITH loc_oGrid.Column4.Text1
+                .FontName = "Courier New"
+                .FontSize = 8
+                .Margin   = 0
+            ENDWITH
+        ENDIF
+
+        *-- Column5: DatIns
+        WITH loc_oGrid.Column5
+            .Width     = 80
+            .ReadOnly  = .T.
+            .Movable   = .F.
+            .Resizable = .F.
+            .FontName  = "Courier New"
+            .Header1.Caption   = "Dt.Entrada"
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
+        ENDWITH
+        IF PEMSTATUS(loc_oGrid.Column5, "Text1", 5)
+            WITH loc_oGrid.Column5.Text1
+                .FontName = "Courier New"
+                .FontSize = 8
+                .Margin   = 0
+            ENDWITH
+        ENDIF
+
+        *-- Column6: NRegis
+        WITH loc_oGrid.Column6
+            .Width     = 80
+            .ReadOnly  = .T.
+            .Movable   = .F.
+            .Resizable = .F.
+            .FontName  = "Courier New"
+            .Header1.Caption   = "N.Registros"
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(36, 84, 155)
+        ENDWITH
+        IF PEMSTATUS(loc_oGrid.Column6, "Text1", 5)
+            WITH loc_oGrid.Column6.Text1
+                .FontName = "Courier New"
+                .FontSize = 8
+                .Margin   = 0
+            ENDWITH
+        ENDIF
+
+        *-- Ordenacao por clique no cabecalho (legado: Column2..5.Header1.Click
+        *-- chama AcertaGrades(N) - Column1/Column6 nao tem Click no dump)
+        BINDEVENT(loc_oGrid.Column2.Header1, "Click", THIS, "GradeHeaderCodigosClick")
+        BINDEVENT(loc_oGrid.Column3.Header1, "Click", THIS, "GradeHeaderDescsClick")
+        BINDEVENT(loc_oGrid.Column4.Header1, "Click", THIS, "GradeHeaderUsuInsClick")
+        BINDEVENT(loc_oGrid.Column5.Header1, "Click", THIS, "GradeHeaderDatInsClick")
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBotoes
+    * ConfigurarBotoesAcao - Botoes de acao da tela (equivalentes aos 3
+    * CommandGroups do legado - cmdProcessar/Commandgroup2/cmdBtnGrade, cada
+    * um com ButtonCount 1 ou 2); migrados para CommandButton standalone,
+    * preservando a geometria ABSOLUTA (grupo.Left/Top + botao.Left/Top do
+    * dump) e Caption/Picture/cor de cada botao interno.
     *==========================================================================
-        LOCAL loc_oCnt
-        *-- Botao Processar (standalone com icone 60px, Themes=.T. + DisabledPicture obrigatorios)
+    PROTECTED PROCEDURE ConfigurarBotoesAcao()
+    *==========================================================================
+        *-- cmdProcessar (Command1/btnProcessar): grupo Left=637 Top=-2,
+        *-- botao Left=5 Top=5 -> absoluto 642,3. Themes=.T.+DisabledPicture
+        *-- SAO EXCECAO ao legado (Themes=.F.): este botao e desabilitado em
+        *-- runtime (This.Enabled=.f. durante o processamento) e sem Themes=.T.
+        *-- o icone desaparece com Enabled=.F. (regra #99 do CLAUDE.md).
         THIS.AddObject("cmd_4c_Processar", "CommandButton")
         WITH THIS.cmd_4c_Processar
-            .Top             = 5
-            .Left            = 828
-            .Height          = 75
+            .Top             = 3
+            .Left            = 642
             .Width           = 75
+            .Height          = 75
             .FontBold        = .T.
             .FontItalic      = .T.
-            .FontName        = "Tahoma"
+            .FontName        = "Comic Sans MS"
             .FontSize        = 8
             .WordWrap        = .T.
             .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
             .DisabledPicture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
             .Caption         = "\<Processar"
-            .ToolTipText     = "[Alt+P] Processar Unifica" + CHR(231) + CHR(227) + "o"
             .ForeColor       = RGB(90, 90, 90)
             .BackColor       = RGB(255, 255, 255)
             .Themes          = .T.
+            .Visible         = .T.
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
 
-        *-- Container canonico Encerrar (Left=917, Width=90, Height=85)
-        THIS.AddObject("cnt_4c_Saida", "Container")
-        loc_oCnt = THIS.cnt_4c_Saida
-        WITH loc_oCnt
-            .Top         = -2
-            .Left        = 917
-            .Width       = 90
-            .Height      = 85
-            .BorderWidth = 0
-            .BackStyle   = 0
+        *-- Commandgroup2 (Command1/btnsair): grupo Left=712 Top=-2, botao
+        *-- Left=5 Top=5 -> absoluto 717,3. Themes=.F. como no legado (nunca
+        *-- desabilitado em runtime).
+        THIS.AddObject("cmd_4c_Sair", "CommandButton")
+        WITH THIS.cmd_4c_Sair
+            .Top        = 3
+            .Left       = 717
+            .Width      = 75
+            .Height     = 75
+            .FontBold   = .T.
+            .FontItalic = .T.
+            .FontName   = "Comic Sans MS"
+            .FontSize   = 8
+            .WordWrap   = .T.
+            .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Cancel     = .T.
+            .Caption    = "Encerrar"
+            .ForeColor  = RGB(90, 90, 90)
+            .BackColor  = RGB(255, 255, 255)
+            .Themes           = .T.
+            .Visible    = .T.
         ENDWITH
-        loc_oCnt.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH loc_oCnt.cmd_4c_Encerrar
-            .Top         = 5
-            .Left        = 5
-            .Height      = 75
-            .Width       = 75
-            .FontBold    = .T.
-            .FontItalic  = .T.
-            .FontName    = "Tahoma"
+        BINDEVENT(THIS.cmd_4c_Sair, "Click", THIS, "BtnEncerrarClick")
+
+        *-- cmdBtnGrade (Command1/btnMarcar + Command2/btnDesmarcar): grupo
+        *-- Left=715 Top=280. Command1 Left=5 Top=5 -> absoluto 720,285.
+        *-- Command2 Left=5 Top=45 -> absoluto 720,325.
+        THIS.AddObject("cmd_4c_SelTudo", "CommandButton")
+        WITH THIS.cmd_4c_SelTudo
+            .Top         = 285
+            .Left        = 720
+            .Width       = 40
+            .Height      = 40
+            .FontName    = "Verdana"
             .FontSize    = 8
             .WordWrap    = .T.
-            .Picture     = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .Cancel      = .T.
-            .Caption     = "Encerrar"
-            .ToolTipText = "[Esc] Encerrar"
-            .ForeColor   = RGB(90, 90, 90)
+            .Picture     = gc_4c_CaminhoIcones + "to-do-list_checked2.ico"
+            .Caption     = ""
+            .ToolTipText = "Seleciona Tudo"
+            .ForeColor   = RGB(36, 84, 155)
             .BackColor   = RGB(255, 255, 255)
-            .Themes      = .F.
+            .Themes           = .T.
+            .Visible     = .T.
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_SelTudo, "Click", THIS, "CmdSelTudoClick")
+
+        THIS.AddObject("cmd_4c_ApagaTudo", "CommandButton")
+        WITH THIS.cmd_4c_ApagaTudo
+            .Top         = 325
+            .Left        = 720
+            .Width       = 40
+            .Height      = 40
+            .FontName    = "Verdana"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .Picture     = gc_4c_CaminhoIcones + "onebit_33.ico"
+            .Caption     = ""
+            .ToolTipText = "Apaga Tudo"
+            .ForeColor   = RGB(36, 84, 155)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes           = .T.
+            .Visible     = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_ApagaTudo, "Click", THIS, "CmdApagaTudoClick")
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarCntNova
-    *-- Container com campo "Nome da Unificacao" (cntNova do legado)
+    * ConfigurarContainerNova - Container "cntNova": campo onde o usuario
+    * digita o nome da unificacao (equivalente a ThisForm.cntNova.getNova do
+    * legado, lido em BtnProcessarClick/ProcessarUnificacao).
+    * Original: cntNova Top=112 Left=49 Width=660 Height=42
     *==========================================================================
-        LOCAL loc_oCnt
+    PROTECTED PROCEDURE ConfigurarContainerNova()
+    *==========================================================================
         THIS.AddObject("cnt_4c_Nova", "Container")
-        loc_oCnt = THIS.cnt_4c_Nova
-        WITH loc_oCnt
-            .Top         = 92
-            .Left        = 15
-            .Width       = 800
-            .Height      = 42
-            .BackStyle   = 0
-            .BorderWidth = 0
+        WITH THIS.cnt_4c_Nova
+            .Top           = 112
+            .Left          = 49
+            .Width         = 660
+            .Height        = 42
+            .BackStyle     = 0
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
         ENDWITH
-        loc_oCnt.AddObject("lbl_4c_Nome", "Label")
-        WITH loc_oCnt.lbl_4c_Nome
-            .AutoSize  = .T.
+
+        *-- Label1: classe "say" do legado (AutoSize=.T. sem Width/Alignment
+        *-- declarados) - regra #23 do CLAUDE.md: AutoSize e no-op em
+        *-- AddObject, usar Width/Height ja calculados pelo Form Designer.
+        THIS.cnt_4c_Nova.AddObject("lbl_4c_Label1", "Label")
+        WITH THIS.cnt_4c_Nova.lbl_4c_Label1
+            .AutoSize  = .F.
             .FontBold  = .T.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
+            .Alignment = 0
             .Caption   = " \<Nome da Unifica" + CHR(231) + CHR(227) + "o :"
             .Height    = 15
             .Left      = 20
             .Top       = 13
+            .Width     = 121
             .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
         ENDWITH
-        loc_oCnt.AddObject("txt_4c_GetNova", "TextBox")
-        WITH loc_oCnt.txt_4c_GetNova
+
+        THIS.cnt_4c_Nova.AddObject("txt_4c_Nova", "TextBox")
+        WITH THIS.cnt_4c_Nova.txt_4c_Nova
             .FontName          = "Courier New"
             .FontSize          = 9
             .Format            = "K"
             .Height            = 25
-            .Left              = 155
+            .Left              = 151
             .MaxLength         = 20
-            .TabIndex          = 1
             .Top               = 8
             .Width             = 220
+            .Value             = ""
             .DisabledBackColor = RGB(255, 255, 255)
             .DisabledForeColor = RGB(0, 0, 128)
-            .Value             = ""
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGrade
-    *-- Grid grd_4c_Selecoes: 6 colunas (Check, Codigo, Descricao, Usuario,
-    *-- Dt.Entrada, N.Registros) ? espelho do grdSelecoes do legado
-    *==========================================================================
-        THIS.AddObject("grd_4c_Selecoes", "Grid")
-        WITH THIS.grd_4c_Selecoes
-            .Top                = 140
-            .Left               = 15
-            .Width              = 870
-            .Height             = 420
-            .RecordMark         = .F.
-            .DeleteMark         = .F.
-            .RowHeight          = 16
-            .HeaderHeight       = 16
-            .AllowHeaderSizing  = .F.
-            .AllowRowSizing     = .F.
-            .ReadOnly           = .F.
-            .ScrollBars         = 2
-            .FontName           = "Tahoma"
-            .FontSize           = 8
-            .GridLineColor      = RGB(238, 238, 238)
-            .ColumnCount        = 6
-
-            *-- Column1: CheckBox de selecao (SelImp)
-            WITH .Column1
-                .ColumnOrder   = 1
-                .Width         = 20
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .F.
-                WITH .Header1
-                    .Caption   = ""
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlCheck1", "CheckBox")
-                WITH .ctlCheck1
-                    .Caption   = ""
-                    .Alignment = 0
-                    .AutoSize  = .T.
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .Value     = 0
-                ENDWITH
-                .CurrentControl = "ctlCheck1"
-                .Sparse         = .F.
-            ENDWITH
-
-            *-- Column2: Codigo (Codigos)
-            WITH .Column2
-                .ColumnOrder   = 2
-                .Width         = 90
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .T.
-                WITH .Header1
-                    .Caption   = "C" + CHR(243) + "digo"
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlText", "TextBox")
-                WITH .ctlText
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .FontName    = "Courier New"
-                    .FontSize    = 8
-                ENDWITH
-                .CurrentControl = "ctlText"
-            ENDWITH
-
-            *-- Column3: Descricao (Descs)
-            WITH .Column3
-                .ColumnOrder   = 3
-                .Width         = 380
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .T.
-                WITH .Header1
-                    .Caption   = "Descri" + CHR(231) + CHR(227) + "o"
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlText", "TextBox")
-                WITH .ctlText
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .FontName    = "Tahoma"
-                    .FontSize    = 8
-                ENDWITH
-                .CurrentControl = "ctlText"
-            ENDWITH
-
-            *-- Column4: Usuario (UsuIns)
-            WITH .Column4
-                .ColumnOrder   = 4
-                .Width         = 130
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .T.
-                WITH .Header1
-                    .Caption   = "Usu" + CHR(225) + "rio"
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlText", "TextBox")
-                WITH .ctlText
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .FontName    = "Courier New"
-                    .FontSize    = 8
-                ENDWITH
-                .CurrentControl = "ctlText"
-            ENDWITH
-
-            *-- Column5: Data Entrada (DatIns)
-            WITH .Column5
-                .ColumnOrder   = 5
-                .Width         = 120
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .T.
-                WITH .Header1
-                    .Caption   = "Dt.Entrada"
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlText", "TextBox")
-                WITH .ctlText
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .FontName    = "Tahoma"
-                    .FontSize    = 8
-                ENDWITH
-                .CurrentControl = "ctlText"
-            ENDWITH
-
-            *-- Column6: N.Registros (NRegis)
-            WITH .Column6
-                .ColumnOrder   = 6
-                .Width         = 110
-                .Movable       = .F.
-                .Resizable     = .F.
-                .ReadOnly      = .T.
-                WITH .Header1
-                    .Caption   = "N.Registros"
-                    .Alignment = 2
-                    .FontName  = "Tahoma"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36, 84, 155)
-                ENDWITH
-                .AddObject("ctlText", "TextBox")
-                WITH .ctlText
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .FontName    = "Tahoma"
-                    .FontSize    = 8
-                ENDWITH
-                .CurrentControl = "ctlText"
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBtnGrade
-    *-- Botoes Selecionar/Desmarcar tudo (cmdBtnGrade do legado)
-    *-- Posicionados abaixo e a direita da grade
-    *==========================================================================
-        *-- Botao Selecionar Tudo
-        THIS.AddObject("cmd_4c_SelTudo", "CommandButton")
-        WITH THIS.cmd_4c_SelTudo
-            .Top         = 265
-            .Left        = 892
-            .Height      = 40
-            .Width       = 40
-            .FontName    = "Verdana"
-            .FontSize    = 8
-            .WordWrap    = .T.
-            .Picture     = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
-            .Caption     = ""
-            .TabStop     = .F.
-            .ToolTipText = "Selecionar Tudo"
-            .ForeColor   = RGB(36, 84, 155)
-            .BackColor   = RGB(255, 255, 255)
-            .Themes      = .T.
+            .Visible           = .T.
         ENDWITH
 
-        *-- Botao Desmarcar Tudo
-        THIS.AddObject("cmd_4c_Apaga", "CommandButton")
-        WITH THIS.cmd_4c_Apaga
-            .Top         = 310
-            .Left        = 892
-            .Height      = 40
-            .Width       = 40
-            .FontName    = "Verdana"
-            .FontSize    = 8
-            .WordWrap    = .T.
-            .Picture     = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-            .Caption     = ""
-            .TabStop     = .F.
-            .ToolTipText = "Desmarcar Tudo"
-            .ForeColor   = RGB(36, 84, 155)
-            .BackColor   = RGB(255, 255, 255)
-            .Themes      = .T.
-        ENDWITH
+        *-- Valor inicial vem do BO (ponto de RECARGA): o .Value = "" acima eh
+        *-- so o tipo do campo - quem decide o conteudo exibido eh BOParaForm,
+        *-- para que tela e BO nunca divirjam.
+        THIS.BOParaForm()
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBINDEVENTs
+    * InicializarForm - Cria o BO e a estrutura visual completa: cabecalho,
+    * grade de selecao (grd_4c_Dados), botoes de acao (Processar/Sair/
+    * Marcar/Desmarcar) e o campo "Nome da Unificacao".
     *==========================================================================
-        *-- Botoes principais
-        BINDEVENT(THIS.cmd_4c_Processar,              "Click", THIS, "BtnProcessarClick")
-        BINDEVENT(THIS.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
-
-        *-- Botoes de selecao de grade
-        BINDEVENT(THIS.cmd_4c_SelTudo, "Click", THIS, "BtnSelecionarTudoClick")
-        BINDEVENT(THIS.cmd_4c_Apaga,   "Click", THIS, "BtnDesmarcarTudoClick")
-
-        *-- Cliques nos cabecalhos para ordenacao
-        BINDEVENT(THIS.grd_4c_Selecoes.Column2.Header1, "Click", THIS, "Col2HeaderClick")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column3.Header1, "Click", THIS, "Col3HeaderClick")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column4.Header1, "Click", THIS, "Col4HeaderClick")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column5.Header1, "Click", THIS, "Col5HeaderClick")
-
-        *-- CheckBox de selecao individual: MouseDown + KeyPress
-        BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "MouseDown", THIS, "GrdChkMouseDown")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "KeyPress",  THIS, "GrdChkKeyPress")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "Click",     THIS, "GrdChkClick")
-        BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "MouseUp",   THIS, "GrdChkMouseUp")
-    ENDPROC
-
+    PROTECTED PROCEDURE InicializarForm()
     *==========================================================================
-    PROTECTED PROCEDURE MontarGrade
-    *-- Vincula o cursor_4c_Itn ao grid apos BuscarMalas()
-    *==========================================================================
-        LOCAL loc_oGrd, loc_oErro
-        loc_oGrd = .NULL.
-        TRY
-            IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                loc_oGrd = THIS.grd_4c_Selecoes
-                loc_oGrd.RecordSource = ""
-            ENDIF
-
-            IF USED("cursor_4c_Itn")
-                THIS.OrdenarGrade(THIS.this_nOrdemGrade)
-
-                loc_oGrd.ColumnCount = 6
-                loc_oGrd.RecordSource = "cursor_4c_Itn"
-
-                WITH loc_oGrd
-                    .Column1.ControlSource = "cursor_4c_Itn.SelImp"
-                    .Column2.ControlSource = "cursor_4c_Itn.Codigos"
-                    .Column3.ControlSource = "cursor_4c_Itn.Descs"
-                    .Column4.ControlSource = "cursor_4c_Itn.Usuins"
-                    .Column5.ControlSource = "cursor_4c_Itn.Datins"
-                    .Column6.ControlSource = "cursor_4c_Itn.Nregis"
-                ENDWITH
-
-                GO TOP IN cursor_4c_Itn
-            ENDIF
-
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_oGrd.Refresh()
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro MontarGrade")
-        ENDTRY
-    ENDPROC
-
-    *==========================================================================
-    PROCEDURE OrdenarGrade
-    *-- Ordena cursor_4c_Itn pela coluna especificada e destaca header
-    *-- par_nColuna: 2=Codigos 3=Descs 4=UsuIns 5=DatIns
-    *==========================================================================
-        LPARAMETERS par_nColuna
-        LOCAL loc_cTag, loc_nRec, loc_i
-        loc_cTag = ""
-
-        IF VARTYPE(par_nColuna) = "N"
-            THIS.this_nOrdemGrade = par_nColuna
-        ENDIF
-
-        DO CASE
-            CASE THIS.this_nOrdemGrade = 2
-                loc_cTag = "Codigos"
-            CASE THIS.this_nOrdemGrade = 3
-                loc_cTag = "Descs"
-            CASE THIS.this_nOrdemGrade = 4
-                loc_cTag = "Usuins"
-            CASE THIS.this_nOrdemGrade = 5
-                loc_cTag = "Datins"
-        ENDCASE
-
-        IF USED("cursor_4c_Itn") AND !EMPTY(loc_cTag)
-            loc_nRec = RECNO("cursor_4c_Itn")
-            SET ORDER TO TAG (loc_cTag) IN cursor_4c_Itn
-            IF RECCOUNT("cursor_4c_Itn") > 0
-                GO loc_nRec IN cursor_4c_Itn
-            ENDIF
-        ENDIF
-
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            FOR loc_i = 1 TO THIS.grd_4c_Selecoes.ColumnCount
-                THIS.grd_4c_Selecoes.Columns(loc_i).Header1.BackColor = ;
-                    IIF(THIS.this_nOrdemGrade = loc_i, RGB(220, 255, 220), RGB(192, 192, 192))
-            ENDFOR
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE TornarControlesVisiveis
-    *==========================================================================
-        LOCAL loc_i, loc_oControl
-        FOR loc_i = 1 TO THIS.ControlCount
-            loc_oControl = THIS.Controls(loc_i)
-            IF VARTYPE(loc_oControl) = "O"
-                IF PEMSTATUS(loc_oControl, "Visible", 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarSubControlesVisiveis(loc_oControl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    PROTECTED PROCEDURE TornarSubControlesVisiveis
-        LPARAMETERS par_oContainer
-        LOCAL loc_i, loc_oControl
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oControl = par_oContainer.Controls(loc_i)
-            IF VARTYPE(loc_oControl) = "O"
-                IF PEMSTATUS(loc_oControl, "Visible", 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarSubControlesVisiveis(loc_oControl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *==========================================================================
-    * Compatibilidade de pipeline ? OPERACIONAL flat (sem PageFrame/CRUD)
-    *
-    * Este form nao segue o padrao Page1=Lista/Page2=Dados.
-    * Grid e botoes sao criados diretamente via:
-    *   ConfigurarGrade()    ? grd_4c_Selecoes (6 colunas, checkbox SelImp)
-    *   ConfigurarBotoes()   ? cmd_4c_Processar + cnt_4c_Saida/cmd_4c_Encerrar
-    *   ConfigurarBtnGrade() ? cmd_4c_SelTudo + cmd_4c_Apaga
-    * Todos chamados em InicializarForm().
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        *-- OPERACIONAL: sem PageFrame; controles criados diretamente em InicializarForm
-        RETURN .T.
-    ENDPROC
-
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        *-- OPERACIONAL: grid ja configurado por ConfigurarGrade() em InicializarForm()
-        *-- Refrescar grade caso chamado pelo pipeline apos carga inicial
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5) AND USED("cursor_4c_Itn")
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        *-- OPERACIONAL: sem pagina de dados separada; grade gerenciada por ConfigurarGrade()
-        RETURN .T.
-    ENDPROC
-
-    PROCEDURE AlternarPagina(par_nPagina)
-        *-- OPERACIONAL: nao ha troca de pagina; apenas refresca a grade
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    PROCEDURE Destroy
-    *==========================================================================
-        IF USED("cursor_4c_Itn")
-            USE IN cursor_4c_Itn
-        ENDIF
-        DODEFAULT()
-    ENDPROC
-
-    *==========================================================================
-    * Handlers de eventos - PUBLIC (obrigatorio para BINDEVENT)
-    *==========================================================================
-
-    PROCEDURE BtnProcessarClick()
-        LOCAL loc_cNome, loc_lOk, loc_nSelecionadas, loc_oErro
-        loc_lOk = .F.
-        loc_cNome = ""
-
-        IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-            THIS.cmd_4c_Processar.Enabled = .F.
-        ENDIF
-
-        TRY
-            IF !USED("cursor_4c_Itn")
-                MsgAviso("Nenhuma mala direta carregada.", "Processar")
-            ELSE
-                *-- GO TOP + refresh antes de verificar selecao (comportamento original)
-                GO TOP IN cursor_4c_Itn
-                IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                    THIS.grd_4c_Selecoes.Refresh()
-                ENDIF
-
-                *-- Verificar se ha malas com registros selecionadas
-                SELECT COUNT(*) AS nSel FROM cursor_4c_Itn ;
-                    WHERE SelImp = 1 INTO CURSOR cursor_4c_TmpSel
-                loc_nSelecionadas = 0
-                IF USED("cursor_4c_TmpSel")
-                    loc_nSelecionadas = NVL(cursor_4c_TmpSel.nSel, 0)
-                    USE IN cursor_4c_TmpSel
-                ENDIF
-
-                IF loc_nSelecionadas < 1
-                    MsgAviso("Nenhuma Mala Direta com registros foi selecionada para unifica" + ;
-                             CHR(231) + CHR(227) + "o.", "Processar")
-                    IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                        THIS.grd_4c_Selecoes.SetFocus()
-                    ENDIF
-                ELSE
-                    IF loc_nSelecionadas = 1
-                    MsgAviso("Apenas uma Mala Direta com registros foi selecionada." + CHR(13) + ;
-                             "N" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + "vel unificar apenas uma." + CHR(13) + ;
-                             "Selecione ao menos duas Malas Diretas.", "Processar")
-                    IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                        THIS.grd_4c_Selecoes.SetFocus()
-                    ENDIF
-                ELSE
-                    IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-                        loc_cNome = ALLTRIM(THIS.cnt_4c_Nova.txt_4c_GetNova.Value)
-                    ENDIF
-
-                    IF EMPTY(loc_cNome)
-                        MsgAviso("Nome da Unifica" + CHR(231) + CHR(227) + "o inv" + CHR(225) + "lido." + CHR(13) + ;
-                                 "Este " + CHR(233) + " o nome que ser" + CHR(225) + " utilizado na unifica" + ;
-                                 CHR(231) + CHR(227) + "o gerada.", "Processar")
-                        IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-                            THIS.cnt_4c_Nova.txt_4c_GetNova.SetFocus()
-                        ENDIF
-                    ELSE
-                        IF MsgConfirma("Confirma a Unifica" + CHR(231) + CHR(227) + "o das Malas Diretas?")
-                            loc_lOk = THIS.this_oBusinessObject.ProcessarUnificacao(loc_cNome)
-                            IF loc_lOk
-                                THIS.MontarGrade()
-                                IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-                                    THIS.cnt_4c_Nova.txt_4c_GetNova.Value = ""
-                                ENDIF
-                                IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                                    THIS.grd_4c_Selecoes.SetFocus()
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro BtnProcessarClick")
-        ENDTRY
-
-        IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-            THIS.cmd_4c_Processar.Enabled = .T.
-        ENDIF
-    ENDPROC
-
-    PROCEDURE BtnEncerrarClick()
-        THIS.Release()
-    ENDPROC
-
-    PROCEDURE BtnSelecionarTudoClick()
-        IF USED("cursor_4c_Itn")
-            REPLACE ALL SelImp WITH 1 IN cursor_4c_Itn
-        ENDIF
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE BtnDesmarcarTudoClick()
-        IF USED("cursor_4c_Itn")
-            REPLACE ALL SelImp WITH 0 IN cursor_4c_Itn
-        ENDIF
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE Col2HeaderClick()
-        THIS.OrdenarGrade(2)
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE Col3HeaderClick()
-        THIS.OrdenarGrade(3)
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE Col4HeaderClick()
-        THIS.OrdenarGrade(4)
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    PROCEDURE Col5HeaderClick()
-        THIS.OrdenarGrade(5)
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-    ENDPROC
-
-    *-- MouseDown: toggle SelImp do registro corrente (equivale ao CheckBox original)
-    PROCEDURE GrdChkMouseDown
-        LPARAMETERS par_nButton, par_nShift, par_nXCoord, par_nYCoord
-        LOCAL loc_nSel
-        IF USED("cursor_4c_Itn")
-            loc_nSel = IIF(cursor_4c_Itn.SelImp = 1, 0, 1)
-            SELECT cursor_4c_Itn
-            REPLACE SelImp WITH loc_nSel
-        ENDIF
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
-        NODEFAULT
-    ENDPROC
-
-    *-- KeyPress: toggle SelImp com Enter (13) ou Space (32)
-    PROCEDURE GrdChkKeyPress
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nSel
-        IF INLIST(par_nKeyCode, 13, 32)
-            IF USED("cursor_4c_Itn")
-                loc_nSel = IIF(cursor_4c_Itn.SelImp = 1, 0, 1)
-                SELECT cursor_4c_Itn
-                REPLACE SelImp WITH loc_nSel
-            ENDIF
-            IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-                THIS.grd_4c_Selecoes.Refresh()
-            ENDIF
-            NODEFAULT
-        ENDIF
-    ENDPROC
-
-    *-- Click: absorver para nao disparar duplo-toggle com MouseDown
-    PROCEDURE GrdChkClick()
-        NODEFAULT
-    ENDPROC
-
-    *-- MouseUp: absorver tambem. O toggle ja aconteceu no MouseDown; sem este
-    *-- handler o processamento nativo do MouseUp reverte a marcacao.
-    *-- Pattern #185 / Erro146 (2026-09-04).
-    PROCEDURE GrdChkMouseUp
-        LPARAMETERS par_nButton, par_nShift, par_nXCoord, par_nYCoord
-        NODEFAULT
-    ENDPROC
-
-    *==========================================================================
-    * Contratos de pipeline ? nao aplicaveis a este form OPERACIONAL
-    * (nao ha Page1=Lista/Page2=Dados nem botoes CRUD; acao principal = BtnProcessarClick)
-    *==========================================================================
-    PROCEDURE BtnIncluirClick()
-        RETURN .F.
-    ENDPROC
-
-    PROCEDURE BtnAlterarClick()
-        RETURN .F.
-    ENDPROC
-
-    PROCEDURE BtnExcluirClick()
-        RETURN .F.
-    ENDPROC
-
-    PROCEDURE BtnVisualizarClick()
-        RETURN .F.
-    ENDPROC
-
-    *==========================================================================
-    * CarregarLista - recarrega grade do servidor (contrato de pipeline)
-    *==========================================================================
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_oErro, loc_lModoValidacaoOuTeste
         loc_lSucesso = .F.
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            loc_lSucesso = THIS.this_oBusinessObject.BuscarMalas()
-            IF loc_lSucesso
-                THIS.MontarGrade()
+        loc_lModoValidacaoOuTeste = (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI) OR ;
+                                    (TYPE("gb_4c_ModoTeste")   = "L" AND gb_4c_ModoTeste)
+
+        TRY
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
+            *-- DataSession=2 nasce no default do VFP (regra #9.4) - SET DELETED
+            *-- nao herda o SET do config.prg
+            SET DELETED ON
+
+            THIS.this_oBusinessObject = CREATEOBJECT("SigPrMluBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarGridDados()
+                THIS.ConfigurarBotoesAcao()
+                THIS.ConfigurarContainerNova()
+
+                THIS.TornarControlesVisiveis(THIS)
+
+                *-- Estado inicial pelo funil unico: a tela nasce em "LISTA"
+                *-- (grade disponivel para selecao, Processar liberado)
+                THIS.this_cModoAtual = "LISTA"
+                THIS.AjustarBotoesPorModo()
+
+                *-- Carga inicial da grade - pulada em validacao de UI / modo
+                *-- teste (sem gnConnHandle real)
+                IF !loc_lModoValidacaoOuTeste
+                    THIS.CarregarLista()
+                ENDIF
+
+                THIS.Visible = .T.
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Falha ao criar SigPrMluBO.", "Erro em InicializarForm")
             ENDIF
-        ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em InicializarForm")
+        ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * FormParaBO - mapeia campo "Nome da Unificacao" para o BO
-    * (unico campo editavel pelo usuario neste form OPERACIONAL)
+    * CarregarLista - Popula cursor_4c_Dados (equivalente a crSigMlItn) com
+    * as malas diretas cadastradas e liga a grade. O cursor precisa ser
+    * READWRITE porque a Column1 (chk_4c_Check1) grava SelImp por linha
+    * (regra do CLAUDE.md: Grid com coluna editavel exige cursor READWRITE -
+    * SQLEXEC() cria cursor somente-leitura).
     *==========================================================================
-    PROCEDURE FormParaBO()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-                THIS.this_oBusinessObject.this_cDescs = ;
-                    ALLTRIM(THIS.cnt_4c_Nova.txt_4c_GetNova.Value)
+    PROCEDURE CarregarLista()
+    *==========================================================================
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
+
+        loc_lSucesso = .F.
+
+        *-- TRY/CATCH obrigatorio: SQLEXEC com gnConnHandle invalido (conexao
+        *-- caida/nunca aberta) DISPARA excecao em vez de devolver -1 - o IF
+        *-- loc_nResultado >= 0 abaixo nunca roda nesse caso, e sem este bloco
+        *-- o Program Error cru ("Connection handle is invalid.") sobe para
+        *-- quem chamou (regra do CLAUDE.md sobre SQLEXEC com handle invalido).
+        *-- Nenhum RETURN dentro do TRY (regra #1): o veredicto sai pela flag
+        *-- loc_lSucesso e ha um RETURN unico DEPOIS do ENDTRY.
+        TRY
+            IF USED("cursor_4c_DadosTmp")
+                USE IN cursor_4c_DadosTmp
             ENDIF
-        ENDIF
-        RETURN .T.
-    ENDPROC
 
-    *==========================================================================
-    * BOParaForm - popula campo "Nome da Unificacao" a partir do BO
-    *==========================================================================
-    PROCEDURE BOParaForm()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-                THIS.cnt_4c_Nova.txt_4c_GetNova.Value = ;
-                    THIS.this_oBusinessObject.this_cDescs
+            loc_cSQL = "SELECT 0 AS SelImp, codigos AS Codigos, descs AS Descs, " + ;
+                "usuins AS UsuIns, datins AS DatIns, nregis AS NRegis FROM SigMlItn"
+
+            SET NULL ON
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+            SET NULL OFF
+
+            IF loc_nResultado >= 0
+                IF USED("cursor_4c_Dados")
+                    USE IN cursor_4c_Dados
+                ENDIF
+
+                SELECT * FROM cursor_4c_DadosTmp INTO CURSOR cursor_4c_Dados READWRITE
+                USE IN cursor_4c_DadosTmp
+
+                SELECT cursor_4c_Dados
+                INDEX ON Codigos TAG Codigos
+                INDEX ON Descs   TAG Descs
+                INDEX ON UsuIns  TAG UsuIns
+                INDEX ON DatIns  TAG DatIns
+
+                THIS.grd_4c_Dados.RecordSource = ""
+                THIS.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Dados.SelImp"
+                THIS.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Dados.Codigos"
+                THIS.grd_4c_Dados.Column3.ControlSource = "cursor_4c_Dados.Descs"
+                THIS.grd_4c_Dados.Column4.ControlSource = "cursor_4c_Dados.UsuIns"
+                THIS.grd_4c_Dados.Column5.ControlSource = "cursor_4c_Dados.DatIns"
+                THIS.grd_4c_Dados.Column6.ControlSource = "cursor_4c_Dados.NRegis"
+                THIS.grd_4c_Dados.RecordSource = "cursor_4c_Dados"
+
+                *-- RecordSource reseta ControlSource/Width/Header/CurrentControl
+                *-- (auto-bind pela ordem dos campos do cursor) - reconfigurar
+                *-- IMEDIATAMENTE depois (CLAUDE.md "Problema 48")
+                THIS.grd_4c_Dados.Column1.ControlSource    = "cursor_4c_Dados.SelImp"
+                THIS.grd_4c_Dados.Column1.CurrentControl = "chk_4c_Check1"
+                THIS.grd_4c_Dados.Column1.Sparse         = .F.
+                THIS.grd_4c_Dados.Column1.ReadOnly        = .F.
+                THIS.grd_4c_Dados.Column1.Width           = 15
+                THIS.grd_4c_Dados.Column1.Header1.Caption = ""
+                THIS.grd_4c_Dados.Column2.ControlSource    = "cursor_4c_Dados.Codigos"
+                THIS.grd_4c_Dados.Column2.Width           = 80
+                THIS.grd_4c_Dados.Column2.Header1.Caption = "C" + CHR(243) + "digo"
+                THIS.grd_4c_Dados.Column3.ControlSource    = "cursor_4c_Dados.Descs"
+                THIS.grd_4c_Dados.Column3.Width           = 260
+                THIS.grd_4c_Dados.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                THIS.grd_4c_Dados.Column4.ControlSource    = "cursor_4c_Dados.UsuIns"
+                THIS.grd_4c_Dados.Column4.Width           = 120
+                THIS.grd_4c_Dados.Column4.Header1.Caption = "Usu" + CHR(225) + "rio"
+                THIS.grd_4c_Dados.Column5.ControlSource    = "cursor_4c_Dados.DatIns"
+                THIS.grd_4c_Dados.Column5.Width           = 80
+                THIS.grd_4c_Dados.Column5.Header1.Caption = "Dt.Entrada"
+                THIS.grd_4c_Dados.Column6.ControlSource    = "cursor_4c_Dados.NRegis"
+                THIS.grd_4c_Dados.Column6.Width           = 80
+                THIS.grd_4c_Dados.Column6.Header1.Caption = "N.Registros"
+
+                THIS.OrdenarGrade(THIS.this_nGridOrder)
+
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao carregar malas diretas:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-        ENDIF
-        RETURN .T.
+        CATCH TO loc_oErro
+            loc_lSucesso = .F.
+            MostrarErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro ao carregar malas diretas")
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * HabilitarCampos - habilita/desabilita controles editaveis
+    * OrdenarGrade - Reordena cursor_4c_Dados pela coluna informada
+    * (equivalente a AcertaGrades(pColuna) do legado) e realca o cabecalho
+    * da coluna ativa com RGB(220,255,220), como no legado.
     *==========================================================================
-    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-            THIS.cnt_4c_Nova.txt_4c_GetNova.Enabled = par_lHabilitar
+    PROCEDURE OrdenarGrade(par_nColuna)
+    *==========================================================================
+        LOCAL loc_cTag, loc_nI, loc_cCaminho
+
+        IF VARTYPE(par_nColuna) = "N"
+            THIS.this_nGridOrder = par_nColuna
         ENDIF
-        IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-            THIS.cmd_4c_Processar.Enabled = par_lHabilitar
+
+        DO CASE
+            CASE THIS.this_nGridOrder = 3
+                loc_cTag = "Descs"
+            CASE THIS.this_nGridOrder = 4
+                loc_cTag = "UsuIns"
+            CASE THIS.this_nGridOrder = 5
+                loc_cTag = "DatIns"
+            OTHERWISE
+                loc_cTag = "Codigos"
+        ENDCASE
+
+        IF USED("cursor_4c_Dados")
+            SELECT cursor_4c_Dados
+            SET ORDER TO TAG (loc_cTag)
+            GO TOP
+        ENDIF
+
+        IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+            FOR loc_nI = 1 TO THIS.grd_4c_Dados.ColumnCount
+                loc_cCaminho = "THIS.grd_4c_Dados.Column" + ALLTRIM(STR(loc_nI, 2)) + ".Header1.BackColor"
+                STORE IIF(THIS.this_nGridOrder = loc_nI, RGB(220, 255, 220), THIS.BackColor) TO (loc_cCaminho)
+            ENDFOR
+            THIS.grd_4c_Dados.Refresh()
         ENDIF
     ENDPROC
 
     *==========================================================================
-    * LimparCampos - limpa campo nome e desmarca todas as selecoes da grade
+    * GradeHeader*Click - Disparados pelo clique nos cabecalhos das colunas
+    * 2 a 5 (equivalente a Column2..5.Header1.Click chamando AcertaGrades(N)
+    * no legado - Column1/Column6 nao tem Click no dump)
+    *==========================================================================
+    PROCEDURE GradeHeaderCodigosClick()
+    *==========================================================================
+        THIS.OrdenarGrade(2)
+    ENDPROC
+
+    PROCEDURE GradeHeaderDescsClick()
+    *==========================================================================
+        THIS.OrdenarGrade(3)
+    ENDPROC
+
+    PROCEDURE GradeHeaderUsuInsClick()
+    *==========================================================================
+        THIS.OrdenarGrade(4)
+    ENDPROC
+
+    PROCEDURE GradeHeaderDatInsClick()
+    *==========================================================================
+        THIS.OrdenarGrade(5)
+    ENDPROC
+
+    *==========================================================================
+    * BindToggleSelecao - Liga os 4 eventos do checkbox de selecao da grade
+    * (Pattern #185/#186 - Erro146: CheckBox de Column NAO alterna sem os
+    * handlers de Click/MouseDown/MouseUp/KeyPress, todos com NODEFAULT)
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleSelecao(par_oChk)
+    *==========================================================================
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "ChkSelecaoKeyPress")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "ChkSelecaoMouseDown")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "ChkSelecaoMouseUp")
+        BINDEVENT(par_oChk, "Click",     THIS, "ChkSelecaoClick")
+    ENDPROC
+
+    *==========================================================================
+    * ChkSelecaoToggle - Alterna SelImp da linha corrente de cursor_4c_Dados
+    * (equivalente a "m.SelImp = Iif(crSigMlItn.SelImp=1, 0, 1) / Gather
+    * Memvar Fields SelImp" do legado - disparado no MouseDown/KeyPress)
+    *==========================================================================
+    PROCEDURE ChkSelecaoToggle()
+    *==========================================================================
+        IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+            SELECT cursor_4c_Dados
+            REPLACE SelImp WITH IIF(NVL(SelImp, 0) = 1, 0, 1)
+            THIS.grd_4c_Dados.Refresh()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ChkSelecaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *==========================================================================
+        IF INLIST(par_nKeyCode, 13, 32)
+            THIS.ChkSelecaoToggle()
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    *-- MouseDown apenas SUPRIME o toggle nativo (legado: "NoDefault" e nada
+    *-- mais). Quem alterna eh o MouseUp - o legado simula a tecla Enter
+    *-- (codigo 13) de dentro do seu proprio MouseUp para disparar o mesmo
+    *-- toggle do KeyPress. Invertidos, o valor alterna antes de o clique
+    *-- terminar e um arraste sobre a celula alterna sem o usuario soltar o
+    *-- botao.
+    PROCEDURE ChkSelecaoMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+    *==========================================================================
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkSelecaoMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+    *==========================================================================
+        THIS.ChkSelecaoToggle()
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkSelecaoClick()
+    *==========================================================================
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * BtnEncerrarClick - Encerra o formulario (equivalente a ThisForm.Release do
+    * btnsair.Click legado)
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick()
+    *==========================================================================
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * MarcarTodasAs - Funil UNICO dos dois botoes do cmdBtnGrade legado. No
+    * SCX os dois sao um CommandGroup com ButtonCount = 2 e UM Click so:
+    *
+    *     Update crSigMlItn Set SelImp = This.Value
+    *     ThisForm.grdSelecoes.Refresh
+    *
+    * O unico dado que muda entre btnMarcar e btnDesmarcar e o "This.Value"
+    * do grupo, isto e o INDICE do botao clicado - 1 no primeiro e 2 no
+    * segundo. Por isso os dois handlers abaixo apenas chamam este metodo com
+    * o indice correspondente, em vez de duplicar a logica.
+    *
+    * O valor 2 do botao Desmarcar e transcricao LITERAL (regra #17): o
+    * legado nao grava 0 ao desmarcar, grava o indice do botao, e != 1 ja
+    * basta para a linha sair do filtro "SelImp = 1" usado em
+    * ValidarProcessamento/ProcessarUnificacao.
+    *
+    * UPDATE-SQL e nao REPLACE ALL: o legado usa "Update ... Set" porque
+    * REPLACE ALL percorre o cursor inteiro e deixa o ponteiro em EOF - a
+    * grade saltaria para o fim e perderia a linha corrente a cada clique nos
+    * botoes, divergencia visivel que o legado nao tem. O RECNO() e salvo e
+    * restaurado porque a grade continua ancorada no ponteiro do cursor
+    * (regra #21a), e fechamos com Refresh como o legado.
+    *
+    * "m.par_nValor" com prefixo m. e obrigatorio: em comando SQL do VFP um
+    * identificador solto e resolvido primeiro como COLUNA do cursor.
+    *==========================================================================
+    PROTECTED PROCEDURE MarcarTodasAs(par_nValor)
+    *==========================================================================
+        LOCAL loc_nRec, loc_oErro
+
+        TRY
+            IF USED("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                loc_nRec = RECNO()
+
+                UPDATE cursor_4c_Dados SET SelImp = m.par_nValor
+
+                SELECT cursor_4c_Dados
+                IF BETWEEN(loc_nRec, 1, RECCOUNT("cursor_4c_Dados"))
+                    GO loc_nRec
+                ELSE
+                    GO TOP
+                ENDIF
+
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em MarcarTodasAs")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * CmdSelTudoClick - 1o botao do cmdBtnGrade ("btnMarcar", ToolTip
+    * "Seleciona Tudo"): marca todas as malas da grade. This.Value = 1.
+    *==========================================================================
+    PROCEDURE CmdSelTudoClick()
+    *==========================================================================
+        THIS.MarcarTodasAs(1)
+    ENDPROC
+
+    *==========================================================================
+    * CmdApagaTudoClick - 2o botao do cmdBtnGrade ("btnDesmarcar", ToolTip
+    * "Apaga Tudo"): desmarca todas as malas da grade. This.Value = 2.
+    *==========================================================================
+    PROCEDURE CmdApagaTudoClick()
+    *==========================================================================
+        THIS.MarcarTodasAs(2)
+    ENDPROC
+
+    *==========================================================================
+    * ValidarProcessamento - REGRA DOS CAMPOS que esta fase entrega, em FONTE
+    * UNICA. No legado ela NAO mora em evento de campo: o dump nao tem
+    * Valid/When/LostFocus em getNova (grep "PROCEDURE" no SIGPRMLU devolve so
+    * acertagrades/montagrades/processamento/Release/Init e os Click/KeyPress/
+    * MouseUp/MouseDown do Check1 da grade) - ela mora DENTRO do
+    * cmdProcessar.Click e governa o campo "Nome da Unificacao"
+    * (cnt_4c_Nova.txt_4c_Nova) mais a selecao da grade. Por isso nasce AQUI e
+    * o handler do botao apenas CHAMA.
+    *
+    * Transcricao literal dos tres guards do legado, na MESMA ordem, com as
+    * MESMAS mensagens e os MESMOS destinos de SetFocus:
+    *   1) Reccount('csTmp') < 1   -> "Nenhuma Mala Direta Com Registros..."    -> grade
+    *   2) Reccount('csTmp') = 1   -> "Apenas Uma Mala Direta Com Registros..." -> grade
+    *   3) IsEmpty(getNova.Value)  -> "Nome da Unificacao Invalido!!!..."        -> campo
+    *
+    * O csTmp do legado ("Select Codigos From crSigMlItn Where (SelImp = 1)
+    * Into Cursor csTmp") so existe para ser contado: aqui o equivalente eh o
+    * COUNT FOR sobre cursor_4c_Dados, sem criar cursor.
+    *
+    * O TEXTBOX eh a FONTE UNICA do nome - o legado le
+    * ThisForm.cntNova.getNova.Value direto, inclusive no Insert e na mensagem
+    * final de conclusao. O espelho para a property do BO eh feito aqui, DEPOIS
+    * de validar, para que nenhum caminho grave o nome ANTIGO quando o usuario
+    * limpa o campo entre duas unificacoes.
+    *
+    * PUBLIC de proposito: chamado de FORA da classe pelo handler do botao
+    * (BINDEVENT descarta retorno de delegate, por isso o guard eh chamado em
+    * codigo) e pelos harnesses de teste - regras #3 e #51 do CLAUDE.md.
+    *
+    * Retorna .T. quando os tres guards passam.
+    *==========================================================================
+    PROCEDURE ValidarProcessamento()
+    *==========================================================================
+        LOCAL loc_lValido, loc_nSelecionadas, loc_oErro
+
+        loc_lValido       = .T.
+        loc_nSelecionadas = 0
+
+        *-- TRY/CATCH obrigatorio: este metodo eh o funil de validacao chamado
+        *-- de FORA (BtnProcessarClick e harness de teste). Sem ele uma falha
+        *-- aqui sobe como "Program Error" CRU do VFP, em vez do dialogo do
+        *-- sistema, e o BtnProcessarClick nem chegaria a reabilitar o botao.
+        *-- Nenhum RETURN dentro do TRY (regra #1): o veredicto sai pela flag
+        *-- loc_lValido e ha um RETURN unico DEPOIS do ENDTRY.
+        TRY
+            IF USED("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                GO TOP
+                COUNT FOR NVL(SelImp, 0) = 1 TO loc_nSelecionadas
+            ENDIF
+
+            DO CASE
+                CASE loc_nSelecionadas < 1
+                    MsgAviso("Nenhuma Mala Direta Com Registros Foi Selecionada Para Unifica" + ;
+                        CHR(231) + CHR(227) + "o!!!", "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.grd_4c_Dados.SetFocus()
+                    loc_lValido = .F.
+
+                CASE loc_nSelecionadas = 1
+                    MsgAviso("Apenas Uma Mala Direta Com Registros Foi Selecionada Para Ser Unificada!!!" + CHR(13) + ;
+                        "N" + CHR(227) + "o " + CHR(233) + " Poss" + CHR(237) + ;
+                        "vel Unificar Apenas Uma Mala Direta, Selecione Ao Menos Duas!!!", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.grd_4c_Dados.SetFocus()
+                    loc_lValido = .F.
+
+                CASE EMPTY(ALLTRIM(THIS.cnt_4c_Nova.txt_4c_Nova.Value))
+                    MsgAviso("Nome da Unifica" + CHR(231) + CHR(227) + "o Invalido!!! Este " + CHR(233) + ;
+                        " o Nome Que" + CHR(13) + "Vai Ser Utilizado Na Unifica" + CHR(231) + CHR(227) + ;
+                        "o Que Ser" + CHR(225) + " Gerada!!!", "Aten" + CHR(231) + CHR(227) + "o")
+                    THIS.cnt_4c_Nova.txt_4c_Nova.SetFocus()
+                    loc_lValido = .F.
+            ENDCASE
+
+            *-- Espelho tela -> BO (so com os guards aprovados), delegado ao
+            *-- funil unico FormParaBO. Fica DEPOIS da validacao para que
+            *-- nenhum caminho grave o nome ANTIGO quando o usuario limpa o
+            *-- campo entre duas unificacoes, e a falha dele REPROVA: sem o
+            *-- espelho, ProcessarUnificacao leria property vazia.
+            IF loc_lValido
+                loc_lValido = THIS.FormParaBO()
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Validacao que nao conseguiu concluir REPROVA: deixar passar
+            *-- gravaria a unificacao sem os tres guards do legado.
+            loc_lValido = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ValidarProcessamento")
+        ENDTRY
+
+        RETURN loc_lValido
+    ENDPROC
+
+    *==========================================================================
+    * BtnProcessarClick - Handler do botao Processar (cmdProcessar.Click do
+    * legado). Reproduz, na ordem do legado: repinta a grade e volta ao topo
+    * (Refresh / Go Top In crSigMlItn / Refresh - regra #21a: popular/alterar
+    * cursor nao repinta sozinho, e o toggle do checkbox grava por REPLACE),
+    * trava o botao (This.Enabled = .f.), valida pelo funil unico
+    * ValidarProcessamento(), pede confirmacao e dispara ProcessarUnificacao().
+    * O "This.Enabled = .t." aparece em TODOS os caminhos de saida do legado -
+    * aqui eh uma unica linha no fim, equivalente e sem repeticao.
+    *==========================================================================
+    PROCEDURE BtnProcessarClick()
+    *==========================================================================
+        LOCAL loc_oErro
+
+        TRY
+            THIS.grd_4c_Dados.Refresh()
+            IF USED("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                GO TOP
+            ENDIF
+            THIS.grd_4c_Dados.Refresh()
+
+            THIS.this_cModoAtual = "PROCESSANDO"
+            THIS.AjustarBotoesPorModo()
+
+            IF THIS.ValidarProcessamento()
+                IF MsgConfirma("Confirma a Unifica" + CHR(231) + CHR(227) + "o das Malas Diretas?", ;
+                    "Confirma" + CHR(231) + CHR(227) + "o")
+                    THIS.ProcessarUnificacao()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em BtnProcessarClick")
+        ENDTRY
+
+        *-- Reabilitacao INCONDICIONAL e FORA do TRY. O legado repete
+        *-- "This.Enabled = .t." nos QUATRO caminhos de saida do
+        *-- cmdProcessar.Click (os tres "Return 0" dos guards e o fim do
+        *-- metodo) exatamente para que nenhuma saida deixe o botao travado.
+        *-- Uma unica linha depois do ENDTRY cobre os quatro MAIS o caminho de
+        *-- excecao: sem ela, um erro em ValidarProcessamento/
+        *-- ProcessarUnificacao deixaria o Processar cinza pelo resto da vida
+        *-- do form e a tela ficaria inutilizavel sem fechar e reabrir
+        *-- (regra #40 - quem DESABILITA reabilita no funil de volta).
+        THIS.this_cModoAtual = "LISTA"
+        THIS.AjustarBotoesPorModo()
+    ENDPROC
+
+    *==========================================================================
+    * ProcessarUnificacao - Unifica as malas diretas marcadas numa mala NOVA
+    * (equivalente ao PROCEDURE processamento do legado): gera um codigo novo,
+    * duplica os registros de SigMlCab de cada mala selecionada na mala nova
+    * (deduplicando por Desti+Ceps+Endes+Nums+Compls) e grava o cabecalho da
+    * mala nova em SigMlItn via o BusinessObject.
+    *==========================================================================
+    PROCEDURE ProcessarUnificacao()
+    *==========================================================================
+        LOCAL loc_cCodigoNovo, loc_cNomeUnificacao, loc_cUnificas, loc_nTotalOrigem, ;
+            loc_nTotalUnificado, loc_nMalasSelecionadas, loc_cSQL, loc_nResultado, ;
+            loc_cChaveUnica, loc_lSucesso, loc_oErro, loc_cCodMala, loc_lErroInsercao, loc_cMsg, ;
+            loc_lSnapshotOk
+
+        loc_lSucesso        = .F.
+        loc_lErroInsercao   = .F.
+        loc_cUnificas        = ""
+        loc_nTotalOrigem     = 0
+        loc_nMalasSelecionadas = 0
+
+        TRY
+            loc_cCodigoNovo = PADR(SUBSTR(SYS(2015), 3, 10), 10)
+
+            *-- Snapshot da tela pelo funil unico FormParaBO. Chamado tambem
+            *-- aqui (e nao so no ValidarProcessamento) para o metodo ser
+            *-- auto-suficiente quando acionado de fora - harness de teste - e
+            *-- porque eh puro: reler a mesma tela devolve o mesmo valor.
+            *-- Dai em diante o TextBox e a contagem da grade NAO sao mais
+            *-- lidos: tudo vem das properties do BO.
+            loc_lSnapshotOk = THIS.FormParaBO()
+            IF !loc_lSnapshotOk
+                *-- FormParaBO ja exibiu o proprio erro - aqui so aborta, sem
+                *-- segunda mensagem (regra #9: CATCH nunca silencioso, mas
+                *-- tambem nunca em duplicata).
+                loc_lErroInsercao = .T.
+            ENDIF
+
+            loc_cNomeUnificacao    = ALLTRIM(THIS.this_oBusinessObject.this_cNomeUnificacao)
+            loc_cUnificas          = THIS.this_oBusinessObject.this_cCodigosSelecionados
+            loc_nMalasSelecionadas = THIS.this_oBusinessObject.this_nTotalMalasSelecionadas
+
+            *-- Cursor de dedup final (equivalente a csMalaUnificada), chave
+            *-- de unicidade igual ao legado: Padr(Upper(StrTran(Desti+Ceps+
+            *-- Endes+Nums+Compls,' ','')),200)
+            IF USED("cursor_4c_Unificada")
+                USE IN cursor_4c_Unificada
+            ENDIF
+
+            SET NULL ON
+            CREATE CURSOR cursor_4c_Unificada (ChaveUnica C(200), Cidchaves C(20), ;
+                IClis C(10) NULL, Codigos C(10) NULL, Bairs C(40) NULL, Ceps C(9) NULL, ;
+                Compls C(25) NULL, Estas C(2) NULL, Faxs C(20) NULL, Grupos C(10) NULL, ;
+                Mes C(2) NULL, Nums C(10) NULL, Rclis C(50) NULL, Tel1S C(20) NULL, ;
+                Tel2S C(20) NULL, Cidas C(30) NULL, Endes C(60) NULL, Nascs T NULL, ;
+                Profiss C(20) NULL, Sexos C(1) NULL, Ultcomps T NULL, Aptos N(6, 0) NULL, ;
+                Opdest N(1, 0) NULL, Desti C(50) NULL, Opini N(1, 0) NULL, Dtncons T NULL, ;
+                Conjuges C(60) NULL, Dtcasas T NULL, Situas C(3) NULL, Dataincs T NULL, ;
+                Opani N(1, 0) NULL, Quebras C(40) NULL, Cpfs C(20) NULL)
+            SET NULL OFF
+            INDEX ON ChaveUnica TAG ChaveUnica
+
+            *-- Malas marcadas (equivalente a "Select Codigos From crSigMlItn
+            *-- Where SelImp = 1")
+            IF USED("cursor_4c_MalasSel")
+                USE IN cursor_4c_MalasSel
+            ENDIF
+            SELECT Codigos FROM cursor_4c_Dados WHERE SelImp = 1 ;
+                INTO CURSOR cursor_4c_MalasSel
+
+            SELECT cursor_4c_MalasSel
+            SCAN
+                IF loc_lErroInsercao
+                    EXIT
+                ENDIF
+
+                loc_cCodMala = ALLTRIM(cursor_4c_MalasSel.Codigos)
+
+                loc_cSQL = "SELECT iclis, codigos, bairs, ceps, compls, estas, faxs, " + ;
+                    "grupos, mes, nums, rclis, tel1s, tel2s, cidas, endes, nascs, " + ;
+                    "profiss, sexos, ultcomps, aptos, opdest, desti, opini, dtncons, " + ;
+                    "conjuges, dtcasas, situas, dataincs, opani, quebras, cpfs " + ;
+                    "FROM SigMlCab WHERE codigos = " + EscaparSQL(PADR(loc_cCodMala, 10))
+
+                IF USED("cursor_4c_MlCabTmp")
+                    USE IN cursor_4c_MlCabTmp
+                ENDIF
+
+                SET NULL ON
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MlCabTmp")
+                SET NULL OFF
+
+                IF loc_nResultado >= 0
+                    loc_nTotalOrigem = loc_nTotalOrigem + RECCOUNT("cursor_4c_MlCabTmp")
+
+                    SELECT cursor_4c_MlCabTmp
+                    SCAN
+                        SCATTER MEMVAR MEMO
+                        loc_cChaveUnica = PADR(UPPER(STRTRAN(NVL(m.desti, "") + NVL(m.ceps, "") + ;
+                            NVL(m.endes, "") + NVL(m.nums, "") + NVL(m.compls, ""), " ", "")), 200)
+
+                        IF !SEEK(loc_cChaveUnica, "cursor_4c_Unificada", "ChaveUnica")
+                            m.ChaveUnica = loc_cChaveUnica
+                            m.Cidchaves  = LEFT(fUniqueIds(), 20)
+                            m.Codigos    = PADR(loc_cCodigoNovo, 10)
+                            INSERT INTO cursor_4c_Unificada FROM MEMVAR
+                        ENDIF
+                    ENDSCAN
+
+                    USE IN cursor_4c_MlCabTmp
+                ENDIF
+            ENDSCAN
+
+            USE IN cursor_4c_MalasSel
+
+            loc_nTotalUnificado = RECCOUNT("cursor_4c_Unificada")
+
+            *-- Grava cada registro deduplicado em SigMlCab (equivalente ao
+            *-- .Update('crSigMlCab') do legado - aqui linha a linha via
+            *-- SQLEXEC, pois a arquitetura nova nao usa cursor remoto
+            *-- editavel). desdtcom/teldtcom sao NOT NULL sem DEFAULT (regra
+            *-- #22) e o legado tambem os deixa em branco (nunca aparecem no
+            *-- lcCampo copiado).
+            SELECT cursor_4c_Unificada
+            SCAN
+                IF loc_lErroInsercao
+                    EXIT
+                ENDIF
+
+                loc_cSQL = "INSERT INTO SigMlCab (" + ;
+                    "cidchaves, iclis, codigos, bairs, ceps, compls, estas, faxs, " + ;
+                    "grupos, mes, nums, rclis, tel1s, tel2s, cidas, endes, nascs, " + ;
+                    "profiss, sexos, ultcomps, aptos, opdest, desti, opini, dtncons, " + ;
+                    "conjuges, dtcasas, situas, dataincs, opani, quebras, cpfs, " + ;
+                    "desdtcom, teldtcom) VALUES (" + ;
+                    EscaparSQL(LEFT(ALLTRIM(cursor_4c_Unificada.Cidchaves), 20)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.IClis, ""), 10)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Codigos, ""), 10)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Bairs, ""), 40)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Ceps, ""), 9)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Compls, ""), 25)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Estas, ""), 2)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Faxs, ""), 20)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Grupos, ""), 10)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Mes, ""), 2)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Nums, ""), 10)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Rclis, ""), 50)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Tel1S, ""), 20)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Tel2S, ""), 20)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Cidas, ""), 30)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Endes, ""), 60)) + ", " + ;
+                    FormatarDataSQL(cursor_4c_Unificada.Nascs) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Profiss, ""), 20)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Sexos, ""), 1)) + ", " + ;
+                    FormatarDataSQL(cursor_4c_Unificada.Ultcomps) + ", " + ;
+                    FormatarNumeroSQL(NVL(cursor_4c_Unificada.Aptos, 0), 0) + ", " + ;
+                    FormatarNumeroSQL(NVL(cursor_4c_Unificada.Opdest, 0), 0) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Desti, ""), 50)) + ", " + ;
+                    FormatarNumeroSQL(NVL(cursor_4c_Unificada.Opini, 0), 0) + ", " + ;
+                    FormatarDataSQL(cursor_4c_Unificada.Dtncons) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Conjuges, ""), 60)) + ", " + ;
+                    FormatarDataSQL(cursor_4c_Unificada.Dtcasas) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Situas, ""), 3)) + ", " + ;
+                    FormatarDataSQL(cursor_4c_Unificada.Dataincs) + ", " + ;
+                    FormatarNumeroSQL(NVL(cursor_4c_Unificada.Opani, 0), 0) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Quebras, ""), 40)) + ", " + ;
+                    EscaparSQL(LEFT(NVL(cursor_4c_Unificada.Cpfs, ""), 20)) + ", " + ;
+                    EscaparSQL("") + ", " + EscaparSQL("") + ")"
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nResultado < 0
+                    loc_lErroInsercao = .T.
+                ENDIF
+            ENDSCAN
+
+            USE IN cursor_4c_Unificada
+
+            IF loc_lErroInsercao
+                IF loc_lSnapshotOk
+                    MsgErro("Erro ao gravar os registros unificados:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                ENDIF
+            ELSE
+                *-- Cabecalho da mala nova (equivalente ao "Insert Into
+                *-- crSigMlItn" do legado) - reusa o BO ja existente
+                THIS.this_oBusinessObject.NovoRegistro()
+                THIS.this_oBusinessObject.this_cCodigos            = loc_cCodigoNovo
+                THIS.this_oBusinessObject.this_cDescs              = loc_cNomeUnificacao
+                THIS.this_oBusinessObject.this_cUsuIns             = gc_4c_UsuarioLogado
+                THIS.this_oBusinessObject.this_dDatIns             = DATETIME()
+                THIS.this_oBusinessObject.this_nNRegis             = loc_nTotalUnificado
+                THIS.this_oBusinessObject.this_cUnificas           = loc_cUnificas
+                THIS.this_oBusinessObject.this_cNomeUnificacao      = PADR(loc_cNomeUnificacao, 20)
+                THIS.this_oBusinessObject.this_cCodigoGerado        = loc_cCodigoNovo
+                THIS.this_oBusinessObject.this_nTotalRegistrosOrigem = loc_nTotalOrigem
+                THIS.this_oBusinessObject.this_cCodigosSelecionados  = loc_cUnificas
+                THIS.this_oBusinessObject.this_nTotalMalasSelecionadas = loc_nMalasSelecionadas
+
+                IF THIS.this_oBusinessObject.Salvar()
+                    loc_cMsg = "Unifica" + CHR(231) + CHR(227) + 'o "' + loc_cNomeUnificacao + ;
+                        '" Conclu' + CHR(237) + "da!!!" + CHR(13) + ;
+                        "Foram Selecionados " + ALLTRIM(STR(loc_nTotalUnificado)) + " Registros," + CHR(13) + ;
+                        "Retirados de " + ALLTRIM(STR(loc_nMalasSelecionadas)) + " Malas Diretas," + CHR(13) + ;
+                        "Que Continham Um Total de " + ALLTRIM(STR(loc_nTotalOrigem)) + " Registros."
+                    MsgInfo(loc_cMsg, "Confirma" + CHR(231) + CHR(227) + "o")
+
+                    *-- LimparCampos zera as properties do BO e o BOParaForm
+                    *-- reflete o BO vazio no campo; CarregarLista refaz a
+                    *-- consulta com "0 AS SelImp" e desmarca a grade, como o
+                    *-- Requery(crSigMlItn) do legado.
+                    THIS.LimparCampos()
+                    THIS.CarregarLista()
+                    THIS.grd_4c_Dados.SetFocus()
+
+                    loc_lSucesso = .T.
+                ELSE
+                    IF !THIS.this_oBusinessObject.this_lErroExibido
+                        MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar a unifica" + ;
+                            CHR(231) + CHR(227) + "o.", "Erro")
+                    ENDIF
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em ProcessarUnificacao")
+        ENDTRY
+
+        *-- Encerra qualquer cursor temporario que tenha sobrevivido a um erro
+        IF USED("cursor_4c_MalasSel")
+            USE IN cursor_4c_MalasSel
+        ENDIF
+        IF USED("cursor_4c_MlCabTmp")
+            USE IN cursor_4c_MlCabTmp
+        ENDIF
+        IF USED("cursor_4c_Unificada")
+            USE IN cursor_4c_Unificada
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - Transferencia TELA -> BO, em FONTE UNICA.
+    *
+    * Nao eh convencao importada de form CRUD: o bloco EXISTE no legado, so
+    * nao tem esse nome. O cmdProcessar.Click le a tela em dois pontos -
+    * "ThisForm.cntNova.getNova.Value" (nome da unificacao) e o
+    * "Select Codigos From crSigMlItn Where (SelImp = 1)" (malas marcadas) -
+    * e o Processamento legado reusa os dois. Aqui os dois
+    * viram UMA leitura, gravada nas properties do BO, e nenhum outro metodo
+    * volta a tocar no TextBox nem a recontar a grade.
+    *
+    * PROTECTED obrigatoriamente: FormBase declara FormParaBO como PROTECTED e
+    * VFP9 nao permite ALARGAR o escopo de metodo herdado.
+    *
+    * O RECNO eh salvo e restaurado porque a grade continua ancorada no
+    * ponteiro do cursor (regra #21a) - o SCAN abaixo deixaria o ponteiro em
+    * EOF e a grade saltaria para o fim a cada clique em Processar.
+    *
+    * Retorna .T. quando a transferencia concluiu.
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+    *==========================================================================
+        LOCAL loc_lSucesso, loc_cCodigos, loc_nMalas, loc_nRec, loc_oErro
+
+        loc_lSucesso = .F.
+        loc_cCodigos = ""
+        loc_nMalas   = 0
+
+        *-- Nenhum RETURN dentro do TRY (regra #1): o veredicto sai pela flag
+        *-- loc_lSucesso e ha um RETURN unico DEPOIS do ENDTRY.
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                IF USED("cursor_4c_Dados")
+                    SELECT cursor_4c_Dados
+                    loc_nRec = RECNO()
+
+                    SCAN FOR NVL(SelImp, 0) = 1
+                        loc_cCodigos = loc_cCodigos + ALLTRIM(cursor_4c_Dados.Codigos) + "; "
+                        loc_nMalas   = loc_nMalas + 1
+                    ENDSCAN
+
+                    SELECT cursor_4c_Dados
+                    IF BETWEEN(loc_nRec, 1, RECCOUNT("cursor_4c_Dados"))
+                        GO loc_nRec
+                    ELSE
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                *-- MaxLength = 20 no SCX e SigMlItn.descs eh char(30): PADR em
+                *-- 20 preserva a largura que o campo aceita, igual ao
+                *-- Alltrim(getNova.Value) do Insert legado.
+                THIS.this_oBusinessObject.this_cNomeUnificacao = ;
+                    PADR(ALLTRIM(THIS.cnt_4c_Nova.txt_4c_Nova.Value), 20)
+
+                THIS.this_oBusinessObject.this_cCodigosSelecionados    = loc_cCodigos
+                THIS.this_oBusinessObject.this_nTotalMalasSelecionadas = loc_nMalas
+
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            loc_lSucesso = .F.
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em FormParaBO")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Transferencia BO -> TELA (sentido inverso de FormParaBO).
+    * Reflete this_cNomeUnificacao no campo "Nome da Unificacao". Usado como
+    * ponto de RECARGA em dois lugares: na criacao do campo
+    * (ConfigurarContainerNova) e no LimparCampos, que zera o BO e deixa este
+    * metodo apagar a tela - assim o valor exibido nunca divirge do BO.
+    *
+    * PROTECTED obrigatoriamente - FormBase declara BOParaForm como PROTECTED.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+    *==========================================================================
+        LOCAL loc_oErro
+
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND PEMSTATUS(THIS, "cnt_4c_Nova", 5)
+                THIS.cnt_4c_Nova.txt_4c_Nova.Value = ;
+                    ALLTRIM(NVL(THIS.this_oBusinessObject.this_cNomeUnificacao, ""))
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em BOParaForm")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos - Zera o estado de uma unificacao concluida: limpa as
+    * properties do BO (SigPrMluBO.LimparDados) e deixa o BOParaForm refletir
+    * o BO zerado no campo "Nome da Unificacao".
+    *
+    * A GRADE nao eh tocada aqui de proposito: o legado desmarca as malas
+    * refazendo a consulta ("ThisForm.poDataMgr.Requery('crSigMlItn')" sobre
+    * "Select 0 as SelImp, * From SigMlItn"), e no migrado quem reproduz isso
+    * eh CarregarLista, cujo SELECT tambem traz "0 AS SelImp". Desmarcar aqui
+    * tambem duplicaria a regra em dois lugares.
+    *
+    * PROTECTED obrigatoriamente - FormBase declara LimparCampos como PROTECTED.
     *==========================================================================
     PROTECTED PROCEDURE LimparCampos()
-        IF PEMSTATUS(THIS, "cnt_4c_Nova", 5)
-            THIS.cnt_4c_Nova.txt_4c_GetNova.Value = ""
-        ENDIF
-        IF USED("cursor_4c_Itn")
-            REPLACE ALL SelImp WITH 0 IN cursor_4c_Itn
-        ENDIF
-        IF PEMSTATUS(THIS, "grd_4c_Selecoes", 5)
-            THIS.grd_4c_Selecoes.Refresh()
-        ENDIF
+    *==========================================================================
+        LOCAL loc_oErro
+
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.this_oBusinessObject.LimparDados()
+            ENDIF
+
+            THIS.BOParaForm()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em LimparCampos")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
-    * AjustarBotoesPorModo - sem modo CRUD neste form OPERACIONAL
+    * AjustarBotoesPorModo - FUNIL UNICO do estado habilitado/desabilitado dos
+    * botoes, derivado de this_cModoAtual ("LISTA" / "PROCESSANDO").
+    *
+    * Reproduz EXATAMENTE o que o legado faz, e so isso: o cmdProcessar.Click
+    * trava e destrava o PROPRIO botao ("This.Enabled = .f." no inicio e
+    * "This.Enabled = .t." nos quatro caminhos de saida) e NAO mexe em
+    * Enabled/ReadOnly de mais nada - nem da grade, nem do campo, nem dos
+    * botoes de marcar/desmarcar. Travar mais do que isso seria divergencia
+    * visivel do legado (PILAR 1).
+    *
+    * Por que o funil existe em vez das duas atribuicoes soltas: quem
+    * DESABILITA tem de REABILITAR no caminho de volta (regra #40), e com a
+    * atribuicao espalhada pelos caminhos de saida basta um deles esquecer para
+    * o botao ficar cinza pelo resto da vida do form. Aqui o modo eh a unica
+    * fonte e BtnProcessarClick repoe "LISTA" DEPOIS do ENDTRY, cobrindo
+    * tambem o caminho de excecao.
+    *
+    * PUBLIC de proposito: o harness TesteAutomatico.prg chama
+    * oForm.AjustarBotoesPorModo() de FORA da classe (regras #3 e #51).
     *==========================================================================
     PROCEDURE AjustarBotoesPorModo()
-        *-- OPERACIONAL: habilita Processar somente se BO inicializado
+    *==========================================================================
+        LOCAL loc_lLiberado
+
+        loc_lLiberado = (UPPER(ALLTRIM(NVL(THIS.this_cModoAtual, "LISTA"))) != "PROCESSANDO")
+
         IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-            THIS.cmd_4c_Processar.Enabled = (VARTYPE(THIS.this_oBusinessObject) = "O")
+            THIS.cmd_4c_Processar.Enabled = loc_lLiberado
         ENDIF
     ENDPROC
 
     *==========================================================================
-    * BtnBuscarClick - recarrega a lista de malas diretas do servidor
+    * TornarControlesVisiveis - Torna visiveis os controles criados por
+    * AddObject (nascem com Visible=.F.), recursando em Pages e Containers.
+    * Este form nao tem container flutuante (Visible=.F. toggled por botao) -
+    * todos os objetos do SIGPRMLU.SCX sao estaticos.
     *==========================================================================
-    PROCEDURE BtnBuscarClick()
-        THIS.CarregarLista()
+    PROCEDURE TornarControlesVisiveis(par_oContainer)
+    *==========================================================================
+        LOCAL loc_nI, loc_oControle
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oControle = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oControle) != "O"
+                LOOP
+            ENDIF
+
+            IF PEMSTATUS(loc_oControle, "Visible", 5)
+                loc_oControle.Visible = .T.
+            ENDIF
+
+            IF UPPER(loc_oControle.BaseClass) = "PAGEFRAME"
+                LOCAL loc_nP
+                FOR loc_nP = 1 TO loc_oControle.PageCount
+                    THIS.TornarControlesVisiveis(loc_oControle.Pages(loc_nP))
+                ENDFOR
+            ENDIF
+
+            IF PEMSTATUS(loc_oControle, "ControlCount", 5)
+                THIS.TornarControlesVisiveis(loc_oControle)
+            ENDIF
+        ENDFOR
     ENDPROC
 
     *==========================================================================
-    * BtnSalvarClick - nao aplicavel (salvar ocorre via BtnProcessarClick)
+    * Destroy - Libera o BO e os cursores abertos pelo form
     *==========================================================================
-    PROCEDURE BtnSalvarClick()
-        RETURN .F.
-    ENDPROC
+    PROCEDURE Destroy()
+    *==========================================================================
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
 
-    *==========================================================================
-    * BtnCancelarClick - limpa selecoes e campo nome
-    *==========================================================================
-    PROCEDURE BtnCancelarClick()
-        THIS.LimparCampos()
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
+        IF USED("cursor_4c_DadosTmp")
+            USE IN cursor_4c_DadosTmp
+        ENDIF
+        IF USED("cursor_4c_MalasSel")
+            USE IN cursor_4c_MalasSel
+        ENDIF
+        IF USED("cursor_4c_MlCabTmp")
+            USE IN cursor_4c_MlCabTmp
+        ENDIF
+        IF USED("cursor_4c_Unificada")
+            USE IN cursor_4c_Unificada
+        ENDIF
+
+        DODEFAULT()
     ENDPROC
 
 ENDDEFINE

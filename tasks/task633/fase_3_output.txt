@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 is complete. Created `C:\4c\projeto\app\forms\operacionais\Formsigprite.prg` with the base structure:
+
+- **`DEFINE CLASS Formsigprite AS FormBase`** com propriedades visuais pixel-perfect do SCX legado (800x600, `DataSession=2`, `TitleBar=0`, `ControlBox=.F.`, `Movable=.F.`, `FontName="Verdana"`)
+- **`Init(par_cEmps, par_cDopes, par_nNums, par_lChecaDisps)`** ÔÇö recebe os par├ómetros do documento antes de `DODEFAULT()` disparar `InicializarForm()`
+- **`InicializarForm()`** ÔÇö instancia `sigpriteBO`, repassa os par├ómetros ao BO, monta o t├¡tulo din├ómico (`"<Emps> - <Dopes> - <Nums> - Itens"`, com guarda para modo teste/valida├º├úo de UI) e chama `ConfigurarCabecalho()`
+- **`ConfigurarCabecalho()`** ÔÇö faixa cinza do topo (`cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, nomes conforme `mapeamento.json`)
+- **`Destroy()`** ÔÇö fecha os cursores que as pr├│ximas fases criar├úo e libera o BO
+
+Como este ├® um form **OPERACIONAL** (flat, sem PageFrame no legado ÔÇö confirmado em `layout.json`/`comportamento.json`), n├úo criei PageFrame/Page1/Page2 nem containers de bot├Áes CRUD, que n├úo existem no SCX original. Grids (`grdCabec`/`grdItens`/`grdRodape`), bot├Áes (`btnSubniveis`/`btnEntrega`/`cmdsair`) e campos de descri├º├úo/imagem ficam para as Fases 4-8.
+
+Validei compilando com `vfp9.exe -T` (BO + Form) ÔÇö sem erros.

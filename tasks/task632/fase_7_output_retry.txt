@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. O ponto central: **o form j├í estava correto ÔÇö o gate estava errado.**
+
+## Diagn├│stico
+
+A Fase 7 exige os 4 nomes `BtnIncluir/Alterar/Visualizar/ExcluirClick`. O `SIGPRITB` n├úo tem CRUD nenhum: seus 4 bot├Áes s├úo Processar, Impressora, V├¡deo e Sair. O gate o classificava como CRUD porque o dump cont├®m `btnVisualizar` ÔÇö mas esse ├® o `Command2` do CommandGroup de **relat├│rio** (`Picture = relatorio_video_26.jpg`, `Caption = "\<Video"`), e seu Click ├® `Report Form SigPrIct Preview NoConsole`.
+
+Reproduzi a reprova├º├úo exata rodando o gate standalone: `semCrud=False nH=4 nB=4` ÔåÆ faltam `BtnIncluirClick, BtnAlterarClick, BtnExcluirClick`. Criar esses 3 exigiria **inventar bot├Áes** (viola o PILAR 1) ou **m├®todos vazios** (proibido pela regra de completude).
+
+Confirmei que **n├úo** era gate editado mid-run (`.ps1` de 10-14 19:10 vs. run de 10-15 17:43) ÔÇö a reprova├º├úo era real.
+
+## O que fiz
+
+**1. Um defeito real no form (regra #1):** `BtnProcessarClick` tinha `RETURN` bare dentro de `TRY`. Trocado por flag `loc_lProsseguir` **com o resto do bloco envolvido em `IF`** ÔÇö s├│ trocar o RETURN por atribui├º├úo descartaria o early-exit e abriria a confirma├º├úo de processamento com per├¡odo inv├ílido. Varredura confirma 0 ocorr├¬ncias restantes no form e no BO.
+
+**2. O gate:** adicionei `Test-VerbosCrudSaoTodosDeRelatorio`, que dispensa a evid├¬ncia de *nome* apenas quando **todo** verbo casado tem Click provado com `REPORT FORM`. Fail-closed em 5 camadas, todas testadas: dump vazio ÔåÆ `False`; sem verbo ÔåÆ `False`; verbo sem Click no dump ÔåÆ `False`; Click que n├úo ├® report ÔåÆ `False`; min├║sculo ÔåÆ `True` (o `[regex]::Matches` n├úo herda a case-insensitividade do `-match`).
+
+**Medi├º├úo nos 631 dumps:** muda exatamente **6 dumps / 2 forms** (`SigPrIct`, `SigPrItb`) ÔÇö e **zero regress├úo** nos 15 dumps CRUD conferidos (`SIGCDCOR`, `sigcdcli`, `SigCdPro`, `SIGCDCAR`, `SigCdMoe`, `SIGCDSET`, `SigCdTam`, `SigPrCtr`, `SIGCDGPD` seguem CRUD).
+
+Tamb├®m restaurei CRLF (conven├º├úo dos forms irm├úos) e atualizei o coment├írio que listava esses 2 forms como pend├¬ncia n├úo resolvida.
+
+## Verifica├º├úo
+
+- Compile VFP9 limpo com `.fxp` apagado antes: form 21.316 B, BO 10.969 B, **zero `.err`**
+- Balanceado: IF 55/55, WITH 22/22, TRY 11/11, PROC 20/20, CLASS 1/1
+- Gate standalone: **sem fix ÔåÆ reprova** (mensagem id├¬ntica ao retry); **com fix ÔåÆ passa**
+- Sem stubs/TODOs; zero bytes n├úo-ASCII (regra #4); BO sem `PROTECTED` nos m├®todos que o form chama (regra #51)
+- `.ps1` parseia sem erro, BOM UTF-8 preservado
+
+## Duas ressalvas que voc├¬ precisa saber
+
+**A corre├º├úo do gate n├úo vale para esta run.** O PowerShell j├í parseou o `.ps1` ao iniciar; o pr├│ximo retry da task632 ainda vai reprovar com a mesma mensagem, mesmo com o form correto. A dispensa passa a valer na pr├│xima invoca├º├úo do orquestrador.
+
+**A mesma corre├º├úo j├í havia sido escrita em 2026-10-07 e foi perdida** ÔÇö `git log --all -S` prova que a fun├º├úo nunca existiu no hist├│rico. Atualizei a mem├│ria para exigir `grep` no arquivo antes de confiar que o gate est├í corrigido. Vale revisar se outras corre├º├Áes de gate daquele per├¡odo tamb├®m se perderam.
+
+Deixei as 3 altera├º├Áes n├úo commitadas (`OrquestradorMigracao.ps1`, `FormSigPrItb.prg`, `SigPrItbBO.prg`) ÔÇö n├úo commito sem voc├¬ pedir, e a `main` ├® a branch atual.

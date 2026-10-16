@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 7,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGravarLog", "fConfigGeral", "File", "fwBuscaExt", "From", "fRecalculaS"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRMDC",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Select csContas\nScan\n\tlcUpdate = [Update SigCdCli ] + ;\n\t\t\t\t  [Set ContaVens = '] + csContas.ContaNov + [' ] + ;\n\t\t\t\t[Where ContaVens = '] + csContas.ContaAnt + [']\n\n\tlnErro = ThisForm.PodataMgr.SqlExecute(lcUpdate,[])\n\tIf (lnErro < 1)\n\t\tIf MessageBox([Falha ao Tentar Trocar a Conta \"] + Alltrim(csContas.ContaAnt) + [\"] + Chr(13) + ;\n\t\t\t\t\t  [Deseja Tentar Novamente?], 4+32+256, [Atenção!!!]) = 6\n\t\t\tSelect CsContas\n\t\t\tSkip -1\n\t\t\tLoop\n\t\tElse\n\t\t\tExit\n\t\tEndif\n\tEndIf\nEndScan\n\t\t\t\nIf (lnErro < 1)\n\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SqlExecute,RollBack,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csContas (ContaAnt c(10), ContaNov c(10))\nIndex On ContaAnt + ContaNov Tag Duplica\nIndex On ContaAnt Tag ContaAnt\nIndex On ContaNov Tag ContaNov\nSet Order To\nInsert Into csContas(ContaAnt, ContaNov) Values ('', '')\n\nlcArquivo = Sys(5)+Sys(2003)+'\\ArqDBF'\nIf Not File(lcArquivo+'.dbf')\n\tMessageBox('O ArqDBF não está no diretório do Sistema!!!',0+48,'')\n\tReturn\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC",
+      "evento": "Init",
+      "linhas": 31,
+      "codigoOriginal": "Lparameters pCheckCad\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Checkcadpro = pCheckCad\n\nWith ThisForm\n\t.podatamgr = CreateObject('fSqlConector')\nEndWith\n\nThisForm.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.)\n\nWith ThisForm.Grade\n\t.ColumnCount = 2\n\t.AllowHeaderSizing = .F.\n\t.AllowRowSizing = .F.\n\t.DeleteMark = .F.\n\t.HeaderHeight = 18\n\t.RecordSource = \"csContas\"\n\t.RowHeight = 18\n\t.ScrollBars = 2\n\t.TabIndex =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not ThisForm.Checkcadpro\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Iclis', This.Value, 'Seleção', 1000)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Iclis', '', 'Código')\n\t\t\tloLista.mAddColuna('Rclis', '', 'Descrição')\n\t\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\t\tloLista.gridProc.SetAll('DynamicForeColor', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'Iclis', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Iclis', '', 'Código')\n\t\tloLista.mAddColuna('Rclis', '', 'Descrição')\n\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rg... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.Chk_DelCT",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.chkReps.Value = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkReps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.btnIncluir",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select csContas\nIf !Empty(csContas.ContaAnt) .And. !Empty(csContas.ContaNov)\n\tAppend Blank\nEndif\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.btnExcluir",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select csContas\nDelete\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.Exporta",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "gcFileExcel = GetFile('XLS')\n\nIf Empty(gcFileExcel)\n\tMessageBox('Arquivo para Importação não informado!!!',0+16,'')\n\tReturn .f.\nEndif\n\nCreate Cursor CrImporta (ContaAnt c(10), ContaNov c(10))\nIndex On ContaAnt Tag Contas\n\nIf Not Empty(gcFileExcel) And Not File(gcFileExcel)\n\t=MessageBox('O Arquivo [' + Alltrim(gcFileExcel) + ']' + Chr(13) + ;\n\t\t\t\t'Não Foi Encontrado ou o Acesso Foi Negado!!! Verifique!!!', 0+48, '')\n\tReturn 0\nEndIf\n\nSelect CrImporta\nAppend From (gcfileexcel) type xls\n\nSelect CrIm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.btnProcessar",
+      "evento": "Click",
+      "linhas": 216,
+      "codigoOriginal": "Local llFecha, lnCnt, lcArq, lcCpo, lnNumero\n\nSelect csContas\nGo Top\nIf Eof()\n   Messagebox('Não Existem Contas a Serem Processadas!!!', 0+48,'Atenção!!!')\n   ThisForm.Grade.Column1.Text1.SetFocus\n   Return\nEndif\n\nSelect csContas\nScan\n\tIf Empty(csContas.ContaAnt)\n\t   Messagebox('Existe Uma Conta Antiga Inválida!!!', 0+48,'Atenção!!!')\n\t   ThisForm.Grade.Column1.Text1.SetFocus\n\t   Return\t\t\n\tEndif\n\n\tIf Empty(csContas.ContaNov)\n\t   Messagebox('Existe Uma Conta Nova Inválida!!!', 0+48,'Atenção!!!')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "TrocarReps,SqlExecute,CursorQuery",
+        "controlesReferenciados": "chkReps,Chk_DelCT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.btnSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDC.chkReps",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If (This.Value = 1)\n\tThisForm.chk_DelCT.Value = 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk_DelCT",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRMDC.Procedure",
+      "queryOriginal": "\tlcUpdate = [Update SigCdCli ] + ; \t\t\t\t  [Set ContaVens = '] + csContas.ContaNov + [' ] + ; \t\t\t\t[Where ContaVens = '] + csContas.ContaAnt + [']",
+      "tabelas": "SigCdCli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMDC.Procedure",
+      "queryOriginal": "Insert Into csContas(ContaAnt, ContaNov) Values ('', '')",
+      "tabelas": "csContas",
+      "colunas": "ContaAnt,ContaNov",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli", "csContas"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

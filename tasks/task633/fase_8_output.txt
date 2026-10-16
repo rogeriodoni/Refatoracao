@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Here's what I did and verified.
+
+## What changed
+
+**`projeto/app/forms/operacionais/Formsigprite.prg`** ÔÇö added the five consolidation hooks, all with real code transcribed from the legacy dump (no stubs):
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarLista()` **PUBLIC** | fim do `Init`: `.SelecionaDados` + `.grdItens.Refresh`/`.grdRodape.Refresh` |
+| `FormParaBO()` *PROTECTED* | `Select crGrade` do `AfterRowColChange` ÔÇö a linha corrente vira o item do BO |
+| `BOParaForm()` *PROTECTED* | corpo do `AfterRowColChange`: `CursorQuery` de `FigJpgs` + `Strconv`/`StrToFile` + os 3 `Refresh` |
+| `LimparCampos()` *PROTECTED* | abertura do `AfterRowColChange`: `FigJpg.Visible = .f.` / `Picture = ''` |
+| `Activate()` | `.grdItens.Column1.Setfocus` do fim do `Init` (no `Init` o controle ainda n├úo existe) |
+
+`GrdItensAfterRowColChange` foi decomposto nesses hooks (mesma ordem, mesmo comportamento), e `InicializarForm` passou a chamar `CarregarLista()`. Isso tamb├®m corrigiu um defeito real: `sigpriteBO.CarregarDoCursor()` nunca era chamado ÔÇö as properties de item do BO eram c├│digo morto.
+
+## Verificado medindo, n├úo por inspe├º├úo
+
+- **Compila limpo** (form e BO, `.fxp` apagado antes e recriado).
+- **Probe instanciando o form** (`automation/ProbeSigPrIteF8.prg`, log em `automation/logs/probe_sigprite_f8.txt`): `FormParaBO` acompanha a sele├º├úo (PRD0001 ÔåÆ PRD0002), restaura o alias corrente, `LimparCampos` apaga a foto, `BOParaForm` ├® seguro com `Imagems` 0 e 1 sem conex├úo, `AfterRowColChange` encadeia os tr├¬s e devolve `LockScreen = .F.`, `Activate` segura o `SetFocus` com o form n├úo desenhado, e `CarregarLista` sem SQL devolve `.F.` **reportando o erro** (n├úo silencioso).
+- **Gate da Fase 8**: conferi os predicados fora do orquestrador ÔÇö `semCrudLegadoF8`, `legadoSemSalvar`, `Test-LegadoSomenteLeitura` e `Test-AcaoDoLegadoTemHandler` todos `True`, ent├úo o ramo *visualizador* dispensa `BtnCancelarClick` (o ├║nico dos quatro nomes ausente) e o bot├úo de a├º├úo ├® validado por `BtnSubniveisClick`/`BtnEntregaClick`.
+
+## Duas coisas que deixei de fora, de prop├│sito
+
+1. **`HabilitarCampos`, `AjustarBotoesPorModo`, bot├úo de gravar e bot├úo de cancelar edi├º├úo** ÔÇö o dump prova que o legado n├úo grava nada (s├│ `SqlExecute` de leitura e `Insert Into` cursor local) e que todo campo ├® somente-leitura (grades com `ReadOnly = .T.`, os dois `Get_*` com `When ÔåÆ .f.`). Cri├í-los violaria o PILAR 1; cri├í-los vazios violaria a regra de completude. Est├í documentado no cabe├ºalho do arquivo.
+2. **Entrada no `menu.prg`** ÔÇö o form exige `Emps`/`Dopes`/`Nums` de quem o abre; pelo menu abriria com a grade vazia. ├ë a mesma decis├úo j├í tomada para os irm├úos `FormSigMvSbn` e `FormSigPrCar`, que tamb├®m n├úo t├¬m entrada. O `config.prg` j├í carrega o arquivo automaticamente pelo `ADIR` de `forms/operacionais/`.
+
+Descoberta que vale registrar: `FormParaBO`/`BOParaForm`/`LimparCampos` s├úo **PROTECTED por heran├ºa** (`FormBase.prg` as declara assim) ÔÇö omitir o modificador n├úo as torna p├║blicas. Marquei as tr├¬s explicitamente como `PROTECTED` para o leitor n├úo se enganar; s├│ `CarregarLista` ├® p├║blica, que ├® a que o harness chama de fora.

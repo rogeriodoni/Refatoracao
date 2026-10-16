@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+That's a minor detail ÔÇö not worth chasing further. The important finding stands.
+
+**Esta N├âO ├® uma corre├º├úo de c├│digo.** O log mostra o erro exato j├í documentado 100+ vezes na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): a falha ocorre na `[ETAPA 1B] Conectando ao banco de dados`, **antes** de qualquer `CREATEOBJECT("FormSigPrMlu")` ou `CREATEOBJECT("SigPrMluBO")` ser sequer alcan├ºado. O pre-flight `SQLSTRINGCONNECT` falha com erro 1526 (DBNETLIB) porque a m├íquina do pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server.
+
+Confirmei de novo agora:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+PingSucceeded    : False
+SourceAddress    : 192.168.199.115
+```
+Mesmo resultado de sempre ÔÇö sem rota, n├úo "porta recusada".
+
+Reli `FormSigPrMlu.prg` e `SigPrMluBO.prg` integralmente (cabe├ºalho, grid com checkbox, 3 CommandGroups, valida├º├úo, `ProcessarUnificacao` com dedup, `Inserir`/`Atualizar`/`LimparDados`) e n├úo encontrei nenhum defeito real ÔÇö consistente com as 6 tentativas anteriores desta mesma task638, que j├í inclu├¡ram uma recontagem 1-a-1 de colunas ├ù valores do `INSERT INTO SigMlItn` (88/88, sem diverg├¬ncia).
+
+Seguindo a li├º├úo j├í registrada (e repetida por essa mem├│ria para n├úo queimar tentativas as ciegas): **n├úo editei nada** nos arquivos. Registrei esta 7┬¬ reincid├¬ncia na mem├│ria do projeto.
+
+**Recomenda├º├úo**: a task638 deveria ser marcada como bloqueada/pausada at├® algu├®m com acesso ├á infraestrutura liberar a rota para `192.168.200.0/24` ÔÇö reexecutar `runtime_fix` sobre este mesmo form s├│ vai repetir o mesmo resultado (restam 3 das 10 tentativas antes de esgotar o or├ºamento por um bloqueio puramente de rede).

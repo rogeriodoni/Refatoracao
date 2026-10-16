@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo ├® um bug de c├│digo. O log mostra a falha **antes** de qualquer `CREATEOBJECT("FormSIGPRINT"/"SIGPRINTBO")`:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL: Codigo: 1526 - DBNETLIB SQL Server inexistente ou acesso negado
+```
+
+Isso ├® o pr├®-flight de conex├úo (`SQLSTRINGCONNECT`) falhando porque a m├íquina do pipeline n├úo tem rota para `192.168.200.0/24` ÔÇö confirmei agora com `Test-NetConnection 192.168.200.10 -Port 1433`, que voltou `TcpTestSucceeded=False` / `PingSucceeded=False`, igual ├ás dezenas de reincid├¬ncias j├í registradas em mem├│ria (task623, task627, task629, task630, e agora task631) desde 2026-08-02.
+
+Revisei o `FormSIGPRINT.prg` e o `SIGPRINTBO.prg` e n├úo encontrei nenhum problema real de c├│digo (estrutura CRUD com PageFrame, grid de lista, lookup de c├│digo duplicado ÔÇö tudo consistente com os padr├Áes do projeto). Por isso **n├úo editei os arquivos**: regravar `.prg` que j├í est├í correto, s├│ para "satisfazer" essa tentativa de runtime_fix, arriscaria introduzir regress├úo sem nenhuma chance de resolver o sintoma, j├í que o erro ocorre antes do form/BO sequer rodarem.
+
+Recomendo marcar essa task como bloqueada por infraestrutura (falta de rota de rede at├® o SQL Server) em vez de reexecutar o runtime_fix sobre o mesmo form ÔÇö reexecutar s├│ vai repetir o mesmo erro 1526 at├® algu├®m com acesso ├á rede liberar a rota.

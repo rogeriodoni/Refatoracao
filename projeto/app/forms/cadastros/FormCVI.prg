@@ -1386,17 +1386,20 @@ DEFINE CLASS FormCVI AS FormBase
             RETURN
         ENDIF
 
-        IF !THIS.this_oBusinessObject.ValidarDados()
-            RETURN
-        ENDIF
-
+        *-- FormParaBO e ValidarDados DENTRO do TRY: fora dele um erro de runtime
+        *   sobe como "Program Error" CRU do VFP, sem o dialogo do projeto (Erro226).
         TRY
+            *-- FormParaBO ANTES de validar: ValidarDados le as PROPERTIES do BO,
+            *   que so sao preenchidas aqui. Invertido, o INCLUIR acusava
+            *   "Obrigatorio Informar o Usuario!!!" com o campo preenchido (Erro225).
             IF THIS.FormParaBO()
-                IF THIS.this_oBusinessObject.Salvar()
-                    MsgInfo("Registro salvo com sucesso!")
-                    THIS.this_cModoAtual = "LISTA"
-                    THIS.AlternarPagina(1)
-                    loc_lResultado = .T.
+                IF THIS.this_oBusinessObject.ValidarDados()
+                    IF THIS.this_oBusinessObject.Salvar()
+                        MsgInfo("Registro salvo com sucesso!")
+                        THIS.this_cModoAtual = "LISTA"
+                        THIS.AlternarPagina(1)
+                        loc_lResultado = .T.
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1575,9 +1578,14 @@ DEFINE CLASS FormCVI AS FormBase
             THIS.this_oBusinessObject.this_cIndivs  = UPPER(ALLTRIM(loc_oPg2.txt_4c_Indivs.Value))
             THIS.this_oBusinessObject.this_cSetors  = ALLTRIM(loc_oPg2.txt_4c_Setors.Value)
             THIS.this_oBusinessObject.this_cSupervs = ALLTRIM(loc_oPg2.txt_4c_Supervs.Value)
-            THIS.this_oBusinessObject.this_nAdics   = loc_oPg2.txt_4c_Adics.Value
-            THIS.this_oBusinessObject.this_nMinimos = loc_oPg2.txt_4c_Minimos.Value
-            THIS.this_oBusinessObject.this_nMinExps = loc_oPg2.txt_4c_MinExps.Value
+            *-- Os TextBox nascem com .Value = "" (CARACTERE); no legado eles tinham
+            *   ControlSource na coluna numeric e o Value ja vinha numerico.
+            *   Sem converter, this_nAdics/nMinimos/nMinExps viram CHARACTER e o
+            *   "THIS.this_nMinimos = 0" do ValidarDados estoura com
+            *   "Operator/operand type mismatch" (Erro226).
+            THIS.this_oBusinessObject.this_nAdics   = ConverterParaNumero(loc_oPg2.txt_4c_Adics.Value)
+            THIS.this_oBusinessObject.this_nMinimos = ConverterParaNumero(loc_oPg2.txt_4c_Minimos.Value)
+            THIS.this_oBusinessObject.this_nMinExps = ConverterParaNumero(loc_oPg2.txt_4c_MinExps.Value)
 
             loc_lResultado = .T.
         CATCH TO loc_oErro
@@ -1754,9 +1762,10 @@ DEFINE CLASS FormCVI AS FormBase
     * AbrirLookupUsuars - Lookup em SigCdUsu (Usuarios / Nome Completo)
     *--------------------------------------------------------------------------
     PROCEDURE AbrirLookupUsuars()
-        LOCAL loc_oPg2, loc_lReadOnly, loc_oBusca, loc_oErro
+        LOCAL loc_oPg2, loc_lReadOnly, loc_oBusca, loc_oErro, loc_cCodigo
         loc_oBusca   = .NULL.
         loc_lReadOnly = .F.
+        loc_cCodigo  = ""
 
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF VARTYPE(loc_oPg2.txt_4c_Usuars) = "O"
@@ -1772,18 +1781,28 @@ DEFINE CLASS FormCVI AS FormBase
                 loc_oPg2.txt_4c_Usuars.Value, ;
                 "Usu" + CHR(225) + "rios")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Usuarios", "XXXXXXXXXX", "Usu" + CHR(225) + "rio")
-                loc_oBusca.mAddColuna("NComps",   "X(40)",     "Nome Completo")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou
-                    loc_oPg2.txt_4c_Usuars.Value = ALLTRIM(loc_oBusca.this_cValorSelecionado)
-                    THIS.PreencherUltimoPeriodoUsuario(ALLTRIM(loc_oBusca.this_cValorSelecionado))
+                *-- Legado: If Not loLista.plAchouRegistro -> so abre o picker
+                *   quando o Init NAO resolveu o codigo sozinho (match exato)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Usuarios", "XXXXXXXXXX", "Usu" + CHR(225) + "rio")
+                    loc_oBusca.mAddColuna("NComps",   "X(40)",     "Nome Completo")
+                    loc_oBusca.Show()
+                ENDIF
+                *-- Legado: This.Value = crListaRemota.Usuarios (le do CURSOR)
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUsu")
+                    SELECT cursor_4c_BuscaUsu
+                    loc_cCodigo = ALLTRIM(cursor_4c_BuscaUsu.Usuarios)
+                    loc_oPg2.txt_4c_Usuars.Value = loc_cCodigo
                 ENDIF
                 IF USED("cursor_4c_BuscaUsu")
                     USE IN cursor_4c_BuscaUsu
                 ENDIF
                 loc_oBusca.Release()
                 loc_oBusca = .NULL.
+                *-- Legado: o bloco do periodo roda DEPOIS do Use In crListaRemota
+                IF !EMPTY(loc_cCodigo)
+                    THIS.PreencherUltimoPeriodoUsuario(loc_cCodigo)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao abrir lookup de Usu" + CHR(225) + "rio:" + ;
@@ -1892,11 +1911,17 @@ DEFINE CLASS FormCVI AS FormBase
                 loc_oPg2.txt_4c_Setors.Value, ;
                 "Setores")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Setores", "XXXXXXXXXX", "Setor")
-                loc_oBusca.mAddColuna("Descrs",  "X(40)",     "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou
-                    loc_oPg2.txt_4c_Setors.Value = ALLTRIM(loc_oBusca.this_cValorSelecionado)
+                *-- Legado: If Not loLista.plAchouRegistro -> so abre o picker
+                *   quando o Init NAO resolveu o codigo sozinho (match exato)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Setores", "XXXXXXXXXX", "Setor")
+                    loc_oBusca.mAddColuna("Descrs",  "X(40)",     "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+                *-- Legado: This.Value = crListaRemota.Setores (le do CURSOR)
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSet")
+                    SELECT cursor_4c_BuscaSet
+                    loc_oPg2.txt_4c_Setors.Value = ALLTRIM(cursor_4c_BuscaSet.Setores)
                 ENDIF
                 IF USED("cursor_4c_BuscaSet")
                     USE IN cursor_4c_BuscaSet
@@ -1979,8 +2004,10 @@ DEFINE CLASS FormCVI AS FormBase
                     loc_oBusca.mAddColuna("Usuars", "XXXXXXXXXX", "Usu" + CHR(225) + "rio")
                     loc_oBusca.mAddColuna("NComps", "X(40)",     "Nome Completo")
                     loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou
-                        loc_oPg2.txt_4c_Supervs.Value = ALLTRIM(loc_oBusca.this_cValorSelecionado)
+                    *-- Legado (fwBuscaSel 'LocalSupervs','Usuars'): le do CURSOR
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSup")
+                        SELECT cursor_4c_BuscaSup
+                        loc_oPg2.txt_4c_Supervs.Value = ALLTRIM(cursor_4c_BuscaSup.Usuars)
                     ENDIF
                     IF USED("cursor_4c_BuscaSup")
                         USE IN cursor_4c_BuscaSup

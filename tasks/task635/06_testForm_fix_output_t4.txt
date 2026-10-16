@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo ÔÇö ├® bloqueio de infraestrutura
+
+O erro reportado na etapa `06_testForm` ├®:
+
+```
+Codigo: 1526
+Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ocorre na **ETAPA 1B** (pre-flight `SQLSTRINGCONNECT`), antes de qualquer `CREATEOBJECT("FormSigPrMdc")`/`CREATEOBJECT("SigPrMdcBO")` ser logado. Ou seja: **o c├│digo do form/BO nunca ├® alcan├ºado** ÔÇö nenhuma edi├º├úo de `.prg` pode corrigir isso.
+
+Confirmei com `Test-NetConnection 192.168.200.10 -Port 1433`: `TcpTestSucceeded=False`, `PingSucceeded=False`, origem `192.168.199.115`. A m├íquina do pipeline est├í na sub-rede 199.x e n├úo tem rota para a 200.x, onde vive o SQL Server `DB_MBAHIA`. Esse ├® um problema recorrente e j├í documentado (100+ tasks desde 2026-08-02, incluindo as 4 tasks imediatamente anteriores a esta: task632, task633, task634, e agora task635 pela 4┬¬ tentativa consecutiva).
+
+`FormSigPrMdc.prg` e `SigPrMdcBO.prg` foram revisados e **deixados intactos** ÔÇö n├úo h├í achado de c├│digo relacionado a este erro, e edit├í-los "para satisfazer a tarefa" seria o anti-padr├úo que arriscaria introduzir regress├úo em c├│digo que j├í est├í correto.
+
+**Recomenda├º├úo**: marcar a task635 como bloqueada por infraestrutura (sem rota de rede para 192.168.200.0/24) e n├úo reexecutar `runtime_fix` sobre este mesmo form at├® que algu├®m com acesso ├á rede/infra libere a rota ÔÇö reexecutar vai repetir exatamente o mesmo resultado.

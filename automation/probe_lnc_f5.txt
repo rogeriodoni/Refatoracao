@@ -1,0 +1,25 @@
+CP1 inicio
+CP2 config ok
+CP3 procedures ok
+CP4 CREATEOBJECT VARTYPE=O
+CP5 Page2 ControlCount=11
+txt_4c_Grupo: Format=[K] MaxLength=10 TabIndex=2 Top=156 Left=300 Width=80 Visible=.T.
+txt_4c_Desc_Gru: Format=[K] MaxLength=40 TabIndex=3 Top=156 Left=382 Width=360 Visible=.T.
+txt_4c_Contas: Format=[K] MaxLength=10 TabIndex=5 Top=181 Left=300 Width=80 Visible=.T.
+txt_4c_Desc_Con: Format=[K] MaxLength=50 TabIndex=6 Top=181 Left=382 Width=360 Visible=.T.
+lbl_4c_Label2: Caption=[Grupo : ] Alignment=0 TabIndex=1 Top=159 ForeColor=5921370
+lbl_4c_Label3: Caption=[Conta : ] Alignment=0 TabIndex=4
+cnt_4c_BotoesAcao: Top=33 Left=844 Width=160 TabIndex=11
+cmd_4c_Salvar.Caption=[Salvar] cmd_4c_Cancelar.Caption=[Cancelar]
+cnt_4c_Cabecalho: Top=29 Height=80 BackColor=6579300 TituloCaption=[Cadastro de Lançamentos]
+AEVENTS txt_4c_Grupo n=3
+   evento=[LOSTFOCUS] -> metodo=[VALIDARGRUPOLOSTFOCUS]
+   evento=[KEYPRESS] -> metodo=[GRUPOKEYPRESS]
+   evento=[DBLCLICK] -> metodo=[GRUPODBLCLICK]
+AEVENTS txt_4c_Contas n=3
+   evento=[LOSTFOCUS] -> metodo=[VALIDARCONTALOSTFOCUS]
+   evento=[KEYPRESS] -> metodo=[CONTAKEYPRESS]
+   evento=[DBLCLICK] -> metodo=[CONTADBLCLICK]
+this_lEmLookup=.F.
+CP6 Release ok
+CP7 fim

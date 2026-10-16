@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All patterns confirmed as valid and idiomatic in this codebase. The implementation is complete and consistent.
+
+## Summary
+
+Phase 2/8 added the real "CRUD-equivalent" methods to `sigpriteBO.prg`, adapted for the fact that SIGPRITE is a **read-only document-items viewer** (confirmed by reading the full legacy source ÔÇö no INSERT/UPDATE/DELETE against SQL Server anywhere, only `SqlExecute` SELECTs and local cursor manipulation):
+
+- **`InicializarCursores()`** ÔÇö creates `cursor_4c_Grade`/`cursor_4c_Rodape` (equivalent to legacy `Load`'s `Create Cursor crGrade/crRodape`)
+- **`MontarChaveEmpDopNum()`** ÔÇö builds the positional 29-char key with explicit `PADR` (per CLAUDE.md rule #42, to avoid the silent zero-rows bug)
+- **`ObterChavePrimaria()`** ÔÇö delegates to the key builder
+- **`CarregarDoCursor()`** ÔÇö maps the current grid row into `this_*` properties
+- **`CarregarFlagImagem()`** ÔÇö loads `SigCdOpe.Imagems`
+- **`CarregarItens()`** ÔÇö the SQL join + local GROUP BY totals (equivalent to legacy `SelecionaDados`)
+- **`CarregarImagemProduto()`** ÔÇö fetches product image data (decode stays in the Form, per project convention)
+- **`Inserir()`/`Atualizar()`** ÔÇö overridden as `PROTECTED` stubs with an explicit "tela de consulta" message, mirroring the established sibling pattern in `SigMvSbnBO.prg`, instead of inventing fake SQL writes that would violate PILAR 2
+
+I verified every non-trivial pattern (parenthesized cursor names in `CREATE CURSOR`/`INSERT INTO`/`GO TOP IN`, the read-only-BO override convention, image handling split between BO/Form) against existing files already in `projeto\app\classes\` to ensure consistency. No VFP9 compiler is available on this machine to compile-check, so this was verified by careful manual review and cross-referencing against proven idioms already in the codebase.

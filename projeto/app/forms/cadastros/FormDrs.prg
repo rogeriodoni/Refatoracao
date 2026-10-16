@@ -29,19 +29,108 @@ DEFINE CLASS FormDrs AS FormBase
     this_nCodAtual       = 0
     this_lMontouObjetos  = .F.
     this_nNroControles   = 0
+    this_lSemTits        = .F.   && .T. = sem tipo escolhido; o chamador NAO deve exibir o form
 
     *-- Array de controles dinamicos (nomeCtrl, obrigatorio, nomeCampo)
     DIMENSION laControles[1, 3]
 
     *===========================================================================
     * Init - Recebe par_cTits antes de delegar ao FormBase
+    *
+    * O form eh GENERICO: no legado o Init recebe pPrg obrigatoriamente
+    * (ThisForm.Tits = Padr(pPrg,20)) e TUDO depende dele - os campos vem de
+    * SigSyCit Where Tits = <tipo> e os registros de SigSyCrs Where Tits = <tipo>.
+    * Chamado sem o parametro, Tits fica vazio, as consultas filtram por '' e a
+    * tela abre sem campos e sem linhas (Erro228). Como o menu do sistema novo
+    * nao tem como saber o tipo, aqui ele eh ESCOLHIDO pelo usuario.
     *===========================================================================
     PROCEDURE Init(par_cTits)
         IF VARTYPE(par_cTits) = "C"
             THIS.this_cTits = PADR(ALLTRIM(par_cTits), 20)
         ENDIF
+
+        IF EMPTY(ALLTRIM(THIS.this_cTits))
+            IF !THIS.SelecionarTits()
+                *-- Sem tipo nao ha o que montar: avisa o chamador e nao segue
+                THIS.this_lSemTits = .T.
+                RETURN .T.
+            ENDIF
+        ENDIF
+
         RETURN DODEFAULT()
     ENDPROC
+
+    *===========================================================================
+    * SelecionarTits - Escolhe o tipo de ficha tecnica (SigSyCit.Tits)
+    * Retorna .T. se o usuario escolheu um tipo.
+    *===========================================================================
+    PROTECTED FUNCTION SelecionarTits()
+        LOCAL loc_cSQL, loc_nRet, loc_oBusca, loc_lEscolheu
+        loc_lEscolheu = .F.
+        loc_oBusca    = .NULL.
+
+        TRY
+            IF USED("cursor_4c_BuscaTits")
+                USE IN cursor_4c_BuscaTits
+            ENDIF
+
+            *-- 2 colunas: o ConfigurarGrid do FormBuscaAuxiliar da 80px a
+            *-- primeira e divide o restante entre as demais; com uma coluna so
+            *-- a grade ficaria com 80px usados e o resto vazio.
+            loc_cSQL = "SELECT RTRIM(Tits) AS Tits, COUNT(*) AS Campos FROM SigSyCit" + ;
+                       " WHERE RTRIM(Tits) <> '' GROUP BY RTRIM(Tits) ORDER BY 1"
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaTits")
+
+            DO CASE
+                CASE loc_nRet < 0 OR !USED("cursor_4c_BuscaTits")
+                    MsgErro("Erro ao listar os tipos de ficha t" + CHR(233) + "cnica:" + ;
+                        CHR(13) + CapturarErroSQL(), "Fichas T" + CHR(233) + "cnicas")
+
+                CASE RECCOUNT("cursor_4c_BuscaTits") = 0
+                    MsgAviso("Nenhum tipo de ficha t" + CHR(233) + "cnica cadastrado " + ;
+                        "em SigSyCit.", "Fichas T" + CHR(233) + "cnicas")
+
+                CASE RECCOUNT("cursor_4c_BuscaTits") = 1
+                    *-- Tipo unico: nao faz sentido perguntar
+                    SELECT cursor_4c_BuscaTits
+                    GO TOP
+                    THIS.this_cTits = PADR(ALLTRIM(cursor_4c_BuscaTits.Tits), 20)
+                    loc_lEscolheu   = .T.
+
+                OTHERWISE
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaTits"
+                        loc_oBusca.mAddColuna("Tits",   "X(20)", "Ficha T" + CHR(233) + "cnica")
+                        loc_oBusca.mAddColuna("Campos", "9999",  "Campos")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaTits")
+                            SELECT cursor_4c_BuscaTits
+                            THIS.this_cTits = PADR(ALLTRIM(cursor_4c_BuscaTits.Tits), 20)
+                            loc_lEscolheu   = .T.
+                        ENDIF
+                        loc_oBusca.Release()
+                        loc_oBusca = .NULL.
+                    ENDIF
+            ENDCASE
+
+            IF USED("cursor_4c_BuscaTits")
+                USE IN cursor_4c_BuscaTits
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao selecionar o tipo de ficha t" + CHR(233) + "cnica:" + ;
+                CHR(13) + loc_oErro.Message, "Fichas T" + CHR(233) + "cnicas")
+            IF USED("cursor_4c_BuscaTits")
+                USE IN cursor_4c_BuscaTits
+            ENDIF
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.Release()
+                loc_oBusca = .NULL.
+            ENDIF
+        ENDTRY
+
+        RETURN loc_lEscolheu
+    ENDFUNC
 
     *===========================================================================
     * InicializarForm - Chamado por FormBase.Init via DODEFAULT
@@ -209,6 +298,33 @@ DEFINE CLASS FormDrs AS FormBase
             .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+
+        *-- Botao Visualizar (Left=80) - legado: grupo_op.consultar, Top=5 Left=80.
+        *-- A migracao perdeu este botao e deixou o vao de 75px entre Incluir e
+        *-- Alterar; o modo CONSULTAR tinha sido enfiado no botao Buscar (Erro228).
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
+            .Caption         = "Visualizar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 80
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
 
         loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
         WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
@@ -612,11 +728,15 @@ DEFINE CLASS FormDrs AS FormBase
 
         *-- Container para campos dinamicos de SigSyCit + campos fixos de header
         *-- Original Shape1: Top=167, Height=309, Left=65, Width=670 -> compensado Top=196
+        *-- Equivale ao poWindowCad do legado (criarform):
+        *--   Left = Pagina.Left + 10 | Width = Pagina.Width - 40
+        *-- O migrado tinha Left=65 com Width=THIS.Width (1007), ou seja 65..1072:
+        *-- 65px alem da borda do form, e a Page RECORTAVA o excedente (Erro228).
         loc_oPagina.AddObject("cnt_4c_Campos", "Container")
         WITH loc_oPagina.cnt_4c_Campos
             .Top         = 196
-            .Left        = 65
-            .Width       = THIS.Width
+            .Left        = 10
+            .Width       = THIS.Width - 40
             .Height      = 420
             .BackStyle   = 1
             .BackColor   = RGB(255, 255, 255)
@@ -1450,9 +1570,10 @@ DEFINE CLASS FormDrs AS FormBase
     ENDPROC
 
     *===========================================================================
-    * BtnBuscarClick - Exibe registro selecionado em modo leitura (CONSULTAR)
+    * BtnVisualizarClick - Exibe registro selecionado em modo leitura
+    * Legado: grupo_op.consultar -> pcEscolha = 'CONSULTAR' (campos ReadOnly)
     *===========================================================================
-    PROCEDURE BtnBuscarClick()
+    PROCEDURE BtnVisualizarClick()
         LOCAL loc_nCods, loc_lProsseguir
         loc_lProsseguir = .T.
         TRY
@@ -1472,8 +1593,60 @@ DEFINE CLASS FormDrs AS FormBase
                 THIS.pgf_4c_Paginas.ActivePage = 2
             ENDIF
         CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormDrs.BtnVisualizarClick")
+        ENDTRY
+    ENDPROC
+
+    *===========================================================================
+    * BtnBuscarClick - Localiza um registro pelo codigo (modo PROCURAR)
+    * Legado: grupo_op.procurar -> pcEscolha = 'PROCURAR'; o unico modo em que
+    * getCods fica Enabled (grupo_op.Click) e msv_procurar faz o Locate.
+    *===========================================================================
+    PROCEDURE BtnBuscarClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
+        TRY
+            IF !USED("crSigSyCrs")
+                MsgAviso("Nenhum registro dispon" + CHR(237) + "vel.", ;
+                    "Fichas T" + CHR(233) + "cnicas")
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_lNovoRegistro = .F.
+                THIS.MontarObjetos("PROCURAR")
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value   = 0
+                *-- legado: loDad.getCods.Enabled = .t. SOMENTE em PROCURAR
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Enabled = .T.
+                THIS.pgf_4c_Paginas.ActivePage = 2
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormDrs.BtnBuscarClick")
         ENDTRY
+    ENDPROC
+
+    *===========================================================================
+    * ExecutarProcurar - msv_procurar do legado: Locate For Cods = getCods.Value
+    *===========================================================================
+    PROTECTED PROCEDURE ExecutarProcurar()
+        LOCAL loc_nCods
+        loc_nCods = THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value
+
+        IF USED("crSigSyCrs")
+            SELECT crSigSyCrs
+            LOCATE FOR crSigSyCrs.Cods = loc_nCods
+            IF !FOUND()
+                MsgAviso("Registro n" + CHR(227) + "o encontrado.", ;
+                    "Fichas T" + CHR(233) + "cnicas")
+            ENDIF
+        ENDIF
+
+        *-- legado: getCods volta desabilitado ao sair do modo PROCURAR
+        THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Enabled = .F.
+        THIS.DesmontarObjetos()
+        THIS.pgf_4c_Paginas.ActivePage = 1
+        THIS.this_cModoAtual = "LISTA"
     ENDPROC
 
     *===========================================================================
@@ -1485,7 +1658,13 @@ DEFINE CLASS FormDrs AS FormBase
         LOCAL loc_cEDN, loc_nResult
         loc_lProsseguir = .T.
         TRY
-            IF !INLIST(THIS.this_cModoAtual, "INSERIR", "ALTERAR")
+            *-- legado: no modo PROCURAR o Confirmar executa msv_procurar
+            IF THIS.this_cModoAtual = "PROCURAR"
+                THIS.ExecutarProcurar()
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir AND !INLIST(THIS.this_cModoAtual, "INSERIR", "ALTERAR")
                 THIS.BtnCancelarClick()
                 loc_lProsseguir = .F.
             ENDIF

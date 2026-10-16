@@ -1117,15 +1117,19 @@ DEFINE CLASS Formsigrecmc AS FormBase
         LOCAL loc_oPg
         loc_oPg = THIS.pgf_4c_Paginas.Page1
 
+        *-- Painel OPACO: com BackStyle = 0 o texto flutuava direto sobre a textura
+        *-- da Page (fundo_cad_*.jpg) e saia ilegivel. Padrao canonico: FormSIGRECND.
         loc_oPg.AddObject("cnt_4c_Mensagem", "Container")
         WITH loc_oPg.cnt_4c_Mensagem
-            .Top         = 150
-            .Left        = 175
-            .Width       = 473
-            .Height      = 56
-            .BackStyle   = 0
-            .BorderWidth = 0
-            .Visible     = .F.
+            .Top           = 150
+            .Left          = 175
+            .Width         = 473
+            .Height        = 56
+            .BackStyle     = 1
+            .BackColor     = RGB(255, 255, 224)
+            .BorderWidth   = 1
+            .SpecialEffect = 0
+            .Visible       = .F.
         ENDWITH
 
         loc_oPg.cnt_4c_Mensagem.AddObject("lbl_4c_LblMensagem", "Label")
@@ -1136,9 +1140,9 @@ DEFINE CLASS Formsigrecmc AS FormBase
             .Height    = 22
             .Caption   = "Aguarde!!!"
             .FontName  = "Tahoma"
-            .FontSize  = 14
+            .FontSize  = 12
             .FontBold  = .T.
-            .ForeColor = RGB(0, 0, 0)
+            .ForeColor = RGB(0, 0, 128)
             .BackStyle = 0
             .Alignment = 2
             .Visible   = .T.
@@ -1213,8 +1217,9 @@ DEFINE CLASS Formsigrecmc AS FormBase
         BINDEVENT(loc_oPg.txt_4c_Empresa,     "KeyPress", THIS, "TxtEmpresaKeyPress")
         BINDEVENT(loc_oPg.txt_4c_DEmpresa,    "KeyPress", THIS, "TxtDEmpresaKeyPress")
         BINDEVENT(loc_oPg.txt_4c_NmOperacao,  "KeyPress", THIS, "TxtNmOperacaoKeyPress")
-        BINDEVENT(loc_oPg.txt_4c_DtInicial,   "KeyPress", THIS, "TxtDtInicialKeyPress")
-        BINDEVENT(loc_oPg.txt_4c_DtFinal,     "KeyPress", THIS, "TxtDtFinalKeyPress")
+        *-- Periodo: o legado valida no Valid (ao SAIR do campo), nunca a cada tecla
+        BINDEVENT(loc_oPg.txt_4c_DtInicial,   "LostFocus", THIS, "TxtDtInicialLostFocus")
+        BINDEVENT(loc_oPg.txt_4c_DtFinal,     "LostFocus", THIS, "TxtDtFinalLostFocus")
         BINDEVENT(loc_oPg.txt_4c_Moeda,       "KeyPress", THIS, "TxtMoedaKeyPress")
         BINDEVENT(loc_oPg.txt_4c_MoedaDesc,   "KeyPress", THIS, "TxtMoedaDescKeyPress")
         BINDEVENT(loc_oPg.txt_4c_CdConta,     "KeyPress", THIS, "TxtCdContaKeyPress")
@@ -1616,43 +1621,38 @@ DEFINE CLASS Formsigrecmc AS FormBase
         ENDIF
     ENDPROC
 
-    *-- DtInicial: valida intervalo maximo de 6 anos
-    PROCEDURE TxtDtInicialKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg, loc_dDti, loc_dDtf
-        loc_oPg  = THIS.pgf_4c_Paginas.Page1
-        loc_dDti = loc_oPg.txt_4c_DtInicial.Value
-        loc_dDtf = loc_oPg.txt_4c_DtFinal.Value
-        IF VARTYPE(loc_dDti) = "D" AND VARTYPE(loc_dDtf) = "D"
-            IF (YEAR(loc_dDtf) - YEAR(loc_dDti)) >= 6
-                MsgAviso("O per" + CHR(237) + "odo n" + CHR(227) + "o pode passar de 6 anos!!", ;
-                    "Aten" + CHR(231) + CHR(227) + "o!!")
-                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .F.
-                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
-                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .F.
-            ELSE
-                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .T.
-                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
-                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
-            ENDIF
-        ENDIF
+    *-- DtInicial/DtFinal: valida intervalo maximo de 6 anos.
+    *-- Legado (get_dt_inicial.Valid): a checagem roda ao SAIR do campo, nunca a cada
+    *-- tecla - ligada a "KeyPress" o aviso subia a cada caractere digitado (Erro213).
+    PROCEDURE TxtDtInicialLostFocus()
+        THIS.ValidarPeriodoAnos()
     ENDPROC
 
-    PROCEDURE TxtDtFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    PROCEDURE TxtDtFinalLostFocus()
+        THIS.ValidarPeriodoAnos()
+    ENDPROC
+
+    PROCEDURE ValidarPeriodoAnos()
         LOCAL loc_oPg, loc_dDti, loc_dDtf
         loc_oPg  = THIS.pgf_4c_Paginas.Page1
         loc_dDti = loc_oPg.txt_4c_DtInicial.Value
         loc_dDtf = loc_oPg.txt_4c_DtFinal.Value
         IF VARTYPE(loc_dDti) = "D" AND VARTYPE(loc_dDtf) = "D"
-            IF (YEAR(loc_dDtf) - YEAR(loc_dDti)) >= 6
-                MsgAviso("O per" + CHR(237) + "odo n" + CHR(227) + "o pode passar de 6 anos!!", ;
-                    "Aten" + CHR(231) + CHR(227) + "o!!")
-                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .F.
-                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
-                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .F.
-            ELSE
-                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .T.
-                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
-                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
+            *-- Data em branco tem YEAR() = 0: sem este guard a conta da o ano corrente
+            *-- inteiro e o aviso dispara enquanto o usuario ainda esta preenchendo.
+            *-- Data vazia ja eh barrada pelo sigrecmcBO.ValidarFiltros ("Data inicial invalida !").
+            IF !EMPTY(loc_dDti) AND !EMPTY(loc_dDtf)
+                IF (YEAR(loc_dDtf) - YEAR(loc_dDti)) >= 6
+                    MsgAviso("O per" + CHR(237) + "odo n" + CHR(227) + "o pode passar de 6 anos!!", ;
+                        "Aten" + CHR(231) + CHR(227) + "o!!")
+                    THIS.cmg_4c_Botoes.Buttons(1).Enabled = .F.
+                    THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
+                    THIS.cmg_4c_Botoes.Buttons(3).Enabled = .F.
+                ELSE
+                    THIS.cmg_4c_Botoes.Buttons(1).Enabled = .T.
+                    THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
+                    THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC

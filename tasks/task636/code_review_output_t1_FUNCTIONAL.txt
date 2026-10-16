@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Verifiquei os 4 achados do pass FUNCTIONAL contra o c├│digo real de `Formsigprmdp.prg` e **nenhum se confirmou** ÔÇö todos batem com padr├Áes de falso positivo j├í documentados na mem├│ria do projeto para este mesmo detector:
+
+| Achado | Veredito | Evid├¬ncia |
+|---|---|---|
+| CONTAINER-VISIVEL (Sombra/Result/Barra) | Falso | S├│ `cnt_4c_Result` tem `.Visible=.F.` e j├í est├í filtrado corretamente (com `LOOP` antes da recurs├úo, que j├í protege `cnt_4c_Barra` por ser filho) |
+| METODO-INEXISTENTE THIS.Name() | Falso | `Name` s├│ ├® lido como propriedade (sem par├¬nteses) nas 2 ocorr├¬ncias do arquivo ÔÇö ├® propriedade nativa do VFP9 |
+| NULL-CURSOR cursor_4c_Dados | Falso | Nunca recebe `APPEND FROM`/SQLEXEC de SQL Server ÔÇö s├│ `INSERT INTO...VALUES`/`APPEND BLANK`+`REPLACE` |
+| NULL-CURSOR cursor_4c_Importa | Falso | Populado via `APPEND FROM TYPE XLS` (Excel), n├úo SQL Server |
+
+Nenhuma altera├º├úo foi feita nos arquivos `Formsigprmdp.prg`/`sigprmdpBO.prg`, pois aplicar as "corre├º├Áes" sugeridas introduziria regress├Áes (ex.: adicionar `CNT_4C_SOMBRA` ao filtro de ocultos esconderia o cabe├ºalho sempre vis├¡vel). Registrei as reincid├¬ncias nas mem├│rias `feedback_container_visivel_cabecalho_falso_positivo.md` e `feedback_metodo_inexistente_nao_checa_formbase.md` para refor├ºar o padr├úo sist├¬mico desse detector.

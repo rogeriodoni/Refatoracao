@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced (54/54 IF/ENDIF, 22/22 WITH/ENDWITH, 11/11 TRY/ENDTRY, 20 PROCEDURE/FUNCTION vs 19 ENDPROC + 1 ENDFUNC). The implementation is complete and structurally sound.
+
+## Summary
+
+Fase 7/8 implemented in `C:\4c\projeto\app\forms\operacionais\FormSigPrItb.prg`:
+
+- **`InicializarForm`**: now loads `SigCdPam.DirContabv` via `SigPrItbBO.CarregarParametros()` at startup (mirrors the legacy `Init`, which aborts if this query fails), guarded for `gb_4c_ValidandoUI`/`gb_4c_ModoTeste`.
+- **`ConfigurarAguarde`** (new): builds `cnt_4c_Aguarde` ("Aguarde... / Processando Dados...", born hidden) and `shp_4c_Shape1` decorative shape ÔÇö both from the dump.
+- **`BtnProcessarClick`** ÔåÆ validates the period via `SigPrItbBO.ValidarPeriodo()` (same 3 checks/messages/focus order as legacy), confirms, delegates to `ExecutarProcessamento`.
+- **`ExecutarProcessamento`** ÔåÆ toggles `cnt_4c_Aguarde`, calls `BO.Processar()`, then branches exactly like the legacy `processamento` method: inconsistencies found ÔåÆ lock the filter/Processar, enable the report buttons, warn; no inconsistencies but movement ÔåÆ warn + `ExecutarGravacaoArquivo`; no movement ÔåÆ warn only.
+- **`ExecutarGravacaoArquivo`** ÔåÆ mirrors the legacy `gravar`: re-enables the date fields, disables the report buttons, confirms, then calls `BO.GerarArquivoContabil()`.
+- **`BtnImprimirClick`/`BtnVisualizarClick`** ÔåÆ `PrepararCursoresRelatorio` (aliases `cursor_4c_SemConta`/`cursor_4c_Cabecalho` to the literal `SemConta`/`Cabecalho` cursor names the already-ported `SigPrIct.frx` requires ÔÇö verified by inspecting the FRX's compiled field references) + the canonical `ExecutarReportForm` helper (PRINTER_PROMPT/PREVIEW).
+- **`BtnEncerrarClick`** ÔåÆ `THIS.Release()`.
+- **`Destroy`** ÔåÆ cleans up all work-area cursors, including the literal `SemConta`/`Cabecalho` aliases.
+
+All new Click handlers are `PUBLIC` (BINDEVENT requirement); internal helpers are `PROTECTED`.

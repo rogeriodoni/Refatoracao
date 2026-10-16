@@ -1,0 +1,51 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e verificada.
+
+## O que foi entregue
+
+**`projeto/app/forms/operacionais/FormSigPrMlu.prg`**
+
+| M├®todo | Escopo | Conte├║do real |
+|---|---|---|
+| `FormParaBO()` | PROTECTED | Fonte **├║nica** da leitura da tela: nome da unifica├º├úo + varredura das malas marcadas (`SelImp=1 AND NRegis>0`) ÔåÆ 3 properties do BO. Salva/restaura `RECNO()` (a grade fica ancorada no ponteiro ÔÇö regra #21a) |
+| `BOParaForm()` | PROTECTED | Sentido inverso; ponto de recarga, chamado na cria├º├úo do campo e pelo `LimparCampos` |
+| `LimparCampos()` | PROTECTED | Zera o BO e deixa o `BOParaForm` refletir o vazio na tela ÔÇö substitui o `txt.Value = ""` solto |
+| `AjustarBotoesPorModo()` | PUBLIC | Funil ├║nico do `Enabled` do bot├úo Processar, derivado de `this_cModoAtual` ÔÇö que estava **declarado e nunca usado**. Substitui as duas atribui├º├Áes diretas (regra #40) |
+
+Renomeados para o nome can├┤nico do projeto (precedente: `FormSigPrGf1`, `FormSigMvTta`): `CmdProcessarClick` ÔåÆ **`BtnProcessarClick`**, `CmdSairClick` ÔåÆ **`BtnEncerrarClick``. `CmdSelTudoClick`/`CmdApagaTudoClick` ficaram com `Cmd` (n├úo s├úo a├º├úo da tela; ├® o nome que o projeto j├í usa).
+
+**Corrigido um desvio do legado:** o toggle do checkbox da grade estava no `MouseDown` com o `MouseUp` s├│ suprimindo o default ÔÇö invertido em rela├º├úo ao SCX (`MouseDown = NoDefault`; `MouseUp = This.KeyPress(13,0)`).
+
+**`projeto/app/classes/SigPrMluBO.prg`** ÔÇö adicionado `LimparDados()` (PUBLIC, com `DODEFAULT()`): o form n├úo ├® modal-por-registro como o legado, e sem o reset o estado de uma unifica├º├úo sobreviveria para a seguinte.
+
+## Verifica├º├úo
+
+Criei `automation/CompileCheckMluF8.prg` (compila + **instancia** headless). Resultado:
+
+```
+COMPILE_OK   (sem .ERR nos dois arquivos)      VARTYPE_FORM=O
+PROT_FORMPARABO/BOPARAFORM/LIMPARCAMPOS = .T.  (PROTECTED, como FormBase exige)
+PROT_AJUSTAR/CARREGARLISTA/VALIDARPROC  = .F.  (PUBLIC, cham├íveis pelo harness)
+MODO_INICIAL=[LISTA]  Enabled: LISTA=.T. -> PROCESSANDO=.F. -> volta=.T.
+VALIDAR_SEM_SELECAO=.F.   VALIDAR_COM_2_MALAS=.T.   VALIDAR_SEM_NOME=.F.
+BO_NOME=[UNIF TESTE]  BO_CODIGOS=[MALA000001; MALA000002;]  BO_QTD=2
+RECNO_APOS_FORMPARABO=1
+```
+
+Auditores do projeto: `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes` ÔÇö todos **OK**. Padr├Áes do validador de completude (TODO/stub/"nao implement"/"pendente"): zero ocorr├¬ncias.
+
+## O que deixei de fora, e por qu├¬
+
+Tr├¬s nomes do roteiro da fase n├úo existem no legado ÔÇö conferido no dump, n├úo presumido:
+
+- **Handler de Cancelar** ÔÇö o SCX n├úo tem bot├úo de cancelar. A superf├¡cie s├úo os 4 bot├Áes dos 3 CommandGroup, todos com handler. N├úo h├í Page2 nem modo de edi├º├úo a abandonar.
+- **`HabilitarCampos()`** ÔÇö os ├║nicos `PROCEDURE When` do SCX s├úo os cinco `Return(.f.)` das c├®lulas (j├í migrados como `Column.ReadOnly = .T.`), e o ├║nico `Enabled` que o legado move em runtime ├® o do pr├│prio bot├úo Processar ÔÇö que virou `AjustarBotoesPorModo`. Implementar aqui seria no-op (stub) ou inven├º├úo de estado.
+- **`BtnBuscarClick()`** ÔÇö a tela n├úo tem busca: a grade carrega a tabela inteira (`Select 0 as SelImp, * From SigMlItn`, sem `Where`).
+
+Tudo isso est├í documentado no cabe├ºalho do `.prg` com a evid├¬ncia do legado.
+
+**Ponto a saber sobre o gate:** dos 4 nomes que a Fase 8 exige por substring, tr├¬s est├úo como c├│digo real; `BtnCancelarClick` fica ausente de prop├│sito e ├® dispensado pelo ramo **fluxo-├║nico** do gate. Conferi os predicados desse ramo contra o dump (`sem CRUD` Ô£ô, `BaseClass: grid` Ô£ô, `BaseClass: textbox` com `getNova` digit├ível Ô£ô, `PROCEDURE Carregar*` Ô£ô) ÔÇö ele dispara. O bot├úo de a├º├úo ├® satisfeito direto pelo `$padraoAcaoGravar` via `BtnProcessarClick`, e `legadoSemSalvar` ├® verdadeiro no dump.

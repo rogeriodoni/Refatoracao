@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `projeto/app/forms/operacionais/FormSigPrMlu.prg`.
+
+## O que a fase realmente tinha de trabalho
+
+A tentativa anterior concluiu "sem trabalho pendente" e o gate reprovou ÔÇö e o gate estava **certo**. O item que faltava era `PROCEDURE Validar\w+` no ramo FLAT, que ├® exatamente o cen├írio j├í registrado em `feedback_gate_fase6_exige_validar_do_campo_digitavel` (task621/task625): o gate separa "campo criado" de "campo que funciona".
+
+- **Lookup: nenhum, confirmado.** O dump n├úo casa `fwbusca*`, `mAddColuna`, `sigacess()`, `Acesso*()` nem `FormBuscaAuxiliar`. Inventar lookup violaria o PILAR 1 ÔÇö n├úo foi feito.
+- **Campos: nada a acrescentar.** O ├║nico campo digit├ível (`getNova` ÔåÆ `cnt_4c_Nova.txt_4c_Nova`) j├í existia com `Format = "K"` e `MaxLength = 20` transcritos do SCX; as 5 `Text1` das Column2..6 s├úo c├®lulas somente-leitura (`When / Return(.f.)` ÔåÆ `Column.ReadOnly = .T.`).
+- **A regra do campo ├® que faltava.** `getNova` n├úo tem `Valid`/`When`/`LostFocus`; a regra que o governa mora **dentro do `cmdProcessar.Click`** do legado (3 guards: nenhuma mala marcada / uma s├│ marcada / nome em branco). A regra ├® de quem ela governa, n├úo de quem a chama ÔÇö ent├úo nasce nesta fase.
+
+## Altera├º├Áes
+
+1. **`PROCEDURE ValidarProcessamento()`** (PUBLIC, regras #3/#51) ÔÇö funil ├║nico com os tr├¬s guards transcritos literalmente: mesma ordem, mesmas mensagens (via `CHR()`), mesmos destinos de `SetFocus`. O `csTmp` do legado, que s├│ existia para ser contado, virou `COUNT FOR` sem criar cursor. Espelha o textbox ÔåÆ `BO.this_cNomeUnificacao` **s├│ com os guards aprovados** (`feedback_validarpreacao_textbox_fonte_unica`).
+2. **`CmdProcessarClick`** passou a s├│ chamar o funil ÔÇö e ganhou o `Refresh / Go Top / Refresh` que o legado faz no topo do `Click` e que a migra├º├úo havia descartado (regra #21a).
+3. Cabe├ºalho do arquivo reescrito com a evid├¬ncia da fase (o coment├írio anterior dizia "CONFIRMADO SEM TRABALHO").
+
+## Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| `COMPILE` do Form + BO no VFP9 (`.fxp` apagado antes) | **SEM ERROS**, `.fxp` recriado |
+| Gate `case 6` (ramo FLAT) rodado verbatim | `temLayoutFlat = True` (era `False`) |
+| `Test-CompletudeCodigo` (4 checagens) | Form **0** problemas, BO **0** |
+| Runtime, 5 cen├írios | guards 1/2/3 recusam, cen├írio v├ílido aprova, espelho `[MALA UNIFICADA      ]` |
+| 3 mensagens do legado no `_dialogs.txt` | id├¬nticas ao `Messagebox` original |
+| Regras #1 (RETURN em TRY) e #9.1 (PUBLIC em DEFINE CLASS) | 0 ocorr├¬ncias |
+
+Duas observa├º├Áes do caminho:
+
+- **A primeira rodada do probe deu falso negativo nos 5 cen├írios**: o form ├® `DataSession = 2` e meu `cursor_4c_Dados` nasceu na sess├úo 1, ent├úo `USED()` era `.F.` dentro do m├®todo e tudo ca├¡a no guard 1. S├│ com `SET DATASESSION TO loc_oForm.DataSessionId` o teste passou a medir o caminho real ÔÇö o sinal foi o guard 1 disparar **cinco** vezes, inclusive onde n├úo devia.
+- **TabIndex n├úo foi transcrito, de prop├│sito.** O SCX traz `TabIndex = 2` triplicado (grade, `cmdBtnGrade`, `cntNova`) e `getNova = 0` ÔÇö este ├║ltimo ├® o ├║nico focaliz├ível do seu container, logo a ordem relativa j├í est├í correta; reproduzir os `2` duplicados embaralharia a sequ├¬ncia sem ganho.

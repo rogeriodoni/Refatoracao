@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö variable name and icon path are correct. FormSIGPRINT.prg has been created for Fase 3/8 with:
+
+- `DEFINE CLASS FormSIGPRINT AS FormBase` with the canonical visual properties (1000x600, PILAR 1 fidelity)
+- `Init()` ÔÇö only `RETURN DODEFAULT()` (regra cr├¡tica: evita duplicar `InicializarForm`)
+- `InicializarForm()` ÔÇö instancia `SIGPRINTBO`, chama `ConfigurarPageFrame`, propaga `Caption` para as faixas de t├¡tulo
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`/`Tabs=.F.`, Page1="Lista"/Page2="Dados"
+- `ConfigurarPaginaLista()` / `ConfigurarPaginaDados()` ÔÇö cada uma cria a faixa de cabe├ºalho (regra #11, nas duas p├íginas) e um container de bot├Áes vazio (`cnt_4c_Botoes` na Lista, `cnt_4c_BotoesAcao` em Dados) ÔÇö sem grid, campos ou eventos, que ficam para as Fases 4-8
+- `TornarControlesVisiveis()` recursivo e `Destroy()` liberando o BO
+
+Balanceamento de `PROCEDURE`/`ENDPROC`, `WITH`/`ENDWITH` e `AddObject` confirmado por contagem. Pr├│xima fase (4) deve adicionar o grid e os bot├Áes CRUD dentro do `cnt_4c_Botoes` j├í criado.

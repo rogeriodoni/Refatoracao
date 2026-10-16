@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. 
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSigPrItb.prg` ÔÇö the Phase 3 "Estrutura Base" for this OPERACIONAL form (batch processor for "Integra├º├úo Cont├íbil Total", no grid/CRUD per the legacy layout).
+
+Key decisions, since this form doesn't follow the generic CRUD Page1/Page2 template from the phase boilerplate:
+- Followed the established project precedent for this exact family of forms (`FormSigPrGf1.prg` ÔÇö a filter/processing dialog with no grid and no CRUD, built the same way across its 8 phases).
+- Visual properties (`Width=800`, `Height=229`, `Caption`, `ControlBox=.F.`, `Closable=.F.`, `TitleBar=0`, etc.) transcribed literally from the legacy SCX dump; `WindowType=1`/`ShowWindow=1` added as the project's canonical convention so the modal form survives `Show()` from menu.prg.
+- `ConfigurarPageFrame()` kept as a no-op orchestrator name (architectural placeholder, since this flat form has no real PageFrame) that currently only calls `ConfigurarCabecalho()`.
+- `ConfigurarCabecalho()` builds `cnt_4c_Sombra` + the two title labels, using `THIS.Caption` dynamically (not the stale literal "Cadastro de Testes" text baked into the legacy SCX labels ÔÇö that's a known copy-paste residue in the original, confirmed against the dump).
+- `TornarControlesVisiveis()` added now (with the `cnt_4c_Aguarde` skip-but-recurse exception) since `InicializarForm()` calls it.
+- `Destroy()` just chains `DODEFAULT()` ÔÇö no form-owned cursors yet at this phase.
+
+Verified the file compiles cleanly with a headless VFP9 `COMPILE` check (no `.err` output, `.fxp` generated), then cleaned up all compiled/test artifacts.
+
+Not included yet (per phase scope): action buttons (`Processar`/Encerrar), the period/empresa filter container (`cnt_4c_Mvt1`), the empresa lookup, `cnt_4c_Aguarde`, and the `Shape1` decoration ÔÇö these land in Fases 4 through 8 as noted in the file's header comment.

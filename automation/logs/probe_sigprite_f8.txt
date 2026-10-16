@@ -1,0 +1,34 @@
+PROBE FASE8 Formsigprite - inicio 15/10/2026 21:27:13
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O
+2a CarregarLista  existe=.T. protected=.F.  (esperado .T./.F.)
+2b CarregarItens  existe=.T. protected=.F.  (esperado .T./.F.)
+2c FormParaBO     existe=.T. protected=.T.  (PROTECTED pela FormBase)
+2d BOParaForm     existe=.T. protected=.T.  (PROTECTED pela FormBase)
+2e LimparCampos   existe=.T. protected=.T.  (PROTECTED pela FormBase)
+3a grd_4c_Itens=.T. img_4c_FigJpg=.T. obj_4c_Get_obs=.T.
+3b grd_4c_Itens.RecordSource=[cursor_4c_Grade] ColumnCount=11 Col2.ControlSource=[cursor_4c_Grade.CPros]
+3c (sessao 2) cursor_4c_Grade USED=.T. cursor_4c_Rodape USED=.T.
+4a RECCOUNT(cursor_4c_Grade)=2 RECNO=1
+4b FormParaBO()=.T.
+4c BO CPros=[PRD0001] DPros=[PRODUTO UM] CUnis=[UN] QtdSs=6 CMoes=[BRL]  (esperado PRD0001 / PRODUTO UM / UN / 6 / BRL)
+4d FormParaBO() na 2a linha=.T.
+4e BO CPros=[PRD0002] QtdSs=0  (esperado PRD0002 / 0)
+5a ALIAS() antes=[CURSOR_4C_RODAPE]
+5b FormParaBO() -> .T.
+5c ALIAS() depois=[CURSOR_4C_RODAPE]  (tem de ser CURSOR_4C_RODAPE)
+6a img Visible=.F. Picture=[]  (esperado .F. / vazio)
+7a BOParaForm() Imagems=0 -> .T.
+7b img Visible=.F.  (esperado .F.)
+8a BOParaForm() Imagems=1 sem conexao -> .T.
+8b img Visible=.F.  (esperado .F.)
+9a AfterRowColChange OK - LockScreen=.F. BO CPros=[PRD0001]  (esperado .F. / PRD0001)
+10a THIS.Visible=.F.
+10b Activate() form invisivel OK - this_lFocoInicialDado=.F.  (esperado .F.)
+11a CarregarLista() sem conexao -> .F.  (esperado .F. - gnConnHandle=-99)
+11b BO mensagem=[Conexão com o banco de dados não disponível]
+12a Release OK
+--- gc_4c_ArquivoErroTeste ---
+[15/10/2026 09:27:14 PM] Erro ao carregar itens: Conexão com o banco de dados não disponível
+
+PROBE FASE8 Formsigprite - fim

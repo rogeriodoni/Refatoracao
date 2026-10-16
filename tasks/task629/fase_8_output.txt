@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSIGPRIMP.prg` est├í completo e verificado no VFP9.
+
+## O que entrei nesta fase
+
+**Hooks de transfer├¬ncia reais** (n├úo stubs ÔÇö eles existem no legado, s├│ sem nome):
+- `BOParaForm()` ÔÇö transcri├º├úo de `Thisform.get_Arquivo.Value = crSigCdPam.DirImports` do `Init` do SCX, mais o reavalia do `When` no fim.
+- `FormParaBO(par_cArquivo)` ÔÇö o in├¡cio do `btnMovEst.Click` (`lcDirImport` ÔåÆ `lcArq` ÔåÆ `MovEst`). Retorna l├│gico e `BtnMovEstClick` **aborta** (`LOOP`) quando falha.
+
+**`CarregarLista()`** ÔÇö funil ├║nico PUBLIC com o guard de ambiente (sem conex├úo SQL em modo teste), que antes estava duplicado no `InicializarForm`. PUBLIC porque `TesteAutomatico.prg` o chama de fora.
+
+## Dois defeitos encontrados e corrigidos ao medir
+
+1. **`FormParaBO`/`BOParaForm` s├úo PROTECTED por heran├ºa** ÔÇö `FormBase` os declara assim e o VFP9 n├úo deixa a subclasse alargar o escopo. Declarados sem modificador, `PEMSTATUS(...,2)` j├í devolvia `.T.` e a chamada de fora estourava `Property BOPARAFORM is not found` (foi isso que travou o primeiro probe num di├ílogo modal). Agora est├úo com `PROTECTED` expl├¡cito e documentado; o probe os exercita por uma subclasse `ProbeSIGPRIMP`.
+
+2. **`FormParaBO()` sem argumento zerava `this_cArquivo`** ÔÇö e `FormBase.Salvar()` chama exatamente assim. Agora sem argumento s├│ sincroniza o diret├│rio; o probe prova com sentinela que `SENTINELA.TXT` sobrevive.
+
+**Defeito herdado do SCX, consertado com registro**: o legado remove da lista por posi├º├úo do `ADir`, mas o ListBox tem `Sorted = .T.` no pr├│prio SCX. Medido: ADir entrega `ZEBRA/MOV001/ALFA`, a tela exibe `ALFA/MOV001/ZEBRA` ÔÇö `RemoveItem(1)` tirava **ALFA.TXT** tendo processado **ZEBRA.TXT**. Troquei por `RemoverArquivoDaLista(<nome>)`, varrendo de baixo para cima.
+
+## Verifica├º├úo
+
+- Compila sem `.err`; instancia (`VARTYPE = "O"`); nenhum procedure vazio (19 m├®todos, todos com corpo).
+- Probe (`automation/probe_fase8_sigprimp.prg`): todos os cen├írios com o resultado esperado; ├║nico di├ílogo disparado ├® o `MsgInfo` que o legado tem.
+- `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes`: limpos.
+- Sem marcadores TODO/pend├¬ncia, ASCII puro, CRLF preservado (LF=772 CR=772).
+
+Medi tamb├®m, de passagem, que `LOCAL loc_aArq[1]` misturado com escalares **j├í declara array** (id├¬ntico a `LOCAL ARRAY`) ÔÇö o c├│digo existente estava correto; quem estoura ├® `LOCAL` sem subscrito.
+
+**O que deliberadamente n├úo criei**, documentado no cabe├ºalho com o motivo: `HabilitarCampos` (n├úo h├í campo edit├ível ÔÇö o TextBox ├® somente-leitura por `When ÔåÆ Return .f.`), `LimparCampos` (o legado tem a linha de limpeza **comentada**; limpar divergiria do PILAR 1), `AjustarBotoesPorModo` (n├úo h├í modo; o equivalente ├® `AtualizarEstadoBotoes`), `BtnBuscarClick`/`BtnSalvarClick` (o SCX n├úo tem esses bot├Áes). Cri├í-los vazios seria reprovado pela regra de completude, e invent├í-los violaria o PILAR 1.

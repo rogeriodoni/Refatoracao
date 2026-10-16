@@ -553,3 +553,36 @@ DEFINE CLASS TextBoxDescGrupoCla_4c AS TextBox
         RETURN .T.
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxProdutoAntMdp_4c - celula "Codigo Original" (Column1) da grade de
+* pares de substituicao do Formsigprmdp (fila de recalculo de custo).
+*
+* Legado (SIGPRMDP.Grade.Column1.Text1.Valid): com ThisForm.Checkcadpro = .F.
+* abre fwBuscaExt contra SigCdPro (campo Cpros/Dpros) para validar o codigo
+* antigo digitado; com Checkcadpro = .T. (modo que aceita codigo de produto
+* ainda nao cadastrado), o Valid nao faz nada e o codigo digitado eh aceito
+* como esta.
+*
+* Instalado com Column.AddObject + CurrentControl + Sparse = .F. (regra #18):
+* validacao de celula vive no Valid do TextBox da coluna, nunca em
+* AfterRowColChange (regra #46). O corpo mora no form
+* (ValidarCProsAntGridExec), que recebe o proprio TextBox - dentro do Valid
+* o valor digitado esta em THIS.Value e ainda nao chegou ao cursor.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxProdutoAntMdp_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCProsAntGridExec", 5)
+            RETURN THISFORM.ValidarCProsAntGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 6 conclu├¡da** ÔÇö `projeto\app\forms\operacionais\FormSIGPRIMP.prg` (487 ÔåÆ 567 linhas).
+
+## O achado que define a fase: o legado N├âO tem lookup
+
+Varredura do dump (`tasks\task629\SIGPRIMP_form_codigo_fonte.txt`) por `fwBuscaExt|fwBuscaSel|fwBuscaInt|mAddColuna|sigacess()|Acesso*()|FormBuscaAuxiliar` ÔåÆ **zero ocorr├¬ncia**. O ├║nico campo da tela (`Get_Arquivo`) tem `PROCEDURE When / Return .f.`: s├│ **exibe** o diret├│rio de importa├º├úo lido de `SigCdPam`, n├úo aceita digita├º├úo ÔÇö campo somente-leitura n├úo tem onde receber c├│digo para um picker resolver. Criar `FormBuscaAuxiliar` aqui seria inventar tabela que o original nunca consulta (PILARES 1 e 2). Os 3 controles de dados (label/textbox/listbox) j├í foram entregues na Fase 5 ÔÇö n├úo havia campo faltando.
+
+## O que a fase entregou de fato: a regra que governa o campo
+
+O legado condiciona o bot├úo de a├º├úo ao campo: `btnMovEst.PROCEDURE When / Return !Empty(thisform.get_Arquivo.Value)`. No migrado isso existia s├│ como um `IF EMPTY(...) RETURN` **dentro** do Click ÔÇö o bot├úo ficava sempre ativo e, com o diret├│rio em branco, o usu├írio clicava e nada acontecia, sem retorno nenhum.
+
+- `ValidarArquivoImportacao()` ÔÇö a regra, lendo o **TextBox** (fonte ├║nica, como o `When` do legado)
+- `AtualizarEstadoBotoes()` ÔÇö o efeito visual, em `cmd_4c_BtnMovEst.Enabled`, chamado no funil de carga, no fim do `InicializarForm` e no retorno do processamento (regra #40)
+- `BtnMovEstClick` passa a usar o guard (tecla de atalho/Enter tamb├®m chega ao Click)
+- `txt_4c_Arquivo.TabStop = .F.` junto ao `ReadOnly`, reproduzindo o salto na tabula├º├úo que ├® o efeito do `When ÔåÆ .F.`
+- Coment├írio obsoleto da Fase 3 ("montados nas pr├│ximas fases") corrigido
+
+Ambos os m├®todos s├úo PUBLIC ÔÇö o pipeline chama de fora da classe (regra #51, confirmado: `PEMSTATUS(...,2) = .F.`).
+
+## Provas
+
+| verifica├º├úo | resultado |
+|---|---|
+| Compila├º├úo VFP9 (`.fxp`/`.err` apagados antes) | Form e BO OK, **zero `.ERR`** |
+| `CREATEOBJECT("FormSIGPRIMP")` em modo teste | `VARTYPE = "O"`, nenhum di├ílogo suprimido |
+| Regra do `When` (vazio / preenchido / s├│ espa├ºos) | `.F./.F.` ┬À `.T./.T.` ┬À `.F./.F.` |
+| Click com campo vazio | sai sem processar, sem erro |
+| Visualizar/Imprimir (ocultos no legado) | `Visible = .F.` preservado |
+| Gate `case 6` rodado verbatim num harness | passa pelo ramo **CAPTURA** (`piso de 1 campo, 1 no migrado + handler de valida├º├úo + BINDEVENT`) |
+| Controle negativo (mesmo arquivo sem `Validar*`) | reprova ÔÇö confirma que o item que faltava era exatamente esse |
+
+Arquivo ASCII puro (sem acento literal) e CRLF preservado. Artefatos de evid├¬ncia: `automation\probe_fase6_sigprimp.prg` + `_result.txt`.

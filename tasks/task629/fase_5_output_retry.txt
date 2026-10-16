@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 est├í completa. Resumo do que encontrei e fiz.
+
+## Diagn├│stico
+
+O form j├í estava completo ÔÇö e a tentativa anterior estava certa quanto a isso. Confirmei objeto por objeto: os 12 objetos do `mapeamento.json` (e todos os 13 do dump do SCX) existem no migrado. **O bloqueio era o gate, n├úo o `.prg`.**
+
+Medi cada termo do `case 5` isoladamente antes de tocar em nada. O ramo CAPTURA estava verde em tudo ÔÇö `pColuna|Grade|grd`=False, `AddCursor liga grade`=False, `ControlSource liga lista`=False, campos de entrada presentes, paridade OK ÔÇö e reprovava por **um ├║nico termo**: `BaseClass: listbox`.
+
+Esse ├® um falso positivo conhecido: em VFP9 quem define a origem das linhas ├® `RowSourceType`, n├úo a BaseClass. O `Arquivos` do SIGPRIMP ├® `RowSourceType = 1` (value list) alimentado por `AddItem` a partir de `ADir()` no diret├│rio ÔÇö n├úo h├í tabela nem cursor atr├ís. O gate j├í tratava ComboBox assim; a incoer├¬ncia era s├│ com ListBox.
+
+**A mem├│ria descrevia esse fix como aplicado em 2026-10-07, mas ele n├úo est├í no arquivo** ÔÇö `Test-LegadoListBoxLigaLista` n├úo existe e `git log -S` n├úo acha nenhum commit. Foi projetado, medido e perdido. Reapliquei.
+
+## O que mudei
+
+**`automation/OrquestradorMigracao.ps1`** (+98 linhas) ÔÇö helper `Test-LegadoListBoxLigaLista`, fail-closed (ListBox sem `RowSourceType` provado em {0,1} *mant├®m* a exig├¬ncia de grade); token `listbox` sai do regex estrito nos 5 sites (F4/F5/F6/F8-protocolo/F8-gr├ífico); `listbox`/`combobox` entram na exclus├úo de `Test-LegadoControlSourceLigaLista`. `grid|pageframe` e os regexes largos de DESPACHANTE/EXIBICAO ficaram intocados.
+
+Medi├º├úo nos 628 dumps: **449 ÔåÆ 443**, 6 flips = **2 forms distintos** (SIGPRILA e SIGPRIMP), **zero vazamentos**. Delta isolado da exclus├úo do ControlSource: 3 dumps, nenhum com grade. Reproduz a medi├º├úo da sess├úo anterior. Encoding conferido antes/depois (BOM `EF BB BF`, 2963 bytes >127, zero LF solto) e `Parser::ParseFile` limpo.
+
+**`FormSIGPRIMP.prg`** ÔÇö tr├¬s corre├º├Áes de fidelidade reais que a auditoria achou:
+- `lbl_4c_Label4.Width` 125 ÔåÆ **130**. Medi no VFP9: o caption "Arquivos Importa├º├úo :" em Tahoma 8 bold tem **126 px** ÔÇö estava **cortando**. Confirmei tamb├®m que `AutoSize = .T.` ├® no-op em Label criado por `AddObject` (ficou nos 100 do default), como manda a regra #23. 130 ├® o v├úo exato at├® o TextBox (310ÔåÆ440).
+- `Closable = .F.`, `Movable = .F.`, `ClipControls = .F.` ÔÇö declarados no SCX e perdidos na migra├º├úo; o `migration_guide.md` nomeia Closable e ClipControls como obrigat├│rias. `ShowTips` n├úo repeti: j├í vem herdado de `FormBase`.
+- `lbl_4c_LblTitulo.ToolTipText` do SCX.
+
+CRLF restaurado em `FormSIGPRIMP.prg` e `SIGPRIMPBO.prg` (as fases 1ÔÇô5 normalizaram para LF; o resto do projeto ├® CRLF).
+
+Apaguei os `.FXP` e instanciei: `BaseClass=[Form]`, 1000x330, 10 filhos diretos, `ReadOnly=.T.`, `RowSourceType=1`, Visualizar/Imprimir ocultos como no legado, Caption propagado, e as propriedades novas todas efetivas.
+
+Dois pontos que deixei deliberadamente como estavam, para n├úo inventar: o `TabIndex` dos bot├Áes (o dump n├úo declara nenhum, e os dois controles que declaram j├í est├úo na ordem relativa certa ÔÇö e o legado nomeia o `Say4` com TabIndex=8, que a mem├│ria diz para *n├úo* transcrever porque Label n├úo tem `TabStop`); e o `Load() = fConfigGeral()`, n├úo-port j├í documentado no cabe├ºalho.
+
+## Uma ressalva importante
+
+**O fix do gate n├úo vale para a execu├º├úo em curso.** O `RunLoop.ps1` (PID 10872) subiu ├ás **18:28:08** e eu gravei o orquestrador ├ás **19:10:38** ÔÇö `& script.ps1` parseia o arquivo inteiro na invoca├º├úo, ent├úo o loop ainda tem o gate antigo em mem├│ria e a Fase 5 da task629 vai reprovar de novo. **Precisa relan├ºar o loop** para o ramo CAPTURA valer. Simulei o gate com o c├│digo novo e confirmei: task629 passa por CAPTURA, e as refer├¬ncias mant├¬m cada uma o seu ramo original (570 DESPACHANTE, 573 EXIBICAO, 574 ARVORE, 581/586 CAPTURA, 620 FLAT, 624 DESPACHANTE) ÔÇö zero regress├úo.

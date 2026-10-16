@@ -7976,7 +7976,14 @@ PROCEDURE AbrirFormDrs()
     ENDTRY
 
     IF VARTYPE(loForm) = "O"
-        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+        *-- O FormDrs eh generico e pede o tipo de ficha tecnica no Init.
+        *-- Se o usuario cancelou a escolha (ou nao ha tipo cadastrado), nao ha
+        *-- o que exibir: libera sem mensagem, porque cancelar nao eh erro.
+        IF loForm.this_lSemTits
+            loForm.Release()
+        ELSE
+            loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+        ENDIF
     ENDIF
 ENDPROC
 

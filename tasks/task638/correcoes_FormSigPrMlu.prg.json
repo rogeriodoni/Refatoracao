@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrMlu.prg",
+    "timestamp":  "2026-10-16T11:40:17",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  789,
+                          "Original":  "REPLACE SelImp WITH IIF(NVL(SelImp, 0) = 1, 0, 1)",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  953,
+                          "Original":  "COUNT FOR NVL(SelImp, 0) = 1 TO loc_nSelecionadas",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1323,
+                          "Original":  "SCAN FOR NVL(SelImp, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

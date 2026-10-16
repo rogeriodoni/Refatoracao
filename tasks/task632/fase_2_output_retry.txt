@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 2 conclu├¡da: `C:\4c\projeto\app\classes\SigPrItbBO.prg` (625 linhas, compila limpo).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1:6200+`) exige:
+
+```
+$conteudo -match "CarregarDoCursor" -and (("Inserir" -and "Atualizar") -or $boSomenteLeitura)
+```
+
+O arquivo gerado **n├úo tinha `CarregarDoCursor` em lugar nenhum**. A exce├º├úo *BO somente-leitura* j├í se aplicava (medi as 4 provas no dump: sem `TABLEUPDATE`, sem `.AddCursor`, ├║nico alvo de escrita ├® `Insert Into Cabecalho` que ├® `Create Cursor` local, BO sem `SQLEXEC` de escrita) ÔÇö ou seja `Inserir`/`Atualizar` **n├úo** eram o problema, e continuam corretamente herdados de `BusinessBase`. Faltava s├│ o `CarregarDoCursor`.
+
+## O que adicionei (funcionalidade real, n├úo stub)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` **PUBLIC** | `getEmp1.Value = crListaRemota.Cemps` / `getDsemp1.Value = crListaRemota.Razas` (Valid) + `Select DirContabv` do `Init`. Mapeia `Cemps`/`Razas`/`DirContabv`, cada coluna sob `TYPE(alias+".col")` (n├úo `PEMSTATUS`), preservando a work area |
+| `CarregarEmpresa(valor, lPorDescricao)` | match exato dos `Valid` de `getEmp1`/`getDsemp1`; delega ao `CarregarDoCursor`. N├úo apaga o digitado nem avisa "n├úo encontrado" (regra #50) |
+| `MontarCabecalhoRelatorio()` | `Create Cursor Cabecalho` + `Insert Into Cabecalho` do `processamento` ÔÇö faltava inteiro; `_Empr` ÔåÆ `go_4c_Sistema.cCodEmpresa` |
+| `ObterChavePrimaria()` **PROTECTED** | identifica├º├úo do lote (empresa + per├¡odo) |
+
+## Defeitos reais que corrigi no que j├í estava l├í
+
+1. **`cursor_4c_MovAux.Contas` era `C(10)`; o legado declara `c(09)`** ÔÇö e `GerarArquivoContabil` grava largura FIXA (o `Copy To ... Type SDF`), ent├úo 1 caractere a mais deslocava **todas** as colunas seguintes do arquivo entregue ├á contabilidade. Corrigido no `CREATE CURSOR` e no `PADR` correspondente.
+2. **`IF cursor_4c_MvCcr.Autos AND ...`** ÔÇö `SigMvCcr.autos` ├® `bit`, chega como L├│gico *ou* Num├®rico conforme o driver; `AND` com num├®rico estoura *Data type mismatch* em runtime. Agora `ConverterParaLogico()`.
+3. **`cursor_4c_SemConta` sem a coluna `Ocors c(40)`** que o legado declara (coluna do relat├│rio de inconsist├¬ncias).
+4. **`SET NULL ON` indevido no `cursor_4c_SemConta`** ÔÇö o legado declara n├úo-nul├ível e popula por `APPEND BLANK` + `REPLACE` com `NVL()`; nul├ível, o `APPEND BLANK` deixava `Datas = .NULL.` e a chave do ├¡ndice (`DTOS(Datas)`) sa├¡a nula.
+5. **`STRTRAN(DTOC(...),"/","")` num campo `c(08)`** dependia de `SET CENTURY ON`; com `DataSession=2` (nasce `AMERICAN`/`CENTURY OFF`, regra #9.4) daria 6 caracteres e deslocaria o arquivo inteiro. Agora montado d├¡gito a d├¡gito (DDMMAAAA).
+6. `MontarCabecalhoRelatorio` falhando n├úo era respeitado pelo bloco do `SigCdGcr` ÔÇö guardado com `loc_lProsseguir`.
+
+## Verifica├º├Áes executadas
+
+- **Gate da Fase 2 replicado literalmente**: `VALIDADO: True` (4 provas do somente-leitura todas `True`).
+- **Compila├º├úo VFP9 real**: sem `.err`, `.fxp` gerado (`.fxp` removido depois).
+- **Colunas contra `docs/schema.sql`** (lido com `-Raw`, 683 tabelas): `SigMvCcr`, `SigCdGcr.contconts`, `SigCdEmp.cemps/razas`, `SigCdCli.iclis/ccontabs`, `SigCdPam.dircontabv` ÔÇö todas existem. `ValidadorSQLSchema.ps1`: **PASSOU, 0 inv├ílidas**.
+- `VerificarColunaEmpresaSQL.ps1`: **ERRO=0**. `VerificarFuncoesNaoDefinidas.ps1`: **nenhuma chamada ├│rf├ú**.
+- Balanceamento de blocos OK; **nenhum `RETURN` dentro de `TRY/CATCH`**; nenhum `TODO/FIXME/PLACEHOLDER`; sem a frase "nao implement" (falso positivo do 05d).
+
+**Ponto que deixo sinalizado para revis├úo** (herdado da passada anterior, n├úo mexi para n├úo trocar um palpite por outro): no ramo `Autos AND "LOTE" $ Hists`, o legado faz `M.Docto = Val(Right(Alltrim(Hists),6))` ÔÇö atribui **num├®rico** a um campo `c(10)` via `Gather Memvar`. O c├│digo usa `TRANSFORM(VAL(...), "@L 9999999999")` ÔåÆ 10 d├¡gitos, enquanto o outro ramo gera 6 (`@L 999999`). A largura real pretendida pelo legado ├® amb├¡gua; s├│ o arquivo conferido pela contabilidade resolve.
+
+Duas auditorias (`VerificarInsertNotNull.ps1`, `VerificarCamposCursorBO.ps1`) n├úo rodaram: exigem o SQL Server `192.168.200.10`, inalcan├º├ível desta m├íquina. N├úo se aplicam de todo modo ÔÇö este BO n├úo tem INSERT em tabela.

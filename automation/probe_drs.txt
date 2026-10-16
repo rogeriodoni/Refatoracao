@@ -1,0 +1,26 @@
+=== PROBE FormDrs / BtnIncluirClick ===
+1) CREATEOBJECT -> VARTYPE=O Caption=[Ficha Técnica - ]
+2) PageCount=2 ActivePage(antes)=1
+
+3) BOTOES da Page1 (cnt_4c_Botoes):
+   CMD_4C_INCLUIR         Left=   5 Vis=.T. Ena=.T.
+   CMD_4C_VISUALIZAR      Left=  80 Vis=.T. Ena=.T.
+   CMD_4C_ALTERAR         Left= 155 Vis=.T. Ena=.T.
+   CMD_4C_EXCLUIR         Left= 230 Vis=.T. Ena=.T.
+   CMD_4C_BUSCAR          Left= 305 Vis=.T. Ena=.T.
+
+4) BtnIncluirClick()...
+   ActivePage(depois)=2
+
+5) CONTROLES da Page2:
+   CNT_4C_CABECALHO         Container      Top=  29 Left=    0 W= 1007 H=  80 Vis=.T. Ena=.T.
+   CNT_4C_BOTOESACAO        Container      Top=  38 Left=  840 W=  160 H=  85 Vis=.T. Ena=.T.
+   LBL_4C_CODIGO            Label          Top= 166 Left=  102 W=   53 H=  16 Vis=.T. Ena=.T.
+   TXT_4C_CODS              Textbox        Top= 163 Left=  155 W=   52 H=  20 Vis=.T. Ena=.F.
+   CNT_4C_CAMPOS            Container      Top= 196 Left=   10 W=  967 H= 420 Vis=.T. Ena=.T.
+
+6) cnt_4c_Campos.ControlCount=0
+
+7) CURSORES: crSigSyCit USED=.T. RECCOUNT=0 | crSigSyCrs USED=.T. RECCOUNT=0
+8) this_cTits=[]
+FIM

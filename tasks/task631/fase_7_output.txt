@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\cadastros\FormSIGPRINT.prg` (861 ÔåÆ 1237 linhas).
+
+## Os 4 eventos principais (escopo da fase)
+
+Todos **PUBLIC** (regra #3), transcritos do `Grupo_op.Click` legado ÔÇö inclusive os `SetFocus` de cada `Case`:
+
+| Evento | Comportamento | Origem no legado |
+|---|---|---|
+| `BtnIncluirClick` | `NovoRegistro()` ÔåÆ limpa ficha ÔåÆ modo antes de `HabilitarCampos` ÔåÆ Page2 ÔåÆ `optTipo.Value = 1` + foco no C├│digo | `Case 'INSERIR'` |
+| `BtnAlterarClick` | chave da linha ÔåÆ `CarregarPorCodigo` ÔåÆ `EditarRegistro()` ÔåÆ `BOParaForm` ÔåÆ foco na Descri├º├úo | `Case 'ALTERAR'` |
+| `BtnVisualizarClick` | carrega, campos desabilitados, Confirmar off, foco no Cancelar | `Case 'CONSULTAR'` |
+| `BtnExcluirClick` | `MsgConfirma` + `Excluir()` + recarrega lista (padr├úo can├┤nico, 144/199 forms) | `Salva.Click` ramo `'EXCLUIR'` |
+
+A chave lida da grade ├® **`cidchaves`**, n├úo `cods` ÔÇö `cods` tem ├¡ndice n├úo-├║nico e o BO chaveia por `cidchaves` em `Atualizar`/`ExecutarExclusao`.
+
+## Tr├¬s coisas que tive de resolver al├®m do escopo nominal
+
+1. **O form n├úo instanciava.** O probe deu `CREATEOBJECT retornou L`: `BINDEVENT` **valida o delegate**, e as fases 4ÔÇô6 j├í ligaram `BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`BtnEncerrarClick`, que n├úo existiam. Implementei os quatro (nominalmente da Fase 8) ÔÇö sem eles a fase 7 entregaria uma tela que n├úo abre.
+2. **`BtnBuscarClick` ├® busca-por-exemplo, n├úo picker.** O dump tem `PROCEDURE msv_procurar` (`SET NEAR ON` + `SEEK` pelo getCods): o Buscar limpa a ficha, libera s├│ o C├│digo e o **Confirmar** executa a procura. Reproduzi o `NEAR ON` via `LOCATE FOR cods >= procurado` (cursor vem com `ORDER BY cods`), e esse caminho **n├úo** passa por `AlternarPagina(1)` de prop├│sito ÔÇö o funil chama `CarregarLista`, que re-consultaria e perderia a posi├º├úo.
+3. **`InicializarForm` nunca chamava `CarregarLista`.** A Lista abria vazia e os tr├¬s eventos que leem a linha corrente nunca achariam registro. Chamada adicionada.
+
+Tamb├®m corrigi, com base no framework (`fwget.When` + `plProcurar`), o modo BUSCAR: s├│ o C├│digo fica edit├ível ÔÇö campo edit├ível que a busca ignora engana o usu├írio.
+
+## Verifica├º├úo (n├úo s├│ compilou)
+
+- `COMPILE_OK`; 0 `RETURN` dentro de TRY; 0 `BINDEVENT` sem handler; completude (os 4 regexes do `05d`) OK.
+- Auditorias: propriedades inexistentes, m├®todo PROTECTED chamado de fora, fun├º├Áes n├úo definidas (projeto inteiro, exit 0), lookup em KeyPress ÔÇö todas limpas.
+- Dois probes headless (`automation\ProbeSigprintF7.prg` / `F7b.prg`): form instancia; INCLUIR ÔåÆ modo/p├ígina/Tipo=1/Confirmar on; volta ÔåÆ modo LISTA + Confirmar off; guardas de "nenhum registro" avisam e n├úo trocam de p├ígina; busca exata ÔåÆ recno 3, NEAR ÔåÆ recno 2, acima de todos ÔåÆ recno 3, `RECCOUNT` intacto; as 3 valida├º├Áes do Confirmar disparam na ordem e com os textos literais do legado; Cancelar limpa e volta.
+
+Duas ressalvas: o caminho Alterar/Visualizar **com** dados chega ao `CarregarPorCodigo` mas para no `SQLEXEC` ÔÇö esta m├íquina n├úo alcan├ºa o SQL Server (`gnConnHandle` indefinido), ent├úo grava├º├úo/leitura real continua sem prova. E, por fidelidade, mantive o foco indo para a *Descri├º├úo* na valida├º├úo da *Mensagem*, como est├í no SCX (documentado em coment├írio). N├úo commitei nada.

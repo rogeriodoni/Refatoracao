@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo
+
+O erro n├úo chega a tocar `FormSigPrMlu.prg`/`SigPrMluBO.prg`. O log mostra:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso ├® o pr├®-flight de conex├úo (`SQLSTRINGCONNECT`) falhando **antes** de qualquer `CREATEOBJECT` do form/BO ÔÇö o c├│digo migrado nunca chega a ser executado. Confirmei agora mesmo:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False | PingSucceeded: False | SourceAddress: 192.168.199.115
+```
+
+Esse ├® exatamente o bloqueio de infraestrutura j├í documentado na minha mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que roda o pipeline (origem `192.168.199.115`) n├úo tem rota para a sub-rede `192.168.200.0/24` onde est├í o SQL Server `DB_MBAHIA`. Isso j├í se repetiu em 100+ tasks desde 2026-08-02, inclusive nesta mesma sess├úo de hoje (task636, task637).
+
+Ainda assim, revisei o c├│digo com aten├º├úo redobrada antes de descartar a hip├│tese de bug real ÔÇö em particular contei manualmente as 88 colunas e as 88 express├Áes de valor do `INSERT INTO SigMlItn` em `SigPrMluBO.Inserir()` (risco cl├íssico da regra #22 do CLAUDE.md, diverg├¬ncia silenciosa colunas├ùvalores). Bateram 1 a 1, sem diverg├¬ncia. Resto do form/BO (grid com checkbox, 3 CommandGroups, funil de valida├º├úo, FormParaBO/BOParaForm) est├í consistente com os padr├Áes j├í estabelecidos no projeto.
+
+**N├úo editei os arquivos** ÔÇö fazer altera├º├Áes "para satisfazer a tarefa" seria o anti-padr├úo que a pr├│pria mem├│ria do projeto existe para evitar: queima tentativas do orquestrador sem chance de corrigir o sintoma real, e arrisca introduzir regress├úo em c├│digo que j├í est├í correto.
+
+Recomendo marcar task638 como bloqueada por infraestrutura at├® algu├®m com acesso ├á rede liberar a rota 192.168.199.x ÔåÆ 192.168.200.x ÔÇö reexecutar o `runtime_fix` sobre este mesmo form s├│ vai repetir o mesmo erro 1526. Mem├│ria atualizada com essa reincid├¬ncia (tentativa 2/10).

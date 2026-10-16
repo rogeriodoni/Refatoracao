@@ -5322,6 +5322,284 @@ function Test-ModoRecebidoDoChamador {
 
 <#
 .SYNOPSIS
+    Diz se TODA evidencia de NOME de verbo CRUD no dump e', de fato, botao da
+    toolbar de RELATORIO (Click = REPORT FORM).
+
+.DESCRIPTION
+    Setima excecao da familia "evidencia de NOME" do gate da Fase 7. As seis
+    anteriores atacaram o DONO do nome (form pai, container de grade, dialogo
+    filho), o LIMITE do identificador (verbo com sufixo) e QUAL verbo e'
+    ('Excluir' sozinho e' ambiguo). Nenhuma olhou o que o botao FAZ.
+
+    'Visualizar' e' ambiguo pelo mesmo motivo que 'Excluir' era: na barra do
+    frmcadastro ele VE UM REGISTRO, mas na toolbar do frmrelatorio ele da
+    PREVIEW DO RELATORIO. O desempate esta no proprio Click - um
+    "Report Form ... Preview" nao tem registro nenhum para visualizar.
+
+    No SIGPRITB ("Integracao Contabil Total") o btnVisualizar e' o Command2 do
+    CommandGroup de relatorio dentro de cntBotoes, com
+    Picture = relatorio_video_26.jpg e Caption = "\<Video"; o irmao Command1 e'
+    o btnImprimir (relatorio_impressora_26.jpg). Os dois Click sao
+    "Report Form SigPrIct Preview" e "Report Form SigPrIct to Print Prompt
+    NoConsole", e o dump nao tem frmcadastro, Grupo_Op nem pcEscolha. Marcado
+    como CRUD, a fase exigia os quatro BtnXxxClick - insatisfazivel sem
+    INVENTAR botao (viola o PILAR 1) ou criar metodo vazio (proibido pela regra
+    de completude), mesmo com os 4 handlers reais dos 4 botoes do legado.
+
+    FAIL-CLOSED em tres camadas:
+      1. dump vazio -> $false;
+      2. nenhum match do regex de nome -> $false (nao ha o que dispensar);
+      3. verbo cujo "PROCEDURE <nome>.Click" NAO esta no dump NAO e'
+         dispensado - ausencia de prova nao e' prova de ausencia.
+    So devolve $true quando TODO nome casado tem Click PROVADO com REPORT FORM.
+
+    A evidencia ESTRUTURAL (frmcadastro / Grupo_Op / pcEscolha) e' avaliada
+    ANTES no call site e faz short-circuit, entao form CRUD que tambem imprime
+    nunca chega aqui.
+
+    Medido em 2026-10-15 nos dumps de tasks\: a evidencia de NOME muda em
+    exatamente 2 forms legado DISTINTOS (SigPrIct e SigPrItb); em ambos TODO
+    match e' REPORT e ha ZERO regressao nos dumps CRUD conhecidos
+    (SIGCDCOR, sigcdcli, SigCdPro, SIGCDCAR, SigCdMoe, SIGCDSET, SigCdTam,
+    SigPrCtr, SIGPRETQ, SIGMVCTH, SigPrChr, SigCdGrp, sigprtam).
+#>
+function Test-VerbosCrudSaoTodosDeRelatorio {
+    param(
+        [string]$TextoDump
+    )
+
+    # Camada 1: sem dump nao ha prova - mantem a exigencia.
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # MESMO padrao do call site. [regex]::Matches NAO herda a
+    # case-insensitividade do operador -match, entao o IgnoreCase e' explicito:
+    # sem ele um 'btnvisualizar' minusculo escaparia e a dispensa pareceria nao
+    # casar nada.
+    $achados = [regex]::Matches(
+        $TextoDump,
+        '(btn|cmd|Command)(Incluir|Alterar|Visualizar)(?![A-Za-z0-9_])',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    # Camada 2: nada casou - nao ha o que dispensar.
+    if ($achados.Count -eq 0) { return $false }
+
+    $nomes = @{}
+    foreach ($m in $achados) { $nomes[$m.Value.ToUpper()] = $m.Value }
+
+    foreach ($nome in $nomes.Values) {
+        # Corpo do Click daquele objeto, aceitando caminho qualificado
+        # ("PROCEDURE cntBotoes.btnVisualizar.Click").
+        $padraoClick = '(?ims)^[ \t]*PROCEDURE[ \t]+(?:[A-Za-z0-9_]+\.)*' +
+                       [regex]::Escape($nome) +
+                       '\.Click[ \t]*\r?$(.*?)^[ \t]*ENDPROC'
+
+        $mClick = [regex]::Match(
+            $TextoDump,
+            $padraoClick,
+            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+        # Camada 3: sem o Click no dump, NAO dispensa.
+        if (-not $mClick.Success) { return $false }
+
+        if ($mClick.Groups[1].Value -notmatch '(?i)\bREPORT[ \t]+FORM\b') { return $false }
+    }
+
+    return $true
+}
+
+<#
+.SYNOPSIS
+    Devolve o CORPO do "Click" de um objeto do dump legado, nas DUAS formas que
+    o extrator produz.
+
+.DESCRIPTION
+    Existe porque o dump nomeia o Click de dois jeitos diferentes, conforme o
+    objeto:
+
+      (a) QUALIFICADO - membro de CommandGroup sai com o nome na propria
+          linha:  "PROCEDURE btnVisualizar.Click" (SIGPRITB);
+
+      (b) BARE - CommandButton solto sai com a linha generica
+          "PROCEDURE Click", e o nome do objeto aparece so no cabecalho do
+          bloco, "* OBJETO: SIGPRMDC.btnIncluir" (SIGPRMDC).
+
+    Quem procura so (a) nao encontra o Click de NENHUM botao solto e, num gate
+    fail-closed, isso vira "ausencia de prova" - a dispensa simplesmente nunca
+    acontece, sem erro e sem aviso. Foi o que aconteceu ao medir a oitava
+    excecao da Fase 7: zero forms afetados porque o SIGPRMDC usa a forma (b).
+
+    Devolve $null quando nao achou o Click - o chamador decide o que fazer
+    (num gate fail-closed, manter a exigencia).
+#>
+function Get-CorpoClickDoObjetoLegado {
+    param(
+        [string]$TextoDump,
+        [string]$NomeObjeto
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump) -or [string]::IsNullOrWhiteSpace($NomeObjeto)) {
+        return $null
+    }
+
+    $ic = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    $nomeEsc = [regex]::Escape($NomeObjeto)
+
+    # Forma (a): "PROCEDURE <caminho.>?<nome>.Click"
+    $mA = [regex]::Match(
+        $TextoDump,
+        '(?ims)^[ \t]*PROCEDURE[ \t]+(?:[^\r\n.]+\.)*' + $nomeEsc + '\.Click[ \t]*\r?$(.*?)^[ \t]*ENDPROC',
+        $ic)
+    if ($mA.Success) { return $mA.Groups[1].Value }
+
+    # Forma (b): bloco "* OBJETO: <caminho.><nome>" + "PROCEDURE Click" dentro
+    # dele. O bloco termina no proximo "* OBJETO:" ou no fim do dump.
+    $mBloco = [regex]::Match(
+        $TextoDump,
+        '(?ims)^\*[ \t]*OBJETO:[ \t]*(?:[^\r\n.]+\.)*' + $nomeEsc + '[ \t]*\r?$(.*?)(?=^\*[ \t]*OBJETO:|\z)',
+        $ic)
+    if (-not $mBloco.Success) { return $null }
+
+    $mB = [regex]::Match(
+        $mBloco.Groups[1].Value,
+        '(?ims)^[ \t]*PROCEDURE[ \t]+Click[ \t]*\r?$(.*?)^[ \t]*ENDPROC',
+        $ic)
+    if ($mB.Success) { return $mB.Groups[1].Value }
+
+    return $null
+}
+
+<#
+.SYNOPSIS
+    Diz se TODA evidencia de NOME de verbo CRUD no dump e', de fato, botao da
+    toolbar de LINHA de uma grade (Click = Append Blank / Delete + Grade.Refresh).
+
+.DESCRIPTION
+    Oitava excecao da familia "evidencia de NOME" do gate da Fase 7, e irma
+    direta de Test-VerbosCrudSaoTodosDeRelatorio: as duas olham o que o botao
+    FAZ (o corpo do Click) em vez de quem e' o dono do nome.
+
+    O gate ja reconhece a toolbar de LINHA - o comentario do call site diz
+    "todo dump que muda tem 'cmdInserir'+'cmdExcluir' ... isto eh, toolbar de
+    linha" -, mas a dispensa ficou restrita ao verbo 'Excluir' sozinho, porque
+    se presumiu que o botao que ACRESCENTA linha se chama sempre 'Inserir'
+    (que nao e' verbo da barra CRUD). O SIGPRMDC ("Muda Conta") chama o dele de
+    'btnIncluir': o Click e' "Select csContas / If !Empty(ContaAnt) And
+    !Empty(ContaNov) / Append Blank / Endif / ThisForm.Grade.Refresh /
+    ThisForm.Grade.Column1.Text1.SetFocus" - acrescenta UMA LINHA ao cursor
+    local que alimenta a Grade, sem tabela, sem SQL e sem modo -, e o irmao
+    'btnExcluir' e' "Select csContas / Delete / ThisForm.Grade.Refresh /
+    ThisForm.Grade.Column1.Text1.SetFocus". O dump nao tem frmcadastro,
+    Grupo_Op nem pcEscolha, e nao existe nenhum Alterar/Visualizar. Marcado
+    como CRUD, a fase exigia os quatro BtnXxxClick - insatisfazivel sem
+    INVENTAR botao (viola o PILAR 1) ou criar metodo vazio (proibido pela regra
+    de completude), mesmo com os 5 handlers reais dos 5 botoes do legado.
+
+    Assinatura exigida do Click, TODA ela, para cada nome casado:
+      1. mexe em UMA LINHA de cursor local - "Append Blank" ou "Delete" nu
+         (comando sozinho na linha, sem "From"/"For"/"All"/"Next");
+      2. repinta uma GRADE - "<algo com Grd/Grade/Grid>.Refresh";
+      3. NAO persiste nada - sem Insert Into / Update <x> / Delete From /
+         SqlExec / SqlExecute / TableUpdate / Replace ... In <cursor remoto> e
+         sem pcEscolha no corpo.
+
+    A camada 3 e' o que mantem a dispensa estreita: botao CRUD de verdade
+    grava (ou chama quem grava) e nunca passa por ela.
+
+    FAIL-CLOSED em tres camadas, igual a irma:
+      1. dump vazio -> $false;
+      2. nenhum match do regex de nome -> $false (nao ha o que dispensar);
+      3. verbo cujo "PROCEDURE <nome>.Click" NAO esta no dump NAO e'
+         dispensado - ausencia de prova nao e' prova de ausencia.
+
+    A evidencia ESTRUTURAL (frmcadastro / Grupo_Op / pcEscolha) e' avaliada
+    ANTES no call site e faz short-circuit, entao form CRUD que tambem tem
+    grade editavel nunca chega aqui.
+#>
+function Test-VerbosCrudSaoTodosDeLinhaDeGrade {
+    param(
+        [string]$TextoDump,
+
+        # Inclui 'Excluir' no conjunto de nomes escrutinados, e casa o nome com
+        # o MESMO padrao (sem guarda de fim-de-identificador) que o call site da
+        # Fase 8 usa para contar evidencia de CRUD.
+        #
+        # A Fase 7 NAO passa este switch: lá 'Excluir' sozinho ja tem dispensa
+        # propria ($soExcluirDeLinha), e o padrao com (?!...) e' o que aquele
+        # call site conta. A Fase 8 e' o oposto - o predicado dela
+        # ($soApagaLinhaGradeF8) exige que 'Excluir' seja o UNICO verbo casado,
+        # entao o par 'btnIncluir'+'btnExcluir' do SIGPRMDC ficava fora de
+        # alcance pelos DOIS lados.
+        #
+        # Casar SEM a guarda e' o lado SEGURO, nao o permissivo: verbo com
+        # sufixo ('btnExcluirTudo') casa o prefixo, a busca do Click daquele
+        # NOME nao encontra nada e a Camada 3 devolve $false. Com a guarda, o
+        # mesmo nome simplesmente nao entraria na lista e deixaria de ser
+        # escrutinado - justamente o que o call site contou como CRUD.
+        [switch]$IncluirVerboExcluir
+    )
+
+    # Camada 1: sem dump nao ha prova - mantem a exigencia.
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # MESMO padrao do call site. [regex]::Matches NAO herda a
+    # case-insensitividade do operador -match, entao o IgnoreCase e' explicito.
+    $padraoNome = if ($IncluirVerboExcluir) {
+        '(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)'
+    } else {
+        '(btn|cmd|Command)(Incluir|Alterar|Visualizar)(?![A-Za-z0-9_])'
+    }
+    $achados = [regex]::Matches(
+        $TextoDump,
+        $padraoNome,
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    # Camada 2: nada casou - nao ha o que dispensar.
+    if ($achados.Count -eq 0) { return $false }
+
+    $nomes = @{}
+    foreach ($m in $achados) { $nomes[$m.Value.ToUpper()] = $m.Value }
+
+    foreach ($nome in $nomes.Values) {
+        # Corpo do Click daquele objeto, nas duas formas que o dump produz -
+        # "PROCEDURE btnIncluir.Click" (membro de grupo) e "PROCEDURE Click"
+        # sob "* OBJETO: ...btnIncluir" (botao solto, que eh o caso do
+        # SIGPRMDC).
+        $corpo = Get-CorpoClickDoObjetoLegado -TextoDump $TextoDump -NomeObjeto $nome
+
+        # Camada 3: sem o Click no dump, NAO dispensa.
+        if ($null -eq $corpo) { return $false }
+
+        # (1) mexe em UMA LINHA de cursor local. "Delete" nu = comando sozinho
+        #     na linha; "Delete From"/"Delete All"/"Delete For"/"Delete Next"
+        #     NAO contam (o primeiro e' SQL, os outros apagam em massa).
+        $mexeEmLinha = ($corpo -match '(?im)^[ \t]*APPEND[ \t]+BLANK\b') -or
+                       ($corpo -match '(?im)^[ \t]*DELETE[ \t]*\r?$')
+        if (-not $mexeEmLinha) { return $false }
+
+        # (2) repinta uma GRADE.
+        if ($corpo -notmatch '(?i)(Grd|Grade|Grid)[A-Za-z0-9_]*[ \t]*\.[ \t]*Refresh\b') {
+            return $false
+        }
+
+        # (3) NAO persiste nada, e nao conhece modo CRUD.
+        $padroesPersistencia = @(
+            'Insert[ \t]+Into\b',
+            'Update[ \t]+[A-Za-z0-9_]',
+            'Delete[ \t]+From\b',
+            'SqlExec(ute)?\b',
+            'TableUpdate\b',
+            'pcEscolha'
+        )
+        foreach ($padrao in $padroesPersistencia) {
+            if ($corpo -match "(?i)$padrao") { return $false }
+        }
+    }
+
+    return $true
+}
+
+<#
+.SYNOPSIS
     Detecta no dump do legado o padrao "dialogo de EXIBICAO": a tela TEM
     controle de entrada, mas TODOS eles sao somente-leitura (ReadOnly = .T.).
 
@@ -5504,8 +5782,89 @@ function Test-LegadoControlSourceLigaLista {
             # ControlSource: so NAO e' lista quando o dono e' grupo de botoes.
             if (-not $objProp) { return $true }
             if (-not $baseClass.ContainsKey($objProp)) { return $true }
-            if ($baseClass[$objProp] -notin @('commandgroup', 'optiongroup')) { return $true }
+            if ($baseClass[$objProp] -notin @('commandgroup', 'optiongroup', 'listbox', 'combobox')) { return $true }
         }
+    }
+
+    return $false
+}
+<#
+.SYNOPSIS
+    Diz se algum ListBox do SCX legado e' de fato uma LISTA DE REGISTROS
+.DESCRIPTION
+    Irma de Test-LegadoAddCursorLigaGrade e Test-LegadoControlSourceLigaLista,
+    para o falso positivo que nenhuma das duas cobre: o teste ESTRITO de lista
+    contava QUALQUER 'BaseClass: listbox' como prova de grade, por simples
+    presenca do token. Mas em VFP9 quem define a ORIGEM DAS LINHAS de um
+    ListBox e' o par RowSourceType/RowSource, nao a BaseClass:
+
+      0 = None    1 = Value (lista literal, separada por virgula)
+      2 = Alias   3 = SQL Statement   4 = Query   5 = Array
+      6 = Fields  7 = Files   8 = Structure   9 = Popup   10 = Collection
+
+    Com RowSourceType 0 ou 1 o controle nao le tabela nem cursor: as linhas sao
+    uma STRING literal (ou chegam por AddItem em runtime) e o ListBox e' um
+    campo de ENTRADA como outro qualquer. O gate ja tratava ComboBox assim -
+    'BaseClass: combobox' NUNCA entrou no regex estrito, mesmo com
+    RowSourceType = 6. A incoerencia era so com ListBox.
+
+    FAIL-CLOSED: devolve $true (existe lista) sempre que NAO da para provar o
+    contrario - ListBox sem RowSourceType no dump, ou com valor fora de {0,1},
+    MANTEM a exigencia de grade. So dispensa quando TODO ListBox do dump esta
+    provadamente em 0 ou 1. Dump sem ListBox nenhum devolve $false (nao ha
+    ListBox para ligar lista - quem responde por grid/pageframe e' o regex).
+
+    Medido em 2026-10-14 nos dumps de tasks\: o delta e' de 2 forms legado
+    distintos - SIGPRILA (assistente de Importacao de Planilha, List1 de
+    'Ordem das Colunas' com RowSourceType = 1 preenchido em runtime) e SIGPRIMP
+    (Importacao de dados, ListBox 'Arquivos' com RowSourceType = 1 alimentado
+    por AddItem a partir de ADir() no diretorio de importacao). Em ambos: zero
+    BaseClass grid|pageframe, zero pColuna|Grade|grd, AddCursor nao liga grade.
+#>
+function Test-LegadoListBoxLigaLista {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    $linhas = $TextoDump -split "`r?`n"
+
+    # 1a passada (SECAO 1 - arvore de objetos): quais objetos sao ListBox.
+    $listbox  = @{}
+    $objAtual = ""
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') {
+            $objAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*listbox\s*$') {
+            if ($objAtual) { $listbox[$objAtual.ToUpper()] = $null }
+        }
+    }
+
+    # Sem ListBox nenhum nao ha o que decidir aqui.
+    if ($listbox.Count -eq 0) { return $false }
+
+    # 2a passada (SECAO 2 - propriedades): RowSourceType de cada ListBox. O
+    # cabecalho traz o caminho completo; a chave e' a ultima parte, igual ao
+    # que Test-LegadoDialogoExibicao ja faz para ReadOnly.
+    $objProp = ""
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') {
+            $partes  = $matches[1] -split '\.'
+            $objProp = $partes[$partes.Count - 1].ToUpper()
+        } elseif ($linha -match '^\s*RowSourceType\s*=\s*(\d+)\s*$') {
+            if ($objProp -and $listbox.ContainsKey($objProp)) {
+                $listbox[$objProp] = [int]$matches[1]
+            }
+        }
+    }
+
+    # FAIL-CLOSED: um unico ListBox sem prova de RowSourceType em {0,1} basta
+    # para manter a exigencia de grade.
+    foreach ($chave in @($listbox.Keys)) {
+        $tipo = $listbox[$chave]
+        if ($null -eq $tipo) { return $true }
+        if ($tipo -ne 0 -and $tipo -ne 1) { return $true }
     }
 
     return $false
@@ -6638,7 +6997,8 @@ function Invoke-MigracaoFase {
                     if (Test-Path $dumpCapturaF4) {
                         $txtCapturaF4 = Get-Content $dumpCapturaF4 -Raw -ErrorAction SilentlyContinue
                         if ($txtCapturaF4) {
-                            $temListaEstritaF4 = ($txtCapturaF4 -match '(?im)^\s*BaseClass:\s*(grid|pageframe|listbox)\s*$') -or
+                            $temListaEstritaF4 = ($txtCapturaF4 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                 (Test-LegadoListBoxLigaLista -TextoDump $txtCapturaF4) -or
                                                  ($txtCapturaF4 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
                                      (Test-LegadoAddCursorLigaGrade -TextoDump $txtCapturaF4) -or
                                                  (Test-LegadoControlSourceLigaLista -TextoDump $txtCapturaF4)
@@ -6920,7 +7280,8 @@ function Invoke-MigracaoFase {
                     if (Test-Path $dumpCapturaF5) {
                         $txtCapturaF5 = Get-Content $dumpCapturaF5 -Raw -ErrorAction SilentlyContinue
                         if ($txtCapturaF5) {
-                            $temListaEstritaF5 = ($txtCapturaF5 -match '(?im)^\s*BaseClass:\s*(grid|pageframe|listbox)\s*$') -or
+                            $temListaEstritaF5 = ($txtCapturaF5 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                 (Test-LegadoListBoxLigaLista -TextoDump $txtCapturaF5) -or
                                                  ($txtCapturaF5 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
                                      (Test-LegadoAddCursorLigaGrade -TextoDump $txtCapturaF5) -or
                                                  (Test-LegadoControlSourceLigaLista -TextoDump $txtCapturaF5)
@@ -7275,7 +7636,8 @@ function Invoke-MigracaoFase {
                     if (Test-Path $dumpCapturaF6) {
                         $txtCapturaF6 = Get-Content $dumpCapturaF6 -Raw -ErrorAction SilentlyContinue
                         if ($txtCapturaF6) {
-                            $temListaEstritaF6 = ($txtCapturaF6 -match '(?im)^\s*BaseClass:\s*(grid|pageframe|listbox)\s*$') -or
+                            $temListaEstritaF6 = ($txtCapturaF6 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                 (Test-LegadoListBoxLigaLista -TextoDump $txtCapturaF6) -or
                                                  ($txtCapturaF6 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
                                                  (Test-LegadoAddCursorLigaGrade -TextoDump $txtCapturaF6) -or
                                                  (Test-LegadoControlSourceLigaLista -TextoDump $txtCapturaF6)
@@ -7435,10 +7797,41 @@ function Invoke-MigracaoFase {
                             # 'cmdInserir'+'cmdExcluir' (ou ToolTipText "Excluir Item
                             # da Grade"/"Excluir Item"), isto eh, toolbar de linha.
                             # Narrowing DELIBERADO em relacao a "exigir >=2 verbos":
-                            # SigPrIct e SigPrItb tem 'btnVisualizar' unico e
-                            # seguiriam CRUD aqui, mas aquela variante os liberaria.
+                            # SigPrIct e SigPrItb tem 'btnVisualizar' unico; a
+                            # variante dos >=2 verbos os liberaria, mas mexia em 17
+                            # forms. RESOLVIDO em 2026-10-15 por um criterio mais
+                            # ESTREITO - Test-VerbosCrudSaoTodosDeRelatorio, logo
+                            # abaixo, que olha o CLICK (REPORT FORM) em vez de
+                            # contar irmaos, e muda o veredicto desses 2 forms so.
                             if (-not $temCrudLegado -and ($txtLegadoF7 -match '(btn|cmd|Command)(Incluir|Alterar|Visualizar)(?![A-Za-z0-9_])')) {
-                                if (-not (Test-DialogoFilhoDoChamador -TextoDump $txtLegadoF7)) {
+                                $ehDialogoFilhoF7 = Test-DialogoFilhoDoChamador -TextoDump $txtLegadoF7
+
+                                # Setima excecao da familia do NOME, e a primeira
+                                # que olha o que o botao FAZ: 'Visualizar' na
+                                # toolbar do frmrelatorio da PREVIEW DO RELATORIO
+                                # (Click = "Report Form ... Preview"), nao a vista
+                                # de um REGISTRO. Dispensa so quando TODO nome
+                                # casado tem Click provado com REPORT FORM
+                                # (fail-closed em 3 camadas - ver a funcao).
+                                $soRelatorioF7 = Test-VerbosCrudSaoTodosDeRelatorio -TextoDump $txtLegadoF7
+
+                                # Oitava excecao da familia do NOME, irma da
+                                # setima: a toolbar de LINHA de grade tambem
+                                # se desempata pelo CLICK. O comentario acima
+                                # ja constatou que esses dumps sao "cmdInserir
+                                # + cmdExcluir", mas a dispensa do 'Excluir
+                                # sozinho' nao alcanca o legado que chama o
+                                # botao de acrescentar linha de 'Incluir' (e
+                                # nao de 'Inserir') - o SIGPRMDC ("Muda Conta")
+                                # faz exatamente isso: btnIncluir.Click eh
+                                # "Select csContas / Append Blank /
+                                # ThisForm.Grade.Refresh", sem tabela, sem SQL
+                                # e sem modo. Dispensa so quando TODO nome
+                                # casado tem Click provado como linha-de-grade
+                                # (fail-closed em 3 camadas - ver a funcao).
+                                $soLinhaGradeF7 = Test-VerbosCrudSaoTodosDeLinhaDeGrade -TextoDump $txtLegadoF7
+
+                                if (-not $ehDialogoFilhoF7 -and -not $soRelatorioF7 -and -not $soLinhaGradeF7) {
                                     $temCrudLegado = $true
                                 }
                             }
@@ -7717,6 +8110,41 @@ function Invoke-MigracaoFase {
                             $soApagaLinhaGradeF8 = ($verbosCrudCasadosF8.Count -gt 0) -and
                                                    (@($verbosCrudCasadosF8 | Where-Object { $_ -ne 'excluir' }).Count -eq 0) -and
                                                    (Test-LegadoEscritaSoEmCursorLocal -TextoDump $txtLegadoF8)
+
+                            # DESEMPATE PELO CLICK - defeito GEMEO do que a
+                            # Fase 7 acabou de consertar na mesma familia
+                            # ("evidencia de NOME"). As duas provas acima
+                            # pressupoem que o botao que ACRESCENTA linha se
+                            # chama 'Inserir' (fora da lista de verbos CRUD) e
+                            # que a tela nao persiste em lugar nenhum. O
+                            # SIGPRMDC ("Muda Conta") e o irmao sigprmdp quebram
+                            # as duas: chamam o deles de 'btnIncluir' - e
+                            # 'Incluir' ESTA na lista -, e a tela persiste de
+                            # verdade, mas em OUTRO botao ('btnProcessar', que
+                            # nao e' verbo CRUD). Resultado: 'excluir' nao era o
+                            # unico verbo E a escrita nao era so em cursor
+                            # local, entao os DEZ ramos de excecao ficavam fora
+                            # de alcance e a fase exigia BtnCancelarClick de um
+                            # legado que nao tem Page2, nem modo de edicao, nem
+                            # botao de Cancelar - insatisfazivel sem INVENTAR
+                            # botao (viola o PILAR 1) ou criar metodo vazio
+                            # (proibido pela regra de completude), mesmo com os
+                            # 5 handlers reais dos 5 botoes do legado.
+                            #
+                            # A pergunta certa nao e' "a TELA grava?" e sim "o
+                            # botao com NOME de verbo CRUD grava?" - o mesmo
+                            # "olhar o ALVO, nao o NOME" que os ramos
+                            # VISUALIZADOR e FILTRO-DESPACHO ja precisaram
+                            # aplicar. Test-VerbosCrudSaoTodosDeLinhaDeGrade
+                            # responde isso lendo o corpo do Click de CADA nome
+                            # casado e exigindo as tres marcas juntas (Append
+                            # Blank/Delete nu + <Grade>.Refresh + NENHUMA
+                            # persistencia no corpo). Botao CRUD de verdade
+                            # grava, ou chama quem grava, e nunca passa.
+                            if (-not $soApagaLinhaGradeF8) {
+                                $soApagaLinhaGradeF8 = Test-VerbosCrudSaoTodosDeLinhaDeGrade `
+                                    -TextoDump $txtLegadoF8 -IncluirVerboExcluir
+                            }
                         }
                     }
                     $semCrudRealF8 = $semCrudLegadoF8 -or $soApagaLinhaGradeF8
@@ -8148,7 +8576,8 @@ function Invoke-MigracaoFase {
                     #      linha com \b, NAO substring: a tabela "o que nao se
                     #      aplica" que se escreve no cabecalho do form satisfaria
                     #      um -match solto e a dispensa viraria NO-OP.
-                    $semGradeProtocoloF8 = -not (($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe|listbox)\s*$') -or
+                    $semGradeProtocoloF8 = -not (($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                 (Test-LegadoListBoxLigaLista -TextoDump $txtLegadoF8) -or
                                                  ($txtLegadoF8 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
                                                  (Test-LegadoAddCursorLigaGrade -TextoDump $txtLegadoF8) -or
                                                  (Test-LegadoControlSourceLigaLista -TextoDump $txtLegadoF8))
@@ -8376,7 +8805,8 @@ function Invoke-MigracaoFase {
                     #      selecao - nao vale trocar o grafico por outra coisa;
                     #   7. o migrado entrega o handler de Click do(s) botao(oes)
                     #      que o legado tem.
-                    $semGradeGraficoF8 = -not (($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe|listbox)\s*$') -or
+                    $semGradeGraficoF8 = -not (($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                 (Test-LegadoListBoxLigaLista -TextoDump $txtLegadoF8) -or
                                                ($txtLegadoF8 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
                                                (Test-LegadoAddCursorLigaGrade     -TextoDump $txtLegadoF8) -or
                                                (Test-LegadoControlSourceLigaLista -TextoDump $txtLegadoF8))

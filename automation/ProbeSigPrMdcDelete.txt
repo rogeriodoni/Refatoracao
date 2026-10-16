@@ -1,0 +1,8 @@
+=== PROBE DELETE FormSigPrMdc ===
+SET(DELETED) na datasession privada = [ON] (esperado ON)
+ANTES do Excluir: RECCOUNT=3 RECNO=3
+posicionado em RECNO=2 ContaAnt=[0000000003]
+DEPOIS do Excluir: RECCOUNT=3 NAVEGAVEIS(SCAN)=2 (esperado 2) DELETADOS=1 (esperado 1)
+ponteiro final: RECNO=3 DELETED=.F. ContaAnt=[0000000005]  <- se DELETED=.T. o ponteiro parou numa linha que a grade NAO mostra
+grade: ActiveRow=2 RelativeRow=1
+=== FIM ===

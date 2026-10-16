@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and verified. 
+
+## What was wrong
+
+The Fase 4 gate for an **OPERACIONAL / flat-layout** form requires three things (`OrquestradorMigracao.ps1:6586-6591`):
+
+| Requirement | Status before |
+|---|---|
+| `AddObject("grd_4c_ÔÇª` | Ô£à present |
+| `AddObject("cmd_4c_ÔÇª` / `cmg_4c_` | Ô£à present (5 buttons) |
+| `CarregarLista` / `CarregarDados` / `MontaGrade` | ÔØî **absent** |
+
+The previous run built the grid and buttons but never created a data-loading method, so the gate failed on that single item. The repaint logic was instead scattered inline as raw `grd_4c_Dados.Refresh` calls across five handlers.
+
+## What I did
+
+Added `PROCEDURE CarregarLista(par_cPosicao)` as the single bind-and-repaint funnel (regra #21a) and routed every cursor-mutating path through it ÔÇö real logic, not a stub to satisfy a regex:
+
+- **Re-binds** `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Width` ÔåÆ `Header1.Caption` in that order, since assigning `RecordSource` resets widths to the 90 default and captions to `"Header1"` (Problema 48 / Pattern #180).
+- **Does not touch `ColumnCount`** ÔÇö reassigning it recreates the `Column` objects and would silently destroy the `BINDEVENT`s that `ConfigurarGrid` installs on `Column1.Text1`/`Column2.Text1` for the cell lookups (Pattern #183).
+- **Recreates the cursor via the BO** if the `csContas` alias was closed by another flow, since `InicializarCursorContas()` does `USE IN` + `CREATE CURSOR` and would otherwise leave the grid bound to a dead alias.
+- **`par_cPosicao` reproduces each legacy call site's own positioning** rather than a blanket `GO TOP`: the legacy uses `Go bott` after the XLS import but deliberately does *not* reposition on Incluir/Excluir ÔÇö a blanket `GO TOP` would have yanked the pointer off the row the user just appended.
+
+Call sites: `InicializarForm` (`"TOPO"`), `BtnIncluirClick` (`""`), `BtnExcluirClick` (`""`), `BtnExportaClick` (`"FIM"`), `BtnProcessarClick` post-reset (`"TOPO"`).
+
+I left `ValidarCelulaConta`/`AbrirBuscaConta` without a repaint on purpose ÔÇö both already keep cell and cursor in sync via `Text1.Value`, the legacy `Valid` doesn't repaint there, and a mid-edit `RecordSource` reassignment risks disrupting the in-cell edit.
+
+## Verification
+
+- **Compiles clean in VFP9** ÔÇö form and BO both produce `.FXP` with zero `.err` output (generated `.fxp` then deleted so the next phase doesn't run stale p-code).
+- Gate items: 1 grid, 5 buttons, `CarregarLista` present.
+- Balanced `PROCEDURE/ENDPROC` (23/23), `WITH/ENDWITH` (27/27), `TRY/ENDTRY` (14/14), `IF/ENDIF` (63/63), `SCAN/ENDSCAN` (5/5), `DO CASE/ENDCASE` (1/1).
+- `RETURN` outside `TRY/CATCH` (regra #1); method is PUBLIC so `TesteAutomatico.prg` can call it (regra #3); file is pure ASCII with accents via `CHR()` (regra #4); no TODO/stub markers.
+
+One thing worth flagging: the file had been written with **LF-only line endings** by the earlier phase's Write tool while every sibling form in the working tree is CRLF. I restored CRLF. This is cosmetic for git (`core.autocrlf=true` normalizes on commit) but it's why `git diff --stat` reports the whole file as rewritten rather than just my ~80 added lines.

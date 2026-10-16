@@ -1,0 +1,21 @@
+INICIO
+=== BtnVisualizarClick na linha 2 (cidchaves=...002)
+modo=LISTA page=1 (o SQLEXEC falha nesta maquina: o que importa eh NAO ter caido no aviso 'Selecione um registro')
+=== POS BtnBuscarClick
+modo=BUSCAR page=2 cod.Enabled=.T. descrs.Enabled=.F. mensas.Enabled=.F. confirmar=.T.
+=== Buscar 0000000030 (exato)
+modo=LISTA page=1 recno=3 (esperado 3) cods=0000000030 reccount=3 (esperado 3 - nada apagado)
+=== Buscar 0000000015 (NEAR)
+recno=2 (esperado 2) cods=0000000020
+=== Buscar 9999999999 (acima de todos)
+recno=3 (esperado 3) cods=0000000030
+=== Confirmar INCLUIR vazio (validacao 1)
+modo=INCLUIR page=2 (deve ficar em 2)
+=== validacoes 2 e 3 (ver DIALOGOS) page=2
+=== POS BtnCancelarClick
+modo=LISTA page=1 cod.Value=[] descrs.Value=[] confirmar=.F.
+RELEASE OK
+DIALOGOS: [14/10/2026 23:25:12] SIGPRINTBO.CarregarPorCodigo: Erro ao carregar: | Variable 'GNCONNHANDLE' is not found.
+[14/10/2026 23:25:12] Atenção: Codigo Inválido!!!
+[14/10/2026 23:25:12] Atenção: Descrição Inválida!!!
+[14/10/2026 23:25:12] Atenção: Mensagem Inválida!!! Atenção Esta Mensagem Será Utilizada na Impressão da Solicitação!!! Portanto É Necessário Que a Mesma Seja Preenchida!!!

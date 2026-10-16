@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All references updated. Fix summary:
+
+The test harness `TesteAutomatico.prg` (test `BtnEncerrarExiste`) requires the close method to be named `BtnEncerrarClick`, `BtnFecharClick`, or `BtnSairClick` ÔÇö but the form had it as `CmdsairClick` (inherited from the legacy object name `cmdsair`, not its Caption). This matches a known pattern already in memory: the handler must be named by the button's **action/Caption** ("Encerrar"), not the legacy object name.
+
+Renamed the handler in `Formsigprite.prg`:
+- `PROCEDURE CmdsairClick()` ÔåÆ `PROCEDURE BtnEncerrarClick()`
+- Updated the `BINDEVENT` call and header comments accordingly
+
+The control name `cmd_4c_Cmdsair` was left unchanged (no `mapeamento.json` update needed, per the established pattern ÔÇö only the handler is enumerated by the gate). No business logic was touched.

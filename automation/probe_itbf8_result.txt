@@ -1,0 +1,42 @@
+PROBE FASE8 HOOKS FormSigPrItb - inicio 15/10/2026 19:13:27
+0 SETUP: OK
+1 INSTANCIA: VARTYPE=O
+2a Data1 .Value=[15/10/2026] tipo=D esperado=[15/10/2026]
+2b Data2 .Value=[15/10/2026]
+2c Emp1  .Value=[] LEN=0 (esperado 0)
+2d Dsemp1 .Value=[] LEN=0 (esperado 0)
+3a modo=[FILTRO] (esperado FILTRO)
+3b Data1.Enabled=.T. Data2=.T. Emp1=.T. Dsemp1=.T. (esperado .T. nos 4)
+3c Processar.Enabled=.T. (esperado .T.)
+3d btnImprimir=.F. btnVisualizar=.F. (esperado .F. nos 2)
+3e cnt_4c_Aguarde.Visible=.F. (esperado .F.)
+4a FormParaBO(): .T.
+4b BO DataInicial=[01/01/2026] tipo=D (esperado D 01/01/2026)
+4c BO DataFinal  =[31/01/2026]
+4d BO Empresa    =[001] (esperado 001)
+4e BO DescEmpresa=[MARCELLA BAHIA]
+5a BOParaForm(): .T.
+5b tela Data1=[01/01/2026] (esperado 01/01/2026)
+5c tela Emp1 =[001] (esperado 001)
+5d tela Dsemp1=[MARCELLA BAHIA]
+6a sem data inicial: .F. msg=[Data Inicial Inválida!!!]
+6b sem data final  : .F. msg=[Data Final Inválida!!!]
+6c final < inicial : .F. msg=[A Data Final Não Pode Ser Menor Que a Inicial!!!]
+6d periodo valido  : .T.
+7a pos INCONSISTENCIA: filtro=.F./.F./.F./.F. (esperado .F. nos 4)
+7b Processar=.F. (esperado .F.)
+7c relatorio=.T./.T. (esperado .T. nos 2)
+7d volta FILTRO: filtro=.T. Processar=.T. relatorio=.F.
+7e HabilitarCampos() sem arg: Data1=.T. (esperado .T.)
+8a FormParaBO           protected=.T. (esperado .T.)
+8b BOParaForm           protected=.T. (esperado .T.)
+8c HabilitarCampos      protected=.F. (esperado .F.)
+8d AjustarBotoesPorModo protected=.F. (esperado .F.)
+8e BtnProcessarClick    protected=.F. (esperado .F.)
+8f BtnEncerrarClick     protected=.F. (esperado .F.)
+9 PrepararCursoresRelatorio() sem cursor: .F. (esperado .F.)
+10 RELEASE: OK
+DIALOGOS SUPRIMIDOS:
+[15/10/2026 19:13:27] Atenção: Nenhuma inconsistência disponível para o relatório.
+
+FIM 15/10/2026 19:13:27

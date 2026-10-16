@@ -1,461 +1,291 @@
-*==============================================================================
-* SigPrMluBO.prg - Business Object: Unificacao de Mala Direta
-* Tabela principal: SigMlItn (lista de malas para unificacao)
-* Tabela secundaria: SigMlCab (membros/destinatarios das malas)
-*==============================================================================
+*============================================================================
+* SigPrMluBO.prg - Business Object para Unificacao de Mala Direta (SIGPRMLU)
+*
+* Form OPERACIONAL (SIGPRMLU / FormSigPrMlu): lista as malas diretas
+* cadastradas (SigMlItn, grid com checkbox de selecao), permite ao usuario
+* marcar duas ou mais e "Processar" a unificacao delas numa mala NOVA:
+*   - gera um codigo novo (equivalente a Substr(Sys(2015),3,10) do legado)
+*   - duplica, deduplicando por chave logica (Desti+Ceps+Endes+Nums+Compls),
+*     os registros de SigMlCab (Where Codigos = <malaSelecionada>) na mala
+*     nova
+*   - insere o cabecalho da mala nova em SigMlItn (Codigos/Descs/Ativos/
+*     UsuIns/DatIns/NRegis/Espelhos/Unificas)
+*
+* this_cTabela/this_cCampoChave apontam para SigMlItn (cabecalho da mala,
+* entidade listada na grade principal do form - equivalente ao
+* AddCursor('SigMlItn', 'Codigos', 'crSigMlItn', ...) do Init legado).
+* SigMlCab (registros/clientes dentro de cada mala, PK cidchaves) e
+* manipulada em bloco durante o Processamento (Fase 2+), sem mapeamento
+* propriedade-a-propriedade, pois o legado faz Select * / Scatter Memvar /
+* Gather Memvar (copia integral do registro, nao campo a campo).
+*
+* Herda de: BusinessBase
+* Criado em: Fase 1 - Propriedades e Init
+*============================================================================
+
 DEFINE CLASS SigPrMluBO AS BusinessBase
 
-    *-- Propriedades do registro SigMlItn gerado pela unificacao
-    this_cCodigos        = ""   && char(10) PK - codigo gerado via SYS(2015)
-    this_cDescs          = ""   && char(30) - nome da unificacao digitado pelo usuario
-    this_cUsuIns         = ""   && char(10) - usuario que executou
-    this_nNRegis         = 0    && numeric(8,0) - qtd de registros unificados (apos dedup)
-    this_cEspelhos       = ""   && char(8)  - sempre 'SigPrMlu'
-    this_cUnificas       = ""   && text     - lista de codigos unificados (sep '; ')
+    *==========================================================================
+    * Propriedades de registro - espelham as colunas de SigMlItn (docs/
+    * schema.sql) efetivamente usadas pelo SIGPRMLU.scx (cabecalho da mala
+    * direta exibido na grade e gravado ao final da unificacao). As demais
+    * colunas de SigMlItn (filtros de geracao da mala: anivfs/cepfs/faixafs/
+    * opsexs/etc.) pertencem ao cadastro de Mala Direta (outro form) e NAO
+    * sao tocadas por SIGPRMLU - nao sao declaradas aqui.
+    *==========================================================================
+    this_cCodigos    = SPACE(10)  && SigMlItn.codigos  - char(10) NOT NULL (PK) - grdselecoes.Column2
+    this_cDescs      = SPACE(30)  && SigMlItn.descs    - char(30) NOT NULL - grdselecoes.Column3 / nome da unificacao
+    this_lAtivos     = .F.        && SigMlItn.ativos   - bit NOT NULL - sempre .T. na mala resultante da unificacao
+    this_cUsuIns     = SPACE(10)  && SigMlItn.usuins   - char(10) NOT NULL - grdselecoes.Column4 (Usuar do legado)
+    this_dDatIns     = {}         && SigMlItn.datins   - datetime NULL - grdselecoes.Column5 (DateTime() na gravacao)
+    this_dDatAlts    = {}         && SigMlItn.datalts  - datetime NULL - nao gravado por este form (.NULL. no Insert legado)
+    this_dUlts       = {}         && SigMlItn.ults     - datetime NULL - nao gravado por este form (.NULL. no Insert legado)
+    this_dDtEnts     = {}         && SigMlItn.dtents   - datetime NULL - nao gravado por este form (.NULL. no Insert legado)
+    this_nNRegis     = 0          && SigMlItn.nregis   - numeric(8,0) NOT NULL - grdselecoes.Column6 (Reccount da mala unificada)
+    this_cEspelhos   = SPACE(8)   && SigMlItn.espelhos - char(8) NOT NULL - origem fixa 'SigPrMlu' (Insert legado)
+    this_cUnificas   = ""         && SigMlItn.unificas - text NULL - lista "codigo1; codigo2; " das malas de origem
 
-    *-- Controle interno do processamento
-    this_nTotalMalas     = 0    && qtd de malas selecionadas (SelImp=1 AND NRegis>0)
-    this_nTotalRegistros = 0    && total bruto de registros antes da deduplicacao
+    *==========================================================================
+    * Estado de processamento - nao sao colunas persistidas isoladamente;
+    * controlam a unificacao (Processamento() legado) e espelham o estado da
+    * tela (txt_4c_Nova/getNova e os resultados intermediarios do calculo)
+    *==========================================================================
+    this_cNomeUnificacao        = SPACE(20)  && cntNova.getNova.Value - MaxLength=20 no SCX legado
+    this_cCodigoGerado          = SPACE(10)  && lcNew  - Substr(Sys(2015),3,10), codigo da mala resultante
+    this_nTotalRegistrosOrigem  = 0          && lnTot  - soma de Reccount('crTmp') de cada mala selecionada
+    this_cCodigosSelecionados   = ""         && lcUni  - "codigo1; codigo2; " das malas marcadas (SelImp = 1)
+    this_nTotalMalasSelecionadas = 0         && Reccount('csMalasSelecionadas') - quantidade de malas marcadas
 
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Init - Inicializa o Business Object configurando a tabela/chave
+    * primaria de referencia (SigMlItn/codigos - equivalente ao AddCursor(
+    * 'SigMlItn', 'Codigos', 'crSigMlItn', ...) do Init legado, que define
+    * qual entidade a grade principal do form lista e processa)
+    *==========================================================================
     PROCEDURE Init()
-        this_cTabela     = "SigMlItn"
-        this_cCampoChave = "Codigos"
-        DODEFAULT()
+        LOCAL loc_lResultado, loc_oErro
+        loc_lResultado = .F.
+
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigMlItn"
+            THIS.this_cCampoChave = "codigos"
+
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lResultado
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - retorna PK do registro atual
-    *--------------------------------------------------------------------------
-    FUNCTION ObterChavePrimaria()
-        RETURN THIS.this_cCodigos
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - mapeia cursor_4c_Itn para propriedades do BO
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * CarregarDoCursor - Mapeia as colunas do cursor (crSigMlItn, populado via
+    * SQLEXEC/AddCursor equivalente) para as propriedades this_* deste BO.
+    *==========================================================================
     PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
+
         IF USED(par_cAliasCursor)
             SELECT (par_cAliasCursor)
-            THIS.this_cCodigos  = NVL(Codigos,  "")
-            THIS.this_cDescs    = NVL(Descs,    "")
-            THIS.this_cUsuIns   = NVL(Usuins,   "")
-            THIS.this_nNRegis   = NVL(Nregis,   0)
-            THIS.this_cEspelhos = NVL(Espelhos, "")
+
+            THIS.this_cCodigos  = TratarNulo(codigos, "")
+            THIS.this_cDescs    = TratarNulo(descs, "")
+            IF VARTYPE(ativos) = "L"
+                THIS.this_lAtivos = TratarNulo(ativos, .F.)
+            ELSE
+                THIS.this_lAtivos = (TratarNulo(ativos, 0) = 1)
+            ENDIF
+            THIS.this_cUsuIns   = TratarNulo(usuins, "")
+            THIS.this_dDatIns   = TratarNulo(datins, {})
+            THIS.this_dDatAlts  = TratarNulo(datalts, {})
+            THIS.this_dUlts     = TratarNulo(ults, {})
+            THIS.this_dDtEnts   = TratarNulo(dtents, {})
+            THIS.this_nNRegis   = TratarNulo(nregis, 0)
+            THIS.this_cEspelhos = TratarNulo(espelhos, "")
+            THIS.this_cUnificas = TratarNulo(unificas, "")
+
             loc_lSucesso = .T.
         ENDIF
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BuscarMalas - carrega SigMlItn em cursor_4c_Itn com SelImp=0
-    * Equivale ao MontaGrades + Requery do legado
-    *--------------------------------------------------------------------------
-    PROCEDURE BuscarMalas()
-        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_Itn")
-                TABLEREVERT(.T., "cursor_4c_Itn")
-                USE IN cursor_4c_Itn
-            ENDIF
-            IF USED("cursor_4c_ItnTemp")
-                USE IN cursor_4c_ItnTemp
-            ENDIF
-
-            loc_cSQL = "SELECT Codigos, Descs, UsuIns, DatIns, NRegis, Espelhos " + ;
-                       "FROM SigMlItn ORDER BY Descs"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ItnTemp") > 0
-                SET NULL ON
-                CREATE CURSOR cursor_4c_Itn ( ;
-                    SelImp   N(1,0) NULL, ;
-                    Codigos  C(10)  NULL, ;
-                    Descs    C(30)  NULL, ;
-                    Usuins   C(10)  NULL, ;
-                    Datins   T      NULL, ;
-                    Nregis   N(8,0) NULL, ;
-                    Espelhos C(8)   NULL  ;
-                )
-                SET NULL OFF
-
-                INDEX ON Codigos TAG Codigos
-                INDEX ON Descs   TAG Descs
-                INDEX ON Usuins  TAG Usuins
-                INDEX ON Datins  TAG Datins
-
-                SELECT cursor_4c_Itn
-                APPEND FROM DBF("cursor_4c_ItnTemp")
-                REPLACE ALL SelImp WITH 0
-
-                USE IN cursor_4c_ItnTemp
-                GO TOP IN cursor_4c_Itn
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao carregar lista de Malas Diretas.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ProcessarUnificacao - unifica malas selecionadas (SelImp=1) em uma nova
-    * par_cNomeUnificacao - nome digitado pelo usuario para a nova mala
-    *--------------------------------------------------------------------------
-    PROCEDURE ProcessarUnificacao(par_cNomeUnificacao)
-        LOCAL loc_lSucesso, loc_oErro
-        LOCAL loc_cNew, loc_lcUni, loc_lnTot, loc_nMalas, loc_pCod, loc_cSQL
-        LOCAL loc_lInsertOk
-
-        loc_lSucesso = .F.
-        TRY
-            IF !USED("cursor_4c_Itn")
-                MsgAviso("Grade de malas n" + CHR(227) + "o carregada.", "Aviso")
-            ELSE
-                *-- Conta malas com registros selecionadas
-                loc_nMalas = 0
-                SELECT COUNT(*) AS nSel FROM cursor_4c_Itn ;
-                    WHERE SelImp = 1 INTO CURSOR cursor_4c_ContSel READWRITE
-                IF USED("cursor_4c_ContSel")
-                    SELECT cursor_4c_ContSel
-                    loc_nMalas = NVL(nSel, 0)
-                    USE IN cursor_4c_ContSel
-                ENDIF
-
-                IF loc_nMalas < 1
-                    MsgAviso("Nenhuma Mala Direta com Registros foi Selecionada para Unifica" + ;
-                             CHR(231) + CHR(227) + "o!", "Aviso")
-                ELSE
-                    IF loc_nMalas = 1
-                    MsgAviso("Selecione ao menos duas Malas Diretas para Unificar.", "Aviso")
-                ELSE
-                    *-- Gera novo codigo para a mala unificada
-                    loc_cNew  = SUBSTR(SYS(2015), 3, 10)
-                    loc_lcUni = ""
-                    loc_lnTot = 0
-
-                    *-- Cursor acumulador de TODOS os registros das malas selecionadas
-                    SET NULL ON
-                    CREATE CURSOR cursor_4c_MalaDup ( ;
-                        Cidchaves C(20) NULL, IClis    C(10)  NULL, Codigos  C(10)  NULL, ;
-                        Bairs     C(40) NULL, Ceps     C(9)   NULL, Compls   C(25)  NULL, ;
-                        Estas     C(2)  NULL, Faxs     C(20)  NULL, Grupos   C(10)  NULL, ;
-                        Mes       C(2)  NULL, Nums     C(10)  NULL, Rclis    C(50)  NULL, ;
-                        Tel1S     C(20) NULL, Tel2S    C(20)  NULL, Cidas    C(30)  NULL, ;
-                        Endes     C(60) NULL, Nascs    T      NULL, Profiss  C(20)  NULL, ;
-                        Sexos     C(1)  NULL, Ultcomps T      NULL, Aptos    N(6,0) NULL, ;
-                        Opdest    N(1,0) NULL, Desti   C(50)  NULL, Opini    N(1,0) NULL, ;
-                        Dtncons   T     NULL, Conjuges C(60)  NULL, Dtcasas  T      NULL, ;
-                        Situas    C(3)  NULL, Dataincs T      NULL, Opani    N(1,0) NULL, ;
-                        Quebras   C(40) NULL, Cpfs     C(20)  NULL, ;
-                        ChaveUnica C(200) NULL ;
-                    )
-                    SET NULL OFF
-
-                    *-- Acumula registros de cada mala selecionada via SQLEXEC
-                    SELECT cursor_4c_Itn
-                    SCAN FOR SelImp = 1
-                        loc_pCod  = RTRIM(cursor_4c_Itn.Codigos)
-                        loc_lcUni = loc_lcUni + loc_pCod + "; "
-
-                        loc_cSQL = "SELECT Cidchaves, IClis, Codigos, Bairs, Ceps, Compls, " + ;
-                                   "Estas, Faxs, Grupos, Mes, Nums, Rclis, Tel1S, Tel2S, " + ;
-                                   "Cidas, Endes, Nascs, Profiss, Sexos, Ultcomps, Aptos, " + ;
-                                   "Opdest, Desti, Opini, Dtncons, Conjuges, Dtcasas, " + ;
-                                   "Situas, Dataincs, Opani, Quebras, Cpfs " + ;
-                                   "FROM SigMlCab WHERE Codigos = " + EscaparSQL(loc_pCod)
-
-                        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MlaTemp") > 0
-                            loc_lnTot = loc_lnTot + RECCOUNT("cursor_4c_MlaTemp")
-                            SELECT cursor_4c_MalaDup
-                            APPEND FROM DBF("cursor_4c_MlaTemp")
-                            USE IN cursor_4c_MlaTemp
-                        ENDIF
-                    ENDSCAN
-
-                    *-- Calcula ChaveUnica de deduplicacao para todos os registros
-                    SELECT cursor_4c_MalaDup
-                    REPLACE ALL ChaveUnica WITH ;
-                        PADR(UPPER(STRTRAN( ;
-                            RTRIM(NVL(Desti,  "")) + ;
-                            RTRIM(NVL(Ceps,   "")) + ;
-                            RTRIM(NVL(Endes,  "")) + ;
-                            RTRIM(NVL(Nums,   "")) + ;
-                            RTRIM(NVL(Compls, "")), " ", "")), 200)
-
-                    *-- Cursor de destino: apenas registros unicos
-                    SET NULL ON
-                    CREATE CURSOR cursor_4c_MalaUni ( ;
-                        Cidchaves C(20) NULL, IClis    C(10)  NULL, Codigos  C(10)  NULL, ;
-                        Bairs     C(40) NULL, Ceps     C(9)   NULL, Compls   C(25)  NULL, ;
-                        Estas     C(2)  NULL, Faxs     C(20)  NULL, Grupos   C(10)  NULL, ;
-                        Mes       C(2)  NULL, Nums     C(10)  NULL, Rclis    C(50)  NULL, ;
-                        Tel1S     C(20) NULL, Tel2S    C(20)  NULL, Cidas    C(30)  NULL, ;
-                        Endes     C(60) NULL, Nascs    T      NULL, Profiss  C(20)  NULL, ;
-                        Sexos     C(1)  NULL, Ultcomps T      NULL, Aptos    N(6,0) NULL, ;
-                        Opdest    N(1,0) NULL, Desti   C(50)  NULL, Opini    N(1,0) NULL, ;
-                        Dtncons   T     NULL, Conjuges C(60)  NULL, Dtcasas  T      NULL, ;
-                        Situas    C(3)  NULL, Dataincs T      NULL, Opani    N(1,0) NULL, ;
-                        Quebras   C(40) NULL, Cpfs     C(20)  NULL, ;
-                        ChaveUnica C(200) NULL ;
-                    )
-                    SET NULL OFF
-
-                    SELECT cursor_4c_MalaUni
-                    INDEX ON ChaveUnica TAG idxmalauni
-
-                    *-- Deduplicacao: copia apenas registros com ChaveUnica nova
-                    SELECT cursor_4c_MalaDup
-                    GO TOP
-                    SCAN
-                        IF !SEEK(cursor_4c_MalaDup.ChaveUnica, "cursor_4c_MalaUni", "idxmalauni")
-                            SCATTER MEMVAR MEMO
-                            SELECT cursor_4c_MalaUni
-                            APPEND BLANK
-                            GATHER MEMVAR MEMO
-                            SELECT cursor_4c_MalaDup
-                        ENDIF
-                    ENDSCAN
-
-                    *-- Insere registros deduplicados no SQL Server SigMlCab
-                    loc_lInsertOk = .T.
-                    SELECT cursor_4c_MalaUni
-                    GO TOP
-                    SCAN
-                        loc_cSQL = THIS.GerarSQLInsertSigMlCab(loc_cNew)
-                        IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
-                            MsgErro("Erro ao inserir registro na Mala Direta unificada.", "Erro")
-                            loc_lInsertOk = .F.
-                            EXIT
-                        ENDIF
-                    ENDSCAN
-
-                    IF loc_lInsertOk
-                        *-- Atualiza propriedades e persiste SigMlItn
-                        THIS.this_cCodigos        = loc_cNew
-                        THIS.this_cDescs          = LEFT(ALLTRIM(par_cNomeUnificacao), 30)
-                        THIS.this_cUsuIns         = ALLTRIM(gc_4c_UsuarioLogado)
-                        THIS.this_nNRegis         = RECCOUNT("cursor_4c_MalaUni")
-                        THIS.this_cEspelhos       = "SigPrMlu"
-                        THIS.this_cUnificas       = loc_lcUni
-                        THIS.this_nTotalMalas     = loc_nMalas
-                        THIS.this_nTotalRegistros = loc_lnTot
-
-                        IF THIS.Inserir()
-                            MsgInfo( ;
-                                "Unifica" + CHR(231) + CHR(227) + "o '" + ;
-                                ALLTRIM(par_cNomeUnificacao) + "' Conclu" + CHR(237) + "da!" + CHR(13) + ;
-                                "Foram Selecionados " + ALLTRIM(STR(THIS.this_nNRegis)) + " Registros," + CHR(13) + ;
-                                "Retirados de " + ALLTRIM(STR(loc_nMalas)) + " Malas Diretas," + CHR(13) + ;
-                                "Que Continham Um Total de " + ALLTRIM(STR(loc_lnTot)) + " Registros.", ;
-                                "Unifica" + CHR(231) + CHR(227) + "o")
-                            THIS.BuscarMalas()
-                            loc_lSucesso = .T.
-                        ENDIF
-                    ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        *-- Limpa cursores de trabalho (fora do TRY para sempre executar)
-        IF USED("cursor_4c_MalaDup")
-            USE IN cursor_4c_MalaDup
-        ENDIF
-        IF USED("cursor_4c_MalaUni")
-            USE IN cursor_4c_MalaUni
-        ENDIF
-        IF USED("cursor_4c_MlaTemp")
-            USE IN cursor_4c_MlaTemp
-        ENDIF
-        IF USED("cursor_4c_ContSel")
-            USE IN cursor_4c_ContSel
-        ENDIF
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * GerarSQLInsertSigMlCab - monta SQL INSERT para um registro de SigMlCab
-    * Cursor_4c_MalaUni deve estar posicionado no registro a inserir
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE GerarSQLInsertSigMlCab(par_cNovoCodigos)
-        LOCAL loc_cSQL, loc_cCidChaves
-
-        loc_cCidChaves = fUniqueIds()
-
-        *-- Monta INSERT parte a parte para clareza
-        loc_cSQL = "INSERT INTO SigMlCab " + ;
-                   "(CidChaves, Codigos, IClis, Bairs, Ceps, Compls, Estas, Faxs, Grupos, " + ;
-                   "Mes, Nums, Rclis, Tel1S, Tel2S, Cidas, Endes, Nascs, Profiss, " + ;
-                   "Sexos, Ultcomps, Aptos, Opdest, Desti, Opini, Dtncons, Conjuges, " + ;
-                   "Dtcasas, Situas, Dataincs, Opani, Quebras, Cpfs, DesDtCom, TelDtCom) " + ;
-                   "VALUES (" + ;
-                   EscaparSQL(loc_cCidChaves) + ", " + ;
-                   EscaparSQL(par_cNovoCodigos) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.IClis,    ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Bairs,    ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Ceps,     ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Compls,   ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Estas,    ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Faxs,     ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Grupos,   ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Mes,      ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Nums,     ""))) + ", " + ;
-                   EscaparSQL(LEFT(RTRIM(NVL(cursor_4c_MalaUni.Rclis,"")),50)) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Tel1S,    ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Tel2S,    ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Cidas,    ""))) + ", " + ;
-                   EscaparSQL(LEFT(RTRIM(NVL(cursor_4c_MalaUni.Endes,"")),60)) + ", " + ;
-                   FormatarDataSQL(cursor_4c_MalaUni.Nascs) + ", " + ;
-                   EscaparSQL(LEFT(RTRIM(NVL(cursor_4c_MalaUni.Profiss,"")),20)) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Sexos,    ""))) + ", " + ;
-                   FormatarDataSQL(cursor_4c_MalaUni.Ultcomps) + ", " + ;
-                   FormatarNumeroSQL(NVL(cursor_4c_MalaUni.Aptos,  0), 0) + ", " + ;
-                   FormatarNumeroSQL(NVL(cursor_4c_MalaUni.Opdest, 0), 0) + ", " + ;
-                   EscaparSQL(LEFT(RTRIM(NVL(cursor_4c_MalaUni.Desti,  "")),50)) + ", " + ;
-                   FormatarNumeroSQL(NVL(cursor_4c_MalaUni.Opini,  0), 0) + ", " + ;
-                   FormatarDataSQL(cursor_4c_MalaUni.Dtncons) + ", " + ;
-                   EscaparSQL(LEFT(RTRIM(NVL(cursor_4c_MalaUni.Conjuges,"")),60)) + ", " + ;
-                   FormatarDataSQL(cursor_4c_MalaUni.Dtcasas) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Situas,  ""))) + ", " + ;
-                   FormatarDataSQL(cursor_4c_MalaUni.Dataincs) + ", " + ;
-                   FormatarNumeroSQL(NVL(cursor_4c_MalaUni.Opani,  0), 0) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Quebras, ""))) + ", " + ;
-                   EscaparSQL(RTRIM(NVL(cursor_4c_MalaUni.Cpfs,    ""))) + ", " + ;
-                   "'', '')"
-
-        RETURN loc_cSQL
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - INSERT novo registro SigMlItn no SQL Server
-    * SigMlItn tem ~80 colunas NOT NULL; filtros de selecao recebem valores
-    * neutros (' '/0/0) pois este registro e produto da unificacao, nao filtro.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Inserir - INSERT do cabecalho da mala direta unificada em SigMlItn
+    * (equivalente ao "Insert Into crSigMlItn (Codigos, Descs, Ativos, UsuIns,
+    * DatIns, DatAlts, Ults, DtEnts, NRegis, Espelhos, Unificas) Values (...)"
+    * do Processamento legado).
+    *
+    * SigMlItn tem dezenas de colunas NOT NULL sem DEFAULT que pertencem aos
+    * FILTROS de geracao de mala direta (cadastro de Mala Direta - outro form)
+    * e NUNCA sao tocadas pelo SIGPRMLU. O legado grava o registro INTEIRO
+    * (AddCursor sem query = Select * + Gather Memvar/TableUpdate), entao essas
+    * colunas vao em branco/zero junto das que a tela de fato edita. A lista
+    * abaixo vem do docs/schema.sql (regra #22 do CLAUDE.md - a lista de
+    * colunas NOT NULL vem do SCHEMA, nunca do dump do legado).
+    *==========================================================================
     PROCEDURE Inserir()
-        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
-        LOCAL loc_cCols1, loc_cCols2, loc_cCols3, loc_cCols4
-        LOCAL loc_cVals1, loc_cVals2, loc_cVals3, loc_cVals4
-        LOCAL loc_cCidChaves
-
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro, loc_cIdChaves
         loc_lSucesso = .F.
+
         TRY
-            loc_cCidChaves = fUniqueIds()
+            IF EMPTY(ALLTRIM(THIS.this_cCodigos))
+                THIS.this_cCodigoGerado = PADR(SUBSTR(SYS(2015), 3, 10), 10)
+                THIS.this_cCodigos      = THIS.this_cCodigoGerado
+            ENDIF
 
-            *-- Bloco 1: colunas com valores reais do processo de unificacao
-            loc_cCols1 = "Codigos, Descs, Ativos, UsuIns, UsuAlts, DatIns, NRegis, " + ;
-                         "Espelhos, Unificas, CidChaves"
-            loc_cVals1 = EscaparSQL(THIS.this_cCodigos) + ", " + ;
-                         EscaparSQL(LEFT(THIS.this_cDescs, 30)) + ", 1, " + ;
-                         EscaparSQL(LEFT(THIS.this_cUsuIns, 10)) + ", " + ;
-                         "'', GETDATE(), " + ;
-                         FormatarNumeroSQL(THIS.this_nNRegis, 0) + ", " + ;
-                         "'SigPrMlu', " + ;
-                         EscaparSQL(THIS.this_cUnificas) + ", " + ;
-                         EscaparSQL(loc_cCidChaves)
+            IF EMPTY(ALLTRIM(THIS.this_cUsuIns))
+                THIS.this_cUsuIns = gc_4c_UsuarioLogado
+            ENDIF
 
-            *-- Bloco 2: colunas char NOT NULL de criterios de filtro (vazias)
-            loc_cCols2 = ", DEmps, Cadas, Cemps, CepFs, CepIs, Cidades, Ests, FaixaFs, FaixaIs, " + ;
-                         "Nomes, Profs, RSocs, AnivFs, AnivIs, LinHas, TabUfs, BairS, Estados, " + ;
-                         "Vends, CParents, Paises, Dopes, Situa, ClassiFis, ClassiFSs, " + ;
-                         "RegIFs, RegIIs, Conjuge, FPubls, CodSegs"
-            loc_cVals2 = ", '', '', '', '', '', '', '', '', '', " + ;
-                         "'', '', '', '', '', '', '', '', '', " + ;
-                         "'', '', '', '', '', '', '', '', " + ;
-                         "'', '', ''"
+            IF EMPTY(ALLTRIM(THIS.this_cEspelhos))
+                THIS.this_cEspelhos = "SigPrMlu"
+            ENDIF
 
-            *-- Bloco 3: colunas numericas NOT NULL de criterios de filtro (zero)
-            loc_cCols3 = ", DestIs, OPSexS, OptCepS, OptNrS, OptUltS, Situas, OPSitua, OPAnis, " + ;
-                         "OPCivis, OpenDes, OptLmk, OPIdade, EnDigual, ValosF, ValosI, IdadeFs, IdadeIs"
-            loc_cVals3 = ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+            * Legado grava Ativos = .t. incondicionalmente na mala resultante
+            THIS.this_lAtivos = .T.
 
-            *-- Bloco 4: colunas bit NOT NULL de criterios de filtro (zero)
-            loc_cCols4 = ", CkAnis, CkCads, CkCepS, CkCidS, CkEmpS, CkEsts, CkFNoms, CkNomes, CkProfs, " + ;
-                         "CkRSocs, CkSexS, CkUlts, CkClass, CkSituas, CkRegis, CkSitua, CkCivils, " + ;
-                         "CkDtEnts, CkLinhas, CkBairs, CkVends, CkIdade, CkDtAtus, CkTlMk, CkNComp, " + ;
-                         "CkUltCom, CkPais, CkMov, CkConjuge, CkPubls, CkSegs"
-            loc_cVals4 = ", 0, 0, 0, 0, 0, 0, 0, 0, 0, " + ;
-                         "0, 0, 0, 0, 0, 0, 0, 0, " + ;
-                         "0, 0, 0, 0, 0, 0, 0, 0, " + ;
-                         "0, 0, 0, 0, 0, 0"
+            loc_cIdChaves = fUniqueIds()
 
             loc_cSQL = "INSERT INTO SigMlItn (" + ;
-                       loc_cCols1 + loc_cCols2 + loc_cCols3 + loc_cCols4 + ") " + ;
-                       "VALUES (" + loc_cVals1 + loc_cVals2 + loc_cVals3 + loc_cVals4 + ")"
+                "anivfs, anivis, ativos, cadas, cemps, cepfs, cepis, cidades, " + ;
+                "ckanis, ckcads, ckceps, ckcids, ckemps, ckests, ckfnoms, cknomes, " + ;
+                "ckprofs, ckrsocs, cksexs, ckults, codigos, datins, demps, descs, " + ;
+                "destis, espelhos, ests, faixafs, faixais, nomes, nregis, opsexs, " + ;
+                "optceps, optnrs, optults, profs, rsocs, usualts, usuins, ckclass, " + ;
+                "cksituas, classifis, classifss, situas, ckregis, cksitua, opsitua, regifs, " + ;
+                "regiis, situa, linhas, ckcivils, opanis, ckdtents, cklinhas, tabufs, " + ;
+                "opcivis, bairs, ckbairs, estados, unificas, ckvends, vends, cidchaves, " + ;
+                "ckidade, idadefs, idadeis, opidade, cparents, ckdtatus, opendes, cktlmk, " + ;
+                "optlmk, ckncomp, ckultcom, ckpais, paises, ckmov, dopes, endigual, " + ;
+                "valosf, valosi, ckconjuge, conjuge, ckpubls, cksegs, fpubls, codsegs" + ;
+                ") VALUES (" + ;
+                EscaparSQL("") + ", " + EscaparSQL("") + ", " + IIF(THIS.this_lAtivos, "1", "0") + ", " + ;
+                    EscaparSQL("") + ", " + EscaparSQL("") + ", " + EscaparSQL("") + ", " + ;
+                    EscaparSQL("") + ", " + EscaparSQL("") + ", " + ;
+                "0, 0, 0, 0, 0, 0, 0, 0, " + ;
+                "0, 0, 0, 0, " + ;
+                    EscaparSQL(PADR(ALLTRIM(THIS.this_cCodigos), 10)) + ", " + ;
+                    FormatarDataSQL(IIF(EMPTY(THIS.this_dDatIns), DATETIME(), THIS.this_dDatIns)) + ", " + ;
+                    EscaparSQL("") + ", " + ;
+                    EscaparSQL(PADR(ALLTRIM(THIS.this_cDescs), 30)) + ", " + ;
+                "0, " + EscaparSQL(PADR(ALLTRIM(THIS.this_cEspelhos), 8)) + ", " + ;
+                    EscaparSQL("") + ", " + EscaparSQL("") + ", " + EscaparSQL("") + ", " + EscaparSQL("") + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nNRegis, 0) + ", 0, " + ;
+                "0, 0, 0, " + EscaparSQL("") + ", " + EscaparSQL("") + ", " + ;
+                    EscaparSQL(PADR(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ", " + ;
+                    EscaparSQL(PADR(ALLTRIM(THIS.this_cUsuIns), 10)) + ", 0, " + ;
+                "0, " + EscaparSQL("") + ", " + EscaparSQL("") + ", 0, 0, 0, 0, " + EscaparSQL("") + ", " + ;
+                EscaparSQL("") + ", " + EscaparSQL("") + ", " + EscaparSQL("") + ", 0, 0, 0, 0, " + EscaparSQL("") + ", " + ;
+                "0, " + EscaparSQL("") + ", 0, " + EscaparSQL("") + ", " + ;
+                    EscaparSQL(NVL(THIS.this_cUnificas, "")) + ", 0, " + EscaparSQL("") + ", " + ;
+                    EscaparSQL(LEFT(loc_cIdChaves, 20)) + ", " + ;
+                "0, 0, 0, 0, " + EscaparSQL("") + ", 0, 0, 0, " + ;
+                "0, 0, 0, 0, " + EscaparSQL("") + ", 0, " + EscaparSQL("") + ", 0, " + ;
+                FormatarNumeroSQL(0, 2) + ", " + FormatarNumeroSQL(0, 2) + ", 0, " + EscaparSQL("") + ", 0, 0, " + ;
+                    EscaparSQL("") + ", " + EscaparSQL("") + ;
+                ")"
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
-                MsgErro("Erro ao gravar Unifica" + CHR(231) + CHR(227) + "o no banco de dados.", "Erro")
-            ELSE
-                THIS.RegistrarAuditoria("I")
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
                 loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao inserir mala direta unificada:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro("Erro ao inserir mala direta unificada:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Atualizar - UPDATE do registro SigMlItn no SQL Server
-    * A tela original nao faz edicao apos unificar (mala unificada e imutavel),
-    * mas o metodo existe para permitir manutencao (renomear, atualizar contadores)
-    * via propriedades do BO.
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Atualizar - UPDATE do cabecalho da mala direta em SigMlItn (apenas as
+    * colunas que este form mantem - as demais colunas NOT NULL de SigMlItn
+    * pertencem ao cadastro de Mala Direta e nao sao alteradas aqui)
+    *==========================================================================
     PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+
         TRY
-            IF EMPTY(THIS.this_cCodigos)
-                MsgAviso("C" + CHR(243) + "digo da Unifica" + CHR(231) + CHR(227) + ;
-                         "o n" + CHR(227) + "o informado.", "Aviso")
+            IF EMPTY(ALLTRIM(THIS.this_cCodigos))
+                MsgAviso("C" + CHR(243) + "digo n" + CHR(227) + "o definido para atualiza" + ;
+                    CHR(231) + CHR(227) + "o", "SigPrMluBO.Atualizar")
             ELSE
                 loc_cSQL = "UPDATE SigMlItn SET " + ;
-                           "Descs = "     + EscaparSQL(LEFT(THIS.this_cDescs, 30)) + ", " + ;
-                           "UsuAlts = "   + EscaparSQL(LEFT(THIS.this_cUsuIns, 10)) + ", " + ;
-                           "NRegis = "    + FormatarNumeroSQL(THIS.this_nNRegis, 0) + ", " + ;
-                           "Espelhos = "  + EscaparSQL(LEFT(THIS.this_cEspelhos, 8)) + ", " + ;
-                           "Unificas = "  + EscaparSQL(THIS.this_cUnificas) + " " + ;
-                           "WHERE Codigos = " + EscaparSQL(THIS.this_cCodigos)
+                    "descs = "    + EscaparSQL(PADR(ALLTRIM(THIS.this_cDescs), 30)) + ", " + ;
+                    "ativos = "   + IIF(THIS.this_lAtivos, "1", "0") + ", " + ;
+                    "nregis = "   + FormatarNumeroSQL(THIS.this_nNRegis, 0) + ", " + ;
+                    "unificas = " + EscaparSQL(NVL(THIS.this_cUnificas, "")) + ", " + ;
+                    "usualts = "  + EscaparSQL(PADR(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ", " + ;
+                    "datalts = GETDATE() " + ;
+                    "WHERE codigos = " + EscaparSQL(PADR(ALLTRIM(THIS.this_cCodigos), 10))
 
-                IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
-                    MsgErro("Erro ao atualizar Unifica" + CHR(231) + CHR(227) + ;
-                            "o no banco de dados.", "Erro")
-                ELSE
-                    THIS.RegistrarAuditoria("A")
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nResultado >= 0
+                    THIS.RegistrarAuditoria("UPDATE")
                     loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao atualizar mala direta:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro("Erro ao atualizar mala direta:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - registra operacao em LogAuditoria
-    *--------------------------------------------------------------------------
-    PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_oErro
-        TRY
-            loc_cSQL = "INSERT INTO LogAuditoria " + ;
-                       "(Usuario, DataHora, Tabela, Operacao, ChaveRegistro, DadosNovos) " + ;
-                       "VALUES (" + ;
-                       EscaparSQL(gc_4c_UsuarioLogado) + ", GETDATE(), " + ;
-                       "'SigMlItn', " + ;
-                       EscaparSQL(par_cOperacao) + ", " + ;
-                       EscaparSQL(THIS.this_cCodigos) + ", " + ;
-                       EscaparSQL("Unifica" + CHR(231) + CHR(227) + "o: " + THIS.this_cDescs) + ")"
-            SQLEXEC(gnConnHandle, loc_cSQL)
-        CATCH TO loc_oErro
-            *-- Auditoria nao deve bloquear operacao principal
-        ENDTRY
+    *==========================================================================
+    * LimparDados - Zera as properties deste BO. Sobrescreve o stub da
+    * BusinessBase (que limpa apenas this_cMensagemErro) porque este form NAO
+    * eh modal-por-registro como o legado: ele fica aberto e o usuario pode
+    * fazer uma unificacao depois da outra. Sem o reset, o estado da anterior
+    * (nome, codigo gerado, totais e a lista de malas de origem) sobrevive na
+    * instancia e qualquer caminho que deixe de reatribuir uma dessas
+    * properties gravaria o valor da unificacao PASSADA - o mesmo risco de
+    * ciclo de vida da regra #32 do CLAUDE.md.
+    *
+    * PUBLIC (sem modificador) obrigatoriamente: LimparDados eh PUBLIC na
+    * BusinessBase, o Form a chama de fora em LimparCampos, e VFP9 nao permite
+    * REDUZIR o escopo sem quebrar o chamador (regra #51).
+    *==========================================================================
+    PROCEDURE LimparDados()
+        DODEFAULT()
+
+        *-- Colunas de SigMlItn mantidas por este form
+        THIS.this_cCodigos  = SPACE(10)
+        THIS.this_cDescs    = SPACE(30)
+        THIS.this_lAtivos   = .F.
+        THIS.this_cUsuIns   = SPACE(10)
+        THIS.this_dDatIns   = {}
+        THIS.this_dDatAlts  = {}
+        THIS.this_dUlts     = {}
+        THIS.this_dDtEnts   = {}
+        THIS.this_nNRegis   = 0
+        THIS.this_cEspelhos = SPACE(8)
+        THIS.this_cUnificas = ""
+
+        *-- Estado de processamento (espelho da tela e resultados do calculo)
+        THIS.this_cNomeUnificacao          = SPACE(20)
+        THIS.this_cCodigoGerado            = SPACE(10)
+        THIS.this_nTotalRegistrosOrigem    = 0
+        THIS.this_cCodigosSelecionados     = ""
+        THIS.this_nTotalMalasSelecionadas  = 0
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * ObterChavePrimaria - Retorna o codigo (char(10), PK de SigMlItn) do
+    * registro atual
+    *==========================================================================
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCodigos)
     ENDPROC
 
 ENDDEFINE

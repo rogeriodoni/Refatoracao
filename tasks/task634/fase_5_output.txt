@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada em `C:\4c\projeto\app\forms\cadastros\FormSIGPRLNC.prg`.
+
+A task chegou sobre um form **j├í migrado** ÔÇö `ConfigurarPaginaDados()` j├í existia com os 100% dos controles da Page2 (o legado tem s├│ 4 campos: Get_Grupos, Get_Desc_Gru, Get_Contas, Get_Desc_Con + 2 labels). Ent├úo a Fase 5 real foi **auditar contra o dump e o schema**. Achei e corrigi 5 defeitos, todos compilando limpo antes:
+
+**1. Lookup ligado a `"KeyPress"` (regra #47) ÔÇö o mais grave.** `ValidarGrupoLostFocus`/`ValidarContaLostFocus` estavam em `"KeyPress"` com guarda `13/9`: **sair do campo com o MOUSE nunca validava** ÔÇö a descri├º├úo ficava vazia e o c├│digo inv├ílido passava. O legado valida no `Valid`. Troquei para `"LostFocus"`, tirei `LPARAMETERS` e as guardas de tecla (havia um `IF` redundante que tornava o F4 inalcan├º├ível), e acrescentei guarda de reentr├óncia `this_lEmLookup` ÔÇö o picker ├® modal e redispara o pr├│prio `LostFocus`. Como o corpo tem `RETURN` antecipado, usei o padr├úo imune a RETURN: corpo em `<Nome>Exec()` + wrapper fino; os irm├úos de F4 (`AbrirLookupGrupo/Conta`) usam **save/restore**, setado depois dos RETURN de guarda.
+
+**2. `Format = "K"` descartado nos 4 campos (regra #49).** O dump declara nos quatro `fwget`. `InputMask = ""` ├® override VAZIO do Form Designer ÔÇö n├úo transcrevi.
+
+**3. `MaxLength` ausente (regra #19)** ÔÇö tirei do schema, n├úo do Width: `grupos`/`contas` char(10), `SigCdGcr.descrs` char(40), `SigCdCli.rclis` char(50). Sem isso o usu├írio digitava mais do que cabe e o INSERT quebrava com *String or binary data would be truncated*.
+
+**4. `TabIndex` n├úo transcrito** ÔÇö ordem de Tab ├® comportamento (PILAR 1). Transcrevi 1..10 do dump.
+
+**5. `cmd_4c_Cancelar.Caption = "Encerrar"`** ÔåÆ `"Cancelar"` (├® o `Grupo_Salva.Cancelar`; "Encerrar" ├® o bot├úo de sa├¡da da Lista). Alinhei o container ao dump + can├┤nico: Left 819ÔåÆ844, Width 165ÔåÆ160, Top 38ÔåÆ33. Pus `.Alignment = 0` expl├¡cito nos labels (regra #23).
+
+Verifica├º├úo: compilou limpo no VFP9 (`.fxp` apagado antes, regerado, sem `.err`); as propriedades novas existem nas base classes (regra #33 ÔÇö falham s├│ em runtime); **instanciei o form** e li de volta cada valor ÔÇö `Format=K`, MaxLength 10/40/10/50, TabIndex 2/3/5/6, geometria intacta, labels `ForeColor` RGB(90,90,90), faixa do cabe├ºalho Top=29/Height=80/RGB(100,100,100) com t├¡tulo propagado, e `AEVENTS` confirmando **`LOSTFOCUS ÔåÆ VALIDARGRUPOLOSTFOCUS`** com o F4 ainda em `KEYPRESS`. Auditores do projeto: `[LOOKUP-KEYPRESS] ERRO=0 AVISO=0`, `[FORMAT] ALTA=0 MEDIA=0 BAIXA=0`, `[PROP-INEXISTENTE] OK`.
+
+Dois pontos que **deixei de fora de prop├│sito**:
+
+- **`cnt_4c_BotoesAcao.BackStyle = 1` + BackColor branco** n├úo ├® do legado (`Grupo_Salva` ├® BackStyle=0) ÔÇö ├® inje├º├úo do **CorretorAutomatico #107** ("container overlay Grid"), que aqui disparou em premissa falsa: o container (Top 33..118, Left 844..1004) n├úo sobrep├Áe grade nenhuma. ├ë o contexto errado j├í documentado na regra #44. N├úo reverti porque o #107 est├í vivo e re-injetaria no pr├│ximo sweep; o conserto certo ├® no pattern, n├úo no form.
+- `Column2.ReadOnly = .T.` na grade (o legado tem `.F.`) e o `ColumnCount = 3` ÔåÆ `RecordSource` ÔåÆ `ColumnCount = 2`: s├úo da grade, escopo da Fase 4, e mexer ali arrisca o fluxo do lookup de c├®lula que j├í est├í correto pela regra #46.
+
+N├úo toquei no BO nem em `config.prg`/`menu.prg` ÔÇö j├í integrados nas fases anteriores.

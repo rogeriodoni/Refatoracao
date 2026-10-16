@@ -1,0 +1,24 @@
+=== PROBE FormSigPrMdc ===
+[1] config.prg OK
+[2] SET PROCEDURE OK
+[3] CREATEOBJECT OK classe=Probeformsigprmdc W=800 H=340 modo=EDICAO
+[4] USED(cursor_4c_Contas)=.T. RECCOUNT=1
+[5] Grid RecordSource=[cursor_4c_Contas] ColumnCount=2 C1.Src=[cursor_4c_Contas.ContaAnt] C2.Src=[cursor_4c_Contas.ContaNov] C1.Hdr=[Conta Antiga] C2.Hdr=[Conta Nova] C1.W=90 C2.W=90
+[6] BtnIncluirClick par VAZIO OK -> RECCOUNT=1 (esperado 1)
+[7] BtnIncluirClick par CHEIO OK -> RECCOUNT=2 (esperado 2) RECNO=2 (esperado 2)
+[8] BtnExcluirClick OK -> RECCOUNT=2 naoDeletados=2 [RECCOUNT conta deletados]
+[9] ChkRepsClick OK -> DelCT.Value=0 (esperado 0) DelCT.Enabled=.F. (esperado .F.)
+[10] FormParaBO=.T. -> BO.TrocarReps=.F. BO.ApagarAntiga=.T. BO.CheckCadPro=.F. BO.ContaAnt=[]
+[11] BOParaForm=.T. -> DelCT.Value=1 (esperado 1, restaurado do BO)
+[12] PROCESSANDO -> Incluir=.F. Processar=.F. Grid=.F. Sair=.T. (Sair NUNCA trava)
+[13] EDICAO -> Incluir=.T. Processar=.T. Grid=.T. (todos .T. = reabilitou)
+[14] AtualizarProgresso OK -> txt=[SIGCDCLI / ICLIS] barraW=100 (esperado 100) pct=[50 %]
+[15] LimparCampos=.T. -> RECCOUNT=1 (esperado 1) ContaAnt=[] (esperado vazio) modo=EDICAO
+[16] CarregarLista() sem arg=.T.
+[17] escopo: CarregarLista=public AjustarBotoesPorModo=public AtualizarProgresso=public LimparCampos=PROTECTED! FormParaBO=PROTECTED! BOParaForm=PROTECTED! HabilitarCampos=public BtnIncluirClick=public BtnProcessarClick=public 
+[18] escopo BO: ValidarParesContas=public ValidarCodigoConta=public ImportarDeXLS=public TrocarContaRepresentantes=public ExcluirContaAntiga=public InicializarCursorContas=public ValidarArqDBF=public 
+[19] Release OK
+[20] ERROS GRAVADOS NO MODO TESTE:
+[16/10/2026 03:18:39 AM] Atenção: O ArqDBF não está no diretório do Sistema!!!
+
+=== FIM ===

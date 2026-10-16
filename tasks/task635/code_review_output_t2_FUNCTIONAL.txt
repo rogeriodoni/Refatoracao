@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado
+
+Revisei o ├║nico achado listado no pass FUNCTIONAL para `FormSigPrMdc.prg`:
+
+**[CONTAINER-VISIVEL] CNT_4C_SOMBRA, CNT_4C_BARRA** ÔÇö **falso positivo**, nenhuma altera├º├úo aplicada.
+
+Conferi (`grep`) todas as ocorr├¬ncias dos dois nomes no arquivo:
+- `cnt_4c_Sombra` (cabe├ºalho) declara `.Visible = .T.` explicitamente em `ConfigurarCabecalho` (linha 202) ÔÇö nunca `.F.`.
+- `cnt_4c_Barra` (barra de progresso) declara `.Visible = .T.` explicitamente em `ConfigurarPainelResultado` (linha 604) ÔÇö nunca `.F.`.
+
+O ├║nico container genuinamente oculto neste form ├® `cnt_4c_Result` (`.Visible = .F.`, linha 545), e ele **j├í** est├í corretamente tratado por nome em `TornarControlesVisiveis` (recursa nos filhos sem for├ºar o pr├│prio `.Visible`). `cnt_4c_Barra` ├® filho dele e permanece efetivamente oculto enquanto o pai estiver oculto ÔÇö for├ºar seu `.Visible` pr├│prio para `.T.` ├® inofensivo.
+
+Esse ├® o mesmo padr├úo sistem├ítico j├í documentado em mem├│ria (`feedback_container_visivel_cabecalho_falso_positivo.md`, 15+ reincid├¬ncias): o detector marca qualquer container de cabe├ºalho/decorativo pelo nome, sem checar o `.Visible` real. Adicionar `CNT_4C_SOMBRA` ao filtro contradiria a regra #11 do CLAUDE.md ("NUNCA detectar o cabe├ºalho pelo NOME"). Registrei a reincid├¬ncia na mem├│ria para o hist├│rico.
+
+Nenhum arquivo de c├│digo foi alterado.

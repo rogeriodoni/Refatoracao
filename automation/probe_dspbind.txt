@@ -1,0 +1,15 @@
+=== PROBE FormDsp / bindings de Grupo e Conta ===
+CREATEOBJECT FormDsp -> VARTYPE=O Caption=[Cadastro de Disponibilidades]
+
+--- txt_4c_cd_grupo ---
+   bindings: 2
+   evento=LOSTFOCUS    -> metodo=VALIDARGRUPOFORM
+   evento=KEYPRESS     -> metodo=TECLAGRUPOKEYPRESS
+
+--- txt_4c_cd_conta ---
+   bindings: 2
+   evento=LOSTFOCUS    -> metodo=VALIDARCONTAFORM
+   evento=KEYPRESS     -> metodo=TECLACONTAKEYPRESS
+
+guardas: this_lEmLookupGrupo=.F. this_lEmLookupConta=.F.
+FIM

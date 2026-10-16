@@ -144,7 +144,7 @@ DEFINE CLASS FormCVE AS FormBase
             *-- Cabecalho (Top=2+29=31)
             loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
             WITH loc_oPagina.cnt_4c_Cabecalho
-                .Top         = 31
+                .Top         = 29          && canonico CLAUDE.md #11 (estava 31)
                 .Left        = 0
                 .Width       = THIS.Width
                 .Height      = 80
@@ -617,7 +617,9 @@ DEFINE CLASS FormCVE AS FormBase
             loc_oPagina.AddObject("grd_4c_Lista", "Grid")
 
             loc_oGrid             = loc_oPagina.grd_4c_Lista
-            loc_oGrid.ColumnCount = 8
+            *-- SETE colunas, como o pColuna do legado (SIGCDCVE:953-960).
+            *-- Havia uma oitava ("Experiencia"/MinExps) que o legado NAO lista.
+            loc_oGrid.ColumnCount = 7
 
             WITH loc_oGrid
                 .Top                = 185
@@ -639,41 +641,74 @@ DEFINE CLASS FormCVE AS FormBase
                 .GridLines          = 3
                 .Visible            = .T.
 
+                *-- Larguras e legendas do pColuna legado
                 WITH .Column1
-                    .Width           = 110
+                    .Width           = 80
                     .Header1.Caption = "Usu" + CHR(225) + "rio"
                 ENDWITH
                 WITH .Column2
-                    .Width           = 35
+                    .Width           = 31
                     .Header1.Caption = "M" + CHR(234) + "s"
                 ENDWITH
                 WITH .Column3
-                    .Width           = 45
+                    .Width           = 38
                     .Header1.Caption = "Ano"
                 ENDWITH
                 WITH .Column4
-                    .Width           = 20
-                    .Header1.Caption = "V"
+                    .Width           = 80
+                    .Header1.Caption = "Vendedor"
                 ENDWITH
                 WITH .Column5
-                    .Width           = 160
-                    .Header1.Caption = "Cargo"
+                    .Width           = 80
+                    .Header1.Caption = "Cargos"
                 ENDWITH
+                *-- InputMask na Column E no Text1: a Column sozinha nao atualiza
+                *-- o Text1 ja instanciado, e o legado declara nos dois.
                 WITH .Column6
-                    .Width           = 70
+                    .Width           = 80
                     .Alignment       = 2
+                    .InputMask       = "999.99"
                     .Header1.Caption = "Adicional"
+                    .Text1.InputMask = "999.99"
                 ENDWITH
                 WITH .Column7
-                    .Width           = 100
+                    .Width           = 108
                     .Alignment       = 2
+                    .InputMask       = "999,999,999.99"
                     .Header1.Caption = "M" + CHR(237) + "nimo"
+                    .Text1.InputMask = "999,999,999.99"
                 ENDWITH
-                WITH .Column8
-                    .Width           = 100
-                    .Alignment       = 2
-                    .Header1.Caption = "Experi" + CHR(234) + "ncia"
-                ENDWITH
+            ENDWITH
+
+            *-- Legenda do realce da grade (pagina.lista do legado):
+            *-- Shape2 = quadrado 14x14 em RGB(255,255,223) e Say4 "Supervisor
+            *-- Setor". Explicam o DynamicBackColor aplicado em CarregarLista.
+            *-- Os dois faltavam na migracao. Top = legado + 29.
+            loc_oPagina.AddObject("shp_4c_LegendaSup", "Shape")
+            WITH loc_oPagina.shp_4c_LegendaSup
+                .Top           = 165
+                .Left          = 282
+                .Width         = 14
+                .Height        = 14
+                .BackStyle     = 1
+                .SpecialEffect = 0
+                .BackColor     = RGB(255, 255, 223)
+                .Visible       = .T.
+            ENDWITH
+
+            loc_oPagina.AddObject("lbl_4c_LegendaSup", "Label")
+            WITH loc_oPagina.lbl_4c_LegendaSup
+                .Caption   = "Supervisor Setor"
+                .Top       = 164
+                .Left      = 179
+                .Width     = 82
+                .Height    = 15
+                .AutoSize  = .F.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Visible   = .T.
             ENDWITH
 
             THIS.TornarControlesVisiveis(loc_oPagina)
@@ -1214,7 +1249,7 @@ DEFINE CLASS FormCVE AS FormBase
                     MsgErro("Erro ao carregar comiss" + CHR(245) + "es:" + CHR(13) + ;
                             CapturarErroSQL(), "Erro SQL")
                 ELSE
-                    loc_oGrid.ColumnCount = 8
+                    loc_oGrid.ColumnCount = 7
                     loc_oGrid.RecordSource           = "cursor_4c_Lista"
                     loc_oGrid.Column1.ControlSource  = "cursor_4c_Lista.Usuars"
                     loc_oGrid.Column2.ControlSource  = "cursor_4c_Lista.Mess"
@@ -1223,31 +1258,40 @@ DEFINE CLASS FormCVE AS FormBase
                     loc_oGrid.Column5.ControlSource  = "cursor_4c_Lista.Setors"
                     loc_oGrid.Column6.ControlSource  = "cursor_4c_Lista.Adics"
                     loc_oGrid.Column7.ControlSource  = "cursor_4c_Lista.Minimos"
-                    loc_oGrid.Column8.ControlSource  = "cursor_4c_Lista.MinExps"
-
-                    loc_oGrid.Column1.Width           = 110
-                    loc_oGrid.Column2.Width           = 35
-                    loc_oGrid.Column3.Width           = 45
-                    loc_oGrid.Column4.Width           = 20
-                    loc_oGrid.Column5.Width           = 160
-                    loc_oGrid.Column6.Width           = 70
-                    loc_oGrid.Column7.Width           = 100
-                    loc_oGrid.Column8.Width           = 100
 
                     loc_oGrid.Column1.Header1.Caption = "Usu" + CHR(225) + "rio"
                     loc_oGrid.Column2.Header1.Caption = "M" + CHR(234) + "s"
                     loc_oGrid.Column3.Header1.Caption = "Ano"
-                    loc_oGrid.Column4.Header1.Caption = "V"
-                    loc_oGrid.Column5.Header1.Caption = "Cargo"
+                    loc_oGrid.Column4.Header1.Caption = "Vendedor"
+                    loc_oGrid.Column5.Header1.Caption = "Cargos"
                     loc_oGrid.Column6.Header1.Caption = "Adicional"
                     loc_oGrid.Column7.Header1.Caption = "M" + CHR(237) + "nimo"
-                    loc_oGrid.Column8.Header1.Caption = "Experi" + CHR(234) + "ncia"
 
                     loc_oGrid.Column6.Alignment = 2
                     loc_oGrid.Column7.Alignment = 2
-                    loc_oGrid.Column8.Alignment = 2
+                    loc_oGrid.Column6.InputMask = "999.99"
+                    loc_oGrid.Column7.InputMask = "999,999,999.99"
 
                     THIS.FormatarGridLista(loc_oGrid)
+
+                    *-- Larguras POR ULTIMO: FormatarGridLista mexe na FONTE do
+                    *-- grid, e isso recalcula Column.Width (CLAUDE.md #35c/#41).
+                    *-- Valores do pColuna legado (SIGCDCVE:953-960).
+                    loc_oGrid.Column1.Width = 80
+                    loc_oGrid.Column2.Width = 31
+                    loc_oGrid.Column3.Width = 38
+                    loc_oGrid.Column4.Width = 80
+                    loc_oGrid.Column5.Width = 80
+                    loc_oGrid.Column6.Width = 80
+                    loc_oGrid.Column7.Width = 108
+
+                    *-- Realce do legado (SIGCDCVE:973): linha de supervisor de
+                    *-- setor (Indivs = "N") sai em amarelo claro. A legenda
+                    *-- shp_4c_LegendaSup/lbl_4c_LegendaSup explica a cor.
+                    loc_oGrid.SetAll("DynamicBackColor", ;
+                        "IIF(cursor_4c_Lista.Indivs = [N], RGB(255,255,223), RGB(255,255,255))", ;
+                        "Column")
+
                     loc_lResultado = .T.
                 ENDIF
             ENDIF

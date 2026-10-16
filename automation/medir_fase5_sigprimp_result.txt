@@ -1,0 +1,33 @@
+[1] MEDICAO DO LABEL
+    Caption          : [Arquivos Importação :] (21 chars)
+    AutoSize=.T. Width: 100  (regra #23: no-op => fica no default)
+    TXTWIDTH*FONTMETRIC: 126.00 px
+    .Width atual no prg: 125
+    Vao ate o TextBox  : 130 (Say4.Left=310 -> Get_Arquivo.Left=440)
+    CORTA com 125?     : SIM
+    CORTA com 130?     : nao
+
+[2] INSTANCIACAO
+    CREATEOBJECT     : OK
+    BaseClass        : [Form]
+    Caption          : [Importação de dados]
+    Width x Height   : 1000 x 330
+    ControlCount     : 10
+      - CNT_4C_SOMBRA       Container      L=    0 T=    0 W= 1000 H=   80 Vis=.T.
+      - SHP_4C_SHAPE2       Shape          L=    4 T=    7 W=  758 H=  110 Vis=.T.
+      - LBL_4C_LABEL4       Label          L=  310 T=  111 W=  130 H=   17 Vis=.T.
+      - TXT_4C_ARQUIVO      Textbox        L=  440 T=  108 W=  250 H=   21 Vis=.T.
+      - OBJ_4C_ARQUIVOS     Listbox        L=  402 T=  130 W=  288 H=  169 Vis=.T.
+      - SHP_4C_SHAPE1       Shape          L=  773 T=  -12 W=  229 H=  110 Vis=.T.
+      - CMD_4C_CANCELA      Commandbutton  L=  925 T=    3 W=   75 H=   75 Vis=.T.
+      - CMD_4C_VISUALIZAR   Commandbutton  L=  775 T=    3 W=   75 H=   75 Vis=.F.
+      - CMD_4C_IMPRIMIR     Commandbutton  L=  850 T=    3 W=   75 H=   75 Vis=.F.
+      - CMD_4C_BTNMOVEST    Commandbutton  L=  700 T=    3 W=   75 H=   75 Vis=.T.
+    lbl_4c_Label4.Width (efetivo): 130
+    txt_4c_Arquivo.ReadOnly      : .T.
+    txt_4c_Arquivo.TabIndex      : 3
+    obj_4c_Arquivos.TabIndex     : 4
+    obj_4c_Arquivos.RowSourceType: 1
+    cmd_4c_Visualizar.Visible    : .F. (legado: .F. sempre)
+    cmd_4c_Imprimir.Visible      : .F. (legado: .F. sempre)
+    cnt_4c_Sombra.lbl_4c_LblTitulo.Caption: [Importação de dados]

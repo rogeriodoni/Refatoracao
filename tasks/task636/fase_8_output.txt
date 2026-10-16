@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All clean, no duplicates. The Fase 8 implementation is complete.
+
+## Resumo
+
+Completei a Fase 8/8 (final) do `Formsigprmdp` (Substitui├º├úo de Refer├¬ncias de Produtos), um form OPERACIONAL complexo que n├úo segue o padr├úo CRUD:
+
+**No BO (`sigprmdpBO.prg`)** adicionei a engine real de substitui├º├úo:
+- `ValidarParSubstituicao()` ÔÇö replica as 5 valida├º├Áes do legado (c├│digo inv├ílido, sem barra, c├│digo novo vazio, c├│digos iguais, grupos de estoque incompat├¡veis)
+- `MapearTabelasAlvo()` ÔÇö substitui o cat├ílogo local `ArqDBF.DBF` (que n├úo existe no SQL Server) por uma consulta equivalente ao `INFORMATION_SCHEMA.COLUMNS`, com o mesmo filtro de 14 nomes de coluna e tamanho
+- `ProcessarPar()` ÔÇö motor de UPDATE multi-tabela num ├║nico lote T-SQL at├┤mico (`SAVE TRANSACTION`, j├í que `BEGIN/COMMIT` em `SQLEXEC` separados n├úo protegem nesta conex├úo), com os casos especiais do legado (SIGPRPRT nunca atualizado, SIGCDPRO/SIGPRCPO/SIGCDPRF/SIGCDPFT com transfer├¬ncia de c├│digo de barras)
+- `EnfileirarRecalculoPorPar()` ÔÇö como `fRecalculaP`/`fRecalculaC` (fun├º├Áes globais do Fortyus) n├úo vieram no acervo, enfileira em `SigOpClC` para rec├ílculo externo em vez de tentar reproduzir o c├ílculo
+
+**No Form** liguei e implementei `BtnProcessarClick`, `ExportaClick` (importa├º├úo XLS) e `BtnEncerrarClick`, al├®m de `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos` com significado real (espelham a linha corrente do grid com o BO).
+
+**Gap documentado meio da linguagem do projeto (regra #27)**: nunca excluo linhas de `SigMvEst` sem a recria├º├úo que `fRecalculaP` fazia no legado ÔÇö isso corromperia saldo de estoque em sil├¬ncio. Em vez disso, o form avisa explicitamente quando h├í saldo pendente de revis├úo manual.
+
+Corrigi tamb├®m 2 viola├º├Áes da regra cr├¡tica #1 (`RETURN` dentro de `TRY/CATCH`) que escrevi na primeira passada, e um gap real: o Form nunca propagava `this_lCheckCadPro`/`this_lManterBarra` para o BO, nem lia `SigCdPaC.CalcCustos` como o legado fazia ÔÇö corrigido em `InicializarForm`.

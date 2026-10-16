@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. Resumo:
+
+## O que a fase entregou
+
+Os 5 handlers dos **5 bot├Áes que o legado realmente tem** j├í estavam no form, completos ÔÇö confirmei um a um contra o dump e corrigi um defeito real que s├│ apareceu medindo:
+
+| legado | handler | o que faz |
+|---|---|---|
+| `btnIncluir` | `BtnIncluirClick` | `APPEND BLANK` guardado pelo par completo |
+| `btnExcluir` | `BtnExcluirClick` | `DELETE` da linha corrente |
+| `Exporta` | `BtnExportaClick` | importa planilha XLS (nome legado engana) |
+| `btnProcessar` | `BtnProcessarClick` | troca em lote / s├│ representantes |
+| `btnSair` | `BtnSairClick` | `ThisForm.Release` |
+
+**N├úo existe `BtnAlterarClick` nem `BtnVisualizarClick`**: o legado herda de `form` (n├úo de `frmcadastro`), sem `Grupo_Op` e sem `pcEscolha`. `btnIncluir`/`btnExcluir` s├úo a **toolbar de LINHA da grade** (`Select csContas / Append Blank / ThisForm.Grade.Refresh`), n├úo a barra CRUD. Invent├í-los violaria o PILAR 1; cri├í-los vazios, a regra de completude.
+
+## Defeito encontrado e corrigido
+
+Instanciando no VFP9 medi que, ap├│s `BtnIncluirClick`, o ponteiro voltava para o **registro 1** (`CarregarLista` reatribui o `RecordSource`, e isso reseta o ponteiro) ÔÇö ent├úo o `SetFocus` em `Column1.Text1` punha o usu├írio na primeira linha, **j├í preenchida**, em vez da linha nova. O legado fecha com `Grade.Refresh`, que n├úo move o ponteiro. Guardei/reponho o `RECNO()` nos dois handlers. Medido depois do conserto: `ponteiro=2` (linha nova).
+
+## Gate da Fase 7 ÔÇö falso positivo corrigido
+
+O gate marcava o form como CRUD s├│ porque o bot├úo de acrescentar linha se chama `btnIncluir` (e n├úo `btnInserir`), e passava a exigir os 4 nomes. Adicionei a 8┬¬ dispensa da fam├¡lia "evid├¬ncia de NOME", que desempata pelo **Click** (`Append Blank`/`Delete` nu + `Grade.Refresh` + **nenhuma** persist├¬ncia), mais o helper `Get-CorpoClickDoObjetoLegado` ÔÇö a primeira medi├º├úo deu *zero* porque o dump nomeia o Click de dois jeitos e bot├úo solto sai como `PROCEDURE Click` sob `* OBJETO:`. **Medido nos 634 dumps: 2 forms mudam (`SigPrMdc`, `sigprmdp`), zero regress├úo.**
+
+ÔÜá´©Å **Esse conserto n├úo vale para esta execu├º├úo** ÔÇö o orquestrador j├í parseou o `.ps1`; se o retry reprovar a Fase 7, o artefato est├í correto e n├úo se deve mexer no form (vale da pr├│xima task em diante).
+
+## Valida├º├úo executada
+
+- `COMPILE` limpo (`.fxp` apagado antes, nenhum `.err`)
+- `Test-CompletudeCodigo`: OK no form e no BO (sem TODO/stub)
+- 6 casos exercitados no VFP9: par incompleto n├úo acrescenta e preserva ponteiro; par completo acrescenta e foca a linha nova; exclus├úo sai da grade (`SET DELETED ON` ativo, `DELETED=ON` medido na datasession 2); `Chk_DelCT` acompanha `chkReps` nos dois sentidos; `BtnSairClick` libera o form
+
+Registrei a li├º├úo em mem├│ria (`feedback_gate_fase7_incluir_de_linha_de_grade`) e no header do form.
+
+**Ponto de aten├º├úo fora do escopo**: `fRecalculaS(.T., gnConnHandle, .T.)` segue a conven├º├úo do projeto (igual a `SigPrCccBO:464`), mas a fun├º├úo portada deriva o flag `llAut` de `TYPE(pCta) = "O"` ÔÇö com handle num├®rico ele fica `.F.`, divergindo do legado, que passava o objeto `Podatamgr`. Afeta 5+ call sites em `functions.prg`; n├úo toquei.

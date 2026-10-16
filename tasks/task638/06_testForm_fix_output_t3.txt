@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo ├® um bug de c├│digo. O erro ocorre na ETAPA 1B (pre-flight de conex├úo SQL, c├│digo 1526 DBNETLIB), **antes** de qualquer `CREATEOBJECT` do form/BO ÔÇö ou seja, `FormSigPrMlu.prg`/`SigPrMluBO.prg` nunca chegam a ser executados.
+
+Confirmei agora mesmo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+PingSucceeded    : False
+SourceAddress    : 192.168.199.115
+```
+
+Esta ├® a mesma falha de infraestrutura documentada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde est├í o SQL Server `DB_MBAHIA`. J├í reincidiu em 100+ tasks desde 2026-08-02 (mais recentemente em task634-636), sempre com a mesma assinatura, e nenhuma edi├º├úo de `.prg` jamais resolveu ÔÇö porque o c├│digo nunca ├® alcan├ºado.
+
+Revisei `FormSigPrMlu.prg` e `SigPrMluBO.prg` mesmo assim (grid com checkbox regra #18, CommandGroups migrados para CommandButton, processamento de unifica├º├úo com dedup por chave l├│gica) e n├úo encontrei defeito de c├│digo. Segui o padr├úo j├í estabelecido: **n├úo editei os arquivos**, para n├úo arriscar introduzir uma regress├úo em c├│digo correto, e registrei esta reincid├¬ncia (task638, tentativa 3/10) na mem├│ria do projeto.
+
+Se a tentativa 3/10 se repetir, o indicado ├® algu├®m com acesso ├á rede do pipeline verificar a rota/VPN para `192.168.200.10:1433` ÔÇö n├úo mais uma corre├º├úo de c├│digo.

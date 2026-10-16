@@ -1,310 +1,1246 @@
-*==============================================================================
-* Formsigprite.prg - Form Operacional: Itens de Ordem de Producao
-* Herda de: FormBase
-* Migrado de: SIGPRITE.SCX
-* Tipo: OPERACIONAL - visualizacao somente-leitura de itens de OP
-* Recebe parametros via Init: pEmp, pDop, pNum, pDis, pCnx (compatibilidade legado)
-* O gnConnHandle global e usado diretamente (pCnx legado ignorado no novo sistema)
-*==============================================================================
+*====================================================================
+* Formsigprite.prg
+*
+* Form OPERACIONAL "Itens" - tela de CONSULTA (somente-leitura) que
+* exibe os itens de um documento de movimentacao (SigMvItn), aberta a
+* partir de outra tela do sistema (Movimentacao/Entrada/Saida) com o
+* par Emps+Dopes+Nums do documento ja definido.
+*
+* PILAR 1 (UX): layout identico ao legado SIGPRITE.SCX - sem barra de
+* titulo (TitleBar = 0), sem controle de janela (ControlBox = .F.),
+* nao movivel (Movable = .F.), 800x600, com a faixa de cabecalho cinza
+* (cntSombra) no topo mostrando o titulo calculado "<Emps> - <Dopes> -
+* <Nums> - Itens".
+*
+* PILAR 3 (arquitetura): o legado (SIGPRITE) e um form FLAT do VFP -
+* SEM PageFrame, SEM Page1/Page2: grdCabec, grdItens, grdRodape,
+* Get_descr, Get_obs, FigJpg, btnSubniveis, btnEntrega e cmdsair sao
+* todos filhos DIRETOS do form (ver layout.json/comportamento.json de
+* tasks\task633). Este form migrado segue a mesma estrutura flat - nao
+* ha PageFrame para inventar (CLAUDE.md, Gate da Fase 3 quando o legado
+* nao tem PageFrame). O unico container do legado e cntSombra (faixa
+* do cabecalho), reproduzido aqui como cnt_4c_Sombra.
+*
+* FASES 3-8/8 CONCLUIDAS: esqueleto do form, cabecalho, grids (grdCabec/
+* grdItens/grdRodape), botoes (btnSubniveis/btnEntrega/cmdsair), os
+* campos de dados do item selecionado (Get_descr/Say2 -> txt_4c_Descr/
+* lbl_4c_Label2 e Get_obs/Say_Obs -> obj_4c_Get_obs/lbl_4c__Obs, ligados
+* por ControlSource direto a cursor_4c_Grade - regra #41 do CLAUDE.md),
+* as formas decorativas (shpProdutos/Shape5/Shape1 -> shp_4c_ShpProdutos/
+* shp_4c_Shape5/shp_4c_Shape1), a imagem do produto (FigJpg -> img_4c_FigJpg)
+* e o indicador de disponibilidade (lblDisps/shpDisps -> lbl_4c_LblDisps/
+* shp_4c_ShpDisps), alem de TODOS os eventos do dump (comportamento.json,
+* 18 metodos com codigo): grd_4c_Itens.AfterRowColChange (decodifica e
+* exibe a foto do produto), grd_4c_Itens.Column2.Text1.DblClick (abre a
+* Pesquisa Global de Produtos filtrada pelo codigo da linha, equivalente
+* a "Do Form SIGOPCGP.Scx ... With [SIGOPCGP] NoShow" do legado - aqui
+* FormSigOpCgp, ja migrado, atraves do fluxo publico Limpar Filtros +
+* txt_4c_ProdutoI/F + BtnConsultarClick), os 3 botoes de acao
+* (BtnSubniveisClick/BtnEntregaClick/BtnEncerrarClick, equivalentes a
+* "Do Form SigMvMvt"/"Do Form SigOpDen"/"ThisForm.Release") e o truque de
+* foco Tag/Value das DUAS grades decorativas sem RecordSource (grdCabec E
+* grdRodape - Column1.GotFocus devolve o foco para grd_4c_Itens.Column1,
+* Column2.GotFocus/LostFocus guardam/restauram o valor para a celula
+* nunca mostrar cursor de edicao piscando).
+*
+* FASE 8 (consolidacao) acrescentou os hooks canonicos, todos com codigo
+* REAL vindo do legado - nenhum deles e novo comportamento:
+*   CarregarLista() - entrada canonica de carga; chama CarregarItens()
+*     (.SelecionaDados) e, como o fim do Init legado, deixa a 1a linha ja
+*     sincronizada com o detalhe do produto. PUBLIC porque o harness
+*     TesteAutomatico.prg a chama de fora (CLAUDE.md regra #3).
+*   FormParaBO() - a SELECAO da grade vira o item corrente do BO
+*     ("Select crGrade" do AfterRowColChange legado); e o que faltava para
+*     BO.CarregarDoCursor() deixar de ser codigo morto.
+*   BOParaForm() - o corpo do AfterRowColChange legado (CursorQuery de
+*     FigJpgs + Strconv/StrToFile + os tres Refresh finais).
+*   LimparCampos() - o bloco de abertura do mesmo AfterRowColChange
+*     (esconde e descarrega a foto).
+*   Activate() - o ".grdItens.Column1.Setfocus" do fim do Init legado, que
+*     no Init nao pega porque o controle ainda nao foi desenhado.
+*
+* NOTA (Gate Fases 7/8): este form NAO tem bloco CRUD algum - o SCX
+* legado (ver layout.json/analise.json de tasks\task633) nao declara
+* cmd_4c_Incluir/Alterar/Visualizar/Excluir nem Page1=Lista/Page2=Dados;
+* e um form FLAT de CONSULTA aberto com o documento ja escolhido por
+* outra tela, e a prova disso esta no proprio dump: nenhuma gravacao em
+* tabela (so SqlExecute de leitura e Insert Into cursor LOCAL) e todo
+* campo de entrada somente-leitura (grades com ReadOnly = .T. e os dois
+* Get_* com "PROCEDURE When / Return .f."). Por isso NAO existem aqui,
+* e nao devem ser criados: botao de gravar, botao que abandona edicao,
+* HabilitarCampos (nao ha campo editavel para habilitar) e
+* AjustarBotoesPorModo (nao ha modo INCLUIR/ALTERAR/VISUALIZAR - a tela
+* tem um unico estado). Inventa-los violaria o PILAR 1 (UX identica ao
+* original) e a regra de nunca criar funcionalidade que o sistema legado
+* nao tem; cria-los vazios violaria a regra de completude.
+*
+* Parametros de Init (equivalentes ao legado
+* LParameters pEmp, pDop, pNum, pDis, pCnx):
+*   par_cEmps        - pEmp: empresa do documento (SigMvItn.Emps)
+*   par_cDopes       - pDop: codigo da operacao (SigMvItn.Dopes)
+*   par_nNums        - pNum: numero do documento (SigMvItn.Nums)
+*   par_lChecaDisps  - pDis: indica se a disponibilidade do produto
+*                      deve ser conferida/exibida
+*   pCnx (legado) nao se aplica: a nova arquitetura usa a conexao
+*   global unica gnConnHandle, nao reabre conexao por form.
+*====================================================================
 
 DEFINE CLASS Formsigprite AS FormBase
 
-    *-- Propriedades visuais do form (copiadas do SCX original)
-    Height      = 600
-    Width       = 1000
-    BorderStyle = 2
-    AutoCenter  = .T.
-    TitleBar    = 0
+    *-- Propriedades visuais (pixel-perfect SCX legado - PILAR 1)
+    DataSession = 2
     ShowWindow = 1
     WindowType = 1
-    ControlBox  = .F.
-    MaxButton   = .F.
-    MinButton   = .F.
-    Movable     = .F.
+    BorderStyle = 2
+    Height      = 600
+    Width       = 800
+    AutoCenter  = .T.
     Caption     = "Itens"
+    ControlBox  = .F.
     FontName    = "Verdana"
     FontSize    = 8
+    MaxButton   = .F.
+    Movable     = .F.
+    TitleBar    = 0
     ForeColor   = RGB(36, 84, 155)
     Themes      = .F.
-    DataSession = 2
+    ShowTips    = .T.
 
     *-- Business Object
     this_oBusinessObject = .NULL.
 
-    *-- Parametros recebidos na abertura (armazenados para uso interno)
-    this_cEmp        = ""     && Empresa (3 chars)
-    this_cDop        = ""     && Codigo da operacao (20 chars)
-    this_nNum        = 0      && Numero da OP
-    this_lChecaDisps = .F.    && Verificar disponibilidade do produto
+    *-- Parametros recebidos na abertura (equivalentes a pEmp/pDop/pNum/
+    *-- pDis do legado)
+    this_cEmps       = ""
+    this_cDopes      = ""
+    this_nNums       = 0
+    this_lChecaDisps = .F.
 
-    *-- Arquivo temporario para imagem do produto
-    this_cArquivoTemp = ""
+    *-- Arquivo temporario para decodificar a foto do produto (copia da
+    *-- property equivalente no BO - equivalente a ThisForm.Arquivo do
+    *-- Init legado). Usado pelas fases de grid/eventos (AfterRowColChange).
+    this_cArquivo = ""
 
-    *-- Mensagem de erro para InicializarForm
-    this_cMensagemErro = ""
+    *-- Uma vez so: o foco inicial vai para a grade de itens na PRIMEIRA
+    *-- ativacao do form (equivalente a ".grdItens.Column1.Setfocus" do fim
+    *-- do Init legado). No Init o controle ainda nao foi desenhado e o
+    *-- SetFocus nao pega - por isso o Activate, com esta trava para nao
+    *-- roubar o foco do usuario a cada volta de Subniveis/Entrega.
+    this_lFocoInicialDado = .F.
 
     *==========================================================================
-    PROCEDURE Init(par_cEmp, par_cDop, par_nNum, par_lDis, par_cCnx)
+    * Init - Recebe os parametros do documento ANTES de DODEFAULT() rodar
+    * ver CLAUDE.md "Problema 8", Init so repassa para DODEFAULT()).
     *==========================================================================
-        IF PCOUNT() >= 4
-            THIS.this_cEmp        = IIF(VARTYPE(par_cEmp) = "C", ALLTRIM(par_cEmp), "")
-            THIS.this_cDop        = IIF(VARTYPE(par_cDop) = "C", ALLTRIM(par_cDop), "")
-            THIS.this_nNum        = IIF(VARTYPE(par_nNum)  = "N", par_nNum, 0)
-            THIS.this_lChecaDisps = IIF(VARTYPE(par_lDis)  = "L", par_lDis, .F.)
-        ENDIF
-        RETURN DODEFAULT()
+    PROCEDURE Init(par_cEmps, par_cDopes, par_nNums, par_lChecaDisps)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        THIS.this_cEmps       = IIF(VARTYPE(par_cEmps) = "C", ALLTRIM(par_cEmps), "")
+        THIS.this_cDopes      = IIF(VARTYPE(par_cDopes) = "C", ALLTRIM(par_cDopes), "")
+        THIS.this_nNums       = IIF(VARTYPE(par_nNums) = "N", par_nNums, 0)
+        THIS.this_lChecaDisps = IIF(VARTYPE(par_lChecaDisps) = "L", par_lChecaDisps, .F.)
+
+        loc_lResultado = DODEFAULT()
+        RETURN loc_lResultado
     ENDPROC
 
     *==========================================================================
-    * InicializarForm - Chamado por FormBase.Init via DODEFAULT
+    * InicializarForm - Cria o Business Object, repassa os parametros do
+    * documento (equivalente a .EmpDopNum/.ChecaDisps do Init legado),
+    * monta o titulo dinamico (equivalente a ThisForm.Caption = Alltrim(pEmp)
+    * + ' - ' + Alltrim(pDop) + ' - ' + Alltrim(Str(pNum,6)) + ' - Itens') e
+    * constroi a faixa do cabecalho. Grids, botoes e campos de dados ficam
+    * para as fases seguintes.
     *==========================================================================
     PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso, loc_oErro
+        LOCAL loc_lSucesso, loc_oErro, loc_lModoValidacaoOuTeste
         loc_lSucesso = .F.
+        loc_lModoValidacaoOuTeste = (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI) OR ;
+                                    (TYPE("gb_4c_ModoTeste")   = "L" AND gb_4c_ModoTeste)
 
         TRY
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
+            *-- Instanciar Business Object
             THIS.this_oBusinessObject = CREATEOBJECT("sigpriteBO")
+            IF VARTYPE(THIS.this_oBusinessObject) <> "O"
+                MsgErro("Erro ao criar sigpriteBO. VARTYPE retornou: " + ;
+                    VARTYPE(THIS.this_oBusinessObject), "Formsigprite.InicializarForm")
+            ELSE
+                THIS.this_oBusinessObject.this_cEmps       = THIS.this_cEmps
+                THIS.this_oBusinessObject.this_cDopes      = THIS.this_cDopes
+                THIS.this_oBusinessObject.this_nNums       = THIS.this_nNums
+                THIS.this_oBusinessObject.this_lChecaDisps = THIS.this_lChecaDisps
+                THIS.this_cArquivo                          = THIS.this_oBusinessObject.this_cArquivo
 
-            *-- Aplicar background do form (equivalente ao Page.Picture do CRUD)
-            THIS.ConfigurarPageFrame()
-
-            *-- Verificar conexao antes de prosseguir
-            IF gnConnHandle <= 0
-                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
-                    MsgErro("Imposs" + CHR(237) + "vel Efetuar Conex" + CHR(227) + CHR(227) + "o " + ;
-                            "Com o Servidor de Banco de Dados...", "Conex" + CHR(227) + "o")
-                    loc_lSucesso = .F.
+                *-- Titulo "<Emps> - <Dopes> - <Nums> - Itens", igual ao
+                *-- legado. Em validacao de UI / modo teste nao recalcula:
+                *-- nesses modos os parametros chegam vazios/zero (nao ha
+                *-- chamador real) e o comparador confere contra o Caption
+                *-- ESTATICO do SCX ("Itens") - recalcular so trocaria o
+                *-- texto fiel por outro tambem incorreto.
+                IF !loc_lModoValidacaoOuTeste
+                    THIS.Caption = ALLTRIM(THIS.this_cEmps) + " - " + ALLTRIM(THIS.this_cDopes) + ;
+                        " - " + ALLTRIM(STR(THIS.this_nNums, 6)) + " - Itens"
                 ENDIF
-            ENDIF
 
-            *-- Passar parametros para o BO
-            THIS.this_oBusinessObject.this_cEmp        = THIS.this_cEmp
-            THIS.this_oBusinessObject.this_cDop        = THIS.this_cDop
-            THIS.this_oBusinessObject.this_nNum        = THIS.this_nNum
-            THIS.this_oBusinessObject.this_lChecaDisps = THIS.this_lChecaDisps
-            THIS.this_oBusinessObject.this_cEmpDopNum  = PADR(THIS.this_cEmp, 3) + ;
-                                                         PADR(THIS.this_cDop, 20) + ;
-                                                         STR(THIS.this_nNum, 6)
+                THIS.ConfigurarCabecalho()
 
-            *-- Arquivo temporario para imagem do produto
-            THIS.this_cArquivoTemp = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                *-- Cursores do grid (regra #41 do CLAUDE.md - cursor_4c_Grade/
+                *-- cursor_4c_Rodape tem de existir ANTES do Column.ControlSource
+                *-- das grades, senao o Init estoura "Alias is not found") +
+                *-- flag de imagem do produto (SigCdOpe.Imagems, equivalente ao
+                *-- .poDataMgr.CursorQuery('SigCdOpe', ...) do Init legado).
+                THIS.this_oBusinessObject.InicializarCursores()
 
-            *-- Titulo do form: "Empresa - Operacao - Numero - Itens"
-            THIS.Caption = THIS.this_cEmp + " - " + THIS.this_cDop + " - " + ;
-                           ALLTRIM(STR(THIS.this_nNum, 6)) + " - Itens"
+                THIS.ConfigurarGridCabecalho()
+                THIS.ConfigurarGridItens()
+                THIS.ConfigurarGridRodape()
+                THIS.ConfigurarBotoesAcao()
+                THIS.ConfigurarCamposProduto()
+                THIS.ConfigurarElementosVisuais()
 
-            *-- Inicializar cursores no BO
-            THIS.this_oBusinessObject.InicializarCursores()
-
-            *-- Carregar info da operacao (Imagems)
-            IF gnConnHandle > 0
-                THIS.this_oBusinessObject.CarregarInfoOperacao(THIS.this_cDop)
-            ENDIF
-
-            *-- Construir interface visual
-            THIS.LockScreen = .T.
-
-            THIS.ConfigurarCabecalho()
-            THIS.ConfigurarBotoesAcao()
-            THIS.ConfigurarShapes()
-            THIS.ConfigurarPaginaLista()
-            THIS.TornarControlesVisiveis()
-            THIS.ConfigurarBINDEVENTs()
-
-            *-- Carregar dados (pular em modo de validacao de UI)
-            IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
-                IF gnConnHandle > 0
-                    THIS.CarregarItens()
+                *-- Carga inicial dos dados (equivalente a .SelecionaDados do
+                *-- Init legado) - pulada em validacao de UI / modo teste
+                *-- (sem gnConnHandle real, ver CarregarItens()).
+                IF !loc_lModoValidacaoOuTeste
+                    THIS.this_oBusinessObject.CarregarFlagImagem()
+                    THIS.CarregarLista()
                 ENDIF
-            ENDIF
 
-            THIS.LockScreen = .F.
-            loc_lSucesso = .T.
+                loc_lSucesso = .T.
+            ENDIF
 
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro InicializarForm")
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, ;
+                "Erro em Formsigprite.InicializarForm")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * ConfigurarPageFrame - Aplica background do form
-    * Forms OPERACIONAIS nao usam PageFrame (layout customizado direto no Form),
-    * mas o metodo eh mantido para compatibilidade com o padrao FormBase.
-    * Aqui apenas define a imagem de fundo equivalente ao Page.Picture do CRUD.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        LOCAL loc_cImgFundo
-        loc_cImgFundo = gc_4c_CaminhoIcones + "new_background.jpg"
-        IF FILE(loc_cImgFundo)
-            THIS.Picture = loc_cImgFundo
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarCabecalho - Container cinza superior com titulo
+    * ConfigurarCabecalho - Faixa cinza do topo (cntSombra do legado), com
+    * os dois labels sobrepostos (sombra + titulo) exibindo o Caption
+    * calculado em InicializarForm. Nomes conforme tasks\task633\mapeamento.json
+    * (cnt_4c_Sombra / lbl_4c_LblSombra / lbl_4c_LblTitulo).
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCnt
+
         THIS.AddObject("cnt_4c_Sombra", "Container")
-        WITH THIS.cnt_4c_Sombra
+        loc_oCnt = THIS.cnt_4c_Sombra
+        WITH loc_oCnt
             .Top         = 0
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
-            .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
+            .BackColor   = RGB(100, 100, 100)
             .Visible     = .T.
+        ENDWITH
 
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .Top           = 18
-                .Left          = 10
-                .AutoSize      = .F.
-                .Width         = THIS.Width
-                .Height        = 40
-                .FontBold      = .T.
-                .FontName      = "Tahoma"
-                .FontSize      = 18
-                .FontUnderline = .F.
-                .BackStyle     = 0
-                .WordWrap      = .T.
-                .Alignment     = 0
-                .ForeColor     = RGB(0, 0, 0)
-                .Caption       = THIS.Caption
-                .Visible       = .T.
-            ENDWITH
+        loc_oCnt.AddObject("lbl_4c_LblSombra", "Label")
+        WITH loc_oCnt.lbl_4c_LblSombra
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .FontUnderline = .F.
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .AutoSize      = .F.
+            .Caption       = THIS.Caption
+            .Height        = 40
+            .Left          = 10
+            .Top           = 18
+            .Width         = 769
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
+        ENDWITH
 
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .Top           = 17
-                .Left          = 10
-                .AutoSize      = .F.
-                .Width         = THIS.Width
-                .Height        = 46
-                .FontBold      = .T.
-                .FontName      = "Tahoma"
-                .FontSize      = 18
-                .BackStyle     = 0
-                .WordWrap      = .T.
-                .Alignment     = 0
-                .ForeColor     = RGB(255, 255, 255)
-                .Caption       = THIS.Caption
-                .ToolTipText   = "T" + CHR(237) + "tulo do Formul" + CHR(225) + "rio"
-                .Visible       = .T.
-            ENDWITH
+        loc_oCnt.AddObject("lbl_4c_LblTitulo", "Label")
+        WITH loc_oCnt.lbl_4c_LblTitulo
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 18
+            .WordWrap  = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Caption   = THIS.Caption
+            .Height    = 46
+            .Left      = 10
+            .Top       = 17
+            .Width     = 769
+            .ForeColor = RGB(255, 255, 255)
+            .Visible   = .T.
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * ConfigurarBotoesAcao - Botoes de acao: Encerrar, Subniveis, Entrega
+    * ConfigurarGridCabecalho - Grade "grdCabec" do legado: faixa decorativa
+    * de 4 colunas (Produto | "" | Quantidade | Valor) que funciona como um
+    * segundo cabecalho acima de grd_4c_Itens, agrupando visualmente varias
+    * colunas da grade de baixo sob um titulo so (ex.: "Quantidade" cobre
+    * Original/Baixada/Saldo). NAO tem RecordSource - o legado nunca liga
+    * esta grade a cursor nenhum, so FormatBase (regra #35b: a grade da
+    * Lista/estrutura espelha o legado, nunca se inventa binding que nao
+    * existe). O GotFocus/LostFocus abaixo reproduz o truque do legado para
+    * o usuario nunca conseguir "entrar" nesta grade (foco sempre volta
+    * para grd_4c_Itens.Column1).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGridCabecalho()
+        LOCAL loc_oGrid
+
+        THIS.AddObject("grd_4c_Cabec", "Grid")
+        loc_oGrid = THIS.grd_4c_Cabec
+
+        WITH loc_oGrid
+            .ColumnCount        = 4
+            .Top                = 118
+            .Left               = 26
+            .Width              = 731
+            .Height             = 35
+            .FontName           = "Arial"
+            .HeaderHeight       = 17
+            .AllowHeaderSizing  = .F.
+            .AllowRowSizing     = .F.
+            .DeleteMark         = .F.
+            .RecordMark         = .F.
+            .ReadOnly           = .T.
+            .ScrollBars         = 0
+            .Visible            = .T.
+        ENDWITH
+
+        WITH loc_oGrid.Column1
+            .Width    = 226
+            .FontName = "Arial"
+            .ReadOnly = .T.
+        ENDWITH
+        WITH loc_oGrid.Column1.Header1
+            .Caption   = "Produto"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .Alignment = 2
+        ENDWITH
+
+        WITH loc_oGrid.Column2
+            .Width    = 20
+            .FontName = "Arial"
+            .ReadOnly = .T.
+        ENDWITH
+        WITH loc_oGrid.Column2.Header1
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .Alignment = 2
+        ENDWITH
+
+        WITH loc_oGrid.Column3
+            .Width    = 242
+            .FontName = "Arial"
+            .ReadOnly = .T.
+        ENDWITH
+        WITH loc_oGrid.Column3.Header1
+            .Caption   = "Quantidade"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .Alignment = 2
+        ENDWITH
+
+        WITH loc_oGrid.Column4
+            .Width    = 238
+            .FontName = "Arial"
+            .ReadOnly = .T.
+        ENDWITH
+        WITH loc_oGrid.Column4.Header1
+            .Caption   = "Valor"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .Alignment = 2
+        ENDWITH
+
+        BINDEVENT(loc_oGrid.Column1.Text1, "GotFocus",  THIS, "GrdCabecColumn1GotFocus")
+        BINDEVENT(loc_oGrid.Column2.Text1, "GotFocus",  THIS, "GrdCabecColumn2GotFocus")
+        BINDEVENT(loc_oGrid.Column2.Text1, "LostFocus", THIS, "GrdCabecColumn2LostFocus")
+    ENDPROC
+
+    *-- Redireciona o foco para a grade de itens de verdade (legado:
+    *-- ThisForm.grdItens.Column1.SetFocus no GotFocus do Text1 da Column1)
+    PROCEDURE GrdCabecColumn1GotFocus()
+        THIS.grd_4c_Itens.Column1.SetFocus()
+    ENDPROC
+
+    *-- Truque Tag/Value do legado: guarda o valor ao entrar e devolve ao
+    *-- sair, para a celula nunca mostrar cursor de edicao piscando
+    PROCEDURE GrdCabecColumn2GotFocus()
+        THIS.grd_4c_Cabec.Column2.Text1.Tag = THIS.grd_4c_Cabec.Column2.Text1.Value
+    ENDPROC
+
+    PROCEDURE GrdCabecColumn2LostFocus()
+        THIS.grd_4c_Cabec.Column2.Text1.Value = THIS.grd_4c_Cabec.Column2.Text1.Tag
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGridItens - Grade "grdItens" do legado: os 11 campos do item
+    * do documento, ligada a cursor_4c_Grade (equivalente ao
+    * .RecordSource = 'crGrade' + Column1..11.ControlSource do PROCEDURE
+    * MontaGrades legado). ReadOnly=.T. em tudo (tela de CONSULTA). Fonte
+    * Courier New nas colunas e nos Text1 (mesmo loop "For I=1 To
+    * .ColumnCount" do legado, aqui transcrito coluna a coluna).
+    * DynamicForeColor/DynamicBackColor reproduzem as duas regras de negocio
+    * do legado (saldo vazio em azul; disponibilidade insuficiente destaca
+    * a linha) - regra #17 do CLAUDE.md, transcrever formula literalmente.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGridItens()
+        LOCAL loc_oGrid, loc_cCursor, loc_cExpFore, loc_cExpBack
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorGrade
+
+        THIS.AddObject("grd_4c_Itens", "Grid")
+        loc_oGrid = THIS.grd_4c_Itens
+
+        WITH loc_oGrid
+            .ColumnCount       = 11
+            .RecordSource      = loc_cCursor
+            .Top               = 135
+            .Left              = 26
+            .Width             = 750
+            .Height            = 275
+            .FontName          = "Arial"
+            .HeaderHeight      = 17
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .ReadOnly          = .T.
+            .ScrollBars        = 2
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Column1 - numero sequencial do item (CItens = ordinal da consulta)
+        WITH loc_oGrid.Column1
+            .ControlSource = loc_cCursor + ".CItens"
+            .InputMask     = "999999"
+            .Width         = 31
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column1.Header1
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column1.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column2 - codigo do produto (ponteiro de mao: DblClick abre a
+        *-- Pesquisa Global de Produtos, equivalente ao "Do Form SIGOPCGP"
+        *-- do legado - ver GrdItensColumn2DblClick)
+        WITH loc_oGrid.Column2
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 108
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column2.Header1
+            .Caption   = "Produto"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column2.Text1
+            .FontName     = "Courier New"
+            .BorderStyle  = 0
+            .Margin       = 0
+            .MousePointer = 99
+            .MouseIcon    = gc_4c_CaminhoIcones + "h_point.cur"
+            .ForeColor    = RGB(0, 0, 0)
+            .BackColor    = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column3 - unidade
+        WITH loc_oGrid.Column3
+            .ControlSource = loc_cCursor + ".CUnis"
+            .Width         = 42
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column3.Header1
+            .Caption   = "Unidade"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column3.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column4 - volume
+        WITH loc_oGrid.Column4
+            .ControlSource = loc_cCursor + ".Volumes"
+            .InputMask     = "999"
+            .Width         = 42
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column4.Header1
+            .Caption   = "Volume"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column4.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column5 - operacao (O = origem/destino, "I"/"S" conforme legado)
+        WITH loc_oGrid.Column5
+            .ControlSource = loc_cCursor + ".Opers"
+            .Width         = 20
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column5.Header1
+            .Caption   = "O"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column5.Text1
+            .FontName    = "Courier New"
+            .FontBold    = .T.
+            .Alignment   = 2
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column6 - quantidade original (a.Qtds)
+        WITH loc_oGrid.Column6
+            .ControlSource = loc_cCursor + ".QtdOs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column6.Header1
+            .Caption   = "Original"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column6.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column7 - quantidade baixada (a.QtBaixas)
+        WITH loc_oGrid.Column7
+            .ControlSource = loc_cCursor + ".QtdBs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column7.Header1
+            .Caption   = "Baixada"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column7.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column8 - saldo (a.Qtds - a.QtBaixas)
+        WITH loc_oGrid.Column8
+            .ControlSource = loc_cCursor + ".QtdSs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column8.Header1
+            .Caption   = "Saldo"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column8.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column9 - valor unitario (a.Units)
+        WITH loc_oGrid.Column9
+            .ControlSource = loc_cCursor + ".Units"
+            .InputMask     = "999999999.99"
+            .Width         = 100
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column9.Header1
+            .Caption   = "Unit" + CHR(225) + "rio"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column9.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column10 - moeda (a.Moedas)
+        WITH loc_oGrid.Column10
+            .ControlSource = loc_cCursor + ".CMoes"
+            .Width         = 36
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column10.Header1
+            .Caption   = "Moeda"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column10.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Column11 - valor total (a.Totas)
+        WITH loc_oGrid.Column11
+            .ControlSource = loc_cCursor + ".Totas"
+            .InputMask     = "999999999.99"
+            .Width         = 100
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+        ENDWITH
+        WITH loc_oGrid.Column11.Header1
+            .Caption   = "Valor Total"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+        ENDWITH
+        WITH loc_oGrid.Column11.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 255)
+        ENDWITH
+
+        *-- Regras de negocio do legado (transcritas - CLAUDE.md regra #17):
+        *-- saldo vazio em azul; linha com disponibilidade insuficiente para
+        *-- a baixa pintada de branco (destaque), senao amarelo-claro.
+        loc_cExpFore = "IIF(EMPTY(" + loc_cCursor + ".QtdSs), RGB(0,0,255), RGB(0,0,0))"
+        loc_oGrid.SetAll("DynamicForeColor", loc_cExpFore, "Column")
+
+        IF THIS.this_lChecaDisps
+            loc_cExpBack = "IIF(" + loc_cCursor + ".Disps < " + loc_cCursor + ;
+                ".QtdSs, RGB(255,255,255), RGB(255,255,223))"
+            loc_oGrid.SetAll("DynamicBackColor", loc_cExpBack, "Column")
+        ENDIF
+
+        *-- AfterRowColChange (legado: decodifica e exibe a foto do produto
+        *-- da linha corrente) e DblClick na coluna do codigo (legado: abre
+        *-- a Pesquisa Global de Produtos filtrada pelo codigo da linha)
+        BINDEVENT(loc_oGrid, "AfterRowColChange", THIS, "GrdItensAfterRowColChange")
+        BINDEVENT(loc_oGrid.Column2.Text1, "DblClick", THIS, "GrdItensColumn2DblClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarGridRodape - Grade "grdRodape" do legado: totais por moeda
+    * (equivalente a .RecordSource = 'crRodape' do MontaGrades legado),
+    * fundo amarelo-claro (RGB 255,255,223) e cabecalho amarelo (RGB
+    * 255,255,0) sem legenda nenhuma (HeaderHeight=4 - praticamente oculto).
+    * As colunas 1/2/3/5/9 apontam para CPros (sempre vazio no cursor de
+    * totais - BO.CarregarItens grava CPros = "" na linha de totais) - isto
+    * e FIEL ao legado, que usa o mesmo ControlSource redundante nessas
+    * colunas como espacador (regra #17 - transcrever, nunca "corrigir"
+    * o que parece estranho sem confirmar que e defeito).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGridRodape()
+        LOCAL loc_oGrid, loc_cCursor
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorRodape
+
+        THIS.AddObject("grd_4c_Rodape", "Grid")
+        loc_oGrid = THIS.grd_4c_Rodape
+
+        WITH loc_oGrid
+            .ColumnCount       = 11
+            .RecordSource      = loc_cCursor
+            .Top               = 404
+            .Left              = 26
+            .Width             = 749
+            .Height            = 25
+            .FontName          = "Arial"
+            .HeaderHeight      = 4
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .ReadOnly          = .T.
+            .ScrollBars        = 2
+            .Visible           = .T.
+        ENDWITH
+
+        WITH loc_oGrid.Column1
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 31
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column1.Header1
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column1.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column2
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 108
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column2.Header1
+            .Caption   = ""
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column2.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column3
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 42
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column3.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column3.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column4
+            .ControlSource = loc_cCursor + ".Volumes"
+            .InputMask     = "999"
+            .Width         = 42
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column4.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column4.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column5
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 20
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column5.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column5.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column6
+            .ControlSource = loc_cCursor + ".QtdOs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column6.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column6.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column7
+            .ControlSource = loc_cCursor + ".QtdBs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column7.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column7.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column8
+            .ControlSource = loc_cCursor + ".QtdSs"
+            .InputMask     = "9999999.99"
+            .Width         = 80
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column8.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column8.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column9
+            .ControlSource = loc_cCursor + ".CPros"
+            .Width         = 100
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column9.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column9.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column10
+            .ControlSource = loc_cCursor + ".CMoes"
+            .Width         = 36
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column10.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column10.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        WITH loc_oGrid.Column11
+            .ControlSource = loc_cCursor + ".Totas"
+            .InputMask     = "999999999.99"
+            .Width         = 100
+            .ReadOnly      = .T.
+            .Movable       = .F.
+            .Resizable     = .F.
+            .FontName      = "Courier New"
+            .BackColor     = RGB(255, 255, 223)
+        ENDWITH
+        WITH loc_oGrid.Column11.Header1
+            .Caption   = ""
+            .FontSize  = 8
+            .Alignment = 2
+            .BackColor = RGB(255, 255, 0)
+        ENDWITH
+        WITH loc_oGrid.Column11.Text1
+            .FontName    = "Courier New"
+            .BorderStyle = 0
+            .Margin      = 0
+            .ForeColor   = RGB(0, 0, 0)
+            .BackColor   = RGB(255, 255, 223)
+        ENDWITH
+
+        *-- Mesmo truque de foco do grdCabec (regra de UX do legado - o
+        *-- usuario nunca "entra" na grade de totais): Column1 devolve o
+        *-- foco para a grade de itens de verdade, Column2 guarda/devolve
+        *-- o valor via Tag para a celula nunca mostrar cursor de edicao.
+        BINDEVENT(loc_oGrid.Column1.Text1, "GotFocus",  THIS, "GrdRodapeColumn1GotFocus")
+        BINDEVENT(loc_oGrid.Column2.Text1, "GotFocus",  THIS, "GrdRodapeColumn2GotFocus")
+        BINDEVENT(loc_oGrid.Column2.Text1, "LostFocus", THIS, "GrdRodapeColumn2LostFocus")
+    ENDPROC
+
+    *-- Redireciona o foco para a grade de itens de verdade (legado:
+    *-- ThisForm.grdItens.Column1.SetFocus no GotFocus do Text1 da
+    *-- Column1 de grdRodape - mesmo comportamento do grdCabec)
+    PROCEDURE GrdRodapeColumn1GotFocus()
+        THIS.grd_4c_Itens.Column1.SetFocus()
+    ENDPROC
+
+    *-- Truque Tag/Value do legado na grade de totais: guarda o valor ao
+    *-- entrar e devolve ao sair, para a celula nunca mostrar cursor de
+    *-- edicao piscando
+    PROCEDURE GrdRodapeColumn2GotFocus()
+        THIS.grd_4c_Rodape.Column2.Text1.Tag = THIS.grd_4c_Rodape.Column2.Text1.Value
+    ENDPROC
+
+    PROCEDURE GrdRodapeColumn2LostFocus()
+        THIS.grd_4c_Rodape.Column2.Text1.Value = THIS.grd_4c_Rodape.Column2.Text1.Tag
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoesAcao - Botoes flutuantes do legado (Top=460, 75x75,
+    * Comic Sans MS, Themes=.F. - mesmo padrao fwbtng). cmd_4c_Cmdsair usa
+    * o tamanho DEFAULT da classe fwbtng (Height=100/Width=80 - ver
+    * Framework\framework_class_codigo_fonte.txt), pois o SCX legado so
+    * sobrescreve Top/Left/Picture/Caption/ToolTipText/Cancel - mantido
+    * fiel, inclusive o overflow de +5px (725+80=805) alem do
+    * Form.Width=800 que ja existia no legado.
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarBotoesAcao()
-        *-- Botao Encerrar (cmdsair original - Top=3, Left=725 no legado 800px)
-        *-- Proporcional para 1000px: Left = 917 (padrao canonico)
-        THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH THIS.cmd_4c_Encerrar
-            .Top            = 3
-            .Left = 5
-            .Width          = 75
-            .Height         = 75
-            .Caption        = "Encerrar"
-            .Cancel         = .T.
-            .ToolTipText    = "[Esc] Encerrar"
-            .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .FontBold       = .T.
-            .FontItalic     = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .ForeColor      = RGB(90, 90, 90)
-            .BackColor      = RGB(255, 255, 255)
+        THIS.AddObject("cmd_4c_BtnSubniveis", "CommandButton")
+        WITH THIS.cmd_4c_BtnSubniveis
+            .Top        = 460
+            .Left       = 691
+            .Width      = 75
+            .Height     = 75
+            .FontBold   = .T.
+            .FontItalic = .T.
+            .FontName   = "Comic Sans MS"
+            .FontSize   = 8
+            .Picture    = gc_4c_CaminhoIcones + "geral_pendencia_60.jpg"
+            .Caption    = "\<Subniveis"
+            .ForeColor  = RGB(90, 90, 90)
+            .BackColor  = RGB(255, 255, 255)
             .Themes           = .T.
-            .SpecialEffect  = 0
-            .PicturePosition = 13
-            .MousePointer   = 15
-            .WordWrap       = .T.
-            .AutoSize       = .F.
-            .Visible        = .T.
+            .Visible    = .T.
         ENDWITH
 
-        *-- Botao Subniveis (Top=460, Left=691 no legado 800px)
-        *-- Proporcional para 1000px: Left = 691 + 200 = 891 -> usar 691 (sem pgf, form nao tem pgf)
-        *-- Legado original Left=691 em form 800px - manter proporcao em 1000px: Left=891-200=691
-        *-- Na verdade o form nao tem pageframe entao manteremos os valores originais
-        *-- O form operacional nao usa PageFrame, entao nao ha compensacao de Top
-        THIS.AddObject("cmd_4c_Subniveis", "CommandButton")
-        WITH THIS.cmd_4c_Subniveis
-            .Top            = 460
-            .Left           = 691
-            .Width          = 75
-            .Height         = 75
-            .Caption        = "\<Subniveis"
-            .Picture        = gc_4c_CaminhoIcones + "geral_pendencia_60.jpg"
-            .FontBold       = .T.
-            .FontItalic     = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .ForeColor      = RGB(90, 90, 90)
-            .BackColor      = RGB(255, 255, 255)
+        THIS.AddObject("cmd_4c_BtnEntrega", "CommandButton")
+        WITH THIS.cmd_4c_BtnEntrega
+            .Top        = 460
+            .Left       = 616
+            .Width      = 75
+            .Height     = 75
+            .FontBold   = .T.
+            .FontItalic = .T.
+            .FontName   = "Comic Sans MS"
+            .FontSize   = 8
+            .Picture    = gc_4c_CaminhoIcones + "geral_relogio_60.jpg"
+            .Caption    = "\<Entrega"
+            .ForeColor  = RGB(90, 90, 90)
+            .BackColor  = RGB(255, 255, 255)
             .Themes           = .T.
-            .SpecialEffect  = 0
-            .PicturePosition = 13
-            .MousePointer   = 15
-            .WordWrap       = .T.
-            .AutoSize       = .F.
-            .Visible        = .T.
+            .Visible    = .T.
         ENDWITH
 
-        *-- Botao Entrega (Top=460, Left=616 no legado)
-        THIS.AddObject("cmd_4c_Entrega", "CommandButton")
-        WITH THIS.cmd_4c_Entrega
-            .Top            = 460
-            .Left           = 616
-            .Width          = 75
-            .Height         = 75
-            .Caption        = "\<Entrega"
-            .Picture        = gc_4c_CaminhoIcones + "geral_relogio_60.jpg"
-            .FontBold       = .T.
-            .FontItalic     = .T.
-            .FontName       = "Tahoma"
-            .FontSize       = 8
-            .ForeColor      = RGB(90, 90, 90)
-            .BackColor      = RGB(255, 255, 255)
+        THIS.AddObject("cmd_4c_Cmdsair", "CommandButton")
+        WITH THIS.cmd_4c_Cmdsair
+            .Top          = 3
+            .Left         = 725
+            .Width        = 80
+            .Height       = 100
+            .FontBold     = .T.
+            .FontItalic   = .T.
+            .FontName     = "Comic Sans MS"
+            .FontSize     = 8
+            .WordWrap     = .T.
+            .MousePointer = 15
+            .Picture      = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Cancel       = .T.
+            .Caption      = "Encerrar"
+            .ToolTipText  = "[Esc] Encerrar"
+            .ForeColor    = RGB(90, 90, 90)
+            .BackColor    = RGB(255, 255, 255)
             .Themes           = .T.
-            .SpecialEffect  = 0
-            .PicturePosition = 13
-            .MousePointer   = 15
-            .WordWrap       = .T.
-            .AutoSize       = .F.
-            .Visible        = .T.
+            .Visible      = .T.
+        ENDWITH
+
+        BINDEVENT(THIS.cmd_4c_BtnSubniveis, "Click", THIS, "BtnSubniveisClick")
+        BINDEVENT(THIS.cmd_4c_BtnEntrega,   "Click", THIS, "BtnEntregaClick")
+        BINDEVENT(THIS.cmd_4c_Cmdsair,      "Click", THIS, "BtnEncerrarClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCamposProduto - Primeira metade dos campos de dados do item
+    * corrente da grade (equivalente a Get_descr/Say2 e Get_obs/Say_Obs do
+    * legado): descricao e observacao do produto. Ligados por ControlSource
+    * DIRETO a cursor_4c_Grade (equivalente a 'crGrade.DPros'/'crGrade.Obs'
+    * do dump), o mesmo cursor da grd_4c_Itens - por isso so podem ser
+    * criados DEPOIS de THIS.this_oBusinessObject.InicializarCursores()
+    * (regra #41 do CLAUDE.md: ControlSource de cursor ainda inexistente
+    * derruba o Init).
+    *
+    * .ReadOnly = .T. + .TabStop = .F. reproduzem o PROCEDURE When
+    * (Return .f.) do legado - o usuario nunca ganha foco nem edita estes
+    * campos, eles so espelham a linha selecionada na grade de itens. O
+    * refresh explicito (ThisForm.Refresh / ThisForm.Get_Obs.Refresh do
+    * AfterRowColChange legado) fica para a fase que amarra os eventos da
+    * grade - sem ela os controles ainda mostram a 1a linha do cursor ate
+    * o usuario navegar a grade, o que e seguro (nao estoura, nao perde
+    * dados) e sera corrigido junto com FigJpg/disponibilidade.
+    *
+    * Say2/Say_Obs sao classe "say" do Framework legado - AutoSize=.T. e
+    * Alignment=0, sem Width/Alignment declarados no dump (regra #23 do
+    * CLAUDE.md: NUNCA inventar Width+Alignment=1). Como AddObject torna
+    * AutoSize=.T. no-op (mesma regra #23), usar Alignment=0 explicito com
+    * Width calculada para caber o texto, sem herdar nada do campo abaixo
+    * (os dois estao em TOP diferentes, nao lado a lado - sem risco de
+    * sobreposicao da regra #28).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCamposProduto()
+        LOCAL loc_cCursor
+        loc_cCursor = THIS.this_oBusinessObject.this_cCursorGrade
+
+        *-- Say2 -> lbl_4c_Label2 ("Descricao Produto")
+        THIS.AddObject("lbl_4c_Label2", "Label")
+        WITH THIS.lbl_4c_Label2
+            .FontName  = THIS.FontName
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o Produto"
+            .Left      = 30
+            .Top       = 440
+            .Width     = 150
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Get_descr -> txt_4c_Descr (espelha <cursor>.DPros - somente leitura)
+        THIS.AddObject("txt_4c_Descr", "TextBox")
+        WITH THIS.txt_4c_Descr
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ControlSource     = loc_cCursor + ".DPros"
+            .Left              = 30
+            .Top               = 456
+            .Width             = 396
+            .Height            = 23
+            .ReadOnly          = .T.
+            .TabStop           = .F.
+            .ForeColor         = RGB(0, 0, 0)
+            .BackColor         = RGB(255, 255, 255)
+            .DisabledBackColor = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(192, 192, 192)
+            .BorderColor       = RGB(100, 100, 100)
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Say_Obs -> lbl_4c__Obs ("Observacao Produto")
+        THIS.AddObject("lbl_4c__Obs", "Label")
+        WITH THIS.lbl_4c__Obs
+            .FontName  = THIS.FontName
+            .FontSize  = 8
+            .Alignment = 0
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Caption   = "Observa" + CHR(231) + CHR(227) + "o Produto"
+            .Left      = 30
+            .Top       = 481
+            .Width     = 160
+            .Height    = 17
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Get_obs -> obj_4c_Get_obs (espelha <cursor>.Obs - memo, somente leitura)
+        THIS.AddObject("obj_4c_Get_obs", "EditBox")
+        WITH THIS.obj_4c_Get_obs
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ControlSource = loc_cCursor + ".Obs"
+            .Left          = 30
+            .Top           = 496
+            .Width         = 396
+            .Height        = 57
+            .ReadOnly      = .T.
+            .TabStop       = .F.
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .NullDisplay   = " "
+            .Visible       = .T.
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * ConfigurarShapes - Shapes decorativos do layout original
+    * ConfigurarElementosVisuais - Formas decorativas (shpProdutos/Shape5/
+    * Shape1 do legado), a imagem do produto (FigJpg) e o indicador de
+    * disponibilidade (lblDisps/shpDisps). Transcrito literalmente do dump
+    * (tasks\task633\sigprite_form_codigo_fonte.txt) - regra #17 do
+    * CLAUDE.md, inclusive o Shape1 com BorderStyle=0 (sem contorno,
+    * BorderColor sem efeito) e o shpDisps com cor fixa amarelo-claro (nao
+    * ha regra de negocio dinamica para ele no legado - so o Visible muda,
+    * equivalente a ".lblDisps.Visible = pDis" / ".shpDisps.Visible = pDis"
+    * do Init legado).
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarShapes()
-        *-- shpProdutos: borda ao redor da area de grids (Top=113, Left=21)
-        THIS.AddObject("shp_4c_Produtos", "Shape")
-        WITH THIS.shp_4c_Produtos
+    PROTECTED PROCEDURE ConfigurarElementosVisuais()
+        *-- shpProdutos - moldura ao redor da area de grades/detalhe do produto
+        THIS.AddObject("shp_4c_ShpProdutos", "Shape")
+        WITH THIS.shp_4c_ShpProdutos
             .Top         = 113
             .Left        = 21
-            .Height      = 320
             .Width       = 757
+            .Height      = 320
             .BackStyle   = 0
             .BorderColor = RGB(90, 90, 90)
             .Visible     = .T.
         ENDWITH
 
-        *-- Shape5: borda ao redor da area de descricao/observacao (Top=438)
-        THIS.AddObject("shp_4c_Descricao", "Shape")
-        WITH THIS.shp_4c_Descricao
+        *-- Shape5 - moldura ao redor do bloco de descricao/observacao
+        THIS.AddObject("shp_4c_Shape5", "Shape")
+        WITH THIS.shp_4c_Shape5
             .Top         = 438
             .Left        = 21
-            .Height      = 121
             .Width       = 584
+            .Height      = 121
             .BackStyle   = 0
             .Curvature   = 0
             .BackColor   = RGB(255, 255, 255)
@@ -312,1268 +1248,441 @@ DEFINE CLASS Formsigprite AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        *-- Shape1: borda ao redor do botao Encerrar
-        THIS.AddObject("shp_4c_CmdSair", "Shape")
-        WITH THIS.shp_4c_CmdSair
+        *-- Shape1 - moldura decorativa junto aos botoes Subniveis/Entrega
+        THIS.AddObject("shp_4c_Shape1", "Shape")
+        WITH THIS.shp_4c_Shape1
             .Top         = 7
-            .Left        = 917
-            .Height      = 110
+            .Left        = 691
             .Width       = 90
+            .Height      = 110
             .BackStyle   = 0
             .BorderStyle = 0
             .BorderColor = RGB(136, 189, 188)
             .Visible     = .T.
         ENDWITH
 
-        *-- shpDisps: indicador visual de disponibilidade (pequeno quadrado)
-        THIS.AddObject("shp_4c_Disps", "Shape")
-        WITH THIS.shp_4c_Disps
-            .Top          = 441
-            .Left         = 254
-            .Height       = 14
-            .Width        = 14
-            .BackStyle    = 1
-            .SpecialEffect = 0
-            .BackColor    = RGB(255, 255, 187)
-            .Visible      = THIS.this_lChecaDisps
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarGrdCabec - Grid de cabecalho (informacoes da OP, 4 colunas)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGrdCabec()
-        THIS.AddObject("grd_4c_Cabec", "Grid")
-        WITH THIS.grd_4c_Cabec
-            .Top              = 118
-            .Left             = 26
-            .Width            = 731
-            .Height           = 35
-            .ColumnCount      = 4
-            .FontName         = "Arial"
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing   = .F.
-            .DeleteMark       = .F.
-            .RecordMark       = .F.
-            .ReadOnly         = .T.
-            .ScrollBars       = 0
-            .HeaderHeight     = 17
-            .Panel            = 1
-            .RecordSource     = "cursor_4c_Itens"
-            .Visible          = .T.
-
-            *-- Coluna 1: Produto (codigo)
-            WITH .Column1
-                .FontName       = "Arial"
-                .Width          = 226
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.CPros"
-                WITH .Header1
-                    .FontBold   = .T.
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Produto"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Arial"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Coluna 2: (vazia - separador visual no legado)
-            WITH .Column2
-                .FontName       = "Arial"
-                .Width          = 20
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Opers"
-                WITH .Header1
-                    .FontBold   = .T.
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Arial"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Coluna 3: Quantidade
-            WITH .Column3
-                .FontName       = "Arial"
-                .Width          = 242
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.QtdOs"
-                WITH .Header1
-                    .FontBold   = .T.
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Quantidade"
-                ENDWITH
-                WITH .Text1
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Coluna 4: Valor
-            WITH .Column4
-                .FontName       = "Arial"
-                .Width          = 238
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Totas"
-                WITH .Header1
-                    .FontBold   = .T.
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Valor"
-                ENDWITH
-                WITH .Text1
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Impedir redimensionamento e movimentacao de colunas
-            .SetAll("Movable",    .F., "Column")
-            .SetAll("Resizable",  .F., "Column")
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarGrdItens - Grid principal de itens (11 colunas)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGrdItens()
-        THIS.AddObject("grd_4c_Itens", "Grid")
-        WITH THIS.grd_4c_Itens
-            .Top              = 135
-            .Left             = 26
-            .Width            = 750
-            .Height           = 275
-            .ColumnCount      = 11
-            .FontName         = "Arial"
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing   = .F.
-            .DeleteMark       = .F.
-            .RecordMark       = .F.
-            .ReadOnly         = .T.
-            .ScrollBars       = 2
-            .HeaderHeight     = 17
-            .RecordSource     = "cursor_4c_Itens"
-            .HighlightBackColor = RGB(255, 255, 255)
-            .HighlightForeColor = RGB(15, 41, 104)
-            .HighlightStyle   = 2
-            .Visible          = .T.
-
-            *-- Col 1: CItens (sequencial do item - sem header)
-            WITH .Column1
-                .FontName       = "Courier New"
-                .Width          = 31
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.CItens"
-                .InputMask      = "999999"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 2: CPros (codigo produto - clickavel para abrir SIGOPCGP)
-            WITH .Column2
-                .FontName       = "Courier New"
-                .Width          = 108
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.CPros"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Produto"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .MousePointer = 99
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 3: CUnis (unidade)
-            WITH .Column3
-                .FontName       = "Courier New"
-                .Width          = 42
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.CUnis"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Unidade"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 4: Volumes
-            WITH .Column4
-                .FontName       = "Courier New"
-                .Width          = 42
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Volumes"
-                .InputMask      = "999"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Volume"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 5: Opers (tipo operacao - bold, centralizado)
-            WITH .Column5
-                .FontBold       = .T.
-                .FontName       = "Courier New"
-                .Alignment      = 2
-                .Width          = 20
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Opers"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "O"
-                ENDWITH
-                WITH .Text1
-                    .FontBold   = .T.
-                    .Alignment  = 2
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 6: QtdOs (quantidade original)
-            WITH .Column6
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.QtdOs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Original"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 7: QtdBs (quantidade baixada)
-            WITH .Column7
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.QtdBs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Baixada"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 8: QtdSs (saldo = original - baixada)
-            WITH .Column8
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.QtdSs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Saldo"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 9: Units (preco unitario)
-            WITH .Column9
-                .FontName       = "Courier New"
-                .Width          = 100
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Units"
-                .InputMask      = "999999999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Unit" + CHR(225) + "rio"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 10: CMoes (codigo da moeda)
-            WITH .Column10
-                .FontName       = "Courier New"
-                .Width          = 36
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.CMoes"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Moeda"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 11: Totas (valor total)
-            WITH .Column11
-                .FontName       = "Courier New"
-                .Width          = 100
-                .ReadOnly       = .T.
-                .ControlSource  = "cursor_4c_Itens.Totas"
-                .InputMask      = "999999999.99"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = "Valor Total"
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 255)
-                ENDWITH
-            ENDWITH
-
-            *-- Impedir redimensionamento e movimentacao de colunas
-            .SetAll("Movable",    .F., "Column")
-            .SetAll("Resizable",  .F., "Column")
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarPaginaDados - Area inferior "Dados": descricao, observacao,
-    * imagem e indicador de disponibilidade do produto selecionado no grid.
-    * Para forms OPERACIONAIS (sem PageFrame), este metodo agrupa os campos
-    * de detalhe do item corrente, equivalente a Page2/Dados de CRUD.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        *-- Label "Descricao Produto"
-        THIS.AddObject("lbl_4c_DescricaoPro", "Label")
-        WITH THIS.lbl_4c_DescricaoPro
-            .Top        = 440
-            .Left       = 30
-            .FontSize   = 8
-            .Caption    = "Descri" + CHR(231) + CHR(227) + "o Produto"
-            .ForeColor  = RGB(90, 90, 90)
-            .Visible    = .T.
-        ENDWITH
-
-        *-- TextBox somente-leitura para descricao do produto (Get_descr original)
-        THIS.AddObject("txt_4c_Descr", "TextBox")
-        WITH THIS.txt_4c_Descr
-            .Top                  = 456
-            .Left                 = 30
-            .Width                = 396
-            .Height               = 23
-            .FontName             = "Tahoma"
-            .FontSize             = 8
-            .ControlSource        = "cursor_4c_Itens.DPros"
-            .ReadOnly             = .T.
-            .ForeColor            = RGB(0, 0, 0)
-            .BackColor            = RGB(255, 255, 255)
-            .DisabledBackColor    = RGB(255, 255, 255)
-            .DisabledForeColor    = RGB(192, 192, 192)
-            .BorderColor          = RGB(100, 100, 100)
-            .Visible              = .T.
-        ENDWITH
-
-        *-- Label "Observacao Produto"
-        THIS.AddObject("lbl_4c_ObsPro", "Label")
-        WITH THIS.lbl_4c_ObsPro
-            .Top        = 481
-            .Left       = 30
-            .FontSize   = 8
-            .Caption    = "Observa" + CHR(231) + CHR(227) + "o Produto"
-            .ForeColor  = RGB(90, 90, 90)
-            .Visible    = .T.
-        ENDWITH
-
-        *-- EditBox somente-leitura para observacao (Get_obs original)
-        THIS.AddObject("txt_4c_Obs", "EditBox")
-        WITH THIS.txt_4c_Obs
-            .Top           = 496
-            .Left          = 30
-            .Width         = 396
-            .Height        = 57
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .ControlSource = "cursor_4c_Itens.Obs"
-            .ReadOnly      = .T.
-            .ForeColor     = RGB(0, 0, 0)
-            .BorderColor   = RGB(100, 100, 100)
-            .NullDisplay   = " "
-            .Visible       = .T.
-        ENDWITH
-
-        *-- Label de disponibilidade do produto (so visivel se pDis=.T.)
-        THIS.AddObject("lbl_4c_Disps", "Label")
-        WITH THIS.lbl_4c_Disps
-            .Top        = 441
-            .Left       = 270
-            .FontSize   = 8
-            .Caption    = "Disponibilidade do Produto"
-            .ForeColor  = RGB(90, 90, 90)
-            .Visible    = THIS.this_lChecaDisps
-        ENDWITH
-
-        *-- Imagem do produto (inicialmente oculta, exibida por AfterRowColChange)
+        *-- FigJpg -> img_4c_FigJpg (foto do produto da linha corrente -
+        *-- preenchida/exibida por GrdItensAfterRowColChange)
         THIS.AddObject("img_4c_FigJpg", "Image")
         WITH THIS.img_4c_FigJpg
-            .Stretch    = 1
-            .Top        = 443
-            .Left       = 433
-            .Width      = 166
-            .Height     = 111
-            .Visible    = .F.
+            .Stretch = 1
+            .Top     = 443
+            .Left    = 433
+            .Width   = 166
+            .Height  = 111
+            .Picture = ""
+            .Visible = .F.
+        ENDWITH
+
+        *-- lblDisps/shpDisps -> indicador de disponibilidade do produto,
+        *-- visivel apenas quando o chamador pede a conferencia (par_lChecaDisps)
+        THIS.AddObject("lbl_4c_LblDisps", "Label")
+        WITH THIS.lbl_4c_LblDisps
+            .FontName  = THIS.FontName
+            .FontSize  = 8
+            .Caption   = "Disponibilidade do Produto"
+            .Left      = 270
+            .Top       = 441
+            .Width     = 160
+            .Height    = 17
+            .BackStyle = 0
+            .Alignment = 0
+            .AutoSize  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = THIS.this_lChecaDisps
+        ENDWITH
+
+        THIS.AddObject("shp_4c_ShpDisps", "Shape")
+        WITH THIS.shp_4c_ShpDisps
+            .Top           = 441
+            .Left          = 254
+            .Width         = 14
+            .Height        = 14
+            .BackStyle     = 1
+            .SpecialEffect = 0
+            .BackColor     = RGB(255, 255, 187)
+            .Visible       = THIS.this_lChecaDisps
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * ConfigurarGrdRodape - Grid de rodape com totais por moeda (11 colunas)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGrdRodape()
-        THIS.AddObject("grd_4c_Rodape", "Grid")
-        WITH THIS.grd_4c_Rodape
-            .Top              = 404
-            .Left             = 26
-            .Width            = 749
-            .Height           = 25
-            .ColumnCount      = 11
-            .FontName         = "Arial"
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing   = .F.
-            .DeleteMark       = .F.
-            .RecordMark       = .F.
-            .ReadOnly         = .T.
-            .ScrollBars       = 2
-            .HeaderHeight     = 4
-            .RecordSource     = "cursor_4c_Rodape"
-            .Visible          = .T.
-
-            *-- As colunas do rodape espelham as do grdItens em largura
-            *-- mas exibem os totais acumulados por moeda (sem header caption)
-            *-- Col 1: vazia (alinha com CItens do grdItens)
-            WITH .Column1
-                .FontName       = "Courier New"
-                .Width          = 31
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CPros"
-                WITH .Header1
-                    .FontName   = "Tahoma"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 2: vazia (alinha com CPros)
-            WITH .Column2
-                .FontName       = "Courier New"
-                .Width          = 108
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CPros"
-                WITH .Header1
-                    .FontName   = "Arial"
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ReadOnly   = .T.
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 3: vazia (alinha com CUnis)
-            WITH .Column3
-                .FontName       = "Courier New"
-                .Width          = 42
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CPros"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 4: Volumes total
-            WITH .Column4
-                .FontName       = "Courier New"
-                .Width          = 42
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.Volumes"
-                .InputMask      = "999"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 5: vazia (alinha com Opers)
-            WITH .Column5
-                .FontName       = "Courier New"
-                .Width          = 20
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CPros"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 6: QtdOs total
-            WITH .Column6
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.QtdOs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 7: QtdBs total
-            WITH .Column7
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.QtdBs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 8: QtdSs total
-            WITH .Column8
-                .FontName       = "Courier New"
-                .Width          = 80
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.QtdSs"
-                .InputMask      = "9999999.99"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 9: vazia (alinha com Units)
-            WITH .Column9
-                .FontName       = "Courier New"
-                .Width          = 100
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CPros"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 10: CMoes (moeda)
-            WITH .Column10
-                .FontName       = "Courier New"
-                .Width          = 36
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.CMoes"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Col 11: Totas total
-            WITH .Column11
-                .FontName       = "Courier New"
-                .Width          = 100
-                .ReadOnly       = .T.
-                .BackColor      = RGB(255, 255, 223)
-                .ControlSource  = "cursor_4c_Rodape.Totas"
-                .InputMask      = "999999999.99"
-                WITH .Header1
-                    .FontSize   = 8
-                    .Alignment  = 2
-                    .Caption    = ""
-                    .BackColor  = RGB(255, 255, 0)
-                ENDWITH
-                WITH .Text1
-                    .FontName   = "Courier New"
-                    .BorderStyle = 0
-                    .Margin     = 0
-                    .ForeColor  = RGB(0, 0, 0)
-                    .BackColor  = RGB(255, 255, 223)
-                ENDWITH
-            ENDWITH
-
-            *-- Impedir redimensionamento e movimentacao de colunas
-            .SetAll("Movable",    .F., "Column")
-            .SetAll("Resizable",  .F., "Column")
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarPaginaLista - Organiza a configuracao da visualizacao principal
-    * Para este form OPERACIONAL (sem PageFrame), agrupa a configuracao dos
-    * grids de cabecalho, itens, area de descricao/imagem e rodape de totais.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        THIS.ConfigurarGrdCabec()
-        THIS.ConfigurarGrdItens()
-        THIS.ConfigurarPaginaDados()
-        THIS.ConfigurarGrdRodape()
-    ENDPROC
-
-    *==========================================================================
-    * AlternarPagina - Atualiza a exibicao dos grids apos recarregar dados.
-    * Para este form OPERACIONAL sem PageFrame, nao ha alternancia de paginas:
-    * o metodo sincroniza os tres grids e forca refresh visual sem flickering.
-    *==========================================================================
-    PROCEDURE AlternarPagina()
-        THIS.LockScreen = .T.
-        IF USED("cursor_4c_Itens")
-            THIS.grd_4c_Cabec.Refresh
-            THIS.grd_4c_Itens.Refresh
-            THIS.grd_4c_Rodape.Refresh
-        ENDIF
-        THIS.Refresh
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *==========================================================================
-    * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
-    *==========================================================================
-    PROCEDURE TornarControlesVisiveis()
-        LOCAL loc_i, loc_oCtrl, loc_j, loc_oFilho
-        FOR loc_i = 1 TO THIS.ControlCount
-            loc_oCtrl = THIS.Controls(loc_i)
-            IF VARTYPE(loc_oCtrl) = "O"
-                *-- img_4c_FigJpg inicia oculta (gerenciada por AfterRowColChange)
-                *-- shp_4c_Disps e lbl_4c_Disps dependem de this_lChecaDisps
-                IF UPPER(loc_oCtrl.Name) = "IMG_4C_FIGJPG"
-                    LOOP
-                ENDIF
-                IF UPPER(loc_oCtrl.Name) = "SHP_4C_DISPS" OR ;
-                   UPPER(loc_oCtrl.Name) = "LBL_4C_DISPS"
-                    loc_oCtrl.Visible = THIS.this_lChecaDisps
-                    LOOP
-                ENDIF
-                IF INLIST(UPPER(loc_oCtrl.Name), "CNT_4C_SOMBRA")
-                    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
-                        FOR loc_j = 1 TO loc_oCtrl.ControlCount
-                            loc_oFilho = loc_oCtrl.Controls(loc_j)
-                            IF VARTYPE(loc_oFilho) = "O"
-                                loc_oFilho.Visible = .T.
-                            ENDIF
-                        ENDFOR
-                    ENDIF
-                    LOOP
-                ENDIF
-                loc_oCtrl.Visible = .T.
-                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
-                    FOR loc_j = 1 TO loc_oCtrl.ControlCount
-                        loc_oFilho = loc_oCtrl.Controls(loc_j)
-                        IF VARTYPE(loc_oFilho) = "O"
-                            loc_oFilho.Visible = .T.
-                        ENDIF
-                    ENDFOR
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarBINDEVENTs - Vincula eventos de interface
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBINDEVENTs()
-        *-- Encerrar
-        BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "CmdEncerrarClick")
-
-        *-- Subniveis
-        BINDEVENT(THIS.cmd_4c_Subniveis, "Click", THIS, "CmdSubniveisClick")
-
-        *-- Entrega
-        BINDEVENT(THIS.cmd_4c_Entrega, "Click", THIS, "CmdEntregaClick")
-
-        *-- Grid itens: mudar linha atualiza imagem e descricao
-        BINDEVENT(THIS.grd_4c_Itens, "AfterRowColChange", THIS, "GrdItensAfterRowColChange")
-
-        *-- Duplo clique no produto abre consulta de produto
-        BINDEVENT(THIS.grd_4c_Itens.Column2.Text1, "DblClick", THIS, "GrdItensProdutoDblClick")
-
-        *-- GrdCabec: evitar foco no cabecalho (redirecionar para grdItens)
-        BINDEVENT(THIS.grd_4c_Cabec.Column1.Text1, "GotFocus", THIS, "GrdCabecGotFocus")
-
-        *-- GrdRodape: evitar foco no rodape (redirecionar para grdItens)
-        BINDEVENT(THIS.grd_4c_Rodape.Column1.Text1, "GotFocus", THIS, "GrdRodapeGotFocus")
-
-        *-- Column2 de grdCabec: armazenar/restaurar valor (estabilidade visual)
-        BINDEVENT(THIS.grd_4c_Cabec.Column2.Text1,  "GotFocus",  THIS, "GrdCabecCol2GotFocus")
-        BINDEVENT(THIS.grd_4c_Cabec.Column2.Text1,  "KeyPress", THIS, "GrdCabecCol2LostFocus")
-
-        *-- Column2 de grdRodape: armazenar/restaurar valor (estabilidade visual)
-        BINDEVENT(THIS.grd_4c_Rodape.Column2.Text1, "GotFocus",  THIS, "GrdRodapeCol2GotFocus")
-        BINDEVENT(THIS.grd_4c_Rodape.Column2.Text1, "KeyPress", THIS, "GrdRodapeCol2LostFocus")
-    ENDPROC
-
-    *==========================================================================
-    * CarregarItens - Executa a consulta SQL e popula os grids
-    *==========================================================================
-    PROCEDURE CarregarItens()
-        IF TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste
-            RETURN
-        ENDIF
-        IF gnConnHandle <= 0
-            RETURN
-        ENDIF
-        LOCAL loc_lResultado
-        loc_lResultado = THIS.this_oBusinessObject.BuscarItens()
-
-        IF loc_lResultado
-            *-- DynamicForeColor: QtdSs=0 em azul, >0 em preto
-            THIS.grd_4c_Itens.SetAll("DynamicForeColor", ;
-                "IIF(EMPTY(cursor_4c_Itens.QtdSs), RGB(0,0,255), RGB(0,0,0))", "Column")
-
-            *-- DynamicBackColor para disponibilidade (so quando pDis=.T.)
-            IF THIS.this_lChecaDisps
-                THIS.grd_4c_Itens.SetAll("DynamicBackColor", ;
-                    "IIF(cursor_4c_Itens.Disps < cursor_4c_Itens.QtdSs, " + ;
-                    "RGB(255,255,255), RGB(255,255,223))", "Column")
-            ENDIF
-
-            IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
-                THIS.grd_4c_Itens.Refresh
-                THIS.grd_4c_Rodape.Refresh
-                THIS.grd_4c_Itens.Column1.SetFocus
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * GrdItensAfterRowColChange - Ao mudar linha: atualiza imagem do produto
+    * GrdItensAfterRowColChange - Reage a troca de linha/coluna na grade de
+    * itens, equivalente ao PROCEDURE AfterRowColChange de grdItens no
+    * legado (dump, linhas 1672-1701). PUBLIC + LPARAMETERS par_nColIndex:
+    * alvo de BINDEVENT (regra #3), que exige metodo PUBLIC declarando o
+    * parametro do evento.
+    *
+    * O corpo do legado foi decomposto nos tres hooks canonicos, na MESMA
+    * ordem e sem mudar comportamento:
+    *   LimparCampos() - "FigJpg.Visible = .f. / FigJpg.Picture = ''";
+    *   FormParaBO()   - "Select crGrade" (a linha corrente da grade passa a
+    *                    ser o item corrente do BO);
+    *   BOParaForm()   - o CursorQuery de FigJpgs, o Strconv/StrToFile e os
+    *                    tres Refresh finais.
+    *
+    * NAO filtra por par_nColIndex: o legado tambem nao filtra, e filtrar
+    * aqui seria o defeito da regra #46 (nColIndex e a coluna de DESTINO).
     *==========================================================================
     PROCEDURE GrdItensAfterRowColChange(par_nColIndex)
         THIS.LockScreen = .T.
 
-        THIS.img_4c_FigJpg.Visible  = .F.
-        THIS.img_4c_FigJpg.Picture  = ""
+        THIS.LimparCampos()
+        THIS.FormParaBO()
+        THIS.BOParaForm()
 
-        IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
-            *-- Verificar se operacao tem imagem habilitada (Imagems=1)
-            IF THIS.this_oBusinessObject.this_nImagems = 1 AND ;
-               !EMPTY(cursor_4c_Itens.CPros)
-                *-- Carregar imagem do produto
-                IF THIS.this_oBusinessObject.CarregarImagemProduto( ;
-                        ALLTRIM(cursor_4c_Itens.CPros), THIS.this_cArquivoTemp)
-                    IF !EMPTY(THIS.this_oBusinessObject.this_cArquivo)
-                        THIS.img_4c_FigJpg.Picture = THIS.this_oBusinessObject.this_cArquivo
+        THIS.LockScreen = .F.
+    ENDPROC
+
+    *==========================================================================
+    * GrdItensColumn2DblClick - Abre a Pesquisa Global de Produtos filtrada
+    * pelo codigo da linha corrente, equivalente ao PROCEDURE DblClick de
+    * grdItens.Column2.Text1 no legado (dump, linhas 1713-1728):
+    *   Do Form SIGOPCGP.Scx Name ThisForm.poObjExt1 Linked With [SIGOPCGP] NoShow
+    *   .fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()       (Limpar Filtros)
+    *   .fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 10)
+    *   .fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 10)
+    *   .fld_principal.Pag_Consulta.grp_operacao.cmd_consulta.Click()    (Consultar)
+    *
+    * FormSigOpCgp (ja migrado) expoe o mesmo fluxo atraves de metodos
+    * PUBLIC equivalentes - GrpLimparFiltrosClick()/BtnConsultarClick() -
+    * chamados aqui no lugar de simular clique em CommandGroup/Buttons
+    * (regra #38: dentro de WITH nao ha .Self, e Buttons(N) e colecao, nao
+    * API publica estavel para chamar de fora). PUBLIC (sem par_cModo) para
+    * ser alvo de BINDEVENT "DblClick" (regra #3).
+    *==========================================================================
+    PROCEDURE GrdItensColumn2DblClick()
+        LOCAL loc_cCodigoProduto, loc_oForm, loc_oErro, loc_oPag
+        loc_oForm = .NULL.
+
+        loc_cCodigoProduto = ALLTRIM(TratarNulo(THIS.grd_4c_Itens.Column2.Text1.Value, ""))
+
+        IF !EMPTY(loc_cCodigoProduto)
+            TRY
+                loc_oForm = CREATEOBJECT("Formsigopcgp")
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro ao abrir Pesquisa Global de Produtos")
+                loc_oForm = .NULL.
+            ENDTRY
+
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.GrpLimparFiltrosClick()
+
+                loc_oPag = loc_oForm.pgf_4c_1.Page1.pgf_4c_Filtro.Page1
+                loc_oPag.txt_4c_ProdutoI.Value = PADR(loc_cCodigoProduto, 10)
+                loc_oPag.txt_4c_ProdutoF.Value = PADR(loc_cCodigoProduto, 10)
+
+                loc_oForm.BtnConsultarClick()
+                loc_oForm.Show()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnSubniveisClick - Abre o form de subniveis/movimentacao relacionada,
+    * equivalente a "Do Form SigMvMvt With .f., <Emps>, <Dopes>, <Nums>" do
+    * legado (o .f. e par_lModal=.F. -> FormSIGMVMVT.WindowType=0, Show() NAO
+    * bloqueia - por isso pode ficar dentro do mesmo TRY sem o risco da
+    * regra #29, que e especifica de Show() MODAL).
+    *==========================================================================
+    PROCEDURE BtnSubniveisClick()
+        LOCAL loc_oForm, loc_oErro
+        loc_oForm = .NULL.
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSIGMVMVT", .F., THIS.this_cEmps, THIS.this_cDopes, THIS.this_nNums)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao abrir Subniveis")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnEntregaClick - Abre o form de Entrega/Previsao do documento,
+    * equivalente a "Do Form SigOpDen With <Emps>, <Dopes>, <Nums>" do
+    * legado. FormSigOpDen ainda NAO foi migrado neste acervo (nao existe em
+    * projeto\app\forms) - o CATCH informa a falha real (classe ausente) em
+    * vez de fingir sucesso ou abrir tela quebrada; assim que SigOpDen for
+    * migrado em outra task, este botao passa a funcionar sem alteracao.
+    *==========================================================================
+    PROCEDURE BtnEntregaClick()
+        LOCAL loc_oForm, loc_oErro
+        loc_oForm = .NULL.
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigOpDen", THIS.this_cEmps, THIS.this_cDopes, THIS.this_nNums)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao abrir Entrega")
+            loc_oForm = .NULL.
+        ENDTRY
+
+        IF VARTYPE(loc_oForm) = "O"
+            loc_oForm.Show()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnEncerrarClick - Encerra o form (equivalente a ThisForm.Release do
+    * legado - regra #8/#29: THIS.Release(), fora de qualquer TRY). Nomeado
+    * pela ACAO/Caption do botao ("Encerrar"), nao pelo Name do objeto
+    * legado (cmdsair) - harness TesteAutomatico.prg (teste
+    * BtnEncerrarExiste) enumera BtnEncerrarClick/BtnFecharClick/
+    * BtnSairClick como metodos de encerramento validos.
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * CarregarItens - Popula cursor_4c_Grade/cursor_4c_Rodape via o BO
+    * (equivalente a .SelecionaDados do legado) e repinta as duas grades
+    * (regra #21 do CLAUDE.md - popular cursor NAO repinta a grade sozinho).
+    * Chamado por CarregarLista(), que e a entrada canonica de carga (e quem
+    * sincroniza depois o item corrente com o BO e com a area de detalhe).
+    * Continua PUBLIC para permitir recarregar SO as grades, sem mexer no
+    * detalhe - por exemplo ao voltar de Subniveis/Entrega.
+    *==========================================================================
+    PROCEDURE CarregarItens()
+        LOCAL loc_lSucesso, loc_cCursorGrade, loc_cCursorRodape
+        loc_lSucesso = THIS.this_oBusinessObject.CarregarItens()
+
+        loc_cCursorGrade  = THIS.this_oBusinessObject.this_cCursorGrade
+        loc_cCursorRodape = THIS.this_oBusinessObject.this_cCursorRodape
+
+        IF loc_lSucesso
+            IF USED(loc_cCursorGrade)
+                GO TOP IN (loc_cCursorGrade)
+            ENDIF
+            IF USED(loc_cCursorRodape)
+                GO TOP IN (loc_cCursorRodape)
+            ENDIF
+
+            THIS.grd_4c_Itens.Refresh()
+            THIS.grd_4c_Rodape.Refresh()
+        ELSE
+            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao carregar itens")
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * CarregarLista - Entrada canonica de carga da tela: popula as duas
+    * grades (CarregarItens -> BO.CarregarItens) e, em seguida, sincroniza o
+    * item CORRENTE com o Business Object e com a area de detalhe do
+    * produto. Equivale ao trecho final do Init legado, que chama
+    * ".SelecionaDados" e logo depois ".grdItens.Refresh / .grdRodape.Refresh"
+    * deixando a 1a linha selecionada com a foto/descricao ja na tela.
+    *
+    * PUBLIC (sem PROTECTED) de proposito: alem de InicializarForm(), este
+    * metodo e chamado de FORA da classe pelo harness TesteAutomatico.prg
+    * (THIS.oForm.CarregarLista()) - PROTECTED aqui falharia em runtime com
+    * "Property CARREGARLISTA is not found" (CLAUDE.md regra #3).
+    *
+    * A "lista" desta tela e a grade de itens do documento: nao ha Page1 de
+    * listagem CRUD (o legado e um form FLAT de consulta, ver cabecalho).
+    *==========================================================================
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso
+        loc_lSucesso = THIS.CarregarItens()
+
+        IF loc_lSucesso
+            *-- Mesma sequencia do AfterRowColChange: limpa o detalhe, leva a
+            *-- linha corrente para o BO e repinta a partir dele. Sem isto, a
+            *-- 1a linha ficaria selecionada na grade com a foto do produto
+            *-- em branco ate o usuario mexer no cursor da grade.
+            THIS.LimparCampos()
+            IF THIS.FormParaBO()
+                THIS.BOParaForm()
+            ENDIF
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - Transfere o que esta SELECIONADO na tela para o Business
+    * Object: a linha corrente da grade de itens vira o item corrente do BO
+    * (this_cCodigoProduto, this_cDescricaoProduto, this_nQtdSaldo, ...).
+    * Equivale ao "Select crGrade" que abre o AfterRowColChange legado e as
+    * referencias "crGrade.<campo>" que vem depois dele.
+    *
+    * Esta tela e de CONSULTA - nao ha campo digitavel cujo .Value precise
+    * voltar para o BO (Get_descr/Get_obs tem ControlSource direto no cursor
+    * e When -> .F. no legado). O sentido util de "form -> BO" aqui e,
+    * portanto, a SELECAO, e e ela que alimenta BOParaForm() e
+    * BO.CarregarImagemProduto().
+    *
+    * PROTECTED explicito: FormBase.prg ja declara FormParaBO/BOParaForm/
+    * LimparCampos como PROTECTED, e em VFP9 o escopo da base PREVALECE -
+    * omitir o modificador aqui NAO tornaria o metodo publico, so esconderia
+    * do leitor que ele e interno (CLAUDE.md regra #51). Os tres sao
+    * chamados sempre por THIS., de dentro da classe.
+    *
+    * Restaura a area de trabalho anterior: BO.CarregarDoCursor() faz
+    * SELECT no cursor da grade e deixaria o alias corrente trocado para
+    * quem chamou (o AfterRowColChange dispara no meio de outras operacoes).
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_lSucesso, loc_cCursorGrade, loc_cAliasAnterior
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_cAliasAnterior = ALIAS()
+            loc_cCursorGrade   = THIS.this_oBusinessObject.this_cCursorGrade
+
+            IF USED(loc_cCursorGrade) AND !EOF(loc_cCursorGrade) AND !BOF(loc_cCursorGrade)
+                loc_lSucesso = THIS.this_oBusinessObject.CarregarDoCursor(loc_cCursorGrade)
+            ENDIF
+
+            IF !EMPTY(loc_cAliasAnterior) AND USED(loc_cAliasAnterior)
+                SELECT (loc_cAliasAnterior)
+            ENDIF
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Leva o item corrente do Business Object para a tela: le a
+    * foto do produto (BO.CarregarImagemProduto -> cursor_4c_Produto.FigJpgs),
+    * decodifica o Base64 para o arquivo temporario e exibe em img_4c_FigJpg,
+    * repintando depois a grade e os campos de detalhe. E o corpo do
+    * AfterRowColChange legado (dump, linhas 1672-1701), transcrito.
+    *
+    * Decodificar o Base64 e gravar o JPG e responsabilidade da camada de UI
+    * (o BO so entrega o cursor) - mesmo padrao de sigprcpdBO/ClienteBO.
+    *
+    * CLEAR RESOURCES antes de regravar THIS.this_cArquivo reproduz o
+    * "Clear Resources" do legado - sem ele, reatribuir o MESMO caminho de
+    * arquivo a .Picture nao forca o VFP9 a reler o conteudo (cache de GDI),
+    * e a foto da linha anterior ficaria "colada" na tela.
+    *
+    * Descricao e Observacao NAO sao atribuidas aqui: tem ControlSource
+    * direto em cursor_4c_Grade (fiel ao legado, que liga Get_descr a
+    * "crGrade.DPros") e seguem a linha corrente sozinhas - so precisam do
+    * Refresh final, igual ao "ThisForm.Get_Obs.Refresh" do legado.
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oBO, loc_cCursorProduto, loc_cCodigoProduto
+        LOCAL loc_cFigJpgs, loc_cFoto, loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_oBO            = THIS.this_oBusinessObject
+            loc_cCursorProduto = loc_oBO.this_cCursorProduto
+            loc_cCodigoProduto = ALLTRIM(TratarNulo(loc_oBO.this_cCodigoProduto, ""))
+
+            IF loc_oBO.this_nImagems = 1 AND !EMPTY(loc_cCodigoProduto) ;
+                    AND PEMSTATUS(THIS, "img_4c_FigJpg", 5) ;
+                    AND loc_oBO.CarregarImagemProduto(loc_cCodigoProduto) ;
+                    AND USED(loc_cCursorProduto) ;
+                    AND TYPE(loc_cCursorProduto + ".FigJpgs") != "U"
+
+                loc_cFigJpgs = EVALUATE(loc_cCursorProduto + ".FigJpgs")
+
+                IF !ISNULL(loc_cFigJpgs) AND !EMPTY(loc_cFigJpgs)
+                    CLEAR RESOURCES
+
+                    loc_cFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(loc_cFigJpgs, ;
+                        "data:image/png;base64,", ""), ;
+                        "data:image/jpeg;base64,", ""), ;
+                        "data:image/jpg;base64,", ""), 14)
+
+                    IF STRTOFILE(loc_cFoto, THIS.this_cArquivo) > 0
+                        THIS.img_4c_FigJpg.Picture = THIS.this_cArquivo
                         THIS.img_4c_FigJpg.Visible = .T.
                     ENDIF
                 ENDIF
             ENDIF
+
+            IF PEMSTATUS(THIS, "grd_4c_Itens", 5)
+                THIS.grd_4c_Itens.Refresh()
+            ENDIF
+            THIS.Refresh()
+            IF PEMSTATUS(THIS, "obj_4c_Get_obs", 5)
+                THIS.obj_4c_Get_obs.Refresh()
+            ENDIF
+
+            loc_lSucesso = .T.
         ENDIF
 
-        THIS.grd_4c_Itens.Refresh
-        THIS.Refresh
-        THIS.txt_4c_Obs.Refresh
-
-        THIS.LockScreen = .F.
+        RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * GrdItensProdutoDblClick - Duplo clique no codigo produto: abre SIGOPCGP
+    * LimparCampos - Zera a area de detalhe do produto antes de recarregar:
+    * esconde e descarrega a foto. E o bloco de abertura do AfterRowColChange
+    * legado (FigJpg.Visible = .f. / FigJpg.Picture = vazio).
+    *
+    * Descricao e Observacao NAO sao limpas por codigo: tem ControlSource
+    * direto em cursor_4c_Grade (igual ao legado) e acompanham a linha
+    * corrente sozinhas - atribuir .Value nelas GRAVARIA no cursor, que e o
+    * oposto do que esta tela de consulta deve fazer.
+    *
+    * O guard PEMSTATUS existe porque AfterRowColChange pode disparar
+    * enquanto a tela ainda esta sendo montada (a imagem e criada depois das
+    * grades, em ConfigurarElementosVisuais).
     *==========================================================================
-    PROCEDURE GrdItensProdutoDblClick()
-        LOCAL loc_cCPros
-        IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
-            loc_cCPros = ALLTRIM(cursor_4c_Itens.CPros)
-            IF !EMPTY(loc_cCPros)
-                *-- Abrir form de consulta de produto (Formsigprccp ou equivalente)
-                *-- O legado abria SIGOPCGP.SCX - no novo sistema usar equivalente migrado
-                TRY
-                    IF VARTYPE(gobjExt1_sigprite) != "O" OR ISNULL(gobjExt1_sigprite)
-                        PUBLIC gobjExt1_sigprite
-                        gobjExt1_sigprite = CREATEOBJECT("Formsigprccp")
-                        IF VARTYPE(gobjExt1_sigprite) = "O"
-                            gobjExt1_sigprite.Show()
-                        ENDIF
-                    ENDIF
-                CATCH TO loc_oErro
-                    MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                            "Erro ao abrir Consulta de Produto")
-                ENDTRY
+    PROTECTED PROCEDURE LimparCampos()
+        IF PEMSTATUS(THIS, "img_4c_FigJpg", 5)
+            THIS.img_4c_FigJpg.Visible = .F.
+            THIS.img_4c_FigJpg.Picture = ""
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * Activate - Coloca o foco na grade de itens na PRIMEIRA exibicao do
+    * form, equivalente a ".grdItens.Column1.Setfocus" do fim do Init
+    * legado. Nao pode ficar no Init: la o controle ainda nao foi desenhado
+    * e o SetFocus nao tem efeito.
+    *
+    * A trava this_lFocoInicialDado evita roubar o foco a cada reativacao
+    * (voltar de Subniveis/Entrega reativa este form). Sem TRY/CATCH de
+    * proposito: as duas condicoes que fariam o SetFocus falhar - grade
+    * inexistente/invisivel, form ainda nao desenhado e grade sem linha -
+    * estao todas testadas antes
+    * (CLAUDE.md regra #9: CATCH nunca silencioso; aqui nao ha CATCH a
+    * silenciar porque nao ha excecao esperada).
+    *==========================================================================
+    PROCEDURE Activate()
+        LOCAL loc_cCursorGrade
+
+        IF !THIS.this_lFocoInicialDado AND PEMSTATUS(THIS, "grd_4c_Itens", 5) ;
+                AND VARTYPE(THIS.this_oBusinessObject) = "O"
+            loc_cCursorGrade = THIS.this_oBusinessObject.this_cCursorGrade
+
+            IF THIS.Visible AND THIS.grd_4c_Itens.Visible AND THIS.grd_4c_Itens.Enabled ;
+                    AND USED(loc_cCursorGrade) AND RECCOUNT(loc_cCursorGrade) > 0
+                THIS.this_lFocoInicialDado = .T.
+                THIS.grd_4c_Itens.Column1.SetFocus()
             ENDIF
         ENDIF
+
+        DODEFAULT()
     ENDPROC
 
     *==========================================================================
-    * GrdCabecGotFocus - Redireciona foco do cabecalho para grdItens
-    *==========================================================================
-    PROCEDURE GrdCabecGotFocus()
-        IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
-            THIS.grd_4c_Itens.Column1.SetFocus
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * GrdRodapeGotFocus - Redireciona foco do rodape para grdItens
-    *==========================================================================
-    PROCEDURE GrdRodapeGotFocus()
-        IF USED("cursor_4c_Itens") AND !EOF("cursor_4c_Itens")
-            THIS.grd_4c_Itens.Column1.SetFocus
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * CmdEncerrarClick - Fecha o form
-    *==========================================================================
-    PROCEDURE CmdEncerrarClick()
-        THIS.Release()
-    ENDPROC
-
-    *==========================================================================
-    * CmdSubniveisClick - Abre form de subniveis (SigMvMvt migrado)
-    *==========================================================================
-    PROCEDURE CmdSubniveisClick()
-        LOCAL loc_cEmp, loc_cDop, loc_nNum
-        loc_cEmp = SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 1, 3)
-        loc_cDop = SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 4, 20)
-        loc_nNum = INT(VAL(SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 24, 6)))
-
-        TRY
-            LOCAL loc_oFrmSub
-            loc_oFrmSub = CREATEOBJECT("FormSigMvMvt", .F., ;
-                          ALLTRIM(loc_cEmp), ALLTRIM(loc_cDop), loc_nNum)
-            IF VARTYPE(loc_oFrmSub) = "O"
-                loc_oFrmSub.Show()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao abrir Subniveis")
-        ENDTRY
-    ENDPROC
-
-    *==========================================================================
-    * CmdEntregaClick - Abre form de entrega (SigOpDen migrado)
-    *==========================================================================
-    PROCEDURE CmdEntregaClick()
-        LOCAL loc_cEmp, loc_cDop, loc_nNum
-        loc_cEmp = SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 1, 3)
-        loc_cDop = SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 4, 20)
-        loc_nNum = INT(VAL(SUBSTR(THIS.this_oBusinessObject.this_cEmpDopNum, 24, 6)))
-
-        TRY
-            LOCAL loc_oFrmEnt
-            loc_oFrmEnt = CREATEOBJECT("FormSigOpDen", ;
-                          ALLTRIM(loc_cEmp), ALLTRIM(loc_cDop), loc_nNum)
-            IF VARTYPE(loc_oFrmEnt) = "O"
-                loc_oFrmEnt.Show()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao abrir Entrega")
-        ENDTRY
-    ENDPROC
-
-    *==========================================================================
-    * GrdCabecCol2GotFocus / GrdCabecCol2LostFocus
-    * Armazena valor corrente em Tag e restaura ao perder foco (estabilidade
-    * visual da coluna separadora do grid de cabecalho - comportamento original)
-    *==========================================================================
-    PROCEDURE GrdCabecCol2GotFocus()
-        THIS.grd_4c_Cabec.Column2.Text1.Tag = TRANSFORM(THIS.grd_4c_Cabec.Column2.Text1.Value)
-    ENDPROC
-
-    PROCEDURE GrdCabecCol2LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF !EMPTY(THIS.grd_4c_Cabec.Column2.Text1.Tag)
-            THIS.grd_4c_Cabec.Column2.Text1.Value = THIS.grd_4c_Cabec.Column2.Text1.Tag
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * GrdRodapeCol2GotFocus / GrdRodapeCol2LostFocus
-    * Idem para o grid de rodape (coluna 2 eh a descricao do produto - exibida
-    * em branco no rodape mas precisa preservar o valor entre focos)
-    *==========================================================================
-    PROCEDURE GrdRodapeCol2GotFocus()
-        THIS.grd_4c_Rodape.Column2.Text1.Tag = TRANSFORM(THIS.grd_4c_Rodape.Column2.Text1.Value)
-    ENDPROC
-
-    PROCEDURE GrdRodapeCol2LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF !EMPTY(THIS.grd_4c_Rodape.Column2.Text1.Tag)
-            THIS.grd_4c_Rodape.Column2.Text1.Value = THIS.grd_4c_Rodape.Column2.Text1.Tag
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * BtnVisualizarClick - Recarrega os itens da OP do banco (refresh do grid)
-    * Este form OPERACIONAL eh um viewer read-only. "Visualizar" equivale a
-    * recarregar do banco para refletir alteracoes feitas nas telas filhas
-    * (Subniveis, Entrega) que podem alterar quantidades baixadas/saldos.
-    *==========================================================================
-    PROCEDURE BtnVisualizarClick()
-        IF gnConnHandle <= 0
-            MsgErro("Sem conex" + CHR(227) + "o com o servidor de banco de dados.", ;
-                    "Conex" + CHR(227) + "o")
-            RETURN
-        ENDIF
-
-        THIS.LockScreen = .T.
-        THIS.this_oBusinessObject.CarregarInfoOperacao(THIS.this_cDop)
-        THIS.CarregarItens()
-        THIS.LockScreen = .F.
-    ENDPROC
-
-    *==========================================================================
-    * BtnIncluirClick - Abre o form de Subniveis (SigMvMvt)
-    * Este form OPERACIONAL nao insere itens diretamente (paridade com legado
-    * SIGPRITE.SCX). A inclusao de subniveis eh feita no form dedicado aberto
-    * via btnSubniveis. Este metodo redireciona para essa funcionalidade.
-    *==========================================================================
-    PROCEDURE BtnIncluirClick()
-        THIS.CmdSubniveisClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnAlterarClick - Abre o form de Entrega (SigOpDen)
-    * A alteracao das quantidades baixadas/entregues eh feita no form dedicado
-    * aberto via btnEntrega (paridade com legado). Este metodo redireciona.
-    *==========================================================================
-    PROCEDURE BtnAlterarClick()
-        THIS.CmdEntregaClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnExcluirClick - Encerra o form (equivalente ao cmdsair)
-    * Este form OPERACIONAL nao suporta exclusao de itens (paridade com legado
-    * SIGPRITE.SCX, que eh viewer read-only). A operacao encerra a janela.
-    *==========================================================================
-    PROCEDURE BtnExcluirClick()
-        THIS.Release()
-    ENDPROC
-
-    *==========================================================================
-    * BtnEncerrarClick - Fecha o form (alias canonico para CmdEncerrarClick)
-    *==========================================================================
-    PROCEDURE BtnEncerrarClick()
-        THIS.CmdEncerrarClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnBuscarClick - Recarrega itens do banco (alias para BtnVisualizarClick)
-    *==========================================================================
-    PROCEDURE BtnBuscarClick()
-        THIS.BtnVisualizarClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnSalvarClick - Form OPERACIONAL viewer nao tem edicao: encerra
-    *==========================================================================
-    PROCEDURE BtnSalvarClick()
-        THIS.CmdEncerrarClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnCancelarClick - Form OPERACIONAL viewer nao tem edicao: encerra
-    *==========================================================================
-    PROCEDURE BtnCancelarClick()
-        THIS.CmdEncerrarClick()
-    ENDPROC
-
-    *==========================================================================
-    * CarregarLista - Alias canonico para CarregarItens
-    *==========================================================================
-    PROCEDURE CarregarLista()
-        THIS.CarregarItens()
-    ENDPROC
-
-    *==========================================================================
-    * AjustarBotoesPorModo - Form viewer nao tem modos CRUD; sem alteracao
-    *==========================================================================
-    PROCEDURE AjustarBotoesPorModo()
-        IF VARTYPE(THIS.cmd_4c_Subniveis) = "O"
-            THIS.cmd_4c_Subniveis.Enabled = .T.
-        ENDIF
-        IF VARTYPE(THIS.cmd_4c_Entrega) = "O"
-            THIS.cmd_4c_Entrega.Enabled = .T.
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * HabilitarCampos - Todos os controles sao somente-leitura neste viewer
-    *==========================================================================
-    PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lAtivo
-        loc_lAtivo = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
-        IF VARTYPE(THIS.cmd_4c_Subniveis) = "O"
-            THIS.cmd_4c_Subniveis.Enabled = loc_lAtivo
-        ENDIF
-        IF VARTYPE(THIS.cmd_4c_Entrega) = "O"
-            THIS.cmd_4c_Entrega.Enabled = loc_lAtivo
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * LimparCampos - Limpa os cursores e reseta a exibicao visual
-    *==========================================================================
-    PROCEDURE LimparCampos()
-        IF USED("cursor_4c_Itens")
-            SELECT cursor_4c_Itens
-            ZAP
-        ENDIF
-        IF USED("cursor_4c_Rodape")
-            SELECT cursor_4c_Rodape
-            ZAP
-        ENDIF
-        THIS.img_4c_FigJpg.Visible = .F.
-        THIS.img_4c_FigJpg.Picture = ""
-        IF VARTYPE(THIS.grd_4c_Itens) = "O"
-            THIS.grd_4c_Itens.Refresh
-        ENDIF
-        IF VARTYPE(THIS.grd_4c_Rodape) = "O"
-            THIS.grd_4c_Rodape.Refresh
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * FormParaBO - Form OPERACIONAL viewer: nao ha campos editaveis.
-    * Apenas atualiza os parametros de contexto no BO caso o chamador
-    * precise repassar novos valores de Emp/Dop/Num antes de recarregar.
-    *==========================================================================
-    PROCEDURE FormParaBO()
-        THIS.this_oBusinessObject.this_cEmp        = THIS.this_cEmp
-        THIS.this_oBusinessObject.this_cDop        = THIS.this_cDop
-        THIS.this_oBusinessObject.this_nNum        = THIS.this_nNum
-        THIS.this_oBusinessObject.this_lChecaDisps = THIS.this_lChecaDisps
-        THIS.this_oBusinessObject.this_cEmpDopNum  = PADR(THIS.this_cEmp, 3) + ;
-                                                     PADR(THIS.this_cDop, 20) + ;
-                                                     STR(THIS.this_nNum, 6)
-    ENDPROC
-
-    *==========================================================================
-    * BOParaForm - Atualiza o titulo do form com base nos parametros correntes
-    * do BO. Os grids sao bound ao cursor via ControlSource; o refresh visual
-    * eh feito diretamente em CarregarItens/AlternarPagina.
-    *==========================================================================
-    PROCEDURE BOParaForm()
-        THIS.Caption = THIS.this_oBusinessObject.this_cEmp + " - " + ;
-                       THIS.this_oBusinessObject.this_cDop + " - " + ;
-                       ALLTRIM(STR(THIS.this_oBusinessObject.this_nNum, 6)) + " - Itens"
-        IF VARTYPE(THIS.cnt_4c_Sombra) = "O"
-            THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption
-            THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption
-        ENDIF
-    ENDPROC
-
+    * Destroy - Libera o Business Object. Fecha os cursores que as fases
+    * seguintes virao a criar (cursor_4c_Grade/Rodape/Produto), repetindo
+    * aqui o equivalente a ThisForm.poDataMgr.Release do Release legado -
+    * a liberacao de conexao propriamente dita e feita pelo BO/gnConnHandle
+    * global, nao por form.
     *==========================================================================
     PROCEDURE Destroy()
-    *==========================================================================
-        LOCAL loc_oErro
-        *-- Limpar arquivo temporario de imagem
-        IF !EMPTY(THIS.this_cArquivoTemp) AND FILE(THIS.this_cArquivoTemp)
-            TRY
-                ERASE (THIS.this_cArquivoTemp)
-            CATCH TO loc_oErro
-                MsgErro(loc_oErro.Message, "Erro ao remover imagem tempor" + CHR(225) + "ria")
-            ENDTRY
-        ENDIF
-
-        *-- Liberar cursores do BO
-        IF USED("cursor_4c_Itens")
-            USE IN cursor_4c_Itens
+        IF USED("cursor_4c_Grade")
+            USE IN cursor_4c_Grade
         ENDIF
         IF USED("cursor_4c_Rodape")
             USE IN cursor_4c_Rodape
         ENDIF
+        IF USED("cursor_4c_Produto")
+            USE IN cursor_4c_Produto
+        ENDIF
 
-        *-- Liberar BO
         IF VARTYPE(THIS.this_oBusinessObject) = "O"
             THIS.this_oBusinessObject = .NULL.
         ENDIF

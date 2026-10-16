@@ -3,6 +3,20 @@
 * Herdado de: FormBase
 * Tipo: OPERACIONAL (dialogo de processamento - sem PageFrame)
 * Portado de: SIGPRMEI.SCX
+*
+* NAO-PORT DELIBERADO:
+*   Load (=fConfigGeral()) - fConfigGeral era funcao GLOBAL da aplicacao legado
+*   (sig.prg/SIGFUNCS.PRG) que nao veio no acervo. O wrapper NO-OP em
+*   projeto\app\utils\fconfiggeral.prg existe so para o p-code dos VCX legado
+*   (nao editavel) continuar resolvendo o nome; em codigo NOSSO nunca se chama
+*   fConfigGeral. O que ela fazia (configuracao global) ja ocorre ANTES deste
+*   form abrir: config.prg (SETs/paths/aliases), main.prg (conexao) e o
+*   proprio SIGPRMEIBO (SigCdPam via InicializarForm). Mesmo padrao de
+*   FormSigMvExp.prg/FormSigPrCar.prg.
+*
+*   Destroy (ThisForm.PoDataMgr.Release + DoDefault) - poDataMgr era o
+*   data manager do Framework legado (fSqlConector); equivalente no migrado
+*   eh THIS.this_oBusinessObject, liberado em Destroy() abaixo.
 *==============================================================================
 SET SAFETY OFF
 SET RESOURCE OFF
@@ -17,6 +31,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     ShowWindow = 1
     WindowType = 1
     ControlBox  = .F.
+    FontBold    = .F.          && SCX: SIGPRMEI.FontBold
     Closable    = .F.
     MaxButton   = .F.
     MinButton   = .F.
@@ -93,6 +108,11 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
                 THIS.ConfigurarBotoes()
                 THIS.ConfigurarLabels()
 
+                *-- TabIndex: DEPOIS de todos os AddObject (regra: atribuir em
+                *-- controle inexistente derruba o Init)
+                THIS.ConfigurarPaginaLista()
+                THIS.ConfigurarPaginaDados()
+
                 THIS.TornarControlesVisiveis(THIS)
 
                 loc_lSucesso = .T.
@@ -117,8 +137,8 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
 
         THIS.AddObject("cnt_4c_Cabecalho", "Container")
         WITH THIS.cnt_4c_Cabecalho
-            .Top         = -1
-            .Left        = -1
+            .Top         = 0
+            .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
             .BackStyle   = 1
@@ -144,6 +164,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
             .Alignment     = 0
             .BackStyle     = 0
             .ForeColor     = RGB(0, 0, 0)
+            .Rotation      = 0                      && SCX: lblSombra.Rotation
             .Caption       = THIS.Caption
             .Visible       = .T.
         ENDWITH
@@ -163,6 +184,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
             .BackStyle    = 0
             .ForeColor    = RGB(255, 255, 255)
             .ToolTipText  = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+            .Rotation     = 0                       && SCX: lblTitulo.Rotation
             .Caption      = THIS.Caption
             .Visible      = .T.
         ENDWITH
@@ -177,7 +199,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
         THIS.AddObject("btn_4c_Processar", "CommandButton")
         WITH THIS.btn_4c_Processar
             .Top             = 3
-            .Left            = 340
+            .Left            = 350                && SCX: cmdBtnForm.Left=345 + Command1.Left=5
             .Width           = 75
             .Height          = 75
             .Caption         = "Processar"
@@ -186,7 +208,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
             .ToolTipText     = "Processar"
             .FontBold        = .T.
             .FontItalic      = .T.
-            .FontName        = "Tahoma"
+            .FontName        = "Comic Sans MS"     && SCX: Command1.FontName
             .FontSize        = 8
             .ForeColor       = RGB(90, 90, 90)
             .BackColor       = RGB(255, 255, 255)
@@ -204,7 +226,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
         THIS.AddObject("btn_4c_Encerrar", "CommandButton")
         WITH THIS.btn_4c_Encerrar
             .Top             = 3
-            .Left            = 420
+            .Left            = 425                && SCX: cmdBtnForm.Left=345 + Command2.Left=80
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"
@@ -214,7 +236,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
             .ToolTipText     = "[ESC] Sair"
             .FontBold        = .T.
             .FontItalic      = .T.
-            .FontName        = "Tahoma"
+            .FontName        = "Comic Sans MS"     && SCX: Command2.FontName
             .FontSize        = 8
             .ForeColor       = RGB(90, 90, 90)
             .BackColor       = RGB(255, 255, 255)
@@ -285,9 +307,17 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE BtnProcessarClick()
         LOCAL loc_llOk1, loc_llOk2, loc_lnMov, loc_lnKey, loc_lnError, loc_lcErro
+        LOCAL loc_lSaiuPeloBotao
+
+        loc_lSaiuPeloBotao = .F.
 
         THIS.btn_4c_Processar.Enabled = .F.
         SET CURSOR OFF
+
+        *-- SCX btnCopiar.Click: Keyboard [{LEFTARROW}] - tira o foco do botao que
+        *-- acabou de perder o Enabled, para que o INKEY(.5, "M") do loop capture
+        *-- mouse e teclado em vez de a tecla ficar presa no controle desabilitado.
+        KEYBOARD "{LEFTARROW}"
 
         loc_lnMov = 1
         DO WHILE .T.
@@ -320,15 +350,34 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
             IF !THIS.this_lParametrizado OR loc_lnKey = 27
                 EXIT
             ENDIF
+
+            *-- SCX btnCopiar.Click: clique do mouse sobre o botao Encerrar tambem
+            *-- interrompe o polling. INKEY(.5, "M") devolve 151 no clique com o
+            *-- botao esquerdo; MCOL/MROW com nScaleMode = 3 dao a posicao do
+            *-- ponteiro em PIXELS dentro da janela do form, que eh a unidade em
+            *-- que Left/Top/Width/Height dos controles estao. Sem este ramo o loop
+            *-- so para por ESC e clicar em Encerrar nao surte efeito algum.
+            IF loc_lnKey = 151 AND ;
+               THIS.MouseSobreBotaoSair(MCOL(THIS.Name, 3), MROW(THIS.Name, 3), THIS.btn_4c_Encerrar)
+                loc_lSaiuPeloBotao = .T.
+                THIS.BtnEncerrarClick()
+                EXIT
+            ENDIF
         ENDDO
 
         SET CURSOR ON
-        THIS.lbl_4c_Status.Caption = ""
-        THIS.btn_4c_Processar.Enabled = .T.
 
-        IF THIS.this_lParametrizado
-            THIS.Release()
-            QUIT
+        *-- Restauracao NAO roda quando o Encerrar ja liberou o form: os controles
+        *-- pertencem a um form em liberacao, e o legado tambem nao chega aqui em
+        *-- estado util (btnSair.Click faz ThisForm.Release).
+        IF !loc_lSaiuPeloBotao
+            THIS.lbl_4c_Status.Caption = ""
+            THIS.btn_4c_Processar.Enabled = .T.
+
+            IF THIS.this_lParametrizado
+                THIS.Release()
+                QUIT
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -337,6 +386,64 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE BtnEncerrarClick()
         THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MouseSobreBotaoSair - O ponteiro do mouse esta sobre o botao de saida?
+    *
+    * O SCX legado CHAMA ThisForm.MouseSobreBotaoSair(...) no loop do
+    * btnCopiar.Click mas NUNCA a define: a ClassInfo do SCX (RESERVED3) lista
+    * apenas desabotao / gravararquivos / habilitabotao / lerarquivos, e a classe
+    * do form eh "form" PURA, sem VCX de onde herdar. Transcrever a chamada sem
+    * definir o metodo cairia na regra #13 do CLAUDE.md: nome desconhecido nao eh
+    * erro de compilacao - o VFP procura mousesobrebotaosair.prg no PATH e so
+    * estoura em RUNTIME, dentro do loop de processamento. Por isso o metodo eh
+    * IMPLEMENTADO aqui, com a semantica que o call site exige.
+    *
+    * par_nCol / par_nRow : posicao do ponteiro em PIXELS dentro da janela do
+    *                       form (MCOL/MROW com nScaleMode = 3)
+    * par_oBotao          : o CommandButton de saida a testar
+    *--------------------------------------------------------------------------
+    PROCEDURE MouseSobreBotaoSair(par_nCol, par_nRow, par_oBotao)
+        LOCAL loc_nLeft, loc_nTop, loc_oPai, loc_nNivel, loc_lSobre
+
+        loc_lSobre = .F.
+
+        IF VARTYPE(par_oBotao) = "O" AND VARTYPE(par_nCol) = "N" AND VARTYPE(par_nRow) = "N"
+
+            *-- Left/Top sao RELATIVOS ao pai: somar a cadeia de containers ate o
+            *-- Form da a posicao ABSOLUTA na janela, que eh o referencial de
+            *-- MCOL/MROW. Hoje os dois botoes sao filhos diretos do Form (o
+            *-- cmdBtnForm do legado foi desmembrado em dois CommandButton), mas
+            *-- somar a cadeia mantem o teste correto se algum deles voltar para
+            *-- dentro de um container.
+            loc_nLeft  = par_oBotao.Left
+            loc_nTop   = par_oBotao.Top
+            loc_oPai   = par_oBotao.Parent
+            loc_nNivel = 0
+
+            *-- Guarda de profundidade: evita laco infinito se a cadeia de Parent
+            *-- vier ciclica ou nunca alcancar o Form.
+            DO WHILE VARTYPE(loc_oPai) = "O" AND loc_nNivel < 20
+                IF UPPER(loc_oPai.BaseClass) == "FORM"
+                    EXIT
+                ENDIF
+                IF PEMSTATUS(loc_oPai, "Left", 5) AND PEMSTATUS(loc_oPai, "Top", 5)
+                    loc_nLeft = loc_nLeft + loc_oPai.Left
+                    loc_nTop  = loc_nTop  + loc_oPai.Top
+                ENDIF
+                IF !PEMSTATUS(loc_oPai, "Parent", 5)
+                    EXIT
+                ENDIF
+                loc_oPai   = loc_oPai.Parent
+                loc_nNivel = loc_nNivel + 1
+            ENDDO
+
+            loc_lSobre = BETWEEN(par_nCol, loc_nLeft, loc_nLeft + par_oBotao.Width) ;
+                AND BETWEEN(par_nRow, loc_nTop, loc_nTop + par_oBotao.Height)
+        ENDIF
+
+        RETURN loc_lSobre
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -470,24 +577,39 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - N/A para OPERACIONAL sem PageFrame
+    * ConfigurarPaginaDados - Ordem de tabulacao transcrita do SCX legado
     *
-    * FormSIGPRMEI eh um dialogo de processamento (500x147) sem PageFrame,
-    * portanto nao ha Page2/Dados como em forms CRUD (frmcadastro).
-    * Metodo mantido pela interface do pipeline de migracao. Nao ha campos
-    * de entrada, TextBoxes ou Labels de dados a configurar ? todos os
-    * controles visuais foram criados em ConfigurarCabecalho +
-    * ConfigurarBotoes + ConfigurarLabels.
+    * FormSIGPRMEI eh um dialogo de processamento (500x147) sem PageFrame: o SCX
+    * legado nao tem TextBox/EditBox/ComboBox/Grid algum (arvore completa =
+    * cntSombra + lblSombra/lblTitulo, cmdBtnForm com 2 botoes, Label2, Label1),
+    * entao nao existe campo de dados a criar - analise.json confirma campos,
+    * lookups e labels vazios. O trabalho real desta fase eh o TabIndex, que o
+    * migrador descarta: com AddObject o VFP9 numera pela ORDEM DE CRIACAO, que
+    * nao tem relacao com a ordem do legado, e isso nao gera erro nem log.
+    *
+    * TabIndex declarado no SCX:
+    *   cmdBtnForm           = 4   CommandGroup - sem TabStop, nao focalizavel
+    *   cmdBtnForm.Command1  = 2   -> btn_4c_Processar  (Processar)
+    *   cmdBtnForm.Command2  = 3   -> btn_4c_Encerrar   (Encerrar)
+    *   Label2 / Label1      = 4   Label nao tem TabStop - TabIndex inerte
+    *
+    * Numerar SO os focalizaveis: Label nao tem TabStop (nao recebe foco), logo
+    * transcrever o TabIndex dos labels seria inerte e ainda EMBARALHARIA a
+    * sequencia dos controles que de fato param o Tab - por isso os tres "4"
+    * duplicados do SCX (cmdBtnForm/Label2/Label1) nao sao reproduzidos. Entre
+    * os dois focalizaveis nao ha empate, e a ordem relativa do legado
+    * (Command1=2 antes de Command2=3) fica preservada.
+    *
+    * Atribuicao em ordem ASCENDENTE: cada atribuicao poe o controle na posicao
+    * pedida e empurra os demais para tras. Chamado por InicializarForm DEPOIS
+    * de todos os AddObject - antes disso atribuiria em controle inexistente.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaDados()
-        IF PEMSTATUS(THIS, "lbl_4c_Status", 5)
-            THIS.lbl_4c_Status.Caption = ""
-        ENDIF
         IF PEMSTATUS(THIS, "btn_4c_Processar", 5)
-            THIS.btn_4c_Processar.Enabled = .T.
+            THIS.btn_4c_Processar.TabIndex = 1
         ENDIF
         IF PEMSTATUS(THIS, "btn_4c_Encerrar", 5)
-            THIS.btn_4c_Encerrar.Enabled = .T.
+            THIS.btn_4c_Encerrar.TabIndex = 2
         ENDIF
     ENDPROC
 

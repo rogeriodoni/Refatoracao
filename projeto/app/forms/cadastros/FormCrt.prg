@@ -22,6 +22,7 @@ DEFINE CLASS FormCrt AS FormBase
 
     *-- Propriedades de controle
     this_oBusinessObject = .NULL.
+    this_lEmLookupEmp    = .F.   && guarda de reentrancia do picker de Empresa
     this_cModoAtual      = "LISTA"
 
     *--------------------------------------------------------------------------
@@ -657,6 +658,13 @@ DEFINE CLASS FormCrt AS FormBase
                 .Alignment = 3
                 .Visible   = .T.
             ENDWITH
+            *-- LostFocus eh o equivalente ao Valid do legado (Get_EmpPad.Valid):
+            *-- digitou algo e saiu do campo -> procura a empresa e, nao achando
+            *-- exata, ABRE a lista. Sem este binding so havia KeyPress e
+            *-- DblClick, entao digitar a empresa nao abria nada (Erro221).
+            *-- BINDEVENT em "Valid" de TextBox nao dispara de forma confiavel
+            *-- no VFP9 (CLAUDE.md #47), por isso LostFocus.
+            BINDEVENT(loc_oPagina.txt_4c_EmpPad, "LostFocus", THIS, "EmpPadLookupLostFocus")
             BINDEVENT(loc_oPagina.txt_4c_EmpPad, "KeyPress", THIS, "EmpPadLookupKeyPress")
             BINDEVENT(loc_oPagina.txt_4c_EmpPad, "DblClick", THIS, "EmpPadLookupDblClick")
 
@@ -1091,11 +1099,37 @@ DEFINE CLASS FormCrt AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * EmpPadLookupKeyPress - Handler KeyPress para lookup de Empresa (F4)
+    * EmpPadLookupLostFocus - equivalente ao Valid do legado.
+    *
+    * Legado (SIGCDCRT.Pagina.Dados.Get_EmpPad.Valid):
+    *     If !IsEmpty(This.Value)
+    *         xBrox = CreateObject('fwBuscaExt', ..., 'SigCdEmp', 'crSigCdEmp',
+    *                              'cEmps', This.Value, 'Empresas', .t., 'cEmps')
+    *         If Not xBrox.plAchouRegistro
+    *             xBrox.mAddColuna('CEmps','XXXXXX','Codigo', .t.)
+    *             xBrox.mAddColuna('Razas','','Descricao', .t.)
+    *             xBrox.Show()
+    *             This.Value = Iif(LastKey() # 27, crSigCdEmp.CEmps, '')
+    *         EndIf
+    *     Endif
+    * ou seja: com valor digitado, procura a empresa exata e, NAO achando,
+    * abre a lista. Campo vazio nao consulta nada.
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpPadLookupLostFocus()
+        THIS.AbrirLookupEmpresa(.F.)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * EmpPadLookupKeyPress - F4 abre a lista.
+    *
+    * Medido no VFP9 (tabela de INKEY()/LASTKEY(), que o KeyPress compartilha):
+    *     F1 = 28   F2 = -1   F3 = -2   F4 = -3   F5 = -4
+    *     a letra "s" = 115   a letra "t" = 116
+    * Estava testando 28, que eh F1 - por isso o F4 nunca fez nada aqui.
     *--------------------------------------------------------------------------
     PROCEDURE EmpPadLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28  && F4
-            THIS.AbrirLookupEmpresa()
+        IF par_nKeyCode = -3  && F4
+            THIS.AbrirLookupEmpresa(.T.)
         ENDIF
     ENDPROC
 
@@ -1103,22 +1137,41 @@ DEFINE CLASS FormCrt AS FormBase
     * EmpPadLookupDblClick - Handler DblClick para lookup de Empresa
     *--------------------------------------------------------------------------
     PROCEDURE EmpPadLookupDblClick()
-        THIS.AbrirLookupEmpresa()
+        *-- duplo clique eh pedido explicito: abre mesmo com empresa valida
+        THIS.AbrirLookupEmpresa(.T.)
     ENDPROC
 
     *--------------------------------------------------------------------------
     * AbrirLookupEmpresa - Abre picker de Empresa em SigCdEmp (CEmps/Razas)
     * Original: fwBuscaExt em SigCdEmp, campo cEmps, filtro Cemps (When=INSERIR/ALTERAR)
     *--------------------------------------------------------------------------
-    PROCEDURE AbrirLookupEmpresa()
-        LOCAL loc_oBusca, loc_cValor, loc_oPagina
+    *-- par_lForcar = .T. abre a lista MESMO com empresa valida. O LostFocus
+    *-- passa .F. (comportamento do legado: so abre quando nao casa exato);
+    *-- F4 e duplo clique passam .T., porque sao pedido EXPLICITO do usuario.
+    PROCEDURE AbrirLookupEmpresa(par_lForcar)
+        LOCAL loc_oBusca, loc_cValor, loc_oPagina, loc_lForcar
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        loc_lForcar = (VARTYPE(par_lForcar) = "L" AND par_lForcar)
 
         IF loc_oPagina.txt_4c_EmpPad.ReadOnly
             RETURN
         ENDIF
 
+        *-- Guarda de reentrancia: o picker eh MODAL, tira o foco e faz o
+        *-- proprio LostFocus disparar de novo (CLAUDE.md #37/#47).
+        IF THIS.this_lEmLookupEmp
+            RETURN
+        ENDIF
+
         loc_cValor = ALLTRIM(loc_oPagina.txt_4c_EmpPad.Value)
+
+        *-- Legado: campo vazio nao consulta nada (If !IsEmpty(This.Value)).
+        *-- No F4/duplo clique abre assim mesmo, para o usuario poder escolher.
+        IF EMPTY(loc_cValor) AND !loc_lForcar
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookupEmp = .T.
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
@@ -1126,20 +1179,14 @@ DEFINE CLASS FormCrt AS FormBase
                 "Empresas")
 
             IF VARTYPE(loc_oBusca) = "O"
-                IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
-                    IF USED("cursor_4c_BuscaEmp")
-                        loc_oPagina.txt_4c_EmpPad.Value = ALLTRIM(cursor_4c_BuscaEmp.CEmps)
-                    ENDIF
-                ELSE
-                    IF !loc_oBusca.this_lAchouRegistro
+                IF loc_lForcar OR !loc_oBusca.this_lAchouRegistro
                     loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
                     loc_oBusca.mAddColuna("Razas", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.Show()
+                ENDIF
 
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
-                        loc_oPagina.txt_4c_EmpPad.Value = ALLTRIM(cursor_4c_BuscaEmp.CEmps)
-                    ENDIF
-                    ENDIF
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+                    loc_oPagina.txt_4c_EmpPad.Value = ALLTRIM(cursor_4c_BuscaEmp.CEmps)
                 ENDIF
 
                 loc_oBusca.Release()
@@ -1147,6 +1194,9 @@ DEFINE CLASS FormCrt AS FormBase
         CATCH TO loc_oErro
             MsgErro("Erro ao buscar empresa:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
+
+        *-- Liberar DEPOIS do ENDTRY, para valer tambem quando o CATCH dispara
+        THIS.this_lEmLookupEmp = .F.
 
         IF USED("cursor_4c_BuscaEmp")
             USE IN cursor_4c_BuscaEmp

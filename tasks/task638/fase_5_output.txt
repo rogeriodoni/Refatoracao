@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada ÔÇö `FormSigPrMlu.prg` modificado.
+
+## O que a Fase 5 tinha de entregar
+
+Este form ├® **OPERACIONAL sem Page2**: o `layout.json` tem 25 objetos e os 6 `textbox` do dump s├úo os `Text1` das 6 colunas de `grdselecoes` (entregues na Fase 4). O **├║nico campo solto** ├® `cntNova.getNova` ("Nome da Unifica├º├úo") ÔÇö n├úo h├í "metade dos campos" para dividir.
+
+A execu├º├úo anterior desta fase concluiu isso e **n├úo tocou no arquivo**, o que disparou o guard de NO-OP (o form tem campo fora de coluna, ent├úo a exce├º├úo `Test-LegadoSemCamposSoltos` n├úo se aplica) e provocou esta re-execu├º├úo. Fiz ent├úo o trabalho real da fase: **auditoria propriedade-a-propriedade do bloco do campo contra o dump do SCX**.
+
+## Diverg├¬ncias encontradas e corrigidas
+
+| objeto | dump do SCX | migrado (antes) | a├º├úo |
+|---|---|---|---|
+| `cnt_4c_Nova` | `SpecialEffect = 0` | **ausente** | acrescentado |
+| `lbl_4c_Label1` | `AutoSize = .T.` | impl├¡cito | `.AutoSize = .F.` expl├¡cito (regra #23) |
+
+As demais 11 propriedades de `getNova` (`Format="K"`, `MaxLength=20`, `DisabledBackColor/ForeColor`, geometria) e 10 de `Label1` estavam fi├®is. `ZOrderSet`/`TabIndex` ficaram **de fora de prop├│sito**: `ZOrderSet` ├® bookkeeping do Form Designer (regra #33) e o `TabIndex` do SCX est├í duplicado entre os focaliz├íveis de n├¡vel de form (grid=2, `cntNova`=2, `cmdBtnGrade`=2) ÔÇö reproduzir seria inventar ordem, e o ├║nico focaliz├ível dentro de `cntNova` ├® o pr├│prio TextBox, o que torna o valor inerte.
+
+## Verifica├º├Áes que rodei
+
+- **Compila limpo**: `COMPILE` sem `.ERR` (apaguei o `.fxp` antes, para n├úo medir c├│digo velho).
+- **Propriedades existem nas classes**: `Container.SPECIALEFFECT` e `Label.AUTOSIZE` confirmados em `propriedades_baseclasses.txt`; `VerificarPropriedadesInexistentes.ps1` ÔåÆ `OK`.
+- **├ìcones existem** (regra #25 ÔÇö `.Picture` inexistente falha em sil├¬ncio): os 5 arquivos (`to-do-list_checked2.ico`, `onebit_33.ico`, `geral_processar_60.jpg`, `cadastro_sair_60.jpg`, `new_background.jpg`) est├úo em `vbmp\`.
+- **INSERT do BO vs. NOT NULL** (regra #22): as **86** colunas NOT NULL de `SigMlItn` est├úo todas nas 88 do INSERT, e a contagem colunaÔåövalor fecha em 88/88 com os tipos alinhados posicionalmente ÔÇö o gate 05f n├úo deve bloquear.
+- **Valida├º├úo do Processar** transcrita fielmente (3 guards do legado na mesma ordem, `IsEmpty` ÔåÆ `EMPTY(ALLTRIM())`), e `txt_4c_Nova.Value = ""` s├│ **depois** de montar a mensagem que cita o nome.
+- Zero `ZOrderSet`, `.TabIndex`, `.Self`, `Controls("<nome>")` e zero `RETURN` dentro de `TRY`.
+
+Dois pontos para registro, que **n├úo mexi** por serem fi├®is ao legado: `getNova.MaxLength = 20` ├® mais estreito que `SigMlItn.descs char(30)` (├® a escolha do SCX, PILAR 1), e o `\<` do caption do label ├® o access-key Alt+N ÔÇö funciona porque o label ├® criado antes do TextBox no mesmo container.

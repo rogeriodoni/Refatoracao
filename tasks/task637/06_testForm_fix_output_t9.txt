@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado: bloqueio de infraestrutura, n├úo de c├│digo
+
+Esta ├® a **task637/FormSIGPRMEI**, agora na tentativa 9/10 ÔÇö e a assinatura do erro ├® id├¬ntica ├ás 8 tentativas anteriores desta mesma task (e de 9 outras tasks desde 2026-08-02, documentadas em mem├│ria):
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [...]SQL Server inexistente ou acesso negado.
+Status: ERRO AO CRIAR OBJETO
+```
+
+Esse erro ocorre no pre-flight `SQLSTRINGCONNECT`, **antes** de qualquer `CREATEOBJECT("FormSIGPRMEI")`/`CREATEOBJECT("SIGPRMEIBO")` ser logado ÔÇö ou seja, o c├│digo do form/BO nunca chega a executar. Reconfirmei agora com `Test-NetConnection 192.168.200.10 -Port 1433`: `TcpTestSucceeded=False`, `PingSucceeded=False`, origem `192.168.199.115` (mesma sub-rede 199.x, sem rota para a 200.x onde est├í o SQL Server).
+
+Form (`FormSIGPRMEI.prg`) e BO (`SIGPRMEIBO.prg`) j├í foram revisados linha a linha nas tentativas 1-8 sem nenhum achado relacionado a conectividade ÔÇö n├úo editei nada agora, para n├úo arriscar regress├úo em c├│digo que est├í correto apenas para "satisfazer" a tarefa.
+
+**Recomenda├º├úo**: esta task deveria ser marcada como bloqueada/pausada at├® algu├®m com acesso ├á rede/infra liberar a rota para `192.168.200.0/24`. Reexecutar o `runtime_fix` sobre este mesmo form vai repetir o mesmo resultado ÔÇö resta s├│ 1 tentativa (10/10) antes de esgotar o or├ºamento sem que nenhuma corre├º├úo de c├│digo pudesse ter evitado isso.
+
+Achado colateral (fora do escopo, n├úo corrigido): `SIGPRMEIBO.LerArquivos()` usa `BEGIN TRANSACTION`/`COMMIT`/`ROLLBACK` via `SQLEXEC` cru em torno de 4 INSERTs ÔÇö mesmo padr├úo n├úo-at├┤mico j├í registrado em mem├│ria (`feedback_begin_commit_via_sqlexec_nao_protege`). Corre├º├úo exigiria reescrever como SQLEXEC ├║nico em T-SQL com `SAVE TRANSACTION`, o que teria alto risco de ser feito ├ás ciegas sem acesso ao banco ÔÇö melhor tratar numa task dedicada, n├úo neste runtime_fix bloqueado por rede.

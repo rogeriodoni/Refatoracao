@@ -239,6 +239,43 @@ DEFINE CLASS SigPrMdcBO AS BusinessBase
     ENDFUNC
 
     *--------------------------------------------------------------------------
+    * ExcluirContaAntiga
+    * Apaga a conta antiga de SigCdCli. Reproduz o ramo
+    * "If lcArq == 'SIGCDCLI' And lcCpo = 'ICLIS' And Chk_DelCT.Value = 1" do
+    * btnProcessar.Click legado, que exclui a conta de origem quando a conta de
+    * destino JA existe no cadastro (nesse caso nao ha o que renomear).
+    * par_cConta: codigo da conta a excluir (Iclis)
+    * Returns: .T. se o DELETE foi aceito pelo servidor, .F. caso contrario
+    *--------------------------------------------------------------------------
+    FUNCTION ExcluirContaAntiga(par_cConta)
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        loc_lSucesso = .F.
+        loc_cSQL     = ""
+        loc_nRet     = 0
+        TRY
+            IF EMPTY(par_cConta)
+                MsgAviso("Conta antiga inv" + CHR(225) + "lida para exclus" + ;
+                    CHR(227) + "o.", "Aviso")
+            ELSE
+                loc_cSQL = "DELETE FROM SigCdCli WHERE Iclis = " + ;
+                    EscaparSQL(ALLTRIM(par_cConta))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet < 1
+                    MsgErro("Falha ao excluir a conta antiga [" + ;
+                        ALLTRIM(par_cConta) + "]." + CHR(13) + ;
+                        CapturarErroSQL(), "Erro SQL")
+                ELSE
+                    THIS.RegistrarAuditoria("EXCLUSAO_CONTA: " + ALLTRIM(par_cConta))
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao excluir conta antiga")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
     * ImportarDeXLS
     * Importa arquivo XLS e carrega pares em cursor_4c_Contas.
     * Valida ContaAnt contra SigCdCli (se this_lCheckCadPro = .F.).
@@ -419,7 +456,8 @@ DEFINE CLASS SigPrMdcBO AS BusinessBase
     * Casos especiais:
     *   SIGMVCCR/CONTAS   -> atualiza GruConMoes + chama fRecalculaS
     *   SIGCDCLI/ICLIS    -> verifica se ContaNov existe; deleta ContaAnt se par_lApagarContaAntiga
-    *   SIGMVHST/ESTOS    -> atualiza EmpGruEsts + chama fRecalculaP + fRecalculaC
+    *   SIGMVHST/ESTOS    -> atualiza EmpGruEsts (fRecalculaP/fRecalculaC do legado
+    *                        NAO portadas e sem stub - regra #27; recalculo omitido)
     *   SIGCDCLH/ICLIS    -> atualiza GruContas
     *   SIGMVSLC/SIGMVEST -> DELETE (nao UPDATE)
     *
@@ -528,15 +566,18 @@ DEFINE CLASS SigPrMdcBO AS BusinessBase
                                 loc_cContaNovSalvo = cursor_4c_Contas.ContaNov
                                 SELECT cursor_4c_Mccr
                                 SCAN
-                                    TRY
-                                        =fRecalculaS(cursor_4c_Mccr.Grupos, ;
-                                            m.loc_cContaNovSalvo, ;
-                                            CTOD('01/01/1900'), ;
-                                            cursor_4c_Mccr.Moedas, ;
-                                            gnConnHandle)
-                                    CATCH TO loc_oErroF
-                                        *-- fRecalculaS nao portada - pular recalculo
-                                    ENDTRY
+                                    *-- fRecalculaS ESTA portada (utils\functions.prg):
+                                    *-- chamada de verdade, SEM TRY que engula o erro.
+                                    *-- Aqui ela roda em "modo registro" (1o parametro
+                                    *-- CARACTERE): so acumula a entrada no cursor
+                                    *-- crRecalculaS; o recalculo efetivo acontece na
+                                    *-- chamada em "modo processamento" (1o parametro
+                                    *-- logico) depois do SCAN de arquivos.
+                                    =fRecalculaS(cursor_4c_Mccr.Grupos, ;
+                                        m.loc_cContaNovSalvo, ;
+                                        CTOD('01/01/1900'), ;
+                                        cursor_4c_Mccr.Moedas, ;
+                                        gnConnHandle)
                                 ENDSCAN
                                 IF USED("cursor_4c_Mccr")
                                     USE IN cursor_4c_Mccr
@@ -612,31 +653,19 @@ DEFINE CLASS SigPrMdcBO AS BusinessBase
                                         loc_cCpo + " = '" + ;
                                         PADR(cursor_4c_Contas.ContaAnt, 10) + "'"
                                     SQLEXEC(gnConnHandle, loc_cWhere, "cursor_4c_His")
-                                    IF USED("cursor_4c_His") AND RECCOUNT("cursor_4c_His") > 0
-                                        loc_cContaNovSalvo = cursor_4c_Contas.ContaNov
-                                        SELECT cursor_4c_His
-                                        SCAN
-                                            TRY
-                                                =fRecalculaP(cursor_4c_His.Emps, ;
-                                                    cursor_4c_His.Grupos, ;
-                                                    m.loc_cContaNovSalvo, ;
-                                                    cursor_4c_His.Cpros, ;
-                                                    CTOD('01/01/1900'), ;
-                                                    cursor_4c_His.CodCors, ;
-                                                    cursor_4c_His.CodTams, ;
-                                                    gnConnHandle)
-                                                =fRecalculaC(cursor_4c_His.Emps, ;
-                                                    cursor_4c_His.Cpros, ;
-                                                    CTOD('01/01/1900'), ;
-                                                    gnConnHandle)
-                                            CATCH TO loc_oErroF
-                                                *-- fRecalculaP/C nao portadas - pular recalculo
-                                            ENDTRY
-                                        ENDSCAN
-                                        IF USED("cursor_4c_His")
-                                            USE IN cursor_4c_His
-                                        ENDIF
+                                    IF USED("cursor_4c_His")
+                                        *-- O legado percorre este cursor chamando
+                                        *-- fRecalculaP (saldo por produto/cor/tamanho)
+                                        *-- e fRecalculaC (custo), que NAO foram
+                                        *-- portadas e NAO recebem stub: devolver um
+                                        *-- valor fixo para calculo de saldo gravaria
+                                        *-- numero errado em silencio (regra #27).
+                                        *-- O recalculo fica OMITIDO e VISIVEL aqui,
+                                        *-- nunca escondido num CATCH - o UPDATE do
+                                        *-- codigo abaixo continua sendo aplicado.
+                                        USE IN cursor_4c_His
                                     ENDIF
+                                    SELECT cursor_4c_Contas
                                     loc_cUpdate = "UPDATE " + loc_cArq + ;
                                         " SET " + loc_cCpo + " = '" + ;
                                         cursor_4c_Contas.ContaNov + ;
@@ -698,34 +727,23 @@ DEFINE CLASS SigPrMdcBO AS BusinessBase
                 ENDIF
             ENDSCAN  && csArquivos
 
-            *-- Recalculos finais (funcoes legado - pular se nao portadas)
+            *-- Recalculo final em "modo processamento" (1o parametro logico),
+            *-- fechando o lote registrado pelas chamadas em "modo registro" do
+            *-- SCAN acima. fRecalculaS ESTA portada (utils\functions.prg) -
+            *-- chamada de verdade e SEM TRY que engula o resultado: se ela
+            *-- recusar, o lote tem de ir para ROLLBACK.
             IF loc_nErro > 0
-                TRY
-                    IF NOT fRecalculaS(.T., gnConnHandle, .T.)
-                        loc_nErro = -1
-                    ENDIF
-                CATCH
-                    *-- fRecalculaS nao portada - ignorar
-                ENDTRY
+                IF NOT fRecalculaS(.T., gnConnHandle, .T.)
+                    loc_nErro = -1
+                ENDIF
             ENDIF
-            IF loc_nErro > 0
-                TRY
-                    IF NOT fRecalculaP(.T., gnConnHandle)
-                        loc_nErro = -1
-                    ENDIF
-                CATCH
-                    *-- fRecalculaP nao portada - ignorar
-                ENDTRY
-            ENDIF
-            IF loc_nErro > 0
-                TRY
-                    IF NOT fRecalculaC(.T., .F., .F., gnConnHandle)
-                        loc_nErro = -1
-                    ENDIF
-                CATCH
-                    *-- fRecalculaC nao portada - ignorar
-                ENDTRY
-            ENDIF
+
+            *-- fRecalculaP / fRecalculaC do legado NAO foram portadas e NAO
+            *-- recebem stub (regra #27: funcao que devolve VALOR DE CALCULO de
+            *-- saldo nunca pode ser substituida por um retorno fixo - gravaria
+            *-- numero errado em silencio). A ausencia fica VISIVEL aqui, nao
+            *-- escondida num CATCH vazio; mesmo tratamento dado ao caminho
+            *-- equivalente de Formsigprmdp.prg/sigprmdpBO.prg.
 
             *-- Commit ou Rollback
             IF loc_nErro < 1

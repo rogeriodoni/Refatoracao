@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigPrMdc.prg` (1700 linhas) e `SigPrMdcBO.prg` (924 linhas) compilam limpos, instanciam e passam em 9 auditorias + validador de schema.
+
+## O que a consolida├º├úo entregou
+
+**M├®todos finais adicionados** (todos exercitados no probe):
+
+| M├®todo | Escopo | Papel |
+|---|---|---|
+| `FormParaBO()` | PROTECTED | checkboxes ÔåÆ `this_lTrocarReps`/`this_lApagarContaAntiga`, `this_lCheckCadPro`, `this_cArqDBFPath`, par corrente da grade ÔåÆ `this_cContaAnt`/`this_cContaNov` (com convers├úo `= 1`, CheckBox.Value ├® num├®rico) |
+| `BOParaForm()` | PROTECTED | caminho inverso, reaplicando a depend├¬ncia do `Chk_DelCT.When` |
+| `LimparCampos()` | PROTECTED | `Zap`+`Append Blank` do fim do `btnProcessar.Click`, com guarda de `SET SAFETY` |
+| `AjustarBotoesPorModo()` | public | funil de estado EDICAO/PROCESSANDO (regra #40) |
+| `AtualizarProgresso()` | public | funil do painel `cntResult` ÔÇö e o contrato que `BO.ProcessarMudancaContas(.., par_oForm)` exige |
+
+Os tr├¬s primeiros s├úo `PROTECTED` **expl├¡cito**: `FormBase` os declara assim e o VFP9 n├úo deixa a subclasse alargar o escopo (medido). `AtualizarProgresso` tem nome ausente de `FormBase` justamente por ser chamado de fora pelo BO.
+
+## Defeitos que a consolida├º├úo encontrou e corrigiu
+
+O Form das fases 3-7 nunca releu o BO das fases 1-2, e divergia em 5 pontos ÔÇö **todos compilavam limpo**:
+
+1. **Alias do cursor**: form usava `csContas`, BO cria `cursor_4c_Contas`. `Grid.RecordSource` estourava dentro do `TRY` do `ConfigurarGrid`, que exibia o erro e seguia ÔÇö a tela **abria com a grade sem binding** e todo `IF USED(...)` virava no-op silencioso. 61 refer├¬ncias renomeadas.
+2. `ValidarContaExiste` ÔåÆ `ValidarCodigoConta` (devolve **string**, n├úo l├│gico).
+3. `ImportarXLS` ÔåÆ `ImportarDeXLS` (devolve **l├│gico**, n├úo contagem ÔÇö a contagem passou a ser o delta de `RECCOUNT`).
+4. `TrocarApenasRepresentantes(cursor)` ÔåÆ `TrocarContaRepresentantes()`.
+5. `ExcluirContaAntiga` era **chamado e n├úo existia** ÔÇö implementado no BO.
+
+Tamb├®m: `ValidarParesContas` s├│ devolve a mensagem com `@` (VFP9 passa por valor em m├®todo); `Init(par_lCheckCad)` agora recebe o par├ómetro do legado, que antes era descartado; `fConfigGeral()` do `Load` legado foi reposto; `SQLGETPROP` fora de TRY ganhou guarda; e o ramo de falha do processamento passou a reproduzir o `Return 0` do legado ÔÇö **preserva os pares digitados** em vez de zer├í-los, via flag (RETURN em TRY ├® proibido).
+
+No BO, tr├¬s `CATCH` engoliam `fRecalculaS`/`P`/`C`. `fRecalculaS` **est├í** portada e agora ├® chamada sem swallow; `fRecalculaP`/`C` n├úo est├úo e a aus├¬ncia ficou vis├¡vel em coment├írio, sem stub (regra #27).
+
+## Verifica├º├úo
+
+- Compila├º├úo: sem `.err` nos dois arquivos.
+- `TestFormWrapper` **n├úo roda nesta m├íquina** (SQL Server 192.168.200.10 sem rota, e `ConfigurarAmbiente()` pendura) ÔÇö usei o molde de probe documentado: `automation\ProbeSigPrMdc.prg` instancia via subclasse e exercita grade, Incluir/Excluir linha, `ChkRepsClick`, round-trip `FormParaBO`/`BOParaForm`, os dois modos de bot├úo, progresso, `LimparCampos` e `CarregarLista()` sem argumento. Tudo conforme esperado.
+- `ProbeSigPrMdcDelete.prg` confirma `SET DELETED ON` ativo na datasession privada: 3 registros f├¡sicos, 2 naveg├íveis, ponteiro em linha vis├¡vel.
+- Auditorias limpas: FuncoesNaoDefinidas, MetodoProtegido, PropriedadesInexistentes, ColunaEmpresaSQL, InsertNotNull, CamposCursorBO, FormBuscaAuxiliar, LookupEmKeyPress, TabelasInexistentes, FormatInputMask. `ValidadorSQLSchema`: 683 tabelas, 21 statements, nenhuma coluna inv├ílida.
+
+**Ressalvas que deixei de prop├│sito:** o `BtnProcessarClick` mant├®m o SCAN multi-tabela inline em vez de delegar a `BO.ProcessarMudancaContas` ÔÇö o inline usa `SQLCOMMIT`/`SQLROLLBACK` do VFP, fiel ao `poDataMgr.Commit/RollBack` legado, enquanto o do BO usa `BEGIN/COMMIT TRANSACTION` via `SQLEXEC`, que nesta conex├úo (`Transactions=2`, `@@TRANCOUNT` j├í 1) s├│ aninha e **n├úo protege**. Unificar os dois ├® refatora├º├úo maior que a Fase 8 e mexeria em c├│digo validado na Fase 2 ÔÇö fica registrado como pend├¬ncia. N├úo h├í `BtnSalvarClick`/`BtnCancelarClick`/`BtnBuscarClick`/`BtnEncerrarClick`: o legado herda de `form`, n├úo de `frmcadastro`, e tem 5 bot├Áes (`btnIncluir`/`btnExcluir`/`Exporta`/`btnProcessar`/`btnSair`); `BtnSairClick` ├® o Encerrar.

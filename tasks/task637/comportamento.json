@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FILE", "FILETOSTR", "fGerUniqueKey", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Procedure",
+      "linhas": 154,
+      "codigoOriginal": "Local lcDpd, laDir, lnDir, llOks, lcChr\n\nlcDeq = Alltrim(crsigcdpam.CdChepSais)\nlcDeq = Iif(Right(lcDeq, 1)=[\\], lcDeq, lcDeq + [\\])\nllOks = .F.\nlcChr = CHR(13) + CHR(10)\n\nlcArq = lcDeq + [estoque.xml]\nIF FILE(lcArq)\n\tDELETE FILE &lcArq\nENDIF\n\n*** mena 27/04/2016 - incluido o campo IPI no select para colocar no xml ***\nlcQuery = \t[select a.cpros, a.sqtds, b.dpros, b.pvens, b.pcuss, b.prodwebs, b.prodvars, b.Encargos, ] +;\n\t\t\t[case when b.aliqipis<>0 then b.aliqipis else c.aipis end as ipi ] +;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILE",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Procedure",
+      "linhas": 605,
+      "codigoOriginal": "Local lcDpd, laDir, lnDir\n\nlcDpd = Alltrim(crsigcdpam.DirLivrosV)\nlcDpd = Iif(Right(lcDpd, 1)=[\\], lcDpd, lcDpd + [\\])\n\nlcDeq = Alltrim(crsigcdpam.CdChepSais)\nlcDeq = Iif(Right(lcDeq, 1)=[\\], lcDeq, lcDeq + [\\])\n\nlnArq = ADir(laArq, lcDpd + [*.XML])\n\nllOks = .t.\n\nlcDop = [VENDA WEB]\nlcGrO = [ESTOQUE]\nlcCtO = [ESTOQUE]\nlcGrD = [CLIENTEWEB]\nlcGrV = [VENDEDOR]\nlcCtV = [V34]\nlcUsu = [WEB]\nlcEmp = [ESC]\n\nlcQuery = [Select * ] + ;\n\t\t    [From SigCdOpe ] + ;\n\t\t   [Where Dopes = '] + Padr(lcDop, 20) + [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILETOSTR,fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\n\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "LParameters pPar\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nThisForm.Parametrizado = pPar\nthisform.poObjext = CreateObject('fSqlConector', 'CEP')\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector])\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .podatamgr\n\t\t\t.AddCursor([SigCdCli],   [IClis],     [crSigCdCli])\n\t\t\t.AddCursor([SigMvCab],\t [cIdChaves], [crSigMvCab])\n\t\t\t.AddCursor([SigMvItn],\t [cIdChaves], [crSigMvItn])\n\t\t\t.AddCursor([... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poObjext = CreateObject,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRMEI",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.Parametrizado\n\tThisForm.OK.Click()\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMEI.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "Local llOk1, llOk2, lcCidChave, lnErro1\n\nThis.Enabled = .f.\n\nSet Cursor Off\n\nKeyboard [{LEFTARROW}]\n\nlnMov = 1\nDo While .t.\n\tThisForm.cmdBtnForm.BtnSair.Enabled = .f.\n\n\tThisForm.Label1.Caption = [Aguardando Arquivos Para Processar] + Replicate([.], lnMov)\n\tlnMov = Iif(lnMov < 5, lnMov + 1, 1)\n\n\tllOk1 = ThisForm.LerArquivos()\n\tllOk2 = ThisForm.GravarArquivos()\n\n\tThisForm.cmdBtnForm.BtnSair.Enabled = .t.\n\t\n\tlnError = 0\n\tlcErro  = On([Error])\n\tOn Error lnError = 1\n\n\tlnKey = Inkey(.5, 'M')\n\n\tIf lnEr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LerArquivos,GravarArquivos,MouseSobreBotaoSair,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMEI.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

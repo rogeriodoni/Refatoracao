@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSIGPRMEI.prg`.
+
+## O achado principal: este form n├úo tem lookup nenhum
+
+Varri o dump legado (`SIGPRMEI_form_codigo_fonte.txt`, 1195 linhas) pelos padr├Áes da regra ÔÇö `fwbusca` (gen├®rico, cobre Ext/Sel/Int), `mAddColuna`, `sigacess(`, `Acesso(Campos|Contas|Empresa|...)`, `PROCEDURE Valid`, `PROCEDURE KeyPress`. **Zero ocorr├¬ncias.** Os ├║nicos `CreateObject` s├úo de conex├úo (`fSqlConector`).
+
+A ├írvore inteira do SCX s├úo 8 objetos: `cntSombra` + 2 labels, `cmdBtnForm` (2 bot├Áes), `Label2`, `Label1`. **Nenhum TextBox, nenhum `ControlSource`** ÔÇö `analise.json` confirma `campos: []`, `lookups: []`. Criar lookup aqui violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup"; criar m├®todo vazio seria stub. Ent├úo essa parte da fase ├® legitimamente vazia, e o `cnt_4c_BotoesAcao` (Salvar/Cancelar) ├® boilerplate CRUD que n├úo se aplica.
+
+## O que de fato faltava ÔÇö duas perdas no loop de processamento
+
+Comparando o `btnCopiar.Click` legado linha a linha com o migrado, achei dois trechos descartados:
+
+**1. `KEYBOARD "{LEFTARROW}"`** ÔÇö tira o foco do bot├úo rec├®m-desabilitado antes do loop, para o `INKEY(.5,"M")` capturar mouse/teclado.
+
+**2. A sa├¡da por clique do mouse no Encerrar** ÔÇö estava inteiramente ausente. Sem ela o polling s├│ parava por ESC: **clicar em Encerrar n├úo surtia efeito nenhum**, e isso compila limpo e n├úo gera log.
+
+O legado **chama** `ThisForm.MouseSobreBotaoSair(...)` mas **nunca a define** ÔÇö a `ClassInfo` do SCX (RESERVED3) lista s├│ `desabotao`/`gravararquivos`/`habilitabotao`/`lerarquivos`, e a classe ├® `form` pura, sem VCX de onde herdar. Transcrever a chamada crua cairia exatamente na regra #13 (estouraria em runtime dentro do loop). Ent├úo **implementei o m├®todo**, somando a cadeia de `Parent` para obter a posi├º├úo absoluta e com guarda de profundidade.
+
+Acrescentei tamb├®m uma flag `loc_lSaiuPeloBotao` para o tail de restaura├º├úo n├úo tocar controles de um form j├í em libera├º├úo.
+
+## Verifica├º├Áes
+
+- **Compila├º├úo VFP9** (`.fxp` apagado antes): `FXP=SIM / SEM_ERROS`
+- **Probe de runtime** ÔÇö form instancia e os 7 casos passam: dentro `.T.`, centro `.T.`, ├á esquerda `.F.`, abaixo `.F.`, sobre o Processar `.F.`, arg n├úo-objeto `.F.`, arg n├úo-num├®rico `.F.` (ret├óngulo medido 425..500 ├ù 3..78, id├¬ntico ao absoluto do legado `345+80, -2+5`)
+- **Auditorias**: `VerificarFuncoesNaoDefinidas` ÔåÆ "nenhuma chamada ├│rf├ú" nos 976 `.prg` (prova que o m├®todo novo resolve); `VerificarLookupEmKeyPress` ÔåÆ ERRO=0 AVISO=0; `VerificarMetodoProtegidoChamadoDeFora` ÔåÆ OK; `VerificarPropriedadesInexistentes` ÔåÆ OK
+- **Est├íticas**: sem TODO/FIXME, sem `PUBLIC` em `DEFINE CLASS`, sem acentos literais, sem `RETURN` dentro de TRY/CATCH, CRLF preservado (diff limpo, 91 linhas, s├│ as 3 mudan├ºas)
+- Todas as 7 properties e os 2 m├®todos do BO usados pelo form existem e s├úo PUBLIC
+
+Dois pontos que **deliberadamente n├úo** portei: `fConfigGeral()` do `Load` (o wrapper em `utils/` documenta explicitamente "em c├│digo NOSSO nunca se chama ÔÇö existe APENAS para bin├írio legado") e `poObjext = CreateObject('fSqlConector','CEP')` (o stub est├í desativado como `fSqlConector.prg.stub-erro124`; reintroduzir reverteria aquela decis├úo).
+
+Uma observa├º├úo operacional: o `git diff` contra HEAD mostra ~154 linhas porque a Fase 5 ainda n├úo foi commitada ÔÇö as mudan├ºas desta fase s├úo s├│ as 91 do diff contra o backup.

@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 17 mapped objects from `mapeamento.json` are present and correctly named in the implementation.
+
+## Summary
+
+Phase 4 of the FormSigPrMdc migration is complete. Since this is an **OPERACIONAL** form (not a CRUD Page1/Page2 form), I adapted the generic "Grid + CRUD buttons" phase template to the form's actual flat layout, adding to `FormSigPrMdc.prg`:
+
+- **Grid** (`grd_4c_Dados`) bound to the `csContas` cursor (created by the BO in a prior phase), with the exact columns/headers/widths from the legacy dump.
+- **5 CRUD-equivalent buttons** (Incluir/Excluir/Importar/Processar/Encerrar) with their decorative frame containers, using the real icons already present in `vbmp\` and exact legacy positions/captions.
+- **Checkboxes** (Chk_DelCT / ChkReps) replicating the legacy `When`/`Click` dependency (Chk_DelCT only usable when ChkReps is unchecked).
+- **Progress panel** (`cnt_4c_Result`) as a hidden-by-default "containers flutuantes" element, shown only during processing.
+- **Full Click handlers**, including the complete multi-table `BtnProcessarClick` batch logic transcribed literally from the legacy `ArqDBF`-driven loop (correct outer/middle/inner `SCAN` nesting: arquivos ÔåÆ campos ÔåÆ contas), reusing the BO methods already built in Phases 1ÔÇô2 (`ValidarParesContas`, `TrocarApenasRepresentantes`, `ExcluirContaAntiga`, `ImportarXLS`, `ValidarContaExiste`).
+- Grid-cell lookups (`Valid` ÔåÆ `KeyPress`) against `SigCdCli`, opening `FormBuscaAuxiliar` on miss.
+
+Applied several project-wide lessons proactively: `SET DELETED ON` in `InicializarForm` (DataSession=2 doesn't inherit it), a `SET SAFETY` guard around the final `ZAP` (private datasession defaults to SAFETY ON), and updated `TornarControlesVisiveis` to treat `cnt_4c_Result` as a floating container that shouldn't be forced visible.
+
+`fRecalculaP`/`fRecalculaC` aren't ported (only `fRecalculaS` exists) ÔÇö consistent with the sibling `Formsigprmdp.prg`, I omitted them explicitly with a comment rather than stubbing fake calculation results.
+
+The file is structurally balanced (all `PROCEDURE/ENDPROC`, `WITH/ENDWITH`, `TRY/ENDTRY`, `IF/ENDIF`, `SCAN/ENDSCAN` pairs match), uses `CHR()` for all accented text, and all BINDEVENT-bound handlers are PUBLIC. Next phase would typically refine field-level details and final validation/testing.

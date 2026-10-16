@@ -28,6 +28,7 @@ DEFINE CLASS FormDES AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_cFiltroEmps     = ""    && Filtro de empresa para o grid
+    this_lEmLookupEmps   = .F.   && Guarda de reentrancia do lookup de Empresa
 
     *==========================================================================
     * Init
@@ -830,8 +831,10 @@ DEFINE CLASS FormDES AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
         BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
-        *-- BINDEVENT Empresa: validar ao perder foco
-        BINDEVENT(loc_oPagina.txt_4c_Emps, "KeyPress", THIS, "ValidarEmps")
+        *-- BINDEVENT Empresa: validar ao perder o foco (legado: getEmps.Valid).
+        *-- NUNCA "KeyPress": sem testar a tecla o handler dispara a CADA caractere
+        *-- digitado e o usuario nao consegue terminar de digitar o codigo (Erro227).
+        BINDEVENT(loc_oPagina.txt_4c_Emps, "LostFocus", THIS, "ValidarEmps")
 
         *-- BINDEVENT Valmeta/Valcota: recalcular % ao sair do campo
         *-- Legado: GetValmeta.Valid e getvalcota.Valid atualizam getpdes
@@ -842,48 +845,166 @@ DEFINE CLASS FormDES AS FormBase
     ENDPROC
 
     *==========================================================================
-    * ValidarEmps - Valida codigo de empresa ao sair do campo
-    * Substitui fAcessoEmpresa() (nao portada) - verifica se Cemps existe em SigCdEmp
+    * ValidarEmps - LostFocus de txt_4c_Emps
+    * Legado: getEmps.Valid -> fAcessoEmpresa(Usuar, 'C', This.Value, getEmps)
+    *
+    * Wrapper fino com guarda de REENTRANCIA: o picker eh MODAL, tira o foco e
+    * redispara o proprio LostFocus - sem a guarda abrem dois dialogos. A flag eh
+    * liberada AQUI (e nao no corpo), para valer tambem nos RETURN antecipados.
     *==========================================================================
-    PROCEDURE ValidarEmps(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg2, loc_cEmps, loc_cSQL, loc_nRes, loc_lResultado
-        loc_lResultado = .F.
+    PROCEDURE ValidarEmps()
+        IF THIS.this_lEmLookupEmps
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupEmps = .T.
+        THIS.ValidarEmpsExec()
+        THIS.this_lEmLookupEmps = .F.
+    ENDPROC
+
+    *==========================================================================
+    * ValidarEmpsExec - corpo da validacao de empresa
+    * Reproduz fAcessoEmpresa(pTip='C') de Framework\sigacess.PRG:732
+    *   - valor vazio      -> limpa o campo e sai (legado: llRet = Empty(pChv))
+    *   - nao achou exato  -> ABRE o picker com as empresas acessiveis, ja
+    *                         posicionado no que foi digitado (legado: Set Near On
+    *                         + Seek, senao fwBuscaSel). O legado NUNCA exibe
+    *                         "Empresa nao encontrada" - quem avisa eh o picker.
+    *   - cancelou (ESC)   -> limpa o campo (legado: pObC.Value = Iif(llLpa,[],...))
+    *==========================================================================
+    PROTECTED PROCEDURE ValidarEmpsExec()
+        LOCAL loc_oPg2, loc_cEmps, loc_cFiltro, loc_oBusca, loc_lAbriu
 
         IF !PEMSTATUS(THIS.pgf_4c_Paginas, "Page2", 5)
             RETURN
         ENDIF
 
-        loc_oPg2  = THIS.pgf_4c_Paginas.Page2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
         IF !PEMSTATUS(loc_oPg2, "txt_4c_Emps", 5)
             RETURN
         ENDIF
 
-        loc_cEmps = ALLTRIM(loc_oPg2.txt_4c_Emps.Value)
+        loc_cEmps  = ALLTRIM(loc_oPg2.txt_4c_Emps.Value)
+        loc_oBusca = .NULL.
+        loc_lAbriu = .F.
 
         IF EMPTY(loc_cEmps)
+            loc_oPg2.txt_4c_Emps.Value = ""
             RETURN
         ENDIF
 
         TRY
-            loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp" + ;
-                       " WHERE Cemps = " + EscaparSQL(loc_cEmps)
-            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ValidaEmp")
+            loc_cFiltro = THIS.MontarFiltroAcessoEmpresa()
 
-            IF loc_nRes > 0 AND USED("cursor_4c_ValidaEmp")
-                IF RECCOUNT("cursor_4c_ValidaEmp") = 0
-                    MsgAviso("Empresa '" + loc_cEmps + "' n" + CHR(227) + "o encontrada.", "")
-                    loc_oPg2.txt_4c_Emps.SetFocus()
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdEmp", "cursor_4c_BuscaEmp", "Cemps", loc_cEmps, ;
+                "Empresas", .F., .F., loc_cFiltro)
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Cemps", "XXXXXX",  "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Razas", "X(40)",   "Nome")
+                    loc_oBusca.Show()
+                    loc_lAbriu = .T.
                 ENDIF
-                USE IN cursor_4c_ValidaEmp
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+                    SELECT cursor_4c_BuscaEmp
+                    loc_oPg2.txt_4c_Emps.Value = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
+                ELSE
+                    IF loc_lAbriu
+                        *-- legado: cancelou o browse -> campo volta vazio
+                        loc_oPg2.txt_4c_Emps.Value = ""
+                    ENDIF
+                ENDIF
+
+                IF USED("cursor_4c_BuscaEmp")
+                    USE IN cursor_4c_BuscaEmp
+                ENDIF
+
+                loc_oBusca.Release()
+                loc_oBusca = .NULL.
             ENDIF
         CATCH TO loException
             MsgErro("Erro em ValidarEmps:" + CHR(13) + loException.Message, "Erro")
-            IF USED("cursor_4c_ValidaEmp")
-                USE IN cursor_4c_ValidaEmp
+            IF USED("cursor_4c_BuscaEmp")
+                USE IN cursor_4c_BuscaEmp
+            ENDIF
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.Release()
+                loc_oBusca = .NULL.
             ENDIF
         ENDTRY
     ENDPROC
+
+    *==========================================================================
+    * MontarFiltroAcessoEmpresa - WHERE adicional das empresas acessiveis
+    * Legado (fAcessoEmpresa): o universo eh SigCdEmp restrito por SigCdAcE do
+    * usuario; se o usuario eh 4CONTROL, ou se nao tem NENHUM registro em
+    * SigCdAcE, o universo eh a tabela inteira. SigCdPam.BlqmEmps ligado prende
+    * o usuario a empresa corrente.
+    *==========================================================================
+    PROTECTED FUNCTION MontarFiltroAcessoEmpresa()
+        LOCAL loc_cUsu, loc_cFiltro, loc_nTotal, loc_lBlq, loc_cEmpAtual
+
+        loc_cFiltro = ""
+        loc_cUsu    = ALLTRIM(IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, ""))
+
+        *-- SigCdPam.BlqmEmps: prende o usuario a empresa corrente
+        loc_lBlq = .F.
+        IF USED("cursor_4c_PamEmp")
+            USE IN cursor_4c_PamEmp
+        ENDIF
+        IF SQLEXEC(gnConnHandle, "SELECT BlqmEmps FROM SigCdPam", "cursor_4c_PamEmp") > 0
+            IF RECCOUNT("cursor_4c_PamEmp") > 0
+                SELECT cursor_4c_PamEmp
+                GO TOP
+                loc_lBlq = ConverterParaLogico(cursor_4c_PamEmp.BlqmEmps)
+            ENDIF
+            USE IN cursor_4c_PamEmp
+        ENDIF
+
+        IF loc_lBlq
+            loc_cEmpAtual = ""
+            IF TYPE("go_4c_Sistema") = "O"
+                loc_cEmpAtual = ALLTRIM(NVL(go_4c_Sistema.cCodEmpresa, ""))
+            ENDIF
+            IF !EMPTY(loc_cEmpAtual)
+                loc_cFiltro = "Cemps = " + EscaparSQL(loc_cEmpAtual)
+            ENDIF
+        ENDIF
+
+        *-- 4CONTROL ve tudo; usuario sem registro em SigCdAcE tambem
+        IF EMPTY(loc_cUsu) OR UPPER(loc_cUsu) == "4CONTROL"
+            RETURN loc_cFiltro
+        ENDIF
+
+        loc_nTotal = 0
+        IF USED("cursor_4c_AceEmp")
+            USE IN cursor_4c_AceEmp
+        ENDIF
+        IF SQLEXEC(gnConnHandle, ;
+                "SELECT COUNT(*) AS Nreg FROM SigCdAcE WHERE Usuarios = " + EscaparSQL(loc_cUsu), ;
+                "cursor_4c_AceEmp") > 0
+            IF RECCOUNT("cursor_4c_AceEmp") > 0
+                SELECT cursor_4c_AceEmp
+                GO TOP
+                loc_nTotal = cursor_4c_AceEmp.Nreg
+            ENDIF
+            USE IN cursor_4c_AceEmp
+        ENDIF
+
+        IF loc_nTotal > 0
+            IF !EMPTY(loc_cFiltro)
+                loc_cFiltro = loc_cFiltro + " AND "
+            ENDIF
+            loc_cFiltro = loc_cFiltro + ;
+                "Cemps IN (SELECT Emps FROM SigCdAcE WHERE Usuarios = " + ;
+                EscaparSQL(loc_cUsu) + ")"
+        ENDIF
+
+        RETURN loc_cFiltro
+    ENDFUNC
 
     *==========================================================================
     * Destroy

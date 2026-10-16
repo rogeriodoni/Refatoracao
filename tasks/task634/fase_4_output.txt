@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 executada e verificada. O arquivo j├í continha `ConfigurarPaginaLista()` e `AlternarPagina()` de uma execu├º├úo anterior, ent├úo o trabalho real foi auditar os entreg├íveis da fase contra o dump do legado ÔÇö e ali havia um defeito.
+
+## O que estava errado
+
+A Page1 estava completa na estrutura (cabe├ºalho cinza ÔåÆ 5 bot├Áes CRUD ÔåÆ Encerrar ÔåÆ Grid, nessa ordem, com os `BINDEVENT`), mas a **geometria do Grid da Lista n├úo foi transcrita**. O SCX sobrescreve `Pagina.Lista.Grade` explicitamente (`SIGPRLNC_form_codigo_fonte.txt:126-129`) e o migrado tinha os quatro valores inventados:
+
+| | SCX legado | migrado (antes) | migrado (agora) |
+|---|---|---|---|
+| Top | 101 (+29 do PageFrame) | 117 | **130** |
+| Left | 29 | 2 | **29** |
+| Width | 940 | 950 | **940** |
+| Height | 480 | 452 | **480** |
+
+A grade abria 28px acima, colada na borda esquerda e 28px mais curta que o legado ÔÇö viola├º├úo do PILAR 1 que n├úo quebra nada em runtime, por isso passou pelos gates.
+
+Corrigi tamb├®m `cnt_4c_Cabecalho.Width` da Page1, que estava `1020` (n├║mero solto, maior que o pr├│prio form) ÔÇö agora `THIS.Width`, igual ├á Page2 e ao `FormCor` de refer├¬ncia (regra #11).
+
+## O que conferi e estava certo (n├úo mexi)
+
+- **Colunas da grade** batem com o `pColuna` do `Init` legado: Grupos/Contas/Opera├º├úo, 80px cada (regra #35b) ÔÇö e o `AddCursor` do legado ├® `Select * From SigClLan` sem `WHERE`, ent├úo `Buscar("")` ├® fiel (regra #35a).
+- **Bloco Sa├¡da can├┤nico** (regra #10): `Left=917`, `Width=90`, Encerrar 75x75 ÔÇö o SCX tem `Grupo_Saida.Left=919`, corretamente ignorado.
+- **Faixa do cabe├ºalho ├® o primeiro `AddObject`** nas duas p├íginas, com os containers de bot├úo em `Top=29` desenhando por cima (regra #11); nenhum controle de dados abaixo de 109.
+- **Regra #40 n├úo se aplica**: `AjustarBotoesPorModo` liga Incluir/Buscar incondicionalmente e os outros tr├¬s por `RECCOUNT` ÔÇö n├úo desabilita por modo, logo n├úo h├í bot├úo travado cinza na volta.
+- `cnt_4c_Filtros` n├úo foi criado: o SCX s├│ reposiciona o container herdado, sem torn├í-lo vis├¡vel e sem c├│digo que o use.
+- Integra├º├úo pronta: `menu.prg` BAR 24 de `popCadastros` + `AbrirFormSIGPRLNC()` com `Show()` **fora** do TRY (regra #29).
+
+## Verifica├º├úo
+
+Apaguei o `.fxp` antigo e recompilei: `FormSIGPRLNC.fxp` regerado (39.406 bytes, 22:56), **sem `.err`**. Diff limpo ÔÇö 2 hunks, s├│ as mudan├ºas acima, CRLF preservado.
+
+N├úo instanciei o form (a m├íquina do pipeline n├úo alcan├ºa o SQL Server 192.168.200.10), ent├úo a geometria est├í conferida por transcri├º├úo do dump, n├úo por tela renderizada.

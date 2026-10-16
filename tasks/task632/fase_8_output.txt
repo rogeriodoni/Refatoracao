@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrItb.prg` est├í completo (1383 linhas, 24 m├®todos).
+
+## O que entrou na Fase 8
+
+Quatro m├®todos de **funil**, todos com l├│gica real transcrita do legado (nenhum stub):
+
+| M├®todo | Escopo | Origem no legado |
+|---|---|---|
+| `FormParaBO()` | `PROTECTED` | `IniPer`/`FinPer`/`m.lcEmp1` do `PROCEDURE processamento` |
+| `BOParaForm()` | `PROTECTED` | bloco de carga do `Init` (`getData1=Date()`, `getEmp1=Space(3)`, ÔÇª) |
+| `HabilitarCampos()` | PUBLIC | `.Enabled` dos 4 campos do filtro (`Init` + ramo `If Not Eof('semconta')`) |
+| `AjustarBotoesPorModo()` | PUBLIC | `.Enabled` de `Processar`/`btnImprimir`/`btnVisualizar` nos mesmos pontos |
+
+`PROTECTED` expl├¡cito nos dois primeiros porque `FormBase` declara esses nomes como protegidos e o VFP9 n├úo deixa a subclasse alargar o escopo. Os dois funis ficaram PUBLIC de verdade ÔÇö medido com `PEMSTATUS(obj,"x",2)`, n├úo s├│ pela aus├¬ncia da palavra.
+
+`InicializarForm`, `BtnProcessarClick` e `ExecutarProcessamento` passaram a chamar esses m├®todos no lugar das atribui├º├Áes inline. `ExecutarGravacaoArquivo()` ficou **fora** do funil de prop├│sito: o `gravar` legado reabilita s├│ `getData1`/`getData2` e n├úo toca em `getEmp1`/`getDsemp1`/`Processar` ÔÇö rotear pelo funil divergiria do legado.
+
+## Verifica├º├úo executada (VFP9 real, n├úo s├│ leitura)
+
+- **Compila├º├úo**: Form e BO recriaram o `.FXP`, sem `.err` (`automation\CompileCheckItbF8.prg`).
+- **Instancia├º├úo + 10 blocos de medi├º├úo** (`automation\ProbeItbF8Hooks.prg`, subclasse `Probe*` para alcan├ºar os PROTECTED): tela abre; carga inicial correta (datas `DATE()`, empresa vazia); modo `FILTRO` com filtro e `Processar` habilitados e relat├│rios desabilitados; `FormParaBO` preserva o tipo `D`; round-trip `BOParaForm` fecha; as 3 recusas de `ValidarPeriodo` saem na ordem e com o texto do legado; modo `INCONSISTENCIA` trava os 4 campos + `Processar` e liga os 2 relat├│rios; `HabilitarCampos()` sem argumento habilita (guarda `PCOUNT()`); `Release` OK. ├Ünico di├ílogo suprimido foi o esperado ("nenhuma inconsist├¬ncia dispon├¡vel").
+- **Auditorias**: m├®todo PROTECTED chamado de fora = 0; fun├º├úo n├úo definida = 0; propriedade inexistente = 0; lookup em KeyPress = ERRO 0/AVISO 0; `FormBuscaAuxiliar` sem achado neste form; `RETURN` dentro de TRY/CATCH = 0.
+- **Gate da Fase 8 simulado**: `metodosFaltantes = 0` e `BtnProcessarClick` casa direto a lista can├┤nica de bot├úo de a├º├úo; validador de completude (TODO/stub/procedure vazia/pend├¬ncia) = 0 nos dois arquivos.
+
+## Decis├Áes registradas no cabe├ºalho do arquivo
+
+`CarregarLista()`, `LimparCampos()`, `BtnSalvarClick()`, `BtnCancelarClick()` e `BtnBuscarClick()` **n├úo existem** ÔÇö SIGPRITB n├úo tem grade, lista, `Page1/Page2`, modos CRUD nem grava├º├úo em tabela (o produto ├® arquivo texto em `SigCdPam.DirContabv`). Os 14 m├®todos com c├│digo do dump est├úo todos migrados. O ├║nico bot├úo de fechar do legado tem `Click = ThisForm.Release` e `Cancel = .T.`, ent├úo o handler ├® `BtnEncerrarClick` e o ESC continua caindo nele ÔÇö batiz├í-lo de "Cancelar" daria ao bot├úo o verbo de uma a├º├úo que a tela n├úo tem. Mesma decis├úo j├í registrada em `FormSigPrGf1`.
+
+O diff do arquivo aparece grande contra `HEAD` porque as Fases 3-7 j├í o reescreveram neste run (HEAD tem uma vers├úo anterior de 1222 linhas) ÔÇö n├úo ├® artefato de CRLF; o arquivo segue CRLF, como o resto do projeto sob `core.autocrlf=true`.
+
+Dois arquivos novos de automa├º├úo ficaram sem commit: `automation\CompileCheckItbF8.prg` e `automation\ProbeItbF8Hooks.prg`.

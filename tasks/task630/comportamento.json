@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRINS",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LParameters pFrm\n\nThisForm.ParentForm = pFrm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm.Enabled = .f.\nThisForm.get_CodServ.Value = LocalSacOp.cCodServs\nThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'cPros', LocalSacOp.cCodServs, 'dPros')\nThisForm.get_DescServ.Value = LocalPro.dPros\nThisForm.get_Valor.Value = LocalSacOp.nVlServs\nThisForm.get_Valor.SetFocus\n* Fim *************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_CodServ,get_DescServ,get_Valor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS.get_CodServ",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS.get_DescServ",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS.get_Valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS.ok",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If( ThisForm.get_Valor.Value <= 0 ) Then\n\tMessageBox('O valor do serviço deve ser informado!',16,'')\n\tThisForm.get_Valor.SetFocus\n\tReturn(.F.)\nEndIf\nThisForm.ParentForm.cCodServ  = ThisForm.get_CodServ.Value\nThisForm.ParentForm.nVlServ   = ThisForm.get_Valor.Value\nThisForm.ParentForm.Enabled   = .T.\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Valor,get_CodServ",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRINS.Cancela",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.cCodServ  = ''\nThisForm.ParentForm.nVlServ   = 0\nThisForm.ParentForm.Enabled   = .T.\nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

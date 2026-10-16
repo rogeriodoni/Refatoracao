@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 6 conclu├¡da** ÔÇö `projeto\app\forms\operacionais\FormSIGPRIMP.prg`.
+
+## A Fase 6 n├úo falhou por defeito no c├│digo ÔÇö falhou por gate obsoleto em mem├│ria
+
+Medi antes de mexer em qualquer arquivo. Rodando o bloco `case 6` **verbatim** num harness isolado contra o `.prg` que j├í estava em disco:
+
+| vers├úo do gate | `temListaEstritaF6` | `legadoCapturaF6` | veredito |
+|---|---|---|---|
+| **HEAD** (a que o processo em execu├º├úo tem em mem├│ria) | `True` | `False` | **reprova** |
+| working tree (corrigida ├ás ~19:17) | `False` | `True` | **aprova** |
+
+A causa: a sess├úo do retry da **Fase 5** adicionou `Test-LegadoListBoxLigaLista` ao `OrquestradorMigracao.ps1` ÔÇö citando `SIGPRIMP` nominalmente no coment├írio ÔÇö trocando `BaseClass: (grid|pageframe|listbox)` por uma prova real de `RowSourceType`. O `OrquestradorMigracao.ps1` **j├í estava rodando** (parseado ├ás 18:28); PowerShell n├úo recarrega o `.ps1` mid-run, ent├úo o gate das 19:28 ainda contava o `BaseClass: listbox` como grade. ├ë exatamente o cen├írio da mem├│ria `feedback_gate_corrigido_na_fase_nao_vale_para_ela_mesma`.
+
+A premissa da corre├º├úo confere: `SIGPRIMP.Arquivos` tem **`RowSourceType = 1`** (Value) e `RowSource = ""` ÔÇö ├® alimentado por `AddItem` a partir de `ADir()`, n├úo l├¬ tabela nem cursor. N├úo ├® lista de registros.
+
+## Auditoria independente do que a fase entrega
+
+N├úo aceitei as alega├º├Áes da tentativa anterior ÔÇö refiz as verifica├º├Áes:
+
+- **Lookups**: varredura do dump por `fwbusca|mAddColuna|sigacess\(|Acesso*\(|FormBuscaAuxiliar` ÔåÆ **zero**. O ├║nico campo (`Get_Arquivo`) tem `When / Return .f.`, s├│ exibe o diret├│rio lido de `SigCdPam`. Criar picker aqui inventaria tabela que o legado nunca consulta.
+- **Completude dos controles**: os 12 objetos do SCX est├úo 1:1 no migrado (1 textbox, 1 listbox, 3 labels, 4 commandbuttons, 2 shapes, 1 container) ÔÇö nada faltando.
+- **Transcri├º├úo**: `RowSourceType`/`Sorted`/`TabIndex`/`BorderColor`/`Left`/`Top`/`Width`/`Height` batem com o dump.
+- **Regra do `When`** (`btnMovEst`: `Return !Empty(get_Arquivo.Value)`) reproduzida em `ValidarArquivoImportacao()` + `AtualizarEstadoBotoes()`, ambos PUBLIC (`PEMSTATUS(...,2) = .F.`, regra #51).
+
+## Corre├º├úo que apliquei
+
+Um defeito de fidelidade real que escapou: o legado faz `Messagebox([Nenhum arquivo para importar.],64,[Aviso])` ÔÇö ├¡cone **64 = informa├º├úo**. O migrado usava `MsgAviso` (├¡cone 48). Trocado para `MsgInfo("Nenhum arquivo para importar.", "Aviso")`, com o literal do legado no coment├írio.
+
+## Provas
+
+| verifica├º├úo | resultado |
+|---|---|
+| Compila├º├úo VFP9 (`.fxp`/`.err` apagados antes) | Form e BO OK, **zero `.ERR`** |
+| `CREATEOBJECT("FormSIGPRIMP")` em modo teste | `VARTYPE = "O"`, nenhum di├ílogo suprimido |
+| Regra do `When` (vazio / cheio / s├│ espa├ºos) | `.F./.F.` ┬À `.T./.T.` ┬À `.F./.F.` |
+| Click com campo vazio | sai sem processar, sem erro |
+| Gate `case 6` atual, verbatim | **aprova** (ramo CAPTURA) |
+| `Test-CompletudeCodigo` | `True` ÔÇö nenhum TODO/stub |
+| Arquivo | ASCII puro (0 bytes >126), 570 linhas, 570 CRLF |
+
+## Dois pontos que precisam da sua decis├úo
+
+1. **O gate corrigido s├│ vale no pr├│ximo run.** Esta execu├º├úo continua com o gate antigo em mem├│ria. A Fase 6 vai passar mesmo assim, porque o caminho de retry s├│ confere `Test-Path` do `.prg` ÔÇö n├úo reexecuta o gate.
+
+2. **A Fase 8 deve bater no mesmo obst├ículo.** Medi: os dois carve-outs `semGradeProtocoloF8` / `semGradeGraficoF8` d├úo `False` com o gate antigo e `True` com o corrigido. Se a Fase 8 do SIGPRIMP depender de um deles, ela vai reprovar pelo mesmo motivo. Relan├ºar o loop faria o processo reparsear o `.ps1` e eliminar o risco ÔÇö mas isso ├® sua chamada, n├úo quis interromper um pipeline em curso.
+
+Tamb├®m fica em aberto que `automation/OrquestradorMigracao.ps1` segue **n├úo commitado** (92 inser├º├Áes) ÔÇö a corre├º├úo do `Test-LegadoListBoxLigaLista` se perde se algu├®m descartar o working tree.

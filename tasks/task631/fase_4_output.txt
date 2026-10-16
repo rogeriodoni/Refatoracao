@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up. Fase 4 is complete for FormSIGPRINT.
+
+## Summary
+
+Completed Fase 4/8 for `FormSIGPRINT.prg`:
+
+- **`ConfigurarPaginaLista()`**: replaced the empty Fase-3 shells with the real `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, canonical Left=542) and a new `cnt_4c_Saida`/`cmd_4c_Encerrar` (canonical Left=917, rule #10), each wired via `BINDEVENT` to its `Btn*Click` handler name (bodies land in Fase 7, matching the pipeline's established pattern ÔÇö verified against task607's already-completed Fase 4 output).
+- Added `grd_4c_Lista` (3 read-only columns: C├│digo, Descri├º├úo, and a derived Tipo column transcribing the legacy's `IIF(Tipos=1,"CHEQUE",IIF(Tipos=2,"TITULOS","FOLLOW UP"))` literally as the grid's ControlSource expression).
+- Implemented `CarregarLista()`, `AlternarPagina()`, and `FormatarGridLista()` fully (no stubs), including the `gb_4c_ValidandoUI` test-fixture branch.
+- **SIGPRINTBO.prg**: the generic `BusinessBase.Buscar()` depends on `this_oDataAccess`, which never gets instantiated because `Init()` calls `DODEFAULT()` with no table name (same pattern already present in `CorBO.prg`). Since `CarregarLista()` needed a working `Buscar()`, I added `Buscar()`, `CarregarPorCodigo()` (keyed on `cidchaves`, since `cods` isn't unique per schema), and `ExecutarExclusao()` to the BO, mirroring `CorBO`'s established pattern ÔÇö otherwise the grid would never populate.
+
+Verified both files compile cleanly via `vfp9.exe COMPILE` (no `.err` output), then removed the temporary compile-check script and `.FXP` artifacts.

@@ -1,0 +1,17 @@
+=== PROBE FormDrs / selecao de Tits ===
+
+--- A) CREATEOBJECT FormDrs COM par_cTits = FICHA TESTE ---
+   VARTYPE=O | this_lSemTits=.F. | this_cTits=[FICHA TESTE] | Caption=[Ficha Técnica - FICHA TESTE]
+   Botoes Page1:
+      CMD_4C_INCLUIR         Left=   5
+      CMD_4C_VISUALIZAR      Left=  80
+      CMD_4C_ALTERAR         Left= 155
+      CMD_4C_EXCLUIR         Left= 230
+      CMD_4C_BUSCAR          Left= 305
+   cnt_4c_Campos Left=10 Width=967 (form Width=1007)
+
+--- B) CREATEOBJECT FormDrs SEM parametro ---
+   VARTYPE=O | this_lSemTits=.T. | this_cTits=[]
+   (menu: this_lSemTits=.T. -> Release() sem mensagem de erro)
+
+FIM

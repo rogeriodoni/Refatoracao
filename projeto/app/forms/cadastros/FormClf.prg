@@ -27,6 +27,7 @@ DEFINE CLASS FormClf AS FormBase
     this_oBusinessObject = .NULL.
     this_cMensagemErro   = ""    && OBRIGATORIO - nao herdado de FormBase
     this_lTemProduto     = .F.   && .T. se ha produtos com AliqIPI<>0
+    this_lEmLookupUF     = .F.   && guarda de reentrancia do seletor de UF
 
     *--------------------------------------------------------------------------
     * Init - Inicializacao do formulario
@@ -117,31 +118,52 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
         *-- Container de cabecalho (cntSombra: Top=2 -> 31)
+        *-- Cabecalho cinza canonico - CLAUDE.md #11 (identico ao da pagina Dados).
+        *-- Estava BackStyle = 0 (transparente) com BackColor claro e titulo
+        *-- RGB(90,90,90): a faixa nao pintava e o titulo saia escuro sobre a
+        *-- textura da Page. Faltava tambem o label de sombra. (Erro216)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 31
-            .Left        = 0
-            .Width       = 1020
-            .Height      = 80
-            .BackColor   = RGB(192, 192, 192)
-            .BackStyle   = 0
-            .BorderWidth = 0
-            .Visible     = .T.
-        ENDWITH
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
 
-        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
-        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
-            .Caption   = "Cadastro de Classificacao Fiscal"
-            .Top       = 20
-            .Left      = 20
-            .Width     = 600
-            .Height    = 30
-            .FontName  = "Tahoma"
-            .FontSize  = 14
-            .FontBold  = .T.
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
         ENDWITH
 
         *-- Container de botoes CRUD (Grupo_op: Left=542, Top=0 -> 29)
@@ -1035,14 +1057,15 @@ DEFINE CLASS FormClf AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- cmd_4c_Incluir: inserir IVA top=246+29=275; Left=932
-        loc_oPagina.AddObject("cmd_4c_Incluir", "CommandButton")
-        WITH loc_oPagina.cmd_4c_Incluir
+        *-- cmd_4c_InsIva: inserir na grade IVA. Legado inserir: top=246, Left=932
+        *-- (o +76 acompanha o deslocamento da faixa, CLAUDE.md #11).
+        loc_oPagina.AddObject("cmd_4c_InsIva", "CommandButton")
+        WITH loc_oPagina.cmd_4c_InsIva
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .ToolTipText   = "Inserir"
             .Top           = 322
-            .Left = 5
+            .Left          = 932
             .Width         = 45
             .Height        = 45
             .FontName      = "Verdana"
@@ -1055,16 +1078,16 @@ DEFINE CLASS FormClf AS FormBase
             .Enabled       = .F.
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_Incluir, "Click", THIS, "BtnIncluirIvaClick")
+        BINDEVENT(loc_oPagina.cmd_4c_InsIva, "Click", THIS, "BtnIncluirIvaClick")
 
-        *-- cmd_4c_Excluir: excluir IVA top=291+29=320; Left=932
-        loc_oPagina.AddObject("cmd_4c_Excluir", "CommandButton")
-        WITH loc_oPagina.cmd_4c_Excluir
+        *-- cmd_4c_ExcIva: excluir na grade IVA. Legado excluir: top=291, Left=932
+        loc_oPagina.AddObject("cmd_4c_ExcIva", "CommandButton")
+        WITH loc_oPagina.cmd_4c_ExcIva
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .ToolTipText   = "Excluir"
             .Top           = 367
-            .Left = 230
+            .Left          = 932
             .Width         = 45
             .Height        = 45
             .FontName      = "Verdana"
@@ -1077,7 +1100,7 @@ DEFINE CLASS FormClf AS FormBase
             .Enabled       = .F.
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_Excluir, "Click", THIS, "BtnExcluirIvaClick")
+        BINDEVENT(loc_oPagina.cmd_4c_ExcIva, "Click", THIS, "BtnExcluirIvaClick")
 
         *-- cmd_4c_InsRed: InsRed top=315+29=344; Left=626
         loc_oPagina.AddObject("cmd_4c_InsRed", "CommandButton")
@@ -1175,6 +1198,12 @@ DEFINE CLASS FormClf AS FormBase
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Alignment   = 3
+            *-- Format TAMBEM aqui: medido no VFP9, Column.Format NAO chega ao
+            *-- Text1 ja instanciado, e a UF aceitava minuscula. O legado
+            *-- declara nos dois (GradIva.Column1.Text1 / Format = "!").
+            .Format      = "!"
+            .BorderStyle = 0
+            .Margin      = 0
         ENDWITH
 
         WITH loc_oPagina.grd_4c_IVA.Column2
@@ -1195,6 +1224,9 @@ DEFINE CLASS FormClf AS FormBase
             .Alignment   = 3
             .ForeColor   = RGB(0, 0, 0)
             .BackColor   = RGB(255, 255, 255)
+            .Format      = "!"
+            .BorderStyle = 0
+            .Margin      = 0
         ENDWITH
 
         WITH loc_oPagina.grd_4c_IVA.Column3
@@ -1230,6 +1262,13 @@ DEFINE CLASS FormClf AS FormBase
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
         ENDWITH
+        *-- Celula de UF com Valid proprio: o legado abre o browse de SigCdUfs
+        *-- ao SAIR da celula quando o digitado nao casa exato (GradIva.
+        *-- Column1.Text1.Valid). So com F4 o usuario tinha de adivinhar, e UF
+        *-- incompleta/invalida era aceita e gravada. (Erro219)
+        THIS.InstalarCelulaUF(loc_oPagina.grd_4c_IVA.Column1)
+        THIS.InstalarCelulaUF(loc_oPagina.grd_4c_IVA.Column2)
+
         BINDEVENT(loc_oPagina.grd_4c_IVA, "KeyPress", THIS, "IvaGridKeyPress")
         BINDEVENT(loc_oPagina.grd_4c_IVA, "AfterRowColChange", THIS, "IvaLostFocusValidar")
 
@@ -1274,6 +1313,9 @@ DEFINE CLASS FormClf AS FormBase
             .FontName    = "Tahoma"
             .FontSize    = 8
             .Alignment   = 3
+            .Format      = "!"
+            .BorderStyle = 0
+            .Margin      = 0
         ENDWITH
 
         WITH loc_oPagina.grd_4c_Reducao.Column2
@@ -1309,6 +1351,8 @@ DEFINE CLASS FormClf AS FormBase
             .ForeColor = RGB(0, 0, 0)
             .BackColor = RGB(255, 255, 255)
         ENDWITH
+        THIS.InstalarCelulaUF(loc_oPagina.grd_4c_Reducao.Column1)
+
         BINDEVENT(loc_oPagina.grd_4c_Reducao, "KeyPress", THIS, "RedGridKeyPress")
         BINDEVENT(loc_oPagina.grd_4c_Reducao, "AfterRowColChange", THIS, "RedLostFocusValidar")
 
@@ -1411,13 +1455,6 @@ DEFINE CLASS FormClf AS FormBase
                 loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.unidades"
                 loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.cest"
 
-                *-- Larguras (legado: Codigos=94, Descricaos=290, Aipis=45, Unidades=31, Cest=70)
-                loc_oGrid.Column1.Width = 94
-                loc_oGrid.Column2.Width = 290
-                loc_oGrid.Column3.Width = 45
-                loc_oGrid.Column4.Width = 31
-                loc_oGrid.Column5.Width = 70
-
                 *-- Headers OBRIGATORIO apos RecordSource (VFP reseta ao mudar RecordSource)
                 loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
                 loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
@@ -1426,6 +1463,17 @@ DEFINE CLASS FormClf AS FormBase
                 loc_oGrid.Column5.Header1.Caption = "CEST"
 
                 THIS.FormatarGridLista(loc_oGrid)
+
+                *-- Larguras POR ULTIMO (legado pColuna: Codigos=94, Descricaos=290,
+                *-- Aipis=45, Unidades=31, Cest=70). CLAUDE.md #35(c)/#41: mexer na
+                *-- FONTE do Grid recalcula as colunas. Medido no VFP9 - definidas
+                *-- antes de FormatarGridLista viravam 74/284/49/67/53, que eh
+                *-- exatamente a grade torta reportada (Erro216).
+                loc_oGrid.Column1.Width = 94
+                loc_oGrid.Column2.Width = 290
+                loc_oGrid.Column3.Width = 45
+                loc_oGrid.Column4.Width = 31
+                loc_oGrid.Column5.Width = 70
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loException
@@ -1651,7 +1699,12 @@ DEFINE CLASS FormClf AS FormBase
 
             IF THIS.this_oBusinessObject.Salvar()
                 loc_cCodigo = ALLTRIM(THIS.this_oBusinessObject.this_cCodigo)
-                THIS.SalvarFilhos(loc_cCodigo)
+                *-- NAO chamar SalvarFilhos aqui: ClfBO.Salvar() ja grava crIva e
+                *-- crRed (SalvarIVAs/SalvarReducoes, nos ramos Inserir E Atualizar).
+                *-- A chamada duplicada apagava com DELETE FROM o que o BO tinha
+                *-- acabado de inserir e reinseria com um INSERT que omitia a coluna
+                *-- diasprz (NOT NULL) sem checar o SQLEXEC: sigcdiva ficava VAZIA,
+                *-- sem erro na tela. (Erro218)
                 MsgInfo("Registro salvo com sucesso.", "Sucesso")
                 THIS.pgf_4c_Paginas.ActivePage = 1
                 THIS.CarregarLista()
@@ -1798,14 +1851,27 @@ DEFINE CLASS FormClf AS FormBase
             loc_oPg2.cbo_4c_CmbIPip.Enabled   = par_lHabilitar AND !THIS.this_lTemProduto
             loc_oPg2.cbo_4c_CmbTipoMerc.Enabled= par_lHabilitar
             loc_oPg2.opt_4c_Opt_TpSubSt.Enabled= par_lHabilitar
-            *-- Botoes de grid IVA/RED habilitados so em INCLUIR/ALTERAR
-            IF PEMSTATUS(loc_oPg2, "cmd_4c_Incluir", 5)
+            *-- Botoes de grid IVA/RED habilitados so em INCLUIR/ALTERAR.
+            *-- Legado: os quatro tem When = INLIST(pcEscolha,'INSERIR','ALTERAR'),
+            *-- que corresponde exatamente a par_lHabilitar.
+            *-- Os IF estavam com o CORPO VAZIO: os botoes ficavam com o
+            *-- Enabled = .F. do nascimento e nunca eram religados, entao nao
+            *-- havia como inserir nem excluir linha nas grades. E como sao
+            *-- botoes icone-only com Themes = .F., desabilitados eles nem
+            *-- desenham o icone - apareciam como quadrados cinza vazios.
+            *-- AjustarBotoesPorModo(), que tambem os ajusta, nao eh chamado
+            *-- em lugar nenhum deste form. (Erro217)
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_InsIva", 5)
+                loc_oPg2.cmd_4c_InsIva.Enabled = par_lHabilitar
             ENDIF
-            IF PEMSTATUS(loc_oPg2, "cmd_4c_Excluir", 5)
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_ExcIva", 5)
+                loc_oPg2.cmd_4c_ExcIva.Enabled = par_lHabilitar
             ENDIF
             IF PEMSTATUS(loc_oPg2, "cmd_4c_InsRed", 5)
+                loc_oPg2.cmd_4c_InsRed.Enabled = par_lHabilitar
             ENDIF
             IF PEMSTATUS(loc_oPg2, "cmd_4c_ExcRed", 5)
+                loc_oPg2.cmd_4c_ExcRed.Enabled = par_lHabilitar
             ENDIF
         CATCH TO loException
             MostrarErro("Erro em HabilitarCampos:" + CHR(13) + loException.Message, "Erro")
@@ -1981,14 +2047,24 @@ DEFINE CLASS FormClf AS FormBase
                 USE IN crRed
             ENDIF
 
+            *-- Estrutura IDENTICA a de ClfBO.CarregarIVAsPorCodigo /
+            *-- CarregarReducoesPorCodigo e ao schema (sigcdiva / sigcdred).
+            *-- Faltava a coluna diasprz em crIva: ClfBO.SalvarIVAs le
+            *-- crIva.diasprz, entao ALTERAR gravava (o cursor vinha do BO, com
+            *-- a coluna) e INCLUIR estourava "Variable DIASPRZ is not found"
+            *-- (Erro218). codigos/cidchaves tambem divergiam em largura.
+            *-- O legado nunca preenche diasprz: ela vem do Select * do
+            *-- AddCursor e nasce 0 no Append Blank - por isso aqui tambem.
             SET NULL OFF
-            CREATE CURSOR crIva (codigos c(12), estasO c(2), estasD c(2), ;
-                                 indivast n(7,3), indivastPi n(7,3), cidChaves c(10))
+            CREATE CURSOR crIva (cidchaves C(20), codigos C(10), ;
+                                 estasO C(2), estasD C(2), ;
+                                 indivast N(7,3), indivastpi N(7,3), ;
+                                 diasprz N(3,0))
             SELECT crIva
             APPEND BLANK
 
-            CREATE CURSOR crRed (codigos c(12), estas c(2), aReds n(7,3), ;
-                                 bReds n(7,3), cidChaves c(10))
+            CREATE CURSOR crRed (cidchaves C(20), codigos C(10), estas C(2), ;
+                                 areds N(6,3), breds N(6,3))
             SELECT crRed
             APPEND BLANK
             SET NULL ON
@@ -2013,11 +2089,17 @@ DEFINE CLASS FormClf AS FormBase
                 USE IN crRed
             ENDIF
 
+            *-- MESMA estrutura de CriarCursoresFilhos e do schema. Esta era a
+            *-- TERCEIRA copia da definicao e tambem nao tinha diasprz, que
+            *-- ClfBO.SalvarIVAs le: sem isto o Erro218 voltava ao salvar uma
+            *-- ALTERACAO (so o INCLUIR tinha sido corrigido).
             SET NULL OFF
-            CREATE CURSOR crIva (codigos c(12), estasO c(2), estasD c(2), ;
-                                 indivast n(7,3), indivastPi n(7,3), cidChaves c(10))
-            CREATE CURSOR crRed (codigos c(12), estas c(2), aReds n(7,3), ;
-                                 bReds n(7,3), cidChaves c(10))
+            CREATE CURSOR crIva (cidchaves C(20), codigos C(10), ;
+                                 estasO C(2), estasD C(2), ;
+                                 indivast N(7,3), indivastpi N(7,3), ;
+                                 diasprz N(3,0))
+            CREATE CURSOR crRed (cidchaves C(20), codigos C(10), estas C(2), ;
+                                 areds N(6,3), breds N(6,3))
             SET NULL ON
 
             *-- Carregar IVAs do banco
@@ -2316,10 +2398,10 @@ DEFINE CLASS FormClf AS FormBase
         IF par_nKeyCode = 115  && F4
             loc_nCol = loc_oPg2.grd_4c_IVA.ActiveColumn
             IF loc_nCol = 1
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column1.Text1)
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column1.txt_4c_Uf, .T.)
             ENDIF
             IF loc_nCol = 2
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column2.Text1)
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_IVA.Column2.txt_4c_Uf, .T.)
             ENDIF
         ENDIF
     ENDPROC
@@ -2333,9 +2415,27 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF par_nKeyCode = 115  && F4
             IF loc_oPg2.grd_4c_Reducao.ActiveColumn = 1
-                THIS.AbrirLookupUF(loc_oPg2.grd_4c_Reducao.Column1.Text1)
+                THIS.AbrirLookupUF(loc_oPg2.grd_4c_Reducao.Column1.txt_4c_Uf, .T.)
             ENDIF
         ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InstalarCelulaUF - poe o controle de celula com Valid numa Column de UF
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InstalarCelulaUF
+        LPARAMETERS par_oColuna
+        IF PEMSTATUS(par_oColuna, "txt_4c_Uf", 5)
+            RETURN
+        ENDIF
+        par_oColuna.AddObject("txt_4c_Uf", "TextBoxUfClf_4c")
+        par_oColuna.txt_4c_Uf.Visible = .T.
+        *-- Sem CurrentControl o objeto existe e NAO aparece: a coluna segue
+        *-- desenhando o Text1 dela (CLAUDE.md #18). Sparse = .F. para o
+        *-- controle valer em TODAS as linhas, nao so na ativa.
+        par_oColuna.CurrentControl = "txt_4c_Uf"
+        par_oColuna.Sparse         = .F.
+        par_oColuna.ReadOnly       = .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2352,10 +2452,28 @@ DEFINE CLASS FormClf AS FormBase
     * cursor ligado pelo ControlSource - entao a selecao do picker persiste:
     *     cursor.estaso = [AA] -> Column1.Text1.Value = "SP" -> cursor = [SP]
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupUF
-        LPARAMETERS par_oCampo
-        LOCAL loc_lResultado, loc_oBusca, loc_cAtual
+    *-- PUBLIC de proposito: eh chamado pelo Valid do controle de celula
+    *-- (TextBoxUfClf_4c) via THISFORM; metodo PROTECTED estoura ali
+    *-- (CLAUDE.md #51).
+    *-- par_lForcar = .T. abre a lista MESMO com valor valido. O Valid
+    *-- automatico passa .F. (comportamento do legado: so abre quando nao
+    *-- casa exato); F4 e duplo clique passam .T., porque sao pedido
+    *-- EXPLICITO do usuario - com o guard do #37 a tecla nao fazia nada
+    *-- em celula que ja tinha UF valida (toda linha existente no ALTERAR).
+    PROCEDURE AbrirLookupUF
+        LPARAMETERS par_oCampo, par_lForcar
+        LOCAL loc_lResultado, loc_oBusca, loc_cAtual, loc_lForcar
         loc_lResultado = .F.
+        loc_lForcar = (VARTYPE(par_lForcar) = "L" AND par_lForcar)
+
+        *-- Guarda de reentrancia: o picker eh MODAL, tira o foco e faz o
+        *-- proprio Valid disparar de novo - sem isto abrem dois dialogos
+        *-- empilhados (CLAUDE.md #37/#47).
+        IF THIS.this_lEmLookupUF
+            RETURN .F.
+        ENDIF
+        THIS.this_lEmLookupUF = .T.
+
         TRY
             IF VARTYPE(par_oCampo) != "O"
                 loc_lResultado = .F.
@@ -2365,7 +2483,7 @@ DEFINE CLASS FormClf AS FormBase
                     "SigCdUfs", "cursor_4c_BuscaUf", "Estados", loc_cAtual, ;
                     "Sele" + CHR(231) + CHR(227) + "o")
                 IF VARTYPE(loc_oBusca) = "O"
-                    IF !loc_oBusca.this_lAchouRegistro
+                    IF loc_lForcar OR !loc_oBusca.this_lAchouRegistro
                         loc_oBusca.mAddColuna("Estados", "", "UF")
                         loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
                         loc_oBusca.Show()
@@ -2385,6 +2503,9 @@ DEFINE CLASS FormClf AS FormBase
         CATCH TO loException
             MostrarErro("Erro ao abrir lookup UF:" + CHR(13) + loException.Message, "Erro")
         ENDTRY
+
+        *-- Liberar DEPOIS do ENDTRY, para valer tambem quando o CATCH dispara
+        THIS.this_lEmLookupUF = .F.
         RETURN loc_lResultado
     ENDPROC
 
@@ -2575,11 +2696,11 @@ DEFINE CLASS FormClf AS FormBase
             ENDIF
 
             *-- Botoes de grid filhos (IVA e Reducao)
-            IF PEMSTATUS(loc_oPg2, "cmd_4c_Incluir", 5)
-                loc_oPg2.cmd_4c_Incluir.Enabled = loc_lModoEdicao
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_InsIva", 5)
+                loc_oPg2.cmd_4c_InsIva.Enabled = loc_lModoEdicao
             ENDIF
-            IF PEMSTATUS(loc_oPg2, "cmd_4c_Excluir", 5)
-                loc_oPg2.cmd_4c_Excluir.Enabled = loc_lModoEdicao
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_ExcIva", 5)
+                loc_oPg2.cmd_4c_ExcIva.Enabled = loc_lModoEdicao
             ENDIF
             IF PEMSTATUS(loc_oPg2, "cmd_4c_InsRed", 5)
                 loc_oPg2.cmd_4c_InsRed.Enabled = loc_lModoEdicao
@@ -2592,5 +2713,51 @@ DEFINE CLASS FormClf AS FormBase
         ENDTRY
     ENDPROC
 
+ENDDEFINE
+
+
+*==============================================================================
+* TextBoxUfClf_4c - celula de UF das grades IVA-ST e Reducao do FormClf.
+*
+* O Valid vai EMBUTIDO na classe: BINDEVENT em Valid de controle de Column nao
+* eh confiavel no VFP9 (CLAUDE.md #46) - foi por isso que o F4 acabou pendurado
+* no KeyPress do GRID.
+*
+* Transcricao do legado (SIGCDCLF.Pagina.Dados.GradIva.Column1.Text1.Valid):
+*     If Not IsEmpty(This.Value)
+*         loLista = CreateObject('fwBuscaExt', ..., 'SigCdUfs', ..., 'Estados',
+*                                Padr(This.Value,2), 'Selecao', .T.)
+*         If Not loLista.plAchouRegistro
+*             loLista.mAddColuna('Estados','','UF')
+*             loLista.mAddColuna('Descrs','','Descricao')
+*             loLista.Show()
+*         EndIf
+*     EndIf
+* ou seja: com valor digitado, procura a UF exata; NAO achando, ABRE a lista.
+* "S" nunca casa exato, entao UF incompleta passa a abrir o seletor em vez de
+* ser aceita.
+*==============================================================================
+DEFINE CLASS TextBoxUfClf_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    Alignment   = 3
+    BorderStyle = 0
+    Margin      = 0
+    Format      = "!"
+    MaxLength   = 2
+
+    PROCEDURE Valid()
+        *-- Campo vazio sai sem consultar - igual ao legado (If Not IsEmpty)
+        IF !EMPTY(ALLTRIM(THIS.Value))
+            THISFORM.AbrirLookupUF(THIS)
+        ENDIF
+        THIS.Refresh()
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE DblClick()
+        *-- duplo clique eh pedido explicito: abre a lista mesmo com UF valida
+        THISFORM.AbrirLookupUF(THIS, .T.)
+    ENDPROC
 ENDDEFINE
 

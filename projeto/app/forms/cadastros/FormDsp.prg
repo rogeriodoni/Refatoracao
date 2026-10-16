@@ -21,6 +21,8 @@ DEFINE CLASS FormDsp AS FormBase
     *-- Propriedades de estado
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
+    this_lEmLookupGrupo  = .F.   && Guarda de reentrancia do lookup de Grupo
+    this_lEmLookupConta  = .F.   && Guarda de reentrancia do lookup de Conta
 
     *==========================================================================
     * Init - APENAS DODEFAULT (FormBase chama InicializarForm)
@@ -542,7 +544,10 @@ DEFINE CLASS FormDsp AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        BINDEVENT(loc_oPagina.txt_4c_cd_grupo, "KeyPress", THIS, "ValidarGrupoForm")
+        *-- Legado: get_cd_grupo.Valid -> valida ao SAIR do campo, nunca a cada
+        *-- tecla. Em "KeyPress" sem testar a tecla, o handler disparava no 1o
+        *-- caractere digitado e acusava "Grupo invalido!" (Erro229).
+        BINDEVENT(loc_oPagina.txt_4c_cd_grupo, "LostFocus", THIS, "ValidarGrupoForm")
         BINDEVENT(loc_oPagina.txt_4c_cd_grupo, "KeyPress",  THIS, "TeclaGrupoKeyPress")
 
         *======================================================================
@@ -598,7 +603,8 @@ DEFINE CLASS FormDsp AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        BINDEVENT(loc_oPagina.txt_4c_cd_conta, "KeyPress", THIS, "ValidarContaForm")
+        *-- Legado: get_cd_conta.Valid -> valida ao SAIR do campo (Erro229)
+        BINDEVENT(loc_oPagina.txt_4c_cd_conta, "LostFocus", THIS, "ValidarContaForm")
         BINDEVENT(loc_oPagina.txt_4c_cd_conta, "KeyPress",  THIS, "TeclaContaKeyPress")
 
         *======================================================================
@@ -1049,7 +1055,26 @@ DEFINE CLASS FormDsp AS FormBase
     * ValidarGrupoForm - Handler LostFocus de txt_4c_cd_grupo
     * Valida codigo no banco (SigCdGcr) e preenche descricao em ds_grupo
     *==========================================================================
-    PROCEDURE ValidarGrupoForm(par_nKeyCode, par_nShiftAltCtrl)
+    * Wrapper fino com guarda de REENTRANCIA: o picker eh MODAL, tira o foco e
+    * redispara o proprio LostFocus. A flag eh liberada AQUI, e nao no corpo,
+    * para valer tambem nos RETURN antecipados.
+    PROCEDURE ValidarGrupoForm()
+        IF THIS.this_lEmLookupGrupo
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupGrupo = .T.
+        THIS.ValidarGrupoFormExec()
+        THIS.this_lEmLookupGrupo = .F.
+    ENDPROC
+
+    *-- Corpo. Legado (get_cd_grupo.Valid):
+    *--   If !IsEmpty(this.value)
+    *--       fAcessoContab(Usuar,'C',this.value,This,get_ds_grupo)
+    *--   Else
+    *--       get_ds_grupo.value = ''
+    *-- O fAcessoContab ABRE O BROWSE quando nao acha o codigo; o legado nunca
+    *-- exibe "Grupo invalido!" nem apaga o que o usuario digitou.
+    PROTECTED PROCEDURE ValidarGrupoFormExec()
         LOCAL loc_oPagina, loc_cGrupo
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_cd_grupo.Value)
@@ -1066,19 +1091,26 @@ DEFINE CLASS FormDsp AS FormBase
         IF THIS.this_oBusinessObject.ValidarGrupo(loc_cGrupo)
             loc_oPagina.txt_4c_ds_grupo.Value = THIS.this_oBusinessObject.this_cDsGrupo
         ELSE
-            MsgAviso("Grupo inv" + CHR(225) + "lido!", "Grupo")
-            loc_oPagina.txt_4c_cd_grupo.Value = ""
+            *-- Nao achou: abre o browse com o digitado como prefixo. O picker
+            *-- JA eh o feedback - sem MsgAviso e sem limpar o codigo.
             loc_oPagina.txt_4c_ds_grupo.Value = ""
-            loc_oPagina.txt_4c_cd_grupo.SetFocus()
+            THIS.AbrirBuscaGrupo()
         ENDIF
     ENDPROC
 
     *==========================================================================
     * TeclaGrupoKeyPress - Handler KeyPress de txt_4c_cd_grupo (F4=lookup)
     *==========================================================================
+    *-- F4: testa a tecla, entao o binding em "KeyPress" aqui eh legitimo.
+    *-- Guarda save/restore: o picker tira o foco e dispara o LostFocus, que
+    *-- abriria um SEGUNDO dialogo por cima deste.
     PROCEDURE TeclaGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lAnterior
         IF par_nKeyCode = 115
+            loc_lAnterior = THIS.this_lEmLookupGrupo
+            THIS.this_lEmLookupGrupo = .T.
             THIS.AbrirBuscaGrupo()
+            THIS.this_lEmLookupGrupo = loc_lAnterior
         ENDIF
     ENDPROC
 
@@ -1135,7 +1167,22 @@ DEFINE CLASS FormDsp AS FormBase
     * ValidarContaForm - Handler LostFocus de txt_4c_cd_conta
     * Valida codigo no banco (SigCdCli filtrado por grupo) e preenche descricao
     *==========================================================================
-    PROCEDURE ValidarContaForm(par_nKeyCode, par_nShiftAltCtrl)
+    * Wrapper fino com guarda de REENTRANCIA (ver ValidarGrupoForm)
+    PROCEDURE ValidarContaForm()
+        IF THIS.this_lEmLookupConta
+            RETURN
+        ENDIF
+        THIS.this_lEmLookupConta = .T.
+        THIS.ValidarContaFormExec()
+        THIS.this_lEmLookupConta = .F.
+    ENDPROC
+
+    *-- Corpo. Legado (get_cd_conta.Valid):
+    *--   If !fAcessoContas(Usuar,grupo,'C',this.value,This,get_ds_conta)
+    *--       Messagebox('Acesso Negado !!',0+48,'')  / This.Value = ''
+    *-- O fAcessoContas abre o browse quando nao acha; a mensagem e a limpeza
+    *-- so acontecem quando o ACESSO eh negado, nao quando o codigo nao existe.
+    PROTECTED PROCEDURE ValidarContaFormExec()
         LOCAL loc_oPagina, loc_cGrupo, loc_cConta
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_cd_grupo.Value)
@@ -1153,19 +1200,22 @@ DEFINE CLASS FormDsp AS FormBase
         IF THIS.this_oBusinessObject.ValidarConta(loc_cGrupo, loc_cConta)
             loc_oPagina.txt_4c_ds_conta.Value = THIS.this_oBusinessObject.this_cDsConta
         ELSE
-            MsgAviso("Conta inv" + CHR(225) + "lida!", "Conta")
-            loc_oPagina.txt_4c_cd_conta.Value = ""
             loc_oPagina.txt_4c_ds_conta.Value = ""
-            loc_oPagina.txt_4c_cd_conta.SetFocus()
+            THIS.AbrirBuscaConta()
         ENDIF
     ENDPROC
 
     *==========================================================================
     * TeclaContaKeyPress - Handler KeyPress de txt_4c_cd_conta (F4=lookup)
     *==========================================================================
+    *-- F4 da Conta (ver TeclaGrupoKeyPress)
     PROCEDURE TeclaContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lAnterior
         IF par_nKeyCode = 115
+            loc_lAnterior = THIS.this_lEmLookupConta
+            THIS.this_lEmLookupConta = .T.
             THIS.AbrirBuscaConta()
+            THIS.this_lEmLookupConta = loc_lAnterior
         ENDIF
     ENDPROC
 

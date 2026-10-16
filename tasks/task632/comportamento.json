@@ -1,0 +1,246 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File", "fDtoSQL", "fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRITB",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "ThisForm.cntMvt1.getData1.Enabled = .t.\nThisForm.cntMvt1.getData2.Enabled = .t.\nThisForm.cntBotoes.BtnReport.btnImprimir.Enabled = .f.\nThisForm.cntBotoes.BtnReport.btnVisualizar.Enabled = .f.\n\nIf Messagebox('Confirma a Geração do Arquivo?', 4+32+256, '') = 6\n\tSelect MovAux\n\tSet Order to EmpCont\n\tGo Top\n\n\tDataProc = Datas\n\tScan\n\t\tIf (MovAux.Datas <> DataProc)\n\t\t\tWait Window Nowait \"Gerando Arquivo Contábil : \" + EmpCont + \" - \" + MovAux.Datas\n\t\t\tDataProc = Datas\n\t\tEndif\n\t\tEmpProc = EmpCont\t\n\t\tNum... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB",
+      "evento": "Procedure",
+      "linhas": 178,
+      "codigoOriginal": "Private pDtI, pDtF\n\nLocal loProgresso, tot, Cta, Cred, Deb, Hisc, Ano, Dtct, Empc, Totreg, NumAux, NomeAux, ValFecha,lcEmp1\n\nWith ThisForm\n\t.cntAguarde.Visible = .t.\n\t.Refresh\n\t.Draw\n\t.ZOrder()\nEndWith\n\nSet Talk On\nSet Talk Window\n\nIniPer   = ThisForm.cntMvt1.getData1.Value\nFinPer   = ThisForm.cntMvt1.getData2.Value\nm.lcEmp1 = ThisForm.cntMvt1.getEmp1.Value\n\nCreate Cursor Grupos (Codigos c(10), ContConts n(1))\n\nCreate Cursor SemConta (Contas c(09), Datas d(8), Hists c(70), Valors n(12,2), Ocors ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.cntMvt1.getData1.Value   = Date()\n\t\t.cntMvt1.getData2.Value   = Date()\n\t\t.cntMvt1.getEmp1.Value    = Space(03)\n\t\t.cntMvt1.getDsemp1.Value  = Space(40)\n\t\t.cntMvt1.getData1.Enabled = .t.\n\t\t.cntMvt1.getData2.Enabled = .t.\n\t\t.cntBotoes.BtnReport.btnImprimir.Enabled   = .f.\n\t\t.cntBotoe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRITB",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor MovAux (AnoFis c(04), Datas c(08), Contas c(09), Debs c(12), ;\n\t\t\t\t\t  Creds c(12), Docto c(10), Hists c(70), EmpCont c(03))\nIndex on EmpCont + Datas Tag EmpCont\nSet Order To ('') In ('movaux')\n* Fim **************************************************************************************\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntMvt1.getDsemp1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Razas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Razas', '', 'Descrição')\n\t\tloLista.mAddColuna('Cemps', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.cntMvt1.getEmp1.Value   = crListaRemota.Cemps\n\tThisForm.cntMvt1.getDsemp1.Value = crListaRemota.Razas\n\tUse In crListaRemota\nElse\n\tThisForm.cntMvt1.getEmp1.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntMvt1.getDsemp1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.cntMvt1.getEmp1.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntMvt1.getEmp1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cemps', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cemps', '', 'Código')\n\t\tloLista.mAddColuna('Razas', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.cntMvt1.getEmp1.Value   = crListaRemota.Cemps\n\tThisForm.cntMvt1.getDsemp1.Value = crListaRemota.Razas\n\tUse In crListaRemota\nElse\n\tThisForm.cntMvt1.getEmp1.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.Botões_de_Ação",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.Botões_de_Ação",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.Processar",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "\tIf Empty(ThisForm.cntMvt1.getData1.value)\n\t\tMessagebox('Data Inicial Inválida!!!',0+48,'')\n\t\tThisForm.cntMvt1.getData1.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.cntMvt1.getData2.value)\n\t\tMessagebox('Data Final Inválida!!!',0+48,'')\n\t\tThisForm.cntMvt1.getData2.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tIf ThisForm.cntMvt1.getData2.value < ThisForm.cntMvt1.getData1.value\n\t\tMessagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')\n\t\tThisForm.cntMvt1.getData2.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntBotoes.Botões_de_Ação",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntBotoes.Botões_de_Ação",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigPrIct to Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITB.cntBotoes.Botões_de_Ação",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigPrIct Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

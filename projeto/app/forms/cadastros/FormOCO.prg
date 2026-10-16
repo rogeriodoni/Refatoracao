@@ -139,7 +139,7 @@ DEFINE CLASS FormOCO AS FormBase
             *-- Container Cabecalho (compensacao PageFrame.Top: +29)
             loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
             WITH loc_oPagina.cnt_4c_Cabecalho
-                .Top         = 2 + 29
+                .Top         = 29          && canonico CLAUDE.md #11 (estava 2+29=31, 2px fora da Page2)
                 .Left        = 0
                 .Width       = THIS.Width
                 .Height      = 80
@@ -246,6 +246,55 @@ DEFINE CLASS FormOCO AS FormBase
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
         TRY
+            *-- Cabecalho cinza - tem de ser o PRIMEIRO AddObject da pagina
+            *-- (CLAUDE.md #11). O container de botoes fica em Top = 33, DENTRO
+            *-- da area da faixa (29..109): criado DEPOIS dela, desenha por cima;
+            *-- criada a faixa depois, ela COBRE Confirmar/Encerrar e so sobra a
+            *-- fresta de 9px entre 109 e 118. Era esse o layout errado (Erro220).
+            loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPagina.cnt_4c_Cabecalho
+                .Top           = 29
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+            ENDWITH
+
             *-- Container Botoes Acao (Salvar/Cancelar) - compensacao +29
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPagina.cnt_4c_BotoesAcao
@@ -490,50 +539,6 @@ DEFINE CLASS FormOCO AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
-        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top           = 29
-            .Left          = 0
-            .Width         = THIS.Width
-            .Height        = 80
-            .BackColor     = RGB(100, 100, 100)
-            .BorderWidth   = 0
-            .SpecialEffect = 0
-            .Visible       = .T.
-
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .Caption   = THIS.Caption
-                .Top       = 15
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 40
-                .FontName  = "Tahoma"
-                .FontSize  = 16
-                .FontBold  = .T.
-                .ForeColor = RGB(0, 0, 0)
-                .BackStyle = 0
-                .AutoSize  = .F.
-                .Visible   = .T.
-            ENDWITH
-
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .Caption   = THIS.Caption
-                .Top       = 18
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 46
-                .FontName  = "Tahoma"
-                .FontSize  = 16
-                .FontBold  = .T.
-                .ForeColor = RGB(255, 255, 255)
-                .BackStyle = 0
-                .AutoSize  = .F.
-                .Visible   = .T.
-            ENDWITH
-        ENDWITH
 
 
 
@@ -567,7 +572,11 @@ DEFINE CLASS FormOCO AS FormBase
                 .Height        = 22
                 .FontName      = "Tahoma"
                 .FontSize      = 8
-                .MaxLength     = 20
+                *-- SIGCCCCO.cods eh char(2) - CLAUDE.md #19: MaxLength vem da
+                *-- largura da COLUNA. Estava 20 e o INSERT estourava com 3
+                *-- caracteres (Erro: dados truncados). O legado limita pelo
+                *-- ControlSource no cursor; aqui o campo eh solto.
+                .MaxLength     = 2
                 .SpecialEffect = 0
                 .BorderStyle   = 1
                 .Enabled       = .T.
@@ -603,7 +612,8 @@ DEFINE CLASS FormOCO AS FormBase
                 .Height        = 22
                 .FontName      = "Tahoma"
                 .FontSize      = 8
-                .MaxLength     = 100
+                *-- SIGCCCCO.descs eh char(30) - mesma regra do Codigo
+                .MaxLength     = 30
                 .SpecialEffect = 0
                 .BorderStyle   = 1
                 .Enabled       = .T.

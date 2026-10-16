@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+O erro **n├úo ├® um bug de c├│digo** ÔÇö ├® a falha de infraestrutura j├í documentada e recorrente (100+ tasks desde 2026-08-02): a m├íquina do pipeline n├úo tem rota para a sub-rede `192.168.200.0/24`, onde fica o SQL Server `DB_MBAHIA`.
+
+Reconfirmei agora mesmo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False | PingSucceeded: False | SourceAddress: 192.168.199.115
+```
+
+O log mostra o erro 1526 na **ETAPA 1B** ("Conectando ao banco de dados"), que ├® o pre-flight de conex├úo ÔÇö acontece **antes** de `FormSigPrMlu`/`SigPrMluBO` serem instanciados. Ou seja, nenhuma edi├º├úo em `.prg` poderia corrigir isso.
+
+Revisei mesmo assim os dois arquivos (`FormSigPrMlu.prg` e `SigPrMluBO.prg`) atr├ís de defeitos reais ÔÇö escopo PROTECTED/PUBLIC, ordem de reset de `RecordSource`/`ControlSource`, `TRY/CATCH` sem `RETURN` interno, funil `AjustarBotoesPorModo`/reabilita├º├úo de bot├Áes ÔÇö e n├úo encontrei nenhum problema. **N├úo alterei os arquivos**: mutar c├│digo j├í correto para "consertar" uma falha de rede s├│ arrisca introduzir uma regress├úo real, como a mem├│ria do projeto adverte.
+
+Registrei esta nova reincid├¬ncia (task638/FormSigPrMlu, tentativa 8/10) na mem├│ria do projeto. A task j├í consumiu 8 das 10 tentativas presa neste bloqueio puramente de rede ÔÇö vale avisar quem administra a m├íquina do pipeline sobre a rota ausente para `192.168.200.0/24`.

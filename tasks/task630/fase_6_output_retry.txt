@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 6 conclu├¡da.** Arquivo: `projeto/app/forms/operacionais/FormSigPrIns.prg` (339 ÔåÆ 493 linhas).
+
+## Por que a tentativa anterior reprovou
+
+A tentativa com sonnet adicionou s├│ os campos (`lbl_4c_Label2` + `txt_4c__Valor`) e declarou sucesso. Mas este form cai no ramo **"layout captura"** do gate da Fase 6 (`OrquestradorMigracao.ps1:7355-7400`), que exige tr├¬s coisas do lado migrado ÔÇö e **duas estavam ausentes**:
+
+| Exig├¬ncia do gate | Antes | Agora |
+|---|---|---|
+| campos (piso = metade dos TextBox do legado) | 3/3 Ô£ô | 3/3 Ô£ô |
+| `BINDEVENT` | **ausente** | Ô£ô |
+| `PROCEDURE Validar\w+` | **ausente** | Ô£ô |
+
+## O que acrescentei (transcrito do dump, n├úo inventado)
+
+O legado **n├úo tem lookup algum** ÔÇö confirmei medindo o dump: zero ocorr├¬ncias de `fwbusca`, `mAddColuna`, `sigacess`, `FormBuscaAuxiliar`. Inventar um picker violaria o PILAR 1. Os eventos que o legado de fato tem s├úo os dois `Click`:
+
+- **`ConfigurarEventos()`** ÔÇö `BINDEVENT` dos `Click` de `cmd_4c_Ok`/`cmd_4c_Cancela` (handlers PUBLIC, regra #3).
+- **`ValidarValorServico()`** ÔÇö transcri├º├úo literal do guard que abre `SIGPRINS.ok.Click` (`get_Valor.Value <= 0` ÔåÆ aviso + `SetFocus`). Roda **s├│ ao confirmar**, como no legado ÔÇö n├úo em `LostFocus`, porque `get_Valor` s├│ tem `When`, n├úo `Valid` (regra #47 ao contr├írio: ligar em evento de foco criaria aviso que o legado n├úo tem).
+- **`BtnConfirmarClick()` / `BtnCancelarClick()`** ÔÇö as tr├¬s linhas de transfer├¬ncia ao pai de cada `Click` legado. Early-exit por flag e `Release()` fora do `TRY` (regra #1).
+- **`DevolverResultadoAoPai()`** ÔÇö guard `PEMSTATUS` + `AddProperty`, porque o `FormSIGPRIMP` migrado ainda **n├úo declara** `cCodServ`/`nVlServ`; sem o guard a atribui├º├úo estouraria *"Property CCODSERV is not found"* (regra #33).
+
+Reusei `ConverterParaNumero()` de `utils/functions.prg` em vez de escrever convers├úo nova (regra #13).
+
+## Verifica├º├úo executada (n├úo s├│ gate de regex)
+
+Compila├º├úo limpa, e **instanciei o form no VFP9** ÔÇö "a tela abre" s├│ se prova instanciando:
+
+- `CREATEOBJECT` ÔåÆ `VARTYPE=O`, 8 controles, `this_cMensagemErro` vazio
+- `AEVENTS` confirma o bind real: `CLICK->BTNCONFIRMARCLICK` e `CLICK->BTNCANCELARCLICK`
+- os 3 m├®todos existem e `PEMSTATUS(...,2)` = **n├úo-PROTECTED** (sen├úo o BINDEVENT falharia em sil├¬ncio)
+- valida├º├úo: `0` ÔåÆ `.F.`, `-5` ÔåÆ `.F.`, `123.45` ÔåÆ `.T.`
+- Confirma v├ílido ÔåÆ pai recebe `SERV001` / `250.75` / `Enabled=.T.`
+- Cancela ÔåÆ pai zerado (`""` / `0`) + `Enabled=.T.`
+- **Confirma com valor 0 ÔåÆ pai INTACTO e `Enabled` continua `.F.`** (reproduz o `Return(.F.)` do legado: n├úo transfere, n├úo reabilita, n├úo fecha)
+
+Auditorias do projeto: `VerificarFuncoesNaoDefinidas` OK, `VerificarLookupEmKeyPress` ERRO=0 AVISO=0, `VerificarPropriedadesInexistentes` OK, `VerificarMetodoProtegidoChamadoDeFora` OK. Completude: nenhum TODO/stub.
+
+## Dois pontos que voc├¬ deve saber
+
+1. **Esta task roda sobre form j├í migrado**: `HEAD` tem uma vers├úo de 480 linhas de `FormSigPrIns.prg`, e as Fases 3ÔÇô5 a substitu├¡ram por uma de 339. O diff contra `HEAD` (383+/370ÔêÆ) ├® reescrita completa, n├úo s├│ o meu acr├®scimo.
+2. **`FormSIGPRIMP` n├úo tem o contrato do pai**: nenhum lugar do projeto cria `FormSigPrIns` ainda, e o pai n├úo declara `cCodServ`/`nVlServ`. Meu guard evita o crash, mas a integra├º├úo real (menu/chamador + popula├º├úo do Init via `CarregarDescricaoServico`) ├® escopo das Fases 7/8 ÔÇö deixei isso expl├¡cito nos coment├írios em vez de silenciar.
+
+Encontrei tamb├®m uma armadilha de ambiente que custou tempo e vale registrar: `vfp9.exe -c"C:\4c"` **trava num modal** e o processo sobrevivente faz a execu├º├úo seguinte falhar sem log; e o VFP rodou o `.fxp` velho do meu pr├│prio probe depois de eu editar o `.prg` (a regra do `.fxp` obsoleto vale para scripts de teste, n├úo s├│ para forms). Quer que eu propague isso via `/propagate-lesson`?

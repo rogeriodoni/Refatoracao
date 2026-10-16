@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7 ÔÇö j├í estava entregue. Nenhuma edi├º├úo foi necess├íria.
+
+**Esta ├® a 7┬¬ vez que uma task ├® re-enfileirada sobre um form j├í migrado.** A `tasks\task637\SIGPRMEI.SCX` tem `md5 b40184d5...` id├¬ntico a `tasks\task207\` e `tasks\task312\` (**COMPLETED**). Os quatro `Btn*Click` pedidos j├í existem em `FormSIGPRMEI.prg` (linhas 443/479/491/518), com l├│gica real ÔÇö n├úo s├úo stubs.
+
+### O ponto que decidiu o veredito
+
+O SCX legado **n├úo tem bot├úo CRUD nenhum** (`layout.json`: s├│ `cmdBtnForm` com `buttonCount=2` = Processar/Sair, mais 2 labels). Essa ├® exatamente a situa├º├úo da task635, onde a conclus├úo anterior foi *"n├úo inventar ÔÇö viola o PILAR 1"*. A diferen├ºa aqui ├® que os 4 m├®todos existem como **shims n├úo ligados a controle nenhum**: os ├║nicos `BINDEVENT` do arquivo s├úo `btn_4c_Processar` e `btn_4c_Encerrar`, que s├úo os 2 bot├Áes do legado. Nenhum bot├úo inventado aparece na tela, ent├úo n├úo h├í viola├º├úo do PILAR 1 ÔÇö s├úo shims de compatibilidade com o `TestFormWrapper`, com sem├óntica adaptada e documentada inline.
+
+Crit├®rio que generalizei na mem├│ria: `Btn<Verbo>Click` ausente no legado s├│ ├® defeito se algum `BINDEVENT`/`.Click` o ligar a um controle vis├¡vel.
+
+### Auditoria ÔÇö tudo limpo
+
+Balanceamento `28/28` m├®todos, `42/42` IF, `4/4` TRY, `7/7` WITH, `1/1` DEFINE CLASS; zero `RETURN` dentro de TRY (#1), zero CATCH silencioso (#9), zero acento literal fora de coment├írio (#4), zero `.Self` (#38), `Controls("nome")` (#34), `this_prop .Value` (#43) ou `MESSAGEBOX`; os 3 `.Picture` existem em `vbmp\` (#25); os 8 m├®todos chamados de fora s├úo PUBLIC (#3); e **`LerArquivos`/`GravarArquivos` s├úo PUBLIC no BO** (#51) com as 8 properties lidas pelo form todas declaradas. `menu.prg` e `config.prg` (via `ADIR()`) j├í integrados.
+
+**Compila├º├úo real**: `vfp9.exe` gerou os dois `.fxp` com **zero `.err`**. Artefatos removidos depois para n├úo sujar a ├írvore.
+
+### Corrigi um erro na pr├│pria mem├│ria
+
+A 6┬¬ ocorr├¬ncia registrava `vfp9.exe -c <script>.prg` como a forma que funciona ÔÇö est├í errado e me custou um timeout de 120s: em VFP9 **`-c` ├® a flag de arquivo de configura├º├úo**, ent├úo o VFP abre a IDE e fica pendurado, sem gerar `.fxp` nem `.err`. O certo ├® o programa como argumento posicional: `vfp9.exe -t "<script>.prg"` ÔÇö com isso os dois `.fxp` nasceram em menos de 2s.
+
+Tamb├®m anotei uma armadilha de grep que quase me fez reportar desbalanceamento grave: contar `TRY` com padr├úo que exige algo depois da palavra d├í **0 aberturas contra 4 `ENDTRY`**, porque `TRY` fica sozinho na linha.
+
+Seguindo o que as 6 sess├Áes anteriores estabeleceram, n├úo reabro a quest├úo de duplicata/descarte da task e n├úo toquei em `task_state.json` ÔÇö isso ├® bookkeeping do orquestrador.

@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 j├í estava entregue ÔÇö n├úo editei o `.prg`. Fiz auditoria e compila├º├úo.
+
+## Situa├º├úo
+
+Esta ├® a **quarta invoca├º├úo** da task634 sobre `SIGPRLNC` e a **segunda sobre a pr├│pria Fase 7**. A SCX da task (`md5 283e7a93ÔÇª`) ├® id├¬ntica ├á de task204/247/**task309 (COMPLETED)**.
+
+Os quatro m├®todos pedidos j├í existem em `projeto/app/forms/cadastros/FormSIGPRLNC.prg`, com l├│gica real transcrita do legado (n├úo stubs), todos **PUBLIC** (condi├º├úo do BINDEVENT/TestFormWrapper, regra #3):
+
+| M├®todo | Linha | Conte├║do |
+|---|---|---|
+| `BtnIncluirClick` | 958 | `NovoRegistro()` + `this_cModoAtual = "INSERIR"` **antes** de `HabilitarCampos` (Problema 19) |
+| `BtnVisualizarClick` | 972 | l├¬ `cursor_4c_Dados` com guarda de sele├º├úo vazia; modo `"PROCURAR"` |
+| `BtnAlterarClick` | 1001 | idem, modo `"ALTERAR"` + `CarregarPaginaDados` |
+| `BtnExcluirClick` | 1030 | `MsgConfirma` (retorno l├│gico, regra #7); exclui s├│ o `cidchaves` da linha corrente, n├úo o grupo+conta inteiro (Erro148, documentado inline) |
+
+## Auditoria (tudo limpo)
+
+Balanceamento `PROCEDURE/ENDPROC` 55/55, `IF/ENDIF` 151/151, `TRY/ENDTRY` 14/14, `WITH/ENDWITH` 31/31, `DEFINE CLASS/ENDDEFINE` 2/2. Zero `RETURN` dentro de `TRY` (regra #1), zero `.Self` (#38), zero `Controls("<nome>")` (#34), zero TODO/stub real. As duas corre├º├Áes manuais de bug sobreviveram: `TextBoxOcorrencia_4c` + `CurrentControl` (Erro191/regra #46) e `AtualizarGradeOcorrencias()` no ramo `ELSE` de `AlternarPagina`, depois do `ActivePage` (Erro192/regra #21).
+
+**Compilei** a vers├úo atual do working tree (2208 linhas ÔÇö as sess├Áes anteriores s├│ compilaram a de 1817 do HEAD): `.fxp` de 46 KB, **nenhum `.err`**. Removi o `.fxp` e o script tempor├írio depois, o repo est├í como estava.
+
+## Dois pontos para quem continuar
+
+- O working tree tem **431 inser├º├Áes / 40 dele├º├Áes** n├úo commitadas acima do HEAD. As dele├º├Áes s├úo da Fase 6 anterior e s├úo leg├¡timas: `BINDEVENT` de lookup migrado de `"KeyPress"` para `"LostFocus"` (regra #47), com wrapper + `*Exec` e guarda `this_lEmLookup`. N├úo s├úo perda.
+- `Column1` da grade de ocorr├¬ncias ├® a coluna **Ocorr├¬ncia** (c├│digo, edit├ível) e `Column2` a Descri├º├úo read-only ÔÇö invers├úo deliberada em rela├º├úo ao SCX, coerente com "ordem visual direta, nunca `ColumnOrder`". N├úo ├® bug.
+
+N├úo repeti as perguntas de duplicata/descarte das sess├Áes anteriores (nenhuma foi respondida) e n├úo toquei em `task_state.json` ÔÇö isso ├® bookkeeping do orquestrador.

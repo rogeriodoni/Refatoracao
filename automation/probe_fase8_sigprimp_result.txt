@@ -1,0 +1,42 @@
+=== PROBE FASE 8 - FormSIGPRIMP ===
+FXP BO   : OK
+FXP Form : OK
+ERR BO   : nenhum
+ERR Form : nenhum
+VARTYPE  : O
+
+--- escopo (protected .F. = PUBLIC). FormParaBO/BOParaForm sao PROTECTED por heranca de FormBase - esperado .T. ---
+CarregarLista         existe=.T. protected=.F.
+FormParaBO            existe=.T. protected=.T.
+BOParaForm            existe=.T. protected=.T.
+RemoverArquivoDaLista existe=.T. protected=.F.
+AlternarPagina        existe=.T. protected=.F.
+BtnMovEstClick        existe=.T. protected=.F.
+BtnCancelarClick      existe=.T. protected=.F.
+
+--- CarregarLista() com gb_4c_ModoTeste = .T. ---
+retorno=.F. (esperado .F. - sem conexao SQL) Enabled=.F.
+
+--- BOParaForm() : BO -> campo ---
+BO cheio : retorno=.T. txt=[C:\4c\tasks\task629\] Enabled=.T. (esperado .T./.T.)
+BO vazio : retorno=.T. txt=[] Enabled=.F. (esperado Enabled .F. - When do legado)
+
+--- FormParaBO() : campo -> BO ---
+sem arg         : retorno=.T. BO.DirImport=[C:\USERS\ROGER\APPDATA\LOCAL\TEMP\pf8sigprimp\] BO.Arquivo=[SENTINELA.TXT] (esperado SENTINELA.TXT INTACTO - FormBase.Salvar chama sem arg)
+arquivo EXISTE  : retorno=.T. BO.Arquivo=[C:\USERS\ROGER\APPDATA\LOCAL\TEMP\pf8sigprimp\MOV001.TXT] (esperado .T.)
+arquivo AUSENTE : retorno=.F. (esperado .F. - BtnMovEstClick faz LOOP e nao chama o BO)
+
+--- RemoverArquivoDaLista() com Sorted = .T. ---
+ordem do ADir   : 1=ZEBRA.TXT 2=MOV001.TXT 3=ALFA.TXT
+ordem EXIBIDA   : 1=ALFA.TXT 2=MOV001.TXT 3=ZEBRA.TXT
+RemoveItem(1) do legado tiraria [ALFA.TXT], mas o ADir processou ZEBRA.TXT
+remover ZEBRA.TXT por NOME: retorno=.T. ListCount=2 1=ALFA.TXT 2=MOV001.TXT
+nome inexistente: retorno=.T. ListCount=2
+
+--- BtnMovEstClick() com campo vazio ---
+saiu sem erro; Enabled=.F.
+dir sem .TXT: saiu sem erro (MsgInfo do legado)
+
+--- dialogs suprimidos ---
+[14/10/2026 07:52:51 PM] Aviso: Nenhum arquivo para importar.
+
