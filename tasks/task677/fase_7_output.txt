@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigPrSlp.prg`.
+
+## O que encontrei
+
+Os 4 eventos principais **j├í existiam** no arquivo, com implementa├º├úo real (n├úo stubs), mapeados para a sem├óntica deste di├ílogo OPERACIONAL de sele├º├úo:
+
+| M├®todo | A├º├úo (linha) |
+|---|---|
+| `BtnIncluirClick` | 936 ÔÇö delega a `CmdAdicionarClick` (= `Command1` do SCX) |
+| `BtnAlterarClick` | 946 ÔÇö foca `grd_4c_Itens` para marcar/desmarcar |
+| `BtnVisualizarClick` | 971 ÔÇö foca `grd_4c_Listas` para navegar as listas de origem |
+| `BtnExcluirClick` | 996 ÔÇö desmarca tudo (= `CmdApgTudo`), com confirma├º├úo |
+
+Todos PUBLIC, como a regra #3 exige (o harness os chama direto).
+
+## Defeito real que corrigi
+
+`AjustarBotoesPorModo` desabilitava `cmd_4c_Adicionar` quando havia zero itens marcados ÔÇö e **nada chamava o m├®todo**. Dois problemas:
+
+1. **PILAR 1**: conferi o dump legado (`tasks/task677/SigPrSlp_form_codigo_fonte.txt:639-670`) ÔÇö o `Command1` **n├úo tem `PROCEDURE When` nem override de `Enabled`**. Ele est├í sempre clic├ível; o pr├│prio `Click` filtra com `If CsSigCdLpi.lMarcas = 1` dentro do `Scan`, ent├úo clicar sem marca├º├úo simplesmente n├úo insere linha. O ├║nico `When` do form inteiro ├® o do `Check1` (`Return(CsSigCdLpi.lMarcas = 0)`), j├í transcrito. O gate era regra de neg├│cio inventada.
+2. **Regra #40**: como o harness chama `AjustarBotoesPorModo()` de fora e nenhum caminho de volta reabilitava, o bot├úo ficaria preso em cinza.
+
+Troquei por: `cmd_4c_Adicionar.Enabled = .T.` (fiel ao legado) e as grades seguindo `USED()` do respectivo cursor. Liguei o m├®todo no **funil** de carga (fim de `CarregarGradeLista` e `MontaGrade2`, inclusive no caminho de falha), para o estado ser reposto sempre que os cursores s├úo recriados.
+
+Os bot├Áes legado reais (`cmd_4c_SelTudo`/`cmd_4c_ApgaTudo`) continuam em `CmdSelTudoClick`/`CmdApgaTudoClick` **sem** confirma├º├úo, como no SCX ÔÇö a confirma├º├úo ficou s├│ no `BtnExcluirClick`, que ├® wrapper sint├®tico da API CRUD e n├úo est├í ligado a controle vis├¡vel.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9 limpa**: `.fxp` regerados, nenhum `.err` (form e BO). Apaguei os `.fxp` antes para n├úo medir c├│digo velho.
+- **Regra #51**: os 6 m├®todos do BO chamados pelo form s├úo todos PUBLIC.
+- **Pattern #177**: as 3 properties do BO usadas existem; `this_cMensagemErro`/`this_lErroExibido` v├¬m de `BusinessBase:16-17`.
+- **Regra #33**: `ENABLED` confirmado em `GRID` e `COMMANDBUTTON` na tabela `propriedades_baseclasses.txt`.
+- Sem acentos literais, sem `.Self`, sem `Controls("nome")`, sem `ISEMPTY(`, sem `MESSAGEBOX` fora de coment├írio, `MsgConfirma` usado como l├│gico, nenhum `RETURN` dentro de `TRY` nos m├®todos da fase.
+- `VerificarFuncoesNaoDefinidas` e `VerificarMetodoProtegidoChamadoDeFora`: zero achados para estes arquivos.
+
+Uma ressalva honesta: validei por compila├º├úo e auditoria est├ítica, n├úo instanciando o form. Pelas regras #21/#42 deste projeto, o di├ílogo s├│ se prova de verdade exibindo-o e conferindo que as grades trazem linha (`RECCOUNT`) ÔÇö e isso depende do SQL Server 192.168.200.10, que a mem├│ria do projeto registra como inalcan├º├ível desta m├íquina.

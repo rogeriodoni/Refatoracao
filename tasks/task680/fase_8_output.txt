@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 executed. Both files are final, compiled, and the gate passes.
+
+## Real defect found and fixed
+
+`BtnExcluirClick` called `THIS.CarregarLista()` after a successful delete. That re-reads the grid from the DB, and the BO's `SELECT` brings `SPACE(20) AS descs` (faithful transcription of the legacy `Space(40) as Descs` ÔÇö the size Description is only resolved at runtime by the cell lookup). So deleting one row **blanked the Descri├º├úo column of every other row**, and discarded the pending blank row from `BtnInserirClick` together with its `cidchaves`. Silent: no error, no log.
+
+Fixed to do what the legacy actually does (`cmdExcluir.Click`: `Delete / Skip / Skip -1`) ÔÇö local removal in both branches, with two additions:
+- `SELECT cursor_4c_Dados` + `LOCATE` **before** the `DELETE`: `BO.Excluir()` runs SQLEXEC (delete + audit insert), and `DELETE`/`SKIP` act on the *current* work area, so without repositioning the deletion could hit the wrong row.
+- On a failed DB delete the row now **stays** in the grid instead of vanishing ÔÇö hiding a record that still exists in `SigPrTam` would be worse than the error message.
+
+## Other consolidation
+
+- **Legacy coverage map in the header** ÔÇö all 15 SCX methods mapped to their migrated counterpart, plus `SIGPRTAM.Load` (`=fConfigGeral()`) documented as **NOT PORTED** with the reason, matching the convention already in `FormSigMvExp`/`FormSigMvSbn`/`FormSIGMVTI2`. Also documented the real opening call (`Do Form SigPrTam With Thisform, ThisForm.DataSessionId, ThisForm.pcEscolha` ÔÇö no product code, which is why `par_cCodProduto` replaces `pnDataSes`) and the `houveincl`/`houveexcl` contract with the parent.
+- **`BOParaForm`** ÔÇö documented why `dataalts`/`datatrans`/`dtmovs` are deliberately excluded (no control on screen, BO round-trips them intact, and property-vs-column type divergence would only add `Data type mismatch` risk).
+- **BO hygiene** ÔÇö `CATCH TO loc_oErro` in `CarregarDoCursor`/`Inserir`/`Atualizar`/`ExecutarExclusao` had no `LOCAL` declaration, leaking a PRIVATE variable to callers.
+
+## Verification (measured, not inferred)
+
+VFP9 smoke test passed first (`STRTOFILE` output present), so these results are real:
+
+- **Compile**: all three `.FXP` generated, no `.err` (BO, `TextBoxGridLookup`, form).
+- **Probe** (headless instantiation + handler exercise, cursor created inside the private DataSession): `Init OK`; 6 columns with `CurrentControl=TXT_4C_CELCODTAM`/`TXT_4C_CELPRAZO` and `Sparse=.F.`; `Inserir` adds exactly one blank row and the 2nd click reuses it (legacy idempotence); the deleted blank row goes and **`[CID-A=PEQUENO][CID-B=MEDIO]` survived** ÔÇö the fix proven; with SQL down the persisted row stays and the suppressed dialog names the real cause (`Connection handle is invalid`), so the failure is not mute; `HabilitarCampos` toggles `Column.ReadOnly` with `Encerrar` always enabled.
+- **Phase-8 gate**: `VEREDITO=PASSA` (new `automation\VerificarGateFase8Task680.ps1`, following the project's per-task verifier convention ÔÇö takes the FLUXO-UNICO + LINHA-IMEDIATA dispensations, so `BtnCancelarClick` and a save button are correctly not required).
+- **Completeness validator** `Test-CompletudeCodigo`: OK on both files. It initially rejected one of my own new comments containing the word "pendente" ÔÇö rephrased.
+- Auditors clean for this form: `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarLookupEmKeyPress`, `VerificarFormBuscaAuxiliar`, `VerificarPropriedadesInexistentes`, `VerificarFormatInputMask` (ALTA=0 MEDIA=0 BAIXA=0). `INSERT` covers all 10 `SigPrTam` columns ÔÇö checked against `docs/schema.sql` read with `Get-Content -Raw`, since the SQL-based auditors can't run (server 192.168.200.10 unreachable from this machine).
+
+## Left out, deliberately
+
+- **No menu entry** ÔÇö `SIGPRTAM` is only ever opened as a child dialog from Cadastro de Produtos; a standalone menu item would invent a flow the legacy doesn't have.
+- **No `config.prg` change** ÔÇö `ADIR()` already auto-loads `*BO.prg`/`Form*.prg`.
+- **FormProduto wiring is still missing, and the dialog is unreachable without it.** `FormProduto.prg:3778` has the "Outros Tamanhos" button (`obj_4c_CmdTamanho`) with no `BINDEVENT` and no handler. That's task003's form and its own migration's scope, so I didn't touch it ÔÇö the legacy target is `btnTam.Valid` ÔåÆ `Do Form SigPrTam With Thisform, ThisForm.DataSessionId, ThisForm.pcEscolha`, and `btnTam.When` enables it in `INSERIR`/`ALTERAR`/`CONSULTAR`.
+
+Note on the diff size: `git diff --stat` shows ~2400 changed lines, but that's the accumulated uncommitted work of phases 3ÔÇô7; my edits are +85 lines in the form (1713 ÔåÆ 1798, method count unchanged at 32) and 4 one-line changes in the BO.

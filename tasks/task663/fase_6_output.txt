@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrPcp.prg` modificado (+ uma corre├º├úo no BO).
+
+## Auditoria de lookup: o legado tem ZERO
+
+Varri `tasks/task663/SigPrPcp_form_codigo_fonte.txt` pelos padr├Áes da regra (`fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt` via `fwbusca`, `mAddColuna`, `sigacess(`, fam├¡lia `Acesso*(`) ÔÇö **0 ocorr├¬ncias**. N├úo criei `AbrirLookup*`/`FormBuscaAuxiliar`: inventar um violaria o PILAR 1. A auditoria ficou documentada no cabe├ºalho do `.prg`, campo a campo (`Get_Cliente` tem `When ÔåÆ Return .f.`; `Text1` ├® preenchido pelo `AfterRowColChange`; todas as colunas de grade, exceto `Grade.Column1`, s├úo `ReadOnly = .T.`).
+
+## O que a fase entregou
+
+**├Ünico campo digit├ível: `Grade.Column1.Text1` (Priors).** Todos os 15 controles do SCX j├í existiam das fases 3ÔÇô5; o trabalho real foi fazer essa c├®lula funcionar.
+
+1. **`ValidarPrioridades()`** (PUBLIC) ÔÇö a regra da c├®lula n├úo est├í num `Valid`, est├í no `Salva.Click` do legado (`If m.Priors = 0 And m.aPriors = 0 / Loop`). Transcrita: sem nenhuma linha eleg├¡vel, avisa e aborta em vez de rodar o Scan em vazio, dar Commit e fechar a tela (o usu├írio sa├¡a achando que gravou). `BtnConfirmarClick`/`BtnSalvarClick` agora chamam.
+
+2. **Corre├º├úo ÔÇö TAB entre grades nunca funcionou.** Os handlers `GrdDadosCol1LostFocus`/`GrdItensCol1LostFocus` estavam ligados a `"KeyPress"` (assinatura da regra #47), mas testam `LASTKEY() = 9` ÔÇö dentro de `KeyPress` o `LASTKEY()` devolve a tecla *anterior*. Religados a `"LostFocus"` como no legado, sem `LPARAMETERS`, com guarda de reentr├óncia.
+
+3. **Corre├º├úo ÔÇö larguras/legendas das colunas.** `BtnVisualizarClick` destr├│i (`USE IN`) e recria os cursores antes de rechamar `CarregarGrades`; sobre cursor recriado o `RecordSource` devolve as colunas ao default 90 com header `"Header1"`. Reaplica├º├úo movida para depois do bind.
+
+## Corre├º├úo no BO (fora do escopo da fase, mas a grava├º├úo estava morta)
+
+`SigMvCab.empdopnums` ├® `char(29)` = `emps` char(3) + `dopes` char(20) + `Str(numes,6)` ÔÇö chave **posicional** (regra #42). Os tr├¬s sites montavam a chave com as properties j├í `ALLTRIM`adas, produzindo 15 caracteres em vez de 29: o `UPDATE` rodava sem erro e afetava **zero linhas**. Centralizado em `MontarEmpDopNums()` com `PADR` expl├¡cito. Medido no VFP9: agora `[001MALOTE                   3]`, 29 chars, id├¬ntico ao legado.
+
+## Verifica├º├úo no VFP9 (`automation\TestSigPrPcpF6.prg`, `.fxp` apagado antes)
+
+Ambos compilam; `CREATEOBJECT` devolve objeto; `AEVENTS` confirma `LOSTFOCUS ÔåÆ GRDDADOSCOL1LOSTFOCUS` e `LOSTFOCUS ÔåÆ GRDITENSCOL1LOSTFOCUS`; `ValidarPrioridades` ├® PUBLIC. Os 6 cen├írios passaram (rodados dentro da datasession privada do form): tudo zero ÔåÆ `.F.`; `Priors=5` ÔåÆ `.T.` com ponteiro preservado; `Priors=100` ÔåÆ `.F.` posicionando na linha ofensora; `Priors=99` ÔåÆ `.T.`; s├│ `aPriors<>0` ÔåÆ `.T.`. Auditores `VerificarLookupEmKeyPress`, `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora` e `VerificarPropriedadesInexistentes`: nenhum achado. Validador 05d: 0 marcadores, 0 frases proibidas.
+
+Dois pontos para sua decis├úo:
+
+- **Faixa 0..99 em `ValidarPrioridades` n├úo vem do legado.** A `InputMask = "999999"` da c├®lula (transcrita fielmente) aceita 6 d├¡gitos, mas `SigMvCab.priors` ├® `numeric(2,0)`. Sem a checagem, digitar 100 estoura overflow cru do SQL Server no meio da transa├º├úo. O resultado l├¡quido ├® o mesmo do legado (nada ├® gravado), com mensagem leg├¡vel ÔÇö mas ├® um guard que o legado n├úo tem. Posso remover se preferir fidelidade estrita.
+- **Os auditores de schema (`VerificarColunaEmpresaSQL`, `VerificarInsertNotNull`, `VerificarCamposCursorBO`) ainda estavam rodando** quando terminei; os quatro primeiros j├í vieram limpos. N├úo h├í `INSERT` neste BO, ent├úo o risco ├® baixo, mas o resultado desses tr├¬s eu n├úo confirmei.

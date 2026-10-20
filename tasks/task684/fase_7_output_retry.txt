@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGPRTRF.prg` atualizado.
+
+## Por que a tentativa anterior falhou
+
+N├úo foi falta de implementa├º├úo ÔÇö os eventos reais **j├í estavam escritos** (transcritos do dump legado). A falha era de **NOME**: o gate conta handlers com
+
+```powershell
+[regex]::Matches($conteudo, 'PROCEDURE\s+(Cmd|Btn)\w*Click')   # case-SENSITIVE
+```
+
+e os m├®todos tinham sido batizados `cmd_4c_AlteraClick` / `cmd_4c_SairClick` (prefixo **min├║sculo**, copiado do `FormSed`, que ├® o ├║nico outro form do projeto com essa grafia ÔÇö 8 sites contra **8322** `PROCEDURE Btn*Click`). Medido: o regex do gate devolvia **0**; o mesmo regex com `(?i)` devolvia 2. O gate ent├úo reprovava com *"legado sem CRUD, mas o form tem so 0 handler(s) ... (minimo 2)"*.
+
+## O que foi feito
+
+Renomeei os dois handlers para a conven├º├úo dominante, mantendo intactos os nomes dos **objetos** (`cmd_4c_Altera` / `cmd_4c_Sair`, que seguem o PILAR 3 corretamente):
+
+| antes | depois | bot├úo legado |
+|---|---|---|
+| `cmd_4c_AlteraClick` | **`BtnOkClick`** | `altera`, Caption `"\<Ok"` |
+| `cmd_4c_SairClick` | **`BtnCancelarClick"`** | `sair`, Caption `"Cancelar"` |
+
+Atualizados junto: os dois `BINDEVENT` e as 4 refer├¬ncias em coment├írios (incluindo um que j├í dizia `CmdAlteraClick`, revelando que o gerador *pretendia* o prefixo mai├║sculo). Nomes escolhidos pela **a├º├úo** (captions do legado), n├úo pelo nome do objeto legado, e aferidos contra o acervo: `BtnOkClick` 23 sites, `BtnCancelarClick` 817.
+
+## Os 4 `BtnIncluir/Alterar/Visualizar/ExcluirClick` do template n├úo se aplicam
+
+Medido no dump `SIGPRTRF_form_codigo_fonte.txt`: `frmcadastro`/`Grupo_Op` = **0**, nome `btn|cmd(Incluir|Alterar|Visualizar)` = **0**, `pcEscolha` = **0**, `X.CRUD.Click` = **0**, classe base = `form` puro. S├úo exatamente **2** CommandButton. Cri├í-los seria inventar bot├úo (viola o PILAR 1) ou gerar m├®todo vazio (proibido pela regra de completude) ÔÇö e o pr├│prio gate tem a via documentada `legadoSemCrud` para isso.
+
+## Verifica├º├úo
+
+- **Gate Fase 7**: `legadoSemCrud = True`, `nBotoesLegado = 2` ÔåÆ `minHandlersF7 = 2`, `nHandlers = 2` ÔåÆ **passa**.
+- **Completude (05d)**: rodei os tr├¬s detectores reais do validador (marcador `TODO/FIXME/...`, procedure vazia, indicador de pend├¬ncia) sobre o Form e o BO ÔåÆ **zero problemas**. Confirmei que o `"TODO caminho"` da linha 80 n├úo casa (o regex exige o marcador logo ap├│s `*--`).
+- **Compila├º├úo VFP9 real**: `FormSIGPRTRF.prg` e `SIGPRTRFBO.prg` geraram `.fxp` sem nenhum `.err`. Apaguei os `.fxp` antes para n├úo medir c├│digo velho, e removi os artefatos depois.
+- Handlers s├úo **PUBLIC** (regra #3, exig├¬ncia do BINDEVENT); `MontarListaProdutos` no BO ├® PUBLIC (regra #51); `ExibirAnimacaoConfirmacao` ├® PROTECTED e chamada com `THIS.` (regra #8).
+- Nenhuma refer├¬ncia ├│rf├ú aos nomes antigos em `FormSIGPRTRF` (as que aparecem no grep s├úo do `FormSed`, form distinto e n├úo tocado).
+
+Conferi tamb├®m a fidelidade do que j├í existia: o guard `Count to x for Not Empty(Cpros)` ÔåÆ `MsgAviso("Nenhum Produto Informado!!!")` + aborta, e as tr├¬s cores da anima├º├úo (`255`ÔåÆ`RGB(255,0,0)`, `65535`ÔåÆ`RGB(255,255,0)`, `4227072`ÔåÆ`RGB(0,128,64)`, pela f├│rmula `cor = R + G*256 + B*65536`) est├úo corretas.

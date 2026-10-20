@@ -1,0 +1,193 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "Found", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCCO",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor XCorNf (cods n(3),descs c(30),retifs m(8) NULL )\nIndex On cods Tag cods",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO",
+      "evento": "Init",
+      "linhas": 68,
+      "codigoOriginal": "LParameters pForm,Emp,Serie,EmisDe,EmisAte,NFis\nPrivate pcEmps,pcSeries,pcNFis\n\nThisForm.poDataMgr = CreateObject('fSqlConector','SigNfCor')\n\nThisForm.ParentForm = pForm\n\npcEmps    = Emp\npcSeries  = Serie\npcNFis    = NFis\n\nlcQryCorNf = [Select * From SigNfCor ]+;\n \t\t\t  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis = ?pcNFis ]+;\n\t\t      [Order By cemps,cseries,cnfis,noccors ]\n\nlcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]\n\nWith ThisForm.poDataMgr\n\t.AddCursor('SigNfCor','... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "poDataMgr = CreateObject,Requery",
+        "controlesReferenciados": "Get_NotaIni",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Grade.Column3.Edit1",
+      "evento": "KeyPress",
+      "linhas": 17,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\nDo Case\n\tCase nKeyCode = 13 or nKeyCode = 24\n\t\tSelect XCorNf\n\t\tIf !Eof()\n\t\t\tSkip\n\t\tEndIf\n\t\tThisForm.Grade.Refresh\n\tCase nKeyCode = 5 \n\t\tSelect XCorNf\n\t\tIf !Bof()\n\t\t\tSkip -1\n\t\tEndIf\n\t\tThisForm.Grade.Refresh\n\tCase nKeyCode = 9\n\t\tKeyBoard \"{CTRL+TAB}\"\nEndCase",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Sair",
+      "evento": "Click",
+      "linhas": 127,
+      "codigoOriginal": "Private lcEmps,lcSeries,lcNFis,lnOccors, pNot, pTru\n\nIf Not IsEmpty(ThisForm.Get_NotaIni.Value)\n\tpNot = .f.\n\tpTru = .t.\n\n\tllTaOk = .t.\nSuspend\n\n\tlcQuery = [Delete From SigNfCor ] + ;\n\t\t\t   [Where CEmps = '] + Padr(ThisForm.Emp, 3) + [' And ] + ;\n\t\t\t   \t\t [CSeries = '] + Padr(ThisForm.Serie, 3) + [' And ] + ;\n\t\t\t   \t\t [CNfis = '] + Padr(ThisForm.Get_NotaIni.Value, 6) + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexã... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Commit,RollBack,Update",
+        "controlesReferenciados": "Get_NotaIni",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Get_NotaIni",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCCO.Get_NotaIni",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tSelect XCorNf\n\tZap\n\tSelect CrSigNfCor\n\tpcEmps    = ThisForm.Emp\n\tpcSeries  = ThisForm.Serie\n\tpcNFisDe  = This.Value\n\tThisForm.poDataMgr.Requery('CrSigNfCor')\n\tSelect CrSigNfCor\n\tGo Top\n\tIf !Eof()\n\t\tSelect CrSigCcOco\n\t\tScan\n\t\t\tInsert Into XCorNf (cods,descs,retifs) ;\n\t\t\tValues (CrSigCcOco.ncodigos,CrSigCcOco.cdescrs,'')\n\t\tEndScan\n\t\tSelect CrSigNfCor\n\t\tScan\n\t\t\tIf Seek(CrSigNfCor.noccors,'XCorNf.cods','cods')\n\t\t\t\tReplace XCorNf.retifs With CrSigNfCor.mretifs\n\t\t\tEndIf\n\t\t\tSel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCCO.Init",
+      "queryOriginal": "lcQryCorNf = [Select * From SigNfCor ]+; \t\t\t  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis = ?pcNFis ]+; \t\t      [Order By cemps,cseries,cnfis,noccors ]",
+      "tabelas": "SigNfCor",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCCO.Init",
+      "queryOriginal": "lcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCCO.Sair.Click",
+      "queryOriginal": "\tlcQuery = [Delete From SigNfCor ] + ; \t\t\t   [Where CEmps = '] + Padr(ThisForm.Emp, 3) + [' And ] + ; \t\t\t   \t\t [CSeries = '] + Padr(ThisForm.Serie, 3) + [' And ] + ; \t\t\t   \t\t [CNfis = '] + Padr(ThisForm.Get_NotaIni.Value, 6) + [']",
+      "tabelas": "SigNfCor",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCCO.Get_NotaIni.Valid",
+      "queryOriginal": "\t\t\tInsert Into XCorNf (cods,descs,retifs) ; \t\t\tValues (CrSigCcOco.ncodigos,CrSigCcOco.cdescrs,'')",
+      "tabelas": "XCorNf",
+      "colunas": "cods,descs,retifs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigNfCor", "SigCdEmp", "XCorNf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

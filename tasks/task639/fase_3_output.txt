@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks structurally sound ÔÇö balanced TRY/CATCH/ENDTRY, WITH/ENDWITH, and PROCEDURE/ENDPROC blocks, single ENDDEFINE.
+
+Phase 3/8 complete: created `C:\4c\projeto\app\forms\operacionais\Formsigopacc.prg` as a flat OPERACIONAL dialog (no PageFrame, matching the SIGOPACC legacy layout which has no Lista/Dados split), following the established pattern from `FormSigMvAte.prg`:
+
+- `Init(par_oFormPai, par_cOperacao, par_nTpAltera, par_cPkChaves)` ÔÇö stores the legacy `pOldForm/Oper/pTpAltera` context (reusing `FormBase.this_cModoAtual` instead of inventing a new property) plus an explicit PK parameter instead of depending on an external positioned cursor, creates the `sigopaccBO`, and delegates to `DODEFAULT()`.
+- `InicializarForm()` ÔÇö sets the caption (`Proper(Oper) + " Lancamento de Conta Corrente"`, accented via `CHR(231)`), calls `ConfigurarPageFrame()`, propagates the title to the header labels, and makes the tree visible.
+- `ConfigurarPageFrame()` ÔÇö orchestrator stub calling only `ConfigurarCabecalho()` for now.
+- `ConfigurarCabecalho()` ÔÇö the gray header band (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`), with canonical values (not the legacy's stale `Width=800`).
+- `AlternarPagina`/`AjustarBotoesPorModo` ÔÇö deliberate no-ops (PUBLIC, for `TesteAutomatico.prg` contract compatibility) since this dialog has no page/mode switching.
+- `TornarControlesVisiveis` ÔÇö standard recursive visibility fixup.
+
+Fields (Data/Documento/Grupo/Conta/Moeda/Job/Historico), the Acerto OptionGroup, and the Cmd_Confirma/Cmd_Cancela buttons are intentionally deferred to Fases 4-8, per the phase scope.

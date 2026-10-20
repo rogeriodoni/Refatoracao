@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. Arquivo modificado: `C:\4c\projeto\app\forms\operacionais\FormSIGPRTFH.prg` (+133 linhas).
+
+## O que a Fase 6 pedia vs. o que o legado tem
+
+**Campos restantes: nada a acrescentar.** Conferi objeto a objeto contra `layout.json`: os 29 objetos do SCX (9 TextBox + 9 Label de dados + cabe├ºalho + `Shape2` + `Container1` com 4 labels + grupo `SAIDA`) j├í foram todos criados nas Fases 3/5. Os 9 TextBox do migrado correspondem aos 9 do legado.
+
+**Lookups: o legado n├úo tem nenhum.** Medido no dump pelos 5 padr├Áes Fortyus (`fwbusca` ÔÇö cobre Ext/Sel/Int ÔÇö, `mAddColuna`, `sigacess(`, `Acesso<...>(`, `FormBuscaAuxiliar`): **zero ocorr├¬ncias**. E os 9 `Get*` t├¬m `PROCEDURE When / Return(.f.)` ÔÇö campo que n├úo aceita digita├º├úo n├úo tem onde o usu├írio digitar c├│digo para um picker resolver. Inventar lookup aqui violaria o PILAR 1 e a regra "NUNCA inventar tabelas de lookup".
+
+## O que entreguei no lugar
+
+`ValidarParametros()` (PUBLIC, regras #3/#51), a confer├¬ncia dos argumentos que o protocolo SiTef exige ÔÇö exatamente os que o legado passa ├á DLL em `SAIDA.GotFocus`: `pcIP`/`pcPos` (`ConfiguraIntSiTefInterativo`) e `pcInicio` (`IniciaFuncaoSiTefInterativo`). Mensagens s├úo **as do pr├│prio legado** ("Sem comunica├º├úo com SiTef" do GotFocus; "Fornecida uma Modalidade Inv├ílida" do `errotef` ÔêÆ3), nenhuma inventada. N├úo grava arquivo de retorno nem abre di├ílogo ÔÇö o legado ├® silencioso nesse ponto; o veredito fica em `this_lParametrosValidos` para o handler do GotFocus (Fase 7) gravar a falha no mesmo momento em que o legado gravaria. Tem o bypass can├┤nico `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`. Deixei `pcCaixa`/`pcCupom` fora: o legado n├úo os condiciona.
+
+## Defeito pr├®-existente que travava a tela (corrigido)
+
+A tela **n├úo abria em m├íquina nenhuma sem o integrador SiTef**, e provei que era anterior ├á minha edi├º├úo (rodei o probe com o arquivo da Fase 5: mesmo erro). `DECLARE ... IN "CliSiTef32I.DLL"` **carrega a biblioteca na hora**; dentro do TRY do `SIGPRTFHBO.Init` isso devolvia `.F.` ÔåÆ `CREATEOBJECT` do BO devolvia `.F.` ÔåÆ `InicializarForm` devolvia `.F.` ÔåÆ `CREATEOBJECT("FormSIGPRTFH")` devolvia `.F.`, exibindo s├│ `VARTYPE retornou: L`.
+
+Toquei o BO (fora do escopo nominal da fase, mas sem isso a entrega da fase n├úo ├® verific├ível): os `DECLARE` em TRY gravando `this_lSiTefDisponivel`, e os 4 wrappers da DLL testando a flag e devolvendo o valor de falha que o pr├│prio legado trata (`.F.`/`.F.`/`-1`/`-1`) ÔÇö chamar fun├º├úo n├úo declarada faria o VFP procurar `<nome>.prg` no PATH (regra #13). Resultado: a tela **abre** e diz "Sem comunica├º├úo com SiTef" em vez de n├úo abrir.
+
+## Verifica├º├úo executada
+
+- `COMPILE` do BO e do Form: sem `.ERR`, `.FXP` gerado (apaguei os `.fxp` antes).
+- Instancia├º├úo real no VFP9: `INSTANCIOU OK ControlCount=22`; `ValidarParametros` existe e ├® PUBLIC (`PEMSTATUS(...,2) = .F.`).
+- Todos os ramos exercitados: IP vazio e POS vazio ÔåÆ "Sem comunica├º├úo com SiTef"; modalidade `0` e n├úo-num├®rica ÔåÆ "Fornecida uma Modalidade Inv├ílida"; completo ÔåÆ `.T.`; bypass ModoTeste ÔåÆ `.T.`.
+- Auditores do projeto: `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes` e `Test-CompletudeCodigo` (05d) ÔÇö todos OK nos dois arquivos.
+- Gate da Fase 6: **passa pelo ramo CAPTURA** (legado sem lista estrita, sem lookup, campos n├úo vinculados; migrado com 9/9 campos, `InicializarForm`, `PROCEDURE Validar*` e BINDEVENT). Os ramos VISUALIZADOR e FLAT exigiriam `.ControlSource =` ÔÇö este legado n├úo tem binding algum, e inventar um violaria o PILAR 2.
+
+Dois pontos para voc├¬ decidir:
+
+- **`mapeamento.json` divergente**: o JSON mapeia `Shape2 ÔåÆ shp_4c_Shape2`, mas o form criou `shp_4c_Painel`. Isso quebra o `ValidarUIFidelity` nesse objeto. N├úo mexi (├® artefato da Fase 3) ÔÇö diga se quer que alinhe.
+- **MEMORY.md**: o hook pediu compactar para <17,1 KB. Removi as caudas explicativas e linhas vazias (21,1 ÔåÆ 20,2 KB) preservando os 253 ponteiros. Os ~14 KB restantes s├úo nomes de arquivo: chegar a 17,1 KB exige **descartar ~45 mem├│rias**, e isso ├® sua decis├úo, n├úo minha.

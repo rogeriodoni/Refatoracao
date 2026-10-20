@@ -94,7 +94,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -125,7 +127,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -165,7 +169,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -200,7 +206,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Verifica")
-                TABLEREVERT(.T., "cursor_4c_Verifica")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Verifica") > 1
+                    TABLEREVERT(.T., "cursor_4c_Verifica")
+                ENDIF
                 USE IN cursor_4c_Verifica
             ENDIF
 
@@ -367,7 +375,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ItensTemp")
-                TABLEREVERT(.T., "cursor_4c_ItensTemp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ItensTemp") > 1
+                    TABLEREVERT(.T., "cursor_4c_ItensTemp")
+                ENDIF
                 USE IN cursor_4c_ItensTemp
             ENDIF
 
@@ -446,7 +456,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_GruposTemp")
-                TABLEREVERT(.T., "cursor_4c_GruposTemp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_GruposTemp") > 1
+                    TABLEREVERT(.T., "cursor_4c_GruposTemp")
+                ENDIF
                 USE IN cursor_4c_GruposTemp
             ENDIF
 
@@ -673,7 +685,9 @@ DEFINE CLASS PrmBO AS BusinessBase
                            " WHERE a.CBars = " + ALLTRIM(par_cCodigo)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_BuscaEtq")
-                    TABLEREVERT(.T., "cursor_4c_BuscaEtq")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_BuscaEtq") > 1
+                        TABLEREVERT(.T., "cursor_4c_BuscaEtq")
+                    ENDIF
                     USE IN cursor_4c_BuscaEtq
                 ENDIF
 
@@ -699,7 +713,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaProd")
-                TABLEREVERT(.T., "cursor_4c_BuscaProd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaProd") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaProd")
+                ENDIF
                 USE IN cursor_4c_BuscaProd
             ENDIF
 
@@ -742,7 +758,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaProd")
-                TABLEREVERT(.T., "cursor_4c_BuscaProd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaProd") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaProd")
+                ENDIF
                 USE IN cursor_4c_BuscaProd
             ENDIF
 
@@ -783,7 +801,9 @@ DEFINE CLASS PrmBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaCol")
-                TABLEREVERT(.T., "cursor_4c_BuscaCol")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaCol") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaCol")
+                ENDIF
                 USE IN cursor_4c_BuscaCol
             ENDIF
 

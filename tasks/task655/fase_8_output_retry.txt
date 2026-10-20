@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete and the gate passes for the right structural reason. Here's what was actually wrong and what I did.
+
+## The gate, not the form
+
+The form was already complete; the gate was unsatisfiable for this layout. Measured with `automation/VerificarGateFase8Task655.ps1` (AST-only ÔÇö dot-sourcing the orchestrator fires a real migration):
+
+- `BtnCancelarClick` was the hard blocker. The legacy's second button is `btnsair` ("Encerrar", `Click = ThisForm.Release`); renaming its handler to `BtnCancelarClick` would make the name lie, and inventing the method is a stub.
+- `CarregarLista` was passing **only** because the header comment spelled the name ÔÇö the gate checks these by bare substring. A latent false-pass. I elided the names in that comment (`Carregar...Lista`), so it now honestly reports missing.
+- None of the 12 existing exception branches reach this shape: it has editable fields (not despachante), they're not read-only (not exibicao/visualizador), there's no list at all (not fluxo-unico/linha-imediata), 2 buttons (not calculadora/entrada-sem-botao), no DLL, no OLE, no `Do Form` (**not** filtro-despacho), and nothing is persisted (**not** leitor-baixa).
+
+So I added the 13th branch, **RETORNO-AO-PAI**: a child dialog whose action writes the selection back into the *parent form's controls* and closes. Fail-closed on six summed proofs plus a new `Test-LegadoRetornoAoPai` helper (Init takes the caller and type-checks it; a `Click` block both assigns to `ThisForm.ParentForm.<x>` and closes). Dispensation is partial ÔÇö only `BtnCancelarClick`/`CarregarLista`; `FormParaBO`/`BOParaForm` stay required with anchored regexes.
+
+Breadth measured across all 654 dumps: 7 pass the helper, **1 passes the full predicate** (this form). All 8 sibling `VerificarGateFase8Task*` scripts still PASS ÔÇö zero regression.
+
+## One fidelity bug worth your attention
+
+While exercising `BOParaForm` I found a genuine divergence. The legacy's two `Valid` handlers do:
+
+```foxpro
+ThisForm.getRgConjuges.Value = crListaRemota.Rgs   && Rgs, n├úo RgConjuges
+```
+
+It **searches** `SigCdCli.RgConjuges` (spouse's RG) but **displays** `SigCdCli.Rgs` (account holder's RG). I confirmed `Rgs` really is in that cursor: `fwBuscaExt.Init` falls back to `select *` when the caller omits `lcFields` (12th param), and the SCX passes only 7. The migrated BO was mapping `RgConjuges` ÔÇö different data in a user-visible field.
+
+Per regra #17 / PILAR 1 I transcribed the legacy (added `this_cRgs`, `Rgs` in the SELECT, mapped it) and commented it loudly in both files. **This looks like a legacy bug** ÔÇö searching one column and showing another is incoherent for a block labeled "Dados do C├┤njuge". I reproduced it rather than "improving" it, but if the business wants the spouse's RG shown there, that's a one-line change and your call.
+
+## Verified, not assumed
+
+A VFP9 probe (`automation/ProbeCcj655F8.prg`) instantiates the form with the 5 legacy parameters against a simulated parent form ÔÇö **PROBE_OK** on 10 checks, including the core behavior: `BtnConfirmarClick` writes all three values plus the return flag into the parent's named controls and closes. It also confirms the Init refuses to open without a valid caller, exactly like the legacy guard.
+
+Two of my probe's initial assertions were wrong, not the form: `AtualizarEstadoCampoConjuge` is legitimately PROTECTED (only internal `THIS.` callers, not a BINDEVENT target), and the legacy `When` is deliberately rendered as `.ReadOnly`. I corrected the probe.
+
+Also clean: gate PASSA, SQL-schema validator PASSOU (683 tables ÔÇö read with the right encoding), completude OK on form and BO, `COMPILE` 0 errors on form/BO/menu, and six project audits (orphan functions, lookup-in-KeyPress, PROTECTED-from-outside, nonexistent properties, FormBuscaAuxiliar, Format/InputMask) report nothing for this form. Menu integration added as BAR 158/159 + `AbrirFormSigOpCcj`, following the `AbrirFormSigOpAlC` precedent for this same child-dialog family.
+
+One note: `05_migracao` is still `IN_PROGRESS` in `task_state.json`. That's the orchestrator's own state and it was interrupted mid-run, so I left it alone ÔÇö it should continue from step 05b.

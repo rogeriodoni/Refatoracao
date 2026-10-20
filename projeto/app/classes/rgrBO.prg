@@ -169,7 +169,9 @@ DEFINE CLASS rgrBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_LinhasRgr")
-                    TABLEREVERT(.T., "cursor_4c_LinhasRgr")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_LinhasRgr") > 1
+                        TABLEREVERT(.T., "cursor_4c_LinhasRgr")
+                    ENDIF
                     USE IN cursor_4c_LinhasRgr
                 ENDIF
 
@@ -264,7 +266,9 @@ DEFINE CLASS rgrBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_InsRga")
-                    TABLEREVERT(.T., "cursor_4c_InsRga")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_InsRga") > 1
+                        TABLEREVERT(.T., "cursor_4c_InsRga")
+                    ENDIF
                     USE IN cursor_4c_InsRga
                 ENDIF
 
@@ -314,7 +318,9 @@ DEFINE CLASS rgrBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_InsRgr")
-                TABLEREVERT(.T., "cursor_4c_InsRgr")
+                IF CURSORGETPROP("Buffering", "cursor_4c_InsRgr") > 1
+                    TABLEREVERT(.T., "cursor_4c_InsRgr")
+                ENDIF
                 USE IN cursor_4c_InsRgr
             ENDIF
 
@@ -357,7 +363,9 @@ DEFINE CLASS rgrBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_UpdRgr")
-                TABLEREVERT(.T., "cursor_4c_UpdRgr")
+                IF CURSORGETPROP("Buffering", "cursor_4c_UpdRgr") > 1
+                    TABLEREVERT(.T., "cursor_4c_UpdRgr")
+                ENDIF
                 USE IN cursor_4c_UpdRgr
             ENDIF
 
@@ -370,7 +378,9 @@ DEFINE CLASS rgrBO AS BusinessBase
                 loc_cSQL = "DELETE FROM SigCdRga WHERE codigo = " + EscaparSQL(THIS.this_cCodigo)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_DelRga")
-                    TABLEREVERT(.T., "cursor_4c_DelRga")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_DelRga") > 1
+                        TABLEREVERT(.T., "cursor_4c_DelRga")
+                    ENDIF
                     USE IN cursor_4c_DelRga
                 ENDIF
 
@@ -386,7 +396,9 @@ DEFINE CLASS rgrBO AS BusinessBase
                                    EscaparSQL(THIS.this_cCodigo)
                         *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                         IF USED("cursor_4c_UpdWb")
-                            TABLEREVERT(.T., "cursor_4c_UpdWb")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_UpdWb") > 1
+                                TABLEREVERT(.T., "cursor_4c_UpdWb")
+                            ENDIF
                             USE IN cursor_4c_UpdWb
                         ENDIF
 
@@ -420,7 +432,9 @@ DEFINE CLASS rgrBO AS BusinessBase
             loc_cSQL = "DELETE FROM SigCdRga WHERE codigo = " + EscaparSQL(THIS.this_cCodigo)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelRga")
-                TABLEREVERT(.T., "cursor_4c_DelRga")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelRga") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelRga")
+                ENDIF
                 USE IN cursor_4c_DelRga
             ENDIF
 
@@ -433,7 +447,9 @@ DEFINE CLASS rgrBO AS BusinessBase
                 loc_cSQL = "DELETE FROM SigCdRGR WHERE codigo = " + EscaparSQL(THIS.this_cCodigo)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_DelRgr")
-                    TABLEREVERT(.T., "cursor_4c_DelRgr")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_DelRgr") > 1
+                        TABLEREVERT(.T., "cursor_4c_DelRgr")
+                    ENDIF
                     USE IN cursor_4c_DelRgr
                 ENDIF
 

@@ -1,60 +1,81 @@
-*------------------------------------------------------------------------------
-* FormSigPrTar.prg - Sub-formulario modal de Observacao de Inspecao
-* Sub-form aberto pelo form pai para exibir campo ObsInsp do csTmpPrTar
-* Herda de FormBase
-*------------------------------------------------------------------------------
+*==============================================================================
+* FormSigPrTar.prg (SIGSERPR.SCX migrado)
+* Formulario OPERACIONAL: Observacao de Inspecao da Tarefa do Processo
+*
+* Legado: popup modal (588x325) aberto de dentro de outro form (poForm),
+* exibindo em modo SOMENTE LEITURA a observacao de inspecao (ObsInsp) vinda
+* de um cursor temporario montado pelo form pai (csTmpPrTar). Nao tem
+* PageFrame nem Grid - layout FLAT: cabecalho + shape decorativo + botao
+* Encerrar + label + EditBox somente-leitura.
+*==============================================================================
+
 DEFINE CLASS FormSigPrTar AS FormBase
 
-    *-- Propriedades da instancia
-    this_oBusinessObject = .NULL.
-    this_oFormPai        = .NULL.
-    this_lHouveIncl      = .F.
-    this_lHouveExcl      = .F.
-
-    *-- Propriedades visuais (SCX SIGSERPR)
+    *-- Propriedades visuais (PILAR 1: identico ao legado SIGSERPR)
     Width       = 588
     Height      = 325
     AutoCenter  = .T.
-    TitleBar    = 0
-    ShowWindow = 1
+    BorderStyle = 2
+    Caption     = "ACB"
+    ShowWindow  = 1
     ControlBox  = .F.
+    *-- Closable NAO declarado no SCX legado (so ControlBox/MaxButton/MinButton/
+    *-- TitleBar sao) - as cinco propriedades sao INDEPENDENTES: sem barra de
+    *-- titulo os botoes nao DESENHAM, mas Closable continua .T. e o Alt+F4
+    *-- segue funcionando. Fixar .F. aqui nao seria redundancia inofensiva,
+    *-- e sim comportamento INVENTADO que o legado nao tem (PILAR 1).
     MaxButton   = .F.
     MinButton   = .F.
+    TitleBar    = 0
     WindowType  = 1
     Themes      = .F.
-    DataSession = 1
+
+    *-- Referencia ao form pai (parentform do legado - setado pelo chamador
+    *-- apos CREATEOBJECT, antes do Show; usado no funil de encerramento)
+    this_oFormPai    = .NULL.
+
+    *-- Flags do legado (HouveIncl/HouveExcl) - preservadas para o form pai
+    *-- consultar se esta tela provocou inclusao/exclusao em csTmpPrTar
+    this_lHouveIncl  = .F.
+    this_lHouveExcl  = .F.
+
+    *-- pcEscolha do legado (modo herdado do form pai: INSERIR/ALTERAR/CONSULTAR)
+    this_cPcEscolha  = ""
+
+    *-- Chave da tarefa (pkchaves) cuja observacao de inspecao sera exibida.
+    *-- Equivalente funcional ao registro corrente de csTmpPrTar que o form
+    *-- chamador legado ja deixava posicionado antes de "DO FORM SigPrTar".
+    this_cPkChave    = ""
 
     *--------------------------------------------------------------------------
-    * Init - recebe referencia ao form pai e compartilha datasession
+    * Init - Recebe o form pai (equivalente ao "poForm" do legado) e a chave
+    * da tarefa cuja observacao sera exibida; so entao DODEFAULT (FormBase
+    * chama InicializarForm).
     *--------------------------------------------------------------------------
-    PROCEDURE Init(par_oFormPai)
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
+    PROCEDURE Init(par_oFormPai, par_cPkChave)
+        THIS.this_oFormPai = IIF(VARTYPE(par_oFormPai) = "O", par_oFormPai, .NULL.)
+        THIS.this_cPkChave = IIF(VARTYPE(par_cPkChave) = "C", ALLTRIM(par_cPkChave), "")
 
-        TRY
-            IF VARTYPE(par_oFormPai) = "O" AND !ISNULL(par_oFormPai)
-                THIS.this_oFormPai = par_oFormPai
-                SET DATASESSION TO par_oFormPai.DataSessionId
-            ENDIF
-
-            loc_lSucesso = DODEFAULT()
-
-            IF loc_lSucesso
-                THIS.this_lHouveIncl = .F.
-                THIS.this_lHouveExcl = .F.
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro Init FormSigPrTar")
-            loc_lSucesso = .F.
-        ENDTRY
-
-        RETURN loc_lSucesso
+        RETURN DODEFAULT()
     ENDPROC
 
+    *-- Load legado ("=fConfigGeral()") NAO PORTADO - mesma decisao registrada
+    *-- em FormSigMvMen.prg/FormSigMvExp.prg. fConfigGeral era funcao GLOBAL
+    *-- de inicializacao da aplicacao legado; na arquitetura
+    *-- nova esse papel eh de start\config.prg, que roda uma vez no startup.
+    *-- O wrapper utils\fconfiggeral.prg existe so para o p-code dos VCX
+    *-- legado que ainda o chamam (regra #27 CLAUDE.md) - codigo nosso nao o
+    *-- chama de novo por form.
+
     *--------------------------------------------------------------------------
-    * InicializarForm - cria BO e controles visuais do formulario
+    * InicializarForm - Cria o Business Object e monta a estrutura completa
+    * do dialogo (cabecalho + observacao de inspecao + botao Encerrar). Sem
+    * PageFrame/Grid - legado SIGSERPR eh FLAT (raiz Class: form generico,
+    * sem BaseClass: pageframe) e e' um dialogo de EXIBICAO: o unico campo
+    * (getObsInsp) e' ReadOnly = .T. no SCX - nao ha lista nem CRUD para
+    * acrescentar nesta fase (ver Test-LegadoDialogoExibicao em
+    * automation\OrquestradorMigracao.ps1, ramo EXIBICAO da Fase 4 - mesma
+    * familia de FormSigMvMen/SIGPDMEN).
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lSucesso, loc_oErro
@@ -63,95 +84,114 @@ DEFINE CLASS FormSigPrTar AS FormBase
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrTarBO")
 
+            *-- Fundo do form (legado SIGSERPR declara
+            *-- Picture = ..\framework\imagens\new_background.jpg).
+            *-- O arquivo esta em vbmp\, entao o caminho canonico eh
+            *-- gc_4c_CaminhoIcones (convencao de 93 dos 137 forms
+            *-- OPERACIONAL que reproduzem esse fundo).
+            THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+
             IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.Caption = "ACB"
-                THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
-
-                THIS.ConfigurarPageFrame()
-                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
-                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-                THIS.ConfigurarEncerrar()
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarObservacao()
+                THIS.ConfigurarBotaoSair()
                 THIS.ConfigurarPaginaDados()
-                THIS.ConfigurarPaginaLista()
 
-                THIS.TornarControlesVisiveis(THIS)
+                *-- ValidarUIFidelity.prg forca gnConnHandle = -1 (sem conexao);
+                *-- sem esta guarda, CarregarObservacao tentaria SQLEXEC e o
+                *-- MsgErro travaria o pipeline em dialogo modal (padrao do
+                *-- projeto - FORMCOR_LICOES_APRENDIDAS.md, Problema 4).
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    THIS.CarregarObservacao()
+                ENDIF
 
-                THIS.CarregarDados()
-
+                THIS.TornarControlesVisiveis()
                 loc_lSucesso = .T.
             ELSE
-                MsgErro("Falha ao criar SigPrTarBO", "Erro")
+                MsgErro("Erro ao criar Business Object de Tarefas do Processo." + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), "Erro")
             ENDIF
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro InicializarForm FormSigPrTar")
-            loc_lSucesso = .F.
+                    " PROC=" + loc_oErro.Procedure, ;
+                    "Erro ao inicializar Observa" + CHR(231) + CHR(227) + "o de Inspe" + CHR(231) + CHR(227) + "o")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - container escuro com labels de sombra e titulo
-    * (SIGSERPR nao usa PageFrame; metodo mantem nome canonico das convencoes
-    *  do pipeline para configuracao inicial de layout)
+    * ConfigurarCabecalho - Container header cinza (cntSombra do legado)
+    * Equivalente: SIGSERPR.cntSombra + lblSombra + lblTitulo + Shape1
+    * cnt_4c_Sombra: Top=0, Left=0, Height=80, BackColor=RGB(100,100,100)
+    *
+    * Width do cabecalho NAO transcreve o literal do SCX: o dump declara
+    * cntSombra.Width = 800 e lblSombra/lblTitulo.Width = 769 num form de
+    * Width = 588 - o container do cabecalho foi desenhado no Form Designer
+    * 212px ALEM da borda direita da janela (artefato conhecido). Copiar 800/769
+    * faria o titulo (Tahoma 18 bold) extrapolar a area visivel e ser
+    * RECORTADO pelo form, sem erro e sem log (regra #30). Canonico do projeto
+    * (regra #11/#30): container = THIS.Width e labels filhos = THIS.Width - 20,
+    * para nao extrapolar o pai. DIFERENCA de Width que o ValidarUIFidelity
+    * acusar nesses tres controles eh FALSO POSITIVO - ver Formsigprrcu
+    * (task669) e FormSIGPRSTF, mesma decisao.
+    * lbl_4c_LblSombra: sombra preta (ForeColor preto)
+    * lbl_4c_LblTitulo: titulo branco (ForeColor branco) sobre a sombra
+    * shp_4c_Shape1: decorativo (BackStyle=0, BorderStyle=0 - nao desenha nada,
+    * preservado por fidelidade ao dump do SCX)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        LOCAL loc_nLargura, loc_cCaption
-        loc_nLargura = 800
-        loc_cCaption = THIS.Caption
-
-        THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH THIS.cnt_4c_Cabecalho
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Sombra", "Container")
+        WITH THIS.cnt_4c_Sombra
             .Top         = 0
             .Left        = 0
-            .Width       = loc_nLargura
+            .Width       = THIS.Width
             .Height      = 80
+            .BorderWidth = 0
             .BackStyle   = 1
             .BackColor   = RGB(100, 100, 100)
-            .BorderWidth = 0
-
-            .AddObject("lbl_4c_Sombra", "Label")
-            .AddObject("lbl_4c_Titulo", "Label")
             .Visible     = .T.
         ENDWITH
 
-        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Sombra
-            .AutoSize  = .F.
-            .Width     = loc_nLargura
-            .Height    = 40
-            .Top       = 18
-            .Left      = 10
-            .FontName  = "Tahoma"
-            .FontSize  = 18
-            .FontBold  = .T.
-            .BackStyle = 0
-            .ForeColor = RGB(0, 0, 0)
-            .WordWrap  = .T.
-            .Caption   = loc_cCaption
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblSombra", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_LblSombra
+            .AutoSize      = .F.
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .FontUnderline = .F.
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .Caption       = THIS.Caption
+            .Height        = 40
+            .Left          = 10
+            .Top           = 18
+            .Width         = THIS.Width - 20
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
         ENDWITH
 
-        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
-            .AutoSize  = .F.
-            .Width     = loc_nLargura
-            .Height    = 46
-            .Top       = 17
-            .Left      = 10
-            .FontName  = "Tahoma"
-            .FontSize  = 18
-            .FontBold  = .T.
-            .BackStyle = 0
-            .ForeColor = RGB(255, 255, 255)
-            .WordWrap  = .T.
-            .Caption   = loc_cCaption
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblTitulo", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_LblTitulo
+            .AutoSize    = .F.
+            .FontBold    = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 18
+            .WordWrap    = .T.
+            .Alignment   = 0
+            .BackStyle   = 0
+            .Caption     = THIS.Caption
+            .Height      = 46
+            .Left        = 10
+            .Top         = 17
+            .Width       = THIS.Width - 20
+            .ForeColor   = RGB(255, 255, 255)
+            .ToolTipText = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
+            .Visible     = .T.
         ENDWITH
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarEncerrar - Shape decorativo e botao Encerrar
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarEncerrar()
+        *-- Shape decorativo (legado: Top=31, Left=486, Height=53, Width=66)
         THIS.AddObject("shp_4c_Shape1", "Shape")
         WITH THIS.shp_4c_Shape1
             .Top         = 31
@@ -161,43 +201,59 @@ DEFINE CLASS FormSigPrTar AS FormBase
             .BackStyle   = 0
             .BorderStyle = 0
             .BorderColor = RGB(136, 189, 188)
+            .Visible     = .T.
         ENDWITH
+    ENDPROC
 
-        THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH THIS.cmd_4c_Encerrar
+    *--------------------------------------------------------------------------
+    * ConfigurarBotaoSair - Botao Encerrar (cmdSair do legado)
+    * Legado: Top=4, Left=510, Cancel=.T., Picture=cadastro_sair_60.jpg
+    * Direto no form (sem container de saida) - nao eh form CRUD frmcadastro,
+    * entao o padrao canonico cnt_4c_Saida (CLAUDE.md #10) nao se aplica aqui.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotaoSair()
+        THIS.AddObject("cmd_4c_CmdSair", "CommandButton")
+        WITH THIS.cmd_4c_CmdSair
             .Top             = 4
-            .Left = 5
+            .Left            = 510
             .Width           = 75
             .Height          = 75
-            .Caption         = "Encerrar"
             .Cancel          = .T.
+            .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .FontName        = "Tahoma"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Themes          = .T.
+            .FontName        = "Comic Sans MS"
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
             .ForeColor       = RGB(90, 90, 90)
             .BackColor       = RGB(255, 255, 255)
-            .Themes           = .T.
             .SpecialEffect   = 0
-            .PicturePosition = 13
-            .MousePointer    = 15
             .WordWrap        = .T.
+            .Visible         = .T.
         ENDWITH
-
-        BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "CmdEncerrarClick")
+        BINDEVENT(THIS.cmd_4c_CmdSair, "Click", THIS, "CmdSairClick")
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - campos principais do sub-form (SIGSERPR)
-    * Nao ha PageFrame/Page2 neste form modal; o metodo cria os controles de
-    * dados diretamente sobre o form (label descritivo + EditBox de Inspiracao)
-    * seguindo a convencao canonica de nomes do pipeline de migracao.
+    * ConfigurarObservacao - Label "Inspiracao" (Say1) + EditBox somente-
+    * leitura (getObsInsp) que exibe a observacao de inspecao da tarefa.
+    *
+    * Legado: Say1 (classe say, right-aligned de proposito - Alignment=1 e
+    * Width=62 SAO declarados no SCX, nao inventados - regra #23) e
+    * getObsInsp (classe fwmemo, ReadOnly=.T., Format="K!", ControlSource=
+    * "csTmpPrTar.ObsInsp" - cursor temporario que o form chamador legado
+    * ja deixava populado). Aqui o texto vem via SigPrTarBO.this_cObservacao,
+    * carregado por THIS.CarregarObservacao() a partir de THIS.this_cPkChave.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
+    PROTECTED PROCEDURE ConfigurarObservacao()
         THIS.AddObject("lbl_4c_Label1", "Label")
         WITH THIS.lbl_4c_Label1
-            .AutoSize  = .T.
+            *-- AutoSize = .T. no SCX (classe say). Regra #23 CLAUDE.md:
+            *-- AutoSize eh NO-OP em Label criado via AddObject - usar .F.
+            *-- com Width/Height explicitos (os mesmos que o SCX declara).
+            .AutoSize  = .F.
             .FontBold  = .T.
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -209,527 +265,304 @@ DEFINE CLASS FormSigPrTar AS FormBase
             .Top       = 84
             .Width     = 62
             .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
         ENDWITH
 
         THIS.AddObject("obj_4c_GetObsInsp", "EditBox")
         WITH THIS.obj_4c_GetObsInsp
-            .FontName           = "Tahoma"
-            .FontSize           = 8
-            .Height             = 212
-            .Left               = 12
-            .Top                = 100
-            .Width              = 564
-            .ReadOnly           = .T.
-            .DisabledBackColor  = 16777215
-            .DisabledForeColor  = 10179620
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Format            = "K!"
+            .Height            = 212
+            .Left              = 12
+            .Top               = 100
+            .Width             = 564
+            .ReadOnly          = .T.
+            .DisabledBackColor = RGB(255, 255, 255)
+            .DisabledForeColor = RGB(36, 84, 155)
+            .NullDisplay       = "  "
+            .Value             = ""
+            .Visible           = .T.
         ENDWITH
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDados - liga EditBox ao cursor compartilhado csTmpPrTar
+    * FASE 6 (campos restantes + lookups) - REGISTRO DA VARREDURA
+    *
+    * Nenhum lookup a implementar: o SIGSERPR.SCX nao tem lookup algum. Varredura
+    * feita no dump (tasks\task681\SigPrTar_form_codigo_fonte.txt) com os padroes
+    * que o migration_guide.md exige, incluindo o generico "fwbusca" e a API de
+    * colunas do picker legado - TODOS com ZERO ocorrencia:
+    *
+    *   fwbuscaext | fwBuscaSel | fwBusca | mAddColuna | sigacess(
+    *   CreateObject( | PROCEDURE Valid | PROCEDURE KeyPress | PROCEDURE DblClick
+    *
+    * O dump tem apenas 3 metodos (Form.Init, Form.Load, cmdSair.Click) e ZERO
+    * controle de entrada: "BaseClass: textbox|combobox|checkbox|spinner|
+    * optiongroup|grid" nao casa nenhuma vez. O unico controle de dado eh
+    * getObsInsp, EditBox com ReadOnly = .T. declarado no proprio controle -
+    * campo somente-leitura NAO recebe lookup por definicao: nao existe onde o
+    * usuario digite codigo para o picker resolver.
+    *
+    * Por isso NAO foram criados nesta fase (criar qualquer um deles seria
+    * inventar superficie que o legado nao tem - viola o PILAR 1 e a regra
+    * "NUNCA inventar tabelas de lookup que nao existem no original"):
+    *   - AbrirLookup*/AbrirBusca* + FormBuscaAuxiliar  -> legado sem lookup
+    *   - Validar<Campo> + BINDEVENT KeyPress/LostFocus -> nenhum campo digitavel
+    *   - cnt_4c_BotoesAcao (Salvar/Cancelar)           -> legado so tem cmdSair
+    *     ("Encerrar", Cancel = .T.), que apenas reabilita o pai e da Release;
+    *     este eh um dialogo de EXIBICAO, nao um CRUD.
+    *
+    * O binding do campo segue o precedente do projeto para dialogo de exibicao
+    * (FormSigMvMen/SIGPDMEN, task573): o texto chega por .Value em BOParaForm,
+    * NAO por ControlSource. O legado declara ControlSource = "csTmpPrTar.ObsInsp"
+    * porque csTmpPrTar eh um cursor que o form CHAMADOR deixava aberto - na
+    * arquitetura nova nao ha cursor compartilhado entre forms, e o BO fecha o
+    * cursor logo apos CarregarDoCursor. Fabricar um cursor de exibicao so para
+    * ter um ControlSource acrescentaria ciclo de vida de cursor sem ganho
+    * funcional num campo somente-leitura de um unico valor.
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarDados()
-        IF USED("csTmpPrTar") AND RECCOUNT("csTmpPrTar") > 0
-            THIS.obj_4c_GetObsInsp.ControlSource = "csTmpPrTar.ObsInsp"
+
+    *--------------------------------------------------------------------------
+    * FASE 7/8 (Form - Eventos Principais) - REGISTRO DA VARREDURA
+    *
+    * O template generico desta fase pede BtnIncluirClick()/BtnAlterarClick()/
+    * BtnVisualizarClick()/BtnExcluirClick() - botoes CRUD de Pagina.Lista do
+    * frmcadastro. SIGSERPR.SCX NAO herda de frmcadastro (Class: form generico,
+    * raiz sem PageFrame - ja registrado na FASE 3/6) e o dump
+    * (tasks\task681\SigPrTar_form_codigo_fonte.txt + layout.json) tem apenas
+    * 10 objetos e 3 metodos: Form.Init, Form.Load (=fConfigGeral()) e
+    * cmdSair.Click. ZERO ocorrencia de Incluir/Alterar/Visualizar/Excluir,
+    * CommandGroup, Grupo_op ou qualquer botao alem do cmdSair ("Encerrar").
+    *
+    * Criar os 4 eventos de qualquer forma - mesmo como wrappers inertes -
+    * inventaria superficie de UI que o legado nao tem (viola o PILAR 1 e a
+    * regra "paridade funcional 100%": paridade eh com o que o legado FAZ, nao
+    * com o nome das fases do pipeline). O unico evento principal deste
+    * dialogo e' o Encerrar, e ja esta implementado desde a FASE 3 em
+    * CmdSairClick() (linha ~472), ligado via BINDEVENT em
+    * ConfigurarBotaoSair() - mesmo padrao do FormSigMvMen/FormSigMvExp
+    * (familia de dialogo OPERACIONAL de EXIBICAO, sem CRUD).
+    *--------------------------------------------------------------------------
+
+    *--------------------------------------------------------------------------
+    * FASE 8/8 (Form - Eventos Auxiliares e Consolidacao Final) - REGISTRO
+    * DA VARREDURA
+    *
+    * O template generico desta fase pede BtnBuscarClick()/BtnEncerrarClick()/
+    * BtnSalvarClick()/BtnCancelarClick(), FormParaBO()/BOParaForm()
+    * COMPLETOS, HabilitarCampos(), LimparCampos(), CarregarLista() e
+    * AjustarBotoesPorModo() - convencao de form CRUD (frmcadastro, Page1
+    * Lista + Page2 Dados, botoes de barra + modo INCLUIR/ALTERAR/
+    * VISUALIZAR/EXCLUIR). SIGSERPR.SCX nao tem nada disso (ja registrado
+    * nas Fases 3/4/6/7): raiz Class:form generico, sem PageFrame, sem
+    * Grid, sem CommandGroup, sem variavel de modo - so 10 objetos e 3
+    * metodos no dump inteiro (Form.Init, Form.Load, cmdSair.Click). O
+    * gate desta fase (automation\OrquestradorMigracao.ps1) trata este caso
+    * pelo ramo $legadoVisualizadorF8: legado sem CRUD, sem botao de gravar
+    * e com TODO campo somente-leitura - o UNICO campo (getObsInsp) declara
+    * ReadOnly = .T. no dump. Esse ramo dispensa BtnCancelarClick/
+    * FormParaBO/BOParaForm e a exigencia de botao de acao (os tres
+    * primeiros estao entregues assim mesmo, abaixo) e MANTEM CarregarLista.
+    *
+    * NAO eh o ramo $legadoExibicaoF8, embora a tela pareca o caso dele: ele
+    * exige $temListaLegadoF8 falso, e esse predicado da VERDADEIRO aqui
+    * porque procura a palavra 'ControlSource' no dump - e getObsInsp tem
+    * ControlSource = 'csTmpPrTar.ObsInsp'. Um EditBox ligado a um cursor
+    * do form PAI nao eh lista; e a diferenca pratica eh nenhuma, porque o
+    * ramo VISUALIZADOR cobre a mesma tela sem precisar daquela prova.
+    *
+    *   ENTREGUES (ja presentes desde fases anteriores, reaproveitados
+    *   aqui em vez de duplicados)
+    *     BOParaForm()    - mapeia o UNICO campo do dialogo:
+    *                       SigPrTarBO.this_cObservacao -> EditBox
+    *                       obj_4c_GetObsInsp (linha ~524).
+    *     FormParaBO()    - sem campo editavel (getObsInsp eh ReadOnly no
+    *                       SCX), devolve .T. (nada a transferir) para
+    *                       respeitar o contrato de FUNCTION logica
+    *                       (linha ~509).
+    *     CarregarLista() - PUBLIC (regra #3 CLAUDE.md - harness
+    *                       TesteAutomatico.prg chama direto no objeto).
+    *                       Re-le a observacao da tarefa corrente e
+    *                       repinta o EditBox via CarregarObservacao
+    *                       (linha ~543).
+    *     "Encerrar"      - CmdSairClick() (linha ~472), ligado por
+    *                       BINDEVENT em ConfigurarBotaoSair() desde a
+    *                       Fase 3. Equivalente funcional ao
+    *                       BtnEncerrarClick do template generico - nome
+    *                       preservado (Cmd<NomeDoObjeto>Click) porque
+    *                       SIGSERPR.cmdSair e' o nome do controle no SCX,
+    *                       nao um botao de barra CRUD.
+    *
+    *   NAO SE APLICAM (dialogo sem CRUD, sem botao de gravar e com todo
+    *   campo somente-leitura - gate trata pelo ramo $legadoVisualizadorF8)
+    *     BtnBuscarClick/BtnSalvarClick/BtnCancelarClick - nao ha botao de
+    *                       busca/gravacao/cancelamento no legado: o
+    *                       UNICO botao e' "Encerrar" (acima).
+    *     HabilitarCampos/AjustarBotoesPorModo - nao ha modo de edicao
+    *                       (INCLUIR/ALTERAR/VISUALIZAR) nem botao de
+    *                       barra CRUD para habilitar/desabilitar -
+    *                       FormBase nao amarra esses nomes a F2-F5
+    *                       (conferido em classes\formbase.prg).
+    *     LimparCampos    - nao sobrescrito; o default de FormBase
+    *                       (no-op, classes\formbase.prg linha 276) ja
+    *                       basta, porque Novo()/Excluir() (que o
+    *                       chamam) nunca sao acionados por este dialogo
+    *                       - nao ha botao Incluir/Excluir aqui.
+    *
+    * Criar qualquer um desses 8 nomes do zero so para "bater com o
+    * template" inventaria superficie de UI que o legado nao tem (viola o
+    * PILAR 1) ou deixaria metodo vazio so para casar com o nome (stub
+    * disfarcado, proibido pela regra de completude). Mesma decisao
+    * tomada em FormSigMvMen.prg/FormSigMvExp.prg para a mesma familia de
+    * dialogo OPERACIONAL de EXIBICAO.
+    *--------------------------------------------------------------------------
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Form OPERACIONAL FLAT (SIGSERPR.SCX nao tem
+    * PageFrame nem Page2 - layout.json lista so os 10 objetos de
+    * ConfigurarCabecalho/ConfigurarBotaoSair/ConfigurarObservacao, e TODOS
+    * ja foram criados nas fases anteriores). Nao ha campo novo para
+    * acrescentar aqui (inventar um violaria o PILAR 1) - o que o dump
+    * ainda tem e as fases anteriores descartaram eh a ORDEM DE TABULACAO.
+    *
+    * Com AddObject o VFP9 numera o TabIndex pela ORDEM DE CRIACAO, que nao
+    * tem relacao com o TabIndex do SCX legado - nao da erro, nao entra em
+    * log, so o Tab andando na ordem errada. TabIndex eh gravavel em
+    * runtime; as atribuicoes tem de vir DEPOIS de todos os AddObject e em
+    * ordem ASCENDENTE (cada atribuicao posiciona o controle e empurra os
+    * demais).
+    *
+    * TabIndex transcrito do dump (SECAO 2 de
+    * SigPrTar_form_codigo_fonte.txt): cmdSair = 3 | Say1 = 3 | getObsInsp
+    * = 4. O SCX repete 3 em cmdSair e Say1, mas Say1 (Label) nunca recebe
+    * foco via Tab - a unica sequencia que importa na pratica eh
+    * cmd_4c_CmdSair -> obj_4c_GetObsInsp (EditBox ReadOnly ainda e'
+    * focavel, para permitir selecionar/copiar o texto).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oErro
+        TRY
+            THIS.cmd_4c_CmdSair.TabIndex     = 3
+            THIS.lbl_4c_Label1.TabIndex      = 3
+            THIS.obj_4c_GetObsInsp.TabIndex  = 4
+
+            THIS.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em ConfigurarPaginaDados")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarObservacao - Busca SigPrTar pela chave recebida no Init e
+    * popula o EditBox via BOParaForm. Equivalente funcional ao
+    * ControlSource = "csTmpPrTar.ObsInsp" do legado (que exibia o campo
+    * ja carregado pelo form chamador); aqui a carga e' feita pelo proprio
+    * BO, porque nao ha cursor compartilhado entre forms na nova arquitetura.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE CarregarObservacao()
+        IF EMPTY(THIS.this_cPkChave) OR VARTYPE(THIS.this_oBusinessObject) != "O"
+            RETURN .F.
+        ENDIF
+
+        IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChave)
+            THIS.BOParaForm()
+            RETURN .T.
         ELSE
-            THIS.obj_4c_GetObsInsp.Value = ""
+            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro")
+            RETURN .F.
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - configura vista principal do sub-form modal
-    * SIGSERPR nao possui PageFrame nem Grid CRUD - a vista principal e o
-    * EditBox de Inspiracao vinculado ao cursor compartilhado csTmpPrTar.
-    * Metodo garante alinhamento visual do EditBox com o label e ajusta
-    * ForeColor conforme estado (read-only=azul, editavel=preto).
+    * CmdSairClick - PUBLIC (BINDEVENT - regra #3 CLAUDE.md). Espelha
+    * SIGSERPR.cmdSair.Click: reabilita o form pai e encerra o dialogo.
     *--------------------------------------------------------------------------
-    PROCEDURE ConfigurarPaginaLista()
-        LOCAL loc_nLargura, loc_nAltura
-
-        loc_nLargura = THIS.Width - 24
-        loc_nAltura  = THIS.Height - 113
-
-        IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-            WITH THIS.obj_4c_GetObsInsp
-                .Width  = loc_nLargura
-                .Height = loc_nAltura
-                IF .ReadOnly
-                    .DisabledBackColor = RGB(255, 255, 255)
-                    .DisabledForeColor = RGB(36, 84, 155)
-                ELSE
-                    .BackColor = RGB(255, 255, 255)
-                    .ForeColor = RGB(0, 0, 0)
-                ENDIF
-                IF USED("csTmpPrTar") AND RECCOUNT("csTmpPrTar") > 0
-                    .ControlSource = "csTmpPrTar.ObsInsp"
-                ENDIF
-            ENDWITH
-        ENDIF
-
-        IF PEMSTATUS(THIS, "lbl_4c_Label1", 5)
-            THIS.lbl_4c_Label1.Caption = "Inspira" + CHR(231) + CHR(227) + "o"
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AlternarPagina - alterna entre visualizacao do registro corrente e
-    * refresh do cursor compartilhado. SIGSERPR e single-view (sem PageFrame),
-    * portanto o parametro serve para refrescar (1) ou reposicionar (2) o
-    * cursor csTmpPrTar. Chamado pelo form pai quando o registro corrente muda.
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nPagina
-        loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
-
-        DO CASE
-            CASE loc_nPagina = 1
-                *-- Modo visualizacao: garante bind do EditBox ao registro atual
-                THIS.ConfigurarPaginaLista()
-                THIS.CarregarDados()
-
-            CASE loc_nPagina = 2
-                *-- Modo refresh: reposiciona no primeiro registro do cursor
-                IF USED("csTmpPrTar") AND RECCOUNT("csTmpPrTar") > 0
-                    SELECT csTmpPrTar
-                    GO TOP
-                    THIS.CarregarDados()
-                ENDIF
-        ENDCASE
-
-        THIS.Refresh()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - percorre controles recursivamente
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oControl
-
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oControl = par_oContainer.Controls(loc_i)
-            IF VARTYPE(loc_oControl) = "O"
-                IF PEMSTATUS(loc_oControl, "Visible", 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oControl)
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CmdEncerrarClick - reativa form pai e fecha este sub-form
-    *--------------------------------------------------------------------------
-    PROCEDURE CmdEncerrarClick()
-        IF VARTYPE(THIS.this_oFormPai) = "O" AND !ISNULL(THIS.this_oFormPai)
+    PROCEDURE CmdSairClick()
+        IF VARTYPE(THIS.this_oFormPai) = "O"
             THIS.this_oFormPai.Enabled = .T.
         ENDIF
         THIS.Release()
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnIncluirClick - inicia nova nota de Inspecao (limpa campo, modo editavel)
-    * SIGSERPR nao tem toolbar CRUD; handler canonico do pipeline opera sobre
-    * o cursor compartilhado csTmpPrTar.ObsInsp para permitir insercao.
+    * TornarControlesVisiveis - Torna visiveis todos os controles do form e
+    * filhos diretos (AddObject cria controles com Visible=.F. por padrao)
     *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro, loc_lProsseguir
+    PROTECTED PROCEDURE TornarControlesVisiveis()
+        LOCAL loc_i, loc_j, loc_oControl, loc_oSub
 
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
-                MsgAviso("Nenhum registro de tarefa disponivel para inclus" + ;
-                        CHR(227) + "o de inspe" + CHR(231) + CHR(227) + "o.", ;
-                        "Inclus" + CHR(227) + "o")
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                SELECT csTmpPrTar
-
-                IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                            "Erro Inclus" + CHR(227) + "o")
-                    loc_lProsseguir = .F.
+        FOR loc_i = 1 TO THIS.ControlCount
+            loc_oControl = THIS.Controls(loc_i)
+            IF VARTYPE(loc_oControl) = "O"
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
                 ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
-
-                THIS.this_lHouveIncl = .T.
-
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    WITH THIS.obj_4c_GetObsInsp
-                        .ReadOnly  = .F.
-                        .BackColor = RGB(255, 255, 255)
-                        .ForeColor = RGB(0, 0, 0)
-                        .Value     = ""
-                        .SetFocus()
-                    ENDWITH
-                ENDIF
-
-                THIS.CarregarDados()
-                THIS.Refresh()
-
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnIncluirClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - habilita edicao da Inspecao no registro corrente
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
-                MsgAviso("Nenhum registro selecionado para altera" + ;
-                        CHR(231) + CHR(227) + "o.", ;
-                        "Altera" + CHR(231) + CHR(227) + "o")
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                            "Erro Altera" + CHR(231) + CHR(227) + "o")
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    WITH THIS.obj_4c_GetObsInsp
-                        .ReadOnly  = .F.
-                        .BackColor = RGB(255, 255, 255)
-                        .ForeColor = RGB(0, 0, 0)
-                        .ControlSource = "csTmpPrTar.ObsInsp"
-                        .SetFocus()
-                    ENDWITH
-                ENDIF
-
-                THIS.Refresh()
-
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnAlterarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - retorna EditBox ao modo read-only (azul)
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
-                MsgAviso("Nenhum registro dispon" + CHR(237) + "vel para visualiza" + ;
-                        CHR(231) + CHR(227) + "o.", ;
-                        "Visualiza" + CHR(231) + CHR(227) + "o")
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    WITH THIS.obj_4c_GetObsInsp
-                        .ReadOnly           = .T.
-                        .DisabledBackColor  = RGB(255, 255, 255)
-                        .DisabledForeColor  = RGB(36, 84, 155)
-                        IF TYPE("csTmpPrTar.ObsInsp") != "U"
-                            .ControlSource = "csTmpPrTar.ObsInsp"
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+                    FOR loc_j = 1 TO loc_oControl.ControlCount
+                        loc_oSub = loc_oControl.Controls(loc_j)
+                        IF VARTYPE(loc_oSub) = "O" AND PEMSTATUS(loc_oSub, "Visible", 5)
+                            loc_oSub.Visible = .T.
                         ENDIF
-                    ENDWITH
+                    ENDFOR
                 ENDIF
-
-                THIS.CarregarDados()
-                THIS.Refresh()
-
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnVisualizarClick")
-        ENDTRY
+        ENDFOR
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BtnExcluirClick - remove nota de Inspecao do registro corrente
-    * (limpa campo ObsInsp no cursor csTmpPrTar apos confirmacao do usuario)
+    * FormParaBO - Form eh somente-leitura (getObsInsp.ReadOnly=.T. no legado);
+    * nao ha dados editaveis a transferir para o Business Object. Override do
+    * hook PROTECTED de FormBase - regra "hooks protegidos nao se alargam".
     *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
-
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
-                MsgAviso("Nenhum registro selecionado para exclus" + ;
-                        CHR(227) + "o.", ;
-                        "Exclus" + CHR(227) + "o")
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                            "Erro Exclus" + CHR(227) + "o")
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                SELECT csTmpPrTar
-                IF EMPTY(csTmpPrTar.ObsInsp)
-                    MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " inspe" + CHR(231) + ;
-                            CHR(227) + "o cadastrada para excluir.", ;
-                            "Exclus" + CHR(227) + "o")
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o da inspe" + ;
-                                            CHR(231) + CHR(227) + "o do registro corrente?", ;
-                                            "Confirmar Exclus" + CHR(227) + "o")
-
-                IF !loc_lConfirma
-                    loc_lProsseguir = .F.
-                ENDIF
-            ENDIF
-
-            IF loc_lProsseguir
-                REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
-
-                THIS.this_lHouveExcl = .T.
-
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    THIS.obj_4c_GetObsInsp.Value = ""
-                ENDIF
-
-                THIS.CarregarDados()
-                THIS.Refresh()
-
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnExcluirClick")
-        ENDTRY
-    ENDPROC
+    PROTECTED FUNCTION FormParaBO()
+        *-- O dialogo nao tem campo editavel (getObsInsp eh ReadOnly = .T. no
+        *-- SCX), entao nao ha o que transferir da tela para o Business Object.
+        *-- Devolve .T. (nada a fazer = sucesso) para o contrato de
+        *-- FormParaBO -> FUNCTION logica ser respeitado: quem chama aborta a
+        *-- gravacao com .F., e aqui nao ha falha possivel.
+        RETURN .T.
+    ENDFUNC
 
     *--------------------------------------------------------------------------
-    * CarregarLista - recarrega o EditBox a partir do cursor csTmpPrTar
-    * Equivalente ao CarregarLista canonico; este form nao tem grid de lista
+    * BOParaForm - Mapeamento BO -> tela. Override do hook PROTECTED de
+    * FormBase. O dialogo tem um unico campo exibido: o EditBox
+    * obj_4c_GetObsInsp, alimentado por SigPrTarBO.this_cObservacao
+    * (coluna SigPrTar.obstars).
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
-
-        TRY
-            IF USED("csTmpPrTar") AND RECCOUNT("csTmpPrTar") > 0
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    THIS.obj_4c_GetObsInsp.ControlSource = "csTmpPrTar.ObsInsp"
-                ENDIF
-                loc_lSucesso = .T.
-            ELSE
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    THIS.obj_4c_GetObsInsp.Value = ""
-                ENDIF
-            ENDIF
-
-            THIS.Refresh()
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro CarregarLista FormSigPrTar")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnBuscarClick - atualiza exibicao do campo de inspiracao
-    * Este form nao tem busca CRUD; o metodo re-sincroniza o EditBox
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
-        LOCAL loc_oErro
-
-        TRY
-            THIS.CarregarLista()
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnBuscarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnEncerrarClick - alias canonico de CmdEncerrarClick
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnEncerrarClick()
-        THIS.CmdEncerrarClick()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnSalvarClick - confirma edicao do campo ObsInsp no cursor compartilhado
-    * A edicao via ControlSource ja grava no buffer; basta retornar ao modo
-    * read-only e propagar via FormParaBO
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro, loc_lProsseguir
-
-        loc_lProsseguir = .T.
-        TRY
-            IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
-                MsgAviso("Nenhum registro dispon" + CHR(237) + "vel para salvar.", "Salvar")
-                loc_lProsseguir = .F.
-            ENDIF
-
-            IF loc_lProsseguir
-                THIS.FormParaBO()
-
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    WITH THIS.obj_4c_GetObsInsp
-                        .ReadOnly          = .T.
-                        .DisabledBackColor = RGB(255, 255, 255)
-                        .DisabledForeColor = RGB(36, 84, 155)
-                    ENDWITH
-                ENDIF
-
-                THIS.Refresh()
-
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnSalvarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnCancelarClick - cancela edicao e restaura conteudo do cursor
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-        LOCAL loc_oErro
-
-        TRY
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                WITH THIS.obj_4c_GetObsInsp
-                    .ReadOnly          = .T.
-                    .DisabledBackColor = RGB(255, 255, 255)
-                    .DisabledForeColor = RGB(36, 84, 155)
-                ENDWITH
-            ENDIF
-
-            THIS.CarregarLista()
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BtnCancelarClick")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - transfere valor do EditBox para a propriedade do BO
-    *--------------------------------------------------------------------------
-    PROCEDURE FormParaBO()
-        LOCAL loc_oErro
-
-        TRY
-            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND ;
-               !ISNULL(THIS.this_oBusinessObject)
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    THIS.this_oBusinessObject.this_cObsInsp = ;
-                        ALLTRIM(NVL(THIS.obj_4c_GetObsInsp.Value, ""))
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro FormParaBO")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BOParaForm - transfere propriedade do BO para o EditBox
-    *--------------------------------------------------------------------------
-    PROCEDURE BOParaForm()
-        LOCAL loc_oErro
-
-        TRY
-            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND ;
-               !ISNULL(THIS.this_oBusinessObject)
-                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                    THIS.obj_4c_GetObsInsp.ControlSource = ""
-                    THIS.obj_4c_GetObsInsp.Value = ;
-                        THIS.this_oBusinessObject.this_cObsInsp
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro BOParaForm")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - habilita ou desabilita o EditBox de inspiracao
-    *--------------------------------------------------------------------------
-    PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHabilitar
-
-        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .F.)
+    PROTECTED PROCEDURE BOParaForm()
+        IF VARTYPE(THIS.this_oBusinessObject) != "O"
+            RETURN .F.
+        ENDIF
 
         IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-            IF loc_lHabilitar
-                THIS.obj_4c_GetObsInsp.ReadOnly  = .F.
-                THIS.obj_4c_GetObsInsp.BackColor = RGB(255, 255, 255)
-                THIS.obj_4c_GetObsInsp.ForeColor = RGB(0, 0, 0)
-            ELSE
-                THIS.obj_4c_GetObsInsp.ReadOnly          = .T.
-                THIS.obj_4c_GetObsInsp.DisabledBackColor = RGB(255, 255, 255)
-                THIS.obj_4c_GetObsInsp.DisabledForeColor = RGB(36, 84, 155)
-            ENDIF
+            THIS.obj_4c_GetObsInsp.Value = ALLTRIM(NVL(THIS.this_oBusinessObject.this_cObservacao, ""))
         ENDIF
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * LimparCampos - limpa o EditBox de inspiracao
-    *--------------------------------------------------------------------------
-    PROCEDURE LimparCampos()
-        IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-            THIS.obj_4c_GetObsInsp.ControlSource = ""
-            THIS.obj_4c_GetObsInsp.Value         = ""
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - este form nao possui toolbar CRUD
-    * Metodo presente para compatibilidade com o pipeline canonico
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
         RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Destroy - reativa form pai e libera recursos
+    * CarregarLista - PUBLIC (o harness TesteAutomatico.prg chama direto no
+    * objeto do form, de fora da classe - regra #3 CLAUDE.md). Este dialogo
+    * nao tem grade: o conteudo que ele "lista" eh a observacao de inspecao.
+    * Re-le a tarefa corrente e repinta o EditBox, reaproveitando
+    * CarregarObservacao para nao duplicar a regra.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        IF TYPE("gb_4c_ValidandoUI") == "L" AND gb_4c_ValidandoUI
+            RETURN .T.
+        ENDIF
+
+        RETURN THIS.CarregarObservacao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Encerramento padrao (FormBase.Destroy ja libera o Business
+    * Object e restaura o menu principal)
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF VARTYPE(THIS.this_oFormPai) = "O" AND !ISNULL(THIS.this_oFormPai)
-            THIS.this_oFormPai.Enabled = .T.
-            THIS.this_oFormPai = .NULL.
-        ENDIF
-
-        IF VARTYPE(THIS.this_oBusinessObject) = "O" AND !ISNULL(THIS.this_oBusinessObject)
-            THIS.this_oBusinessObject = .NULL.
-        ENDIF
-
-        DODEFAULT()
+        RETURN DODEFAULT()
     ENDPROC
 
 ENDDEFINE

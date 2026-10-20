@@ -1,0 +1,348 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 13,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fVerificaPasta", "File", "fConfigGeral", "Fase + Conta + Str", "fwBuscaExt", "fAcessoContab", "fDtoSQL", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCFA",
+      "evento": "Procedure",
+      "linhas": 55,
+      "codigoOriginal": "LParameters lcSaida\n\nCreate Cursor TmpCabec (Titulo c(100), SubTitulo c(100), Empresa c(100))\n\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\n\nlcTitulo \t= 'Falhas por Fase'\nlcSubTitulo = 'Material : ' + Alltrim(This.Get_Mat.Value) + ' - ' + Alltrim(This.Get_DMat.Value) + Chr(13) + ;\n\t\t\t  'Período : ' + Dtoc(This.Get_Datai.Value) + ' - ' + Dtoc(This.Get_Dataf.Value)\nlcEmpresa   = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\n\nInsert Into TmpCabec (Empresa, Titulo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaPasta,File",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Mat,Get_DMat,Get_Datai,Get_Dataf,optImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Get_Datai.Value = Date()\n\t\t.Get_Dataf.Value = Date()\n\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Datai,Get_Dataf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCFA",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor TmpSaldo (Fase c(10), Conta c(10), Rclis c(40), Entradas n(12,2), Saidas n(12,2), Pesagems n(12,2), ;\n\t\tFReals n(12,2), FAdmins n(12,2), fTotals n(12,2), Seqs c(1), pFalhas n(8,2), IndProds n(12,3), Codigos n(6), Datas d)\nIndex On Seqs + Fase + Conta + Str(Codigos,6) Tag SeqFase\nIndex On Fase + Conta + Str(Codigos) Tag Fase\n\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,Fase + Conta + Str",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_Mat",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'CPros', This.Value, 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.Get_Mat.Value  = crListaRemota.CPros\n\tThis.Parent.Get_DMat.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThis.Parent.Get_Mat.Value  = ''\n\tThis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Mat,Get_DMat",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_Dgrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'D',This.Value,ThisForm.get_grupo,ThisForm.get_Dgrupo)\nElse\n\tThisForm.get_grupo.Value = ''\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_Dgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_Dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Visualizar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Impressão('V')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressão",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Excel",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Impressão('E')\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressão",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_DMat",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', This.Value, 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.Get_Mat.Value  = crListaRemota.CPros\n\tThis.Parent.Get_DMat.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThis.Parent.Get_Mat.Value  = ''\n\tThis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Mat,Get_DMat",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_DMat",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Get_Mat.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Mat",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Processa",
+      "evento": "Click",
+      "linhas": 113,
+      "codigoOriginal": "Private pDtI, pDtF\n\nlcCodMat  = ThisForm.Get_Mat.Value\nldDataIni = ThisForm.Get_Datai.Value\nldDataFim = ThisForm.Get_Dataf.Value\nlcGrupo   = ThisForm.Get_Grupo.Value\nlcConta   = Thisform.Get_Conta.value\n\nIf Empty(ThisForm.Get_Mat.Value)\n\t=Messagebox('O Produto Deve Ser Informado!!!', 32, '')\n\tThisForm.Get_Mat.SetFocus\n\tReturn 0\nEndIf\n\nIf (ldDataFim < ldDataIni)\n\t=Messagebox('Data Final Deve Ser Maior Que a Data Inicial!!!', 32, '')\n\tThisForm.Get_Mat.SetFocus\n\tReturn 0\nEndIf\n\nSelect TmpSaldo \nSet... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Mat,Get_Datai,Get_Dataf,Get_Grupo,Get_Conta,optImp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Grade",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.Get_Descr.Value = TmpSaldo.Rclis\nThisForm.Get_Descr.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Saida",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_Descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_grupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(this.Value)\n\tIf Not fAcessoContab(Usuar, 'C', This.Value, This, thisform.get_DGrupo, .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 32, '')\n\t\tThisForm.Get_Grupo.Value = ''\n\t\tThisForm.Get_DGrupo.Value = ''\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_DGrupo,Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_conta",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, ThisForm.Get_Grupo.Value, 'C', This.Value, ThisForm.Get_Conta, ThisForm.Get_DConta, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 32, '')\n\t\tThisForm.Get_Conta.Value  = ''\n\t\tThisForm.Get_dConta.Value = ''\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_dConta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, ThisForm.Get_Grupo.Value, 'D', This.Value, ThisForm.Get_Conta, ThisForm.Get_DConta, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 32, '')\n\t\tThisForm.Get_Conta.Value = ''\n\t\tThisForm.Get_dConta.Value = ''\n\tEndIf\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Get_dConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFA.Imprimir",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Impressão('I')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressão",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCFA.Procedure",
+      "queryOriginal": "Insert Into TmpCabec (Empresa, Titulo... [TRUNCADO]",
+      "tabelas": "TmpCabec",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpCabec"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

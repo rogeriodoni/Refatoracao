@@ -50,7 +50,9 @@ DEFINE CLASS COCBO AS BusinessBase
             loc_cSQL = "SELECT TitOpcS, TitOpcN, TitOpcA FROM SigCdPac"
 
             IF USED("cursor_4c_Params")
-                TABLEREVERT(.T., "cursor_4c_Params")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Params") > 1
+                    TABLEREVERT(.T., "cursor_4c_Params")
+                ENDIF
                 USE IN cursor_4c_Params
             ENDIF
 
@@ -97,7 +99,9 @@ DEFINE CLASS COCBO AS BusinessBase
             loc_cSQL = loc_cSQL + " ORDER BY Codigos"
 
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -129,7 +133,9 @@ DEFINE CLASS COCBO AS BusinessBase
                        " WHERE Codigos = " + EscaparSQL(ALLTRIM(par_cCodigo))
 
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -190,7 +196,9 @@ DEFINE CLASS COCBO AS BusinessBase
                        " ORDER BY Codigos"
 
             IF USED("cursor_4c_BuscaGrupo")
-                TABLEREVERT(.T., "cursor_4c_BuscaGrupo")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaGrupo") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaGrupo")
+                ENDIF
                 USE IN cursor_4c_BuscaGrupo
             ENDIF
 
@@ -220,7 +228,9 @@ DEFINE CLASS COCBO AS BusinessBase
                        " WHERE Codigos = " + EscaparSQL(ALLTRIM(par_cCodigo))
 
             IF USED("cursor_4c_ChkExiste")
-                TABLEREVERT(.T., "cursor_4c_ChkExiste")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkExiste") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkExiste")
+                ENDIF
                 USE IN cursor_4c_ChkExiste
             ENDIF
 

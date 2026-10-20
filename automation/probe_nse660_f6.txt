@@ -1,0 +1,30 @@
+=== PROBE Fase 6 - FormSIGPRNSE (task660) ===
+1) CREATEOBJECT -> VARTYPE=O Width=1021 Height=699 ControlCount=20
+   txt_4c_CEmps=.T. txt_4c_DEmps=.T. grade=.T.
+   ObterFiltroAcessoEmpresas=.T. CarregarUniversoEmpresas=.T. ResolverEmpresa=.T. AbrirBuscaEmpresaExec=.T.
+2) escopos (Protected=.T. significa inacessivel de fora):
+   ValidarEmpresaCEmps       Prot=.F. esperado .F.
+   ValidarEmpresaDEmps       Prot=.F. esperado .F.
+   CEmpsDblClick             Prot=.F. esperado .F.
+   DEmpsDblClick             Prot=.F. esperado .F.
+   AjustarCamposDependentes  Prot=.F. esperado .F.
+   AbrirBuscaEmpresa         Prot=.F. esperado .F.
+   ResolverEmpresa           Prot=.F. esperado .F.
+   BtnDirsClick              Prot=.F. esperado .F.
+   ObterFiltroAcessoEmpresas Prot=.T. esperado .T.
+   CarregarUniversoEmpresas  Prot=.T. esperado .T.
+   AbrirBuscaEmpresaExec     Prot=.T. esperado .T.
+3) KeyPress com tecla 65 (nao eh Enter/Tab/F4):
+   CEmps=[0] esperado [0]   DEmps=[RESIDUO] esperado [RESIDUO]
+4) Enter com o codigo VAZIO:
+   CEmps vazio=.T.   DEmps vazio=.T. ambos esperados .T.
+5) guarda de reentrancia ligada (nenhum picker pode abrir):
+   CEmps=[001] esperado [001]   DEmps=[MANTIDO] esperado [MANTIDO]   flag ainda ligada=.T. esperado .T.
+5b) apos um ciclo completo do funil (corpo falha sem conexao):
+   flag liberada=.T. esperado .T.
+6) When de getDEmps aplicado por ReadOnly:
+   codigo preenchido -> DEmps.ReadOnly=.T. esperado .T.
+   codigo vazio      -> DEmps.ReadOnly=.F. esperado .F.   Dirs.ReadOnly=.T. esperado .T.
+7) ObterFiltroAcessoEmpresas() sem conexao -> VARTYPE=C esperado C   valor=[]
+
+PROBE_OK

@@ -49,7 +49,9 @@ DEFINE CLASS RecBO AS BusinessBase
                        " ORDER BY grupos"
 
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -80,7 +82,9 @@ DEFINE CLASS RecBO AS BusinessBase
                        " WHERE grupos = " + EscaparSQL(par_cGrupos)
 
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -234,7 +238,9 @@ DEFINE CLASS RecBO AS BusinessBase
                        " WHERE grupos = " + EscaparSQL(par_cGrupos)
 
             IF USED("cursor_4c_ChkCod")
-                TABLEREVERT(.T., "cursor_4c_ChkCod")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkCod") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkCod")
+                ENDIF
                 USE IN cursor_4c_ChkCod
             ENDIF
 
@@ -278,7 +284,9 @@ DEFINE CLASS RecBO AS BusinessBase
             ENDIF
 
             IF USED("cursor_4c_BuscaGcr")
-                TABLEREVERT(.T., "cursor_4c_BuscaGcr")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaGcr") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaGcr")
+                ENDIF
                 USE IN cursor_4c_BuscaGcr
             ENDIF
 

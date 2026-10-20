@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 is complete, compiled clean, and verified by instantiation. Here's what I found and delivered.
+
+## The phase's literal scope was empty ÔÇö and that was the finding
+
+Fase 5 asks for "the first 50% of the Page2 TextBoxes and Labels." The legacy `SIGPRSLP.SCX` object tree has **zero data TextBoxes or Labels** ÔÇö only `cntSombra` (+2 title labels), two grids, and four buttons. All already delivered in Fases 3ÔÇô4. So I did not invent fields the legacy doesn't have (PILAR 1); I documented that in the method header and delivered the data area that actually exists.
+
+## What `ConfigurarPaginaDados()` was
+
+It was defined, had a guard-only body, and **was never called by anything**. I made it a real implementation and wired it into `InicializarForm`.
+
+## The real defect this uncovered (measured in VFP9)
+
+The itens grid is the data area, and it was silently destroyed on every list change. `BuscarItensDaLista` does `USE IN` + `SQLEXEC` on the alias **while the grid is still bound to it**. I reproduced the damage with a probe:
+
+```
+[4] bind inicial:          C1.CC=[CHECK1] C1.Sparse=.F. C1.W=22 C3.W=290 C3.hdr=[Descri├º├úo do Produto] C4.mask=[999,999,999.99] Check1existe=.T.
+[5] cursor RECRIADO:       C1.CC=[Text1]  C1.Sparse=.T. C1.W=7  C3.W=28  C3.hdr=[Dpros]                C4.mask=[]              Check1existe=.F.
+[6] apos o contrato:       C1.CC=[CHECK1] C1.Sparse=.F. C1.W=22 C3.W=290 C3.hdr=[Descri├º├úo do Produto] C4.mask=[999,999,999.99] Check1existe=.T.
+```
+
+From the **second list selected onward** the grid showed raw column names (`Dpros`), 7px columns, no masks, and **no checkbox** ÔÇö so nothing could be marked, which is the whole purpose of the dialog. No error, no log.
+
+The non-obvious part: reapplying properties is not enough. `Check1existe` goes `.T. ÔåÆ .F.` ÔÇö the cursor recreation rebuilds the `Column` objects and **destroys the AddObject'd CheckBox**. My first contract version restored widths/headers/masks but left `CurrentControl=Text1`; `GarantirCheckBoxItens()` re-creates the control and re-binds its 5 handlers (`When` + the 4 Pattern #185 toggle handlers), guarded so bindings happen once per instance.
+
+## Three transcription defects fixed in the same area
+
+| Defect | Was | Legacy / fix |
+|---|---|---|
+| `cmd_4c_Encerrar.Left` | `5` | `725` ÔÇö the CorretorAutomatico AUTO-182/#143 regression from CLAUDE.md regra #44: the button is a **direct child of the Form**, not of `cnt_4c_Saida`, so Left isn't relative. At 5/3 it sat on top of the header title; 725+75=800 = Form.Width, flush right. |
+| `cmd_4c_SelTudo` / `cmd_4c_ApgaTudo` `.Picture` | invented `geral_marcar_26.jpg` / `cadastro_excluir_26.jpg` | `to-do-list_checked2.ico` / `onebit_33.ico` ÔÇö the legacy icons, both confirmed present in `vbmp\` (regra #25) |
+| `ToolTipText` | "Selecionar Tudo"/"Desmarcar Tudo" | "Selec.Tudo"/"Apaga Tudo" |
+
+Also reordered both rebind paths to the canonical `RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header` (regra #41) ÔÇö `ControlSource` was being set before `RecordSource`, and consolidated the contradictory double-assigned `Check1` geometry (`Top` 23 then 9, `Width` 60 then 22) into one block, with the 22px deviation from the SCX's `Width=60` documented (the 22px column clips it either way).
+
+## Verification
+
+I first ran the smoke test the project memory prescribes, because VFP9 was recorded as compiling-without-executing in a prior session ÔÇö here it **did** execute (`VIVO 19/10/2026 09:47:29`), so the checks below are real and not inferred from `.FXP`/`exit=0`:
+
+- Compiles clean (fresh `.fxp`, no `.err`), form and BO
+- **Instantiates**: `VARTYPE=O`, accented Caption correct, all 6 column widths `22/108/290/108/40/60` matching the SCX, masks only on Column4/Column6 (Column5 empty ÔÇö empty override not transcribed, regra #49), both icons resolve on disk
+- Toggle handler works: `lMarcas=1` after keypress
+- Gate `05d_validarCompletude` passes (regexes replicated rather than dot-sourcing the orchestrator, which would fire a migration)
+- 0 literal accents, 0 `RETURN` inside `TRY`, 0 `this_X .Value`, 0 `.Self`, 0 `Controls("name")`, all blocks balanced, CRLF preserved, every `THIS.method()` and `THIS.this_X` resolves
+
+One note: `ConfigurarPaginaDados` is `PROTECTED`, so my probe reached it through a probe-only subclass ÔÇö production code unchanged. I did not modify `SigPrSlpBO.prg`; its pending diff is from Fases 1ÔÇô2. Probe scripts cleaned up.

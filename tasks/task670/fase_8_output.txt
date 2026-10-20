@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 executada. O arquivo anterior tinha dado a fase como "nada a fazer" e foi rejeitado pelo guard de NO-OP do orquestrador ÔÇö e com raz├úo: havia lacunas reais.
+
+## O que faltava de fato (e foi entregue)
+
+**`BOParaForm()` ÔÇö ausente** (`projeto/app/forms/operacionais/FormSigPrRet.prg:2378`). ├ë o inverso campo-a-campo de `FormParaBO`, declarado `PROTECTED` expl├¡cito porque `FormBase` j├í o declara assim e VFP9 n├úo deixa a subclasse alargar escopo. Trata a sentinela `31/12/9999` que `FormParaBO` grava quando a Data Final fica em branco ÔÇö pint├í-la de volta exibiria data que o legado nunca mostra.
+
+**Regra "fixa empresa" do `Init` legado ÔÇö inteiramente ausente.** O BO j├í tinha `CarregarParametros()` e `this_nFixaEmpresa`, mas **nada no form os chamava**: numa instala├º├úo com `SigCdPac.fixaemp = 1` o filtro Empresa ficava livre onde o legado o trava em `_EMPR`. Entregue em `AplicarFixaEmpresa()` / `FixarEmpresaNaTela()` (`:2302`, `:2324`), com `go_4c_Sistema.cCodEmpresa` no lugar de `_EMPR` e resolu├º├úo da Raz├úo Social por `SigPrRetBO.CarregarEmpresa()` (consulta direta ÔÇö `AbrirLookupCanonico` sempre abre picker, inadequado no `Init`).
+
+**Dois dos 14 `When` do SCX estavam errados** (`:2335` e seguintes):
+- `get_ds_empresa` com a condi├º├úo **invertida** ÔÇö a Raz├úo Social, que ├® a via alternativa de busca, ficava desabilitada justamente com o c├│digo vazio; e preencher o c├│digo j├í preenche a descri├º├úo, ent├úo o campo era inalcan├º├ível para sempre.
+- `get_Ds_GrEstoque` **sem condi├º├úo nenhuma**.
+
+**Reset de Digita├º├úo/Arquivadas vazava filtros.** O legado ├® modal e recria as `PRIVATE` a cada clique; o form migrado n├úo fecha entre cliques, ent├úo Ind├║stria, SubGrupo, Linha, Local, Localiza├º├úo e Qtd. de Etiquetas sobreviviam de uma CONSULTA anterior. Agora o reset sai de `SigPrRetBO.LimparDados()` (`:474`, reset completo que preserva `this_nFixaEmpresa` por ser par├ómetro, n├úo filtro), mantendo as exce├º├Áes literais do legado ÔÇö Ordem da tela em Digita├º├úo, fixa em 1 em Arquivadas.
+
+**`Chk_Preco`**: default do BO era 1, o SCX declara 2 ÔÇö corrigido.
+
+**`DO FORM SigOpIpE`** virou funil ├║nico `DespacharImpressao()` (`:2442`): TRY cobrindo **s├│** a chamada (ela ├® modal e bloqueia ÔÇö TRY largo capturaria erros da outra tela com o nome de m├®todo errado) e, quando o `.SCX` n├úo est├í alcan├º├ível, aviso que **nomeia** a tela ausente em vez do "File does not exist" cru.
+
+N├úo inventei `CarregarLista`, `BtnSalvarClick`/`BtnCancelarClick` nem `HabilitarCampos` ÔÇö o SCX n├úo tem Grid/PageFrame/AddCursor, n├úo grava nada (├║nica escrita ├® `Create Cursor csEtiqDig`, cursor VFP local) e n├úo tem modos. O motivo est├í documentado no cabe├ºalho.
+
+## Verifica├º├úo
+
+- **Compila limpo** no VFP9 (BO e Form, sem `.err`).
+- **`ValidadorSQLSchema`**: 683 tabelas, 11 statements, PASSOU. `SigCdEmp.cemps char(3)` / `razas char(40)` e `SigCdPac.fixaemp numeric(1,0)` conferidos no schema can├┤nico lido com `-Raw` (UTF-16).
+- **Instanciado de verdade** (probe com subclasse, necess├íria para alcan├ºar os `PROTECTED`): `CREATEOBJECT` OK, 56 controles, e os observ├íveis batem ÔÇö `dsEmp=.T.`/`dsGrEst=.T.` (antes `.F.` permanente), `cdEst=.F.`, round-trip `FormParaBO`ÔåÆ`BOParaForm` preservando valores e devolvendo a Data Final vazia, `LimparDados` zerando Ind├║stria e repondo pre├ºo=2 com `fixaemp=1` intacto, os tr├¬s modos setando `this_cTipo`.
+- Sem `RETURN` dentro de TRY/CATCH, sem `MESSAGEBOX`/`ISEMPTY`/`MostrarAviso`/`.Self`, sem `PUBLIC` em `DEFINE CLASS`, sem TODO/stub, `DEFINE`/`ENDDEFINE` e 61/61 `PROCEDURE`/`ENDPROC` balanceados. Auditorias de fun├º├Áes n├úo definidas, propriedades inexistentes e m├®todo protegido chamado de fora: nenhum achado nestes dois arquivos.
+
+Uma observa├º├úo que ficou **fora** do escopo: `AbrirLookupCanonico` (em `FormBase`) abre o picker mesmo quando h├í match exato ÔÇö ├® o padr├úo que a regra #37 condena, mas ├® de alcance global e n├úo deste form.

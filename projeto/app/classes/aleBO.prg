@@ -229,7 +229,9 @@ DEFINE CLASS aleBO AS BusinessBase
 
             *-- Unir os 5 cursores em crSigCdAle com estrutura identica
             IF USED("crSigCdAle")
-                TABLEREVERT(.T., "crSigCdAle")
+                IF CURSORGETPROP("Buffering", "crSigCdAle") > 1
+                    TABLEREVERT(.T., "crSigCdAle")
+                ENDIF
                 USE IN crSigCdAle
             ENDIF
 

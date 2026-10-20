@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fVerificaPasta"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPARQ",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPARQ",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters poForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.DataSessionId = poForm.DataSessionId\n\nThisForm.ParentForm = poForm\nThisForm.ParentForm.pnTipos = 1\n\nSelect crGerArq\nGo Top",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPARQ.Grid1.Column1.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 39,
+      "codigoOriginal": "m.lcArqTxt = ''\nm.lcArqTxt = PutFile([Arquivo :],[],[TXT])\n\nIf Not Empty(m.lcArqTxt)\n\tIf Not fVerificaPasta(m.lcArqTxt,2)\n\t\tMessageBox('Local ou Arquivo Invalido !!!',16,'')\n\t\tReplace nMarcas  With 0\n\t\tReplace cNomArqs With ''\n\t\tThis.Value = 0\n\t\tThis.Parent.Refresh\n\t\tReturn(.f.)\n\tEndIf\nElse\n\tMessageBox('Destino Invalido !!!',16,'')\n\tReplace nMarcas  With 0\n\tReplace cNomArqs With ''\n\tThis.Value = 0\n\tThis.Parent.Refresh\n\tReturn(.f.)\nEndif\n\nlnReg = Recno()\nLocate for cNomArqs = m.lcArqTxt\nIf ! eof(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaPasta",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPARQ.Commandgroup1",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Locate for nMarcas = 1\nIf Eof()\n\tMessageBox('Geração Não Selecionada !!!',16,'')\n\tReturn\nEndIf \nIf MessageBox('Confirma Exportação do Inventário '+Alltrim(Str(crSigCdBal.Codigos))+'?',36,'')==7\n\tReturn\nEndif\nRelease Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPARQ.Commandgroup1",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Locate for nMarcas = 1\nIf ! Eof()\n\tIf MessageBox('Geração Selecionada, Deseja Cancelar ???',36,'') = 7\n\t\tReturn\n\tEndIf\nEndIf \nReplace All nMarcas With 0\nRelease Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPARQ.Optiongroup1",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ParentForm.pnTipos = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

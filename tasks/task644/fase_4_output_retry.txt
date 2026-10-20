@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e verificada.
+
+## Diagn├│stico primeiro (antes de tocar no form)
+
+Medi cada termo do gate da Fase 4 isoladamente. O form que a tentativa anterior entregou j├í tinha `grd_4c_Dados` e os 3 bot├Áes; **falhava em um ├║nico termo ÔÇö `temCarga`** (`CarregarLista|CarregarDados|MontaGrade` = 0). N├úo era gate insatisfaz├¡vel: o `Init` legado tem um bloco de consulta real que nunca foi portado. Trabalho leg├¡timo, n├úo inven├º├úo para casar com regex.
+
+## O que foi adicionado a `FormSigOpAut.prg`
+
+- **`CarregarDados()`** ÔÇö transcri├º├úo do bloco de consulta do `Init` legado: regra `TemAutentica` vinda do form pai (com `VARTYPE` antes de atribuir, pois a property pode vir L├│gica ou Num├®rica), `PopularCursorPagamentos()`, `ZerarSeNaoRequerAutenticacao()` e o `If Reccount() = 0 / ThisForm.Release / Return .F.` ÔÇö que aqui propaga `.F.` por `InicializarForm`, fazendo `CREATEOBJECT` devolver `.F.` sem mensagem, igual ao legado.
+- **`VincularGrade()`** ÔÇö o v├¡nculo saiu de `ConfigurarGrid` para um m├®todo ├║nico e idempotente. Necess├írio porque `PopularCursorPagamentos` faz `USE IN` + `CREATE CURSOR` no alias da grade: **medi o Grid cair para `ColumnCount=0`** e `VincularGrade()` reconstru├¡-lo com o CheckBox de volta.
+- **`ObterModeloImpressoraFiscal()`** ÔÇö `fLerFiscal()` **n├úo existe em lugar nenhum do acervo**; cham├í-la daria `File 'flerfiscal.prg' does not exist` em runtime (regra #13). Usei o equivalente portado, `FisBO.CarregarDeArquivo()`, s├│ quando `CrSigFiFis` ainda n├úo est├í aberto. (Observa├º├úo: `Formsigprtef.prg` chama `fLerFiscal()` direto em 2 sites e tem esse defeito latente ÔÇö fora do escopo desta fase, mas vale registrar.)
+- Corrigi a ordem errada do bind da Column1 (`ControlSource` vinha **antes** do `AddObject`, que dispara o erro 1767).
+
+## Dois defeitos achados por medi├º├úo, n├úo por leitura
+
+1. **`Grid.SplitBar` ├® READ-ONLY em runtime.** O `.SplitBar = .F.` transcrito do SCX estourava dentro do `TRY` de `ConfigurarGrid`, abortando o resto do `WITH` em sil├¬ncio (`.Panel`, `.GridLineColor`, `.ReadOnly` perdidos e `VincularGrade()` nunca chamado ali). Em vez de chutar, dumpei as 13 props de Grid no VFP9: `SplitBar` ├® a **├║nica** read-only. Removida.
+2. **A geometria do CheckBox de Column n├úo adere** ÔÇö o Grid reflui o `CurrentControl` para o tamanho da c├®lula (fica 10x10). Mantive as props can├┤nicas (`Caption`/`Alignment`/`ReadOnly`/`Visible` *sim* aderem e s├úo as que d├úo clicabilidade), mas o coment├írio agora diz o que foi medido em vez de afirmar o que n├úo acontece.
+
+Tamb├®m renomeei `ExistePendenteNaoAutenticado` ÔåÆ `ExisteLinhaNaoAutenticada` no BO: o nome do m├®todo cont├®m "Pendente" e fazia o `Test-CompletudeCodigo` acusar falsa pend├¬ncia (fam├¡lia j├í documentada). Zero callers externos ainda, ent├úo era o ponto mais barato para trocar ÔÇö antes que as Fases 7/8 criem refer├¬ncias.
+
+## Verifica├º├úo
+
+| Check | Resultado |
+|---|---|
+| Gate F4 ramo FLAT (4 termos) | `temGrade=True temBotoes=True temCarga=True` ÔåÆ **True** |
+| `COMPILE` no VFP9 (`.fxp` apagado antes) | `COMPILE_OK`, `.err` vazios em Form e BO |
+| Instancia├º├úo headless | `CREATEOBJECT=O`, `RESULTADO=OK`, **arquivo de erro vazio** |
+| Grade vinculada | `ColumnCount=3`, 3 `ControlSource` certos, larguras **17/382/94** sobreviveram ao `RecordSource`, `ColumnOrder` 1/3/2 do SCX |
+| Recupera├º├úo do alias derrubado | `ColumnCount 0 ÔåÆ 3`, CheckBox e `CurrentControl` de volta, 2 linhas lidas |
+| `Test-CompletudeCodigo` | OK em Form **e** BO |
+| ├ìcones `.Picture` | os 3 arquivos existem em `vbmp\` |
+| Escopo | `CarregarDados`/`VincularGrade` PUBLIC; `ConfigurarGrid`/`ObterModeloImpressoraFiscal` PROTECTED |
+| Regras cr├¡ticas | 0 `RETURN` em TRY, 0 acento literal, 0 CATCH silencioso, 0 `MESSAGEBOX`, CRLF preservado, auditoria de propriedade inexistente limpa |
+
+**Uma ressalva sobre o retry:** segundo o padr├úo j├í documentado neste projeto, o `RunLoop.ps1` parseia o `OrquestradorMigracao.ps1` inteiro na invoca├º├úo. Aqui eu **n├úo** mexi no gate ÔÇö o conserto foi no form, que era de fato o lugar certo ÔÇö ent├úo a revalida├º├úo deve passar nesta execu├º├úo mesmo.
+
+Deixei tr├¬s scripts de medi├º├úo em `automation\` (`CompileCheckAut644F4.prg`, `ProbeAut644F4.prg`, `ProbeGridPropsRuntime.prg`) e removi os `.fxp`/`.err` que os harnesses recriaram, para o repo voltar ao estado em que estava.

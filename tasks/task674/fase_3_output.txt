@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSigPrSdd.prg` (compila├º├úo verificada no VFP9, sem erros, junto com o BO das fases 1-2).
+
+Decis├Áes de estrutura, baseadas no c├│digo-fonte legado (`SIGPRSDD.SCX`, Width=799/Height=288, sem PageFrame):
+- **Form OPERACIONAL plano**, n├úo CRUD: nada de Page1/Page2 ÔÇö o legado ├® um di├ílogo modal ├║nico (Boleto/Gerar Senha/Encerrar), sem grid nem lista. Segui o padr├úo j├í usado em `FormFop.prg` (`ConfigurarPageFrame()` como orquestrador que delega para `ConfigurarCabecalho()`).
+- Propriedades de janela transcritas literalmente do SCX: `ControlBox=.F.`, `Closable=.F.`, `TitleBar=0`, `BorderStyle=2`, `Width=799`, `Height=288`.
+- `this_lProducao` adicionada agora (recebida via `Init()`) porque j├í no legado controla comportamento central (lookup de Opera├º├úo via SigCdOpd/SigCdOpe, exibi├º├úo do campo Valor).
+- `cnt_4c_Cabecalho` criado com `lbl_4c_Sombra`/`lbl_4c_Titulo` nos valores exatos do dump (Top=18/17, ForeColor preto/branco, FontSize=18).
+- BO instanciado (`CREATEOBJECT("SigPrSddBO")`) dentro de `InicializarForm()`.
+- **N├úo inclu├¡** ainda: campos (Solicitante/Empresa/Opera├º├úo/Documento/Valor/Data/Motivo/Fpg) nem bot├Áes Boleto/Gerar Senha/Encerrar ÔÇö ficam para as fases seguintes, conforme o escopo da Fase 3.
+
+Pr├│ximo passo natural seria a Fase 4 (bot├Áes de a├º├úo, j├í que este form n├úo tem grid/CRUD).

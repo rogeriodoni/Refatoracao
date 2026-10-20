@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and verified.
+
+## O que foi entregue
+
+**`Formsigprnfe.prg`** (+521 linhas) ÔÇö o form ├® OPERACIONAL **FLAT** (o SCX legado n├úo tem PageFrame), ent├úo o gate se cumpre pelo ramo flat: grade + bot├Áes + m├®todo de carga. `ConfigurarPaginaLista`/`AlternarPagina` n├úo foram criados de prop├│sito ÔÇö invent├í-los exigiria um PageFrame que o legado n├úo tem.
+
+- `CarregarLista()` ÔÇö funil p├║blico da carga (o `PROCEDURE selecionar` do legado)
+- `ValidarFiltrosSelecao()` ÔÇö as 6 recusas do legado, na mesma ordem (`MsgConfirma` tratado como l├│gico, regra #7)
+- `ObterFiltrosSelecao()` / `AplicarFiltrosIniciais()` / `FocarCampoFiltro()` ÔÇö crit├®rios e defaults do `Init` legado
+- `AtualizarGrade()` ÔÇö funil ├║nico de repintura (`GO TOP` + `Refresh`, regra #21)
+- `LimparSelecao()` + `AjustarBotoesPorModo()` ÔÇö o par desabilita/**reabilita** (regra #40), chamado tamb├®m no `Init`
+- marca├º├úo da grade: `MarcarTodas`/`DesmarcarTodas`/`AlternarMarcacaoLinha` + os 4 handlers com `NODEFAULT` e `BINDEVENT`
+
+**`sigprnfeBO.prg`** (+282 linhas) ÔÇö `BuscarOperacoes()` + `MontarGradeOperacoes()`: as 3 consultas do legado transcritas, populando o cursor da grade por `ZAP`+`INSERT` (nunca `SQLEXEC` sobre o alias do Grid). As 6 tabelas e todas as colunas foram conferidas no `docs/schema.sql` lido como UTF-16 (682 tabelas) ÔÇö `SigMvNfi` usa `emps` sem C, confirmado.
+
+## Dois bugs encontrados e corrigidos
+
+1. **A tela n├úo abria.** `CREATEOBJECT` devolvia `.F.`: no painel de inutiliza├º├úo, `Column6.AddObject("chk_4c_Check1")` vinha *antes* de reapontar o `ControlSource`, e o CheckBox herdava a amarra├º├úo do `RecordSource` ao campo `Notaf` (char) ÔåÆ *"Data type mismatch"* dentro do `Init`. Corrigida a ordem (`ControlSource` ÔåÆ `AddObject` ÔåÆ `CurrentControl`). Era defeito da Fase 3.
+2. Coment├írio `* PLACEHOLDER` que o regex do validador de completude casa ÔÇö e que tamb├®m estava desatualizado.
+
+## Medi├º├Áes (VFP9)
+
+`DTOT(d)+86399` ÔåÆ `'...23:59:59'` (reproduz o `fDtoSql(dtF,'23:59:59')`); `SCAN/ENDSCAN` permanece amarrado ao seu alias mesmo com `SELECT` de outro alias e `INSERT INTO` no corpo ÔÇö por isso a estrutura do legado foi transcrita literalmente.
+
+Compila├º├úo limpa (sem `.ERR`) e o form **instanciado de fato**: grade ligada, painel oculto, estados dos bot├Áes id├¬nticos ao `Init` legado, os 9 m├®todos chamados de fora todos PUBLIC, marcar/desmarcar/alternar com as contagens esperadas, ida-e-volta dos bot├Áes correta e a valida├º├úo recusando carga sem data. `ValidadorSQLSchema` passou; `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas` e `VerificarColunaEmpresaSQL` fecharam em 0 no projeto inteiro.
+
+## Dois pontos que precisam da sua decis├úo
+
+- **O `TestFormWrapper` n├úo roda nesta m├íquina** ÔÇö trava na ETAPA 1 (carga do framework legado) tamb├®m em form **n├úo alterado** (`Formsigprila`), ent├úo ├® ambiental, n├úo da minha mudan├ºa. Usei uma sonda equivalente (`automation/vfp_helpers/test_fase4_sigprnfe.prg`) que instancia o form sem os VCX. A etapa 6 do pipeline vai falhar por esse motivo independente da Fase 4.
+- **Esta task re-rodou sobre um form j├í migrado e mais completo.** O HEAD tem `Formsigprnfe` com 2288 linhas e `sigprnfeBO` com 1517; as Fases 1-3 desta execu├º├úo reescreveram para 890/700. Ficaram fora, por enquanto, 44 m├®todos do form (painel de filtros, lookups, todos os `Btn*Click`) e 16 do BO (`processamento`, `selecionar`, `processarenvio`, `processarcancelamento`, `consultarstatus`ÔÇª). As Fases 5-8 deveriam reconstruir isso, mas **at├® l├í a ├írvore de trabalho est├í atr├ís do que est├í commitado** ÔÇö n├úo mexi nisso porque est├í fora do escopo da Fase 4 e um merge manual conflitaria com o pipeline.

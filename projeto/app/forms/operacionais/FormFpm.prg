@@ -1001,7 +1001,9 @@ DEFINE CLASS FormFpm AS FormBase
                     THIS.AlternarPagina(1)
                 ENDIF
                 IF USED("cursor_4c_FpagI")
-                    TABLEREVERT(.T., "cursor_4c_FpagI")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1
+                        TABLEREVERT(.T., "cursor_4c_FpagI")
+                    ENDIF
                     USE IN cursor_4c_FpagI
                 ENDIF
                 THIS.CarregarDados()
@@ -1034,7 +1036,9 @@ DEFINE CLASS FormFpm AS FormBase
         loc_lSucesso = .F.
         TRY
             IF USED("cursor_4c_FpagI")
-                TABLEREVERT(.T., "cursor_4c_FpagI")
+                IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1
+                    TABLEREVERT(.T., "cursor_4c_FpagI")
+                ENDIF
                 USE IN cursor_4c_FpagI
             ENDIF
             loc_lSucesso = THIS.CarregarDados()
@@ -1066,7 +1070,7 @@ DEFINE CLASS FormFpm AS FormBase
             IF USED("cursor_4c_FpagI")
                 SELECT cursor_4c_FpagI
                 *-- Commit da linha corrente (TABLEUPDATE se ha alteracoes nao salvas)
-                IF GETFLDSTATE(-1, "cursor_4c_FpagI") > 1
+                IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1 AND GETFLDSTATE(-1, "cursor_4c_FpagI") > 1
                     TABLEUPDATE(.F., .T., "cursor_4c_FpagI")
                 ENDIF
             ENDIF
@@ -1153,7 +1157,9 @@ DEFINE CLASS FormFpm AS FormBase
         TRY
             IF USED("cursor_4c_FpagI")
                 SELECT cursor_4c_FpagI
-                TABLEREVERT(.T., "cursor_4c_FpagI")
+                IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1
+                    TABLEREVERT(.T., "cursor_4c_FpagI")
+                ENDIF
                 DELETE ALL
                 *-- Compacta remocoes marcadas (evita SET DELETED clutter no scan)
                 SET DELETED ON
@@ -1273,7 +1279,9 @@ DEFINE CLASS FormFpm AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
         IF USED("cursor_4c_FpagI")
-            TABLEREVERT(.T., "cursor_4c_FpagI")
+            IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1
+                TABLEREVERT(.T., "cursor_4c_FpagI")
+            ENDIF
             USE IN cursor_4c_FpagI
         ENDIF
         IF USED("cursor_4c_FpagITemp")

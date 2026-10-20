@@ -5754,13 +5754,90 @@ function Corrigir-MostrarAvisoInexistente {
 }
 
 # =============================================================================
+# Pattern #219: TABLEREVERT sem guard de buffering (Erro 1586)
+# =============================================================================
+# TABLEREVERT()/TABLEUPDATE() EXIGEM buffering ligado. Medido no VFP9
+# (2026-10-20):
+#
+#   CREATE CURSOR x (a C(3))               -> CURSORGETPROP("Buffering") = 1
+#   SELECT * FROM y INTO CURSOR x READWRITE -> CURSORGETPROP("Buffering") = 1
+#   TABLEREVERT(.T., "x")  com Buffering=1 -> ERRO 1586
+#         "Function requires row or table buffering mode."
+#   USE IN x               com Buffering=5 e alteracoes PENDENTES -> OK
+#
+# Ou seja: TABLEREVERT antes de USE IN nunca foi necessario, e no caso comum
+# (cursor sem buffering) ele ERRA. Dentro de TRY o erro vira MsgErro e aborta o
+# metodo; fora de TRY congela o VFP num Program Error que ninguem ve.
+#
+# Este pattern eh RETROATIVO: envolve qualquer TABLEREVERT cru em
+# IF CURSORGETPROP("Buffering", <alias>) > 1 ... ENDIF, preservando a semantica
+# (com buffering real ele continua revertendo; sem buffering nao ha o que
+# reverter). Auto-fix seguro: nao depende de dump do legado nem de julgamento.
+# Origem: Erro230 (FormDup/DupBO - a tela de Series de Duplicatas nao abria).
+function Corrigir-TableRevertSemBuffering {
+    param([string[]]$Linhas, [string]$Arquivo = '')
+
+    $resultado = @()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Comentario: nao mexe
+        if ($linha -match '(?i)^\s*(\*|&&)') {
+            $resultado += $linha
+            continue
+        }
+
+        # TABLEREVERT(<escopo>, <alias>) sozinho na linha.
+        # O alias pode ser literal ("cursor_4c_X") ou variavel (par_cCursor).
+        if ($linha -match '(?i)^(\s*)=?\s*TABLEREVERT\s*\(\s*[^,()]+\s*,\s*("(?:[^"]+)"|[A-Za-z_]\w*)\s*\)\s*$') {
+            $indent = $Matches[1]
+            $alias  = $Matches[2]
+            $chamada = $linha.Trim()
+
+            # Ja guardado? A linha anterior nao-vazia tem de ser o IF do buffering
+            # DESTE alias (guard de outro alias nao protege).
+            $jaGuardado = $false
+            for ($j = $i - 1; $j -ge 0; $j--) {
+                if ([string]::IsNullOrWhiteSpace($Linhas[$j])) { continue }
+                if ($Linhas[$j] -match '(?i)IF\s+CURSORGETPROP\s*\(\s*"Buffering"\s*,\s*("(?:[^"]+)"|[A-Za-z_]\w*)\s*\)\s*>\s*1') {
+                    if ($Matches[1] -eq $alias) { $jaGuardado = $true }
+                }
+                break
+            }
+
+            if (-not $jaGuardado) {
+                $resultado += "${indent}IF CURSORGETPROP(`"Buffering`", $alias) > 1"
+                $resultado += "${indent}    $chamada"
+                $resultado += "${indent}ENDIF"
+                Add-Correcao -Tipo "TABLEREVERT-SEM-BUFFERING" -Linha ($i+1) -Original $chamada -Corrigido "IF CURSORGETPROP(`"Buffering`", $alias) > 1 / $chamada / ENDIF" -Descricao "TABLEREVERT em alias sem buffering dispara Erro 1586 'Function requires row or table buffering mode.' - envolvido em guard de CURSORGETPROP (regra #52)."
+                continue
+            }
+        }
+
+        $resultado += $linha
+    }
+
+    return $resultado
+}
+
+# =============================================================================
 # Pattern #91: SQLEXEC em cursor existente sem fechar antes (uncommitted changes)
 # =============================================================================
 # Em BO.Buscar / BO.CarregarPorCodigo, se SQLEXEC usa alias de cursor que o
 # form ja criou como placeholder do grid (cursor_4c_Dados, cursor_4c_Lista),
 # VFP9 falha com "Table buffer for alias X contains uncommitted changes" porque
 # o cursor anterior pode ter edicoes pendentes via grid.
-# Fix: injetar USED()+TABLEREVERT+USE IN antes do SQLEXEC.
+# Fix: injetar USED()+TABLEREVERT (guardado por buffering)+USE IN antes do SQLEXEC.
+#
+# ATENCAO (Erro230, 2026-10-20): ate esta data o pattern injetava TABLEREVERT
+# CRU, sem guard de buffering. Medido no VFP9: cursor de CREATE CURSOR e de
+# SELECT ... INTO CURSOR READWRITE nasce com Buffering = 1, e ali TABLEREVERT
+# NAO eh no-op - dispara "Error 1586: Function requires row or table buffering
+# mode.". Como o form cria o placeholder do grid com CREATE CURSOR antes de
+# CarregarLista, o guard injetado quebrava a ABERTURA da tela (FormDup).
+# Medido tambem: USE IN fecha alias com buffering 5 e alteracoes PENDENTES sem
+# erro nenhum - ou seja o TABLEREVERT antes do USE IN nunca foi necessario.
+# Mantido so sob guard de buffering para o caso de alias vindo de AddCursor.
 function Corrigir-SQLExecCursorGuard {
     param([string[]]$Linhas)
 
@@ -5804,11 +5881,13 @@ function Corrigir-SQLExecCursorGuard {
                 # Injetar guard antes
                 $resultado += "${indent}*-- Fechar cursor anterior se existir (evita `"Table buffer contains uncommitted changes`")"
                 $resultado += "${indent}IF USED(`"$cursorNome`")"
-                $resultado += "${indent}    TABLEREVERT(.T., `"$cursorNome`")"
+                $resultado += "${indent}    IF CURSORGETPROP(`"Buffering`", `"$cursorNome`") > 1"
+                $resultado += "${indent}        TABLEREVERT(.T., `"$cursorNome`")"
+                $resultado += "${indent}    ENDIF"
                 $resultado += "${indent}    USE IN $cursorNome"
                 $resultado += "${indent}ENDIF"
                 $resultado += ""
-                Add-Correcao -Tipo "SQLEXEC-CURSOR-GUARD" -Linha ($i+1) -Original "(auto-fix)" -Corrigido "(auto-fix)" -Descricao "Injetado guard USED/TABLEREVERT/USE IN antes de SQLEXEC em '$cursorNome' (evita `"Table buffer contains uncommitted changes`" quando form usa o cursor como RecordSource do grid)."
+                Add-Correcao -Tipo "SQLEXEC-CURSOR-GUARD" -Linha ($i+1) -Original "(auto-fix)" -Corrigido "(auto-fix)" -Descricao "Injetado guard USED/TABLEREVERT(sob Buffering>1)/USE IN antes de SQLEXEC em '$cursorNome' (evita `"Table buffer contains uncommitted changes`" quando form usa o cursor como RecordSource do grid)."
             }
 
             $resultado += $linha
@@ -6139,7 +6218,13 @@ function Corrigir-PictureReportIconesInexistentes {
     $substituicoes = [ordered]@{
         'geral_visualizar_60\.jpg' = 'relatorio_video_26.jpg'
         'geral_imprimir_60\.jpg'   = 'relatorio_impressora_26.jpg'
-        'geral_excel_60\.jpg'      = 'geral_envelope_32.jpg'
+        # 'geral_excel_60.jpg' FOI REMOVIDO desta tabela em 2026-10-18: o arquivo
+        # EXISTE em vbmp\ (conferidos os 12 nomes da tabela um a um - 11 ausentes,
+        # ESTE o unico presente). A entrada trocava um icone VALIDO, transcrito do
+        # SCX legado, por um envelope - mudanca de UI silenciosa, nao correcao.
+        # Usado pelo botao Excel do optArquivo em Formsigprpdf (SIGPRPDF.optArquivo.
+        # Option2.Picture = ..\framework\imagens\geral_excel_60.jpg). As variantes
+        # realmente ausentes continuam na tabela: "excel.jpg" e cadastro_excel_60.jpg.
         'geral_fechar_60\.jpg'     = 'relatorio_sair_60.jpg'
         # Nomes corrompidos por strip-prefix bugado (task026/SIGREADS): "imagens\v" -> "ideo", "imagens\b" -> "otao"
         '"ideo\.jpg"'              = '"relatorio_video_26.jpg"'
@@ -17065,6 +17150,9 @@ function Invoke-CorrecaoAutomatica {
         $linhas = Corrigir-ControlsIndexadoPorNome -Linhas $linhas -Arquivo $Arquivo
         $linhas = Corrigir-FormBuscaAuxiliarSemHandle -Linhas $linhas -Arquivo $Arquivo
         $linhas = Corrigir-SelfDentroDeWith -Linhas $linhas -Arquivo $Arquivo
+        # #219 tambem no modo SEGURO: classe base e utilitario tambem fecham cursor
+        # (o Erro 1586 derruba qualquer tela que use a classe).
+        $linhas = Corrigir-TableRevertSemBuffering -Linhas $linhas -Arquivo $Arquivo
         $linhas = Avisar-SqlExecSobreAliasDeGrid -Linhas $linhas -Arquivo $Arquivo
         $linhas = Avisar-GradeEditavelSemLiberarColuna -Linhas $linhas -Arquivo $Arquivo
     }
@@ -17156,6 +17244,9 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-MostrarErroParaMsgAviso -Linhas $linhas
     $linhas = Corrigir-MostrarAvisoInexistente -Linhas $linhas
     $linhas = Corrigir-SQLExecCursorGuard -Linhas $linhas
+    # #219: TABLEREVERT sem guard de buffering (Erro 1586) - roda DEPOIS do #91,
+    # para tambem cobrir o guard que ele acabou de injetar.
+    $linhas = Corrigir-TableRevertSemBuffering -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-CntSaidaEncerrarCanonico -Linhas $linhas
     $linhas = Corrigir-PageWidthStripMinus60 -Linhas $linhas
     $linhas = Corrigir-BotaoSaidaCanonico -Linhas $linhas -Arquivo $Arquivo

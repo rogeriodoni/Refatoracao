@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7/8 is complete for `Formsigproer` (SIGPROER ÔÇö Reimpress├úo do SiTef).
+
+**Important context**: this form is a hardware-driven modal dialog (SiTef PIN-pad protocol), not a CRUD screen ÔÇö it has no Incluir/Alterar/Visualizar/Excluir in the legacy code, so I implemented what the form's own phase-tracking comments (and the legacy `SIGPROER.SCX`) actually call for instead of inventing CRUD handlers that don't exist in this dialog:
+
+1. **`BtnCancelarClick`** (`Formsigproer.prg`) ÔÇö migrated from `SIGPROER.SAIDA.CANCELA.Click`, bound via `BINDEVENT` to `obj_4c_SAIDA.Buttons(1)`. Calls `RetornoFalha(...)` + `THIS.Release()`.
+2. **`ConectarTerminalSiTef`** (`Formsigproer.prg`, called at the end of `InicializarForm`) ÔÇö transcribes the hardware block of `SIGPROER.Init` (`ConfiguraIntSiTefInterativo` + `IniciaFuncaoSiTefInterativo`), delegating the actual DLL calls to three new BO methods: `ConectarSiTef`, `IniciarSiTef`, `MontarIdTerminal` (`sigproerBO.prg`), keeping the Form/BO split already used by the sibling `Formsigprdft`/`sigprdftBO`.
+3. `Unload` ÔÇö legacy body is fully commented out (`*CLEAR DLLS...`), nothing to port.
+
+Gated behind `TerminalDisponivel()` (already existing from phase 5/6) so pipeline/test runs never touch the DLL.
+
+Verified both files compile clean (`COMPILE_OK`) and the form instantiates headlessly without errors ÔÇö Cancel button fires correctly, `txt_4c_SenhaSupervisor` and `obj_4c_SAIDA` are present and correct.

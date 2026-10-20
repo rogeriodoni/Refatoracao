@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 4/8 ÔÇö resultado para `Formsigprsen.prg` (SIGPRSEN, "Gerador da Senha do Dia"):**
+
+A instru├º├úo gen├®rica desta fase ("Grid e Bot├Áes CRUD na Page1") **n├úo se aplica** a este form. O legado ├® um di├ílogo utilit├írio de 500x119px, sem PageFrame, sem lista, sem grid, sem tabela (`analise.json`: `temGrid=false`; `comportamento.json`: `totalQueries=0`). Inventar Grid+CRUD aqui violaria o PILAR 1 (nunca inventar UI que n├úo existe no legado) ÔÇö padr├úo j├í documentado na mem├│ria do projeto para forms OPERACIONAL do tipo despachante/di├ílogo.
+
+Em vez de inventar UI falsa, usei esta fase para completar trabalho real e pendente: liguei os eventos dos dois bot├Áes reais do legado, fi├®is ao `SIGPRSEN.scx`:
+- `BtnGerSenClick()` ÔÇö replica `PROCEDURE processamento` (confirma, gera a senha via `sigprsenBO.GerarSenha()`, exibe e envia por e-mail via `MandaEmail()`, suprimindo di├ílogos em modo Autom├ítico).
+- `BtnSaidaClick()` ÔÇö replica `ThisForm.Release` do bot├úo Encerrar.
+- `Init()` ÔÇö agora dispara o Click do Gerar Senha e libera o form sozinho quando `par_lAutomatico=.T.`, igual ao legado.
+
+Validado: compila├º├úo limpa no VFP9 (`COMPILE` gerou o `.fxp` sem erro), arquivos tempor├írios de teste removidos.

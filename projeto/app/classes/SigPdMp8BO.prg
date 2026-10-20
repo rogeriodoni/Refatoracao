@@ -159,7 +159,9 @@ DEFINE CLASS SigPdMp8BO AS BusinessBase
                        " OR Emps = ' '"
 
             IF USED("cursor_4c_Ncf")
-                TABLEREVERT(.T., "cursor_4c_Ncf")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Ncf") > 1
+                    TABLEREVERT(.T., "cursor_4c_Ncf")
+                ENDIF
                 USE IN cursor_4c_Ncf
             ENDIF
 
@@ -195,7 +197,9 @@ DEFINE CLASS SigPdMp8BO AS BusinessBase
                        EscaparSQL(par_cCodPds)
 
             IF USED("cursor_4c_Produto")
-                TABLEREVERT(.T., "cursor_4c_Produto")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Produto") > 1
+                    TABLEREVERT(.T., "cursor_4c_Produto")
+                ENDIF
                 USE IN cursor_4c_Produto
             ENDIF
 

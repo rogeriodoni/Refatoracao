@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpAtu.prg` est├í completo e funcional.
+
+## O que a Fase 8 entregou
+
+O form j├í vinha com campo, bot├úo e lookup das fases 3ÔÇô7. A consolida├º├úo acrescentou quatro coisas, **todas com call site real** (m├®todo sem chamador seria stub):
+
+**1. Universo do lookup corrigido ÔÇö era um desvio do PILAR 1, n├úo refinamento.**
+O legado chama `fwBusca**Int**('CrOpera','Dopes',...)` ÔÇö o picker de *cursor local*. Ele nunca navegou `SigCdOpe`: navegava o `crOpera` que o chamador (SIGCDBAL, "Acerto de Invent├írio") monta j├í filtrado (`Where Parcs <> 1 And Opers = 3 And DigItens = 1 And Caixas <> 1`). O migrado consultava a tabela inteira, ent├úo o usu├írio escolhia no picker uma opera├º├úo que o `PublicarOperacaoEscolhida` recusava logo depois. Novo `CarregarUniversoOperacoes()` copia as linhas de `crOpera` quando ele est├í aberto, e s├│ cai em `SigCdOpe` fora do SIGCDBAL. O filtro **n├úo** foi copiado para o di├ílogo (seria filtro inventado) ÔÇö ele chega pronto dentro do cursor.
+
+**2. Cancelamento vis├¡vel ao chamador ÔÇö defeito silencioso que ainda estava l├í.**
+O chamador decide por `IsEmpty(crOpera.Dopes)`, e ele mesmo d├í `Go Top` no cursor. Cancelar sem mexer na posi├º├úo deixava o cursor na **primeira** opera├º├úo, e isso seria lido como "o usu├írio escolheu a opera├º├úo 1" ÔÇö grava├º├úo errada, sem erro e sem log. Cancelar agora posiciona `crOpera` em EOF, o ├║nico estado em que a coluna l├¬ vazio.
+
+**3. Hooks completos** ÔÇö `BOParaForm` e `LimparCampos` (chamados no `InicializarForm`), ao lado do `FormParaBO` da fase 7.
+
+**4. Libera├º├úo de recursos** ÔÇö `QueryUnload` publica o cancelamento se a tela morrer sem confirmar (guardado por `this_lConfirmado`, para n├úo apagar um Ok bem-sucedido); `Destroy` fecha o cursor do picker e **n├úo** fecha `crOpera`, que ├® do chamador.
+
+`BtnCancelarClick` n├úo ├® bot├úo novo (o SCX n├úo tem Cancelar): ├® o nome do caminho de cancelamento que o legado j├í tem ÔÇö sair com o campo vazio ÔÇö, com duas entradas reais. `BtnSalvar/Buscar/Encerrar`, `CarregarLista`, `AjustarBotoesPorModo` e `HabilitarCampos` seguem documentados como n├úo aplic├íveis: o legado ├® um popup de 800x130 com 1 campo e 1 bot├úo, sem CRUD, sem grade e sem persist├¬ncia.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| `COMPILE` form + BO | `COMPILE_OK`, `.err` vazios |
+| Completude (05d, extra├¡do por AST, sem dot-source) | OK nos dois arquivos |
+| Gate da Fase 8 reproduzido (`VerificarGateFase8Task643.ps1`) | `metodosFaltantes: []` ÔåÆ **PASSA** |
+| 5 auditores (`FuncoesNaoDefinidas`, `MetodoProtegidoChamadoDeFora`, `LookupEmKeyPress`, `FormBuscaAuxiliar`, `PropriedadesInexistentes`) | zero achados |
+| Probe headless A | confirma ÔåÆ `crOpera` na linha escolhida, `Estoqs` leg├¡vel; cancela / fora do universo / Ok vazio ÔåÆ EOF e `Dopes` vazio; escopos corretos |
+| Probe headless B | `gnConnHandle` nem existe (tipo `U`) e digitar `"saida"` volta `"SAIDA"` ÔÇö prova que o universo veio mesmo de `crOpera`, n├úo de um no-op; c├│digo digitado n├úo ├® apagado |
+| `SigCdOpe` no schema can├┤nico (UTF-16, `Get-Content -Raw`) | 252 colunas, `dopes` char, **sem** `descrs` ÔÇö regra single-column respeitada |
+
+Duas ressalvas honestas: o SQL Server n├úo ├® alcan├º├ível desta m├íquina, ent├úo o ramo `SigCdOpe` (di├ílogo fora do SIGCDBAL) compila e ├® defensivo mas n├úo foi exercitado contra o banco; e o picker modal em si n├úo pode ser exercitado headless ÔÇö o que os probes provam ├® que ele **n├úo** abre quando o match exato resolve (o script terminaria travado se abrisse).
+
+Fora do escopo desta task, mas registro porque ├® o outro lado deste contrato: o `FormBAL` migrado ainda n├úo porta o bloco "Acerto de Invent├írio" do SIGCDBAL, ou seja ningu├®m chama este di├ílogo ainda.

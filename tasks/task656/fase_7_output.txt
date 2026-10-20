@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada em `C:\4c\projeto\app\forms\operacionais\FormSigOpCcl.prg` (+108 linhas, nenhuma removida, `COMPILE` limpo sem `.ERR`).
+
+**Os quatro `Btn<verbo>Click` da barra CRUD n├úo foram criados ÔÇö de prop├│sito.** Medi os dois lados do gate antes de decidir (li├º├úo das 7 reprova├º├Áes da Fase 7): o dump do `SIGOPCCL` n├úo tem `frmcadastro`, `Grupo_Op`, `pcEscolha`, nome de bot├úo CRUD nem `X.Click` ÔåÆ `legadoSemCrud = True`; seus **2** bot├Áes (`sair`, `ButtonCount = 2`: Consulta + Encerrar) j├í t├¬m handler real ÔåÆ `nHandlers = 2 >= piso 2`. Gate rodado standalone em processo novo: **`faltantes = 4` + aprova├º├úo pelo carve-out**, que ├® o caminho correto. Inventar os quatro violaria o PILAR 1; stubs s├úo proibidos pela regra de completude.
+
+O que a fase entregou foram as **duas metades que de fato faltavam** no evento dos bot├Áes que existem:
+
+**1. `FormParaBO()` ÔÇö defeito real de grava├º├úo/consulta, silencioso.** O fluxo era m├úo ├║nica (BO ÔåÆ Form): nada escrevia os TextBox de volta no BO. `BuscarOperacoes()` l├¬ `this_cGrupo`/`this_cConta`, que s├│ eram preenchidos como efeito colateral de um lookup ÔÇö e `ObterTipoCadastro`, que ├® o caminho do campo Grupo, **nunca toca `this_cGrupo`**. Tr├¬s desvios do legado (que l├¬ `Padr(ThisForm.Origem.get_grupo.Value, 10)` no instante do clique):
+
+- Grupo aceito e Conta ainda n├úo resolvida ÔåÆ consulta recusada com *"Informe o Grupo e a Conta"* com os dois campos preenchidos na tela;
+- conta de grupo diferente do digitado ÔåÆ consulta o `Grupos` do cursor, n├úo o da tela;
+- campo alterado depois do lookup ÔåÆ consulta o valor **antigo** e devolve a movimenta├º├úo de outra conta, sem erro nenhum.
+
+O `PADR(...,10)` ficou no BO, onde o legado tamb├®m o aplica. Declarado `PROTECTED` porque `FormBase` declara o hook assim (regra #51) e chamado s├│ com `THIS.`.
+
+**2. `Destroy()` ÔÇö equivalente ao `PROCEDURE Release` do form legado** (`ThisForm.poDataMgr.Release`), que n├úo existia. `cursor_4c_Operacoes` (o `TmpOper` do `Load`) vive na data session **compartilhada** (`DataSession = 1`, igual ao legado) e vazava para a tela seguinte com os dois `INDEX ON`. Nome lido antes do `DODEFAULT()`, porque `FormBase.Destroy` zera o BO; `DODEFAULT()` como ├║ltima linha (sem ele o menu principal aparece encolhido).
+
+Verifica├º├Áes: `Test-CompletudeCodigo` OK no Form e no BO; CRLF restaurado (CR=LF=1107) e arquivo ASCII puro; os 4 TextBox nascem `.Value = ""`, ent├úo o `ALLTRIM` n├úo cai no erro 11.
+
+Uma coisa que ajustei no meio do caminho e vale registrar: a primeira vers├úo do coment├írio citava os quatro identificadores por extenso, e isso fazia o gate aprovar por *"handlers presentes"* (`faltantes = 0`) em vez de pelo carve-out ÔÇö o gate casa nome no `.prg` inteiro, coment├írio inclu├¡do. Reescrevi em prosa gen├®rica e a aprova├º├úo passou a vir da medi├º├úo real.
+
+Fora do escopo, como nas fases anteriores: `DO FORM SigOpClp` (legado ainda n├úo migrado) e `fAcessoContab`/`fAcessoContas` (controle de acesso n├úo portado).

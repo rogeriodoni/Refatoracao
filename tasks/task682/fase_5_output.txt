@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigprtef.prg` atualizado.
+
+## O que esta fase realmente tinha para fazer
+
+`SIGPRTEF` ├® OPERACIONAL **FLAT** (800x190, sem PageFrame): os 16 controles s├úo filhos diretos do form e a Fase 4 j├í criou **todos**. N├úo h├í "metade dos campos da Page2" para acrescentar ÔÇö metade de zero ├® zero. Inventar campo violaria o PILAR 1 e deixar `ConfigurarPaginaDados` com `RETURN .T.` ├® stub disfar├ºado. O trabalho real foi **auditar propriedade por propriedade** o que a Fase 4 transcreveu, contra o dump e contra o `.scx` lido como DBF. Quatro lacunas, todas confirmadas no VFP9:
+
+**1. `ConfigurarPaginaDados` ganhou corpo real: a ordem de tabula├º├úo** ÔÇö e passou a ser chamada do `InicializarForm` (antes era c├│digo morto, nunca invocado). O migrador descartou o `TabIndex` do SCX; com `AddObject` o VFP numera pela ordem de cria├º├úo, que **n├úo bate** com a do legado (os bot├Áes v├¬m `Sair/TefAdm/Command1/TefAtv` no SCX e `TefAdm/TefAtv/Cancelar/Encerrar` no migrado). Resultado medido: os 8 agora reproduzem o legado exatamente.
+
+**2. `cmd_4c_Encerrar.Left = 5` ÔåÆ `703`** (valor do SCX). Em 5 o bot├úo cobria o `Admin` (Left=17) ÔÇö criado depois, desenhava por cima e o usu├írio **n├úo conseguia clicar em Admin** ÔÇö e o `Shape1` decorativo (698..788), que existe para enquadrar o Encerrar, ficava vazio. Era res├¡duo do pattern #182 do CorretorAutomatico, que ├á ├®poca assumia `cnt_4c_Saida` como pai; o pattern j├í foi corrigido no Erro501, ent├úo n├úo reintroduz.
+
+**3. `lbl_4c_Redetef`: `AutoSize = .T.` ÔåÆ `.F.` + `Width 67 / Height 15`** medidos (regra #23 ÔÇö `AutoSize` ├® no-op em Label de `AddObject` em parte dos contextos, e ali a Width fica nos 100 do default, invadindo o TextBox em 274). O texto termina em 270, 4px antes do campo, como no legado.
+
+**4. `cnt_4c_TefTxt.Left = 2` ÔåÆ `0`** (valor de design do dump; o 2 ├® o valor de *runtime* que `ProcCntTxt` aplica, fielmente ao legado).
+
+## Uma transcri├º├úo literal teria quebrado a tela
+
+O `.scx` guarda `TabIndex` para s├│ 3 objetos: `Get_redetef=1`, `Say1=6`, `CntTefTxt=8`. Mas o VFP aplica cada valor **no momento em que cria o objeto** e clampa ao total existente: `Say1` nasce 3┬║ (o 6 n├úo cabe), `CntTefTxt` nasce 5┬║ (o 8 n├úo cabe). Simulando o load (`automation\medir_tabindex_sigprtef.prg`), a ordem **efetiva** do legado ├® `1,2,3,4,5,6,7,8` na ordem dos registros ÔÇö s├│ o `1` do campo digit├ível sobrevive. Transcrever 6 e 8 ao p├® da letra jogaria o `Encerrar` para o fim do ciclo: fiel ao arquivo, infiel ├á tela. Isso corrige uma afirma├º├úo da li├º├úo existente sobre `TabIndex` (que autorizava usar os valores literais com lacunas) ÔÇö atualizei aquela mem├│ria com a medi├º├úo e o crit├®rio de quando o literal n├úo vale.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (sem `.err`), instancia├º├úo real com `gb_4c_ValidandoUI` (`ControlCount=9`), tab order lida de volta `1..8` batendo com o legado, geometria confirmada, `Test-CompletudeCodigo` do orquestrador passa em form e BO, gate da Fase 5 satisfeito pelo ramo PAGINADO (`ConfigurarPaginaDados` presente), CRLF preservado nas 1573 linhas. Scripts tempor├írios removidos; o simulador ficou como artefato nomeado, na conven├º├úo `medir_tabindex_*`.
+
+Uma observa├º├úo sobre o escopo: esta task rodou **sobre um form j├í migrado** (o arquivo existia no HEAD) ÔÇö o `Left = 5` do Encerrar j├í vinha de l├í, n├úo foi a Fase 4 desta rodada que o introduziu.

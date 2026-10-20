@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í bug de c├│digo aqui ÔÇö este erro j├í ├® um padr├úo conhecido e documentado em mem├│ria (100+ ocorr├¬ncias desde 2026-08-02).
+
+**Diagn├│stico**: o erro ocorre na `[ETAPA 1B] Conectando ao banco de dados`, **antes** de qualquer `CREATEOBJECT` do form ou do BO (a mensagem "ERRO AO CRIAR OBJETO" ├® enganosa ÔÇö na verdade ├® o pr├®-flight de conex├úo `SQLSTRINGCONNECT` que falha). Confirmei agora mesmo:
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded : False
+PingSucceeded    : False
+SourceAddress    : 192.168.199.108
+```
+
+A m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24`, onde fica o SQL Server `DB_MBAHIA`. Isso ├® falha de infraestrutura/rede, n├úo do c├│digo migrado ÔÇö reconfirmado dezenas de vezes em tasks completamente diferentes, mesmo depois de revis├úo linha a linha do form/BO sob suspeita, sem nenhum achado relacionado.
+
+Revisei `Formsigprtam.prg` e `sigprtamBO.prg` (dialogo filho OPERACIONAL "Peso m├®dio por tamanho", grid com c├®lulas edit├íveis) e n├úo encontrei nenhum problema de c├│digo ÔÇö mantive os dois arquivos intactos para n├úo arriscar introduzir uma regress├úo em c├│digo que j├í est├í correto.
+
+Registrei esta reincid├¬ncia (task680, tentativa 7/10) na mem├│ria do projeto. Como esse bloqueio ├® puramente de rede, nenhuma edi├º├úo de `.prg` vai resolver ÔÇö a pipeline precisa rodar numa m├íquina com rota at├® `192.168.200.10:1433`, ou essa etapa precisa ser pulada/mockada at├® a conectividade ser restaurada.

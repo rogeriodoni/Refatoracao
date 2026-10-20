@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 est├í completa e o gate agora passa.
+
+## Causa da falha anterior
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`) ├®:
+
+```powershell
+$conteudo -match "CarregarDoCursor" -and (($conteudo -match "Inserir" -and $conteudo -match "Atualizar") -or $boSomenteLeitura)
+```
+
+`CarregarDoCursor` ├® exigido **incondicionalmente** ÔÇö fica fora do escape `-or $boSomenteLeitura`. O BO entregue pela execu├º├úo anterior tinha **zero ocorr├¬ncias** desse token. `Inserir`/`Atualizar` j├í passavam (substring no coment├írio de rodap├®). Ou seja: faltava exatamente um m├®todo, n├úo a decis├úo de arquitetura.
+
+## O que fiz
+
+Confirmei primeiro que a exce├º├úo "BO somente-leitura" **realmente se aplica** (medido no dump do legado): sem `TABLEUPDATE`, sem `.AddCursor`, zero alvos de `Insert Into`/`Update`/`Delete From`, e o BO sem `SQLEXEC` de escrita ÔÇö as 4 provas verdes. Ent├úo `Inserir()`/`Atualizar()` seguem legitimamente herdados de `BusinessBase`, e o coment├írio que documenta isso ├® registro de decis├úo, n├úo brecha.
+
+Em vez de satisfazer o token com um coment├írio, implementei um `CarregarDoCursor` **real e integrado**:
+
+- Mapeia as colunas de `SigCdMoe` conferidas no `docs/schema.sql` (lido com encoding correto ÔÇö UTF-16): `cmoes` char(3), `dmoes` char(15), `cotas` **bit**.
+- `SELECT (par_cAliasCursor)` antes de ler campos ÔÇö a sintaxe `(variavel).campo` n├úo existe em VFP9.
+- Exist├¬ncia de campo via `TYPE(alias + ".col")`, nunca `PEMSTATUS` (que exige objeto e estoura com nome de cursor).
+- **N├úo** ├® `PROTECTED` (regra #51) ÔÇö `CarregarDoCursor` ├® PUBLIC na base e o Form pode cham├í-lo.
+- `cotas` tratado por `VARTYPE` (bit chega como L├│gico *ou* Num├®rico conforme o driver). Deliberadamente **n├úo** usei `TratarNulo` nessa coluna: ele devolve o padr├úo para qualquer l├│gico vazio, e `.F.` ├® valor leg├¡timo de `cotas` ÔÇö seria perda silenciosa.
+- `RETURN` s├│ depois do `ENDTRY`; `CATCH` n├úo silencioso (preenche `this_cMensagemErro`, canal que a base exibe).
+
+Adicionei `this_cDescricaoMoeda` (o `dmoes` j├í vinha no `SELECT` e era descartado) e refatorei `CarregarMoeda` para **delegar** ao novo m├®todo ÔÇö fonte ├║nica da leitura, em vez de m├®todo pendurado.
+
+## Verifica├º├úo
+
+- Gate da Fase 2 replicado em PowerShell (sem dot-source do orquestrador, que dispararia migra├º├úo): **passa**.
+- `Test-CompletudeCodigo` replicado: 0 TODO, 0 "pendente/n├úo implement", 0 stub, **nenhum procedure vazio**.
+- Balanceamento: PROCEDURE/ENDPROC 10/10, TRY/ENDTRY 6/6, IF/ENDIF 25/25, DEFINE/ENDDEFINE 1/1.
+- Zero bytes n├úo-ASCII (acentos s├│ via `CHR()`); sem `PUBLIC` em classe, sem `.Self`, sem `ISEMPTY`/`MostrarAviso`.
+- **VFP9 `COMPILE`: `COMPILE_OK`** ÔÇö `.FXP` gerado, `.ERR` vazio. Removi o `.fxp` depois para n├úo deixar c├│digo compilado velho na ├írvore.
+
+## Um ponto que preciso sinalizar
+
+`fCriptografar()` ÔÇö usado no `ValidarSenha` deste BO ÔÇö **n├úo est├í definido em lugar nenhum** do projeto nem do acervo legado (`SIGFUNCS.PRG` n├úo veio; a ├║nica ocorr├¬ncia em `Framework/` ├® dentro de `sigmvcab.SCT`, p-code que *chama*). ├ë lacuna pr├®-existente e sist├¬mica: `pafBO`, `sigprftpBO`, `SigPrScnBO`, `sigtosenBO` e `Formsigtosen` j├í dependem dela. Em runtime d├í `File 'fcriptografar.prg' does not exist` ao validar senha.
+
+**N├úo criei o wrapper de prop├│sito.** Pela regra #27, `fCriptografar` cai na linha "DEIXAR AUSENTE": devolve valor de c├ílculo usado em compara├º├úo de seguran├ºa. Um stub chutado faria a valida├º├úo de senha errar em sil├¬ncio ÔÇö aceitando tudo ou recusando tudo ÔÇö e eu n├úo tenho o algoritmo do legado para transcrever. Ausente, o erro aparece alto. Isso precisa de decis├úo sua (recuperar o algoritmo do Fortyus) e est├í fora do escopo da Fase 2 ÔÇö o pipeline pode seguir para a Fase 3.

@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö all BO properties referenced by the form (`this_cUsuarios`, `this_cNComps`, `this_cGrupos`, `this_cCursorArvore`, `this_cMensagemErro`) exist in `SIGOPCAUBO.prg`, and no "n├úo implementado" false-positive triggers remain.
+
+## Summary
+
+Fase 6/8 completo para **FormSIGOPCAU.prg**: implementei os tr├¬s lookups que faltavam (equivalentes aos `PROCEDURE Valid` do legado em `GetcUsu`/`GetDUsu`/`GetGrupo`):
+
+- **`ValidarCUsu`/`ValidarDUsu`/`ValidarGrupo`** (+ respectivos `*Exec`) ÔÇö ligados via `BINDEVENT ... "LostFocus"` (nunca `KeyPress` sem testar tecla, regra do projeto), com guarda de reentr├óncia `this_lEmLookup` contra o picker modal.
+- **`AbrirBuscaUsuario`/`AbrirBuscaGrupo`** ÔÇö abrem `FormBuscaAuxiliar` seguindo o contrato can├┤nico (match exato no `Init`, `Show()` s├│ quando n├úo achou, preenchimento sob guarda `this_lSelecionou`), preservando a ordem de colunas do legado (busca por c├│digo mostra C├│digo primeiro; busca por nome mostra Nome primeiro).
+- **`AtualizarHabilitacaoFiltros`** ÔÇö reproduz os tr├¬s guards `When` mutuamente exclusivos do legado (Usu├írio ├ù Grupo; Nome s├│ edit├ível quando os dois outros est├úo vazios).
+
+Cada `Validar*Exec` chama `THIS.CarregarDados()` ao final, reproduzindo a checagem incondicional do `maketree` legado. Arquivo passa na checagem de balanceamento de `PROCEDURE/FUNCTION`, `TRY/ENDTRY` e `WITH/ENDWITH`, e todos os m├®todos BINDEVENT delegate est├úo PUBLIC.

@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is done and verified. Here's the report, including a mistake I made along the way.
+
+## What Phase 6 needed for this form
+
+`SIGPRVTX` has **no lookups at all** ÔÇö the dump has zero `fwBusca*`/`sigacess()`/`mAddColuna`, so inventing one would violate PILAR 1. And it has exactly **one** data-entry field: `Grade.Column4` ("Referencia SKU" / `refsku`). The legacy declares `Column1/2/3.ReadOnly = .T.` and deliberately omits it on Column4; `GetPlanilha` is `ReadOnly = .T. + Enabled = .F.` (filled only by the `GetFile` picker). So the deliverable was that editable cell plus its validation:
+
+- **`TextBoxRefSkuVtx_4c`** ÔÇö TextBox subclass with `Valid` **embedded** (regra #46: `BINDEVENT` on a Column TextBox's `Valid` doesn't fire reliably), same pattern as `TextBoxProdutoLpr_4c`.
+- **`InstalarCelulaRefSku`** ÔÇö `AddObject` + `CurrentControl` + `Sparse = .F.` (regra #18 ÔÇö without `CurrentControl` the control never appears), idempotent, called from `MontarGrade` *after* the bind since `RecordSource` can recreate Columns.
+- **`Column4.ReadOnly = .F.`** placed after the Column1/2/3 lines (regra #18 ordering).
+- **`MaxLength = 40`** from `refsku char(40)` in the schema ÔÇö not from `Width` (regra #19).
+- **`ValidarRefSkuGrade`** ÔÇö enforces only the schema width, reading from `par_oTxt.Value` (the cursor gets the value *after* `Valid`) and writing back to both the control and the cursor. **Blank stays valid**, because the legacy's `Gather Memvar` writes empty `refsku` happily ÔÇö I did not invent a mandatory-field rule.
+- **`ValidarGrade`** ÔÇö the `cmdok.Click` pre-conditions transcribed literally (empty-grid message + confirmation); its `GO TOP` is also what commits a cell left mid-edit.
+
+## The mistake
+
+I used `perl -0777 -i -pe` with a `die` guard, expecting "no match ÔåÆ file untouched". That is wrong: `perl -i` renames the temp file over the original, and the `die` fired before any output, so **the form file was truncated to 0 bytes** and there was no backup. `HEAD` held only the *old, wrong-shaped* version (a CRUD/PageFrame form ÔÇö the reason this task was re-enqueued), so restoring it would have been a regression.
+
+I rebuilt the file from the legacy dump, which is the authoritative source anyway: 847 lines, every property transcribed from `SIGPRVTX_form_codigo_fonte.txt`. One deliberate change from the destroyed version ÔÇö the header objects now use the names in `mapeamento.json` (`cnt_4c_Sombra` / `lbl_4c_LblSombra` / `lbl_4c_LblTitulo`) instead of `cnt_4c_Cabecalho`, since `ValidarUIFidelity` resolves names through that JSON. I saved the `perl -i` hazard to memory.
+
+## Verification (not just "it compiles")
+
+Compiled clean in VFP9, then instantiated and exercised the new code:
+
+```
+Col4.CurrentControl=[TXT_4C_REFSKU]  Sparse=.F.
+ReadOnly  Col1=.T. Col2=.T. Col3=.T. Col4=.F.      <- igual ao legado
+txt_4c_RefSku MaxLength=40   Col4 Width=150  Header=[Referencia SKU]
+ValidarRefSkuGrade(56 chars): LEN(.Value)=40  LEN(cursor.refsku)=40
+ValidarRefSkuGrade(branco):  retorno=.T.  cursor vazio=SIM
+ValidarGrade(grade vazia)=.F.  -> "Nenhum Registro para Atualizacao."
+```
+
+No `ON ERROR` fired. Gate conditions for the Fase 6 FLAT branch all true (`semPageFrame`, `BINDEVENT`, `.ControlSource =`, `PROCEDURE Validar\w+`, `legadoSemLookup`). Completeness regexes: 0 TODO, 0 "later", 0 empty procedures of 19. Auditors `VerificarFuncoesNaoDefinidas`, `VerificarLookupEmKeyPress`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` all clean.
+
+## Two things worth your attention
+
+1. **`projeto/app/utils/impexceldriver.prg` is new and untracked** (created by the prior Phase 6 run, not by me). `Processamento` depends on it entirely. It has a latent edge case: the "title starts with a digit" guard compares the whole string (`loc_cLimpo >= "0" AND loc_cLimpo <= "9"`), so a column header like `9ABC` slips through and `CREATE CURSOR` fails ÔÇö caught by the outer `CATCH`, so it degrades to a safe `.F.` plus the caller's message, not a crash. I left it alone as out of scope; say the word and I'll fix it.
+
+2. **I could not compact `MEMORY.md` to the 17.1KB the hook asked for.** The index has 257 entries, zero duplicates, zero dangling links ÔÇö I checked. Filenames alone average ~48 bytes, so 17.1KB leaves ~14 characters per label, which makes the index useless for judging relevance. Reaching the target means *dropping* entries, and that's a call about your accumulated knowledge that I shouldn't make blind. It sits at 20.5KB, still under the 24.4KB read limit. I can do a curation pass if you want to tell me which areas are stale.

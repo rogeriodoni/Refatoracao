@@ -1,0 +1,76 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "For"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPBOL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBOL",
+      "evento": "Init",
+      "linhas": 144,
+      "codigoOriginal": "LParameters poForm, pnTpBol, pCursor\n\nSet DataSession to poForm.DataSessionId\n\nIf poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0\n\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\tReturn(.f.)\nEndIf\n\nlcErro = ''\nllSair = .F.\nWith Thisform\n\t.vnTpBol  = Iif(Type('pnTpBol') = 'N', pnTpBol, 0)\n\t.vnCursor = pCursor\n\tDo Case\n\t\tCase .vnTpBol = 1\n\t\t\t.Caption = 'Impressão de Protocolo de Cheque'\n\t\t\t\n\t\tCase InList( .vnTpBol, 2, 3,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Impressora,Option&lcI,Cmd_Imprimir",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBOL.btnReport",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "*!*\tLocal lnImpres, lcImp, lcCursor\n\n*!*\tIf Thisform.VnQtdimp > 0\n*!*\t\tWith Thisform\n*!*\t\t\tlnImpres  = .Opt_Impressora.Value\n*!*\t\t\tlcImp     = .Opt_Impressora.Buttons(lnImpres).Tag\n*!*\t\t\tlcCursor  = .vnCursor\n*!*\t\tEndWith\n*!*\t\tSelect (lcCursor)\n*!*\t\tReplace cImps With lcImp\n*!*\tEndif\n*!*\tThisform.Release\n\nLocal lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcCursor\n\nWith Thisform\n\tlnTpBols  = .vnTpBol\n\tlcTitEnv  = .vcTitEnvelope\n\tlcEmps    = .vcEmp\n\tlcDopes   = .v... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Impressora",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPBOL.Init",
+      "queryOriginal": "If poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0",
+      "tabelas": "SigCdmp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

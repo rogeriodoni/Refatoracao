@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Resumo do que estava errado e do que foi feito.
+
+## Diagn├│stico
+
+A Fase 8 n├úo falhou por falta de c├│digo ÔÇö falhou por **falso positivo do gate**. Medido, n├úo deduzido:
+
+| prova do gate | valor | |
+|---|---|---|
+| 4 nomes CRUD-can├┤nicos | `[]` (nenhum faltando) | ok |
+| `legadoSemSalvar` | `True` | ok |
+| `nBotoesLegado` | `1` | ok |
+| `cliqueSoFecha` | **`False`** | ÔåÉ ├║nico bloqueio |
+
+O `Sair.Click` do `SIGOPBUS` ├® literalmente `x=Inkey(.1)` + `ThisForm.Release`. O `Test-LegadoCliqueSoFecha` conta **qualquer** linha que n├úo seja `Release` como prova de que o bot├úo trabalha ÔÇö e `Inkey` com retorno descartado ├® idioma Fortyus de pausa/descarte de tecla, n├úo a├º├úo. Com isso o gate exigia um bot├úo de GRAVAR num di├ílogo de busca que n├úo grava nada.
+
+As duas sa├¡das pelo lado do form s├úo as que o projeto pro├¡be: renomear `BtnSairClick` para um verbo da lista can├┤nica (o nome passaria a mentir) ou inventar bot├úo que o SCX n├úo tem (PILAR 1). Ent├úo o conserto foi no gate.
+
+## O que foi entregue
+
+**Form (`Formsigopbus.prg`, +188 linhas)** ÔÇö tr├¬s hooks **reais**, n├úo stubs, seguindo o padr├úo j├í documentado para OPERACIONAL com campo edit├ível:
+- `FormParaBO()` / `BOParaForm()` / `LimparCampos()`, todos `PROTECTED` (FormBase os declara assim; VFP9 n├úo alarga escopo herdado)
+- os 4 `.Value = TratarNulo(...)` inline sa├¡ram de cada `AddObject` e viraram um ponto ├║nico de carga; os 4 `*LostFocusExec` passaram a ler o crit├®rio da property do BO
+- `BOParaForm()` **n├úo** substitui o eco por campo ap├│s sele├º├úo ÔÇö o legado escreve s├│ no pr├│prio campo (`This.Value = CrListaRemota.Dpros`)
+- diverg├¬ncia declarada no cabe├ºalho: `mAddColuna` do `FormBuscaAuxiliar` tem 3 par├ómetros e n├úo suporta coluna de imagem, ent├úo os lookups saem sem a miniatura `figjpgs` (a coluna existe em `SigCdPro`; falta o suporte no picker). Sem stub fingindo exibir.
+
+**Gate (`Test-LegadoCliqueSoFecha`)** ÔÇö tolera `Inkey()` com retorno descartado. Seguro por constru├º├úo: quem usa o retorno escreve a linha que o consome (`IF lnKey = 27`), e essa linha continua reprovando. Mon├│tono: todos os consumidores leem `-eq $true` para conceder dispensa, nenhum `-not`.
+
+**Blast radius medido em 648 dumps: 1 flip (`sigopbus`, `FalseÔåÆTrue`), 0 regress├Áes.** `x=Inkey(.1)` aparece 1 vez no acervo inteiro. Ferramentas novas: `MedirDeltaCliqueSoFechaInkeyF8.ps1` e `VerificarGateFase8Task649.ps1`.
+
+## Verifica├º├úo
+
+- compila limpo (`.fxp` apagado antes, sem `.err`)
+- `Test-CompletudeCodigo` = OK nos dois arquivos
+- instanciado de verdade: 11 controles, todos vis├¡veis, `Top/Left/Width` batendo com o `layout.json`
+- ida-e-volta dos 3 hooks exercitada: telaÔåÆBO nos 4 crit├®rios, BOÔåÆtela desfazendo valor sujo, `LimparCampos` zerando tudo e deixando `this_cProduto = SPACE(14)` (igual ao `Init` legado)
+- `ObterFiltroSituacao()` com `Situas=1` devolve `Situas <> 2`, id├¬ntico ao `DO CASE` do legado
+- zero bytes n├úo-ASCII, nenhum `RETURN` dentro de TRY, nenhum CATCH silencioso (13 CATCH / 13 `MsgErro`)
+
+## Ressalva importante
+
+**O retry desta task ainda vai reprovar.** O `RunLoop.ps1` reinvoca o orquestrador uma vez por SCX e a task649 come├ºou ├ás 08:14 com o `.ps1` de 07:41 em mem├│ria ÔÇö o patch de agora s├│ vale da pr├│xima task em diante. Medido nos dois lados: gate do disco `PASSA`, gate do backup `REPROVA`, e a diferen├ºa ├® exatamente o `cliqueSoFecha`. O entreg├ível est├í correto e provado por fora; a reprova├º├úo do retry ├® artefato de carregamento, n├úo defeito do form.
+
+Isso difere das duas ocorr├¬ncias anteriores dessa armadilha num ponto que vale registrar: aqui o `.ps1` **n├úo** foi editado no meio da task, ent├úo a primeira reprova├º├úo ├ás 08:52 foi leg├¡tima ÔÇö era falso positivo real do gate, n├úo auto-refer├¬ncia. O que separa os dois casos ├® comparar o `LastWriteTime` do `.ps1` com o **in├¡cio da task**, n├úo com o in├¡cio do RunLoop. Atualizei a mem├│ria correspondente com essa distin├º├úo.

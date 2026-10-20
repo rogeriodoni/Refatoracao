@@ -1,0 +1,214 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 9,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCCL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor TmpOper (Emps c(3), Dopes c(20), MascNum c(6), Tipo c(10), Moeda c(3), Valos n(12,2), Datas T Null)\nIndex On Emps + Dopes + MascNum Tag Num\nIndex On Datas Tag Datas\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.sair",
+      "evento": "Click",
+      "linhas": 73,
+      "codigoOriginal": "Local lcQuery, lcMoe\n\nThisForm.Enabled = .f.\n\nZap In TmpOper\n\nlcQuery = [Select MoedaPs,MascNums ] + ;\n\t\t    [From SigCdPam ] + ;\n\t\t   [Where Not cIdChaves = '] + fUniqueIds() + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPam') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPam)')\n\tReturn 0\nEndIf\n\nWait Window 'Aguarde!!! Selecionando Destino...' NoWait\n\nlcQuery = [Select a.Emps, a.Dopes, a.Numes, a.Datas, a.Valos, b.CMoes ] + ;\n\t\t    [From SigMvC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_grupo,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_grupo",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, This)\n\n\tThisForm.poDataMgr.CursorQuery('SigCdGcr', 'crSigCdGcr', 'Codigos', This.Value)\n\n\tWith This.Parent\n\t\t.Get_dConta.Left  = Iif(crSigCdGcr.TpCads = 1, 326, 177)\n\t\t.Get_dConta.Width = Iif(crSigCdGcr.TpCads = 1, 278, 427)\n\t\t.Say_dConta.Left  = Iif(crSigCdGcr.TpCads = 1, 329, 180)\n\t\t.Get_Cpf.Visible  = (crSigCdGcr.TpCads = 1)\n\t\t.Say_Cpf.Visible  = (crSigCdGcr.TpCads = 1)\n\tEndWith\nEndIf\n* Fim **************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_dConta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_conta",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Not Empty(This.Parent.Get_Grupo.Value)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_conta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local Grupo\n\nGrupo = this.Parent.get_grupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This, This.Parent.get_dconta)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Parent.Get_DConta.Value = ''\n\t\tThis.Parent.get_cpf.Value = ''\n\tElse\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Value)\n\n\t\tIf Empty(This.Parent.get_grupo.Value) \n\t\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\t\tEndIf\n\t\tThis.Parent.get_cpf.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_grupo,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value) And Empty(This.Parent.Get_Cpf.Value)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_dconta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local Grupo\n\nGrupo = this.Parent.get_grupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, This.Parent.get_conta, This.Parent.get_dconta)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Parent.Get_DConta.Value = ''\n\t\tThis.Parent.get_cpf.Value = ''\n\tElse\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Value)\n\n\t\tIf Empty(This.Parent.get_grupo.Value) \n\t\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\t\tEndIf\n\t\tThis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_grupo,get_conta,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_cpf",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCL.Origem.Get_cpf",
+      "evento": "Valid",
+      "linhas": 50,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tlnVer = 0\n\tlcCgc = StrTran(StrTran(StrTran(This.Value,'.',''),'-',''),'/','')\n\tIf (Len(Alltrim(lcCgc)) <> 14)\n\t\tlcCgc1 = TransForm(lcCgc,'@R 999.999.999-99')\n\t\tIf (Len(Alltrim(lcCgc)) = 11)\n\t\t\tlnVer = Iif(fValidarCPF(lcCgc1),1,2)\n\t\tEndIf\n\tElse\n\t\tlcCgc1 = TransForm(lcCgc,'@R 99.999.999/9999-99')\n\t\tlnVer  = Iif(fValidarCNPJ(lcCgc1),1,2)\n\tEndIf\n\t\n\tIf (lnVer = 2)\n\t\t=MessageBox('CPF/CNPJ Incorreto!!!', 48, '')\n\t\tReturn 0\n\tEndIf\n\n\tThis.Value = lcCgc1\n\tThis.Refr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

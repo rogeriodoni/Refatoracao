@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 2 conclu├¡da e verificada.**
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1:6893`) exige:
+
+```
+CarregarDoCursor  AND  ( (Inserir AND Atualizar)  OR  $boSomenteLeitura )
+```
+
+A exce├º├úo "BO somente-leitura" relaxa **s├│** `Inserir`/`Atualizar` ÔÇö **nunca** `CarregarDoCursor`. A tentativa anterior acertou o racioc├¡nio do somente-leitura mas omitiu `CarregarDoCursor` por completo, e esse termo ├® incondicional. Foi a causa ├║nica da reprova├º├úo.
+
+## O que fiz
+
+Adicionei `CarregarDoCursor(par_cAliasCursor)` com l├│gica **real**, n├úo stub: extra├¡ para ele o mapeamento colunaÔåÆproperty que estava inline em `ObterDadosContaEmail`, que agora delega. ├ë o ├║nico ponto do BO que l├¬ coluna de cursor, e ├® o hook can├┤nico do `BusinessBase` para isso ÔÇö a query do e-mail da empresa (`SigCdEmp`) ├® a ├║nica leitura remota que o legado faz (linha 646 do dump).
+
+Transcrevi as convers├Áes do legado coluna a coluna (linhas 652 e 801-804): `LOWER+ALLTRIM` em `PadEmails`/`PadServs`, **s├│ `ALLTRIM`** em `PadSenhas`, `NVL(...,0)` em `PadPortas`. Tipos conferidos no `docs/schema.sql` com `Get-Content -Raw` (regra #14): `padportas` ├® `numeric(3,0)` ÔåÆ vai para a property num├®rica. Usei `SELECT (alias)` + acesso direto aos campos (nunca `(var).campo`), `TYPE(alias+".col")` para exist├¬ncia de campo (nunca `PEMSTATUS` em cursor), `RETURN` s├│ fora do `TRY`, `CATCH` com `MsgErro`.
+
+Mantive `Inserir`/`Atualizar`/`ObterChavePrimaria` herdados: o dump prova zero grava├º├úo (nenhum `TABLEUPDATE`, nenhum `.AddCursor`, nenhum alvo de `Insert/Update/Delete`), ent├úo sobrescrever significaria inventar SQL ÔÇö o que a regra #22 pro├¡be.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| Gate Fase 2 simulado | **PASSA** ÔÇö 4 provas do somente-leitura `True`, `CarregarDoCursor` presente |
+| 05d completude | **PASSA** ÔÇö 0 problemas (sem TODO, sem procedure vazia, sem "pendente"/"nao implement") |
+| `COMPILE` no VFP9 | **COMPILE_OK** ÔÇö `.FXP` gerado, `.ERR` vazio |
+| Runtime, 4 cen├írios | **sem exce├º├úo** |
+
+Compilar n├úo bastava, ent├úo rodei o m├®todo de verdade (`automation\TestCarregarDoCursorSigPrPdf664.prg`, subclasse com `Init` vazio porque BO sem conex├úo travaria o VFP headless): linha normal mapeia `fiscal@empresa.com.br` / `587` tipo `N` e **restaura a work area** do chamador; colunas `NULL` viram `""`/`0` sem quebrar; cursor vazio e alias ausente devolvem `.F.` com mensagem. O caso que mais importava: a senha preserva a caixa (`SeNhA123`) enquanto os dois endere├ºos s├úo minusculados ÔÇö ├® a diverg├¬ncia do legado que um `LOWER` uniforme teria apagado em sil├¬ncio.
+
+Dois pontos para as fases seguintes, herdados da Fase 1 e ainda abertos por decis├úo dela: `this_lPdfCreatorDisponivel` (detec├º├úo do PDFCreator via registro, `REGISTRY1`) fica para a fase do Form resolver, e `this_cEmpPastas` ├® lido mas o legado nunca o usa depois do `Select` ÔÇö mantive para rastrear a mesma consulta.

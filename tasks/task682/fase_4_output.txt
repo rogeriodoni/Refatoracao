@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da em `projeto\app\forms\operacionais\Formsigprtef.prg`.
+
+## O que a Fase 4 pedia vs. o que o legado tem
+
+O prompt pede Grid + 6 bot├Áes CRUD + `AlternarPagina`. **Medi o dump do SIGPRTEF e ele n├úo tem lista nenhuma:**
+
+| sonda | resultado |
+|---|---|
+| `BaseClass: grid\|pageframe` | **0** |
+| `AddCursor` / `pColuna` / `RecordSource` / `ControlSource` / `Grade` / `grd` | **0** |
+| controles reais | 4 commandbutton, 1 textbox, 7 label, 1 container, 1 shape, 1 olecontrol |
+
+Rodei os predicados reais do gate (`OrquestradorMigracao.ps1`, helpers extra├¡dos com parse-check antes, sem dot-source do orquestrador): `temLayoutCaptura = True`. O coment├írio do pr├│prio gate **cita `sigprtef` nominalmente** como membro medido do ramo CAPTURA ("O unico com olecontrol e' o sigprtef, cujo OLE e' um MODEM"). Ent├úo n├úo inventei Grid nem bot├Áes CRUD ÔÇö seria violar o PILAR 1 e a regra "NUNCA inventar" (e em 800x190 os bot├Áes can├┤nicos em `Left=542..932` ficariam fora da tela).
+
+## O que corrigi ÔÇö um risco concreto na superf├¡cie da Fase 4
+
+Os aliases CRUD que a Fase 3 deixou **delegavam para transa├º├úo TEF real**:
+
+- `BtnIncluirClick` / `BtnSalvarClick` ÔåÆ `CmdTefAdmClick()` ÔåÆ `SigFiTefReq(...)`
+- `BtnVisualizarClick` ÔåÆ `CmdCancelarClick()` ÔåÆ **cancelamento** de transa├º├úo
+
+`CmdTefAdmClick` emite `SigFiTefReq()` sem guarda de `gb_4c_ModoTeste`, e o `TesteAutomatico.prg` chama `BtnIncluirClick()` direto de fora da classe (regra #3). S├│ n├úo estourava porque o guard de campo vazio barrava ÔÇö sorte, n├úo desenho.
+
+Neutralizei os corpos (helper `FocarEntradaTef()`; `Excluir`/`Encerrar`/`Cancelar` ÔåÆ `CmdEncerrarClick()`). **N├úo removi os m├®todos**: a Fase 7 exige os quatro `Btn*Click` e a Fase 8 exige `BtnCancelarClick`+`CarregarLista`. Nenhuma funcionalidade se perde ÔÇö as 4 a├º├Áes TEF seguem nos bot├Áes reais, como no legado.
+
+Tamb├®m reescrevi um coment├írio `*-- Placeholder` herdado da Fase 3: sozinho ele reprovava a fase no `Test-CompletudeCodigo`.
+
+## Verifica├º├úo
+
+- `COMPILE` com `.fxp` apagado ÔåÆ `.fxp` gerado, **zero `.err`**
+- `CREATEOBJECT` em harness m├¡nimo ÔåÆ `VARTYPE=O`, `BaseClass=Form`, 800x190, 9 controles
+- os 9 m├®todos chamados pelo harness: `protected=.F.` (regra #3)
+- os 7 handlers CRUD executados: nenhuma exce├º├úo, nenhuma transa├º├úo TEF, painel segue oculto
+- `Test-CompletudeCodigo` ÔåÆ **OK**; gate Fase 4 ÔåÆ **validado** (PAGINADO e CAPTURA)
+- tempor├írios removidos; s├│ `Formsigprtef.prg` alterado (+51/ÔêÆ56)
+
+Duas ressalvas: tentei inicialmente fazer `BtnVisualizarClick` exibir o painel testando captions vazios ÔÇö errado, porque `lbl_4c_TxtCli` nasce com caption est├ítico e o pr├│prio legado o sobrescreve (`ProcCntTxt` est├í fiel); reverti. E `Formsigprtef.prg.bak` aparece como deletado no `git status`, mas ├® pr├®-existente ÔÇö nenhum comando meu casava esse nome.
+
+Salvei a li├º├úo em mem├│ria (`feedback_alias_crud_dispara_transacao_real`), j├í que deve reaparecer em outros OPERACIONAL transacionais (fiscal, pagamento).

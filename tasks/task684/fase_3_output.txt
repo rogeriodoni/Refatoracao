@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean. Phase 3 is complete: `FormSIGPRTRF.prg` created at `C:\4c\projeto\app\forms\operacionais\FormSIGPRTRF.prg`, both it and `SIGPRTRFBO.prg` compile cleanly in VFP9.
+
+Summary of what was built:
+- `DEFINE CLASS FormSIGPRTRF AS FormBase` with the real legado dimensions (436├ù450 modal dialog, `ControlBox=.F.`, `WindowType=1`, `DataSession=2`) ÔÇö **not** the generic 1000├ù600 CRUD template, since this is an OPERACIONAL dialog with a flat custom layout, no PageFrame/Lista/Dados.
+- State properties mirroring the legado's `ThisForm.AntCPro`/`ThisForm.Retorno` (`this_cCodigoAnterior`, `this_cRetorno`) plus `this_cCursorGrade` for the grid's cursor name.
+- `Init()` ÔåÆ `RETURN DODEFAULT()`.
+- `InicializarForm()`: sets `Caption` via `CHR()` concatenation (can't be a class-level literal ÔÇö Caption with CHR() must be assigned in a method, confirmed against existing migrated forms), creates the BO, loads the `ClockEcfs` wait parameter, builds the two containers (`cnt_4c__Referencia`, `cnt_4c__Mensagem` ÔÇö exact double-underscore names from `mapeamento.json`), and calls `TornarControlesVisiveis`.
+- `TornarControlesVisiveis` filters out `cnt_4c__Mensagem` by name (the "Aguarde" progress panel must stay hidden until the Ok button's countdown animation, per the containers-flutuantes rule).
+- `Destroy()` releases the grid cursor then calls `DODEFAULT()` (required so `FormBase.Destroy`'s menu-popup restore logic still runs).
+
+Grid, label, Shape1, and the two buttons (Ok/Cancelar) are deliberately deferred to Phase 4, per this phase's scope.
+
+One side note: a research subagent I dispatched flagged that one tool result contained an injected fake "MCP server instructions" block trying to redirect it into creating a Claude Docs artifact ÔÇö unrelated to the task. It correctly ignored it; flagging to you per security practice, no action needed.

@@ -88,7 +88,9 @@ DEFINE CLASS ClfBO AS BusinessBase
             loc_cSQL = loc_cSQL + " ORDER BY codigos"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -118,7 +120,9 @@ DEFINE CLASS ClfBO AS BusinessBase
                 " FROM SIGCDCLF WHERE codigos = " + EscaparSQL(ALLTRIM(par_cCodigo))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -285,7 +289,9 @@ DEFINE CLASS ClfBO AS BusinessBase
                 EscaparSQL(ALLTRIM(THIS.this_cCodigo))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dup")
-                TABLEREVERT(.T., "cursor_4c_Dup")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dup") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dup")
+                ENDIF
                 USE IN cursor_4c_Dup
             ENDIF
 
@@ -510,7 +516,9 @@ DEFINE CLASS ClfBO AS BusinessBase
                 " WHERE clfiscals = " + EscaparSQL(ALLTRIM(par_cCodigo))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_TmPro")
-                TABLEREVERT(.T., "cursor_4c_TmPro")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmPro") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmPro")
+                ENDIF
                 USE IN cursor_4c_TmPro
             ENDIF
 

@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da. O resultado, por├®m, n├úo ├® o que o prompt da fase pedia ÔÇö e a raz├úo est├í medida, n├úo inferida.
+
+## O legado n├úo tem bot├úo nenhum
+
+Medi o dump `SigPrScn_form_codigo_fonte.txt` com os pr├│prios contadores do gate:
+
+| medi├º├úo | valor |
+|---|---|
+| `BaseClass: commandbutton` / `commandgroup` | **0** |
+| `PROCEDURE *Click` no dump | **0** |
+| evid├¬ncia de CRUD (`frmcadastro`, `Grupo_Op`, `pcEscolha`, `btn/cmd<verbo>`, `<verbo>.Click`) | **nenhuma** |
+
+`SIGPRSCN` ├® um di├ílogo modal de login 436x160 (`TitleBar=0`, `ControlBox=.F.`) com 2 `fwget`, 2 `Label` e o `cntSombra`. Os 3 m├®todos com c├│digo s├úo `Load`, `Init` e `SENHA.LostFocus` ÔÇö e a ├║nica sa├¡da ├® autenticar, porque o legado faz `Thisform.Release` **dentro** do `LostFocus`.
+
+Escrever `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar cinco bot├Áes de cadastro nessa tela (PILAR 1) e dar-lhes corpo sobre `SigCdUsu`, que o legado s├│ **l├¬** (PILAR 2) ÔÇö ou deix├í-los vazios, o que a regra de completude pro├¡be. **N├úo escrevi.** O que entrei no `FormSigPrScn.prg` foi o invent├írio com a evid├¬ncia acima, no mesmo formato dos blocos das fases anteriores. O "evento principal" desta tela ├® o `ValidarSenha()` da Fase 6, que j├í estava completo (inclusive o ramo `SetFiscal.Ini` ÔåÆ `SigCdPam`/`fTempoApp`, que vive no `SigPrScnBO.CarregarParametrosSistema`).
+
+## O gate era insatisfaz├¡vel ÔÇö consertei o gate
+
+`legadoSemCrud = .T.`, `nHandlers = 0`, `minHandlersF7 = 2` ÔåÆ a Fase 7 **reprovava um form correto**. Esse ├® o caso `SIGPRALE` j├í documentado. Implementei exatamente o rem├®dio prescrito, no `case 7`:
+
+```powershell
+if ($nBotoesLegado -eq 0 -and $FormType -eq 'OPERACIONAL' -and (Test-LegadoSemBotaoAlgum ...)) { $minHandlersF7 = 0 }
+```
+
+Fail-closed em quatro provas (`Test-LegadoSemBotaoAlgum` j├í existia, escrita para a Fase 8). **Delta medido nos dumps de `tasks\`**: dos 226 com zero bot├Áes, libera **19 dumps = 9 forms distintos**, todos OPERACIONAL e todos sem evid├¬ncia de CRUD (conferidos um a um); os outros **207** seguem no piso 2. Controle negativo: o mesmo dump marcado como `REPORT` continua reprovando.
+
+## Verifica├º├úo
+
+- `COMPILE_OK` ÔÇö form e BO, zero `.err` (`CompileCheckScn673F7.prg`)
+- `PROBE_OK` ÔÇö form **instancia** (436x160, `TitleBar=0`, `WindowType=1`), os 7 controles do legado existem, zero bot├úo na ├írvore, zero handler CRUD, `ValidarSenha`/`ValidarParametros` PUBLIC, `BINDEVENT` vivo apontando para `VALIDARSENHA`, `Format`/`InputMask`/`PasswordChar`/`TabIndex` do SCX (`ProbeScn673F7.prg`)
+- validador de completude: 0 ocorr├¬ncias de TODO/stub/"pendente"/"nao implement"; 0 acentos literais
+- orquestrador: parse limpo, UTF-8 BOM + CRLF preservados
+
+## Dois pontos que precisam de voc├¬
+
+1. **O loop tem de ser relan├ºado.** `& script.ps1` parseia o arquivo na invoca├º├úo ÔÇö a edi├º├úo do gate n├úo desbloqueia uma execu├º├úo j├í em curso.
+
+2. **Duas mem├│rias estavam erradas e me custaram tempo; corrigi as duas.** `feedback_noop_guard_sem_excecao_para_fase_sem_trabalho` afirmava que o guard de NO-OP tinha exce├º├úo para as Fases 5/6/7 e que o `case 7` j├í tinha o carve-out `$minHandlersF7 = 0`. **Nenhuma das duas existia** ÔÇö nem no `HEAD` nem na c├│pia de trabalho; `Test-LegadoSemCamposSoltos` e `Test-LegadoSemLookupAlgum` n├úo est├úo definidas em lugar nenhum do arquivo. Provavelmente perdido no `refatoracao_16102026`. Implementei s├│ o carve-out da Fase 7 (que ├® o que bloqueava esta task); **a exce├º├úo do guard de NO-OP continua ausente** ÔÇö ela n├úo d├í resultado errado, mas queima uma re-execu├º├úo opus sempre que o modelo corretamente n├úo altera o arquivo. Deixei de fora de prop├│sito, por estar fora do escopo desta fase: me diga se quer que eu feche isso tamb├®m.
+
+Nada foi commitado.

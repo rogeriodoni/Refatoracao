@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 5 ÔÇö `Formsigprsen` : nada a acrescentar, e isso est├í correto
+
+**N├úo alterei o `.prg`.** O `SIGPRSEN.scx` n├úo tem campo nenhum para migrar:
+
+| `BaseClass` no dump | qtd |
+|---|---|
+| form / dataenvironment | 1 + 1 |
+| container (`cntSombra`) | 1 |
+| label (`lblSombra`, `lblTitulo`) | 2 |
+| commandbutton (`btnGerSen`, `Saida`) | 2 |
+| **textbox / editbox / combobox / grid / pageframe** | **0** |
+
+Zero `AddCursor`, `pColuna`, `RecordSource`, `ControlSource`, `Grade`, `grd`. Metade de zero campos ├® zero ÔÇö escrever um `ConfigurarPaginaDados` exigiria inventar campos (viola o PILAR 1) ou criar m├®todo vazio (stub disfar├ºado). Os 6 objetos do legado j├í foram entregues nas Fases 3/4 e est├úo todos presentes.
+
+**Gate da Fase 5 rodado contra os arquivos reais: `VALIDADO`** pelo ramo DESPACHANTE (`legadoSemListaNemCampos = True`, `nBotoesLegado = 2`, `temSuperficieDespachante = True` ÔÇö `AddObject("cmd_4c_ÔÇª")` + `PROCEDURE BtnÔÇªClick`).
+
+Auditoria est├ítica do form: 0 acentos literais, 0 `this_X .Value`, 0 `MESSAGEBOX`/`ISEMPTY`/`PUBLIC PROCEDURE`, 0 `RETURN` dentro de `TRY`, 0 TODO/stub real, 3 Pictures conferidas existindo em `vbmp\`, e os 5 membros do BO usados pelo form (`GerarSenha`, `MandaEmail`, `this_cSenhaDia`, `this_cMensagemErro`, `this_lAutomatico`) todos declarados e PUBLIC (regra #51).
+
+## O defeito real estava no harness ÔÇö corrigido
+
+O guard de NO-OP (`Invoke-MigracaoFase`) n├úo tinha exce├º├úo: exit 0 + hash igual ÔçÆ for├ºa retry com opus e timeout 2x. Numa fase sem trabalho isso queima uma execu├º├úo opus inteira s├│ para reconfirmar que n├úo havia o que fazer. A mem├│ria que especificava o conserto avisava que ele **n├úo estava em disco** ÔÇö medi e confirmei. Implementei:
+
+- `Test-LegadoSemCampoNemLista` ÔÇö 4 provas (piso de sanidade `>= 1` bloco `BaseClass:` com `\s*$` para consumir o CRLF; sem lista; sem campos; sem agrupador de VCX, que esconde campos no p-code). Reusa o crit├®rio j├í medido do ramo DESPACHANTE em vez de inventar um novo.
+- `$faseSemTrabalhoNoLegado` no guard: Fases 5/6/7, s├│ `OPERACIONAL`, s├│ com dump presente; Fase 6 exige a prova extra de aus├¬ncia de lookup; Fase 7 delega a `Test-LegadoSemBotaoAlgum`. S├│ **deixa de for├ºar** o retry ÔÇö o gate de conte├║do continua valendo.
+
+**Medi├º├úo nos 674 dumps:** Fases 5 e 6 liberam 20 dumps = 10 forms distintos (11 REPORT recusados por `FormType`); Fase 7 libera 19 = 9 forms. O `sigprsen` libera 5 e 6 e **mant├®m o retry na 7**, porque ali h├í 2 bot├Áes com `.Click` real ÔÇö fail-closed funcionando. 12 controles negativos passaram (muta├º├úo por `.Replace()` literal, com entrada verificada). BOM preservado, bytes >127 id├¬nticos (2965), 16152 linhas CRLF, `Parser::ParseFile` com 0 erros, +153 linhas e nada mais tocado.
+
+Duas ressalvas honestas:
+
+1. **N├úo provei compila├º├úo nem instancia├º├úo.** O `vfp9.exe` nesta sess├úo gera o `.FXP` e sai sem executar o `.prg` (exit 0, nenhum arquivo de sa├¡da) ÔÇö ent├úo `.FXP` e exit 0 n├úo provam nada aqui. S├│ rodei as verifica├º├Áes est├íticas acima.
+2. Editar o orquestrador **n├úo desbloqueia uma execu├º├úo em curso** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo. Se o loop de migra├º├úo estiver rodando agora, ele precisa ser relan├ºado para pegar a corre├º├úo; esta task675/Fase 5 ainda vai gastar o retry.

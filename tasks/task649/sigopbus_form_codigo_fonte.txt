@@ -1,0 +1,745 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopbus.SCX
+* Data/Hora: 17/10/2026 08:14:07
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPBUS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPBUS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPBUS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPBUS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPBUS
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Descricao
+  Parent: SIGOPBUS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGOPBUS
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Produto
+  Parent: SIGOPBUS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Sair
+  Parent: SIGOPBUS
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label4
+  Parent: SIGOPBUS
+  Class: label
+  BaseClass: label
+
+Objeto: Label5
+  Parent: SIGOPBUS
+  Class: label
+  BaseClass: label
+
+Objeto: Get_RefFor
+  Parent: SIGOPBUS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGOPBUS
+  Class: label
+  BaseClass: label
+
+Objeto: get_DPro2s
+  Parent: SIGOPBUS
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 336
+  Width = 412
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ""
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  conjunto = .F.
+  filtrasituas = .F.
+  codmacro = .F.
+  cnjlacto = .F.
+  Name = "SIGOPBUS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Busca  de  Produto"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Busca  de  Produto"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Busca Produto pela Descrição"
+  Height = 21
+  Left = 52
+  Top = 90
+  Width = 209
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Get_Descricao
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 52
+  MaxLength = 40
+  TabIndex = 4
+  Top = 112
+  Width = 295
+  BackColor = 255,255,234
+  Name = "Get_Descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Busca Produto pelo Código"
+  Height = 21
+  Left = 52
+  Top = 145
+  Width = 193
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Get_Produto
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 52
+  MaxLength = 14
+  TabIndex = 1
+  Top = 167
+  Width = 113
+  BackColor = 255,255,234
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Sair
+------------------------------------------------------------
+  Top = 272
+  Left = 358
+  Height = 27
+  Width = 41
+  Cancel = .T.
+  Caption = "Sair"
+  Style = 1
+  TabIndex = 9
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "[Pressione <ESC> para cancelar]"
+  Height = 18
+  Left = 88
+  Top = 308
+  Width = 219
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Busca Produto pela Ref. Fornecedor"
+  Height = 21
+  Left = 52
+  Top = 199
+  Width = 254
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Get_RefFor
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 52
+  MaxLength = 20
+  TabIndex = 2
+  Top = 221
+  Width = 160
+  BackColor = 255,255,234
+  Name = "Get_RefFor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Busca Produto pelo Descritivo"
+  Height = 21
+  Left = 52
+  Top = 253
+  Width = 212
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBUS.get_DPro2s
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 52
+  MaxLength = 40
+  TabIndex = 3
+  Top = 275
+  Width = 295
+  BackColor = 255,255,234
+  Name = "get_DPro2s"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPBUS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return(Thisform.Produto)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Thisform.PodataMgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pRetorno, pSituacao, pConjunto, pCodMacro, pFiltraSit, pCnj
+
+ThisForm.Tiporetorno = pRetorno
+ThisForm.Situas = Iif(Type('pSituacao')='N', pSituacao, 0)
+ThisForm.FiltraSituas = Iif(Type('pFiltraSit')='N', pFiltraSit, 0)
+ThisFOrm.Conjunto = pConjunto
+ThisFOrm.CodMacro = pCodMacro
+ThisForm.Cnjlacto = pCnj
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+		ThisForm.Produto = Space(14)
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBUS.Get_Descricao
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	ThisForm.Label4.Visible = .t.
+	
+	lcFiltro = [ Dpros Like '%]+Alltrim(This.Value)+[%' ]
+	If Thisform.Situas <> 0 And ThisForm.FiltraSituas <> 0
+		Do case
+		Case Thisform.Situas = 1
+			lcFiltro = lcFiltro + [ Situas <> 2 ]
+		Case Thisform.Situas = 2
+			lcFiltro = lcFiltro + [ Situas = 2 ]
+		Case Thisform.Situas = 3
+			lcFiltro = lcFiltro + [ Situas In(0,1,2) ]
+		Case Thisform.Situas = 4
+			lcFiltro = lcFiltro + [ Situas <> 2 And Encoms = 1 ]
+		Case Thisform.Situas = 5
+			lcFiltro = lcFiltro + [ Encoms = 1 ]
+		EndCase
+	EndIf 
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'dpros', This.Value, 'Seleção', 1000 , .F. , lcFiltro, .t., .t. )
+	loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+	loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+	loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+	loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+	loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+	If ThisForm.Conjunto 
+		loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+	EndIf 
+	If ThisForm.CodMacro
+		loLista.mAddColuna('CodMacro', '', 'Cod. Macro',.t.,'CodMacro')
+	EndIf 
+	If ThisForm.CnjLacto
+		loLista.mAddColuna('CnjLacto', '', 'Conjunto',.t.,'CnjLacto')
+	EndIf 
+    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+	loLista.Show()	
+	
+	ThisForm.Produto = Space(14)
+	If Lastkey() <> 27
+		This.Value = CrListaRemota.Dpros
+		ThisForm.Produto = Iif(ThisForm.Conjunto,CrListaRemota.Conjunts,Iif(ThisForm.CodMacro,CrListaRemota.CodMacro,Iif(ThisForm.Tiporetorno,Str(CrListaRemota.Cbars),CrListaRemota.Cpros)))
+	EndIf
+	ThisForm.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBUS.Get_Produto
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	ThisForm.Label4.Visible = .t.
+	
+	If Thisform.Situas = 0 Or ThisForm.FiltraSituas = 0
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+								   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000,.f.,.f.,.f.,.t. )
+		loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+		loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+		loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+		loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+		loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+		If ThisForm.Conjunto 
+			loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+		EndIf 
+		If ThisForm.CodMacro
+			loLista.mAddColuna('CodMacro', '', 'Cod. Macro',.t.,'CodMacro')
+		EndIf 
+	    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+		loLista.Show()
+	Else
+		lcFiltro = []
+		Do case
+		Case Thisform.Situas = 1
+			lcFiltro = [ Situas <> 2 ]
+		Case Thisform.Situas = 2
+			lcFiltro = [ Situas = 2 ]
+		Case Thisform.Situas = 3
+			lcFiltro = [ Situas In(0,1,2) ]
+		Case Thisform.Situas = 4
+			lcFiltro = [ Situas <> 2 And Encoms = 1 ]
+		Case Thisform.Situas = 5
+			lcFiltro = [ Encoms = 1 ]
+		EndCase
+		
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000, .f., lcFiltro,.f.,.t.)
+		loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+		loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+		loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+		loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+		loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+		If ThisForm.Conjunto 
+			loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+		EndIf 
+		If ThisForm.CodMacro
+			loLista.mAddColuna('CodMacro', '', 'Cod. Macro',.t.,'CodMacro')
+		EndIf 
+		If ThisForm.CnjLacto
+			loLista.mAddColuna('CnjLacto', '', 'Conjunto',.t.,'CnjLacto')
+		EndIf 
+	    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+		loLista.Show()
+		
+	EndIf 
+	
+*!*		If (Thisform.Situas = 1) && Só Produtos Ativos
+*!*			Dimension laFiltro(1,2)
+*!*			laFiltro(1,1) = 'Situas'
+*!*			laFiltro(1,2) = 1
+*!*			loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+*!*							   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000, .f., @laFiltro,.f.,.t.)
+*!*			loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+*!*			loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+*!*			loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+*!*			loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+*!*			loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+*!*			If ThisForm.Conjunto 
+*!*				loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+*!*			EndIf 
+*!*		    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+*!*			loLista.Show()
+*!*		Else
+*!*			If (ThisForm.Situas = 2) && Só Produtos inAtivos
+*!*				Dimension laFiltro(1,2)
+*!*				laFiltro(1,1) = 'Situas'
+*!*				laFiltro(1,2) = 2
+*!*				loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+*!*								   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000, .f., @laFiltro,.f.,.t.)
+*!*				loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+*!*				loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+*!*				loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+*!*				loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+*!*				loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+*!*				If ThisForm.Conjunto 
+*!*					loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+*!*				EndIf 
+*!*			    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+*!*				loLista.Show()
+*!*			Else
+*!*				loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+*!*									   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000,.f.,.f.,.f.,.t. )
+*!*				loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+*!*				loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+*!*				loLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')
+*!*				loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+*!*				loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+*!*				If ThisForm.Conjunto 
+*!*					loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+*!*				EndIf 
+*!*			    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+*!*				loLista.Show()
+*!*			Endif
+*!*		EndIf
+	ThisForm.Produto = Space(14)
+	If Lastkey() <> 27
+		This.Value = CrListaRemota.Dpros
+		ThisForm.Produto = Iif(ThisForm.Conjunto,CrListaRemota.Conjunts,Iif(ThisForm.CodMacro,CrListaRemota.CodMacro,Iif(ThisForm.Tiporetorno,Str(CrListaRemota.Cbars),CrListaRemota.Cpros)))
+	EndIf
+	ThisForm.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBUS.Sair
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+x=Inkey(.1)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBUS.Get_RefFor
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	ThisForm.Label4.Visible = .t.
+	*** MENA - 20/10/2014 - colocado alltrim na referencia para não coincidir exatamente com a referencia do cadastro. Assim não traz o primeiro cpros encontrado ***	
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'Reffs', ALLTRIM(This.Value), 'Seleção', 1000, .f., .f., .f., .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Reffs', '', 'Ref.Fornecedor',.t.,'Reffs')
+		loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+		loLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')
+		loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+		loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+		If ThisForm.Conjunto 
+			loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+		EndIf
+		If ThisForm.CodMacro
+			loLista.mAddColuna('CodMacro', '', 'Cod. Macro',.t.,'CodMacro')
+		EndIf  
+		If ThisForm.CnjLacto
+			loLista.mAddColuna('CnjLacto', '', 'Conjunto',.t.,'CnjLacto')
+		EndIf 
+	    loLista.mAddColuna('figjpgs', .f., .f., .f., .f., .t.)
+		loLista.Show()
+	EndIf
+	ThisForm.Produto = Space(14)
+	If Lastkey() <> 27
+		This.Value = CrListaRemota.Cpros
+		ThisForm.Produto = Iif(ThisForm.Conjunto,CrListaRemota.Conjunts,Iif(ThisForm.CodMacro,CrListaRemota.CodMacro,Iif(ThisForm.Tiporetorno,Str(CrListaRemota.Cbars),CrListaRemota.Cpros)))
+	EndIf
+EndIf
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBUS.get_DPro2s
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	ThisForm.Label4.Visible = .t.
+	
+	lcFiltro = [ Dpro2s Like '%]+Alltrim(This.Value)+[%' ]
+	If Thisform.Situas <> 0 And ThisForm.FiltraSituas <> 0
+		Do case
+		Case Thisform.Situas = 1
+			lcFiltro = lcFiltro + [ Situas <> 2 ]
+		Case Thisform.Situas = 2
+			lcFiltro = lcFiltro + [ Situas = 2 ]
+		Case Thisform.Situas = 3
+			lcFiltro = lcFiltro + [ Situas In(0,1,2) ]
+		Case Thisform.Situas = 4
+			lcFiltro = lcFiltro + [ Situas <> 2 And Encoms = 1 ]
+		Case Thisform.Situas = 5
+			lcFiltro = lcFiltro + [ Encoms = 1 ]
+		EndCase
+	EndIf 
+	
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPro2s', This.Value, 'Seleção', 1000, .F., ;
+						   lcFiltro, .t., .t. )
+	loLista.mAddColuna('Dpro2s', '', 'Descrição',.t.,'Dpro2s')
+	loLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')
+	loLista.mAddColuna('ObsPes', '', 'Obs 1',.t.,'ObsPes')
+	loLista.mAddColuna('ObsPeds', '', 'Obs 2',.t.,'ObsPeds')
+	loLista.mAddColuna('PesoMs', '99,999.999', 'Peso Médio',.t.,'PesoMs')
+	If ThisForm.Conjunto 
+		loLista.mAddColuna('Conjunts', '', 'Cod. Pai',.t.,'Conjunts')
+	EndIf 
+	If ThisForm.CodMacro
+		loLista.mAddColuna('CodMacro', '', 'Cod. Macro',.t.,'CodMacro')
+	EndIf 
+	If ThisForm.CnjLacto
+		loLista.mAddColuna('CnjLacto', '', 'Conjunto',.t.,'CnjLacto')
+	EndIf 
+	loLista.Show()
+	ThisForm.Produto = Space(14)
+	If Lastkey() <> 27
+		This.Value = CrListaRemota.Dpro2s
+		ThisForm.Produto = Iif(ThisForm.Conjunto,CrListaRemota.Conjunts,Iif(ThisForm.CodMacro,CrListaRemota.CodMacro,Iif(ThisForm.Tiporetorno,Str(CrListaRemota.Cbars),CrListaRemota.Cpros)))
+	EndIf
+	ThisForm.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPBUS
+RESERVED3 (ClassInfo): podatamgr
+produto
+situas
+tiporetorno
+conjunto
+filtrasituas
+codmacro
+cnjlacto
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

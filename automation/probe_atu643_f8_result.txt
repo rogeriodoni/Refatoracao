@@ -1,0 +1,13 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+INIT Campo=[] Confirmado=.F. Selecionado=[] MemoEhSentinela=.T.
+ESCOPO BtnOkClick prot=.F. BtnCancelarClick prot=.F. AbrirLookupDopEstq prot=.F. FormParaBO prot=.T. BOParaForm prot=.T. LimparCampos prot=.T. CarregarUniverso prot=.T.
+LOOKUP EXATO Campo=[INVENTARIO] PickerFechado=.T.
+OK Confirmado=.T. Selecionado=[INVENTARIO] crOpera.Dopes=[INVENTARIO] crOpera.Estoqs=1 EOF=.F. BO.this_cDopEstq=[INVENTARIO]
+CANCELA Confirmado=.F. Selecionado=[] EOF=.T. DopesVazio=.T.
+FORA DO UNIVERSO Confirmado=.F. EOF=.T. DopesVazio=.T.
+OK VAZIO chamada=OK
+OK VAZIO Confirmado=.F. EOF=.T. DopesVazio=.T.
+POS-RELEASE crOperaAberto=.T. PickerFechado=.T.
+RESULTADO=OK

@@ -1,0 +1,289 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 6,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRTAM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM",
+      "evento": "Init",
+      "linhas": 69,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha, pcProduto\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pPro\n\nSet DataSession to pnDataSes\n\n=DoDefault()\n\nThisform.peAntValue = 0\n\nWith ThisForm\n\t.ParentForm = poForm\n\t.pcescolha = pcEscolha\n\t.houveincl = .F.\n\t.houveexcl = .F.\n\n\tIf Type('pcProduto') = [C]\n\t\tpcPro = pcProduto\n\t\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\tlcSql = [Select Dpros, pvens, pcuss From SigC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "this.Tag = this.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 48,
+      "codigoOriginal": "Local loLista\n\nIf this.Tag <> this.Value\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwbuscaext', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCdTam', ;\n\t\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tIf (Lastkey() <> 27)\n\t\t\tlnReg = Recno('crSigPrTam')\n\t\t\t\n\t\t\tSelect a.CodTams ;\n\t\t\t  From crSigPrTam a ;\n\t\t\t Where a.CodT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "this.Tag = this.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nLocal loLista\n\nIf this.Tag <> this.Value\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwbuscaext', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCdTam', ;\n\t\t\t\t\t\t\t   'CrListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tIf (Lastkey() <> 27)\n\t\t\tSelect a.CodTams ;\n\t\t\t  From crSigPrTam a ;\n\t\t\t Where a.CodTams = CrList... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peAntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If (This.Value <> ThisForm.peAntValue)\n\tStore 0 to lnPerc, lnValor\n\tIf Not Empty(This.Value)\n\t\tlnPerc  = This.Value\n\t\tlnValor = crSigCdPro.PVens + (crSigCdPro.PVens * (lnPerc/100))\n\t\t*lnValor = crSigCdPro.PCuss * lnPerc \n\t\tReplace Valor With lnValor in crSigPrTam\n\tEndIf \nEndIf \t\n\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peAntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If (This.Value <> ThisForm.peAntValue)\n\tStore 0 To lnPerc, lnValor\n\tIf Not Empty(This.Value)\n\t\tlnValor = This.Value\n\t\tIf Empty(crSigCdPro.PVens)\n\t\t\t=MessageBox([Favor Informar o Preço de Venda do Produto.],0+64,[Aviso])\n\t\t\tlnValor = 0\n\t\t\tThis.Value = lnValor\n\t\tEndIf \n\t\tlnPerc  = ((lnValor - crSigCdPro.PVens)/crSigCdPro.PVens)*100\n\t\t*lnPerc  = Iif(Empty(crSigCdPro.PCuss),0,lnValor/crSigCdPro.PCuss)\n\t\tReplace Percs With lnPerc In crSigPrTam\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peAntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.cmdExcluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigPrTam\n\nIf Not Eof() And ( crSigPrTam.cPros = crSigCdPro.cPros )\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.Houveexcl = .T.\nThisform.Grade.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.cmdSair",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) \n\t\tSelect crSigPrTam\n\t\tScan\n\t\t\tIf( IsEmpty(crSigPrTam.CodTams) )\n\t\t\t\tMessageBox('Tamanho não informado!',48,'Atenção')\n\t\t\t\tThisform.Grade.Column1.SetFocus ()\n\t\t\t\tReturn .F.\n\t\t\tEndIf\n\n*!*\t\t\t\tIf( IsEmpty(crSigPrTam.PesoMs) ) \n*!*\t\t\t\t\tMessageBox([Peso médio do tamanho '] + crSigPrTam.CodTams + [' não foi informado!],48,'Atenção')\n*!*\t\t\t\t\tThisForm.Grade.Column3.SetFocus()\n*!*\t\t\t\t\tRetur... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRTAM.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.houveincl = .T.\n\nSelect crSigPrTam\nLocate for cPros = crSigCdPro.cPros And CodTams = Space(4)\nIf Eof()\n\tInsert Into crSigPrTam (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())\nEndIf\n\nSelect crSigPrTam\nThisform.Grade.Column1.SetFocus()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRTAM.Init",
+      "queryOriginal": "\t\tlcSql = [Select Dpros, pvens, pcuss From SigC... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "Dpros,pvens,pcuss",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRTAM.Grade.Column1.Text1.Valid",
+      "queryOriginal": "\t\t\tSelect a.CodTams ; \t\t\t  From crSigPrTam a ; \t\t\t Where a.CodT... [TRUNCADO]",
+      "tabelas": "crSigPrTam",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRTAM.Grade.Column2.Text1.Valid",
+      "queryOriginal": "\t\t\tSelect a.CodTams ; \t\t\t  From crSigPrTam a ; \t\t\t Where a.CodTams = CrList... [TRUNCADO]",
+      "tabelas": "crSigPrTam",
+      "colunas": "CodTams",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRTAM.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into crSigPrTam (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())",
+      "tabelas": "crSigPrTam",
+      "colunas": "cPros,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigPrTam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

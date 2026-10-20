@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei `FormSIGPRTFH.prg` e `SIGPRTFHBO.prg` integralmente e n├úo h├í bug de c├│digo a corrigir aqui. O erro ├® de infraestrutura, n├úo de c├│digo:
+
+**Diagn├│stico**
+- O log mostra o erro na **ETAPA 1B** (`[ETAPA 1B] Conectando ao banco de dados... Codigo: 1526 ... DBNETLIB SQL Server inexistente ou acesso negado`), **antes** de qualquer `CREATEOBJECT` do form/BO ÔÇö o preflight `SQLSTRINGCONNECT` do `TestFormWrapper.prg` falha antes do c├│digo de `FormSIGPRTFH`/`SIGPRTFHBO` ser alcan├ºado.
+- Isso ├® a reincid├¬ncia documentada em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`): a m├íquina que roda o pipeline (sub-rede 192.168.199.x) n├úo tem rota para 192.168.200.0/24, onde fica o SQL Server `DB_MBAHIA`. J├í ocorreu em 100+ tasks desde 2026-08-02, com a mesma assinatura exata, inclusive 5 vezes j├í nesta mesma task683.
+- Nenhuma edi├º├úo de `.prg` resolve: o form/BO nunca chega a ser instanciado quando esse erro ocorre.
+
+**O que verifiquei no c├│digo mesmo assim** (para garantir que n├úo ├® coincid├¬ncia mascarando um bug real):
+- Init com os 24 par├ómetros bate com o uso documentado no cabe├ºalho.
+- `DECLARE ... IN "CliSiTef32I.DLL"` protegido por TRY/CATCH com `this_lSiTefDisponivel` (regra do DECLARE que mata o form).
+- `BOParaForm`/`FormParaBO` PROTECTED, chamados s├│ via `THIS.` internamente.
+- Todos os ~25 m├®todos do BO chamados pelo form (`IniciarSessaoSiTef`, `ContinuarFuncaoSiTef`, `MontarBuffer*`, `Registrar*`, `Decodificar*`, etc.) s├úo PUBLIC ÔÇö nenhuma viola├º├úo da regra #51.
+- Handlers ligados por `BINDEVENT` (`BtnSaidaClick`, `BtnSaidaGotFocus`, `TxtDvChequeGotFocus`, `ValidarParametros`) s├úo PUBLIC.
+- Nenhum `RETURN` dentro de TRY/CATCH; `CommandGroup` sem `ForeColor` no grupo (cor nos `Buttons(N)`).
+
+N├úo fiz altera├º├Áes nos arquivos ÔÇö editar c├│digo j├í correto s├│ para "satisfazer" um gate de infraestrutura arriscaria introduzir regress├úo. Registrei a reincid├¬ncia (tentativa 7/10) na mem├│ria do projeto para rastrear o padr├úo. Se a rede para 192.168.200.10:1433 continuar indispon├¡vel, recomendo tratar isso como bloqueio de infraestrutura fora do escopo de corre├º├úo de c├│digo.

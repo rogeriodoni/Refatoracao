@@ -1,475 +1,256 @@
-*******************************************************************************
-* sigprtamBO.prg - Business Object: Peso Medio por Tamanho do Produto
-* Herda de BusinessBase
-* Tabela principal: sigprtam
-*******************************************************************************
+*==============================================================================
+* sigprtamBO.prg - Business Object para Tamanhos do Produto (SIGPRTAM)
+* Tabela Principal: SigPrTam (PK: cidchaves)
+* Tabela Relacionada: SigCdTam (cadastro de tamanhos - cods/descs/varias)
+*
+* SIGPRTAM e um dialogo filho chamado pelo cadastro de produtos para
+* manter a grade de tamanhos (codigo, descricao, peso medio, percentual,
+* valor e prazo de entrega) de UM produto por vez (filtro por cpros).
+*==============================================================================
+SET SAFETY OFF
+SET RESOURCE OFF
 
 DEFINE CLASS sigprtamBO AS BusinessBase
 
-    *-- Identificacao da entidade
-    this_cTabela     = "sigprtam"
-    this_cCampoChave = "cidchaves"
+    *-- Propriedades: SigPrTam
+    this_cCidChaves  = ""   && cidchaves char(20) NOT NULL - PK
+    this_cCodTams    = ""   && codtams   char(4)  NOT NULL - FK SigCdTam.cods
+    this_cCpros      = ""   && cpros     char(14) NOT NULL - FK SigCdPro.cPros (produto filtrado)
+    this_dDataAlts   = {}   && dataalts  datetime NULL
+    this_dDataTrans  = {}   && datatrans datetime NULL
+    this_dDtMovs     = {}   && dtmovs    datetime NULL
+    this_nPesoMs     = 0    && pesoms    numeric(7,3) NOT NULL - peso medio do tamanho
+    this_nPercs      = 0    && percs     numeric(5,2) NOT NULL - percentual sobre o preco de venda
+    this_nValor      = 0    && valor     numeric(11,5) NOT NULL - valor calculado a partir do percentual
+    this_nDiasPrz    = 0    && diasprz   numeric(2,0) NOT NULL - prazo de entrega em dias
 
-    *-- Chave primaria
-    this_cCidChaves  = ""
+    *-- Propriedade NAO persistida: descricao do tamanho (join com SigCdTam.descs)
+    this_cDescs      = ""   && descs char(20) - vem de SigCdTam, exibida na grade
 
-    *-- Codigo do tamanho (FK -> SigCdTam.cods)
-    this_cCodTams    = ""
-
-    *-- Descricao do tamanho (virtual - SigCdTam.descs, nao persiste em sigprtam)
-    this_cDescs      = ""
-
-    *-- Codigo do produto (FK -> SigCdPro.cpros)
-    this_cCPros      = ""
-
-    *-- Peso medio por tamanho
-    this_nPesoMs     = 0
-
-    *-- Percentual sobre preco de venda
-    this_nPercs      = 0
-
-    *-- Valor calculado (preco de venda + percentual)
-    this_nValor      = 0
-
-    *-- Dias prazo de entrega
-    this_nDiasPrz    = 0
-
-    *-- Data da ultima alteracao
-    this_dDataAlts   = {}
-
-    *-- Data de transferencia
-    this_dDataTrans  = {}
-
-    *-- Data de movimento
-    this_dDtMovs     = {}
-
-    *-- Contexto do produto pai (carregado de SigCdPro)
-    this_cDPros      = ""
-    this_nPVens      = 0
-    this_nPCuss      = 0
-
-    *-- Nome do cursor de trabalho para o grid de tamanhos
-    this_cCursorDados = "cursor_4c_TamPro"
-
-    *---------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * Init - Configura tabela e chave primaria
+    *--------------------------------------------------------------------------
     PROCEDURE Init()
-    *---------------------------------------------------------------------------
-        THIS.this_cTabela     = "sigprtam"
-        THIS.this_cCampoChave = "cidchaves"
         DODEFAULT()
+
+        THIS.this_cTabela     = "SigPrTam"
+        THIS.this_cCampoChave = "cidchaves"
+
+        RETURN .T.
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    PROCEDURE ObterChavePrimaria()
-    *---------------------------------------------------------------------------
-        RETURN THIS.this_cCidChaves
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cCidChaves  = NVL(ALLTRIM(cidchaves), "")
-            THIS.this_cCodTams    = NVL(ALLTRIM(codtams), "")
-            THIS.this_cCPros      = NVL(ALLTRIM(cpros), "")
-            THIS.this_nPesoMs     = NVL(pesoms, 0)
-            THIS.this_nPercs      = NVL(percs, 0)
-            THIS.this_nValor      = NVL(valor, 0)
-            THIS.this_nDiasPrz    = NVL(diasprz, 0)
-            THIS.this_dDataAlts   = NVL(dataalts, {})
-            THIS.this_dDataTrans  = NVL(datatrans, {})
-            THIS.this_dDtMovs     = NVL(dtmovs, {})
-            loc_lSucesso = .T.
-        ENDIF
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * CarregarTamanhos - Carrega tamanhos do produto do SQL Server para cursor
-    * par_cCPros: codigo do produto
-    *---------------------------------------------------------------------------
-    PROCEDURE CarregarTamanhos(par_cCPros)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
-        loc_lSucesso = .F.
-        TRY
-            IF USED(THIS.this_cCursorDados)
-                IF USED(THIS.this_cCursorDados)
-                    TABLEREVERT(.T., THIS.this_cCursorDados)
-                ENDIF
-                USE IN (THIS.this_cCursorDados)
-            ENDIF
-
-            loc_cSql = "SELECT a.cidchaves, a.codtams, a.cpros, " + ;
-                        "       a.pesoms, a.percs, a.valor, a.diasprz, " + ;
-                        "       a.dataalts, a.datatrans, a.dtmovs, " + ;
-                        "       ISNULL(b.descs, '') AS descs " + ;
-                        "  FROM sigprtam a " + ;
-                        "  LEFT JOIN SigCdTam b ON b.cods = a.codtams " + ;
-                        " WHERE a.cpros = " + EscaparSQL(par_cCPros) + ;
-                        " ORDER BY a.codtams"
-
-            IF SQLEXEC(gnConnHandle, loc_cSql, THIS.this_cCursorDados) > 0
-                SELECT (THIS.this_cCursorDados)
-                GO TOP
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao carregar tamanhos do produto.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            IF USED(THIS.this_cCursorDados)
-                USE IN (THIS.this_cCursorDados)
-            ENDIF
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * CarregarProduto - Carrega dados do produto pai (PVens, PCuss, Dpros)
-    * par_cCPros: codigo do produto
-    *---------------------------------------------------------------------------
-    PROCEDURE CarregarProduto(par_cCPros)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
-        loc_lSucesso = .F.
-        TRY
-            IF USED("cursor_4c_ProdutoPai")
-                USE IN cursor_4c_ProdutoPai
-            ENDIF
-            loc_cSql = "SELECT TOP 1 dpros, pvens, pcuss " + ;
-                        "  FROM SigCdPro " + ;
-                        " WHERE cpros = " + EscaparSQL(par_cCPros)
-            IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_ProdutoPai") > 0
-                IF !EOF("cursor_4c_ProdutoPai")
-                    SELECT cursor_4c_ProdutoPai
-                    THIS.this_cDPros  = NVL(ALLTRIM(dpros), "")
-                    THIS.this_nPVens  = NVL(pvens, 0)
-                    THIS.this_nPCuss  = NVL(pcuss, 0)
-                    loc_lSucesso = .T.
-                ENDIF
-                USE IN cursor_4c_ProdutoPai
-            ELSE
-                MsgErro("Erro ao carregar dados do produto.", "Erro")
-            ENDIF
-        CATCH TO loc_oErro
-            IF USED("cursor_4c_ProdutoPai")
-                USE IN cursor_4c_ProdutoPai
-            ENDIF
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * InserirLinhaGrid - Insere linha em branco no cursor do grid (local)
-    * par_cCPros: codigo do produto
-    *---------------------------------------------------------------------------
-    PROCEDURE InserirLinhaGrid(par_cCPros)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cIdChaves
-        loc_lSucesso = .F.
-        TRY
-            IF !USED(THIS.this_cCursorDados)
-                MsgErro("Cursor de tamanhos n" + CHR(227) + "o est" + CHR(225) + " aberto.", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Verificar se ja existe linha vazia para este produto
-            SELECT (THIS.this_cCursorDados)
-            LOCATE FOR ALLTRIM(codtams) = "" AND ALLTRIM(cpros) = ALLTRIM(par_cCPros)
-            IF !EOF()
-                loc_lSucesso = .T.
-            ENDIF
-
-            loc_cIdChaves = fUniqueIds()
-
-            INSERT INTO (THIS.this_cCursorDados) ;
-                (cidchaves, codtams, cpros, descs, pesoms, percs, valor, diasprz) ;
-                VALUES (loc_cIdChaves, "", par_cCPros, "", 0, 0, 0, 0)
-
-            SELECT (THIS.this_cCursorDados)
-            GO BOTTOM
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * ExcluirLinhaGrid - Remove linha corrente do cursor do grid (local)
-    * par_cCPros: codigo do produto
-    *---------------------------------------------------------------------------
-    PROCEDURE ExcluirLinhaGrid(par_cCPros)
-    *---------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega as propriedades a partir de uma linha do
+    * cursor (cursor_4c_Dados, populado pelo Form a partir de SigPrTam)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+
         TRY
-            IF !USED(THIS.this_cCursorDados)
-                loc_lSucesso = .F.
-            ENDIF
-            SELECT (THIS.this_cCursorDados)
-            IF !EOF() AND ALLTRIM(cpros) = ALLTRIM(par_cCPros)
-                DELETE
-                SKIP
-                IF EOF()
-                    SKIP -1
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+
+                THIS.this_cCidChaves = TratarNulo(cidchaves, "")
+                THIS.this_cCodTams   = TratarNulo(codtams,   "")
+                THIS.this_cCpros     = TratarNulo(cpros,     "")
+                THIS.this_dDataAlts  = TratarNulo(dataalts,  {})
+                THIS.this_dDataTrans = TratarNulo(datatrans, {})
+                THIS.this_dDtMovs    = TratarNulo(dtmovs,    {})
+                THIS.this_nPesoMs    = TratarNulo(pesoms,    0)
+                THIS.this_nPercs     = TratarNulo(percs,     0)
+                THIS.this_nValor     = TratarNulo(valor,     0)
+                THIS.this_nDiasPrz   = TratarNulo(diasprz,   0)
+
+                * Descs vem de um JOIN com SigCdTam (nao existe na tabela
+                * SigPrTam) - so esta presente quando o SELECT do Form a traz
+                IF TYPE("descs") = "C"
+                    THIS.this_cDescs = TratarNulo(descs, "")
+                ELSE
+                    THIS.this_cDescs = ""
                 ENDIF
+
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message, "sigprtamBO.CarregarDoCursor")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * ValidarTamanhoExiste - Verifica se codtams ja esta em uso para cpros
-    * (exceto o registro corrente identificado por cIdChaves)
-    * Retorna .T. se duplicado (ja existe), .F. se OK
-    *---------------------------------------------------------------------------
-    PROCEDURE ValidarTamanhoExiste(par_cCodTams, par_cIdChavesAtual)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lDuplicado, loc_oErro
-        loc_lDuplicado = .F.
-        TRY
-            IF USED(THIS.this_cCursorDados)
-                SELECT (THIS.this_cCursorDados)
-                LOCATE FOR ALLTRIM(codtams) = ALLTRIM(par_cCodTams) AND ;
-                           ALLTRIM(cidchaves) <> ALLTRIM(par_cIdChavesAtual)
-                loc_lDuplicado = !EOF()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lDuplicado
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Chave primaria de SigPrTam (cidchaves)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidChaves)
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * BuscarDescricaoTamanho - Busca descricao do tamanho em SigCdTam
-    * par_cCodTams: codigo do tamanho
-    * Retorna descricao (string) ou "" se nao encontrado
-    *---------------------------------------------------------------------------
-    PROCEDURE BuscarDescricaoTamanho(par_cCodTams)
-    *---------------------------------------------------------------------------
-        LOCAL loc_cDescs, loc_oErro, loc_cSql
-        loc_cDescs = ""
-        TRY
-            IF USED("cursor_4c_BuscaTam")
-                USE IN cursor_4c_BuscaTam
-            ENDIF
-            loc_cSql = "SELECT TOP 1 cods, descs FROM SigCdTam " + ;
-                        " WHERE cods = " + EscaparSQL(par_cCodTams)
-            IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_BuscaTam") > 0
-                IF !EOF("cursor_4c_BuscaTam")
-                    SELECT cursor_4c_BuscaTam
-                    loc_cDescs = NVL(ALLTRIM(descs), "")
-                ENDIF
-                USE IN cursor_4c_BuscaTam
-            ENDIF
-        CATCH TO loc_oErro
-            IF USED("cursor_4c_BuscaTam")
-                USE IN cursor_4c_BuscaTam
-            ENDIF
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_cDescs
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * SalvarTamanhos - Persiste todas as linhas do cursor no SQL Server
-    * par_cCPros: codigo do produto
-    * Estrategia: DELETE all + INSERT all (mesma logica do legado via TABLEREVERT/TABLEUPDATE)
-    *---------------------------------------------------------------------------
-    PROCEDURE SalvarTamanhos(par_cCPros)
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
-        LOCAL loc_cCidChaves, loc_cCodTams, loc_nPesoMs
-        LOCAL loc_nPercs, loc_nValor, loc_nDiasPrz
-        loc_lSucesso = .F.
-        TRY
-            IF !USED(THIS.this_cCursorDados)
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Validar: todos os registros devem ter tamanho informado
-            SELECT (THIS.this_cCursorDados)
-            SCAN
-                IF EMPTY(ALLTRIM(codtams))
-                    MsgAviso("Tamanho n" + CHR(227) + "o informado!", "Aten" + CHR(231) + CHR(227) + "o")
-                    loc_lSucesso = .F.
-                ENDIF
-            ENDSCAN
-
-            *-- Deletar registros existentes no SQL Server
-            loc_cSql = "DELETE FROM sigprtam WHERE cpros = " + EscaparSQL(par_cCPros)
-            IF SQLEXEC(gnConnHandle, loc_cSql) < 0
-                MsgErro("Erro ao excluir tamanhos anteriores.", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Inserir todos os registros do cursor
-            SELECT (THIS.this_cCursorDados)
-            SCAN FOR !DELETED() AND ALLTRIM(cpros) = ALLTRIM(par_cCPros) ;
-                AND !EMPTY(ALLTRIM(codtams))
-                loc_cCidChaves = ALLTRIM(cidchaves)
-                loc_cCodTams   = ALLTRIM(codtams)
-                loc_nPesoMs    = NVL(pesoms, 0)
-                loc_nPercs     = NVL(percs, 0)
-                loc_nValor     = NVL(valor, 0)
-                loc_nDiasPrz   = NVL(diasprz, 0)
-
-                loc_cSql = "INSERT INTO sigprtam " + ;
-                            "(cidchaves, codtams, cpros, pesoms, percs, valor, diasprz, dataalts) " + ;
-                            "VALUES (" + ;
-                            EscaparSQL(loc_cCidChaves) + ", " + ;
-                            EscaparSQL(loc_cCodTams) + ", " + ;
-                            EscaparSQL(par_cCPros) + ", " + ;
-                            FormatarNumeroSQL(loc_nPesoMs, 3) + ", " + ;
-                            FormatarNumeroSQL(loc_nPercs, 2) + ", " + ;
-                            FormatarNumeroSQL(loc_nValor, 5) + ", " + ;
-                            FormatarNumeroSQL(loc_nDiasPrz, 0) + ", " + ;
-                            "GETDATE())"
-
-                IF SQLEXEC(gnConnHandle, loc_cSql) < 0
-                    MsgErro("Erro ao salvar tamanho " + loc_cCodTams + ".", "Erro")
-                    loc_lSucesso = .F.
-                ENDIF
-            ENDSCAN
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * CalcularValorPorPercentual - Calcula Valor a partir de Percs e PVens
-    * par_nPercs:  percentual informado
-    * par_nPVens:  preco de venda do produto
-    * Retorna valor calculado
-    *---------------------------------------------------------------------------
-    PROCEDURE CalcularValorPorPercentual(par_nPercs, par_nPVens)
-    *---------------------------------------------------------------------------
-        LOCAL loc_nValor
-        loc_nValor = 0
-        IF par_nPVens <> 0 AND par_nPercs <> 0
-            loc_nValor = par_nPVens + (par_nPVens * (par_nPercs / 100))
-        ENDIF
-        RETURN loc_nValor
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * CalcularPercentualPorValor - Calcula Percs a partir de Valor e PVens
-    * par_nValor:  valor informado
-    * par_nPVens:  preco de venda do produto
-    * Retorna percentual calculado
-    *---------------------------------------------------------------------------
-    PROCEDURE CalcularPercentualPorValor(par_nValor, par_nPVens)
-    *---------------------------------------------------------------------------
-        LOCAL loc_nPercs
-        loc_nPercs = 0
-        IF par_nPVens <> 0 AND par_nValor <> 0
-            loc_nPercs = ((par_nValor - par_nPVens) / par_nPVens) * 100
-        ENDIF
-        RETURN loc_nPercs
-    ENDPROC
-
-    *---------------------------------------------------------------------------
-    * Inserir - Insere um unico registro de tamanho no SQL Server
-    * Usa as propriedades this_* para montar o INSERT
-    *---------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * Inserir - INSERT INTO SigPrTam (novo tamanho para o produto filtrado)
+    * O legado gera a PK com fUniqueIds() no clique do botao Inserir, antes
+    * de o usuario preencher qualquer coluna da grade (regra #22).
+    *--------------------------------------------------------------------------
     PROCEDURE Inserir()
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+
         TRY
             IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
                 THIS.this_cCidChaves = fUniqueIds()
             ENDIF
 
-            loc_cSql = "INSERT INTO sigprtam " + ;
-                        "(cidchaves, codtams, cpros, " + ;
-                        " pesoms, percs, valor, diasprz, dataalts) " + ;
-                        "VALUES (" + ;
-                        EscaparSQL(THIS.this_cCidChaves) + ", " + ;
-                        EscaparSQL(THIS.this_cCodTams) + ", " + ;
-                        EscaparSQL(THIS.this_cCPros) + ", " + ;
-                        FormatarNumeroSQL(THIS.this_nPesoMs, 3) + ", " + ;
-                        FormatarNumeroSQL(THIS.this_nPercs, 2) + ", " + ;
-                        FormatarNumeroSQL(THIS.this_nValor, 5) + ", " + ;
-                        FormatarNumeroSQL(THIS.this_nDiasPrz, 0) + ", " + ;
-                        "GETDATE())"
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigPrTam (cidchaves, codtams, cpros, dataalts, datatrans, dtmovs, pesoms, percs, valor, diasprz)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cCidChaves)>>,
+                    <<EscaparSQL(THIS.this_cCodTams)>>,
+                    <<EscaparSQL(THIS.this_cCpros)>>,
+                    <<FormatarDataSQL(THIS.this_dDataAlts)>>,
+                    <<FormatarDataSQL(THIS.this_dDataTrans)>>,
+                    <<FormatarDataSQL(THIS.this_dDtMovs)>>,
+                    <<FormatarNumeroSQL(THIS.this_nPesoMs, 3)>>,
+                    <<FormatarNumeroSQL(THIS.this_nPercs, 2)>>,
+                    <<FormatarNumeroSQL(THIS.this_nValor, 5)>>,
+                    <<FormatarNumeroSQL(THIS.this_nDiasPrz, 0)>>
+                )
+            ENDTEXT
 
-            IF SQLEXEC(gnConnHandle, loc_cSql) > 0
-                THIS.RegistrarAuditoria("I")
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
                 loc_lSucesso = .T.
             ELSE
-                MsgErro("Erro ao inserir tamanho " + ALLTRIM(THIS.this_cCodTams) + ".", "Erro")
+                MsgErro("Erro ao inserir tamanho do produto:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro("Erro ao inserir:" + CHR(13) + loc_oErro.Message, "sigprtamBO.Inserir")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * Atualizar - Atualiza um unico registro de tamanho no SQL Server
-    * Usa as propriedades this_* para montar o UPDATE
-    *---------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * Atualizar - UPDATE SigPrTam (cpros e cidchaves nao mudam depois do
+    * Inserir - sao a chave e o filtro de origem do registro)
+    *--------------------------------------------------------------------------
     PROCEDURE Atualizar()
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
-        TRY
-            loc_cSql = "UPDATE sigprtam SET " + ;
-                        " codtams = " + EscaparSQL(THIS.this_cCodTams) + ", " + ;
-                        " cpros   = " + EscaparSQL(THIS.this_cCPros) + ", " + ;
-                        " pesoms  = " + FormatarNumeroSQL(THIS.this_nPesoMs, 3) + ", " + ;
-                        " percs   = " + FormatarNumeroSQL(THIS.this_nPercs, 2) + ", " + ;
-                        " valor   = " + FormatarNumeroSQL(THIS.this_nValor, 5) + ", " + ;
-                        " diasprz = " + FormatarNumeroSQL(THIS.this_nDiasPrz, 0) + ", " + ;
-                        " dataalts = GETDATE() " + ;
-                        " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
 
-            IF SQLEXEC(gnConnHandle, loc_cSql) > 0
-                THIS.RegistrarAuditoria("A")
+        TRY
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigPrTam
+                SET codtams   = <<EscaparSQL(THIS.this_cCodTams)>>,
+                    dataalts  = <<FormatarDataSQL(THIS.this_dDataAlts)>>,
+                    datatrans = <<FormatarDataSQL(THIS.this_dDataTrans)>>,
+                    dtmovs    = <<FormatarDataSQL(THIS.this_dDtMovs)>>,
+                    pesoms    = <<FormatarNumeroSQL(THIS.this_nPesoMs, 3)>>,
+                    percs     = <<FormatarNumeroSQL(THIS.this_nPercs, 2)>>,
+                    valor     = <<FormatarNumeroSQL(THIS.this_nValor, 5)>>,
+                    diasprz   = <<FormatarNumeroSQL(THIS.this_nDiasPrz, 0)>>
+                WHERE cidchaves = <<EscaparSQL(THIS.this_cCidChaves)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
                 loc_lSucesso = .T.
             ELSE
-                MsgErro("Erro ao atualizar tamanho " + ALLTRIM(THIS.this_cCodTams) + ".", "Erro")
+                MsgErro("Erro ao atualizar tamanho do produto:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro("Erro ao atualizar:" + CHR(13) + loc_oErro.Message, "sigprtamBO.Atualizar")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *---------------------------------------------------------------------------
-    * ExecutarExclusao - Remove um registro de tamanho do SQL Server (PROTECTED)
-    * Chamado por BusinessBase.Excluir()
-    *---------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * ExecutarExclusao - DELETE FROM SigPrTam (equivalente ao Delete do
+    * cursor buferizado no cmdExcluir.Click do legado)
+    *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ExecutarExclusao()
-    *---------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oErro, loc_cSql
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
+
         TRY
-            loc_cSql = "DELETE FROM sigprtam " + ;
-                        " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-            IF SQLEXEC(gnConnHandle, loc_cSql) > 0
-                THIS.RegistrarAuditoria("E")
+            loc_cSQL = "DELETE FROM SigPrTam WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("DELETE")
                 loc_lSucesso = .T.
             ELSE
-                MsgErro("Erro ao excluir tamanho.", "Erro")
+                MsgErro("Erro ao excluir tamanho do produto:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro("Erro ao excluir:" + CHR(13) + loc_oErro.Message, "sigprtamBO.ExecutarExclusao")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * Buscar - Busca os tamanhos vinculados a um produto (par_cCpros).
+    * Retorna cursor_4c_Dados com cidchaves/codtams/cpros/.../descs.
+    *
+    * NAO faz JOIN com SigCdTam para preencher descs: o legado tambem nao
+    * faz (Init: "Select a.*, Space(40) as Descs From SigPrTam a Where
+    * a.cPros = ...") - a descricao so e preenchida em runtime pelo lookup
+    * da celula de Codigo/Descricao (Column1/Column2.Text1.Valid), nunca
+    * pela carga inicial. Transcricao literal (CLAUDE.md regra #17).
+    *--------------------------------------------------------------------------
+    PROCEDURE Buscar(par_cCpros)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+            IF USED("cursor_4c_DadosTmp")
+                USE IN cursor_4c_DadosTmp
+            ENDIF
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                SELECT cidchaves, codtams, cpros, dataalts, datatrans, dtmovs,
+                       pesoms, percs, valor, diasprz, SPACE(20) AS descs
+                FROM SigPrTam
+                WHERE cpros = <<EscaparSQL(par_cCpros)>>
+            ENDTEXT
+
+            * SQLEXEC cria cursor SOMENTE-LEITURA - a grade precisa inserir
+            * (Inserir) e apagar (Excluir) linhas localmente, alem de editar
+            * peso/percentual/valor/prazo, entao o resultado eh copiado para
+            * um cursor READWRITE (CLAUDE.md: "Grid com coluna EDITAVEL
+            * exige cursor READWRITE")
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+
+            IF loc_nResultado >= 0
+                SELECT * FROM cursor_4c_DadosTmp INTO CURSOR cursor_4c_Dados READWRITE
+                IF USED("cursor_4c_DadosTmp")
+                    USE IN cursor_4c_DadosTmp
+                ENDIF
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = CapturarErroSQL()
+                MsgErro("Erro ao buscar tamanhos do produto:" + CHR(13) + ;
+                        THIS.this_cMensagemErro, "Erro SQL")
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro("Erro ao buscar:" + CHR(13) + loc_oErro.Message, "sigprtamBO.Buscar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
 
 ENDDEFINE

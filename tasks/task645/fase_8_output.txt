@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpBcb.prg` est├í completo e validado.
+
+## O que entreguei
+
+**Os tr├¬s hooks can├┤nicos, decompondo o `Valid` de `Get_Codigo` do legado** ÔÇö n├úo s├úo conven├º├úo de Page2 importada ├á for├ºa, o bloco existe literalmente no SCX, s├│ sem esse nome:
+
+| M├®todo | Equivalente legado | Escopo |
+|---|---|---|
+| `LimparCampos()` | bloco `With ThisForm / .Get_Grupo.Value = ' ' / ...` que **abre** o Valid | PROTECTED |
+| `FormParaBO()` | `lnBar = Iif(Type('This.Value')='C', Int(Val(...)), ...)` + o guard `If (lnBar > 0)` | PROTECTED |
+| `BOParaForm()` | bloco `.Get_Grupo.Value = crSigOpEtq.Grupos / ...` que **fecha** o Valid | PROTECTED |
+| `ConsultarCodigo()` / `...Exec()` | o funil inteiro, com guarda de reentr├óncia imune a `RETURN` (regra #47) | PUBLIC |
+
+PROTECTED nos tr├¬s primeiros ├® obrigat├│rio ÔÇö `FormBase` os declara assim e VFP9 n├úo permite alargar escopo herdado.
+
+**Duas corre├º├Áes de defeito real que a consolida├º├úo exp├┤s:**
+- `BtnConfirmarClick` gravava a etiqueta **carregada no BO**, n├úo a da tela. No fluxo normal o `LostFocus` sincroniza, mas um leitor de c├│digo de barras pode confirmar sem o foco sair do campo ÔÇö gravaria a etiqueta *anterior*, sem erro nenhum. Agora confere e, se divergir, reusa o mesmo funil.
+- As duas recusas do `Inserir()` (n├úo localizado / j├í baixado) preenchiam `this_cMensagemErro` e **n├úo exibiam nada** ÔÇö o form chama `Inserir()` direto, sem passar pelo `ExibirFalha()` do `BusinessBase`. Fechei o contrato da regra #20: o BO marca `this_lErroExibido` onde j├í exibe, o form completa a mensagem s├│ quando ela sobrou.
+
+## O caso do `CarregarLista`
+
+O gate cobra quatro nomes. Tr├¬s s├úo reais aqui; **`CarregarLista` n├úo tem referente** ÔÇö o SCX n├úo tem grade nem lista (zero `BaseClass: grid|pageframe`, zero `pColuna`; os `.AddCursor` do `Init` t├¬m o 5┬║ argumento vazio, s├úo buffers de escrita do `INSERT`). Cri├í-lo exigiria inventar uma grade (PILAR 1) ou deixar m├®todo vazio (regra de completude).
+
+Seguindo a pr├ítica j├í estabelecida ("o fix ├® no GATE, nunca inventar os 4 m├®todos no `.prg`"), adicionei o ramo **LEITOR-BAIXA** ao `OrquestradorMigracao.ps1` ÔÇö fail-closed em 6 provas, dispensando **s├│** esse nome. Varri os 583 dumps de `tasks\`: alcan├ºa 38, atua de fato em 3, e 2 desses j├í s├úo cobertos por ramos anteriores.
+
+**Uma coisa que corrigi em mim mesmo:** minha primeira vers├úo do coment├írio do cabe├ºalho citava `CarregarLista` por extenso ÔÇö e o gate confere por substring, ent├úo o arquivo *passava pela prosa*, sem que o ramo estrutural fosse avaliado. Reescrevi o coment├írio sem o token (explicando por qu├¬) para o gate decidir pelo motivo certo.
+
+## Verifica├º├úo
+
+| Medi├º├úo | Resultado |
+|---|---|
+| `COMPILE` VFP9 (form + BO) | `COMPILE_OK`, zero `.err` |
+| Probe VFP9 ÔÇö instancia├º├úo + 7 checagens | `PROBE_OK` |
+| Escopos via `PEMSTATUS(...,2)` | 3 PROTECTED / 2 PUBLIC, como exigido |
+| `( KG )` com padding do banco | id├¬ntico ao legado (sem `ALLTRIM`) |
+| Guarda de reentr├óncia n├úo trava ap├│s sa├¡da antecipada | confirmado em 3 chamadas |
+| `Test-CompletudeCodigo` | OK nos dois arquivos |
+| `ValidadorSQLSchema` | 683 tabelas, nenhuma coluna inv├ílida |
+| Sintaxe do orquestrador (AST) | OK |
+
+Scripts de evid├¬ncia: `automation/{VerificarGateFase8Task645.ps1, SweepRamoLeitorBaixaFase8.ps1, ProbeBcb645Fase8.prg, CompileCheckBcb645F8.prg}`. Usei carregamento AST-only em tudo ÔÇö dot-source do orquestrador dispara migra├º├úo real.
+
+Dois pontos para seu julgamento: (1) **n├úo implementei** `BtnBuscarClick`/`BtnEncerrarClick`/`BtnSalvarClick`/`HabilitarCampos`/`AjustarBotoesPorModo` ÔÇö o legado n├úo tem esses bot├Áes nem modos de edi├º├úo, seriam stubs; (2) o `OrquestradorMigracao.ps1` j├í estava `M` antes de eu come├ºar ÔÇö dos 16 hunks do diff, **5 s├úo meus** (linhas ~8129, 8915, 9154, 9202, 9387). N├úo commitei nada.

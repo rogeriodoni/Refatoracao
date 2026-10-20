@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei a linha 379 e todo o restante do metodo `VincularGrade()` (linhas 357-486). O achado do pass eh **falso positivo**: o `ControlSource` das 3 colunas JA eh redefinido apos o `RecordSource = "cursor_4c_Pagamentos"` da linha 379:
+
+- `Column1.ControlSource` ÔåÆ linha 414
+- `Column2.ControlSource` ÔåÆ linha 420
+- `Column3.ControlSource` ÔåÆ linha 431
+
+E, alem disso, `Column.Width` (442-444) e `Header1.Caption` (447-455) tambem sao redefinidos depois ÔÇö exatamente o padrao canonico documentado na memoria `feedback_grid_recordsource_reset_sem_reconfig.md` (Erro141/Pattern #180: RecordSource reseta ControlSource/Width/Header, exige re-set explicito apos o ultimo ControlSource).
+
+O detector automatico provavelmente usa uma janela curta de linhas apos o `RecordSource =` e nao alcancou a linha 414 (ha ~35 linhas de configuracao do CheckBox da Column1 - AddObject, Caption, Alignment etc - entre o RecordSource e o primeiro ControlSource).
+
+Como o codigo ja esta correto, nao fiz nenhuma alteracao no arquivo ÔÇö aplicar uma "correcao" aqui duplicaria atribuicoes ja existentes sem necessidade, violando a regra de nao alterar o que nao esta quebrado. Nenhum outro problema de grid/cursor foi encontrado no arquivo (unico item listado no pass).

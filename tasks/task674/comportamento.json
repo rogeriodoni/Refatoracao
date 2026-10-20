@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "fGerPswDiario", "fUniqueIds", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRSDD",
+      "evento": "Init",
+      "linhas": 36,
+      "codigoOriginal": "Lparameters _Producao,lcNomeFrm1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisform.Producao = _producao\n\nPrivate pIds\n\npIds = Replicate(Chr(254), 20)\n\nlcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']\n\nWith ThisForm\n\tlcNomeFrm1 = Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,.Name)\n\t.Name = lcNomeFrm1\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn >... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSDD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Operação",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf ThisForm.Producao\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpd', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Dopps', This.Value, 'Seleção', .t.)\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Dopps', '', 'Operação')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\tThis.Value = crListaRemota.Dopps\n\n\tElse\n\t\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Seleção', .... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not Thisform.Producao)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Data",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_fpg",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpFp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Fpags', This.Value, 'Seleção', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna( 'FPags', '', 'Código')\n\t\tloLista.mAddColuna( 'Descrs', '', 'Descrição' )\n\t\tloLista.mAddColuna( 'MoeFPgs', 'XXXXX', 'Moeda' )\n\t\tloLista.mAddColuna( 'FParcs', '99', ' #' )\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Fpags\n\tUse In crListaRemota\nElse\n\tThis.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Fwbtng1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Do Form SigOpBol With ThisForm,15",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.GeraSenha",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "If Empty(crSigPrSnd.Solicits) \n\t=Messagebox('Informe o Nome do Solicitante...', 32)\n\tThisForm.Get_Solic.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(crSigPrSnd.Emps)\n\t=Messagebox('Informe a Empresa...', 32)\n\tThisForm.Get_cd_empresa.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(crSigPrSnd.Operas)\n\t=Messagebox('Informe a Operação...', 32)\n\tThisForm.Get_Operação.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(crSigPrSnd.Docs)\n\t=Messagebox('Informe o Número do Documento...', 32)\n\tThisForm.Get_Doc.SetFocus\n\tReturn 0\nEndIf\n\nIf Not Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerPswDiario,fUniqueIds",
+        "metodosFormChamados": "Producao And Empty,Sqlexecute,Update,Commit",
+        "controlesReferenciados": "Get_Solic,Get_cd_empresa,Get_Operação,Get_Doc,Get_Valor,Get_Motivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Ds_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Ds_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Saida",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSDD.Get_Cd_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRSDD.Init",
+      "queryOriginal": "lcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']",
+      "tabelas": "SigPrSnd",
+      "colunas": "cIdChaves,pIds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrSnd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

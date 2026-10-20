@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 executada. O form n├úo estava pronto ÔÇö a tentativa anterior concluiu "nada a fazer", mas havia trabalho real e dois defeitos que impediam o di├ílogo de funcionar.
+
+## O que a Fase 8 entregou
+
+**`FormSIGPRTRF.prg`**
+
+| M├®todo | Origem no legado |
+|---|---|
+| `ValidarParametros()` | ramo `Else` do `Init` (`'Impossivel Efetuar Conexao...'`, t├¡tulo `CreateObject`) ÔÇö **estava ausente**; com bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`, sen├úo o harness (que for├ºa `gnConnHandle=0` de prop├│sito) reprovaria sempre |
+| `FormParaBO()` / `BOParaForm()` | eram `WITH/ENDWITH` **vazios**; agora o par `ControlSource` do `Init` (`CrProduto.Cpros`/`.Dpros`) nos dois sentidos. `BOParaForm` concentra as 3 atribui├º├Áes do `Valid` legado, e o lookup grava por ele ÔÇö fonte ├║nica |
+| `Unload()` + `ObterRetorno()` / `ObterListaProdutos()` | `PROCEDURE Unload / Return ThisForm.Retorno` ÔÇö **estava ausente**: o di├ílogo n├úo tinha como devolver a rela├º├úo de produtos |
+| `Destroy()` | `PROCEDURE Release / ThisForm.poDataMgr.Release` ÔÇö agora solta o BO, cacheando a lista antes (o `Unload` dispara depois do `Destroy`) |
+| `HabilitarCampos()` | trava grade+bot├Áes durante a contagem, repondo o que o la├ºo **sem `DOEVENTS`** do legado garantia de gra├ºa |
+| `LimparCampos()` | `Create Cursor` do `Load` + `Append Blank` do `Init`; hook do `FormBase` |
+| `FecharDialogo()`, guardas de reentr├óncia, TRY/CATCH na anima├º├úo | ÔÇö |
+
+**`SIGPRTRFBO.prg`** ÔÇö `MontarListaProdutos` rep├Áe o `RECNO`, n├úo s├│ o alias.
+**`menu.prg`** ÔÇö o chamador agora libera o di├ílogo.
+
+## Dois defeitos encontrados medindo, n├úo lendo
+
+1. **`THIS.Release()` matava a refer├¬ncia do chamador.** Medido: `Release()` ÔåÆ `VARTYPE` vira `"X"` e qualquer leitura estoura *"is not an object"*; `Hide()` ÔåÆ segue `"O"`. Como o retorno do `Unload` s├│ chega a quem abre com `DO FORM ... TO`, e o projeto abre com `CREATEOBJECT + Show()`, o di├ílogo **n├úo tinha como entregar a lista que ├® a raz├úo de ele existir**. Troquei por `Hide()` ÔÇö o desenho que o `FormBuscaAuxiliar` j├í documenta no pr├│prio cabe├ºalho.
+2. **`COUNT`/`SCAN` deixavam o ponteiro em EOF**, ent├úo `BOParaForm()` devolvia `.F.` e n├úo gravava nada, calado.
+
+Tamb├®m guardei o `ZAP` do `LimparCampos` com save/restore de `SET SAFETY`: o form ├® `DataSession = 2`, onde SAFETY vale `ON` e um `ZAP` nu abre modal e **congela a tela**.
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa: form, BO e `menu.prg` (sem `.err`).
+- Probe headless de 12 pontos, todos passando ÔÇö incluindo `BOParaForm()=.T.` gravando cursor+2 c├®lulas, `MontarLista_qtde=1` com `recno=1 eof=.F.`, `LimparCampos VOLTOU` (n├úo congelou) com binding/formato intactos, e o fluxo completo do Ok: `Retorno=[Ok] Lista=[7891234]` leg├¡vel **depois** de a tela fechar. A anima├º├úo real (1s) devolve `grd=.T. ok=.T. cancela=.T. painelAguarde=.F.`
+- Auditorias do projeto limpas: fun├º├Áes ├│rf├ús, propriedades inexistentes, lookup em KeyPress, m├®todo PROTECTED chamado de fora.
+- Validador de completude: zero TODO/stub/procedure vazia. Gate da Fase 8: 4 m├®todos presentes, handler de a├º├úo casando.
+
+Duas ressalvas, para sua decis├úo:
+
+- **N├úo propaguei as duas li├º├Áes** para prompts/CorretorAutomatico. Ambas generalizam (di├ílogo-que-retorna ÔåÆ `Hide()`; m├®todo que conta ÔåÆ repor `RECNO`), mas editar artefatos do pipeline no meio da execu├º├úo ├® arriscado ÔÇö e `OrquestradorMigracao.ps1`/`CorretorAutomatico.ps1` j├í est├úo modificados na ├írvore. Salvei na mem├│ria; posso rodar `/propagate-lesson` se quiser.
+- **`AjustarBotoesPorModo`/`BtnBuscarClick`/`BtnEncerrarClick` ficaram de fora deliberadamente**: o legado n├úo tem modos CRUD nem esses bot├Áes (s├│ `altera`/`sair`), e cri├í-los seria inventar superf├¡cie ou escrever m├®todo vazio. O gate n├úo os exige.

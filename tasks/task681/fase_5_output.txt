@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is structurally balanced (TRY/CATCH/ENDTRY: 2/2/2, PROCEDURE/FUNCTION defs match ENDPROC/ENDFUNC: 13/13).
+
+## Summary
+
+FormSigPrTar (SIGSERPR) is a FLAT OPERACIONAL exhibit dialog with just one real field (`Say1` + `getObsInsp`), already fully built in earlier phases ÔÇö there was no new "campo" left to add for Fase 5 without inventing one (forbidden by PILAR 1). Per the established project pattern for this exact scenario, the genuine Fase-5 work for a FLAT form is a property-by-property audit against the dump. That turned up:
+
+- **Missing `TabIndex`** on `cmd_4c_CmdSair` (3), `lbl_4c_Label1`/Say1 (3), and `obj_4c_GetObsInsp` (4) ÔÇö transcribed literally from the SCX dump into a new `ConfigurarPaginaDados()` method, called after all `AddObject` calls in `InicializarForm()`.
+- Documented the legacy `Load`/`fConfigGeral()` event as intentionally not ported, mirroring the identical decision already recorded in `FormSigMvMen.prg`/`FormSigMvExp.prg`.
+
+No fields were invented and no existing behavior changed ÔÇö only the tab order fidelity gap was closed.

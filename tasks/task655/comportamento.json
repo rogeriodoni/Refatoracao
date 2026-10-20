@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCCJ",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ",
+      "evento": "Init",
+      "linhas": 48,
+      "codigoOriginal": "Lparameters pForms, pIClis, pICpfs, pRClis, pCpRet\n* Parâmetros : pForms - Formulário de Origem\n*              pIClis - Campo do Formulário Anterior De Código da Conta\n*              pICpfs - Campo do Formulário Anterior De Cpf da Conta\n*              pRClis - Campo do Formulário Anterior De Descrição da Conta\n*\t\t\t   pCpRet - Propriedade Para Receber o Retorno Deste Formulário\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nIf (Ty... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ.getRgConjuges",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getConjuges.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ.getRgConjuges",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'RgConjuges', This.Value, 'Seleção', 200)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('RGConjuges', '', 'RG')\n\t\tloLista.mAddColuna('Conjuges',   '', 'Nome')\n\t\tloLista.mAddColuna('IClis',      '', 'Código')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ.getConjuges",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'Conjuges', This.Value, 'Seleção', 200)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Conjuges',   '', 'Nome')\n\t\tloLista.mAddColuna('RGConjuges', '', 'RG')\n\t\tloLista.mAddColuna('IClis',      '', 'Código')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ.btnsair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCCJ.btnconfirmar",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Local lcIClis, lcICpfs, lcRClis, lcCpRet\n\nlcIClis = ThisForm.pIClis\nlcICpfs = ThisForm.pICpfs\nlcRClis = ThisForm.pRClis\nlcCpRet = ThisForm.pCpRet\n\nThisForm.ParentForm.&lcIClis..Value = ThisForm.getIClis.Value\nThisForm.ParentForm.&lcICpfs..Value = ThisForm.getCpfs.Value\nThisForm.ParentForm.&lcRClis..Value = ThisForm.getRClis.Value\nThisForm.ParentForm.&lcCpRet. = .t.\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

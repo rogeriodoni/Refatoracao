@@ -1,0 +1,13 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+ESCOPO(prot) FormParaBO=.T. BOParaForm=.T. BtnImprimirClick=.F. BtnSairClick=.F. BtnGradeClick=.F. CarregarDados=.F. VincularGrade=.F. ValidarMarcacaoLinha=.F.
+FormParaBO retorno=.T. BO.this_cObservacao=[OBS DIGITADA PELO OPERADOR]
+BOParaForm retorno=.T. txt_4c_TxtObs.Value=[VINDO DO BO]
+LINHA NO BO Marca=.T. Obs=[# 001; TESTE] Fpags=[DINHEIRO] Printed=.F. Autenticas=1 RecnoPreservado=1
+PENDENTE(antes)=.T.
+POS-BtnSairClick(pendente) formVivo=.T. cursorAberto=.T.
+ValidarMarcacaoLinha(Printed=.F.) Marca=.T. (esperado .T.)
+POS-BtnImprimirClick Reccount=2 Printed=2 (esperado 2) Marcadas=0 (esperado 0) PENDENTE(depois)=.F.
+POS-BtnSairClick(tudo autenticado) cursorAberto=.F.
+RESULTADO=OK

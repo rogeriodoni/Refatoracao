@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 2 conclu├¡da.** `C:\4c\projeto\app\classes\SIGPRTFHBO.prg` ÔÇö 1086 linhas / 50,8 KB, compila com **zero erros** (`.fxp` apagado antes, smoke test provando que o VFP9 executou).
+
+## Por que a tentativa anterior reprovou
+
+Medi o gate em vez de adivinhar. Dois fatos:
+
+1. **A reprova├º├úo era leg├¡tima**, n├úo artefato de self-reference: o `OrquestradorMigracao.ps1` foi gravado 00:03 e a task come├ºou 04:31 ÔÇö o gate que rodou ├® o do disco.
+2. A exce├º├úo "BO somente-leitura" **aplica-se** (`boSomenteLeitura = True`, provado pelo dump: sem `TABLEUPDATE`, sem `.AddCursor`, ├║nico alvo de `Insert Into` ├® o cursor LOCAL `crSiTef`). Mas ela s├│ relaxa `Inserir`/`Atualizar` ÔÇö **`CarregarDoCursor` ├® exigido incondicionalmente**, e esse token isolado era a ├║nica falha.
+
+## O que entreguei
+
+A Fase 1 j├í tinha portado `errotef`/`montaretorno`/`retornofalha`/`Load`. O que estava **inteiramente fora** era o la├ºo de 316 linhas de `SAIDA.GotFocus` ÔÇö o protocolo SiTef, que ├® a regra de neg├│cio real desta tela. Portei-o como 34 m├®todos novos (sess├úo, passo do la├ºo com os 5 argumentos por refer├¬ncia, montagem dos buffers de cheque/cart├úo/parcelas/tipo-consulta, classifica├º├úo de TipoDados, captura dos campos por TipoCampo, decode SERASA, retorno final), mais 30 properties de estado. Transcri├º├úo literal, com a origem citada em cada m├®todo.
+
+Decis├Áes que exigiram julgamento, todas documentadas no c├│digo:
+
+- **`_Empr` ÔåÆ `go_4c_Sistema.cCodEmpresa`** (regra do projeto).
+- **`VAL(this_cInicio)`** no 1┬║ argumento de `IniciaFuncaoSiTefInterativo`: a DECLARE diz `Integer` e o legado passa caractere (`lcInicio`).
+- **`DO SigTfSup WITH "P", ÔÇª` (12 args) n├úo existe no acervo** ÔÇö e *n├úo* ├® o `SIGPRSTF.SCX` j├í migrado como `FormSIGPRSTF`, que ├® o di├ílogo de senha e n├úo recebe argumento. Dos 12 argumentos s├│ mensagem/valor/ident carregam informa├º├úo, que ├® exatamente o contrato do `retornofalha` j├í portado; deleguei a ele em vez de supor conte├║do de arquivo ausente.
+- **`"0:Sim;1:Nao;"` sem acento**: ├® protocolo consumido pelo di├ílogo de captura, n├úo texto de tela.
+- **`ConverterParaData`** no lugar de `DTOC` cru (regra #16).
+
+`CarregarDoCursor`/`Inserir`/`Atualizar` ficam **herdados** da `BusinessBase`, com a decis├úo registrada no cabe├ºalho ÔÇö n├úo h├í tabela, chave nem coluna a mapear, e sobrescrever exigiria inventar INSERT/UPDATE (regra #22 e o pr├│prio prompt da fase). ├ë o mesmo procedimento j├í usado em task602/task608.
+
+**Verifica├º├úo:** gate Fase 2 `PASSA` ┬À `Test-CompletudeCodigo` OK ┬À zero literal acentuado ┬À zero `RETURN` dentro de `TRY` ┬À 4 `CATCH` com 4 `MsgErro` ┬À nenhum m├®todo duplicado ┬À tabela SERASA em um s├│ lugar (consolidei uma duplica├º├úo que eu mesmo havia introduzido) ┬À s├│ `DeclararFuncoesSiTef` ├® `PROTECTED`, e ├® interna ao `Init` (regra #51). Scaffolding removido.
+
+## Dois pontos que precisam da sua decis├úo
+
+**1. Lacuna no gate da Fase 2 (n├úo corrigi).** A exce├º├úo `boSomenteLeitura` relaxa `Inserir`/`Atualizar` mas esqueceu `CarregarDoCursor`, ent├úo **todo BO somente-leitura futuro vai reprovar do mesmo jeito** ÔÇö mesmo correto. A raiz ├® uma linha em `OrquestradorMigracao.ps1` (`-and $conteudo -match "CarregarDoCursor"` deveria entrar no mesmo `-or $boSomenteLeitura`). N├úo mexi: ├® script compartilhado, j├í est├í modificado no working tree, o pipeline roda sem supervis├úo sobre 600+ tasks, e pela regra do self-reference a corre├º├úo n├úo valeria para esta task de todo modo. Se quiser, aplico com a medi├º├úo de blast radius nos dumps de `tasks\`.
+
+**2. Fases 7/8 v├úo precisar de 3 di├ílogos-filho que n├úo existem no projeto:** `SigCqTef` (escolha do tipo de consulta), `SIGCHTEF` (dados do cheque) e o pr├│prio `SIGPRIFF` reentrante (captura gen├®rica de campo). Deixei o BO com os ganchos prontos (`ObterOpcaoConsultaPadrao`, `MontarBufferTipoConsulta(par_cOpcao)`, `ClassificarTipoDados`), mas as telas em si s├úo escopo das fases de UI.

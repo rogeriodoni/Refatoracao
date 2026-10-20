@@ -117,7 +117,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -152,7 +154,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_Carrega")
-                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                        TABLEREVERT(.T., "cursor_4c_Carrega")
+                    ENDIF
                     USE IN cursor_4c_Carrega
                 ENDIF
 
@@ -439,7 +443,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_VerCoo")
-                TABLEREVERT(.T., "cursor_4c_VerCoo")
+                IF CURSORGETPROP("Buffering", "cursor_4c_VerCoo") > 1
+                    TABLEREVERT(.T., "cursor_4c_VerCoo")
+                ENDIF
                 USE IN cursor_4c_VerCoo
             ENDIF
 
@@ -472,7 +478,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_TmpFab")
-                TABLEREVERT(.T., "cursor_4c_TmpFab")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmpFab") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmpFab")
+                ENDIF
                 USE IN cursor_4c_TmpFab
             ENDIF
 
@@ -505,7 +513,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_TmpMpm")
-                TABLEREVERT(.T., "cursor_4c_TmpMpm")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmpMpm") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmpMpm")
+                ENDIF
                 USE IN cursor_4c_TmpMpm
             ENDIF
 
@@ -538,7 +548,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_TmpMpf")
-                TABLEREVERT(.T., "cursor_4c_TmpMpf")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmpMpf") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmpMpf")
+                ENDIF
                 USE IN cursor_4c_TmpMpf
             ENDIF
 
@@ -577,7 +589,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Impressoras")
-                TABLEREVERT(.T., "cursor_4c_Impressoras")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Impressoras") > 1
+                    TABLEREVERT(.T., "cursor_4c_Impressoras")
+                ENDIF
                 USE IN cursor_4c_Impressoras
             ENDIF
 
@@ -611,7 +625,9 @@ DEFINE CLASS LGRBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Modelos")
-                TABLEREVERT(.T., "cursor_4c_Modelos")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Modelos") > 1
+                    TABLEREVERT(.T., "cursor_4c_Modelos")
+                ENDIF
                 USE IN cursor_4c_Modelos
             ENDIF
 

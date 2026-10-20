@@ -1,0 +1,52 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada. O resultado honesto ├® que **o escopo nominal da Fase 5 ├® vazio para este form**, e encontrei um defeito funcional real ao auditar.
+
+## O que a Fase 5 pedia vs. o que o legado tem
+
+O `SIGPRRSS.SCX` tem **exatamente 9 registros**, dos quais 7 visuais: `cntSombra` (+`lblSombra`/`lblTitulo`), `Shape1`, `SAIR`, `OK`, `Label1`. **Zero** `textbox`/`editbox`/`combobox`/`checkbox`/`optiongroup`/`spinner` ÔÇö nenhum campo de dados, nenhum grid. Os 7 j├í estavam criados nas Fases 3-4, e `ConfigurarPaginaDados` j├í existia (abriga o `Shape1`).
+
+Metade de zero campos ├® zero ÔÇö n├úo inventei Page2 de dados (violaria o PILAR 1) nem criei m├®todo vazio (proibido pela regra de completude). ├ë o caso j├í registrado em `feedback_gate_fase5_exige_campos_inexistentes`.
+
+## O que entreguei (73 linhas, 0 removidas)
+
+**1. `Activate` ausente ÔÇö defeito funcional silencioso.** O legado tem:
+```foxpro
+If ThisForm.Parametrizado
+    ThisForm.OK.Click()
+Endif
+```
+Sem ele, o `Fortyus.Exe` abre a tela parametrizada e **espera um clique humano em Processar** ÔÇö todo o ramo `this_lParametrizado` (os par├ómetros `pParam/pUsuario/pOnLine`, `IniciarLog`/`GravarLog`/`QUIT`) nunca roda. Nenhum erro, nenhum log. O cabe├ºalho do pr├│prio form j├í anunciava esse uso como suportado.
+
+Acrescentei 3 guardas que o legado n├úo precisava: `ModoTeste`/`ValidandoUI` (um loop de processamento numa probe travaria o pipeline desassistido igual a um modal) e reentr├óncia via `cmd_4c_OK.Enabled`. Os `IF` s├úo **separados de prop├│sito** ÔÇö VFP9 n├úo faz short-circuit, ent├úo encadear faria `.Enabled` ser avaliado mesmo com `PEMSTATUS` falso.
+
+**2. Fidelidade dos labels do cabe├ºalho (PILAR 1):** o dump declara `Alignment = 0` nos dois e `FontUnderline = .F.` no `lblSombra`; o migrado omitia. Transcritos ÔÇö s├úo o default, mas fixam o alinhamento esquerdo e impedem um passe futuro de "corrigir" para `Alignment = 1` (regra #23).
+
+## Verifica├º├úo
+
+Compila limpo (`.fxp` apagado antes e recriado ÔÇö n├úo ├® artefato velho) e **instancia de verdade**, medido headless nos dois modos:
+
+```
+VARTYPE_SEM_PARAM=O   Parametrizado=.F. W=580 H=120
+Sombra: Alignment=0 FontUnderline=.F. W=560 H=40
+Titulo: Alignment=0 H=46 Caption=[Rec├ílculo de Saldos]
+Shape1: T=7 L=478 W=90 H=27          <- id├¬ntico ao dump
+ACTIVATE_SEM_PARAM=NOOP_OK
+VARTYPE_COM_PARAM=O   Parametrizado=.T. Usuario=[USR1]
+ACTIVATE_BATCH_MODOTESTE=BARRADO     <- guarda do pipeline funciona
+```
+`Height` 40/46 sobreviveu ao `WordWrap` (a armadilha do `AutoSize` da regra #23 est├í evitada). Arquivo segue **LF puro**, diff cir├║rgico.
+
+## Tr├¬s coisas que decidi *n├úo* fazer, com a medi├º├úo
+
+- **`CrSigCdPam`** ÔÇö o `Init` legado faz `Cursorquery('SigCdPam','CrSigCdPam',...,[GrupoRecs,GrupoPags,ContaRecs,ContaPags])`, mas essa string aparece **1 vez no dump inteiro**: nada nunca l├¬ o cursor. O consumidor seria o `fRecalculaS`, que n├úo veio no acervo ÔÇö e o BO j├í reporta essa aus├¬ncia alto (`this_lRecalculoDisponivel`). Carregar o cursor seria inventar.
+- **`Load` ÔåÆ `=fConfigGeral()`** ÔÇö o wrapper existe, mas o cabe├ºalho dele diz textualmente que *em c├│digo nosso nunca se chama*; existe s├│ para p-code legado.
+- **`.Picture`** ÔÇö conferi que `new_background.jpg`, `geral_processar_60.jpg` e `cadastro_sair_60.jpg` existem em `vbmp\`. Sem falha silenciosa (regra #25).
+
+## Dois pontos de aten├º├úo
+
+1. **`Activate` ├® tecnicamente escopo da Fase 7** (eventos). Puxei para c├í porque a Fase 5 n├úo tinha outro trabalho e a Fase 7 trata de *bot├Áes* ÔÇö `Activate` cairia na brecha. **Se a Fase 7 rodar, ela n├úo deve re-adicionar `Activate`** (duplicar `PROCEDURE` no mesmo `DEFINE CLASS` ├® problema).
+2. **A exce├º├úo do guard de NO-OP n├úo est├í mais no orquestrador.** `Test-LegadoSemCamposSoltos` d├í **0 ocorr├¬ncias** em `OrquestradorMigracao.ps1` ÔÇö a fun├º├úo que minha mem├│ria registra como adicionada em 2026-10-07 n├úo existe no arquivo atual (que est├í `M` no git). O gate de conte├║do da Fase 5 passa (via `$temPaginaDados`), e meu diff muda o hash, ent├úo esta fase n├úo dispara retry ÔÇö mas forms sem campo nenhum continuar├úo queimando uma re-execu├º├úo opus. N├úo mexi no orquestrador: est├í fora do pedido e, por `& script.ps1` parsear na invoca├º├úo, n├úo afetaria a execu├º├úo em curso de todo modo.

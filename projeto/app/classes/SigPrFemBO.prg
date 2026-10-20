@@ -1822,7 +1822,9 @@ DEFINE CLASS SigPrFemBO AS BusinessBase
         LOCAL loc_nResultado
 
         IF USED(par_cCursor)
-            TABLEREVERT(.T., par_cCursor)
+            IF CURSORGETPROP("Buffering", par_cCursor) > 1
+                TABLEREVERT(.T., par_cCursor)
+            ENDIF
             USE IN (par_cCursor)
         ENDIF
 

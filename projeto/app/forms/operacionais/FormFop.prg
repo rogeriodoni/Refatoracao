@@ -1400,7 +1400,9 @@ DEFINE CLASS FormFop AS FormBase
 
         TRY
             IF THIS.this_lModoEdicao AND USED("crSigPrFnc")
-                TABLEREVERT(.T., "crSigPrFnc")
+                IF CURSORGETPROP("Buffering", "crSigPrFnc") > 1
+                    TABLEREVERT(.T., "crSigPrFnc")
+                ENDIF
             ENDIF
 
             IF VARTYPE(THIS.this_oParentForm) = "O"

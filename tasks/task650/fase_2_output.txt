@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Pure ASCII, all blocks balanced, no `TRY`/`RETURN` conflicts. The BO is complete.
+
+## Summary
+
+Completed **Fase 2/8** for `SigOpC44BO.prg`. This is a read-only OPERACIONAL dialog (CAT 44/2008 file generator) ÔÇö it never writes to SQL Server, only to local cursors that get exported to a text file by the Form. I verified this against the legacy dump (no `TABLEUPDATE`, no `.AddCursor`, all `Insert Into`/`Replace` targets are `Create Cursor`-declared locals), which matches the orchestrator's `boSomenteLeitura` proof-based exception for Fase 2 ÔÇö so `Inserir()`/`Atualizar()`/`ExecutarExclusao()` correctly stay inherited from `BusinessBase`, documented with a comment that also satisfies the gate's literal substring check.
+
+What was added:
+- **`InicializarCursoresLocais()`** ÔÇö creates `cursor_4c_Reg1/2/3` (ported from legacy `Load`)
+- **`CarregarParametros(par_cEmpresa)`** ÔÇö loads `SigCdPac.dircat44` and `SigCdEmp` fiscal data (ported from legacy `Init`), replacing the forbidden `_Empr` with `go_4c_Sistema.cCodEmpresa`
+- **`CarregarDoCursor()`** / **`ObterChavePrimaria()`** ÔÇö standard BO data-access hooks
+- **`GerarRegistro1/2/3()`** ÔÇö full transcription of the legacy tax-calculation logic (ICMS-ST priority chain across `SigPrTri`ÔåÆ`SigCdUfd`ÔåÆ`SigCdcFi`ÔåÆ`SigCdPro`ÔåÆ`SigCdUfs`, last-purchase-price lookup, regime-tribut├írio formulas), preserving every literal value, sign, and guard from the original
+
+I cross-checked every table/column name against `docs/schema.sql` (read via `-Raw` per the UTF-16 rule) rather than guessing. File-writing (`CmdGera.Click`'s `FWRITE` logic) is correctly deferred to the Form in later phases ÔÇö that's UI/flow, not BO data layer.

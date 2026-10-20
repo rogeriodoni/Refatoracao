@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7/8 ÔÇö j├í estava entregue. Nenhuma edi├º├úo necess├íria.
+
+N├úo aceitei a nota da sess├úo anterior de cara: refiz a auditoria do zero, incluindo **compila├º├úo real**.
+
+**├ë task duplicada.** `tasks\task663\SigPrPcp.scx` tem md5 `3aef4367ÔÇª` id├¬ntico a `task212` (PENDING) e **`task318` (COMPLETED)**. 3┬¬ vez que a mesma task663 volta s├│ trocando o n├║mero da fase (j├í veio nas Fases 3 e 5).
+
+**Os 4 m├®todos pedidos existem com l├│gica real**, n├úo esqueleto ÔÇö e com sem├óntica OPERACIONAL pr├│pria, fiel ao legado (que n├úo tem CRUD: o SCX s├│ tem `Salva.Click` e `Sair.Click`):
+
+| M├®todo | Mapeamento |
+|---|---|
+| `BtnIncluirClick` | `GO TOP` em `cursor_4c_Selecao` + `ActivateCell` na coluna Priors (a ├║nica edit├ível, `Column1.ReadOnly = .F.` no dump) |
+| `BtnAlterarClick` | edita Priors da linha corrente via `RelativeRow` |
+| `BtnVisualizarClick` | derruba e reprocessa os dois cursores do zero + reindexa + `SET RELATION` + `CarregarGrades` |
+| `BtnExcluirClick` | `REPLACE Priors WITH 0`, com guardas de "sem sele├º├úo"/"j├í zerada" e confirma├º├úo |
+
+Conformidade: nenhum `PROTECTED` nos quatro (regra #3), `TRY/CATCH` com `MsgErro` real incluindo `LineNo` (regra #9), `loc_lProsseguir` em vez de `RETURN` dentro do `TRY` (regra #1).
+
+**Verifica├º├Áes independentes:**
+- **Compila├º├úo real** (`vfp9.exe -t` + `COMPILE`, apagando o `.fxp` antes): ambos geraram `.fxp`, **zero `.err`**.
+- Balanceamento: `PROCEDURE/ENDPROC` 36/36, `IF/ENDIF` 63/63, `TRY/ENDTRY` 8/8, `WITH/ENDWITH` 30/30, `DO CASE` 3/3, `FOR` 2/2, `SCAN` 1/1 no Form; BO `FUNCTION` 8/8, `IF` 45/45, `TRY` 5/5, `SCAN` 3/3.
+- Zero `TODO`/`FIXME`/stub ÔÇö os 6 matches do grep s├úo substring de "todos"/"m├®todo"/"altera".
+- Regra #51: os 5 m├®todos do BO chamados de fora (`CarregarDoCursor`, `GravarPrioridades`, `ObterConfiguracaoPam`, `ObterImagemProduto`, `Processar`) s├úo `FUNCTION` sem `PROTECTED`.
+- `menu.prg`: `DEFINE BAR 93 OF popMovimentos` + `ON SELECTION` + `AbrirFormSigPrPcp()` com o `Show()` **fora do TRY** (regra #29). `config.prg` carrega os dois por `ADIR`.
+
+**Corre├º├úo de medi├º├úo que vale para as pr├│ximas auditorias:** contar s├│ `^PROCEDURE` deu falso desbalanceio (24/36) ÔÇö os 12 restantes s├úo `PROTECTED PROCEDURE`. O padr├úo tem de ser `^(PROTECTED |HIDDEN )?PROCEDURE`, sen├úo a auditoria "acha" defeito onde n├úo h├í e manda consertar c├│digo correto. Registrei isso na mem├│ria junto com a 11┬¬ ocorr├¬ncia do padr├úo.
+
+N├úo regenerei via template de Fase 7: ele pressup├Áe form CRUD, e usar `Write`/reescrever aqui trocaria l├│gica fiel ao legado por bot├Áes que este OPERACIONAL n├úo tem. Tamb├®m n├úo toquei em `task_state.json` (`05_migracao` segue `IN_PROGRESS`) ÔÇö o status ├® bookkeeping do orquestrador.

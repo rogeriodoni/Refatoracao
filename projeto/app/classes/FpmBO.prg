@@ -39,7 +39,9 @@ DEFINE CLASS FpmBO AS BusinessBase
 
         TRY
             IF USED("cursor_4c_FpagI")
-                TABLEREVERT(.T., "cursor_4c_FpagI")
+                IF CURSORGETPROP("Buffering", "cursor_4c_FpagI") > 1
+                    TABLEREVERT(.T., "cursor_4c_FpagI")
+                ENDIF
                 USE IN cursor_4c_FpagI
             ENDIF
 

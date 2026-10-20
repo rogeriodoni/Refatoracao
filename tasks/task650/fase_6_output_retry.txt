@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e verificada. `FormSigOpC44.prg`: 514 ÔåÆ 784 linhas.
+
+## O que faltava (e por que a tentativa anterior reprovou)
+
+A tentativa anterior entregou os campos corretos, mas parou a├¡. O gate da Fase 6 casa este form pelo ramo **CAPTURA** (OPERACIONAL, sem PageFrame, legado sem lista e sem lookup, campos de entrada n├úo vinculados), que exige `BINDEVENT` + `PROCEDURE Validar\w+` ÔÇö o arquivo tinha **zero** dos dois.
+
+Al├®m disso havia um bloqueio n├úo ├│bvio: um coment├írio em prosa na linha 136 continha o literal `AddObject("pgf_4c_...")`. O gate testa `$conteudo -notmatch 'AddObject\(\s*"pgf_4c_'` sobre o texto **cru**, ent├úo o coment├írio derrubava `$semPageFrame` e com ele **todos os cinco ramos OPERACIONAL**. Reescrevi a frase (o sentido ÔÇö "este form n├úo cria PageFrame" ÔÇö ficou mais expl├¡cito, n├úo menos).
+
+## O que entreguei
+
+Sem lookup: `grep` de `fwbusca|mAddColuna|sigacess|Acesso*()|FormBuscaAuxiliar` no dump devolve **0**, e a ├║nica `CreateObject` ├® `fSqlConector` (conex├úo, n├úo picker). Inventar lookup violaria o PILAR 1.
+
+Nenhum campo do SCX tem `Valid`/`When`/`LostFocus` ÔÇö a regra dos campos mora no `CmdGera.Click`. Como ela **governa os campos desta fase**, nasce aqui e o Click (Fase 7) s├│ chama (mesmo racioc├¡nio da task625/SIGPRICT):
+
+- **`ValidarParametros()`** (PUBLIC) ÔÇö transcri├º├úo dos tr├¬s guards na ordem do legado, mensagens/t├¡tulos/`SetFocus` caractere a caractere via `CHR()`, `MsgAviso` (├¡cone 48 = valida├º├úo de UI), `RETURN` ├║nico depois do `ENDTRY`.
+- **`AplicarValoresPadrao()`** ÔÇö defaults do `Init` legado (`C:\`, `Date()`, `1`). N├úo atribuo `ListIndex` porque o legado tamb├®m n├úo: ├® esse zero que o 3┬║ guard testa.
+- **`FormParaBO()`/`BOParaForm()`** ÔÇö `PROTECTED` expl├¡cito (regra #51), `ConverterParaData()` em vez de `TTOD()` (regra #16), `this_nFinalidade` recebe o **ListIndex** (├® o que `GeraReg1` grava em `CodFinal`).
+- **3 `BINDEVENT`** ÔÇö `KeyPress` nos dois TextBox digit├íveis e `InteractiveChange` na combo (Style=2, n├úo se digita). `txt_4c_Txtdest` fica sem handler: ├® `ReadOnly`/`TabStop=.F.` no legado. Os handlers s├úo **sync-only** ÔÇö antecipar mensagem divergiria do PILAR 1.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| Gate `case 6` extra├¡do verbatim e executado | `RESULTADO-VALIDADO: True` (ramo captura, piso 2 campos / 3 no migrado) |
+| Validador 05d (os 2 regex dele, n├úo `grep -i todo`) | 0 marcadores, 0 procedures de corpo curto |
+| `COMPILE` no VFP9 (`.fxp` apagado antes) | Form e BO geram `.fxp`, **nenhum `.ERR`** |
+| Instancia├º├úo + 4 cen├írios de valida├º├úo | `.F./.F./.F./.T.`, com as 3 mensagens exatas do legado no log de di├ílogos |
+| `AEVENTS` no objeto de origem | `DtEst=[KEYPRESSÔåÆDTESTKEYPRESS]`, `NumParc=[KEYPRESSÔåÆNUMPARCKEYPRESS]`, `GetFinal=[INTERACTIVECHANGEÔåÆFINALIDADEINTERACTIVECHANGE]`, `Txtdest=0` |
+| `KeyPress(13,0)` nativo | tela=7 ÔåÆ `BO.this_nNumParcelas = 7` (o delegate roda de fato) |
+
+Artefatos: `automation\CompilarF6SigOpC44.prg`, `automation\TestSigOpC44F6.prg`, sa├¡da em `automation\teste_sigopc44_f6.txt`. Os `.fxp` gerados foram removidos.
+
+Uma observa├º├úo sobre o pipeline, n├úo sobre esta task: o ramo `$semPageFrame` l├¬ o arquivo cru, ent├úo **qualquer coment├írio** que cite `AddObject("pgf_4c_` reprova as cinco exce├º├Áes OPERACIONAL da Fase 6 ÔÇö e o mesmo texto aparece nas Fases 4 e 5. Se quiser, propago isso (ancorar o teste em linha n├úo-coment├írio) via `/propagate-lesson`.

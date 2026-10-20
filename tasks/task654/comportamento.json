@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCBX",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Bxado",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBX",
+      "evento": "Init",
+      "linhas": 9,
+      "codigoOriginal": "Parameters pcForm, pcCodigo\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPublic Bxado\n\nThisForm.ParentForm = pcForm\nThisForm.pcCodigo   = pcCodigo",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBX.Container1.Text1",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.ParentForm.poDatamgr.pnIdconn,'SigCdEmp','csSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('cEmps', '', 'Cod', .t.)\n\t\txBrox.mAddColuna('RazSocs', '', 'Razão Social', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('csSigCdEmp.cEmps'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBX.Container1.Text2",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.ParentForm.poDatamgr.pnIdconn,'SigCdOpe','csSigCdOpe','Dopes',This.Value,'Operações',.t.,'Dopes')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Dopes', '', 'Operação', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('csSigCdOpe.Dopes'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBX.Commandgroup1",
+      "evento": "Click",
+      "linhas": 89,
+      "codigoOriginal": "If Not Empty(ThisForm.Container1.Text3.Value)\n\tllNum = .t.\n\tFor I = 1 to Len(Alltrim(ThisForm.Container1.Text3.Value))\n\t\tIf Not IsDigit(Substr(Alltrim(ThisForm.Container1.Text3.Value), I, 1))\n\t\t\tllNum = .f.\n\t\tEndIf\n\tNext\n\tIf Not llNum \n\t\t=MessageBox('O Número da Operação Digitado Não é Válido!!!', 48, '')\n\t\tThisForm.Container1.Text3.SetFocus \n\t\tReturn 0\n\tEndIf\nEndIf\n\t\nIf Empty(ThisForm.Container1.Text3.Value)\n\t=MessageBox('O Número da Operação Digitado Não é Válido!!!', 48, '')\n\tThisForm.Contain... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,UpDate,SqlExecute,Commit",
+        "controlesReferenciados": "ChkApro,ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBX.Commandgroup1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Bxado = 'C'\nRelease Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

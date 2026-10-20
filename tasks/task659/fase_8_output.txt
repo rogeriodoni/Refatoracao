@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Compila limpo e a tela abre ÔÇö verificado instanciando no VFP9, n├úo s├│ lendo o c├│digo.
+
+## O que foi entregue
+
+**`Formsigprnfe.prg`**
+- **`FormParaBO()`** ÔÇö substituiu o `ObterFiltrosSelecao` parcial. Transfere os **15** crit├®rios da tela (antes eram 9): faltavam Ambiente, Impress├úo, Regime, Arquivos, Usar TXT-ALT, Hor├írio de Ver├úo, Venc Futuros, Subst. C├│digo e Conting├¬ncia/In├¡cio. CheckBox num├®rico ÔåÆ property l├│gica com `(ctl.Value = 1)`.
+- **`BOParaForm()`** ÔÇö n├úo existia. Era um defeito real: o `Init` legado pr├®-carrega Empresa (`_Empr`), Datas (`Date()`), Regime e S├®rie, e o migrado s├│ gravava isso no BO, nunca na tela ÔÇö a `ValidarFiltrosSelecao` recusava a sele├º├úo por "Data Inicial n├úo informada" com a tela rec├®m-aberta.
+- **`ChecarDirs()`** + `MontarDiretorioGeracao` + `ArquivarTxtDeOutrasDatas` ÔÇö `PROCEDURE checardirs` do legado, que estava declarado como pendente. Preenche o Regime Tribut├írio (combo que nunca era populado) e o diret├│rio de gera├º├úo, cria as pastas e faz o backup dos `.TXT` antigos. Religado tamb├®m ao `Valid` da Empresa, com o guard de valor-mudou via `Tag`.
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö a lista de campos que o legado repete duas vezes (`.f.` no `selecionar`, `.t.` no `limpaselecao`) virou uma s├│, parametrizada; `AjustarBotoesPorModo` delega.
+- **`BtnCancelarClick()`**, `DeclararValidacaoIE()` (DLL `DllInscE32`), vers├Áes `2.0.4`/`4.00` + caption do r├│tulo, foco inicial e o ramo de `pMovimentacao` (carrega a nota e j├í dispara a sele├º├úo).
+
+**`sigprnfeBO.prg`** ÔÇö `CarregarParametros()` (SigCdPam/SigCdPac), `ObterRegimeEmpresa()`, `ObterSeriePadraoNfe()`, `CarregarMovimentacao()` + as properties correspondentes. `this_cIniContin` virou `this_dIniContin`: o controle legado ├® `fweditdata` (DATE) e a property char quebrava o idaÔÇæeÔÇævolta.
+
+## Verifica├º├úo
+
+| Gate | Resultado |
+|---|---|
+| COMPILE form + BO | OK, `.err` vazios |
+| Instancia├º├úo (VFP9, `gnConnHandle = -1`) | abre; defaults na tela; `FormParaBO` levou os 15 crit├®rios; `HabilitarCampos`/`AjustarBotoesPorModo` fecham o par de volta (regra #40) |
+| `ValidadorSQLSchema` | 13 statements, nenhuma coluna inv├ílida |
+| `VerificarFuncoesNaoDefinidas` / `MetodoProtegidoChamadoDeFora` / `ColunaEmpresaSQL` / `CamposCursorBO` | limpos |
+| ASCII puro (regra #4) | 0 bytes > 127 nos dois arquivos |
+
+## Dois pontos que voc├¬ precisa saber
+
+1. **`FormParaBO`/`BOParaForm` ficam PROTECTED, n├úo PUBLIC.** `FormBase` os declara `PROTECTED` e em VFP9 isso vale para o override da subclasse mesmo sem o modificador ÔÇö medido: chamar de fora d├í `Property FORMPARABO is not found`. Funcionam normalmente via `THIS.` (├® assim que `CarregarLista`, `Processamento` e `AplicarFiltrosIniciais` os usam), mas o harness n├úo consegue cham├í-los diretamente. Est├í documentado no cabe├ºalho dos dois m├®todos.
+
+2. **O motor de emiss├úo continua fora, e isso n├úo mudou nesta fase.** `Processamento` cobre completas as a├º├Áes 4 e 7 (inutiliza├º├úo de numera├º├úo); as a├º├Áes 1/2/3/5/6 dependem da gera├º├úo do layout NF-e (milhares de linhas de XML e c├ílculo de tributos por item) e exibem `MsgErro` expl├¡cito em vez de um stub silencioso. Isso ├® o que j├í vinha das fases anteriores ÔÇö eu n├úo ampliei nem escondi.

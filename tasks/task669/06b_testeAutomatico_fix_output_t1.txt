@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Identifiquei e corrigi o bug real em `Formsigprrcu.prg`: `InicializarForm()` exigia `gnConnHandle > 0` dentro do TRY para criar o BO e montar a tela. Isso **n├úo era** o problema de infraestrutura/rede j├í documentado em mem├│ria (confirmei via `Test-NetConnection 192.168.200.10 -Port 1433` que a porta est├í acess├¡vel agora) ÔÇö era um bug de c├│digo: `TesteAutomatico.prg` define `gnConnHandle = 0` deliberadamente (para n├úo travar 30s no timeout TCP), esperando que os forms instanciem mesmo assim via `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`.
+
+Encontrei que esse exato padr├úo de corre├º├úo **j├í existe** em `FormSigPrPpc.prg`/`FormSIGMVCTH.prg`, datado do mesmo dia (2026-10-18) ÔÇö ent├úo apliquei o mesmo padr├úo can├┤nico:
+
+- Extra├¡ a guarda de conex├úo para um m├®todo `ValidarParametros()` PUBLIC, chamado **fora** do TRY (regra #1).
+- No topo dele, bypass imediato quando `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` est├úo ativos.
+- Fora do modo teste, mantive o `DO CASE` com as mensagens exatas do legado, respeitando o sil├¬ncio quando `this_lParametrizado`.
+- A cria├º├úo do BO (`CREATEOBJECT("sigprrcuBO")`) agora roda incondicionalmente ap├│s a valida├º├úo passar.
+
+Salvei uma mem├│ria nova (`feedback_gnconnhandle_gate_falha_instanciacao_em_modoteste.md`) listando outros ~15 forms que usam a mesma string "Imposs├¡vel Efetuar Conex├úo" e podem ter o mesmo defeito ainda n├úo corrigido, para n├úo gastar tentativas de runtime_fix neles achando que ├® rede.

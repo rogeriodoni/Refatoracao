@@ -76,7 +76,9 @@ DEFINE CLASS ICDBO AS BusinessBase
         loc_lSucesso = .F.
         TRY
             IF USED("cnSigPrTri")
-                TABLEREVERT(.T., "cnSigPrTri")
+                IF CURSORGETPROP("Buffering", "cnSigPrTri") > 1
+                    TABLEREVERT(.T., "cnSigPrTri")
+                ENDIF
                 USE IN cnSigPrTri
             ENDIF
             loc_cSQL = "SELECT cidchaves, tipos, descs, aliquotas, bases, cfops, " + ;
@@ -108,7 +110,9 @@ DEFINE CLASS ICDBO AS BusinessBase
         loc_lSucesso = .F.
         TRY
             IF USED("cnSigPrTri")
-                TABLEREVERT(.T., "cnSigPrTri")
+                IF CURSORGETPROP("Buffering", "cnSigPrTri") > 1
+                    TABLEREVERT(.T., "cnSigPrTri")
+                ENDIF
                 USE IN cnSigPrTri
             ENDIF
             loc_cSQL = "SELECT cidchaves, tipos, descs, aliquotas, bases, cfops, " + ;

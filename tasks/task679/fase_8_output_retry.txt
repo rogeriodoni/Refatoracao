@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. O bloqueio **n├úo** estava no form ÔÇö estava no gate.
+
+## Diagn├│stico (medido, n├úo lido)
+
+Reproduzi o bloco `case 8` real do orquestrador fora dele (`automation/VerificarGateFase8Task679.ps1`, AST-only ÔÇö dot-source dispara migra├º├úo real). Veredito: **um ├║nico** bloqueio.
+
+```
+?? faltam metodos finais: BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)
+```
+
+O `SigTfSup` ├® um di├ílogo de senha com **zero** bot├úo de a├º├úo: o ├║nico bot├úo ├® o `CommandGroup SAIDA` (`ButtonCount=1`, membro `CANCELA`, `Cancel=.T.`), e a confirma├º├úo ├® o ENTER no `KeyPress` do campo. Primitivas medidas: `nBotoes=1`, `cliqueSoFecha=False`, `semBotaoAlgum=False`, `somenteLeitura=False`, `acaoTemHandler=False` ÔÇö nenhuma sa├¡da do bloco alcan├ºa.
+
+A causa de `cliqueSoFecha=False` s├úo dois idiomas Fortyus que `Test-LegadoCliqueSoFecha` n├úo conhecia, e nenhum ├® a├º├úo:
+
+| linha do `CANCELA.Click` | o que ├® |
+|---|---|
+| `RELEASE Windows` | como **este** legado fecha (nunca escreve `ThisForm.Release`) |
+| `ThisForm.Senha.Value=""` | limpar o pr├│prio campo p/ o chamador ler vazio (= cancelou) |
+
+Conferi o passo 1 da li├º├úo de self-reference: o `.ps1` ├® de 19/10 05:04 e a task come├ºou 17:50 ÔåÆ o gate que rodou era o do disco, ent├úo a reprova├º├úo foi **bug de gate leg├¡timo**, n├úo artefato.
+
+## O que fiz
+
+**Gate** (`OrquestradorMigracao.ps1`, 2 hunks, diff conferido linha a linha): as duas toler├óncias no `if` do helper ÔÇö `RELEASE WINDOWS` restrito ├á palavra *Windows* (`Release All`/`Release <var>` seguem reprovando) e atribui├º├úo de literal **vazio** a `.Value` (atribuir valor, ou `REPLACE`/`Insert`/`Update`, segue reprovando) ÔÇö mais uma mensagem pr├│pria, porque a gen├®rica diria "somente-leitura" e "s├│ faz ThisForm.Release", as duas factualmente erradas aqui.
+
+Alcance medido nos **678** dumps de `tasks\` (`MedirCliqueSoFechaTask679.ps1`): muda **4 dumps = 1 form distinto** (`SIGPRSTF`, tasks 228/254/334/679), `FalseÔåÆTrue`. Mon├│tono ÔÇö todos os consumidores leem `-eq $true` para *conceder* dispensa. Veredito final nas duas vers├Áes: backup pr├®-patch **REPROVA**, disco **PASSA**.
+
+**Form**: os tr├¬s hooks can├┤nicos que t├¬m referente de verdade neste di├ílogo passaram a existir mesmo, em vez de s├│ no coment├írio (era um falso-pass latente, j├í conhecido) ÔÇö `FormParaBO` (campoÔåÆBO, no caminho vivo do ENTER), `BOParaForm` (inverso) e `LimparCampos` (o `ThisForm.Senha.Value=""` legado, com fonte ├║nica no `BO.LimparDados`), todos `PROTECTED` como `FormBase` os declara. **N├úo** inventei bot├úo de gravar nem criei stub; `CarregarLista`, `HabilitarCampos`/`AjustarBotoesPorModo` e `BtnBuscar`/`BtnEncerrar`/`BtnSalvar` seguem sem referente e n├úo foram criados.
+
+**Provas por fora**: compila├º├úo limpa com `.fxp` apagado antes (ambos regerados, zero `.err`); `Test-CompletudeCodigo` OK no form e no BO; e `ProbeStf679Fase8.prg` em VFP9 real ÔåÆ **PROBE_OK** nas 10 verifica├º├Áes (instancia 400x200/modal, 11 controles do legado, escopos, hooks nos dois sentidos, ENTER confirma / outra tecla n├úo, Cancelar limpa, caption do `Init` legado, ├¡cone existe em `vbmp`).
+
+Li├º├úo propagada em mem├│ria (`feedback_gate_fase8_release_windows_e_limpar_campo_nao_eh_acao`), com ponteiro no `MEMORY.md` e cross-link na irm├ú do `Inkey` ÔÇö mesmo helper, mesma classe de toler├óncia.
+
+## Ressalva importante
+
+**A valida├º├úo da Fase 8 desta task vai reprovar de novo.** O orquestrador do task679 parseou o `.ps1` ├ás 17:50 e o conserto entrou ├ás ~18:21 ÔÇö o processo segue com o gate antigo em mem├│ria. O conserto vale da pr├│xima invoca├º├úo em diante. Satisfazer o gate velho exigiria inventar um bot├úo de gravar (PILAR 1) ou um handler vazio; h├í ainda um terceiro caminho ÔÇö `$padraoAcaoGravar` ├® `-match` no arquivo inteiro, sem ├óncora, ent├úo um coment├írio citando `PROCEDURE BtnConfirmarClick` passaria ÔÇö mas isso ├® enganar o validador, n├úo entregar trabalho, e n├úo fiz.

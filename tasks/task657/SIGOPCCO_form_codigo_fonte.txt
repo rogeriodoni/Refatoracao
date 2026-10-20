@@ -1,0 +1,745 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPCCO.SCX
+* Data/Hora: 17/10/2026 17:47:30
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCCO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCCO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCCO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGOPCCO
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCCO.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCCO.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCCO.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCCO.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCCO.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Edit1
+  Parent: SIGOPCCO.Grade.Column3
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Sair
+  Parent: SIGOPCCO
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say1
+  Parent: SIGOPCCO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NotaIni
+  Parent: SIGOPCCO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 149
+  Left = 4
+  Width = 586
+  Height = 208
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO
+------------------------------------------------------------
+  Height = 425
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Carta de Correção"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .T.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCCO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  Height = 290
+  Left = 98
+  ReadOnly = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 5
+  Top = 122
+  Width = 604
+  ForeColor = 0,0,0
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 220
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 280
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Sparse = .F.
+  Column3.ForeColor = 0,0,0
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ocorrência"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Retificação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Grade.Column3.Edit1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 53
+  Left = 5
+  Top = 31
+  Width = 100
+  ForeColor = 0,0,0
+  Name = "Edit1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Sair
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "Sair"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Confirmar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Ok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Say1
+------------------------------------------------------------
+  Caption = "Nota : "
+  Left = 183
+  Top = 94
+  TabIndex = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCCO.Get_NotaIni
+------------------------------------------------------------
+  Left = 220
+  MaxLength = 6
+  TabIndex = 1
+  Top = 91
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_NotaIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCCO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor XCorNf (cods n(3),descs c(30),retifs m(8) NULL )
+Index On cods Tag cods
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm,Emp,Serie,EmisDe,EmisAte,NFis
+Private pcEmps,pcSeries,pcNFis
+
+ThisForm.poDataMgr = CreateObject('fSqlConector','SigNfCor')
+
+ThisForm.ParentForm = pForm
+
+pcEmps    = Emp
+pcSeries  = Serie
+pcNFis    = NFis
+
+lcQryCorNf = [Select * From SigNfCor ]+;
+ 			  [Where cemps = ?pcEmps And cseries = ?pcSeries And cnfis = ?pcNFis ]+;
+		      [Order By cemps,cseries,cnfis,noccors ]
+
+lcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]
+
+With ThisForm.poDataMgr
+	.AddCursor('SigNfCor','cidchaves','CrSigNfCor','','',lcQryCorNf)
+	.AddCursor('SigCcOco','ncodigos' ,'CrSigCcOco','','')
+	.AddCursor('SigCdEmp'  ,'cemps'    ,'CrSigCdEmp'  ,'','',lcQryEmp)
+EndWith
+
+ThisForm.poDataMgr.Requery('CrSigNfCor')
+ThisForm.poDataMgr.Requery('CrSigCcOco')
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+
+ThisForm.Emp      = Emp
+ThisForm.Serie    = Serie
+ThisForm.EmisDe   = EmisDe
+ThisForm.EmisAte  = EmisAte
+ThisForm.pcNFisDe = NFis
+ThisForm.Get_NotaIni.Value = NFis
+
+With ThisForm.Grade
+	.RecordSource = 'XCorNf'
+	.Column1.ControlSource = 'XCorNf.cods'
+	.Column2.ControlSource = 'XCorNf.descs'
+	.Column3.ControlSource = 'XCorNf.retifs'
+	.Refresh
+EndWith
+
+Select XCorNf
+Zap
+
+Select CrSigNfCor
+Go Top
+If !Eof()
+	Select CrSigCcOco
+	Scan
+		Insert Into XCorNf (cods,descs,retifs) ;
+		Values (CrSigCcOco.ncodigos,CrSigCcOco.cdescrs,'')
+	EndScan
+	Select CrSigNfCor
+	Go Top
+	Scan
+		Select XCorNf
+		Go Top
+		Locate For XCorNf.cods = CrSigNfCor.noccors
+		If Found()
+			Replace XCorNf.retifs With CrSigNfCor.mretifs
+		Endif
+		Select CrSigNfCor
+	EndScan
+EndIf
+Select XCorNf
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCCO.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCCO.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCCO.Grade.Column3.Edit1
+* Classe: editbox (Base: editbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+Do Case
+	Case nKeyCode = 13 or nKeyCode = 24
+		Select XCorNf
+		If !Eof()
+			Skip
+		EndIf
+		ThisForm.Grade.Refresh
+	Case nKeyCode = 5 
+		Select XCorNf
+		If !Bof()
+			Skip -1
+		EndIf
+		ThisForm.Grade.Refresh
+	Case nKeyCode = 9
+		KeyBoard "{CTRL+TAB}"
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCCO.Sair
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Ok.Click
+------------------------------------------------------------
+PROCEDURE Ok.Click
+Private lcEmps,lcSeries,lcNFis,lnOccors, pNot, pTru
+
+If Not IsEmpty(ThisForm.Get_NotaIni.Value)
+	pNot = .f.
+	pTru = .t.
+
+	llTaOk = .t.
+Suspend
+
+	lcQuery = [Delete From SigNfCor ] + ;
+			   [Where CEmps = '] + Padr(ThisForm.Emp, 3) + [' And ] + ;
+			   		 [CSeries = '] + Padr(ThisForm.Serie, 3) + [' And ] + ;
+			   		 [CNfis = '] + Padr(ThisForm.Get_NotaIni.Value, 6) + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (1)])
+		llTaOk = .f.
+	EndIf
+
+	If llTaOk
+		lcQuery = [Update SigMvNfi ] + ;
+					 [Set Correcs = ?pNot ] + ;
+				   [Where Emps = '] + Padr(ThisForm.Emp, 3) + [' And ] + ;
+				   		 [Series = '] + Padr(ThisForm.Serie, 3) + [' And ] + ;
+				   		 [Nfis = '] + Padr(ThisForm.Get_NotaIni.Value, 6) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (2)])
+			llTaOk = .f.
+		EndIf
+	EndIf
+
+	If llTaOk
+		If (ThisForm.poDataMgr.Commit() < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (3)])
+			llTaOk = .f.
+		EndIf
+	EndIf
+
+	If Not llTaOk
+		ThisForm.poDataMgr.RollBack()
+		Return 0
+	Else
+		Update crSigMvNfi ;
+		   Set Correcs = .f. ;
+	     Where Emps = Padr(ThisForm.Emp, 3) And ;
+			   Series = Padr(ThisForm.Serie, 3) And ;
+			   Nfis = Padr(ThisForm.Get_NotaIni.Value, 6) 
+	EndIf
+		
+	Zap In crSigNfCor
+
+	Select XCorNf
+	Go Top In XCorNf
+	Scan While llTaOK
+		If llTaOK And Not IsEmpty(XCorNf.Retifs)
+			Select crSigNfCor
+			Locate For crSigNfCor.nOccors = XCorNf.Cods
+			If Eof([crSigNfCor])
+				Insert Into crSigNfCor (cEmps, cSeries, cNfis, nOccors, mRetifs, cIdChaves) ;
+								Values (ThisForm.Emp, ThisForm.Serie, ThisForm.Get_NotaIni.Value, ;
+										XCorNf.Cods, XCorNf.Retifs, fUniqueIds())
+			Else
+				Replace mRetifs With XCorNf.Retifs In crSigNfCor
+			EndIf
+		EndIf
+	EndScan
+
+	Select crSigNfCor
+	Go Top In crSigNfCor
+	If Not Eof([crSigNfCor])
+		If Not ThisForm.poDataMgr.Update([crSigNfCor])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (4)])
+			llTaOk = .f.
+		EndIf
+
+		If llTaOk
+			Select crSigNfCor
+			Go Top In crSigNfCor
+			If Not Eof([crSigNfCor])
+				lcQuery = [Update SigMvNfi ] + ;
+							 [Set Correcs = ?pTru ] + ;
+						   [Where Emps = '] + Padr(ThisForm.Emp, 3) + [' And ] + ;
+						   		 [Series = '] + Padr(ThisForm.Serie, 3) + [' And ] + ;
+						   		 [Nfis = '] + Padr(ThisForm.Get_NotaIni.Value, 6) + [']
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (5)])
+					llTaOk = .f.
+				EndIf
+			EndIf
+		EndIf
+
+		If llTaOk 
+			If (ThisForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (6)])
+				llTaOk = .f.
+			EndIf
+		EndIf
+
+		If Not llTaOk
+			ThisForm.poDataMgr.RollBack()
+			Return 0
+		Else
+			Update crSigMvNfi ;
+			   Set Correcs = .t. ;
+		     Where Emps = Padr(ThisForm.Emp, 3) And ;
+				   Series = Padr(ThisForm.Serie, 3) And ;
+				   Nfis = Padr(ThisForm.Get_NotaIni.Value, 6) 
+		EndIf
+	Else
+		If MessageBox('Confirma Impressão da Correção ?',4 + 32 + 256,'')=6
+			pcEmps    = ThisForm.Emp
+			pcSeries  = ThisForm.Serie
+			pcEmisDe  = ThisForm.EmisDe
+			pcEmisAte = ThisForm.EmisAte
+			pcNFisDe  = ThisForm.pcNFisDe
+			pcNFisAte = ThisForm.pcNFisDe
+			pEDNs     = CrSigMvNfi.Emps + CrSigMvNfi.Dopes + Str(CrSigMvNfi.Numes,6)
+
+			Do Form SigreImc With pcEmps,pcSeries,pcEmisDe,pcEmisAte,pEDNs,pcNFisDe,pcNFisAte
+		EndIf
+	EndIf
+	ThisForm.Release
+Else
+	MessageBox('Nota Fiscal Inválida !!',0+48,'')
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Cancela.Click
+------------------------------------------------------------
+PROCEDURE Cancela.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCCO.Get_NotaIni
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	Select XCorNf
+	Zap
+	Select CrSigNfCor
+	pcEmps    = ThisForm.Emp
+	pcSeries  = ThisForm.Serie
+	pcNFisDe  = This.Value
+	ThisForm.poDataMgr.Requery('CrSigNfCor')
+	Select CrSigNfCor
+	Go Top
+	If !Eof()
+		Select CrSigCcOco
+		Scan
+			Insert Into XCorNf (cods,descs,retifs) ;
+			Values (CrSigCcOco.ncodigos,CrSigCcOco.cdescrs,'')
+		EndScan
+		Select CrSigNfCor
+		Scan
+			If Seek(CrSigNfCor.noccors,'XCorNf.cods','cods')
+				Replace XCorNf.retifs With CrSigNfCor.mretifs
+			EndIf
+			Select CrSigNfCor
+		EndScan
+	Else
+		MessageBox('Nota sem Correção !!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		Select XCorNf
+		Zap
+		ThisForm.Grade.Refresh
+		Return 0
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCCO
+RESERVED3 (ClassInfo): emisate
+emisde
+emp
+parentform
+pcnfisde
+podatamgr
+serie
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

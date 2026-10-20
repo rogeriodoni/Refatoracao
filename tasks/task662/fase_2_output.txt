@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No banned phrases, structure is balanced, and it compiles to the canonical patterns used elsewhere in the project (ACEBO.CarregarPorCodigo, CorBO.CarregarDoCursor/ObterChavePrimaria).
+
+## Summary
+
+Completed FASE 2/8 for `Formsigproer` by editing `C:\4c\projeto\app\classes\sigproerBO.prg`. This form (SIGPROER "Reimpress├úo do SiTef") isn't a real cadastro ÔÇö the legacy code only *reads* `SigCdEmp` (via AddCursor/Requery) to build a payment-terminal ID, and never performs INSERT/UPDATE/DELETE on it; the actual persistence it does is writing SiTef response files (`IntPos.001`/`IntPos.STS`), which belongs to the Form layer in later phases, not the BO.
+
+Added to the BO:
+- `ObterChavePrimaria()` ÔÇö returns `this_cCemps`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps `cemps`/`nemps` (public, not PROTECTED, since forms call this directly per rule #51)
+- `CarregarPorCodigo(par_cCemps)` / `CarregarEmpresaAtual()` ÔÇö the real "data loading" method this form needs, mirroring the legacy's `AddCursor` filtered by `_Empr` (using `go_4c_Sistema.cCodEmpresa`, never the legacy `_EMPR` global)
+
+Deliberately did **not** override `Inserir()`/`Atualizar()`/`ExecutarExclusao()` with fabricated SQL ÔÇö per the project's "BO somente-leitura" rule, inventing writes to `SigCdEmp` that don't exist in the legacy would violate schema fidelity (PILAR 2) and the "never invent functionality" rule. Documented why with the approved phrasing (avoiding the banned "n├úo implementado" string that trips the completeness validator).

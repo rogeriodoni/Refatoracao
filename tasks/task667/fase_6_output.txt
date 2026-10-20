@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6/8 is complete. Summary of what was added to `Formsigprpre.prg`:
+
+**Novos containers em Page1 (Lista)** ÔÇö ambos j├í eram referenciados por `CarregarLista()` desde a fase anterior, mas nunca haviam sido criados:
+- `cnt_4c_Periodo` (Top=119, Left=701 ÔÇö compensado +29): label "Per├¡odo :", `txt_4c_Dt_inicial`/`txt_4c_Dt_final` (DATE() default), separador "a".
+- `cnt_4c_Prod` (Top=118, Left=16): label "Grupo/Produto :", `txt_4c_Grupo`, `txt_4c_Prod`, `txt_4c_DProd`.
+
+**Lookups completos (FormBuscaAuxiliar, padr├úo can├┤nico do projeto)**:
+- `GrupoLostFocus`/`Exec` ÔÇö busca em `SigCdGrp` por `cgrus`, com ESC limpando o campo (fiel ao `LastKey()<>27` do legado).
+- `ProdLostFocus`/`Exec` ÔÇö busca em `SigCdPro` por `cpros`, chama `CarregarLista()` ao final (como o legado).
+- `DProdLostFocus`/`Exec` ÔÇö busca em `SigCdPro` por `dpros`, **sem** chamar `CarregarLista()` ao final ÔÇö assimetria transcrita literalmente do legado.
+- `DProdGotFocus` ÔÇö equivalente ao `When()` do legado (campo descri├º├úo s├│ edit├ível quando c├│digo est├í vazio).
+- `Dt_inicialLostFocus`/`Dt_finalLostFocus` ÔÇö valida├º├úo cruzada de datas + recarga da grade; `Dt_final` tamb├®m move foco pra grade (fiel ao `Column1.SetFocus` legado).
+
+Todos os handlers usam `LostFocus` (n├úo `Valid`/`KeyPress`) com guardas de reentr├óncia (`this_lEmLookupGrupo/Prod/DProd`), seguindo as regras do CLAUDE.md sobre BINDEVENT n├úo confi├ível em `Valid` para TextBox e sobre lookups modais precisarem de guarda. Verifiquei balanceamento estrutural (27 PROCEDURE/27 ENDPROC, WITH/ENDWITH, TRY/ENDTRY, IF/ENDIF todos pareados) e aus├¬ncia de TODOs/stubs.

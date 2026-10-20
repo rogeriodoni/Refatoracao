@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 8/8 conclu├¡da ÔÇö `Formsigprtef.prg`
+
+O arquivo j├í tinha o corpo da Fase 8 de uma execu├º├úo anterior. Validei contra o gate e encontrei **3 defeitos reais** no que estava escrito, al├®m de uma afirma├º├úo falsa em coment├írio. Corrigi os quatro.
+
+### Defeitos corrigidos
+
+**1. `HabilitarCampos` lia uma flag do BO que ningu├®m escrevia** ÔÇö `this_lInicializado` estava declarada no BO (Fase 1) e lida aqui, mas **zero atribui├º├Áes** no projeto inteiro. Valia `.F.` para sempre, ent├úo `HabilitarCampos(.T.)` **desligava os dois bot├Áes de a├º├úo da tela** (`TefAdm`/`TefAtv`). Sem erro, sem log. `this_lAcessoAdm`/`this_lAcessoAtv` estavam igualmente mortas.
+
+**2. Condi├º├úo do legado descartada por um coment├írio falso** ÔÇö `InicializarEstadoTEF` dizia `*-- fChecaAcesso nao portada` e fazia `.Enabled = loc_lOk`. Mas `fChecaAcesso` **existe** em `utils/functions.prg` e outros forms migrados a chamam. O legado ├® `.TefAdm.Enabled = fChecaAcesso('TEFADM') and ok`. Transcrevi, e o estado agora ├® gravado no BO (fonte ├║nica), de onde `HabilitarCampos` recalcula a mesma condi├º├úo.
+
+**3. Leitura do BO sem guard** ÔÇö `THIS.this_oBusinessObject.this_lInicializado` sem `VARTYPE(...) = "O"` estoura se o BO n├úo foi criado. Guardado.
+
+**4. `AjustarBotoesPorModo` era `RETURN .T.` puro** ÔÇö agora ├® o funil de reabilita├º├úo (regra #40), recalculando a condi├º├úo do legado a partir do BO. Sem efeito colateral e **sem disparar transa├º├úo TEF** ÔÇö respeitando a decis├úo j├í registrada de que alias de nome CRUD nunca delega a `SigFiTefReq`.
+
+Tamb├®m documentei no cabe├ºalho as 8 fun├º├Áes globais do legado (`fLerFiscal`, `SigFiTefReq`, `ImprFiscal`ÔÇª) que ficam **ausentes de prop├│sito** (regra #27: devolvem valor de transa├º├úo; wrapper no-op gravaria status fiscal errado em sil├¬ncio). A aus├¬ncia estava invis├¡vel.
+
+### Verifica├º├úo
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 8 (`case 8` rodado standalone) | `metodosFaltantes` vazio; `padraoAcaoGravar` casa |
+| `Test-CompletudeCodigo` (Form e BO) | OK ÔÇö sem TODO/stub/procedure vazia |
+| Acentos literais / `this_X .Value` / `.Self` / `PUBLIC` em DEFINE CLASS | 0 em todos |
+| `RETURN` dentro de `TRY` | 0 |
+| Blocos WITH/PROC/TRY/IF/FOR | balanceados |
+| M├®todos do BO chamados de fora (regra #51) | 9, todos PUBLIC, sem colis├úo com `BusinessBase` |
+| CRLF preservado | sim |
+| Menu (`BAR 147` + `AbrirFormsigprtef`) | j├í integrado, `Show()` fora do `TRY` (regra #29) |
+
+### O que n├úo consegui provar
+
+**N├úo h├í prova de compila├º├úo.** O smoke test do VFP9 falhou nesta sess├úo: `vfp9.exe -T` gerou o `.FXP` do pr├│prio script e saiu com `exit=0` **sem executar o corpo** (arquivo de sa├¡da ausente); tentar compilar o form direto pendurou o processo at├® eu mat├í-lo. Logo: nenhum `COMPILE_OK` e nenhuma instancia├º├úo ÔÇö s├│ a bateria est├ítica acima.
+
+Salvei a li├º├úo #1 na mem├│ria (`feedback_habilitarcampos_le_flag_do_bo_nunca_escrita`), j├í que o padr├úo "Fase 1 declara, Fase 8 consome, a fase do meio nunca escreve" passa por todos os gates.

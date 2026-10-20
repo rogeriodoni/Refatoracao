@@ -1,0 +1,145 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 3,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCAC",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr  = CreateObject('fSqlConector', ThisForm.Name)\n\t.poDataMgr.SqlExecute([Select descricaos, programas, parametros From SigCdPrg],'crSigCdPrg1')\n\t\n\tSelect crSigCdPrg1\n\tReplace All Descricaos With Upper(descricaos)\nEndWith\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCAC.Text1",
+      "evento": "GotFocus",
+      "linhas": 14,
+      "codigoOriginal": "If Used('crGrupos')\n\tSelect crGrupos\n\tDelete All\n\tGo Top\n\tThisForm.Grid1.Refresh\nEndif\n\nIf Used('crSigCdUsu')\n\tSelect crSigCdUsu\n\tDelete all\n\tGo Top\n\tThisForm.Grid2.Refresh\nEndIf \n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCAC.Text1",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "LOCAL xBrow\n\nIF not IsEmpty(This.value)\n\n\tlcSearch = '%'+Upper(Alltrim(This.Value))+'%'\n\tSelect Descricaos, programas, Parametros From crSigCdPrg1 Where Descricaos Like lcSearch into Cursor crSigCdPrg\n\n\tSelect crSigCdPrg\n\tGo Top\n\n\tIf Eof()\n\t\tMessageBox('Parametros não Localizado',16,'')\n\t\tReturn(.f.)\n\tEndif\n\n\tIf Reccount() > 1\n\t\tGo Top\n\t\txBrow = CreateObject('fwBuscaInt','crSigCdPrg','Descricaos',This.Value,'Programas',.t.)\n\t\txBrow.mAddColuna('Descricaos',Replicate('X',85),'Programa',.t.)\n\t\txBro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCAC.Grid1",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.Grid2.RecordSource = ''\n\nIf Used('crGrupos') \n\tIf Empty(crGrupos.Grupos)\n\t\tlcQueryUsuario = [Select Distinct Usuarios, nComps, cCargs, Deptos, Supervis, cAtivos From SigCdUsu ]+;\n\t\t\t\t\t\t [Where Supervis In ('S', 'I') ]+;\n\t\t\t\t\t\t [Union ]+;\n\t\t\t\t\t\t [Select Distinct b.Usuarios, b.nComps, b.cCargs, b.Deptos, b.Supervis, b.cAtivos From SigCdAcu a ]+;\n\t\t    \t\t\t [Inner Join SigCdUsu b On a.Usuarios = b.Usuarios Where a.Grupos = '          ' ]+;\n\t\t                 [And (a.P... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCAC.Commandgroup1",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "Private lcPrgs, lcParms\n\nIf ! Empty(ThisForm.pcPrograma)\n\n\tThisForm.Grid1.RecordSource = ''\n\tThisForm.Grid2.RecordSource = ''\n\n\tlcPrgs  = Alltrim(ThisForm.pcPrograma)\n\tlcParms = Alltrim(ThisForm.pcParametro)\n\n\tlcQueryAcesso  = [Select distinct Grupos From SigCdAcu Where Programas = ?lcPrgs ]+;\n\t                 Iif(!Empty(lcParms),[ And Parametros = ?lcParms ],[ ])+;\n\t                 [Order By Grupos]\n\n\tThisForm.PoDatamgr.SqlExecute(lcQueryAcesso,'crGrupos')\n\tGo Top\n\t\n\tIf Eof() or ! Empty(Grupo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCAC.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Release Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCAC.Init",
+      "queryOriginal": "\t.poDataMgr.SqlExecute([Select descricaos, programas, parametros From SigCdPrg],'crSigCdPrg1')",
+      "tabelas": "SigCdPrg",
+      "colunas": "descricaos,programas,parametros",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCAC.Text1.Valid",
+      "queryOriginal": "\tSelect Descricaos, programas, Parametros From crSigCdPrg1 Where Descricaos Like lcSearch into Cursor crSigCdPrg",
+      "tabelas": "crSigCdPrg1",
+      "colunas": "Descricaos,programas,Parametros,lcSearch,crSigCdPrg",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCAC.Grid1.Procedure",
+      "queryOriginal": "\t\tlcQueryUsuario = [Select Distinct Usuarios, nComps, cCargs, Deptos, Supervis, cAtivos From SigCdUsu ]+; \t\t\t\t\t\t [Where Supervis In ('S', 'I') ]+; \t\t\t\t\t\t [Union ]+; \t\t\t\t\t\t [Select Distinct b.Usuarios, b.nComps, b.cCargs, b.Deptos, b.Supervis, b.cAtivos From SigCdAcu a ]+; \t\t    \t\t\t [Inner Join SigCdUsu b On a.Usuarios = b.Usuarios Where a.Grupos = '          ' ]+; \t\t                 [And (a.P... [TRUNCADO]",
+      "tabelas": "SigCdUsu,SigCdAcu",
+      "colunas": "nComps,cCargs,Deptos,Supervis,cAtivos,Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCAC.Commandgroup1.Click",
+      "queryOriginal": "\tlcQueryAcesso  = [Select distinct Grupos From SigCdAcu Where Programas = ?lcPrgs ]+; \t                 Iif(!Empty(lcParms),[ And Parametros = ?lcParms ],[ ])+; \t                 [Order By Grupos]",
+      "tabelas": "SigCdAcu",
+      "colunas": "Programas,Iif!EmptylcParms,[,Parametros,Grupos]",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPrg", "crSigCdPrg1", "SigCdUsu", "SigCdAcu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

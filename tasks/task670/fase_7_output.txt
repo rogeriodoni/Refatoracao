@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All controls and properties exist. The implementation for Fase 7/8 is complete.
+
+## Summary
+
+Implemented Fase 7/8 ("Form - Eventos Principais") for `FormSigPrRet.prg`. Since this is an OPERACIONAL dialog form (not a CRUD cadastro), the legacy had no Incluir/Alterar/Visualizar/Excluir verbs ÔÇö it has 4 real buttons on the `obj_4c_Sair` CommandGroup: **Consulta, Encerrar, Digitacao, Arquivadas**. I implemented those instead of inventing CRUD buttons that don't exist in the legacy (would violate PILAR 1), following the exact precedent already established in `FormSigOpCcl.prg` for forms whose legacy delegates to an unmigrated screen.
+
+Changes:
+- Added `this_cTipo` property (equivalent to legacy `ThisForm.Tipo`).
+- `ConfigurarEventosBotoes()`: binds each of the 4 `Buttons(N)` individually (legacy had one `Click` per button, not a grouped `Do Case`).
+- `FormParaBO()`: transcribes all 28 filter fields into the BO properties (equivalent to the `consulta.Click` PRIVATE-variable block), including the `pdDtFinal` special default (`CTOD("31/12/9999")` when end date is empty).
+- `BtnConsultaClick`: calls `FormParaBO()`, sets `this_cTipo = "CONSULTA"`, delegates via `DO FORM SigOpIpE WITH THIS`.
+- `BtnDigitacaoClick` / `BtnArquivadasClick`: reset most filters to blank/default (transcribed literally from the legacy ÔÇö note Digitacao keeps `Ordem` from the screen while Arquivadas hardcodes it to `1`; both keep `Promocao` from the screen).
+- `BtnEncerrarClick`: `THIS.Release()`.
+- `SigOpIpE` (the actual label-printing screen) stays a literal, documented out-of-scope `DO FORM` call ÔÇö its `.SCX` lives in `ProximasMigracoes\`, unmigrated, same as the `SigOpClp` precedent.
+
+Verified: balanced `PROCEDURE/ENDPROC`, `WITH/ENDWITH`, `TRY/CATCH/ENDTRY` blocks, class closure, and every BO property/control referenced actually exists. No VFP9 compiler was available in this sandbox to run the usual `vfp9.exe -c` check, so this was verified by static review instead.

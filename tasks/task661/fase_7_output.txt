@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Summary
+
+Implemented Phase 7/8 ("Eventos Principais") for `Formsigproef` (SIGPROEF ÔÇö Selection/Cancellation of TEF Transaction). Since this is an OPERACIONAL dialog with no Incluir/Alterar/Visualizar/Excluir buttons, the generic phase template didn't apply; I implemented the real equivalent ÔÇö the 5 action buttons' `Click` handlers and the form-level `KeyPress` (F2ÔÇôF5), continuing the fidelity-first approach of phases 3ÔÇô6:
+
+**`Formsigproef.prg`**:
+- `KeyPress(F2/F3/F4/F5)` ÔåÆ delegates to the action buttons' Click, exactly like the legacy `Case nKeyCode = -1..-4`.
+- `BtnOkClick` ÔåÆ closes the dialog (`Release Windows`).
+- `BtnCancelaClick` ÔåÆ validates via BO, confirms non-fiscal-receipt cancellation, delegates supervisor confirmation to the (unmigrated) `SigOpCtf`/`SigTfCan`, then commits via `BO.Atualizar()`.
+- `BtnReimprimeClick` / `BtnUltimoClick` ÔåÆ reprint via the already-migrated `Formsigproer`, or the unmigrated `SigTfSup` fallback.
+- `BtnGerencialClick` ÔåÆ literal call to the unmigrated `SigPrTef()` global function.
+- `InicializarForm` now also loads `SigCdPam`/`SigCdPac` parameters, the Cancela button's permission, and fiscal-printer data ÔÇö the rest of the legacy `Init` that these buttons depend on, which earlier phases had left out.
+
+**`sigproefBO.prg`**: added `CarregarParametrosSistema()`, `CarregarDadosImpressoraFiscal()`, `CarregarFormaPagamento()`; fixed `this_lLCartao` (wrongly typed as logical) to `this_cLCartao` (char, per schema).
+
+`SigOpCtf`, `SigTfCan`, `SigTfSup`, and the `SigPrTef()` function never came in the legacy acervo (confirmed ÔÇö not in `origem/`), so those calls are kept literal, matching this project's established convention for out-of-scope dependencies (e.g. `FormSigOpCcl.BtnConsultaClick ÔåÆ DO FORM SigOpClp`). They're wrapped in `TRY/CATCH` so a missing dependency surfaces through the project's `MsgErro` dialog instead of a raw VFP crash.
+
+Both files are structurally balanced (TRY/ENDTRY, IF/ENDIF, WITH/ENDWITH, PROCEDURE/ENDPROC all match).

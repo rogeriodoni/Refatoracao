@@ -196,7 +196,9 @@ DEFINE CLASS NflBO AS BusinessBase
                        "ORDER BY n.emps, n.series"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -242,7 +244,9 @@ DEFINE CLASS NflBO AS BusinessBase
                        " FROM SigCnFN2 WHERE cidchaves = " + EscaparSQL(par_cCidchaves)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Registro")
-                TABLEREVERT(.T., "cursor_4c_Registro")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Registro") > 1
+                    TABLEREVERT(.T., "cursor_4c_Registro")
+                ENDIF
                 USE IN cursor_4c_Registro
             ENDIF
 

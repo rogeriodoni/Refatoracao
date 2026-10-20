@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good, confirmed. The FormSigOpAtu.prg structure matches established project conventions (verified against `FormSigOpAlC.prg`, `FormSIGPRSTF.prg`, and `FormSigMvMen.prg` sibling forms, plus the exact literal SCX dump for SigOpAtu).
+
+Fase 3/8 is complete: `FormSigOpAtu.prg` now has:
+- `DEFINE CLASS FormSigOpAtu AS FormBase` with the exact visual properties from the legacy SCX (Width=800, Height=130, Caption, AutoCenter, BorderStyle, ControlBox=.F., Movable=.F., TitleBar=0, WindowType=1 ÔÇö modal dialog, no title bar)
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` creating `SigOpAtuBO` and calling `ConfigurarLayoutBase()`
+- `ConfigurarLayoutBase()` building the background Picture + `cnt_4c_Sombra` header container with `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` (both captions reproduce the legacy Init's `ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption` pattern), matching `mapeamento.json` and the literal SCX property dump exactly
+- A documented block explaining which CRUD-canonical methods don't apply to this single-field/single-button dialog
+- `Destroy()` ÔåÆ `DODEFAULT()`
+
+Deliberately excluded per phase scope: the `DopEstq` textbox, `Say1` label, and `Command1`/Ok button (Fases 4ÔÇô7), and no call to `fConfigGeral()` in Load since that's a no-op compatibility wrapper only for legacy VCX p-code, never for our own migrated code.

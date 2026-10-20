@@ -1,0 +1,28 @@
+=== TESTE FASE 6 FormSigPrPcp ===
+BO  .fxp recriado  : .T.
+FORM.fxp recriado  : .T.
+CHAVE len=29 [001MALOTE                   3]
+CHAVE ok (29 chars): .T.
+FORM VARTYPE       : O
+BaseClass          : Form
+ValidarPrioridades existe   : .T.
+ValidarPrioridades PROTECTED: .F.
+this_lTrocandoGrade: .F.
+grd Col1 Width     : 50
+grd Col1 ReadOnly  : .F.
+grd Col1 InputMask : [999999]
+BIND Grade.Col1.Text1 = 1
+   [LOSTFOCUS -> GRDDADOSCOL1LOSTFOCUS]
+BIND Item.Col1.Text1  = 1
+   [LOSTFOCUS -> GRDITENSCOL1LOSTFOCUS]
+VALIDA sem cursor      : .F.  (esperado .F.)
+DataSessionID      : 2
+cursor_4c_Selecao  : .T.  reccount=0
+VALIDA todos zero      : .F.  (esperado .F.)
+VALIDA Priors=5        : .T.  (esperado .T.)
+Ponteiro preservado(2) : .T.
+VALIDA Priors=100      : .F.  (esperado .F.)
+Posicionou na ofensora : .T.
+VALIDA Priors=99       : .T.  (esperado .T.)
+VALIDA so aPriors<>0   : .T.  (esperado .T.)
+=== FIM ===

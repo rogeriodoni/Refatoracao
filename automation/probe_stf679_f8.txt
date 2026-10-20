@@ -1,0 +1,31 @@
+=== PROBE Fase 8 - FormSIGPRSTF (SigTfSup) ===
+1) CREATEOBJECT -> VARTYPE=O Width=400 (400) Height=200 (200) TitleBar=0 (0) WindowType=1 (1) Caption=[Senha de Risco]
+2) controles do legado:
+   cnt_4c_Sombra          = .T.
+   .lbl_4c_LblSombra      = .T.
+   .lbl_4c_LblTitulo      = .T.
+   shp_4c_Shape1          = .T.
+   txt_4c_SenhaSupervisor = .T.
+   lbl_4c_Label3          = .T.
+   txt_4c_SENHA           = .T.
+   cnt_4c_Container1      = .T.
+   .lbl_4c_Label1         = .T.
+   obj_4c_SAIDA           = .T.
+   .ButtonCount           = 1 (1)
+   txt_4c_SENHA.PasswordChar=[*] (*)  txt_4c_SenhaSupervisor.Enabled=.F. (.F.)
+3) escopos (atributo 2 = Protected):
+   FormParaBO       Protected=.T. esperado .T.
+   BOParaForm       Protected=.T. esperado .T.
+   LimparCampos     Protected=.T. esperado .T.
+   ValidarSenha     Protected=.F. esperado .F.
+   BtnCancelarClick Protected=.F. esperado .F.
+4) FormParaBO: txt=[X1Y2Z3] -> BO.this_cSenha=[X1Y2Z3] esperado [X1Y2Z3]
+5) BOParaForm: BO=[A9B8] -> txt=[A9B8] esperado [A9B8]
+6) LimparCampos: txt=[] BO=[] Confirmou=.F. esperado [] [] .F.
+9) Caption de instrucao = [Digite a Senha<CR>do Supervisor] esperado [Digite a Senha<CR>do Supervisor]
+10) Picture=[c:\4c\vbmp\cadastro_cancelar_60.jpg] FILE()=.T. esperado .T.
+7) ValidarSenha: tecla 65 (nao-ENTER) -> Confirmou=.F. ObterSenha=[] esperado .F. []
+   ENTER (13) -> Confirmou=.T. ObterSenha=[SEGREDO1] esperado .T. [SEGREDO1]
+8) BtnCancelarClick: ObterSenha=[] Confirmou=.F. esperado [] .F.
+
+PROBE_OK

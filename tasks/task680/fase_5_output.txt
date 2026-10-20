@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 executada ÔÇö com uma corre├º├úo real, n├úo um NO-OP.
+
+## O que foi feito
+
+**Contexto**: este form OPERACIONAL (`SIGPRTAM` ÔÇö "Peso m├®dio por tamanho") ├® **flat, sem Page2**. O `analise.json` traz `"campos": []`: os ├║nicos campos digit├íveis s├úo as **6 c├®lulas da grade** (Tam./Descri├º├úo/Peso M├®dio/Percentual/Valor/Entrega). Essa ├® a superf├¡cie da Fase 5 aqui, e ela j├í estava implementada pelas fases anteriores ÔÇö mas **com um defeito de runtime em 2 das 6 c├®lulas**.
+
+## Defeito encontrado e corrigido
+
+`GrdColumn3*` (Peso M├®dio, `numeric(7,3)`) e `GrdColumn6*` (Entrega, `numeric(2,0)`) guardavam o valor anterior da c├®lula em `Text1.Tag`, copiando o `this.Tag = this.Value` do `When` legado ÔÇö que no legado s├│ existe em c├®lula **CHARACTER**.
+
+Medido no VFP9 (`automation\medir_tag_numerico.prg`):
+
+| express├úo | resultado |
+|---|---|
+| `VARTYPE(txt.Tag)` default | `C` |
+| `txt.Tag = <num├®rico>` | **ERRO "Data type is invalid for this property."** |
+| `<num├®rico> != txt.Tag` | **ERRO "Operator/operand type mismatch." (erro 107)** |
+
+Compila limpo; estoura no instante em que o usu├írio clica na c├®lula (`GotFocus`) ou sai dela (`LostFocus`) ÔÇö e como esses handlers n├úo t├¬m TRY/CATCH, sairia o **Program Error cru** do VFP. As duas c├®lulas ficariam inutiliz├íveis.
+
+**Conserto** (4 sites): duas properties num├®ricas no form ÔÇö `this_nPesoAnterior` e `this_nPrazoAnterior` ÔÇö, uma por coluna para n├úo depender da ordem em que os `GotFocus`/`LostFocus` se intercalam. ├ë o mesmo padr├úo que o legado usa com `peAntValue` e que `Column4`/`Column5` j├í usavam via `this_nValorAnterior`. Os 6 sites de `.Tag` em `Column1`/`Column2` (char) ficaram intactos ÔÇö ali o uso est├í correto.
+
+## Verifica├º├úo
+
+- Teste runtime antes/depois no VFP9: padr├úo novo passa nos dois casos (sem mudan├ºa ÔåÆ n├úo grava; com mudan├ºa ÔåÆ grava); padr├úo antigo erra no `GotFocus` **e** no `LostFocus`.
+- `COMPILE` real de `Formsigprtam.prg` e `sigprtamBO.prg`: `.fxp` gerado, **zero `.err`**.
+- Balanceamento: `PROCEDURE/ENDPROC` 37/37, `IF/ENDIF` 93/93, `TRY/ENDTRY` 4/4, `WITH/ENDWITH` 9/9, `FOR/ENDFOR` 1/1, `DEFINE CLASS/ENDDEFINE` 1/1; zero `RETURN` dentro de TRY; zero TODO/stub.
+- `MaxLength` conferido contra `docs/schema.sql` (UTF-16, via `Get-Content -Raw`): `codtams char(4)` ÔåÆ 4, `descs char(20)` ÔåÆ 20. Corretos.
+
+Li├º├úo persistida em mem├│ria (`feedback_tag_de_textbox_eh_so_character.md`) ÔÇö vale para qualquer c├®lula num├®rica de grade, n├úo s├│ deste form.
+
+## Fora do escopo (n├úo corrigido)
+
+Em `FormProduto.prg`, os bot├Áes `obj_4c_CmdTamanho` ("Outros Tamanhos") e `obj_4c_CmdCaracts` ("Caracter├¡sticas") s├úo criados **sem `BINDEVENT` de Click** ÔÇö hoje nada abre o `Formsigprtam`. ├ë arquivo de outra migra├º├úo; vale task pr├│pria.

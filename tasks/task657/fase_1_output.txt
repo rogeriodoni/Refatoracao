@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\SIGOPCCOBO.prg` com a estrutura `DEFINE CLASS SIGOPCCOBO AS BusinessBase`, todas as propriedades mapeadas do c├│digo fonte legado (SIGOPCCO_form_codigo_fonte.txt) e confirmadas contra `docs/schema.sql`:
+
+- **SigNfCor** (tabela principal, PK `cidchaves`): `this_cCidchaves`, `this_cEmps`, `this_cSeries`, `this_cNfis`, `this_nNoccors`, `this_cMretifs`
+- **Contexto/filtro** repassado pelo form chamador (usado depois na impress├úo via `Do Form SigreImc`): `this_dEmisDe`, `this_dEmisAte`
+- **SigCdEmp** (auxiliar, carregada no `Init` legado): `this_cRazas`
+
+`Init()` configura `this_cTabela = "SigNfCor"` e `this_cCampoChave = "cidchaves"`, e `ObterChavePrimaria()` (PROTECTED, igual ao padr├úo BALBO/CorBO) retorna a chave.
+
+Pr├│xima fase (2/8) vai completar `CarregarDoCursor()`, `Inserir()`/`Atualizar()` (upsert por `noccors`) e a l├│gica de carregamento das ocorr├¬ncias (`SigCcOco` + `SigNfCor` mesclados no cursor local).

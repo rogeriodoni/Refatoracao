@@ -1,0 +1,34 @@
+=== PROBE Fase 6 - FormSigOpC44 (task650) ===
+[OK] 1. INSTANCIA: BaseClass=Form Caption=[Geração do Arquivo da CAT 44/2008] WxH=503x247
+
+--- 2. CAMPOS E DEFAULTS ---
+  txt_4c_Txtdest.Value   = [C:\] (legado: C:\)
+  txt_4c_DtEst.Value     = [17/10/2026] tipo=D (legado: Date())
+  txt_4c_NumParc.Value   = [1] tipo=N (legado: 1)
+  cbo_4c_GetFinal.ListIndex = 0 ListCount=2 (legado NAO seleciona: 0)
+  BO.this_cDestino       = [C:\]
+  BO.this_dDataEstoque   = [17/10/2026]
+  BO.this_nNumParcelas   = 1
+  BO.this_nFinalidade    = 0
+
+--- 3. BINDEVENT (AEVENTS no objeto de ORIGEM) ---
+  txt_4c_DtEst      = 1 [KEYPRESS -> DTESTKEYPRESS]
+  txt_4c_NumParc    = 1 [KEYPRESS -> NUMPARCKEYPRESS]
+  cbo_4c_GetFinal   = 1 [INTERACTIVECHANGE -> FINALIDADEINTERACTIVECHANGE]
+  txt_4c_Txtdest    = 0 (ReadOnly no legado: esperado 0)
+
+--- 4. ValidarParametros() ---
+  4a finalidade nao escolhida  -> .F. (esperado .F.)
+  4b destino vazio             -> .F. (esperado .F.)
+  4c data do estoque vazia     -> .F. (esperado .F.)
+  4d tudo preenchido           -> .T. (esperado .T.)
+     BO.this_nFinalidade apos 4d = 1 (espelho do ListIndex)
+
+--- 5. KeyPress NATIVO (ENTER) espelha tela -> BO ---
+  tela=7  ->  BO.this_nNumParcelas = 7 (esperado 7)
+
+--- DIALOGOS CAPTURADOS ---
+[17/10/2026 09:59:49] Finalidade inválida...: Finalidade do arquivo não informada!
+[17/10/2026 09:59:49] Destino Inválido...: Destino de Arquivo Inválido!!!Verifique a Configuração da Empresa.
+[17/10/2026 09:59:49] Data do Estoque inválida...: Data do Estoque não informada!
+

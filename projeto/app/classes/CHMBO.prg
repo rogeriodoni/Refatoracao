@@ -81,7 +81,9 @@ DEFINE CLASS CHMBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -115,7 +117,9 @@ DEFINE CLASS CHMBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -181,7 +185,9 @@ DEFINE CLASS CHMBO AS BusinessBase
                           " WHERE banco = " + EscaparSQL(THIS.this_cBanco)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkDup")
-                TABLEREVERT(.T., "cursor_4c_ChkDup")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkDup") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkDup")
+                ENDIF
                 USE IN cursor_4c_ChkDup
             ENDIF
 
@@ -222,7 +228,9 @@ DEFINE CLASS CHMBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_Insert")
-                    TABLEREVERT(.T., "cursor_4c_Insert")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_Insert") > 1
+                        TABLEREVERT(.T., "cursor_4c_Insert")
+                    ENDIF
                     USE IN cursor_4c_Insert
                 ENDIF
 
@@ -283,7 +291,9 @@ DEFINE CLASS CHMBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Update")
-                TABLEREVERT(.T., "cursor_4c_Update")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Update") > 1
+                    TABLEREVERT(.T., "cursor_4c_Update")
+                ENDIF
                 USE IN cursor_4c_Update
             ENDIF
 
@@ -317,7 +327,9 @@ DEFINE CLASS CHMBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Delete")
-                TABLEREVERT(.T., "cursor_4c_Delete")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Delete") > 1
+                    TABLEREVERT(.T., "cursor_4c_Delete")
+                ENDIF
                 USE IN cursor_4c_Delete
             ENDIF
 

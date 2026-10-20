@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7/8 executada.
+
+## O que entrei
+
+O roteiro gen├®rico da Fase 7 pede `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`. **Medi o dump e este legado n├úo tem barra CRUD nenhuma**: herda de `form` puro (n├úo `frmcadastro`), zero `Grupo_Op`, zero `pcEscolha`, nenhum bot├úo com nome de verbo CRUD ÔÇö s├│ 4 `commandbutton` soltos. Criar os 4 nomes seria inventar bot├úo (PILAR 1) ou m├®todo vazio (regra de completude). Entreguei os Click dos bot├Áes de a├º├úo que o legado **tem**:
+
+**`FormSigPrSnd.prg`** (`projeto\app\forms\operacionais\`)
+- `BtnGerSenClick()` ÔÇö a├º├úo principal, transcrita passo a passo: guard de campo obrigat├│rio ÔåÆ confirma├º├úo ÔåÆ gera├º├úo/grava├º├úo ÔåÆ re-bind da grade ÔåÆ "Favor anotar as senhas geradas." ÔåÆ zera a quantidade. Os dois guards ficam **fora** do TRY (regra #1).
+- `BtnSenPendClick()` ÔÇö dispara `CarregarDados()`. N├úo avisa em consulta vazia, porque o legado n├úo avisa (regras #47/#50).
+- `RecarregarGradeDoTemp()` ÔÇö funil ├║nico do ZAP+APPEND+re-bind que o legado repete id├¬ntico nos dois Clicks; `CarregarDados` passou a us├í-lo (Problema 48 / regra #41).
+- 2 BINDEVENT de Click, guardados por `PEMSTATUS` do controle.
+
+**`SigPrSndBO.prg`** ÔÇö o Click legado usa `fKeyGen()`, `ChkRegister()`, `Update()` e `Commit()`, nenhum deles existente nesta arquitetura:
+- `ContarSenhasIguais()` = `ChkRegister`, com `-1` para "n├úo consegui consultar" (devolver 0 aceitaria senha duplicada; devolver >0 giraria o la├ºo).
+- `GerarSenhaUnica()` = o la├ºo `fKeyGen` + confer├¬ncia. `fKeyGen` n├úo foi portada e o fonte n├úo existe; chamar o nome nu seria a regra #13. N├úo cabe wrapper em `utils\` (regra #27 ├® para p-code de VCX) ÔÇö o ├║nico chamador ├® este `.prg`.
+- `GerarSenhasLivres()` = Zap + For/Insert + Update + Commit/RollBack. Os N INSERT v├úo num **SQLEXEC ├║nico** com `SAVE TRANSACTION`/`THROW`, porque a conex├úo nasce com `Transactions=2` e `@@TRANCOUNT`=1 ÔÇö um par BEGIN/COMMIT separado s├│ aninha o contador. Falha derruba `cursor_4c_SenhasTemp`, para a tela n├úo exibir senha que n├úo gravou.
+
+## Verificado, n├úo presumido
+
+- **Compila limpo**: `.fxp` gerado, zero `.err`, nos dois arquivos.
+- **Teste em VFP9** (`tasks\task678\_teste_fase7.out`): **10 OK / 0 falhou** ÔÇö 300 senhas todas com 6 d├¡gitos (104423..998532, sem espa├ºo ├á esquerda); 200 senhas num lote, 200 distintas; faixa esgotada para no teto e avisa; consulta falhando aborta na **1┬¬** volta (n├úo gira 100├ù); sem conex├úo recusa e limpa o cursor; qtde 0/`"abc"` recusadas.
+- **`ValidadorSQLSchema.ps1`**: PASSOU (683 tabelas). Conferi tamb├®m ├á m├úo: o INSERT lista as **15** colunas com 15 express├Áes de valor, cobrindo as **14** NOT NULL, sem coluna inventada (regra #22).
+- **Escopo PUBLIC** dos 4 m├®todos do BO medido com `PEMSTATUS(...,2)` = `.F.` (regra #51).
+- **`APPEND FROM DBF()` sobre cursor montado por `INSERT INTO`**: medido ÔÇö v├¬ as 7 linhas sem `FLUSH`. N├úo acrescentei o FLUSH especulativo.
+- `VerificarColunaEmpresaSQL`: ERRO=0 em 1021 arquivos.
+- Ambos CRLF, 100% ASCII (acentos por `CHR()`), zero `RETURN` dentro de TRY, zero procedure vazia, zero gatilho dos 4 regexes do `05d_validarCompletude`.
+
+Um detalhe que custaria uma rodada do validador: a legenda legada "Senhas pendentes" num coment├írio casa o regex `\bpendente` do 05d e reprova a fase por falso positivo. Reescrevi o coment├írio.
+
+## Duas pend├¬ncias que s├úo da Fase 8, n├úo desta
+
+1. **`cmd_4c_Saida` e `cmd_4c_BtnExcel` seguem sem handler.** Como o form ├® `Closable=.F.`/`TitleBar=0`, enquanto o Saida n├úo tiver Click **n├úo h├í como fechar a tela**. N├úo ├® exposi├º├úo real agora (o form n├úo est├í no menu), mas ├® o item n┬║ 1 da Fase 8.
+2. **`FormSigPrSnd` n├úo est├í em `menu.prg`.** N├úo adicionei de prop├│sito: ligar ao menu antes do handler do Saida publicaria um di├ílogo sem sa├¡da.
+
+N├úo consegui testar a grava├º├úo de verdade contra o SQL Server ÔÇö esta m├íquina n├úo tem rota para `192.168.200.10` (bloqueio de infra recorrente, n├úo de c├│digo). O que dependia do banco foi coberto estaticamente (validador de schema + confer├¬ncia coluna a coluna) e por teste com a consulta de duplicidade controlada.

@@ -143,7 +143,9 @@ DEFINE CLASS SigPdM13BO AS BusinessBase
 
             *-- Protecao uncommitted changes no cursor do grid
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
             IF USED("cursor_4c_DadosTemp")

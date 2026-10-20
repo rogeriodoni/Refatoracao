@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 2 complete. I added to `sigprtamBO.prg`:
+
+- **CarregarDoCursor()** ÔÇö maps all 10 SigPrTam columns plus the joined `descs` (guarded with `TYPE()` since it comes from a join with SigCdTam, not the table itself). Used correct default *values* in `TratarNulo` (`""`, `0`, `{}`) rather than type-code strings, per the known `TratarNulo` pitfall.
+- **ObterChavePrimaria()** ÔÇö returns `cidchaves` (PK), PROTECTED per BusinessBase contract.
+- **Inserir()** ÔÇö generates the PK via `fUniqueIds()` (matching the legado's `cmdInserir.Click`), does a real SQL `INSERT`, calls `RegistrarAuditoria("INSERT")`.
+- **Atualizar()** ÔÇö SQL `UPDATE` keyed by `cidchaves` (doesn't touch `cpros`/`cidchaves`, which are immutable after insert), calls `RegistrarAuditoria("UPDATE")`.
+- **ExecutarExclusao()** ÔÇö SQL `DELETE` keyed by `cidchaves` (replaces the legado's buffered `Delete` on the cursor), `PROTECTED` per the project's public-`Excluir()`-only rule, calls `RegistrarAuditoria("DELETE")`.
+
+Design notes I verified against the schema and codebase conventions before writing:
+- Confirmed `SigPrTam`/`SigCdTam` column names/types directly in `docs/schema.sql` (UTF-16, read via `Get-Content -Raw`) rather than trusting the dump.
+- `Inserir`/`Atualizar` are **not** `PROTECTED` (matches `BusinessBase`'s explicit public declaration ÔÇö regra #51/Erro199), while `ObterChavePrimaria`/`ExecutarExclusao` stay `PROTECTED`.
+- Did not replicate `CorBO.prg`'s `TratarNulo(col, "C")` pattern ÔÇö that's the known bug where the 2nd arg is a default *value*, not a type code.
+
+Next up is Phase 3 (creating the Form), which will presumably arrive as its own task.

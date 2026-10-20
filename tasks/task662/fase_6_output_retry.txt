@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e verificada.
+
+## Por que a fase anterior reprovou
+
+Medi o `case 6` do `OrquestradorMigracao.ps1` flag por flag em vez de adivinhar. Os campos **j├í estavam todos l├í** ÔÇö faltavam exatamente dois itens, ambos trabalho real do legado:
+
+| flag | antes | depois |
+|---|---|---|
+| `temBindEvent` | **False** | True |
+| `PROCEDURE Validar*` | **False** | True |
+
+N├úo ├® falso positivo do gate: o legado tem `When`/`GotFocus`/`LostFocus` nos dois TextBox, e reproduzir isso ├® a entrega desta fase. **Lookups: zero** ÔÇö `grep` dos padr├Áes (`fwbusca`, `mAddColuna`, `sigacess()`, `Acesso*()`) d├í 0 no dump. ├ë di├ílogo de hardware (PIN-pad), n├úo cadastro; inventar lookup violaria o PILAR 1.
+
+## Defeito fatal encontrado de passagem
+
+As fases 5/6 anteriores criaram `txt_4c_Senha` **e** `txt_4c_SENHA`. Nomes de membro do VFP9 s├úo case-insensitive ÔÇö medi:
+
+```
+AddObject("txt_4c_SENHA") -> "A member object with this name already exists."
+```
+
+O erro ca├¡a no `TRY` do `InicializarForm` e **`CREATEOBJECT("Formsigproer")` devolvia `.F.`** ÔÇö a tela nunca abria. Confirmei instanciando antes de mexer (`VARTYPE = L`). Renomeado para `txt_4c_SenhaSupervisor` (nome vem do r├│tulo da tela), com `mapeamento.json` corrigido junto.
+
+## Entregue
+
+- **`Formsigproer.prg`** (336 ÔåÆ 974 linhas): `ConfigurarEventosCampos` (4 BINDEVENT), `ValidarAcessoSenha`/`ValidarAcessoSenhaSupervisor` (o `When`), `SenhaGotFocus`/`SenhaSupervisorGotFocus` + `AguardarTerminalExec`, `ValidarSenha`/`ValidarSenhaSupervisor` + os dois `*Exec`, `MontarRetorno`, `RetornoFalha`, `PreencherBuffer`, `ComecaCom`, `TerminalDisponivel`.
+- **`sigproerBO.prg`** (124 ÔåÆ 222): protocolo da DLL (`DeclararFuncoesSiTef`, `ReiniciarProtocoloSiTef`, `ContinuarSiTef`), seguindo a arquitetura j├í usada em `sigprdftBO` ÔÇö PILAR 3. Precisei estender o BO porque os handlers do form o chamam (regra #13).
+
+Lacos transcritos literais, incluindo o envio em duas etapas do NSU/data (`lnTipo` 1ÔåÆ2ÔåÆ3), os ramos `TipoCampo` 515/516, o `llVias`, as chaves repetidas do `montaretorno` e o `lsCupom = Buffer + Buffer`.
+
+**Um desvio deliberado, medido:** o `=` do legado sobre buffer de 2000 bytes **nunca casa** sob o `SET EXACT ON` do `config.prg` ÔÇö provei que a transcri├º├úo literal d├í `.F.` para "VIA A SER REIMPRESSA" e "DOC INEXISTENTE", matando em sil├¬ncio a escolha da via e a detec├º├úo de falha. `ComecaCom` (prefixo com `==`) d├í `.T.`, e o controle negativo d├í `.F.`.
+
+## Provas
+
+Compila├º├úo limpa (sem `.err`); `CREATEOBJECT` ÔåÆ **`VARTYPE = O`**, 7 controles; os 4 BINDEVENT confirmados via `AEVENTS` (`GOTFOCUS -> SENHAGOTFOCUS`, `LOSTFOCUS -> VALIDARSENHA`, etc.); 8 m├®todos do form e 2 do BO existem e s├úo PUBLIC (regras #3/#51); `When` reproduzido (vazio `.T.`, com valor `.F.`); os 4 handlers disparam em ModoTeste sem tocar hardware e a flag de reentr├óncia volta a `.F.`. **Gate da Fase 6 (ramo CAPTURA) = True.** Validador 05d: 0 marcadores TODO, 0 "pendente/pr├│xima fase"; 0 acentos literais; 0 `PUBLIC` em `DEFINE CLASS`. CRLF preservado no form (974/974), BO em LF como estava.
+
+## Fora do escopo, para a Fase 7
+
+`CANCELA.Click`, o `Init` de hardware (`ConfiguraIntSiTefInterativo`/`IniciaFuncaoSiTefInterativo`) e o `Unload` ÔÇö registrado no cabe├ºalho do arquivo. Apaguei os `.fxp` para a Fase 7 recompilar do zero.
+
+Duas li├º├Áes novas salvas em mem├│ria: a colis├úo de nomes por caixa de letras e o `=` sob `SET EXACT ON`.

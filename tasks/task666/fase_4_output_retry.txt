@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í completa e o gate passa. O conte├║do visual da fase (grades + bot├úo + decora├º├úo) j├í existia da execu├º├úo anterior; **o que reprovava eram duas coisas concretas**, n├úo falta de c├│digo:
+
+**1. Prefixo do CommandGroup** ÔÇö estava `obj_4c_Grp_operacao`. O can├┤nico do projeto para CommandGroup ├® `cmg_4c_` (249 usos de `cmg_4c_Botoes` contra o `obj_4c_` que vem do gerador de mapeamento quando o tipo sai como *Unknown*). Renomeado para `cmg_4c_Grp_operacao`.
+
+**2. Faltava o m├®todo de carga.** O roteiro escrito na Fase 3 adiava `CarregarOperacoes` para a Fase 7ÔÇæ8, mas a carga ├® trabalho da Fase 4. Implementei de verdade (n├úo stub):
+
+- `CarregarDados()` ÔÇö transcreve o trecho final do `Init` legado (`LockScreen`/`MousePointer = 11` ÔåÆ carga ÔåÆ `MousePointer = 0`), delegando ZAP/APPEND/GO TOP ao `SIGPRPPPBO.CarregarOperacoes` que j├í existia pronto. N├úo refaz o `WHERE` em `SigMvCab` ÔÇö o resultado vem do cursor `TprMvCab` que o form pai deixa pronto.
+- `RepintarGrades()` ÔÇö funil ├║nico de repintura (regra #21).
+
+Ambos **PUBLIC**, porque o harness os chama de fora da classe (regras #3/#51) ÔÇö medido: `PEMSTATUS(...,2) = .F.`.
+
+**Um defeito que eu mesmo introduzi e corrigi antes de entregar:** a primeira vers├úo do `RepintarGrades` fazia `GO TOP` no cursor mestre. Correto na carga inicial, mas a Fase 7ÔÇæ8 vai reusar esse funil no `AfterRowColChange` ÔÇö e ali o `GO TOP` puxaria a grade de volta para a linha 1 logo depois do usu├írio escolher a linha N. Tirei os `GO TOP` (o BO j├í os faz em `CarregarOperacoes`/`CarregarItensPorChave`) e deixei o m├®todo como repintura pura, coerente com o legado, que s├│ faz `grd_itens.Refresh` no fim do `AfterRowColChange`.
+
+Tamb├®m alinhei `tasks/task666/mapeamento.json`, que apontava para nomes inexistentes (`obj_4c_Grp_operacao`, e as duas grades colidindo em `grd_4c_Dados`, mais `column1 ÔåÆ Page_4c_1`) ÔÇö isso produziria diferen├ºa bloqueante falsa no `ValidarUIFidelity` depois.
+
+**Verifica├º├úo (n├úo s├│ "compila"):**
+
+| Checagem | Resultado |
+|---|---|
+| Gate Fase 4 (l├│gica do orquestrador, ramo flat/OPERACIONAL) | PASSA ÔÇö 34,4 KB |
+| `COMPILE` form + BO no VFP9 | `COMPILE_OK`, `.err` vazios |
+| Instancia├º├úo headless | `CREATEOBJECT=O`, 8 controles com a geometria exata do dump |
+| `Column.Width` ap├│s `RecordSource` | preservadas (31/150/80/75/98 e 108/290/66) ÔÇö n├úo resetaram para 90 |
+| `.Picture` do Encerrar | `cadastro_sair_60.jpg` existe em disco (regra #25) |
+| Carga **com** `TprMvCab` | grade mestre com **3 linhas**, na ordem do `ORDER BY`; 2┬¬ carga continua 3 (ZAP funciona) |
+| Carga **sem** `TprMvCab` | `.F.` com aviso, sem Program Error cru |
+| Chave posicional | 29 chars (regra #42) |
+| Acentos literais / `ISEMPTY` / `.Self` / `Controls("nome")` / `PUBLIC` em classe / `RETURN` dentro de TRY | nenhum |
+| Regexes reais do `05d_validarCompletude` | zero marcador, zero pend├¬ncia, zero procedure vazia |
+
+Duas observa├º├Áes que vale registrar:
+
+- **A grade de ITENS n├úo p├┤de ser provada end-to-end** porque depende de `SQLEXEC` em `SigMvItn` e o SQL Server (192.168.200.10) n├úo ├® alcan├º├ível nesta m├íquina. O que ficou provado ├® a degrada├º├úo correta: retorna `.F.` com *"Conex├úo com o banco de dados n├úo dispon├¡vel"* em vez de estourar. O caminho mestre, que ├® puro VFP, est├í provado com linhas de verdade.
+- Tive que trocar duas ocorr├¬ncias de "**TODO** caminho" (portugu├¬s, = *"cada caminho"*) por "CADA caminho" nos meus pr├│prios coment├írios: o regex do validador de completude ├® `^\s*\*--\s*(TODO|...)` e casaria com elas ÔÇö falso positivo que reprovaria a fase.

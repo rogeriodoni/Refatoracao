@@ -4641,7 +4641,7 @@ function Test-CompletudeCodigo {
     }
 
     # 3. Detectar "implementar depois" / "proxima fase" em comentarios
-    $laterPattern = "(?im)\*.*?(implementar\s+(depois|later|futur)|pr[o�]xima\s+fase|pendente|nao\s+implement)"
+    $laterPattern = "(?im)\*.*?(implementar\s+(depois|later|futur)|pr[o�]xima\s+fase|\bpendente|nao\s+implement)"
     $laterMatches = [regex]::Matches($content, $laterPattern)
     foreach ($m in $laterMatches) {
         $problemas += "Indicador de pendencia: $($m.Value.Trim())"
@@ -5322,6 +5322,91 @@ function Test-ModoRecebidoDoChamador {
 
 <#
 .SYNOPSIS
+    Conta as ocorrencias VIVAS de 'pcEscolha' no dump legado - as unicas que
+    podem ser evidencia de modo CRUD.
+.DESCRIPTION
+    'pcEscolha' eh a variavel de MODO do frmcadastro, e as Fases 7 e 8 a usam
+    como ULTIMA evidencia de CRUD quando frmcadastro/Grupo_Op/botao CRUD nao
+    casam. A contagem CRUA (todas as ocorrencias do texto menos as lidas do
+    pai) conta tambem ocorrencia que NAO eh uso nenhum, e por isso marcava
+    como CRUD dialogo que nao tem modo algum:
+
+      (a) linha COMENTADA - '*!*  If Inlist(thisform.pcEscolha, [INSERIR])'
+          (sigcdale, SIGOPCAU) e '*.pcEscolha = [CONSULTAR]' (SigPrTar). O
+          '*!*' eh o marcador de "comentar fora" do Form Designer: o bloco
+          inteiro eh codigo MORTO;
+      (b) a DECLARACAO da property na SECAO 2 - 'pcescolha = .F.' eh o
+          cabecalho que o SCX grava para TODA custom property do form,
+          inclusive a que ninguem le nem escreve;
+      (c) a listagem do RESERVED3/ClassInfo na SECAO 4 - o nome aparece
+          sozinho numa linha, so como inventario de properties.
+
+    No SIGSERPR (task681) as TRES ocorrencias sao dessas: property vestigial
+    declarada, listada no ClassInfo e com a unica atribuicao COMENTADA. O
+    dialogo eh um popup somente-leitura (um EditBox ReadOnly e o botao
+    Encerrar) sem Page2, sem modo de edicao e sem Cancelar - e mesmo assim a
+    Fase 8 exigia dele BtnSalvarClick/BtnConfirmarClick. Insatisfazivel sem
+    INVENTAR um botao que o legado nao tem (viola o PILAR 1 e a regra "NUNCA
+    inventar") ou criar um handler vazio (proibido pela regra de completude) -
+    a mesma armadilha ja corrigida na Fase 6 (lookup inexistente), na Fase 7
+    (piso de 2 handlers) e aqui mesmo (pcEscolha recebido do chamador).
+
+    FAIL-CLOSED: so DESCONTA ocorrencia provadamente inerte. Qualquer uso
+    executavel - 'ThisForm.pcEscolha = [INSERIR]', 'If pcEscolha = ...',
+    'Do Case pcEscolha' - continua contando e preserva o veredito de hoje. As
+    regras (b) e (c) sao ancoradas na SECAO: sem os cabecalhos '* SECAO N' no
+    dump, so a regra (a) vale, e a contagem volta a ser a crua.
+    Desconta tambem, por LINHA, a leitura do modo no form PAI
+    ('pForm.pcEscolha') - era o unico desconto que os call sites ja faziam, e
+    fica aqui para haver FONTE UNICA (CLAUDE.md #44, item 6: predicado
+    duplicado nos dois call sites diverge em silencio no primeiro caso novo).
+
+    Medido em 2026-10-20 nos 680 dumps de tasks\: 292 citam 'pcEscolha' e
+    apenas TRES mudam de veredito - sigcdale (task345), SIGOPCAU (task652) e
+    SigPrTar (task681) -, nenhum deles com evidencia estrutural de CRUD
+    (frmcadastro, Grupo_Op ou botao Incluir/Alterar/Visualizar/Excluir). Zero
+    regressao nos dumps CRUD conhecidos (SIGCDCOR, sigcdcli, SigCdPro,
+    SIGCDCAR, SigCdMoe, SIGCDSET, SigCdTam, SigPrCtr, SigCdGrp, sigprtam) nem
+    nos dialogos filhos que ja eram dispensados por Test-ModoRecebidoDoChamador
+    (SigMvAte, SigMvChv, SigPrEml, SigMvTta).
+#>
+function Get-ContagemPcEscolhaViva {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return 0 }
+
+    $vivas = 0
+    $secao = ''
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        # Cabecalho de secao do extrator ('* SECAO 2: PROPRIEDADES ...').
+        # Copiado para $secao na hora: o $matches do -match seguinte
+        # sobrescreve este (CLAUDE.md #43).
+        if ($linha -match '^\*\s*SECAO\s+(\d)') { $secao = $matches[1] }
+
+        $nOcorr = ([regex]::Matches($linha, '(?i)pcEscolha')).Count
+        if ($nOcorr -eq 0) { continue }
+
+        # (a) linha comentada - '*', '*!*' ou '&&'
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        # (b) declaracao da property no cabecalho do SCX
+        if ($secao -eq '2' -and $linha -match '(?i)^\s*pcescolha\s*=') { continue }
+        # (c) inventario de properties do RESERVED3/ClassInfo
+        if ($secao -eq '4' -and $linha -match '(?i)^\s*pcescolha\s*$') { continue }
+
+        # (d) modo LIDO do form pai - nao eh modo proprio
+        $nDoPai = ([regex]::Matches($linha, '(?i)(ParentForm|pForm|oForm|oFormulario|par_oForm)\s*\.\s*pcEscolha')).Count
+
+        $vivas += ($nOcorr - $nDoPai)
+    }
+
+    if ($vivas -lt 0) { $vivas = 0 }
+    return $vivas
+}
+
+<#
+.SYNOPSIS
     Diz se TODA evidencia de NOME de verbo CRUD no dump e', de fato, botao da
     toolbar de RELATORIO (Click = REPORT FORM).
 
@@ -5735,10 +5820,35 @@ function Test-LegadoAddCursorLigaGrade {
     e' o MESMO 'ControlSource = "OPSENHA"' no grupo SAIDA. Nao ha lista
     escondida em nenhum deles.
 
-    Deliberadamente NAO se removeu ControlSource do teste: isso levaria a 75
-    tasks, liberando tambem SigCdFis, SigPrSdd, SigPrTar e SigReEch, onde o
-    ControlSource esta em controle de DADOS e pode ser vinculo a cursor de
-    verdade. A correcao e' cirurgica, so no caso provado.
+    Em 2026-10-16 (task639, SIGOPACC) esse recuo foi REVISTO, com medicao. O
+    paragrafo anterior dizia que ControlSource em controle de DADOS 'pode ser
+    vinculo a cursor de verdade' e por isso contava como lista. Isso confunde
+    DUAS coisas: em VFP9 o ControlSource de TextBox/EditBox/Spinner/CheckBox/
+    OptionButton liga UM campo do registro CORRENTE - e' vinculo ESCALAR e por
+    construcao nao produz lista nenhuma. Quem lista em VFP e' Grid
+    (RecordSource + Column.ControlSource) ou ListBox/ComboBox (RowSource), e
+    esses continuam contando: 'column' NAO entra na lista de escalares e
+    RecordSource devolve $true de imediato.
+
+    Medido em 2026-10-16 nos 638 dumps de tasks\: tratar controle de valor
+    escalar como nao-lista muda esta funcao em 239 dumps, mas o veredito do
+    ramo CAPTURA muda em apenas 5 - os outros 234 seguem reprovados por OUTRA
+    evidencia (grid/pageframe, pColuna/Grade/grd, ListBox que liga lista ou
+    AddCursor que liga grade). Os 5 sao 4 forms legado distintos: SigCdFis
+    (task418), SigPrSdd (task223 e task329), SigReEch (task084) e sigopacc
+    (task639). Conferidos um a um no dump: os 4 tem ZERO 'BaseClass: grid',
+    ZERO 'BaseClass: pageframe', ZERO 'BaseClass: column', ZERO
+    'BaseClass: listbox' e ZERO RecordSource - nao ha lista escondida em
+    nenhum deles. SigPrTar, citado no recuo anterior, NAO entra: reprova por
+    outra evidencia e segue reprovando.
+
+    Caso de origem: SIGOPACC -> Formsigopacc (task639) - dialogo modal 700x500
+    de 'Alterar Lancamento de Conta Corrente', TitleBar=0/ControlBox=.F.,
+    aberto por um form pai com (pOldForm, OPER, pTpAltera), com os 29 TextBox
+    ligados por ControlSource ao cursor crAltcc que o pai posiciona em UM
+    registro. Sem esta correcao o gate exigia inventar um Grid ou um PageFrame
+    Lista/Dados com 6 botoes CRUD (viola o PILAR 1 e 'NUNCA inventar'), e a
+    unica alternativa que sobrava era metodo-adaptador vazio (stub proibido).
 
     FAIL-CLOSED: dono desconhecido (objeto que nao aparece na arvore da SECAO 1)
     conta como lista, e RecordSource conta sempre. Usada SO pelo teste estrito
@@ -5779,10 +5889,16 @@ function Test-LegadoControlSourceLigaLista {
             # RecordSource e' propriedade de grade: prova de lista, sempre.
             if ($matches[1] -ieq 'RecordSource') { return $true }
 
-            # ControlSource: so NAO e' lista quando o dono e' grupo de botoes.
+            # ControlSource: NAO e' lista quando o dono e' um controle de
+            # valor unico (grupo de botoes ou campo de entrada escalar).
             if (-not $objProp) { return $true }
             if (-not $baseClass.ContainsKey($objProp)) { return $true }
-            if ($baseClass[$objProp] -notin @('commandgroup', 'optiongroup', 'listbox', 'combobox')) { return $true }
+            # Controle de valor ESCALAR: ControlSource liga UM campo do
+            # registro corrente, nunca uma lista (ver .DESCRIPTION).
+            # 'column' fica FORA desta lista de proposito - Column.ControlSource
+            # e' coluna de GRADE, isto e', prova de lista.
+            if ($baseClass[$objProp] -notin @('commandgroup', 'optiongroup', 'listbox', 'combobox',
+                                               'textbox', 'editbox', 'spinner', 'checkbox', 'optionbutton')) { return $true }
         }
     }
 
@@ -6101,8 +6217,51 @@ function Test-LegadoCliqueSoFecha {
         foreach ($linha in $linhas) {
             # Aceita ThisForm.Release / Form.Release / =ThisForm.Release() /
             # Release Thisform. Qualquer outra instrucao = botao de acao.
+            #
+            # EXCECAO - Inkey() com resultado DESCARTADO: idioma Fortyus de
+            # pausa/descarte de tecla pendente antes de fechar a tela
+            # ("x=Inkey(.1)" no Sair.Click do SIGOPBUS, task649). Inkey espera
+            # n segundos por uma tecla e devolve o codigo dela; atribuido a uma
+            # variavel que ninguem le, ou com o retorno jogado fora, nao
+            # persiste nada, nao abre nada e nao retem calculo nenhum - eh um
+            # no-op de UI, da mesma classe que um comentario, e NAO transforma
+            # o botao "Sair" em botao de ACAO. Contar como acao fazia a Fase 8
+            # reprovar o dialogo de busca COMPLETO, e as duas unicas saidas
+            # seriam renomear BtnSairClick para um verbo da lista canonica (o
+            # nome passaria a MENTIR sobre o que o metodo faz) ou inventar um
+            # botao que o SCX nao tem (viola o PILAR 1 e "NUNCA inventar").
+            #
+            # Seguro por construcao: quem USA o retorno do Inkey escreve a
+            # linha seguinte que o consome ("IF lnKey = 27 ..."), e essa linha
+            # continua reprovando o teste. Tolerar a linha do Inkey, portanto,
+            # nunca libera um Click que de fato faz trabalho.
+            #
+            # EXCECAO - RELEASE WINDOWS: eh o idioma de FECHAR do legado
+            # Fortyus, nao uma acao. O SigTfSup (SIGPRSTF, task679) fecha o
+            # dialogo assim nos DOIS caminhos - no CANCELA.Click e no KeyPress
+            # do campo de senha -, sem nunca escrever ThisForm.Release. Contar
+            # isso como trabalho fazia a Fase 8 cobrar um
+            # Btn(Salvar|Confirmar|...)Click de um dialogo cujo UNICO botao eh
+            # o Cancelar, e as duas unicas saidas seriam INVENTAR o botao
+            # (viola o PILAR 1 e "NUNCA inventar") ou criar um handler vazio
+            # (proibido pela regra de completude).
+            # Restrito a palavra WINDOWS: "Release All" e "Release <var>"
+            # seguem reprovando - liberar variavel nao eh fechar a tela.
+            #
+            # EXCECAO - limpar o PROPRIO controle antes de fechar: o
+            # CANCELA.Click do SigTfSup faz ThisForm.Senha.Value="" para que o
+            # chamador leia senha VAZIA (= cancelou). Atribuir literal vazio a
+            # um <controle>.Value nao persiste nada, nao abre nada e nao retem
+            # calculo nenhum - eh no-op de UI, da mesma classe que o Inkey
+            # descartado acima, e NAO transforma o Cancelar em botao de ACAO.
+            # Seguro por construcao: so literal VAZIO ("" / [] / SPACE(n) / 0 /
+            # {} / {//}) e so em ".Value"; atribuir VALOR, ou escrever em campo
+            # de cursor (REPLACE/Insert/Update/Gather), continua reprovando.
             if ($linha -notmatch '(?i)^(=\s*)?(This)?Form\.Release(\s*\(\s*\))?$' -and
-                $linha -notmatch '(?i)^Release[^\S\r\n]+Thisform$') {
+                $linha -notmatch '(?i)^Release[^\S\r\n]+Thisform$' -and
+                $linha -notmatch '(?i)^Release[^\S\r\n]+Windows[^\S\r\n]*(&&.*)?$' -and
+                $linha -notmatch '(?i)^(This)?Form(\.\w+)+\.Value[^\S\r\n]*=[^\S\r\n]*(""|\[[^\S\r\n]*\]|SPACE[^\S\r\n]*\([^()]*\)|0|\{[^\S\r\n]*\}|\{[^\S\r\n]*/[^\S\r\n]*/[^\S\r\n]*\})[^\S\r\n]*(&&.*)?$' -and
+                $linha -notmatch '(?i)^(\w+\s*=\s*|=\s*)?Inkey\s*\([^()]*\)\s*(&&.*)?$') {
                 return $false
             }
         }
@@ -6111,6 +6270,308 @@ function Test-LegadoCliqueSoFecha {
     return $true
 }
 
+<#
+.SYNOPSIS
+    O legado nao tem botao ALGUM?
+.DESCRIPTION
+    Irmao de Get-ContagemBotoesLegado/Test-LegadoCliqueSoFecha, para o ramo
+    ENTRADA-SEM-BOTAO da Fase 8. Test-LegadoCliqueSoFecha nao serve sozinho
+    aqui: sem nenhum .Click para inspecionar ele devolve $null (nao $true), e
+    o bloco do botao de acao le isso como "nao provado".
+
+    As TRES provas:
+      1. ZERO botao declarado - CommandButton e membros de CommandGroup
+         (Get-ContagemBotoesLegado ja soma os dois);
+      2. ZERO evento Click no dump - nao basta faltar BOTAO: um Click
+         pendurado em outro controle significaria que a tela TEM acao de
+         clique, e ai este ramo nao se aplica;
+      3. o form eh "form" PURO. frmcadastro/frmrelatorio HERDAM a barra de
+         botoes sem declara-la no SCX, entao contagem 0 neles eh ausencia de
+         PROVA, nao prova de ausencia - o mesmo recuo que o bloco do botao de
+         acao da Fase 8 ja faz ao exigir contagem == 1 em vez de >= 0.
+#>
+function Test-LegadoSemBotaoAlgum {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # (1) nenhum botao declarado
+    if ((Get-ContagemBotoesLegado -TextoDump $TextoDump) -ne 0) { return $false }
+
+    # (2) nenhum evento Click - mesmo padrao de bloco do Test-LegadoCliqueSoFecha
+    if ([regex]::IsMatch($TextoDump, '(?ims)^PROCEDURE[^\S\r\n]+[\w\.]*Click[^\S\r\n]*\r?$')) { return $false }
+
+    # (3) Class: form E BaseClass: form no MESMO objeto (form puro)
+    $classeAtual = ""
+    $ehFormPuro  = $false
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\s*Class:\s*(\S+)\s*$') {
+            $classeAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*(\S+)\s*$') {
+            if ($matches[1] -ieq 'form' -and $classeAtual -ieq 'form') { $ehFormPuro = $true }
+            $classeAtual = ""
+        }
+    }
+
+    return $ehFormPuro
+}
+<#
+.SYNOPSIS
+    O legado nao tem NEM superficie de lista NEM superficie de campos?
+.DESCRIPTION
+    Usado pelo guard de NO-OP de Invoke-MigracaoFase (Erro178), nas Fases 5 e 6.
+
+    O guard compara o MD5 do .prg antes/depois da fase e, com exit code 0 +
+    hash igual, FORCA retry com opus e timeout 2x. Ele assume que toda fase
+    sempre tem o que fazer - e isso nao vale para legado SEM CAMPO ALGUM
+    (splash / despachante / catalogo estatico). As Fases 5 e 6 pedem "metade
+    dos campos" e "os campos restantes e os lookups": com ZERO campo no
+    legado, metade de zero eh zero, e a fase termina CERTA sem tocar no
+    arquivo. As duas unicas formas de "satisfazer" o guard escrevendo algo
+    seriam inventar campos (viola o PILAR 1 e a regra "NUNCA inventar") ou
+    criar um metodo vazio (stub disfarcado, proibido pela regra de
+    completude) - por isso o conserto mora AQUI, no harness, e nunca no .prg.
+
+    Este helper NAO libera fase nenhuma: ele so impede que o guard FORCE o
+    retry. O gate de conteudo do switch roda em seguida e continua tendo de
+    passar (para este universo, pelo ramo DESPACHANTE, que usa exatamente os
+    mesmos criterios (1) e (2) daqui).
+
+    As provas, todas lidas do dump:
+      (0) PISO DE SANIDADE - o dump tem de ter sido REALMENTE parseado (>= 1
+          bloco "BaseClass:"). Sem isso, dump ilegivel/com encoding errado
+          devolveria $true para quase qualquer coisa - foi a armadilha de
+          medicao que ja derrubou uma versao anterior desta funcao, quando o
+          regex ancorado em '[ \t]*$' nao casava com o CRLF do dump e nBlocos
+          ficava em 0. Usar '\s*$' (que consome o \r), como o resto do arquivo.
+      (1) nenhuma superficie de LISTA - objeto grid/pageframe, ou a forma como
+          o Init legado monta/vincula a grade (AddCursor, pColuna,
+          RecordSource, ControlSource, Grade, grd).
+      (2) nenhuma superficie de CAMPOS - nenhum controle de ENTRADA de dados.
+          Label/Image/Shape/Container/CommandButton NAO contam: sao decoracao
+          e acao, e um splash costuma ter os cinco.
+      (3) nenhum AGRUPADOR vindo de VCX - container/pageframe/page/custom/
+          control/toolbar com ClassLoc, ou Class cls*. No sigcdcli o cntConta
+          eh o clsconta do classresp.vcx: os campos moram no p-code e "sem
+          campo" ali eh ILUSAO DE DUMP - e eh justamente nesses wrappers que a
+          fase TEM trabalho (os Left/Top que o SCX sobrepoe nos filhos do VCX).
+
+    Fail-closed em todas as portas: dump vazio/ilegivel devolve $false -
+    ausencia de prova nao eh prova de ausencia.
+
+    Medido em 2026-10-19 nos 674 dumps de tasks\: casam 31, dos quais o
+    chamador so alcanca os 20 OPERACIONAL = 10 forms legado distintos
+    (SIGCDFAPF, SIGCDFAPP, SigMvExp, SigMvPdt, SIGPRALE, SigPrGloT, sigprico,
+    sigprrcu, sigprsen, SigReGla); os 11 REPORT nao entram porque o guard
+    exige FormType = OPERACIONAL. Negativos conferidos um a um, com a mutacao
+    aplicada por .Replace LITERAL (nao por regex, pela armadilha do CRLF) e
+    com a entrada da mutacao verificada: BaseClass textbox/combobox/grid/
+    pageframe, ControlSource, AddCursor, pColuna, agrupador de VCX (com e sem
+    Class cls*), dump vazio, dump so com espacos e texto sem bloco algum -
+    todos devolvem $false.
+#>
+function Test-LegadoSemCampoNemLista {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # (0) piso de sanidade - o dump foi parseado?
+    if (([regex]::Matches($TextoDump, '(?im)^\s*BaseClass:\s*(\S+)\s*$')).Count -lt 1) { return $false }
+
+    # (1) superficie de LISTA
+    if ([regex]::IsMatch($TextoDump, '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$')) { return $false }
+    if ([regex]::IsMatch($TextoDump, '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')) { return $false }
+
+    # (2) superficie de CAMPOS
+    if ([regex]::IsMatch($TextoDump, '(?im)^\s*BaseClass:\s*(textbox|editbox|combobox|listbox|checkbox|optiongroup|optionbutton|spinner)\s*$')) { return $false }
+
+    # (3) agrupador vindo de VCX - campos escondidos no p-code
+    $gruposBase = @('container','pageframe','page','custom','control','toolbar')
+    $objClass = ""; $objBase = ""; $objLoc = ""; $temAgrupadorVcx = $false
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\s*Objeto:\s*') {
+            # fecha o objeto anterior antes de comecar o proximo
+            if (($objLoc -ne "" -and $gruposBase -contains $objBase.ToLower()) -or
+                $objClass.ToLower().StartsWith('cls')) { $temAgrupadorVcx = $true }
+            $objClass = ""; $objBase = ""; $objLoc = ""
+        } elseif ($linha -match '^\s*Class:\s*(\S+)\s*$') {
+            # copiar o grupo AGORA (CLAUDE.md regra #43 - o proximo -match
+            # sobrescreve $matches)
+            $objClass = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*(\S+)\s*$') {
+            $objBase = $matches[1]
+        } elseif ($linha -match '^\s*ClassLoc:\s*(\S+)') {
+            $objLoc = $matches[1]
+        }
+    }
+    # ultimo objeto do dump
+    if (($objLoc -ne "" -and $gruposBase -contains $objBase.ToLower()) -or
+        $objClass.ToLower().StartsWith('cls')) { $temAgrupadorVcx = $true }
+    if ($temAgrupadorVcx) { return $false }
+
+    return $true
+}
+<#
+.SYNOPSIS
+    Dialogo sem botao: o evento que CONFIRMA a tela existe no legado e foi
+    reproduzido no migrado?
+.DESCRIPTION
+    Usado pelo ramo ENTRADA-SEM-BOTAO da Fase 8. A 1a versao daquele ramo
+    exigia KeyPress e so KeyPress, repetindo em codigo a frase do proprio
+    comentario dele ("o dialogo sem botao SO pode ser confirmado por tecla").
+    A frase eh FALSA, e o contra-exemplo eh SIGPRSCN -> FormSigPrScn
+    (task673): dialogo modal de login 436x160 (TitleBar=0, ControlBox=.F.),
+    ZERO botao na arvore do SCX, cuja autenticacao INTEIRA vive em
+    "PROCEDURE LostFocus" de SIGPRSCN.SENHA - o proprio Thisform.Release
+    esta dentro dele. Exigir KeyPress ali obrigaria a INVENTAR um handler de
+    tecla que o legado nao tem (viola o PILAR 1) e, pior, criaria um SEGUNDO
+    caminho de validacao concorrendo com o LostFocus - a armadilha de
+    reentrancia das regras #37/#47.
+
+    Valid e LostFocus contam como a MESMA familia: BINDEVENT em "Valid" nao
+    dispara de forma confiavel em TextBox (regra ja estabelecida no projeto),
+    entao Valid do legado eh legitimamente migrado como LostFocus.
+
+    FAIL-CLOSED nos DOIS lados:
+      LEGADO  - o dump tem de declarar o evento num objeto que eh CONTROLE
+                (nome com ponto), nao no form: evento do form nao confirma
+                campo nenhum.
+      MIGRADO - nao basta existir o BINDEVENT; o delegate citado nele tem de
+                ser um metodo REALMENTE declarado no .prg (BINDEVENT com
+                delegate inexistente estoura no proprio BIND).
+    Sem dump, ou sem evento de controle no dump, devolve $false - ausencia de
+    prova nao eh prova de ausencia.
+#>
+function Test-ConfirmacaoDialogoSemBotao {
+    param(
+        [string]$TextoDump,
+        [string]$ConteudoForm
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump))    { return $false }
+    if ([string]::IsNullOrWhiteSpace($ConteudoForm)) { return $false }
+
+    # --- LADO LEGADO: eventos declarados em objeto que eh CONTROLE ---
+    $objetoAtual     = ""
+    $eventosControle = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -cmatch '^\*\s*OBJETO:\s*(\S+)\s*$') {
+            $objetoAtual = $matches[1]
+        } elseif ($linha -match '^PROCEDURE[^\S\r\n]+(\w+)[^\S\r\n]*$') {
+            # Copiar o grupo AGORA, antes de qualquer outro -match: o
+            # proximo -match SOBRESCREVE $matches e $matches[1] viraria
+            # $null (CLAUDE.md regra #43 - foi exatamente o que aconteceu
+            # na 1a versao deste helper, com $objetoAtual -match no meio).
+            # Por isso o teste do ponto usa .Contains, que nao toca $matches.
+            $eventoAtual = $matches[1].ToLower()
+            # ponto no nome = controle (SIGPRSCN.SENHA), nao o form (SIGPRSCN)
+            if ($objetoAtual.Contains('.')) {
+                [void]$eventosControle.Add($eventoAtual)
+            }
+        }
+    }
+
+    $legadoPorTecla = $eventosControle.Contains('keypress')
+    $legadoPorSaida = ($eventosControle.Contains('lostfocus') -or $eventosControle.Contains('valid'))
+    if (-not ($legadoPorTecla -or $legadoPorSaida)) { return $false }
+
+    # --- LADO MIGRADO: BINDEVENT do MESMO evento + delegate declarado ---
+    $eventosAceitos = @()
+    if ($legadoPorTecla) { $eventosAceitos += 'KeyPress'  }
+    if ($legadoPorSaida) { $eventosAceitos += 'LostFocus' }
+
+    foreach ($evt in $eventosAceitos) {
+        $padraoBind = 'BINDEVENT\([^)]*,\s*"' + $evt + '"\s*,\s*[^,]+,\s*"(\w+)"\s*\)'
+        foreach ($m in [regex]::Matches($ConteudoForm, $padraoBind,
+                        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+            $delegate   = $m.Groups[1].Value
+            $padraoDecl = '(?im)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+' +
+                           [regex]::Escape($delegate) + '\b'
+            if ($ConteudoForm -match $padraoDecl) { return $true }
+        }
+    }
+
+    return $false
+}
+
+<#
+.SYNOPSIS
+    O legado eh dialogo FILHO de SELECAO que devolve o escolhido ao form PAI?
+.DESCRIPTION
+    Irmao de Test-LegadoEscritaSoEmCursorLocal/Test-LegadoCliqueSoFecha, para o
+    ramo RETORNO-AO-PAI da Fase 8 (SIGOPCCJ -> FormSigOpCcj, task655, "Procura
+    de Contas por Conjuge").
+
+    Esta forma de tela nao grava em tabela NEM despacha para outro form: o
+    resultado da busca eh ESCRITO DE VOLTA nos controles do form CHAMADOR
+    ("ThisForm.ParentForm.&lcIClis..Value = ThisForm.getIClis.Value") e a tela
+    fecha. Por isso nenhum dos 12 ramos anteriores a alcanca - em particular
+    FILTRO-DESPACHO, que exige "Do Form <outro>", e LEITOR-BAIXA, que exige
+    persistencia em tabela do banco.
+
+    As TRES provas, todas lidas do dump:
+      1. o Init RECEBE o form chamador como parametro e confere que eh objeto
+         (Lparameters + Type('<par>') <> 'O') - eh o que faz dele dialogo
+         FILHO, e nao tela de menu;
+      2. existe ATRIBUICAO a ThisForm.ParentForm.<membro> - leitura nao conta
+         (um dialogo qualquer pode LER o pai sem ser canal de retorno), e eh a
+         atribuicao que substitui a persistencia que esta tela nao tem;
+      3. a atribuicao mora num bloco PROCEDURE ...Click que TAMBEM fecha a tela
+         (ThisForm.Release) - a assinatura "confirmou, devolveu, fechou". Sem
+         exigir o mesmo bloco, um Release solto em outro handler bastaria.
+
+    Fail-closed: dump vazio/ilegivel devolve $false.
+#>
+function Test-LegadoRetornoAoPai {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # (1) o Init recebe o form chamador e valida que eh objeto. O nome do
+    # parametro NAO eh fixo (pForms no SIGOPCCJ), entao o que se exige eh o par
+    # "declarado em Lparameters" + "conferido com Type(...) = 'O'" - checar um
+    # nome especifico reprovaria pela GRAFIA, nao pela ausencia (a armadilha de
+    # lista de palavras que o ramo LINHA-IMEDIATA ja levou).
+    $temLparam = $false
+    foreach ($m in [regex]::Matches($TextoDump, '(?im)^\s*Lparameters\s+([\w\s,]+)$')) {
+        foreach ($par in ($m.Groups[1].Value -split ',')) {
+            $nome = $par.Trim()
+            if ($nome -and [regex]::IsMatch($TextoDump,
+                    "(?i)Type\s*\(\s*['""]" + [regex]::Escape($nome) + "['""]\s*\)\s*(<>|!=|==|=)\s*['""]O['""]")) {
+                $temLparam = $true
+            }
+        }
+    }
+    if (-not $temLparam) { return $false }
+
+    # (2) e (3) - ATRIBUICAO ao pai no MESMO bloco Click que fecha a tela.
+    # Mesmo recorte de bloco do Test-LegadoCliqueSoFecha ([^\S\r\n] impede o
+    # \s* de atravessar linha e casar o ENDPROC de outro metodo).
+    $blocos = [regex]::Matches($TextoDump, '(?ims)^PROCEDURE[^\S\r\n]+[\w\.]*Click[^\S\r\n]*\r?$(.*?)^ENDPROC[^\S\r\n]*\r?$')
+    foreach ($bloco in $blocos) {
+        $linhas = ($bloco.Groups[1].Value -split "`r?`n") |
+                  ForEach-Object { $_.Trim() } |
+                  Where-Object { $_ -ne '' -and $_ -notmatch '^\*' -and $_ -notmatch '^&&' }
+
+        $atribuiAoPai = $false
+        $fecha        = $false
+        foreach ($linha in $linhas) {
+            # Atribuicao: ThisForm.ParentForm.<algo> a ESQUERDA de um '='.
+            # O <algo> pode trazer macro (&lcIClis..Value) - por isso [^=]*.
+            if ($linha -match '(?i)^ThisForm\s*\.\s*ParentForm\s*\.[^=]*=') { $atribuiAoPai = $true }
+            if ($linha -match '(?i)^(=\s*)?(This)?Form\.Release(\s*\(\s*\))?$') { $fecha = $true }
+        }
+        if ($atribuiAoPai -and $fecha) { return $true }
+    }
+
+    return $false
+}
 function Test-AcaoDoLegadoTemHandler {
     <#
     .SYNOPSIS
@@ -6134,11 +6595,62 @@ function Test-AcaoDoLegadoTemHandler {
         do PROPRIO dump, pelo Caption/Name de cada CommandButton, e cobra-se
         que exista "PROCEDURE Btn<verbo>*Click" no migrado.
 
+        O DONO do bloco eh identificado pelo BaseClass da ARVORE DA SECAO 1
+        do dump, nao pelo prefixo do nome (2026-10-17, task644). O filtro
+        original exigia Name comecando por cmd/btn/command/Grupo, mas esse
+        prefixo eh convencao do autor do SCX, nao garantia: quando o botao
+        herda de classe do Framework Fortyus, o Form Designer batiza pela
+        CLASSE. Em SIGOPAUT (task644) os tres CommandButton se chamam 'Sair',
+        'Fwbtnm1' (classe fwbtnm) e 'Grade' - nenhum casa o prefixo, entao o
+        helper devolvia $false para uma tela que TEM botao de acao
+        ("\<Imprimir", que autentica as linhas marcadas) e cujo migrado TEM o
+        handler (BtnImprimirClick). Eh a mesma familia de erro que este
+        helper foi criado para desfazer - decidir por lista/padrao de NOME -
+        so que do lado do DONO em vez do VERBO. O dump ja traz a resposta
+        certa em "Objeto: X / BaseClass: commandbutton"; o prefixo fica como
+        FALLBACK para dump sem a SECAO 1 legivel.
+
+        Medido em 2026-10-17 nos dumps de tasks\ com form migrado: a mudanca
+        altera o veredito DESTE helper em 88 de 388 dumps, mas o veredito
+        FINAL da Fase 8 em apenas 1 de 234 forms (SigOpAut) - os outros 87 ou
+        ja passavam por $padraoAcaoGravar, ou por um dos 9 ramos de excecao,
+        ou seguem reprovados por outro metodo faltante. Nenhum form que
+        passava antes passa a reprovar (219 -> 220).
+
+        O verbo passou a ser colhido tambem do MEMBRO INTERNO do grupo, e o
+        handler aceito com prefixo Btn OU Cmd (2026-10-17, task648). As duas
+        coisas sao a MESMA familia de erro que este helper existe para
+        desfazer - ler o nivel/grafia errada do nome -, e sao
+        indissociaveis: SIGOPBOL -> FormSIGOPBOL so passa com as duas. O
+        dump declara um CommandGroup 'btnReport' SEM Caption (o verbo esta em
+        'Command1.Name = "Cmd_Imprimir"', e o Caption do membro, 'Encerrar',
+        eh verbo de SAIDA e continua descartado) e o migrado nomeia o handler
+        'CmdImprimirClick', espelhando o objeto legado. So com (A) o helper
+        colhe 'Imprimir'; so com (B) ele aceita 'Cmd...Click'.
+
+        Medido em 2026-10-17 nos 392 dumps de tasks\ com form migrado: o
+        veredito DESTE helper vai de 168 para 219 (+51), com ZERO regressao
+        (nenhum .T. virou .F., como garante a monotonia - o resultado so eh
+        consumido por '-not $legadoSemAcao -> $metodosFaltantes +='). O
+        veredito FINAL da Fase 8 muda em 2 forms distintos: SIGOPBOL
+        (task648) e SigPrEs1 (tasks 178/281/606, que ja passava pelo ramo
+        FILTRO-DESPACHO). Conferidos os 30 forms distintos que mudam de
+        veredito aqui: em TODOS o par eh verbo real do legado -> handler real
+        do migrado (Imprimir->CmdImprimirClick, Processar->BtnProcessarClick,
+        Consultar->BtnConsultarClick, ...), nenhum casamento por acidente.
+
+        A fronteira de seguranca NAO foi tocada: este helper so eh consultado
+        quando $legadoSemSalvar prova que o legado nao tem botao de gravar.
+        Legado COM botao de gravar continua exigindo o nome canonico.
+
         FAIL-CLOSED:
           - dump ausente/ilegivel -> $false (ausencia de prova nao eh prova);
-          - botao que so FECHA a tela nao conta como acao (Sair/Encerrar/
-            Fechar/Cancelar/Retornar/OK/X) - senao qualquer form passaria pelo
-            botao de sair;
+          - botao que so FECHA a tela nao conta como acao (Sair/Saida/
+            Encerrar/Fechar/Cancelar/Retornar/OK/X) - senao qualquer form
+            passaria pelo botao de sair. A lista de verbos de saida FOI
+            AMPLIADA junto com a deteccao por BaseClass e nao se separa dela:
+            admitir o CommandGroup 'SAIDA' do SIGTOSEN sem admitir o verbo
+            'saida' faria aquele form passar pelo proprio botao de sair;
           - Caption/Name com menos de 4 letras uteis eh descartado: raiz curta
             casaria por acidente (ex.: "Ok" dentro de "BtnBloqueioClick");
           - exige o handler ancorado em inicio de linha, para a tabela
@@ -6155,14 +6667,35 @@ function Test-AcaoDoLegadoTemHandler {
     if ([string]::IsNullOrWhiteSpace($TextoDump))    { return $false }
     if ([string]::IsNullOrWhiteSpace($ConteudoForm)) { return $false }
 
-    # Verbos que apenas FECHAM a tela - nao sao acao
-    $verbosDeSaida = @('sair','encerrar','fechar','cancelar','cancela','retornar',
-                       'voltar','abandonar','ok','x','esc','exit','close')
+    # Verbos que apenas FECHAM a tela - nao sao acao.
+    # 'saida'/'saida acentuado'/'saidas' e as formas verbais 'encerra'/'fecha'/
+    # 'retorna'/'volta' entraram em 2026-10-17 JUNTO com a deteccao por
+    # BaseClass abaixo, e sao parte indissociavel dela: SIGTOSEN (task017) tem
+    # um UNICO CommandGroup chamado 'SAIDA' (botao interno 'CANCELA',
+    # Cancel = .T., Picture cadastro_sair_60.jpg, ToolTip "[ESC] Sair do
+    # Sistema") que o filtro por NOME escondia. Admitir o grupo sem admitir o
+    # verbo faria 'SAIDA' casar com 'BtnSaidaClick' no migrado e o form
+    # passaria pelo botao de SAIR - exatamente o furo que esta lista existe
+    # para fechar. Medido: sem este acrescimo o veredito final mudava em 2
+    # forms (SigOpAut e sigtosen); com ele, em 1 (so SigOpAut).
+    $verbosDeSaida = @('sair','saida','sa' + [char]0x00ED + 'da','saidas',
+                       'encerrar','encerra','fechar','fecha',
+                       'cancelar','cancela','retornar','retorna',
+                       'voltar','volta','abandonar','ok','x','esc','exit','close')
 
     # Blocos "* PROPRIEDADES DE: ..." de cada CommandButton do SCX. O dump
     # traz Name = "..." e, quando existe, Caption = "..." - e do Caption que
     # sai o verbo que o USUARIO ve (o Name costuma ser abreviado: cmdtran).
     $candidatos = New-Object System.Collections.Generic.List[string]
+
+    # Nomes cujo BaseClass na ARVORE DA SECAO 1 do dump eh commandbutton/
+    # commandgroup. Esta eh a fonte AUTORITATIVA de "isto eh um botao" - o
+    # prefixo do nome eh so um palpite (ver .DESCRIPTION).
+    $botoesPorBaseClass = New-Object System.Collections.Generic.HashSet[string] ([StringComparer]::OrdinalIgnoreCase)
+    foreach ($o in [regex]::Matches($TextoDump,
+        '(?im)^\s*Objeto:\s*(?<nome>[^\r\n]+?)\s*\r?\n(?:[^\r\n]*\r?\n){0,3}?\s*BaseClass:\s*(?:commandbutton|commandgroup)\s*$')) {
+        [void]$botoesPorBaseClass.Add($o.Groups['nome'].Value.Trim())
+    }
 
     $blocos = [regex]::Matches($TextoDump,
         '(?is)\*\s*PROPRIEDADES\s+DE:\s*(?<caminho>[^\r\n]+)\r?\n[-\s]*\r?\n(?<corpo>.*?)(?=\*\s*PROPRIEDADES\s+DE:|\z)')
@@ -6170,14 +6703,31 @@ function Test-AcaoDoLegadoTemHandler {
     foreach ($b in $blocos) {
         $corpo = $b.Groups['corpo'].Value
 
-        # So CommandButton/CommandGroup: o resto nao dispara acao por Click
+        # So CommandButton/CommandGroup: o resto nao dispara acao por Click.
+        # Aceita pelo BaseClass da arvore (prova) OU pelo prefixo do nome
+        # (fallback para dump sem a SECAO 1 legivel) - ver .DESCRIPTION.
         $nome = [regex]::Match($corpo, '(?im)^\s*Name\s*=\s*"([^"]+)"').Groups[1].Value
         if ([string]::IsNullOrWhiteSpace($nome)) { continue }
-        if ($nome -notmatch '(?i)^(cmd|btn|command|Grupo)') { continue }
+        if (($nome -notmatch '(?i)^(cmd|btn|command|Grupo)') -and
+            (-not $botoesPorBaseClass.Contains($nome))) { continue }
 
         $caption = [regex]::Match($corpo, '(?im)^\s*Caption\s*=\s*"([^"]*)"').Groups[1].Value
 
-        foreach ($bruto in @($caption, $nome)) {
+        # MEMBRO INTERNO do CommandGroup: quando o SCX declara o botao DENTRO
+        # de um grupo, o Name/Caption de primeiro nivel sao do GRUPO - e o
+        # grupo costuma nao ter Caption nenhum e um Name que nao diz nada
+        # ('btnReport'). O verbo mora no membro: 'Command1.Name = "Cmd_Imprimir"'.
+        # Mesma licao do CLAUDE.md #31 (membro interno com NOME PROPRIO nao se
+        # ignora) e a mesma familia de erro que a deteccao por BaseClass ja
+        # desfez neste helper - decidir pelo nivel errado do dump.
+        $brutos = [System.Collections.Generic.List[string]]::new()
+        [void]$brutos.Add($caption)
+        [void]$brutos.Add($nome)
+        foreach ($mi in [regex]::Matches($corpo, '(?im)^\s*\w+\.(?:Name|Caption)\s*=\s*"([^"]*)"')) {
+            [void]$brutos.Add($mi.Groups[1].Value)
+        }
+
+        foreach ($bruto in $brutos) {
             if ([string]::IsNullOrWhiteSpace($bruto)) { continue }
 
             # "\<Transfere" -> "Transfere"; "Rede \<Dial-Up" -> "Rede Dial Up";
@@ -6201,7 +6751,12 @@ function Test-AcaoDoLegadoTemHandler {
         if ($raiz.Length -gt 5) { $raiz = $raiz.Substring(0, $raiz.Length - 1) }
         $raizEscapada = [regex]::Escape($raiz)
 
-        if ($ConteudoForm -match "(?im)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+Btn\w*$raizEscapada\w*Click\b") {
+        # Prefixo Btn OU Cmd: o projeto nomeia handler de botao das DUAS
+        # formas (Formsigprdft e o proprio FormSIGOPBOL usam Cmd<Verbo>Click,
+        # espelhando o 'Cmd_Imprimir' do legado). Ancorar so em 'Btn' deixava
+        # o padrao SILENCIOSAMENTE PARCIAL - casa a familia, nunca o especime
+        # (CLAUDE.md #44, item 6).
+        if ($ConteudoForm -match "(?im)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+(?:Btn|Cmd)\w*$raizEscapada\w*Click\b") {
             return $true
         }
     }
@@ -6398,16 +6953,71 @@ function Invoke-MigracaoFase {
 
     # Erro178: NO-OP com exit code 0 - a fase "terminou bem" sem tocar no arquivo.
     # Tratar como FALHA para cair no retry (que ja re-executa com opus e timeout 2x).
+    #
+    # EXCECAO FAIL-CLOSED: FASE SEM TRABALHO NO LEGADO.
+    # O guard assume que toda fase sempre tem o que fazer. Isso nao vale para
+    # legado SEM CAMPO ALGUM (splash / despachante / catalogo estatico): as
+    # Fases 5 e 6 pedem "metade dos campos" e "os campos restantes e os
+    # lookups", e metade de zero eh zero - a fase termina CERTA sem tocar no
+    # arquivo. As Fases 7 e 8, por sua vez, pedem "os eventos dos botoes", e o
+    # legado pode nao ter botao ALGUM (ex.: sigprico, catalogo de 24 Image).
+    # Sem esta excecao o guard gasta uma re-execucao opus inteira so para
+    # reconfirmar que nao havia nada a fazer - e as duas unicas formas de
+    # "satisfazer" o guard escrevendo algo seriam inventar campos/botoes
+    # (viola o PILAR 1) ou escrever metodo vazio (stub disfarcado, proibido
+    # pela regra de completude).
+    #
+    # A excecao so DEIXA DE FORCAR o retry - nao libera fase nenhuma: o gate
+    # de conteudo do switch roda em seguida e continua tendo de passar.
+    #
+    # FAIL-CLOSED em todas as portas: so FormType = OPERACIONAL, so nas fases
+    # listadas, so com o dump PRESENTE e legivel, e a prova vem de helper que
+    # ja devolve $false por ausencia de prova. Na Fase 6 exige-se a prova EXTRA
+    # de ausencia de lookup (mesma lista de padroes do gate da propria fase):
+    # sem campo solto ainda pode haver fwBuscaExt no Valid de uma celula.
+    $faseSemTrabalhoNoLegado = $false
+    if ($FormType -eq "OPERACIONAL" -and $NumeroFase -in @(5, 6, 7)) {
+        $dumpNoOp = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+        if (Test-Path $dumpNoOp) {
+            $txtNoOp = Get-Content $dumpNoOp -Raw -ErrorAction SilentlyContinue
+            if ($txtNoOp) {
+                if ($NumeroFase -eq 7) {
+                    # Test-LegadoSemBotaoAlgum ja eh fail-closed por si: exige
+                    # zero botao E zero .Click E Class do form 'form' PURO.
+                    $faseSemTrabalhoNoLegado = Test-LegadoSemBotaoAlgum -TextoDump $txtNoOp
+                } else {
+                    $faseSemTrabalhoNoLegado = Test-LegadoSemCampoNemLista -TextoDump $txtNoOp
+                    if ($faseSemTrabalhoNoLegado -and $NumeroFase -eq 6) {
+                        $padroesLookupNoOp = @(
+                            'fwbusca',
+                            'mAddColuna',
+                            'sigacess\s*\(',
+                            'Acesso(Campos|Contab|Contas|Empresa|Grupos|MovInd|MovMto|Produto|Titulo)\s*\(',
+                            'FormBuscaAuxiliar'
+                        )
+                        if ($padroesLookupNoOp | Where-Object { $txtNoOp -match $_ }) {
+                            $faseSemTrabalhoNoLegado = $false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     $assinaturaDepois = if (Test-Path $alvoNoOp) { (Get-FileHash -Path $alvoNoOp -Algorithm MD5).Hash } else { $null }
     $foiNoOp = $false
     if ($LASTEXITCODE -eq 0 -and $null -ne $assinaturaAntes -and $assinaturaAntes -eq $assinaturaDepois) {
-        $foiNoOp = $true
-        Write-Host "  [NO-OP] Fase $NumeroFase terminou com exit code 0 mas NAO alterou $(Split-Path -Leaf $alvoNoOp)" -ForegroundColor Red
-        $preview = if (Test-Path $outputFile) { (Get-Content $outputFile -Raw -ErrorAction SilentlyContinue) } else { "" }
-        if ($preview.Length -gt 400) { $preview = $preview.Substring($preview.Length - 400) }
-        Write-Host "  Fim do output da fase: $preview" -ForegroundColor DarkGray
-        Write-Host "  Forcando retry (o modelo respondeu sem executar a fase)" -ForegroundColor Yellow
-        $global:LASTEXITCODE = 1
+        if ($faseSemTrabalhoNoLegado) {
+            Write-Host "  [i] Fase $NumeroFase nao alterou $(Split-Path -Leaf $alvoNoOp) - e esta CERTA: o dump prova que o legado nao tem a superficie que esta fase acrescenta (sem campo/lista, ou sem botao algum). Retry NAO forcado; o gate de conteudo segue valendo." -ForegroundColor Cyan
+        } else {
+            $foiNoOp = $true
+            Write-Host "  [NO-OP] Fase $NumeroFase terminou com exit code 0 mas NAO alterou $(Split-Path -Leaf $alvoNoOp)" -ForegroundColor Red
+            $preview = if (Test-Path $outputFile) { (Get-Content $outputFile -Raw -ErrorAction SilentlyContinue) } else { "" }
+            if ($preview.Length -gt 400) { $preview = $preview.Substring($preview.Length - 400) }
+            Write-Host "  Fim do output da fase: $preview" -ForegroundColor DarkGray
+            Write-Host "  Forcando retry (o modelo respondeu sem executar a fase)" -ForegroundColor Yellow
+            $global:LASTEXITCODE = 1
+        }
     }
 
     if ($LASTEXITCODE -ne 0) {
@@ -6823,7 +7433,36 @@ function Invoke-MigracaoFase {
                             $legadoSemListaNemCampos = (-not $temListaLegado) -and (-not $temCamposLegado)
                             # Dialogo de EXIBICAO: tem campo, mas TODO campo do
                             # legado e' ReadOnly = .T. - ver Test-LegadoDialogoExibicao.
-                            $legadoSoExibicaoF4 = (-not $temListaLegado) -and
+                            #
+                            # Aqui a ausencia de lista e' medida pelo teste ESTRITO, nao
+                            # pelo $temListaLegado largo. O largo casa o TOKEN cru
+                            # 'ControlSource' sem olhar de QUEM ele e' nem se tem valor,
+                            # e num dialogo de exibicao o ControlSource do campo
+                            # ReadOnly e' justamente COMO o legado mostra o texto - ou
+                            # seja, a prova de que o ramo se aplica estava derrubando o
+                            # proprio ramo. Caso: SIGSERPR -> FormSigPrTar (task681),
+                            # cuja UNICA ocorrencia no dump e'
+                            # ControlSource = "csTmpPrTar.ObsInsp" no getObsInsp
+                            # (fwmemo, ReadOnly = .T.), com ZERO BaseClass grid|pageframe,
+                            # ZERO AddCursor|pColuna|Grade|grd e ZERO RecordSource.
+                            # O ramo CAPTURA, criado depois, ja usava o teste estrito -
+                            # EXIBICAO era o unico ramo "sem lista" ainda preso ao largo.
+                            # $temListaLegado fica INTOCADO: DESPACHANTE o consome.
+                            #
+                            # Medido em 2026-10-19 nos 680 dumps de tasks\ (628 forms com
+                            # .prg e analise.json): o veredito da Fase 4 muda em 3 dumps,
+                            # que sao o MESMO legado (SigPrTar - task230/336/681),
+                            # todos REPROVA -> PASSA pelo ramo EXIBICAO, e ZERO dumps
+                            # regridem (TRUE -> FALSE). Nao basta trocar por "sem lista
+                            # puro": o estrito NAO e' subconjunto do largo
+                            # (Test-LegadoListBoxLigaLista pode acusar lista onde o largo
+                            # nao casa), por isso as DUAS direcoes foram medidas.
+                            $temListaEstritaExibF4 = ($txtLegadoF4 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
+                                                     (Test-LegadoListBoxLigaLista -TextoDump $txtLegadoF4) -or
+                                                     ($txtLegadoF4 -match '(?i)(pColuna|\bGrade\b|\bgrd)') -or
+                                                     (Test-LegadoAddCursorLigaGrade -TextoDump $txtLegadoF4) -or
+                                                     (Test-LegadoControlSourceLigaLista -TextoDump $txtLegadoF4)
+                            $legadoSoExibicaoF4 = (-not $temListaEstritaExibF4) -and
                                                   (Test-LegadoDialogoExibicao -TextoDump $txtLegadoF4)
                             $nBotoesLegadoF4 = Get-ContagemBotoesLegado -TextoDump $txtLegadoF4
                         }
@@ -7872,9 +8511,12 @@ function Invoke-MigracaoFase {
                             #      PILAR 1) ou criar metodo vazio (proibido
                             #      pela regra de completude).
                             if (-not $temCrudLegado) {
-                                $nPcEscolhaTotal = ([regex]::Matches($txtLegadoF7, '(?i)pcEscolha')).Count
-                                $nPcEscolhaDoPai = ([regex]::Matches($txtLegadoF7, '(?i)(ParentForm|pForm|oForm|oFormulario|par_oForm)\s*\.\s*pcEscolha')).Count
-                                if (($nPcEscolhaTotal - $nPcEscolhaDoPai) -gt 0) {
+                                # Ocorrencia INERTE (linha comentada, declaracao
+                                # da property, inventario do ClassInfo) nao eh
+                                # uso de modo - Get-ContagemPcEscolhaViva ja
+                                # desconta essas E a leitura no pai.
+                                $nPcEscolhaViva = Get-ContagemPcEscolhaViva -TextoDump $txtLegadoF7
+                                if ($nPcEscolhaViva -gt 0) {
                                     if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF7)) {
                                         $temCrudLegado = $true
                                     }
@@ -7944,8 +8586,43 @@ function Invoke-MigracaoFase {
                     $minHandlersF7 = 2
                     if ($nBotoesLegado -eq 1) { $minHandlersF7 = 1 }
 
+                    # Ha legado OPERACIONAL com ZERO botao DE VERDADE, e para
+                    # ele o piso 2 fica insatisfazivel: so passaria INVENTANDO
+                    # botao (viola o PILAR 1) ou criando handler vazio
+                    # (proibido pela regra de completude). O SIGPRSCN
+                    # ("Liberacao de Acesso ao Sistema", task673) eh um dialogo
+                    # modal de login 436x160 - 2 fwget, 2 Label e o cntSombra,
+                    # TitleBar=0, ControlBox=.F. - cuja unica saida eh
+                    # autenticar (o legado faz Thisform.Release DENTRO do
+                    # SENHA.LostFocus): zero commandbutton, zero commandgroup,
+                    # zero .Click.
+                    #
+                    # O que separa este caso dos 152 REPORT que tambem contam 0
+                    # NAO eh a contagem de botoes - eh distinguir "zero
+                    # declarado porque NAO HA" de "zero declarado porque eh
+                    # HERDADO". As tres provas estao em Test-LegadoSemBotaoAlgum
+                    # (nBotoes=0 E nenhum PROCEDURE *Click no dump E o form eh
+                    # "form" PURO - frmcadastro/frmrelatorio herdam a barra sem
+                    # declara-la e por isso ficam de fora), e a quarta eh
+                    # FormType OPERACIONAL, que exclui REPORT por um segundo
+                    # caminho independente.
+                    #
+                    # FAIL-CLOSED como os irmaos: so zera o piso com as QUATRO
+                    # provas. Medido em 2026-10-19 nos dumps de tasks\: dos 226
+                    # com nBotoesLegado=0, libera 19 dumps = 9 forms DISTINTOS
+                    # (SIGCDFAPF, SIGCDFAPP, SIGOPBIN, SIGPRALE, SigPrGloT,
+                    # sigprico, SIGPRIFF, SigPrScn, SigReGla), todos OPERACIONAL
+                    # e todos sem evidencia de CRUD alguma; os outros 207 seguem
+                    # no piso 2. Contagem em forms DISTINTOS porque o mesmo
+                    # legado reaparece remigrado em varias tasks.
+                    if ($nBotoesLegado -eq 0 -and $FormType -eq 'OPERACIONAL' -and (Test-LegadoSemBotaoAlgum -TextoDump $txtLegadoF7)) {
+                        $minHandlersF7 = 0
+                    }
+
                     if ($legadoSemCrud -and $nHandlers -ge $minHandlersF7) {
-                        if ($minHandlersF7 -eq 1) {
+                        if ($minHandlersF7 -eq 0) {
+                            Write-Host "  [i] Fase 7: legado OPERACIONAL sem botao ALGUM no SCX (zero commandbutton/commandgroup e zero .Click) - nao ha evento de botao a portar" -ForegroundColor Cyan
+                        } elseif ($minHandlersF7 -eq 1) {
                             Write-Host "  [i] Fase 7: legado sem botao CRUD e com UM UNICO botao no SCX - validado pelo(s) $nHandlers handler(s) desse botao" -ForegroundColor Cyan
                         } else {
                             Write-Host "  [i] Fase 7: legado sem botao CRUD algum - validado pelos $nHandlers handler(s) de botao que o legado realmente tem" -ForegroundColor Cyan
@@ -8040,12 +8717,23 @@ function Invoke-MigracaoFase {
                 $legadoExibicaoF8      = $false
                 $legadoVisualizadorF8  = $false
                 $legadoFluxoUnicoF8    = $false
+                $legadoArvoreF8        = $false
                 $legadoLinhaImediataF8 = $false
                 $legadoCalculadoraF8   = $false
                 $legadoProtocoloF8     = $false
                 $legadoFiltroDespachoF8 = $false
                 $legadoUtilitarioArquivoF8 = $false
                 $legadoGraficoF8       = $false
+                $legadoEntradaSemBotaoF8 = $false
+                $legadoRetornoAoPaiF8  = $false
+                # Definido AQUI, e nao mais abaixo junto do seu proprio bloco,
+                # porque o ramo LEITOR-BAIXA (dentro do if de OPERACIONAL, que
+                # roda antes) tambem precisa dele para provar que o migrado
+                # entregou o handler do botao de acao. FONTE UNICA de proposito:
+                # duplicar a lista de verbos aqui faria as duas copias divergirem
+                # em silencio no primeiro verbo novo (CLAUDE.md #44, item 6).
+                $padraoAcaoGravar = 'PROCEDURE\s+Btn(Salvar|Confirmar|Gravar|Processa|Aplicar|Executar|OK)\w*Click'
+
                 if ($FormType -eq "OPERACIONAL" -and $txtLegadoF8) {
                     $temListaLegadoF8 = ($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$') -or
                                         ($txtLegadoF8 -match '(?i)(AddCursor|pColuna|RecordSource|ControlSource|\bGrade\b|\bgrd)')
@@ -8181,9 +8869,15 @@ function Invoke-MigracaoFase {
                     # Vale tambem para $semCrudRealF8: o apaga-linha nao pode
                     # servir de atalho para pular a prova de modo recebido.
                     if ($semCrudLegadoF8 -or $semCrudRealF8) {
-                        $nPcEscolhaTotalF8 = ([regex]::Matches($txtLegadoF8, '(?i)pcEscolha')).Count
-                        $nPcEscolhaDoPaiF8 = ([regex]::Matches($txtLegadoF8, '(?i)(ParentForm|pForm|oForm|oFormulario|par_oForm)\s*\.\s*pcEscolha')).Count
-                        if (($nPcEscolhaTotalF8 - $nPcEscolhaDoPaiF8) -gt 0) {
+                        # Ocorrencia INERTE (linha comentada, declaracao da
+                        # property, inventario do ClassInfo) nao eh uso de modo -
+                        # Get-ContagemPcEscolhaViva ja desconta essas E a
+                        # leitura no pai. Sem isso o SIGSERPR (task681), cujo
+                        # pcEscolha eh property vestigial com a unica
+                        # atribuicao COMENTADA, era marcado como CRUD e a fase
+                        # exigia dele um BtnSalvarClick inexistente.
+                        $nPcEscolhaVivaF8 = Get-ContagemPcEscolhaViva -TextoDump $txtLegadoF8
+                        if ($nPcEscolhaVivaF8 -gt 0) {
                             if (-not (Test-ModoRecebidoDoChamador -TextoDump $txtLegadoF8)) {
                                 $semCrudLegadoF8 = $false
                                 $semCrudRealF8   = $false
@@ -8349,6 +9043,67 @@ function Invoke-MigracaoFase {
                                            $temListaLegadoF8 -and $temCamposLegadoF8 -and
                                            ($conteudo -match 'PROCEDURE\s+Carregar\w*'))
 
+                    # Ramo ARVORE: irmao do FLUXO-UNICO acima, para o mesmo
+                    # formato (lista E campo editavel reais, sem CRUD) quando a
+                    # LISTA do legado nao eh Grid e sim um ActiveX de arvore -
+                    # exatamente a excecao que as Fases 4 e 5 ja reconhecem
+                    # ($legadoListaArvore/$legadoArvoreSemBindF5) e que esta
+                    # fase, sem este ramo, NAO herdava (CLAUDE.md #44 item 6:
+                    # "excecao de layout criada numa fase nao se propaga
+                    # sozinha para as vizinhas que fazem a mesma pergunta
+                    # sobre a mesma superficie" - SEXTA recorrencia da familia,
+                    # aqui na Fase 8). $temListaLegadoF8 so conta BaseClass
+                    # grid/pageframe ou AddCursor/pColuna/RecordSource/
+                    # ControlSource/Grade/grd - nenhum desses aparece no dump
+                    # de uma arvore (ex.: SIGOPCAU -> FormSIGOPCAU, task652:
+                    # TreeView ctTree.ocx desenhado por AddPictureNode/
+                    # NodeCargo/NodeExpanded/NodeLevel, 3 TextBox de filtro
+                    # mutuamente exclusivos, sem CRUD e sem botao de gravar) -
+                    # sem este ramo, $legadoFluxoUnicoF8 fica para sempre fora
+                    # de alcance e a fase exige BtnCancelarClick/FormParaBO/
+                    # BOParaForm/CarregarLista de um legado que nao tem Page2,
+                    # nem modo de edicao, nem ficha para mapear em bloco (a
+                    # transferencia eh por CAMPO, dentro do metodo de carga -
+                    # ver cabecalho do form migrado).
+                    #
+                    # Dispensa IDENTICA ao FLUXO-UNICO, pelo mesmo motivo: sem
+                    # Page2/modo de edicao nao ha o que Cancelar nem ficha para
+                    # FormParaBO/BOParaForm mapearem em bloco, e CarregarLista
+                    # vira o metodo Carregar* que de fato alimenta a arvore
+                    # (exigido pela condicao, nao soh pelo nome).
+                    #
+                    # FAIL-CLOSED, mesmos quatro criterios da excecao ARVORE
+                    # das Fases 4/5: dump exigindo ausencia de Grid/PageFrame,
+                    # presenca de OLEControl E de API de nos (nao basta "tem
+                    # olecontrol" - haveria falso positivo com MODEM/oModem,
+                    # ver nota da Fase 4) - mais $semCrudRealF8/$temCamposLegadoF8
+                    # (sem CRUD, com campo editavel) e o migrado provando
+                    # AddObject de OLEControl + metodo Carregar*.
+                    $legadoListaArvoreF8 = $false
+                    if ($txtLegadoF8) {
+                        $semGridLegadoF8 = -not ($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*(grid|pageframe)\s*$')
+                        $temOleLegadoF8  = $txtLegadoF8 -match '(?im)^\s*BaseClass:\s*olecontrol\s*$'
+                        $temApiNosF8     = $txtLegadoF8 -match '(?i)(AddPictureNode|ClearNodes|NodeCargo|NodeExpanded|NodeLevel|NodeHeader|\.Nodes\.Add)'
+                        $legadoListaArvoreF8 = $semGridLegadoF8 -and $temOleLegadoF8 -and $temApiNosF8
+                    }
+                    $temArvoreMigradaF8 = ($conteudo -match 'AddObject\(\s*"[^"]+"\s*,\s*"OLEControl"') -and
+                                           ($conteudo -match 'PROCEDURE\s+Carregar\w*')
+
+                    $legadoArvoreF8 = ($semCrudRealF8 -and (-not $legadoDespachanteF8) -and
+                                       (-not $legadoExibicaoF8) -and (-not $legadoVisualizadorF8) -and
+                                       (-not $legadoFluxoUnicoF8) -and
+                                       $legadoListaArvoreF8 -and $temCamposLegadoF8 -and
+                                       $temArvoreMigradaF8)
+
+                    if ($legadoArvoreF8 -and $metodosFaltantes.Count -gt 0) {
+                        $dispensaArvoreF8 = @("BtnCancelarClick", "FormParaBO", "BOParaForm", "CarregarLista")
+                        $dispensadosArvoreF8 = @($metodosFaltantes | Where-Object { $dispensaArvoreF8 -contains $_ })
+                        if ($dispensadosArvoreF8.Count -gt 0) {
+                            Write-Host "  [i] Fase 8 (layout arvore): legado sem CRUD mas com arvore (ActiveX) e campo editavel reais, sem Page2/modo de edicao cancelavel - $($dispensadosArvoreF8 -join ', ') nao se aplicam; validado pelo OLEControl + metodo Carregar* que alimenta a arvore" -ForegroundColor Cyan
+                            $metodosFaltantes = @($metodosFaltantes | Where-Object { $dispensaArvoreF8 -notcontains $_ })
+                        }
+                    }
+
                     # QUINTO ramo - LINHA IMEDIATA: dialogo FILHO de grade 1-N,
                     # aberto de dentro de um form pai, que TEM CRUD de LINHA
                     # (Inserir/Excluir) mas NAO tem Salvar/Confirmar nem
@@ -8448,7 +9203,7 @@ function Invoke-MigracaoFase {
                     # botao sem prefixo perdia a segunda dispensa e a fase
                     # reprovava pedindo um Salvar/Confirmar que o SCX nao tem.
                     $legadoLinhaImediataF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
-                                              (-not $legadoVisualizadorF8) -and
+                                              (-not $legadoVisualizadorF8) -and (-not $legadoArvoreF8) -and
                                               $temListaLegadoF8 -and $temBotoesLinhaLegadoF8 -and
                                               $legadoSemSalvar -and $semAcaoNemCancelarLegadoF8 -and
                                               $semPageFrameLegadoF8 -and $temSuperficieLinhaF8)
@@ -8506,6 +9261,7 @@ function Invoke-MigracaoFase {
 
                     $legadoCalculadoraF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
                                             (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                            (-not $legadoArvoreF8) -and
                                             (-not $legadoLinhaImediataF8) -and
                                             $semCrudLegadoF8 -and (-not $temListaLegadoF8) -and
                                             $temCamposLegadoF8 -and $legadoSemSalvar -and
@@ -8589,13 +9345,57 @@ function Invoke-MigracaoFase {
                                            ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+BOParaForm\b') -and
                                            ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+Btn\w*Click\b')
 
+                    # EVIDENCIA de protocolo, SEM as exclusoes de ramo. O
+                    # $legadoProtocoloF8 abaixo precisa dos -not para nao
+                    # DISPENSAR nome em nome de dois ramos ao mesmo tempo; esta
+                    # variavel existe para a outra pergunta, que nao depende de
+                    # qual ramo ficou com o form: "este legado tem o que
+                    # PERSISTIR?". A resposta vem so das PROVAS - DLL de
+                    # dispositivo externo declarada no SCX, sem CRUD, sem botao
+                    # de gravar, sem objeto de acao/cancelamento prefixado,
+                    # EXATAMENTE 1 botao e o migrado tendo entregado os dois
+                    # hooks reais mais o handler desse botao -, e nenhuma delas
+                    # muda porque um ramo vizinho reivindicou o form primeiro.
+                    #
+                    # Por que foi preciso separar (SIGPRTFH -> FormSIGPRTFH,
+                    # task683, 2026-10-20): o FLUXO-UNICO reivindica este dump
+                    # por DUAS provas falsas e, sendo avaliado antes, zera
+                    # $legadoProtocoloF8 - com isso o bloco do botao de acao
+                    # perdia a unica saida aplicavel e a fase ficava
+                    # INSATISFAZIVEL, restando so INVENTAR um botao de gravar
+                    # (viola o PILAR 1 e "NUNCA inventar") ou criar handler
+                    # vazio (proibido pela regra de completude). As duas provas
+                    # falsas, medidas:
+                    #   1. "tem lista" vem do $temListaLegadoF8 LARGO, que casa
+                    #      o token "ControlSource" solto. Neste dump o unico eh
+                    #      "SAIDA.ControlSource = [OPSENHA]" num COMMANDGROUP -
+                    #      vestigio da classe Grupo_Saida do Framework - e o
+                    #      proprio projeto ja sabe descontar isso:
+                    #      Test-LegadoControlSourceLigaLista devolve False aqui
+                    #      (assim como AddCursorLigaGrade e ListBoxLigaLista), e
+                    #      eh justamente por isso que o ramo protocolo usa os
+                    #      ESTRITOS em $semGradeProtocoloF8.
+                    #   2. "metodo Carregar* que alimenta o grid" eh casado por
+                    #      CarregarCamposNaTela, que preenche TEXTBOX - o form
+                    #      nao tem grade alguma.
+                    #
+                    # Fix ADITIVO de proposito: a variavel so e' consumida para
+                    # CONCEDER dispensa (um -or a mais em $legadoSemAcao), nunca
+                    # com -not, entao nenhum form que hoje passa pode comecar a
+                    # reprovar. Estreitar o $temListaLegadoF8 do FLUXO-UNICO
+                    # seria o conserto da causa, mas e' o oposto de monotono -
+                    # aquele ramo dispensa os QUATRO nomes, e restringi-lo
+                    # reprovaria formuarios que hoje passam por ele.
+                    $legadoProtocoloBrutoF8 = ($semCrudLegadoF8 -and $semGradeProtocoloF8 -and
+                                               $temCamposLegadoF8 -and $temDllExternaF8 -and
+                                               $legadoSemSalvar -and $semAcaoNemCancelarProtF8 -and
+                                               ($nBotoesProtF8 -eq 1) -and $temSuperficieProtF8)
+
                     $legadoProtocoloF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
                                           (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                          (-not $legadoArvoreF8) -and
                                           (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
-                                          $semCrudLegadoF8 -and $semGradeProtocoloF8 -and
-                                          $temCamposLegadoF8 -and $temDllExternaF8 -and
-                                          $legadoSemSalvar -and $semAcaoNemCancelarProtF8 -and
-                                          ($nBotoesProtF8 -eq 1) -and $temSuperficieProtF8)
+                                          $legadoProtocoloBrutoF8)
 
                     # OITAVO ramo - FILTRO-DESPACHO: tela de FILTRO que consulta
                     # e ENTREGA o resultado a OUTRO form. TEM campos editaveis
@@ -8671,6 +9471,7 @@ function Invoke-MigracaoFase {
 
                     $legadoFiltroDespachoF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
                                                (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                               (-not $legadoArvoreF8) -and
                                                (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
                                                (-not $legadoProtocoloF8) -and
                                                $semCrudLegadoF8 -and $semGradeFiltroF8 -and
@@ -8745,6 +9546,7 @@ function Invoke-MigracaoFase {
 
                     $legadoUtilitarioArquivoF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
                                                   (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                                  (-not $legadoArvoreF8) -and
                                                   (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
                                                   (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
                                                   $semCrudLegadoF8 -and $semGradeUtilF8 -and
@@ -8817,6 +9619,7 @@ function Invoke-MigracaoFase {
 
                     $legadoGraficoF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
                                         (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                        (-not $legadoArvoreF8) -and
                                         (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
                                         (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
                                         (-not $legadoUtilitarioArquivoF8) -and
@@ -8824,6 +9627,246 @@ function Invoke-MigracaoFase {
                                         $semGradeGraficoF8 -and $temOleLegadoF8 -and
                                         (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8) -and
                                         $temSuperficieGrafF8)
+
+                    # 11o ramo - LEITOR-BAIXA: dialogo de "le o codigo e
+                    # confirma". UM campo digitavel (o codigo de barras/
+                    # etiqueta), os demais campos somente-exibicao preenchidos
+                    # pelo Valid desse campo, e um par de botoes - o de acao
+                    # PERSISTE em tabela do banco e o outro fecha. Sem grade,
+                    # sem Page1(Lista)/Page2(Dados), sem barra CRUD. Ex.:
+                    # SIGOPBCB -> FormSigOpBcb (task645, "Baixa de Codigos de
+                    # Barras"): Get_Codigo + 6 campos com 'Procedure When /
+                    # Return .f.' + Confirma("Baixa")/Cancela("Encerrar"), e o
+                    # BaixaBarra grava SigMvCab/SigMvHst e zera SigOpEtq.
+                    #
+                    # Dispensa UM nome so - o de carga da LISTA -, porque eh o
+                    # unico dos quatro sem referente: nao ha grade nem cursor
+                    # de listagem a popular, e exigi-lo obrigaria a INVENTAR
+                    # uma grade (viola o PILAR 1) ou a criar metodo vazio
+                    # (proibido pela regra de completude). Os outros tres
+                    # CONTINUAM exigidos e sao reais nesta forma: FormParaBO
+                    # leva o campo digitavel ao BO, BOParaForm eh o bloco
+                    # "With ThisForm / .Get_X.Value = cursor.X" que FECHA o
+                    # Valid legado, e BtnCancelarClick eh o Click do botao que
+                    # fecha. Mesma leitura de [[feedback-formparabo-real-em-
+                    # form-operacional]]: em form OPERACIONAL os dois hooks nao
+                    # sao invencao quando existe campo editavel alimentando a
+                    # operacao - o bloco ja esta no legado, so sem esse nome.
+                    #
+                    # Por que nao cai nos ramos ja existentes: DESPACHANTE e
+                    # EXIBICAO exigem (-not $temListaLegadoF8), e o token
+                    # 'AddCursor' do Init legado derruba os dois por falso
+                    # positivo (os .AddCursor daqui tem o 5o argumento vazio -
+                    # nao ligam grade); VISUALIZADOR e GRAFICO exigem
+                    # Test-LegadoSomenteLeitura, e aqui HA campo digitavel;
+                    # FLUXO-UNICO exige um metodo Carregar* alimentando grid,
+                    # que nao existe porque nao existe grid; LINHA-IMEDIATA
+                    # exige CRUD de linha numa grade; CALCULADORA, PROTOCOLO,
+                    # FILTRO-DESPACHO e UTILITARIO-ARQUIVO todos pressupoem que
+                    # NADA persista em tabela do banco, e aqui o botao de acao
+                    # persiste. Predicado PROPRIO e estreito, sem tocar em
+                    # $temListaLegadoF8 nem nos predicados dos outros ramos -
+                    # mesma decisao de PROTOCOLO, FILTRO-DESPACHO e GRAFICO.
+                    #
+                    # FAIL-CLOSED em SEIS provas somadas:
+                    #   1. sem barra CRUD ($semCrudLegadoF8);
+                    #   2. sem objeto/metodo de gravar no legado
+                    #      ($legadoSemSalvar - o botao se chama 'Confirma');
+                    #   3. sem grade, pelo predicado ESTREITO - reusa
+                    #      $semGradeGraficoF8, que ja desconta os dois falsos
+                    #      positivos conhecidos (AddCursor de 5o argumento
+                    #      vazio e ControlSource que nao liga lista). Reuso
+                    #      APENAS de leitura: nao altera o ramo GRAFICO.
+                    #      Esse predicado conta ListBox so quando ela de fato
+                    #      alimenta lista (Test-LegadoListBoxLigaLista): o
+                    #      sigprila tem List1 com RowSourceType = 1, isto eh
+                    #      lista de VALORES montada por metodo proprio
+                    #      (CompletaLista, nome do legado), nao grade de
+                    #      registros - nada que um metodo de carga de lista
+                    #      tivesse a popular. Mesma leitura de
+                    #      [[feedback-listbox-rowsourcetype-falso-positivo-de-lista]];
+                    #   4. o legado TEM campo e ao menos um deles aceita
+                    #      digitacao - eh o que separa esta forma de
+                    #      EXIBICAO/VISUALIZADOR/GRAFICO;
+                    #   5. a tela PERSISTE em tabela do banco (a negacao de
+                    #      Test-LegadoEscritaSoEmCursorLocal) - eh o que separa
+                    #      esta forma de CALCULADORA/PROTOCOLO/FILTRO-DESPACHO;
+                    #   6. o migrado entrega a superficie real: o handler do
+                    #      botao de acao MAIS os dois hooks de transferencia.
+                    #      Sem eles nao ha dispensa - a ausencia de grade nao
+                    #      autoriza entregar a tela pela metade.
+                    $temSuperficieLeitorF8 = ($conteudo -match $padraoAcaoGravar) -and
+                                             ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+FormParaBO\b') -and
+                                             ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+BOParaForm\b')
+
+                    $legadoLeitorBaixaF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                                            (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                            (-not $legadoArvoreF8) -and
+                                            (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                                            (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                                            (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                                            $semCrudLegadoF8 -and $legadoSemSalvar -and
+                                            $semGradeGraficoF8 -and $temCamposLegadoF8 -and
+                                            (-not (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8)) -and
+                                            (-not (Test-LegadoEscritaSoEmCursorLocal -TextoDump $txtLegadoF8)) -and
+                                            $temSuperficieLeitorF8)
+
+                    # 12o ramo - DIALOGO DE ENTRADA (input-box) SEM BOTAO ALGUM.
+                    # Nenhum dos 11 ramos acima alcanca este legado:
+                    #   despachante             exige NAO ter campo - aqui o campo eh a tela inteira;
+                    #   exibicao / visualizador exigem campo somente-leitura - aqui o campo eh o que se DIGITA;
+                    #   calculadora / protocolo exigem UM botao no SCX - aqui sao ZERO;
+                    #   fluxo-unico / linha-imediata / grafico / utilitario / leitor-baixa
+                    #                           exigem lista, grade, OleBoundControl ou persistencia.
+                    # E o bloco do botao de acao tambem nao alcanca: sem nenhum
+                    # .Click no dump, Test-LegadoCliqueSoFecha devolve $null e a
+                    # contagem de botoes eh 0, nao 1.
+                    # Resultado, antes deste ramo: a fase cobrava
+                    # BtnSalvar/Confirmar/Gravar + os quatro nomes CRUD de um
+                    # legado sem botao, sem grade, sem Page2 e sem modo de
+                    # edicao - insatisfazivel sem INVENTAR botao (viola o
+                    # PILAR 1) ou criar handler vazio (proibido pela regra de
+                    # completude).
+                    #
+                    # FAIL-CLOSED: dump PRESENTE + as tres provas de
+                    # Test-LegadoSemBotaoAlgum + sem lista (predicado estreito
+                    # $semGradeGraficoF8, que ja desconta os falsos positivos de
+                    # ControlSource escalar) + COM campo e ele EDITAVEL (eh o que
+                    # separa de despachante/exibicao/visualizador) + sem CRUD +
+                    # sem botao de gravar, e exigindo do MIGRADO a superficie
+                    # que o legado de fato tem: o campo de entrada, o BINDEVENT
+                    # do evento que CONFIRMA a tela e o handler correspondente.
+                    # Qual evento confirma vem do DUMP, nao de palpite: ate
+                    # 2026-10-19 este predicado exigia KeyPress e so KeyPress,
+                    # porque se presumia que "o dialogo sem botao SO pode ser
+                    # confirmado por tecla". SIGPRSCN (task673) prova o
+                    # contrario - ZERO botao e a autenticacao inteira no
+                    # "PROCEDURE LostFocus" de SIGPRSCN.SENHA -, entao quem
+                    # decide eh Test-ConfirmacaoDialogoSemBotao, que casa o
+                    # evento do legado (KeyPress ou LostFocus/Valid, em objeto
+                    # que eh CONTROLE) com o BINDEVENT do migrado e exige que
+                    # o delegate dele seja um metodo declarado.
+                    #
+                    # Caso de origem: SIGPRIFF -> FormSIGPRIFF (task301/task626).
+                    # Reincidente em SIGOPBIN -> FormSIGOPBIN (task646), dialogo
+                    # modal 600x200 que recebe pPag do form chamador, pede os 6
+                    # primeiros digitos do cartao (BIN) num unico TextBox e
+                    # devolve Iif(ZSen,'*',' ')+UsuLibs pelo Unload - a arvore
+                    # inteira do SCX eh Form + 2 Labels + 1 TextBox + container
+                    # decorativo, sem UM CommandButton.
+                    $temSuperficieEntradaF8 = ($conteudo -match 'AddObject\(\s*"(txt_4c_|cbo_4c_|edt_4c_|spn_4c_)[^"]*"\s*,\s*"(TextBox|ComboBox|EditBox|Spinner)"') -and
+                                              (Test-ConfirmacaoDialogoSemBotao -TextoDump $txtLegadoF8 -ConteudoForm $conteudo)
+
+                    $legadoEntradaSemBotaoF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                                                (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                                (-not $legadoArvoreF8) -and
+                                                (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                                                (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                                                (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                                                (-not $legadoLeitorBaixaF8) -and
+                                                (Test-LegadoSemBotaoAlgum -TextoDump $txtLegadoF8) -and
+                                                $semCrudLegadoF8 -and $legadoSemSalvar -and
+                                                $semGradeGraficoF8 -and $temCamposLegadoF8 -and
+                                                (-not (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8)) -and
+                                                $temSuperficieEntradaF8)
+
+                    # 13o ramo - RETORNO-AO-PAI: dialogo FILHO de SELECAO que
+                    # devolve o escolhido aos controles do form CHAMADOR e
+                    # fecha. Ex.: SIGOPCCJ -> FormSigOpCcj (task655, "Procura
+                    # de Contas por Conjuge"): 450x270, Class/BaseClass form
+                    # puro, 5 TextBox (dois deles lookup em SigCdCli via
+                    # fwBuscaExt) e DOIS botoes - "Inserir" (btnconfirmar, que
+                    # copia IClis/Cpfs/RClis para o form de origem via
+                    # ThisForm.ParentForm.<campo>.Value e fecha) e "Encerrar"
+                    # (btnsair, Click = ThisForm.Release).
+                    #
+                    # Nenhum dos 12 ramos acima alcanca - medido em 2026-10-17
+                    # com VerificarGateFase8Task655.ps1:
+                    #   DESPACHANTE     exige SEM campos, e este tem 5;
+                    #   EXIBICAO /
+                    #   VISUALIZADOR    exigem todo campo somente-leitura, e
+                    #                   aqui o usuario DIGITA nome e R.G.;
+                    #   FLUXO-UNICO     exige lista real (temListaLegadoF8 =
+                    #                   False: nao ha Grid, PageFrame, pColuna,
+                    #                   AddCursor nem ControlSource);
+                    #   ARVORE          exige OLEControl, que nao ha;
+                    #   LINHA-IMEDIATA  exige grade + Inserir/Excluir de linha;
+                    #   CALCULADORA     exige UM botao cujo Click so fecha, e
+                    #                   aqui sao DOIS e o Confirmar trabalha;
+                    #   PROTOCOLO       exige DECLARE de DLL no SCX;
+                    #   FILTRO-DESPACHO exige Do Form <outro> - este nao
+                    #                   despacha para outro form, devolve ao
+                    #                   PAI que ja estava aberto;
+                    #   UTILITARIO-ARQUIVO exige Create Table ... Free;
+                    #   GRAFICO         exige OleBoundControl;
+                    #   LEITOR-BAIXA    exige PERSISTENCIA em tabela do banco, e
+                    #                   esta tela nao escreve em tabela nenhuma
+                    #                   (Test-LegadoEscritaSoEmCursorLocal true);
+                    #   ENTRADA-SEM-BOTAO exige ZERO botao, e aqui sao dois.
+                    #
+                    # Dispensa PARCIAL - so os DOIS nomes sem referente nesta
+                    # tela, como nos ramos visualizador/calculadora/leitor:
+                    #   Cancelar  - eh o botao que ABANDONA uma edicao na Page2
+                    #               de Dados. Nao ha PageFrame, nem modo de
+                    #               edicao, nem registro em edicao; o segundo
+                    #               botao do SCX eh "Encerrar", que so fecha, e
+                    #               o migrado o entrega com o nome do legado
+                    #               (BtnSairClick). Renomea-lo para Cancelar
+                    #               faria o nome MENTIR sobre o que o metodo faz.
+                    #   Lista     - nao ha grade NEM cursor de listagem: o
+                    #               resultado da procura eh UM registro, que vai
+                    #               para os 3 campos do bloco "Dados da Conta
+                    #               Principal".
+                    # FormParaBO/BOParaForm continuam EXIGIDOS - os 5 campos sao
+                    # editaveis e mapeiam properties do BO -, e sao justamente o
+                    # que temSuperficieRetornoF8 cobra, com regex ANCORADA em
+                    # inicio de linha: a tabela "o que nao se aplica" que se
+                    # escreve no cabecalho do form satisfaria um -match solto e
+                    # a dispensa viraria NO-OP (armadilha ja documentada nos
+                    # ramos LINHA-IMEDIATA e FILTRO-DESPACHO).
+                    #
+                    # FAIL-CLOSED em provas somadas:
+                    #   1. legado sem CRUD, sem botao de gravar e sem NENHUMA
+                    #      evidencia estrita de grade (reusa semGradeGraficoF8,
+                    #      que ja desconta AddCursor de 3 args e ControlSource
+                    #      que nao liga lista);
+                    #   2. COM campo e ao menos um deles editavel - separa esta
+                    #      forma de EXIBICAO/VISUALIZADOR;
+                    #   3. NADA persistido em tabela e NENHUM Do Form - separa
+                    #      de LEITOR-BAIXA e de FILTRO-DESPACHO;
+                    #   4. sem PageFrame no SCX - nao ha Page1/Page2 a popular;
+                    #   5. a assinatura do ramo, em Test-LegadoRetornoAoPai: o
+                    #      Init recebe o form chamador e confere que eh objeto,
+                    #      e UM bloco Click atribui a ThisForm.ParentForm.<x> e
+                    #      fecha a tela;
+                    #   6. o migrado entregou a superficie real - os dois hooks
+                    #      de transferencia MAIS o handler do botao de acao.
+                    #
+                    # Largura medida (automation\MedirRamoRetornoAoPaiF8.ps1,
+                    # 654 dumps de tasks\): 7 dumps passam as 3 provas do
+                    # helper, mas com o lado LEGADO inteiro sobra 1 dump = 1
+                    # form distinto (SigOpCcj, o caso de origem). SigPrGl2 e
+                    # SigPrGlp passam o helper e reprovam o predicado (tem
+                    # grade/PageFrame) - zero regressao.
+                    $temSuperficieRetornoF8 = ($conteudo -match $padraoAcaoGravar) -and
+                                              ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+FormParaBO\b') -and
+                                              ($conteudo -match '(?m)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+BOParaForm\b')
+
+                    $legadoRetornoAoPaiF8 = ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                                             (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                                             (-not $legadoArvoreF8) -and
+                                             (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                                             (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                                             (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                                             (-not $legadoLeitorBaixaF8) -and (-not $legadoEntradaSemBotaoF8) -and
+                                             $semCrudLegadoF8 -and $legadoSemSalvar -and
+                                             $semGradeGraficoF8 -and $temCamposLegadoF8 -and
+                                             (-not (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8)) -and
+                                             (Test-LegadoEscritaSoEmCursorLocal -TextoDump $txtLegadoF8) -and
+                                             (-not ($txtLegadoF8 -match '(?im)^\s*Do\s+Form\s+\w+')) -and
+                                             (-not ($txtLegadoF8 -match '(?im)^\s*BaseClass:\s*pageframe\s*$')) -and
+                                             (Test-LegadoRetornoAoPai -TextoDump $txtLegadoF8) -and
+                                             $temSuperficieRetornoF8)
                 }
 
                 if ($legadoDespachanteF8 -and $metodosFaltantes.Count -gt 0) {
@@ -8981,6 +10024,72 @@ function Invoke-MigracaoFase {
                     $metodosFaltantes = @()
                 }
 
+                # Ramo LEITOR-BAIXA (ver as SEIS provas onde
+                # $legadoLeitorBaixaF8 eh calculado). Dispensa UM nome so - o de
+                # carga da LISTA -, porque eh o unico sem referente: nao ha
+                # grade nem cursor de listagem na tela. FormParaBO/BOParaForm/
+                # BtnCancelarClick continuam EXIGIDOS, e os dois primeiros sao
+                # justamente o que $temSuperficieLeitorF8 cobra antes de
+                # dispensar qualquer coisa - mesma dispensa PARCIAL dos ramos
+                # VISUALIZADOR e CALCULADORA, e pelo mesmo motivo: ausencia de
+                # grade nao autoriza entregar a tela pela metade.
+                if ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                    (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                    (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                    (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                    (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                    $legadoLeitorBaixaF8 -and $metodosFaltantes.Count -gt 0) {
+                    $dispensaLeitorF8 = @("CarregarLista")
+                    $dispensadosLeitorF8 = @($metodosFaltantes | Where-Object { $dispensaLeitorF8 -contains $_ })
+                    if ($dispensadosLeitorF8.Count -gt 0) {
+                        Write-Host "  [i] Fase 8 (layout leitor-baixa): legado eh dialogo de leitura e confirmacao - UM campo digitavel (o codigo lido) alimenta campos somente-exibicao e o botao de acao persiste em tabela, sem grade e sem Page1/Page2 - $($dispensadosLeitorF8 -join ', ') nao se aplica; validado pelos hooks FormParaBO/BOParaForm e pelo handler do botao de acao do legado" -ForegroundColor Cyan
+                        $metodosFaltantes = @($metodosFaltantes | Where-Object { $dispensaLeitorF8 -notcontains $_ })
+                    }
+                }
+
+                # Ramo ENTRADA-SEM-BOTAO (ver as provas onde
+                # $legadoEntradaSemBotaoF8 eh calculado). Dispensa os QUATRO
+                # nomes: nao ha botao para BtnCancelarClick, nao ha grade para
+                # CarregarLista, e nao ha Page2 de Dados - o unico campo nasce e
+                # morre no mesmo evento de tecla, igual ao "This.Value" que o
+                # Valid legado le direto do controle. O que se cobra em troca
+                # esta em $temSuperficieEntradaF8: o campo de entrada, o
+                # BINDEVENT de KeyPress e o handler dele.
+                if ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                    (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                    (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                    (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                    (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                    (-not $legadoLeitorBaixaF8) -and
+                    $legadoEntradaSemBotaoF8 -and $metodosFaltantes.Count -gt 0) {
+                    Write-Host "  [i] Fase 8 (layout entrada-sem-botao): legado eh dialogo de ENTRADA sem UM botao sequer - um campo digitavel confirmado por tecla ou por saida do campo, sem lista, sem CRUD e sem Page2 - $($metodosFaltantes -join ', ') nao se aplicam; validado pelo campo de entrada, pelo BINDEVENT do evento de confirmacao do legado (KeyPress ou LostFocus/Valid) e pelo handler declarado dele" -ForegroundColor Cyan
+                    $metodosFaltantes = @()
+                }
+
+                # Ramo RETORNO-AO-PAI (ver as SEIS provas onde
+                # $legadoRetornoAoPaiF8 eh calculado). Dispensa DOIS nomes - o
+                # Cancelar da Page2 de Dados e o de carga da LISTA -, porque sao
+                # os unicos sem referente: nao ha PageFrame/modo de edicao nem
+                # grade/cursor de listagem. FormParaBO/BOParaForm continuam
+                # EXIGIDOS e sao o que $temSuperficieRetornoF8 cobra antes de
+                # dispensar qualquer coisa - mesma dispensa PARCIAL dos ramos
+                # VISUALIZADOR, CALCULADORA e LEITOR-BAIXA, e pelo mesmo motivo:
+                # ausencia de grade nao autoriza entregar a tela pela metade.
+                if ((-not $legadoDespachanteF8) -and (-not $legadoExibicaoF8) -and
+                    (-not $legadoVisualizadorF8) -and (-not $legadoFluxoUnicoF8) -and
+                    (-not $legadoArvoreF8) -and
+                    (-not $legadoLinhaImediataF8) -and (-not $legadoCalculadoraF8) -and
+                    (-not $legadoProtocoloF8) -and (-not $legadoFiltroDespachoF8) -and
+                    (-not $legadoUtilitarioArquivoF8) -and (-not $legadoGraficoF8) -and
+                    (-not $legadoLeitorBaixaF8) -and (-not $legadoEntradaSemBotaoF8) -and
+                    $legadoRetornoAoPaiF8 -and $metodosFaltantes.Count -gt 0) {
+                    $dispensaRetornoF8    = @("BtnCancelarClick", "CarregarLista")
+                    $dispensadosRetornoF8 = @($metodosFaltantes | Where-Object { $dispensaRetornoF8 -contains $_ })
+                    if ($dispensadosRetornoF8.Count -gt 0) {
+                        Write-Host "  [i] Fase 8 (layout retorno-ao-pai): legado eh dialogo FILHO de selecao - campos editaveis alimentam UM registro que o botao de acao devolve aos controles do form CHAMADOR e fecha, sem grade, sem Page1/Page2, sem CRUD e sem persistencia em tabela - $($dispensadosRetornoF8 -join ', ') nao se aplicam; validado pelos hooks FormParaBO/BOParaForm e pelo handler do botao de acao do legado" -ForegroundColor Cyan
+                        $metodosFaltantes = @($metodosFaltantes | Where-Object { $dispensaRetornoF8 -notcontains $_ })
+                    }
+                }
                 # A excecao acima NAO pode virar atalho para form sem acao
                 # nenhuma: o botao que grava/confirma tem de existir com ALGUM
                 # nome. Aceita o nome canonico CRUD ou o nome que o legado usa.
@@ -9006,7 +10115,8 @@ function Invoke-MigracaoFase {
                 # Faltando qualquer uma, a exigencia original permanece.
                 # Medido em 2026-09-24 nos 565 dumps de tasks\: as tres juntas
                 # dispensam 7 forms; so a prova 3 dispensaria 58.
-                $padraoAcaoGravar = 'PROCEDURE\s+Btn(Salvar|Confirmar|Gravar|Processa|Aplicar|Executar|OK)\w*Click'
+                # $padraoAcaoGravar vem definido mais acima (fonte unica) - o
+                # ramo LEITOR-BAIXA tambem o consome.
                 if ((-not $legadoDespachanteF8) -and ($conteudo -notmatch $padraoAcaoGravar)) {
                     $legadoSemAcao          = $false
                     $acaoLegadoComHandlerF8 = $false
@@ -9068,6 +10178,21 @@ function Invoke-MigracaoFase {
                             $legadoSemAcao = $legadoProtocoloF8
                         }
 
+                        # Mesma prova de "nada a persistir", quando OUTRO ramo
+                        # reivindicou o form antes e zerou $legadoProtocoloF8.
+                        # A pergunta deste bloco - ha acao de GRAVAR? - nao
+                        # depende de qual ramo ficou com a dispensa dos NOMES:
+                        # depende so do legado ter ou nao o que persistir, e
+                        # $legadoProtocoloBrutoF8 responde isso pelas provas
+                        # (ver o comentario da propria variavel, acima).
+                        # Continua FECHADO: $temSuperficieProtF8 exige que o
+                        # migrado tenha entregado FormParaBO, BOParaForm e o
+                        # handler do botao - a dispensa e' paga com trabalho
+                        # real, nao concedida de graca.
+                        if (-not $legadoSemAcao) {
+                            $legadoSemAcao = $legadoProtocoloBrutoF8
+                        }
+
                         # Tela de FILTRO-DESPACHO (SIGPRES1): aqui HA botao de
                         # acao - "Consultar" - e o migrado TEM o handler dele
                         # (BtnConsultarClick). Test-LegadoCliqueSoFecha devolve
@@ -9120,6 +10245,16 @@ function Invoke-MigracaoFase {
                         # INVENTAR botao de gravar numa tela que so desenha.
                         if (-not $legadoSemAcao) {
                             $legadoSemAcao = $legadoGraficoF8
+                        }                        # Dialogo de ENTRADA sem botao ALGUM: nao ha acao de
+                        # clique a exigir, porque nao ha clique. Sem nenhum
+                        # .Click no dump, Test-LegadoCliqueSoFecha devolve $null
+                        # e a contagem de botoes eh 0 (nao 1), entao nem ele nem
+                        # as outras saidas acima alcancam. A confirmacao do
+                        # dialogo eh por TECLA ou por SAIDA DO CAMPO (LostFocus/
+                        # Valid - o caso SIGPRSCN), e o handler dela ja eh
+                        # cobrado por $temSuperficieEntradaF8.
+                        if (-not $legadoSemAcao) {
+                            $legadoSemAcao = $legadoEntradaSemBotaoF8
                         }
                     }
 
@@ -9140,6 +10275,18 @@ function Invoke-MigracaoFase {
                             # aqui seria factualmente errado, como ja aconteceu
                             # com a mensagem unica antes do ramo visualizador.
                             Write-Host "  [i] Fase 8: legado eh dialogo de calculo em memoria (UM botao no SCX, Click so faz ThisForm.Release, nada a persistir) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
+                        } elseif (($cliqueSoFechaF8 -eq $true) -and ($nBotoesLegadoF8 -eq 1) -and
+                                  (-not (Test-LegadoSomenteLeitura -TextoDump $txtLegadoF8))) {
+                            # Mesma prova estrutural do ramo abaixo (UM botao no
+                            # SCX, todo Click so fecha), mas aqui NAO se pode
+                            # dizer "somente-leitura": o campo eh o que se
+                            # DIGITA (SigTfSup -> FormSIGPRSTF, task679: senha do
+                            # supervisor, confirmada por ENTER no KeyPress do
+                            # proprio campo), e o unico botao LIMPA o campo antes
+                            # de fechar. As duas frases da mensagem unica seriam
+                            # factualmente erradas aqui - o mesmo erro que ela ja
+                            # cometia antes do ramo visualizador.
+                            Write-Host "  [i] Fase 8: legado eh dialogo de ENTRADA cujo UNICO botao do SCX so limpa o campo e fecha (a confirmacao eh por tecla no proprio campo digitavel) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
                         } elseif (($cliqueSoFechaF8 -eq $true) -and ($nBotoesLegadoF8 -eq 1)) {
                             Write-Host "  [i] Fase 8: legado somente-leitura (UM botao no SCX e todo Click so faz ThisForm.Release) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
                         } elseif ($legadoLinhaImediataF8) {
@@ -9152,6 +10299,16 @@ function Invoke-MigracaoFase {
                             # factualmente erradas, o erro que a mensagem unica
                             # ja cometeu antes do ramo visualizador.
                             Write-Host "  [i] Fase 8: legado eh dialogo de protocolo com dispositivo externo (UNICO botao do SCX aborta a transacao na DLL e fecha; nada a persistir em tabela) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
+                        } elseif ($legadoProtocoloBrutoF8) {
+                            # Mensagem propria: as PROVAS de protocolo estao
+                            # todas de pe, mas outro ramo de layout reivindicou
+                            # o form e zerou $legadoProtocoloF8 - dizer "ramo
+                            # protocolo" seria enganoso, e as frases dos outros
+                            # ramos ("Click so faz ThisForm.Release",
+                            # "somente-leitura", "sem botao de acao") seriam
+                            # factualmente erradas aqui, o mesmo erro que a
+                            # mensagem unica cometia antes do ramo visualizador.
+                            Write-Host "  [i] Fase 8: legado conversa com dispositivo externo via DLL declarada no SCX e nao tem o que persistir (sem CRUD, sem botao de gravar, UNICO botao no SCX) - a dispensa dos NOMES ficou com outro ramo de layout, mas a exigencia de botao de acao nao se aplica" -ForegroundColor Cyan
                         } elseif ($legadoFiltroDespachoF8) {
                             # Mensagem propria: aqui NAO se pode dizer "Click so
                             # faz ThisForm.Release" (o Consultar consulta e abre
@@ -9160,7 +10317,14 @@ function Invoke-MigracaoFase {
                             # handler) - as quatro frases seriam factualmente
                             # erradas. O que falta eh acao de GRAVAR.
                             Write-Host "  [i] Fase 8: legado eh tela de filtro que consulta para cursor local e despacha o resultado a outro form (Do Form) - ha botao de acao e ele tem handler no migrado, mas nada eh persistido em tabela, entao exigencia de botao de GRAVAR nao se aplica" -ForegroundColor Cyan
-                        } elseif ($acaoLegadoComHandlerF8) {
+                        } elseif ($legadoEntradaSemBotaoF8) {
+                            # Mensagem propria: aqui NAO se pode dizer "Click so
+                            # faz ThisForm.Release" (nao existe Click), nem
+                            # "somente-leitura" (o campo eh o que se digita), nem
+                            # "UM botao no SCX" (sao ZERO) - as tres frases
+                            # seriam factualmente erradas, o mesmo erro que a
+                            # mensagem unica cometia antes do ramo visualizador.
+                            Write-Host "  [i] Fase 8: legado eh dialogo de ENTRADA sem UM botao sequer (confirmacao por tecla ou por saida do campo digitavel) - exigencia de botao de acao nao se aplica" -ForegroundColor Cyan                        } elseif ($acaoLegadoComHandlerF8) {
                             # Mensagem propria: aqui NAO se pode dizer "Click so
                             # faz ThisForm.Release" (o botao trabalha), nem
                             # "somente-leitura" (ha campo digitavel), nem "sem
@@ -9190,7 +10354,7 @@ function Invoke-MigracaoFase {
                 # eh mexer no form (inventando botao/campo que o legado nao tem)
                 # em vez de conferir se o gate eh satisfazivel para este legado.
                 if ($metodosFaltantes.Count -gt 0 -and $FormType -eq "OPERACIONAL") {
-                    Write-Host "  [i] Fase 8: ramos de excecao (todos exigem o dump do legado PRESENTE) - despachante: sem lista, sem campos e sem CRUD; exibicao: sem lista, sem CRUD e todo campo ReadOnly; visualizador: sem CRUD, sem botao de gravar e todo campo somente-leitura (aceita When -> .f. e heranca de Grid/Column), dispensa apenas BtnCancelarClick/FormParaBO/BOParaForm e mantem CarregarLista; fluxo-unico: sem CRUD mas COM lista e campo editavel reais (campo dispara a carga da lista), dispensa BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista exigindo em troca um metodo Carregar* que alimente o grid; linha-imediata: dialogo filho de grade 1-N com Inserir/Excluir por linha e gravacao imediata, sem Salvar/Confirmar, sem Cancelar e sem PageFrame no SCX, dispensa apenas BtnCancelarClick e a exigencia de botao de acao, exigindo em troca os handlers de linha, a persistencia no BO e os hooks FormParaBO/BOParaForm; calculadora: dialogo de calculo em memoria - COM campo editavel, sem lista/grade, sem CRUD, sem persistencia e UM unico botao cujo Click so fecha -, dispensa apenas BtnCancelarClick/CarregarLista e a exigencia de botao de acao, exigindo em troca os hooks FormParaBO/BOParaForm e o handler do botao do legado; grafico: a tela EH um grafico - OleBoundControl ligado a campo General de cursor local, ComboBox somente-selecao escolhendo a serie, sem grade, sem CRUD e sem persistencia -, dispensa os QUATRO nomes e a exigencia de botao de GRAVAR, exigindo em troca o OleBoundControl reproduzido, o campo de selecao e o handler do botao do legado" -ForegroundColor DarkGray
+                    Write-Host "  [i] Fase 8: ramos de excecao (todos exigem o dump do legado PRESENTE) - despachante: sem lista, sem campos e sem CRUD; exibicao: sem lista, sem CRUD e todo campo ReadOnly; visualizador: sem CRUD, sem botao de gravar e todo campo somente-leitura (aceita When -> .f. e heranca de Grid/Column), dispensa apenas BtnCancelarClick/FormParaBO/BOParaForm e mantem CarregarLista; fluxo-unico: sem CRUD mas COM lista e campo editavel reais (campo dispara a carga da lista), dispensa BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista exigindo em troca um metodo Carregar* que alimente o grid; arvore: irmao do fluxo-unico quando a LISTA do legado eh um ActiveX de arvore (OLEControl + AddPictureNode/ClearNodes/NodeCargo/NodeExpanded/NodeLevel/NodeHeader) em vez de Grid, sem CRUD e COM campo editavel real, dispensa BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista exigindo em troca o OLEControl reproduzido + um metodo Carregar* que alimente a arvore; linha-imediata: dialogo filho de grade 1-N com Inserir/Excluir por linha e gravacao imediata, sem Salvar/Confirmar, sem Cancelar e sem PageFrame no SCX, dispensa apenas BtnCancelarClick e a exigencia de botao de acao, exigindo em troca os handlers de linha, a persistencia no BO e os hooks FormParaBO/BOParaForm; calculadora: dialogo de calculo em memoria - COM campo editavel, sem lista/grade, sem CRUD, sem persistencia e UM unico botao cujo Click so fecha -, dispensa apenas BtnCancelarClick/CarregarLista e a exigencia de botao de acao, exigindo em troca os hooks FormParaBO/BOParaForm e o handler do botao do legado; grafico: a tela EH um grafico - OleBoundControl ligado a campo General de cursor local, ComboBox somente-selecao escolhendo a serie, sem grade, sem CRUD e sem persistencia -, dispensa os QUATRO nomes e a exigencia de botao de GRAVAR, exigindo em troca o OleBoundControl reproduzido, o campo de selecao e o handler do botao do legado; leitor-baixa: dialogo de leitura e confirmacao - UM campo digitavel (o codigo lido) alimenta campos somente-exibicao e o botao de acao PERSISTE em tabela do banco, sem grade e sem Page1/Page2 -, dispensa APENAS CarregarLista, exigindo em troca os hooks FormParaBO/BOParaForm e o handler do botao de acao; retorno-ao-pai: dialogo FILHO de selecao - campos editaveis alimentam UM registro que o botao de acao devolve aos controles do form CHAMADOR e fecha, sem grade, sem Page1/Page2, sem CRUD, sem persistencia em tabela e sem Do Form -, dispensa APENAS BtnCancelarClick/CarregarLista, exigindo em troca os hooks FormParaBO/BOParaForm e o handler do botao de acao" -ForegroundColor DarkGray
                 }
 
                 if ($metodosFaltantes.Count -eq 0) {
@@ -11325,7 +12489,7 @@ function Invoke-Etapa05d_ValidarCompletude {
                     }
 
                     # Detectar "implementar depois" / "proxima fase"
-                    $laterPattern = "(?im)\*.*?(implementar\s+(depois|later|futur)|pr[o�]xima\s+fase|pendente|nao\s+implement)"
+                    $laterPattern = "(?im)\*.*?(implementar\s+(depois|later|futur)|pr[o�]xima\s+fase|\bpendente|nao\s+implement)"
                     $laterMatches = [regex]::Matches($conteudo, $laterPattern)
                     foreach ($m in $laterMatches) {
                         $listaProblemas += "[$nomeArquivo] Indicador de pendencia: $($m.Value.Trim())"

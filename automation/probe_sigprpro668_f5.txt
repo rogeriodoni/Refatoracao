@@ -1,0 +1,73 @@
+=== PROBE Fase 5 - FormSIGPRPRO (task668) ===
+1) VARTYPE(form) = [O]  (esperado O)
+   Caption=[Características de Produtos] 1000x600
+
+2) OBJETOS:
+   cnt_4c_Cabecalho        : .T.
+   ..lbl_4c_Sombra         : .T.
+   ..lbl_4c_Titulo         : .T.
+   shp_4c_Shape            : .T.
+   shp_4c_ShpCodigo        : .T.
+   shp_4c_Shape1           : .T.
+   lbl_4c_Label1           : .T.
+   txt_4c_CPros            : .T.
+   txt_4c_DPros            : .T.
+   grd_4c_Dados            : .T.
+   txt_4c_Comples          : .T.
+   edt_4c_Infos            : .T.
+   cmd_4c_Ok               : .T.
+   BaseClass edt_4c_Infos  = [Editbox] (esperado EditBox)
+
+3) CURSOR PLACEHOLDER (DataSessionID=2):
+   USED(cursor_4c_Carac) = .T.
+   FCOUNT = 5 (esperado 5)
+     col1 = [CIDCHAVES]
+     col2 = [CARACTERIS]
+     col3 = [COMPLS]
+     col4 = [CPROS]
+     col5 = [INFOS]
+   TYPE(cursor.cpros) = [C] (esperado C)
+
+4/5) GRADE:
+   RecordSource            = [cursor_4c_Carac]
+   Column1.ControlSource   = [cursor_4c_Carac.caracteris]
+   Column1.Width           = 363 (esperado 363, NAO 90)
+   Column1.Header1.Caption = [Características]
+   Column1.Text1.FontName  = [Tahoma] (dump: Tahoma)
+   Column1.FontName        = [Courier New] (dump: Courier New)
+
+6) SAIDA POR TECLADO:
+   Closable   = .T. (esperado .T. - SCX nao declara)
+   ControlBox = .F. (SCX: .F.)
+   MaxButton  = .F. (SCX: .F.)
+   TitleBar   = 0 (SCX: 0)
+
+7) LABEL x CAMPO (regra #23/#28):
+   lbl_4c_Label1.AutoSize = .F.
+   lbl Left+Width         = 90
+   txt_4c_CPros.Left      = 94
+   sem sobreposicao
+
+8) CONTROLE FORA DO PAI (regra #30):
+   (nenhuma linha FORA acima = todos dentro)
+
+9) ESCOPO BO (regra #51 - atributo 2 = Protected):
+   BuscarProduto         Protected = .F.
+   BuscarCaracteristicas Protected = .F.
+   CarregarDoCursor      Protected = .F.
+   handlers do form (BINDEVENT / harness):
+     GrdDadosAfterRowColChange Protected = .F.
+     CmdOkClick                Protected = .F.
+     VincularGrade             Protected = .F.
+     CarregarLista             Protected = .F.
+     AjustarBotoesPorModo      Protected = .F.
+
+10) CarregarDoCursor sobre o placeholder:
+   retorno          = .T.
+   this_cCPros      = [PRD0001]
+   this_cCaracteris = [COR]
+
+11) GrdDadosAfterRowColChange:
+   txt_4c_Comples = [AZUL] (esperado AZUL)
+
+=== FALHAS = 0 ===

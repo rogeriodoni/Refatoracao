@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprnfe.prg",
+    "timestamp":  "2026-10-17T23:30:53",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-87-OPTIONGROUP-WIDTH",
+                          "Linha":  922,
+                          "Original":  ".Width         = 258",
+                          "Corrigido":  "(nao mutado - conferir Width no dump do SCX legado)",
+                          "Descricao":  "Pattern #87 WARNING: OptionGroup obj_4c_OptContin.Width=258 menor que MAX(Buttons.Left+Width)+10 = 328. Pode clipar o ultimo botao - mas a largura costuma vir transcrita do SCX legado (PILAR 1) e Buttons com AutoSize = .T. nao usam a largura declarada. Conferir no dump antes de mexer."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  979,
+                          "Original":  "BINDEVENT(loc_oPnl.txt_4c_Emps, \"LostFocus\", THIS, \"ValidarEmpresa\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup ValidarEmpresa. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-74-LOSTFOCUS-LOOKUP",
+                          "Linha":  980,
+                          "Original":  "BINDEVENT(loc_oPnl.txt_4c_Series, \"LostFocus\", THIS, \"ValidarSerie\")",
+                          "Corrigido":  "(nao mutado - LostFocus em lookup eh desenho, regras #35/#37)",
+                          "Descricao":  "Pattern #74 WARNING: BINDEVENT LostFocus em handler de lookup ValidarSerie. NAO trocado para KeyPress: o handler nao declara (par_nKeyCode, par_nShiftAltCtrl) e estouraria em runtime a cada tecla (regra #3). LostFocus em lookup eh o desenho das regras #35/#37 (com guarda de reentrancia) - conferir se ha a guarda, nao trocar o evento. Rebaixado a WARNING no sweep do Erro501 (2026-10-06), depois de desfazer os consertos do Formgpd e do FormProduto."
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

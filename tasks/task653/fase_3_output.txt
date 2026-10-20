@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All structural pairs balance correctly (8 PROCEDUREs/ENDPROC, 4 WITH/ENDWITH, 1 TRY/ENDTRY, 2 FOR/ENDFOR, 6 IF/ENDIF, 1 DEFINE CLASS/ENDDEFINE). The form compiles structurally sound.
+
+**Fase 3 completa.** Criei `FormSigOpCbl.prg` em `C:\4c\projeto\app\forms\operacionais\` com a estrutura b├ísica:
+
+- `DEFINE CLASS FormSigOpCbl AS FormBase` com as dimens├Áes pixel-perfect do SCX legado (800x600, sem barra de t├¡tulo, `ControlBox`/`Closable`/`Movable` = `.F.`, modal via `WindowType=1`)
+- `Init()` apenas `RETURN DODEFAULT()` (regra do Problema 8 ÔÇö n├úo chamar `InicializarForm()` duas vezes)
+- `InicializarForm()` cria `SigOpCblBO` (da Fase 1/2), aplica o background e monta a estrutura visual
+- `ConfigurarPageFrame()` ÔåÆ `ConfigurarPaginaLista()`: este form ├® **OPERACIONAL de tela ├║nica** (registro singleton em `SigCnFBl`), n├úo segue o padr├úo PageFrame Lista/Dados do CRUD ÔÇö segui o padr├úo de `Formsigprsen.prg` como refer├¬ncia
+- `ConfigurarCabecalho()` ÔÇö replica o `cntSombra` do legado (container cinza + `lbl_4c_Sombra`/`lbl_4c_Titulo`)
+- `ConfigurarBotoes()` ÔÇö reserva o container `cnt_4c_Botoes` (posi├º├úo exata do `cmdGsalva` legado: Left=643, Width=160, Height=85), **vazio** ÔÇö os bot├Áes Confirmar/Encerrar entram na pr├│xima fase
+- `TornarControlesVisiveis()` ÔÇö recursivo, trata PageFrame e Container
+- `Destroy()` ÔÇö chama `DODEFAULT()` por ├║ltimo (libera o BO e restaura o menu)
+
+Campos de dados (as ~40 posi├º├Áes linha/coluna, textos, impressora/fonte) e os bot├Áes Confirmar/Encerrar ficam para as pr├│ximas fases, conforme o escopo da Fase 3.

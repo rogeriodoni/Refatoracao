@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files exist for these yet, so nothing to delete.
+
+## Summary
+
+Phase 6/8 for `FormSigOpCcl` (Opera├º├Áes por Conta) is complete:
+
+**`SigOpCclBO.prg`**:
+- Added `this_lGrupoEncontrado` flag so `ObterTipoCadastro` can distinguish "grupo doesn't exist" from "grupo exists with `TpCads=0`" (both would otherwise look identical via the numeric return).
+- Added `CarregarContaPorDescricao()` ÔÇö reverse lookup by name (`SigCdCli.RClis`), mirroring the existing `CarregarContaPorCodigo` contract. Documented why it deliberately diverges from the legacy `Get_dconta.Valid`, which appears to have a copy-paste bug (filters `IClis` by the typed *description*, inherited from `Get_conta.Valid`) that `fAcessoContas`'s unported side-effects make impossible to verify or faithfully reproduce.
+
+**`FormSigOpCcl.prg`**:
+- Completed `ConfigurarPaginaDados()` with the remaining Nome (`Say_dConta`/`Get_dconta`) and CPF/CNPJ (`Say_CPF`/`Get_cpf`) fields, transcribed from the dump.
+- Fixed a Phase 5 fidelity slip: `Say2` ("Conta") was `FontBold=.T.` but the dump declares `.F.` explicitly.
+- Widened `cnt_4c_Origem` from 519ÔåÆ610px: the legacy `Get_grupo.Valid` repositions the Nome field to end at column 604 in *both* `TpCads` branches, which would get silently clipped by a 519-wide container (CLAUDE.md rule #30) ÔÇö documented as a deliberate, justified deviation.
+- Replicated the legacy field dependencies (`Get_conta`/`Get_dconta`/`Get_cpf`'s `When`) via `BINDEVENT ... "When"` (reliable for TextBox, same pattern as sibling `FormSigOpBcb`).
+- Implemented all four lookup funnels (Grupo/Conta/Nome/CPF) on `LostFocus`, each with a reentrancy guard, exact-match-first/`FormBuscaAuxiliar`-fallback behavior (rule #50 ÔÇö no warning dialog, digitado never erased), and preserved an exact legacy quirk: entering by Conta code does *not* populate the Nome field (the legacy `Valid` simply never does).
+- CPF/CNPJ validation transcribes the legacy's digit-check logic literally (`ValidarCPF`/`ValidarCNPJ`), including the quirk that lengths other than 11/14 digits silently skip validation.
+
+Both files pass structural balance checks (WITH/ENDWITH, IF/ENDIF, TRY/ENDTRY, etc.) and contain no literal accented characters or `RETURN` inside `TRY` blocks.

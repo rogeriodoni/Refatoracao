@@ -1,0 +1,17 @@
+=== PROBE Fase 4 - FormSIGOPCCO (task657) ===
+[OK] 1. INSTANCIA: BaseClass=Form Caption=[Carta de Correção] 800x425
+[OK] 2. grd_4c_Dados: ColumnCount=3 Top=122 Left=98 604x290 RecordSource=[cursor_4c_Ocorrencias]
+     Col1 H=[Ocorrência] W=70 CS=[cursor_4c_Ocorrencias.cods] RO=.T.
+     Col2 H=[Descrição] W=220 CS=[cursor_4c_Ocorrencias.descs] RO=.T.
+     Col3 H=[Retificação] W=280 CS=[cursor_4c_Ocorrencias.retifs] RO=.F.
+[OK] 3. Column3.CurrentControl=[EDT_4C_RETIFICACAO] Sparse=.F. edtExiste=.T.
+[OK] 4. cmg_4c_Sair: ButtonCount=2 Top=-2 Left=645 B1=[\<Confirmar] B2=[\<Cancelar]
+[OK] 5. cursor_4c_Ocorrencias: campos=3 [CODS,DESCS,RETIFS] TAG=[CODS] RECCOUNT=0
+     6a. CarregarDados   existe=.T. PROTECTED=.F.
+     6b. AtualizarGrade  existe=.T. PROTECTED=.F.
+[OK] 6c. CarregarDados sem SQL retornou .F. (esperado .F. - sem conexao nao ha correcao) RECCOUNT=0
+[OK] 6d. AtualizarGrade executou sem erro
+     7. BO.CarregarOcorrencias PROTECTED=.F. BO.CarregarCorrecoes PROTECTED=.F.
+--- dialogos capturados ---
+[17/10/2026 18:17:19] Erro em CarregarDados: File 'mostrarerro.prg' does not exist.Linha: 254Procedure: carregarcorrecoes
+

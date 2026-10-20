@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is intact and complete. Phase 8 is done.
+
+**Summary of Phase 8 work on `Formsigprrcu.prg`:**
+
+This OPERACIONAL dialog (Rec├ílculo de Custos de Produto) has no PageFrame, no list, no data fields and no CRUD ÔÇö just a "Processar" button and an "Encerrar" button, all already implemented in phases 3/4/7. The generic Phase 8 checklist (`BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`/`CarregarLista`/`AjustarBotoesPorModo`) doesn't apply here ÔÇö adding any of it would either invent UI the legacy never had (violates PILAR 1) or be an empty stub (forbidden).
+
+The real defect this phase found and fixed: the two buttons had been named after the **legacy object names** (`cmd_4c_OK`/`BtnOkClick`, `cmd_4c_Sair`/`BtnSairClick`) instead of their **Captions/actions** ("Processar"/"Encerrar") ÔÇö a PILAR 3 violation and exactly the pattern the project's established convention avoids (851+ forms use `BtnEncerrarClick`, 26+ use `BtnProcessarClick`). Renamed:
+- `cmd_4c_OK` ÔåÆ `cmd_4c_Processar`, `BtnOkClick`/`BtnOkClickExec` ÔåÆ `BtnProcessarClick`/`BtnProcessarClickExec`
+- `cmd_4c_Sair` ÔåÆ `cmd_4c_Encerrar`, `BtnSairClick` ÔåÆ `BtnEncerrarClick`
+- Updated `tasks\task669\mapeamento.json` to match (required since `ValidarUIFidelity` resolves paths from it)
+- Left all comments describing the *legacy* code (`OK.Click`, `Sair.Click()`, `ThisForm.OK.Click()`) untouched, since those describe the original SCX, not our objects.
+
+Added a Phase 8 note to the file header documenting this reasoning. File structure verified intact (642 lines, `ENDDEFINE` at EOF, procedure/function counts match).

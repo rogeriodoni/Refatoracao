@@ -1,104 +1,212 @@
-*------------------------------------------------------------------------------
-* SigPrTarBO.prg - Business Object para FormSigPrTar
-* Sub-formulario modal de visualizacao de Observacao de Inspecao
-* Herda de BusinessBase
-*------------------------------------------------------------------------------
+*====================================================================
+* SigPrTarBO.prg
+*
+* Business Object para Tarefas do Processo (visualizacao de
+* observacoes de inspecao vinculadas a uma tarefa de processo)
+* Tabela: SigPrTar
+* Herda de: BusinessBase
+*====================================================================
+
 DEFINE CLASS SigPrTarBO AS BusinessBase
 
-    *-- ObsInsp do cursor csTmpPrTar compartilhado pelo form pai
-    this_cObsInsp = ""
+    *-- Propriedades da entidade (mapeamento para tabela SigPrTar)
+    this_cPkChave      = ""    && pkchaves char(20) - PK (Fortyus unique key)
+    this_cProduto      = ""    && cpros char(14)
+    this_cTarefa       = ""    && tarefas char(20)
+    this_dDataInicio   = {}    && dtinis datetime
+    this_dDataFim      = {}    && dtfims datetime
+    this_cObservacao   = ""    && obstars text (memo) - observacao de inspecao
+    this_cUsuario      = ""    && usuars char(10)
 
-    *--------------------------------------------------------------------------
-    * Init - Inicializa o BO
-    *--------------------------------------------------------------------------
+    *====================================================================
+    * Init - Inicializa Business Object
+    *====================================================================
     PROCEDURE Init()
-        DODEFAULT()
-
-        THIS.this_cTabela     = ""
-        THIS.this_cCampoChave = ""
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigPrTar"
+            THIS.this_cCampoChave = "pkchaves"
+            loc_lSucesso = .T.
+        CATCH TO loException
+            MostrarErro(loException, "SigPrTarBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega ObsInsp do cursor csTmpPrTar compartilhado
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cObsInsp = TratarNulo(ObsInsp, "C")
-            RETURN .T.
-        ENDIF
-        RETURN .F.
+    *====================================================================
+    * InicializarValoresPadrao - Defaults para novo registro
+    * usuars eh NOT NULL - gc_4c_UsuarioLogado eh o padrao do sistema
+    *====================================================================
+    PROTECTED PROCEDURE InicializarValoresPadrao()
+        THIS.this_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Chave logica do registro visualizado
-    * Retorna hash do conteudo ObsInsp (permite auditar visualizacoes)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        LOCAL loc_cChave
+    *====================================================================
+    * ObterChavePrimaria - Retorna chave primaria para auditoria
+    *====================================================================
+    FUNCTION ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cPkChave)
+    ENDFUNC
 
-        IF EMPTY(THIS.this_cObsInsp)
-            loc_cChave = "SEM_OBSERVACAO"
-        ELSE
-            loc_cChave = LEFT(ALLTRIM(THIS.this_cObsInsp), 40)
-        ENDIF
+    *====================================================================
+    * CarregarDoCursor - Carrega propriedades do BO a partir de cursor
+    * REGRA CRITICA: SELECT (par_cAliasCursor) ANTES de acessar campos
+    *====================================================================
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
 
-        RETURN loc_cChave
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cPkChave    = TratarNulo(pkchaves, "")
+                THIS.this_cProduto    = TratarNulo(cpros,    "")
+                THIS.this_cTarefa     = TratarNulo(tarefas,  "")
+                THIS.this_dDataInicio = TratarNulo(dtinis,   {})
+                THIS.this_dDataFim    = TratarNulo(dtfims,   {})
+                THIS.this_cObservacao = TratarNulo(obstars,  "")
+                THIS.this_cUsuario    = TratarNulo(usuars,   "")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "SigPrTarBO.CarregarDoCursor")
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Inserir - Nao suportado (sub-form somente leitura)
-    * O EditBox getObsInsp tem ReadOnly=.T. no SCX legado
-    * A tabela real eh mantida pelo form pai via cursor csTmpPrTar compartilhado
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        THIS.this_cMensagemErro = "Formul" + CHR(225) + "rio de visualiza" + CHR(231) + CHR(227) + ;
-                                  "o de observa" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-                                  "o suporta inclus" + CHR(227) + "o. As altera" + CHR(231) + ;
-                                  CHR(245) + "es s" + CHR(227) + "o feitas no formul" + CHR(225) + "rio principal."
-        RETURN .F.
-    ENDPROC
+    *====================================================================
+    * CarregarPorCodigo - Busca a tarefa do processo (e a observacao de
+    * inspecao, obstars) pela chave primaria pkchaves. Usado pelo form
+    * (FormSigPrTar) para exibir no EditBox somente-leitura o texto que,
+    * no legado, chegava ja carregado no cursor temporario csTmpPrTar
+    * montado pelo form chamador.
+    *====================================================================
+    FUNCTION CarregarPorCodigo(par_cPkChave)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
 
-    *--------------------------------------------------------------------------
-    * Atualizar - Nao suportado (sub-form somente leitura)
-    * O EditBox getObsInsp tem ReadOnly=.T. no SCX legado
-    * A tabela real eh mantida pelo form pai via cursor csTmpPrTar compartilhado
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        THIS.this_cMensagemErro = "Formul" + CHR(225) + "rio de visualiza" + CHR(231) + CHR(227) + ;
-                                  "o de observa" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-                                  "o suporta altera" + CHR(231) + CHR(227) + "o. As altera" + CHR(231) + ;
-                                  CHR(245) + "es s" + CHR(227) + "o feitas no formul" + CHR(225) + "rio principal."
-        RETURN .F.
-    ENDPROC
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
 
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Registra evento de visualizacao de observacao
-    * Override do BusinessBase: usa nome logico "SigPrTar" na coluna Tabela
-    * (o BO nao tem tabela fisica dedicada; audita a acao do sub-form)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_cChave, loc_cUsuario, loc_nResultado
-
-        loc_cChave = THIS.ObterChavePrimaria()
-
-        IF EMPTY(loc_cChave)
+        IF EMPTY(ALLTRIM(NVL(par_cPkChave, "")))
+            THIS.this_cMensagemErro = "C" + CHR(243) + "digo n" + CHR(227) + "o informado"
             RETURN .F.
         ENDIF
 
-        loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")
+        TRY
+            loc_cSQL = "SELECT cpros, dtfims, dtinis, obstars, pkchaves, tarefas, usuars" + ;
+                " FROM SigPrTar WHERE pkchaves = " + EscaparSQL(ALLTRIM(par_cPkChave))
 
-        loc_cSQL = "INSERT INTO LogAuditoria (Tabela, Operacao, ChaveRegistro, Usuario, DataHora) " + ;
-                   "VALUES (" + ;
-                   EscaparSQL("SigPrTar") + ", " + ;
-                   EscaparSQL(par_cOperacao) + ", " + ;
-                   EscaparSQL(loc_cChave) + ", " + ;
-                   EscaparSQL(loc_cUsuario) + ", " + ;
-                   "GETDATE())"
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_SigPrTar")
+                TABLEREVERT(.T., "cursor_4c_SigPrTar")
+                USE IN cursor_4c_SigPrTar
+            ENDIF
 
-        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigPrTar")
 
-        RETURN (loc_nResultado >= 0)
+            IF loc_nResultado >= 0
+                IF RECCOUNT("cursor_4c_SigPrTar") > 0
+                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_SigPrTar")
+                ELSE
+                    THIS.this_cMensagemErro = "Tarefa do processo n" + CHR(227) + "o encontrada"
+                ENDIF
+
+                IF USED("cursor_4c_SigPrTar")
+                    USE IN cursor_4c_SigPrTar
+                ENDIF
+            ELSE
+                THIS.this_cMensagemErro = "Erro ao carregar tarefa do processo:" + CHR(13) + CapturarErroSQL()
+            ENDIF
+
+        CATCH TO loException
+            THIS.this_cMensagemErro = "Erro ao carregar:" + CHR(13) + loException.Message
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *====================================================================
+    * Inserir - Insere novo registro na tabela SigPrTar
+    * pkchaves eh PK tecnica Fortyus - gerada via fUniqueIds(), nunca vazia
+    *====================================================================
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF EMPTY(ALLTRIM(THIS.this_cPkChave))
+                THIS.this_cPkChave = fUniqueIds()
+            ENDIF
+
+            IF EMPTY(ALLTRIM(THIS.this_cUsuario))
+                THIS.this_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "")
+            ENDIF
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigPrTar (cpros, dtfims, dtinis, obstars, pkchaves, tarefas, usuars)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cProduto)>>,
+                    <<FormatarDataSQL(THIS.this_dDataFim)>>,
+                    <<FormatarDataSQL(THIS.this_dDataInicio)>>,
+                    <<EscaparSQL(THIS.this_cObservacao)>>,
+                    <<EscaparSQL(THIS.this_cPkChave)>>,
+                    <<EscaparSQL(THIS.this_cTarefa)>>,
+                    <<EscaparSQL(THIS.this_cUsuario)>>
+                )
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao inserir tarefa do processo:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "SigPrTarBO.Inserir")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *====================================================================
+    * Atualizar - Atualiza registro existente na tabela SigPrTar
+    *====================================================================
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigPrTar
+                SET cpros   = <<EscaparSQL(THIS.this_cProduto)>>,
+                    dtfims  = <<FormatarDataSQL(THIS.this_dDataFim)>>,
+                    dtinis  = <<FormatarDataSQL(THIS.this_dDataInicio)>>,
+                    obstars = <<EscaparSQL(THIS.this_cObservacao)>>,
+                    tarefas = <<EscaparSQL(THIS.this_cTarefa)>>,
+                    usuars  = <<EscaparSQL(THIS.this_cUsuario)>>
+                WHERE pkchaves = <<EscaparSQL(THIS.this_cPkChave)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao atualizar tarefa do processo:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "SigPrTarBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

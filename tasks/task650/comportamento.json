@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fLimpaTexto", "fDtoSQL", "fConfigGeral", "Fcreate", "Fcount", "Fields", "FileToStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPC44",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lcCNPJ, lcIE\n\nSelect crReg1\n\nlcCNPJ = Strtran(Strtran(Strtran(crSigCdEmp.Cgcs,[.],[]),[/],[]),[-],[])\nlcIE   = Strtran(crSigCdEmp.IEs,[.],[])\n\nAppend Blank\nReplace TipoReg  With [1],;\n\t\tCNPJ\t With lcCNPJ,;\n\t\tInscEst  With lcIE,;\n\t\tRazaos\t With fLimpaTexto(crSigCdEmp.Razsocs),;\n\t\tCodFinal With Str(ThisForm.GetFinal.ListIndex,1),;\n\t\tQtdRegT2 With Str(0,5),;\n\t\tDtLevEst With Dtoc(ThisForm.getDtEst.Value) in crReg1  \n\t\t\nReturn\n\t\t\n\t\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPC44",
+      "evento": "Procedure",
+      "linhas": 118,
+      "codigoOriginal": "Local lnAliIcm, lnUltVlrCompra\n\nSelect crReg2\n\nSelect cPros, Max(cGrus) as cGrus, Sum(Sqtds) as Sqtds, Max(dPros) as dPros, Max(cUnis) as cUnis, Max(ClFiscals) as ClFiscals ;\n\t from CsTemporario Where Ps = 1 AND Ps2 = 1 Having Sum(Sqtds) > 0 Group by cPros Into cursor crProds\n\nThisForm.TotalImposto = 0\n\npDtSaldo = fDtoSQL(ThisForm.getDtEst.Value,[23:59:59]) \n\nSelect crProds\nScan\n\tlnAliIcm = 0\n\tThisForm.poDataMgr.CursorQuery([SigCdPro],[LocalPro],[cPros],crProds.cPros,[Valors,Icms,CustoFS])\t\n\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fLimpaTexto",
+        "metodosFormChamados": "CursorQuery,SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPC44",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "LOCAL lnNumParc \n\nlnNumParc = ThisForm.getNumParc.Value \nIf( ThisForm.TotalImposto <= 0 )\n\tlnNumParc = 0\nEndif\n\nSelect crReg3\n\nAppend Blank in crReg3\nReplace TipoReg \tWith [3],;\n\t\tTotSldCred\tWith [0,00],;\n\t\tIcmTotDev\tWith Str(ThisForm.TotalImposto,12,2),;\n\t\tIcmRecEst   With Str(ThisForm.TotalImposto,12,2),;\n\t\tNumParcPag  With Str(lnNumParc,2) in crReg3 \n\nReturn",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPC44",
+      "evento": "Init",
+      "linhas": 31,
+      "codigoOriginal": "Lparameters lcEmp\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\tIf Not .poDataMgr.CursorQuery([SigCdPac], [crSigCdPac], .F., .F., [DirCat44])\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPac)')\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\tlcEmp = Iif(Type([lcEmp]) == 'C' and not Empty(lcEmp),lcEmp,_Empr)\n\t\t=Seek(lcEmp,[crSigCdEmp],[cEmps])\n\t\t\n\t\t.TxtDest.Value = [C:\\]\n\n\t\tIf Not Empty(crSigCdPac.DirCat44)\n\t\t\t.TxtDest.Value = cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPC44",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crReg1( ;\nTipoReg\t\t\tc(1),;\nCNPJ\t\t\tc(14),;\nInscEst\t\t\tc(15),;\nRazaos\t\t\tc(50),;\nCodFinal\t\tc(1),;\nQtdRegT2\t\tc(5),;\nDtLevEst\t\tc(10))\n\nCreate Cursor crReg2( ;\nTipoReg\t\t\tc(1),;\nCodMerc\t\t\tc(10),;\nQtde\t\t\tc(12),;\nVlrUnit\t\t\tc(12),;\nVlrTot\t\t\tc(14),;\nAliqIcms\t\tc(5),;\nIVASt\t\t\tc(8),;\nPrecoFin\t\tc(12),;\nImpDev\t\t\tc(12),;\nCodTpMerc\t\tc(2),;\nDescMerc\t\tc(50),;\nUnid\t\t\tc(3))\n\nCreate Cursor crReg3( ;\nTipoReg\t\t\tc(1),;\nTotSldCred\t\tc(12),;\nIcmTotDev\t\tc(12),;\nIcmRecEst\t\tc(12),;\nNumParcPag\t\tc(2... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPC44.CmdGera",
+      "evento": "Click",
+      "linhas": 89,
+      "codigoOriginal": "Local lcArqDest, ldDtIni, ldDtFim\n\nIf Empty(ThisForm.Txtdest.Value)\n\t=MessageBox('Destino de Arquivo Inválido!!!' + Chr(13) + ;\n\t\t\t\t'Verifique a Configuração da Empresa.', 48, 'Destino Inválido...')\n\tThisForm.CmdSair.SetFocus\n\tReturn .f.\nEndIf\n\nIf Empty(ThisForm.getDtEst.Value)\n\t=MessageBox('Data do Estoque não informada!',48,'Data do Estoque inválida...')\n\tThisForm.getDtEst.SetFocus \n\tReturn(.F.)\nEndif\n\nIf ThisForm.getFinal.ListIndex <= 0 \n\t=MessageBox('Finalidade do arquivo não informada!',48,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Fcreate,Fcount,Fields,FileToStr",
+        "metodosFormChamados": "GeraReg1,GeraReg2,GeraReg3",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPC44.CmdSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPC44.Procedure",
+      "queryOriginal": "Select cPros, Max(cGrus) as cGrus, Sum(Sqtds) as Sqtds, Max(dPros) as dPros, Max(cUnis) as cUnis, Max(ClFiscals) as ClFiscals ; \t from CsTemporario Where Ps = 1 AND Ps2 = 1 Having Sum(Sqtds) > 0 Group by cPros Into cursor crProds",
+      "tabelas": "CsTemporario",
+      "colunas": "cPros,Ps2,Having,SumSqtds,crProds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CsTemporario"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

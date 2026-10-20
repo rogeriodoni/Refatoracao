@@ -1012,6 +1012,12 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 145 OF popMovimentos DO AbrirFormSIGPRIBL
 
+    DEFINE BAR 146 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 147 OF popMovimentos PROMPT "Administra" + CHR(231) + CHR(227) + "o do TEF" ;
+           MESSAGE "Administra" + CHR(231) + CHR(227) + "o do TEF (SigFiTef / SigFiNfs / SigFiMpF)"
+
+    ON SELECTION BAR 147 OF popMovimentos DO AbrirFormsigprtef
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -6553,6 +6559,14 @@ PROCEDURE AbrirFormSIGPRTRF()
 
     IF VARTYPE(loForm) = "O"
         loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+
+        *-- O dialogo fecha com Hide(), nao Release(), para o resultado
+        *-- continuar legivel aqui (o Release mata a referencia - medido).
+        *-- Quem abre a tela pelo MENU nao tem para onde encaminhar a
+        *-- relacao de produtos (no legado ela volta ao form CHAMADOR da
+        *-- transmissao ECF), entao aqui so se libera o objeto - e eh o
+        *-- chamador que tem de faze-lo, como no FormBuscaAuxiliar.
+        loForm.Release()
     ENDIF
 ENDPROC
 
@@ -12024,6 +12038,39 @@ PROCEDURE AbrirFormSIGPRIBL()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Boleto Banc" + CHR(225) + "rio:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigprtef - Abre formulario de Administracao do TEF
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigprtef()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("Formsigprtef")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Administra" + CHR(231) + CHR(227) + "o do TEF" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Administra" + CHR(231) + CHR(227) + "o do TEF:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

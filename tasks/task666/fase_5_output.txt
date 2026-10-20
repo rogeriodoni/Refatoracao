@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 14 methods present, no duplicates, and the structure is intact with balanced TRY/ENDTRY/ENDPROC blocks. The file now has the two new methods correctly wired into `ConfigurarPageFrame()`.
+
+**Summary of Fase 5/8 changes to `FormSIGPRPPP.prg`:**
+
+Added two new methods (first half of the "Conta/Periodo/Grupo" display fields), wired into `ConfigurarPageFrame()`:
+
+- **`ConfigurarCampoConta()`** ÔÇö `shp_4c_Shp_cliente_periodo` (shape framing Conta+Per├¡odo), `lbl_4c_Lbl_cliente` ("Conta :"), `txt_4c__cliente`, `txt_4c__cliente_desc` ÔÇö all read-only/non-focusable display fields (matching the legacy `When` returning `.F.`).
+- **`ConfigurarCampoPeriodo()`** ÔÇö `lbl_4c_Lbl_periodo` ("Per├¡odo :"), `txt_4c__dt_inicial`/`txt_4c__dt_final` (DATE, `Value = {}`), `lbl_4c_Lbl_periodo_a` (the "├á" separator).
+
+No `.Value` population yet ÔÇö that's deferred to Fase 6 along with the Grupo field (`lbl_4c_Label4`/`txt_4c_Grupo`), since all 5 display fields get populated together from the parent form (`FormSigPrPpc.this_oBusinessObject`). Updated the `ConfigurarPageFrame()` roadmap comment to reflect this split.

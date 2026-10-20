@@ -1,0 +1,21 @@
+=== PROBE Fase 6b - formulas Percentual<->Valor (task680) ===
+0) DataSessionId do form = 2
+1) Percentual -> Valor (PVens=100, Percs=10)
+   percs=10  valor=110
+2) Valor -> Percentual (PVens=100, Valor=150)
+   percs=50  valor=150
+3) Percentual zerado NAO zera o Valor (fiel ao legado)
+   percs=0  valor=150
+4) Peso Medio / Entrega -> cursor
+   pesoms=2.345  diasprz=7
+5) duplicidade de Tamanho
+   linha corrente cidchaves=[CID0000000000000002]
+   (duplicidade real exige SQL - medida no probe de integracao)
+6) LOCATE de GravarLinhaAtual com cidchaves CURTO
+   LEN(cidchaves no cursor) = 20
+   fluxo ALCANCOU a gravacao (LOCATE achou a linha)
+
+FALHAS=0
+ERROS/AVISOS CAPTURADOS:
+[19/10/2026 08:52:30 PM] sigprtamBO.Atualizar: Erro ao atualizar:Connection handle is invalid.
+

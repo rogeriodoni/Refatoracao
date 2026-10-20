@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked the actual file ÔÇö not just the excerpt ÔÇö and all 6 "METODO-INEXISTENTE" findings are false positives. The review pass only saw truncated excerpts of this 1246-line file, which happened to skip the ranges where these methods are defined. All six exist, properly declared, within the same `DEFINE CLASS...ENDDEFINE` block, and are called consistently with their scope (PROTECTED/PUBLIC, always via `THIS.` from methods inside the same class):
+
+| M├®todo chamado | Definido em |
+|---|---|
+| `ConectarTerminalSiTef()` | linha 580 ÔÇö `PROTECTED FUNCTION` |
+| `TerminalDisponivel()` | linha 1091 ÔÇö `PROTECTED FUNCTION` |
+| `ValidarAcessoSenha()` | linha 620 ÔÇö `FUNCTION` (PUBLIC) |
+| `ValidarAcessoSenhaSupervisor()` | linha 629 ÔÇö `FUNCTION` (PUBLIC) |
+| `PreencherBuffer(par_cValor)` | linha 1062 ÔÇö `PROTECTED FUNCTION` |
+| `ComecaCom(par_cTexto, par_cPrefixo)` | linha 1081 ÔÇö `PROTECTED FUNCTION` |
+
+No changes were needed ÔÇö all calls resolve correctly, so I didn't touch either file. Adding duplicate stub implementations (as the generic instructions suggest for "METODO-INEXISTENTE") would have broken working code and introduced real duplicate-member errors. This is the same class of false positive the project has hit before with truncated/partial review context (`feedback_metodo_inexistente_nao_checa_formbase.md`) ÔÇö worth keeping in mind for this pass's tooling: it should scan the whole file for `PROCEDURE`/`FUNCTION` declarations before flagging a call as undefined, not just the excerpt it was fed.

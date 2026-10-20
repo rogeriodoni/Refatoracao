@@ -72,7 +72,9 @@ DEFINE CLASS EspBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -105,7 +107,9 @@ DEFINE CLASS EspBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -202,7 +206,9 @@ DEFINE CLASS EspBO AS BusinessBase
                        " WHERE EspecieNfs = " + EscaparSQL(THIS.this_cEspecies)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkMvCcr")
-                TABLEREVERT(.T., "cursor_4c_ChkMvCcr")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkMvCcr") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkMvCcr")
+                ENDIF
                 USE IN cursor_4c_ChkMvCcr
             ENDIF
 
@@ -218,7 +224,9 @@ DEFINE CLASS EspBO AS BusinessBase
                            " WHERE Especies = " + EscaparSQL(THIS.this_cEspecies)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_ChkOpe")
-                    TABLEREVERT(.T., "cursor_4c_ChkOpe")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_ChkOpe") > 1
+                        TABLEREVERT(.T., "cursor_4c_ChkOpe")
+                    ENDIF
                     USE IN cursor_4c_ChkOpe
                 ENDIF
 
@@ -303,7 +311,9 @@ DEFINE CLASS EspBO AS BusinessBase
                        " WHERE especies = " + EscaparSQL(THIS.this_cEspecies)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkDup")
-                TABLEREVERT(.T., "cursor_4c_ChkDup")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkDup") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkDup")
+                ENDIF
                 USE IN cursor_4c_ChkDup
             ENDIF
 

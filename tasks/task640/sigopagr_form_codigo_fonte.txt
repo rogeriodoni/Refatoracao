@@ -1,0 +1,937 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopagr.SCX
+* Data/Hora: 16/10/2026 18:51:13
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPAGR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: ShpFigura
+  Parent: SIGOPAGR
+  Class: shape
+  BaseClass: shape
+
+Objeto: grdItens
+  Parent: SIGOPAGR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPAGR.grdItens.Column3
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAGR.grdItens.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAGR.grdItens.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntBotoes
+  Parent: SIGOPAGR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: ImgJpg
+  Parent: SIGOPAGR
+  Class: image
+  BaseClass: image
+
+Objeto: apaga
+  Parent: SIGOPAGR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGOPAGR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 500
+  Width = 1059
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleção de Localização"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  pcescolha = .F.
+  pcorigem = .F.
+  podatamgr = .F.
+  Name = "SIGOPAGR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.ShpFigura
+------------------------------------------------------------
+  Top = 141
+  Left = 795
+  Height = 348
+  Width = 253
+  BackStyle = 0
+  BorderColor = 136,189,188
+  ZOrderSet = 0
+  Name = "ShpFigura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 483
+  Left = 1
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 6
+  Width = 742
+  GridLineColor = 192,192,192
+  Name = "grdItens"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 122
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 250
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 1
+  Column3.Width = 17
+  Column3.Sparse = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.Width = 90
+  Column4.Movable = .T.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 6
+  Column5.Width = 95
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.InputMask = "99999,999.99"
+  Column5.Name = "Column5"
+  Column6.FontName = "Verdana"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 7
+  Column6.Width = 95
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.InputMask = "99999,999.99"
+  Column6.Name = "Column6"
+  Column7.FontName = "Verdana"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 4
+  Column7.Width = 44
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column3.Check1
+------------------------------------------------------------
+  Top = 22
+  Left = 22
+  Height = 17
+  Width = 60
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Check1"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column5.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column6.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column6.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column7.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam."
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.grdItens.Column7.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 1
+  Value = 0
+  Height = 110
+  Left = 874
+  SpecialEffect = 1
+  Top = 10
+  Width = 171
+  TabIndex = 3
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.Top = 5
+  Command1.Left = 86
+  Command1.Height = 100
+  Command1.Width = 80
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+  Command2.Top = 5
+  Command2.Left = 5
+  Command2.Height = 100
+  Command2.Width = 80
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command2.Caption = "\<Confirmar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 1
+  Command2.ToolTipText = "Confirmar a Seleção"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnConfirmar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.ImgJpg
+------------------------------------------------------------
+  Stretch = 2
+  Height = 341
+  Left = 798
+  Top = 144
+  Visible = .F.
+  Width = 247
+  Name = "ImgJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.apaga
+------------------------------------------------------------
+  Top = 243
+  Left = 745
+  Height = 40
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 26
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 84
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAGR.SelTudo
+------------------------------------------------------------
+  Top = 202
+  Left = 745
+  Height = 40
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 24
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 85
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPAGR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+Local lnOldSel
+
+Select crItensBor 
+Index on Cpros Tag Cpros
+Go top
+
+With ThisForm.grdItens
+	.RecordSource = [crItensBor]
+	.column1.ControlSource = [crItensBor.Cpros]
+	.column2.ControlSource = [crItensBor.Dpros]
+	.column3.ControlSource = [crItensBor.Marcas]
+	.column4.ControlSource = [crItensBor.qtds]
+	.column5.ControlSource = [crItensBor.Valor]
+	.column6.ControlSource = [crItensBor.Pesos]
+	.column7.ControlSource = [crItensBor.CodTams]
+	.Refresh()
+EndWith 
+
+ThisForm.grdItens.Column1.SetFocus
+ThisForm.grdItens.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE validacao
+------------------------------------------------------------
+PROCEDURE validacao
+*!*	Local lnOldSel
+*!*	lnOldSel = Select()
+
+*!*	If Empty(Thisform.getBase.Value)
+*!*		Messagebox([Informar a Base da Localização.],0+48,[Atenção])
+*!*		Return .F.
+*!*	Endif
+
+*!*	Select crSigLcNv2
+*!*	Go Top
+*!*	If Reccount([crSigLcNv2])>0 And Empty(Thisform.getNvl2.Value)
+*!*		lcNivel = Alltrim(Thisform.getBase.Value)
+*!*		Select * From crSigLcNv2 Where Cods = lcNivel Into Cursor LocalNivel Readwrite
+*!*		If Reccount([LocalNivel])>0
+*!*			Messagebox([Informar o Segundo Nível da Localização.],0+48,[Atenção])
+*!*			Return .F.
+*!*		Endif
+*!*	Endif
+
+*!*	Select crSigLcNv3
+*!*	Go Top
+*!*	If Reccount([crSigLcNv3])>0 And Empty(Thisform.getNvl3.Value) And Not Empty(Thisform.getNvl2.Value)
+*!*		lcNivel = Alltrim(Thisform.getNvl2.Value)
+*!*		Select * From crSigLcNv3 Where Cods = lcNivel Into Cursor LocalNivel Readwrite
+*!*		If Reccount([LocalNivel])>0
+*!*			Messagebox([Informar o Terceiro Nível da Localização.],0+48,[Atenção])
+*!*			Return .F.
+*!*		Endif
+*!*	Endif
+
+*!*	Select crSigLcNv4
+*!*	Go Top
+*!*	If Reccount([crSigLcNv4])>0 And Empty(Thisform.getNvl4.Value) And Not Empty(Thisform.getNvl3.Value)
+*!*		lcNivel = Alltrim(Thisform.getNvl3.Value)
+*!*		Select * From crSigLcNv4 Where Cods = lcNivel Into Cursor LocalNivel Readwrite
+*!*		If Reccount([LocalNivel])>0
+*!*			Messagebox([Informar o Quarto Nível da Localização.],0+48,[Atenção])
+*!*			Return .F.
+*!*		Endif
+*!*	Endif
+
+*!*	Select(lnOldSel)
+*!*	Return .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Use In crItensBor 
+Use In csProdItn
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lParameters pCnx, pEscolha
+
+ThisForm.pcEscolha = pEscolha
+ThisForm.poDataMgr = pCnx
+
+If Used([csProdItn])
+	Use in csProdItn
+EndIf 
+
+Create Cursor csProdItn(cItens n(4),Cpros c(14), codtams c(3), Valor n(15,6), Pesos n(8,3))
+
+ThisForm.grdItens.RecordSource = []
+
+Select crTpmMvItn
+Select 0 as Marcas, Cpros, Dpros, CodTams, Sum(Qtds) as Qtds, Max(Units) as Valor, Max(Pesos) as Pesos from crTpmMvItn ;
+Where Not Empty(Cpros) Group By Cpros, CodTams, Dpros Into Cursor crItensBor  ReadWrite 
+
+ThisForm.MontaGrade()
+
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens
+* Classe: grid (Base: grid)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+lcArquivo2 = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+Select crItensBor 
+= ThisForm.poDataMgr.CursorQuery('SigCdPro','crTPro','Cpros',crItensBor .Cpros,'FigJpgs')
+If Not IsNull(crTPro.FigJpgs) And Not IsEmpty(crTPro.FigJpgs)
+	This.parent.ImgJpg.Visible = .F.
+	This.parent.ImgJpg.Picture = ''
+	Select crTPro
+	Clear Resources
+	Copy Memo crTPro.FigJpgs to (lcArquivo2)
+	This.parent.ImgJpg.Picture = (lcArquivo2)
+	This.parent.ImgJpg.Visible = .T.
+Else
+	This.parent.ImgJpg.Visible = .F.
+	This.parent.ImgJpg.Picture = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column3.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace crItensBor.Marcas With IIf(crItensBor.Marcas == 0,1,0)	
+	This.parent.parent.AfterRowColChange
+	This.parent.parent.Refresh 
+	NoDefault
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+This.KeyPress(13,0)
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(CrSigOpCdd.AltValPes=1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(CrSigOpCdd.AltValPes=1 And crItensBor.Marcas = 1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.grdItens.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(CrSigOpCdd.AltValPes=1  And crItensBor.Marcas = 1 )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+
+Select crItensBor 
+Go top
+Scan for Marcas = 1
+	Update crTpmMvItn set Pesos = crItensBor.Pesos, Units = crItensBor.Valor where Cpros = crItensBor.Cpros And CodTams = crItensBor.CodTams
+	Select crItensBor 
+EndScan 
+
+Select crTpmMvItn
+Go Top
+
+Update crTpmMvItn set Totas = (crTpmMvItn.Units * crTpmMvItn.Qtds)
+
+Select crTpmMvItn
+Go top
+	
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crItensBor 
+Replace All crItensBor .Marcas with 0
+Go Top
+ThisForm.grdItens.AfterRowColChange()
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAGR.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crItensBor 
+Replace All crItensBor .Marcas with 1
+Go Top
+ThisForm.grdItens.AfterRowColChange()
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPAGR
+RESERVED3 (ClassInfo): pcescolha
+pcorigem
+podatamgr
+*montagrade 
+*reverterxml 
+*validacao 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 22
+================================================================================

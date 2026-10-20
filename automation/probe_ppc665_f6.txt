@@ -1,0 +1,58 @@
+=== PROBE Fase 6 - FormSigPrPpc ===
+1) CREATEOBJECT -> VARTYPE=O Width=660 Height=300 Caption=[Produtos Por Conta]
+2) controles do legado:
+   txt_4c_Grupo          = .T.
+   txt_4c_DGrupo         = .T.
+   txt_4c_Conta          = .T.
+   txt_4c_ContaDesc      = .T.
+   txt_4c_Operacao       = .T.
+   txt_4c_DtIni          = .T.
+   txt_4c_DtFin          = .T.
+   txt_4c_Empresa        = .T.
+   txt_4c_EmpresaDesc    = .T.
+   lbl_4c_LblGrupo       = .T.
+   lbl_4c_LblConta       = .T.
+   lbl_4c_LblOperacao    = .T.
+   lbl_4c_LblPeriodo     = .T.
+   lbl_4c_LblA           = .T.
+   lbl_4c_LblEmpresa     = .T.
+   cmg_4c_Operacao       = .T.
+3) lookups (existe / Protected esperado .F.):
+   AbrirBuscaGrupo           existe=.T. Protected=.F.
+   AbrirBuscaGrupoPorDesc    existe=.T. Protected=.F.
+   AbrirBuscaConta           existe=.T. Protected=.F.
+   AbrirBuscaContaPorDesc    existe=.T. Protected=.F.
+   AbrirBuscaOperacao        existe=.T. Protected=.F.
+   AbrirBuscaEmpresa         existe=.T. Protected=.F.
+   AbrirBuscaEmpresaPorDesc  existe=.T. Protected=.F.
+4) gate dos When (AtualizarDependenciaCampos):
+   existe=.T. Protected=.F. (esperado .T. / .F.)
+   4a) codigo VAZIO (When=.T. -> descricao editavel):
+       DGrupo      ReadOnly=.F. TabStop=.T.
+       ContaDesc   ReadOnly=.F. TabStop=.T.
+       EmpresaDesc ReadOnly=.F. TabStop=.T.
+   4b) codigo PREENCHIDO (When=.F. -> descricao recusa foco):
+       DGrupo      ReadOnly=.T. TabStop=.F.
+       ContaDesc   ReadOnly=.T. TabStop=.F.
+       EmpresaDesc ReadOnly=.T. TabStop=.F.
+5) guarda de reentrancia this_lEmLookup:
+   existe=.T.
+   guarda LIGADA  -> DGrupo=[SENTINELA] esperado [SENTINELA] (handler devolveu sem agir)
+   guarda SOLTA   -> DGrupo=[] esperado [] (ramo vazio do legado zera o par)
+   this_lEmLookup apos a chamada=.F. esperado .F. (nao travou ligada)
+6) BtnCancelarClick reabre a descricao:
+   ContaDesc ReadOnly=.F. TabStop=.T. esperado .F./.T.
+7) transcricao do SCX:
+   TabIndex na ordem do legado = 2/3/5/6/8/10/12/14/15/17
+   estritamente CRESCENTE (ordem do SCX preservada) = .T.
+   MaxLength DGrupo=20 esperado 20 (SCX)
+   MaxLength Empresa=3 esperado 3 (SigCdEmp.cemps char(3))
+8) contrato do harness (existe / Protected esperado .F.):
+   CarregarLista         existe=.T. Protected=.F.
+   AlternarPagina        existe=.T. Protected=.F.
+   AjustarBotoesPorModo  existe=.T. Protected=.F.
+   BtnIncluirClick       existe=.T. Protected=.F.
+   BtnCancelarClick      existe=.T. Protected=.F.
+   this_cModoAtual       existe=.T. Protected=.F.
+
+PROBE_OK

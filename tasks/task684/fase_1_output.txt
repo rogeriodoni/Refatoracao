@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 1/8 complete: created `C:\4c\projeto\app\classes\SIGPRTRFBO.prg` with `DEFINE CLASS SIGPRTRFBO AS BusinessBase`, declaring:
+
+- `this_cCodigoProduto` / `this_cDescricaoProduto` ÔÇö mapeiam `SigCdPro.cpros`/`dpros`, usados no lookup de cada linha da grade de produtos
+- `this_nTempoEspera` ÔÇö `SigCdPac.ClockEcfs`, par├ómetro lido no `Init` legado e usado no aguarde ao confirmar
+- `this_cListaProdutos` ÔÇö lista final de c├│digos (equivalente ao `ThisForm.Retorno` do legado)
+
+`Init()` segue o padr├úo can├┤nico do projeto (TRY/CATCH, `DODEFAULT()`, `this_cTabela = "SigCdPro"`, `this_cCampoChave = "cpros"`, `RETURN` fora do TRY).
+
+Pr├│ximo: Fase 2/8 deve completar `CarregarDoCursor()`, `Inserir()`/`Atualizar()` (ou os m├®todos de valida├º├úo de produto) neste mesmo arquivo.

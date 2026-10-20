@@ -1,0 +1,15 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+GRID ColumnCount=2 RecordSource=[cursor_4c_Produtos] Top=78 Left=3 W=429 H=309 GridReadOnly=.F. Visible=.T.
+COL1 CS=[cursor_4c_Produtos.Cpros] W=108 RO=.F. Format=[K!] Mask=[!!!!!!!!!!] Hdr=[Cód. Produto]
+COL2 CS=[cursor_4c_Produtos.Dpros] W=290 RO=.T. Hdr=[Descrição do Produto]
+CURSOR used=.T. Reccount=1 Recno=1
+BOTOES Ok[a_save1.bmp]=OK Cancelar[cancelar.bmp]=OK OkPos=314/399 CancelPos=372/399 CancelProp=.T.
+MENSAGEM Visible=.F. (tem de ser .F. - container flutuante)
+ESCOPO CarregarLista prot=.F. FocarPrimeiraCelula prot=.F. ConfigurarGradeProdutos prot=.T.
+ALIAS DERRUBADO ColumnCount=0 RecordSource=[cursor_4c_Produtos]
+CarregarLista retorno=.T.
+REVINCULADO ColumnCount=2 RecordSource=[cursor_4c_Produtos] Col1CS=[cursor_4c_Produtos.Cpros] Col2CS=[cursor_4c_Produtos.Dpros] W=108/290 Hdr1=[Cód. Produto] Hdr2=[Descrição do Produto] Col2RO=.T. Reccount=1
+POS-RELEASE cursorAberto=.F.
+RESULTADO=OK

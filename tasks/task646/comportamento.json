@@ -1,0 +1,108 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPBIN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBIN",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBIN",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "LParameters pPag\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Fpagto  = pPag\n\t\t.Usulibs = []\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBIN.Get_Bin",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local lCod,lfan,codcor,xobj,totite\n\nThisForm.UsuLibs = []\n\nIf Empty(This.Value)\n\tZSen = .f.\n\tThisForm.ZSen = .f.\n\tThisForm.Release\n\tReturn .t.\nEndIf\n\nlcSql = [Select * From SigOpFpB Where Fpags = ']+ThisForm.Fpagto+[' And CodBins = ']+This.Value+[']\nIf Thisform.Podatamgr.Sqlexecute(lcSql,'LocalFpagB') < 1\n\tMessageBox('Falha na Conexão. Tente Novamente!!!',0+16,'')\n\tzsen = .f.\n\tThisform.zsen=.F.\n\tThisform.release\nElse\n\tSelect LocalFpagB\n\tIf Reccount('LocalFpagB') > 0\n\t\tIf Between(Dtos(Date()),Dto... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBIN.Get_Bin",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf (Lastkey() = 27) And Empty(This.Value)\n\tZSen = .f.\n\tThisForm.ZSen = .f.\n\tThisForm.Release\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPBIN.Get_Bin.Valid",
+      "queryOriginal": "lcSql = [Select * From SigOpFpB Where Fpags = ']+ThisForm.Fpagto+[' And CodBins = ']+This.Value+['] If Thisform.Podatamgr.Sqlexecute(lcSql,'LocalFpagB') < 1",
+      "tabelas": "SigOpFpB",
+      "colunas": "Fpags,Fpagto+[,CodBins,Value+[],SqlexecutelcSql,LocalFpagB",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpFpB"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

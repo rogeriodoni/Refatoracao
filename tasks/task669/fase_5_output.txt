@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 5 is done. Compiles clean in VFP9 (no `.err`), and passes all three completeness-validator patterns.
+
+## What Phase 5 actually was for this form
+
+The phase asks for "the first 50% of Page2 data fields" ÔÇö **this legacy form has zero data fields**. Measured in the dump: 0 textbox/editbox/combobox/listbox/checkbox/optiongroup/optionbutton/spinner, 0 grid/pageframe, 0 `ControlSource`. All 9 legacy objects (header container + 2 labels, Shape1, 2 CommandButtons, status Label) were already delivered in Phases 3ÔÇô4. Inventing a Page2 with fields would violate PILAR 1, and an empty `ConfigurarPaginaDados` is a forbidden stub.
+
+So, following the task648 precedent for FLAT forms, I ran the phase as a **property-by-property audit against the dump** ÔÇö which found four real defects:
+
+| # | Finding | Action |
+|---|---|---|
+| 1 | **`Picture` (form background) dropped.** Dump declares `..\framework\imagens\new_background.jpg`; the migrated form set nothing ÔÇö the screen opened with VFP's native grey instead of the legacy texture. Silent failure: no compile error, no runtime error, nothing in the log. | Added `THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"` as the first statement of `ConfigurarPageFrame`, before the `AddObject`s. Verified the file exists in `vbmp\`, and that this is the dominant form (138 operational forms) ÔÇö not the `gc_4c_CaminhoBase` reconstruction. |
+| 2 | **`Themes = .F.` dropped** (declared on the form in the dump). | Added, with a comment distinguishing it from the *deliberate* `Themes = .T.` on the two buttons (icons vanish at `Enabled = .F.` otherwise ÔÇö both buttons get disabled during processing). |
+| 3 | **`Closable = .F.` invented** ÔÇö the dump declares only `ControlBox`, `MaxButton`, `MinButton`, `TitleBar`. Those five properties are independent: without a title bar the buttons don't *draw*, but `Closable` stays `.T.` and Alt+F4 keeps working. Pinning it `.F.` silently removes an exit the original had. | Removed. |
+| 4 | **`ToolTipText` dropped** on `lblTitulo` (form has `ShowTips = .T.`, so it really shows). | Added via `CHR()` codes. |
+
+Checked and deliberately left alone: `BorderStyle = 2` is already inherited from `FormBase` (matches the dump); `ShowWindow = 1` is universal across all 168 operational forms and documented in `FormBase` as the modal pattern, so it's architecture (PILAR 3), not an invention; `ClipControls` is cosmetic with no dump signal either way (82/138 split).
+
+Diff is +31/ÔêÆ2 lines with LF preserved, matching this file's own history ÔÇö no whole-file diff noise.
+
+## Two things worth flagging
+
+**The NO-OP guard will burn a wasted opus retry on phases like this.** `Invoke-MigracaoFase` compares the file MD5 before/after and forces a retry on exit-0-with-unchanged-hash. It has **no exception** for a phase whose work doesn't exist in the legacy. My edits mean this particular run won't trip it, but the underlying gap is real. Note that a stored memory claims this was fixed with `Test-LegadoSemCamposSoltos`/`Test-LegadoSemLookupAlgum` ÔÇö I verified that's **wrong**: those names exist only in task scratch files and old phase-5 output narratives, never in `OrquestradorMigracao.ps1` (at HEAD or in the working tree). I didn't fix the guard, since that's shared pipeline infrastructure outside this phase's scope, and editing it wouldn't unblock the in-flight run anyway (`& script.ps1` parses the file at invocation). Worth doing as its own change if you want it.
+
+The content gate for case 5 does pass, via the DESPACHANTE branch (OPERACIONAL + no-list-no-fields dump + `cmd_4c_` AddObject + `BtnOkClick` handler).
+
+**`fRecalculaC` is still deliberately absent, so Processar will fail loudly at runtime.** That's the documented intent (a stub returning a calculation value would write wrong costs in silence), but it means this screen's main action isn't functional until that routine is ported ÔÇö not something Phase 5 changes.

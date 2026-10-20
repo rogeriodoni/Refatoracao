@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+A task663 pede "Fase 3/8" para `SigPrPcp`, mas esta ├® uma **re-execu├º├úo sobre form j├í migrado por completo**: o SCX ├® id├¬ntico (md5) ao da task318, que est├í `COMPLETED`, e os arquivos j├í existem com todas as 8 fases implementadas (`FormSigPrPcp.prg`, 1169 linhas; `SigPrPcpBO.prg`, 501 linhas).
+
+Seguindo o padr├úo j├í documentado em mem├│ria (9┬¬ ocorr├¬ncia desse cen├írio), **n├úo usei `Write`** ÔÇö isso apagaria as Fases 4-8 inteiras. Em vez disso, auditei o arquivo existente:
+
+- Balanceamento de blocos (`IF`/`TRY`/`WITH`/`PROCEDURE`/`DEFINE CLASS`) todos corretos nos dois arquivos
+- Zero `RETURN` dentro de `TRY`, `Init()`/`Destroy()` no padr├úo can├┤nico
+- Os 5 m├®todos que o Form chama no BO s├úo `FUNCTION` p├║blicas (regra #51)
+- Todos os 21 m├®todos chamados de fora (BINDEVENT/TesteAutomatico) s├úo PUBLIC
+- `menu.prg` e `config.prg` j├í integrados corretamente
+
+**Defeito real encontrado e corrigido**: `ConfigurarPageFrame()` reconstru├¡a o path do Framework a partir de `gc_4c_CaminhoBase + "..\..\..\Framework\imagens\..."` em vez de usar a vari├ível can├┤nica ÔÇö viola├º├úo documentada no CLAUDE.md (Erro119). Corrigi para `gc_4c_CaminhoIcones + "new_background.jpg"`, que ├® o padr├úo dominante nos demais forms OPERACIONAIS e aponta para arquivo existente em `vbmp\`.
+
+Compilei os dois arquivos com `vfp9.exe` real ÔÇö zero erros. Atualizei a mem├│ria com esse 9┬║ caso (o primeiro desta s├®rie onde a auditoria achou um defeito real, n├úo s├│ confirmou completude).

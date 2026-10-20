@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í completa e o gate passa. Resumo:
+
+## O que estava errado
+
+O form e o BO **j├í estavam completos e fi├®is** desde as Fases 1ÔÇô7 ÔÇö o racioc├¡nio da tentativa anterior (os 9 m├®todos do template CRUD n├úo se aplicam a um di├ílogo modal de sele├º├úo de impressora) estava certo. O que reprovou foi o **gate**, num ponto s├│:
+
+`Test-AcaoDoLegadoTemHandler` derivava o verbo do **n├¡vel errado do dump**. O SCX declara um `CommandGroup` chamado `btnReport` **sem Caption**; o verbo mora no membro (`Command1.Name = "Cmd_Imprimir"`, e `Command1.Caption = "Encerrar"` ├® verbo de sa├¡da). O helper colhia "Report" e cobrava `Btn*Repor*Click`. Do outro lado, o handler migrado ├® `CmdImprimirClick` e o padr├úo estava ancorado s├│ em `Btn`.
+
+## Corre├º├Áes no gate (`OrquestradorMigracao.ps1`)
+
+- **(A)** colher o verbo tamb├®m dos membros internos do bloco ÔÇö mesma li├º├úo do CLAUDE.md #31, e a mesma fam├¡lia de "ler o n├¡vel errado" que a detec├º├úo por BaseClass j├í desfez do lado do dono;
+- **(B)** aceitar handler com prefixo `Btn` **ou** `Cmd` ÔÇö o projeto nomeia das duas formas; ancorar numa s├│ deixava o padr├úo silenciosamente parcial (#44, item 6).
+
+S├úo indissoci├íveis: medido, **(A) sozinho e (B) sozinho deixam o SIGOPBOL reprovando**.
+
+**Medi├º├úo (392 dumps com form migrado)**: helper vai de 168 ÔåÆ 219, com **zero regress├úo** ÔÇö e isso ├® estrutural, n├úo sorte: o resultado s├│ ├® consumido por `-not $legadoSemAcao ÔåÆ $metodosFaltantes +=`, ent├úo alargar nunca faz reprovar quem passava. Veredito FINAL muda em **2 forms distintos** (SIGOPBOL e SigPrEs1, que j├í passava por outro ramo). Conferi os 30 forms que mudam no helper: em todos o par ├® verbo real do legado ÔåÆ handler real do migrado. A fronteira de seguran├ºa n├úo foi tocada (o helper s├│ ├® consultado quando `$legadoSemSalvar`). Ferramentas: `MedirDeltaAcaoHandlerF8.ps1`, `VerificarGateFase8Task648.ps1`.
+
+## Defeitos reais que achei ao fechar a fase
+
+1. **`FormSigPrSdd.BtnBoletoClick` ÔÇö `Show()` de form MODAL dentro de TRY** (regra #29). ├ë o ├║nico caller deste di├ílogo: erro de runtime l├í dentro saltaria para o CATCH e derrubaria a refer├¬ncia `LOCAL`, fechando a tela sozinha. Corrigido para o formato can├┤nico, com `loc_lErroExibido` para um CREATEOBJECT que estoura n├úo gerar dois di├ílogos.
+2. **Dois "pendente" no cabe├ºalho** faziam o validador de completude acusar pend├¬ncia falsa (na frase que diz o contr├írio). Reescrito ÔÇö agora `[OK]`.
+3. **CRLF**: `FormSIGOPBOL.prg` e `SIGOPBOLBO.prg` estavam LF-only. Restaurado.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: os tr├¬s `.prg` limpos, nenhum `.err`.
+- **Instancia├º├úo offline** (`vfp_helpers\probe_task648_fase8.prg`, sem `ConfigurarAmbiente()`, que travaria): `VARTYPE=O`, Caption `Impress├úo de Boleto (*)` (correto para `tpBol=15`, ramo OTHERWISE do Do Case legado), 800x197, WindowType=1, TitleBar=0, DataSession=2, os 5 objetos do SCX, handler PUBLIC, e sem impressora o form degrada para `Lbl_Erro` vis├¡vel com Opt/Lbl_Impressora ocultos ÔÇö exatamente o ramo ELSE do Init legado. Zero erros capturados.
+- Auditorias limpas: fun├º├Áes n├úo definidas, propriedades inexistentes, m├®todo protegido chamado de fora.
+
+## Dois pontos que deixei em aberto (decis├úo sua)
+
+1. **Furo no pr├│prio gate**: os quatro nomes CRUD (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`) s├úo checados com `-match` solto no arquivo inteiro ÔÇö a tabela "o que n├úo se aplica" do cabe├ºalho satisfaz todos. O FormSIGOPBOL passa parcialmente por a├¡. Ancor├í-los **n├úo ├® mon├│tono** (reprovaria forms que hoje passam) e exigiria um ramo de exce├º├úo novo; n├úo fiz em sweep cego.
+2. **Diverg├¬ncia de fidelidade herdada das fases anteriores**: em falha real de SQL o legado d├í MessageBox e **n├úo abre** (`Return(.f.)`); o migrado abre e mostra a mensagem no `Lbl_Erro`. Em produ├º├úo `gnConnHandle` ├® sempre v├ílido e o guard ├® conven├º├úo do projeto para modo teste ÔÇö mas ├® diverg├¬ncia.
+
+Aten├º├úo ao re-rodar: pela li├º├úo j├í registrada, **consertar o `.ps1` n├úo desbloqueia a fase carregada em mem├│ria** ÔÇö o orquestrador precisa ser reiniciado para a Fase 8 passar. A li├º├úo foi anexada ├á mem├│ria `feedback_gate_fase8_verbo_da_acao_fora_da_lista`.

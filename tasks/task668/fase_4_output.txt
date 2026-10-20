@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. `FormSIGPRPRO.prg` (757 linhas) compila limpo e instancia no VFP9.
+
+## O que a Fase 4 pedia ├ù o que o legado tem
+
+O prompt gen├®rico pede "Grid + container `cnt_4c_Botoes` com 6 bot├Áes CRUD". **N├úo criei a barra CRUD** ÔÇö o `SIGPRPRO.SCX` tem exatamente **um** bot├úo (`Ok`), e nenhum Incluir/Alterar/Excluir. Inventar 6 bot├Áes violaria o PILAR 1 e a regra "NUNCA inventar". Essa parte a execu├º├úo sonnet anterior (14:46ÔÇô14:49) j├í tinha conclu├¡do corretamente.
+
+O gate da Fase 4 (`OrquestradorMigracao.ps1:7036`) j├í passa pelo ramo PAGINADO (`ConfigurarPaginaLista` + `AlternarPagina` presentes) e tamb├®m passaria pelo ramo FLAT. **Sou o retry opus for├ºado pelo guard de NO-OP** ÔÇö que tem carve-out para as Fases 5, 6 e 7, mas **n├úo para a 4**; o hash inalterado disparou o retry mesmo com a decis├úo certa.
+
+## Mas havia trabalho real no escopo da Fase 4 (grade + bot├úo de a├º├úo) ÔÇö 3 defeitos que a execu├º├úo anterior n├úo viu
+
+**1. `cmd_4c_Ok.Left` nunca foi escalado ÔÇö o bot├úo ca├¡a fora da pr├│pria moldura.** O form foi escalado 800ÔåÆ1000 (├ù1.25) e **todos** os irm├úos acompanharam (`Shape` 697ÔåÆ871, `GradeCarac` 20ÔåÆ25, `getComples` 348ÔåÆ435ÔÇª), menos o OK, que ficou com o `723` cru do SCX. O `Shape` decorativo que no legado emoldura o bot├úo vai de 871..984; o bot├úo estava em **723..798 ÔÇö fora da moldura e por cima do `lbl_4c_Titulo`**. Corrigido para `904` (723├ù1.25) ÔåÆ 904..979, dentro da moldura. Medido no VFP9.
+
+**2. C├®lulas da grade sa├¡am em Courier New.** O dump declara `Column1.FontName="Courier New"` **mas** `Column1.Text1.FontName="Tahoma"` ÔÇö e o Text1 ├® o controle que a Column realmente desenha. O migrado configurava s├│ a Column, nunca o Text1. Transcrevi o bloco do dump (FontName/BorderStyle/Margin/MaxLength/ForeColor/BackColor). Verificado: `Text1.FontName=[Tahoma]`.
+
+**3. O rebind do `RecordSource` apagava `Column1.Width` em sil├¬ncio.** `CarregarDados` fazia `RecordSource` + `ControlSource` e restaurava s├│ o `Header1.Caption` ÔÇö a `Width=363` e a fonte voltavam ao default 90 (regra #41/Problema 48), e a grade nunca era repintada (regra #21a: popular cursor n├úo repinta). Extra├¡ `VincularGrade()` como **funil ├║nico** (ordem ColumnCountÔåÆRecordSourceÔåÆControlSourceÔåÆWidthÔåÆHeader, fechando com `GO TOP` + `Refresh`), que ├® o equivalente do bloco "Acertando a Grade" do `Init` legado. `ColumnCount` s├│ ├® atribu├¡do se divergir, para n├úo recriar os objetos Column.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (sem `.err`), `CREATEOBJECT` devolve objeto, `ColumnCount=1`, `Width=363`, header e fonte preservados ap├│s duas chamadas de `VincularGrade` **e** ap├│s `CarregarDados` (prova de idempot├¬ncia), `Release` OK. Zero bytes >127 (regra #4) e CRLF preservado. `SigPrCrr` conferida no `docs/schema.sql` com `Get-Content -Raw` (682 tabelas ÔÇö piso de sanidade OK): colunas do BO batem com o schema real. Tempor├írios e `.fxp` recompilados removidos.
+
+## Dois pontos que deixei de fora, de prop├│sito
+
+- **Os 8 handlers `Btn*Click` sem bot├úo que os chame** (4 deles com `MsgAviso` explicando que a tela ├® s├│ consulta). S├úo c├│digo morto que existe para o contrato do `TesteAutomatico.prg`. N├úo s├úo stubs "ser├í implementado" ÔÇö explicam uma decis├úo real ÔÇö, e remov├¬-los pode derrubar o gate da Fase 7 e o harness. Est├í fora do escopo da Fase 4; sinalizo para sua decis├úo.
+- **`AlternarPagina` com `RETURN` nu**: o form ├® plano, n├úo h├í p├ígina para alternar, e o m├®todo precisa existir e ser PUBLIC para o harness. ├ë a implementa├º├úo honesta do contrato.
+
+Observa├º├úo: o `git diff` contra `HEAD` mostra hunks al├®m dos meus (`BuscarDadosProduto`ÔåÆ`BuscarProduto`, limpeza de `cursor_4c_Produto`, e os ~491 do `SIGPRPROBO.prg`) ÔÇö s├úo altera├º├Áes das Fases 1ÔÇô3 deste mesmo task668 que j├í estavam na working tree, n├úo minhas.

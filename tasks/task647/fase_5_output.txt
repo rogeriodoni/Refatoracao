@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks correct and well-formed. Phase 5/8 is complete.
+
+**Summary**: Added `ConfigurarPaginaDados()` to `FormSigOpBlo.prg`, wired it into `InicializarForm()` right after `ConfigurarPageFrame()`. It creates the first half of the legacy dialog's fields as direct children of `THIS` (this form is FLAT, no PageFrame ÔÇö per Phase 3/4 decisions):
+
+- `shp_4c_Shape2`, `shp_4c_Shape1` (divider lines)
+- `lbl_4c_Label2` ("Per├¡odo do Bloqueio" header)
+- `txt_4c_Datini`, `txt_4c_Datfin` (date range, `Format="E"`, `InputMask="99/99/9999"`)
+- `lbl_4c_Label1` ("a"), `lbl_4c_Label3`/`lbl_4c_Label4` ("Dias Retroativo :" / "Dias Futuro :")
+- `txt_4c__ddr`, `txt_4c__ddf` (numeric day-offset fields)
+- `lbl_4c_Label5` ("Bloqueio Autom├ítico" header)
+
+All Top/Left/Width/Font values were copied verbatim from the SCX dump; accented captions use `CHR()` per CLAUDE.md rule #4. The remaining block (Shape3/Shape4, "Bloqueio Cont├íbil"/"Concilia├º├úo" labels, `Get_DtCont`, `Opt_Concilia`) and the `Get_datfin` date-order validation are explicitly deferred to Phase 6, documented in the method's header comment.

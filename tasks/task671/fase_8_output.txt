@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `COMPILE_OK` (0 erros) e `RESULTADO=OK` no probe de runtime.
+
+## O que a Fase 8 encontrou
+
+Os dez m├®todos que a fase pedia (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`) **j├í existiam** das fases anteriores. A consolida├º├úo, ao conferir o `OK.Click` legado linha a linha, revelou **dois defeitos mudos**:
+
+**1. Todo o controle transacional foi descartado na migra├º├úo.** O `OK.Click` legado tem **2 `Commit()` e 7 `Rollback()`**; o migrado tinha **zero**. Como `SQLGETPROP(h,"Transactions")` j├í vale 2 (manual) neste ambiente e `BusinessBase` n├úo d├í `SQLCOMMIT`, o `DELETE FROM SigOpClP` nunca era efetivado ÔÇö **a fila n├úo drenava e o lote reprocessaria os mesmos itens a cada passada, para sempre**, sem erro na tela. Mesma classe de defeito j├í registrada no Erro do `SigPrIbbBO`.
+
+Corrigido com `DetectarTransacaoManual`/`ConfirmarTransacao`/`DesfazerTransacao` no BO (padr├úo `IF` aninhado de `SIGPRCNBBO.prg:471`, inerte em auto-commit), ligados onde o legado commita/desfaz. `MarcarEmProcessamento()` passou a concentrar o lock otimista ÔÇö devolvendo o **c├│digo num├®rico**, porque o legado distingue `-3` (sai do Scan) de outras falhas (`Loop`); antes o SQL estava duplicado no form sem rollback.
+
+**2. `fRecalculaP` n├úo existe no acervo e o retorno dela gateia o loop.** Nos BOs irm├úos (`SigPrGlpBO`, `dmoBO`, `SigOpBcbBO`) o retorno ├® descartado; aqui ele controla o fluxo, dentro de `TRY/CATCH` com `MsgErro` ÔÇö ou seja **um modal por item da fila, e no modo parametrizado (`Fortyus.Exe`, desassistido) o lote travava no primeiro di├ílogo**. Mantive a fun├º├úo **ausente** (regra #27: stub devolvendo `.T.` drenaria a fila sem recalcular nada), mas a aus├¬ncia passou a ser medida **uma vez** classificando o erro 1 do VFP9, e o form aborta a passada com **uma** mensagem ÔÇö em lote via `Fortyus.Log`, nunca em di├ílogo. Medir em vez de testar com `FILE()` cobre o caso de a fun├º├úo vir de um `SET PROCEDURE`.
+
+Tamb├®m corrigi a **aridade** das duas chamadas (eram 7 e 1 argumento; o legado usa 8 e 9) ÔÇö argumento faltando n├úo estoura, s├│ muda em sil├¬ncio o que a fun├º├úo calcula.
+
+## Verifica├º├úo
+
+- `PEMSTATUS(...,2)`: os **10** m├®todos do BO chamados pelo form s├úo PUBLIC (regra #51); auditoria `VerificarMetodoProtegidoChamadoDeFora` passa limpa.
+- Aus├¬ncia de `fRecalculaP`: 1┬¬ chamada marca o flag e a mensagem; 2┬¬ sai pelo gate com a sentinela **intacta** ÔÇö sem exce├º├úo repetida.
+- `BtnProcessarClick` **termina** e reporta **uma** vez (o arquivo de erro do harness mostra exatamente uma linha).
+- `VerificarInsertNotNull` e `VerificarCamposCursorBO`: 0 ocorr├¬ncias para este BO.
+- Sem `TODO`/stub, sem `MESSAGEBOX` direto, sem acento literal, sem `RETURN` dentro de `TRY`, blocos balanceados.
+
+Duas ressalvas que **n├úo** consertei, de prop├│sito, e que registrei como `NOTA DE ESCOPO` no cabe├ºalho do BO:
+
+- **`fRecalculaP` continua ausente** ÔÇö sem ela o form n├úo recalcula saldo nenhum em produ├º├úo. ├ë decis├úo da regra #27 (valor de c├ílculo fica ausente e vis├¡vel), n├úo um conserto completo. Portar a fun├º├úo ├® trabalho fora desta task.
+- **`SigPrSlP` n├úo recebe grava├º├úo**: o `Scatter/Zap/Append/Gather` do legado sobre `CrSigPrSlP` n├úo chega ao banco ÔÇö a linha `Update('CrSigPrSlP')` est├í **comentada no pr├│prio fonte legado** e o buffer ├® descartado pelo `Rollback` seguinte. Inventar um INSERT ali violaria o PILAR 2 tanto quanto perder uma grava├º├úo real.
+
+Dois achados laterais: o `menu.prg` j├í segue a regra #29 (`Show()` fora do `TRY`), e a primeira falha do probe foi `.fxp` velho ÔÇö exatamente a armadilha da regra #29, confirmada ao medir.

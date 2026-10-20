@@ -1,0 +1,789 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpAut.SCX
+* Data/Hora: 17/10/2026 01:07:41
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPAUT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPAUT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPAUT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPAUT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grd
+  Parent: SIGOPAUT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPAUT.Grd.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPAUT.Grd.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPAUT.Grd.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAUT.Grd.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPAUT.Grd.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPAUT.Grd.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: TxtObs
+  Parent: SIGOPAUT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGOPAUT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OleComm
+  Parent: SIGOPAUT
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Sair
+  Parent: SIGOPAUT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Fwbtnm1
+  Parent: SIGOPAUT
+  Class: fwbtnm
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGOPAUT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 364
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Autenticação"
+  ControlBox = .F.
+  Movable = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPAUT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd
+------------------------------------------------------------
+  ColumnCount = 3
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 228
+  Left = 12
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  SplitBar = .F.
+  TabIndex = 1
+  Top = 85
+  Width = 527
+  GridLineColor = 238,238,238
+  Name = "Grd"
+  Column1.FontSize = 8
+  Column1.Width = 17
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.Width = 382
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 2
+  Column3.Width = 94
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 25
+  Height = 17
+  Width = 60
+  Alignment = 0
+  Caption = "Check1"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grd.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.TxtObs
+------------------------------------------------------------
+  Height = 23
+  Left = 12
+  MaxLength = 60
+  TabIndex = 6
+  Top = 337
+  Width = 430
+  Name = "TxtObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Observação"
+  Left = 12
+  Top = 322
+  Visible = .T.
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.OleComm
+------------------------------------------------------------
+  Top = 91
+  Left = 480
+  Height = 100
+  Width = 100
+  Name = "OleComm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Sair
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Fwbtnm1
+------------------------------------------------------------
+  Top = 3
+  Left = 648
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Caption = "\<Imprimir"
+  PicturePosition = 13
+  Name = "Fwbtnm1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPAUT.Grade
+------------------------------------------------------------
+  Top = 3
+  Left = 573
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Caption = "\<Grade"
+  ToolTipText = "[F3] Grade"
+  Name = "Grade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPAUT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE autentica
+------------------------------------------------------------
+PROCEDURE autentica
+Lparameters _TpAutentica
+
+Local Impressora, _autVal, _toPrint
+
+Thisform.Primeiravez = .f.
+
+If ThisForm.Parentform.Podatamgr.Cursorquery('SigMvCab','CrTprMvCab','EmpDopNums',Thisform.toSeek)
+	_autVal  = padc(DTOC(Date())+"-"+Time()+" - "+left(CrTprMvCab.ecfs,3)+" - "+CrTprMvCab.notas,60," ")
+else
+	_autVal  = padc(DTOC(Date())+"-"+Time(),60," ")
+EndIf
+
+_toPrint = padc(alltrim(ThisForm.txtObs.Value),60," ")
+
+If _TpAutentica = 1 &&Impressora Fiscal (Verso) / Impressora de Cheque
+
+	If InList(CrSigFiFis.Imps,'DATAREGIS','NDATAREGIS','BEMA8501','DARUMA','EPSON')
+		If CrSigFiFis.Imps = 'BEMA8501'
+			oFormulario = ThisForm.ParentForm.oModemEest
+			lcNoSerie = LeituraFab(oFormulario)
+			ThisForm.ParentForm.poDataMgr.SqlExecute([Select cModelos From SigFiMpF Where cImpFabs = '] + fDecriptografar(lcNoSerie) + ['], [crTmpImpF])
+			lcModelo = crTmpImpF.cModelos
+		Else
+			lcModelo = Space(10)
+		EndIf
+
+		=fMensagemFixa( "Posicione o papel na impressora para autenticação...", 48, "Autenticação", .F., .F., "\vbmp\ifiscal2.bmp" )
+
+		If ! lcModelo = [MP-7000 TH FI]
+			RetImpVer = ImpVerso(_autVal,_toPrint,Thisform.oModem,.t.)
+		Else
+			If Not Thisform.Primeiravez 
+				RetImpVer = ReAutentica(Thisform.oModem)
+			Else
+				If Not Thisform.ParentForm.TemAutentica
+					RetImpVer = .t.
+				Else
+					RetImpVer = Autentica(Thisform.oModem)
+				EndIf
+				Thisform.Primeiravez = .f.
+			EndIf
+		EndIf
+
+	Else
+
+		=ThisForm.parentform.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[ImpCheqs])
+
+		=fMensagemFixa( "Posicione o Papel na impressora para autenticação...", 48, "Autenticação", .F., .F., "\vbmp\a_print4.bmp" )
+
+		If Not fLerSettings('CrSigSyCom',ThisForm.Parentform.Podatamgr)
+			Return 0
+		EndIf
+		Select * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite
+		Select CrTmpCfCom
+		Go Top
+
+		IF ! ThisForm.OleComm.portopen And crTmpCfCom.Portas <> 0
+			With ThisForm.OleComm
+				.commport = crTmpCfCom.Portas
+				.Settings = Alltrim(crTmpCfCom.Settings)
+				.Inputlen = 1
+			EndWith
+		EndIf
+
+		ThisForm.OleComm.PortOpen = .T.
+
+		If CrTmpParam.ImpCheqs = 2
+
+			Set Century Off
+
+			_toPrint = ThisForm.TxtObs.Value
+
+			ThisForm.OleComm.Output = Spac( 8 ) + _autVal  + Chr(10) + Chr(13)
+			ThisForm.OleComm.Output = Spac( 8 ) + _toPrint + Chr(10) + Chr(13)
+			ThisForm.OleComm.Output = Chr(12)
+
+		Else
+
+			Set Century Off
+
+			_toPrint = ThisForm.TxtObs.Value
+			
+			ThisForm.OleComm.Output = Chr(27) + Chr(64) + Chr(13)
+			ThisForm.OleComm.Output = Spac( 5 ) + _autVal  + Chr(13) + Chr(10)
+			ThisForm.OleComm.Output = Spac( 5 ) + _toPrint + Chr(13) + Chr(10)
+			ThisForm.OleComm.Output = Chr(12)
+
+		Endif
+
+		Set Century On
+
+		ThisForm.OleComm.PortOpen = .F.
+
+	EndIf
+
+Else
+
+	=fMensagemFixa( "Posicione o papel na impressora para autenticação...", 48, "Autenticação", .F., .F., "\vbmp\IFiscal.bmp" )
+	If InList(CrSigFiFis.Imps,'SWEDA','NSWEDA') And Not Thisform.Primeiravez 
+		RetImpVer = ReAutentica(Thisform.oModem)
+	Else
+		If Not Thisform.ParentForm.TemAutentica
+			RetImpVer = .t.
+		Else
+			RetImpVer = Autentica(Thisform.oModem)
+		Endif
+		Thisform.Primeiravez = .f.
+	Endif
+Endif
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+Create Cursor csPgto (Marca L, Obs C(27), fpags C(12), Printed L, Autenticas n(1))
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case nKeyCode = -1 && F2
+		NoDefault
+		ThisForm.Imprimir.Click()
+
+	Case nKeyCode = -2 && F3
+		NoDefault
+		ThisForm.Grade.Click()
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters poform, _pEmps, _pDopes, _pNumes, _pTipo, _pnAutentica
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Parentform = poform
+
+Thisform.oModem = ThisForm.Parentform.oModemEest
+ThisForm.toSeek = _pEmps +_pDopes +Str(_pNumes,6)
+Thisform.Primeiravez = .T.
+
+lcEDN = _pEmps + _pDopes + Str(_pNumes,6)
+
+=fLerFiscal()
+
+Select CrSigFiFis
+Goto top
+
+If Not _pTipo
+
+	If !ThisForm.Parentform.podatamgr.cursorquery('SigMvPar','CrTmpPar','EmpDopNums',lcEDN)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crtmppar)')
+		Return 0
+	EndIf
+
+	Select CrTmpPar
+	Scan
+		Scatter Memvar
+		If ThisForm.Parentform.podatamgr.cursorquery('SigOpFp','CrTmpFpag','Fpags',CrTmpPar.Fpags) And InList(CrTmpFpag.Autenticas,1,3)
+			m.Obs = Padr(Iif(!IsEmpty(NCarnes),'# ' + AllTrim(NCarnes) + ;
+					Iif(!IsEmpty(Outros),'; ',''),'') + Outros,40)
+			m.AutNb = m.cnnSuParcs		
+			m.Marca = .t.
+			Printed = .f.
+			m.Autenticas = CrTmpFpag.Autenticas
+			If _pnAutentica > 0 And _pnAutentica # m.Autenticas
+				Loop
+			EndIf
+			Insert into csPgto from Memvar
+		Endif
+	EndScan
+Else
+
+	If ThisForm.Parentform.podatamgr.cursorquery('SigMvPec','CrTmpEstPe','EmpDopNums',lcEDN)
+	
+		ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdOpe','CrTmpOpe','Dopes',_pDopes,[Autenticas])
+
+		Select CrTmpEstPe
+		Scan
+			Scatter Memvar
+			_nDope = Val(Left(Str(Codigos,10),4))
+			_nNume = Val(Right(Str(Codigos,10),6))
+			If ThisForm.Parentform.podatamgr.cursorquery('SigCdOpe','CrTmpOpe2','ndopes',_ndope,[Dopes,CupFis])
+				m.Obs = CrTmpOpe2.dopes+' '+Str(_nNume,6)
+				m.Fpags = Str(CrTmpEstPe.Codigos)
+				m.AutNb = ''
+				m.Marca = .t.
+				Printed = .f.
+				m.Autenticas = CrTmpOpe.Autenticas
+				If ( _pnAutentica > 0 And _pnAutentica # m.Autenticas ) Or InList(CrTmpOpe2.CupFis,1,3)
+					Loop
+				EndIf
+				Insert into csPgto from Memvar
+			Endif
+		EndScan
+
+	Endif
+
+EndIf
+
+Select csPgto
+If ( Alltrim(CrSigFiFis.Imps) = 'DARUMA' And _PnAutentica = 1 ) Or ;
+		(_PnAutentica <> 1 And Not Thisform.ParentForm.TemAutentica )
+	Zap
+Endif
+Select csPgto
+Go Top	
+If Reccount() = 0
+	ThisForm.Release
+	Return .F.
+Endif
+
+With ThisForm
+	With .Grd 
+		.RecordSource          = 'csPgto'
+		.RecordSourceType      = 1
+		.Column1.ControlSource = 'csPgto.marca'
+		.Column2.ControlSource = 'csPgto.Obs'
+		.Column3.ControlSource = 'csPgto.fPags'
+		.Refresh
+	EndWith	
+
+	If InList(CrSigFiFis.Imps,'BEMA8501','EPSON')
+		.txtObs.Visible = .f.
+	Else
+		.txtObs.value = ""
+		.Refresh
+		.txtObs.SetFocus
+	Endif
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Grd.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if !(csPgto.printed)
+	This.value = .t.
+endif	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Grd.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Grd.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csPgto
+If Reccount() > 0
+	Go top
+	Scan
+		if !(csPgto.Printed)
+			With ThisForm
+				.Grd.Refresh
+				.Grd.Column1.SetFocus
+			EndWith
+			MessageBox("Autenticação Obrigatória",16,"")
+			Return
+		endif
+	EndScan
+EndIf
+ldtime = DateTime()
+Do While DateTime() - ldtime <= 2
+	=chrsaw(.5)
+EndDo
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Fwbtnm1
+* Classe: fwbtnm (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lOk
+lOk = .f.
+if Reccount("csPgto") <=0
+	MessageBox("Não existem observações a serem auteticadas",16,"")	
+	ThisForm.Sair.Setfocus
+Endif
+
+Select csPgto
+go Top
+Scan
+	If csPgto.marca
+		lOk = ThisForm.Autentica(csPgto.Autenticas)
+		if lOk
+			Select csPgto
+			Replace csPgto.marca with .f., csPgto.Printed with .t.
+		EndIf
+	EndIf
+EndScan
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPAUT.Grade
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Grd.Column1.Setfocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPAUT
+RESERVED3 (ClassInfo): omodem
+parentform
+primeiravez
+toseek
+tpautentica
+*autentica 
+
+
+* Objeto: OleComm
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿþÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

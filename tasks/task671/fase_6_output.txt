@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 complete. Here's what I found and did.
+
+## Audit first: the legacy's phase-6 surface
+
+`SIGPRRSA` has exactly **3 data controls** (`Label1`, `Label2`, `Get_Prioridade`) and **zero lookups** ÔÇö I confirmed no `fwBusca*`, `sigacess`, `mAddColuna` or `FormBuscaAuxiliar` anywhere in the dump (the only `CreateObject` is `fSqlConector`, the connection manager). Phase 5 had already created all three with faithful properties, and the action buttons (`OK`/`SAIR`) came in phase 4. So there were no remaining fields to add and no lookup to implement ÔÇö inventing one would violate PILAR 1.
+
+**But the field/validation surface this phase owns had 4 real defects.** I measured each in VFP9 rather than reasoning about them:
+
+| # | Defect | Fix |
+|---|---|---|
+| 1 | `"Prioridade Invalida!!!"` fired **twice per gesture** ÔÇö `KeyPress`(TAB/ENTER) then `LostFocus` both hit the funnel, and `this_lEmValidacao` is already released when the second arrives. Legacy `Valid` returning `.F.` traps focus and discards the click ÔåÆ warns once. | value memo `this_nPrioridadeAvisada`, cleared by a new `InteractiveChange` binding |
+| 2 | `HabilitarCampos` disabled `cmd_4c_Processar` when `this_lParametrizado` ÔÇö exactly the mode where `Activate()` clicks it. Batch runs would have had no execution path, and nothing re-enabled it (rule #40). | dropped the condition; legacy only disables OK *during* the loop, which `BtnProcessarClick` already does |
+| 3 | `FormParaBO` copied the raw `.Value` to the BO, bypassing the `INLIST(0,1)` gate that is the legacy's **only** path to `ThisForm.Prioridade`. An out-of-range value would reach `Priors numeric(1,0)` ÔåÆ filter matches nothing ÔåÆ batch runs "without error" and processes nothing. | range-gated, with `VARTYPE` tolerance |
+| 4 | `FormParaBO`/`BOParaForm`/`LimparCampos` declared without `PROTECTED` while `FormBase` declares them `PROTECTED` ÔÇö VFP9 won't let a subclass widen inherited scope, so the declaration was misleading. | `PROTECTED` explicit + comment |
+
+Defect 4 was surfaced *by* the probe: calling `oForm.FormParaBO()` crashed with `Property FORMPARABO is not found` even though the method is right there in the `.prg`.
+
+## Verification
+
+`automation\ProbeRsa671F6.prg` instantiates the form headless and measures all seven checks ÔÇö `RESULTADO=OK`:
+
+- Both data controls match the dump property-by-property (`T=154 L=134 W=102 H=15`; `T=150 L=238 W=17 H=23 Mask=9 MaxLen=1`)
+- Dedup proven by **counting** the warnings `MsgAviso` writes in test mode: `1` on first attempt, still `1` on the second event of the same gesture, `2` after `InteractiveChange`
+- Valid value propagates to form **and** BO and clears the memo; invalid propagates to neither
+- `FormParaBO(9)` ÔåÆ BO stays `1`; `FormParaBO(0)` ÔåÆ BO becomes `0`
+- Parametrizado: `HabilitarCampos(.T.)` leaves `Processar.Enabled=.T.`, `(.F.)` still disables
+- Protected hooks exercised via a `ProbeRsaHooks AS FormSigPrRsa` subclass (script scope can't reach them)
+
+Compiles clean ÔÇö `.fxp` deleted before and regenerated after, no `.err`. Line endings unchanged (the file was already LF from an earlier phase), so the diff stays readable: **+78 lines** over the phase-5 baseline.
+
+One thing I did **not** change: effective `TabIndex` reads `txt=1 Processar=3 Encerrar=4` instead of the dump's `1/2/3`, because VFP renumbers on every `AddObject`. The relative order (and therefore Tab navigation) matches the legacy, and forcing the absolute numbers would fight the renumbering and risk breaking that order. Labels aren't focusable, so their index is cosmetic.

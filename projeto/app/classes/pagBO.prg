@@ -182,7 +182,9 @@ DEFINE CLASS pagBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -603,7 +605,9 @@ DEFINE CLASS pagBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Ins")
-                TABLEREVERT(.T., "cursor_4c_Ins")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Ins") > 1
+                    TABLEREVERT(.T., "cursor_4c_Ins")
+                ENDIF
                 USE IN cursor_4c_Ins
             ENDIF
 
@@ -768,7 +772,9 @@ DEFINE CLASS pagBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Upd")
-                TABLEREVERT(.T., "cursor_4c_Upd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Upd") > 1
+                    TABLEREVERT(.T., "cursor_4c_Upd")
+                ENDIF
                 USE IN cursor_4c_Upd
             ENDIF
 
@@ -808,7 +814,9 @@ DEFINE CLASS pagBO AS BusinessBase
             loc_cSQLi = "DELETE FROM SigOpFpI WHERE fpags = " + loc_cFpags
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelI")
-                TABLEREVERT(.T., "cursor_4c_DelI")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelI") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelI")
+                ENDIF
                 USE IN cursor_4c_DelI
             ENDIF
 
@@ -821,7 +829,9 @@ DEFINE CLASS pagBO AS BusinessBase
             loc_cSQLp = "DELETE FROM SigOpFpP WHERE fpags = " + loc_cFpags
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelP")
-                TABLEREVERT(.T., "cursor_4c_DelP")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelP") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelP")
+                ENDIF
                 USE IN cursor_4c_DelP
             ENDIF
 
@@ -834,7 +844,9 @@ DEFINE CLASS pagBO AS BusinessBase
             loc_cSQLm = "DELETE FROM SigOpFp WHERE fpags = " + loc_cFpags
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelM")
-                TABLEREVERT(.T., "cursor_4c_DelM")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelM") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelM")
+                ENDIF
                 USE IN cursor_4c_DelM
             ENDIF
 

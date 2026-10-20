@@ -1,0 +1,17 @@
+INICIO
+CREATEOBJECT=O
+SESSAO probe=1 form=2 TprMvCab antes=.F.
+TprMvCab criado RECCOUNT=3
+CarregarDados(com TprMvCab) retorno=.F.
+  cursor_4c_Operacoes existe=.T. RECCOUNT=3
+  cursor_4c_Itens existe=.T. RECCOUNT=0
+  MsgBO=[Conexão com o banco de dados não disponível.]
+LINHAS DA GRADE MESTRE:
+  emps=[001] dopes=[MALOTE] numes=3 datas=15/10/2026 valos=1234.56
+  emps=[001] dopes=[MALOTE] numes=7 datas=16/10/2026 valos=99.90
+  emps=[002] dopes=[REMESSA] numes=1 datas=17/10/2026 valos=42
+LINHA CORRENTE emps=[001] dopes=[MALOTE] numes=3
+CHAVE POSICIONAL=[001MALOTE                   3] LEN=29
+RepintarGrades: alias corrente=[CURSOR_4C_OPERACOES] RECNO=4
+2a CARGA RECCOUNT=3 (esperado 3)
+RESULTADO=OK

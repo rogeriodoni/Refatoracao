@@ -1,0 +1,345 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPBIN.SCX
+* Data/Hora: 17/10/2026 04:55:01
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPBIN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Frase
+  Parent: SIGOPBIN
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPBIN
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Bin
+  Parent: SIGOPBIN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGOPBIN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPBIN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPBIN.cntSombra
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN
+------------------------------------------------------------
+  DataSession = 1
+  Height = 200
+  Width = 600
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = ""
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  BackColor = 231,242,254
+  libfpag2 = .F.
+  libope = 
+  _memberdata = <VFPData><memberdata name="libope" type="property" display="LibOpe"/></VFPData>
+  Name = "SIGOPBIN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.Frase
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  Alignment = 0
+  Caption = "Informe os 6 Primeiros Dígitos do Cartão (BIN)"
+  Height = 34
+  Left = 145
+  Top = 110
+  Width = 310
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Frase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Caption = "Código BIN:"
+  Left = 216
+  Top = 151
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.Get_Bin
+------------------------------------------------------------
+  Century = 2
+  Alignment = 3
+  InputMask = "!!!!!!!!!!"
+  Left = 283
+  TabIndex = 3
+  Top = 147
+  Width = 58
+  ForeColor = 0,0,0
+  Name = "Get_Bin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBIN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPBIN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return Iif(This.ZSen, [*], [ ]) + This.UsuLibs
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pPag
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.Fpagto  = pPag
+		.Usulibs = []
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBIN.Get_Bin
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lfan,codcor,xobj,totite
+
+ThisForm.UsuLibs = []
+
+If Empty(This.Value)
+	ZSen = .f.
+	ThisForm.ZSen = .f.
+	ThisForm.Release
+	Return .t.
+EndIf
+
+lcSql = [Select * From SigOpFpB Where Fpags = ']+ThisForm.Fpagto+[' And CodBins = ']+This.Value+[']
+If Thisform.Podatamgr.Sqlexecute(lcSql,'LocalFpagB') < 1
+	MessageBox('Falha na Conexão. Tente Novamente!!!',0+16,'')
+	zsen = .f.
+	Thisform.zsen=.F.
+	Thisform.release
+Else
+	Select LocalFpagB
+	If Reccount('LocalFpagB') > 0
+		If Between(Dtos(Date()),Dtos(Nvl(LocalFpagB.Datais,Ctod('01/01/1900'))),Dtos(Nvl(LocalFpagB.DataFs,Ctod('31/12/9999'))))
+			Thisform.usulibs = This.value
+			Thisform.zsen=.T.
+		Else
+			ThisForm.zSen = .f.
+		Endif
+	Else
+		Thisform.zsen=.F.
+	EndIf
+EndIf
+Thisform.release
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+Lparameters nKeyCode, nShiftAltCtrl
+
+If (Lastkey() = 27) And Empty(This.Value)
+	ZSen = .f.
+	ThisForm.ZSen = .f.
+	ThisForm.Release
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPBIN
+RESERVED3 (ClassInfo): cancitem
+datdoc
+empresa
+financ
+fpagto
+liberatitulo
+libfpag
+libfpag2
+libope
+libproducao
+libvalida
+nrodoc
+podatamgr
+saldoestoque
+tipo
+usulibs
+valfpag
+zsen
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

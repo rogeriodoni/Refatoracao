@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+7 PROCEDUREs, 7 ENDPROCs ÔÇö balanced. 
+
+**Fase 2 complete.** `sigprpdfBO.prg` now has, besides `Init()`:
+
+- **`ObterDadosContaEmail(par_cCodEmpresa)`** ÔÇö the one real SQL query the legacy form makes (SigCdEmp email account lookup), populating `this_cEmpPad*`/`this_cEmailDe` and `this_lContaEmailCarregada`.
+- **`ObterNomeArquivoPadrao(par_nTipoArquivo)`** ÔÇö default PDF/XLS filename, mirroring legacy's `Diretorio + FORTYUSPDF.PDF`/`FORTYUSEXCEL.XLS`.
+- **`ValidarDadosConfirmacao()`** ÔÇö the two *blocking* checks from `Cmd_GerarPDF.Click` (filename, DE, PARA), in the legacy's exact order, each setting `this_cCampoInvalido` for the Form's `SetFocus`.
+- **`ObterMensagemContaEmailIndisponivel()`** + the `.NULL.` guard in `MontarDadosEnvioEmail()` ÔÇö the third, *non-blocking* legacy check (missing email-account data shows a warning but doesn't stop the dialog from closing, unlike the others which `Return`).
+- **`MontarDadosEnvioEmail()`** ÔÇö builds the `oEMAIL` custom object the legacy hands back to the parent form.
+- **`Destroy()`** ÔÇö releases `cursor_4c_TmpEmpMail`.
+
+I deliberately did **not** add `Inserir()`/`Atualizar()`/`ObterChavePrimaria()` overrides or fabricate a `CarregarDoCursor()` column mapping: this form (confirmed via `analise.json` and the source dump) has no table and no PK ÔÇö it's a modal dialog that only hands a filename and email object back to its parent. Fase 1 already documented this decision (matching the sibling `sigpremaBO`), and BusinessBase's default `Inserir`/`Atualizar`/`ExecutarExclusao` (reject with message) is already correct here ÔÇö overriding them with invented SQL would violate PILAR 2.

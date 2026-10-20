@@ -1,0 +1,511 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPBOL.SCX
+* Data/Hora: 17/10/2026 06:46:04
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPBOL
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Opt_Impressora
+  Parent: SIGOPBOL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Lbl_Impressora
+  Parent: SIGOPBOL
+  Class: label
+  BaseClass: label
+
+Objeto: Lbl_Erro
+  Parent: SIGOPBOL
+  Class: label
+  BaseClass: label
+
+Objeto: cntSombra
+  Parent: SIGOPBOL
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPBOL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPBOL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: btnReport
+  Parent: SIGOPBOL
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 197
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Seleção da Impressora de Boleto"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  vcdope = .F.
+  vcemp = .F.
+  vctitenvelope = .F.
+  vndev = .F.
+  vnnum = .F.
+  vnqbols = .F.
+  vnvias = .F.
+  Name = "SIGOPBOL"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.Opt_Impressora
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 74
+  Left = 168
+  SpecialEffect = 1
+  Top = 103
+  Width = 230
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Name = "Opt_Impressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 9
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 15
+  Option1.Width = 137
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.Lbl_Impressora
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Impressora"
+  Height = 15
+  Left = 173
+  Top = 88
+  Width = 68
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Lbl_Impressora"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.Lbl_Erro
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Não Existe Impressora de Boleto Configurada no Seu Computador. Contate o Suporte Técnico."
+  Height = 40
+  Left = 180
+  Top = 142
+  Visible = .F.
+  Width = 210
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Lbl_Erro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBOL.btnReport
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 94
+  Left = 718
+  SpecialEffect = 1
+  Top = 2
+  Width = 81
+  TabIndex = 4
+  BorderColor = 100,100,100
+  Name = "btnReport"
+  Command1.Top = 1
+  Command1.Left = 6
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Cmd_Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPBOL
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnTpBol, pCursor
+
+Set DataSession to poForm.DataSessionId
+
+If poForm.podatamgr.sqlexecute('select * from SigCdmp order by impres','CrSigCdmp') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+	Return(.f.)
+EndIf
+
+lcErro = ''
+llSair = .F.
+With Thisform
+	.vnTpBol  = Iif(Type('pnTpBol') = 'N', pnTpBol, 0)
+	.vnCursor = pCursor
+	Do Case
+		Case .vnTpBol = 1
+			.Caption = 'Impressão de Protocolo de Cheque'
+			
+		Case InList( .vnTpBol, 2, 3, 4, 5, 7, 9 )
+			.Caption = 'Impressão de Boleto'
+
+		Case .vnTpBol = 6
+			.Caption = 'Impressão de Protocolo de Cartão de Crédito'
+			
+		Case .vnTpBol = 8
+			.Caption = 'Impressão de Boleto de Conserto'
+			
+		Case .vnTpBol = 12
+			.Caption = 'Impressão de Boleto de Ordem de Serviço'
+
+		OtherWise
+			.Caption = 'Impressão de Boleto (*)'
+	EndCase
+				
+EndWith
+
+lnPrinters = APrinters( laPrinters )
+If lnPrinters # 0
+	For lnI = 1 to lnPrinters
+		laPrinters( lnI, 2 ) = laPrinters( lnI, 1 )
+		laPrinters( lnI, 1 ) = Padr(Upper( laPrinters( lnI, 1 ) ),30)
+	EndFor
+	=ASort( laPrinters )
+EndIf
+
+lcSql = [Select b.* From SigSyImp a, SigCdmp b Where a.UsuAcess = ']+Usuar+[' And a.cImps = b.impres ]+;
+		[Union all ]+;
+		[Select c.* From SigCdAcG a, SigSyImp b, SigCdmp c Where a.Usuarios=']+Usuar+[' ]+;
+		[And a.Grupos = b.GrAcess And b.Cimps = c.Impres ]
+
+If poForm.podatamgr.sqlexecute(lcSql,'CrTmpCimp') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+	Return(.f.)
+EndIf
+
+Select crTmpCimp
+If Reccount() > 0
+	Select Distinct Impres, nTpImpres, TpBarra, MaxCols ;
+	  From crTmpCimp ;
+	 Order By Impres ;
+	  Into Cursor crSigCdmp
+EndIf
+
+lnImpres = 1
+lnCimp = 0
+If lnPrinters # 0
+	Select CrSigCdmp
+	Scan For ( Empty( CrSigCdmp.nTpImpres ) Or ( CrSigCdmp.nTpImpres = 1 ) ) And ;
+			 ( CrSigCdmp.TpBarra = 0 ) And ( CrSigCdmp.MaxCols > 39 )
+		Dimension laImpOk( lnImpres )
+		lnOk = AScan( laPrinters, ( Upper( CrSigCdmp.Impres ) ) )
+		If lnOk # 0
+			laImpOk( lnImpres ) = laPrinters( lnOk + 1 )
+			lnImpres = lnImpres + 1
+		EndIf
+		lnCImp = lnCImp + 1
+	EndScan
+Else
+	lcErro = 'Seu Computador Não Apresenta Impressora Configurada. Contate o Suporte Técnico.'
+EndIf
+lnImpres = lnImpres - 1
+
+If lnCImp = 0
+	lcErro = 'Sistema Não Apresenta Impressora(s) de Boleto Configurada(s). Contate o Suporte Técnico.'
+EndIf
+ThisForm.VnQtdimp = lnCimp	
+
+If Empty(lcErro) And lnImpres # 0
+	With Thisform.Opt_Impressora
+		lnTop = 10
+		lnHeight = 15
+		.ButtonCount = lnImpres
+		For lnI = 1 to lnImpres
+			lcI = AllTrim( Str( lnI ) )
+			With .Option&lcI.
+				.AutoSize = .F.
+				.Caption  = ' \<' + lcI + '. ' + laImpOk( lnI )
+				.FontSize = 8
+				.Tag      = Upper( laImpOk( lnI ) )
+				.Top      = lnTop
+				.Width    = 184
+			EndWith
+			lnTop = lnTop + 20
+			lnHeight = lnHeight + 20
+		EndFor
+		.Enabled = ( lnImpres > 1 )
+		.Height = lnHeight
+	EndWith
+	With Thisform.btnReport
+		.Cmd_Imprimir.SetFocus
+	EndWith
+Else
+	If Empty(lcErro)
+		lcErro = 'Não Existe Impressora de Boleto Configurada Nesse Computador. ' + ;
+				 'Contate o Suporte Técnico.'
+	EndIf
+	With Thisform
+		.Opt_Impressora.Visible = .F.
+		.Lbl_Impressora.Visible = .F.
+		.Lbl_Erro.Top = .Opt_Impressora.Top
+		.Lbl_Erro.Visible = .T.
+		.Lbl_Erro.Caption = lcErro
+		.Lbl_Erro.Height  = .Opt_Impressora.Height
+		.Height = .btnReport.Top + .btnReport.Height + 20
+	EndWith
+EndIf
+
+With Thisform
+	With .Opt_Impressora
+		lnBottom1 = .Top + .Height
+	EndWith
+	
+	With .btnReport
+		lnBottom2 = .Top + .Height
+		If lnBottom1 > lnBottom2
+			.Top = .Top + Int ( ( lnBottom1 - lnBottom2 ) / 2 )
+			Thisform.Height = Thisform.Opt_Impressora.Top + Thisform.Opt_Impressora.Height + 20
+		Else
+			Thisform.Height = Thisform.btnReport.Top + Thisform.btnReport.Height + 20
+		EndIf
+		.Cmd_Imprimir.SetFocus
+	EndWith
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBOL.btnReport
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Cmd_Imprimir.Click
+------------------------------------------------------------
+PROCEDURE Cmd_Imprimir.Click
+*!*	Local lnImpres, lcImp, lcCursor
+
+*!*	If Thisform.VnQtdimp > 0
+*!*		With Thisform
+*!*			lnImpres  = .Opt_Impressora.Value
+*!*			lcImp     = .Opt_Impressora.Buttons(lnImpres).Tag
+*!*			lcCursor  = .vnCursor
+*!*		EndWith
+*!*		Select (lcCursor)
+*!*		Replace cImps With lcImp
+*!*	Endif
+*!*	Thisform.Release
+
+Local lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcCursor
+
+With Thisform
+	lnTpBols  = .vnTpBol
+	lcTitEnv  = .vcTitEnvelope
+	lcEmps    = .vcEmp
+	lcDopes   = .vcDope
+	lnNumes   = .vnNum
+	lnValDevs = .vnDev
+	lnTpVias  = .vnVias
+	lnQtdBols = .vnQBols
+	lnImpres  = .Opt_Impressora.Value
+	lcImp     = .Opt_Impressora.Buttons(lnImpres).Tag
+	lcCursor  = .vnCursor
+EndWith
+
+Do SigBlBol With lnTpBols, lcTitEnv, lcEmps, lcDopes, lnNumes, lnValDevs, lnTpVias, lnQtdBols, lcImp, lcCursor
+
+* Parâmetros :
+* 01. nTpbol, Tipo de Boleto
+* 02. TitEnvelope, Título
+* 03. pEmp, Empresa
+* 04. pDop, Nome da Operação de Estoque / Operação de Produção
+* 05. pNum, Número da Movimentação de Estoque / Movimentação de Produção
+* 06. pDev, Valor de Devolução
+* 07. pVias, Número da Via
+* 08. qBols, Quantidade de Boletos
+* 09. Nome da Impressora
+* 10. lcCursor, Nome do Cursor ou Tabela Para Impressão
+
+Thisform.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPBOL
+RESERVED3 (ClassInfo): vcdope
+vcemp
+vctitenvelope
+vncursor
+vndev
+vnnum
+vnqbols
+vnqtdimp
+vntpbol
+vnvias
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

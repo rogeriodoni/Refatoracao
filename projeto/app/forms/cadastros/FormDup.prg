@@ -116,10 +116,13 @@ DEFINE CLASS FormDup AS FormBase
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
         TRY
-            *-- Container cabecalho (cntSombra no legado) - Top=2 dentro da Page
+            *-- Container cabecalho (cntSombra no legado)
+            *-- Legado: cntSombra.Top = 1 (SCX) sobre Pagina.Top = -28 com Tabs = .T.
+            *-- (a faixa de abas de ~28px cancela o offset). Aqui Tabs = .F. e
+            *-- pgf_4c_Paginas.Top = -29, entao vai o canonico 29 (regra #11).
             loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
             WITH loc_oPagina.cnt_4c_Cabecalho
-                .Top         = 2
+                .Top         = 29
                 .Left        = 0
                 .Width       = THIS.Width
                 .Height      = 80
@@ -161,14 +164,18 @@ DEFINE CLASS FormDup AS FormBase
             ENDWITH
 
             *-- Container botoes CRUD (Grupo_Op no legado) - lado direito
+            *-- Legado: Grupo_op.Top = -1 (SCX) com a compensacao da faixa de abas.
+            *-- Aqui vai o canonico 29, o mesmo de cnt_4c_Saida (sem isso os botoes
+            *-- CRUD ficam 29px acima do Encerrar e cortados no topo da tela).
+            *-- BackStyle = 0: o legado tem Grupo_op.BackStyle = 0 (TRANSPARENTE),
+            *-- a barra desenha sobre a faixa cinza do cabecalho.
             loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
             WITH loc_oPagina.cnt_4c_Botoes
-                .Top         = 0
+                .Top         = 29
                 .Left        = 542
                 .Width       = 390
                 .Height      = 85
-                .BackStyle   = 1
-                .BackColor   = RGB(53, 53, 53)
+                .BackStyle   = 0
                 .BorderWidth = 0
                 .Visible     = .T.
 
@@ -315,13 +322,17 @@ DEFINE CLASS FormDup AS FormBase
                 ENDWITH
             ENDWITH
 
-            *-- Botao Copiar (Copia no legado) - original top=4 -> migrado 4+29=33
+            *-- Botao Copiar (Copia no legado, SCX: Top=4 Left=474 75x75)
+            *-- Top = 34 = cnt_4c_Botoes.Top (29) + Top do botao dentro dela (5),
+            *-- para ficar na MESMA linha dos 5 botoes CRUD, que sao irmaos visuais.
+            *-- Picture vem do SCX (geral_subnivel_60.jpg), nao do palpite
+            *-- "copiar = incluir" que a migracao fez (regra #25).
             loc_oPagina.AddObject("cmd_4c_Copia", "CommandButton")
             WITH loc_oPagina.cmd_4c_Copia
                 .Caption         = "Copiar"
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_subnivel_60.jpg"
                 .PicturePosition = 13
-                .Top             = 5
+                .Top             = 34
                 .Left            = 474
                 .Width           = 75
                 .Height          = 75
@@ -340,7 +351,10 @@ DEFINE CLASS FormDup AS FormBase
             ENDWITH
 
             *-- Grade principal - cursor_4c_Dados / series
-            *-- Top=117 = 88 (posicao padrao framework) + 29 (compensacao PageFrame)
+            *-- O SCX legado SOBRESCREVE a Grade do frmcadastro (que eh 88/26/743x498):
+            *--   Grade.Top=121  Left=12  Width=940  Height=470  FontName="Tahoma"
+            *-- A migracao usou os valores da CLASSE BASE e perdeu o override.
+            *-- Top = 121 + 29 (compensacao do PageFrame sem abas) = 150.
             IF !USED("cursor_4c_Dados")
                 CREATE CURSOR cursor_4c_Dados (series C(3))
             ENDIF
@@ -349,11 +363,11 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
             loc_oPagina.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.series"
             WITH loc_oPagina.grd_4c_Lista
-                .Top                = 117
+                .Top                = 150
                 .Left               = 12
-                .Width              = 890
-                .Height             = 490
-                .FontName           = "Verdana"
+                .Width              = 940
+                .Height             = 470
+                .FontName           = "Tahoma"
                 .FontSize           = 8
                 .ForeColor          = RGB(90, 90, 90)
                 .BackColor          = RGB(255, 255, 255)
@@ -368,11 +382,14 @@ DEFINE CLASS FormDup AS FormBase
                 .GridLines          = 3
                 .Visible            = .T.
 
+                *-- Largura e legenda vem do pColuna do Init legado (regra #35):
+                *--   .pfSqlTabela(1).pColuna('Series','','','Series',50,.t.)
+                *-- ou seja: UMA coluna, legenda "Series" (sem acento), largura 50.
                 WITH .Column1
                     .ControlSource    = "cursor_4c_Dados.series"
-                    .Width            = 100
+                    .Width            = 50
                     .Resizable        = .T.
-                    .Header1.Caption  = "S" + CHR(233) + "rie"
+                    .Header1.Caption  = "Series"
                 ENDWITH
             ENDWITH
 
@@ -414,6 +431,7 @@ DEFINE CLASS FormDup AS FormBase
                     .Value    = ""
                     .ReadOnly = .T.
                     .Visible  = .T.
+                    .SpecialEffect = 1
                 ENDWITH
 
                 .AddObject("lbl_4c_LblSerieDestino", "Label")
@@ -440,6 +458,7 @@ DEFINE CLASS FormDup AS FormBase
                     .FontSize = 8
                     .Value    = ""
                     .Visible  = .T.
+                    .SpecialEffect = 1
                 ENDWITH
 
                 .AddObject("cmd_4c_OKCopia", "CommandButton")
@@ -582,6 +601,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *------------------------------------------------------------------
@@ -593,7 +614,7 @@ DEFINE CLASS FormDup AS FormBase
                 .Caption   = "Cabe" + CHR(231) + "alho"
                 .Top       = 142
                 .Left      = 183
-                .Width     = 80
+                .Width     = 60
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
@@ -603,9 +624,15 @@ DEFINE CLASS FormDup AS FormBase
                 .Visible   = .T.
             ENDWITH
 
+            *-- ATENCAO (Erro232): os 5 separadores desta pagina levam o MESMO
+            *-- deslocamento +10 dos demais controles (alem do +29 do PageFrame).
+            *-- Sem ele a linha fica 10px ACIMA do lugar e RISCA o texto da
+            *-- secao, que o legado desenha 1px acima da linha:
+            *--   legado  Label27 "Cabecalho" top=103 h=15 (fim 118) / Shape1 top=119
+            *--   migrado lbl_4c_SecCabecalho Y=113     (fim 128) / shp Y=129
             loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
             WITH loc_oPagina.shp_4c_Shape1
-                .Top           = 148
+                .Top           = 158
                 .Left          = 173
                 .Width         = 560
                 .Height        = 2
@@ -645,6 +672,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XDtDoc", "Label")
             WITH loc_oPagina.lbl_4c_XDtDoc
@@ -670,6 +699,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Nota Fiscal (Label1/Text1/Label2/Text2) top=153 / 167
@@ -697,6 +728,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XNota", "Label")
             WITH loc_oPagina.lbl_4c_XNota
@@ -722,6 +755,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Valor da Duplicata (Label9/Text9/Label10/Text10)
@@ -749,6 +784,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XVlDoc", "Label")
             WITH loc_oPagina.lbl_4c_XVlDoc
@@ -774,6 +811,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- N da Duplicata (Label7/Text7/Label8/Text8)
@@ -801,6 +840,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XNrDoc", "Label")
             WITH loc_oPagina.lbl_4c_XNrDoc
@@ -826,6 +867,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Vencimento (Label3/Text3/Label4/Text4)
@@ -853,6 +896,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XDtVenc", "Label")
             WITH loc_oPagina.lbl_4c_XDtVenc
@@ -878,6 +923,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *------------------------------------------------------------------
@@ -901,7 +948,7 @@ DEFINE CLASS FormDup AS FormBase
 
             loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
             WITH loc_oPagina.shp_4c_Shape3
-                .Top           = 219
+                .Top           = 229
                 .Left          = 173
                 .Width         = 560
                 .Height        = 2
@@ -941,6 +988,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XRazCli", "Label")
             WITH loc_oPagina.lbl_4c_XRazCli
@@ -966,6 +1015,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- C.G.C./C.P.F. (Label15/Text17/Label16/Text18)
@@ -993,6 +1044,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XCgcCli", "Label")
             WITH loc_oPagina.lbl_4c_XCgcCli
@@ -1018,6 +1071,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Insc. Estadual (Label11/Text11/Label12/Text12)
@@ -1045,6 +1100,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XEstCli", "Label")
             WITH loc_oPagina.lbl_4c_XEstCli
@@ -1070,6 +1127,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Valor por Extenso (Label28/Text13/Label29/Text14)
@@ -1097,6 +1156,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XExtens", "Label")
             WITH loc_oPagina.lbl_4c_XExtens
@@ -1122,6 +1183,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Praca (Label30/Text32/Label37/Text33)
@@ -1149,6 +1212,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XPraca", "Label")
             WITH loc_oPagina.lbl_4c_XPraca
@@ -1174,6 +1239,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *------------------------------------------------------------------
@@ -1182,7 +1249,7 @@ DEFINE CLASS FormDup AS FormBase
             *------------------------------------------------------------------
             loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
             WITH loc_oPagina.shp_4c_Shape2
-                .Top           = 318
+                .Top           = 328
                 .Left          = 174
                 .Width         = 262
                 .Height        = 2
@@ -1199,7 +1266,7 @@ DEFINE CLASS FormDup AS FormBase
 
             loc_oPagina.AddObject("shp_4c_Shape6", "Shape")
             WITH loc_oPagina.shp_4c_Shape6
-                .Top           = 318
+                .Top           = 328
                 .Left          = 437
                 .Width         = 217
                 .Height        = 2
@@ -1239,6 +1306,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XEnd", "Label")
             WITH loc_oPagina.lbl_4c_XEnd
@@ -1264,6 +1333,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Bairro (Label19/Text21/Label20/Text22)
@@ -1291,6 +1362,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XBairro", "Label")
             WITH loc_oPagina.lbl_4c_XBairro
@@ -1316,6 +1389,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- C.E.P. (Label25/Text27/Label26/Text28)
@@ -1343,6 +1418,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XCep", "Label")
             WITH loc_oPagina.lbl_4c_XCep
@@ -1368,6 +1445,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Cidade (Label21/Text23/Label22/Text24)
@@ -1395,6 +1474,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XCidade", "Label")
             WITH loc_oPagina.lbl_4c_XCidade
@@ -1420,6 +1501,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- U.F. (Label23/Text25/Label24/Text26)
@@ -1447,6 +1530,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XUF", "Label")
             WITH loc_oPagina.lbl_4c_XUF
@@ -1472,6 +1557,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *------------------------------------------------------------------
@@ -1505,6 +1592,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XObs", "Label")
             WITH loc_oPagina.lbl_4c_XObs
@@ -1530,6 +1619,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- N Colunas/N Linhas Obs (Label42/Text38/Label43/Text39) top=292+29=321 / 304+29=333
@@ -1557,6 +1648,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_LblNlin", "Label")
             WITH loc_oPagina.lbl_4c_LblNlin
@@ -1582,6 +1675,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Valor da NF linha/coluna (Label38/Text34/Label39/Text35) top=291+29=320 / 306+29=335
@@ -1609,6 +1704,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XVlNF", "Label")
             WITH loc_oPagina.lbl_4c_XVlNF
@@ -1634,6 +1731,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Codigo linha/coluna (Label45/Text41/Label46/Text42) top=291+29=320 / 306+29=335
@@ -1661,6 +1760,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
             loc_oPagina.AddObject("lbl_4c_XCod", "Label")
             WITH loc_oPagina.lbl_4c_XCod
@@ -1686,12 +1787,14 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Shape4: separador top=354+29=383
             loc_oPagina.AddObject("shp_4c_Shape4", "Shape")
             WITH loc_oPagina.shp_4c_Shape4
-                .Top           = 383
+                .Top           = 393
                 .Left          = 173
                 .Width         = 263
                 .Height        = 2
@@ -1749,6 +1852,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Fonte Padrao (Label33/Text30) top=392+29=421 / 406+29=435
@@ -1775,6 +1880,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Tamanho da Fonte (Label34/Text31) top=392+29=421 / 406+29=435
@@ -1802,6 +1909,8 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *-- Tamanho da Folha (Label47/Text40) top=424+29=453 / 439+29=468
@@ -1828,14 +1937,23 @@ DEFINE CLASS FormDup AS FormBase
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Visible  = .T.
+                .SpecialEffect = 1
+                .Margin        = 0
             ENDWITH
 
             *------------------------------------------------------------------
             * BOTOES DE ACAO (Confirmar / Cancelar) - Grupo_Salva no legado
-            *-- Top=33 = 4 (original) + 29 (compensacao PageFrame)
+            *-- Top = 29, o MESMO de cnt_4c_Botoes/cnt_4c_Saida da pagina Lista.
+            *-- A faixa do cabecalho ocupa a Y de tela 0..80 (Top 29 + Height 80)
+            *-- e o botao tem 75 de altura em Top interno 5, ou seja 5..80: encosta
+            *-- na borda de baixo da faixa, por dentro. Com Top = 33 o conjunto caia
+            *-- em 9..84 e os dois botoes ficavam 4px PARA FORA da faixa escura
+            *-- (Erro232). O Top = 4 do Grupo_Salva legado nao serve de referencia:
+            *-- a pagina Dados do legado NAO tem faixa - ela foi decisao do projeto
+            *-- (Erro152, regra #11), entao quem manda aqui eh a faixa.
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPagina.cnt_4c_BotoesAcao
-                .Top         = 33
+                .Top         = 29
                 .Left        = 842
                 .Width       = 160
                 .Height      = 85
@@ -1916,9 +2034,13 @@ DEFINE CLASS FormDup AS FormBase
                     loc_oGrid.ColumnCount = 1
                     loc_oGrid.RecordSource              = "cursor_4c_Dados"
                     loc_oGrid.Column1.ControlSource     = "cursor_4c_Dados.series"
-                    loc_oGrid.Column1.Width             = 100
-                    loc_oGrid.Column1.Header1.Caption   = "S" + CHR(233) + "rie"
+                    loc_oGrid.Column1.Header1.Caption   = "Series"
                     THIS.FormatarGridLista(loc_oGrid)
+                    *-- Width por ULTIMO (regra #35c/#41): RecordSource E a troca da
+                    *-- FONTE do grid dentro de FormatarGridLista fazem o VFP9
+                    *-- RECALCULAR a largura das colunas. Medido: definida antes,
+                    *-- a largura 50 do pColuna legado virava 75.
+                    loc_oGrid.Column1.Width             = 50
                     loc_lResultado = .T.
                 ENDIF
             CATCH TO loException
@@ -2100,8 +2222,11 @@ DEFINE CLASS FormDup AS FormBase
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 1
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource            = "cursor_4c_Dados"
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource   = "cursor_4c_Dados.series"
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "S" + CHR(233) + "rie"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "Series"
                 THIS.FormatarGridLista(THIS.pgf_4c_Paginas.Page1.grd_4c_Lista)
+                *-- Width por ULTIMO (regra #35c/#41): RecordSource E a troca da
+                *-- FONTE do grid recalculam a largura das colunas.
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Width            = 50
                 THIS.this_cModoAtual = "LISTA"
                 THIS.pgf_4c_Paginas.Visible = .T.
                 THIS.pgf_4c_Paginas.ActivePage = 1
@@ -2982,8 +3107,10 @@ DEFINE CLASS FormDup AS FormBase
     * FormatarGridLista - Formata visual da grade
     *==========================================================================
     PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        *-- Tahoma 8: o SCX legado sobrescreve a fonte da Grade do frmcadastro
+        *-- (Pagina.Lista.Grade.FontName = "Tahoma"), que por classe eh Verdana.
         WITH par_oGrid
-            .FontName = "Verdana"
+            .FontName = "Tahoma"
             .FontSize = 8
         ENDWITH
     ENDPROC

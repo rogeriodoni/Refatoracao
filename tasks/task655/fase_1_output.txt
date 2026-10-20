@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\SigOpCcjBO.prg` com todas as propriedades identificadas no c├│digo fonte legado (SIGOPCCJ):
+
+- `this_cConjuges` / `this_cRgConjuges` ÔÇö campos de busca pelo c├┤njuge (lookups `fwBuscaExt` em `SigCdCli.Conjuges`/`SigCdCli.RgConjuges`)
+- `this_cIClis` / `this_cCpfs` / `this_cRClis` ÔÇö dados da conta encontrada (re-consulta por `IClis` em `SigCdCli`)
+- `this_lInativas` ÔÇö flag auxiliar usada pelo legado para colorir a linha do picker (vermelho se inativa)
+
+`Init()` chama `DODEFAULT()` e define `this_cTabela = "SigCdCli"` / `this_cCampoChave = "IClis"`, j├í que este form n├úo tem tabela pr├│pria (├® um di├ílogo de busca, confirmado por `analise.json` com `tabela: ""`) ÔÇö a tabela relevante ├® a pesquisada. `ObterChavePrimaria()` j├í aponta para `this_cIClis`.
+
+Pr├│xima fase (2/8) deve completar o BO com `CarregarDoCursor`/l├│gica de busca por RG e por Nome (usando `FormBuscaAuxiliar` no lugar do `fwBuscaExt` legado, conforme regra #36/#37 do CLAUDE.md).

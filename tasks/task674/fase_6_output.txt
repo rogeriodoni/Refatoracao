@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The compile check came back clean ÔÇö `FormSigPrSdd.prg` compiled with no errors (`.fxp` generated, no `.err` file).
+
+Fase 6 is complete for `FormSigPrSdd.prg`:
+- **Remaining fields added**: Cond. Pagto (Say12+Get_fpg), Data (Label4+Get_Data, permanently disabled per legacy `When .F.`), Valor (Label5+Get_Valor, enabled only outside Produ├º├úo mode), Motivo (Label6+Get_Motivo) ÔÇö all with Format/InputMask/MaxLength transcribed literally from the SCX dump.
+- **Lookups implemented** (all via `ConfigurarLookups()` + `BINDEVENT KeyPress`, each handler testing F4/Enter/Tab before acting):
+  - `ValidarOperacao`/`AbrirBuscaOperacao` ÔÇö dynamic table (SigCdOpd.Dopps in Produ├º├úo, SigCdOpe.Dopes otherwise), both single-column.
+  - `ValidarFpg`/`AbrirBuscaFpg` ÔÇö SigOpFp with the 4 legacy picker columns (c├│digo, desconto%, moeda, parcelas).
+  - `ValidarCdEmpresa`/`ValidarDsEmpresa`/`AbrirBuscaEmpresa` ÔÇö shared picker on SigCdEmp.Cemps/Razas, replacing the non-ported `fAcessoEmpresa()`, including the legacy guard that disables description-based search once the c├│digo is filled.
+
+Next up per the task plan is Fase 7 (handlers/piso) and Fase 8 (bot├úo de a├º├úo ÔÇö Boleto/Gerar Senha/Encerrar), which aren't in scope yet.

@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 6/8 ÔÇö `Formsigprrcu` (SIGPRRCU)
+
+### O que a fase pede n├úo existe neste legado ÔÇö e isso est├í provado, n├úo presumido
+
+| Superf├¡cie da Fase 6 | O que o dump tem |
+|---|---|
+| Campos restantes (TextBox/ComboBox/CheckBox/ÔÇª) | **zero** ÔÇö `BaseClass:` do dump s├│ d├í `dataenvironment, form, container, label├ù3, shape, commandbutton├ù2` |
+| Lookups (`fwbusca*`, `mAddColuna`, `sigacess(`, `Acesso*(`, `FormBuscaAuxiliar`) | **zero ocorr├¬ncias** |
+| Container Salvar/Cancelar | n├úo existe ÔÇö o di├ílogo dispara lote (`SigOpClC`), n├úo grava registro de tela |
+
+Os 7 objetos do SCX j├í estavam todos migrados (confere 1-para-1 com `mapeamento.json`). Inventar campo/lookup violaria o PILAR 1; m├®todo vazio violaria a regra anti-stub. Confirmei tamb├®m que o **gate da Fase 6 passa** por conta pr├│pria, pelo ramo DESPACHANTE (`OPERACIONAL` + sem lista + sem campos + sem lookup + `AddObject("cmd_4c_ÔÇª")` + `PROCEDURE BtnOkClick`) ÔÇö n├úo havia nada a "satisfazer" escrevendo c├│digo.
+
+### O defeito real que achei auditando o dump: `BorderStyle` descartado
+
+O SCX declara `BorderStyle = 2` (Fixed Dialog) e a migra├º├úo **jogou a linha fora**. Medi no VFP9 (probe com e sem a linha, as duas instanciadas e lidas depois do `Show()`):
+
+```
+SEM BorderStyle: BS=3 TB=0 W=580 H=150 Vis=.T.   <- default Sizable
+COM BorderStyle=2: BS=2 TB=0 W=580 H=150 Vis=.T.
+```
+
+Ou seja: o di├ílogo nascia **redimension├ível pela borda** onde o legado o fixa. Sem ancoragem de controle, encolher a janela recorta em sil├¬ncio justamente o bloco da direita (`shp_4c_Shape1` em 498, bot├Áes em 430/505, terminando exatos em 580). `TitleBar` continua 0 e as dimens├Áes intactas com a linha posta ÔÇö zero regress├úo. ├ë transcri├º├úo do dump, n├úo escolha, e est├í comentada como tal, distinguindo do `Closable` (que o dump **n├úo** declara e por isso segue fora ÔÇö arrancar a ├║nica via de sa├¡da seria o erro oposto).
+
+### Verifica├º├úo
+
+- `COMPILE` do form e do BO no VFP9 com `.fxp` apagado antes: **sem erro, sem `.err`** (e os `.fxp` removidos depois, para a pr├│xima fase recompilar do zero).
+- ├ìcones conferidos em disco (`.Picture` inexistente falha em sil├¬ncio): `new_background.jpg`, `geral_processar_60.jpg`, `cadastro_sair_60.jpg` ÔÇö todos presentes.
+- CRLF ├¡ntegro: 474/474 linhas (era 463/463; +11 = 10 de coment├írio + a propriedade). Scratch de probe/compile removidos.
+
+### Pend├¬ncia que n├úo ├® desta fase, para registro
+
+O guard de NO-OP do `OrquestradorMigracao.ps1` queimou uma re-execu├º├úo opus aqui. As fun├º├Áes de exce├º├úo `Test-LegadoSemCamposSoltos` / `Test-LegadoSemLookupAlgum` ÔÇö que existem na li├º├úo registrada de 2026-10-07 justamente para este cen├írio ÔÇö **n├úo est├úo no arquivo atual** (s├│ `Test-LegadoSemBotaoAlgum` sobreviveu); aparentemente se perderam numa das refatora├º├Áes de 14ÔÇô16/10. O conserto ├® no guard, n├úo no `.prg`, e n├úo toquei nele porque editar o orquestrador em execu├º├úo n├úo vale para o run corrente.

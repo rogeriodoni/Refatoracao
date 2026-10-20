@@ -1,0 +1,298 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 10,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "fRecalculaP", "fRecalculaC", "fConfigGeral", "Foi Baixado... ' + Chr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPBCB",
+      "evento": "Procedure",
+      "linhas": 80,
+      "codigoOriginal": "Private pBar, pDat\n\nLocal lcDop, lcEmp, lnNum, llTaOk\n\nSelect CrSigMvCab\nZap\nSelect CrSigMvHst\nZap\n\npBar = crSigOpEtq.Cbars\npDat = Datetime()\n\nlcDop = Padr('BAIXA ETIQUETA', 20)\nlcEmp = crSigOpEtq.Empos\nlnNum = fGerUniqueKey(Alltrim(lcDop) + lcEmp)\n\nInsert Into crSigMvCab (Emps, Dopes, Numes, MascNum, GrupoOs, ContaOs, Datas, Usuars, EmpDopNums, cIdChaves, DtAlts) ;\n\t\t\t   Values (lcEmp, lcDop, lnNum, fGerMascara(lnNum), crSigOpEtq.Grupos, crSigOpEtq.Contas, ;\n\t\t\t   \t\t   pDat, Usuar, lcEmp + lcDo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fRecalculaP,fRecalculaC",
+        "metodosFormChamados": "SqlExecute,Update,Commit,rollback",
+        "controlesReferenciados": "get_Codigo,Get_Grupo,Get_Conta,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB",
+      "evento": "Init",
+      "linhas": 31,
+      "codigoOriginal": "Private pIds\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n=DoDefault()\n\npIds = Replicate(Chr(254), 20)\n\nlcQryEest = [Select * From SigMvCab Where cIdChaves = '] + pIds + [']\nlcQryHis  = [Select * From SigMvHst  Where cIdChaves = '] + pIds + [']\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '', lcQry... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Value = Space",
+        "controlesReferenciados": "get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Qtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.get_peso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Codigo",
+      "evento": "Valid",
+      "linhas": 52,
+      "codigoOriginal": "With ThisForm\n\t.Get_Grupo.Value   = ' '\n\t.Get_Conta.Value   = ' '\n\t.Get_Produto.Value = ' '\n\t.Get_Dpro.Value    = ' '\n\t.Get_Qtde.Value    = 0\n\t.Get_peso.Value    = 0\n\t.Say5.Caption      = ' '\n\t.Say6.Caption      = ' '\n\t.Refresh\nEndwith\n\nlnBar = Iif(Type('This.Value')='C', Int(Val(This.Value)), This.Value)\n\nIf (lnBar > 0)\n\tThisForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'CBars', lnBar)\n\n\tIf Eof('crSigOpEtq')\n\t\t=Messagebox('O Código [' + Padl(lnBar, 14) + '] ' + ;\n\t\t\t\t\t'Não Localizado... ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Foi Baixado... ' + Chr",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Produto,Get_Dpro,Get_Qtde,Get_peso",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Codigo",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm Off",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Codigo",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.get_dpro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Confirma",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(ThisForm.get_Codigo.Value) And MessageBox('Confirma Baixa do Barra?',4+32+256,'') = 6\n\tThisForm.BaixaBarra\nEndif\nThisForm.Get_Codigo.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And MessageBox",
+        "controlesReferenciados": "get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBCB.Cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPBCB.Procedure",
+      "queryOriginal": "Insert Into crSigMvCab (Emps, Dopes, Numes, MascNum, GrupoOs, ContaOs, Datas, Usuars, EmpDopNums, cIdChaves, DtAlts) ; \t\t\t   Values (lcEmp, lcDop, lnNum, fGerMascara(lnNum), crSigOpEtq.Grupos, crSigOpEtq.Contas, ; \t\t\t   \t\t   pDat, Usuar, lcEmp + lcDo... [TRUNCADO]",
+      "tabelas": "crSigMvCab",
+      "colunas": "Emps,Dopes,Numes,MascNum,GrupoOs,ContaOs,Datas,Usuars,EmpDopNums,cIdChaves,DtAlts",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPBCB.Init",
+      "queryOriginal": "lcQryEest = [Select * From SigMvCab Where cIdChaves = '] + pIds + [']",
+      "tabelas": "SigMvCab",
+      "colunas": "cIdChaves,pIds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPBCB.Init",
+      "queryOriginal": "lcQryHis  = [Select * From SigMvHst  Where cIdChaves = '] + pIds + [']",
+      "tabelas": "SigMvHst",
+      "colunas": "cIdChaves,pIds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigMvCab", "SigMvCab", "SigMvHst"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

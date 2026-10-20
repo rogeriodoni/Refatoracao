@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da.
+
+## O que encontrei ao abrir o arquivo
+
+Os **eventos de bot├úo j├í estavam implementados e fi├®is ao legado** pelas fases anteriores ÔÇö `BtnInserirClick`, `BtnExcluirClick` e `BtnSairClick`, todos com `BINDEVENT` e transcrevendo os tr├¬s `Click` do SCX (`cmdInserir`/`cmdExcluir`/`cmdSair`).
+
+Os quatro nomes CRUD do enunciado (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) **n├úo se aplicam a este legado**: o `SIGPRTAM` ├® um di├ílogo filho do cadastro de produto com toolbar de **linha de grade** (Inserir/Excluir) mais Encerrar ÔÇö n├úo tem Alterar nem Visualizar. Cri├í-los violaria o PILAR 1 e a regra de completude (stub vazio). Medi o gate da Fase 7 em processo separado, replicando o `case 7` do orquestrador:
+
+```
+legadoSemCrud=True  nHandlers=3  nBotoesLegado=3  minHandlersF7=2  ÔåÆ  PASSA=True
+```
+
+(`cmdInserir` n├úo ├® verbo CRUD; `cmdExcluir` sozinho ├® amb├¡guo ÔÇö regra j├í no gate; e o `pcEscolha` vem como **par├ómetro do Init**, ent├úo `Test-ModoRecebidoDoChamador` dispensa.)
+
+## Defeito real que achei e corrigi
+
+Auditando o caminho do `BtnExcluirClick` ÔåÆ `CarregarLista()`, encontrei uma falha silenciosa. Medi no VFP9 em vez de supor:
+
+| passo | ColumnCount | Column1 |
+|---|---|---|
+| grade configurada | 6 | W=38, "Tam.", c├®lula instalada |
+| `USE IN cursor_4c_Dados` (dentro de `BO.Buscar`) | **0** | ÔÇö |
+| religar `RecordSource` sem repor | **11** | W=80, **"Cidchaves"**, c├®lula **destru├¡da** |
+
+`BO.Buscar()` derruba e recria o alias da grade, o que zera o `ColumnCount`; ao religar, o VFP auto-expandia para as **11 colunas do cursor** ÔÇö a grade passava a exibir `cidchaves`/`cpros`/`dataalts`/`datatrans`/`dtmovs` crus ├á direita das seis do legado. Sem erro, sem log. E isso atingia **toda** carga, n├úo s├│ a exclus├úo, porque `InicializarForm` tamb├®m chama `CarregarLista()`.
+
+Corre├º├úo: repor `ColumnCount = 6` imediatamente antes do `RecordSource`, com o coment├írio explicando a medi├º├úo. Verificado em segundo smoke test ÔÇö fica em 6 na primeira carga e na recarga do Excluir; os controles de c├®lula s├úo de fato destru├¡dos no rebind, mas o `InstalarCelulasGrade()` logo abaixo j├í os reinstala sob guarda `PEMSTATUS`.
+
+`COMPILE` limpo (apaguei o `.fxp` antes; regerado com 26.644 bytes, nenhum `.err`). Arquivo segue CRLF, sem acentos literais no trecho novo.
+
+**Arquivo modificado**: `projeto/app/forms/operacionais/Formsigprtam.prg`
+
+Uma ressalva que deixo registrada e **n├úo** consertei, por estar fora do escopo desta fase: `sigprtamBO.ExecutarExclusao` usa `loc_oErro` no `CATCH` sem declar├í-lo no `LOCAL` da linha 178 ÔÇö a vari├ível vaza como PRIVATE. ├ë inofensivo hoje, mas vale corrigir numa passada pelo BO.

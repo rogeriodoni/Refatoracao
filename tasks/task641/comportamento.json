@@ -1,0 +1,234 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 7,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fBuscarCotacao"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPALC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.Retorna\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\nThisForm.Visible = .f.\nThisForm.LockScreen = .t.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "LParameters lcMoeda, lnCotacao, ldData\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Visible = .f.\nThisForm.LockScreen = .t.\n\nThisForm.poDataMgr = CreateObject('fSqlConector', ThisForm.Name )\n\nThisForm.Get_Moeda.Value = Padr( lcMoeda, 3 )\n\n=ThisForm.Podatamgr.CursorQuery('SigCdMoe','CrMoe','Cmoes',Padr( lcMoeda, 3 ) )\nIf !crMoe.Cotas\n\tMessagebox( 'Esta moeda não permite Alteração de Cotação...', 32, '' )\nEndif\n\nIf Type(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,Value = Padr,CursorQuery,Data = Date",
+        "controlesReferenciados": "Get_Moeda,Get_Cotação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC",
+      "evento": "Activate",
+      "linhas": 7,
+      "codigoOriginal": "If crMoe.Cotas\n\tThisForm.Visible = .t.\n\tThisForm.LockScreen = .f.\nElse\n\tThisForm.Release\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.Get_Cotação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.get_Usuário.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Usuário",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.Get_Cotação",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.Cotação = fBuscarCotacao(ThisForm.Get_moeda.Value, ThisForm.Data, ThisForm.poDataMgr)\n\nVarCot = (Round(This.Value / ThisForm.Cotação, 2) - 1) * 100\n\nIf (Abs(VarCot) > crCarg.VarCots) And (This.Value <> 0)\n\t=Messagebox([Cotação Inválida], 48, [Atenção!!!])\n\tReturn 0\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "Cotação = fBuscarCotacao",
+        "controlesReferenciados": "Get_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.Get_Usuário",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcQuery, lcUser\n\nIf Not Empty(This.Value)\n\tlcUser = Padr(Alltrim(ThisForm.Get_Usuário.Value), 10)\n\tlcQuery = [Select a.Usuarios, a.Senhas, a.CCargs From SigCdUsu a Where Not a.cAtivos='N' and a.usuarios = '] + lcUser + [' order by 1]\n\tThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')\n\n\tIf Not Used('crUsuar') Or Reccount('crUsuar')==0\n\t\t=Messagebox([Usuário Inválido], 48, [Atenção!!!])\n\t\tReturn 0\n\tElse\n\t\tIf Not ThisForm.PoDataMgr.Cursorquery('SigCdCrg','CrCarg','cCargs',CrUsuar.Ccargs ) Or ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Cursorquery",
+        "controlesReferenciados": "Get_Usuário",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.Get_Senha",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcUser,lcQuery\n\nlcUser = Padr(Alltrim(ThisForm.Get_Usuário.value), 10)\nlcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]\nThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')\n\nIf Not Used([crUsuar]) Or (Reccount([crUsuar]) = 0)\n\t=MessageBox([Usuário Inválido], 48, [Atenção!!!])\n\tReturn -1\nElse\n\tIf (Padr(Alltrim(This.Value), 10) <> fCriptografar(CrUsuar.Senhas))\n\t\t=Messagebox([Senha Incorreta], 48, [Atenção!!!])\n\tEndIf \nEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "Get_Usuário",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.Get_Moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPALC.cntBotoes",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "If !Empty( ThisForm.Get_Usuário.Value )\n\tLocal lcUser,lcQuery\n\n\tlcUser = Padr( Alltrim( ThisForm.Get_Usuário.value ), 10 )\n\tlcQuery = [select a.usuarios, a.senhas, a.cCargs from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]\n\tThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')\n\n\tIf Not Used('crUsuar') Or Reccount('crUsuar')==0\n\t\tMessagebox( 'Usuário Inválido !!', 48, '' )\n\t\tThisForm.Get_Usuário.SetFocus\n\t\tReturn\n\tElse\n\t\tIf !ThisForm.PodataMgr.Cursorquery('SigCdCrg',... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "SQLExecute,Cursorquery,Cotação = fBuscarCotacao,Retorna = \"OK\" + Chr,Value, 15, 4 ) + Chr",
+        "controlesReferenciados": "Get_Usuário,Get_Senha,Get_Cotação,Get_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPALC.cntBotoes",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Retorna = [CANCELADO]\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPALC.Get_Usuário.Valid",
+      "queryOriginal": "\tlcQuery = [Select a.Usuarios, a.Senhas, a.CCargs From SigCdUsu a Where Not a.cAtivos='N' and a.usuarios = '] + lcUser + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "Usuarios,Senhas,CCargs,cAtivos,lcUser",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPALC.Get_Senha.Valid",
+      "queryOriginal": "lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cAtivos,lcUser",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPALC.cntBotoes.Click",
+      "queryOriginal": "\tlcQuery = [select a.usuarios, a.senhas, a.cCargs from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cCargs,cAtivos,lcUser",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

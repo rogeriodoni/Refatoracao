@@ -1,0 +1,24 @@
+INICIO
+deps OK gnConnHandle=0
+CREATEOBJECT=O
+FORM W=580 H=200 DataSession=2 BorderStyle=2 TitleBar=0 ControlBox=.F. WindowType=1 Closable=.T. Caption=[Recálculo de Saldos de Produto]
+PICTURE=[new_background.jpg] EXISTE
+CONTROLES ControlCount=7
+  [1] CNT_4C_CABECALHO     base=Container    T=0 L=0 W=580 H=80 Vis=.T.
+  [2] CMD_4C_PROCESSAR     base=Commandbutto T=3 L=430 W=75 H=75 Vis=.T.
+  [3] CMD_4C_ENCERRAR      base=Commandbutto T=3 L=505 W=75 H=75 Vis=.T.
+  [4] LBL_4C_PROGRESSO     base=Label        T=99 L=136 W=309 H=20 Vis=.T.
+  [5] LBL_4C_LBLPRIORIDADE base=Label        T=154 L=134 W=102 H=15 Vis=.T.
+  [6] TXT_4C_PRIORIDADE    base=Textbox      T=150 L=238 W=17 H=23 Vis=.T.
+  [7] SHP_4C_SHAPE1        base=Shape        T=7 L=480 W=48 H=29 Vis=.T.
+CABECALHO BackStyle=1 BackColor=6579300 (RGB(100,100,100)=6579300) BorderWidth=0 ControlCount=2
+LBL SOMBRA T=18 L=10 W=560 H=40 Fore=0 FontSize=18 AutoSize=.F. Vis=.T. Cap=[Recálculo de Saldos de Produto]
+LBL TITULO T=17 L=10 W=560 H=46 Fore=16777215 FontSize=18 AutoSize=.F. Vis=.T. Tip=[Título do Relatório] Cap=[Recálculo de Saldos de Produto]
+ESCOPO(prot) BtnProcessarClick=.F. BtnEncerrarClick=.F. TxtPrioridadeKeyPress=.F. CarregarLista=.F. AjustarBotoesPorModo=.F.
+BO=O Tabela=[] Chave=[] Prioridade=0 Parametrizado=.F.
+CrSigCdPam (sessao 2) usado=.T. reccount=1 GrupoRecs=C ContaPags=C
+RELEASE interativo=OK
+CREATEOBJECT(parametrizado)=O
+PARAM Parametrizado=.T. Prioridade=1 BOPrioridade=1
+LOG existe=SIM tamanho=271
+RESULTADO=OK

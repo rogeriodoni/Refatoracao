@@ -1,0 +1,26 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+FORM W=800 H=600 DataSession=2 ControlBox=.F. BorderStyle=2 Caption=[Consulta de Acessos de Usuário]
+CONTROLES ControlCount=6
+  [1] LBL_4C_LABEL1            base=Label          T=144 L=286 W=64 H=15 Vis=.T.
+  [2] TXT_4C_CUSU              base=Textbox        T=141 L=348 W=96 H=23 Vis=.T.
+  [3] TXT_4C_DUSU              base=Textbox        T=141 L=446 W=298 H=23 Vis=.T.
+  [4] LBL_4C_LABEL2            base=Label          T=144 L=50 W=53 H=15 Vis=.T.
+  [5] TXT_4C_GRUPO             base=Textbox        T=140 L=102 W=144 H=24 Vis=.T.
+  [6] CMG_4C_COMMANDGROUP1     base=Commandgroup   T=7 L=528 W=256 H=110 Vis=.T.
+CMG renomeado existe=.T. nome antigo existe=.F.
+CMG ButtonCount=3 BackStyle=0 SpecialEffect=1 Value=1
+BUTTONS
+  Btn1 Cap=[Expandir Niveis] L=5 T=5 W=80 H=100 Fore=10179620 Pic=[expandcl.bmp]=OK
+  Btn2 Cap=[Recolher Niveis] L=88 T=5 W=80 H=100 Fore=10179620 Pic=[collapsecl.bmp]=OK
+  Btn3 Cap=[Encerrar] L=171 T=5 W=80 H=100 Fore=10179620 Pic=[cadastro_sair_60.jpg]=OK
+IMAGENS ARVORE Menu1=OK x_planilha1=OK MsgStop1=OK
+ESCOPO(prot) BtnExpandirClick=.F. BtnRecolherClick=.F. BtnEncerrarClick=.F. CUsuGotFocus=.F. GrupoGotFocus=.F. CarregarDados=.F.
+TREEVIEW existe=.F.
+HANDLERS sem arvore=OK NodeExp=0
+CarregarDados(sem filtro) retorno=.F.
+CarregarDados(usuario=4CONTROL) retorno=.F. MsgBO=[Conexão com o banco de dados não disponível]
+CarregarDados(grupo=ADM) retorno=.F. MsgBO=[Conexão com o banco de dados não disponível]
+BtnEncerrarClick=OK
+RESULTADO=OK

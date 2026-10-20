@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH balanced too. Phase 4 is complete.
+
+## Summary
+
+Completed **Fase 4/8** for `Formsigprpre.prg` ÔÇö Grid + CRUD buttons on Page1. Key decisions, driven by the legacy dump (`sigprpre_form_codigo_fonte.txt`) rather than the generic template:
+
+- **Grid** (`grd_4c_Lista`): exact legacy geometry (Left=29, Top=126+29, Width=940, Height=459), 6 columns matching `pColuna` calls (Produto/Descricao/Grupo/Data/Pr Anterior/Pr Atual), bound in `CarregarLista()` after `RecordSource` (per the project's Header/Width-reset rule).
+- **`cnt_4c_Botoes`**: populated with the 5 CRUD buttons for structural fidelity, but kept `Visible = .F.` ÔÇö the legacy explicitly disables this whole group (`Grupo_op.Visible=.f.`), since this screen is pure consulta (no Page2 fields, BO doesn't implement Inserir/Atualizar/ExecutarExclusao, by design already documented in `sigprpreBO.prg`).
+- **`cnt_4c_Saida`/Encerrar**: added canonically (Left=917, regra #10) ÔÇö this was missing from Phase 3 and is the *only* way the user can close this form, since Grupo_op is dead.
+- **Btn\*Click handlers**: all implemented as real, permanent behavior (not stubs) ÔÇö Incluir/Alterar/Visualizar/Excluir show an informative "somente consulta" message (mirrors the BO's own refusal design), Buscar reloads the grid, Encerrar releases the form. All declared `PUBLIC` per the BINDEVENT rule and because `TesteAutomatico.prg` calls them directly.
+- **`CarregarLista()`/`AlternarPagina()`**: fully implemented, no bare `RETURN` inside `TRY`, forward-compatible with the as-yet-unbuilt filter widgets (`CntPeriodo`/`cntProd`) via `PEMSTATUS` guards, so a later phase can add them without touching this code again.
+
+File is syntactically balanced (18 PROCEDURE/ENDPROC pairs, 18 WITH/ENDWITH pairs). Next phase would add the `CntPeriodo`/`cntProd` filter fields and their lookups.

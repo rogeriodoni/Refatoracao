@@ -114,7 +114,9 @@ DEFINE CLASS FeaBO AS BusinessBase
                 IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
                     *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                     IF USED("cursor_4c_Pam_Temp")
-                        TABLEREVERT(.T., "cursor_4c_Pam_Temp")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_Pam_Temp") > 1
+                            TABLEREVERT(.T., "cursor_4c_Pam_Temp")
+                        ENDIF
                         USE IN cursor_4c_Pam_Temp
                     ENDIF
 
@@ -181,7 +183,9 @@ DEFINE CLASS FeaBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -215,7 +219,9 @@ DEFINE CLASS FeaBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -443,7 +449,9 @@ DEFINE CLASS FeaBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaGrupo")
-                TABLEREVERT(.T., "cursor_4c_BuscaGrupo")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaGrupo") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaGrupo")
+                ENDIF
                 USE IN cursor_4c_BuscaGrupo
             ENDIF
 
@@ -471,7 +479,9 @@ DEFINE CLASS FeaBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaConta")
-                TABLEREVERT(.T., "cursor_4c_BuscaConta")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaConta") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaConta")
+                ENDIF
                 USE IN cursor_4c_BuscaConta
             ENDIF
 

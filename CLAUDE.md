@@ -1077,6 +1077,37 @@ Na `BusinessBase` sao PUBLIC: `Salvar`, `Excluir`, `Buscar`, `CarregarDoCursor`,
 
 Auto-fix: CorretorAutomatico **#218** (tira o PROTECTED no `*BO.prg`; WARNING para o que so a base protege). Auditoria: `automation\VerificarMetodoProtegidoChamadoDeFora.ps1`. Skill: secao **246**. Origem: Erro199 (FormMtt) - **48 sites em 29 forms**.
 
+### 52. `TABLEREVERT` sem buffering ERRA - e eh o placeholder do grid que dispara, na ABERTURA da tela
+`TABLEREVERT()`/`TABLEUPDATE()` **exigem** buffering. Sem ele nao sao no-op: estouram **Erro 1586 - `Function requires row or table buffering mode.`**. Medido no VFP9 (2026-10-20):
+
+| comando | Buffering = 1 | Buffering = 5 (com alteracao pendente) |
+|---|---|---|
+| `CREATE CURSOR` / `SELECT ... INTO CURSOR ... READWRITE` | nasce **1** | — |
+| `TABLEREVERT(.T., "x")` | **ERRO 1586** | retorna `.T.` |
+| `USE IN x` | OK | **OK** |
+
+A ultima linha fecha o caso: **`USE IN` fecha o alias mesmo com buffer sujo** - o `TABLEREVERT` antes dele nunca foi necessario, e no caso comum ERRA.
+
+**Quem gerou foi o CorretorAutomatico #91, nao o migrador** (regra #43): ele injetava `IF USED(...) / TABLEREVERT(.T., ...) / USE IN` antes de todo `SQLEXEC` em `cursor_4c_*`. O gatilho eh o **placeholder do grid**: `ConfigurarPaginaLista` faz `CREATE CURSOR cursor_4c_Dados` (Buffering = 1), dai `InicializarForm -> CarregarLista -> BO.Buscar("")` acha o alias ABERTO e estoura **na PRIMEIRA abertura**, sempre. Dentro do `TRY` o `CATCH` mostra `MsgErro` com a mensagem crua - que nao cita cursor nenhum e manda o diagnostico para o SQL; **fora de `TRY`** vira *Program Error* e em headless **congela o processo**.
+
+```foxpro
+* CERTO - guardar pelo BUFFERING, nunca so por USED()
+IF USED("cursor_4c_Dados")
+    IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+        TABLEREVERT(.T., "cursor_4c_Dados")
+    ENDIF
+    USE IN cursor_4c_Dados
+ENDIF
+```
+
+O alias nem sempre eh literal (`TABLEREVERT(.T., par_cCursor)` em helper de fechamento); `CURSORGETPROP` aceita a variavel igual.
+
+Sweep 2026-10-20: **267 sites em 77 arquivos**, so **2** com guard. Nenhum gate pegava - compila limpo, e o `TestFormWrapper` pula `CarregarLista` em `gb_4c_ModoTeste`.
+
+**Pendencia que o guard NAO resolve**: em `BtnCancelarClick` de `FormFop`/`FormFpm`/`Formsigpdmp2`/`FormSigPdMp8` o `TABLEREVERT` ERA a semantica de Cancelar, mas os cursores nascem com Buffering = 1 (nenhum chama `CURSORSETPROP`/`AddCursor`) - as edicoes ja iam direto para o cursor e o Cancelar nunca desfez nada. Restaurar o desfazer exige ligar buffering de verdade conferindo o dump do legado.
+
+Auto-fix: CorretorAutomatico **#219** (envolve `TABLEREVERT` cru no guard; nas DUAS listas, inclusive modo SEGURO) + **#91** corrigido na origem. Skill: secao **247**. Origem: Erro230 (`FormDup`/`DupBO` - Series de Duplicatas nao abria).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

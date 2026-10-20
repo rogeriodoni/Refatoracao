@@ -1,0 +1,21 @@
+INICIO
+CREATEOBJECT=O
+LABEL2 dump(T=154 L=134 W=102 H=15) -> T=154 L=134 W=102 H=15 AutoSize=.F. BackStyle=0 Fore=5921370 (RGB(90,90,90)=5921370) Font=Tahoma/8 Bold=.T. TabIndex=6 Cap=[Prioridade (0/1) : ]
+GETPRIORIDADE dump(T=150 L=238 W=17 H=23 Mask=9 MaxLen=1 Tab=1) -> T=150 L=238 W=17 H=23 InputMask=[9] MaxLength=1 TabIndex=1 Font=Tahoma/8 Bold=.T. ReadOnly=.F. ValueType=N Value=0
+ESCOPO(prot) ValidarPrioridade=.F. ValidarPrioridadeExec=.F. TxtPrioridadeKeyPress=.F. TxtPrioridadeInteractiveChange=.F. FormParaBO=.T. HabilitarCampos=.F.
+DEDUP 1a tentativa(5): avisos=1 memo=5 (esperado 1 / 5)
+DEDUP 2o evento do mesmo gesto: avisos=1 (esperado 1 - NAO repetir)
+DEDUP apos InteractiveChange: avisos=2 (esperado 2 - nova tentativa avisa)
+VALIDO(1) retorno=.T. form=1 BO=1 memo=-1 (esperado .T. / 1 / 1 / -1)
+VALIDO(0) retorno=.T. form=0 BO=0 (esperado .T. / 0 / 0)
+INVALIDO(9) nao propaga: form=0 BO=0 (esperado 0 / 0)
+TABORDER txt=1 Processar=3 Encerrar=4 (dump: 1 < 2 < 3)
+CREATEOBJECT(subclasse hooks)=O
+FORMPARABO(9) BO=1 form=1 (esperado 1 / 1 - nao propagou)
+FORMPARABO(0) BO=0 (esperado 0 - propagou)
+BOPARAFORM(1) txt=1 form=1 (esperado 1 / 1)
+LIMPARCAMPOS txt=0 form=0 BO=0 (esperado 0 / 0 / 0)
+CREATEOBJECT(param)=O
+PARAM HabilitarCampos(.T.): Processar.Enabled=.T. txt.ReadOnly=.T. (esperado .T. / .T.)
+PARAM HabilitarCampos(.F.): Processar.Enabled=.F. (esperado .F.)
+RESULTADO=OK

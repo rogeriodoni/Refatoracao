@@ -1,0 +1,60 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 is complete and verified.
+
+## What I did
+
+The gate was failing on one predicate: the OPERACIONAL/flat branch requires `grd_4c_*` + `cmd_4c_*` + a **data-load method** (`CarregarLista|CarregarDados|MontaGrade`). The grid and buttons were already in place from the earlier attempt; the load method was missing.
+
+Rather than bolt on an adapter, I transcribed the block that the legacy `sigprtrf.Init` actually has:
+
+```foxpro
+With Thisform.Cnt_Referencia.Grade
+    .RecordSource = 'CrProduto'
+    .Column1.ControlSource = 'CrProduto.Cpros'
+    .Column2.ControlSource = 'CrProduto.Dpros'
+    .Refresh
+EndWith
+Select CrProduto / Append Blank / Grade.column1.SetFocus
+```
+
+into three real methods:
+
+- **`CarregarLista()`** (PUBLIC) ÔÇö ensures the cursor exists, guarantees the blank row for typing, restores `ColumnCount` if needed, binds `RecordSource`/`ControlSource`, then `GO TOP` + `Refresh`. Callable from any path that recreates/repopulates the cursor.
+- **`AplicarFormatoColunas()`** ÔÇö all column presentation, re-applied after every bind.
+- **`Activate()` + `FocarPrimeiraCelula()`** ÔÇö the legacy's `Grade.column1.SetFocus`, moved out of `Init` (focus on an invisible control errors).
+
+`ConfigurarGradeProdutos()` now holds only grid-level properties.
+
+## A real defect found by measuring
+
+I probed the live form in VFP9 rather than assuming. Reassigning `RecordSource` with the alias open resets nothing ÔÇö but when the grid's alias is **dropped** (which `CriarCursorProdutos()` does), `ColumnCount` falls to **0** and rebinding recreates the Column objects at VFP defaults:
+
+| | antes | ap├│s rev├¡nculo (antes do fix) |
+|---|---|---|
+| `Column1.Format` | `K!` | `""` |
+| `Column1.Text1.InputMask` | `!!!!!!!!!!` | `""` |
+| fonte das colunas | Courier New | Arial |
+| `Movable`/`Resizable` | `.F.` | `.T.` |
+| `Header1.Alignment` | 2 | 6 |
+| **`Column2.ReadOnly`** | `.T.` | **`.F.`** |
+
+That last one matters: the Descri├º├úo column is the one the legacy locks with `Text1.When ÔåÆ Return .f.`, so it would silently become editable. Putting the column format in its own re-appliable method fixes all of it ÔÇö the probe now shows every property restored after the rebind.
+
+## Verification
+
+- `COMPILE` ÔÇö clean, no `.ERR`; `.fxp` regenerated (it's tracked)
+- Live instantiation ÔÇö `CREATEOBJECT` returns an object; grid bound, widths 108/290, both headers correct, `Column2.ReadOnly=.T.`, cursor with 1 blank row, both button icons exist on disk, `cnt_4c__Mensagem` stays hidden, `CarregarLista`/`FocarPrimeiraCelula` are PUBLIC
+- Phase 4 gate replayed in PowerShell ÔåÆ `VALIDADO = True` (flat branch); completude check ÔåÆ 0 TODOs, 0 pendency markers, 0 empty procedures
+- File is pure ASCII (accents via `CHR()`)
+
+Probes kept at `automation/ProbeTrf684F4.prg` and `automation/ProbeTrf684Rebind.prg`.
+
+## Two things worth flagging
+
+**I deliberately did not add `AlternarPagina`**, which the phase prompt mentions. The legacy has no PageFrame, so that path would mean either inventing one or writing an empty stub ÔÇö the orchestrator's own comments call that the "stub disfar├ºado" the completude rule forbids, and the flat branch exists precisely for this case. The gate passes without it.
+
+**`HEAD` already contains a 951-line `FormSIGPRTRF.prg`**; this task is re-migrating an already-migrated form down to 503 lines so far, with phases 5ÔÇô8 still pending. That's consistent with the known "task re-enfileirada sobre form j├í migrado" pattern. The prior version isn't strictly better ÔÇö it used the legacy cursor name `CrProduto` (PILAR 3), had an empty `AlternarPagina` stub, and its `CarregarLista` omitted re-applying `Column.Width` ÔÇö but it does carry behavior (lookup, Ok/Cancelar, the LED animation) that phases 7/8 still have to rebuild. Worth confirming this re-run is intended before it finishes overwriting the committed version.

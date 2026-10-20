@@ -1,0 +1,29 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+FORM W=800 H=500 DataSession=2 TitleBar=0 BorderStyle=2 Caption=[Pesquisa de Produtos por Conta]
+CONTROLES ControlCount=8
+  [1] CNT_4C_CABECALHO         base=Container      T=0 L=0 W=800 H=80 Vis=.T.
+  [2] CMG_4C_GRP_OPERACAO      base=Commandgroup   T=-2 L=717 W=85 H=85 Vis=.T.
+  [3] SHP_4C_OPERACOES         base=Shape          T=224 L=133 W=484 H=112 Vis=.T.
+  [4] LBL_4C_OPERACOES         base=Label          T=210 L=143 W=92 H=15 Vis=.T.
+  [5] SHP_4C_ITENS             base=Shape          T=354 L=133 W=511 H=127 Vis=.T.
+  [6] LBL_4C_ITENS             base=Label          T=339 L=143 W=38 H=15 Vis=.T.
+  [7] GRD_4C_OPERACOES         base=Grid           T=234 L=140 W=469 H=94 Vis=.T.
+  [8] GRD_4C_ITENS             base=Grid           T=363 L=140 W=497 H=112 Vis=.T.
+CMG canonico existe=.T. nome antigo existe=.F.
+CMG ButtonCount=1 BackStyle=0 Btn1 Cap=[Encerrar] Cancel=.T. Pic=[cadastro_sair_60.jpg]=OK
+GRID OPERACOES RecordSource=[cursor_4c_Operacoes] ColumnCount=5 ReadOnly=.T.
+  Col1 CS=[cursor_4c_Operacoes.emps] W=31 Hdr=[Emp.]
+  Col2 CS=[cursor_4c_Operacoes.dopes] W=150 Hdr=[Movimentação]
+  Col3 CS=[cursor_4c_Operacoes.numes] W=80 Hdr=[Número]
+  Col4 CS=[cursor_4c_Operacoes.datas] W=75 Hdr=[Data]
+  Col5 CS=[cursor_4c_Operacoes.valos] W=98 Hdr=[Valor]
+GRID ITENS RecordSource=[cursor_4c_Itens] ColumnCount=3 ReadOnly=.T.
+  Col1 CS=[cursor_4c_Itens.cpros] W=108 Hdr=[Produto]
+  Col2 CS=[cursor_4c_Itens.dpros] W=290 Hdr=[Descrição]
+  Col3 CS=[cursor_4c_Itens.qtds] W=66 Hdr=[Qtde.]
+ESCOPO(prot) CarregarDados=.F. RepintarGrades=.F. BO.CarregarOperacoes=.F. BO.GarantirCursorOperacoes=.F.
+CarregarDados(sem TprMvCab) retorno=.F. MsgBO=[O resultado da consulta (TprMvCab) não está disponível. Refaça a pesquisa na tela anterior.]
+RepintarGrades(vazio)=OK
+RESULTADO=OK

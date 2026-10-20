@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRPRE",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "llDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\npcProd = []\npcGru = []\nIF !EMPTY(ThisForm.Pagina.Lista.CntProd.GetProd.Value)\n\tpcProd = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getProd.Value)\nENDIF\n\nIF !EMPTY(ThisForm.Pagina.Lista.CntProd.getGrupo.Value)\n\tpcGru  = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getgrupo.Value)\nENDIF\n\nIF EMPTY(pcProd)\n\tpcProdF = 'zzzzzzzzzz'\nE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nPublic llDatai,llDataf, pcProd, pcProdF, pcGru, pcGruF\n\nThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value = DATE()\nThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value = DATE()\n\nllDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\npcProd = []\npcGru = []\n\nIF !EMPTY(ThisForm.Pagina.Lista.CntProd.GetProd.Value)\n\tpcProd = ALLTRIM(ThisForm.Pagina.Lista.cnt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "sqldados",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndif\n\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.Pagina.Lista.Grade.Column1.SetFocus\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.GetProd",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.GetProd",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "lcGrupo = This.Parent.getGrupo.value\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', 'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.getProd.Value = crListaRemota.CPros\n\tThis.Parent.getdProd.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThis.Parent.getProd.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.GetdProd",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(This.Parent.getProd.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.GetdProd",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.getProd.Value = crListaRemota.CPros\n\tThis.Parent.getDProd.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThis.Parent.getProd.Value = ''\n\tThis.Parent.getDProd.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.getGrupo",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.mAddColuna('Mercs','','Gde.Grupo')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value                  = Evaluate('CrGrupos.CGrus')\n\tElse\n\t\tThis.Value                  = ''\n\tEndIf\nEndIf... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "sqldados",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPRE.Pagina.Lista.cntProd.getGrupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

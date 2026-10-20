@@ -1,0 +1,669 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPCAU.SCX
+* Data/Hora: 17/10/2026 11:41:28
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigopcau
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: TreeView
+  Parent: sigopcau
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Commandgroup1
+  Parent: sigopcau
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label1
+  Parent: sigopcau
+  Class: label
+  BaseClass: label
+
+Objeto: GetcUsu
+  Parent: sigopcau
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDUsu
+  Parent: sigopcau
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: sigopcau
+  Class: label
+  BaseClass: label
+
+Objeto: GetGrupo
+  Parent: sigopcau
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  ShowTips = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  ControlBox = .F.
+  Height = 600
+  Width = 800
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Consulta de Acessos de Usuário"
+  Name = "SIGOPCAU"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.TreeView
+------------------------------------------------------------
+  Top = 169
+  Left = 29
+  Height = 406
+  Width = 738
+  TabIndex = 4
+  Name = "TreeView"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  Top = 7
+  Left = 528
+  Height = 110
+  Width = 256
+  BackStyle = 0
+  Value = 1
+  SpecialEffect = 1
+  TabIndex = 5
+  BorderColor = 136,189,188
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 100
+  Command1.Width = 80
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\vbmp\expandcl.bmp
+  Command1.Caption = "Expandir Niveis"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.ToolTipText = "Expandir Niveis"
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 88
+  Command2.Height = 100
+  Command2.Width = 80
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\vbmp\collapsecl.bmp
+  Command2.Caption = "Recolher Niveis"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.ToolTipText = "Recolher Niveis"
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+  Command3.Top = 5
+  Command3.Left = 171
+  Command3.Height = 100
+  Command3.Width = 80
+  Command3.FontName = "Verdana"
+  Command3.FontSize = 8
+  Command3.WordWrap = .T.
+  Command3.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command3.Cancel = .T.
+  Command3.Caption = "Encerrar"
+  Command3.ForeColor = 36,84,155
+  Command3.BackColor = 255,255,255
+  Command3.ToolTipText = "Sair"
+  Command3.Themes = .F.
+  Command3.Name = "Command3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário : "
+  Height = 15
+  Left = 286
+  Top = 144
+  Width = 64
+  ForeColor = 36,84,155
+  TabIndex = 6
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.GetcUsu
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "!"
+  Height = 23
+  Left = 348
+  MaxLength = 10
+  TabIndex = 2
+  Top = 141
+  Width = 96
+  Name = "GetcUsu"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.GetDUsu
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "!"
+  Height = 23
+  Left = 446
+  MaxLength = 30
+  TabIndex = 3
+  Top = 141
+  Width = 298
+  Name = "GetDUsu"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo : "
+  Height = 15
+  Left = 50
+  Top = 144
+  Width = 53
+  ForeColor = 36,84,155
+  TabIndex = 8
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigopcau.GetGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "!"
+  Height = 24
+  Left = 102
+  MaxLength = 10
+  TabIndex = 1
+  Top = 140
+  Width = 144
+  Name = "GetGrupo"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigopcau
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+Endwith	
+	
+Local m.loTree1
+
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.AddImage(LoadPicture('\vbmp\Menu1.Bmp'))
+m.loTree1.AddImage(LoadPicture('\vbmp\x_planilha1.bmp'))
+m.loTree1.AddImage(LoadPicture('\vbmp\MsgStop1.Gif'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE maketree
+------------------------------------------------------------
+PROCEDURE maketree
+Local loTree1,lnNode1
+
+If ! Empty(ThisForm.GetcUsu.Value)
+	lcQuery = [Select * From SigCdUsu Where Usuarios = ']+ThisForm.GetcUsu.Value+[']
+	ThisForm.poDataMgr.SqlExecute(lcQuery,'crSigCdUsu')
+
+	* Richard em 29/11/2016 - Eliminando SUPERVIS
+	If (Upper(Alltrim(Usuar))=[4CONTROL])
+*!*		If Lower(Alltrim(crSigCdUsu.supervis))=='s' Or Lower(Alltrim(crSigCdUsu.supervis))=='i'
+		lcQuery = [select a.programas,a.parametros,a.descricaos from SigCdPrg a where not a.programas='          ' ]+;
+		          [group by a.programas,a.parametros,a.Descricaos order by a.Descricaos,a.programas,a.parametros]
+	Else 
+		lcQuery = [select a.programas,a.parametros,c.descricaos from SigCdAcU a ]+;
+				  [left join SigCdAcG b on a.grupos=b.grupos ]+;
+				  [left Join SigCdPrg c on a.Programas = c.Programas And a.Parametros = c.Parametros ]+;
+				  [where not a.programas='          ' And (a.usuarios=']+ThisForm.GetcUsu.Value+;
+				  [' or b.usuarios=']+ThisForm.GetcUsu.Value+[') ]+;
+				  [group by a.programas,a.parametros,c.descricaos order by c.Descricaos, a.programas,a.parametros]
+	EndIf
+Else
+	lcQuery = [select a.programas,a.parametros,c.descricaos from SigCdAcU a ]+;
+			  [left join SigCdAcG b on a.grupos=b.grupos ]+;
+			  [left Join SigCdPrg c on a.Programas = c.Programas And a.Parametros = c.Parametros ]+;
+			  [where not a.programas='          ' And (a.Grupos=']+ThisForm.GetcUsu.Value+;
+			  [' or b.Grupos=']+ThisForm.GetcUsu.Value+[') ]+;
+			  [group by a.programas,a.parametros,c.descricaos order by c.Descricaos, a.programas,a.parametros]
+	
+Endif
+
+ThisForm.poDataMgr.SqlExecute(lcQuery,'crSigCdAcU')
+
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.ClearNodes
+m.loTree1.TipsDisplay = .t.
+m.loTree1.ExpandOnDClick
+m.loTree1.SmallIcons = .t.
+m.loTree1.PicAlign = 0
+m.loTree1.SelectedStyle = 2
+m.loTree1.PictureType = 1
+
+Select crSigCdAcU
+
+Declare laNivel[1]
+laNivel[1]=''
+
+Scan
+	lcDesc = fLimpaTexto(Alltrim(crSigCdAcU.Descricaos))
+	If At('-',lcDesc) = 0
+		m.lnNode1 = m.loTree1.AddPictureNode(Alltrim(lcDesc), 0, 1, 1, 0, 0)
+		m.loTree1.NodeHeader(m.lnNode1) = .t.
+		m.loTree1.NodeExpanded(m.lnNode1) = .f.
+		m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+		m.loTree1.NodeFontBold(m.lnNode1) = 2
+		m.loTree1.NodeCargo(m.lnNode1) = crSigCdAcU.Programas+crSigCdAcU.Parametros
+		laNivel[1] = lcDEsc
+	Else
+		If ! IsNull(lcDesc)
+			lnNivel = 1
+			DO While .t.
+				If Alen(laNivel) < lnNivel
+					Declare laNivel[lnNivel]
+					laNivel[lnNivel] = ''
+					Exit
+				Endif
+				lcDescs = Alltrim(Substr(lcDesc,Iif(lnNivel=1,1,At('-',lcDesc,lnNivel-1)+1),At('-',lcDesc,lnNivel)-Iif(lnNivel=1,1,At('-',lcDesc,lnNivel-1)+1)-1))
+				If Type('laNivel[lnNivel]') = 'L' And ! laNivel[lnNivel]
+					laNivel[lnNivel] = ''
+					Exit
+				Endif
+				If Upper(laNivel[lnNivel]) == Upper(lcDescs)
+					lnNivel = lnNivel + 1
+				Else
+					Declare laNivel[lnNivel]
+					laNivel[lnNivel] = ''
+					Exit
+				EndIf
+			EndDo
+			DO While At('-',lcDesc,lnNivel) <> 0
+				If laNivel[Alen(laNivel)] <> Alltrim(Left(lcDesc,At('-',lcDesc,lnNivel)-1))
+					lcDescs = Alltrim(Substr(lcDesc,Iif(lnNivel=1,1,At('-',lcDesc,lnNivel-1)+1),At('-',lcDesc,lnNivel)-Iif(lnNivel=1,1,At('-',lcDesc,lnNivel-1)+1)-1))
+					laNivel[Alen(laNivel)] = lcDescs
+					lnPicture = 3
+					m.lnNode1 = m.loTree1.AddPictureNode(Alltrim(lcDescs), 0, lnNivel, lnPicture, 0, 0)
+					m.loTree1.NodeHeader(m.lnNode1) = .t.
+					m.loTree1.NodeExpanded(m.lnNode1) = .f.
+					m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+					m.loTree1.NodeFontBold(m.lnNode1) = 2
+					m.loTree1.NodeCargo(m.lnNode1) = crSigCdAcU.Programas+crSigCdAcU.Parametros
+				EndIf
+				lnNivel = lnNivel + 1
+				Declare laNivel[Alen(laNivel)+1]
+				laNivel[Alen(laNivel)] = ''
+			EndDo
+			laNivel[Alen(laNivel)] = Alltrim(Left(lcDesc,At('-',lcDesc,lnNivel)-1))
+			lcDescs = Alltrim(Substr(lcDesc,Iif(lnNivel=1,1,At('-',lcDesc,lnNivel-1)+1),Len(lcDesc)))
+			lnPicture = Iif(lnNivel=1,1,2)
+			m.lnNode1 = m.loTree1.AddPictureNode(Alltrim(lcDescs), 0, lnNivel, lnPicture, 0, 0)
+			m.loTree1.NodeHeader(m.lnNode1) = .t.
+			m.loTree1.NodeExpanded(m.lnNode1) = .f.
+			m.loTree1.NodeShowChecks(m.lnNode1) = .f.
+			m.loTree1.NodeFontBold(m.lnNode1) = 2
+			m.loTree1.NodeCargo(m.lnNode1) = crSigCdAcU.Programas+crSigCdAcU.Parametros
+			laNivel[lnNivel] = lcDescs
+		EndIf 
+	EndIf
+EndScan
+
+m.loTree1.ReDraw(.t.)
+m.loTree1.Refresh
+ThisForm.pnNodeExp = 0
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopcau.TreeView
+* Classe: olecontrol (Base: olecontrol)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Change
+------------------------------------------------------------
+PROCEDURE Change
+*** ActiveX Control Event ***
+LPARAMETERS nindex
+*!*	This.NodeClick(nIndex)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+*** ActiveX Control Event ***
+LPARAMETERS keyascii
+
+*!*	If KeyAscii = 27
+*!*		If InList(ThisForm.pcEscolha,'CONSULTAR')
+*!*			This.Parent.Parent.Parent.Grupo_Salva.Salva.Click
+*!*		Else
+*!*			This.Parent.Parent.Parent.Grupo_Salva.cancelar.Click
+*!*		EndIf
+*!*	EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE NodeClick
+------------------------------------------------------------
+PROCEDURE NodeClick
+*** ActiveX Control Event ***
+LPARAMETERS nindex, ncolumn
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopcau.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+loTree1 = ThisForm.TreeView
+llExpande = .f.
+
+For lnNode = 0 To loTree1.lIstCount-1
+	If ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)
+		loTree1.NodeExpanded(lnNode) = .t.
+		llExpande = .t.
+	Endif
+EndFor
+
+If llExpande 
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp + 1
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+If ThisForm.pnNodeExp > 0
+	loTree1 = ThisForm.TreeView
+
+	For lnNode = 0 To loTree1.lIstCount-1
+		If ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)
+			loTree1.NodeExpanded(lnNode) = .f.
+		Endif
+	EndFor
+
+	ThisForm.pnNodeExp = ThisForm.pnNodeExp - 1
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command3.Click
+------------------------------------------------------------
+PROCEDURE Command3.Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopcau.GetcUsu
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.ClearNodes
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrox
+
+If not IsEmpty(This.value)
+
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Usuarios','','Código',.t.)
+		xBrox.mAddColuna('nComps','','Nome',.T.)
+		xBrox.Show()
+	EndIf 
+
+	If lastkey()<>27
+		This.Parent.GetCUsu.Value = crSigCdUsu.Usuarios
+		This.Parent.GetDUsu.Value = crSigCdUsu.nComps
+	Else
+		This.Parent.GetCUsu.Value = ''
+		This.Parent.GetDUsu.Value = ''
+	endif
+	ThisForm.Refresh
+EndIf
+
+If ! Empty(This.Value) Or ! Empty(This.Parent.GetGrupo.Value)
+	ThisForm.MakeTree()
+Endif
+
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopcau.GetDUsu
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrox
+
+If not IsEmpty(This.value)
+
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','nComps',This.Value,'Seleção',.t.,'nComps')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('nComps','','Nome',.T.)
+		xBrox.mAddColuna('Usuarios','','Código',.t.)
+		xBrox.Show()
+	EndIf 
+
+	If lastkey()<>27
+		This.Parent.GetCUsu.Value = crSigCdUsu.Usuarios
+		This.Parent.GetDUsu.Value = crSigCdUsu.nComps
+	Else
+		This.Parent.GetCUsu.Value = ''
+		This.Parent.GetDUsu.Value = ''
+	endif
+	ThisForm.Refresh
+EndIf
+
+If ! Empty(This.Value) Or ! Empty(This.Parent.GetGrupo.Value)
+	ThisForm.MakeTree()
+Endif
+
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetcUsu.Value) And Empty(ThisForm.GetGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigopcau.GetGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+m.loTree1 = ThisForm.TreeView
+
+m.loTree1.ClearNodes
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrox
+
+If not IsEmpty(This.value)
+
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGrA','crSigCdGrA','Grupos',This.Value,'Seleção',.t.,'Grupos')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Grupos','','Código',.t.)
+		xBrox.mAddColuna('nComps','','Nome',.T.)
+		xBrox.Show()
+	EndIf 
+
+	If lastkey()<>27
+		This.Parent.GetGrupo.Value = crSigCdGrA.Grupos
+	Else
+		This.Parent.GetGrupo.Value = ''
+	endif
+	ThisForm.Refresh
+EndIf
+
+If ! Empty(This.Value) Or ! Empty(This.Parent.GetGrupo.Value)
+	ThisForm.MakeTree()
+Endif
+
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetcUsu.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigopcau
+RESERVED3 (ClassInfo): pnnodeexp
+podatamgr
+*maketree 
+
+
+* Objeto: TreeView
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

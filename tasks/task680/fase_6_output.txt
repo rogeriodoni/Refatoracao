@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. O que mudou e por qu├¬:
+
+## Problema encontrado no que a Fase 5 deixou
+
+Os lookups das c├®lulas da grade estavam ligados por `BINDEVENT` nos eventos `GotFocus`/`KeyPress`/`LostFocus` de `Column<N>.Text1`. Isso ├® exatamente o que a regra **#46** e o pr├│prio cabe├ºalho de `TextBoxGridLookup.prg` pro├¡bem ÔÇö BINDEVENT em evento de c├®lula de Grid n├úo ├® confi├ível no VFP9; a valida├º├úo tem de morar no `Valid` do TextBox da coluna.
+
+## Implementa├º├úo
+
+**`projeto/app/classes/TextBoxGridLookup.prg`** ÔÇö nova classe `TextBoxCelulaTamanho_4c` (+61 linhas) com `When`/`Valid`/`KeyPress`(F4/F5)/`DblClick` **embutidos**, delegando a m├®todos PUBLIC do form via `this_cPapel` (`COD`/`DESC`/`PESO`/`PERC`/`VALOR`/`PRAZO`).
+
+**`projeto/app/forms/operacionais/Formsigprtam.prg`**:
+
+- `InstalarCelulasGrade()` ÔÇö `Column.AddObject` + `CurrentControl` + `Sparse = .F.` nas 6 colunas (regra #18), com `MaxLength` vindo do schema (`codtams char(4)`, `descs char(20)`) e os `InputMask` do SCX. Chamado no `ConfigurarGrid` **e de novo no fim do `CarregarLista`** ÔÇö o BO recria `cursor_4c_Dados` e o rebind reseta `CurrentControl`/`Sparse`/`Column.ReadOnly`.
+- `CelulaGradeEditavel()` ÔÇö os 6 `When` do legado, inclusive o gate "Descri├º├úo s├│ edit├ível com o C├│digo vazio"; `peAntValue` virou property num├®rica por coluna (`Tag` ├® estritamente Character no VFP9).
+- `ValidarCelulaGradeExec()` ÔåÆ `ValidarTamanhoGridExec` / `ValidarPercGridExec` / `ValidarValorGridExec` / `GravarCelulaNumericaExec`. F├│rmulas **transcritas literalmente** (regra #17), incluindo o ramo em que percentual zerado *n├úo* zera o Valor.
+- `ResolverTamanhoSelecionado()` ÔÇö match exato em `SigCdTam`, picker no fallback, checagem de duplicidade, e `Return .F.` s├│ no caso de duplicidade (├║nico `Return .F.` do legado). O c├│digo escolhido volta para `par_oTxt.Value` al├®m do `REPLACE`.
+- `AbrirLookupTamanhoGrade()` ÔÇö F4/F5 e duplo clique entram no mesmo funil, coberto pela guarda de reentr├óncia do picker.
+
+## Defeito adicional corrigido
+
+`GravarLinhaAtual` fazia `LOCATE FOR cidchaves == loc_cCidChaves` com a agulha trimada. **Medido no VFP9**: `PADR("CID001",20) == "CID001"` ├® `.F.` sempre (o `==` compara o comprimento, independente de `SET EXACT`). Com chave menor que 20 o LOCATE falhava e a grava├º├úo devolvia `.F.` em sil├¬ncio. Trocado por `ALLTRIM` dos dois lados ÔÇö as compara├º├Áes novas j├í nascem assim.
+
+## Verifica├º├úo (medida, n├úo inferida)
+
+- Compila├º├úo limpa de form e classe, sem `.err`.
+- `ProbeTam680F6`: form instancia; as 6 colunas com `CurrentControl` apontando para a c├®lula, `Sparse=.F.`, `this_cPapel` certo; os 7 m├®todos chamados pela classe da c├®lula s├úo PUBLIC; `When` devolve `.T.` em ALTERAR e `.F.` em VISUALIZAR. **FALHAS=0**
+- `ProbeTam680F6b` (cursor criado dentro da DataSession privada do form): `PVens=100, Percs=10 ÔåÆ valor=110`; `Valor=150 ÔåÆ percs=50`; percentual zerado deixa o valor intacto; Peso/Entrega chegam ao cursor; o LOCATE acha a linha de chave curta. **FALHAS=0**
+- Auditorias: `VerificarLookupEmKeyPress` ERRO=0 AVISO=0 ┬À `VerificarFuncoesNaoDefinidas` OK ┬À `VerificarMetodoProtegidoChamadoDeFora` OK ┬À `VerificarPropriedadesInexistentes` OK ┬À `ValidadorSQLSchema` PASSOU (683 tabelas).
+
+Nota: o ├║nico erro capturado nos probes ├® `Connection handle is invalid` no `UPDATE` ÔÇö o SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina (j├í registrado). A duplicidade de tamanho depende de SQL e n├úo foi exercitada em runtime; o resto do fluxo foi. Removi um `automation/_cc_sigprtam.FXP` solto (artefato de build n├úo rastreado) junto com os meus tempor├írios.

@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All four methods are already defined in the file ÔÇö they just fell in the sections the review excerpt omitted (lines 1684-1726, and the full `ObterFiltroAcessoEmpresas`/`CarregarUniversoEmpresas` bodies):
+
+- `ObterFiltroAcessoEmpresas()` ÔÇö `PROTECTED FUNCTION` at line 591
+- `CarregarUniversoEmpresas()` ÔÇö `PROTECTED FUNCTION` at line 693
+- `ContarSelecionados()` ÔÇö `PROTECTED FUNCTION` at line 1681
+- `ValidarSelecaoParaGerar()` ÔÇö `PROTECTED FUNCTION` at line 1724
+
+All four are called via `THIS.Metodo()` from **other methods of the same `FormSIGPRNSE` class**, which is legal in VFP9 ÔÇö `PROTECTED` only blocks calls from outside the class hierarchy (regra #51 is about a Form calling a **BO's** protected method, not a form calling its own protected methods). So these 4 "METODO-INEXISTENTE" findings are false positives of the review tool, caused by the code-review pass only seeing truncated excerpts of a 2071-line file and missing the declarations outside those windows.
+
+No code changes are needed ÔÇö there is nothing to fix.

@@ -1,0 +1,1619 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCfa.SCX
+* Data/Hora: 17/10/2026 19:20:26
+* Total de registros: 48
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCFA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCFA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCFA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCFA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPCFA
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_Mat
+  Parent: SIGOPCFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Dgrupo
+  Parent: SIGOPCFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Visualizar
+  Parent: SIGOPCFA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Excel
+  Parent: SIGOPCFA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_DMat
+  Parent: SIGOPCFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processa
+  Parent: SIGOPCFA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Grade
+  Parent: SIGOPCFA
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFA.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFA.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Saida
+  Parent: SIGOPCFA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Datai
+  Parent: SIGOPCFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dataf
+  Parent: SIGOPCFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descr
+  Parent: SIGOPCFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optImp
+  Parent: SIGOPCFA
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGOPCFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGOPCFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dConta
+  Parent: SIGOPCFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGOPCFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Imprimir
+  Parent: SIGOPCFA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 101
+  Left = 55
+  Width = 412
+  Height = 113
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Pesquisa de Falhas por Fase"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGOPCFA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Shape1
+------------------------------------------------------------
+  Top = -3
+  Left = 555
+  Height = 110
+  Width = 230
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_Mat
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 137
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 114
+  Width = 108
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Mat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_Dgrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 23
+  Left = 218
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 162
+  Width = 282
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 3
+  Themes = .F.
+  Name = "Get_Dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Visualizar
+------------------------------------------------------------
+  Top = 3
+  Left = 500
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Cancel = .F.
+  Caption = "    \<Vídeo            "
+  TabIndex = 12
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "Visualizar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Excel
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_excel_26.jpg
+  Cancel = .F.
+  Caption = "    E\<xcel            "
+  TabIndex = 14
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "Excel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_DMat
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 246
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 114
+  Width = 303
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_DMat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say1
+------------------------------------------------------------
+  Caption = "Material :"
+  Left = 87
+  Top = 118
+  Width = 47
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "Processar"
+  TabIndex = 10
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade
+------------------------------------------------------------
+  ColumnCount = 9
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 293
+  Left = 23
+  ReadOnly = .T.
+  RecordSource = "TmpSaldo"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 11
+  Top = 216
+  Width = 754
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 4
+  Column1.ControlSource = "TmpSaldo.Saidas"
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = "TmpSaldo.Entradas"
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 1
+  Column3.ControlSource = "TmpSaldo.Fase"
+  Column3.Width = 73
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 6
+  Column4.ControlSource = "TmpSaldo.FReals"
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column5"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 7
+  Column5.ControlSource = "TmpSaldo.FAdmins"
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column6"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 9
+  Column6.ControlSource = "TmpSaldo.FReals - TmpSaldo.FAdmins"
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column4"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 2
+  Column7.ControlSource = "TmpSaldo.Conta"
+  Column7.Width = 75
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 5
+  Column8.ControlSource = "TmpSaldo.Pesagems"
+  Column8.Width = 80
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.ColumnOrder = 8
+  Column9.ControlSource = "TmpSaldo.IndProds"
+  Column9.Width = 80
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saídas"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Entradas"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Fase"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Falha Real"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Falha Admitida"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Falha Total"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "(TmpSaldo.FReals - TmpSaldo.FAdmins)"
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pesagem"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpSaldo.Pesagems"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Índice Produt."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Grade.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Saida
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 15
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Saida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_Datai
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  Height = 23
+  Left = 137
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 138
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Datai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say2
+------------------------------------------------------------
+  Caption = "Período :"
+  Left = 89
+  Top = 142
+  Width = 45
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_Dataf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  Height = 23
+  Left = 253
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 138
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Dataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say3
+------------------------------------------------------------
+  Caption = "até"
+  Left = 225
+  Top = 142
+  Width = 18
+  TabIndex = 19
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_Descr
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 107
+  SpecialEffect = 1
+  TabIndex = 21
+  Top = 527
+  Width = 369
+  ForeColor = 0,0,0
+  BackColor = 255,255,221
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "Get_Descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.optImp
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 348
+  SpecialEffect = 0
+  Top = 137
+  Width = 354
+  TabIndex = 17
+  ZOrderSet = 16
+  Name = "optImp"
+  Option1.FontName = "Tahoma"
+  Option1.BackStyle = 0
+  Option1.Caption = "Grupo"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 47
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.ZOrderSet = 0
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.BackStyle = 0
+  Option2.Caption = "Grupo + Conta"
+  Option2.Value = 0
+  Option2.Left = 65
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.ZOrderSet = 1
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Grupo + Conta + Balanço"
+  Option3.Height = 15
+  Option3.Left = 177
+  Option3.Top = 5
+  Option3.Width = 141
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Themes = .F.
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição da Conta"
+  Height = 15
+  Left = 109
+  Top = 512
+  Width = 110
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 137
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 162
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 137
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 186
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Get_dConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 218
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 186
+  Width = 282
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say5
+------------------------------------------------------------
+  Caption = "Grupo :"
+  Left = 96
+  Top = 166
+  Width = 38
+  TabIndex = 18
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Say6
+------------------------------------------------------------
+  Caption = "Conta :"
+  Left = 96
+  Top = 189
+  Width = 38
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFA.Imprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Cancel = .F.
+  Caption = " \<Impressora    "
+  TabIndex = 13
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 23
+  Themes = .F.
+  Name = "Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCFA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressão
+------------------------------------------------------------
+PROCEDURE impressão
+LParameters lcSaida
+
+Create Cursor TmpCabec (Titulo c(100), SubTitulo c(100), Empresa c(100))
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+
+lcTitulo 	= 'Falhas por Fase'
+lcSubTitulo = 'Material : ' + Alltrim(This.Get_Mat.Value) + ' - ' + Alltrim(This.Get_DMat.Value) + Chr(13) + ;
+			  'Período : ' + Dtoc(This.Get_Datai.Value) + ' - ' + Dtoc(This.Get_Dataf.Value)
+lcEmpresa   = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+
+Insert Into TmpCabec (Empresa, Titulo, SubTitulo) Values (lcEmpresa, lcTitulo, lcSubTitulo)
+
+Select TmpSaldo
+Set Order to SeqFase
+Go Top
+If Eof() 
+	=Messagebox('Nenhuma Informação Selecionada!!!', 32)
+Else
+	If (lcSaida = 'V')
+		if thisform.optImp.Value = 3 && Grupo + Conta + Balanço
+			Report Form SigOpCf2 Preview NoConsole
+		Else
+			Report Form SigOpCfa Preview NoConsole
+		Endif
+	Else
+		If (lcSaida = 'I')
+			if thisform.optImp.Value = 3 && Grupo + Conta + Balanço
+				Report Form SigOpCf2 To Print Prompt
+			Else
+				Report Form SigOpCfa To Print Prompt
+			Endif
+		Else
+
+			lcArq = PutFile([Nome da Planilha], [], [XLS;TXT])
+
+			If fVerificaPasta(lcArq, 2)
+				If (Lower(Alltrim(JustExt(lcArq)))=='xls')
+					Copy To (lcArq) Type Xls
+				Else 
+					Copy To (lcArq) Delimited With "" With Character ';'
+				EndIf 
+
+				If File(lcArq)
+					=MessageBox('Planilha Gerada Com Sucesso!!!', 0+48+32, '')
+				EndIf
+			Else
+				=MessageBox('Erro na Geração da Planilha,' + Chr(10) + 'Verificar Diretório ou Planilha Já Aberta...', 0+48+32, '')
+			EndIf
+		Endif
+	EndIf
+EndIf
+Use In TmpCabec
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.Get_Datai.Value = Date()
+		.Get_Dataf.Value = Date()
+
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor TmpSaldo (Fase c(10), Conta c(10), Rclis c(40), Entradas n(12,2), Saidas n(12,2), Pesagems n(12,2), ;
+		FReals n(12,2), FAdmins n(12,2), fTotals n(12,2), Seqs c(1), pFalhas n(8,2), IndProds n(12,3), Codigos n(6), Datas d)
+Index On Seqs + Fase + Conta + Str(Codigos,6) Tag SeqFase
+Index On Fase + Conta + Str(Codigos) Tag Fase
+
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_Mat
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'CPros', This.Value, 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Mat.Value  = crListaRemota.CPros
+	This.Parent.Get_DMat.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.Get_Mat.Value  = ''
+	This.Parent.Get_DMat.Value = ''
+EndIf
+This.Parent.Get_Mat.Refresh
+This.Parent.Get_DMat.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_Dgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'D',This.Value,ThisForm.get_grupo,ThisForm.get_Dgrupo)
+Else
+	ThisForm.get_grupo.Value = ''
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_grupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Visualizar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Impressão('V')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Excel
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Impressão('E')
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_DMat
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', This.Value, 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Mat.Value  = crListaRemota.CPros
+	This.Parent.Get_DMat.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.Get_Mat.Value  = ''
+	This.Parent.Get_DMat.Value = ''
+EndIf
+This.Parent.Get_Mat.Refresh
+This.Parent.Get_DMat.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Mat.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Processa
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private pDtI, pDtF
+
+lcCodMat  = ThisForm.Get_Mat.Value
+ldDataIni = ThisForm.Get_Datai.Value
+ldDataFim = ThisForm.Get_Dataf.Value
+lcGrupo   = ThisForm.Get_Grupo.Value
+lcConta   = Thisform.Get_Conta.value
+
+If Empty(ThisForm.Get_Mat.Value)
+	=Messagebox('O Produto Deve Ser Informado!!!', 32, '')
+	ThisForm.Get_Mat.SetFocus
+	Return 0
+EndIf
+
+If (ldDataFim < ldDataIni)
+	=Messagebox('Data Final Deve Ser Maior Que a Data Inicial!!!', 32, '')
+	ThisForm.Get_Mat.SetFocus
+	Return 0
+EndIf
+
+Select TmpSaldo 
+Set Order To Fase
+Zap
+
+pDtI = fDtoSQL(ldDataIni)
+pDtf = fDtoSQL(ldDataFim, '23:59:59')
+
+lcQuery = [Select a.Emps, a.Codigos, a.Grupos, b.CPros, b.Entradas, b.Saldos, ] + ;
+				 [b.Saidas, b.Pesagems, b.FReals, b.FAdmins, b.cIdChaves, a.Contas, c.Rclis, b.IndProds, a.Datas ] + ;
+		    [From SigCdFcx a, SigOpCfe b, SigCdCli c ] + ;
+		   [Where a.Emps = '] + _Empr + [' And ] + ;
+		   		 [a.Datas Between ?pDtI And ?pDtF And ] + ;
+		   		 [a.Emps = b.Emps And ] + ;
+		   		 [a.Codigos = b.Codigos And ] + ;
+		   		 [b.Cpros = '] + lcCodMat + [' And a.Contas = c.Iclis ] + ;
+		   [Order By a.Emps, a.Codigos, a.Grupos, b.CPros, b.Entradas, b.Saldos, ] + ;
+				 [b.Saidas, b.Pesagems, b.FReals, b.FAdmins, b.cIdChaves, a.contas, c.Rclis ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdFcx') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFcx)')
+	Return 0
+EndIf
+
+Select crSigCdFcx
+Scan
+	If (Not Empty(lcGrupo) And CrSigCdFcx.Grupos <> lcGrupo ) Or (Not Empty(lcConta) And CrSigCdFcx.Contas <> lcConta )
+		Loop
+	Endif
+
+	lStrQuery = [Select Setors From SigCdCle Where ClaGrupos = ']+crSigCdFcx.Grupos+[' And ClaContas = ']+CrSigCdFcx.ContaS+[']
+	If (ThisForm.poDataMgr.SqlExecute(lStrQuery,'CrTmpClaes') < 1)
+		=MessageBox('Favor reinicializar o processo!!!', 16, 'Falha na Conexão (CrTmpClaes)')
+		Return 0
+	EndIf
+	
+	lcGrupo2 = CrSigCdFcx.Grupos
+	Select CrTmpClaes
+	If Reccount() > 0
+		lcGrupo2 = CrTmpClaes.Setors
+	Endif
+
+	lcChave = lcGrupo2
+	Do Case
+		Case thisform.optImp.Value = 2 && Grupo + Conta
+			lcChave = lcGrupo2 + CrSigCdFcx.Contas
+		Case thisform.optImp.Value = 3 && Grupo + Conta + Balanço
+			lcChave = lcGrupo2 + CrSigCdFcx.Contas + Str(CrSigCdFcx.Codigos,6)
+	EndCase
+
+	If Not Seek(lcChave, 'TmpSaldo')
+		Insert Into TmpSaldo (Fase,Conta,Rclis,Codigos,Datas) Values (lcGrupo2,;
+		IIF(Inlist(thisform.optImp.Value,2,3),CrSigCdFcx.Contas,''),;
+		IIF(Inlist(thisform.optImp.Value,2,3),CrSigCdFcx.Rclis,''), IIF(thisform.optImp.Value = 3,CrSigCdFcx.Codigos,0),IIF(thisform.optImp.Value = 3,CrSigCdFcx.Datas,Ctod('')))
+	EndIf
+
+	Replace Entradas With Entradas + crSigCdFcx.Entradas + crSigCdFcx.Saldos, ;
+			Saidas   With Saidas   + crSigCdFcx.Saidas, ;
+			FReals   With FReals   + crSigCdFcx.FReals, ;
+			FAdmins  With FAdmins  + crSigCdFcx.FAdmins, ;
+			Pesagems With Pesagems + crSigCdFcx.Pesagems ;
+			IndProds With IndProds + (crSigCdFcx.IndProds - crSigCdFcx.FReals) In TmpSaldo
+
+	x = Iif(TmpSaldo.Saidas = 0,0,(TmpSaldo.fReals / TmpSaldo.Saidas * 100))
+	Replace pFalhas With x In TmpSaldo
+
+EndScan
+
+Select TmpSaldo
+Append Blank
+Replace Seqs With '1'
+Sum FReals, FAdmins, Saidas, Entradas, Pesagems, IndProds To _FReal, _FAdm, _Saida, _Ent, _Psg, _IndProd
+Append Blank
+Replace Seqs     With '2', ;
+		Fase     With 'Total', ;
+		FReals   With _FReal, ;
+		FAdmins  With _FAdm, ;
+		Saidas   With _Saida, ;
+		Entradas With _Ent,;
+		Pesagems With _psg,;
+		IndProds With _IndProd
+
+x = Iif(TmpSaldo.Saidas = 0,0,(TmpSaldo.fReals / TmpSaldo.Saidas * 100))
+Replace pFalhas With x In TmpSaldo
+
+Replace all fTotals With fReals - fAdmins
+
+Set Order To SeqFase
+Go Top
+If Eof()
+	=Messagebox('Nenhuma Falha Selecionada!!!', 32)
+EndIf
+ThisForm.Grade.Refresh
+ThisForm.Grade.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Grade
+* Classe: grid (Base: grid)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.Get_Descr.Value = TmpSaldo.Rclis
+ThisForm.Get_Descr.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Saida
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_Descr
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(this.Value)
+	If Not fAcessoContab(Usuar, 'C', This.Value, This, thisform.get_DGrupo, .f., ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 32, '')
+		ThisForm.Get_Grupo.Value = ''
+		ThisForm.Get_DGrupo.Value = ''
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, ThisForm.Get_Grupo.Value, 'C', This.Value, ThisForm.Get_Conta, ThisForm.Get_DConta, .f., .f., ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 32, '')
+		ThisForm.Get_Conta.Value  = ''
+		ThisForm.Get_dConta.Value = ''
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Get_dConta
+* Classe: fwget (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, ThisForm.Get_Grupo.Value, 'D', This.Value, ThisForm.Get_Conta, ThisForm.Get_DConta, .f., .f., ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 32, '')
+		ThisForm.Get_Conta.Value = ''
+		ThisForm.Get_dConta.Value = ''
+	EndIf
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Conta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFA.Imprimir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Impressão('I')
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCFA
+RESERVED3 (ClassInfo): podatamgr
+*impressão 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

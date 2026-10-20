@@ -956,7 +956,9 @@ DEFINE CLASS Formale AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
         IF USED("crSigCdAle")
-            TABLEREVERT(.T., "crSigCdAle")
+            IF CURSORGETPROP("Buffering", "crSigCdAle") > 1
+                TABLEREVERT(.T., "crSigCdAle")
+            ENDIF
             USE IN crSigCdAle
         ENDIF
         THIS.this_oParentForm = .NULL.

@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## FASE 7/8 ÔÇö Form: Eventos Principais (`Formsigprtef`)
+
+**A fase j├í estava entregue.** Encontrei os quatro handlers exigidos (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í implementados em `projeto/app/forms/operacionais/Formsigprtef.prg`, com o bloco de racional documentando por que eles **n├úo** delegam ├ás a├º├Áes TEF ÔÇö `CmdTefAdmClick`/`CmdTefAtvClick`/`CmdCancelarClick` chamam `SigFiTefReq()`, que abre transa├º├úo real sem guarda de modo de teste.
+
+Validei e corrigi um ponto:
+
+**Verifica├º├Áes (medidas, n├úo presumidas)**
+- Gate Fase 7: os 4 nomes presentes ÔåÆ **0 eventos faltantes**
+- `Test-CompletudeCodigo` (os 4 checks reimplementados ├á parte, sem dot-source do Orquestrador): **0 problemas** ÔÇö sem TODO/stub/procedure vazia/`MsgAviso` placeholder
+- Compila├º├úo no VFP9 (smoke test antes, `.fxp` apagados antes, conferidos depois): `Formsigprtef.prg` e `sigprtefBO.prg` **sem `.err`**, `.fxp` regerados
+- 0 bytes acentuados; 1615 linhas todas CRLF preservadas
+
+**Corre├º├úo aplicada (linhas 1469-1492)**
+
+`BtnExcluirClick` e `BtnCancelarClick` delegavam a `CmdEncerrarClick()` ÔåÆ `THIS.Release()`. Fechar a janela do operador a partir de um nome que **n├úo existe na tela** ├® o mesmo tipo de efeito colateral invis├¡vel que o pr├│prio bloco de racional pro├¡be para as a├º├Áes TEF ÔÇö e, num encadeamento de chamadas, mata o form no meio do teste. Al├®m disso o "Cancelar" do legado (`Command1`) ├® cancelamento de **transa├º├úo TEF**, n├úo de edi├º├úo, e j├í est├í ligado ao bot├úo real.
+
+Agora os dois ficam inertes (`FocarEntradaTef()`, como os outros aliases) e s├│ `BtnEncerrarClick` fecha ÔÇö ├® o ├║nico nome CRUD que coincide com bot├úo real do legado (`Sair`, caption "Encerrar"). Nenhuma funcionalidade se perde: as quatro a├º├Áes reais seguem exclusivamente nos bot├Áes do legado, via `ConfigurarEventos`.
+
+Confirmei tamb├®m que o `TesteAutomatico.prg` nem alcan├ºa esses aliases neste form (sem `pgf_4c_Paginas` + `lFormOperacional` ele passa direto), mas o crit├®rio n├úo deveria depender desse curto-circuito.
+
+Atualizei a mem├│ria `feedback_alias_crud_dispara_transacao_real` ÔÇö a vers├úo anterior recomendava justamente `Excluir`/`Cancelar`/`Encerrar` ÔåÆ `CmdEncerrarClick()`. Arquivos tempor├írios de compila├º├úo removidos; s├│ o `.prg` do form aparece como modificado no git.

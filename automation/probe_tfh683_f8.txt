@@ -1,0 +1,29 @@
+=== PROBE Fase 8 - FormSIGPRTFH (SiTef Consulta de Cheque) ===
+1) CREATEOBJECT -> VARTYPE=O
+   BO VARTYPE=O  SiTefDisponivel=.F.
+
+2) escopos (atributo 2 = PROTECTED):
+   FormParaBO PROTECTED   = .T.
+   BOParaForm PROTECTED   = .T.
+   BtnSaidaClick PROT     = .F.
+   ValidarParametros PROT = .F.
+
+3) BOParaForm (BO -> tela), ja executado no Init:
+   Praca=[1700] Banco=[341] Ag=[1234/5] Cta=[567890/8] Chq=[000999/3] Cpf=[11122233344] Rotulo=[CPF :]
+   9 campos + rotulo conferem = .T.
+
+4) FormParaBO (tela -> BO):
+   retorno = .T.
+
+5) round-trip BO -> tela -> BO (identidade):
+   BO depois do round-trip: Banco=[237] Agencia=[9876] Cpf=[11122233344]
+   identidade preservada = .T.
+
+6) guarda de campo em BRANCO:
+   tela vazia -> BO.this_cBanco=[237]
+   property PRESERVADA = .T.
+
+7) rotulo CPF/CGC:
+   TpPessoa=J -> rotulo=[CGC :]
+
+PROBE_OK

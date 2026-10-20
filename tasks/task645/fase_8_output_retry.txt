@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Timestamps unchanged (04:37/04:28/04:33) ÔÇö I modified no deliverable.
+
+## Fase 8 j├í estava correta; a reprova├º├úo ├® auto-refer├¬ncia do gate
+
+N├úo alterei o form. A Fase 8 **n├úo falhou por defeito no artefato** ÔÇö caiu na armadilha j├í documentada: *gate corrigido DURANTE a fase n├úo vale para ela mesma*.
+
+**Diagn├│stico (procedimento de 3 passos da mem├│ria):**
+1. `leitor-baixa` existe no working tree (2 ocorr├¬ncias), **zero no HEAD** ÔåÆ gate editado mid-run.
+2. `.ps1` gravado **04:33:26**; processo `RunLoop.ps1` (PID 13748) iniciado **2026-10-16 16:48** ÔåÆ o PowerShell j├í tinha parseado a vers├úo antiga.
+3. Executando o bloco `case 8` standalone das duas vers├Áes:
+
+| | VALIDADO | mensagem |
+|---|---|---|
+| gate do **disco** | `True` | ramo leitor-baixa dispensa `CarregarLista` |
+| gate do **HEAD** | `False` | *"faltam m├®todos finais: CarregarLista"* |
+
+Disco `True` + HEAD `False` = artefato correto. A valida├º├úo das 04:38 rodou o gate velho.
+
+**Validei o entreg├ível por fora** (n├úo pelo gate): compila├º├úo com `.fxp` apagado ÔåÆ `COMPILE_OK`, zero `.err`; `Test-CompletudeCodigo` ÔåÆ OK nos dois arquivos; probe VFP9 real ÔåÆ instancia (`Caption=[Baixa de C├│digos de Barras]`), 7 checagens, `PROBE_OK`. Os 3 nomes exigidos (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`) est├úo presentes; s├│ falta `CarregarLista`, que **n├úo tem referente** ÔÇö o `layout.json` n├úo tem grid nem pageframe. Cri├í-lo seria inventar UI (PILAR 1) ou stub vazio (regra de completude). Fidelidade conferida: bot├Áes Confirma (Top 3/Left 649/"Baixa") e Cancela (3/724/"Encerrar") exatos, `MsgConfirma` como l├│gico (regra #7), `SetFocus` incondicional como no legado.
+
+**Uma medi├º├úo que corrige o run anterior.** Ele relatou "atua em 3, 2 j├í cobertos por ramos anteriores". Medindo cada um com o gate completo das duas vers├Áes: `SIGPREST` j├í era `True` nos dois (ramo `utilitario-arquivo` dispara antes ÔÇö o novo nunca ├® avaliado) e `sigprila` seguiu `False` nos dois (dispensa `CarregarLista`, mas `BtnCancelarClick` continua faltando). **Blast radius real = 1 form**, o da pr├│pria task. O sweep por predicado superestima porque o ramo novo exige `-not` de todos os anteriores.
+
+Registrei esse passo 4 ÔÇö medir alcance antes de deixar o ramo no lugar ÔÇö na mem├│ria existente.
+
+**Duas coisas para seu julgamento:** (1) a Fase 8 vai continuar reprovando nesta execu├º├úo por constru├º├úo; o ramo s├│ passa a valer na pr├│xima invoca├º├úo do orquestrador ÔÇö se o pipeline tratar isso como falha dura, task645 precisa ser re-enfileirada, n├úo reparada. (2) `OrquestradorMigracao.ps1` segue `M` com 16 hunks de v├írias tasks; n├úo commitei nada.

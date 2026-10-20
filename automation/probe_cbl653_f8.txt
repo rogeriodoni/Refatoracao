@@ -1,0 +1,38 @@
+=== PROBE Fase 8 - FormSigOpCbl (task653) ===
+1) CREATEOBJECT -> VARTYPE=O Width=800 Height=600 ControlCount=77
+2) escopos (Protected=.T. significa inacessivel de fora):
+   CarregarLista      Prot=.F. esperado .F.
+   BtnConfirmarClick  Prot=.F. esperado .F.
+   BtnCancelarClick   Prot=.F. esperado .F.
+   Text29LostFocus    Prot=.F. esperado .F.
+   Text30LostFocus    Prot=.F. esperado .F.
+   Text40LostFocus    Prot=.F. esperado .F.
+   BtnEncerrarClick   Prot=.F. esperado .F. (existe=.T.)
+   FormParaBO         Prot=.T. esperado .T.
+   BOParaForm         Prot=.T. esperado .T.
+3) GetPaperSize() -> tipo=C len=25 cod=[         9] desc=[A4 210 x 297 mm]
+4) Text29LostFocus com impressora instalada [OneNote for Windows 10]
+   valor depois = [OneNote for Windows 10] (deve ser igual)
+5) Text30LostFocus com fonte instalada [Yu Gothic UI Semilight]
+   valor depois = [Yu Gothic UI Semilight] tam=10 LockScreen=.F. (LockScreen deve voltar .F.)
+6) Text40LostFocus com campo vazio:
+   Text40 = [A4 210 x 297 mm]
+   BO.this_cTamfolha (CRU) = [         9A4 210 x 297 mm]
+7) reentrancia: this_lEmDialogo=.T. -> Text40 = [] (deve continuar VAZIO)
+8) FormParaBO:
+   Text1=12.34  -> BO.this_nNlnlocals=12,34
+   Text13=40    -> BO.this_nNtxtcols=40
+   Text14=3     -> BO.this_nNtxtlins=3
+   Text28=55.25 -> BO.this_nNclcepcobs=55,25
+   Text31=9     -> BO.this_nTamfontes=9
+   BOParaForm: BO 77.77/88.88 -> Text1=77,77 Text28=88,88 Text40=[Personalizado] esperado [Personalizado]
+9) formulas do legado:
+   Montar(cru sem separador) = [Arial/       256/Personalizado]
+   Montar(ja remontado)      = [Tahoma/256/Personalizado] esperado [Tahoma/256/Personalizado]
+   Montar(vazio)             = [Tahoma/] esperado [Tahoma/]
+   Extrair(3 segmentos)      = [A4 210 x 297 mm] esperado [A4 210 x 297 mm]
+   Extrair(sem 2o separador) = [] esperado vazio
+10) CarregarLista() sem conexao -> retorno=.F. form vivo=.T.
+11) BtnEncerrarClick -> BtnCancelarClick (declinada): form vivo=.T. LockScreen=.F. (deve ser .F.)
+
+PROBE_OK

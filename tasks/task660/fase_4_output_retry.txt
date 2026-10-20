@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 para `FormType = OPERACIONAL` aceita dois ramos. O ramo PAGINADO exige `ConfigurarPaginaLista` + `AlternarPagina`; o ramo FLAT exige `grd_4c_*` + `cmg_4c_/cmd_4c_` + **um m├®todo de carga** (`CarregarLista`/`CarregarDados`/`MontaGrade`).
+
+Medido: o dump do legado **n├úo tem `BaseClass: pageframe`** ÔÇö ent├úo o ramo PAGINADO obrigaria a inventar um PageFrame Lista/Dados e 6 bot├Áes CRUD que o legado n├úo tem (viola o PILAR 1). O ramo FLAT j├í tinha grade e bot├Áes; faltava **s├│ o m├®todo de carga**. Era o ├║nico item reprovando.
+
+## O que foi feito
+
+Em vez de criar um m├®todo s├│ para satisfazer o regex, extra├¡ os tr├¬s funis que a regra #21a exige ÔÇö a l├│gica de repintura estava espalhada por 5 lugares:
+
+- **`CarregarLista()`** ÔÇö funil ├║nico de carga: l├¬ os crit├®rios da tela, chama o BO, trava os crit├®rios (`AjustaControles(.f.)` do legado) e repinta. `BtnSelecionarClick` ficou s├│ com as valida├º├Áes de tela.
+- **`AtualizarGrade()`** ÔÇö funil ├║nico de repintura (`Go Top` + `Refresh`, como o legado fecha cada caminho).
+- **`LimparSelecao()`** ÔÇö `ZAP` + reabilitar + repintar.
+
+## Defeitos reais encontrados e corrigidos no caminho
+
+1. **"Limpar Sele├º├úo" dava `ZAP` sem repintar** ÔÇö grade ficava mostrando linhas que n├úo existem mais no cursor (regra #21a exata).
+2. **`AjustaControles(.t.)` do `Init` legado nunca foi chamado** ÔÇö os CommandGroup nascem `Enabled = .T.`, ent├úo dava para clicar "Gerar Arquivo" com a grade vazia. Medido depois do fix: `Limpar=.F. Gerar=.F. MarcaTudo=.F.` no startup.
+3. **`Commit()`/`RollBack()` do `processamento` legado foram descartados** ÔÇö este ├® o grave. A conex├úo nasce com `Transactions = 2` (manual), ent├úo os `INSERT` em `SigPcOoL` ficariam presos na transa├º├úo aberta e **sumiriam sem erro**: as notas voltariam como "n├úo processadas" no lote seguinte, depois do TXT j├í ter ido ├á prefeitura. Reposto com o guard `loc_lManual` can├┤nico (`IF` aninhado ÔÇö VFP9 n├úo faz curto-circuito).
+4. **O `Load` legado cria 5 index tags; s├│ 1 foi migrado** ÔÇö em VFP9 o ├║ltimo `INDEX ON` ├® a ordem controladora, ent├úo a grade exibia por `Emps+Dopes+Numes` em vez de por `ContaDs`. Confirmado no runtime: `ordem=[DESTINO]`, primeira linha `ContaDs=[CD1]`.
+5. **`Show()` de form modal dentro de `TRY`** no bot├úo "Documento" (regra #29) ÔÇö movido para fora.
+
+N├úo repliquei o `btnSelecionar.Click(.t.)` final do legado: no dump, `btnSelecionar` tem **apenas** `PROCEDURE Valid`, nenhum `Click` ÔÇö a chamada cai no `Click` da classe base e ├® no-op.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| `COMPILE` no VFP9 | `.FXP` recriado, **zero** `.err` |
+| `TestFormWrapper` | `Status: SUCESSO`, Width 1000 / Height 600, conectado ao banco (Handle 1) |
+| Probe de runtime dos funis | grade sobrevive ao `ZAP` com `Cols=11`, `RecordSource`, `ControlSource`, `CurrentControl=CHECK1`, headers e larguras **intactos** |
+| Marcar Tudo | marcou 1 de 2 (a outra tem `Erros`) ÔÇö sem├óntica do legado |
+| `VerificarFuncoesNaoDefinidas` | `OK - nenhuma chamada orfa` |
+| `VerificarPropriedadesInexistentes` | `OK - nenhuma atribuicao a propriedade inexistente` |
+| Estrutural | `RETURN` em `TRY` = 0; blocos balanceados; zero acento literal; zero TODO/stub |
+
+Arquivos alterados: `projeto/app/forms/operacionais/FormSIGPRNSE.prg` (+150/ÔêÆ36 linhas) e `projeto/app/classes/SIGPRNSEBO.prg` (s├│ o bloco de ├¡ndices). Arquivos tempor├írios de probe removidos ÔÇö nada commitado.
+
+Um ponto para registro: os itens 3 e 4 s├úo do escopo nominal das Fases 1ÔÇô2 (BO) e 8 (processamento), n├úo da Fase 4. Corrigi porque est├úo no caminho dos bot├Áes que esta fase liga e porque s├úo defeitos mudos ÔÇö mas se a conven├º├úo do pipeline ├® que cada fase s├│ toque o seu arquivo, conv├®m saber que a Fase 8 vai encontrar o `Commit` j├í reposto.

@@ -255,7 +255,9 @@ DEFINE CLASS gpdBO AS BusinessBase
             loc_cSQL = loc_cSQL + " ORDER BY cgrus"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -278,7 +280,9 @@ DEFINE CLASS gpdBO AS BusinessBase
             loc_cSQL = "SELECT * FROM SigCdGrp WHERE cgrus = " + EscaparSQL(par_cCodigo)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Busca")
-                TABLEREVERT(.T., "cursor_4c_Busca")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Busca") > 1
+                    TABLEREVERT(.T., "cursor_4c_Busca")
+                ENDIF
                 USE IN cursor_4c_Busca
             ENDIF
 
@@ -933,7 +937,9 @@ DEFINE CLASS gpdBO AS BusinessBase
                     " ORDER BY codigos"
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_SubGrupos")
-                    TABLEREVERT(.T., "cursor_4c_SubGrupos")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_SubGrupos") > 1
+                        TABLEREVERT(.T., "cursor_4c_SubGrupos")
+                    ENDIF
                     USE IN cursor_4c_SubGrupos
                 ENDIF
 

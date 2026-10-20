@@ -1,0 +1,43 @@
+=== TESTE FASE 6 Formsigprpdf (task664) ===
+BO  .fxp recriado  : .T.
+FORM.fxp recriado  : .T.
+VARTYPE(loForm)    : O
+
+--- 2) controles novos (medido / esperado do SCX) ---
+lbl_4c_LblEmail_Assunto    base=Label          T=  99/  99 L=  21/  21 W=  45/  45 H=  15/  15 Vis=.T.
+txt_4c_TxtEmail_Assunto    base=Textbox        T=  95/  95 L=  68/  68 W= 404/ 404 H=  23/  23 Vis=.T.
+lbl_4c_LblEmail_Corpo      base=Label          T= 127/ 127 L=  32/  32 W=  34/  34 H=  15/  15 Vis=.T.
+obj_4c_EdtEmail_Corpo      base=Editbox        T= 125/ 125 L=  68/  68 W= 404/ 404 H=  53/  53 Vis=.T.
+ScrollBars Corpo (SCX nao declara -> default 2): 2
+ScrollBars CC    (SCX declara 0)               : 0
+Assunto inicial (pcAssunto do Init)            : [Relatorio de Teste]
+Para inicial (oParentForm.Contaemail)          : [destino@cliente.com.br]
+Corpo: Top+Height = 178 <= container.Height = 185
+Total de controles no painel (esperado 10)     : 10
+
+--- 3) SincronizarCamposParaBO (o controle eh a fonte) ---
+this_cEmailDe      = [remetente@empresa.com]
+this_cEmailPara    = [cliente@dominio.com]
+this_cEmailCC      = [copia@dominio.com]
+this_cEmailAssunto = [Fechamento Mensal]
+this_cEmailCorpo   = [Segue em anexo.]
+this_lEnviarEmail  = .T.  VARTYPE=L (tem de ser L)
+this_nTipoArquivo  = 1  VARTYPE=N (tem de ser N)
+this_cArquivoSaida = [C:\4c\automation\FORTYUSPDF.PDF]
+
+--- 4) ValidarDadosEnvio (guards do Cmd_GerarPDF.Click) ---
+4a arquivo vazio              -> .F.  campo=[ARQUIVO]  msg=[Selecione um nome para o arquivo!]
+4b sem e-mail, DE/PARA vazios -> .T.  (esperado .T.)
+4c e-mail, DE vazio           -> .F.  campo=[EMAIL_DE]  msg=[O campo 'DE:' não foi preenchido.]
+4d e-mail, PARA vazio         -> .F.  campo=[EMAIL_PARA]  msg=[O campo 'PARA:' não foi preenchido.]
+4e tudo preenchido            -> .T.  (esperado .T.)
+4f oEMAIL cFrom=[remetente@empresa.com] cTO=[cliente@dominio.com] cAssunto=[Fechamento Mensal] cAnexo=[C:\4c\automation\FORTYUSPDF.PDF]
+
+--- dialogos capturados ---
+
+--- ERROS ---
+[18/10/2026 09:14:25] Atenção: Selecione um nome para o arquivo!
+[18/10/2026 09:14:25] Atenção: O campo 'DE:' não foi preenchido.
+[18/10/2026 09:14:25] Atenção: O campo 'PARA:' não foi preenchido.
+
+FIM

@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. O resultado, por├®m, n├úo ├® o que o prompt pedia ÔÇö e isso ├® deliberado.
+
+## O que encontrei
+
+`FormSigPrRsa.prg` **j├í estava migrado** (614 linhas, commit `f87d3141` de 14/09/2026, com refinamentos n├úo-commitados). N├úo ├® um arquivo de Fase 3 esperando a Fase 4 ÔÇö ├® uma task re-enfileirada sobre form j├í pronto (padr├úo j├í registrado em mem├│ria, visto antes no `SigPrGloT`/task616).
+
+## Por que N├âO adicionei Grid nem os 6 bot├Áes CRUD
+
+O prompt manda "adicionar Grid completo + container `cnt_4c_Botoes` com 6 bot├Áes CRUD". O legado **n├úo tem nenhum dos dois**. O `layout.json` lista 12 objetos (`cntSombra`, `lblSombra`, `lblTitulo`, `Shape1`, `SAIR`, `OK`, `Label1`, `Label2`, `Get_Prioridade`) e a varredura do dump por `grid|grade|grd|pColuna|Grupo_op|Incluir|Alterar|frmcadastro` retorna **uma ├║nica linha** ÔÇö um `AddCursor` de 4 argumentos, sem grade alvo. SIGPRRSA ├® uma tela de processamento em lote: Processar e Encerrar, s├│.
+
+Criar Grid e CRUD ali seria inventar UI inexistente ÔÇö viola├º├úo direta do PILAR 1 e da regra "NUNCA inventar". O pr├│prio gate da Fase 4 (`OrquestradorMigracao.ps1:7031`) prev├¬ isso: o ramo `temLayoutPaginado` exige apenas `ConfigurarPaginaLista` **e** `AlternarPagina`, e ambos j├í existem, implementados (n├úo stubs) e chamados do `InicializarForm`. **O gate j├í passava antes de eu tocar no arquivo.**
+
+## O defeito real que achei e corrigi
+
+Comparando propriedade a propriedade o dump legado com os dois bot├Áes (que *s├úo* o escopo da Fase 4), tudo batia ÔÇö `Top`, `Left`, `Height`, `Width`, `Caption`, `Picture`, `ForeColor`, `BackColor`, `TabIndex`, `Cancel`, `ToolTipText` ÔÇö **exceto a fonte**:
+
+| | legado | migrado (antes) |
+|---|---|---|
+| `OK` / `cmd_4c_Processar` | `Comic Sans MS` | `Tahoma` |
+| `SAIR` / `cmd_4c_Encerrar` | `Comic Sans MS` | `Tahoma` |
+
+Bate com o can├┤nico do framework (`framework_frmcadastro_layout.md`: "FontName dos bot├Áes = Comic Sans MS (N├âO Tahoma)"). Corrigi as duas linhas ÔÇö e s├│ elas (`diff` confirma 2 linhas; CRLF preservado, 614/614).
+
+Dois pontos que **deixei como est├úo** por serem corretos: `Themes = .T.` + `DisabledPicture` divergem do `Themes = .F.` do legado de prop├│sito, porque `BtnProcessarClick` faz `.Enabled = .F.` durante o loop e, sem isso, o ├¡cone sumiria; e os tr├¬s `.Picture` existem de fato em `vbmp\` (verifiquei ÔÇö regra #25).
+
+## Verifica├º├úo
+
+- Compila├º├úo pelo helper do pr├│prio pipeline (`ValidarCompilacao.prg`): `"compilou": true`, sem `.err`, `.fxp` regenerado.
+- Sem `TODO`/`FIXME`/"n├úo implementado".
+- `CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`, `BtnIncluirClick`, `BtnCancelarClick` todos PUBLIC (regra #3 / harness `TesteAutomatico`).
+
+Dois arquivos rastreados foram tocados como efeito do compile: `formsigprrsa.FXP` (regenerado, agora casa com o fonte corrigido) e `resultado_compilacao.json` (artefato que o helper sobrescreve a cada execu├º├úo). `formsigprret.FXP` aparece modificado no `git status`, mas ├® de 19:00 ÔÇö anterior ao meu trabalho, n├úo ├® meu.
+
+Uma ressalva que n├úo consigo resolver por aqui: validei layout por transcri├º├úo do dump e por compila├º├úo, **n├úo instanciando o form**. Para esta tela isso bastaria para a fonte, mas o loop de `BtnProcessarClick` depende do SQL Server (`192.168.200.10`), que esta m├íquina n├úo alcan├ºa ÔÇö ent├úo o caminho de processamento em si segue sem prova de execu├º├úo.

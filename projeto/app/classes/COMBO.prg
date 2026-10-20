@@ -205,7 +205,9 @@ DEFINE CLASS COMBO AS BusinessBase
                        " AND tipos = 'PRO'"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ItP")
-                TABLEREVERT(.T., "cursor_4c_ItP")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ItP") > 1
+                    TABLEREVERT(.T., "cursor_4c_ItP")
+                ENDIF
                 USE IN cursor_4c_ItP
             ENDIF
 
@@ -235,7 +237,9 @@ DEFINE CLASS COMBO AS BusinessBase
                        " AND tipos = 'VEN'"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ItV")
-                TABLEREVERT(.T., "cursor_4c_ItV")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ItV") > 1
+                    TABLEREVERT(.T., "cursor_4c_ItV")
+                ENDIF
                 USE IN cursor_4c_ItV
             ENDIF
 
@@ -264,7 +268,9 @@ DEFINE CLASS COMBO AS BusinessBase
                        " AND tipos = 'MET' ORDER BY codfaixas"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ItM")
-                TABLEREVERT(.T., "cursor_4c_ItM")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ItM") > 1
+                    TABLEREVERT(.T., "cursor_4c_ItM")
+                ENDIF
                 USE IN cursor_4c_ItM
             ENDIF
 

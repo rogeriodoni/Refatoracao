@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+6 method declarations matching 6 ENDPROC ÔÇö balanced. The file structure is sound: DEFINE CLASS/ENDDEFINE, TRY/ENDTRY, and all 3 WITH/ENDWITH pairs line up.
+
+## Summary
+
+Created `C:\4c\projeto\app\forms\operacionais\FormSigPrRet.prg` (Fase 3/8 ÔÇö Form base structure) with:
+
+- **Properties** copied from the legacy SCX (Width=1000, Height=600, DataSession=2, AutoCenter, TitleBar=0, ControlBox=.F., MaxButton/MinButton=.F., WindowType=1, AlwaysOnTop=.T., Caption="Estoque") ÔÇö following the `FormFis.prg` precedent, since SigPrRet is a flat OPERACIONAL dialog with no Lista/Dados PageFrame (confirmed by `layout.json`: all fields are direct children of the form, not of any Page).
+- `Init()` ÔåÆ `DODEFAULT()`, `InicializarForm()` creating `SigPrRetBO`, and `ConfigurarPageFrame()` delegating to `ConfigurarCabecalho()`.
+- `ConfigurarCabecalho()` builds the header container exactly as named in `mapeamento.json` (`cnt_4c_Sombra` / `lbl_4c_LblSombra` / `lbl_4c_LblTitulo`), matching the legacy `cntSombra` block.
+- `TornarControlesVisiveis()` and `Destroy()` per the project's standard OPERACIONAL pattern.
+
+Filter fields (Produto, Faixa de Etiquetas, Grupo/SubGrupo, Empresa, etc.) and the `sair` CommandGroup (Consulta/Digita├º├úo/Arquivadas/Encerrar) are intentionally left for the next phases, as scoped.

@@ -1,0 +1,27 @@
+=== PROBE Fase 6 - Formsigprtam (task680) ===
+1) VARTYPE(form) = [O]
+2) celulas da grade
+   txt_4c_CelCodTam: CurrentControl=[TXT_4C_CELCODTAM] Sparse=.F. this_cPapel=[COD]
+   txt_4c_CelDescTam: CurrentControl=[TXT_4C_CELDESCTAM] Sparse=.F. this_cPapel=[DESC]
+   txt_4c_CelPeso: CurrentControl=[TXT_4C_CELPESO] Sparse=.F. this_cPapel=[PESO]
+   txt_4c_CelPerc: CurrentControl=[TXT_4C_CELPERC] Sparse=.F. this_cPapel=[PERC]
+   txt_4c_CelValor: CurrentControl=[TXT_4C_CELVALOR] Sparse=.F. this_cPapel=[VALOR]
+   txt_4c_CelPrazo: CurrentControl=[TXT_4C_CELPRAZO] Sparse=.F. this_cPapel=[PRAZO]
+3) escopo dos metodos chamados pela classe da celula
+   CelulaGradeEditavel        existe=.T. protected=.F.
+   ValidarCelulaGradeExec     existe=.T. protected=.F.
+   ValidarTamanhoGridExec     existe=.T. protected=.F.
+   ValidarPercGridExec        existe=.T. protected=.F.
+   ValidarValorGridExec       existe=.T. protected=.F.
+   GravarCelulaNumericaExec   existe=.T. protected=.F.
+   AbrirLookupTamanhoGrade    existe=.T. protected=.F.
+4) When (CelulaGradeEditavel)
+   ALTERAR / COD   -> .T.  Tag=[PP]
+   ALTERAR / PESO  -> .T.  this_nPesoAnterior=12,5
+   ALTERAR / VALOR -> .T.  this_nValorAnterior=99,75
+   VISUALIZAR/COD  -> .F.
+5) Valid (ValidarCelulaGradeExec) sem cursor
+   VISUALIZAR/COD  -> .T.
+   ALTERAR / PESO  -> .T.
+
+FALHAS=0

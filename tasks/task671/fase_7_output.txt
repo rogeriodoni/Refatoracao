@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\FormSigPrRsa.prg`.
+
+## O que encontrei
+
+Os quatro m├®todos da Fase 7 **j├í existiam** no arquivo ÔÇö mas como stubs com `MsgAviso`, exatamente o padr├úo que o prompt marca como *"ABSOLUTAMENTE PROIBIDO"*. Antes de mexer, medi o legado e os gates em vez de presumir:
+
+- **O legado n├úo tem CRUD algum.** O `SigPrRsa_form_codigo_fonte.txt` declara s├│ `cntSombra/lblSombra/lblTitulo/Shape1/SAIR/OK/Label1/Label2/Get_Prioridade`. Zero ocorr├¬ncias de `frmcadastro`, `Grupo_Op`, `pcEscolha` ou verbo CRUD. Criar Incluir/Alterar/Visualizar/Excluir de verdade seria **inventar bot├úo** (viola o PILAR 1).
+- **O gate da Fase 7 j├í passava** (os 4 nomes presentes; `nHandlers` = 9 contra piso 2), e o validador de completude s├│ reprova procedure *vazia* ÔÇö os stubs tinham uma linha de c├│digo. Ou seja: nenhum gate estava me for├ºando a nada.
+- **`BtnProcessarClick`/`BtnEncerrarClick` ÔÇö os eventos principais reais deste form ÔÇö j├í est├úo completos e fi├®is** ao `OK.Click` de 156 linhas do legado (loop, `Scan`, lock otimista, `fRecalculaP`, rollback/commit, `Inkey`, log + `Quit` no modo parametrizado).
+- **Regra #51 conferida**: os 7 m├®todos do BO chamados de fora (`BuscarFila`, `ProcessarItem`, `VerificarMovimento`, `GravarLog`, `IniciarLog`, `CarregarDoCursor`, `Excluir`) s├úo todos PUBLIC. Sem o defeito do Erro199.
+
+## O que mudei
+
+Troquei os 4 stubs `MsgAviso` por no-op silencioso (`RETURN .T.`), coerente com os `BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick` que j├í estavam assim logo abaixo. Tr├¬s raz├Áes, documentadas no cabe├ºalho do bloco:
+
+1. Nenhum `cmd_4c_Incluir/Alterar/Visualizar/Excluir` ├® criado por `AddObject` ÔÇö os 9 `AddObject` reproduzem exatamente o SCX. A mensagem era **c├│digo morto**.
+2. Achado concreto: em modo de teste `MsgAviso` n├úo abre di├ílogo ÔÇö ela **grava em `gc_4c_ArquivoErroTeste`** e ecoa `ERRO_TESTE:` no console (`messages.prg ÔåÆ EscreverErroParaArquivo`). Avisar ali contaminaria o arquivo de **erro** do harness com um n├úo-erro.
+3. ├ë o padr├úo explicitamente proibido para `Btn*Click`.
+
+## Verifica├º├úo
+
+- **Compilou limpo no VFP9 real** (`.fxp` gerado, nenhum `.err`); removi o `.fxp` depois, pelo risco de fxp velho.
+- `PROCEDURE`/`ENDPROC` 29Ôåö29, `FUNCTION`/`ENDFUNC` 2Ôåö2, `DEFINE CLASS`/`ENDDEFINE` 1Ôåö1.
+- Simulei o detector de procedure vazia do `05d_validarCompletude`: nenhuma.
+- Zero marcadores TODO/FIXME e zero frases de pend├¬ncia (incluindo a armadilha do `"nao implement"` em coment├írio).
+- O `diff` toca **apenas** o bloco pretendido; o ├║nico `MsgAviso` execut├ível restante ├® a linha 583, que ├® a transcri├º├úo leg├¡tima do `MessageBox('Prioridade Invalida!!!')` do legado.
+- MD5 mudou, ent├úo o guard de NO-OP n├úo vai for├ºar retry com opus.
+
+Uma observa├º├úo que deixo registrada sem agir, por estar fora do escopo da Fase 7: o `SigPrRsaBO.prg` declara `RegistrarAuditoria` como `PROTECTED`, estreitando o contrato PUBLIC da `BusinessBase`. Hoje ├® inofensivo (s├│ a base o chama, internamente), mas quebraria se algum dia for chamado de fora.

@@ -1,78 +1,87 @@
 *==============================================================================
-* SIGPRVTXBO.prg - Business Object para FormSIGPRVTX
-* Importacao de planilha Excel para atualizacao de SKUs (sigprvtx)
-* Data: 2026-07-19
-* Tabela principal: sigprvtx | PK: cidchaves
-* Tabela auxiliar: SigCdPac (leitura de sigkeys)
+* SIGPRVTXBO.prg - Business Object para Cadastro de Testes / Importacao de
+* SKU para VTEX (SIGPRVTX)
+* Tabela Principal: SigPrVtx (PK: cidchaves)
+*
+* SIGPRVTX importa uma planilha Excel com SKUs para um cursor de grade
+* (csGrade no legado) e, ao Processar/Salvar, substitui TODO o conteudo
+* da tabela SigPrVtx pelo conteudo da grade (Delete From SigPrVtx + Insert
+* de cada linha com cidchaves gerado por fUniqueIds()).
 *==============================================================================
+SET SAFETY OFF
+SET RESOURCE OFF
+
 DEFINE CLASS SIGPRVTXBO AS BusinessBase
 
-    *-- -----------------------------------------------------------------------
-    *-- CHAVE DE CONFIGURACAO (SigCdPac.sigkeys - lida no Init do Form)
-    *-- -----------------------------------------------------------------------
-    this_cSigKey        = ""    && sigkeys char(3) - chave de pacote de config
-
-    *-- -----------------------------------------------------------------------
-    *-- CAMINHO DA PLANILHA SELECIONADA
-    *-- -----------------------------------------------------------------------
-    this_cPlanilha      = ""    && Caminho completo do arquivo .xls selecionado
-
-    *-- -----------------------------------------------------------------------
-    *-- CAMPOS DA TABELA sigprvtx (PK + campos da planilha + demais colunas)
-    *-- -----------------------------------------------------------------------
-    this_cCidChaves     = ""    && cidchaves char(20)  NOT NULL - PK (fUniqueIds)
-    this_cNomeSku       = ""    && nomesku   char(100) NOT NULL
-    this_cRefSku        = ""    && refsku    char(40)  NOT NULL
-    this_cSkuAtivo      = ""    && skuativo  char(3)   NOT NULL
-    this_cSkuId         = ""    && skuid     char(10)  NOT NULL
-    this_cCpros         = ""    && cpros     char(14)  NOT NULL
-    this_cDescritivo    = ""    && descritivo char(45) NOT NULL
-    this_cTamanho       = ""    && tamanho   char(4)   NOT NULL
-    this_nQtd           = 0     && qtd       numeric(11,3) NOT NULL
-    this_nBxQtd         = 0     && bxqtd     numeric(11,3) NOT NULL
-    this_lChkAtuStock   = .F.   && chkatustock bit NULL
-    this_nPvens         = 0     && pvens     numeric(11,5) NOT NULL
-    this_nPrecode       = 0     && precode   numeric(11,5) NOT NULL
-    this_lCkVtexUp      = .F.   && ckvtexup  bit NULL
-    this_lCkAtuDesc     = .F.   && ckAtudesc bit NULL
-    this_nVtexProdId    = 0     && vtexProdId int NULL
-
-    *-- -----------------------------------------------------------------------
-    *-- NOME DO CURSOR DA GRADE (padrao OPERACIONAL - cursor_4c_Grade)
-    *-- -----------------------------------------------------------------------
-    this_cCursorDados   = "cursor_4c_Grade"
+    *-- Propriedades: SigPrVtx
+    this_cCidChaves    = ""   && cidchaves   char(20)  NOT NULL - PK (fUniqueIds())
+    this_cNomeSku      = ""   && nomesku     char(100) NOT NULL
+    this_cRefSku       = ""   && refsku      char(40)  NOT NULL
+    this_cSkuAtivo     = ""   && skuativo    char(3)   NOT NULL
+    this_cSkuId        = ""   && skuid       char(10)  NOT NULL
+    this_cCpros        = ""   && cpros       char(14)  NOT NULL
+    this_cDescritivo   = ""   && descritivo  char(45)  NOT NULL
+    this_cTamanho      = ""   && tamanho     char(4)   NOT NULL
+    this_nQtd          = 0    && qtd         numeric(11,3) NOT NULL
+    this_nBxQtd        = 0    && bxqtd       numeric(11,3) NOT NULL
+    this_lChkAtuStock  = .F.  && chkatustock bit NULL
+    this_nPvens        = 0    && pvens       numeric(11,5) NOT NULL
+    this_nPrecoDe      = 0    && precode     numeric(11,5) NOT NULL
+    this_lCkVtexUp     = .F.  && ckvtexup    bit NULL
+    this_lCkAtuDesc    = .F.  && ckatudesc   bit NULL
+    this_nVtexProdId   = 0    && vtexProdId  int NULL
 
     *--------------------------------------------------------------------------
-    * Init - Configura BO: tabela e campo-chave da sigprvtx
+    * Init - Configura tabela e chave primaria
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        LOCAL loc_lSucesso
+        DODEFAULT()
 
-        loc_lSucesso = .F.
+        THIS.this_cTabela     = "SigPrVtx"
+        THIS.this_cCampoChave = "cidchaves"
 
-        TRY
-            DODEFAULT()
-
-            THIS.this_cTabela     = "sigprvtx"
-            THIS.this_cCampoChave = "cidchaves"
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna cidchaves do registro corrente
+    * ObterChavePrimaria - Retorna chave primaria para auditoria
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION ObterChavePrimaria()
-        RETURN THIS.this_cCidChaves
+    FUNCTION ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidChaves)
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * CarregarDoCursor - Mapeia colunas do cursor para propriedades do BO
+    * LimparDados - Reseta as propriedades do BO para os valores padrao
+    * CRITICO: NovoRegistro() chama LimparDados() mas a base so limpa
+    * this_cMensagemErro - sem este override, this_cCidChaves sobrevive entre
+    * chamadas e o Inserir() reaproveita a MESMA chave em todas as linhas da
+    * grade (regra do Problema 22/#22 - fUniqueIds() so gera quando a chave
+    * esta vazia)
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparDados()
+        DODEFAULT()
+
+        THIS.this_cCidChaves   = ""
+        THIS.this_cNomeSku     = ""
+        THIS.this_cRefSku      = ""
+        THIS.this_cSkuAtivo    = ""
+        THIS.this_cSkuId       = ""
+        THIS.this_cCpros       = ""
+        THIS.this_cDescritivo  = ""
+        THIS.this_cTamanho     = ""
+        THIS.this_nQtd         = 0
+        THIS.this_nBxQtd       = 0
+        THIS.this_lChkAtuStock = .F.
+        THIS.this_nPvens       = 0
+        THIS.this_nPrecoDe     = 0
+        THIS.this_lCkVtexUp    = .F.
+        THIS.this_lCkAtuDesc   = .F.
+        THIS.this_nVtexProdId  = 0
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega propriedades do BO a partir de cursor
+    * REGRA CRITICA: SELECT (par_cAliasCursor) ANTES de acessar campos
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso
@@ -81,239 +90,227 @@ DEFINE CLASS SIGPRVTXBO AS BusinessBase
         TRY
             IF USED(par_cAliasCursor)
                 SELECT (par_cAliasCursor)
-                THIS.this_cSkuId      = ALLTRIM(NVL(skuid, ""))
-                THIS.this_cNomeSku    = ALLTRIM(NVL(nomesku, ""))
-                THIS.this_cSkuAtivo   = ALLTRIM(NVL(skuativo, ""))
-                THIS.this_cRefSku     = ALLTRIM(NVL(refsku, ""))
-                loc_lSucesso = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Cursor " + par_cAliasCursor + ;
-                    " n" + CHR(227) + "o est" + CHR(225) + " em uso"
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+                THIS.this_cCidChaves   = TratarNulo(cidchaves,  "C")
+                THIS.this_cNomeSku     = TratarNulo(nomesku,    "C")
+                THIS.this_cRefSku      = TratarNulo(refsku,     "C")
+                THIS.this_cSkuAtivo    = TratarNulo(skuativo,   "C")
+                THIS.this_cSkuId       = TratarNulo(skuid,      "C")
+                THIS.this_cCpros       = TratarNulo(cpros,      "C")
+                THIS.this_cDescritivo  = TratarNulo(descritivo, "C")
+                THIS.this_cTamanho     = TratarNulo(tamanho,    "C")
+                THIS.this_nQtd         = TratarNulo(qtd,        "N")
+                THIS.this_nBxQtd       = TratarNulo(bxqtd,      "N")
+                THIS.this_nPvens       = TratarNulo(pvens,      "N")
+                THIS.this_nPrecoDe     = TratarNulo(precode,    "N")
+                THIS.this_nVtexProdId  = TratarNulo(vtexProdId, "N")
 
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Insere um registro na tabela sigprvtx
-    *--------------------------------------------------------------------------
-    PROCEDURE Inserir()
-        LOCAL loc_lSucesso, loc_cSQL
-        loc_lSucesso = .F.
-
-        TRY
-            THIS.this_cCidChaves = fUniqueIds()
-
-            loc_cSQL = "INSERT INTO sigprvtx " + ;
-                "(cidchaves, nomesku, refsku, skuativo, skuid, " + ;
-                "cpros, descritivo, tamanho, qtd, bxqtd, " + ;
-                "chkatustock, pvens, precode, ckvtexup, ckAtudesc, vtexProdId) " + ;
-                "VALUES (" + ;
-                EscaparSQL(THIS.this_cCidChaves) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cNomeSku, 100)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cRefSku, 40)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cSkuAtivo, 3)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cSkuId, 10)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cCpros, 14)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cDescritivo, 45)) + ", " + ;
-                EscaparSQL(LEFT(THIS.this_cTamanho, 4)) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nQtd, 3) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nBxQtd, 3) + ", " + ;
-                IIF(THIS.this_lChkAtuStock, "1", "NULL") + ", " + ;
-                FormatarNumeroSQL(THIS.this_nPvens, 5) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nPrecode, 5) + ", " + ;
-                IIF(THIS.this_lCkVtexUp, "1", "NULL") + ", " + ;
-                IIF(THIS.this_lCkAtuDesc, "1", "NULL") + ", " + ;
-                IIF(THIS.this_nVtexProdId = 0, "NULL", FormatarNumeroSQL(THIS.this_nVtexProdId, 0)) + ")"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
-                THIS.RegistrarAuditoria("I")
-                loc_lSucesso = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Erro ao inserir registro em sigprvtx (SKU: " + ;
-                    ALLTRIM(THIS.this_cSkuId) + ")"
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza registro existente na tabela sigprvtx
-    *--------------------------------------------------------------------------
-    PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_cVtexProdId
-        loc_lSucesso    = .F.
-        loc_cVtexProdId = IIF(THIS.this_nVtexProdId = 0, "NULL", FormatarNumeroSQL(THIS.this_nVtexProdId, 0))
-
-        TRY
-            loc_cSQL = "UPDATE sigprvtx SET " + ;
-                "nomesku = "     + EscaparSQL(LEFT(THIS.this_cNomeSku, 100)) + ", " + ;
-                "refsku = "      + EscaparSQL(LEFT(THIS.this_cRefSku, 40)) + ", " + ;
-                "skuativo = "    + EscaparSQL(LEFT(THIS.this_cSkuAtivo, 3)) + ", " + ;
-                "skuid = "       + EscaparSQL(LEFT(THIS.this_cSkuId, 10)) + ", " + ;
-                "cpros = "       + EscaparSQL(LEFT(THIS.this_cCpros, 14)) + ", " + ;
-                "descritivo = "  + EscaparSQL(LEFT(THIS.this_cDescritivo, 45)) + ", " + ;
-                "tamanho = "     + EscaparSQL(LEFT(THIS.this_cTamanho, 4)) + ", " + ;
-                "qtd = "         + FormatarNumeroSQL(THIS.this_nQtd, 3) + ", " + ;
-                "bxqtd = "       + FormatarNumeroSQL(THIS.this_nBxQtd, 3) + ", " + ;
-                "chkatustock = " + IIF(THIS.this_lChkAtuStock, "1", "NULL") + ", " + ;
-                "pvens = "       + FormatarNumeroSQL(THIS.this_nPvens, 5) + ", " + ;
-                "precode = "     + FormatarNumeroSQL(THIS.this_nPrecode, 5) + ", " + ;
-                "ckvtexup = "    + IIF(THIS.this_lCkVtexUp, "1", "NULL") + ", " + ;
-                "ckAtudesc = "   + IIF(THIS.this_lCkAtuDesc, "1", "NULL") + ", " + ;
-                "vtexProdId = "  + loc_cVtexProdId + ;
-                " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
-                THIS.RegistrarAuditoria("A")
-                loc_lSucesso = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Erro ao atualizar registro em sigprvtx (cidchaves: " + ;
-                    ALLTRIM(THIS.this_cCidChaves) + ")"
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarGrade - Popula o cursor da grade com os registros ja persistidos
-    *                 em sigprvtx (usado por BtnVisualizarClick / refresh).
-    *                 Cria cursor local com as 4 colunas do grid (skuid,
-    *                 nomesku, skuativo, refsku) via SQLEXEC intermediario e
-    *                 depois REPLICA em cursor local com nome canonico.
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarGrade(par_cCursorGrade)
-        LOCAL loc_lSucesso, loc_cSQL, loc_cCursorTmp
-        loc_lSucesso   = .F.
-        loc_cCursorTmp = "cursor_4c_GradeTmp"
-
-        TRY
-            loc_cSQL = "SELECT skuid, nomesku, skuativo, refsku FROM sigprvtx"
-
-            IF USED(loc_cCursorTmp)
-                USE IN (loc_cCursorTmp)
-            ENDIF
-
-            SET NULL ON
-            IF SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursorTmp) >= 0
-                *-- (Re)cria cursor com nome canonico e ordem/estrutura
-                *-- identicas ao placeholder do form (protege ColumnCount/tags)
-                IF USED(par_cCursorGrade)
-                    SELECT (par_cCursorGrade)
-                    USE
-                ENDIF
-
-                CREATE CURSOR (par_cCursorGrade) (;
-                    skuid    C(10)  NULL, ;
-                    nomesku  C(100) NULL, ;
-                    skuativo C(3)   NULL, ;
-                    refsku   C(40)  NULL)
-                SELECT (par_cCursorGrade)
-                INDEX ON skuid TAG skuid
-
-                SELECT (loc_cCursorTmp)
-                GO TOP
-                SCAN
-                    INSERT INTO (par_cCursorGrade) ;
-                        (skuid, nomesku, skuativo, refsku) VALUES ( ;
-                            NVL(skuid, ""), ;
-                            NVL(nomesku, ""), ;
-                            NVL(skuativo, ""), ;
-                            NVL(refsku, ""))
-                    SELECT (loc_cCursorTmp)
-                ENDSCAN
-
-                IF USED(loc_cCursorTmp)
-                    USE IN (loc_cCursorTmp)
-                ENDIF
-
-                SELECT (par_cCursorGrade)
-                GO TOP
-                loc_lSucesso = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Falha ao consultar sigprvtx"
-            ENDIF
-            SET NULL OFF
-        CATCH TO loc_oErro
-            SET NULL OFF
-            IF USED(loc_cCursorTmp)
-                USE IN (loc_cCursorTmp)
-            ENDIF
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ProcessarGrade - Deleta todos os registros de sigprvtx e reinsere a
-    *                  partir do cursor da grade (replica logica cmdok.Click)
-    *--------------------------------------------------------------------------
-    PROCEDURE ProcessarGrade(par_cCursorGrade)
-        LOCAL loc_lSucesso, loc_lTransacao, loc_cSQL
-        loc_lSucesso = .F.
-        loc_lTransacao = .F.
-
-        TRY
-            IF !USED(par_cCursorGrade)
-                THIS.this_cMensagemErro = "Cursor " + par_cCursorGrade + ;
-                    " n" + CHR(227) + "o est" + CHR(225) + " em uso"
-            ELSE
-                SELECT (par_cCursorGrade)
-                GO TOP
-
-                IF RECCOUNT(par_cCursorGrade) = 0
-                    THIS.this_cMensagemErro = "Nenhum registro para atualiza" + ;
-                        CHR(231) + CHR(227) + "o"
+                IF VARTYPE(chkatustock) = "L"
+                    THIS.this_lChkAtuStock = chkatustock
                 ELSE
-                    SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")
-                    loc_lTransacao = .T.
-
-                    loc_cSQL = "DELETE FROM sigprvtx"
-                    loc_lSucesso = (SQLEXEC(gnConnHandle, loc_cSQL) >= 1)
-
-                    IF loc_lSucesso
-                        SELECT (par_cCursorGrade)
-                        GO TOP
-
-                        SCAN WHILE loc_lSucesso
-                            IF THIS.CarregarDoCursor(par_cCursorGrade)
-                                IF !THIS.Inserir()
-                                    loc_lSucesso = .F.
-                                ENDIF
-                            ELSE
-                                loc_lSucesso = .F.
-                            ENDIF
-                            SELECT (par_cCursorGrade)
-                        ENDSCAN
-
-                        IF loc_lSucesso
-                            SQLEXEC(gnConnHandle, "COMMIT")
-                            loc_lTransacao = .F.
-                        ENDIF
-                    ELSE
-                        THIS.this_cMensagemErro = "Falha ao excluir registros de sigprvtx"
-                    ENDIF
+                    THIS.this_lChkAtuStock = (NVL(chkatustock, 0) = 1)
                 ENDIF
+
+                IF VARTYPE(ckvtexup) = "L"
+                    THIS.this_lCkVtexUp = ckvtexup
+                ELSE
+                    THIS.this_lCkVtexUp = (NVL(ckvtexup, 0) = 1)
+                ENDIF
+
+                IF VARTYPE(ckatudesc) = "L"
+                    THIS.this_lCkAtuDesc = ckatudesc
+                ELSE
+                    THIS.this_lCkAtuDesc = (NVL(ckatudesc, 0) = 1)
+                ENDIF
+
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "SIGPRVTXBO.CarregarDoCursor")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - Insere novo registro na tabela SigPrVtx
+    * cidchaves eh a PK Fortyus, gerada por fUniqueIds() - NUNCA string vazia
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF EMPTY(THIS.this_cCidChaves)
+                THIS.this_cCidChaves = fUniqueIds()
             ENDIF
 
-            IF !loc_lSucesso AND loc_lTransacao
-                SQLEXEC(gnConnHandle, "ROLLBACK")
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigPrVtx (cidchaves, nomesku, refsku, skuativo, skuid,
+                    cpros, descritivo, tamanho, qtd, bxqtd, chkatustock,
+                    pvens, precode, ckvtexup, ckatudesc, vtexProdId)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cCidChaves)>>,
+                    <<EscaparSQL(THIS.this_cNomeSku)>>,
+                    <<EscaparSQL(THIS.this_cRefSku)>>,
+                    <<EscaparSQL(THIS.this_cSkuAtivo)>>,
+                    <<EscaparSQL(THIS.this_cSkuId)>>,
+                    <<EscaparSQL(THIS.this_cCpros)>>,
+                    <<EscaparSQL(THIS.this_cDescritivo)>>,
+                    <<EscaparSQL(THIS.this_cTamanho)>>,
+                    <<FormatarNumeroSQL(THIS.this_nQtd, 3)>>,
+                    <<FormatarNumeroSQL(THIS.this_nBxQtd, 3)>>,
+                    <<FormatarNumeroSQL(IIF(THIS.this_lChkAtuStock, 1, 0), 0)>>,
+                    <<FormatarNumeroSQL(THIS.this_nPvens, 5)>>,
+                    <<FormatarNumeroSQL(THIS.this_nPrecoDe, 5)>>,
+                    <<FormatarNumeroSQL(IIF(THIS.this_lCkVtexUp, 1, 0), 0)>>,
+                    <<FormatarNumeroSQL(IIF(THIS.this_lCkAtuDesc, 1, 0), 0)>>,
+                    <<FormatarNumeroSQL(THIS.this_nVtexProdId, 0)>>
+                )
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao inserir SKU:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-        CATCH TO loc_oErro
-            IF loc_lTransacao
-                SQLEXEC(gnConnHandle, "ROLLBACK")
+
+        CATCH TO loException
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "SIGPRVTXBO.Inserir")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Atualiza registro existente na tabela SigPrVtx
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigPrVtx
+                SET nomesku     = <<EscaparSQL(THIS.this_cNomeSku)>>,
+                    refsku      = <<EscaparSQL(THIS.this_cRefSku)>>,
+                    skuativo    = <<EscaparSQL(THIS.this_cSkuAtivo)>>,
+                    skuid       = <<EscaparSQL(THIS.this_cSkuId)>>,
+                    cpros       = <<EscaparSQL(THIS.this_cCpros)>>,
+                    descritivo  = <<EscaparSQL(THIS.this_cDescritivo)>>,
+                    tamanho     = <<EscaparSQL(THIS.this_cTamanho)>>,
+                    qtd         = <<FormatarNumeroSQL(THIS.this_nQtd, 3)>>,
+                    bxqtd       = <<FormatarNumeroSQL(THIS.this_nBxQtd, 3)>>,
+                    chkatustock = <<FormatarNumeroSQL(IIF(THIS.this_lChkAtuStock, 1, 0), 0)>>,
+                    pvens       = <<FormatarNumeroSQL(THIS.this_nPvens, 5)>>,
+                    precode     = <<FormatarNumeroSQL(THIS.this_nPrecoDe, 5)>>,
+                    ckvtexup    = <<FormatarNumeroSQL(IIF(THIS.this_lCkVtexUp, 1, 0), 0)>>,
+                    ckatudesc   = <<FormatarNumeroSQL(IIF(THIS.this_lCkAtuDesc, 1, 0), 0)>>,
+                    vtexProdId  = <<FormatarNumeroSQL(THIS.this_nVtexProdId, 0)>>
+                WHERE cidchaves = <<EscaparSQL(THIS.this_cCidChaves)>>
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao atualizar SKU:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-            MsgErro(loc_oErro.Message, "Erro")
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "SIGPRVTXBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarExclusao - Exclui registro da tabela SigPrVtx
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarExclusao()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "DELETE FROM SigPrVtx WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("DELETE")
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao excluir SKU:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao excluir:" + CHR(13) + loException.Message, "SIGPRVTXBO.ExecutarExclusao")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExcluirTodos - Apaga TODO o conteudo de SigPrVtx
+    * Espelha "Delete From SigPrVtx" do legado (Grupo_Botao.cmdok.Click),
+    * usado antes de regravar a grade inteira a partir do cursor importado
+    *--------------------------------------------------------------------------
+    PROCEDURE ExcluirTodos()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "DELETE FROM SigPrVtx"
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
+            ELSE
+                MostrarErro("Erro ao limpar SigPrVtx:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao limpar SigPrVtx:" + CHR(13) + loException.Message, "SIGPRVTXBO.ExcluirTodos")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarPorCodigo - Carrega registro pela chave primaria (cidchaves)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarPorCodigo(par_cCidChaves)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "SELECT cidchaves, nomesku, refsku, skuativo, skuid, cpros," + ;
+                " descritivo, tamanho, qtd, bxqtd, chkatustock, pvens, precode," + ;
+                " ckvtexup, ckatudesc, vtexProdId" + ;
+                " FROM SigPrVtx WHERE cidchaves = " + EscaparSQL(par_cCidChaves)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+
+            IF loc_nResultado >= 0
+                IF RECCOUNT("cursor_4c_Carrega") > 0
+                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                    THIS.this_lNovoRegistro = .F.
+                ELSE
+                    MsgAviso("SKU n" + CHR(227) + "o encontrado!")
+                ENDIF
+
+                IF USED("cursor_4c_Carrega")
+                    USE IN cursor_4c_Carrega
+                ENDIF
+            ELSE
+                MostrarErro("Erro ao carregar SKU:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao carregar:" + CHR(13) + loException.Message, "SIGPRVTXBO.CarregarPorCodigo")
         ENDTRY
 
         RETURN loc_lSucesso

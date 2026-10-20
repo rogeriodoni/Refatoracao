@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPBUS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return(Thisform.Produto)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.PodataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters pRetorno, pSituacao, pConjunto, pCodMacro, pFiltraSit, pCnj\n\nThisForm.Tiporetorno = pRetorno\nThisForm.Situas = Iif(Type('pSituacao')='N', pSituacao, 0)\nThisForm.FiltraSituas = Iif(Type('pFiltraSit')='N', pFiltraSit, 0)\nThisFOrm.Conjunto = pConjunto\nThisFOrm.CodMacro = pCodMacro\nThisForm.Cnjlacto = pCnj\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\t\tThisForm.Produto = Space(14)\n\tElse\n\t\t=Messagebox('Impossivel Ef... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Situas = Iif,FiltraSituas = Iif,Produto = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBUS.Get_Descricao",
+      "evento": "Valid",
+      "linhas": 49,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tThisForm.Label4.Visible = .t.\n\t\n\tlcFiltro = [ Dpros Like '%]+Alltrim(This.Value)+[%' ]\n\tIf Thisform.Situas <> 0 And ThisForm.FiltraSituas <> 0\n\t\tDo case\n\t\tCase Thisform.Situas = 1\n\t\t\tlcFiltro = lcFiltro + [ Situas <> 2 ]\n\t\tCase Thisform.Situas = 2\n\t\t\tlcFiltro = lcFiltro + [ Situas = 2 ]\n\t\tCase Thisform.Situas = 3\n\t\t\tlcFiltro = lcFiltro + [ Situas In(0,1,2) ]\n\t\tCase Thisform.Situas = 4\n\t\t\tlcFiltro = lcFiltro + [ Situas <> 2 And Encoms = 1 ]\n\t\tCase Thisfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Produto = Space,Produto = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS.Get_Produto",
+      "evento": "Valid",
+      "linhas": 114,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tThisForm.Label4.Visible = .t.\n\t\n\tIf Thisform.Situas = 0 Or ThisForm.FiltraSituas = 0\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t\t\t   'crListaRemota', 'Cpros', This.Value, 'Seleção', 1000,.f.,.f.,.f.,.t. )\n\t\tloLista.mAddColuna('Cpros', '', 'Código',.t.,'Cpros')\n\t\tloLista.mAddColuna('Dpros', '', 'Descrição',.t.,'Dpros')\n\t\tloLista.mAddColuna('cgrus', '', 'Grupo',.t.,'Cgrus')\n\t\tloLista.mAddColuna('Dpro2s', '', 'De... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS.Sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "x=Inkey(.1)\nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS.Get_RefFor",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tThisForm.Label4.Visible = .t.\n\t*** MENA - 20/10/2014 - colocado alltrim na referencia para não coincidir exatamente com a referencia do cadastro. Assim não traz o primeiro cpros encontrado ***\t\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'Reffs', ALLTRIM(This.Value), 'Seleção', 1000, .f., .f., .f., .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Reffs', '', 'Ref.Fornecedor',.t.,'Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Produto = Space,Produto = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBUS.get_DPro2s",
+      "evento": "Valid",
+      "linhas": 48,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tThisForm.Label4.Visible = .t.\n\t\n\tlcFiltro = [ Dpro2s Like '%]+Alltrim(This.Value)+[%' ]\n\tIf Thisform.Situas <> 0 And ThisForm.FiltraSituas <> 0\n\t\tDo case\n\t\tCase Thisform.Situas = 1\n\t\t\tlcFiltro = lcFiltro + [ Situas <> 2 ]\n\t\tCase Thisform.Situas = 2\n\t\t\tlcFiltro = lcFiltro + [ Situas = 2 ]\n\t\tCase Thisform.Situas = 3\n\t\t\tlcFiltro = lcFiltro + [ Situas In(0,1,2) ]\n\t\tCase Thisform.Situas = 4\n\t\t\tlcFiltro = lcFiltro + [ Situas <> 2 And Encoms = 1 ]\n\t\tCase Thisfo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Produto = Space,Produto = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

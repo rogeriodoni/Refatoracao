@@ -121,7 +121,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
 
         TRY
             IF USED("cursor_4c_TmpOpd")
-                TABLEREVERT(.T., "cursor_4c_TmpOpd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmpOpd") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmpOpd")
+                ENDIF
                 USE IN cursor_4c_TmpOpd
             ENDIF
 
@@ -505,7 +507,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     SELECT xTotMat
                     IF NOT SEEK(loc_cCMats)
                         IF USED("cursor_4c_LocalPro")
-                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_LocalPro") > 1
+                                TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            ENDIF
                             USE IN cursor_4c_LocalPro
                         ENDIF
                         loc_cSQL = "SELECT CUnis, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCMats)
@@ -564,7 +568,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                 loc_nNops = xMFas.Nops
 
                 IF USED("cursor_4c_LocalOpi")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpi") > 1
+                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    ENDIF
                     USE IN cursor_4c_LocalOpi
                 ENDIF
                 loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
@@ -581,7 +587,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                         SELECT xTotPed
                         IF NOT SEEK(loc_cEdn)
                             IF USED("cursor_4c_LocalEest")
-                                TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                IF CURSORGETPROP("Buffering", "cursor_4c_LocalEest") > 1
+                                    TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                ENDIF
                                 USE IN cursor_4c_LocalEest
                             ENDIF
                             loc_cSQL = "SELECT ContaOs, ContaDs, Vends FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdn)
@@ -599,7 +607,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                             ENDIF
 
                             IF USED("cursor_4c_LocalCli")
-                                TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                IF CURSORGETPROP("Buffering", "cursor_4c_LocalCli") > 1
+                                    TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                ENDIF
                                 USE IN cursor_4c_LocalCli
                             ENDIF
                             IF NOT EMPTY(loc_cConta)
@@ -668,7 +678,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     SELECT xMatOp
                     IF NOT SEEK(STR(loc_nNops, 10) + loc_cCMats)
                         IF USED("cursor_4c_LocalPro")
-                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_LocalPro") > 1
+                                TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            ENDIF
                             USE IN cursor_4c_LocalPro
                         ENDIF
                         loc_cSQL = "SELECT CUnis, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCMats)
@@ -723,7 +735,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                 loc_lAberto = .F.
 
                 IF USED("cursor_4c_LocalOpi")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpi") > 1
+                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    ENDIF
                     USE IN cursor_4c_LocalOpi
                 ENDIF
                 loc_cSQL = "SELECT Emps, Dopps, Nops FROM SigOpPic WHERE EmpDopNums = " + EscaparSQL(loc_cChave)
@@ -737,7 +751,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                       STR(cursor_4c_LocalOpi.Nops, 10)
 
                         IF USED("cursor_4c_LocalNens")
-                            TABLEREVERT(.T., "cursor_4c_LocalNens")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_LocalNens") > 1
+                                TABLEREVERT(.T., "cursor_4c_LocalNens")
+                            ENDIF
                             USE IN cursor_4c_LocalNens
                         ENDIF
                         loc_cSQL = "SELECT ChkSubn FROM SigCdNec WHERE EmpDNPs = " + EscaparSQL(loc_cChaveP)
@@ -846,7 +862,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                        " AND a.Grupos = b.GrAcess AND b.Cimps = c.Impres"
 
             IF USED("cursor_4c_TmpCimp")
-                TABLEREVERT(.T., "cursor_4c_TmpCimp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_TmpCimp") > 1
+                    TABLEREVERT(.T., "cursor_4c_TmpCimp")
+                ENDIF
                 USE IN cursor_4c_TmpCimp
             ENDIF
             loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCimp")
@@ -857,7 +875,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
             ENDIF
 
             IF USED("cursor_4c_SigCdmp")
-                TABLEREVERT(.T., "cursor_4c_SigCdmp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_SigCdmp") > 1
+                    TABLEREVERT(.T., "cursor_4c_SigCdmp")
+                ENDIF
                 USE IN cursor_4c_SigCdmp
             ENDIF
 
@@ -892,7 +912,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
             ENDFOR
 
             IF USED("cursor_4c_ImpMatch")
-                TABLEREVERT(.T., "cursor_4c_ImpMatch")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ImpMatch") > 1
+                    TABLEREVERT(.T., "cursor_4c_ImpMatch")
+                ENDIF
                 USE IN cursor_4c_ImpMatch
             ENDIF
             SELECT PADR(ALLTRIM(a.Impres), 15) + " " + ALLTRIM(b.Impres) AS IDupla, ;
@@ -981,7 +1003,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
         loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_LocalEti")
-                TABLEREVERT(.T., "cursor_4c_LocalEti")
+                IF CURSORGETPROP("Buffering", "cursor_4c_LocalEti") > 1
+                    TABLEREVERT(.T., "cursor_4c_LocalEti")
+                ENDIF
                 USE IN cursor_4c_LocalEti
             ENDIF
 
@@ -1007,14 +1031,18 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     loc_nNops   = cursor_4c_LocalEti.Nops
     
                     IF USED("cursor_4c_LocalPro")
-                        TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalPro") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        ENDIF
                         USE IN cursor_4c_LocalPro
                     ENDIF
                     loc_cSQL = "SELECT Cpros,CGrus,SGrus,DPros,Colecoes FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
                     SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
     
                     IF USED("cursor_4c_LocalOpe")
-                        TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpe") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        ENDIF
                         USE IN cursor_4c_LocalOpe
                     ENDIF
                     loc_cSQL = "SELECT Abrevs FROM SigCdOpe WHERE Dopes = " + EscaparSQL(loc_cDopeOs)
@@ -1034,7 +1062,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     ENDIF
     
                     IF USED("cursor_4c_LocalOpi")
-                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpi") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                        ENDIF
                         USE IN cursor_4c_LocalOpi
                     ENDIF
                     loc_cSQL = "SELECT Notas,CodTams,CodCors,Numes,dopes FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
@@ -1112,7 +1142,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
         loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_LocalEti")
-                TABLEREVERT(.T., "cursor_4c_LocalEti")
+                IF CURSORGETPROP("Buffering", "cursor_4c_LocalEti") > 1
+                    TABLEREVERT(.T., "cursor_4c_LocalEti")
+                ENDIF
                 USE IN cursor_4c_LocalEti
             ENDIF
             loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs AS Obs,Emps,Numes,Dopes,Empos,DopeOs,NumeOs,Nops" + ;
@@ -1133,7 +1165,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     loc_nNops  = cursor_4c_LocalEti.Nops
     
                     IF USED("cursor_4c_LocalPro")
-                        TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalPro") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        ENDIF
                         USE IN cursor_4c_LocalPro
                     ENDIF
                     loc_cSQL = "SELECT CGrus, SGrus, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
@@ -1146,14 +1180,18 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                     ENDIF
     
                     IF USED("cursor_4c_LocalOpe")
-                        TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpe") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        ENDIF
                         USE IN cursor_4c_LocalOpe
                     ENDIF
                     loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.Dopes))
                     SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
     
                     IF USED("cursor_4c_LocalOpeO")
-                        TABLEREVERT(.T., "cursor_4c_LocalOpeO")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpeO") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalOpeO")
+                        ENDIF
                         USE IN cursor_4c_LocalOpeO
                     ENDIF
                     loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.DopeOs))
@@ -1175,7 +1213,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
     
                     IF INLIST(par_nTipoEtq, 14, 39, 109, 113)
                         IF USED("cursor_4c_LocalOpi")
-                            TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpi") > 1
+                                TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                            ENDIF
                             USE IN cursor_4c_LocalOpi
                         ENDIF
                         loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
@@ -1190,7 +1230,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                         STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)
     
                             IF USED("cursor_4c_LocalEest")
-                                TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                IF CURSORGETPROP("Buffering", "cursor_4c_LocalEest") > 1
+                                    TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                ENDIF
                                 USE IN cursor_4c_LocalEest
                             ENDIF
                             loc_cSQL = "SELECT ContaOs, ContaDs FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdnL)
@@ -1359,7 +1401,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
     
                             IF INLIST(par_nTipoEtq, 109, 113)
                                 IF USED("cursor_4c_LocalCli")
-                                    TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                    IF CURSORGETPROP("Buffering", "cursor_4c_LocalCli") > 1
+                                        TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                    ENDIF
                                     USE IN cursor_4c_LocalCli
                                 ENDIF
                                 loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaL)
@@ -1389,7 +1433,9 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
 
                 IF THIS.this_nChkUnis = 1 AND THIS.this_nEtiqs = 1
                     IF USED("cursor_4c_LocalEtiPos")
-                        TABLEREVERT(.T., "cursor_4c_LocalEtiPos")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_LocalEtiPos") > 1
+                            TABLEREVERT(.T., "cursor_4c_LocalEtiPos")
+                        ENDIF
                         USE IN cursor_4c_LocalEtiPos
                     ENDIF
                     loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs,Emps,Numes,Dopes FROM SigEtPos" + ;

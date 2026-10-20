@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada em `C:\4c\projeto\app\forms\operacionais\FormSigOpCac.prg`.
+
+## O que foi feito
+
+**Os 4 handlers CRUD (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) N├âO foram criados ÔÇö e isso ├® a entrega correta.** Medido no dump `tasks\task651\SigOpCac_form_codigo_fonte.txt`: zero ocorr├¬ncia de `frmcadastro`, `Grupo_Op`, `pcEscolha`, nome de bot├úo com verbo CRUD e de `<X>.<verbo>.Click`. A superf├¡cie de bot├úo do legado ├® **um** `Commandgroup1` com `ButtonCount = 2` (Consultar / Encerrar). Criar os quatro seria inventar bot├úo (PILAR 1) ou deixar m├®todo vazio (regra de completude).
+
+Os eventos principais reais j├í existiam da Fase 4; a Fase 7 os completou:
+
+1. **`ValidarPreAcao(par_cAcao)`** (novo, Pattern #173/#174) ÔÇö guarda ├║nica dos bot├Áes lendo `txt_4c_Programa` como **fonte ├║nica**. Reproduz o bloqueio que o legado ganha de gra├ºa: o `Text1.Valid` termina em `Return(.f.)` quando o texto n├úo casa programa nenhum, ent├úo o foco **n├úo sai** do campo e o usu├írio nem alcan├ºa o `Commandgroup1`. Com o lookup em `LostFocus` (regra #47) o foco sai ÔÇö sem a guarda, o Consultar rodaria sobre o programa **resolvido antes** com o campo exibindo outro texto. N├úo apaga o digitado (regra #50): avisa e devolve o foco.
+2. **`this_cDescricaoSelecionada`** (nova property) ÔÇö espelho do texto que ficou no campo ap├│s resolver; ├® contra ele que a guarda detecta a diverg├¬ncia. Setada em `AplicarProgramaSelecionado` e limpa nos dois ramos em que o legado limpa `pcPrograma`/`pcParametro` (campo vazio e ESC no picker).
+3. **`BtnConsultarClick`** passa pela guarda antes de `CarregarLista()`; **`BtnEncerrarClick`** documentado como `Release Windows` + ESC via `Buttons(2).Cancel`.
+4. T├¡tulo do picker corrigido para `"Programas"` (5┬║ argumento do `fwBuscaInt` legado) ÔÇö abria com o default `"Procura"`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: limpa, `.fxp` apagado antes e regerado (15.316 bytes), sem `.err`.
+- **Completude (05d)**: rodei a l├│gica real de `Test-CompletudeCodigo` ÔÇö **0 problemas**.
+- **Gate Fase 7** replicado por fora: `legadoSemCrud=True`, `nHandlers=2`, piso 2 ÔåÆ **passa pelo carve-out**.
+- Balanceamento `DO CASE/TRY/PROCEDURE/FUNCTION` ok, nenhum `RETURN` dentro de `TRY`, zero caractere n├úo-ASCII.
+
+## Um achado que vale registrar
+
+A primeira vers├úo do meu coment├írio de cabe├ºalho citava os quatro nomes por extenso ÔÇö e **o gate passou pelo motivo errado**: ele faz `$conteudo -notmatch "BtnIncluirClick"` sobre o `.prg` inteiro, coment├írio inclu├¡do, ent├úo `faltantes` deu **0** e o carve-out nunca rodou. Reescrevi o coment├írio em forma gen├®rica (`Btn<verbo>Click`); agora `faltantes = 4` e a aprova├º├úo vem da medi├º├úo real. Salvei isso como mem├│ria (`feedback_comentario_citando_nome_satisfaz_gate`) porque o mesmo risco existe na Fase 8, que tamb├®m casa nome em texto livre.

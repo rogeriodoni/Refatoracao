@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í completa e **verificada**, n├úo s├│ compilando.
+
+## O que eu verifiquei (n├úo aceitei a execu├º├úo anterior de palavra)
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| Compila├º├úo (`.fxp` apagado antes ÔÇö regra #29) | `COMPILE_OK`, zero `.ERR` em Form e BO |
+| Probe runtime (`ProbeAut644F8.prg`) | `RESULTADO=OK` |
+| Gate `case 8` contra o `.ps1` **em disco** | `validado = True` |
+| `Test-CompletudeCodigo` Form / BO | `True` / `True` |
+| Parse do orquestrador | zero erros de sintaxe |
+
+O probe exerce o fluxo real, n├úo s├│ a abertura: round-trip `TxtObs Ôåö this_cObservacao`, linha da grade carregada no BO com `RECNO` preservado, `BtnImprimirClick` deixando as 2 linhas `Printed=.T. / Marca=.F.`, e o guard do Encerrar recusando fechar com linha pendente e liberando depois.
+
+## Por que a fase constava como falha
+
+O gate `Test-AcaoDoLegadoTemHandler` filtrava bot├úo pelo **prefixo do nome** (`cmd|btn|command|Grupo`). Os tr├¬s CommandButton do SIGOPAUT se chamam `Sair`, `Fwbtnm1` e `Grade` ÔÇö batizados pela classe do Framework, nenhum casa o prefixo. Medi nas duas vers├Áes: HEAD devolve `False`, ├írvore de trabalho devolve `True`. ├ë o padr├úo j├í documentado de "gate corrigido na fase n├úo vale para ela mesma" ÔÇö o `RunLoop.ps1` parseia o orquestrador uma vez por `.SCX` e o processo em mem├│ria tem a vers├úo antiga. **Esta execu├º├úo ainda vai reprovar a Fase 8; o form n├úo precisa de mudan├ºa** ÔÇö basta re-executar a task644, ou aceitar o artefato.
+
+## O que eu consertei
+
+O validador de completude acusava `FormSigOpAut.prg` por achar `pendente` dentro de **inde*pendente***: o regex n├úo tinha `\b`, em **2 sites** (o check ├® duplicado, um por etapa). Medi antes de mexer, nos 993 `.prg`: o `\b` limpa **10 falsos positivos em 10 arquivos** (todos `independente`/`dependente`/`BtnPendente`) e **n├úo perde nenhuma pend├¬ncia real** ÔÇö `Formgpd` segue reprovando por 4 stubs de `MsgAviso` e `Formdmo` por 3 procedures vazias.
+
+Precisei refazer essa edi├º├úo: `sed -i` **reescreveu o arquivo inteiro de CRLF para LF** (1.4 MB, gate compartilhado) e ainda comeu o backslash, gravando `bpendente`. Restaurei do backup e usei .NET `ReadAllText/WriteAllText` com UTF8+BOM ÔÇö confirmado +4 bytes exatos, BOM e CRLF intactos, `numstat` s├│ nas 2 linhas tocadas. Gravei isso na mem├│ria.
+
+## O que deixei de fora, de prop├│sito
+
+**Sem item de menu.** O `Init` exige objeto do form pai + 5 escalares (legado: `Do Form SigOpAut with ThisForm, TprMvCab.Emps, ...`). ├ë di├ílogo filho ÔÇö item de menu seria entrada quebrada. O irm├úo `Formsigopacc` tamb├®m n├úo tem.
+
+**N├úo liguei o form pai ÔÇö e aqui h├í uma lacuna real, de outra task.** Quem abre o SIGOPAUT ├® `sigmvcab.PROCEDURE autenticacao` (task560). O `Formsigmvcab.prg` migrado tem **zero** ocorr├¬ncias de "autentic": essa procedure inteira nunca foi migrada. Ent├úo **hoje nada abre o FormSigOpAut**. N├úo mexi porque ├® escopo da task560 e n├úo ├® trivial (cursores `crPar`/`crSigOpFp`/`crSigCdOpe` + `CursorQuery`) ÔÇö prefiro reportar a alargar a task calada. Recomendo abrir isso como pend├¬ncia da task560.
+
+N├úo commitei nada ÔÇö o repo est├í na `main` e voc├¬ n├úo pediu commit.

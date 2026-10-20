@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Isso ├® o acumulado das Fases 3-8 (ainda n├úo commitadas) contra o HEAD, n├úo s├│ minha edi├º├úo. A Fase 8 em si est├í completa e compila limpo.
+
+## Resumo da Fase 8/8 ÔÇö FormSIGPRTFH
+
+O arquivo j├í chegava quase completo das fases anteriores (Init, BO, cabe├ºalho, campos, lookup/valida├º├úo, la├ºo interativo com o SiTef). O que faltava ÔÇö e que esta fase entregou ÔÇö foi o **fluxo de sa├¡da com retorno de resultado**:
+
+- Adicionei a property `this_cRetChe` no Form, espelhando `this_oBusinessObject.ObterRetornoFinal()`.
+- Corrigi `BtnSaidaClick()` para gravar o resultado nessa property e fechar com `THIS.Hide()` em vez de `THIS.Release()`.
+
+**Por qu├¬**: o cabe├ºalho do arquivo j├í documentava a inten├º├úo ("Unload devolve o resultado ao chamador"), mas isso n├úo funcionaria ÔÇö `THIS.Release()` destruiria o objeto antes do chamador (que usa `CREATEOBJECT()+Show()`, n├úo `DO FORM ... TO var`) conseguir ler o retorno. Encontrei o padr├úo can├┤nico j├í estabelecido em dois forms-irm├úos deste mesmo projeto (`FormSIGPRSTF.this_cSenhaRetorno`, `FormSIGPRIFF.this_uResposta`): fechar com `Hide()` e expor o resultado via property p├║blica lida depois do `Show()` modal voltar. Tamb├®m localizei o chamador real da tela no legado (`sigfitef.PRG:224`, `DO Form SigPrTfh With ... TO RetCrtChq`), confirmando que o mecanismo precisa ser preservado.
+
+Validei compilando `FormSIGPRTFH.prg` + `SIGPRTFHBO.prg` no VFP9 real (`COMPILE`) ÔÇö `COMPILE_OK`, sem erros ÔÇö e removi os artefatos tempor├írios do teste.

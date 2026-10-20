@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 required no code changes. Here's what I found.
+
+## task663 is a duplicate re-run
+
+`SigPrPcp.scx` has an **identical md5** (`3aef4367ÔÇª`) in task212, task318, and task663. **task318 is fully `COMPLETED`/`PASSED`** and already produced `FormSigPrPcp.prg` (1169 lines, header "Fase 8/8 ÔÇö COMPLETO"). So I audited rather than regenerated ÔÇö the prompt's own "A├ç├âO OBRIGAT├ôRIA" says Read + Edit, and this matches a known trap already in memory.
+
+## The Phase 4 template asks for UI the legacy never had
+
+The template wants `cnt_4c_Botoes` with 6 CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar). `SIGPRPCP` is an OPERACIONAL screen with a flat layout ÔÇö `layout.json` lists only **Sair** and **Salva** alongside the two grids, a combo and the labels. Building the CRUD bar would invent UI and violate PILAR 1, so I didn't. What's there and correct: `ConfigurarPaginaLista` (both grids), `ConfigurarBotoes` (`cmd_4c_Confirmar` + `cmd_4c_Cancelar` with Caption "Encerrar"), and `AlternarPagina(par_nPagina)` implementing the legacy's `[ <TAB> para mudar de Grade ]`.
+
+## One suspected defect ÔÇö measured, and it was not real
+
+`CarregarGrades` sets `ColumnCount` + `RecordSource` + `ControlSource` and never re-applies `Column.Width`/`Header1.Caption`. That reads exactly like the canonical Problema 48 / Pattern #180 defect, so I nearly "fixed" it. I measured it in VFP9 first (`automation\medir_grid_recordsource_reset.prg`):
+
+| scenario | Width | Caption |
+|---|---|---|
+| first bind (unbound ÔåÆ cursor) | 50 kept | kept |
+| **cursor closed + recreated, then rebind** | **75 RESET** | **"Header1" RESET** |
+| `RecordSource=""` ÔåÆ rebind, same live cursor | 50 kept | kept |
+
+**The trigger is the alias being destroyed and recreated ÔÇö not the `RecordSource` assignment.** `SigPrPcpBO.Processar` uses temp cursors and `ZAP`, never `SQLEXEC` into the grid aliases, so this form is the no-reset case. Injecting re-config would have been noise. `Column.ReadOnly` was never reset in any scenario, which matters here because `Column1` (Prioridade) is the only editable cell and is the point of the screen.
+
+I also measured `SetFocus()` from `InicializarForm` (before the form is shown) ÔÇö no error, so the info/client panel does populate on open.
+
+Clean on the rest of Phase 4 scope: zero `.Self`, zero `Controls("<nome>")`, no `RETURN` inside `TRY`, no `MESSAGEBOX`/`MostrarAviso`/`ISEMPTY`, no `PUBLIC` in `DEFINE CLASS`, all three `.Picture` files exist in `vbmp\`, `Destroy()` ends in `DODEFAULT()`, and the five methods `TesteAutomatico` calls from outside are PUBLIC. **Compiles clean.**
+
+I made no edits to `FormSigPrPcp.prg` or `SigPrPcpBO.prg` ÔÇö the `git` modifications on both are pre-existing pipeline edits (Pattern #170 path fix).
+
+I did update memory: the existing note states `RecordSource=""` + re-set as the cause, which is broader than measured. I appended the four-scenario table and the narrower trigger, since it decides *where* Pattern #180 injection is actually needed ÔÇö `ZAP`+`APPEND` BOs are immune.
+
+Two things worth your call: `tasks\task663\task_state.json` still shows phases 4ÔÇô8 `PENDING`, and I left it alone (that's orchestrator bookkeeping, not a phase decision). And if the duplicate re-runs keep coming, the dedupe would belong in `OrquestradorMigracao.ps1` ÔÇö matching SCX md5 against tasks already `PASSED`.

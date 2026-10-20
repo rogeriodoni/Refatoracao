@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 2 is complete. Summary of what was done:
+
+**`C:\4c\projeto\app\classes\SIGPRTFHBO.prg`** ÔÇö completed for Phase 2/8.
+
+This form (`SIGPRIFF` ÔåÆ `SIGPRTFH`, "SiTef - Consulta de Cheque") is **not a CRUD entity** ÔÇö confirmed by both the file's own header and the full legacy source: it's a hardware payment-terminal dialog (CliSiTef32I.DLL) with zero SQL Server persistence. So instead of fabricating fake `Inserir()`/`Atualizar()`/`CarregarDoCursor()` SQL that doesn't exist in the legacy system (which would violate PILAR 2 and the project's established "BO somente-leitura" convention), I:
+
+1. Left `Inserir`/`Atualizar`/`ExecutarExclusao`/`ObterChavePrimaria`/`CarregarDoCursor` un-overridden ÔÇö BusinessBase's defaults are already correct ÔÇö and documented why (avoiding the banned "n├úo implementado" phrase).
+2. Ported the **real** business logic from the legacy `SIGPRIFF.SCX` methods instead:
+   - `DeclararFuncoesSiTef()` ÔÇö the 4 `DECLARE ... IN "CliSiTef32I.DLL"` signatures (from legacy `Load`), called once from `Init()`.
+   - `ConfigurarConexaoSiTef`, `IniciarFuncaoSiTef`, `FinalizarTransacaoSiTef` ÔÇö thin wrappers around the DLL calls.
+   - `ProcessarErroSiTef` ÔÇö port of `errotef` (dropped one genuinely dead/buggy legacy branch that referenced an undeclared variable and would crash if hit ÔÇö documented in a comment).
+   - `ObterMensagemSerasa` ÔÇö port of the `CodSerasa`/`RetSerasa` lookup table.
+   - `GravarRetornoFalha` / `GravarRetornoSucesso` ÔÇö faithful ports of `retornofalha`/`montaretorno` (the SDF response-file writers read by the SiTef integrator), fixing one legacy undefined-variable reference (`ltIdent` ÔåÆ `THIS.this_nIdent`) and wrapping file I/O in TRY/CATCH with `MsgErro` per CLAUDE.md rule #9.
+   - Public (non-PROTECTED) visibility on everything the Form will call directly in later phases, per rule #51.
+
+Verified with a real VFP9 `COMPILE` pass (via a temporary helper script, now cleaned up) ÔÇö **zero compile errors**.

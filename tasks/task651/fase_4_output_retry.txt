@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e **validada por execu├º├úo real**, n├úo s├│ por regex.
+
+## Diagn├│stico da reprova├º├úo
+
+A reprova├º├úo era **leg├¡tima** ÔÇö n├úo era a fam├¡lia conhecida de falso-positivo de gate. Apliquei o procedimento da mem├│ria antes de tocar no form:
+
+- `OrquestradorMigracao.ps1` gravado **09:00:24**, task651 iniciada **10:20:12** ÔåÆ o gate que rodou ├® o do disco, n├úo artefato de self-reference.
+- Medindo cada termo isoladamente: o ├║nico que falhava era **`temCarga = 0`** (ramo FLAT exige `CarregarLista|CarregarDados|MontaGrade`).
+- O legado tem **2 grids de verdade** (`BaseClass: grid` ├ù2), ent├úo os ramos de exce├º├úo (DESPACHANTE/EXIBI├ç├âO/CAPTURA/├üRVORE) corretamente n├úo se aplicam.
+
+A tentativa anterior adiou o v├¡nculo das grades ("de prop├│sito") e nunca escreveu m├®todo de carga. A regra #41 que ela citou n├úo manda omitir o bind ÔÇö manda coloc├í-lo **no m├®todo de carga**, com o cursor j├í populado.
+
+## O que implementei
+
+Transcrito do dump, m├®todo a m├®todo: `CarregarLista()` (= `Command1.Click`), `CarregarUsuarios()` (= `Grid1.AfterRowColChange`, uso mestre-detalhe que ├® o caso **correto** de `AfterRowColChange` pela regra #46), `LimparGrades()` (= `Text1.GotFocus`), mais os handlers e `VincularEventos()`. Extra├¡ o formato das colunas para `AplicarFormatoGrdGrupos/Usuarios()` porque `RecordSource` **reseta** `Width`/`Header1.Caption` (Problema 48) ÔÇö tem de ser reaplicado a cada rebind.
+
+## Tr├¬s defeitos reais achados ao verificar
+
+1. **O form n├úo instanciava** (`VARTYPE=L`). `SigOpCacBO.Init()` fazia `RETURN THIS.CarregarProgramas()`; falhando a carga, `CREATEOBJECT` virava `.F.` e o `Init` do form abortava. A carga ├® **cache** ÔÇö `BuscarPrograma` j├í tem `IF !USED(...) THEN CarregarProgramas()`. Init agora devolve `.T.` e guarda o SQL com `gb_4c_ValidandoUI`/`gb_4c_ModoTeste`. Sem isso `ValidarUIFidelity`/`TestFormWrapper` nunca conseguiriam abrir a tela.
+2. **Consulta de usu├írios rodava 2├ù por clique** ÔÇö `SetFocus()` dispara `AfterRowColChange` depois da guarda de reentr├óncia limpar. Medido 2 chamadas ÔåÆ reordenei, agora **1**.
+3. **`Closable = .F.` inventado** ÔÇö o dump declara s├│ `ControlBox`/`TitleBar`. Removido; medido `Closable=.T.` (Alt+F4 de volta).
+
+## Verifica├º├úo
+
+Compila├º├úo VFP9 limpa (sem `.ERR`, `.fxp` apagados depois). Instancia├º├úo real: `VARTYPE=O`, 800├ù551, headers `Grupo` e `Usuario|Nome|Cargo|Depto|Tipo`, larguras `80,292,90,90,26` ÔÇö id├¬nticas ao SCX; os 2 ├¡cones existem em `vbmp/`. Todos os alvos de BINDEVENT com `PEMSTATUS(...,2) = .F.` (PUBLIC). Caminho de bind provado com BO-stub: ControlSources certos, formato sobrevive ao rebind, `DynamicForeColor` transcrito, cascata mestre-detalhe funcionando.
+
+Gate Fase 4 ÔåÆ **PASSA**. `ValidadorSQLSchema` ÔåÆ PASSOU (683 tabelas). `VerificarFuncoesNaoDefinidas` (escopo de projeto), `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora` ÔåÆ OK. ASCII puro, zero `RETURN` em TRY/CATCH, zero TODO/stub.
+
+**Duas ressalvas:** (a) as queries reais contra `SigCdAcu`/`SigCdUsu` foram validadas **estaticamente** contra o schema ÔÇö o SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina, por isso o caminho de dados foi exercitado com stub. (b) O `TextBox`/`Label` do filtro "Programa :" e o lookup `fwBuscaInt` do `Text1.Valid` ficam para as Fases 5-6, por design ÔÇö s├úo eles que preenchem `this_cProgramaSelecionado`, que esta fase consome.
+
+Salvei em mem├│ria a li├º├úo generaliz├ível do defeito #1 (`feedback_bo_init_retorna_falso_mata_o_form`), que n├úo estava coberta.

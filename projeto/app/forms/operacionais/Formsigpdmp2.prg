@@ -3129,7 +3129,9 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
         TRY
             IF USED("xNensi")
                 *-- Desfaz edicoes no buffer da tabela
-                TABLEREVERT(.T., "xNensi")
+                IF CURSORGETPROP("Buffering", "xNensi") > 1
+                    TABLEREVERT(.T., "xNensi")
+                ENDIF
             ENDIF
             THIS.Release()
         CATCH TO loc_oErro

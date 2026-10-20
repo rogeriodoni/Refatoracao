@@ -1,0 +1,554 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpArq.SCX
+* Data/Hora: 16/10/2026 21:45:52
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPARQ
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPARQ
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPARQ.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPARQ.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grid1
+  Parent: SIGOPARQ
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPARQ.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGOPARQ.Grid1.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGOPARQ.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPARQ.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPARQ.Grid1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPARQ.Grid1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Commandgroup1
+  Parent: SIGOPARQ
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Optiongroup1
+  Parent: SIGOPARQ
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label1
+  Parent: SIGOPARQ
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 200
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Geração de Arquivos"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  parentform = .F.
+  Name = "SIGOPARQ"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 83
+  Left = 60
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 85
+  Width = 469
+  GridLineColor = 238,238,238
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 3
+  Column1.Width = 20
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 1
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 2
+  Column3.Width = 338
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column1.Check1
+------------------------------------------------------------
+  Top = 35
+  Left = 37
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "..."
+  Style = 1
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Arquivo"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome do Arquivo"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Grid1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 644
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  BorderColor = 136,189,188
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Gerar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  Value = 1
+  Height = 28
+  Left = 202
+  SpecialEffect = 1
+  Top = 166
+  Width = 189
+  BorderColor = 136,189,188
+  Name = "Optiongroup1"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = " Linha"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 7
+  Option1.Width = 46
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = " Grupo de Produto"
+  Option2.Height = 15
+  Option2.Left = 63
+  Option2.Top = 7
+  Option2.Width = 106
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPARQ.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Exportação  do Setor :"
+  Height = 15
+  Left = 67
+  Top = 172
+  Width = 111
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPARQ
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters poForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.DataSessionId = poForm.DataSessionId
+
+ThisForm.ParentForm = poForm
+ThisForm.ParentForm.pnTipos = 1
+
+Select crGerArq
+Go Top
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPARQ.Grid1.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+m.lcArqTxt = ''
+m.lcArqTxt = PutFile([Arquivo :],[],[TXT])
+
+If Not Empty(m.lcArqTxt)
+	If Not fVerificaPasta(m.lcArqTxt,2)
+		MessageBox('Local ou Arquivo Invalido !!!',16,'')
+		Replace nMarcas  With 0
+		Replace cNomArqs With ''
+		This.Value = 0
+		This.Parent.Refresh
+		Return(.f.)
+	EndIf
+Else
+	MessageBox('Destino Invalido !!!',16,'')
+	Replace nMarcas  With 0
+	Replace cNomArqs With ''
+	This.Value = 0
+	This.Parent.Refresh
+	Return(.f.)
+Endif
+
+lnReg = Recno()
+Locate for cNomArqs = m.lcArqTxt
+If ! eof()
+	MessageBox('Nome Arquivo Ja Informado !!!',16,'')
+	Go lnReg
+	Replace nMarcas  With 0
+	Replace cNomArqs With ''
+	This.Value = 0
+	This.Parent.Refresh
+	Return(.f.)
+EndIf
+Go lnReg
+
+Replace nMarcas  With 1
+Replace cNomArqs With m.lcArqTxt
+This.Value = 1
+
+This.Parent.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPARQ.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+Locate for nMarcas = 1
+If Eof()
+	MessageBox('Geração Não Selecionada !!!',16,'')
+	Return
+EndIf 
+If MessageBox('Confirma Exportação do Inventário '+Alltrim(Str(crSigCdBal.Codigos))+'?',36,'')==7
+	Return
+Endif
+Release Windows
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+Locate for nMarcas = 1
+If ! Eof()
+	If MessageBox('Geração Selecionada, Deseja Cancelar ???',36,'') = 7
+		Return
+	EndIf
+EndIf 
+Replace All nMarcas With 0
+Release Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPARQ.Optiongroup1
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.ParentForm.pnTipos = This.Value
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPARQ
+RESERVED3 (ClassInfo): parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

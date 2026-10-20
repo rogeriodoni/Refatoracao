@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Compilation confirmed successful (fxp was generated), and I've cleaned up the temp check artifacts.
+
+## Summary ÔÇö Fase 5/8: FormSIGPRTFH.prg
+
+Added `ConfigurarCampos()` (creates all 9 data field/label pairs: Pra├ºa, Banco, Ag├¬ncia+DV, Conta+DV, Cheque+DV, CPF, with positions/colors transcribed literally from `SIGPRTFH_form_codigo_fonte.txt`) and `CarregarCamposNaTela()` (populates them from the `this_c*` parameters already captured in `Init`, including the CPF/CGC label swap). Also added `TxtDvChequeGotFocus()` for the legacy's fixed status message.
+
+Key decisions, documented in code comments:
+- **No `FormParaBO`**: every `Get*` field in the legacy has `PROCEDURE When / Return(.f.)` ÔÇö these are display-only, so I used `.ReadOnly = .T.` + `.TabStop = .F.` instead of building a read-back path that doesn't exist in the original.
+- Caught and fixed my own mistake before finalizing: I'd initially "corrected" plain-ASCII legacy captions ("Praca", "Agencia", "Numero") into accented Portuguese via `CHR()`, which would have violated the literal-transcription rule ÔÇö the SCX dump genuinely has no accents there, so I reverted to the literal text.
+- All object names verified against `mapeamento.json` (18/18 match exactly).
+
+Verified by compiling the `.prg` with `vfp9.exe` ÔÇö it built cleanly (`.fxp` produced, no errors).

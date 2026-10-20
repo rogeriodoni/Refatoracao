@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4 executada. `Formsigprpdf.prg`: 268 ÔåÆ 1095 linhas.
+
+## O que foi entregue
+
+O `layout.json` e o dump do legado provam que **SIGPRPDF n├úo tem Grid, PageFrame nem bot├Áes CRUD** ÔÇö ├® um di├ílogo modal de CAPTURA (800x360, `TitleBar=0`, `ControlBox=.F.`). Inventar `ConfigurarPaginaLista`/`AlternarPagina`/6 bot├Áes violaria o PILAR 1, e cri├í-los vazios seria stub. Entreguei a superf├¡cie que este legado **de fato** tem e que a Fase 3 n├úo tinha ÔÇö o gate da Fase 4 passa pelo ramo **CAPTURA** (verificado condi├º├úo por condi├º├úo):
+
+| M├®todo | Conte├║do |
+|---|---|
+| `ConfigurarPainelEmail` | `cnt_4c_CtnSaida_Email` (container colaps├ível, vazio ÔÇö campos s├úo da Fase 5) |
+| `ConfigurarBarraAcao` | `obj_4c_OptArquivo` (PDF/Excel), `chk_4c_Chk_EMAIL`, `cmd_4c_Cmd_GerarPDF`, `cmd_4c_Cmd_SAIR` |
+| `ConfigurarAreaArquivoSaida` | `lbl_4c_Lbl_SalvarEm`, `txt_4c_TxtNomeArqSaida`, `cmd_4c_CmdGetFile`, `cmd_4c_BtnPastasA` |
+| `AplicarTipoArquivoPadrao` / `AplicarNomeArquivoPadrao` / `AlternarPainelEmail` / `CarregarContaEmailEmpresa` | defaults, colapso e consulta a `SigCdEmp` do `Init` legado |
+| 5 handlers `*Click` | os `Click` legado que dependem s├│ de controles desta fase |
+
+Propriedades da classe `fwoption`/`fwbtnp` (`BackStyle=0`, `MousePointer=15`, `DisabledForeColor`) foram lidas abrindo `framework.vcx` como DBF, n├úo adivinhadas. Os 6 ├¡cones v├¬m do dump e existem em `vbmp\`.
+
+## Dois defeitos achados instanciando (n├úo apareciam na compila├º├úo)
+
+1. **Colapso inicial era no-op silencioso.** Usei `cnt_4c_CtnSaida_Email.Visible` como guarda de idempot├¬ncia, mas o container nasce `.Visible = .F.` enquanto a altura ainda ├® a de projeto ÔÇö o `IF` nunca entrava e a tela abria em **360** em vez de 175, com faixa vazia, e o toggle ficava deslocado 185px. Corrigido com a property `this_lPainelEmailVisivel` (nasce `.T.` porque o `Height=360` do SCX j├í conta o painel). Medido: abre 175 ÔåÆ ON 360 ÔåÆ OFF 175 ÔåÆ idempotente.
+2. **Caption sobrescrito no `Init`.** O m├®todo compartilhado trocava `"   Gravar"` por `"\<Gravar"` j├í na abertura; no legado isso s├│ existe no `Chk_EMAIL.Click`. Movido para `ChkEmailClick`.
+
+## Fora do escopo da fase, mas bloqueante
+
+O **Pattern #96 do `CorretorAutomatico`** afirmava que `geral_excel_60.jpg` "n├úo existe em vbmp/" e o trocaria por `geral_envelope_32.jpg` na etapa 05b ÔÇö trocando silenciosamente o ├¡cone do Excel transcrito do SCX. Conferi os 12 nomes da tabela um a um: **11 realmente ausentes, esse ├® o ├║nico presente**. Removi s├│ essa entrada (as variantes `"excel.jpg"` e `cadastro_excel_60.jpg`, genuinamente ausentes, continuam). Era o ├║nico arquivo do repo que referenciava esse ├¡cone, ent├úo o risco de regress├úo ├® nulo. `parse OK`, BOM/CRLF preservados.
+
+## Verifica├º├Áes
+
+- Compila limpo (Form e BO, `.err` vazio); form instancia com os 10 controles na geometria exata do legado.
+- Auditorias com **zero** achado: `PropriedadesInexistentes`, `FuncoesNaoDefinidas`, `MetodoProtegidoChamadoDeFora`, `LookupEmKeyPress`, `FormBuscaAuxiliar`, `FormatInputMask`, `EncodingPS1`.
+- `CorretorAutomatico` numa c├│pia sob `\forms\`: **0 corre├º├Áes, diff vazio** ÔÇö o arquivo j├í est├í no formato final.
+- Zero `RETURN` em TRY/CATCH, zero acentos literais, zero `MESSAGEBOX`/`ISEMPTY`/`PUBLIC PROCEDURE` em c├│digo execut├ível, zero TODO/stub.
+
+**Pend├¬ncia registrada no cabe├ºalho para a Fase 7/8:** `cmd_4c_Cmd_GerarPDF.Click`. O bot├úo existe (├® parte da barra de a├º├úo), mas o handler l├¬ os 5 campos de e-mail que s├│ nascem na Fase 5 ÔÇö escrev├¬-lo agora estouraria em runtime. A regra de neg├│cio j├í est├í pronta no BO (`ValidarDadosConfirmacao`, `MontarDadosEnvioEmail`, `ObterMensagemContaEmailIndisponivel`). `cmd_4c_Cmd_SAIR` j├í est├í ligado, ent├úo o di├ílogo nunca fica sem sa├¡da. Tamb├®m documentei que `obj_4c_REGISTRY1` n├úo foi portado (detec├º├úo do PDFCreator) ÔÇö o `ValidarUIFidelity` vai acus├í-lo, e ├® diverg├¬ncia deliberada, pelo mesmo motivo j├í registrado no `Formsigprema`.

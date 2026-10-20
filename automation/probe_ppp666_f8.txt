@@ -1,0 +1,43 @@
+=== PROBE Fase 8 - FormSigPrPpp (task666) ===
+1) CREATEOBJECT(form, pai, dsid) -> VARTYPE=O
+   Width=800 Height=500 ControlCount=18
+   campos: Grupo=.T. Conta=.T. ContaDesc=.T. DtIni=.T. DtFim=.T.
+   grades: Operacoes=.T. Itens=.T.   botao=.T.   cabecalho=.T.
+2) DataSession: form.DataSessionId=1 pai=1   USED(TprMvCab) de dentro da sessao do form=.T.
+3) escopos (Prot=.T. significa inacessivel de fora):
+   CarregarLista                   Prot=.F. esperado .F.
+   RepintarGrades                  Prot=.F. esperado .F.
+   GradeOperacoesAfterRowColChange Prot=.F. esperado .F.
+   CmdEncerrarClick                Prot=.F. esperado .F.
+   BO.CarregarOperacoes            Prot=.F. esperado .F.
+   BO.CarregarDoCursor             Prot=.F. esperado .F.
+4) somente-leitura:
+   Grupo=.T. Conta=.T. ContaDesc=.T. DtIni=.T. DtFim=.T.
+   grdOperacoes=.T. grdItens=.T.
+5) binding:
+   grdOperacoes RecordSource=[cursor_4c_Operacoes] ColumnCount=5 esperado 5
+      cols=[cursor_4c_Operacoes.emps][cursor_4c_Operacoes.dopes][cursor_4c_Operacoes.numes][cursor_4c_Operacoes.datas][cursor_4c_Operacoes.valos]
+   grdItens RecordSource=[cursor_4c_Itens] ColumnCount=3 esperado 3
+      cols=[cursor_4c_Itens.cpros][cursor_4c_Itens.dpros][cursor_4c_Itens.qtds]
+6) filtros herdados do pai:
+   Grupo=[G01] esperado [G01]
+   Conta=[11101] esperado [11101]
+   ContaDesc=[CLIENTE DE TESTE] esperado [CLIENTE DE TESTE]
+   DtIni=01/01/2026 DtFim=31/12/2026
+7) CarregarLista (grade MESTRE):
+   RECCOUNT(cursor_4c_Operacoes)=3 esperado 3
+   1a linha (ORDER BY emps,dopes,numes) -> [ENTRADA             ] numes=7  esperado [ENTRADA] 7
+   MousePointer apos a carga=0 esperado 0   LockScreen=.F. esperado .F.
+8) AfterRowColChange:
+   mesma LINHA (so trocou de coluna) -> BO.this_cDopes=[SENTINELA] esperado [SENTINELA] (nao recarrega)
+   LINHA diferente -> BO.this_cDopes=[ENTRADA] this_nNumes=7  esperado [ENTRADA] 7
+   this_nLinhaAnterior=0
+9) MontarChaveEmpDopNums 001/MALOTE/3:
+   LEN=29 esperado 29   valor=[001MALOTE                   3]
+10) CmdEncerrarClick -> pai.Enabled=.T. esperado .T.   SetFocus no campo Conta do pai=.T.
+
+--- mensagens suprimidas em ModoTeste ---
+[18/10/2026 13:14:33] Atenção: Conexão com o banco de dados não disponível.
+
+
+PROBE_OK

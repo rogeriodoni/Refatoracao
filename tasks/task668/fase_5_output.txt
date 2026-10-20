@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5/8 conclu├¡da. Resumo:
+
+## O que encontrei
+
+`FormSIGPRPRO.prg` **j├í existia completo** (757 linhas, Fases 3ÔÇô8), e a mesma `SIGPRPRO.scx` j├í havia sido migrada em **task217, task251 e task323** (`md5sum` id├¬ntico; task323 `COMPLETED`+`PASSED`). Os 11 objetos do SCX j├í estavam todos migrados, com `ConfigurarPaginaDados()` cobrindo os 5 controles que a Fase 5 pede (`getDPros`, `GradeCarac`, `getComples`, `GetMemo`, `Ok`).
+
+Ent├úo **n├úo regerei** ÔÇö a instru├º├úo "Use Read + Edit para MODIFICAR" prevaleceu sobre qualquer leitura destrutiva, e fiz **auditoria dos campos**, que achou 4 defeitos reais:
+
+| # | Defeito | Consequ├¬ncia |
+|---|---|---|
+| 1 | Cursor placeholder sem a coluna `cpros` (4 colunas contra 5 do `SELECT` do BO) | `BO.CarregarDoCursor` l├¬ `cursor.cpros` ÔåÆ `Variable CPROS is not found` em runtime |
+| 2 | `Closable = .F.` e `MinButton = .F.` **inventados** ÔÇö o dump do SCX n├úo os declara | tirava o Alt+F4, a sa├¡da por teclado que o legado tinha (regra: as 5 props de barra de t├¡tulo s├úo independentes) |
+| 3 | `AutoSize = .T.` em Label criado por `AddObject` (no-op, regra #23) | `lbl_4c_Label1` podia cair nos 100px default e invadir `txt_4c_CPros` (Left=94) |
+| 4 | Grade sem `RecordSource` quando `CPros` n├úo ├® informado | Grid com `RecordSource` vazio fica ├á merc├¬ da work area e desenha `cidchaves` no lugar de `caracteris` |
+
+## Verifica├º├úo medida no VFP9 (n├úo leitura de c├│digo)
+
+- **Compila├º├úo**: `FXP` gerado para form e BO, **zero `.ERR`**.
+- **Probe funcional** (`automation\ProbeSigPrPro668F5.prg`) ÔÇö **FALHAS = 0**: form instancia; 13 objetos presentes; placeholder com as 5 colunas incluindo `CPROS`; `CarregarDoCursor` devolve `.T.` e l├¬ `cpros`=`PRD0001`; grade ligada a `cursor_4c_Carac.caracteris` **mesmo sem produto**; `Column1.Width = 363` (n├úo resetada para 90) e header preservado; `Column1.FontName`=Courier New com `Text1.FontName`=Tahoma (os dois do dump); `Closable = .T.`; label sem sobreposi├º├úo; nenhum controle fora da ├írea do Form; nenhum m├®todo chamado de fora marcado PROTECTED.
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas parseadas, **PASSOU**. **`VerificarPropriedadesInexistentes.ps1`**: OK.
+- `SigPrCrr` conferida em `docs\schema.sql` (UTF-16, `Get-Content -Raw`): as 5 colunas e larguras batem.
+
+## Dois pontos para voc├¬ decidir
+
+1. **Percal├ºo durante a execu├º├úo, j├í resolvido**: meu comando inline de restaura├º├úo de CRLF foi mangled pelo bash (backticks) e **truncou o `.prg` para 0 bytes**. Reconstru├¡ a partir do `cat -n` persistido e provei a identidade pelo `git diff --stat`, que voltou exatamente ao `+110 / 97 insertions` de antes; o delta final contra o estado pr├®-edi├º├úo s├úo s├│ as minhas 4 mudan├ºas. Registrei a armadilha e o modo de recupera├º├úo na mem├│ria de CRLF.
+
+2. **Integra├º├úo n├úo existe e eu n├úo a inventei**: `FormSIGPRPRO` n├úo tem chamador nem item de menu. O legado ├® um **popup filho** invocado `WITH ThisForm, cPro` por uma tela de produto ÔÇö p├┤-lo em `popMovimentos` abriria a tela sem produto, com a grade vazia, inventando UI que o legado n├úo tem. ├ë decis├úo de Fase 8/integra├º├úo: o certo ├® a tela-pai cham├í-lo. A Fase 2 tamb├®m trocou o BO por um visualizador somente-leitura (sem `Inserir`/`Atualizar`/`ExecutarExclusao`), o que ├® fiel ao legado ÔÇö mas ├® redu├º├úo em rela├º├úo ao BO commitado em task323, ent├úo vale sua confirma├º├úo.

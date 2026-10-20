@@ -268,7 +268,9 @@ DEFINE CLASS SETBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_BuscaLocal")
-                TABLEREVERT(.T., "cursor_4c_BuscaLocal")
+                IF CURSORGETPROP("Buffering", "cursor_4c_BuscaLocal") > 1
+                    TABLEREVERT(.T., "cursor_4c_BuscaLocal")
+                ENDIF
                 USE IN cursor_4c_BuscaLocal
             ENDIF
 

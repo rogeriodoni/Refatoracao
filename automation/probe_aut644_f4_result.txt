@@ -1,0 +1,17 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+GRID ColumnCount=3 RecordSource=[cursor_4c_Pagamentos] RecordSourceType=1 Top=85 Left=12 W=527 H=228 GridReadOnly=.F.
+COL1 CS=[cursor_4c_Pagamentos.Marca] W=17 Order=1 Sparse=.F. RO=.F. CurrentControl=[CHK_4C_MARCA]
+COL2 CS=[cursor_4c_Pagamentos.Obs] W=382 Order=3 RO=.T.
+COL3 CS=[cursor_4c_Pagamentos.Fpags] W=94 Order=2 RO=.T.
+CHK existe=SIM Visible=.T. RO=.F. Top=0 Left=0 H=10 W=10 Caption=[]
+BOTOES Grade[geral_limpa_grade_60.jpg]=OK Imprimir[geral_impressora_normal_60.jpg]=OK Sair[cadastro_sair_60.jpg]=OK
+BOTOES POS Grade=573/3 Imprimir=648/3 Sair=723/3 SairCancel=.T. GradeVisible=.T.
+ESCOPO CarregarDados prot=.F. VincularGrade prot=.F. ConfigurarGrid prot=.T. ObterModeloImpressoraFiscal prot=.T.
+ALIAS DERRUBADO ColumnCount=0 RecordSource=[cursor_4c_Pagamentos]
+VincularGrade retorno=.T.
+REVINCULADO ColumnCount=3 RecordSource=[cursor_4c_Pagamentos] Col1CS=[cursor_4c_Pagamentos.Marca] Col1CC=[CHK_4C_MARCA] ChkExiste=.T. Col2CS=[cursor_4c_Pagamentos.Obs] Col3CS=[cursor_4c_Pagamentos.Fpags] W=17/382/94 Reccount=2 Recno=1
+CarregarDados(ModoTeste) retorno=.T.
+POS-RELEASE cursorAberto=.F.
+RESULTADO=OK

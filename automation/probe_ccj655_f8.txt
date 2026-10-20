@@ -1,0 +1,43 @@
+=== PROBE Fase 8 - FormSigOpCcj (task655) ===
+1) CREATEOBJECT com parametros -> VARTYPE=O Width=450 Height=270 ControlCount=18
+   campos: Conjuges=.T. RgConjuges=.T. IClis=.T. Cpfs=.T. RClis=.T.
+   botoes: Confirmar=.T. Sair=.T.
+2) CREATEOBJECT sem parametros -> VARTYPE=L (esperado L = recusado pelo guard do Init legado)
+3) escopos (Protected=.T. significa inacessivel de fora):
+   BtnConfirmarClick    Prot=.F. esperado .F.
+   BtnSairClick         Prot=.F. esperado .F.
+   ConjugesLostFocus    Prot=.F. esperado .F.
+   RgConjugesLostFocus  Prot=.F. esperado .F.
+   ConjugesKeyPress     Prot=.F. esperado .F.
+   RgConjugesKeyPress   Prot=.F. esperado .F.
+   ValidarConjuges      Prot=.F. esperado .F.
+   AtualizarEstadoCampoConjuge Prot=.T. esperado .T. (so chamada internamente por THIS., nao eh alvo de BINDEVENT)
+   FormParaBO           Prot=.T. esperado .T.
+   BOParaForm           Prot=.T. esperado .T.
+4) FormParaBO:
+   BO.this_cConjuges   = [MARIA DA SILVA]
+   BO.this_cRgConjuges = [123456789]  BO.this_cRgs = [123456789]
+   BO.this_cIClis      = [0000000042]
+   BO.this_cCpfs       = [11122233344]
+   BO.this_cRClis      = [JOAO DA SILVA]
+5) BOParaForm:
+   Conjuges=[ANA PEREIRA] RgConjuges(da coluna Rgs)=[987654321]
+   IClis=[0000000099] Cpfs=[55566677788] RClis=[CARLOS PEREIRA]
+6) BOParaForm com BO sem conta (this_cIClis vazio):
+   Conjuges=[ZULMIRA] (deve ser ZULMIRA)
+   IClis=[0000000099] (deve CONTINUAR 0000000099)
+7) LimparBlocoConjugeEConta:
+   caixas vazias = .T.
+   BO vazio      = .T.
+8) When legado (Empty(getConjuges.Value)) - replicado via .ReadOnly:
+   Conjuges vazio      -> RgConjuges.ReadOnly=.F. esperado .F. (editavel)
+   Conjuges preenchido -> RgConjuges.ReadOnly=.T. esperado .T. (travado)
+9) BtnConfirmarClick -> form CHAMADOR:
+   pai.txt_Destino_IClis.Value = [0000000777] esperado [0000000777]
+   pai.txt_Destino_Cpfs.Value  = [99988877766] esperado [99988877766]
+   pai.txt_Destino_RClis.Value = [PEDRO ALVES] esperado [PEDRO ALVES]
+   pai.plAchouConta            = .T. esperado .T.
+   dialogo fechado (VARTYPE)   = X esperado X (objeto liberado)
+10) BtnConfirmarClick com this_oParentForm NULL -> sem excecao, VARTYPE=X (esperado X: fecha sem copiar)
+
+PROBE_OK

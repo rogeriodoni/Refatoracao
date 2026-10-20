@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete and verified.
+
+## What was missing
+
+The previous run had implemented the lookup **correctly and completely**, but it failed the phase-6 gate for two structural reasons ÔÇö the gate's FLAT branch (`OPERACIONAL` + no PageFrame) requires *both* a `BINDEVENT` and a `PROCEDURE AbrirLookup*|AbrirBusca*`, and the form had **neither**:
+
+- the picker was inlined inside `ValidarCodigoProdutoGridExec` (no `AbrirBusca*` funnel);
+- there was no `BINDEVENT` at all, because regra #46 forbids binding a grid cell's `Valid` ÔÇö so the author used the TextBox-subclass route and stopped there.
+
+The legacy `SIGPRTRF` *does* have a lookup (`fwBuscaExt` ÔåÆ `SigCdPro` in `Grade.Column1.Text1.Valid`), so no carve-out applies; both requirements are owed in full.
+
+## What I changed
+
+`FormSIGPRTRF.prg` ÔÇö extracted the picker into a public funnel and wired the two entry points the legacy `Valid` alone didn't cover:
+- `AbrirBuscaProdutoGrade(par_oTxt)` ÔÇö PUBLIC funnel, reentrancy guard `this_lEmLookupProduto` (regra #47; thin wrapper + `ÔÇªExec` body because the body has early `RETURN`s).
+- `AbrirBuscaProdutoGradeExec` ÔÇö the `FormBuscaAuxiliar` call, transcribed from the legacy `Valid` (handle as 1st arg, `this_lAchouRegistro` before `Show()`, `this_lSelecionou` guarding the assignment ÔÇö regras #36/#37/#50).
+- `GradeProdutosDblClick()` ÔÇö PUBLIC, bound via `BINDEVENT(grd_4c_Dados, "DblClick", ÔÇª)`.
+- `ValidarCodigoProdutoGridExec` now keeps only the legacy guards (`= AntCPro`, `Not Empty`) and delegates.
+
+`TextBoxGridLookup.prg` (`TextBoxProdutoTrf_4c`) ÔÇö added `KeyPress` (F4/F5, with the mandatory key guard) and `DblClick`, both calling the same funnel. `When`/`Valid`/`LostFocus` stay embedded per regra #46.
+
+The four entry points (cell `Valid`, F4/F5, double-click inside the cell, double-click on the grid) converge on one guarded funnel, so no two pickers can stack.
+
+## Verification
+
+- **Compiled clean** in VFP9, both files, `.fxp` erased first and confirmed regenerated.
+- **Instantiated the form** (lean probe, no DB): `ColumnCount=2`, `Col1.CurrentControl=TXT_4C_CELCODIGO`, `Sparse=.F.`, `Col1.ReadOnly=.F.`, `Col2.ReadOnly=.T.`, RecordSource and both ControlSource bound, cell control class `Textboxprodutotrf_4c`.
+- **BINDEVENT proved registered**, not just present: `AEVENTS` ÔåÆ `1 / DBLCLICK -> GRADEPRODUTOSDBLCLICK`. Both handlers measured PUBLIC (`PEMSTATUS(ÔÇª,2) = .F.`).
+- Gate predicates re-run with the orchestrator's own regexes: `semPageFrame`/`temBindEvent`/`temMetodoLookup` all True ÔåÆ `temLayoutFlat = True`; zero TODO/stub matches.
+- `VerificarLookupEmKeyPress.ps1`: `ERRO=0 AVISO=0`. `VerificarFormBuscaAuxiliar.ps1`: no findings for this form (its exit 1 comes from pre-existing hits in `Formsigreimp` and others).
+
+Two things worth flagging, both outside this phase's scope:
+
+- **`projeto\app\classes\TextBoxGridLookup.prg` is untracked in git** ÔÇö not ignored, just never `git add`-ed, despite `config.prg:318` loading it and it hosting the grid-lookup subclasses for several forms. My edit there won't show in `git status` or any diff-based review.
+- The form file's diff vs HEAD looks like a full rewrite (685/820) because the *previous* phase-6 run already rewrote it while uncommitted; line endings are intact CRLF on both files, so that churn isn't normalization damage.

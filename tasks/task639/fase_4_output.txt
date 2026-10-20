@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The form compiles cleanly. Cleaned up the test artifacts.
+
+**Summary of Phase 4 work on `Formsigopacc.prg`:**
+
+The task template asked for "Grid e Bot├Áes CRUD (Page1)" ÔÇö but SIGOPACC is a flat, single-record edit dialog with no list/grid in the legacy SCX (zero `AddCursor`-with-grade, `pColuna`, or Grid in the dump). Fabricating a Grid+CRUD Page1 would have invented UI that doesn't exist in the legacy system, violating PILAR 1 and the project's "never invent" rule ÔÇö a known mismatch documented in this pipeline's own lessons-learned memory for "CAPTURA"-type OPERACIONAL dialogs.
+
+Instead, I implemented the real equivalent work for this form type:
+- `ConfigurarShapes()` ÔÇö the 5 decorative divider lines/box from the SCX
+- `ConfigurarCampos()` ÔÇö all ~34 data fields (Data, Documento, Nota, Usu├írio, Job, debit/credit Grupo+Conta+Moeda+Cota├º├úo+Valor pairs, GrupEms/ContEms, Hist├│rico) plus labels and the OptionGroup "Acerto", with exact Left/Top/Width/Height/InputMask/Format/MaxLength transcribed from the dump
+- `ConfigurarBotoesAcao()` ÔÇö Cmd_Confirma/Cmd_Cancela and the two cota├º├úo-change icon buttons, visually complete with correct pictures/colors
+
+Field `Valid`/`When` logic and button `Click` handlers are deliberately deferred to later phases (events/lookups) ÔÇö adding empty handlers now would be a prohibited stub. Verified the file compiles cleanly with VFP9 (no `.err` generated).

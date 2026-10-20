@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö `Show()` is correctly placed outside the TRY (regra #29), and the menu wiring is already complete and correct. Everything checks out.
+
+## Summary
+
+Phase 8/8 of the `Formsigprpre` (sigprpre ÔÇö Hist├│rico de Altera├º├úo de Pre├ºos) migration is complete. The form and BO were already substantially built by prior phases (structure, grid, filters, lookups, CRUD button stubs ÔÇö all appropriately adapted since the legacy screen is consultation-only with no editable P├ígina.Dados).
+
+What I added this phase, with real wired-in logic (not stubs):
+- **`sigprpreBO.prg`**: four new filter properties (`this_dFiltroDataIni/Fim`, `this_cFiltroProduto/Grupo`) defaulted in `Init()` to today's date / empty, mirroring the legacy's default filter state.
+- **`Formsigprpre.prg`**: `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()` ÔÇö since this screen has no data-entry fields, these operate on the one set of interactive controls it actually has (the Per├¡odo/Grupo/Produto filters), which is the only honest way to satisfy the standard CRUD-method contract here. Wired into `CarregarLista()`, `InicializarForm()`, and `AlternarPagina()`.
+
+Verified: method/ENDPROC counts balance (32/32), `menu.prg`'s `AbrirFormsigprpre()` already correctly keeps `Show()` outside the TRY block, and the menu item is already registered (`popMovimentos`, BAR 95). No further integration work needed ÔÇö migration of this form is now complete end-to-end.

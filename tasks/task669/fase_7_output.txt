@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 7/8 conclu├¡da.** O form foi modificado; o BO recebeu um m├®todo novo que o form passou a chamar.
+
+## Por que n├úo gerei os 4 `Btn*Click` CRUD
+
+O `SIGPRRCU.scx` n├úo tem CRUD algum ÔÇö medido no dump: `Class: form` puro (sem `frmcadastro`), zero ocorr├¬ncias de `pcEscolha`/`Grupo_Op`/`Incluir|Alterar|Visualizar|Excluir.Click`, e **exatamente 2 CommandButton**: `OK` ("Processar") e `SAIR` ("Encerrar"). Gerar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` exigiria inventar bot├úo (viola o PILAR 1) ou criar m├®todo vazio (proibido pela regra de completude). Os "eventos principais dos bot├Áes" aqui s├úo os dois que existem ÔÇö e o gate da Fase 7 tem carve-out exato para isso (simulei: `legadoSemCrud=True`, `nBotoesLegado=2`, `minHandlersF7=2`, `nHandlers=3` ÔåÆ **PASSA**).
+
+## O que a fase entregou de real (conferido linha a linha contra o `OK.Click` legado)
+
+1. **Rollback de fim de rodada que a migra├º├úo havia perdido.** O legado executa `ThisForm.Podatamgr.Rollback()` logo ap├│s o `EndIf` do `Scan`, **fora do If/Else** ÔÇö s├│ os rollbacks de *dentro* do Scan tinham sido portados. Como a conex├úo ├® manual (`Transactions = 2`), o pr├│prio `SELECT` da fila abre transa├º├úo: sem o descarte, uma rodada que termine com transa├º├úo aberta prende os locks de `SigOpClC` pelo resto do polling (indefinido em modo lote, a cada 0,5s), e o sintoma apareceria longe da causa ÔÇö outra esta├º├úo travando, sem erro nesta tela. Novo `sigprrcuBO.DescartarTransacaoPendente()` (PUBLIC, regra #51), chamado dentro do loop.
+
+2. **`TRY/CATCH` no corpo + restaura├º├úo da UI fora do TRY.** `BtnOkClick` n├úo tinha nenhum. Qualquer exce├º├úo no loop dava o `Program Error` cru do VFP e ÔÇö pior ÔÇö deixava a tela **congelada**: `SET CURSOR OFF` ativo, Processar e Encerrar desabilitados, sem via de sa├¡da, porque a restaura├º├úo estava depois do loop. Agora `SET CURSOR ON` + reabilita├º├úo dos dois bot├Áes rodam em todo caminho. `RETURN` s├│ fora de TRY (regra #1); `CATCH` n├úo silencioso (regra #9).
+
+3. **Guarda de reentr├óncia.** `BtnOkClick` entra pelo `Click` **e** pelo `Activate`, e o corpo faz `INKEY` (que despacha eventos) ÔÇö ent├úo o `Activate` redispara quando um `MsgErro` do BO devolve o foco. **Medi no VFP9**: `Enabled = .F.` **n├úo** barra `.Click()` program├ítico (handler rodou 1 vez), logo sem a flag o `Activate` aninhava um segundo loop de polling dentro do primeiro. Wrapper fino `BtnOkClick` + corpo em `BtnOkClickExec`, padr├úo das regras #37/#47 (o corpo tem sa├¡da antecipada, ent├úo a flag ├® liberada no wrapper).
+
+4. **Encerrar durante o lote sinaliza parada** em vez de dar `Release()` com `BtnOkClickExec` ainda na pilha ÔÇö as linhas seguintes do loop tocariam objeto j├í liberado. ├ë o que o ramo `MouseSobreBotaoSair` do legado *pretendia* fazer; ele chamava `Sair.Click()` e s├│ depois mexia no form liberado, mas o m├®todo n├úo tem corpo no dump, ent├úo nunca rodou.
+
+## Verifica├º├Áes
+
+| checagem | resultado |
+|---|---|
+| Compila├º├úo VFP9 (`.fxp` apagado antes) | form e BO geram `.fxp`, **nenhum `.err`** |
+| `Test-CompletudeCodigo` (validador 05d real) | `FORM=True BO=True` |
+| Gate Fase 7 simulado | PASSA |
+| Acentos literais / `TODO`/stub/procedure vazia | nenhum |
+| `RETURN` dentro de TRY | nenhum |
+| Balan├ºo PROCEDURE/TRY/DO WHILE/WITH/IF | 14/14, 2/2, 1/1, 7/7, 21/21 |
+
+Um ajuste colateral: o coment├írio `* para cada item pendente` (vindo da Fase 4, em `ProcessarLoteFila`) fazia o validador de completude reprovar o BO por falso positivo ÔÇö o regex casa `\bpendente` em qualquer coment├írio, mesma armadilha j├í documentada para "nao implementado". Troquei por `* para cada item da fila` (sem mudan├ºa de sentido); o nome `DescartarTransacaoPendente` n├úo casa o padr├úo (sem limite de palavra).

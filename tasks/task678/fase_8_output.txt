@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The structure is complete and clean. Phase 8/8 for `FormSigPrSnd` is done.
+
+**Summary of what was added:**
+- `BtnExcelClick()` ÔÇö transcribed from the legacy `btnExcel.Click`: exports the grid's `Senhads` column to XLS/TXT via `PUTFILE()` + the existing `fVerificaPasta()` wrapper + `COPY TO`, with `MESSAGEBOX` replaced by `MsgAviso` and the legacy global `ON ERROR` trap replaced by `TRY/CATCH`.
+- `BtnSaidaClick()` ÔÇö transcribed from `Saida.Click` (`ThisForm.Release`), named after the legacy object (`Saida` ÔåÆ `cmd_4c_Saida`), matching the sibling form `Formsigprsen.prg`'s convention.
+- Both bound in `ConfigurarEventos()` alongside the two handlers from Phase 7.
+- `cursor_4c_TmpSenhas` cleanup added to `Destroy()` as a safety net.
+- Menu wiring: new "Senhas Livres" item in `popFerramentas` (next to "Gerar Senha do Dia") and `PROCEDURE AbrirFormSigPrSnd()` in `menu.prg`, following the canonical `VARTYPE`/`Show()`-outside-TRY pattern.
+
+The generic Phase 8 roster (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`) assumes a CRUD Page1/Page2 form; this is an OPERACIONAL dialog with no such structure (documented in the file header, consistent with the sibling `Formsigprsen.prg`), so none of those apply ÔÇö inventing them would violate PILAR 1.
+
+**Verification:**
+- `COMPILE` of `SigPrSndBO.prg`, `FormSigPrSnd.prg`, and `menu.prg` all succeeded with zero errors.
+- A lightweight instantiation probe (bypassing the known-hanging `ConfigurarAmbiente()`) confirmed: the form instantiates cleanly, `cmd_4c_BtnExcel`/`cmd_4c_Saida` exist, `BtnExcelClick`/`BtnSaidaClick` exist and are PUBLIC, the grid cursor binds correctly inside the form's private `DataSession`, and `Release()` runs without error.

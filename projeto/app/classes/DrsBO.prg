@@ -321,7 +321,9 @@ DEFINE CLASS DrsBO AS BusinessBase
                            " WHERE Tits = " + EscaparSQL(THIS.this_cTits)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_NextCods")
-                    TABLEREVERT(.T., "cursor_4c_NextCods")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_NextCods") > 1
+                        TABLEREVERT(.T., "cursor_4c_NextCods")
+                    ENDIF
                     USE IN cursor_4c_NextCods
                 ENDIF
 
@@ -421,7 +423,9 @@ DEFINE CLASS DrsBO AS BusinessBase
                            " AND Cods = " + FormatarNumeroSQL(par_nCods)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_CarregaFlags")
-                    TABLEREVERT(.T., "cursor_4c_CarregaFlags")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_CarregaFlags") > 1
+                        TABLEREVERT(.T., "cursor_4c_CarregaFlags")
+                    ENDIF
                     USE IN cursor_4c_CarregaFlags
                 ENDIF
 

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Conclus├úo: n├úo ├® bug de c├│digo ÔÇö ├® a falha de infraestrutura j├í documentada.**
+
+Confirmei via `Test-NetConnection 192.168.200.10 -Port 1433`: `TcpTestSucceeded=False`, `PingSucceeded=False` (origem 192.168.199.108, mesma sub-rede 199.x sem rota para 200.x). O log mostra o erro na **ETAPA 1B** ("Conectando ao banco de dados"), *antes* de qualquer `CREATEOBJECT` do form ou do BO ÔÇö ou seja, o pre-flight de conex├úo SQL do pr├│prio `TestFormWrapper.prg` falha antes do c├│digo migrado chegar a rodar.
+
+Isso ├® exatamente o padr├úo registrado na minha mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa o pipeline n├úo tem rota para `192.168.200.0/24`, onde vive o `DB_MBAHIA`. J├í ocorreu em 100+ tasks desde 2026-08-02, e nenhuma edi├º├úo de `.prg` jamais resolveu ÔÇö porque o erro acontece antes do form existir.
+
+Revisei `FormSIGPRTFH.prg` e `SIGPRTFHBO.prg` linha a linha mesmo assim, verificando os pontos de risco conhecidos deste projeto:
+- RETURN sempre fora de TRY/CATCH (regra #1/#29)
+- BINDEVENT s├│ em m├®todos PUBLIC (`TxtDvChequeGotFocus`, `BtnSaidaGotFocus`, `BtnSaidaClick`)
+- `Controls(N)` indexado por n├║mero em `TornarControlesVisiveis`, nunca por nome (regra #34)
+- `ForeColor` nos `Buttons(1)` do CommandGroup, nunca no grupo (regra #33)
+- `DECLARE ... IN "CliSiTef32I.DLL"` protegido por TRY com flag `this_lSiTefDisponivel` (a DLL carrega na hora e mataria o form se n├úo estivesse instalada na esta├º├úo)
+
+Nenhum defeito encontrado ÔÇö o c├│digo est├í consistente com os padr├Áes j├í estabelecidos no projeto. **N├úo fiz nenhuma edi├º├úo** nos arquivos, para n├úo arriscar introduzir regress├úo em c├│digo correto por causa de um erro que ├® puramente de rede/ambiente.
+
+Registrei esta reincid├¬ncia (task683/FormSIGPRTFH) na mem├│ria do projeto. Isso ├® um bloqueio de infraestrutura que precisa ser resolvido fora do c├│digo ÔÇö algu├®m com acesso ├á rede da m├íquina do pipeline precisa liberar a rota para `192.168.200.10:1433`.

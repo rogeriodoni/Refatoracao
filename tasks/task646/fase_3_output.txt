@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 (Form - Estrutura Base) is complete for **FormSIGOPBIN**.
+
+Key finding: the legacy `SIGOPBIN.SCX` is not a CRUD-style form ÔÇö it has no PageFrame, no grid, and no buttons at all. It's a tiny flat modal dialog (600x200) that just asks for a 6-digit BIN code and closes itself once validated (`ThisForm.Release` inside `Get_Bin.Valid`). The generic Phase 3 template (PageFrame + Page1/Page2 + CRUD containers) doesn't apply here, so ÔÇö consistent with the project's own documented gate rules for "FLAT COM CONTAINER" OPERACIONAL forms and the precedent in `FormPgb.prg`/`FormFpb.prg` ÔÇö I built:
+
+- `DEFINE CLASS FormSIGOPBIN AS FormBase`, visual properties copied exactly from the SCX dump (600x200, `ControlBox=.F.`, `TitleBar=0`, `WindowType=1`, `BackColor=RGB(231,242,254)`, etc.)
+- `Init(par_cFpagto)` ÔÇö mirrors the legacy `LPARAMETERS pPag`, creates `SIGOPBINBO` (already built in Fases 1/2), then `DODEFAULT()`
+- `InicializarForm()` ÔÇö sets the legacy background picture, calls `ConfigurarPageFrame()`, makes the tree visible
+- `ConfigurarPageFrame()` ÔÇö despite the name (kept for orchestrator convention), creates **no PageFrame**: just the header container `cnt_4c_Sombra` with `lbl_4c_LblSombra`/`lbl_4c_LblTitulo` (exact names from `mapeamento.json`), transcribing the literal legacy caption "Cadastro de Testes"
+- `TornarControlesVisiveis()` and `ObterResultadoSaida()` (proxies to the BO, equivalent to the legacy `Unload`)
+
+Verified by compiling the file with VFP9 (clean) and instantiating it headless: `cnt_4c_Sombra` renders with the right size/color, both labels exist and are visible, no `pgf_4c_Paginas` was created, and `ObterResultadoSaida()` returns `" "` as expected for the untouched default state.
+
+The data field (`Frase`, `Say2`, `Get_Bin`) and all event logic are deferred to later phases, per the plan.

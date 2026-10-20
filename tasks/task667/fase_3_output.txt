@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks structurally sound and balanced (WITH/ENDWITH pairs, AddObject order, ENDPROC/ENDDEFINE). The file establishes:
+
+- `DEFINE CLASS Formsigprpre AS FormBase` with PILAR-1-faithful visual properties (Height=600, Width=1000, Caption transcribed literally from the dump).
+- `Init()` ÔåÆ only `DODEFAULT()` (no duplicate `InicializarForm()` call).
+- `InicializarForm()` creating `sigprpreBO`, building the PageFrame, propagating the title to both pages' header bands.
+- `ConfigurarPageFrame()` ÔåÆ Page1 (Lista) / Page2 (Dados), `Top = -29` compensation.
+- `ConfigurarPaginaLista()` ÔåÆ header band (regra #11, first `AddObject`) + empty `cnt_4c_Botoes`, deliberately hidden after `TornarControlesVisiveis()` to mirror the legado's `Grupo_op.Visible = .F.` (this screen is consulta-only, per the BO's header comment).
+- `ConfigurarPaginaDados()` ÔåÆ header band + empty `cnt_4c_Salva` placeholder for Confirmar/Cancelar (added in a later phase).
+- `TornarControlesVisiveis()` recursive helper and `Destroy()` releasing the BO.
+
+Grid, CRUD buttons, filter fields and events are intentionally left out per this phase's scope ÔÇö they land in Fases 4ÔÇô8.

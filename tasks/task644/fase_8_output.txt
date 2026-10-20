@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpAut.prg` est├í completo e **verificado rodando**, n├úo s├│ compilando.
+
+## O que a Fase 8 acrescentou
+
+O gap real n├úo eram os nomes can├┤nicos de CRUD ÔÇö era que `SigOpAutBO.this_cObservacao` estava declarada e **nunca lida nem escrita**: `Autentica()` lia `txt_4c_TxtObs.Value` direto e o Init zerava o controle. Duas fontes para o mesmo dado.
+
+- **`FormParaBO()` / `BOParaForm()`** com conte├║do real: TxtObs Ôåö `this_cObservacao`, mais a linha corrente da grade via `CarregarDoCursor` (equivale ao `csPgto.marca/.Autenticas` que o legado l├¬ dentro do `Scan`). Ambos **`PROTECTED` expl├¡cito** ÔÇö `FormBase` os declara assim e o VFP9 n├úo deixa a subclasse alargar o escopo; omitir mentiria para quem l├¬.
+- `Autentica()` e `AplicarRegraVisibilidadeObs()` passam pelo BO em vez do controle.
+- `loc_lOk = .F.` inicializado em `BtnImprimirClick` (legado: `lOk = .f.`).
+
+Os outros nomes (`BtnCancelarClick`, `CarregarLista`, `HabilitarCampos`, `AjustarBotoesPorModo`) **n├úo se aplicam**: o SCX n├úo tem PageFrame, modo de edi├º├úo nem bot├Áes CRUD ÔÇö s├│ Grade/Imprimir/Encerrar. Est├í documentado no cabe├ºalho, com o porqu├¬.
+
+## Verifica├º├úo (probe headless, `ProbeAut644F8.prg`)
+
+Compila sem `.ERR`, e o fluxo real roda: round-trip formÔåöBO OK; linha carregada no BO com `RECNO` preservado; `BtnImprimirClick` deixou as 2 linhas `Printed=.T. / Marca=.F.`; o guard do Encerrar recusou fechar com linha pendente e liberou depois. `Test-CompletudeCodigo` limpo.
+
+## Dois defeitos encontrados de passagem
+
+1. **`utils\fmensagemfixa.prg` chamava `MESSAGEBOX` cru** ÔÇö e `SIGOPAUT.autentica` o aciona no caminho do bot├úo Imprimir. Num processo sem usu├írio isso **trava o pipeline noturno** at├® o timeout. Passou a usar a mesma supress├úo de `MsgAviso`/`MsgInfo` (`EscreverErroParaArquivo`); fora do modo teste o comportamento ├® id├¬ntico ao anterior.
+2. **Gate da Fase 8 (`Test-AcaoDoLegadoTemHandler`)**: s├│ olhava bot├Áes cujo `Name` come├ºasse por `cmd|btn|command|Grupo`. Quando o bot├úo herda de classe do Framework, o Form Designer batiza pela classe ÔÇö aqui s├úo `Sair`, `Fwbtnm1`, `Grade`. Corrigido para identificar pelo `BaseClass` da ├írvore do dump, com o prefixo como fallback. A lista de verbos de sa├¡da foi ampliada no mesmo passe (`saida` etc.), sem o que o `SIGTOSEN` passaria pelo pr├│prio bot├úo de sair.
+
+Medido: muda o veredito do helper em 88 de 388 dumps, mas o **veredito final em 1 de 234** (s├│ o SigOpAut); nenhum form que passava passa a reprovar (219 ÔåÆ 220).
+
+## O que voc├¬ precisa saber
+
+**Esta execu├º├úo de task644 ainda vai reprovar a Fase 8.** O `RunLoop.ps1` parseia o `OrquestradorMigracao.ps1` uma vez por `.SCX`, e o processo em mem├│ria tem a vers├úo antiga ÔÇö ├® o efeito j├í documentado de "gate corrigido na fase n├úo vale para ela mesma". Rodando o `case 8` contra o `.ps1` em disco, o resultado ├® `validado = True`. O form **n├úo** precisa de mudan├ºa; basta re-executar a task644 (ou aceitar o artefato, que est├í em disco e verificado).
+
+Tamb├®m n├úo commitei nada ÔÇö o repo est├í na `main` e voc├¬ n├úo pediu commit.

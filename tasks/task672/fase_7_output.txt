@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 7 ÔÇö FormSigPrRss: deliverable j├í presente e verificado
+
+**N├úo alterei c├│digo**, porque os 4 eventos da Fase 7 j├í existem e est├úo corretos. Verifiquei com evid├¬ncia em vez de aceitar a conclus├úo da tentativa anterior:
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| `BtnIncluirClick` / `BtnAlterarClick` / `BtnVisualizarClick` / `BtnExcluirClick` | presentes (linhas 665-689), gate `case 7` passa |
+| Compila├º├úo (VFP9, `.fxp` apagado antes) | **0 erros** nos dois arquivos, `.fxp` gerado, nenhum `.err` |
+| Regra #51 (form chamando m├®todo PROTECTED do BO) | os 8 m├®todos chamados s├úo PUBLIC; `ExecutarExclusao` corretamente PROTECTED atr├ís do `Excluir()` p├║blico. `VerificarMetodoProtegidoChamadoDeFora.ps1`: "OK - nenhum form chama metodo PROTECTED de BO" |
+| Properties lidas do BO | todas declaradas (`this_cMensagemErro` vem de `BusinessBase:16`) |
+| Geometria dos bot├Áes vs dump | `OK` 430/3/75├ù75 e `SAIR` 505/3/75├ù75 ÔÇö **id├¬nticos ao legado** |
+| ├ìcones (regra #25) | `geral_processar_60.jpg` e `cadastro_sair_60.jpg` conferem com o dump e **existem** em `vbmp\` |
+| `BINDEVENT` ap├│s o rename | nenhuma refer├¬ncia ├│rf├ú a `cmd_4c_Processar` / `BtnProcessarClick` |
+| Menu (regra #29) | `Show()` **fora** do TRY |
+
+Os 4 handlers s├úo no-op silencioso de prop├│sito: o `SIGPRRSS.SCX` declara apenas `cntSombra`/`Shape1`/`SAIR`/`OK`/`Label1` ÔÇö sem grade, sem CRUD, sem `pcEscolha`. Confirmei que o padr├úo citado no coment├írio ├® real: `FormSigPrRsa.prg` (irm├úo) usa exatamente `RETURN .T.` nos mesmos quatro.
+
+**Dois achados que valem registro:**
+
+1. **Fui re-invocado pelo guard de NO-OP, n├úo por defeito.** O log `05_migracao_fase7.log` mostra `sonnet`/3600s seguido de `opus`/7200s: a 1┬¬ tentativa n├úo mudou o arquivo e o guard for├ºou retry. A causa raiz ├® que **o deliverable da Fase 7 precede esta rodada** ÔÇö os 4 handlers j├í estavam no HEAD (`f87d3141`, 633 linhas), entregues por uma task anterior. O carve-out `Test-LegadoSemBotaoAlgum` n├úo cobre isso (exige `nBotoes = 0`, e o SIGPRRSS tem dois bot├Áes com `.Click`). N├úo fabriquei mudan├ºa para satisfazer o guard: as ├║nicas sa├¡das seriam inventar bot├úo (viola o PILAR 1) ou criar handler vazio (proibido pela regra de completude). **O guard deve disparar de novo** ÔÇö o conserto ├® no guard, e edit├í-lo n├úo desbloquearia esta execu├º├úo de qualquer forma (o `.ps1` ├® parseado na invoca├º├úo).
+
+2. **O `.Left = 5` que a mem├│ria acusava neste form j├í est├í corrigido.** As fases 3-6 desta rodada puseram o `505` do dump e renomearam os objetos para casar com `mapeamento.json` (`cmd_4c_OK`/`cmd_4c_Sair`), que ├® o que o `ValidarUIFidelity` usa ÔÇö ou seja, a rodada fez trabalho ├║til, s├│ n├úo na Fase 7.
+
+Atualizei `feedback_task_rerun_sobre_form_ja_migrado` com o eixo novo (guard de NO-OP ├ù re-run) em vez de criar mem├│ria duplicada.

@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is done. `C:\4c\projeto\app\forms\operacionais\FormSIGPRPPP.prg` (1310 lines) is the final, complete form.
+
+## What Phase 8 changed
+
+1. **`CarregarDados` ÔåÆ `CarregarLista`** (11 sites). `CarregarLista` is the project's canonical name for the method that populates the listing grid, and here that grid *is* `grd_4c_Operacoes` (the movimenta├º├Áes the user scrolls; `grd_4c_Itens` is its detail). No alias with the old name was left behind ÔÇö it would be an empty shortcut, and the only caller was `InicializarForm` in the same file (I verified the parent `FormSigPrPpc` never calls a load method on the child).
+
+2. **The three `.Refresh()` the legacy `Init` does** on the display fields, transcribed into `CarregarFiltrosDoFormPai` ÔÇö `get_cliente`, `get_dt_inicial`, `get_dt_final` only, exactly the list the legacy has (not "completed" to all five).
+
+3. **Documented the surface this legacy does not have**, so the next reader doesn't mistake it for unfinished work.
+
+## What I deliberately did *not* add
+
+The phase prompt's generic list (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `BtnBuscarClick`) is CRUD convention. This legacy form is a read-only child viewer: the dump has zero CRUD markers, one `CommandGroup`, all five fields declare `PROCEDURE When / Return .f.`, and both grids carry `ReadOnly = .T.` plus per-column `ReadOnly`. Adding those would mean inventing buttons the user never had (PILAR 1) or writing empty methods. I checked the Phase-8 gate directly: its `visualizador` carve-out dispenses exactly those, and requires only `CarregarLista` ÔÇö which is now there as real code.
+
+One thing worth flagging: my first draft of that documentation block spelled `FormParaBO`/`BOParaForm`/`BtnCancelarClick`/`BtnSalvarClick` literally. The gate checks those names by plain substring over the whole file, so the comment would have satisfied it without the methods existing ÔÇö hiding the carve-out message from the log. I rewrote the block to name them by role instead, and verified each grep'd identifier now counts 0.
+
+## Verification
+
+- **Compiles clean** ÔÇö form and BO, `.fxp` deleted first, `.err` empty (`automation/CompileCheckPpp666F8.prg`).
+- **`PROBE_OK`** ÔÇö 10/10 functional checks in VFP9 (`automation/ProbePpp666F8.prg`): instantiates with the caller's contract; adopts the parent's DataSession and sees `TprMvCab`; the four externally-called/BINDEVENT methods are PUBLIC; all 5 fields + both grids read-only; both grids bound (5 and 3 columns); the 5 filters arrive from the parent BO; `CarregarLista` loads 3 rows ordered `emps,dopes,numes` and restores `MousePointer`/`LockScreen`; `AfterRowColChange` honours the legacy per-*row* guard (no reload on column change) and reads the current row into the BO; `MontarChaveEmpDopNums` returns 29 positional chars; `CmdEncerrarClick` re-enables the parent and focuses its Conta field.
+- **Completeness validator**: no TODO/FIXME markers, no empty procedures, no pendency phrases, no placeholder `MsgAviso`.
+- **Auditors clean**: `VerificarLookupEmKeyPress` (ERRO=0 AVISO=0), `VerificarMetodoProtegidoChamadoDeFora` (OK), `VerificarFuncoesNaoDefinidas` (OK). No `.Self`, no `Controls("nome")`, no `this_* .Value`, no `RETURN` inside `TRY`, no `MESSAGEBOX`, zero non-ASCII bytes.
+
+Two caveats on the probe: the items grid could not be exercised end-to-end because this machine has no route to SQL Server `192.168.200.10` (`gnConnHandle = -1`), so `CarregarItensPorChave` returns `.F.` with the expected "Conex├úo com o banco de dados n├úo dispon├¡vel" ÔÇö the master-grid path and the `SigMvItn`/`SigCdPro` SQL text are verified by reading, not by execution. And I did not run the full orchestrator gate (dot-sourcing it triggers a migration), so the carve-out conclusion comes from evaluating each gate predicate against the dump and the file by hand.

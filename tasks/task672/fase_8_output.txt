@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 conclu├¡da. O arquivo j├í existia das fases anteriores, mas **n├úo estava completo** ÔÇö encontrei tr├¬s defeitos reais, dois deles funcionais.
+
+## O que a Fase 8 entregou
+
+**Os seis hooks do contrato eram `RETURN` vazio. Agora t├¬m trabalho real:**
+
+| Hook | O que faz |
+|---|---|
+| `FormParaBO()` | copia Usuario/Online/Parametrizado para o BO ÔÇö ├® o "LParameters pParam, pUsuario, pOnLine" do Init legado, ├║nico estado de **entrada** desta tela (o SCX n├úo tem campo digit├ível). Virou ponto de recarga: `BtnOKClick` re-sincroniza antes de montar o SELECT da fila |
+| `BOParaForm()` | pinta `lbl_4c_Label1` a partir de `BO.this_cStatusMsg` ÔÇö fonte ├║nica do texto, que continua **literal do legado** |
+| `LimparCampos()` | o `Label1.Caption = ''` que o legado faz em dois pontos, limpando na fonte |
+| `HabilitarCampos()` | o par `This.Enabled`/`Sair.Enabled` do `OK.Click` |
+| `AjustarBotoesPorModo()` | funil ├║nico ÔÇö ├® o **├║nico** lugar do arquivo que escreve `.Enabled` |
+| `CarregarLista()` | funil de recarga (`FormParaBO` ÔåÆ `BOParaForm` ÔåÆ ajuste) |
+
+Modelei o estado em duas flags porque o legado tem dois n├¡veis: `Processar` fica desabilitado pela execu├º├úo inteira, `Encerrar` volta **entre** passadas (├® a janela do `Inkey` para interromper). Medido: `OK=.F. Sair=.T.` entre passadas. Isso importa porque com `TitleBar=0`/`ControlBox=.F.` o Encerrar ├® a ├║nica sa├¡da da janela.
+
+**Dois defeitos funcionais corrigidos:**
+
+1. **5 `CATCH` do BO abriam `MsgErro` modal no caminho desassistido** (`BuscarFila` a cada passada, `CarregarDoCursor` a cada item, `GravarLog`/`IniciarLog` s├│ em modo batch). O form roteia tudo por `ReportarFalhaProcessamento` exatamente para evitar isso, e o `DesfazerTransacao` do pr├│prio BO j├í documentava a regra ÔÇö os outros cinco a ignoravam. Agora passam por `RegistrarFalha`, que sempre grava em `this_cMensagemErro` (regra #9) e s├│ exibe di├ílogo fora do modo parametrizado.
+
+2. **`fRecalculaS` *est├í* portada** (`utils/functions.prg:1377`, com a auxiliar `fProcessarS`) ÔÇö o BO tinha copiado do irm├úo `SigPrRsaBO` a nota "n├úo existe no acervo". A confus├úo ├® de nome: o irm├úo processa **produtos** e chama `fRecalculaP`, essa sim ausente. Corrigi a documenta├º├úo e a mensagem ao usu├írio (que mandava procurar uma migra├º├úo j├í feita).
+
+   Isso descobriu o defeito mais s├®rio: a chamada de consolida├º├úo passa `gnConnHandle` onde o legado passava o objeto `poDataMgr`, e a fun├º├úo derivava `llAut` da **posi├º├úo** do objeto. Medido no VFP9: legado ÔåÆ `llAut=.T.`, migrado ÔåÆ `llAut=.F.`. Com `llAut=.F.` e `SigCdPam.CalcSalds = 2`, o `IF (crAi2.CalcSalds = 2 AND NOT llAut)` entra e faz **`INSERT INTO SigOpCls`** ÔÇö re-enfileira a conta em vez de calcular o saldo. ├ë a fila que esta tela existe para drenar: em batch, o lote reprocessaria os mesmos itens para sempre.
+
+   Consertei no `functions.prg` (`llAut = pAut` quando `pCta` n├úo ├® objeto) porque o chamador **n├úo tinha como** pedir `llAut=.T.` ÔÇö n├úo existe objeto de conex├úo na nova arquitetura. Medi o impacto nos outros 5 call sites: todos chamam com 2 ou 3 argumentos, `pAut` chega ausente (`.F.` em VFP9, medido), ent├úo ficam inalterados. O caminho legado com objeto continua funcionando.
+
+**Verifica├º├úo:** compila├º├úo limpa nos tr├¬s arquivos (`.fxp` apagado antes, nenhum `.err`); probe instancia a tela e mede os 7 comportamentos acima, todos verdes, sem nada no arquivo de erro do harness; `ValidadorSQLSchema` 0 problemas (683 tabelas); `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes` e `VerificarFuncoesNaoDefinidas` OK; menu BAR 101 com `Show()` fora do TRY.
+
+Evid├¬ncia em `automation\ProbeRss672F8.prg`, `MedirParamAusenteF8.prg`, `MedirLlAutPosFixF8.prg`.
+
+Dois pontos para voc├¬ decidir:
+
+- **`functions.prg` est├í com line endings MISTOS** (2459 CR / 2550 LF) ÔÇö pr├®-existente, n├úo foi eu. Preservei CRLF na regi├úo que editei, mas vale um normalize separado.
+- **Eu errei uma medi├º├úo no caminho** e s├│ percebi porque insisti: usei `cat -A | sed` para checar line endings e conclu├¡ "LF" numa regi├úo que ├® CRLF ÔÇö o `sed` tinha comido o `\r` antes do `od` ver. Se eu tivesse confiado nessa leitura teria escrito LF num arquivo CRLF. Confirmei com `od` direto sobre o arquivo, n├úo sobre pipe.
+
+N├úo commitei nada ÔÇö voc├¬ n├úo pediu.

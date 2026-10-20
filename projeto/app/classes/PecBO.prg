@@ -67,7 +67,9 @@ DEFINE CLASS PecBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -340,7 +342,9 @@ DEFINE CLASS PecBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Itens")
-                TABLEREVERT(.T., "cursor_4c_Itens")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Itens") > 1
+                    TABLEREVERT(.T., "cursor_4c_Itens")
+                ENDIF
                 USE IN cursor_4c_Itens
             ENDIF
 
@@ -466,7 +470,9 @@ DEFINE CLASS PecBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ExpGrupo")
-                TABLEREVERT(.T., "cursor_4c_ExpGrupo")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ExpGrupo") > 1
+                    TABLEREVERT(.T., "cursor_4c_ExpGrupo")
+                ENDIF
                 USE IN cursor_4c_ExpGrupo
             ENDIF
 
@@ -513,7 +519,9 @@ DEFINE CLASS PecBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_GruposCli")
-                TABLEREVERT(.T., "cursor_4c_GruposCli")
+                IF CURSORGETPROP("Buffering", "cursor_4c_GruposCli") > 1
+                    TABLEREVERT(.T., "cursor_4c_GruposCli")
+                ENDIF
                 USE IN cursor_4c_GruposCli
             ENDIF
 

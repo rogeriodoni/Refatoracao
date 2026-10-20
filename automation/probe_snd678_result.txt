@@ -1,0 +1,17 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+Caption=[Senhas livres]  BaseClass=[Form]
+ConfigurarEventos   ex=.T. prot=.F.
+TxtQtdsenLostFocus  ex=.T. prot=.F.
+ObterQtdeSenhas     ex=.T. prot=.F.
+ValidarQtdeSenhas   ex=.T. prot=.F.
+AEVENTS no txt_4c_Qtdsen = 1
+  evento=[(Object)] delegate=[TXTQTDSENLOSTFOCUS]
+CASO1 Value=0  Obter=0 Validar=.F. (esperado .F.)
+CASO2 Value=5  Obter=5 Validar=.T. (esperado .T.)
+CASO3 Value='12' VARTYPE antes=C Obter=12 Validar=.T.
+CASO3 pos-LostFocus VARTYPE=N Value=12 (esperado N / 12)
+CASO4 numerico intocado Value=7 (esperado 7)
+Grid Column1.ReadOnly=.T. Text1.ReadOnly=.T. Header=[Senhas geradas]
+RESULTADO=OK

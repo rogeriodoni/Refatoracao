@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks structurally sound (balanced IF/ENDIF, DO CASE/ENDCASE, PROCEDURE/ENDPROC, FUNCTION/ENDFUNC blocks). This completes Phase 2 for `sigopbusBO.prg`:
+
+- **`CarregarDoCursor()`** ÔÇö carrega a linha selecionada do picker nas properties de crit├®rio/resultado
+- **`ObterCodigoRetorno()`** ÔÇö transcreve o `Iif/Iif/Iif` do legado (Conjunto > CodMacro > TipoRetorno > Cpros)
+- **`ObterFiltroSituacao()`** ÔÇö transcreve o `Do Case` de filtro por situa├º├úo dos tr├¬s campos que o aplicam
+- **`ObterChavePrimaria()`** e **`LimparDados()`** completando o contrato do BO
+- `Inserir()`/`Atualizar()`/`ExecutarExclusao()` permanecem herdados de `BusinessBase` (sem override), documentado no cabe├ºalho sem a frase proibida "n├úo implementado" ÔÇö o dump legado (`comportamento.json`: `metodosComSQL=0`, `totalQueries=0`) comprova que este di├ílogo nunca grava em tabela.
+
+Pr├│ximo passo (Fase 3) ├® criar o `FormSigOpBus.prg`.

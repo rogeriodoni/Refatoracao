@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 is complete and verified.
+
+## What was actually wrong
+
+The previous Phase 6 run reported success (exit code 0), but the gate rejected it. The gate's `temLayoutFlat` branch ÔÇö the one that applies to this form ÔÇö requires:
+
+```
+OPERACIONAL && semPageFrame && temBindEvent && (temMetodoLookup || (legadoSemLookup && temCamposFlat))
+```
+
+Every term passed **except** `temCamposFlat`, which needs both `.ControlSource =` (present) **and** `PROCEDURE Validar\w+` (absent). The form had the four event handlers wired but no named validation method.
+
+## What I did
+
+This form has **no lookups at all** ÔÇö no TextBox fields, and the dump has zero matches for `fwbusca`/`mAddColuna`/`sigacess`/`FormBuscaAuxiliar`/`Acesso*(`. So inventing an `AbrirLookup*` would have violated PILAR 1 ("NUNCA inventar tabelas de lookup"). Instead I extracted validation that genuinely exists in the legacy.
+
+`Grid1.Column1.Check1.InteractiveChange` has a real three-step chain, which I moved into a named PUBLIC `ValidarArquivoDestino()`:
+
+| Legacy | Message | Where |
+|---|---|---|
+| `Else` of `If Not Empty(lcArqTxt)` | `Destino Invalido !!!` | form |
+| `Not fVerificaPasta(lcArqTxt,2)` | `Local ou Arquivo Invalido !!!` | BO (single source) |
+| `Locate for cNomArqs = lcArqTxt` | `Nome Arquivo Ja Informado !!!` | BO (single source) |
+
+`ChkMarcaToggleExec` now just calls it, which also removed the duplicated message/unmark logic. The method is PUBLIC because `BINDEVENT` dispatches from outside the class (regra #3).
+
+I also fixed a real defect I hit while refactoring that error path: the BO's `CATCH` calls `MsgErro` itself *and* the form showed the message again ÔÇö two dialogs for one error. Wired `this_lErroExibido`, which is BusinessBase's existing mechanism for exactly this (regra #20).
+
+## Verification
+
+- **Compiles clean** ÔÇö `.fxp` regenerated with fresh timestamps (deleted first, per regra #29), no `.err`.
+- **Instantiates** ÔÇö `CREATEOBJECT` returns `O`, caption correct. Compiling alone doesn't prove this, so I probed it headless (`automation/ProbeArq642F6.prg`); no VFP error file produced.
+- **Behavior checked, not assumed** ÔÇö `ValidarArquivoDestino("")` and `(0)` both return `.F.` with the exact legacy string; `PEMSTATUS(...,2)` confirms `PROTECTED=.F.`, so the BINDEVENT handlers can reach it.
+- **Completeness validator** ÔÇö ran its four exact regexes against both files: clean. Worth noting the pre-existing word "placeholder" on line 130 is safe only because the regex anchors the marker to the start of a comment (`^\s*\*--\s*`); mid-sentence doesn't match.
+- **Audits** ÔÇö `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes` all pass. The third initially failed to *start* on a `$PSScriptRoot` resolution error under `-File` with a relative path; rerun with an absolute path it reports clean. That's a latent fragility in the audit script's default-parameter line, not a finding ÔÇö worth fixing separately if it's invoked that way elsewhere in the pipeline.
+- Structure balanced: 19/19 PROCEDURE┬ÀENDPROC, 12/12 WITH, 25/25 IF, 1/1 DO CASE. Spot-checked regras #1, #4, #9, #9.1, #15, #16, #34, #38 ÔÇö all clean.
+
+One deliberate deviation I did **not** change: the BO's duplicate-name `LOCATE` excludes the current record (`RECNO() != loc_nRecnoAtual`), whereas the legacy scans all rows including the current one. The legacy would reject re-picking the same file for the row you're already on; the migrated version allows it. I left it because it's the more sensible behavior and harmless, but flagging it since it is a departure from strict transcription.

@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\SigOpCfaBO.prg` (29,3 KB, 6 m├®todos).
+
+## Por que a tentativa anterior foi reprovada
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`) exige `CarregarDoCursor` **sem exce├º├úo** ÔÇö a cl├íusula de BO somente-leitura s├│ dispensa `Inserir`/`Atualizar`. O BO gerado tinha 0 ocorr├¬ncias de `CarregarDoCursor`, ent├úo `$validado = $false`. (O log `05_migracao_fase2.log` s├│ registra o exit code do CLI, por isso aparecia "SUCESSO".)
+
+## O que foi adicionado/corrigido
+
+| M├®todo | O que faz |
+|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | **novo** ÔÇö linha corrente de `cursor_4c_Saldos` ÔåÆ `this_cFaseLinha`/`this_cContaLinha`/`this_cDescricaoLinha`. ├ë o `Grade.AfterRowColChange` do legado (`Get_Descr.Value = TmpSaldo.Rclis`). |
+| `MontarCursorCabecalho()` | **novo** ÔÇö cria/popula `TmpCabec` (Titulo/SubTitulo/Empresa) do m├®todo `Impress├úo`. Alias **literal** `TmpCabec` porque o `.frt` do `SigOpCfa.frx` referencia `TmpCabec.Titulo`/`TmpCabec.SubTitulo` explicitamente (conferido nos bytes do FRT) ÔÇö renomear abortaria o relat├│rio. |
+| `PrepararCursorSaldos()` | era `RecriarCursorSaldos` **PROTECTED** com `USE IN` + `CREATE CURSOR`: derrubaria `Grid.RecordSource`/`Column.ControlSource` e a grade ficaria vazia com o cursor cheio. Agora faz **ZAP** quando o cursor j├í existe (como o legado), com `SET SAFETY OFF` em volta (SAFETY volta a ON em `DataSession = 2` e o ZAP congelaria a tela), e ├® **PUBLIC** porque o Form o chama de fora (regra #51). |
+| `ProcessarPesquisa()` | 3 corre├º├Áes: (a) `SET EXACT OFF` guardado/restaurado ÔÇö com o `EXACT ON` do `config.prg` **todo SEEK da chave parcial falharia** e cada linha da consulta viraria linha nova na grade em vez de somar no grupo; (b) filtro Grupo/Conta passou a `==` exato (com EXACT OFF, `!=` faria grupo "1" casar com "100"); (c) `TTOD()` ÔåÆ `ConverterParaData()` e guard no `DATETIME()` da data final (regra #16; data vazia dispararia erro 11). Tamb├®m removi a valida├º├úo "Informe o per├¡odo" que o legado **n├úo tem** ÔÇö data vazia vira `NULL` no SQL e volta sem linhas, como no original. |
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()`/`ObterChavePrimaria()` seguem sem override: os dois ├║nicos alvos de escrita do dump (`TmpSaldo`, `TmpCabec`) s├úo cursores locais, nenhum `TABLEUPDATE`/`AddCursor` ÔÇö BO genuinamente somente-leitura, e a exce├º├úo fail-closed do gate reconhece isso.
+
+## Verifica├º├Áes executadas
+
+- **Gate Fase 2**: `CarregarDoCursor` Ô£ô `Inserir` Ô£ô `Atualizar` Ô£ô
+- **COMPILE no VFP9**: `.fxp` gerado, **nenhum `.err`**
+- **`Test-CompletudeCodigo`** (4 padr├Áes): 0 problemas
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas, 3 statements, **nenhuma coluna inv├ílida** (colunas conferidas no `docs/schema.sql` UTF-16: `SigCdFcx.emps` sem C ÔÇö regra #48; `SigCdFcx.datas` ├® `datetime`; `SigCdCle.setors/clagrupos/clacontas`; `SigCdCli.iclis/rclis`)
+- **Regras**: 0 acentos literais, 0 `RETURN` dentro de TRY, 0 `this_*.Value`, 0 `MESSAGEBOX`, `_EMPR` s├│ em coment├írio, CRLF restaurado (CR=LF=566)
+
+**Pend├¬ncia para a Fase 8** (fora do escopo desta fase): `SigOpCf2.frx` ÔÇö usado pelo legado quando `optImp = 3` (Grupo+Conta+Balan├ºo) ÔÇö **n├úo existe** em `C:\4install\FortyusMC\Fortyus\`; s├│ `SigOpCfa.frx/.frt` est├úo l├í e precisam ser copiados para `projeto\app\reports\`.

@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o ├║nico achado listado (`TITULO-NAO-PROPAGADO`) contra o c├│digo real do `FormSigOpCac.prg` e ├® **falso positivo** ÔÇö n├úo vou aplicar a corre├º├úo sugerida.
+
+**Por qu├¬:**
+- O form ├® OPERACIONAL **flat**, sem `pgf_4c_Paginas` (confirmado: coment├írio nas linhas 24-26 diz explicitamente que esta tela n├úo ├® CRUD e n├úo tem PageFrame). O path sugerido pelo achado (`THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption`) quebraria com `Property PGF_4C_PAGINAS is not found`.
+- O container real ├® `cnt_4c_Cabecalho`, e dentro dele `ConfigurarCabecalho()` **j├í propaga** o t├¡tulo no pr├│prio `WITH` de cria├º├úo:
+  - linha 243: `lbl_4c_LblSombra.Caption = THIS.Caption`
+  - linha 261: `lbl_4c_LblTitulo.Caption = THIS.Caption`
+
+Isso ├® exatamente o mesmo padr├úo sist├¬mico j├í catalogado na minha mem├│ria (`feedback_titulo_nao_propagado_falso_positivo.md`), que inclusive j├í tem uma entrada registrada hoje (2026-10-17) para este mesmo arquivo `FormSigOpCac.prg`, chegando ├á mesma conclus├úo: n├úo aplicar.
+
+Como n├úo h├í mais nenhum outro problema listado neste pass, nenhum arquivo foi alterado. Se quiser, posso sugerir consertar o gerador do pass VISUAL (que segue templando esse achado sem conferir a estrutura real do form) em vez de continuar re-verificando caso a caso.

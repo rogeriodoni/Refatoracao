@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os 3 problemas apontados contra o c├│digo e o dump legado (`tasks\task670\SigPrRet_form_codigo_fonte.txt`). Nenhum dos tr├¬s ├® um defeito real ÔÇö todos s├úo falsos positivos do validador:
+
+**1. [METODO-INEXISTENTE] `THIS.AbrirLookupCanonico()`**
+O m├®todo existe e ├® PUBLIC, herdado de `FormBase` (`projeto\app\classes\formbase.prg:393`). A assinatura (`par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra`) bate exatamente com todas as chamadas no form. O validador n├úo verificou a cadeia de heran├ºa (ver mem├│ria `feedback_metodo_inexistente_nao_checa_formbase.md`).
+
+**2/3. [LAYOUT-POSITION] `Label1` vs `lbl_4c_Label17`**
+Compara├º├úo errada por colis├úo de nome gen├®rico (regra CLAUDE.md #39/#28):
+- O `Label1` do legado real ├® a legenda **"Etiquetas"** (Left=636, Top=240) ÔÇö j├í migrado corretamente para `lbl_4c_LabelEtiquetas` (FormSigPrRet.prg:859-873), com Left=636/Top=240 **id├¬nticos** ao legado. O pr├│prio c├│digo j├í tem um coment├írio (linhas 855-858) explicando que esse controle foi deliberadamente renomeado para `lbl_4c_LabelEtiquetas` em vez de `lbl_4c_Label1`, justamente para n├úo colidir no mapeamento.
+- O `lbl_4c_Label17` apontado pelo validador n├úo corresponde ao `Label1`; ele corresponde a `Say17` do legado ("Grupo Venda :", Left=227, Top=394) ÔÇö tamb├®m **id├¬ntico** ao migrado (FormSigPrRet.prg:1178-1191).
+
+O validador comparou o legado `Label1` ("Etiquetas") contra o migrado `lbl_4c_Label17` ("Grupo Venda :"), dois controles sem rela├º├úo nenhuma ÔÇö da├¡ o diff de 154/409px.
+
+Nenhuma altera├º├úo foi necess├íria no arquivo; qualquer "corre├º├úo" desses dois pontos introduziria um defeito real (deslocaria um label j├í correto ou removeria um m├®todo herdado v├ílido).

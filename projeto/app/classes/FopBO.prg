@@ -87,7 +87,9 @@ DEFINE CLASS FopBO AS BusinessBase
                 MsgErro("Erro ao carregar fornecedores do produto.", "Erro em BuscarPorProduto")
             ELSE
                 IF USED("crSigPrFnc")
-                    TABLEREVERT(.T., "crSigPrFnc")
+                    IF CURSORGETPROP("Buffering", "crSigPrFnc") > 1
+                        TABLEREVERT(.T., "crSigPrFnc")
+                    ENDIF
                     USE IN crSigPrFnc
                 ENDIF
 
@@ -709,7 +711,9 @@ DEFINE CLASS FopBO AS BusinessBase
     *---------------------------------------------------------------------------
         TRY
             IF USED("crSigPrFnc")
-                TABLEREVERT(.T., "crSigPrFnc")
+                IF CURSORGETPROP("Buffering", "crSigPrFnc") > 1
+                    TABLEREVERT(.T., "crSigPrFnc")
+                ENDIF
                 USE IN crSigPrFnc
             ENDIF
             IF USED("crSigPrFncTemp")

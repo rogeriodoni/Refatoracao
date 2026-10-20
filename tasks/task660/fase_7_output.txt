@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Compiles clean with CRLF restored. Phase 7 is complete.
+
+## Fase 7 ÔÇö FormSIGPRNSE (task660)
+
+**O deliverable da Fase 7 j├í estava entregue.** Antes de mexer no arquivo, medi o gate do `case 7` em processo separado (sem dot-source do orquestrador ÔÇö regra de seguran├ºa do projeto):
+
+```
+legadoSemCrud = True    nBotoesLegado = 8    minHandlersF7 = 2
+nHandlers     = 4       VEREDICTO: PASSA
+```
+
+O legado `SIGPRNSE` ├® OPERACIONAL sem CRUD (`Class: form` puro, sem `frmcadastro`, sem `Grupo_Op`, zero `pcEscolha`, nenhum nome `Incluir/Alterar/Visualizar`). Os 4 handlers que os 8 bot├Áes do legado exigem existem, completos e fi├®is: `BtnDirsClick`, `BtnSelecionarClick`, `CmdBtnGradeClick`, `CmdBtnFormClick` ÔÇö todos com `BINDEVENT` registrado. **N├úo inventei `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`**: cri├í-los violaria o PILAR 1 e a regra de completude (stub disfar├ºado).
+
+Auditoria que fiz antes de concluir, toda verde: `AjustarBotoesPorModo` reproduz os 15 `Enabled` do `AjustaControles` legado um a um; `CmdBtnGradeClick` caso 3 passa os 5 argumentos na ordem exata de `FormSigMvExp.Init(par_cDopes, par_cTipos, par_nNumes, par_cEmps, par_lConsulta)`; zero `RETURN` dentro de `TRY/CATCH`; todo `THIS.<membro>` resolve; nenhum m├®todo do BO chamado de fora ├® `PROTECTED`.
+
+### Defeito real encontrado e corrigido
+
+N├úo era NO-OP: achei um bug que **congela a tela**, dentro do escopo da fase (handlers de bot├úo).
+
+O form tem `DataSession = 2` e havia dois `ZAP` sem guarda. Medi no VFP9:
+
+```
+SAFETY_SESSAO_1            = OFF     (SET SAFETY OFF do main.prg)
+SAFETY_DATASESSION_PRIVADA = ON      <-- n├úo alcan├ºada
+```
+
+`SET SAFETY` ├® escopado por data session: com `SAFETY ON`, o `ZAP` abre o modal *"Zap ÔÇª Are you sure?"* e a tela trava esperando um clique que o usu├írio n├úo v├¬ ÔÇö sem erro e sem log. Os dois sites s├úo alcan├ºados por bot├úo:
+
+| site | bot├úo que dispara |
+|---|---|
+| `FormSIGPRNSE.prg` ÔåÆ `LimparSelecao` | **Limpar Sele├º├úo** (`CmdBtnFormClick` caso 1) e fim de `Processamento` (Gerar Arquivo) |
+| `SIGPRNSEBO.prg` ÔåÆ `BuscarNotasPendentes` | **Selecionar Notas** (`BtnSelecionarClick`) |
+
+Apliquei o padr├úo can├┤nico (save ÔåÆ `SET SAFETY OFF` ÔåÆ `ZAP` ÔåÆ restore), com restore **tamb├®m no `CATCH`** para o SET n├úo vazar na sess├úo privada se o erro estourar no meio.
+
+`COMPILE_OK` nos dois arquivos, `.fxp` apagados antes, sem `.ERR`; gate reconfirmado ap├│s a mudan├ºa.
+
+### Dois pontos para voc├¬ decidir
+
+1. **CRLF**: o `HEAD` tem estes dois `.prg` como **LF**, mas 40/40 dos outros forms operacionais s├úo **CRLF** (e o CorretorAutomatico regrava tudo em CRLF). Restaurei CRLF para seguir o padr├úo. Por isso o `git diff --stat` mostra o arquivo inteiro ÔÇö ├® artefato de EOL somado ├ás Fases 1ÔÇô7; se preferir diff limpo contra o `HEAD`, d├í para voltar a LF.
+
+2. **Guard de NO-OP**: se as Fases 5/6/7 deste form rodarem de novo sem achado como o acima, o guard vai for├ºar retry opus ├á toa ÔÇö a exce├º├úo da Fase 7 (`Test-LegadoSemBotaoAlgum`) exige 0 bot├Áes e aqui h├í 8. ├ë uma variante nova ("legado TEM bot├Áes, mas os handlers j├í foram entregues em fase anterior"). **N├úo editei o orquestrador**: ele est├í com altera├º├Áes n├úo commitadas, a edi├º├úo n├úo valeria para a execu├º├úo em curso (`& script.ps1` parseia na invoca├º├úo) e o blast radius pede medi├º├úo nos 600+ dumps antes. Posso atacar isso numa tarefa pr├│pria se voc├¬ quiser.

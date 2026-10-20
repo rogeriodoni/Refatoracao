@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei os 3 itens apontados antes de alterar qualquer coisa ÔÇö pela regra de "n├úo chutar", precisava confirmar se os m├®todos existem de verdade.
+
+**Resultado: os 3 s├úo falso-positivo do detector.** Os tr├¬s m├®todos existem no pr├│prio `Formsigopacc.prg`, s├│ que declarados com `FUNCTION` em vez de `PROCEDURE`:
+
+| M├®todo chamado | Linha da chamada | Linha da defini├º├úo | Declarado como |
+|---|---|---|---|
+| `THIS.ResolverTemCotas(...)` | 1766 | 1737 | `PROTECTED FUNCTION ResolverTemCotas(par_cMoeda)` |
+| `THIS.ValidarCamposObrigatoriosConfirma()` | 1846 | 1860 | `PROTECTED FUNCTION ValidarCamposObrigatoriosConfirma()` |
+| `THIS.LocalizarCidContrapartida()` | 2006 | 1938 | `PROTECTED FUNCTION LocalizarCidContrapartida()` |
+
+Em VFP9, `FUNCTION` e `PROCEDURE` s├úo intercambi├íveis como declarador de m├®todo dentro de `DEFINE CLASS` ÔÇö ambos aceitam `RETURN`. O detector do pass "METODO-INEXISTENTE" aparentemente s├│ reconhece `PROCEDURE` ao varrer defini├º├Áes, por isso marcou como "n├úo definido" tr├¬s m├®todos que est├úo corretos e completos (assinatura, corpo e retorno coerentes com o call site).
+
+**N├úo fiz nenhuma altera├º├úo no arquivo** ÔÇö mudar algo que j├í est├í certo violaria a regra "corrigir APENAS os problemas listados, NAO alterar l├│gica de neg├│cio", e trocar `FUNCTION`ÔåÆ`PROCEDURE` seria cosm├®tico sem efeito funcional (risco maior que benef├¡cio, dado que todo o restante do form j├í segue esse padr├úo `FUNCTION` para m├®todos com retorno: `ResolverTemCotas`, `ValidarCamposObrigatoriosConfirma`, `LocalizarCidContrapartida` s├úo os ├║nicos 3 do form, e os tr├¬s est├úo certos).
+
+Quer que eu propague essa li├º├úo (detector METODO-INEXISTENTE n├úo reconhece `FUNCTION`) via skill `propagate-lesson`, para os pr├│ximos passes de code-review n├úo repetirem esse falso-positivo?

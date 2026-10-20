@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. `FormSIGPRNSE.prg` modificado (1308 ÔåÆ 1446 linhas), compila limpo (`.FXP` gerado, `.err` vazio) e instancia com sucesso no VFP9.
+
+## O que a fase encontrou
+
+Este form ├® **OPERACIONAL FLAT** (sem PageFrame ÔÇö "Class: form" gen├®rica no dump). As Fases 3-4 j├í criaram **todos** os controles do `layout.json` numa ├║nica passada de layout, ent├úo "adicionar metade dos campos da Page2" n├úo tinha trabalho novo. O trabalho real da fase foi auditar os campos de crit├®rio **contra o dump** ÔÇö e a├¡ havia defeitos.
+
+## Defeitos corrigidos
+
+**1. Rodap├® "Erros dos Dados" estava RECORTADO (regra #30)** ÔÇö o mais grave
+`Say6` (Top=580) e `getErros` (595+77 = **672**) foram transcritos fielmente, mas o form estava em `Height = 600`: os dois ficavam fora da ├írea e eram recortados ÔÇö sem erro, sem log, invis├¡veis em screenshot. A `obj_4c_CmdBtnGrade` tamb├®m terminava exatamente em `Width = 1000`, encostada na borda.
+N├úo existe "can├┤nico 1000x600" para OPERACIONAL (o 1000 dos CRUD vem do `cnt_4c_Saida.Left = 917`, regra #10) ÔÇö os `1021x699` do SCX s├úo layout de verdade. Medido depois: `ErrosBot=672 < 699`, `GradeBtnDir=1000 < 1021`. `WindowType` segue 1, **n├úo** o 0 do dump (transcrever o 0 mata a tela).
+
+**2. Dois `When` do legado nunca migrados**
+- `getDirs.When ÔåÆ Return .f.` ÔÇö a pasta s├│ se escolhe pelo bot├úo GETDIR; o campo aceitava digita├º├úo.
+- `getDEmps.When ÔåÆ Return Empty(getCEmps.Value)` ÔÇö a descri├º├úo s├│ ├® edit├ível enquanto o c├│digo est├í vazio.
+
+`BINDEVENT` em `"When"` n├úo bloqueia (o retorno do delegate ├® descartado, regra #3), ent├úo implementei via `.ReadOnly` num m├®todo PUBLIC `AjustarCamposDependentes()`, chamado no **funil** (regra #40): fim de `ConfigurarPainelCriterios`, fim de `AjustarBotoesPorModo`, e ap├│s cada caminho que resolve a empresa (valida├º├úo exata e picker) ÔÇö quem restringe tem de liberar na volta. Medido: c├│digo vazio ÔåÆ `.F.`, com c├│digo ÔåÆ `.T.`, limpou ÔåÆ `.F.` de novo, e `.T.` preservado ao passar pelo funil. `PEMSTATUS(...,2) = .F.` confirma que n├úo ├® PROTECTED (regras #3/#51).
+
+**3. `Format`/propriedades descartadas (regra #49)**
+`txt_4c_CEmps` tinha `Width = 34` (dump: **31**) e `BorderColor = RGB(90,90,90)` (dump: **36,84,155**). Os tr├¬s campos de classe `fwget` perderam o `Format = "K"` da classe; os de `fweditdata` perderam `Alignment = 3`; o combo perdeu `ColumnWidths = "60"`. Acrescentei tamb├®m `Themes = .F.` e os pares `DisabledBackColor`/`DisabledForeColor` ÔÇö o legado desabilita os crit├®rios durante o processamento, ent├úo s├úo as cores que o usu├írio de fato v├¬ nesse estado. `TabIndex` 1-13/18/19 transcritos (ordem de tabula├º├úo ├® PILAR 1).
+
+Exce├º├úo documentada: `cmd_4c_BtnSelecionar` mant├®m `Themes = .T.` contra o `.F.` do dump ÔÇö o bot├úo ├® desabilitado por `AjustarBotoesPorModo` e com `Themes = .F.` o ├¡cone n├úo renderiza (Pattern #99).
+
+## Decis├Áes que deixei como estavam
+- `cmbCidades` segue com `RowSource` **fixo** do SCX. O cursor `LocalUfs`/`cursor_4c_Municipios` do `Init` legado alimenta o arquivo gerado, n├úo o combo ÔÇö e a lista ├® regra de neg├│cio (cada item casa com um `PROCEDURE` de gera├º├úo via `ALLTRIM` do texto).
+- `lbl_4c_Label6` fica **branco**: ├® transcri├º├úo do dump (`Say6.ForeColor = 255,255,255`) sobre a faixa escura de `new_background.jpg`, n├úo sobre textura clara de Page de cadastro (regra #12).
+
+Auditorias `VerificarPropriedadesInexistentes` e `VerificarFormatInputMask` passam com zero achados para este form. O arquivo chegou nesta fase em **LF** (fases anteriores usaram `Edit`) e permanece em LF ÔÇö restaurar CRLF agora reescreveria as 1446 linhas e esconderia o diff real (210 linhas `+`, 72 `-`).

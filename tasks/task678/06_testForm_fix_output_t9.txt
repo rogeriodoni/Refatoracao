@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+O erro na etapa `06_testForm` da task678 (`FormSigPrSnd`, tentativa 9/10) **n├úo ├® um bug de c├│digo** ÔÇö ├® o mesmo bloqueio de infraestrutura j├í documentado e recorrente desde 2026-08-02: a m├íquina que executa o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA`.
+
+Confirmei agora mesmo:
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+TcpTestSucceeded: False
+PingSucceeded:    False
+```
+
+O log mostra a falha na `[ETAPA 1B] Conectando ao banco de dados`, **antes** de qualquer `CREATEOBJECT` do form/BO ÔÇö ou seja, o c├│digo de `FormSigPrSnd.prg`/`SigPrSndBO.prg` nunca chega a ser executado, ent├úo nenhuma edi├º├úo de `.prg` poderia corrigir isso.
+
+Revisei os dois arquivos linha a linha (guarda de conex├úo, DataSession=2, ciclo de vida do cursor, transa├º├úo SAVE TRANSACTION, TRY/CATCH) e n├úo encontrei nenhum defeito real ÔÇö consistente com o padr├úo j├í registrado nesta mesma falha em outras ~10 tasks anteriores. Deixei ambos **intactos** para n├úo introduzir regress├úo em c├│digo j├í correto, e registrei esta reincid├¬ncia na mem├│ria do projeto.
+
+A task j├í consumiu 9 das 10 tentativas presa neste bloqueio puramente de rede ÔÇö resta 1 tentativa antes de esgotar o or├ºamento sem que o problema seja de c├│digo.

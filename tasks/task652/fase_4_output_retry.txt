@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e validada para `FormSIGOPCAU.prg`.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 (`OrquestradorMigracao.ps1:6957+`) tem um ramo **ARVORE** justamente para este legado (ActiveX de ├írvore no lugar de Grid). Ele exige tr├¬s coisas no migrado ÔÇö e faltavam duas:
+
+| Exig├¬ncia | Antes | Agora |
+|---|---|---|
+| `AddObject(..., "OLEControl")` | OK | OK |
+| `AddObject("cmg_4c_` / `"cmd_4c_` | **falhava** (`obj_4c_Commandgroup1`) | `cmg_4c_Commandgroup1` |
+| `CarregarLista\|CarregarDados\|MontaGrade` | **falhava** (n├úo existia) | `CarregarDados()` |
+
+## Defeito que encontrei de quebra (mais grave que o gate)
+
+O arquivo da tentativa anterior **n├úo abria a tela**. Ele registrava 8 `BINDEVENT` apontando para handlers "da Fase 7", com o coment├írio de que *"BINDEVENT resolve o nome em runtime"*. Medi no VFP9 (`automation/medir_bindevent_delegate.prg`):
+
+```
+BIND delegate inexistente -> ERRO "Property NaoExisteEsteMetodo is not found."
+BIND delegate existente   -> SEM ERRO, retorno = 1
+```
+
+`BINDEVENT` valida **na hora do bind**. Como `ConfigurarControles` roda dentro de `InicializarForm`, o primeiro bind derrubava o `Init` ÔåÆ `CREATEOBJECT` devolvia `.F.` ÔåÆ clicar no menu n├úo fazia nada, sem erro vis├¡vel.
+
+## O que entreguei
+
+- **`cmg_4c_Commandgroup1`** (prefixo can├┤nico, PILAR 3) com os 3 bot├Áes do SCX, e `mapeamento.json` atualizado junto.
+- **`CarregarDados()`** ÔÇö o `maketree` legado: transfere os filtros, chama `SIGOPCAUBO.MontarArvoreAcessos()` e desenha a ├írvore. Com o guard `"pelo menos um filtro"` que o legado escreve nos 3 call sites do `MakeTree`.
+- **`PopularArvore()`** ÔÇö transcri├º├úo linha a linha do la├ºo `Scan`, incluindo o vetor de n├¡veis, os ├¡cones 1/2/3 e `NodeCargo` como chave **posicional** `PADR(programas,15)+PADR(parametros,10)` (regra #42 ÔÇö sem `ALLTRIM` nas partes).
+- **`PrepararArvore()`/`ConfigurarNo()`/`LimparArvore()`/`ArvoreDisponivel()`** + as 3 imagens carregadas uma ├║nica vez.
+- **Handlers implementados** (Expandir/Recolher/Encerrar, GotFocus), todos PUBLIC. Os `BINDEVENT` de `LostFocus` sa├¡ram ÔÇö voltam na Fase 6 **junto com** os handlers de lookup, que ├® o escopo daquela fase.
+- `Change`/`KeyPress`/`NodeClick` do TreeView **n├úo** reproduzidos: no dump os tr├¬s corpos est├úo vazios ou comentados com `*!*` ÔÇö handler ali seria stub.
+
+## Verifica├º├Áes feitas
+
+- Compila limpo (sem `.err`); gate da Fase 4 = `True`; completude = 0 hits nos 3 regexes do `05d` (a palavra "pendente" num coment├írio meu reprovaria ÔÇö reescrevi).
+- Instanciei headless (`automation/ProbeCau652F4.prg`): `CREATEOBJECT=O`, 6 controles com a geometria exata do dump, os 3 ├¡cones existem em disco, todos os delegates PUBLIC, `CarregarDados` sem filtro devolve `.F.` sem tocar o banco e com filtro reporta a mensagem do BO em vez do *Program Error* cru.
+- `VerificarFuncoesNaoDefinidas` / `VerificarPropriedadesInexistentes` / `VerificarMetodoProtegidoChamadoDeFora`: limpos.
+- Testei o algoritmo da ├írvore (`automation/ProbeCau652Arvore.prg`): o la├ºo termina, nenhum `SUBSTR` negativo, hierarquia coerente. **Achado:** o `-1` da f├│rmula legada s├│ produz nomes completos quando `descricaos` usa `" - "` (espa├ºo-h├¡fen-espa├ºo) ÔÇö com `"-"` puro ela corta a ├║ltima letra. Mantive a f├│rmula fiel (regra #17); com o formato real sai `Cadastros / Produtos / Fluxo de Caixa` corretos.
+
+## O que n├úo pude verificar
+
+O `ctTree.ocx` n├úo est├í registrado nesta m├íquina e o SQL Server (192.168.200.10) est├í inalcan├º├ível ÔÇö ent├úo a ├írvore de verdade (`AddPictureNode`/`NodeCargo`) e a consulta n├úo rodaram contra o controle/banco reais. O c├│digo trata os dois casos (`ArvoreDisponivel()` + TRY/CATCH), mas a confirma├º├úo visual depende de uma esta├º├úo com o OCX.

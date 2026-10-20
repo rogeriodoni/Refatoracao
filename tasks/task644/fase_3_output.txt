@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+6 PROCEDUREs, 6 ENDPROCs ÔÇö balanced. All block keywords match correctly. The Fase 3 structure is complete for `FormSigOpAut.prg`:
+
+- `DEFINE CLASS FormSigOpAut AS FormBase` with visual properties identical to the legacy SCX (Width=800, Height=364, Caption="Autentica├º├úo" via CHR codes, WindowType=1 modal, etc.)
+- `Init()` receiving the same parameters as the legacy form (`poform, _pEmps, _pDopes, _pNumes, _pTipo, _pnAutentica`), storing `this_oParentForm`/`this_oModem` and the scalar params before `DODEFAULT()`
+- `InicializarForm()` creating `SigOpAutBO` with those scalars and building the base visual (no fake PageFrame ÔÇö this legacy form is flat, matching the OPERACIONAL FLAT gate rule)
+- `ConfigurarCabecalho()` recreating `cntSombra` ÔåÆ `cnt_4c_Cabecalho` with `lbl_4c_Sombra`/`lbl_4c_Titulo` exactly per the dump
+- `TornarControlesVisiveis()` and `Destroy()` stubs ready for later phases
+
+Grid, buttons, TxtObs, and all Click/KeyPress/Autentica events are intentionally left out, deferred to Fases 4ÔÇô8 per the task scope.

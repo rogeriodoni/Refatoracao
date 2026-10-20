@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files exist for this form/BO. Phase 8/8 is complete: `Formsigproef.prg` now covers all 14 legacy methods/events, including the previously-missing `Unload` (ported via the project's canonical `this_cNsuRetorno` cache pattern, same as `Formsigprdft.prg`), with `montaretorno` explicitly documented as out-of-scope (uncalled, undefined `ltIdent` variable, dead in the legacy acervo itself).
+
+**Summary of Phase 8 changes:**
+- Added header block documenting Phase 8 scope and why the generic CRUD-phase methods (Salvar/Buscar/Encerrar/FormParaBO/AjustarBotoesPorModo) don't apply to this OPERACIONAL dialog.
+- Added `this_cNsuRetorno` property.
+- Added `MontarRetornoTransacao()` (literal transcription of the legacy `Unload` return expression).
+- Added `Unload()` override following the project's established caching pattern.
+- Updated `Destroy()` to compute the cached return value before closing the cursors it depends on.
+
+The migration of `Formsigproef` (sigproef.SCX ÔåÆ Formsigproef.prg / sigproefBO.prg) across all 8 phases is now finished.

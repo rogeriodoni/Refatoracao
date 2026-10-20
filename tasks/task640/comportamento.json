@@ -1,0 +1,394 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 5,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPAGR",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lnOldSel\n\nSelect crItensBor \nIndex on Cpros Tag Cpros\nGo top\n\nWith ThisForm.grdItens\n\t.RecordSource = [crItensBor]\n\t.column1.ControlSource = [crItensBor.Cpros]\n\t.column2.ControlSource = [crItensBor.Dpros]\n\t.column3.ControlSource = [crItensBor.Marcas]\n\t.column4.ControlSource = [crItensBor.qtds]\n\t.column5.ControlSource = [crItensBor.Valor]\n\t.column6.ControlSource = [crItensBor.Pesos]\n\t.column7.ControlSource = [crItensBor.CodTams]\n\t.Refresh()\nEndWith \n\nThisForm.grdItens.Column1.SetFocus\nThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "*!*\tLocal lnOldSel\n*!*\tlnOldSel = Select()\n\n*!*\tIf Empty(Thisform.getBase.Value)\n*!*\t\tMessagebox([Informar a Base da Localização.],0+48,[Atenção])\n*!*\t\tReturn .F.\n*!*\tEndif\n\n*!*\tSelect crSigLcNv2\n*!*\tGo Top\n*!*\tIf Reccount([crSigLcNv2])>0 And Empty(Thisform.getNvl2.Value)\n*!*\t\tlcNivel = Alltrim(Thisform.getBase.Value)\n*!*\t\tSelect * From crSigLcNv2 Where Cods = lcNivel Into Cursor LocalNivel Readwrite\n*!*\t\tIf Reccount([LocalNivel])>0\n*!*\t\t\tMessagebox([Informar o Segundo Nível da Localização.],0+4... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAGR",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Use In crItensBor \nUse In csProdItn\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "lParameters pCnx, pEscolha\n\nThisForm.pcEscolha = pEscolha\nThisForm.poDataMgr = pCnx\n\nIf Used([csProdItn])\n\tUse in csProdItn\nEndIf \n\nCreate Cursor csProdItn(cItens n(4),Cpros c(14), codtams c(3), Valor n(15,6), Pesos n(8,3))\n\nThisForm.grdItens.RecordSource = []\n\nSelect crTpmMvItn\nSelect 0 as Marcas, Cpros, Dpros, CodTams, Sum(Qtds) as Qtds, Max(Units) as Valor, Max(Pesos) as Pesos from crTpmMvItn ;\nWhere Not Empty(Cpros) Group By Cpros, CodTams, Dpros Into Cursor crItensBor  ReadWrite \n\nThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "MontaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nSelect crItensBor \n= ThisForm.poDataMgr.CursorQuery('SigCdPro','crTPro','Cpros',crItensBor .Cpros,'FigJpgs')\nIf Not IsNull(crTPro.FigJpgs) And Not IsEmpty(crTPro.FigJpgs)\n\tThis.parent.ImgJpg.Visible = .F.\n\tThis.parent.ImgJpg.Picture = ''\n\tSelect crTPro\n\tClear Resources\n\tCopy Memo crTPro.FigJpgs to (lcArquivo2)\n\tThis.parent.ImgJpg.Picture = (lcArquivo2)\n\tThis.parent.ImgJpg.Visible = .T.\nElse\n\tThis.par... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column3.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column3.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace crItensBor.Marcas With IIf(crItensBor.Marcas == 0,1,0)\t\n\tThis.parent.parent.AfterRowColChange\n\tThis.parent.parent.Refresh \n\tNoDefault\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nThis.KeyPress(13,0)\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(CrSigOpCdd.AltValPes=1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(CrSigOpCdd.AltValPes=1 And crItensBor.Marcas = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.grdItens.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(CrSigOpCdd.AltValPes=1  And crItensBor.Marcas = 1 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.cntBotoes",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Select crItensBor \nGo top\nScan for Marcas = 1\n\tUpdate crTpmMvItn set Pesos = crItensBor.Pesos, Units = crItensBor.Valor where Cpros = crItensBor.Cpros And CodTams = crItensBor.CodTams\n\tSelect crItensBor \nEndScan \n\nSelect crTpmMvItn\nGo Top\n\nUpdate crTpmMvItn set Totas = (crTpmMvItn.Units * crTpmMvItn.Qtds)\n\nSelect crTpmMvItn\nGo top\n\t\nThisForm.Release\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.apaga",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.apaga",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crItensBor \nReplace All crItensBor .Marcas with 0\nGo Top\nThisForm.grdItens.AfterRowColChange()\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.SelTudo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAGR.SelTudo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crItensBor \nReplace All crItensBor .Marcas with 1\nGo Top\nThisForm.grdItens.AfterRowColChange()\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AfterRowColChange",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPAGR.Init",
+      "queryOriginal": "Select 0 as Marcas, Cpros, Dpros, CodTams, Sum(Qtds) as Qtds, Max(Units) as Valor, Max(Pesos) as Pesos from crTpmMvItn ; Where Not Empty(Cpros) Group By Cpros, CodTams, Dpros Into Cursor crItensBor  ReadWrite",
+      "tabelas": "crTpmMvItn",
+      "colunas": "Cpros,Dpros,CodTams,crItensBor,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPAGR.cntBotoes.Click",
+      "queryOriginal": "\tUpdate crTpmMvItn set Pesos = crItensBor.Pesos, Units = crItensBor.Valor where Cpros = crItensBor.Cpros And CodTams = crItensBor.CodTams",
+      "tabelas": "crTpmMvItn",
+      "colunas": "Pesos,Units",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPAGR.cntBotoes.Click",
+      "queryOriginal": "Update crTpmMvItn set Totas = (crTpmMvItn.Units * crTpmMvItn.Qtds)",
+      "tabelas": "crTpmMvItn",
+      "colunas": "Totas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crTpmMvItn"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

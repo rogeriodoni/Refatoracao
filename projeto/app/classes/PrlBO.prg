@@ -45,7 +45,9 @@ DEFINE CLASS PrlBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -77,7 +79,9 @@ DEFINE CLASS PrlBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -260,7 +264,9 @@ DEFINE CLASS PrlBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Etiquetas")
-                TABLEREVERT(.T., "cursor_4c_Etiquetas")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Etiquetas") > 1
+                    TABLEREVERT(.T., "cursor_4c_Etiquetas")
+                ENDIF
                 USE IN cursor_4c_Etiquetas
             ENDIF
 
@@ -291,7 +297,9 @@ DEFINE CLASS PrlBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkCod")
-                TABLEREVERT(.T., "cursor_4c_ChkCod")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkCod") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkCod")
+                ENDIF
                 USE IN cursor_4c_ChkCod
             ENDIF
 
@@ -329,7 +337,9 @@ DEFINE CLASS PrlBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_GerarCod")
-                TABLEREVERT(.T., "cursor_4c_GerarCod")
+                IF CURSORGETPROP("Buffering", "cursor_4c_GerarCod") > 1
+                    TABLEREVERT(.T., "cursor_4c_GerarCod")
+                ENDIF
                 USE IN cursor_4c_GerarCod
             ENDIF
 

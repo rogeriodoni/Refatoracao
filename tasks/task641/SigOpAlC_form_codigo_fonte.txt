@@ -1,0 +1,697 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpAlC.SCX
+* Data/Hora: 16/10/2026 20:13:01
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPALC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPALC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPALC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPALC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPALC
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGOPALC
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_Cotação
+  Parent: SIGOPALC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPALC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPALC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPALC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Usuário
+  Parent: SIGOPALC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Senha
+  Parent: SIGOPALC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Moeda
+  Parent: SIGOPALC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPALC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntBotoes
+  Parent: SIGOPALC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 170
+  Width = 540
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Alteração de Cotação"
+  ControlBox = .F.
+  Closable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  retorna = CANCELADO
+  Name = "SIGOPALC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Shape2
+------------------------------------------------------------
+  Top = 96
+  Left = 275
+  Height = 58
+  Width = 162
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  Style = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Shape1
+------------------------------------------------------------
+  Top = 96
+  Left = 103
+  Height = 58
+  Width = 162
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  Style = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Get_Cotação
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  InputMask = "9999999.9999"
+  Left = 338
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 126
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Get_Cotação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cotação :"
+  Left = 283
+  Top = 129
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário :"
+  Left = 123
+  Top = 104
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Senha :"
+  Left = 129
+  Top = 129
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Get_Usuário
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  InputMask = "!!!!!!!!!!"
+  Left = 176
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 101
+  Width = 84
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Get_Usuário"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Get_Senha
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 176
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 126
+  Width = 84
+  PasswordChar = "*"
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Get_Senha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Get_Moeda
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Height = 23
+  InputMask = ""
+  Left = 338
+  ReadOnly = .T.
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 101
+  Width = 34
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Get_Moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Moeda :"
+  Left = 291
+  Top = 104
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPALC.cntBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 385
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 1
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cntBotoes"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Gravar os Dados Informados"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnConfirmar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.MousePointer = 15
+  Command2.TabIndex = 4
+  Command2.ToolTipText = "[Esc] Sair Sem Gravar os Dados"
+  Command2.SpecialEffect = 0
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPALC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return ThisForm.Retorna
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ThisForm.Visible = .f.
+ThisForm.LockScreen = .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcMoeda, lnCotacao, ldData
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Visible = .f.
+ThisForm.LockScreen = .t.
+
+ThisForm.poDataMgr = CreateObject('fSqlConector', ThisForm.Name )
+
+ThisForm.Get_Moeda.Value = Padr( lcMoeda, 3 )
+
+=ThisForm.Podatamgr.CursorQuery('SigCdMoe','CrMoe','Cmoes',Padr( lcMoeda, 3 ) )
+If !crMoe.Cotas
+	Messagebox( 'Esta moeda não permite Alteração de Cotação...', 32, '' )
+Endif
+
+If Type( "lnCotacao" ) == "N"
+	ThisForm.Get_Cotação.Value = lnCotacao
+Else
+	ThisForm.Get_Cotação.Value = 0
+Endif
+
+If Type( "ldData" ) == "D"
+	ThisForm.Data = ldData
+Else
+	ThisForm.Data = Date()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If crMoe.Cotas
+	ThisForm.Visible = .t.
+	ThisForm.LockScreen = .f.
+Else
+	ThisForm.Release
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPALC.Get_Cotação
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.get_Usuário.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.Cotação = fBuscarCotacao(ThisForm.Get_moeda.Value, ThisForm.Data, ThisForm.poDataMgr)
+
+VarCot = (Round(This.Value / ThisForm.Cotação, 2) - 1) * 100
+
+If (Abs(VarCot) > crCarg.VarCots) And (This.Value <> 0)
+	=Messagebox([Cotação Inválida], 48, [Atenção!!!])
+	Return 0
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPALC.Get_Usuário
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcQuery, lcUser
+
+If Not Empty(This.Value)
+	lcUser = Padr(Alltrim(ThisForm.Get_Usuário.Value), 10)
+	lcQuery = [Select a.Usuarios, a.Senhas, a.CCargs From SigCdUsu a Where Not a.cAtivos='N' and a.usuarios = '] + lcUser + [' order by 1]
+	ThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')
+
+	If Not Used('crUsuar') Or Reccount('crUsuar')==0
+		=Messagebox([Usuário Inválido], 48, [Atenção!!!])
+		Return 0
+	Else
+		If Not ThisForm.PoDataMgr.Cursorquery('SigCdCrg','CrCarg','cCargs',CrUsuar.Ccargs ) Or crCarg.AltCots # 'S'
+			=Messagebox([Usuário Sem Acesso Para Alterar Cotação], 48, [Atenção!!!])
+			Return 0
+		EndIf
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPALC.Get_Senha
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcUser,lcQuery
+
+lcUser = Padr(Alltrim(ThisForm.Get_Usuário.value), 10)
+lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]
+ThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')
+
+If Not Used([crUsuar]) Or (Reccount([crUsuar]) = 0)
+	=MessageBox([Usuário Inválido], 48, [Atenção!!!])
+	Return -1
+Else
+	If (Padr(Alltrim(This.Value), 10) <> fCriptografar(CrUsuar.Senhas))
+		=Messagebox([Senha Incorreta], 48, [Atenção!!!])
+	EndIf 
+EndIf 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPALC.Get_Moeda
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPALC.cntBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+If !Empty( ThisForm.Get_Usuário.Value )
+	Local lcUser,lcQuery
+
+	lcUser = Padr( Alltrim( ThisForm.Get_Usuário.value ), 10 )
+	lcQuery = [select a.usuarios, a.senhas, a.cCargs from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]
+	ThisForm.poDataMgr.SQLExecute(lcQuery, 'crUsuar')
+
+	If Not Used('crUsuar') Or Reccount('crUsuar')==0
+		Messagebox( 'Usuário Inválido !!', 48, '' )
+		ThisForm.Get_Usuário.SetFocus
+		Return
+	Else
+		If !ThisForm.PodataMgr.Cursorquery('SigCdCrg','CrCarg','cCargs',crUsuar.Ccargs) Or crCarg.AltCots # 'S'
+			Messagebox( 'Usuário sem acesso para alterar cotação !!', 48, '' )
+			ThisForm.Get_Usuário.SetFocus
+			Return
+		Endif
+	Endif
+Else
+	Messagebox( 'Usuário Inválido !!', 48, '' )
+	ThisForm.Get_Usuário.SetFocus
+	Return
+Endif
+
+If Padr( Alltrim( ThisForm.Get_Senha.Value ), 10 ) # fCriptografar( crUsuar.Senhas )
+	Messagebox( 'Senha incorreta !!', 48, '' )
+	ThisForm.Get_Senha.SetFocus
+	Return
+Endif
+
+If ThisForm.Get_Cotação.Value = 0
+	Messagebox( 'Cotação Inválida !!', 48, '' )
+	ThisForm.Get_Cotação.SetFocus
+	Return
+Endif
+
+ThisForm.Cotação = fBuscarCotacao(ThisForm.Get_Moeda.Value, ThisForm.Data, ThisForm.podatamgr )
+
+VarCot = ( Round( ThisForm.Get_Cotação.Value / ThisForm.Cotação, 2 ) - 1 ) * 100
+
+If Abs( VarCot ) > crCarg.VarCots
+	Messagebox( 'Cotação Inválida !!', 48, '' )
+	ThisForm.Get_Cotação.SetFocus
+	Return
+Endif
+
+ThisForm.Retorna = "OK" + Chr( 13 ) + ;
+					Str( Thisform.Get_Cotação.Value, 15, 4 ) + Chr( 13 ) + ;
+					ThisForm.Get_Usuário.Value
+Set Decimals to 2
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Retorna = [CANCELADO]
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPALC
+RESERVED3 (ClassInfo): cotação
+data
+podatamgr
+retorna
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

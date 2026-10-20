@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean, minimal diff exactly as intended. Phase 8/8 is complete.
+
+## Summary
+
+**FormSigOpAlC.prg** (`SIGOPALC` ÔåÆ "Altera├º├úo de Cota├º├úo", an OPERACIONAL authorization dialog, not CRUD) is now finalized:
+
+- **Fixed a real bug**: `Init()` used `NVL(par_cMoeda, "")` to default the moeda parameter, but an omitted parameter arrives as `.F.` (Logical), not `.NULL.` ÔÇö `NVL` only substitutes on `.NULL.`. Switched to `VARTYPE()`, matching the other two params.
+- **Closed a functional gap present since Phase 3**: the legacy `Init`/`Activate` pair shows a warning and silently closes the dialog when the currency doesn't permit quote changes (`crMoe.Cotas = .F.`). The BO already tracked `this_lMoedaPermiteAlteracao` but nothing in the Form ever checked it. Added the warning in `InicializarForm` and a native `Activate()` override that auto-closes the dialog (guarded so it doesn't fire during `gb_4c_ValidandoUI` harness runs).
+- Implemented real `FormParaBO()`/`BOParaForm()` (Usu├írio/Senha/Cota├º├úo/Moeda transfer), wired `FormParaBO()` into `BtnConfirmarClick`.
+- Documented, with the same explicit-comment style used in Phases 3/4/6/7, why `BtnSalvarClick`/`BtnBuscarClick`/`BtnEncerrarClick`/`CarregarLista`/`AjustarBotoesPorModo`/`HabilitarCampos`/`LimparCampos` don't apply ÔÇö this dialog has no Lista/Dados pages, no grid, and no record modes, so inventing them would violate the "never fabricate functionality" rule.
+- Added the `menu.prg` entry (`popMovimentos` bar 147, `AbrirFormSigOpAlC`) for standalone testing.
+
+Verified by compiling `SigOpAlCBO.prg`, `FormSigOpAlC.prg`, and `menu.prg` with `vfp9.exe` ÔÇö all three compile with zero errors.

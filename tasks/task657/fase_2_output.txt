@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. Completei `C:\4c\projeto\app\classes\SIGOPCCOBO.prg` adicionando:
+
+- **CarregarDoCursor()**: mapeia as 6 colunas de `SigNfCor` (cidchaves, cemps, cseries, cnfis, noccors, mretifs) via `TratarNulo`, com `SELECT (alias)` antes de ler os campos (evita a sintaxe inv├ílida `(variavel).campo`).
+- **Inserir()**: gera `cidchaves` via `fUniqueIds()` quando vazio (chave Fortyus, nunca string vazia ÔÇö regra #22) e faz `INSERT INTO SigNfCor` com `EscaparSQL`/`FormatarNumeroSQL`, chamando `RegistrarAuditoria("INSERT")` em sucesso.
+- **Atualizar()**: `UPDATE SigNfCor ... WHERE cidchaves = ...`, chamando `RegistrarAuditoria("UPDATE")`.
+- Mantive `ObterChavePrimaria()` j├í existente (PROTECTED, s├│ uso interno via auditoria).
+
+`Inserir()`/`Atualizar()` ficaram **sem** `PROTECTED` (igual ao `BusinessBase`), j├í que este ├® um form OPERACIONAL (Carta de Corre├º├úo) que n├úo segue o fluxo padr├úo `Salvar()`/p├ígina Dados ÔÇö o form das pr├│ximas fases pode precisar cham├í-los diretamente. Todo `RETURN` ficou fora do `TRY/CATCH` (regra #1), e os erros SQL usam `CapturarErroSQL()` + `MostrarErro()`.
+
+Pr├│xima fase (3/8) deve criar o `FormSIGOPCCO.prg` em `projeto\app\forms\operacionais\`.

@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File is well-formed and complete. Phase 2 is done.
+
+## Summary
+
+Completed `sigprnfeBO.prg` with the CRUD layer requested for Phase 2:
+
+- **Added 57 missing properties** for columns of `SigMvNfi` that Phase 1 hadn't declared (invcbds, empdopnums, bcicmss, segicms/segipis, codservs/descservs, the RPS/ISS service-tax block, nfechv/nfeprt/nfetxt/nfexml/canxml, ndis/nfechvc/chnfes, NumeroNota, chaveexterna, etc.) ÔÇö now all 117 columns of the table have a `this_*` property.
+- **`ObterChavePrimaria()`** ÔÇö returns `ALLTRIM(THIS.this_cCidchaves)` for use by `RegistrarAuditoria()`.
+- **`CarregarDoCursor()`** ÔÇö maps all 117 columns via `TratarNulo`, with the bit columns (`cancelas`, `correcs`) using the `VARTYPE`-aware pattern (regra #13) since the SQL Server driver can return bit as logical or numeric.
+- **`Inserir()`** ÔÇö generates the PK via `fUniqueIds()` when empty, computes `empdopnums` as `PADR(Emps,3)+PADR(Dopes,20)+STR(Numes,6)` (regra #42, matches the `char(29)` column width), builds the INSERT with `FormatarNumeroSQL`/`EscaparSQL`/`FormatarDataSQL` per column type and `LEFT()` truncation matching exact schema widths, then calls `THIS.RegistrarAuditoria("INSERT")` on success.
+- **`Atualizar()`** ÔÇö same computed `empdopnums`, full `UPDATE ... WHERE cidchaves = ...`, calls `RegistrarAuditoria("UPDATE")` on success.
+
+Both follow the exact conventions used in `sigmvcabBO.prg` (closest precedent: another large `SigMv*` table), use temp cursors (`cursor_4c_Insert`/`cursor_4c_Update`) that are closed before/after use, and keep all `RETURN`s outside `TRY/CATCH`. Verified TRY/ENDTRY (4/4), IF/ENDIF (11/11) and INSERT column-list vs VALUES-list counts (117/117) all balance.
+
+Next up would be Phase 3 (creating `Formsigprnfe.prg`) whenever that's triggered.

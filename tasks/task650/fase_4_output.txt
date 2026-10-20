@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+That's 7 real `AddObject` calls plus one in a comment ÔÇö correct and complete.
+
+## Summary
+
+Fase 4 for `FormSigOpC44` (CAT 44/2008 file generator) doesn't fit the generic "Grid + CRUD buttons" template: the legacy `SigOpC44.SCX` has no PageFrame, no list, and no grid ÔÇö it's a single-shot parameter-capture dialog (layout CAPTURA in the orchestrator's gate logic). Inventing a Grid or Incluir/Alterar/Excluir buttons would violate PILAR 1 and the "never invent UI" rule.
+
+Instead I added the real structural pieces this legacy form actually has, transcribed faithfully from the SCX dump:
+- `shp_4c_Shape2` / `shp_4c_ShpSair` ÔÇö the two decorative Shape containers
+- `cmd_4c_CmdGera` / `cmd_4c_CmdSair` ÔÇö the form's actual action buttons (Gerar Arquivo / Sair), with exact Top/Left/Width/Height/colors/icons from the dump
+
+Both wired into `InicializarForm()` via a new `ConfigurarBotoesAcao()` method, with Click logic deliberately deferred to Fase 7 per the phase split. Fields (`txtdest`/`getDtEst`/`getFinal`/`getNumParc` + labels) remain for Fase 5. Verified TRY/ENDTRY, WITH/ENDWITH, and PROCEDURE/ENDPROC counts all balance.

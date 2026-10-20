@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Structure checks out: balanced TRY/CATCH/ENDTRY, matching PROCEDURE/ENDPROC pairs, class properly closed.
+
+## Fase 3/8 conclu├¡da: Formsigproer.prg criado
+
+Criei `C:\4c\projeto\app\forms\operacionais\Formsigproer.prg` com a estrutura base. Um desvio importante do template gen├®rico da fase: **este form N├âO ├® um CRUD** ÔÇö ├® um di├ílogo modal pequeno (400x200) de reautoriza├º├úo SiTef (leitura de senha do supervisor / aguardo de cart├úo), sem grid, sem lookups, sem Page1/Page2. O pr├│prio contexto da tarefa j├í avisava isso ("Layout CUSTOMIZADO... NAO segue padrao Page1=Lista/Page2=Dados"), ent├úo n├úo criei PageFrame nem containers de Lista/Dados ÔÇö segui o padr├úo de outros forms OPERACIONAIS flat como `FormEnd.prg`.
+
+O que entrou nesta fase:
+- `DEFINE CLASS Formsigproer AS FormBase` com propriedades visuais pixel-perfect do SCX (Width=400, Height=200, modal, sem TitleBar/ControlBox, AutoCenter)
+- Properties para os 7 par├ómetros do `Init` legado (EndSitef, pcCaixa, pcNSU, pcData, pcValor, pcHora, pcCodEstabs) ÔÇö a l├│gica de hardware SiTef que os usa fica para as fases de evento
+- `Init()` armazenando esses par├ómetros antes de `DODEFAULT()`
+- `InicializarForm()` instanciando a `sigproerBO` e montando o cabe├ºalho
+- `ConfigurarCabecalho()` ÔÇö a faixa cinza (`cnt_4c_Sombra`/`lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, nomes exatos do `mapeamento.json`), criada **primeiro** para que o `obj_4c_SAIDA` (fase posterior, sobreposto no canto superior direito) desenhe por cima
+- `Destroy()` chamando `DODEFAULT()`
+
+Duas corre├º├Áes deliberadas em rela├º├úo ao dump literal: o `Caption` do cabe├ºalho usava o texto bugado "Cadastro de Testes" (sobra de template) ÔÇö usei `THIS.Caption` ("Reimpress├úo do SiTef", via `CHR(227)`); e a largura do container (800px no dump) foi trocada para `THIS.Width` din├ómico, j├í que o form real tem s├│ 400px.
+
+Faltam para as pr├│ximas fases: Shape1, GetSenha/SENHA (textboxes), Container1 ("Insira ou Passe o Cart├úo"), o CommandGroup SAIDA, e toda a l├│gica de evento (DLLs do SiTef, GotFocus/LostFocus, Click).

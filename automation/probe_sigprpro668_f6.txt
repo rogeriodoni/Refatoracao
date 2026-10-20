@@ -1,0 +1,56 @@
+=== PROBE Fase 6 - FormSIGPRPRO (task668) ===
+1) VARTYPE(form) = [O] (esperado O)
+
+2) BINDEVENT REGISTRADO (AEVENTS):
+   grd_4c_Dados -> 1 binding(s)
+     evento=[AFTERROWCOLCHANGE] delegate=[GRDDADOSAFTERROWCOLCHANGE]
+   cmd_4c_Ok    -> 1 binding(s)
+     evento=[CLICK] delegate=[CMDOKCLICK]
+
+3) LOOKUPS (legado tem ZERO):
+   AbrirLookupProduto existe = .F.
+   AbrirBuscaProduto  existe = .F.
+   (ambos falso = fiel ao legado; verdadeiro seria lookup INVENTADO)
+
+4) CONTROLES TRAVADOS NO LEGADO:
+   txt_4c_CPros.Enabled    = .F. (SCX getCPros.Enabled falso)
+   txt_4c_DPros.Enabled    = .F. (SCX getDPros.Enabled falso)
+   txt_4c_Comples.ReadOnly = .T. (SCX getComples.When falso)
+   edt_4c_Infos.ReadOnly   = .T. (SCX GetMemo.When falso)
+   grd.Column1.ReadOnly    = .T. (SCX Text1.When falso)
+   txt_4c_DPros.Format     = [K!] (SCX: K!)
+
+5) REBIND APOS CURSOR DESTRUIDO/RECRIADO:
+   ANTES do rebind: ColumnCount=0 RecordSource=[cursor_4c_Carac]
+   DEPOIS do rebind:
+     ColumnCount            = 1 (esperado 1)
+     RecordSource           = [cursor_4c_Carac]
+     Column1.ControlSource  = [cursor_4c_Carac.caracteris]
+     Column1.Width          = 363 (esperado 363, NAO 90)
+     Column1.Header1.Cap    = [Características]
+     Column1.Text1.FontName = [Tahoma] (dump: Tahoma)
+     Column1.ReadOnly       = .T.
+     RECNO apos GO TOP      = 1 (esperado 1)
+
+6) NAVEGACAO NA GRADE (AfterRowColChange):
+   linha 1: carac=[COR] -> Comples=[AZUL METALICO] Infos=[Info da COR]
+   linha 2: carac=[TAMANHO] -> Comples=[44 BR] Infos=[Info do TAMANHO]
+   linha 3: carac=[MATERIAL] -> Comples=[COURO] Infos=[Info do MATERIAL]
+
+7) HOOKS DE DADOS - ESCOPO (esperado .T. = Protected, igual FormBase/FormCor):
+   FormParaBO      Protected = .T.
+   BOParaForm      Protected = .T.
+   HabilitarCampos Protected = .T.
+   LimparCampos    Protected = .T.
+   carga pelo caminho PUBLIC (CarregarDados):
+     CarregarDados() OK | DPros=[] Comples=[] Infos=[]
+     CPros.Enabled = .F. (segue falso - tela somente leitura)
+
+8) HANDLERS DO HARNESS (chamada externa):
+   AjustarBotoesPorModo() OK
+   AlternarPagina(1)      OK
+   CarregarLista()        OK
+   BtnVisualizarClick()   OK
+   BtnBuscarClick()       OK
+
+=== FALHAS = 0 ===

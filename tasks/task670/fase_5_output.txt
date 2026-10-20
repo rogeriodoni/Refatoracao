@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All unique (max count is 1). The file is structurally sound.
+
+## Summary
+
+Fase 5/8 complete for `FormSigPrRet.prg`. Added `ConfigurarPaginaDados()` ÔÇö adapted for this OPERACIONAL flat-layout form (no PageFrame, so controls go directly on `THIS` at the same coordinates as the legacy SCX, no +29 offset needed) ÔÇö wired into `ConfigurarPageFrame()`, plus 5 helper methods covering the first half of fields (26 controls), grouped by legacy row:
+
+- **Per├¡odo**: `txt_4c_Datai`/`txt_4c_Dataf` + labels
+- **Empresa**: `txt_4c__cd_empresa`/`txt_4c__ds_empresa` + label
+- **Opera├º├úo/N├║mero/Pre├ºo**: `txt_4c__nm_operacao`, `txt_4c_Numero`, `txt_4c_Numerof`, `obj_4c_Chk_Preco` (OptionGroup Sim/N├úo/Ideal/Atual) + labels
+- **C├│digo/Etiquetas**: `txt_4c_Cod`/`txt_4c_Dcod`, `txt_4c_Etii`/`txt_4c_Etif`, `txt_4c_QtdEti` + labels
+- **Grupo Estoque**: `txt_4c__Cd_GrEstoque`/`txt_4c__Ds_GrEstoque` + label
+
+All properties (Format, InputMask, MaxLength, Value type, TabIndex) were transcribed literally from the SCX dump ÔÇö no invented values. One name-collision fix applied: the legacy `Label1` ("Etiquetas") would have mapped to `lbl_4c_Label1`, colliding with `Say1`'s mapping ÔÇö renamed to `lbl_4c_LabelEtiquetas` with a comment explaining why. OptionGroup button `.Value` overrides from the dump were intentionally **not** transcribed per the project rule against setting non-zero `Buttons(N).Value`.
+
+Verified WITH/ENDWITH (38/38) and PROCEDURE/ENDPROC (13/13) balance, and no duplicate `AddObject` names. Lookups/validations for these fields (Get_codÔåÆSigCdPro, etc.) are deferred to the events phase as planned. Next: Fase 6/8 covers the remaining 28 fields (Ind├║stria, Estoque, Grupo/Subgrupo Produto, Grande Grupo, Cole├º├úo, Linha, Local, Promo├º├úo, Ordem, Marca).

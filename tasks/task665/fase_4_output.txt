@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 4 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigPrPpc.prg`
+
+## Situa├º├úo encontrada
+
+A task re-rodou sobre um form **j├í migrado at├® a Fase 7**. Os entreg├íveis da Fase 4 j├í existiam, com l├│gica real (n├úo stubs):
+
+- `ConfigurarPaginaLista()` e `AlternarPagina()` ÔÇö presentes, adaptados ao layout FLAT
+- Os 6 handlers CRUD (`BtnIncluir/Alterar/Visualizar/Excluir/Buscar/Encerrar`) ÔÇö presentes, delegando ao fluxo funcional real
+
+**N├úo h├í Grid nem barra de 6 bot├Áes CRUD porque o legado n├úo tem.** Verificado no dump `SIGPRPPC_form_codigo_fonte.txt`: zero `BaseClass: grid|pageframe|listbox`, e o ├║nico `AddCursor` (`'SigTempC', ..., 'crSigTempC', '', , lcQry`) tem o 5┬║ argumento vazio ÔÇö n├úo liga grade nenhuma. Inventar grade violaria o PILAR 1. O gate da Fase 4 passa pelo ramo PAGINADO (`ConfigurarPaginaLista` + `AlternarPagina` presentes).
+
+## Defeitos reais corrigidos (achados na auditoria)
+
+| # | Defeito | Corre├º├úo |
+|---|---|---|
+| 1 | Faixa do cabe├ºalho exibia **"Cadastro de Testes"** (placeholder de design-time do SCX) na tela "Produtos Por Conta" | `.Caption = THIS.Caption` ÔÇö o Init legado faz exatamente isso (dump linhas 499-500) |
+| 2 | 6 labels de dados sem `ForeColor` (default preto) | `RGB(90, 90, 90)` ÔÇö regra #12; confirmado que o SCX n├úo declara `ForeColor` em nenhum deles (classe `say`) |
+| 3 | Separador do per├¡odo era `"a"` simples | `CHR(224)` ÔÇö o byte no dump ├® `\340` = `├á` |
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9**: `COMPILE_OK`, form e BO, sem `.err` (`automation/CompileCheckPpc665F4.prg`)
+- **Instancia├º├úo headless**: `RESULTADO=OK` (`automation/ProbePpc665F4.prg`) ÔÇö `CREATEOBJECT=O`, cabe├ºalho `[Produtos Por Conta]` / `PLACEHOLDER=AUSENTE`, `ForeColor=5921370` nos 6 labels, separador `asc=224`, `AlternarPagina(2)` desabilita os 9 campos + Consultar e `AlternarPagina(1)` reabilita todos preservando o filtro digitado, ├¡cones dos 2 bot├Áes existem em `vbmp\`
+- **Escopo**: todos os m├®todos que o `TesteAutomatico.prg` chama de fora s├úo PUBLIC (`LimparCampos` ├® PROTECTED, mas herdado da `FormBase` e n├úo chamado externamente pelo harness)
+- **Auditorias** (`VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes`, `VerificarFormBuscaAuxiliar`, `VerificarLookupEmKeyPress`): zero achados para este form
+
+## Fora do escopo ÔÇö mas confirmado e vale conserto
+
+O mesmo defeito #1 existe em outros forms. Confirmei pelo dump do legado que **FormSigMvMen, FormSigPdMen, FormSigPrIct e FormSigReEtp** hardcodam "Cadastro de Testes" enquanto o Init legado sobrescreve com `ThisForm.Caption` ÔÇö a tela mostra o t├¡tulo errado. (`FormSIGOPBIN` n├úo: ali o legado realmente n├úo sobrescreve, ent├úo o texto ├® fiel. Outros 4 candidatos n├úo t├¬m `mapeamento.json` resolv├¡vel para conferir.) N├úo mexi neles por serem de outras tasks; me avise se quiser que eu corrija.
+
+**Nota sobre o diff**: boa parte do `git diff` deste arquivo (guards de `EMPTY` e `this_lAchouRegistro` nos `AbrirBusca*`, coment├írio do `ConfigurarPaginaLista`) j├í estava n├úo-commitada na ├írvore antes desta sess├úo ÔÇö minhas altera├º├Áes s├úo s├│ as 9 linhas das tr├¬s corre├º├Áes acima.

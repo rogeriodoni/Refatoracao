@@ -48,7 +48,9 @@ DEFINE CLASS RccBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -79,7 +81,9 @@ DEFINE CLASS RccBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -139,7 +143,9 @@ DEFINE CLASS RccBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Itens")
-                TABLEREVERT(.T., "cursor_4c_Itens")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Itens") > 1
+                    TABLEREVERT(.T., "cursor_4c_Itens")
+                ENDIF
                 USE IN cursor_4c_Itens
             ENDIF
 
@@ -191,7 +197,9 @@ DEFINE CLASS RccBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_RateioEditTemp")
-                TABLEREVERT(.T., "cursor_4c_RateioEditTemp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_RateioEditTemp") > 1
+                    TABLEREVERT(.T., "cursor_4c_RateioEditTemp")
+                ENDIF
                 USE IN cursor_4c_RateioEditTemp
             ENDIF
 
@@ -236,7 +244,9 @@ DEFINE CLASS RccBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_RciExist")
-                TABLEREVERT(.T., "cursor_4c_RciExist")
+                IF CURSORGETPROP("Buffering", "cursor_4c_RciExist") > 1
+                    TABLEREVERT(.T., "cursor_4c_RciExist")
+                ENDIF
                 USE IN cursor_4c_RciExist
             ENDIF
 
@@ -369,7 +379,9 @@ DEFINE CLASS RccBO AS BusinessBase
                        EscaparSQL(par_cDescRats)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkExist")
-                TABLEREVERT(.T., "cursor_4c_ChkExist")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkExist") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkExist")
+                ENDIF
                 USE IN cursor_4c_ChkExist
             ENDIF
 

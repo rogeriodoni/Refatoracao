@@ -1104,7 +1104,9 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
                            EscaparSQL(go_4c_Sistema.cCodEmpresa) + " OR Emps = ' ')"
 
                 IF USED("cursor_4c_NcfTemp")
-                    TABLEREVERT(.T., "cursor_4c_NcfTemp")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_NcfTemp") > 1
+                        TABLEREVERT(.T., "cursor_4c_NcfTemp")
+                    ENDIF
                     USE IN cursor_4c_NcfTemp
                 ENDIF
 
@@ -1503,7 +1505,9 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
         TRY
             IF INLIST(UPPER(THIS.this_cEscolha), "INSERIR", "ALTERAR") AND USED("xNensiN")
                 SELECT xNensiN
-                TABLEREVERT(.T., "xNensiN")
+                IF CURSORGETPROP("Buffering", "xNensiN") > 1
+                    TABLEREVERT(.T., "xNensiN")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao cancelar edi" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message, ;

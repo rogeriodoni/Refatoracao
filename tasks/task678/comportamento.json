@@ -1,0 +1,177 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fVerificaPasta", "File", "fKeyGen", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRSND",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\npIds = Replicate(Chr(254), 20)\nlcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrSnd', 'cIdChaves', 'crSigPrSnd', '', '', lcQrySend)\n\t\tEndWith\n\t\t\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSND",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSND",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSND.btnSenPend",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.grdSenha.RecordSource = []\n\nlcQuery = [Select * From SigPrSnd Where EmpDopNums = '']\nThisForm.poDataMgr.SqlExecute(lcQuery,'crSigPrSnd')\n\nSelect crSigPrSnd\nGo top\nThisform.grdSenha.RecordSource = [crSigPrSnd]\nThisForm.grdSenha.Column1.ControlSource = [crSigPrSnd.Senhads]\nThisForm.grdSenha.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSND.btnExcel",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "Local lcExl, lcErr, llErr\n\nSelect SenhaDs as Senhas From crSigPrSnd Into Cursor TmpPrSnd\n\nSelect TmpPrSnd\n\nllErr = .f.\nlcErr = On([Error])\nOn Error llErr = .t.\n\nlcExl = PutFile([Nome da Planilha], [], [XLS;TXT])\n\nIf fVerificaPasta(lcExl, 2)\n\tIf (Lower(Alltrim(JustExt(lcExl))) = [xls])\n\t\tCopy To (lcExl) Type Xl5\n\tElse \n\t\tCopy To (lcExl) Delimited With '' With Character ';'\n\tEndIf \n\n\tIf File(lcExl)\n\t\t=MessageBox([Arquivo gerado com sucesso], 0+48+32, [Geração de Planilha])\n\tEndIf\nElse\n\tllErr = .t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaPasta,File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSND.grdSenha.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSND.btnGerSen",
+      "evento": "Click",
+      "linhas": 49,
+      "codigoOriginal": "If Empty(thisform.getQtdSen.Value) \n\t=Messagebox('Qtde de senhas obrigatório.',48,[Aviso])\n\tThisForm.getQtdSen.Setfocus()\n\tReturn .f.\nEndIf\n\nlnQtd = thisform.getqtdsen.Value\nIf Messagebox([Deseja realmente gerar ] + Alltrim(Str(lnQtd)) + [ senhas livres?],4+32+256,[Gerar Senha]) = 7\n\tReturn .f.\nEndif\n\nSelect crSigPrSnd\nZap\n\nThisform.grdSenha.RecordSource = []\n\nldData = Datetime()\n\nFor n = 1 to lnQtd\n\tInsert Into crSigPrSnd (Usuars, Datas, Tipos) Values (Usuar, ldData, 0)\n\t_Inicio = 0\n\tDo While _... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fKeyGen,fUniqueIds",
+        "metodosFormChamados": "Setfocus,ChkRegister,Refresh,Update,Commit,RollBack",
+        "controlesReferenciados": "ChkRegister('SigPrSnd'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSND.Saida",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRSND.Init",
+      "queryOriginal": "lcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']",
+      "tabelas": "SigPrSnd",
+      "colunas": "cIdChaves,pIds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSND.btnSenPend.Click",
+      "queryOriginal": "lcQuery = [Select * From SigPrSnd Where EmpDopNums = '']",
+      "tabelas": "SigPrSnd",
+      "colunas": "EmpDopNums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSND.btnExcel.Click",
+      "queryOriginal": "Select SenhaDs as Senhas From crSigPrSnd Into Cursor TmpPrSnd",
+      "tabelas": "crSigPrSnd",
+      "colunas": "SenhaDs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSND.btnGerSen.Click",
+      "queryOriginal": "\tInsert Into crSigPrSnd (Usuars, Datas, Tipos) Values (Usuar, ldData, 0)",
+      "tabelas": "crSigPrSnd",
+      "colunas": "Usuars,Datas,Tipos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrSnd", "crSigPrSnd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

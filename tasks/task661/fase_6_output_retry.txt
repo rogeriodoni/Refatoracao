@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 6/8 conclu├¡da** em `projeto/app/forms/operacionais/Formsigproef.prg` ÔÇö compila limpo (`COMPILE_OK`, sem `.err`) e instancia com os handlers exercitados.
+
+## O que entrou
+
+**Lookups: nenhum ÔÇö e isso est├í provado, n├úo presumido.** Varri o dump legado por `fwbusca*`, `mAddColuna`, `sigacess(`, `Acesso*(` e `FormBuscaAuxiliar`: **zero ocorr├¬ncias**. Os F2ÔÇôF5 do `sigproef` s├úo atalhos do `KeyPress` do *form* que disparam o `Click` dos bot├Áes de a├º├úo (Fase 4), n├úo lookup de campo. Inventar um aqui violaria "NUNCA inventar tabelas de lookup que n├úo existem no original".
+
+**Campos restantes** (j├í estavam, da tentativa anterior): `lbl_4c_Separador` ("a", classe `say` ÔÇö sem `Width`/`Alignment` inventados) e `txt_4c_DataFinal`.
+
+**O que faltava de fato ÔÇö os handlers dos dois campos**, transcritos do legado e ligados por `BINDEVENT` em `"LostFocus"` (n├úo em `"Valid"`: BINDEVENT em Valid de TextBox n├úo dispara de forma confi├ível, e o Valid do legado roda imediatamente antes do LostFocus do mesmo campo, ent├úo juntar os dois preserva a ordem original):
+
+| handler | legado reproduzido |
+|---|---|
+| `ValidarDataInicial` | `Valid` (auto-compara├º├úo) + `LostFocus` ÔåÆ foco no Dt_Final |
+| `ValidarDataFinal` | `Valid` (final < inicial puxa a **inicial**) + `LostFocus` ÔåÆ `SqlTrans` |
+| `AtualizarPeriodoNoBO` | os TextBox gravam em `this_dDataInicial/Final`, fonte ├║nica do filtro |
+
+Dois pontos que exigiram decis├úo:
+
+- **O `Valid` do `Dt_inicial` compara o campo com ele mesmo** (`This` *├®* o Dt_inicial) ÔÇö ├® um no-op herdado do SCX. Transcrevi literalmente e documentei: "consert├í-lo" para apontar ao Dt_final mudaria o comportamento da tela, j├í que o ajuste de intervalo ├® feito pelo `Valid` do Dt_final.
+- **Os campos abriam em branco.** O `Init` legado p├Áe `DATE()` nos dois antes do `SqlTrans`; o migrado deixava o default s├│ no BO, ent├úo a grade trazia hoje e os campos ficavam vazios. Apliquei o `DATE()` na tela e passei o per├¡odo para o BO antes da primeira carga.
+
+Guarda de reentr├óncia (`this_lEmValidacao`) porque o `SetFocus` do handler redispararia o pr├│prio `LostFocus` em cascata.
+
+## Verifica├º├úo
+
+Probe headless (`automation/ProbeProef661F6.prg`) instanciou o form e exercitou os tr├¬s m├®todos ÔÇö o `COMPILE` sozinho n├úo provaria nada, j├í que esses defeitos s├│ aparecem em runtime:
+
+```
+CREATEOBJECT=O   Caption=[Sele├º├úo da Transa├º├úo]
+Separador=.T. cap=[a]   DataFinal=.T.
+ValidarDataInicial prot=.F.  ValidarDataFinal prot=.F.  AtualizarPeriodoNoBO prot=.F.
+Ini=[18/10/2026] Fim=[18/10/2026] BOini=[18/10/2026] BOfim=[18/10/2026]
+CASO1 swap -> Ini=[08/10/2026] Fim=[08/10/2026]      <- final anterior colapsa o intervalo
+CASO2 ok   -> Ini=[13/10/2026] Fim=[18/10/2026]      <- intervalo v├ílido intacto
+CASO3 inicial -> guarda=.F.                          <- no-op seguro, flag liberada
+```
+
+Os tr├¬s handlers s├úo PUBLIC (`prot=.F.`) ÔÇö PROTECTED quebraria o BINDEVENT em sil├¬ncio (regra #3/#51).
+
+160 linhas acrescentadas; arquivo segue LF, igual ao commitado. Removi o `.fxp` gerado. **Fases 7ÔÇô8 continuam pendentes**: `KeyPress` F2ÔÇôF5 do form e os `Click` dos 5 bot├Áes de a├º├úo.

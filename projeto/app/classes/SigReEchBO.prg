@@ -135,7 +135,9 @@ DEFINE CLASS SigReEchBO AS BusinessBase
             ENDIF
 
             IF USED("cursor_4c_ChiDados")
-                TABLEREVERT(.T., "cursor_4c_ChiDados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChiDados") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChiDados")
+                ENDIF
                 USE IN cursor_4c_ChiDados
             ENDIF
 
@@ -168,7 +170,9 @@ DEFINE CLASS SigReEchBO AS BusinessBase
                        "WHERE empdopnums = " + EscaparSQL(par_cEmpDopNums)
 
             IF USED("cursor_4c_Par")
-                TABLEREVERT(.T., "cursor_4c_Par")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Par") > 1
+                    TABLEREVERT(.T., "cursor_4c_Par")
+                ENDIF
                 USE IN cursor_4c_Par
             ENDIF
 
@@ -207,7 +211,9 @@ DEFINE CLASS SigReEchBO AS BusinessBase
                        "WHERE cemps = " + EscaparSQL(par_cEmps)
 
             IF USED("cursor_4c_Emp")
-                TABLEREVERT(.T., "cursor_4c_Emp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Emp") > 1
+                    TABLEREVERT(.T., "cursor_4c_Emp")
+                ENDIF
                 USE IN cursor_4c_Emp
             ENDIF
 

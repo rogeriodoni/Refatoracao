@@ -1,0 +1,40 @@
+=== PROBE Fase 8 - FormSIGOPCCO (task657) ===
+1) CREATEOBJECT com parametros -> VARTYPE=O Width=800 Height=425 ControlCount=5
+   grade=.T. campoNota=.T. botoes=.T. cursor=.T.
+2) campo Nota apos o Init: [000123] esperado [000123]   BO.this_cNfis=[000123]  BO.this_cEmps=[001]  BO.this_cSeries=[1]
+3) escopos (Protected=.T. significa inacessivel de fora):
+   CarregarLista            Prot=.F. esperado .F.
+   CarregarDados            Prot=.F. esperado .F.
+   AtualizarGrade           Prot=.F. esperado .F.
+   BtnConfirmarClick        Prot=.F. esperado .F.
+   BtnCancelarClick         Prot=.F. esperado .F.
+   ValidarNotaIni           Prot=.F. esperado .F.
+   GradeRetificacaoKeyPress Prot=.F. esperado .F.
+   AbrirImpressaoCorrecao   Prot=.F. esperado .F.
+   FormParaBO               Prot=.T. esperado .T.
+   BOParaForm               Prot=.T. esperado .T.
+   LimparCampos             Prot=.T. esperado .T.
+4) grade/campo (regressao das fases anteriores):
+   Column3.CurrentControl=[EDT_4C_RETIFICACAO] esperado [edt_4c_Retificacao]
+   Column3.Sparse=.F. esperado .F.   Column3.ReadOnly=.F. esperado .F.
+   Column1.ReadOnly=.T. esperado .T.   Column2.ReadOnly=.T. esperado .T.
+   txt_4c_NotaIni.ReadOnly=.T. esperado .T. (Get_NotaIni.When legado)
+5) FormParaBO com a grade na 2a linha (cods=20):
+   BO.this_cNfis    = [000123] esperado [000123]
+   BO.this_nNoccors = 20 esperado 20
+   BO.this_cMretifs = [TEXTO DIGITADO NA GRADE] esperado [TEXTO DIGITADO NA GRADE]
+   BO.this_dEmisDe  = 01/01/2026  BO.this_dEmisAte = 31/12/2026
+7) BOParaForm (Seek/Replace do 2o Scan legado):
+   campo Nota         = [000999] esperado [000999]
+   linha cods=10 achada = .T.  retifs = [RETIFICACAO GRAVADA EM SIGNFCOR] esperado [RETIFICACAO GRAVADA EM SIGNFCOR]
+8) BOParaForm com this_nNoccors = 0:
+   retifs da linha 20 = [NAO DEVE SER TOCADO] esperado [NAO DEVE SER TOCADO]
+9) LimparCampos (ramo Else do Valid legado):
+   campo Nota vazio = .T.   RECCOUNT(grade) = 0 esperado 0
+6) FormParaBO com a grade VAZIA:
+   BO.this_nNoccors = 0 esperado 0   BO.this_cMretifs = [] esperado []
+10) chamadas sem argumento (fallback nas properties do BO):
+   ObterEmpDopNums() -> [] (vazio: sem conexao, esperado)
+   ConfirmarCorrecao() -> .F.  this_lTemCorrecoesGravadas=.F. (.F./.F.: grade vazia e sem conexao, esperado)
+
+PROBE_OK

@@ -154,7 +154,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Ins")
-                TABLEREVERT(.T., "cursor_4c_Ins")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Ins") > 1
+                    TABLEREVERT(.T., "cursor_4c_Ins")
+                ENDIF
                 USE IN cursor_4c_Ins
             ENDIF
 
@@ -197,7 +199,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Upd")
-                TABLEREVERT(.T., "cursor_4c_Upd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Upd") > 1
+                    TABLEREVERT(.T., "cursor_4c_Upd")
+                ENDIF
                 USE IN cursor_4c_Upd
             ENDIF
 
@@ -235,7 +239,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                        EscaparSQL(THIS.this_cCodigo)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelGg")
-                TABLEREVERT(.T., "cursor_4c_DelGg")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelGg") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelGg")
+                ENDIF
                 USE IN cursor_4c_DelGg
             ENDIF
 
@@ -253,7 +259,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                            EscaparSQL(THIS.this_cCodigo)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_Del")
-                    TABLEREVERT(.T., "cursor_4c_Del")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_Del") > 1
+                        TABLEREVERT(.T., "cursor_4c_Del")
+                    ENDIF
                     USE IN cursor_4c_Del
                 ENDIF
 
@@ -304,7 +312,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_DptGgTmp")
-                    TABLEREVERT(.T., "cursor_4c_DptGgTmp")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_DptGgTmp") > 1
+                        TABLEREVERT(.T., "cursor_4c_DptGgTmp")
+                    ENDIF
                     USE IN cursor_4c_DptGgTmp
                 ENDIF
 
@@ -371,7 +381,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                        EscaparSQL(ALLTRIM(par_cCodigo))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_DelGrp")
-                TABLEREVERT(.T., "cursor_4c_DelGrp")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelGrp") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelGrp")
+                ENDIF
                 USE IN cursor_4c_DelGrp
             ENDIF
 
@@ -409,7 +421,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                                            EscaparSQL(LEFT(loc_aGrupos[loc_nI], 3)) + ")"
                                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                                 IF USED("cursor_4c_InsGrp")
-                                    TABLEREVERT(.T., "cursor_4c_InsGrp")
+                                    IF CURSORGETPROP("Buffering", "cursor_4c_InsGrp") > 1
+                                        TABLEREVERT(.T., "cursor_4c_InsGrp")
+                                    ENDIF
                                     USE IN cursor_4c_InsGrp
                                 ENDIF
 
@@ -487,7 +501,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_AutoChk")
-                    TABLEREVERT(.T., "cursor_4c_AutoChk")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_AutoChk") > 1
+                        TABLEREVERT(.T., "cursor_4c_AutoChk")
+                    ENDIF
                     USE IN cursor_4c_AutoChk
                 ENDIF
 
@@ -530,7 +546,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_UsoChk")
-                TABLEREVERT(.T., "cursor_4c_UsoChk")
+                IF CURSORGETPROP("Buffering", "cursor_4c_UsoChk") > 1
+                    TABLEREVERT(.T., "cursor_4c_UsoChk")
+                ENDIF
                 USE IN cursor_4c_UsoChk
             ENDIF
 
@@ -570,7 +588,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_CodChk")
-                TABLEREVERT(.T., "cursor_4c_CodChk")
+                IF CURSORGETPROP("Buffering", "cursor_4c_CodChk") > 1
+                    TABLEREVERT(.T., "cursor_4c_CodChk")
+                ENDIF
                 USE IN cursor_4c_CodChk
             ENDIF
 

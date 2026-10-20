@@ -91,7 +91,9 @@ DEFINE CLASS FTFBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -205,7 +207,9 @@ DEFINE CLASS FTFBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkOrdem")
-                TABLEREVERT(.T., "cursor_4c_ChkOrdem")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkOrdem") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkOrdem")
+                ENDIF
                 USE IN cursor_4c_ChkOrdem
             ENDIF
 

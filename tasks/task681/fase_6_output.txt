@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All verified. Nothing external referenced the removed methods, and the absence of a menu entry is correct (the legacy is opened via `DO FORM SigPrTar` from a parent form).
+
+## Fase 6 conclu├¡da ÔÇö FormSigPrTar
+
+### A varredura de lookups: zero
+O `SIGSERPR.SCX` **n├úo tem lookup algum**. Varri os 9 padr├Áes que o `migration_guide.md` exige ÔÇö `fwbuscaext`, `fwBuscaSel`, `fwBusca` (gen├®rico), `mAddColuna`, `sigacess(`, `CreateObject(`, `PROCEDURE Valid`, `PROCEDURE KeyPress`, `PROCEDURE DblClick` ÔÇö **todos com zero ocorr├¬ncia**. O dump tem s├│ 3 m├®todos (`Form.Init`, `Form.Load`, `cmdSair.Click`) e zero controle de entrada; o ├║nico controle de dado ├® `getObsInsp`, EditBox com `ReadOnly = .T.`. Campo somente-leitura n├úo recebe lookup por defini├º├úo.
+
+Portanto **n├úo** criei `AbrirLookup*`/`Validar<Campo>`/`BINDEVENT KeyPress` nem `cnt_4c_BotoesAcao` (Salvar/Cancelar) ÔÇö o legado s├│ tem `cmdSair`. Criar qualquer um seria inventar superf├¡cie (PILAR 1).
+
+### Mas a fase n├úo era um no-op ÔÇö achei 2 defeitos reais, ambos j├í catalogados
+A execu├º├úo anterior da Fase 6 declarou "nada pendente" e **n├úo editou nada**. Conferindo propriedade a propriedade contra o dump, achei dois defeitos documentados:
+
+1. **`Closable = .F.` inventado** ÔÇö o SCX declara `ControlBox`/`MaxButton`/`MinButton`/`TitleBar`, mas **nunca `Closable`**. As cinco s├úo independentes: sem barra de t├¡tulo os bot├Áes n├úo desenham, mas `Closable` continua `.T.` e o Alt+F4 funciona. Removido ÔåÆ medido de volta em `.T.`, como no legado.
+
+2. **Widths do cabe├ºalho copiados literalmente** ÔÇö o SCX declara `cntSombra.Width = 800` e os labels `769` num form de `Width = 588` (container desenhado 212px al├®m da janela, artefato do Form Designer). Trocado para `THIS.Width` / `THIS.Width - 20` (regra #11/#30) ÔåÆ medido 588 e 568, tudo dentro do pai. ├ë a **terceira reincid├¬ncia** desse padr├úo (Formsigprrcu/task669, FormSIGPRSTF).
+
+Registrei a varredura e as duas decis├Áes em coment├írio no `.prg`, para serem audit├íveis.
+
+### Verifica├º├úo (medida, n├úo presumida)
+- **Compila limpo** ÔÇö form e BO, com o `.fxp` apagado antes; `.ERR` vazios.
+- **Instancia headless sem erro de runtime**; o probe retornou os valores novos (588/568, `Closable = .T.`), o que prova que o `.fxp` tem minhas edi├º├Áes.
+- **5 auditores** do projeto: zero achado para `FormSigPrTar`/`SigPrTarBO`.
+- **`Test-CompletudeCodigo`**: 0 problemas (as ocorr├¬ncias de "TODO" no grep s├úo a palavra "TODOS" ÔÇö o regex exige `TODO\b` logo ap├│s o `*`).
+- **Gate da Fase 6 passa** por `$temPaginaDados` (`ConfigurarPaginaDados` + `BINDEVENT`). Confirmei tamb├®m que meu coment├írio **n├úo** satisfaz acidentalmente nenhum regex de lookup do gate ÔÇö era risco real de "gaming" involunt├írio.
+
+### Dois pontos que voc├¬ deve saber
+- **Esta task ├® um re-run sobre form j├í migrado.** A vers├úo em HEAD tinha 735 linhas com um CRUD **inventado** (`BtnIncluir/Alterar/Excluir/Salvar/Cancelar/Buscar`, p├ígina Lista, `HabilitarCampos`, `AjustarBotoesPorModo`) que o legado n├úo tem. As fases 3-6 deste re-run substitu├¡ram por 473 linhas fi├®is. O `-583` linhas do diff ├® remo├º├úo de superf├¡cie fabricada, n├úo perda de funcionalidade ÔÇö confirmei que **nada no projeto referencia** os m├®todos removidos, e os nomes novos agora batem com o `mapeamento.json`.
+- **O form n├úo tem chamador migrado.** Correto n├úo ter entrada de menu (o legado ├® `DO FORM SigPrTar` de dentro de outro form, recebendo `poForm`). Mas isso significa que a tela s├│ ser├í alcan├º├ível quando o form pai for migrado ÔÇö fica como depend├¬ncia aberta, fora do escopo da Fase 6.
+
+Deixei `automation/ProbeTar681F6.prg` + resultado, seguindo a conven├º├úo dos probes existentes. O `SigPrTarBO.prg` aparece como modificado no git por causa das fases 1-2 ÔÇö eu n├úo o alterei.

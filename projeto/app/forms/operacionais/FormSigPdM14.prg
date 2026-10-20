@@ -961,7 +961,9 @@ DEFINE CLASS FormSigPdM14 AS FormBase
                         ENDIF
                     ENDIF
                     IF USED("TmpUni")
-                        TABLEREVERT(.T., "TmpUni")
+                        IF CURSORGETPROP("Buffering", "TmpUni") > 1
+                            TABLEREVERT(.T., "TmpUni")
+                        ENDIF
                         USE IN TmpUni
                     ENDIF
                 ENDIF
@@ -1292,7 +1294,9 @@ DEFINE CLASS FormSigPdM14 AS FormBase
                 THIS.txt_4c_Descr.Value = ""
             ENDIF
             IF USED("TmpDistrib")
-                TABLEREVERT(.T., "TmpDistrib")
+                IF CURSORGETPROP("Buffering", "TmpDistrib") > 1
+                    TABLEREVERT(.T., "TmpDistrib")
+                ENDIF
             ENDIF
         CATCH
         ENDTRY

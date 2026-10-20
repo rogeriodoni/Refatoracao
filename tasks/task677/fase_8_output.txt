@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormSigPrSlp.prg` (1468 linhas) + `SigPrSlpBO.prg` (477 linhas).
+
+## O que encontrei
+
+Os m├®todos auxiliares da Fase 8 **j├í existiam** de uma execu├º├úo anterior (que concluiu "nada a fazer"). Mas ao conferir o dump do pai legado ÔÇö `tasks/task461/SigCdLpr_form_codigo_fonte.txt`, cujo `COPIA.Click` faz `Do Form SigPrSlp With ThisForm, CrSigCdLpc.lprecos` ÔÇö achei que **a ├║nica fun├º├úo da tela falhava contra o ├║nico pai que a chama**. Tr├¬s nomes literais do legado n├úo existem no `FormLpr` migrado (PILAR 3 renomeia):
+
+| legado (fixo no c├│digo) | pai migrado real | efeito |
+|---|---|---|
+| cursor `"CrSigCdLpi"` | `cursor_4c_Itens` (**zero** ocorr├¬ncias de `CrSigCdLpi` no FormLpr) | `AdicionarItensMarcados` devolvia **-1** ÔåÆ usu├írio marcava itens, clicava e s├│ recebia "Erro ao adicionar itens" |
+| `ParentForm.CompVenda` | `this_cCompVenda` | arredondamento ficaria desligado em sil├¬ncio quando `fArredondamento` for portada |
+| `Pagina.Dados.Grade` | `pgf_4c_Paginas.Page2` + `grd_4c_Grade`/`grd_4c_GradeC` | todos os `PEMSTATUS` falhavam ÔåÆ foco nunca voltava ├á grade do pedido |
+
+E um quarto, que s├│ aparece em **INCLUIR**: `SEEK(cpros, destino, "CPros")` pressup├Áe a tag sempre presente (verdade no `AddCursor` Fortyus). No `FormLpr` ela ├® condicional ÔÇö s├│ criada quando `CarregarItens` teve sucesso (linha 2271); com o cursor rec├®m-criado por `CREATE CURSOR` a tag n├úo existe e o `SEEK` estouraria dentro do TRY, devolvendo -1.
+
+## Corre├º├Áes
+
+Cada ponte tenta **primeiro o nome do legado** (pai wrapper) e s├│ depois o do migrado ÔÇö nenhum dos dois pais fica de fora: `ResolverCursorDestino` (4 n├¡veis, resolvido no clique e n├úo no `Init`, porque o pai cria o cursor pregui├ºosamente), `ObterCompVendaDoPai`, `DevolverFocoAoPai` + `FocarPrimeiraGrade` (varre por ├¡ndice, filtra `BaseClass = "GRID"` + `Visible` ÔÇö regra #34), `DestinoTemTagCPros` + `ExisteProdutoNoDestino` (cai para `LOCATE` com `PADR` na largura real, salvando/restaurando o alias do SCAN). Tamb├®m transcrevi os `TabIndex` 1/2/3 do SCX, que faltavam.
+
+## Verifica├º├úo
+
+Compila├º├úo VFP9 limpa nos dois arquivos, **com o processo de fato executando** (o arquivo de resultado foi gravado ÔÇö n├úo ca├¡ no caso de compilar-e-sair). As tr├¬s auditorias do projeto passam: propriedades inexistentes (`TabIndex` confirmado em `GRID` e `COMMANDBUTTON` na tabela real), m├®todo PROTECTED chamado de fora, fun├º├Áes n├úo definidas. Sem TODO/stub/m├®todo vazio, sem `MESSAGEBOX`, sem acento literal, sem `RETURN` dentro de TRY.
+
+**Fora do escopo, mas achado e n├úo corrigido:** `FormLpr.BtnCOPIAClick` (linha 2456) implementa "duplica o item atual" ÔÇö comportamento **inventado**. No legado esse bot├úo abre justamente este di├ílogo. Enquanto n├úo for corrigido, `FormSigPrSlp` continua sem nenhum chamador. ├ë um defeito da task461; corrigir exigiria alterar outro form j├í migrado, o que vai al├®m do deliver├ível desta fase ÔÇö mas ├® o que falta para a tela chegar ao usu├írio.

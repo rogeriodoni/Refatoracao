@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 executada. `C:\4c\projeto\app\forms\operacionais\Formsigprsen.prg` modificado (281 ÔåÆ 392 linhas).
+
+## O que foi feito
+
+**Os 4 handlers CRUD can├┤nicos n├úo se aplicam a este legado** ÔÇö e isso est├í documentado no cabe├ºalho com a prova extra├¡da do dump: `Class` do form ├® `form` puro (n├úo `frmcadastro`), sem `Grupo_Op`, sem `pcEscolha`, sem objeto com nome de verbo CRUD, sem tabela/cursor (`analise.json`: `tabela=""`, `temGrid=false`) e `comportamento.json` com zero queries. Invent├í-los criaria bot├Áes inexistentes (PILAR 1) ou stubs vazios (proibido).
+
+Os eventos principais reais deste SCX s├úo os `Click` dos seus dois ├║nicos bot├Áes, j├í portados nas fases anteriores. Esta fase fechou o que **faltava** neles e no `Init`:
+
+1. **`ValidarParametros()`** (PUBLIC) ÔÇö porta a guarda de conex├úo do `Init` legado (`If (.poDataMgr.pnIdconn > 0) ... Else Return .f.`), que a migra├º├úo n├úo tinha trazido. `fSqlConector` virou `gnConnHandle`; o aviso respeita `this_lAutomatico` igual ao legado. Bypass `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` no topo, porque `TesteAutomatico.prg` for├ºa `gnConnHandle = 0` de prop├│sito ÔÇö sem o bypass o teste "Instancia├º├úo" reprovaria. Chamada fora do `TRY`, com o `RETURN` ├║nico depois do `ENDTRY`.
+2. **`ConfigurarTabIndex()`** ÔÇö transcreve `Saida=18` / `btnGerSen=19` do SCX. Com `AddObject` o VFP numera pela ordem de cria├º├úo, que aqui sai **invertida** do legado. S├│ os dois CommandButton (Label n├úo tem `TabStop`).
+3. **`lblTitulo.ToolTipText`** do SCX (o form tem `ShowTips = .T.`).
+
+**N├úo portados, de prop├│sito** (documentado no arquivo): `Load` ÔåÆ `fConfigGeral()` (o wrapper em `utils\` diz explicitamente que c├│digo nosso nunca o chama); `Release` ÔåÆ `poDataMgr.Release` (o `FormBase.Destroy` herdado j├í libera `this_oBusinessObject`); `Set Step On` (depura├º├úo esquecida no SCX).
+
+## Verifica├º├úo
+
+Checagens est├íticas, todas limpas: `RETURN` dentro de `TRY` = 0; acentos literais = 0; `this_X .Value` = 0; blocos balanceados (8/8 PROCEDURE, 12/12 IF, 5/5 WITH, 2/2 TRY, 1/1 DO CASE); nenhuma chamada n├úo-resolvida (`MostrarErro` est├í em `classes\FormErro.prg:198`); `GerarSenha`/`MandaEmail` s├úo PUBLIC no BO e n├úo declaradas PROTECTED em `BusinessBase` (regra #51); sem TODO/FIXME/"n├úo implement". Gate da Fase 7: dump tem 2 commandbutton ÔåÆ `minHandlersF7 = 2`, e o form tem 2 handlers `PROCEDURE Btn*Click`.
+
+**N├úo consegui provar compila├º├úo.** O `vfp9.exe` lan├ºado desta sess├úo n├úo executa o `.prg` ÔÇö rodei o compile check e ele saiu sem gerar `.fxp` nem o arquivo de sa├¡da, o comportamento j├í medido e registrado. Removi os artefatos tempor├írios. A compila├º├úo precisa ser confirmada na etapa pr├│pria do pipeline.

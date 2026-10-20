@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+IF/ENDIF counts balance (10/10) and PROCEDURE/ENDPROC balance is 0. The file is syntactically sound.
+
+## Summary
+
+Completed Fase 2/8 for `sigproefBO.prg` ÔÇö added the BO methods needed for the TEF transaction cancellation screen:
+
+- **CarregarDoCursor()** ÔÇö maps all 13 columns of the legado "Transacao" cursor into `this_*` properties (documented why `cemps` is intentionally excluded ÔÇö the legado's own `CREATE CURSOR` never declares it either).
+- **ValidarDados()** ÔÇö replicates the legado's `Cancela.Click` guards (no transaction selected / already cancelled).
+- **Atualizar()** ÔÇö real cancellation logic: `UPDATE SigFiTef` (transcribed literally from `Cancela.Click`'s SQL, including the `cHeaders='CRT'`-only filter) + commit/rollback via `SQLCOMMIT`/`SQLROLLBACK`, no `RETURN` inside `TRY`.
+- **AtualizarParcelaSigMvPar()** (protected helper) ÔÇö locates the matching `SigMvPar` row by the positional `EmpDopNums` key (without `ALLTRIM`'ing its parts, per the project's chave-posicional rule) and marks `lCancelas`, preserving the legado's nuance that a missing parcela still commits but a failed parcela update rolls back everything.
+- **ObterChavePrimaria()** ÔÇö returns `cnnsus`, documented as the closest legado "key" since `SigFiTef.cidchaves` is never selected by this screen's query.
+
+I deliberately did **not** override `Inserir()`/`ExecutarExclusao()` ÔÇö this screen's legado never creates or deletes a `SigFiTef` row (only updates), so forcing those methods would be fabricating behavior; left a design-decision comment instead (per the project's own documented rule for read/update-only BOs).
+
+Verified column types/names against `docs/schema.sql` (UTF-16, read via `Get-Content -Raw`) for `SigFiTef`, `SigMvPar`, `SigOpFp`, `SigMvCab`, `SigCdOpe`, `SigCdPam`, `SigCdPac`, `SigFiMpF` to confirm the Phase-1 property types were correct and that the SQL I wrote references real columns.

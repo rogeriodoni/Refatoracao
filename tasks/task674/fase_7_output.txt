@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö all globals and helpers referenced exist. The implementation is complete and compiles cleanly.
+
+## Summary
+
+I implemented FASE 7/8 for `FormSigPrSdd.prg` (the "Senha do dia" operational dialog), but deviated from the generic template's `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö this form has no CRUD list/edit structure in the legacy source (confirmed via the SCX dump and `comportamento.json`), so those four methods would be pure fabricated stubs violating PILAR 1. This exact same call was already made and documented for `FormSIGOPBOL.prg` (the form this dialog's "Boleto" button opens), which left an explicit note for whoever tackled this phase.
+
+Instead I implemented the three real buttons from the legacy `Fwbtng1`/`GeraSenha`/`Saida`:
+- **`cmd_4c_Boleto`** ÔåÆ `BtnBoletoClick`: opens `FormSIGOPBOL` with the required `pnTpBol=15` argument (a bug already fixed/documented in that form's own header for this exact caller).
+- **`cmd_4c_GerarSenha`** ÔåÆ `BtnGerarSenhaClick`: transcribes the 6 field validations, the `SigCdPac.SenhDEmps` branch that sums `SigCdEmp.nemps`/`SigOpFp.nfpags`/valor, generates the password, and saves via `NovoRegistro()`+`Salvar()` (the correct PUBLIC entry points per the BusinessBase PROTECTED rule).
+- **`cmd_4c_Encerrar`** ÔåÆ `BtnEncerrarClick`: simple `Release()`.
+
+One known, pre-existing gap I did *not* invent: `fGerPswDiario` (the password-generation algorithm) is a legacy global function that's missing from `utils/functions.prg` ÔÇö already called the same way, unresolved, in 3 other migrated BOs. Per the project's own rule about calculation-value functions, I transcribed the call literally rather than guessing the algorithm (which could silently produce wrong passwords), and documented it as a cross-cutting fix needed separately.
+
+Verified the form compiles cleanly with VFP9 (no `.err` generated). Wrote `tasks/task674/fase_7_output.txt` documenting the reasoning, matching the project's phase-output convention.

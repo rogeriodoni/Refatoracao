@@ -1,0 +1,14 @@
+=== TESTE FASE 7 - gerador de senhas ===
+T0 escopo PUBLIC dos metodos novos:
+    GerarSenhasLivres     existe=.T.  protected=.F.
+    GerarSenhaUnica       existe=.T.  protected=.F.
+    ContarSenhasIguais    existe=.T.  protected=.F.
+    CriarCursorSenhas     existe=.T.  protected=.F.
+T1 300 senhas: 6 digitos sem espaco = .T.  min=104423  max=998532
+T2 lote de 200: linhas=200  distintas=200
+T3 sempre duplicada: senha=[]  chamadas=100 (teto 100)  msg=[Não foi possível obter uma senha livre disponível após 100 tentativas.]
+T4 consulta falhou: senha=[]  chamadas=1 (esperado 1)
+T5 sem conexao: ret=.F.  erroExibido=.T.  cursorLote=.F.  msg=[Sem conexão com o Servidor de Banco de Dados.]
+T6 qtde invalida: ret(0)=.F.  ret('abc')=.F.
+
+RESUMO: OK=10  FALHOU=0

@@ -325,7 +325,9 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_FiltroTemp") >= 1
                 IF USED("cursor_4c_Filtro")
                     IF USED("cursor_4c_Filtro")
-                        TABLEREVERT(.T., "cursor_4c_Filtro")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_Filtro") > 1
+                            TABLEREVERT(.T., "cursor_4c_Filtro")
+                        ENDIF
                         USE IN cursor_4c_Filtro
                     ENDIF
                 ENDIF

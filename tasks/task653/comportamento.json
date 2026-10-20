@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 5,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCBL",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "lcQryCfgBl = [Select * From SigCnFBl]\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCnFBl', 'cIdChaves', 'crSigCnFBl', '','', lcQryCfgBl)\n\t\tEndWith\n\t\t\n\t\t.poDataMgr.ReQuery('crSigCnFBl')\n\n\t\tSelect crSigCnFBl\n\t\tGo TOP\n\n\t\tIf Eof()\n\t\t  Append Blank \n\t\tEndIf\n\n\t\t=DoDefault()\n\t\tThisForm.Text40.value ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value = Substr",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCBL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL.Text40",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcTamFolha\n\nm.lcTamFolha = ''\nIf IsEmpty(This.Value)\n\tm.lcTamFolha = GetPaperSize()\n\tIf IsEmpty(m.lcTamFolha)\n\t\tm.lcTamFolha = (Str(256,10)+'Personalizado')\n\tEndIf\n\tThis.Value = SubStr(m.lcTamFolha,11)\nEndIf\nIf \t(Not Eof('crSigCnFBl')) And (Not IsEmpty(m.lcTamFolha))\n\tReplace ctamfolha With m.lcTamFolha In crSigCnFBl\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL.Text29",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "Local laPrinters,llNtem,lnConta1\n\nDeclare laPrinters [1]\n\nIf Aprinters(m.laPrinters)>0\n\n\tm.llNtem = .t.\n\t\n\tFor m.lnConta1=1 To Alen(m.laPrinters,1)\n\t\n\t\tIf Upper(AllTrim(m.laPrinters [m.lnConta1,1]))==Upper(AllTrim(This.Value))\n\t\t\n\t\t\tm.llNtem = .f.\n\t\t\tm.lnConta1 = (Alen(m.laPrinters,1)+1)\n\t\t\t\n\t\tEndIf\n\t\n\tEndFor\n\t\n\tIf m.llNtem\n\t\n\t\tThis.Value = GetPrinter()\n\t\t\n\tEndIf\n\t\nElse\n\n\tMessageBox('Nenhuma Impressora Instalada.',0+16)\n\t\n\tThis.Value = ''\n\t\nEndIf\n\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL.Text30",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "Local laFonts,llNtem,lnConta1,lcFonte,lnPos1,lnPos2,cFontePdrs,nTamFontes\n\nThisForm.LockScreen = .t.\n\nDeclare laFonts [1]\n\n= Afont(m.laFonts)\n\nm.llNtem = .t.\n\nFor m.lnConta1=1 To Alen(m.laFonts,1)\n\n\tIf Upper(AllTrim(m.laFonts [m.lnConta1]))==Upper(AllTrim(This.Value))\n\t\n\t\tm.llNtem = .f.\n\t\tm.lnConta1 = (Alen(m.laFonts,1)+1)\n\t\t\n\tEndIf\n\nEndFor\n\nIf m.llNtem\n\n\tm.lcFonte = GetFont()\n\tm.lnPos1 = At(',',m.lcFonte,1)\n\tm.lnPos2 = At(',',m.lcFonte,2)\n\tm.nTamFontes = Val(SubStr(m.lcFonte,(m.lnPos1+1),(m.lnP... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL.cmdGsalva",
+      "evento": "Click",
+      "linhas": 66,
+      "codigoOriginal": "Local dDatas,cHoras,cUsuarios,ctamfolha,lcTamFolha\n\nThisForm.LockScreen = .t.\n\nIf MessageBox('Confirma a Configuração do Boleto?',32+4,goSistema.NomeSistema)==6\n\n\tm.dDatas = Date()\n\tm.cHoras = Time()\n\tm.cUsuarios = m.Usuar\n\n\tIf Not Empty(crSigCnFBl.ctamfolha) \n\t\tIf At('/',crSigCnFBl.ctamfolha) = 0\n\t\t\tlcTamFolha = Alltrim(ThisForm.Text30.value)+'/'+SubStr(crSigCnFBl.ctamfolha,1,10)+'/'+SubStr(crSigCnFBl.ctamfolha,11)\n\t\tElse\n\t\t\tlcLocalBarraTamFolha = At('/',Substr(crSigCnFBl.ctamfolha,At('/',crSig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value)+'/'+SubStr,Update,SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCBL.cmdGsalva",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nIf Messagebox('Deseja Abandonar as Alterações Realizadas?',4+32+256,goSistema.NomeSistema)==6\n\tThisForm.Release\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCBL.Init",
+      "queryOriginal": "lcQryCfgBl = [Select * From SigCnFBl]",
+      "tabelas": "SigCnFBl",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCnFBl"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

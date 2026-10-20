@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "Fut.:'+Alltrim", "fGravarLog"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPBLO",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcQryBloqueio = [Select * From SigSyBlq]\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigSyBlq', 'cIdChaves', 'crBloqueio', '', '', lcQryBloqueio)\n\t\tEndWith\n\n\t\t.poDataMgr.Requery('crBloqueio')\n\n\t\tGo Top In crBloqueio\n\t\tIf Eof('crBloqueio')\n\t\t\tInsert Into crBloqueio (cIdChaves) Values (fUniqueIds... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPBLO",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBLO",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBLO.Get_datfin",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (This.Value < Thisform.get_datini.Value)\n\t=Messagebox('Entrada Inválida!!!', 0+48, '')\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_datini",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBLO.Salvamento",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "lcBloqueio = 'BLOQUEIO DE '+Nvl(Dtoc(Thisform.Get_datini.Value),'')+' a '+;\n                            Nvl(Dtoc(ThisForm.Get_datfin.Value),'')+;\n                            ' - Ret.:'+Alltrim(Str(ThisForm.Get_ddr.Value))+;\n                            ' - Fut.:'+Alltrim(Str(ThisForm.Get_ddf.Value))\n\n=fGravarLog('B', 'SIGOPBLO', 'ALTERACAO', lcBLOQUEIO, USUAR)\n\nThisForm.poDataMgr.Update('crBloqueio')\nThisform.poDataMgr.Commit()\n\nThisForm.Release\n* Fim *********************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fut.:'+Alltrim,fGravarLog",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "Get_datini,Get_datfin,Get_ddr,Get_ddf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPBLO.Salvamento",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPBLO.Init",
+      "queryOriginal": "lcQryBloqueio = [Select * From SigSyBlq]",
+      "tabelas": "SigSyBlq",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPBLO.Init",
+      "queryOriginal": "\t\t\tInsert Into crBloqueio (cIdChaves) Values (fUniqueIds... [TRUNCADO]",
+      "tabelas": "crBloqueio",
+      "colunas": "cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyBlq", "crBloqueio"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

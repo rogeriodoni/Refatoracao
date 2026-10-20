@@ -48,7 +48,9 @@ DEFINE CLASS SigPdMenBO AS BusinessBase
                        "WHERE estilos = " + EscaparSQL(par_cCidChave)
 
             IF USED("cursor_4c_SigPdMenMsg")
-                TABLEREVERT(.T., "cursor_4c_SigPdMenMsg")
+                IF CURSORGETPROP("Buffering", "cursor_4c_SigPdMenMsg") > 1
+                    TABLEREVERT(.T., "cursor_4c_SigPdMenMsg")
+                ENDIF
                 USE IN cursor_4c_SigPdMenMsg
             ENDIF
 

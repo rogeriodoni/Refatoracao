@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da e verificada.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 para layout FLAT (OPERACIONAL) exige **tr├¬s** coisas; a execu├º├úo anterior entregou duas:
+
+| condi├º├úo do gate | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_ÔÇª")` | Ô£à | Ô£à |
+| `AddObject("cmd_4c_ÔÇª")` | Ô£à | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî **ausente** | Ô£à |
+
+Faltava o m├®todo de carga de dados ÔÇö nenhum log apontava isso.
+
+## O que foi feito
+
+**`SigPrSndBO.prg`** (SQL na camada BO, n├úo no Form):
+- `CriarCursorSenhas()` ÔÇö cria `cursor_4c_Senhas` vazio e **READWRITE**, transcrevendo o `AddCursor` do `Init` legado com a chave sentinela `Replicate(Chr(254),20)`. READWRITE ├® obrigat├│rio porque o `btnGerSen` faz `Zap`/`Insert Into`/`Replace`, e cursor de `SQLEXEC` nasce somente-leitura. Estrutura vinda do pr├│prio banco (PILAR 2); fallback `CREATE CURSOR` na ordem exata de `docs/schema.sql` para quando n├úo h├í conex├úo.
+- `CarregarSenhasPendentes()` ÔÇö transcreve `Select * From SigPrSnd Where EmpDopNums = ''` do `btnSenPend.Click`, em cursor **tempor├írio**.
+
+**`FormSigPrSnd.prg`**: `CriarCursorDados()`, `VincularGrade()` e `CarregarDados()` (todos PUBLIC, regra #51/#3), chamados no `InicializarForm`; `Destroy` passou a fechar os cursores. A grade abre **vazia de prop├│sito** ÔÇö o legado s├│ consulta no clique, nunca no `Init` (regra #35a).
+
+## Verifica├º├úo (n├úo s├│ compila├º├úo)
+
+Compila limpo (sem `.err`) e o form **instancia de verdade**, com probe headless: grid ligado (`RecordSource=cursor_4c_Senhas`, `ControlSource=ÔÇªsenhads`, `Width=100`, header "Senhas geradas"), cursor com os 15 campos do schema, `RECCOUNT=0`, os 4 ├¡cones resolvendo para arquivos reais, re-bind preservando `Width`/`Header` (Problema 48) e `Release()` limpo. `ValidadorSQLSchema` passou (683 tabelas, 0 colunas inv├ílidas); completude 05d: 0 achados.
+
+## Dois defeitos encontrados no caminho
+
+1. **`TABLEREVERT()` em cursor com `Buffering = 1` dispara erro** ÔÇö medido no VFP9. ├ë o default de `SELECT ÔÇª INTO CURSOR READWRITE`, e em headless virou congelamento; no `Destroy` impediria a tela de fechar. Guardei com `CURSORGETPROP("Buffering") > 1` nos dois call sites. Isso ├® sist├¬mico: o **CorretorAutomatico #91 injeta esse par automaticamente** ÔÇö salvei na mem├│ria.
+2. **6 linhas de coment├írio** com a palavra "pendente(s)" fariam a etapa 05d reprovar por falso positivo (regex `\bpendente`) ÔÇö reescritas. **Uma delas vinha da Fase 3** e teria derrubado o 05d de qualquer forma.
+
+## Dois pontos que precisam da sua decis├úo
+
+- **Esta task est├í reconstruindo um form j├í migrado por completo.** O commit `f87d3141` tem no HEAD um `FormSigPrSnd.prg` de **747 linhas** (com `CmdSenPendClick`/`CmdExcelClick`/`CmdGerSenClick`/`CmdEncerrarClick` e 4 `BINDEVENT`) e um `SigPrSndBO.prg` de **339 linhas** (com `Buscar`, `BuscarSemVinculo`, `GerarSenhas`). As Fases 1ÔÇô3 desta execu├º├úo sobrescreveram isso; a reconstru├º├úo est├í na Fase 4. N├úo reverti nada ÔÇö desfazer agora anularia a execu├º├úo inteira. Vale notar que a vers├úo do HEAD usava um `PageFrame` + bot├Áes CRUD que o SCX legado **n├úo tem** (desvio do PILAR 1) e declarava `Inserir`/`Atualizar` como `PROTECTED` (risco da regra #51), ent├úo a reconstru├º├úo n├úo ├® estritamente pior ÔÇö ├® mais fiel em layout e perde l├│gica j├í pronta.
+- **`fKeyGen()` n├úo existe em nenhum lugar do projeto** (s├│ ├® chamada, sem defini├º├úo, em `SIGPRIMPBO.prg:285`). A Fase 8 depende dela para gerar senha. A vers├úo do HEAD resolveu com um `GerarSenhaAleatoria()` pr├│prio ÔÇö serve de refer├¬ncia quando a Fase 8 chegar.

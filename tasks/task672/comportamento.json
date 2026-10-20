@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Fortyus.Exe", "fConfigGeral", "fRecalculaS"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRRSS",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "If ThisForm.Parametrizado\n\tThisForm.OK.Click()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSS",
+      "evento": "Init",
+      "linhas": 46,
+      "codigoOriginal": "LParameters pParam, pUsuario, pOnLine\n\nThisForm.Parametrizado = (Type('pParam')='C')\nThisform.Usuario = Iif(Type('pUsuario')='C',pUsuario,Space(10))\nThisForm.Online  = pOnLine\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','RECSALDO',.t.)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .podatamgr\n\t\t\t.AddCursor('SigPrSlS','CidChaves','CrSigPrSlS','')\n\t\tEndWith\n\t\t=DoDefault()\n\tElse\n\t\tIf... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fortyus.Exe",
+        "metodosFormChamados": "Parametrizado =,Usuario = Iif,Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRRSS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSS.SAIR",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSS.OK",
+      "evento": "Click",
+      "linhas": 157,
+      "codigoOriginal": "Local llOk, lnErro1\n\nThis.Enabled = .F.\n\nSet Cursor Off\n\nlnMov = 1\nllErrCnx = .f.\n\nKeyboard '{LEFTARROW}'\nSet Step On \nDo While .T.\n\n\tThisForm.Sair.Enabled = .f.\n\n\tThisForm.Label1.Caption = 'Aguardando Contas Para Processar' + Replicate('.', lnMov)\n\tlnMov = Iif(lnMov < 5, lnMov + 1, 1)\n\n\tIf Not Empty(ThisForm.Usuario) Or ThisForm.Online\n\t\tlcSql = [Select 0 as Flag,* From SigOpCls Where Onlines = 1 ]+;\n\t\t\t\tIif(Not Empty(ThisForm.Usuario),[ And Usuars = ']+ThisForm.Usuario+['],[ ])+[ Order by GruC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fRecalculaS,Fortyus.Exe",
+        "metodosFormChamados": "Sqlexecute,Rollback,Commit,MouseSobreBotaoSair,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRRSS.OK.Click",
+      "queryOriginal": "\t\tlcSql = [Select 0 as Flag,* From SigOpCls Where Onlines = 1 ]+; \t\t\t\tIif(Not Empty(ThisForm.Usuario),[ And Usuars = ']+ThisForm.Usuario+['],[ ])+[ Order by GruC... [TRUNCADO]",
+      "tabelas": "SigOpCls",
+      "colunas": "Onlines,Usuario,[,Usuars,Usuario+[]",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpCls"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

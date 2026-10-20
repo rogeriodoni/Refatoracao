@@ -84,7 +84,9 @@ DEFINE CLASS rstBO AS BusinessBase
                        " WHERE a.skchaves = " + EscaparSQL(par_cSkChaves)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -152,7 +154,9 @@ DEFINE CLASS rstBO AS BusinessBase
                            " WHERE a.skchaves = " + EscaparSQL(par_cSkChaves) + " AND a.tipos = 'M'"
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_MunisTmp")
-                    TABLEREVERT(.T., "cursor_4c_MunisTmp")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_MunisTmp") > 1
+                        TABLEREVERT(.T., "cursor_4c_MunisTmp")
+                    ENDIF
                     USE IN cursor_4c_MunisTmp
                 ENDIF
 
@@ -216,7 +220,9 @@ DEFINE CLASS rstBO AS BusinessBase
                            " WHERE a.skchaves = " + EscaparSQL(par_cSkChaves) + " AND a.tipos = 'P'"
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_ProdsTmp")
-                    TABLEREVERT(.T., "cursor_4c_ProdsTmp")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_ProdsTmp") > 1
+                        TABLEREVERT(.T., "cursor_4c_ProdsTmp")
+                    ENDIF
                     USE IN cursor_4c_ProdsTmp
                 ENDIF
 
@@ -335,7 +341,9 @@ DEFINE CLASS rstBO AS BusinessBase
                                    "GETDATE())"
                         *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                         IF USED("cursor_4c_InsRsi")
-                            TABLEREVERT(.T., "cursor_4c_InsRsi")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_InsRsi") > 1
+                                TABLEREVERT(.T., "cursor_4c_InsRsi")
+                            ENDIF
                             USE IN cursor_4c_InsRsi
                         ENDIF
 
@@ -375,7 +383,9 @@ DEFINE CLASS rstBO AS BusinessBase
                                    "GETDATE())"
                         *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                         IF USED("cursor_4c_InsRsi")
-                            TABLEREVERT(.T., "cursor_4c_InsRsi")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_InsRsi") > 1
+                                TABLEREVERT(.T., "cursor_4c_InsRsi")
+                            ENDIF
                             USE IN cursor_4c_InsRsi
                         ENDIF
 
@@ -417,7 +427,9 @@ DEFINE CLASS rstBO AS BusinessBase
                            "GETDATE(), NULL)"
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_InsRst")
-                    TABLEREVERT(.T., "cursor_4c_InsRst")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_InsRst") > 1
+                        TABLEREVERT(.T., "cursor_4c_InsRst")
+                    ENDIF
                     USE IN cursor_4c_InsRst
                 ENDIF
 
@@ -465,7 +477,9 @@ DEFINE CLASS rstBO AS BusinessBase
                            " WHERE skchaves = " + EscaparSQL(THIS.this_cSkChaves)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_UpdRst")
-                    TABLEREVERT(.T., "cursor_4c_UpdRst")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_UpdRst") > 1
+                        TABLEREVERT(.T., "cursor_4c_UpdRst")
+                    ENDIF
                     USE IN cursor_4c_UpdRst
                 ENDIF
 

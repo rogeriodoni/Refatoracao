@@ -132,7 +132,9 @@ DEFINE CLASS SEGBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Ins")
-                TABLEREVERT(.T., "cursor_4c_Ins")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Ins") > 1
+                    TABLEREVERT(.T., "cursor_4c_Ins")
+                ENDIF
                 USE IN cursor_4c_Ins
             ENDIF
 
@@ -170,7 +172,9 @@ DEFINE CLASS SEGBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Upd")
-                TABLEREVERT(.T., "cursor_4c_Upd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Upd") > 1
+                    TABLEREVERT(.T., "cursor_4c_Upd")
+                ENDIF
                 USE IN cursor_4c_Upd
             ENDIF
 
@@ -206,7 +210,9 @@ DEFINE CLASS SEGBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Del")
-                TABLEREVERT(.T., "cursor_4c_Del")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Del") > 1
+                    TABLEREVERT(.T., "cursor_4c_Del")
+                ENDIF
                 USE IN cursor_4c_Del
             ENDIF
 

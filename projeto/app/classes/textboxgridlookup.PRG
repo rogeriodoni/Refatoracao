@@ -586,3 +586,136 @@ DEFINE CLASS TextBoxProdutoAntMdp_4c AS TextBox
         RETURN .T.
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaTamanho_4c - celulas da grade de "Peso medio por tamanho"
+* (Formsigprtam / SIGPRTAM.Grade).
+*
+* No legado cada Column<N>.Text1 tem When (gate de modo) e, nas colunas de
+* lookup (Column1/Column2) e de calculo (Column4/Column5), Valid proprio.
+* BINDEVENT em evento de celula de Grid nao eh confiavel (ver o cabecalho
+* deste arquivo e a regra #46): a celula tem de ser uma classe com os eventos
+* EMBUTIDOS, instalada com Column.AddObject + CurrentControl + Sparse = .F.
+* (regra #18).
+*
+* this_cPapel identifica a coluna - "COD" (Column1/CodTams), "DESC"
+* (Column2/Descs), "PESO" (Column3/PesoMs), "PERC" (Column4/Percs),
+* "VALOR" (Column5/Valor), "PRAZO" (Column6/DiasPrz). O corpo mora no form
+* (depende do cursor, do BO e do preco de venda do produto) e recebe o
+* proprio TextBox: dentro do Valid o valor digitado esta em THIS.Value e
+* AINDA NAO chegou ao cursor.
+*
+* F4/F5 e duplo clique abrem o picker direto nas duas celulas de lookup.
+* O legado nao tem esse atalho (so o Valid, ao sair da celula) - eh o padrao
+* do sistema novo e nao altera o que eh gravado.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaTamanho_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    Margin      = 0
+    this_cPapel = ""
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaGradeEditavel", 5)
+            RETURN THISFORM.CelulaGradeEditavel(THIS.this_cPapel, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCelulaGradeExec", 5)
+            RETURN THISFORM.ValidarCelulaGradeExec(THIS.this_cPapel, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116) AND INLIST(THIS.this_cPapel, "COD", "DESC")
+            IF PEMSTATUS(THISFORM, "AbrirLookupTamanhoGrade", 5)
+                THISFORM.AbrirLookupTamanhoGrade(THIS.this_cPapel, THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF INLIST(THIS.this_cPapel, "COD", "DESC")
+            IF PEMSTATUS(THISFORM, "AbrirLookupTamanhoGrade", 5)
+                THISFORM.AbrirLookupTamanhoGrade(THIS.this_cPapel, THIS)
+            ENDIF
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxProdutoTrf_4c - celula "Codigo" (Column1) da grade de produtos do
+* FormSIGPRTRF (dialogo "Relacao de Produtos" usado pela Transferencia).
+*
+* Legado (SIGPRTRF.Cnt_Referencia.Grade.Column1.Text1):
+*   When      -> ThisForm.AntCPro = This.Value (snapshot do valor anterior)
+*   Valid     -> fwBuscaExt contra SigCdPro (cpros/dpros) quando o valor
+*                mudou e nao esta vazio; preenche a coluna Descricao
+*                (Column2) junto
+*   LostFocus -> com ENTER (Lastkey()=13): linha vazia -> foca o botao Ok;
+*                senao garante uma linha vazia abaixo (Append Blank se
+*                precisar) e avanca a grade para ela (Keyboard '{DNARROW}')
+*
+* Instalado com Column.AddObject + CurrentControl + Sparse = .F. (regra #18);
+* os tres eventos delegam para o form (regra #46: Valid do TextBox da
+* coluna, nunca AfterRowColChange) porque dependem do cursor da grade e dos
+* demais controles do dialogo (botao Ok).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxProdutoTrf_4c AS TextBox
+    FontName    = "Courier New"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    InputMask   = "!!!!!!!!!!"
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "GuardarCodigoAnteriorProduto", 5)
+            THISFORM.GuardarCodigoAnteriorProduto(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCodigoProdutoGridExec", 5)
+            RETURN THISFORM.ValidarCodigoProdutoGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF PEMSTATUS(THISFORM, "AvancarLinhaProdutoGridExec", 5)
+            THISFORM.AvancarLinhaProdutoGridExec()
+        ENDIF
+    ENDPROC
+
+    *-- F4/F5 abrem o picker de produto direto, com o campo vazio ou nao
+    *-- (afordancia padrao do sistema novo, igual a TextBoxGridBase acima).
+    *-- Guard de tecla OBRIGATORIO: sem ele o picker subiria a CADA tecla
+    *-- digitada e o usuario nao terminaria de digitar o codigo (regra #47).
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)  && F4 = 115, F5 = 116
+            IF PEMSTATUS(THISFORM, "AbrirBuscaProdutoGrade", 5)
+                THISFORM.AbrirBuscaProdutoGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    *-- Duplo clique DENTRO da celula: o VFP entrega o evento ao controle
+    *-- sob o ponteiro, que eh este TextBox. Fora da celula quem recebe eh
+    *-- o proprio Grid (BINDEVENT -> GradeProdutosDblClick no form). As
+    *-- duas rotas chamam o MESMO funil, guardado por reentrancia.
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirBuscaProdutoGrade", 5)
+            THISFORM.AbrirBuscaProdutoGrade(THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE

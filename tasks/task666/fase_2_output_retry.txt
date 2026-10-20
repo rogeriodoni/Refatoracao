@@ -1,0 +1,49 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 2 conclu├¡da.** `C:\4c\projeto\app\classes\SIGPRPPPBO.prg` (506 linhas, CRLF, ASCII puro) compila limpo no VFP9 e passa os gates.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1`, `case 2`) exige os tr├¬s tokens `CarregarDoCursor` **E** `Inserir` **E** `Atualizar`. O arquivo tinha `Inserir`/`Atualizar` mas **nenhuma ocorr├¬ncia de `CarregarDoCursor`** ÔÇö o m├®todo simplesmente n├úo existia. A exce├º├úo "BO somente-leitura" n├úo resgata este caso: ela s├│ libera quando todo alvo de escrita do dump ├® cursor local, e aqui o legado grava em `crSigTempC` (tabela remota `SigTempC`), ent├úo `$boSomenteLeitura = $false`.
+
+## Defeito grave que encontrei de quebra
+
+O `CarregarOperacoes` anterior **re-executava a consulta em `SigMvCab` com um filtro inventado** (`WHERE iclis = <conta>`). Lendo o form pai (`tasks/task214/SigPrPpc_form_codigo_fonte.txt:637-657`), o filtro real ├® outro:
+
+```
+Where Datas Between ?pDtI And ?pDtF            && pDtF com 23:59:59
+  And (GrupoOs = pcGrupo Or GrupoDs = pcGrupo) && OR nos DOIS lados
+  And (ContaOs = pcConta Or ContaDs = pcConta) && OR nos DOIS lados
+  [And Dopes = ...] [And Emps = ...]
+```
+
+`iclis` n├úo entra em lugar nenhum. A grade mostraria um conjunto **diferente** do que o usu├írio pediu, sem erro na tela. Corrigi consumindo o cursor `TprMvCab` que o pai j├í deixa pronto ÔÇö `SigPrPpcBO.ConsultarMovimentacoes` preserva esse nome exatamente para isso, e `FormSigPrPpc.prg:777` abre esta tela logo depois.
+
+## O que o BO entrega
+
+| M├®todo | Equivale no legado |
+|---|---|
+| `CarregarOperacoes()` | `Zap In dbOperacao` + `Scan TprMvCab` + `Go Top` + carga dos itens da 1┬¬ linha |
+| `CarregarDoCursor(alias)` | leitura da linha corrente (`SELECT (alias)` + `TYPE()` por campo) |
+| `CarregarItensDaOperacaoCorrente()` | `grd_operacoes.AfterRowColChange` |
+| `CarregarItensPorChave(E,D,N)` | JOIN `SigMvItn` + `SigCdPro`, com `dpros` **ao vivo** do cadastro (`ISNULL(b.dpros,'')` reproduz `Iif(Eof('crSigCdPro'), '', ...)` ÔÇö produto exclu├¡do aparece em branco) |
+| `MontarChaveEmpDopNums()` | `Emps + Dopes + Str(Numes,6)` com `PADR` expl├¡cito = 29 = `empdopnums char(29)` |
+
+A `SigTempC` foi eliminada de prop├│sito: era andaime para mandar lista de chaves ao servidor a partir de um cursor local (insere, faz o JOIN, apaga com `fSqlApagarTmp`). Com conex├úo direta o JOIN vai na pr├│pria consulta. Por isso **n├úo** sobrescrevi `Inserir`/`Atualizar`/`ExecutarExclusao` ÔÇö inventar INSERT/UPDATE violaria o PILAR 2; a decis├úo est├í documentada no cabe├ºalho.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9**: sem erros, `.FXP` gerado
+- **Gate Fase 2**: `VALIDADO=True`
+- **`Test-CompletudeCodigo`**: 0 problemas (sem TODO, sem procedure vazia, sem "pendente"/"nao implement")
+- **`ValidadorSQLSchema.ps1`**: 683 tabelas lidas, 0 colunas inv├ílidas
+- **`VerificarColunaEmpresaSQL.ps1`**: ERRO=0
+- **`VerificarMetodoProtegidoChamadoDeFora.ps1`**: OK
+- **Harness de runtime** (`TprMvCab` sint├®tico, 3 linhas): BO instancia, grade carrega as 3 linhas na ordem `emps/dopes/numes`, props da linha corrente corretas (`datas` como `T`), chave com `LEN=29`, `LimparDados` d├í ZAP sem fechar o cursor, `Destroy` fecha, e os caminhos de erro (sem conex├úo / sem `TprMvCab` / tipos inv├ílidos) recusam com mensagem clara **sem travar**
+
+O harness pegou um defeito que corrigi: `CarregarOperacoes` devolvia `.T.` mesmo quando a carga dos itens falhava, deixando `this_cMensagemErro` preenchido ÔÇö retorno e mensagem agora s├úo consistentes.
+
+Uma limita├º├úo que n├úo pude eliminar: o SQL Server (192.168.200.10) n├úo ├® alcan├º├ível desta m├íquina, ent├úo `CarregarItensPorChave` foi exercitada s├│ nos caminhos de recusa. As colunas do SELECT foram conferidas uma a uma contra `docs/schema.sql` (lido com `Get-Content -Raw`, UTF-16) e pelo validador 05f, mas a execu├º├úo real da query contra o banco fica para o ambiente com conex├úo. Os arquivos tempor├írios de teste e compila├º├úo foram removidos.

@@ -1,0 +1,41 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 is complete and validated. Here's what happened and what I changed.
+
+## Why the previous attempt failed
+
+The gate's `OPERACIONAL`/flat branch requires three things; the prior run delivered two:
+
+| gate condition | antes | agora |
+|---|---|---|
+| `AddObject("grd_4c_ÔÇª")` | Ô£à | Ô£à |
+| `AddObject("cmg_4c_/cmd_4c_ÔÇª")` | Ô£à | Ô£à |
+| `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî **ausente** | Ô£à |
+
+The prior run was right to refuse CRUD buttons + `AlternarPagina` (the legacy has no PageFrame and no CRUD ÔÇö inventing them violates PILAR 1). But it also left the grid *bound and never populated*, and the legacy does have real load logic ÔÇö duplicated verbatim in `PROCEDURE Init` **and** `Get_NotaIni.Valid`. That block was the missing piece, not a stub.
+
+## Changes
+
+**`FormSIGOPCCO.prg`**
+- `CarregarDados(par_cNfis, par_lAvisarSemRegistro)` ÔÇö transcription of the legacy load block as a single method: `Zap` ÔåÆ requery `SigNfCor` ÔåÆ if rows exist, scan `SigCcOco` into the grid cursor, then `SEEK`/`REPLACE` the saved retification text. The business rule is kept literally: the occurrence list is only built when the note **already has** a correction (an empty grid is intentional ÔÇö it's what sends `Ok.Click` down the "Confirma Impress├úo" branch). The `'Nota sem Corre├º├úo !!'` warning is parameterized because the legacy shows it only in `Valid`, not in `Init`.
+- `AtualizarGrade()` ÔÇö single repaint point (`GO TOP` + `Grid.Refresh`), per rule #21.
+- Wired the first load into `InicializarForm`, guarded by `gb_4c_ValidandoUI`/`gb_4c_ModoTeste`.
+- `Column1/Column2.ReadOnly = .T.` to reproduce the legacy's `Text1.When ÔåÆ Return(.F.)` (the dump's `.F.` only works there because the lock lives in `When`).
+
+**`SIGOPCCOBO.prg`** ÔÇö added `CarregarOcorrencias()` and `CarregarCorrecoes(emps, series, nfis)` (the legacy's `CrSigCcOco`/`CrSigNfCor`, same `WHERE`/`ORDER BY`, `PADR` to the schema widths), both PUBLIC per rule #51.
+
+## One pre-existing defect fixed
+
+`CarregarDoCursor` used `TratarNulo(cidchaves, "C")` ÔÇö the 2nd arg is the **default value**, not a type, so a NULL `mretifs` would have stored the literal string `"C"`. Corrected to `""`/`0` across all 6 calls. This came from Fase 2, but `mretifs` is `text NULL` in the schema, so the NULL case is real and my new code reads that field.
+
+## Verification
+
+- **VFP9 compile**: both files, 0 errors, `.fxp` generated (`automation/CompileCheckCco657F4.prg`).
+- **Instantiation probe** (`automation/TestSigOpCco657F4.prg`): form instantiates; grid is 3 cols at 122/98 604├ù290 with the dump's headers and widths 70/220/280; `Column3.CurrentControl = EDT_4C_RETIFICACAO` + `Sparse = .F.`; `cmg_4c_Sair` has both buttons; cursor matches `Create Cursor XCorNf` incl. `TAG cods`; `CarregarDados` returns `.F.` without a DB instead of killing the form.
+- **Validators**: `ValidadorSQLSchema` passed (683 tables parsed, 0 invalid columns); `VerificarFuncoesNaoDefinidas`, `VerificarColunaEmpresaSQL` (ERRO=0), `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora` all exit 0. All 5 `NOT NULL` columns of `SigNfCor` are covered by the INSERT.
+- **Gate**: `temLayoutFlat = True`.
+
+Two notes. The DB-backed validators (`VerificarInsertNotNull`, `VerificarCamposCursorBO`) need `192.168.200.10`, which this machine can't reach ÔÇö I verified NOT-NULL coverage against the canonical schema file instead. And one diagnostic worth keeping: the probe initially reported `File 'mostrarerro.prg' does not exist`, which turned out to be a **stale `.fxp`** running old code (rule #29) ÔÇö with freshly compiled files `MostrarErro` resolves fine, so the probe now deliberately omits `FormErro.prg` to avoid a blocking modal in headless mode.

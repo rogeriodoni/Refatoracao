@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 6 conclu├¡da ÔÇö auditoria, sem regera├º├úo.**
+
+A task668 ├® **re-run**: `SIGPRPRO.scx` tem md5 id├¬ntico ao das task217/task251/task323, e `FormSIGPRPRO.prg` j├í cobria as Fases 3-8. Segui a instru├º├úo "MODIFICAR com Read + Edit" (n├úo o `Write` destrutivo) e auditei em vez de regerar.
+
+**Os tr├¬s entreg├íveis nominais da Fase 6 n├úo existem no legado:**
+
+| Pedido | Realidade no `SIGPRPRO.SCX` |
+|---|---|
+| Lookups com BINDEVENT F4/F5 | **ZERO**: o dump n├úo casa `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`sigacess`/`CreateObject`; os 5 controles de dados s├úo `Enabled=.F.` ou t├¬m `When()` retornando `.f.` |
+| `cnt_4c_BotoesAcao` (Salvar/Cancelar) | Um ├║nico bot├úo "Ok", que s├│ fecha cursores e libera o form ÔÇö nenhum Insert/Update/Delete |
+| ├Ültimos 50% dos campos | Os 16 controles j├í migrados 1-para-1 |
+
+Criar lookup ou Salvar/Cancelar aqui seria inventar UI que o legado nunca teve (PILAR 1).
+
+**Medi em VFP9 em vez de s├│ ler o c├│digo** (`automation\ProbeSigPrPro668F6.prg` ÔåÆ **FALHAS = 0**):
+
+- Os dois `BINDEVENT` est├úo **registrados** (via `AEVENTS`, n├úo s├│ `PEMSTATUS`): `AFTERROWCOLCHANGE ÔåÆ GRDDADOSAFTERROWCOLCHANGE`, `CLICK ÔåÆ CMDOKCLICK`.
+- **`VincularGrade` recupera a grade de verdade**: medi `ColumnCount = 0` **antes** do rebind ÔÇö ├® exatamente o que o `USE IN` + `SQLEXEC` de `BuscarCaracteristicas` provoca no alias ligado ao Grid ÔÇö e depois `ColumnCount=1`, `ControlSource`, `Width=363` (n├úo o default 90), `Header1.Caption`, `Text1.FontName=Tahoma` e `Column1.ReadOnly` todos restaurados. Sem medir o `0`, o teste n├úo provaria nada.
+- Navega├º├úo nas 3 linhas: `Comples` e `Infos` seguem a linha corrente.
+- Os 5 controles travados no legado seguem inacess├¡veis; `Format="K!"` transcrito.
+- Schema conferido no `docs/schema.sql` (UTF-16, `-Raw`): as 5 colunas e larguras de `SigPrCrr` batem com o SELECT do BO e com o cursor placeholder.
+- Compila├º├úo limpa de Form e BO (zero `.err`), estruturas balanceadas, zero `RETURN` dentro de `TRY`, zero `.Self`/`Controls("nome")`/`MESSAGEBOX`.
+- As 5 auditorias do projeto (`VerificarFormBuscaAuxiliar`, `VerificarLookupEmKeyPress`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`) ÔÇö zero achados para SIGPRPRO.
+
+**├Ünica altera├º├úo no `.prg`**: coment├írio de cabe├ºalho registrando a auditoria, por que lookups/Salvar/Cancelar n├úo cabem, e que `=fConfigGeral()` do `Load` legado ├® boilerplate (411 SCX o t├¬m) deliberadamente n├úo portado ÔÇö para o pr├│ximo re-run n├úo "consertar" isso.
+
+Dois enganos meus no probe, corrigidos antes do resultado final: usei `AEVENTS` com 3 argumentos (s├úo 2) e chamei `BOParaForm` de fora, que ├® `PROTECTED` na `FormBase` ÔÇö o *"Property BOPARAFORM is not found"* era artefato do probe, n├úo defeito do form (confirmei que `FormBase` e o can├┤nico `FormCor` tamb├®m os t├¬m PROTECTED, e que a `FormBase` os invoca internamente).
+
+Li├º├úo anexada ├á mem├│ria existente `feedback_task_rerun_sobre_form_ja_migrado` (sexta ocorr├¬ncia), incluindo a t├®cnica de medir `ColumnCount` antes/depois.

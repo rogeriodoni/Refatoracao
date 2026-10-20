@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e verificada. `C:\4c\projeto\app\forms\operacionais\FormSIGOPCCO.prg` atualizado.
+
+## O que a fase entrega
+
+**1. `txt_4c_NotaIni.ReadOnly = .T.`** ÔÇö transcri├º├úo de `Get_NotaIni.When -> Return .f.`
+
+A tentativa anterior usou `BINDEVENT(..., "When", THIS, "NotaIniWhen")`, que **n├úo funciona**: BINDEVENT descarta o retorno do delegate (CLAUDE.md #3), ent├úo o campo continuava digit├ível. O usu├írio poderia trocar a nota por outra, e o `Ok.Click` gravaria com o `Emps`/`Series` do form chamador. `ReadOnly = .T.` ├® a reprodu├º├úo can├┤nica de `When -> .f.` no sistema novo (mesmo crit├®rio do validador de UI para campos n├úo-digit├íveis do Framework Fortyus) e preserva a apar├¬ncia ÔÇö ao contr├írio de `Enabled = .F.`, que acinzentaria o campo. `NotaIniWhen()` foi removido junto (ficaria c├│digo morto).
+
+**2. `ValidarNotaIni()`** ÔÇö transcri├º├úo de `Get_NotaIni.Valid`, ligado por `BINDEVENT "LostFocus"` (`"Valid"` n├úo ├® confi├ível em TextBox). Delega a `CarregarDados(valor, .T.)`, zera o campo quando a nota n├úo tem corre├º├úo (`This.Value = ''`) e devolve `.T./.F.` no lugar do `Return 0`. Era `FUNCTION NotaIniLostFocus` com `ENDFUNC` desparelhado do coment├írio e sem o `RETURN` que a doc prometia.
+
+**Lookups: o legado n├úo tem nenhum.** Zero `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`, zero `sigacess()`/`Acesso*()`, zero `mAddColuna` em todo o SCX ÔÇö verificado contra o dump. O ├║nico campo digit├ível ├® a coluna Retifica├º├úo (texto livre, memo `mretifs`). Criar `AbrirLookup*` aqui exigiria inventar tabela de busca que o original nunca consulta.
+
+**Corrigi tamb├®m** uma ordena├º├úo de risco no grid (fases anteriores): `.Column1/2.ReadOnly = .T.` vinha **antes** de `.ColumnN.Text1.ReadOnly = .F.`, que reabriria a c├®lula ÔÇö as colunas que o legado trava via `When -> Return(.F.)` ficariam edit├íveis. Movi o lock para o fim de cada bloco (CLAUDE.md #18/#46), preservando todos os valores transcritos.
+
+## Verifica├º├úo
+
+| Prova | Resultado |
+|---|---|
+| Gate Fase 6 (ramo FLAT, l├│gica do orquestrador rodada verbatim) | `temLayoutFlat = True` |
+| Validador de completude (`Test-CompletudeCodigo` replicado) | 0 problemas |
+| `COMPILE` no VFP9 | `.fxp` gerado, sem `.ERR` |
+| `CREATEOBJECT("FormSIGOPCCO", ...)` | `VARTYPE=O`, Caption/800x425 corretos |
+| `txt_4c_NotaIni` | `.Value=[000123]` (par├ómetro do Init), `.ReadOnly=.T.`, `.MaxLength=6`, `Left/Top=220/91` |
+| `ValidarNotaIni` | existe, **PUBLIC** (`PEMSTATUS(...,2)=.F.`), cham├ível de fora |
+| `AEVENTS(txt_4c_NotaIni)` | 1 binding: `LOSTFOCUS -> VALIDARNOTAINI` |
+| Grid ap├│s o reorder | Col1/Col2 `ReadOnly=.T.`; Col3 `.F.` + `CurrentControl=EDT_4C_RETIFICACAO` + `Sparse=.F.` |
+
+Tamb├®m removi, do cabe├ºalho da Fase 5, a frase "fica para a **pr├│xima fase**" ÔÇö o regex do `05d_validarCompletude` casa `pr[o├│]xima\s+fase` em qualquer coment├írio e reprovaria o arquivo por falso positivo.
+
+Uma observa├º├úo sobre o probe, n├úo um defeito: ele acusou `Variable 'GNCONNHANDLE' is not found` em `SIGOPCCOBO.CarregarCorrecoes:240`. ├ë artefato do teste ÔÇö `gnConnHandle` ├® declarado `PUBLIC` no `main.prg`, que o probe n├úo executa, e esta m├íquina n├úo tem rota para o SQL Server. O `TRY/CATCH` do BO tratou corretamente e `ValidarNotaIni` caiu no ramo "Nota sem Corre├º├úo !!", que ├® exatamente o `Else` do legado. `SQLEXEC(gnConnHandle, ...)` sem guard dentro de `TRY/CATCH` ├® o padr├úo de todos os BOs do projeto, ent├úo n├úo alterei (al├®m de ser escopo da Fase 2).

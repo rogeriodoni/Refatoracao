@@ -464,7 +464,9 @@ DEFINE CLASS empBO AS BusinessBase
             loc_cSQL = loc_cSQL + "ORDER BY cemps"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -491,7 +493,9 @@ DEFINE CLASS empBO AS BusinessBase
                        "WHERE cemps = " + EscaparSQL(par_cCodigo)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Busca")
-                TABLEREVERT(.T., "cursor_4c_Busca")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Busca") > 1
+                    TABLEREVERT(.T., "cursor_4c_Busca")
+                ENDIF
                 USE IN cursor_4c_Busca
             ENDIF
 

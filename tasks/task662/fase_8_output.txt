@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigproer.prg` est├í completo (1247 linhas, 25 m├®todos), compila limpo e instancia.
+
+## O que a fase entregou
+
+**1. Hooks `FormParaBO` / `BOParaForm`** ÔÇö n├úo s├úo conven├º├úo vazia de CRUD importada: os dois blocos **j├í existiam no SCX legado**, sem esse nome, e cada um estava **duplicado** no migrado:
+
+| hook | legado | sites consolidados |
+|---|---|---|
+| `FormParaBO` | `Buffer = ALLTRIM(This.Value)` + padding + `lnContinua = 1000` | 2 (`ValidarSenhaExec`, `ValidarSenhaSupervisorExec`) |
+| `BOParaForm` | `mensagem = Buffer` / `Buffer = Replicate(Chr(0),2000)` / `lnContinua = 0` | 3 (os tr├¬s la├ºos de protocolo) |
+
+Ambos `PROTECTED` **expl├¡cito** ÔÇö `FormBase` j├í os declara assim e o VFP9 n├úo deixa a subclasse alargar o escopo; omitir o modificador n├úo os tornaria p├║blicos, s├│ esconderia o fato.
+
+**2. Dois defeitos reais encontrados e corrigidos na consolida├º├úo** (`Init`):
+
+- **Aridade**: o legado tem **8** par├ómetros (`pcData` aparece duas vezes na lista, e o 6┬║ sobrescreve o 4┬║); o migrado declarava **7**. Os dois call sites reais em `Formsigproef` passam 8 argumentos, ent├úo `pcHora` ca├¡a em `this_cCodEstabs` e o **c├│digo do estabelecimento (8┬║) era descartado** ÔÇö o Id de loja do `ConfiguraIntSiTefInterativo` sa├¡a errado, sem erro na tela.
+- **Tipo de `pcValor`**: ├® `char(12)` no schema (`cnValors`), mas a property era `this_nValor = 0` com coer├º├úo `VARTYPE="N"` ÔåÆ **sempre 0**. Isso zerava `lcValores` no `IniciaFuncaoSiTefInterativo` e invertia a m├íscara do NSU (`@L 999999` ├ù `@L 999999999`). Virou `this_cValor`; medi no VFP9 que `TRANSFORM` de CHARACTER com picture num├®rica ├® no-op, ent├úo a express├úo do legado continua transcrita literal.
+
+**3. Fora de escopo, documentado no cabe├ºalho**: `CarregarLista`, `BtnSalvarClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` ÔÇö o SCX n├úo tem grade, Page1/Page2, modo CRUD nem bot├úo de gravar (├® di├ílogo de protocolo com UM bot├úo). Invent├í-los violaria o PILAR 1; m├®todo vazio ├® stub.
+
+## Verifica├º├úo
+
+- `automation\VerificarGateFase8Task662.ps1` (AST-only, n├úo dispara migra├º├úo) ÔåÆ **PASSA** pelo ramo **PROTOCOLO**, com os 6 ramos anteriores barrados um a um e `metodosFaltantes` vazio.
+- `automation\ProbeFase8Task662.prg` ÔåÆ instancia o form de verdade: **VEREDITO=PASSA**, zero erro de runtime. Prova a distribui├º├úo dos 8 argumentos e o round-trip real pelo buffer do BO (2000 bytes, `Continua` 1000ÔåÆ0). Os hooks s├úo exercitados por subclasse, n├úo do script, porque s├úo `PROTECTED`.
+- Auditorias `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarLookupEmKeyPress`, `VerificarFormBuscaAuxiliar`: limpas para este form. Sem TODO/stub, sem `MESSAGEBOX`/`ISEMPTY`/`.Self`/`Controls("nome")`, sem `RETURN` dentro de `TRY`.
+
+Uma observa├º├úo que n├úo toquei: o call site em `Formsigproef.prg:791` embrulha `cnvalors` em `TRANSFORM()`, o que o legado n├úo faz (`DO FORM SigPrOer WITH ... Transacao.cnValors, ...`). Como a coluna j├í ├® `char(12)`, `TRANSFORM` ├® in├│cuo ali ÔÇö mas ├® diverg├¬ncia do dump e fica no arquivo do `Formsigproef`, n├úo neste.

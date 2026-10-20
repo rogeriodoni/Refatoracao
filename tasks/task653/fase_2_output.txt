@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+5 procedures, 5 ENDPROCs, 3 TRY/ENDTRY pairs balanced. The file is structurally sound.
+
+**Fase 2 completa.** Adicionei a `SigOpCblBO.prg`:
+- `ObterChavePrimaria()` ÔÇö retorna `cidchaves`
+- `CarregarDoCursor()` ÔÇö mapeia as 40 colunas de `SigCnFBl`
+- `Inserir()` ÔÇö INSERT completo, gera `cidchaves` via `fUniqueIds()` quando vazio, estampa Datas/Horas/Usuarios (igual ao `cmdOk.Click` legado), chama `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE completo das 39 colunas (exceto PK), mesma estampa de auditoria, `RegistrarAuditoria("UPDATE")`
+
+Confirmei a lista de colunas contra `docs/schema.sql` (lido via `Get-Content -Raw`, regra #14) ÔÇö 40 colunas, todas NOT NULL exceto `ddatas`, todas cobertas tanto no INSERT quanto no UPDATE. Nenhum `RETURN` dentro de TRY/CATCH.

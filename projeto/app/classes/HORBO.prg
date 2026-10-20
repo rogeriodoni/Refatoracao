@@ -409,7 +409,9 @@ DEFINE CLASS HORBO AS BusinessBase
 
                         *-- Cria cursor de work para inser??o em lote
                         IF USED("crSigCdThs")
-                            TABLEREVERT(.T., "crSigCdThs")
+                            IF CURSORGETPROP("Buffering", "crSigCdThs") > 1
+                                TABLEREVERT(.T., "crSigCdThs")
+                            ENDIF
                             USE IN crSigCdThs
                         ENDIF
 
@@ -492,7 +494,9 @@ DEFINE CLASS HORBO AS BusinessBase
         TRY
             IF USED("crCalendario")
                 IF USED("crSigCdThs")
-                    TABLEREVERT(.T., "crSigCdThs")
+                    IF CURSORGETPROP("Buffering", "crSigCdThs") > 1
+                        TABLEREVERT(.T., "crSigCdThs")
+                    ENDIF
                     USE IN crSigCdThs
                 ENDIF
 
@@ -725,7 +729,9 @@ DEFINE CLASS HORBO AS BusinessBase
                     ELSE
                         IF RECCOUNT("cursor_4c_LocalCtHr") > 0
                             IF USED("crSigCdThs")
-                                TABLEREVERT(.T., "crSigCdThs")
+                                IF CURSORGETPROP("Buffering", "crSigCdThs") > 1
+                                    TABLEREVERT(.T., "crSigCdThs")
+                                ENDIF
                                 USE IN crSigCdThs
                             ENDIF
 

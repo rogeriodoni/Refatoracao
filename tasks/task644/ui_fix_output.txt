@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei as 3 diferen├ºas (itens #50-52, `SIGOPAUT.OleComm`) contra o arquivo atual e **nenhuma precisa de corre├º├úo** ÔÇö o c├│digo j├í est├í certo:
+
+```foxpro
+THIS.AddObject("obj_4c_OleComm", "OLEControl", "MSCommLib.MSComm")
+WITH THIS.obj_4c_OleComm
+    .Top     = 91      && relatorio aponta diferenca (migrado=0) -> JA ESTA 91
+    .Left    = 480     && relatorio aponta diferenca (migrado=0) -> JA ESTA 480
+    .Width   = 100
+    .Height  = 100     && relatorio aponta diferenca (migrado=80) -> JA ESTA 100
+    .Visible = .F.
+ENDWITH
+```
+(`projeto\app\forms\operacionais\FormSigOpAut.prg:836-839`)
+
+Evid├¬ncia de que o relat├│rio est├í **desatualizado**, n├úo o c├│digo:
+- O relat├│rio cita linhas 323-325 para o `OleComm`; no arquivo atual esse bloco est├í na linha 834-841. O mesmo desalinhamento aparece nos 49 AVISOs (ex.: `cntSombra.lblSombra` apontado na linha 155, mas no arquivo atual `cnt_4c_Cabecalho.lbl_4c_Sombra` existe na linha 227, com `FontBold=.T.`, `FontName=Tahoma`, `FontSize=18`, `Alignment=0`, `Height=40`, `Left=10`, `Top=18`, `Width=THIS.Width-21`, `ForeColor=RGB(0,0,0)` ÔÇö tudo batendo com o "Valor Original" do relat├│rio).
+- O arquivo documenta no cabe├ºalho que foi montado em 8 fases sequenciais; o relat├│rio foi gerado contra um snapshot intermedi├írio (provavelmente fim da Fase 6, antes de `ConfigurarCabecalho`/demais fases consolidarem o arquivo), e a numera├º├úo de linhas cresceu bastante nas fases seguintes.
+
+Como as 3 propriedades j├í batem com o "Valor Original" e o arquivo ├® novo/n├úo versionado (n├úo h├í commit anterior para comparar), n├úo fiz nenhuma edi├º├úo ÔÇö alterar valores que j├í est├úo corretos violaria a instru├º├úo de n├úo tocar em nada al├®m da diferen├ºa real. Recomendo reexecutar o `ValidarUIFidelity`/gerador do relat├│rio sobre o `.prg` final (p├│s Fase 8) para confirmar que as 52 linhas somem.

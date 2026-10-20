@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGPRNSE.prg` atualizado.
+
+## O que j├í estava pronto
+
+Os **20 objetos do `layout.json` j├í estavam todos criados** pelas fases 3ÔÇô5 (`AddObject` conferido um a um). N├úo havia "├║ltimos 50% dos campos" faltando ÔÇö a Fase 6 virou inteiramente trabalho de **lookup**.
+
+Sobre o `cnt_4c_BotoesAcao` (Salvar/Cancelar) do prompt: n├úo se aplica. ├ë um form OPERACIONAL; o container de a├º├úo do legado ├® o `cmdBtnForm` (Limpar / Copiar / Sair), j├í montado em `ConfigurarBotoesAcao`.
+
+## Lookups (os 2 do legado: `getCEmps` e `getDEmps`)
+
+O dump tem exatamente dois, ambos `=fAcessoEmpresa(Usuar, 'C'|'D', This.Value, getCEmps, getDEmps, poDataMgr)` ÔÇö modo LOOKUP de fun├º├úo n├úo portada. Reescrevi o bloco inteiro porque a vers├úo da Fase 5 tinha **dois defeitos que s├│ apareceriam em runtime**:
+
+1. **Picker abriria VAZIO.** O form ├® `DataSession = 2` e o `FormBuscaAuxiliar` ├® `DataSession = 1`. A Fase 5 populava `cursor_4c_BuscaEmpresa` na sess├úo privada e passava o nome para o picker ÔÇö que, na sess├úo default, faz `USED()` dar `.F.` e sai do `ConfigurarGrid` sem montar coluna nenhuma. Agora o cursor ├® populado pelo **pr├│prio `Init` do picker** (dentro da sess├úo dele) e o resultado volta por **propriedade** (`cCodigoSelecionado`/`cDescricaoSelecionada` via `Mostrar()`), nunca por leitura de cursor.
+
+2. **Regra de neg├│cio perdida: controle de acesso.** O `fAcessoEmpresa` (`Framework\sigacess.PRG:732`) n├úo lista `SigCdEmp` inteira ÔÇö restringe por `SIGCDACE` (empresas do usu├írio) e por `SigCdPam.BlqmEmps` (trava na empresa corrente), caindo para a lista completa s├│ quando o usu├írio ├® `4CONTROL` ou n├úo tem nenhuma linha de acesso. A Fase 5 fazia `SELECT Cemps, Razas FROM SigCdEmp` sem filtro ÔÇö o usu├írio enxergaria empresa a que n├úo tem direito. Agora isso vive em `ObterFiltroAcessoEmpresas()`, usada tanto pelo match exato quanto pelo picker (fonte ├║nica). O `And a.Ativas = 1` **n├úo** entra: depende do 7┬║ argumento, e esta chamada tem 6.
+
+Tamb├®m: match exato agora busca por `Razas` no modo D (antes o campo descri├º├úo sempre abria o picker), `Enter` com campo vazio limpa os dois controles (ramo `If llRet` do legado), guarda de reentr├óncia passou ao padr├úo wrapper + `Exec` (imune a `RETURN` antecipado, regra #47), e foram adicionados os `BINDEVENT "DblClick"` + handlers que o prompt pede.
+
+**Diverg├¬ncia deliberada:** ESC/Cancelar no picker **n├úo** apaga o que o usu├írio digitou. O legado zera (`llLpa = Lastkey()=27`), mas apagar impede o usu├írio de corrigir o valor ÔÇö regra #50.
+
+## Evid├¬ncias
+
+| Verifica├º├úo | Resultado |
+|---|---|
+| `COMPILE` form + BO (VFP9) | `COMPILE_OK`, `.err` vazios |
+| Probe funcional (`ProbeNse660F6.prg`, 7 testes) | `PROBE_OK` |
+| `VerificarLookupEmKeyPress` | ERRO=0 AVISO=0 |
+| `VerificarFormBuscaAuxiliar` | OK (1┬║ arg = handle) |
+| `VerificarColunaEmpresaSQL` | ERRO=0 |
+| `VerificarFuncoesNaoDefinidas` | OK |
+| `VerificarMetodoProtegidoChamadoDeFora` | OK |
+| `VerificarPropriedadesInexistentes` | OK |
+
+O probe instancia o form de verdade e mede: escopos (alvos de BINDEVENT PUBLIC, internos PROTECTED), tecla comum n├úo dispara picker, Enter vazio limpa ambos, guarda de reentr├óncia bloqueia e depois libera, e o `When` de `getDEmps` nos dois sentidos.
+
+**Limita├º├úo que fica registrada:** o SQL Server (192.168.200.10) n├úo ├® alcan├º├ível desta m├íquina, ent├úo o probe prova as guardas e que **nenhum modal abre** (o script termina dentro do timeout), mas **n├úo** prova a grade do picker preenchida nem o match exato contra dados reais. Isso s├│ se confirma com banco.
+
+Dois scripts de auditoria do projeto est├úo quebrados por conta pr├│pria (`$PSScriptRoot` vazio no default do `param()`): `VerificarFormBuscaAuxiliar.ps1` e `VerificarPropriedadesInexistentes.ps1` falham sem `-Caminho` expl├¡cito. N├úo mexi neles ÔÇö est├í fora do escopo desta fase, mas vale consertar.

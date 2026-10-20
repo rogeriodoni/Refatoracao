@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1 conclu├¡da. Criei `C:\4c\projeto\app\classes\SigOpBcbBO.prg` (11.608 bytes, ASCII puro, CRLF).
+
+## O que a tela faz (lido do dump legado, n├úo do esqueleto)
+
+`SIGOPBCB` ├® "Baixa de C├│digos de Barras": o operador l├¬ a etiqueta, o `Valid` do campo consulta `SigOpEtq` por `CBars` e exibe Grupo/Conta/Produto/Descri├º├úo/Qtde(1)/Qtde(2) + unidades; o bot├úo "Baixa" grava `INSERT SigMvCab` + `INSERT SigMvHst` + `UPDATE SigOpEtq` numa transa├º├úo.
+
+## Conte├║do entregue
+
+**33 propriedades**, agrupadas por origem e cada uma com a coluna e o tipo exato do schema: etiqueta (`SigOpEtq`, 9), produto (`SigCdPro`, 3), par├ómetro (`SigCdPac`, 1), cabe├ºalho do movimento (`SigMvCab`, 11), hist├│rico (`SigMvHst`, 7), estado da leitura (2 flags para as duas recusas do `Valid` legado ÔÇö "N├úo Localizado" e "J├í Baixado").
+
+**`Init()`** com `DODEFAULT("SigMvHst")`, `this_cTabela = "SigMvHst"`, `this_cCampoChave = "cidchaves"`, mais as duas constantes do `BaixaBarra` legado (`PADR("BAIXA ETIQUETA", 20)` e `Opers = "S"`) e o usu├írio logado.
+
+## Corre├º├Áes sobre o esqueleto gerado
+
+- `this_cCampoChave` era `"cods"` ÔÇö **essa coluna n├úo existe** em `SigMvHst`. A PK real ├® `cidchaves` (constraint `sigmvhst_cidchaves`).
+- `DODEFAULT()` sem a tabela deixaria `this_oDataAccess` como `.NULL.`.
+
+## Notas gravadas no cabe├ºalho para a Fase 2
+
+- **Chaves posicionais** (regra #42): `EmpDopNums` = 3+20+6 = **29**, `EmpGruEsts` = 3+10+10 = **23**, conferidas contra o `char(N)` destino ÔÇö `PADR`, nunca `ALLTRIM`.
+- **Cobertura NOT NULL** (regra #22) medida no schema: `SigMvCab` tem 137 NOT NULL, 26 com DEFAULT ÔåÆ **111 a cobrir**; `SigMvHst` tem 36 NOT NULL, **0 com DEFAULT** ÔåÆ **36 a cobrir**. O gate `Validate-InsertNotNull` bloqueia se faltar alguma.
+- **`fRecalculaP`/`fRecalculaC`**: ausentes do acervo. Documentei a omiss├úo deliberada (regra #27 ÔÇö fun├º├úo que devolve valor de c├ílculo fica ausente e vis├¡vel, n├úo vira stub), seguindo o precedente de `SigPrGlpBO`/`SigPrGlxBO`/`dmoBO`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo VFP9: limpa** ÔÇö gerou o `.FXP` sem produzir `.err`. O `.FXP` foi removido depois (evita p-code velho).
+- `05d_validarCompletude`: 0 problemas (sem TODO/stub/procedure vazia/termo de pend├¬ncia).
+- `VerificarFuncoesNaoDefinidas` e `VerificarCamposCursorBO`: nenhum achado.
+
+Duas ressalvas: o VFP9 **compila** nesta sess├úo, mas n├úo **executa** (sai sem rodar o script ÔÇö sem window station interativa), ent├úo n├úo instanciei o BO; e a causa da falha anterior foi o CLI ter respondido pedindo confirma├º├úo em vez de trabalhar ÔÇö o arquivo nunca chegou a existir.

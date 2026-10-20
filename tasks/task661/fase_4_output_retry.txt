@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da e verificada.
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 para form **OPERACIONAL** (ramo *flat*, `OrquestradorMigracao.ps1:7044-7047`) exige **tr├¬s** coisas no `.prg`: `grd_4c_*`, `cmd_4c_/cmg_4c_` **e** um m├®todo de carga (`CarregarLista|CarregarDados|MontaGrade`). A grade e os 5 bot├Áes j├í estavam l├í; a carga tinha sido deliberadamente adiada para as fases 7-8 ÔÇö era exatamente o terceiro requisito que faltava.
+
+## O que foi feito
+
+**`Formsigproef.prg`** (413 ÔåÆ 570 linhas)
+- `CarregarDados()` (PUBLIC) ÔÇö funil ├║nico que o legado chama no fim do `Init` e no `LostFocus` do `Dt_Final`: `LockScreen`, `WAIT WINDOW 'Aguarde...'`, chamada ao BO e v├¡nculo da grade.
+- `VincularGrade()` ÔÇö transcreve o bloco `With CntTransa.Grade` do fim do `SqlTrans`, na ordem obrigat├│ria **ColumnCount ÔåÆ RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header1.Caption** (o `RecordSource` reseta largura e legenda; sem `ColumnCount` antes, a grade auto-expandiria para as 13 colunas do cursor). Inclui o `DynamicForeColor` que pinta de vermelho a transa├º├úo cancelada, `GO BOTTOM` + `Refresh` (popular cursor n├úo repinta grade) e o `SetFocus` guardado por `Visible`.
+- `InicializarForm` agora chama `CarregarDados()` (pulado em `ModoTeste`/`ValidandoUI`), e o `RETURN .F.` que estava **dentro do TRY** foi trocado pelo padr├úo de flag (regra #1).
+- `Destroy` fecha os tr├¬s cursores pr├│prios da tela.
+
+**`sigproefBO.prg`** (276 ÔåÆ 496 linhas) ÔÇö `BuscarTransacoes()`, que o pr├│prio BO j├í citava em coment├írio mas ningu├®m havia escrito: as duas queries do legado (`Selecao` em `SigFiTef`, `Selecao2` em `SigMvCab ├ù SigCdOpe`) e a montagem do `cursor_4c_Transacao` com as convers├Áes originais (hora `@R xx:xx:xx`, centavos/100, `DDMMYYYY` ÔåÆ DATE). A chave de busca em `Selecao2` ├® **posicional de 29 chars** com `PADR` expl├¡cito (regra #42) ÔÇö colunas conferidas no `docs/schema.sql` via `Get-Content -Raw`.
+
+## Verifica├º├úo
+
+- **Compila├º├úo limpa**: `COMPILE_OK`, `.err` vazios nos dois arquivos.
+- **Instancia├º├úo headless** (`automation/ProbeProef661F4.prg`): `CREATEOBJECT` devolve objeto; os 9 filhos de `cnt_4c_Transa` com a geometria exata do dump; grade 41/8/569/230 com `ColumnCount=7` e as 7 larguras/legendas; os 5 `.Picture` (`imprimir.bmp`, `e_exit1.bmp`, `sair.bmp`) existem em `vbmp\` e batem com o dump; `CarregarDados` ├® PUBLIC; sem conex├úo ele devolve `.F.` com *"Sem conex├úo com o banco de dados."*, sem Program Error cru.
+
+Dois pontos para registro: (1) a consulta real n├úo p├┤de ser exercitada ÔÇö o SQL Server 192.168.200.10 ├® inalcan├º├ível desta m├íquina, ent├úo a prova de que ela devolve linha fica para quem tiver o banco; (2) `businessbase.prg:346` e `dataaccess.prg:44` usam `IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0`, e como VFP9 n├úo faz short-circuit em OR, esse guard estoura justamente quando a vari├ível n├úo existe. N├úo toquei nas classes base no meio do pipeline, mas o defeito ├® real e vale um bug pr├│prio.

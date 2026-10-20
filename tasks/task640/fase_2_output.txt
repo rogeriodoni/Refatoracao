@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Cleaned up ÔÇö only `sigopagrBO.prg` remains. Fase 2/8 is complete.
+
+**Summary:** Completed `sigopagrBO.prg` with BO methods appropriate to this dialog's real behavior. SIGOPAGR is a modal selection dialog (DataSession=1, shared) that never writes to SQL Server except a read-only lookup ÔÇö verified by reviewing the full legacy source ÔÇö so rather than fabricating a fake `INSERT`/`UPDATE` against `SigCdPro` (which would corrupt that table and violate PILAR 2), I followed the established project pattern (same as `SigMvSbnBO`/`SIGMVCMVBO`):
+
+- `CarregarDoCursor()` ÔÇö maps the grouped-item cursor row to `this_*` properties
+- `ObterChavePrimaria()` ÔÇö composite Produto+Tamanho key
+- `MontarItensAgrupados()` ÔÇö local grouping SELECT (literal transcription of the legacy `Init()` query) from the caller's movement cursor
+- `MarcarTodosItens()`, `AtualizarItemMovimento()`, `RecalcularTotaisMovimento()` ÔÇö literal transcriptions of the legacy `SelTudo`/`apaga`/`btnConfirmar` cursor-level logic
+- `BuscarImagemProdutoPorCodigo()` ÔÇö the one genuine SQL Server read (product image lookup)
+- `Inserir()`/`Atualizar()` overridden as explicit refusals (PROTECTED, matching precedent) since no real persisted write exists for this entity; `RegistrarAuditoria()` is intentionally never called, with the reasoning documented in the header comment
+
+Verified with a scoped VFP9 `COMPILE` ÔÇö clean, no errors ÔÇö then removed the temporary check script and generated artifacts.

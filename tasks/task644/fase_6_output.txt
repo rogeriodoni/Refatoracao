@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is managed by the pipeline orchestrator itself (05_migracao is "IN_PROGRESS"), not something I should hand-edit. My job for Phase 6 is done ÔÇö the form file is updated correctly.
+
+## Summary
+
+Completed Phase 6/8 for `FormSigOpAut.prg`. Key finding: this form has **no lookup fields at all** ÔÇö I verified by scanning the full legacy source (`SigOpAut_form_codigo_fonte.txt`) for `fwbuscaext`, `fwBuscaSel`, `sigacess(`, and F4/F5 handling ÔÇö none exist. `SigOpAut` is a small modal dialog (payment/check authentication), not a cadastro with grupo/lookup fields, so the generic Phase 6 lookup template didn't apply here.
+
+What was actually missing was the one remaining object from the SCX dump not yet created: the **`OleComm`** control (serial-port MSComm, used later in `autentica()` to talk to the check/fiscal printer). I added it as `obj_4c_OleComm` in `ConfigurarCampos()`, following the exact canonical pattern already established in `FormSigReEch.prg` (`obj_4c_OModem`):
+- Guarded against `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` (instantiating an OLE hardware control in test mode hangs VFP indefinitely).
+- Wrapped in its own `TRY/CATCH` so a missing OCX doesn't abort the rest of the form.
+- Excluded by name from `TornarControlesVisiveis` ÔÇö forcing it visible would've drawn a blank 100├ù100 OLE box over the grid, since its `Top/Left` (91/480) falls inside the grid's bounding box.
+
+I also updated the header comment block to document explicitly why no lookups were implemented (avoiding a silent gap per the project's completeness rule) and verified the file's structural balance (13 PROCEDURE/ENDPROC, 9 TRY/ENDTRY, 11 WITH/ENDWITH, 1 ENDDEFINE ÔÇö all matched).
+
+Remaining work (Click handlers for Sair/Imprimir/Grade, form-level KeyPress F2/F3, the `autentica()` method itself) is explicitly deferred to Phases 7/8, as noted in the file's banner comment.

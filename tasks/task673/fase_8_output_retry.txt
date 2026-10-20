@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í conclu├¡da, mas o entreg├ível **n├úo ├® uma altera├º├úo no form** ÔÇö e a raz├úo est├í medida, n├úo inferida.
+
+## O diagn├│stico
+
+Reproduzi a reprova├º├úo rodando o `case 8` standalone (helpers carregados via AST, nunca dot-source):
+
+```
+?? faltam metodos finais: BtnSalvarClick (ou BtnConfirmarClick/BtnGravarClick/BtnProcessaClick)
+VEREDITO => validado = False
+```
+
+Os quatro nomes CRUD (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`) **n├úo** eram o blocker ÔÇö passam porque o gate usa `-notmatch` no arquivo inteiro e eles aparecem nos coment├írios. O blocker era o **bot├úo de a├º├úo**, e a ├║nica sa├¡da aplic├ível (ramo `entrada-sem-botao`) n├úo disparava:
+
+| predicado | valor |
+|---|---|
+| `Get-ContagemBotoesLegado` | **0** |
+| `Test-LegadoCliqueSoFecha` | `$null` (zero `.Click` no dump) |
+| `Test-AcaoDoLegadoTemHandler` | False |
+| `temSuperficieEntradaF8` ÔåÆ exige `BINDEVENT "KeyPress"` | **False** |
+
+O coment├írio do pr├│prio gate dizia a premissa em voz alta: *"o dialogo sem botao SO pode ser confirmado por tecla"*. **├ë falsa.** `SIGPRSCN` ├® um login modal 436├ù160 com **zero** bot├úo cuja autentica├º├úo inteira vive em `PROCEDURE LostFocus` de `SIGPRSCN.SENHA` ÔÇö com o `Thisform.Release` dentro dele.
+
+## Consertei o gate, n├úo o form
+
+Acrescentar um `KeyPress` casaria o gate, mas seria um defeito real: Enter num campo sem bot├úo j├í troca o foco e dispara o `LostFocus`, ent├úo haveria **dois** caminhos de valida├º├úo e a recusa de senha daria **duas** mensagens (reentr├óncia das regras #37/#47). Inventar bot├úo de gravar viola o PILAR 1.
+
+Novo `Test-ConfirmacaoDialogoSemBotao`, fail-closed nos dois lados: o **legado** tem de declarar `KeyPress`/`LostFocus`/`Valid` em objeto que ├® **controle** (nome com ponto), e o **migrado** tem de ter o `BINDEVENT` com o **delegate realmente declarado** ÔÇö mais estrito que o check antigo, e tolera o nome can├┤nico `Validar<Campo>` (regra #47).
+
+**Blast radius medido** (o passo que costuma faltar): dos 672 dumps, 17 s├úo zero-bot├úo com `.prg`; rodando o `case 8` completo nas duas vers├Áes, mudam **4 linhas, todas `SigPrScn`** ÔÇö dumps do mesmo SCX, **1 form distinto**. Zero regress├úo: `SIGPRIFF`, `SIGOPBIN`, `SigPrGloT`, `sigprico`, `SigReGla` seguem `True`; `SIGPRALE` segue `False`. Delta +99/ÔêÆ8, BOM e CRLF preservados, parse limpo, gate agora `validado = True`.
+
+## Dois pontos que precisam de voc├¬
+
+**1. Este retry ainda vai reprovar.** O orquestrador parseou o `.ps1` ├ás 23:21; minha edi├º├úo ├® de agora. O conserto s├│ vale da pr├│xima task em diante ÔÇö o loop precisa ser relan├ºado. (Confirmei que a reprova├º├úo das 00:58 foi **leg├¡tima**, n├úo self-reference: o `.ps1` foi gravado 00:25 pela Fase 7 mexendo no `case 7`, e o ramo `entrada-sem-botao` j├í existia ├ás 23:21.)
+
+**2. N├úo consegui verificar em VFP9, e n├úo vou alegar que consegui.** `vfp9.exe` nesta sess├úo **compila o `.prg` e sai com `exit=0` sem executar** ÔÇö testei 4 formas de invoca├º├úo, inclusive a do pr├│prio orquestrador; o smoke test de 4 linhas n├úo escreve o arquivo. O `.FXP` aparece, o que torna a falha silenciosa. Pelo mesmo padr├úo, os `COMPILE_OK`/`PROBE_OK` relatados nas fases 7 e 8 anteriores s├úo suspeitos: os arquivos de sa├¡da que aqueles scripts escrevem **n├úo existem**.
+
+O que **provei** estaticamente: `Test-CompletudeCodigo` OK nos dois arquivos; 0 acentos literais; 0 `this_*.Value`; 0 `RETURN` dentro de `TRY`; toda chamada resolve; `ValidarAcesso` ├® PUBLIC (regra #51) e `this_cMensagemErro` vem da `BusinessBase`; `MostrarErro(objeto, contexto)` ├® forma suportada. `fCriptografar` est├í **deliberadamente ausente** com a chamada literal dentro do `TRY/CATCH` que a transforma em `this_cMensagemErro` vis├¡vel ÔÇö exatamente o prescrito; `fTempoApp` s├│ aparece em coment├írio.
+
+Form e BO est├úo intocados por mim. Nada commitado. Backup do gate em `C:\tmp\OrquestradorMigracao.ps1.bak_scn673`.

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo
+
+Confirmei que este ├® o mesmo bloqueio de infraestrutura j├í documentado em 100+ tasks anteriores (e j├í nas 7 tentativas anteriores desta mesma task679):
+
+```
+Test-NetConnection 192.168.200.10 -Port 1433
+  TcpTestSucceeded: False
+  PingSucceeded:    False
+  SourceAddress:    192.168.199.108  (sub-rede 199.x, sem rota para 200.x)
+```
+
+O log mostra o erro ocorrendo em **"[ETAPA 1B] Conectando ao banco de dados"**, *antes* de qualquer `CREATEOBJECT` do form ou do BO ser alcan├ºado ÔÇö o `TestFormWrapper.prg` faz um `SQLSTRINGCONNECT` incondicional nessa etapa, e o c├│digo de `FormSIGPRSTF.prg`/`SIGPRSTFBO.prg` nunca chega a executar. ├ë a m├íquina do pipeline que n├úo tem rota de rede para `192.168.200.10:1433`, n├úo um defeito no `.prg`.
+
+Revisei o form (di├ílogo modal simples de senha, sem PageFrame/tabela pr├│pria, com coment├írios de fase j├í bastante detalhados) e o BO linha a linha ÔÇö incluindo o checklist de regras do CLAUDE.md (TRY/CATCH, BINDEVENT em m├®todos PUBLIC, `.Picture` existente em `vbmp\cadastro_cancelar_60.jpg` ÔÇö confirmado), e n├úo encontrei nenhum problema de c├│digo. Tamb├®m li o output da tentativa 7 (`06_testForm_fix_output_t7.txt`), que chegou ├á mesma conclus├úo com a mesma evid├¬ncia.
+
+Deixei ambos os arquivos **intactos**, sem usar o Write tool, para n├úo arriscar regress├úo em c├│digo j├í correto ÔÇö conforme o padr├úo estabelecido na mem├│ria desta falha recorrente. Atualizei essa mem├│ria com a reincid├¬ncia da tentativa 8/10: faltam s├│ 2 tentativas antes de esgotar o or├ºamento da task, e nenhuma delas pode ser resolvida editando `.prg` ÔÇö ├® necess├írio que a m├íquina que roda o pipeline ganhe rota de rede at├® `192.168.200.0/24`.

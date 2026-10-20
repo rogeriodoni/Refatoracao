@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balance correctly (6 PROCEDUREs/ENDPROCs, 3 WITH/ENDWITH pairs, 1 DEFINE CLASS/ENDDEFINE).
+
+**Fase 3/8 conclu├¡da.** Criado `C:\4c\projeto\app\forms\operacionais\FormSIGOPCCO.prg`:
+
+- `DEFINE CLASS FormSIGOPCCO AS FormBase` ÔÇö layout **flat** (sem PageFrame), pois o legado SIGOPCCO ├® um di├ílogo modal ├║nico (800x425), n├úo um CRUD Lista/Dados. Isso segue o padr├úo j├í estabelecido em `FormSigOpCcl.prg` para forms OPERACIONAL sem Page1/Page2.
+- Propriedades de contexto (`this_oFormPai`, `this_cEmps`, `this_cSeries`, `this_dEmisDe`, `this_dEmisAte`, `this_cNfis`) com os mesmos nomes j├í usados em `SIGOPCCOBO.prg` (evita o mismatch de nomenclatura da regra #Erro139).
+- `Init(par_oFormPai, par_cEmps, par_cSeries, par_dEmisDe, par_dEmisAte, par_cNfis)` ÔÇö recebe os par├ómetros equivalentes ao `LParameters pForm,Emp,Serie,EmisDe,EmisAte,NFis` do legado, valida por `VARTYPE`, define `Caption` com `CHR()`, e alterna `WindowType` para modal s├│ fora de modo de teste (evita timeout do VFP9 `-T`).
+- `InicializarForm()` ÔÇö cria `SIGOPCCOBO`, monta o cabe├ºalho, chama `TornarControlesVisiveis`.
+- `ConfigurarCabecalho()` ÔÇö container `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, geometria transcrita literalmente do dump (Top/Left/Width/Height/cores exatos), com os nomes definidos em `mapeamento.json`.
+- `Destroy()` fecha o cursor local defensivamente e termina com `DODEFAULT()` (restaura o menu).
+
+Grade de ocorr├¬ncias, bot├Áes Confirmar/Cancelar, campo Nota e os eventos reais ficam para as Fases 4 a 8, como planejado.

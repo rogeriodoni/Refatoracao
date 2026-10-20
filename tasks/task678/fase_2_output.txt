@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2/8 conclu├¡da: `SigPrSndBO.prg` agora tem o CRUD completo.
+
+Adicionei a `SigPrSndBO.prg` (`C:\4c\projeto\app\classes\SigPrSndBO.prg`):
+- **ObterChavePrimaria()** ÔÇö retorna `cidchaves` (PK char(20))
+- **CarregarDoCursor()** ÔÇö mapeia as 15 colunas do schema (`SELECT (alias)` antes de ler campos, `TratarNulo`/`ConverterParaData`)
+- **Inserir()** ÔÇö `INSERT INTO SigPrSnd` cobrindo todas as 15 colunas (14 NOT NULL + `datas` nullable), gera `cidchaves` via `fUniqueIds()` se vazio, chama `RegistrarAuditoria("INSERT")`
+- **Atualizar()** ÔÇö `UPDATE` por `cidchaves`, chama `RegistrarAuditoria("UPDATE")`
+
+Validei contra `docs\schema.sql` (UTF-16, lido com `Get-Content -Raw`) e usei como refer├¬ncia `SigPrSddBO.prg` ÔÇö BO j├í existente na mesma tabela `SigPrSnd` ÔÇö para manter o padr├úo de helpers (`EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL`), tratamento de erro (CATCH sempre com `MostrarErro`) e aus├¬ncia de `RETURN` dentro de `TRY/CATCH`. Tentei compilar com o VFP9 local para checagem de sintaxe, mas o execut├ível n├úo responde neste ambiente (trava sem gerar `.fxp` nem log) ÔÇö revis├úo foi s├│ manual/comparativa.
+
+Pr├│ximo passo do pipeline: Fase 3 (cria├º├úo do Form).

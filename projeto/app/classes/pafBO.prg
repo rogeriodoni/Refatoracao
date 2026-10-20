@@ -73,7 +73,9 @@ DEFINE CLASS pafBO AS BusinessBase
             ENDIF
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -138,7 +140,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        " WHERE Dopes = " + EscaparSQL(ALLTRIM(par_cDopes))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -243,7 +247,9 @@ DEFINE CLASS pafBO AS BusinessBase
                           " WHERE Dopes = " + EscaparSQL(ALLTRIM(THIS.this_cDopes))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_UpdPaf")
-                TABLEREVERT(.T., "cursor_4c_UpdPaf")
+                IF CURSORGETPROP("Buffering", "cursor_4c_UpdPaf") > 1
+                    TABLEREVERT(.T., "cursor_4c_UpdPaf")
+                ENDIF
                 USE IN cursor_4c_UpdPaf
             ENDIF
 
@@ -348,7 +354,9 @@ DEFINE CLASS pafBO AS BusinessBase
             IF loc_lTipoValido AND !EMPTY(ALLTRIM(loc_cUpdate1))
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_FkA")
-                    TABLEREVERT(.T., "cursor_4c_FkA")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_FkA") > 1
+                        TABLEREVERT(.T., "cursor_4c_FkA")
+                    ENDIF
                     USE IN cursor_4c_FkA
                 ENDIF
 
@@ -359,7 +367,9 @@ DEFINE CLASS pafBO AS BusinessBase
                 IF loc_nRes1 >= 0
                     *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                     IF USED("cursor_4c_FkB")
-                        TABLEREVERT(.T., "cursor_4c_FkB")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_FkB") > 1
+                            TABLEREVERT(.T., "cursor_4c_FkB")
+                        ENDIF
                         USE IN cursor_4c_FkB
                     ENDIF
 
@@ -396,7 +406,9 @@ DEFINE CLASS pafBO AS BusinessBase
             loc_cSQL = "SELECT Series FROM SigCdOpe WHERE Dopes = " + EscaparSQL(par_cDopPaf)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_OpeS")
-                TABLEREVERT(.T., "cursor_4c_OpeS")
+                IF CURSORGETPROP("Buffering", "cursor_4c_OpeS") > 1
+                    TABLEREVERT(.T., "cursor_4c_OpeS")
+                ENDIF
                 USE IN cursor_4c_OpeS
             ENDIF
 
@@ -416,7 +428,9 @@ DEFINE CLASS pafBO AS BusinessBase
                            EscaparSQL(ALLTRIM(go_4c_Sistema.cCodEmpresa) + loc_cSeries)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_SerieEx")
-                    TABLEREVERT(.T., "cursor_4c_SerieEx")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_SerieEx") > 1
+                        TABLEREVERT(.T., "cursor_4c_SerieEx")
+                    ENDIF
                     USE IN cursor_4c_SerieEx
                 ENDIF
 
@@ -441,7 +455,9 @@ DEFINE CLASS pafBO AS BusinessBase
                                EscaparSQL(ALLTRIM(go_4c_Sistema.cCodEmpresa) + loc_cSeries) + ")"
                     *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                     IF USED("cursor_4c_InsS")
-                        TABLEREVERT(.T., "cursor_4c_InsS")
+                        IF CURSORGETPROP("Buffering", "cursor_4c_InsS") > 1
+                            TABLEREVERT(.T., "cursor_4c_InsS")
+                        ENDIF
                         USE IN cursor_4c_InsS
                     ENDIF
 
@@ -487,7 +503,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        " WHERE a.pafEcfs = 1"
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_LocalOpe2")
-                TABLEREVERT(.T., "cursor_4c_LocalOpe2")
+                IF CURSORGETPROP("Buffering", "cursor_4c_LocalOpe2") > 1
+                    TABLEREVERT(.T., "cursor_4c_LocalOpe2")
+                ENDIF
                 USE IN cursor_4c_LocalOpe2
             ENDIF
 
@@ -503,7 +521,9 @@ DEFINE CLASS pafBO AS BusinessBase
                 loc_cSQL = "SELECT Dopes, Inativas, Docs, cMd5s, cnCaixas, TrNfis FROM SigCdPaf"
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_PafExist")
-                    TABLEREVERT(.T., "cursor_4c_PafExist")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_PafExist") > 1
+                        TABLEREVERT(.T., "cursor_4c_PafExist")
+                    ENDIF
                     USE IN cursor_4c_PafExist
                 ENDIF
 
@@ -556,7 +576,9 @@ DEFINE CLASS pafBO AS BusinessBase
                                    EscaparSQL(loc_cTrfNfEnc) + ")"
                         *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                         IF USED("cursor_4c_InsP")
-                            TABLEREVERT(.T., "cursor_4c_InsP")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_InsP") > 1
+                                TABLEREVERT(.T., "cursor_4c_InsP")
+                            ENDIF
                             USE IN cursor_4c_InsP
                         ENDIF
 
@@ -585,7 +607,9 @@ DEFINE CLASS pafBO AS BusinessBase
                                    EscaparSQL(ALLTRIM(cursor_4c_PafExist.Dopes))
                         *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                         IF USED("cursor_4c_DelP")
-                            TABLEREVERT(.T., "cursor_4c_DelP")
+                            IF CURSORGETPROP("Buffering", "cursor_4c_DelP") > 1
+                                TABLEREVERT(.T., "cursor_4c_DelP")
+                            ENDIF
                             USE IN cursor_4c_DelP
                         ENDIF
 
@@ -659,7 +683,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        EscaparSQL(THIS.Dcript(ALLTRIM(par_cDopesDecod)))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Md5Val")
-                TABLEREVERT(.T., "cursor_4c_Md5Val")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Md5Val") > 1
+                    TABLEREVERT(.T., "cursor_4c_Md5Val")
+                ENDIF
                 USE IN cursor_4c_Md5Val
             ENDIF
 
@@ -745,7 +771,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        " WHERE a.pafEcfs = 1 AND a.Dopes = " + EscaparSQL(par_cDopesDecod)
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_OpeRed")
-                TABLEREVERT(.T., "cursor_4c_OpeRed")
+                IF CURSORGETPROP("Buffering", "cursor_4c_OpeRed") > 1
+                    TABLEREVERT(.T., "cursor_4c_OpeRed")
+                ENDIF
                 USE IN cursor_4c_OpeRed
             ENDIF
 
@@ -785,7 +813,9 @@ DEFINE CLASS pafBO AS BusinessBase
                            " WHERE Dopes = " + EscaparSQL(loc_cDopesEnc)
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_UpdRed")
-                    TABLEREVERT(.T., "cursor_4c_UpdRed")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_UpdRed") > 1
+                        TABLEREVERT(.T., "cursor_4c_UpdRed")
+                    ENDIF
                     USE IN cursor_4c_UpdRed
                 ENDIF
 
@@ -824,7 +854,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        EscaparSQL(THIS.Dcript(ALLTRIM(par_cDopesPlain)))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ExPaf")
-                TABLEREVERT(.T., "cursor_4c_ExPaf")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ExPaf") > 1
+                    TABLEREVERT(.T., "cursor_4c_ExPaf")
+                ENDIF
                 USE IN cursor_4c_ExPaf
             ENDIF
 
@@ -857,7 +889,9 @@ DEFINE CLASS pafBO AS BusinessBase
                        EscaparSQL(ALLTRIM(par_cDopesPlain))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ExOpe")
-                TABLEREVERT(.T., "cursor_4c_ExOpe")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ExOpe") > 1
+                    TABLEREVERT(.T., "cursor_4c_ExOpe")
+                ENDIF
                 USE IN cursor_4c_ExOpe
             ENDIF
 

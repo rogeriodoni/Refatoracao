@@ -1,0 +1,33 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+FORM W=580 H=334 Caption=[Seleção da Transação]
+CNT_TRANSA ControlCount=9
+  [1] LBL_4C_TITULO        base=Label          T=9 L=191 W=171 H=21 Vis=.T.
+  [2] LIN_4C_LINE1         base=Line           T=29 L=7 W=571 H=0 Vis=.T.
+  [3] SHP_4C_SHAPE1        base=Shape          T=277 L=245 W=331 H=53 Vis=.T.
+  [4] GRD_4C_DADOS         base=Grid           T=41 L=8 W=569 H=230 Vis=.T.
+  [5] CMD_4C_GERENCIAL     base=Commandbutton  T=281 L=251 W=64 H=46 Vis=.T.
+  [6] CMD_4C_ULTIMO        base=Commandbutton  T=281 L=315 W=64 H=46 Vis=.T.
+  [7] CMD_4C_REIMPRIME     base=Commandbutton  T=281 L=379 W=64 H=46 Vis=.T.
+  [8] CMD_4C_CANCELA       base=Commandbutton  T=281 L=443 W=64 H=46 Vis=.T.
+  [9] CMD_4C_OK            base=Commandbutton  T=281 L=507 W=64 H=46 Vis=.T.
+GRADE T=41 L=8 W=569 H=230 ColumnCount=7 ReadOnly=.T. RecordMark=.F. DeleteMark=.F.
+COLUNAS (antes do bind)
+  Col1 W=70    Cap=[Rede] CS=[]
+  Col2 W=78    Cap=[No.Autorização] CS=[]
+  Col3 W=75    Cap=[Valor] CS=[]
+  Col4 W=65    Cap=[Data] CS=[]
+  Col5 W=55    Cap=[Hora] CS=[]
+  Col6 W=60    Cap=[Cupom] CS=[]
+  Col7 W=120   Cap=[Operação] CS=[]
+BOTOES
+  cmd_4c_Gerencial   T=281 L=251 W=64 H=46 Cap=[<F2>\<Gerencial] Pic=[imprimir.bmp]=OK
+  cmd_4c_Ultimo      T=281 L=315 W=64 H=46 Cap=[<F3>\<Ultimo] Pic=[imprimir.bmp]=OK
+  cmd_4c_Reimprime   T=281 L=379 W=64 H=46 Cap=[<F4>\<Reimprimir] Pic=[imprimir.bmp]=OK
+  cmd_4c_Cancela     T=281 L=443 W=64 H=46 Cap=[<F5>\<Cancelar] Pic=[e_exit1.bmp]=OK
+  cmd_4c_Ok          T=281 L=507 W=64 H=46 Cap=[<ESC> Sair] Pic=[sair.bmp]=OK
+ESCOPO(prot) Form.CarregarDados=.F. BO.BuscarTransacoes=.F. BO.CarregarDoCursor=.F.
+TYPE(gnConnHandle)=N
+CarregarDados retorno=.F. MsgBO=[Sem conexão com o banco de dados.] cursor=.F. RecordSource=[]
+RESULTADO=OK

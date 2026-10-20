@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+Analisei os 4 achados do pass FUNCTIONAL contra o c├│digo real e a mem├│ria de reincid├¬ncias conhecidas desse mesmo detector:
+
+**N├úo alterados (falsos positivos confirmados por grep):**
+- **[CONTAINER-VISIVEL] CNT_4C_SOMBRA** ÔÇö o container nunca recebe `.Visible = .F.` em lugar nenhum do arquivo; ├® o cabe├ºalho, sempre vis├¡vel (mesmo padr├úo de dezenas de reincid├¬ncias j├í catalogadas na mem├│ria).
+- **[METODO-INEXISTENTE] THIS.Caption()** ÔÇö `Caption` s├│ aparece como propriedade (`THIS.Caption = ...`), nunca com par├¬nteses de chamada; ├® leitura/atribui├º├úo de property nativa, n├úo inven├º├úo de m├®todo.
+
+**Corrigidos em `SIGOPBOLBO.prg` (achados leg├¡timos):**
+- Adicionado `SET NULL ON` / `SET NULL OFF` em volta do bloco que cria `cursor_4c_SigCdmp` (tanto o `SELECT ... INTO CURSOR` quanto o `CREATE CURSOR` do fallback), j├í que os dados v├¬m de `SigSyImp`/`SigCdAcG`/`SigCdmp` via SQLEXEC.
+- Adicionado o mesmo guard em volta do `CREATE CURSOR cursor_4c_SigOpBol_Opcoes`.
+
+Tamb├®m atualizei as mem├│rias `feedback_container_visivel_cabecalho_falso_positivo.md` e `feedback_metodo_inexistente_nao_checa_formbase.md` com a reincid├¬ncia registrada neste form, para acelerar a triagem em passes futuros.

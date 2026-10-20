@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 6 gate now passes. Here's what I did and why the previous attempt failed.
+
+## Why the first attempt failed
+
+The prior run concluded "no lookups exist, so Phase 6 is done" and only added the `OleComm` OLE control. That diagnosis of *lookups* was right, but it mistook "no lookups" for "nothing to do" ÔÇö and left the form with **zero `BINDEVENT`** and **zero `PROCEDURE Validar*`**, which is exactly what the Phase 6 FLAT gate requires. The gate's branch for a legacy form without lookups is `legadoSemLookup AND temCamposFlat`, where `temCamposFlat = .ControlSource + PROCEDURE Validar*`.
+
+More importantly, two pieces of **real legacy behaviour were missing**, which is what the gate was pointing at:
+
+## What was actually missing
+
+**1. The grid CheckBox was inert.** `VincularGrade` created `chk_4c_Marca` with `CurrentControl`/`Sparse=.F.`, but a CheckBox in a Grid Column doesn't toggle via the native binding ÔÇö it renders, takes focus, and ignores the click. The legacy doesn't use the native toggle either; it writes the value in `Check1.Click`. I added the canonical four handlers (`KeyPress`/`MouseUp` act, `Click`/`MouseDown` exist only to suppress the native toggle with `NODEFAULT`) plus `ValidarMarcacaoLinha`, transcribing the legacy rule:
+
+```foxpro
+if !(csPgto.printed)
+    This.value = .t.
+endif
+```
+
+Since the legacy `Click` runs *after* the native toggle, the observable rule is: a not-yet-authenticated row can never be unmarked (the counterpart of `Sair` refusing to close while any row is unprinted), while an already-printed row toggles freely for re-authentication. `Marca`/`Printed` are **Logical** in this cursor, so the toggle is `!valor` ÔÇö not the `IIF(col = 0, 1, 0)` used for numeric mark columns.
+
+The BINDEVENTs are wired inside `VincularGrade`, not `InicializarForm`: rebuilding `ColumnCount` destroys the Column objects and takes `chk_4c_Marca` with them. `UNBINDEVENT` first, since `VincularGrade` is idempotent and bindings would otherwise accumulate.
+
+**2. The `TxtObs` visibility rule was dropped.** The last block of the legacy `Init` hides the field for `BEMA8501`/`EPSON` (the observation doesn't reach the paper on those printers) and otherwise clears it and sets focus. `ConfigurarCampos` unconditionally set `.Visible = .T.`. Added as `AplicarRegraVisibilidadeObs`, called from `InicializarForm` after `CarregarDados` and only on success ÔÇö matching where the legacy puts it. Transcribed literally: the legacy hides only the TextBox and leaves the "Observa├º├úo" label, so I did too.
+
+I deliberately did **not** invent an `AbrirLookup*` or a `Valid` on `TxtObs` ÔÇö the legacy has neither (0 hits for `fwbusca`/`sigacess`/`mAddColuna`), and fabricating one would violate PILAR 1 and the "NUNCA inventar tabelas de lookup" rule.
+
+## Verification
+
+- Gate simulated against the orchestrator's own logic: `temLayoutFlat = True`.
+- Structure: per-procedure nesting depth returns to 0 everywhere; no duplicate methods; no `PUBLIC` inside `DEFINE CLASS`; no `RETURN` inside `TRY`; no literal accents; no `MESSAGEBOX`; all 4 BINDEVENT targets are PUBLIC and defined exactly once.
+- Project auditors: `VerificarLookupEmKeyPress` **ERRO=0 AVISO=0**, `VerificarMetodoProtegidoChamadoDeFora` OK, `VerificarFuncoesNaoDefinidas` OK, `VerificarPropriedadesInexistentes` OK.
+- CRLF restored (CR=LF=1000); diff is purely additive (197 lines added, 0 removed).
+
+**One thing I could not verify:** the VFP9 compile. `vfp9.exe` hangs in this non-interactive session ÔÇö I confirmed it's environmental, not code-related, with a trivial `STRTOFILE` smoke script that also timed out and produced no file. The orchestrator's own etapa `05c_validarCompilacao` will cover it. The checks above are static only.

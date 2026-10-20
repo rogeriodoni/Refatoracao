@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Pre-existing, not mine. Phase 8 is done.
+
+## Fase 8/8 conclu├¡da ÔÇö `FormSigOpCac.prg`
+
+**Diagn├│stico primeiro:** o motivo da re-execu├º├úo desta fase n├úo foi o gate de conte├║do, e sim o **guard de NO-OP** (`Invoke-MigracaoFase`): a tentativa anterior (sonnet) concluiu que "n├úo havia nada a fazer", tocou apenas `menu.prg` e deixou o `.prg` do form com MD5 id├¬ntico ÔåÆ retry for├ºado com opus. Medi o gate da Fase 8 por fora, com os helpers reais do orquestrador, e ele **j├í passava** pelo ramo `fluxo-unico` (legado sem CRUD, com grade e campo edit├ível reais) + `Test-AcaoDoLegadoTemHandler` (verbo "Consultar" ÔåÆ `BtnConsultarClick`).
+
+Mas havia trabalho real: no cotejo final com o dump apareceram 4 lacunas de transcri├º├úo.
+
+### O que mudou
+
+1. **`txt_4c_Programa.MaxLength = 100`** ÔÇö o SCX declara o limite e a migra├º├úo o descartou; o campo aceitava texto sem limite (regra #19/#49). ├Ünico dos quatro com impacto em **dado**.
+2. **`.Panel = 1`** nos dois Grids ÔÇö declarado no SCX, ausente no migrado. Conferi que `PANEL` existe na classe `Grid` (`automation\propriedades_baseclasses.txt`, regra #33) antes de atribuir; ├® inerte sem `SplitBar`, transcrito por fidelidade.
+3. **`Header1.Alignment` da 5┬¬ coluna** (`Tipo`) ÔÇö o dump declara `Alignment = 2` nas colunas 1ÔÇô4 e **omite** na 5┬¬. Como o dump s├│ grava o que difere do default, 2 n├úo ├® o default; o helper agora recebe um 5┬║ argumento e **n├úo atribui** nada na coluna 5 ÔÇö fiel independentemente de qual seja o default (tentei medir no VFP9, o processo travou sem produzir sa├¡da, ent├úo resolvi sem depender da medi├º├úo).
+4. **Picker de Programa** ÔÇö passou a usar 2 colunas. O `FormBuscaAuxiliar` **ignora a m├íscara** do `mAddColuna` e fixa a 1┬¬ coluna em 80px; com uma coluna s├│, `SigCdPrg.descricaos` (`char(150)`) sairia cortado em 80px de 348 dispon├¡veis. Com a descri├º├úo na 2┬¬ coluna ela recebe a largura restante.
+
+### Verifica├º├Áes
+- Compila├º├úo VFP9 limpa (`.fxp` novos, zero `.err`) do form e do BO.
+- `Test-CompletudeCodigo`: `[OK] nenhum TODO/stub/procedure vazia`.
+- Gate da Fase 8 reavaliado ap├│s as edi├º├Áes: `fluxoUnico=True`, a├º├úo waived, `metodosFaltantes` ÔåÆ 0.
+- Colunas de todas as queries do BO conferidas contra `docs/schema.sql` lido com `-Raw` (regra #14): `SigCdPrg`, `SigCdUsu`, `SigCdAcu`, `SigCdAcG` ÔÇö todas existem.
+- Zero caractere acentuado literal no `.prg` (regra #4).
+- Integra├º├úo de menu da tentativa anterior conferida e correta (bar 155 em `popMovimentos`, `Show()` fora do TRY ÔÇö CLAUDE.md #29).
+
+### Dois pontos para sua decis├úo (n├úo mexi)
+
+- **`FormBuscaAuxiliar.ConfigurarGrid` fixa a 1┬¬ coluna em 80px sempre.** Para picker de coluna ├║nica isso desperdi├ºa ~78% da grade e corta o texto ÔÇö ├® defeito sist├¬mico, n├úo deste form. O conserto cir├║rgico seria `IF this_nColunas = 1 ÔåÆ largura total`, que por constru├º├úo s├│ afeta pickers de uma coluna. N├úo apliquei: ├® classe compartilhada por 137 forms e a regra #44 manda validar sweep contra forms j├í consertados ├á m├úo antes ÔÇö fora do escopo de uma fase de migra├º├úo desassistida.
+- **O guard de NO-OP n├úo tem carve-out para a Fase 8.** Ele j├í isenta as fases 5, 6 e 7 quando o legado n├úo tem o trabalho daquela fase; na 8 ainda queima uma re-execu├º├úo opus inteira para reconfirmar que um form completo est├í completo. Aqui o retry se pagou (achou as 4 lacunas), mas o padr├úo vai reaparecer em visualizadores/despachantes.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö it's a new untracked file (created in Fase 1), now completed for Fase 2. No commit requested, so I'll leave it as-is.
+
+## Summary
+
+Completed Fase 2/8 for `SIGOPCAUBO.prg` ÔÇö this is an OPERACIONAL **read-only** dialog (consulta de acessos de usu├írio), not a CRUD cadastro, so the generic "add Inserir/Atualizar/CRUD" template doesn't literally apply. I honored the design decision already documented in the Fase 1 header (BusinessBase's default refusal behavior is correct here) and instead implemented the real business logic:
+
+- **`MontarArvoreAcessos()`** ÔÇö the actual query logic equivalent to the legacy `MakeTree()` SQL (super-user `4CONTROL` sees all `SigCdPrg`; everyone else sees access rows from `SigCdAcU`/`SigCdAcG` joined to `SigCdPrg`, filtered by usu├írio or grupo), populating `this_cCursorArvore`.
+- **`CarregarDoCursor()`** ÔÇö maps the current row of that cursor into `this_cProgramas`/`this_cParametros`/`this_cDescricaos`.
+- **`ObterChavePrimaria()`** ÔÇö added for consistency even though it's never invoked (no Inserir/Atualizar override).
+
+One notable finding, documented in a comment rather than silently copied: the legacy SCX has a copy-paste bug in the "filter by Grupo" branch ÔÇö it reuses `GetcUsu.Value` (always empty there, due to the mutually-exclusive `When()` guards) instead of `GetGrupo.Value`, which would make group-only searches always return zero rows in production. I used the correct field (`this_cGrupos`) since reproducing the typo would violate the project's "100% functional parity" rule by making a whole feature permanently non-functional.
+
+Verified all table/column names (`sigcdusu`, `sigcdgra`, `sigcdacu`, `sigcdacg`, `sigcdprg`) against `docs/schema.sql` (read with proper UTF-16 handling) and fixed a `TratarNulo()` misuse (2nd arg is the default value, not a type string) before finalizing.

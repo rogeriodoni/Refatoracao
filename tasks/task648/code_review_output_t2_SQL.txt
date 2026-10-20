@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado
+
+Os 3 achados (`NTPIMPRES`, `TPBARRA`, `MAXCOLS`) s├úo **falso positivo** ÔÇö mesmo padr├úo j├í documentado na mem├│ria (`feedback_sql_filtro_inventado_locate_cursor_local.md`), agora na **4┬¬ ocorr├¬ncia**, e a **2┬¬ vez no mesmo arquivo** `SIGOPBOLBO.prg::ObterImpressorasDisponiveis`.
+
+O pass comparou o `SCAN FOR` sobre o cursor **LOCAL** `cursor_4c_SigCdmp` (um `SELECT DISTINCT ... INTO CURSOR` j├í materializado em mem├│ria) contra o `WHERE` do `SQLEXEC` de um m├®todo vizinho (`UsuAcess`/`cImps`/`Usuarios`/`Grupos`) ÔÇö sem rela├º├úo entre os dois. O filtro em si ├® transcri├º├úo fiel do legado:
+
+```
+SIGOPBOL_form_codigo_fonte.txt:346-347
+Scan For ( Empty(CrSigCdmp.nTpImpres) Or (CrSigCdmp.nTpImpres=1) ) And ;
+         ( CrSigCdmp.TpBarra = 0 ) And ( CrSigCdmp.MaxCols > 39 )
+```
+
+Confirmei comparando byte a byte com o dump legado ÔÇö bate exatamente. Nenhuma altera├º├úo foi feita nos arquivos `.prg` (alterar removeria um filtro de neg├│cio real, criando uma regress├úo).
+
+Atualizei a mem├│ria com a 4┬¬ ocorr├¬ncia e marquei que, se o pass repetir esse falso positivo de novo, o caminho certo passa a ser corrigir o detector da ferramenta do pass (n├úo mais reconfirmar manualmente).

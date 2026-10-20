@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. `FormSIGPRNSE.prg` compiles clean, instantiates, and every method added was exercised in runtime.
+
+## What I added
+
+| Method | Scope | Legacy origin |
+|---|---|---|
+| `FormParaBO()` | PROTECTED | the 5-line read block that opens `PROCEDURE selecionar` + `lcCid = cmbCidades.Value` of `processamento` |
+| `BOParaForm()` | PROTECTED | the `.getDtIni.Value = Date()` block of the legacy `Init` |
+| `LimparCampos()` | PROTECTED | same `Init` defaults, now with the BO as single source |
+| `HabilitarCampos(par_lHabilitar)` | PUBLIC | first half of `ajustacontroles(pTip)` (the 10 `= pTip` lines) |
+| `BtnCancelarClick()` | PUBLIC | `btnLimpar` ÔÇö cancels the in-progress selection |
+| `BtnProcessarClick()` | PUBLIC | `btnCopiar` ÔÇö "Gerar Arquivo", the screen's action |
+| `BtnEncerrarClick()` | PUBLIC | `btnSair` (`ThisForm.Release`) |
+| `ContarSelecionados()` / `ValidarSelecaoParaGerar()` | PROTECTED | the `csSeles` count + "Nenhum Lan├ºamento" guard |
+
+`CmdBtnFormClick` now dispatches to the three named handlers; `CarregarLista` reads the screen once via `FormParaBO`; `Processamento` takes the municipality from the BO. The three hooks are PROTECTED because `FormBase` declares them so and VFP9 can't widen inherited scope.
+
+## Two defects found and fixed along the way
+
+- **`"Lan" + CHR(231) + CHR(227) + "amento"` rendered "Lan├º├úamento"** ÔÇö an extra a-tilde. It was in the pre-existing `CmdBtnFormClick` and I had duplicated it. Both sites now share one `ValidarSelecaoParaGerar()`, so the string exists once. Swept the project: no other site had it.
+- **`this_nProcessados` / `this_cCidade` / `this_cDescEmps` were declared in the BO and never populated** ÔÇö each screen read was inline and local. `FormParaBO` closes that.
+
+## What I deliberately did *not* add
+
+The phase brief lists `BtnSalvarClick`/`BtnBuscarClick`. The legacy SCX has no save button (no `btnSalvar`/`btnGravar`/`mGravaDados` ÔÇö grep confirms), and its search button is `btnSelecionar`, already handled by `BtnSelecionarClick`. Adding either would mean inventing a control the legacy doesn't have. `LimparCampos()` is also **not** wired into `BtnCancelarClick`: the legacy "Limpar" only ZAPs the grid and reopens the criteria, keeping what the user typed ÔÇö resetting filters there would force re-typing the period and company on every batch.
+
+## Verification
+
+- Compile: `.fxp` generated for form and BO, no `.err`.
+- Runtime harness (`automation/vfp_helpers/test_fase8_sigprnse.prg`): **SUCESSO** ÔÇö form instantiates, defaults reach the BO *and* the screen, `FormParaBO` captures typed criteria (company padded to 3), enable/disable cycles both ways, ZAP doesn't hang on the private-datasession SAFETY dialog, `CarregarLista` fails cleanly to `.F.` without a connection.
+- Auditors: protected-method-called-from-outside **clean**; undefined-function sweep **clean** (1021 files); nonexistent-property sweep **clean**; `Test-CompletudeCodigo` **OK** on both files.
+
+One caveat on coverage: SQL Server at 192.168.200.10 is unreachable from this machine, so the harness exercised the no-connection path only. `GerarArquivoRJ`/`GerarArquivoSP` and the `SQLCOMMIT`/`SQLROLLBACK` pair in `Processamento` were not executed against real data ÔÇö that needs a run on a machine with the database.

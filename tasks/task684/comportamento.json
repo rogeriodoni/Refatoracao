@@ -1,0 +1,396 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 18,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "For Empty", "For Recno", "fwBuscaExt", "for Not Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigprtrf",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t\n\t\tlcSql = [Select ClockEcfs From SigCdPac ]\n\t\tThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac')\n\n\t\t=DoDefault()\n\t\t\n\t\tThisForm.Retorno = ' '\n\n\t\tWith Thisform.Cnt_Referencia.Grade\n\t\t\t.RecordSource = 'CrProduto'\n\t\t\t.Column1.ControlSource = 'CrProduto.Cpros'\n\t\t\t.Column2.ControlSource = 'CrProduto.Dpros'\n\t\t\t.Refresh\n\t\tEndWith\n\t\t\n\t\tSelect CrProduto\n\t\tAppend Blank\n\t\t\n\t\tThisForm.Cnt_Referencia.Grade.column1.SetFocu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\nCreate Cursor CrProduto (Cpros c(14), dpros c(40))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\ndodefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.Retorno\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Referencia.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "If Lastkey() = 13\n\tSelect CrProduto\n\tIf Empty(cpros)\n\t\tThisForm.Altera.SetFocUs\n\tElse\n\t\t_lnRecno = Recno()\n\t\tLocate For Empty(Cpros)\n\t\tIf Eof()\n\t\t\tAppend Blank\n\t\tEndIf\n\t\tLocate For Recno() = _LnRecno\n\t\tKeyboard '{DNARROW}'\n\tEndif\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty,For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Referencia.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If This.Value = ThisForm.AntCPro\n\tReturn\nEndIf\n\nIf Not Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cpros','','Código')\n\t\tm.loLista.mAddColuna('dpros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf Used('CrProds')\n\t\tThis.Value = Evaluate('CrProds.Cpros')\n\t\tReplace CrProduto.Dpros With CrProds.dpros in CrProduto\n\t\tThis.Parent.Parent.Column2.Text1... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Referencia.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AntCPro = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Referencia.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.altera",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "Select CrProduto\nCount to x for Not Empty(Cpros)\nIf x=0\n\tMessageBox('Nenhum Produto Informado!!!',0+16,'')\n\tReturn .f.\nEndif\n\nThisForm.Cnt_Mensagem.Visible = .t.\nldDataI = Datetime()\n_w = LocalParac.ClockEcfs / 3\n_x = 13\n_y = 1\nDO While Datetime() - ldDataI < LocalParac.ClockEcfs\n\t_Tempo = Datetime() - ldDataI\n\tIf _x >= 13\n\t\t_x = 1\n\tElse\n\t\t_x = _x + 1\n\tEndIf\n\tIf _Tempo > _W\n\t\tIf _Tempo < _W * 2\n\t\t\tFor lnBot = 1 To 13\n\t\t\t\tlcMacro = 'ThisForm.Cnt_Mensagem.botao'+Alltrim(Str(lnBot,2))\n\t\t\t\t&lcMacro.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Not Empty",
+        "metodosFormChamados": "botao'+Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Retorno = ' '\nThisform.release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.Botao1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao9",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao11",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao12",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtrf.Cnt_Mensagem.botao13",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigprtrf.Init",
+      "queryOriginal": "\t\tlcSql = [Select ClockEcfs From SigCdPac ]",
+      "tabelas": "SigCdPac",
+      "colunas": "ClockEcfs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPac"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

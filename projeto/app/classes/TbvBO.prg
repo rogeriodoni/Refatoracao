@@ -212,7 +212,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 
 			*-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
 			IF USED("cursor_4c_Ins")
-				TABLEREVERT(.T., "cursor_4c_Ins")
+				IF CURSORGETPROP("Buffering", "cursor_4c_Ins") > 1
+				    TABLEREVERT(.T., "cursor_4c_Ins")
+				ENDIF
 				USE IN cursor_4c_Ins
 			ENDIF
 
@@ -267,7 +269,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 
 			*-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
 			IF USED("cursor_4c_Upd")
-				TABLEREVERT(.T., "cursor_4c_Upd")
+				IF CURSORGETPROP("Buffering", "cursor_4c_Upd") > 1
+				    TABLEREVERT(.T., "cursor_4c_Upd")
+				ENDIF
 				USE IN cursor_4c_Upd
 			ENDIF
 
@@ -377,7 +381,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 			*-- Remove registros das grades relacionadas primeiro (formula/comissao/faixas)
 			loc_cSQL = "DELETE FROM SigOpTdt WHERE codigos = " + EscaparSQL(THIS.this_cCodigo)
 			IF USED("cursor_4c_DelTdt")
-				TABLEREVERT(.T., "cursor_4c_DelTdt")
+				IF CURSORGETPROP("Buffering", "cursor_4c_DelTdt") > 1
+				    TABLEREVERT(.T., "cursor_4c_DelTdt")
+				ENDIF
 				USE IN cursor_4c_DelTdt
 			ENDIF
 			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DelTdt")
@@ -394,7 +400,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 			IF loc_lContinua
 				loc_cSQL = "DELETE FROM SigOpTdi WHERE codigos = " + EscaparSQL(THIS.this_cCodigo)
 				IF USED("cursor_4c_DelTdi")
-					TABLEREVERT(.T., "cursor_4c_DelTdi")
+					IF CURSORGETPROP("Buffering", "cursor_4c_DelTdi") > 1
+					    TABLEREVERT(.T., "cursor_4c_DelTdi")
+					ENDIF
 					USE IN cursor_4c_DelTdi
 				ENDIF
 				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DelTdi")
@@ -412,7 +420,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 			IF loc_lContinua
 				loc_cSQL = "DELETE FROM SigOpTds WHERE codigos = " + EscaparSQL(THIS.this_cCodigo)
 				IF USED("cursor_4c_DelTds")
-					TABLEREVERT(.T., "cursor_4c_DelTds")
+					IF CURSORGETPROP("Buffering", "cursor_4c_DelTds") > 1
+					    TABLEREVERT(.T., "cursor_4c_DelTds")
+					ENDIF
 					USE IN cursor_4c_DelTds
 				ENDIF
 				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DelTds")
@@ -431,7 +441,9 @@ DEFINE CLASS TbvBO AS BusinessBase
 				*-- Remove o registro principal
 				loc_cSQL = "DELETE FROM SigOpTdz WHERE codigos = " + EscaparSQL(THIS.this_cCodigo)
 				IF USED("cursor_4c_Del")
-					TABLEREVERT(.T., "cursor_4c_Del")
+					IF CURSORGETPROP("Buffering", "cursor_4c_Del") > 1
+					    TABLEREVERT(.T., "cursor_4c_Del")
+					ENDIF
 					USE IN cursor_4c_Del
 				ENDIF
 				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Del")

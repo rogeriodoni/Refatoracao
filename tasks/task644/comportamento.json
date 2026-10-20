@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Fiscal", "fMensagemFixa", "fLerSettings", "fLerFiscal"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPAUT",
+      "evento": "Procedure",
+      "linhas": 110,
+      "codigoOriginal": "Lparameters _TpAutentica\n\nLocal Impressora, _autVal, _toPrint\n\nThisform.Primeiravez = .f.\n\nIf ThisForm.Parentform.Podatamgr.Cursorquery('SigMvCab','CrTprMvCab','EmpDopNums',Thisform.toSeek)\n\t_autVal  = padc(DTOC(Date())+\"-\"+Time()+\" - \"+left(CrTprMvCab.ecfs,3)+\" - \"+CrTprMvCab.notas,60,\" \")\nelse\n\t_autVal  = padc(DTOC(Date())+\"-\"+Time(),60,\" \")\nEndIf\n\n_toPrint = padc(alltrim(ThisForm.txtObs.Value),60,\" \")\n\nIf _TpAutentica = 1 &&Impressora Fiscal (Verso) / Impressora de Cheque\n\n\tIf InList(CrSigFiF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fiscal,fMensagemFixa,fLerSettings",
+        "metodosFormChamados": "Cursorquery,SqlExecute,Output = Spac,Output = Chr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Create Cursor csPgto (Marca L, Obs C(27), fpags C(12), Printed L, Autenticas n(1))\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\tCase nKeyCode = -1 && F2\n\t\tNoDefault\n\t\tThisForm.Imprimir.Click()\n\n\tCase nKeyCode = -2 && F3\n\t\tNoDefault\n\t\tThisForm.Grade.Click()\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT",
+      "evento": "Init",
+      "linhas": 101,
+      "codigoOriginal": "Parameters poform, _pEmps, _pDopes, _pNumes, _pTipo, _pnAutentica\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Parentform = poform\n\nThisform.oModem = ThisForm.Parentform.oModemEest\nThisForm.toSeek = _pEmps +_pDopes +Str(_pNumes,6)\nThisform.Primeiravez = .T.\n\nlcEDN = _pEmps + _pDopes + Str(_pNumes,6)\n\n=fLerFiscal()\n\nSelect CrSigFiFis\nGoto top\n\nIf Not _pTipo\n\n\tIf !ThisForm.Parentform.podatamgr.cursorquery('SigMvPar','CrT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fLerFiscal",
+        "metodosFormChamados": "toSeek = _pEmps +_pDopes +Str,cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Grd.Column1.Check1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "if !(csPgto.printed)\n\tThis.value = .t.\nendif\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Grd.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Grd.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Sair",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Select csPgto\nIf Reccount() > 0\n\tGo top\n\tScan\n\t\tif !(csPgto.Printed)\n\t\t\tWith ThisForm\n\t\t\t\t.Grd.Refresh\n\t\t\t\t.Grd.Column1.SetFocus\n\t\t\tEndWith\n\t\t\tMessageBox(\"Autenticação Obrigatória\",16,\"\")\n\t\t\tReturn\n\t\tendif\n\tEndScan\nEndIf\nldtime = DateTime()\nDo While DateTime() - ldtime <= 2\n\t=chrsaw(.5)\nEndDo\nThisForm.Release",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Fwbtnm1",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Local lOk\nlOk = .f.\nif Reccount(\"csPgto\") <=0\n\tMessageBox(\"Não existem observações a serem auteticadas\",16,\"\")\t\n\tThisForm.Sair.Setfocus\nEndif\n\nSelect csPgto\ngo Top\nScan\n\tIf csPgto.marca\n\t\tlOk = ThisForm.Autentica(csPgto.Autenticas)\n\t\tif lOk\n\t\t\tSelect csPgto\n\t\t\tReplace csPgto.marca with .f., csPgto.Printed with .t.\n\t\tEndIf\n\tEndIf\nEndScan\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Autentica",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPAUT.Grade",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Grd.Column1.Setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

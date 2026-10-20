@@ -1,0 +1,47 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Resumo do que aconteceu e do que fiz.
+
+## Por que a tentativa anterior reprovou
+
+N├úo era falta de m├®todo no form ÔÇö os quatro nomes exigidos j├í estavam l├í. Reproduzi o gate num probe isolado (extraindo as fun├º├Áes do orquestrador; **n├úo** dot-source, que dispararia migra├º├úo) e a causa foi:
+
+`$semCrudLegadoF8` virava `$false` por causa de **tr├¬s ocorr├¬ncias inertes de `pcEscolha`** no dump do SIGSERPR:
+1. a declara├º├úo da property na SE├ç├âO 2 (`pcescolha = .F.`),
+2. a listagem do RESERVED3/ClassInfo na SE├ç├âO 4,
+3. a ├║nica atribui├º├úo ÔÇö **comentada** (`*.pcEscolha = [CONSULTAR]`).
+
+Com `semCrud = .F.`, os oito ramos de exce├º├úo ficam inalcan├º├íveis de uma vez e a fase passa a cobrar `BtnSalvarClick`/`BtnConfirmarClick` de um di├ílogo somente-leitura cujo ├║nico bot├úo ├® "Encerrar". Insatisfaz├¡vel sem inventar bot├úo (viola o PILAR 1) ou criar handler vazio (proibido pela regra de completude) ÔÇö ent├úo corrigi o gate, n├úo o form.
+
+## Corre├º├úo no pipeline
+
+Novo helper `Get-ContagemPcEscolhaViva` (fonte ├║nica, `OrquestradorMigracao.ps1:5373`), consumido pelos **dois** call sites (Fase 7 e Fase 8 tinham o mesmo defeito g├¬meo). Desconta s├│ ocorr├¬ncia provadamente inerte; qualquer uso execut├ível continua contando.
+
+Medi├º├úo nos 680 dumps de `tasks\`: 292 citam `pcEscolha`, **3 mudam de veredito** ÔÇö sigcdale (task345), SIGOPCAU (task652), SigPrTar (task681) ÔÇö, nenhum com evid├¬ncia estrutural de CRUD. Zero regress├úo nos dumps CRUD conhecidos nem nos di├ílogos filhos j├í dispensados.
+
+Resultado: **Fase 7 e Fase 8 validam** ÔÇö a 8 pelo ramo `$legadoVisualizadorF8`.
+
+## Verifica├º├Áes do form
+
+| Checagem | Resultado |
+|---|---|
+| Compila├º├úo VFP9 (BO + Form) | 0 erros, sem `.err` |
+| `Test-CompletudeCodigo` | sem TODO/stub |
+| Instancia├º├úo real no VFP9 | `VARTYPE=O`, 588x325, 5 controles, BO criado, `Release` OK |
+| EditBox | `ReadOnly=.T.`, `Format="K!"`, 564x212 ÔÇö fiel ao SCX (regra #49) |
+| `VerificarMetodoProtegidoChamadoDeFora` | limpo |
+| `VerificarFuncoesNaoDefinidas` | limpo |
+| ├ìcones (`cadastro_sair_60.jpg`, `new_background.jpg`) | existem (regra #25) |
+
+Corrigi tamb├®m o bloco de documenta├º├úo da Fase 8 no form: ele citava o ramo `$legadoExibicaoF8`, que **n├úo** se aplica ÔÇö esse ramo exige aus├¬ncia de lista, e o predicado d├í verdadeiro aqui porque procura a palavra `ControlSource`, presente no `getObsInsp`. As refer├¬ncias de linha tamb├®m estavam defasadas.
+
+## Dois pontos para sua decis├úo
+
+1. **Nada abre esta tela.** N├úo h├í item de menu nem chamador ÔÇö nem antes, nem agora. O legado ├® di├ílogo FILHO (`Init` recebe `poForm`, o Click faz `ParentForm.Enabled = .T.`) e a tela-m├úe n├úo est├í no acervo. N├úo criei entrada de menu porque seria inventar um ponto de entrada: aberta sem pai e sem chave, mostraria uma caixa vazia. Se souber qual tela deveria cham├í-la, eu ligo.
+
+2. **Esta task re-migrou um form j├í migrado** (task230/task336). O ganho ├® real: a vers├úo em HEAD tinha `ConfigurarPageFrame` e ~10 handlers CRUD (`BtnIncluirClick`, `BtnSalvarClick`, `HabilitarCampos`, `AjustarBotoesPorModo`ÔÇª) operando sobre um cursor `csTmpPrTar` que a arquitetura nova nunca cria ÔÇö c├│digo morto e inalcan├º├ível, escrito justamente para satisfazer este gate. A vers├úo atual ├® FLAT e fiel. `BtnSalvarClick` do HEAD nem persistia nada.
+
+Observa├º├úo sobre o diff: `OrquestradorMigracao.ps1` j├í tinha ~1100 linhas de altera├º├Áes n├úo commitadas de sess├Áes anteriores. Minhas mudan├ºas s├úo s├│ tr├¬s hunks (o helper em 5373 e os call sites em 8518 e 8879). N├úo commitei nada.

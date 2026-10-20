@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stray accented literals ÔÇö all text uses `CHR()` codes correctly. The Phase 4 implementation is complete and structurally verified.
+
+## Summary
+
+For **Fase 4/8** of migrating `FormSIGPRNSE` (Integra├º├úo de NFS-e Municipal), I added the full operational layout and business logic, since this form's filter panel, grid, and action buttons are tightly coupled (the buttons can't be meaningfully wired without the filter fields they depend on, and leaving "Gerar Arquivo" as a stub would violate the project's no-stub rule):
+
+**Form (`FormSIGPRNSE.prg`)**:
+- `ConfigurarPainelCriterios()` ÔÇö situa├º├úo, per├¡odo, empresa (com lookup via `FormBuscaAuxiliar`), munic├¡pio, pasta do arquivo, bot├úo Selecionar
+- `ConfigurarGrade()` ÔÇö grid de 11 colunas com checkbox edit├ível (`cursor_4c_Operacoes`), editbox de erros
+- `ConfigurarBotoesAcao()` ÔÇö `cmdBtnGrade` (Marcar Tudo/Desmarcar/Documento) e `cmdBtnForm` (Limpar/Gerar Arquivo/Sair)
+- Handlers for all buttons, the checkbox toggle, empresa lookup, and `AjustarBotoesPorModo` (equivalent to legado's `AjustaControles`)
+
+**BO (`SIGPRNSEBO.prg`)**:
+- `CriarCursoresAuxiliares()`, `BuscarNotasPendentes()` (the SQL joins + validation + grid population + `SigPcOoL` control-row inserts, reusing `Inserir()`)
+- `GerarArquivoRJ()` / `GerarArquivoSP()` ÔÇö literal transcriptions of the Rio de Janeiro and S├úo Paulo NFS-e TXT layouts
+
+I caught and fixed a critical bug during review: several `RETURN` statements ended up inside `TRY/CATCH` blocks (forbidden per CLAUDE.md rule #1) ÔÇö fixed with the `loc_lProsseguir` flag-guard pattern. I also corrected `Themes`/`DisabledPicture` on grouped buttons to match the legado dump, and fixed the `Column.ControlSource` ordering for the grid's checkbox column.

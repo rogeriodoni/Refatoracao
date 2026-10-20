@@ -1,0 +1,36 @@
+=== PROBE FASE 4 ===
+dependencias carregadas
+CREATEOBJECT -> VARTYPE=O
+Caption=[Processamento de NF-e] ControlCount=7
+cursor_4c_Operacoes USED=.F. Grid.ColumnCount=9 RecordSource=[cursor_4c_Operacoes]
+Col1.CurrentControl=[CHK_4C_CHECK1] Col1.Sparse=.F.
+grdInu.Col6.CurrentControl=[CHK_4C_CHECK1]
+cnt_4c_Inu.Visible(esp .F.)=.F.
+--- estado inicial dos botoes (AjustarBotoesPorModo(.F.)) ---
+  Selecionar(esp .T.)=.T.  Limpar(esp .F.)=.F.  Processar(esp .F.)=.F.  Encerrar(esp .T.)=.T.
+  MarcaTudo(esp .F.)=.F.  Desmarcar(esp .F.)=.F.  Documento(esp .F.)=.F.
+--- filtros iniciais (AplicarFiltrosIniciais) ---
+  Emps=[01 ] Processados=1 Tipos=1 Acao=1
+--- escopo dos metodos chamados de FORA (protected deve ser .F.) ---
+  CarregarLista            existe=.T. protected=.F.
+  AtualizarGrade           existe=.T. protected=.F.
+  LimparSelecao            existe=.T. protected=.F.
+  AjustarBotoesPorModo     existe=.T. protected=.F.
+  ObterFiltrosSelecao      existe=.T. protected=.F.
+  MarcarTodasOperacoes     existe=.T. protected=.F.
+  DesmarcarTodasOperacoes  existe=.T. protected=.F.
+  AlternarMarcacaoLinha    existe=.T. protected=.F.
+  BO.BuscarOperacoes       existe=.T. protected=.F.
+--- funis de marcacao (cursor povoado a mao) ---
+  datasession do form=2 cursor USED=.T.
+  RECCOUNT=2
+  MarcarTodas    -> marcadas(esp 2)=2
+  DesmarcarTodas -> marcadas(esp 0)=0
+  AlternarLinha  -> marcadas(esp 1)=1
+--- caminho de volta (regra #40) ---
+  apos Ajustar(.T.):   Limpar(esp .T.)=.T. Selecionar(esp .F.)=.F.
+  apos LimparSelecao: Limpar(esp .F.)=.F. Selecionar(esp .T.)=.T. RECCOUNT(esp 0)=0
+--- validacao recusa carga sem data ---
+  CarregarLista() (esp .F.)=.F.
+Release OK
+=== FIM ===

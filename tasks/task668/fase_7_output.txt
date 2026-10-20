@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 7 conclu├¡da.
+
+## O que encontrei
+
+A Fase 7 **j├í estava aplicada na ├írvore de trabalho** (n├úo commitada ÔÇö o HEAD tem 673 linhas e zero `Btn*Click`; o arquivo em disco tinha 825 com os 4 handlers). Ent├úo **auditei em vez de regerar** ÔÇö regerar destruiria as Fases 7ÔÇæ8 j├í presentes.
+
+Os 4 eventos exigidos pelo gate estavam l├í e passavam. Mas havia um defeito real:
+
+`BtnVisualizarClick` e `BtnBuscarClick` eram **corpos byte-id├¬nticos** (s├│ a mensagem diferia) e cada um fazia:
+
+```foxpro
+THIS.this_oBusinessObject.BuscarProduto(...)
+THIS.CarregarDados()          && que chama BuscarProduto DE NOVO (linha 524)
+IF USED(...) ... grd.Refresh() && que VincularGrade ja fez
+```
+
+**Medido em VFP9** (subclasse-contador do BO injetada no form), antes ├ù depois:
+
+| clique | antes | depois |
+|---|---|---|
+| Visualizar ÔåÆ `BuscarProduto` | **2x** | **1x** |
+| Buscar ÔåÆ `BuscarProduto` | **2x** | **1x** |
+
+## O que mudei
+
+Consolidei num funil ├║nico `RecarregarConsulta(par_cTitulo)` (PUBLIC), ao qual os dois handlers delegam ÔÇö princ├¡pio do funil das regras #31/#40/#47: corrigir um caminho corrige os dois. Removi o `Refresh` redundante. CRLF preservado (editado via Perl em modo bin├írio, n├úo `sed`/Edit).
+
+## Verifica├º├úo
+
+- **COMPILE_OK**, zero `.err` (Form e BO, `.fxp` apagados antes)
+- **Probe de runtime: 25/25 checks, FALHAS=0** ÔÇö os 8 handlers existem e s├úo **PUBLIC** (`PEMSTATUS` attr 2 = `.F.`, regra #51), chamada externa de todos sem *Property not found*, grade rebindada (`ColumnCount=1`, `Width=363`, Header certo), `Comples`/`Infos` seguindo a linha corrente, `Release()` OK nos 3 handlers de sa├¡da
+- Gate Fase 7: 4/4 nomes presentes ┬À completude 05d: 0 TODOs, 0 procedures vazias, 0 indicadores de pend├¬ncia ┬À regra #1 (RETURN em TRY): 0 ┬À regra #9 (CATCH mudo): 0 de 3 ┬À regra #4 (acento literal): 0
+- Regra #51 conferida nos dois sentidos: `BuscarProduto`/`BuscarCaracteristicas` s├úo PUBLIC no BO **e** n├úo existem como PROTECTED na `BusinessBase`
+
+## Dois pontos para registro
+
+1. **A 1┬¬ rodada do probe acusou 2 falhas que eram do pr├│prio probe**, n├úo do form: o form ├® `DataSession = 2` e meu BO stub, criado fora, n├úo via o `cursor_4c_Carac` privado. Corrigi o probe (passa o `DataSessionID`), n├úo o form. Salvei como li├º├úo de mem├│ria ÔÇö vai reincidir em todo probe de form DS=2.
+
+2. **N├úo mexi, mas vale saber** (fora do escopo da Fase 7): a auto-detec├º├úo do `TesteAutomatico.prg` classificaria este form como **CRUD**, porque decide OPERACIONAL pela *aus├¬ncia* de `CarregarLista` e `AlternarPagina` ÔÇö e este form tem os dois como shims de compatibilidade com `FormBase`. No pipeline ├® inofensivo (o orquestrador passa o hint `OPERACIONAL` expl├¡cito, linha 14672); numa execu├º├úo manual sem o 3┬║ argumento, `TesteBtnIncluirNavegacao` falharia com *"pgf_4c_Paginas nao encontrado"*.
+
+Os `MsgAviso` em Incluir/Alterar/Excluir/Salvar n├úo s├úo stubs do tipo proibido ÔÇö declaram a realidade do legado (o SIGPRPRO.SCX tem s├│ o bot├úo "Ok", zero CRUD) e ficam suprimidos em modo de teste, confirmado no log.

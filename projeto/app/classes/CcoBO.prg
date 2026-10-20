@@ -123,7 +123,9 @@ DEFINE CLASS CcoBO AS BusinessBase
                        " ORDER BY grupos, codigos"
 
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -155,7 +157,9 @@ DEFINE CLASS CcoBO AS BusinessBase
                        " WHERE cIdChaves = " + EscaparSQL(par_cIdChaves)
 
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 

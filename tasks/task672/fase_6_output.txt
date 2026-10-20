@@ -1,0 +1,56 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 executada. O resultado honesto ├® que **o escopo nominal da Fase 6 ├® vazio para este form**, e o trabalho real foi um defeito funcional que encontrei auditando.
+
+## O que a Fase 6 pedia vs. o que o legado tem
+
+Os tr├¬s itens do prompt s├úo vazios aqui, e medi cada um:
+
+| Pedido | Medi├º├úo no dump |
+|---|---|
+| "├║ltimos 50% dos TextBoxes" | **zero** controles de entrada no SCX (`BaseClass:` s├│ `form`/`container`/`label`/`shape`/`commandbutton`) |
+| "TODOS os lookups com BINDEVENT" | **zero** ÔÇö `fwbusca`/`fwBuscaSel`/`sigacess`/`mAddColuna` d├úo 0 ocorr├¬ncias; o ├║nico `CreateObject` ├® `fSqlConector` (conex├úo, n├úo picker) |
+| "Container `cnt_4c_BotoesAcao` (Salvar/Cancelar)" | n├úo existe no legado ÔÇö criar violaria o PILAR 1 |
+
+Metade de zero ├® zero. N├úo inventei campo nem lookup (regra "NUNCA inventar tabelas de lookup"), nem m├®todo vazio. O gate da Fase 6 **j├í passava** pelo ramo PAGINADO (`ConfigurarPaginaDados` + `BINDEVENT` presentes).
+
+## O defeito que achei e consertei
+
+`BtnOKClick` ÔÇö o handler que o BINDEVENT liga ao Processar, e que faz todo o SQL ÔÇö **n├úo tinha TRY/CATCH** (era o ├║nico m├®todo relevante sem). Medido no VFP9 (`automation\ProbeRss672F6.prg`), for├ºando uma falha realista (BO devolve `.T.` sem o alias aberto):
+
+```
+ANTES:  B_EXCECAO_ESCAPOU=13 [Alias 'CRSIGOPCLS' is not found.] LN=414
+        B_OK_Enabled=.F.  B_Sair_Enabled=.F.  B_SET_Cursor=OFF
+        B_Label=[Aguardando Contas Para Processar.]
+
+DEPOIS: B_BtnOKClick=RETORNOU_SEM_EXCECAO
+        B_OK_Enabled=.T.  B_Sair_Enabled=.T.  B_SET_Cursor=ON  B_Label=[]
+```
+
+O agravante ├® a combina├º├úo com este form espec├¡fico: `TitleBar = 0` + `ControlBox = .F.` significa que **o Encerrar ├® a ├║nica sa├¡da da janela**. Com os dois bot├Áes em `.F.`, o usu├írio ficava preso ÔÇö s├│ matando o VFP. E em modo parametrizado era pior: `Program Error` cru ├® modal e travaria o pipeline desassistido (regras #38 e #6).
+
+Tr├¬s decis├Áes no conserto:
+
+- **O bloco `INKEY`/`ON ERROR` ficou FORA do TRY.** Em VFP9 o TRY/CATCH tem preced├¬ncia sobre o `ON ERROR` em qualquer ponto da pilha (regra #29) ÔÇö envolv├¬-lo faria o CATCH roubar justamente o erro que o `ON ERROR loc_nError = 1` do legado existe para engolir, trocando "`lnKey = 0` e segue" por "aborta a passada".
+- **Rollback no CATCH, em TRY pr├│prio.** A exce├º├úo saltava o `DesfazerTransacao()` do fim da passada, deixando a transa├º├úo do item ABERTA segurando lock. O TRY aninhado existe porque o pr├│prio rollback pode estourar (conex├úo ca├¡da ├® uma das causas de cair ali) ÔÇö e ele **n├úo** fica silencioso: o motivo entra na mensagem (regra #9).
+- **Nenhum `RETURN` dentro de TRY/CATCH** (regra #1): a sa├¡da ├® por `loc_lProcessando`. Verificado: 0 ocorr├¬ncias.
+
+## Verifica├º├úo
+
+Compila limpo (`.fxp` apagado antes, recriado ÔÇö n├úo ├® artefato velho). Caminho normal provado n├úo-regressivo com fila de 2 itens:
+
+```
+C_itens_carregados=2 lock=2 processados=2 excluidos=2 rollbacks=1
+C_msg_reportada=.F.                      <- nenhuma mensagem esp├║ria
+D_processados=2 excluidos=0               <- item falha -> fila PRESERVADA (Loop do legado)
+```
+
+Diff **puramente aditivo**: 59 linhas acrescentadas, **0 removidas** (ignorando reindenta├º├úo). Arquivo segue LF puro. Gate passa, completude limpa (os 8 "TODO" s├úo as palavras *todo/todos/m├®**todo*** em portugu├¬s, e j├í existiam antes).
+
+## Duas observa├º├Áes
+
+1. **O probe me deu um falso negativo duas vezes** antes de eu achar a causa: `.fxp` velho do pr├│prio probe. ├ë a armadilha j├í registrada ÔÇö vale apagar o `.fxp` do probe, n├úo s├│ o do alvo.
+2. Auditei o resto e **n├úo mexi**, medindo cada hip├│tese: `ON ERROR &loc_cErro.` com string vazia ├® seguro (testado); os tr├¬s `.Picture` existem em `vbmp\`; nenhum m├®todo PROTECTED do BO ├® chamado de fora (regra #51); `this_lNovoRegistro` nunca vira `.T.`, ent├úo o guard de `Excluir()` n├úo dispara; e o `TabIndex` 1/2 produz a mesma ordem relativa que o 8/9 do SCX. As quatro auditorias do projeto (`FuncoesNaoDefinidas`, `PropriedadesInexistentes`, `LookupEmKeyPress`, `MetodoProtegidoChamadoDeFora`) voltaram limpas.

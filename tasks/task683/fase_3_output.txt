@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Clean ÔÇö only the two `.prg` source files remain.
+
+## Summary
+
+Fase 3/8 conclu├¡da: criei `C:\4c\projeto\app\forms\operacionais\FormSIGPRTFH.prg` com a estrutura base do form.
+
+Pontos importantes da implementa├º├úo:
+
+1. **Sem PageFrame** ÔÇö o legado `SIGPRIFF.SCX` ├® um dialogo modal plano (sem abas), ent├úo segui o padr├úo de forms OPERACIONAL flat j├í estabelecido em `FormSigOpAut.prg`, em vez do boilerplate gen├®rico de Page1/Page2 do esqueleto.
+
+2. **Init() com 24 par├ómetros** ÔÇö o legado recebe `pcIp, lcInicio, pcValor, ..., pcteste` via `DO FORM ... WITH`; implementei `Init()` capturando todos os 24 escalares (com guardas `VARTYPE`) antes de `DODEFAULT()`, para que `InicializarForm()` j├í os tenha dispon├¡veis ao criar o BO.
+
+3. **Estrutura visual criada nesta fase**: `cnt_4c_Sombra` (faixa do cabe├ºalho), `shp_4c_Painel` (moldura decorativa), `cnt_4c_Container1` (as 4 labels de status do SiTef ÔÇö Label2/3/4 ficam ocultas na abertura, igual ao legado) e `obj_4c_SAIDA` (o ├║nico bot├úo de sa├¡da do di├ílogo). Campos de dados (Pra├ºa/Banco/Ag├¬ncia/Conta/Cheque/CPF) ficam para a Fase 5, sem lookups (Fase 6, confirmado vazio) e handlers para a Fase 7.
+
+4. **Corrigi uma colis├úo de nomes no mapeamento** ÔÇö `mapeamento.json` (tanto a c├│pia da task quanto a can├┤nica em `projeto\app\utils\mapeamentos\`) mapeava `SIGPRIFF.Label1/2/3/4` (labels diretos do form) para os MESMOS nomes que `SIGPRIFF.Container1.Label1/2/3/4`, um bug de gerador j├í documentado na mem├│ria do projeto. Renomeei os diretos para `lbl_4c_LabelAgencia/LabelCpf/LabelDvConta/LabelDvCheque`.
+
+5. **Valida├º├úo**: compilei `SIGPRTFHBO.prg` e `FormSIGPRTFH.prg` no VFP9 real (`BO_OK` / `FORM_OK`), depois removi os `.fxp` gerados.
+
+Pr├│ximo passo (Fase 4/8) n├úo se aplica da forma gen├®rica aqui ÔÇö este form n├úo tem grid nem bot├Áes CRUD; a Fase 5 deve entrar direto com os campos de dados.

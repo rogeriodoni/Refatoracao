@@ -1,0 +1,709 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpBlo.SCX
+* Data/Hora: 17/10/2026 05:58:19
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPBLO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape2
+  Parent: SIGOPBLO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGOPBLO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say2
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_datini
+  Parent: SIGOPBLO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_datfin
+  Parent: SIGOPBLO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ddr
+  Parent: SIGOPBLO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ddf
+  Parent: SIGOPBLO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGOPBLO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say6
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DtCont
+  Parent: SIGOPBLO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape4
+  Parent: SIGOPBLO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Opt_Concilia
+  Parent: SIGOPBLO
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGOPBLO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGOPBLO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPBLO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPBLO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Salvamento
+  Parent: SIGOPBLO
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 271
+  Width = 500
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Bloqueio"
+  ControlBox = .F.
+  FontName = "Courier New"
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  Themes = .F.
+  Name = "SIGOPBLO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Shape2
+------------------------------------------------------------
+  Top = 153
+  Left = 9
+  Height = 2
+  Width = 291
+  BorderWidth = 2
+  Curvature = 0
+  DrawMode = 13
+  SpecialEffect = 0
+  BorderColor = 100,100,100
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Shape1
+------------------------------------------------------------
+  Top = 98
+  Left = 9
+  Height = 2
+  Width = 291
+  BorderWidth = 2
+  Curvature = 0
+  DrawMode = 13
+  SpecialEffect = 0
+  BorderColor = 100,100,100
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Período do Bloqueio "
+  Left = 15
+  Top = 83
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Get_datini
+------------------------------------------------------------
+  StrictDateEntry = 0
+  Alignment = 3
+  Value = 
+  ControlSource = "crBloqueio.datais"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Left = 16
+  MaxLength = 10
+  TabIndex = 1
+  Top = 104
+  Width = 80
+  NullDisplay = "//"
+  Name = "Get_datini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Get_datfin
+------------------------------------------------------------
+  StrictDateEntry = 0
+  Alignment = 3
+  Value = 
+  ControlSource = "crBloqueio.datafs"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Left = 116
+  MaxLength = 10
+  TabIndex = 2
+  Top = 104
+  Width = 80
+  NullDisplay = "//"
+  Name = "Get_datfin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say1
+------------------------------------------------------------
+  Caption = "a"
+  Left = 100
+  Top = 107
+  TabIndex = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Dias Retroativo : "
+  Left = 16
+  Top = 162
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Dias Futuro : "
+  Left = 171
+  Top = 162
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.get_ddr
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crBloqueio.ddretros"
+  InputMask = ""
+  Left = 113
+  MaxLength = 5
+  TabIndex = 3
+  Top = 159
+  Width = 45
+  Name = "get_ddr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.get_ddf
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crBloqueio.ddfutus"
+  InputMask = ""
+  Left = 246
+  MaxLength = 5
+  TabIndex = 4
+  Top = 159
+  Width = 45
+  Name = "get_ddf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say5
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Bloqueio Automático "
+  Left = 15
+  Top = 138
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Shape3
+------------------------------------------------------------
+  Top = 210
+  Left = 161
+  Height = 2
+  Width = 113
+  BorderWidth = 2
+  Curvature = 0
+  DrawMode = 13
+  SpecialEffect = 0
+  BorderColor = 100,100,100
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say6
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Bloqueio Contábil"
+  Left = 168
+  Top = 195
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Get_DtCont
+------------------------------------------------------------
+  StrictDateEntry = 0
+  Alignment = 3
+  Value = 
+  ControlSource = "crBloqueio.DtiConts"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Left = 174
+  MaxLength = 10
+  TabIndex = 5
+  Top = 216
+  Width = 80
+  NullDisplay = "// "
+  Name = "Get_DtCont"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Shape4
+------------------------------------------------------------
+  Top = 210
+  Left = 9
+  Height = 2
+  Width = 127
+  BorderWidth = 2
+  Curvature = 0
+  DrawMode = 13
+  SpecialEffect = 0
+  BorderColor = 100,10,100
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Opt_Concilia
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  ControlSource = "CrBloqueio.ChkConcs"
+  Height = 53
+  Left = 15
+  Top = 216
+  Width = 119
+  TabIndex = 5
+  Name = "Opt_Concilia"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Checar Bloqueio"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 0
+  Option1.Width = 95
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Liberar Data"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Style = 0
+  Option2.Top = 18
+  Option2.Width = 77
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Nenhum"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Style = 0
+  Option3.Top = 36
+  Option3.Width = 57
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Say7
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data Conciliação"
+  Left = 24
+  Top = 194
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPBLO.Salvamento
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 81
+  Left = 340
+  SpecialEffect = 1
+  Top = 3
+  Width = 161
+  TabIndex = 13
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Salvamento"
+  Command1.Top = 0
+  Command1.Left = 10
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Confirmar"
+  Command1.ToolTipText = "Salva as alterações"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Salva"
+  Command2.Top = 0
+  Command2.Left = 85
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Aborta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPBLO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcQryBloqueio = [Select * From SigSyBlq]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigSyBlq', 'cIdChaves', 'crBloqueio', '', '', lcQryBloqueio)
+		EndWith
+
+		.poDataMgr.Requery('crBloqueio')
+
+		Go Top In crBloqueio
+		If Eof('crBloqueio')
+			Insert Into crBloqueio (cIdChaves) Values (fUniqueIds())
+		EndIf
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBLO.Get_datfin
+* Classe: fweditdata (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Value < Thisform.get_datini.Value)
+	=Messagebox('Entrada Inválida!!!', 0+48, '')
+	Return 0
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPBLO.Salvamento
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Salva.Click
+------------------------------------------------------------
+PROCEDURE Salva.Click
+lcBloqueio = 'BLOQUEIO DE '+Nvl(Dtoc(Thisform.Get_datini.Value),'')+' a '+;
+                            Nvl(Dtoc(ThisForm.Get_datfin.Value),'')+;
+                            ' - Ret.:'+Alltrim(Str(ThisForm.Get_ddr.Value))+;
+                            ' - Fut.:'+Alltrim(Str(ThisForm.Get_ddf.Value))
+
+=fGravarLog('B', 'SIGOPBLO', 'ALTERACAO', lcBLOQUEIO, USUAR)
+
+ThisForm.poDataMgr.Update('crBloqueio')
+Thisform.poDataMgr.Commit()
+
+ThisForm.Release
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Aborta.Click
+------------------------------------------------------------
+PROCEDURE Aborta.Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPBLO
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

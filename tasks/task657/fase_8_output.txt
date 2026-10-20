@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8/8 is complete and verified. Summary:
+
+## What was added ÔÇö `FormSIGOPCCO.prg` (+264 lines)
+
+Four consolidation methods, all wired into the real flow (no dead code, no stubs):
+
+| M├®todo | Escopo | Origem no legado | Chamado por |
+|---|---|---|---|
+| `CarregarLista()` | **PUBLIC** (harness chama de fora ÔÇö regra #3) | o `PROCEDURE Init` que popula a `Grade` | `InicializarForm` |
+| `FormParaBO()` | **PROTECTED** (FormBase declara assim) | `ThisForm.Emp = Emp / Serie / EmisDe / EmisAte / pcNFisDe = NFis` + `XCorNf.Cods`/`Retifs` lidos no `Ok.Click` | `InicializarForm`, `CarregarLista`, `BtnConfirmarClick` |
+| `BOParaForm()` | **PROTECTED** | `Get_NotaIni.Value = NFis` + o `Seek`/`Replace` do 2┬║ `Scan` | `ConfigurarCampoNota`, `CarregarDados` (dentro do Scan) |
+| `LimparCampos()` | **PROTECTED** | ramo `Else` do `Get_NotaIni.Valid` (`This.Value='' / Zap / Grade.Refresh`) | `ValidarNotaIni` |
+
+Tamb├®m substitu├¡ tr├¬s trechos inline pelos novos funis (atribui├º├úo direta do campo ÔåÆ `BOParaForm`; limpeza inline ÔåÆ `LimparCampos`; `CarregarDados` direto ÔåÆ `CarregarLista`), e no BO (`ConfirmarCorrecao`/`ObterEmpDopNums`) o argumento ausente passou a cair na pr├│pria property em vez de `""` ÔÇö assim o `BtnConfirmarClick` chama sem repassar o que o `FormParaBO` acabou de gravar.
+
+## Verifica├º├úo (medida, n├úo inferida)
+
+- **Compila├º├úo**: `COMPILE_OK`, zero `.err` nos dois arquivos.
+- **Probe funcional em VFP9** (`automation/ProbeCco657F8.prg`, 10 checks): **`PROBE_OK`** ÔÇö o form instancia com os 6 par├ómetros do legado, o campo Nota chega com `000123` pela cadeia `FormParaBO ÔåÆ BOParaForm`, os escopos est├úo corretos (os 3 hooks PROTECTED, os handlers PUBLIC), o `FormParaBO` captura a linha corrente da grade e zera a ocorr├¬ncia com a grade vazia, o `BOParaForm` faz o Seek/Replace e **n├úo** toca a grade com `noccors = 0`, e o `LimparCampos` esvazia campo e cursor. As duas linhas em `vfp_err_cco657.txt` s├úo o `Connection handle is invalid` esperado do check 10 (`gnConnHandle = -1`), que mede s├│ o fallback sem argumento.
+- **Gate da Fase 8**: `metodosFaltantes` = 0 com declara├º├Áes `PROCEDURE` reais (n├úo men├º├úo em coment├írio), e `padraoAcaoGravar` casa em `BtnConfirmarClick`.
+- **Auditorias**: completude OK nos dois arquivos; `ValidadorSQLSchema` PASSOU (683 tabelas lidas ÔÇö acima do piso de sanidade do encoding UTF-16); fun├º├Áes ├│rf├ús, propriedades inexistentes e m├®todo PROTECTED chamado de fora: todos zero.
+- CRLF restaurado nos dois `.prg` (CR == LF).
+
+## Duas coisas que deixei de fora, deliberadamente
+
+1. **Barra CRUD, modos e os m├®todos de habilita├º├úo/ajuste por modo.** O `SIGOPCCO` legado tem UM `CommandGroup` de dois bot├Áes (Confirmar/Cancelar), nenhuma altern├óncia de p├ígina e estado fixo (`Get_NotaIni.When ÔåÆ .F.`, `Text1.When ÔåÆ .F.` nas colunas 1 e 2). Cri├í-los exigiria inventar bot├Áes e modos inexistentes (PILAR 1) ou deixar corpo vazio (regra de completude). Est├í documentado no cabe├ºalho em prosa gen├®rica ÔÇö sem escrever os identificadores por extenso, porque os gates casam nome em texto livre e isso faria a fase aprovar pelo caminho errado.
+
+2. **Entrada no `menu.prg`.** Este di├ílogo recebe 6 par├ómetros do form chamador (`pForm,Emp,Serie,EmisDe,EmisAte,NFis`); uma chamada de menu sem argumentos o abriria com empresa/s├®rie/nota vazias. O irm├úo imediato `FormSigOpCcl` (task656), tamb├®m filho com par├ómetros, igualmente n├úo tem entrada de menu. Se voc├¬ quiser a entrada mesmo assim, ├® decis├úo sua ÔÇö diga de onde o menu deve tirar os 6 valores.

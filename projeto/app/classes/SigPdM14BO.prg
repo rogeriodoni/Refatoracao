@@ -187,7 +187,9 @@ DEFINE CLASS SigPdM14BO AS BusinessBase
             ENDIF
 
             IF USED(par_cAlias)
-                TABLEREVERT(.T., par_cAlias)
+                IF CURSORGETPROP("Buffering", par_cAlias) > 1
+                    TABLEREVERT(.T., par_cAlias)
+                ENDIF
                 USE IN (par_cAlias)
             ENDIF
 

@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da ÔÇö `C:\4c\projeto\app\classes\SigPrRetBO.prg`.
+
+## Por que a tentativa anterior foi reprovada
+
+O gate da Fase 2 (`OrquestradorMigracao.ps1:6890`) exige:
+
+```
+CarregarDoCursor  AND  ( (Inserir AND Atualizar)  OR  boSomenteLeitura )
+```
+
+O arquivo anterior tinha `boSomenteLeitura = .T.` corretamente, mas **n├úo tinha `CarregarDoCursor` em lugar nenhum** ÔÇö e esse termo ├® obrigat├│rio nos dois ramos. Faltava o m├®todo, n├úo a justificativa.
+
+## O que foi adicionado (implementa├º├úo real, nenhum stub)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `CarregarPorCodigo(par_cCodigo)` | `SELECT cpros, dpros FROM SigCdPro` ÔÇö o par c├│digo/descri├º├úo que `Get_cod.Valid`/`Get_dcod.Valid` devolvem ├á tela. Retorna `.F.` **sem** di├ílogo quando n├úo acha (o legado abre o browse, n├úo avisa ÔÇö regra #50) |
+| `CarregarDoCursor(par_cAliasCursor)` | Transfere `cpros`/`dpros` do cursor corrente. Serve tanto ├á consulta exata quanto ao cursor do picker (`fwBuscaExt` ÔåÆ `crListaRemota`). Usa `SELECT (alias)` + `TYPE()` (n├úo `PEMSTATUS`, que estoura com alias de cursor) |
+| `CarregarOperacoes()` | Bloco do `Init` legado: `select a.* from SigCdOpd` + `Index On dopps Tag dopps`. Recriado `READWRITE` (cursor de SQLEXEC nasce read-only e `INDEX ON` exige grav├ível) e limitado a `dopps`/`ndopps`, as duas ├║nicas colunas que a tela usa ÔÇö `a.*` traria as colunas `text` sem uso |
+| `CarregarParametros()` | Bloco `mena - 02/04/2017`: l├¬ `SigCdPac.fixaemp` para `this_nFixaEmpresa` (propriedade **num├®rica**, n├úo l├│gica ÔÇö `numeric(1,0)`, regra do Erro180) |
+| `ObterChavePrimaria()` | `PROTECTED`, retorna `this_cCodigo` (PK `sigcdpro_cpros`) |
+
+Tamb├®m corrigi dois coment├írios errados da Fase 1: `cpros` ├® **char(14)** e `dpros` ├® **char(65)** (os `Space(10)`/`Space(40)` do legado s├úo larguras de TextBox, n├úo da coluna).
+
+`Inserir()`/`Atualizar()`/`ExecutarExclusao()`/`RegistrarAuditoria()` continuam herdados. O dump legado tem **zero** `TABLEUPDATE(`, zero `.AddCursor(` e zero `Insert/Update/Delete` sobre tabela ÔÇö o ├║nico alvo de escrita ├® o cursor local `csEtiqDig`. Os tr├¬s bot├Áes (Consulta/Digita├º├úo/Arquivadas) s├│ coletam filtros e fazem `Do Form SigOpIpE`.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo VFP9** (`automation\CompileCheckRet670F2.prg`): `COMPILE_OK`, `.err` vazio
+- **Gate Fase 2** simulado com a l├│gica exata do orquestrador: `boSomenteLeitura=True`, `GATE FASE 2 = True`
+- **Completude 05d** (TODO/procedure vazia/pend├¬ncia): 0 problemas
+- **ValidadorSQLSchema** (683 tabelas, 7 statements): `PASSOU ÔÇö nenhuma coluna invalida`
+- **VerificarFuncoesNaoDefinidas**: nenhuma chamada ├│rf├ú
+- Zero acentos literais; nenhum `RETURN` dentro de `TRY`; arquivo normalizado para CRLF como o resto do reposit├│rio
+
+## Ponto de aten├º├úo para as fases seguintes
+
+`CarregarOperacoes()` e `CarregarParametros()` foram criados mas **n├úo** s├úo chamados do `Init` do BO ÔÇö deixei isso para a fase do Form, para n├úo duplicar com o que a Fase 3+ gerar e para n├úo disparar SQL em modo de teste (`gnConnHandle = 0`). Se nenhuma fase posterior as chamar, o SEEK de Ind├║stria (`seek(this.value,'SigCdOpd','dopps')`) e a trava de empresa por `fixaemp` ficam sem fonte de dados.

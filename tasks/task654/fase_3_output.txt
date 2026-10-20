@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Bom, FormSigOpCbx.prg ├® um arquivo novo (n├úo aparece como modificado/sujo), e os artefatos de compila├º├úo foram limpos. A Fase 3 est├í conclu├¡da.
+
+**Resumo**: Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpCbx.prg` com a estrutura base do dialogo modal "Baixa de Cadastros":
+- `DEFINE CLASS FormSigOpCbx AS FormBase` com propriedades visuais do legado (527x135, modal, sem titlebar)
+- Properties `this_nCodigoPendente`/`this_cTituloPai` (equivalentes aos par├ómetros legado `pcCodigo`/`ParentForm.Tits`) e `this_cResultado` (equivalente ao `Bxado`)
+- `Init(par_nCodigo, par_cTitulo)` que captura os par├ómetros e encaminha via `DODEFAULT()`
+- `InicializarForm()` que instancia o `SigOpCbxBO` e monta a faixa do cabe├ºalho (`ConfigurarCabecalho`)
+
+N├úo inclu├¡ ainda `Container1`/`Commandgroup1` (campos e bot├Áes Baixa/Cancela) nem eventos ÔÇö isso fica para as pr├│ximas fases, conforme o escopo desta fase. Compilei o Form + BO no VFP9 real (`COMPILE_OK`, sem `.err`) antes de limpar os artefatos gerados.

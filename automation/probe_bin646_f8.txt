@@ -1,0 +1,22 @@
+=== PROBE Fase 8 - FormSIGOPBIN ===
+1) CREATEOBJECT -> VARTYPE=O Width=600 Height=200 Fpagto=[001]
+2) controles do legado:
+   lbl_4c_Frase     = .T.
+   lbl_4c_Label2    = .T.
+   txt_4c_Bin       = .T.
+   cnt_4c_Sombra    = .T.
+3) escopos (atributo 2 = Protected):
+   FormParaBO      Protected=.T. esperado .T.
+   BOParaForm      Protected=.T. esperado .T.
+   BinKeyPress     Protected=.F. esperado .F.
+   ValidarCampoBin Protected=.F. esperado .F.
+4) FormParaBO: txt=[411111] -> BO.this_cCodBins=[411111] esperado [411111]
+5) BOParaForm: BO=[550000] -> txt=[550000] esperado [550000]
+6) ObterResultadoSaida (Unload legado):
+   ZSen=.F. UsuLibs=[]       -> [ ] esperado [ ]
+   ZSen=.T. UsuLibs=[411111] -> [*411111] esperado [*411111]
+7) campo: MaxLength=6 esperado 6 (SigOpFpb.codbins char(6))
+   InputMask=[!!!!!!!!!!] (transcrito do SCX)
+   Alignment=3 esperado 3
+
+PROBE_OK

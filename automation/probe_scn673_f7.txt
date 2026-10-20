@@ -1,0 +1,26 @@
+=== PROBE Fase 7 - FormSigPrScn ===
+1) CREATEOBJECT -> VARTYPE=O Width=436 Height=160 TitleBar=0 WindowType=1
+2) controles do legado:
+   lbl_4c_Label1  = .T.
+   lbl_4c_Label2  = .T.
+   txt_4c_USUARIO = .T.
+   txt_4c_SENHA   = .T.
+   cnt_4c_Sombra  = .T.
+     lbl_4c_LblSombra = .T.
+     lbl_4c_LblTitulo = .T.
+3) botoes (o SCX legado nao declara nenhum):
+   CommandButton/CommandGroup na arvore = 0 esperado 0
+   BtnIncluirClick    = .F. esperado .F.
+   BtnAlterarClick    = .F. esperado .F.
+   BtnVisualizarClick = .F. esperado .F.
+   BtnExcluirClick    = .F. esperado .F.
+4) escopos (atributo 2 = Protected):
+   ValidarSenha      Protected=.F. esperado .F.
+   ValidarParametros Protected=.F. esperado .F.
+5) BINDEVENT em txt_4c_SENHA: 1 vinculo(s)
+   delegate -> [VALIDARSENHA]
+6) campos (transcritos do SCX):
+   USUARIO Format=[K] InputMask=[!!!!!!!!!!] TabIndex=2
+   SENHA   Format=[K] InputMask=[!!!!!!!!!!] PasswordChar=[*] TabIndex=3
+
+PROBE_OK

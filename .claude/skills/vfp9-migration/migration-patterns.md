@@ -14239,3 +14239,83 @@ o `Salvar()`, a falha mostraria o `MsgAviso` do BO **e** o generico do `ExibirFa
 Auto-fix: CorretorAutomatico **#218** (no `*BO.prg`; WARNING para o que so a base protege).
 Auditoria: `automation\VerificarMetodoProtegidoChamadoDeFora.ps1` (sobe a heranca ate a raiz;
 exit 1 com pendencia). Regra #51 do CLAUDE.md.
+## 247. `TABLEREVERT` sem buffering: Erro 1586 derruba a ABERTURA da tela (Erro230 2026-10-20)
+
+`TABLEREVERT()` e `TABLEUPDATE()` **exigem** buffering ligado. Sem ele nao sao no-op:
+**ERRAM**. Medido no VFP9 (2026-10-20):
+
+```
+CREATE CURSOR x (a C(3))                 -> CURSORGETPROP("Buffering") = 1
+SELECT * FROM y INTO CURSOR x READWRITE  -> CURSORGETPROP("Buffering") = 1
+TABLEREVERT(.T., "x")  com Buffering = 1 -> ERRO 1586
+        "Function requires row or table buffering mode."
+USE IN x               com Buffering = 1 -> OK
+USE IN x   com Buffering = 5 e alteracoes PENDENTES -> OK
+TABLEREVERT(.T., "x")  com Buffering = 5 -> retorna .T.
+```
+
+A ultima linha eh a que fecha o caso: **`USE IN` fecha o alias mesmo com o buffer
+sujo**. O `TABLEREVERT` antes do `USE IN` nunca foi necessario - e no caso comum
+(cursor sem buffering) ele ERRA.
+
+**Quem gerou foi o CorretorAutomatico, nao o migrador** (como no Erro501, regra #43).
+O pattern **#91** injetava, antes de todo `SQLEXEC` em `cursor_4c_*`:
+
+```foxpro
+IF USED("cursor_4c_Dados")
+    TABLEREVERT(.T., "cursor_4c_Dados")   && <- ERRO 1586 se Buffering = 1
+    USE IN cursor_4c_Dados
+ENDIF
+```
+
+**O gatilho eh o PLACEHOLDER do grid.** `ConfigurarPaginaLista` cria o cursor vazio
+que a grade usa como `RecordSource` antes de existir dado:
+
+```foxpro
+IF !USED("cursor_4c_Dados")
+    CREATE CURSOR cursor_4c_Dados (series C(3))   && Buffering = 1
+ENDIF
+```
+
+Dai `InicializarForm` -> `CarregarLista` -> `BO.Buscar("")` acha o alias ABERTO,
+dispara o `TABLEREVERT` e estoura **na PRIMEIRA abertura**, sempre. O `CATCH` do
+`Buscar` faz `MsgErro(loc_oErro.Message, "Erro")`: o usuario clica no menu e recebe
+um dialogo **"Erro / Function requires row or table buffering mode."** - mensagem
+que nao cita cursor nenhum e manda o diagnostico para o SQL.
+
+**Fora de `TRY` o sintoma inverte**: vira *Program Error* cru, e em VFP9 headless
+**congela o processo** esperando um clique que ninguem ve
+(ver secao do `FormSigPrSnd.Destroy` / `CriarCursorSenhas`).
+
+**Forma correta** - guardar pelo BUFFERING, nunca so por `USED()`:
+
+```foxpro
+IF USED("cursor_4c_Dados")
+    IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+        TABLEREVERT(.T., "cursor_4c_Dados")
+    ENDIF
+    USE IN cursor_4c_Dados
+ENDIF
+```
+
+**O alias nem sempre eh literal** - `TABLEREVERT(.T., par_cCursor)` aparece em
+helper de fechamento (`FecharCursorProcesso`, `ExecutarConsulta`); `CURSORGETPROP`
+aceita a variavel do mesmo jeito.
+
+**Alcance medido**: **267 sites em 77 arquivos**, e so **2** tinham guard. Nenhum
+gate pegava: compila limpo, e o `TestFormWrapper` nao abre a Lista
+(`gb_4c_ModoTeste` pula o `CarregarLista`).
+
+**Dano colateral que o guard NAO conserta**: em `BtnCancelarClick` de 4 forms
+OPERACIONAIS (`FormFop`, `FormFpm`, `Formsigpdmp2`, `FormSigPdMp8`) o `TABLEREVERT`
+era a propria semantica de "Cancelar". Como esses cursores nascem com
+`Buffering = 1` (nenhum deles chama `CURSORSETPROP`/`AddCursor`), as edicoes do grid
+ja iam DIRETO para o cursor: o Cancelar nunca desfez nada e ainda exibia o erro. O
+guard tira o erro; **restaurar o desfazer exige ligar buffering de verdade** e
+conferir contra o dump do legado - fica registrado como pendencia, nao se inventa.
+
+Auto-fix: CorretorAutomatico **#219** (envolve qualquer `TABLEREVERT` cru no guard;
+registrado nas DUAS listas, inclusive modo SEGURO, porque classe base que fecha
+cursor derruba toda tela que a usa) + **#91** corrigido na origem (passou a emitir o
+guard). Regra #52 do CLAUDE.md. Origem: Erro230 (`FormDup`/`DupBO` - a tela de
+Series de Duplicatas nao abria).

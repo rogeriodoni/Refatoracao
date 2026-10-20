@@ -1,0 +1,18 @@
+INICIO
+deps OK gnConnHandle=0
+CREATEOBJECT=O
+ESCOPO-BO prot: BuscarFila=.F. CarregarDoCursor=.F. ProcessarItem=.F. VerificarMovimento=.F. Excluir=.F. MarcarEmProcessamento=.F. DesfazerTransacao=.F. ConfirmarTransacao=.F. GravarLog=.F. IniciarLog=.F.
+ESCOPO-FORM prot: BtnProcessarClick=.F. BtnEncerrarClick=.F. BtnBuscarClick=.F. BtnSalvarClick=.F. BtnCancelarClick=.F. BtnIncluirClick=.F. CarregarLista=.F. AjustarBotoesPorModo=.F. AlternarPagina=.F. HabilitarCampos=.F. ValidarPrioridade=.F. ReportarFalha=.F. FormParaBO=.T. BOParaForm=.T. LimparCampos=.T.
+TRANSACAO Manual=.F. Confirmar=.T.
+DESFAZER chamada=OK (sem excecao)
+RECALC antes Disponivel=.T.
+RECALC 1a chamada ret=.F. Disponivel=.F. Msg=[A função de recálculo de saldo (fRecalculaP) não está disponível nesta instalação.Nenhum saldo foi recalculado e a fila foi preservada.]
+RECALC 2a chamada ret=.F. MsgIntacta=.T.
+VALIDAR(1) Form=1 BO=1
+HABILITAR(.F.) ReadOnly=.T. ProcessarEnabled=.F.
+HABILITAR(.T.) ReadOnly=.F. ProcessarEnabled=.T.
+CONTRATO CarregarLista=.T. BtnBuscar=.T. BtnSalvar=.T. BtnCancelar=.T. BtnIncluir=.T.
+CONTRATO AjustarBotoes/AlternarPagina=OK
+REPORTAR-LOTE LogCriado=.T. Conteudo=[ABORTADO: TESTE-LOTE]
+PROCESSAR retornou ProcessarEnabled=.T. EncerrarEnabled=.T. Progresso=[]
+RESULTADO=OK

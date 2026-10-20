@@ -1,0 +1,33 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCbl.prg` est├í completo (2052 linhas, 23 m├®todos), compila limpo e passou no probe funcional (`PROBE_OK`, 11 verifica├º├Áes).
+
+## O que a Fase 8 entregou
+
+**M├®todos de consolida├º├úo**
+- `CarregarLista()` ÔÇö PUBLIC (o harness chama de fora, regra #3). ├ë a carga de dados desta tela: recarrega o registro ├║nico de `SigCnFBl` (`CarregarRegistroUnico` + `BOParaForm` + `Refresh` + foco no Text1), reproduzindo o bloco `AddCursor/ReQuery/Go Top/Append Blank` do `Init` legado. `InicializarForm` passou a cham├í-la (depois de `ConfigurarPageFrame`, com o guard de `gb_4c_ModoTeste/ValidandoUI`).
+- `BtnCancelarClick()` ÔÇö corpo do `cmdCancelar.Click` legado; `BtnEncerrarClick()` delega para ele. O objeto do SCX tem duas identidades (`Name="cmdCancelar"`, `Caption="Encerrar"`) e as duas conven├º├Áes do projeto apontam para nomes diferentes ÔÇö 88 dos 112 forms OPERACIONAIS declaram os dois, e o `TesteAutomatico.prg` s├│ aceita `BtnEncerrar/Fechar/Sair`. Um corpo, um alias documentado.
+- `BtnConfirmarClick()` ganhou o `LockScreen` do legado, com reset garantido em todo caminho (flag `loc_lLiberou` em vez de tocar o form depois do `Release`).
+- `FormParaBO`/`BOParaForm` j├í estavam completos ÔÇö provei o idaÔÇæeÔÇævolta nos campos no probe.
+
+## Quatro defeitos reais achados e corrigidos (medidos no VFP9, n├úo deduzidos)
+
+1. **`GetPaperSize()` n├úo existe** ÔÇö n├úo ├® nativa do VFP9 e n├úo veio no acervo (os `.PJT` legados a listam como refer├¬ncia externa n├úo resolvida, ao lado de `IsEmpty`). Medido: `File 'getpapersize.prg' does not exist`, erro 1, num `Valid` fora de TRY/CATCH ÔÇö a tela cairia ao sair do campo "Folha" vazio. Criei o wrapper de contrato em `utils\functions.prg` (c├│digo de 10 chars via `PRTINFO(2)` + descri├º├úo, `""` em falha para o chamador aplicar o fallback do legado). **Isso tamb├®m conserta `FormCfb` e `FormCHM`**, que chamam a mesma fun├º├úo.
+2. **`APRINTERS`/`AFONT` com destino `LOCAL` simples** ÔåÆ erro 232 `'LOC_APRINTERS' is not an array` em runtime. Trocado por `LOCAL ARRAY`.
+3. **`loc_nQtd = AFONT(...)` comparado com `> 0`** ÔÇö `AFONT` devolve **L├ôGICO**, n├úo contagem: erro 107 *Operator/operand type mismatch*. Passou a usar `ALEN(array,1)`, como o legado.
+4. **Ramos do legado descartados** ÔÇö o `MessageBox('Nenhuma Impressora Instalada.')` do Text29, o fallback `Str(256,10)+'Personalizado'` do Text40 e o guard de campo vazio que o legado *n├úo* tem (valor em branco deve abrir o seletor). Todos transcritos, com guarda de reentr├óncia (`this_lEmDialogo` + par wrapper/`*Exec`) porque os tr├¬s abrem di├ílogo modal do Windows a partir de `LostFocus`.
+
+Tamb├®m transcrevi os 32 `Format = "K"` do SCX que faltavam, e documentei por que o `Load` legado (`=fConfigGeral()`) **n├úo** ├® portado ÔÇö o pr├│prio `utils\fconfiggeral.prg` diz que c├│digo nosso nunca deve cham├í-lo.
+
+## O que deixei de fora, de prop├│sito
+`HabilitarCampos()`, `LimparCampos()` e `AjustarBotoesPorModo()` pedidos no enunciado gen├®rico da fase: esta tela ├® OPERACIONAL flat, com registro ├║nico e dois bot├Áes (Confirmar/Encerrar) ÔÇö n├úo tem Page1/Page2, grade, nem modos INCLUIR/ALTERAR/VISUALIZAR. Cri├í-los seria stub vazio, proibido pela regra de completude. O gate da Fase 8 exige `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`, e os quatro est├úo presentes e funcionais.
+
+## Verifica├º├úo
+- Compila├º├úo limpa: form, BO e `functions.prg` (nenhum `.err`).
+- `ProbeCbl653F8.prg`: instancia (77 controles), escopos corretos, contrato do `GetPaperSize`, os dois handlers antes quebrados rodando com impressora/fonte reais, guarda de reentr├óncia, idaÔÇæeÔÇævolta BOÔåöform, as f├│rmulas do legado em 5 casos, `CarregarLista` sem conex├úo n├úo derruba o form, `BtnEncerrarClick` honrando confirma├º├úo declinada.
+- Auditorias do projeto, todas sem achado para este form/BO: fun├º├Áes n├úo definidas (0 ├│rf├ús no projeto), `InsertNotNull`, campos de cursor, coluna de empresa, lookup em KeyPress, propriedades inexistentes. `Format/InputMask`: `InputMask 29/29`, `ALTA=0 MEDIA=0`.
+
+Dois pontos que ficam **fora** desta task, mas vale registrar: `FormCfb.prg` tem os mesmos bugs de `LOCAL` array e `AFONT > 0` (linhas ~2194 e ~2246), e a auditoria `VerificarFuncoesNaoDefinidas` n├úo havia sido rodada sobre `FormCfb`/`FormCHM` ÔÇö `GetPaperSize` estava ├│rf├ú l├í desde a migra├º├úo. Quer que eu corrija esses dois forms tamb├®m?

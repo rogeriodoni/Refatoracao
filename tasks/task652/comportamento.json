@@ -1,0 +1,291 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 8,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fLimpaTexto", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigopcau",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "WITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\nEndwith\t\n\t\nLocal m.loTree1\n\nm.loTree1 = ThisForm.TreeView\n\nm.loTree1.AddImage(LoadPicture('\\vbmp\\Menu1.Bmp'))\nm.loTree1.AddImage(LoadPicture('\\vbmp\\x_planilha1.bmp'))\nm.loTree1.AddImage(LoadPicture('\\vbmp\\MsgStop1.Gif'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau",
+      "evento": "Procedure",
+      "linhas": 114,
+      "codigoOriginal": "Local loTree1,lnNode1\n\nIf ! Empty(ThisForm.GetcUsu.Value)\n\tlcQuery = [Select * From SigCdUsu Where Usuarios = ']+ThisForm.GetcUsu.Value+[']\n\tThisForm.poDataMgr.SqlExecute(lcQuery,'crSigCdUsu')\n\n\t* Richard em 29/11/2016 - Eliminando SUPERVIS\n\tIf (Upper(Alltrim(Usuar))=[4CONTROL])\n*!*\t\tIf Lower(Alltrim(crSigCdUsu.supervis))=='s' Or Lower(Alltrim(crSigCdUsu.supervis))=='i'\n\t\tlcQuery = [select a.programas,a.parametros,a.descricaos from SigCdPrg a where not a.programas='          ' ]+;\n\t\t          [g... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.TreeView",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS nindex\n*!*\tThis.NodeClick(nIndex)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.TreeView",
+      "evento": "KeyPress",
+      "linhas": 11,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS keyascii\n\n*!*\tIf KeyAscii = 27\n*!*\t\tIf InList(ThisForm.pcEscolha,'CONSULTAR')\n*!*\t\t\tThis.Parent.Parent.Parent.Grupo_Salva.Salva.Click\n*!*\t\tElse\n*!*\t\t\tThis.Parent.Parent.Parent.Grupo_Salva.cancelar.Click\n*!*\t\tEndIf\n*!*\tEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.TreeView",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS nindex, ncolumn\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.Commandgroup1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "loTree1 = ThisForm.TreeView\nllExpande = .f.\n\nFor lnNode = 0 To loTree1.lIstCount-1\n\tIf ThisForm.pnNodeExp + 1 = loTree1.NodeLevel(lnNode)\n\t\tloTree1.NodeExpanded(lnNode) = .t.\n\t\tllExpande = .t.\n\tEndif\nEndFor\n\nIf llExpande \n\tThisForm.pnNodeExp = ThisForm.pnNodeExp + 1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.Commandgroup1",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If ThisForm.pnNodeExp > 0\n\tloTree1 = ThisForm.TreeView\n\n\tFor lnNode = 0 To loTree1.lIstCount-1\n\t\tIf ThisForm.pnNodeExp = loTree1.NodeLevel(lnNode)\n\t\t\tloTree1.NodeExpanded(lnNode) = .f.\n\t\tEndif\n\tEndFor\n\n\tThisForm.pnNodeExp = ThisForm.pnNodeExp - 1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NodeLevel",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Release Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetcUsu",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "m.loTree1 = ThisForm.TreeView\n\nm.loTree1.ClearNodes\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetcUsu",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local xBrox\n\nIf not IsEmpty(This.value)\n\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Usuarios','','Código',.t.)\n\t\txBrox.mAddColuna('nComps','','Nome',.T.)\n\t\txBrox.Show()\n\tEndIf \n\n\tIf lastkey()<>27\n\t\tThis.Parent.GetCUsu.Value = crSigCdUsu.Usuarios\n\t\tThis.Parent.GetDUsu.Value = crSigCdUsu.nComps\n\tElse\n\t\tThis.Parent.GetCUsu.Value = ''\n\t\tThis.Parent.GetDUsu.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetcUsu",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetDUsu",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local xBrox\n\nIf not IsEmpty(This.value)\n\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','nComps',This.Value,'Seleção',.t.,'nComps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('nComps','','Nome',.T.)\n\t\txBrox.mAddColuna('Usuarios','','Código',.t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tIf lastkey()<>27\n\t\tThis.Parent.GetCUsu.Value = crSigCdUsu.Usuarios\n\t\tThis.Parent.GetDUsu.Value = crSigCdUsu.nComps\n\tElse\n\t\tThis.Parent.GetCUsu.Value = ''\n\t\tThis.Parent.GetDUsu.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetDUsu",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetcUsu.Value) And Empty(ThisForm.GetGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetGrupo",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "m.loTree1 = ThisForm.TreeView\n\nm.loTree1.ClearNodes\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetGrupo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local xBrox\n\nIf not IsEmpty(This.value)\n\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGrA','crSigCdGrA','Grupos',This.Value,'Seleção',.t.,'Grupos')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Grupos','','Código',.t.)\n\t\txBrox.mAddColuna('nComps','','Nome',.T.)\n\t\txBrox.Show()\n\tEndIf \n\n\tIf lastkey()<>27\n\t\tThis.Parent.GetGrupo.Value = crSigCdGrA.Grupos\n\tElse\n\t\tThis.Parent.GetGrupo.Value = ''\n\tendif\n\tThisForm.Refresh\nEndIf\n\nIf ! Empty(This.Value) Or ! Empty(This.Parent... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "MakeTree",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigopcau.GetGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetcUsu.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigopcau.Procedure",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdUsu Where Usuarios = ']+ThisForm.GetcUsu.Value+['] \tThisForm.poDataMgr.SqlExecute(lcQuery,'crSigCdUsu')",
+      "tabelas": "SigCdUsu",
+      "colunas": "Usuarios,Value+[],SqlExecutelcQuery,crSigCdUsu",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigopcau.Procedure",
+      "queryOriginal": "\t\tlcQuery = [select a.programas,a.parametros,a.descricaos from SigCdPrg a where not a.programas='          ' ]+; \t\t          [g... [TRUNCADO]",
+      "tabelas": "SigCdPrg",
+      "colunas": "programas,parametros,descricaos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu", "SigCdPrg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

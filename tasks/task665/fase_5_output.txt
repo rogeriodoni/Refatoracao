@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. O achado principal ├® que **a task665 ├® um re-run sobre um form j├í migrado**: `FormSigPrPpc.prg` j├í existia com 1182 linhas e o cabe├ºalho marcando "FASE 7 COMPLETO".
+
+**N├úo regerei o arquivo.** O prompt manda "Fase 3: Use Write", mas a se├º├úo "A├ç├âO OBRIGAT├ôRIA" do mesmo prompt manda "MODIFICAR usando Read + Edit" ÔÇö entre as duas, vale a n├úo-destrutiva (mem├│ria `feedback_task_rerun_sobre_form_ja_migrado`). Escrever o esqueleto apagaria as Fases 6-8 sem nada no log.
+
+**Entreg├ível da Fase 5 j├í estava presente e fiel**: os 16 controles do `layout.json` existem em `ConfigurarPaginaDados`, e conferi um a um contra o dump ÔÇö `Top`/`Left`/`Width`/`Height`/`Caption`/`ForeColor`/`MaxLength` batem exatamente. Pontos corretos que valem registro: `ZOrderSet = 20` (regra #33) e os overrides vazios `ControlSource = ""`/`InputMask = ""` (regra #49) corretamente **n├úo** transcritos; `CHR(224)` do label "├á" confere com o byte `0xE0` do dump; labels sem `ForeColor` no SCX usando `RGB(90,90,90)` (regra #12).
+
+**Cinco propriedades que o migrador descartou** ÔÇö corrigidas:
+
+| Propriedade | Antes | Dump legado |
+|---|---|---|
+| `Buttons(1/2).FontName` | `"Tahoma"` | **`"Comic Sans MS"`** |
+| `Buttons(2).ToolTipText` | ausente | `"[ESC] - Encerrar"` |
+| `Buttons(1).DisabledBackColor` | ausente | `255,255,255` |
+| `cmg.AutoSize` / `cmg.BorderColor` | ausente | `.T.` / `136,189,188` |
+| `TabIndex` (10 focaliz├íveis) | ausente | `3,4,6,7,9,11,13,15,16,17` |
+
+O `TabIndex` era o defeito real: com `AddObject` o VFP numera pela **ordem de cria├º├úo**, e o `cmg_4c_Operacao` ├® criado primeiro (z-order sobre a faixa), ent├úo recebia o foco inicial ÔÇö no SCX ele ├® o **├║ltimo** (17). Novo m├®todo `AplicarTabIndex()`, chamado ap├│s todos os `AddObject`, numerando s├│ os focaliz├íveis (Label n├úo tem `TabStop`).
+
+**Verificado medindo, n├úo presumindo:**
+- `COMPILE` limpo (`.FXP` gerado, `.err` vazio).
+- Probe de runtime instanciou o form e leu a ordem de volta: `Grupo ÔåÆ DGrupo ÔåÆ Conta ÔåÆ ContaDesc ÔåÆ Operacao ÔåÆ DtIni ÔåÆ DtFin ÔåÆ Empresa ÔåÆ EmpresaDesc ÔåÆ cmg`, id├¬ntica ao legado. `AutoSize = .T.` manteve 161x85 (o c├ílculo dos bot├Áes internos coincide com o declarado), `FontName` e `ToolTipText` confirmados no objeto vivo.
+- CRLF restaurado (`CR=1229 LF=1229`); diff real de 48 linhas, sem reescrita fantasma.
+
+Dois pontos para sua decis├úo, que deixei **intocados** por ficarem fora do escopo da fase:
+1. `txt_4c_Grupo`, `txt_4c_Conta`, `txt_4c_ContaDesc`, `txt_4c_Operacao` e `txt_4c_EmpresaDesc` n├úo t├¬m `MaxLength` ÔÇö o legado tamb├®m n├úo declara (herdam da classe `fwget`). Pela regra #19 o valor viria do schema; acrescentar seria divergir do legado, e esses campos v├úo para `SigTempC` pelo BO, que deveria aplicar `LEFT()`. Vale conferir o BO numa pr├│xima fase.
+2. `InicializarValores()` reproduz o `Init` legado campo a campo, mas acrescenta `txt_4c_Grupo.Value = SPACE(10)` e `txt_4c_DGrupo.Value = SPACE(20)`, que o legado n├úo inicializa ÔÇö inofensivo (TextBox via `AddObject` precisa de `.Value` tipado) e mantive.

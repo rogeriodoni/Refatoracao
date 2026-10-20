@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fiz uma busca completa em ambos os arquivos (`SigPrRsaBO.prg` e `FormSigPrRsa.prg`) pelas colunas `PROCURA` e `DO` apontadas pelo detector, e tamb├®m pela lista de colunas que ele afirma existirem no original (`LNERROR`, `LNKEY`, `PARAMETRIZADO`).
+
+**Resultado: nenhuma ocorr├¬ncia real.** Todos os `WHERE` do c├│digo migrado usam exatamente as colunas do legado:
+- `MarcarEmProcessamento`: `WHERE cidchaves = ...`
+- `BuscarFila`: `WHERE priors = ...`
+- `Atualizar`: `WHERE cidchaves = ...`
+- `ExecutarExclusao`: `WHERE cidchaves = ...`
+- `VerificarMovimento` (SigMvEst/SigMvHst): `WHERE empgruests = ... AND cpros = ...`
+
+N├úo existe nenhum `WHERE` com coluna `PROCURA` ou `DO` em lugar nenhum do c├│digo. E a pr├│pria lista de colunas "do original" que o detector cita (`LNERROR`, `LNKEY`, `PARAMETRIZADO`) tamb├®m n├úo aparece em nenhum WHERE do trecho legado fornecido na tarefa ÔÇö s├úo nomes de vari├ível/coment├írio, n├úo colunas.
+
+A explica├º├úo mais prov├ível: o detector tokenizou texto de **coment├írio**, n├úo SQL real ÔÇö por exemplo a linha 610 cont├®m a palavra `procura` ("o interpretador procura <nome>.prg no PATH") e a linha ~ sobre transa├º├úo manual cont├®m a frase "a cada passada do **DO WHILE**". Isso ├® ru├¡do do parser sobre coment├írios em portugu├¬s, n├úo uma condi├º├úo SQL inventada pela LLM.
+
+N├úo fiz nenhuma altera├º├úo nos arquivos ÔÇö n├úo h├í filtro inventado para remover; todas as condi├º├Áes `WHERE` presentes j├í correspondem fielmente ao legado. Se quiser, posso registrar esse falso positivo via a skill `propagate-lesson` para o detector de `SQL-FILTRO-INVENTADO` parar de escanear coment├írios.

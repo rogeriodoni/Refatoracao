@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 8 is complete. Both files compile clean and the form instantiates and exercises every Phase-8 method.
+
+## What I found
+
+The Phase-8 method bodies were already present from the prior run (which concluded "nothing to do"). Rather than stop there, I audited the migrated form against the legacy `SigPrPpc_form_codigo_fonte.txt` and found four genuine gaps:
+
+**1. `Show()` of the modal child inside the parent's `TRY` ÔÇö rule #29.** `FormSIGPRPPP` is `WindowType = 1`, so `Show()` blocks and the *entire* lifetime of the result screen ran inside `CmdConsultarClick`'s `TRY`. Any runtime error there would jump to the parent's `CATCH`, abandon the `TRY`, drop the `LOCAL loc_oResultado` reference and make the result window close by itself. Restructured so the `TRY` covers only the query and the `CREATEOBJECT`; `Show()` is after `ENDTRY`.
+
+**2. Legacy `ThisForm.Enabled = .f.` was dropped.** The already-migrated child codes against that contract (`FormSIGPRPPP.CmdEncerrarClick` ÔåÆ `this_oFormPai.Enabled = .T.`), so the pair was half-missing. Applying the memory's test ("find who re-enables"): the legacy writes `ThisForm`, not `This`, and the re-enable exists in the child ÔÇö so the form really is the target. Transcribed, keeping `AlternarPagina` as the field-state funnel.
+
+**3. Connection guard from the legacy `Init` was missing.** The form opened on a dead connection and only failed at Consultar. Added `ValidarParametros()` on the canonical `FormSIGMVCTH` pattern, PUBLIC and skipped under `gb_4c_ModoTeste`/`gb_4c_ValidandoUI` so the harness still instantiates.
+
+**4. Validation order and message text diverged.** Legacy checks Grupo ÔåÆ Conta ÔåÆ DtIni ÔåÆ DtFin ÔåÆ DtIni>DtFin; the migrated form checked dates first. Reordered and transcribed each `Messagebox` text. Also aligned the BO's two failure messages, and switched the empty-result case to `MsgInfo` (legacy icon 64, was `MsgAviso`).
+
+Plus `Destroy()` now closes the cursors the screen opened (the equivalent of the legacy `Release`), and a double-dialog path on a failed child `CREATEOBJECT` is closed off.
+
+## Verification
+
+- `COMPILE` on both files ÔåÆ no `.err`; `CREATEOBJECT` ÔåÆ `VARTYPE = O`, 17 controls, `Release()` clean.
+- Every method the test harness calls from outside the class runs without error (`AjustarBotoesPorModo`, `AlternarPagina`, `CarregarLista`, `HabilitarCampos`, `BtnCancelarClick`, `BtnExcluirClick`, `ValidarParametros`) ÔÇö proving they're reachable, per rules #3/#51. `FormParaBO`/`BOParaForm`/`LimparCampos` stay explicitly `PROTECTED`, since `FormBase` protects those names and a subclass can't widen the scope.
+- `FormParaBO`/`BOParaForm` cover all 9 BO properties in both directions.
+- Every SQL column checked against `docs/schema.sql` read as UTF-16 (rule #14): `SigMvCab` uses `emps`, not `cemps` (rule #48) ÔÇö all 9 columns confirmed present, as are the four lookup tables' columns.
+- Four project validators (`VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarLookupEmKeyPress`) ÔÇö clean for both files.
+- CRLF restored after each edit (`CR == LF`); zero literal accented bytes; diff stays scoped at +185/ÔêÆ31 and +6/ÔêÆ2 instead of a whole-file rewrite.
+
+Two corrections worth flagging, since both could have gone the other way:
+
+- I suspected `SetFocus()` on a disabled control was raising an error on the return path from the child. **Measured in VFP9: it does not** ÔÇö it's a silent no-op, and `Form.Enabled = .F.` doesn't propagate to children's `.Enabled`. So I did not "fix" a non-bug; the measurement is recorded in the code comment.
+- I also replaced an `IF ... OR ...` guard believing VFP9's lack of `OR` short-circuiting would crash it. **Measured: it doesn't crash** ÔÇö the `IF` does short-circuit there. I kept the `DO CASE` because it matches the project's canonical reference form, but I rewrote my own comment so it states the measurement instead of claiming a fix, and warns against reverting it as redundant.
+
+One thing I did not change: the legacy `Load` creates cursors `dbOperacao`/`dbItens`, which look like a missing migration. They aren't ÔÇö `SIGPRPPPBO` builds its own `cursor_4c_Operacoes`/`cursor_4c_Itens` (renamed per PILAR 3), so adding them to the parent would have been dead duplicate state. Likewise the legacy's `crSigTempC` scratch cursor belongs to the Fortyus temp-query mechanism the new architecture doesn't use.

@@ -1,0 +1,728 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCac.SCX
+* Data/Hora: 17/10/2026 10:20:12
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCAC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCAC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCAC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCAC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGOPCAC
+  Class: label
+  BaseClass: label
+
+Objeto: Text1
+  Parent: SIGOPCAC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grid1
+  Parent: SIGOPCAC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grid2
+  Parent: SIGOPCAC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid2.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid2.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid2.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid2.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid2.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid2.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid2.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid2.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCAC.Grid2.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCAC.Grid2.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Commandgroup1
+  Parent: SIGOPCAC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 551
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Consulta de Acesso a Programas"
+  ControlBox = .F.
+  TitleBar = 0
+  Name = "SIGOPCAC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Programa :"
+  Height = 15
+  Left = 58
+  Top = 100
+  Width = 55
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 130
+  MaxLength = 100
+  Top = 96
+  Width = 614
+  ForeColor = 90,90,90
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid1
+------------------------------------------------------------
+  ColumnCount = 1
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Height = 396
+  Left = 31
+  Panel = 1
+  ReadOnly = .T.
+  ScrollBars = 2
+  Top = 130
+  Width = 113
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 81
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Height = 395
+  Left = 149
+  Panel = 1
+  ReadOnly = .T.
+  ScrollBars = 2
+  Top = 131
+  Width = 614
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "Grid2"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 292
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 90
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.ForeColor = 90,90,90
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.Width = 90
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.ForeColor = 90,90,90
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.Width = 26
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.ForeColor = 90,90,90
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuario"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cargo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Depto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Grid2.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCAC.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 644
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  BorderColor = 136,189,188
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_procura_60.jpg
+  Command1.Caption = "Consultar"
+  Command1.ToolTipText = "Consultar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCAC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr  = CreateObject('fSqlConector', ThisForm.Name)
+	.poDataMgr.SqlExecute([Select descricaos, programas, parametros From SigCdPrg],'crSigCdPrg1')
+	
+	Select crSigCdPrg1
+	Replace All Descricaos With Upper(descricaos)
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCAC.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+If Used('crGrupos')
+	Select crGrupos
+	Delete All
+	Go Top
+	ThisForm.Grid1.Refresh
+Endif
+
+If Used('crSigCdUsu')
+	Select crSigCdUsu
+	Delete all
+	Go Top
+	ThisForm.Grid2.Refresh
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrow
+
+IF not IsEmpty(This.value)
+
+	lcSearch = '%'+Upper(Alltrim(This.Value))+'%'
+	Select Descricaos, programas, Parametros From crSigCdPrg1 Where Descricaos Like lcSearch into Cursor crSigCdPrg
+
+	Select crSigCdPrg
+	Go Top
+
+	If Eof()
+		MessageBox('Parametros não Localizado',16,'')
+		Return(.f.)
+	Endif
+
+	If Reccount() > 1
+		Go Top
+		xBrow = CreateObject('fwBuscaInt','crSigCdPrg','Descricaos',This.Value,'Programas',.t.)
+		xBrow.mAddColuna('Descricaos',Replicate('X',85),'Programa',.t.)
+		xBrow.Show		
+	EndIf
+
+	If Lastkey() <> 27
+		This.Value           = crSigCdPrg.Descricaos
+		ThisForm.pcPrograma  = crSigCdPrg.Programas
+		ThisForm.pcParametro = crSigCdPrg.Parametros
+	Else
+		This.Value           = ''
+		ThisForm.pcPrograma  = ''
+		ThisForm.pcParametro = ''
+	EndIf
+
+Else
+	
+	This.Value           = ''
+	ThisForm.pcPrograma  = ''
+	ThisForm.pcParametro = ''
+
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCAC.Grid1
+* Classe: grid (Base: grid)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+ThisForm.Grid2.RecordSource = ''
+
+If Used('crGrupos') 
+	If Empty(crGrupos.Grupos)
+		lcQueryUsuario = [Select Distinct Usuarios, nComps, cCargs, Deptos, Supervis, cAtivos From SigCdUsu ]+;
+						 [Where Supervis In ('S', 'I') ]+;
+						 [Union ]+;
+						 [Select Distinct b.Usuarios, b.nComps, b.cCargs, b.Deptos, b.Supervis, b.cAtivos From SigCdAcu a ]+;
+		    			 [Inner Join SigCdUsu b On a.Usuarios = b.Usuarios Where a.Grupos = '          ' ]+;
+		                 [And (a.Programas = ']+Alltrim(ThisForm.pcPrograma)+[' ]+;
+		                 Iif(!Empty(ThisForm.pcParametro),[And a.Parametros = ']+Alltrim(ThisForm.pcParametro)+[') ],[)])
+	Else
+		lcQueryUsuario = [Select Distinct a.Usuarios, a.nComps, a.cCargs, a.Deptos, a.Supervis, a.cAtivos From SigCdUsu a ]+;
+						 [Left Join SigCdAcG b on a.Usuarios = b.Usuarios ]+;
+		                 [Where b.Grupos = ']+crGrupos.Grupos+[' ]
+	EndIf
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQueryUsuario, [crSigCdUsu]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdUsu)])
+		Return 0
+	EndIf
+
+	Select crSigCdUsu
+	Index On Usuarios Tag Usuarios
+	Go Top
+
+	ThisForm.Grid2.RecordSource = 'crSigCdUsu'
+	ThisForm.Grid2.SetAll('DynamicForeColor',[Iif(crSigCdUsu.cAtivos=='N', Rgb(255,0,0), Rgb(0,0,255))],'Column')
+	ThisForm.Grid2.Column1.ControlSource = 'crSigCdUsu.Usuarios'
+	ThisForm.Grid2.Column2.ControlSource = 'crSigCdUsu.nComps'
+	ThisForm.Grid2.Column3.ControlSource = 'crSigCdUsu.cCargs'
+	ThisForm.Grid2.Column4.ControlSource = 'crSigCdUsu.Deptos'
+	ThisForm.Grid2.Column5.ControlSource = 'crSigCdUsu.Supervis'
+Endif	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCAC.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+Private lcPrgs, lcParms
+
+If ! Empty(ThisForm.pcPrograma)
+
+	ThisForm.Grid1.RecordSource = ''
+	ThisForm.Grid2.RecordSource = ''
+
+	lcPrgs  = Alltrim(ThisForm.pcPrograma)
+	lcParms = Alltrim(ThisForm.pcParametro)
+
+	lcQueryAcesso  = [Select distinct Grupos From SigCdAcu Where Programas = ?lcPrgs ]+;
+	                 Iif(!Empty(lcParms),[ And Parametros = ?lcParms ],[ ])+;
+	                 [Order By Grupos]
+
+	ThisForm.PoDatamgr.SqlExecute(lcQueryAcesso,'crGrupos')
+	Go Top
+	
+	If Eof() or ! Empty(Grupos)
+		Append Blank
+	Endif
+
+	Index On Grupos Tag Grupos
+	Go Top
+
+	ThisForm.Grid1.RecordSource = 'crGrupos'
+	ThisForm.Grid1.Column1.ControlSource = 'crGrupos.Grupos'
+
+	ThisForm.Grid1.SetFocus
+	
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCAC
+RESERVED3 (ClassInfo): pcparametro
+pcprograma
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

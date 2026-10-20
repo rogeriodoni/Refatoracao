@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Phase 5 complete.** `FormSigPrRsa.prg` updated ÔÇö compiles with 0 errors and instantiates (`BaseClass=[Form]`, `ControlCount=7`).
+
+## What I found first
+
+`SIGPRRSA` is a **flat** form with no Page2: its entire control inventory is 10 objects, and all 10 were already built in Phases 3/4. I diffed every property against the dump ÔÇö including confirming all three `.Picture` targets really exist in `vbmp\` (rule #25, silent failure). So the phase brief's literal ask ("add the first 50% of the Page2 fields") had nothing to add. Rather than invent a field or an empty method, I audited the one data-entry surface this form has and found two real defects in it:
+
+## 1. The priority value didn't reliably reach the BO
+
+The legacy validates in `Get_Prioridade.Valid` ÔÇö i.e. **on leaving the field**. The migration bound only `"KeyPress"` (ENTER/TAB). Going from the field straight to **Processar with the mouse** fired nothing, so `this_nPrioridade` kept its stale value while the textbox showed the new one ÔÇö `BuscarFila()` then ran the batch on a different priority than what's on screen, with no error. Fixed by:
+
+- a single validation funnel `ValidarPrioridade()`, bound to **`"LostFocus"`** (rule #47) and still reachable from `KeyPress`;
+- `BtnProcessarClick` now revalidates before using the value (textbox as single source of truth), aborting if invalid ÔÇö safe bare `RETURN`, that method has no `TRY`;
+- reentrancy guard with the **wrapper + `ÔÇªExec()`** split, because the body has early `RETURN`s and clearing the flag at the end would leave it stuck at `.T.`, killing validation for the form's lifetime. Measured: two consecutive calls both return `.T.`, flag back to `.F.` each time.
+- invalid input is **rejected but preserved** (`7` stays `7`), matching the legacy `Return .f.` focus-trap instead of erasing what the user typed (rule #50).
+- parametrized mode is exempt ÔÇö the legacy `When` returns `.F.` there, so `Valid` never runs and the value comes from `Fortyus.Exe`; validating would pop a modal nobody sees and abort the batch.
+
+## 2. Z-order inverted ÔÇö a transparent Shape over both buttons
+
+`ConfigurarPaginaDados()` ran **last**, so `shp_4c_Shape1` (480..528 ├ù 7..36) was created on top of `cmd_4c_Processar` (430..505) and `cmd_4c_Encerrar` (505..580). Being `BackStyle=0`/`BorderStyle=0` it paints nothing ÔÇö **invisible in any screenshot** ÔÇö but the transparent box still hit-tests and can eat clicks across a strip of both buttons. The legacy SCX declares `Shape1` *before* `SAIR`/`OK`, so I moved the call ahead of `ConfigurarPaginaLista()`. Verified: creation order is now `CNT_4C_CABECALHO ÔåÆ SHP_4C_SHAPE1 ÔåÆ CMD_4C_PROCESSAR ÔåÆ CMD_4C_ENCERRAR ÔåÆ LBL_4C_PROGRESSO ÔåÆ LBL_4C_LBLPRIORIDADE ÔåÆ TXT_4C_PRIORIDADE`, exactly the legacy declaration order.
+
+Also confirmed `ValidarPrioridade` is PUBLIC (`PEMSTATUS(ÔÇª,2)=.F.`) so `BINDEVENT` binds (rule #3), and no accented literals, no `MESSAGEBOX`, no `RETURN` inside the `TRY`, balanced blocks (28/28 `PROCEDURE`, 2/2 `FUNCTION`, 9/9 `WITH`).
+
+Two things worth flagging for the pipeline rather than the file:
+
+- **The NO-OP guard will likely have fired here.** The Phase 5 content gate passes via the PAGINADO branch (`ConfigurarPaginaDados` exists), but the guard runs *before* the switch and compares MD5. Its existing carve-out (`Test-LegadoSemCamposSoltos`) doesn't apply, because `Get_Prioridade` has `Parent: SIGPRRSA` ÔÇö a loose field, not a `.ColumnN` cell. My changes do alter the hash, so this run is fine; but a flat form whose fields were all legitimately delivered in Phases 3/4 is a gap in that guard, same family as the gate lessons already recorded.
+- **`fRecalculaP` is the legacy calculation entry point** and I left the BO's existing port alone ÔÇö it's Phase 2 territory and outside this phase's scope. I did not verify it against the legacy formula; given rule #17 (transcribe, never rewrite), that's worth a look before this form is signed off.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 complete. Created `C:\4c\projeto\app\forms\operacionais\FormSigOpCcj.prg` with the base structure:
+
+- **Visual properties** matching the legacy 450├ù270 modal dialog (no title bar, no control box, `AutoCenter`).
+- **Properties**: `this_oParentForm` (caller form reference) + `this_cCampoIClis`/`this_cCampoCpfs`/`this_cCampoRClis`/`this_cPropRetorno` ÔÇö the field/property *names* on the caller form that will receive the result, mirroring the legacy `pIClis/pICpfs/pRClis/pCpRet` string parameters.
+- **Init()** ÔÇö reproduces the legacy's strict parameter validation (parent form object + 4 non-empty string params), using `MsgAviso` instead of `MessageBox` (per CLAUDE.md), aborting the dialog if any param is invalid, otherwise storing them and calling `DODEFAULT()`.
+- **InicializarForm()** ÔÇö creates `SigOpCcjBO`, builds the header, makes controls visible.
+- **ConfigurarPageFrame()** ÔÇö no real PageFrame (this is a flat OPERACIONAL dialog, not a CRUD form), just background picture + base font, matching the `FormSigOpAut.prg` sibling precedent.
+- **ConfigurarCabecalho()** ÔÇö the gray header container + shadow/title labels, canonical pattern (`Width = THIS.Width`, never the legacy's hardcoded 800).
+- **TornarControlesVisiveis()** ÔÇö recursive visibility helper for later phases.
+
+No PageFrame/Page1/Page2, grid, or CRUD buttons were added ÔÇö this form is a small lookup dialog (procura de conta por c├┤njuge), not a cadastro, so the generic CRUD phase template doesn't apply; I followed the project's established OPERACIONAL dialog pattern instead. Syntax braces (PROCEDURE/ENDPROC, TRY/ENDTRY, WITH/ENDWITH, IF/ENDIF, FOR/ENDFOR, DEFINE CLASS/ENDDEFINE) all balance correctly.
+
+Next phase (4/8) will add the framed sections, section labels, and the two lookup fields (conjuge/RG) with their `fwBuscaExt`-equivalent lookups against `SigCdCli`.

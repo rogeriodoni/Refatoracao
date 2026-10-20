@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado da revis├úo
+
+O ├║nico problema listado ÔÇö `[METODO-INEXISTENTE] THIS.ObterResultadoSaida()` ÔÇö ├® **falso positivo**. O m├®todo est├í definido no pr├│prio `FormSIGOPBIN.prg` (linhas 494-496):
+
+```foxpro
+FUNCTION ObterResultadoSaida()
+    RETURN THIS.this_oBusinessObject.ObterResultadoSaida()
+ENDFUNC
+```
+
+├ë `PUBLIC` (sem `PROTECTED`), corresponde ao `PROCEDURE Unload` do legado, e existe exatamente para o form chamador ler o resultado ap├│s o `Show()` modal retornar (conforme o pr├│prio cabe├ºalho do arquivo documenta). O detector autom├ítico do pass FUNCTIONAL s├│ reconhece `PROCEDURE <nome>` como defini├º├úo v├ílida e nunca indexa `FUNCTION <nome>` ÔÇö essa ├® a 15┬¬ reincid├¬ncia desse mesmo bug do detector, j├í catalogado em mem├│ria (`feedback_metodo_inexistente_nao_checa_formbase.md`).
+
+N├úo fiz nenhuma altera├º├úo em `FormSIGOPBIN.prg` nem em `SIGOPBINBO.prg` ÔÇö implementar ou remover a chamada quebraria um contrato que j├í funciona corretamente. Registrei esta ocorr├¬ncia na mem├│ria para rastrear o padr├úo.

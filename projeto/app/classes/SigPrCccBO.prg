@@ -1216,7 +1216,9 @@ DEFINE CLASS SigPrCccBO AS BusinessBase
     *==========================================================================
     PROTECTED PROCEDURE FecharCursorProcesso(par_cCursor)
         IF VARTYPE(par_cCursor) = "C" AND USED(par_cCursor)
-            TABLEREVERT(.T., par_cCursor)
+            IF CURSORGETPROP("Buffering", par_cCursor) > 1
+                TABLEREVERT(.T., par_cCursor)
+            ENDIF
             USE IN SELECT(par_cCursor)
         ENDIF
     ENDPROC

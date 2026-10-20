@@ -136,7 +136,9 @@ DEFINE CLASS FBIBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
                 USE IN cursor_4c_Dados
             ENDIF
 
@@ -172,7 +174,9 @@ DEFINE CLASS FBIBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Carrega") > 1
+                    TABLEREVERT(.T., "cursor_4c_Carrega")
+                ENDIF
                 USE IN cursor_4c_Carrega
             ENDIF
 
@@ -787,7 +791,9 @@ DEFINE CLASS FBIBO AS BusinessBase
             loc_cSQL = "SELECT EmpDopNums FROM SigMvCab WHERE nEmps = " + EscaparSQL(ALLTRIM(THIS.this_cCodigo))
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_ChkMvCab")
-                TABLEREVERT(.T., "cursor_4c_ChkMvCab")
+                IF CURSORGETPROP("Buffering", "cursor_4c_ChkMvCab") > 1
+                    TABLEREVERT(.T., "cursor_4c_ChkMvCab")
+                ENDIF
                 USE IN cursor_4c_ChkMvCab
             ENDIF
 
@@ -804,7 +810,9 @@ DEFINE CLASS FBIBO AS BusinessBase
                 loc_cSQL = "SELECT EmpDopNums FROM SigExMvc WHERE nEmps = " + EscaparSQL(ALLTRIM(THIS.this_cCodigo))
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_ChkExMvc")
-                    TABLEREVERT(.T., "cursor_4c_ChkExMvc")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_ChkExMvc") > 1
+                        TABLEREVERT(.T., "cursor_4c_ChkExMvc")
+                    ENDIF
                     USE IN cursor_4c_ChkExMvc
                 ENDIF
 
@@ -822,7 +830,9 @@ DEFINE CLASS FBIBO AS BusinessBase
                 loc_cSQL = "SELECT datas FROM SigFiRX WHERE serifab = " + EscaparSQL(ALLTRIM(THIS.this_cCodigo))
                 *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
                 IF USED("cursor_4c_ChkFiRX")
-                    TABLEREVERT(.T., "cursor_4c_ChkFiRX")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_ChkFiRX") > 1
+                        TABLEREVERT(.T., "cursor_4c_ChkFiRX")
+                    ENDIF
                     USE IN cursor_4c_ChkFiRX
                 ENDIF
 

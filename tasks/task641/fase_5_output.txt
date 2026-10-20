@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+PROCEDURE/ENDPROC counts match (6/6) and WITH/ENDWITH counts match (12/12). The file is balanced.
+
+## Resumo da Fase 5/8
+
+Adicionei o m├®todo `ConfigurarCampos()` em `FormSigOpAlC.prg` com a primeira metade dos campos (bloco "Usu├írio" do dump legado, dentro da moldura `shp_4c_Shape1`):
+
+- **`lbl_4c_Label2`** ("Usu├írio :") + **`txt_4c_Usuario`** ÔÇö `InputMask="!!!!!!!!!!"` (10 chars, for├ºa mai├║scula, igual ao legado) e `MaxLength=10` (confirmado contra `SigCdUsu.usuarios char(10)` no schema)
+- **`lbl_4c_Label3`** ("Senha :") + **`txt_4c_Senha`** ÔÇö `PasswordChar="*"`, `MaxLength=10` (`SigCdUsu.senhas char(10)`)
+
+Posi├º├Áes, cores e ├¡ndices de tabula├º├úo s├úo os do dump (`Left`/`Top`/`TabIndex`/`ForeColor`/`BorderColor`). Como nenhum dos dois `Get_*` declara `.Alignment` no SCX, segui a regra da mem├│ria (`feedback_textbox_alignment_default_e_3_nao_0`) e defini `.Alignment = 0` explicitamente, j├í que o `AddObject` de TextBox nasce com `Alignment=3`.
+
+O bloco "Moeda/Cota├º├úo" (dentro de `shp_4c_Shape2`) e os handlers `Valid`/`Click` ficam para a Fase 6, que depende de todos os campos existirem.

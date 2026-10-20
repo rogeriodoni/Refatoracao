@@ -58,7 +58,9 @@ DEFINE CLASS SigPrSerBO AS BusinessBase
         TRY
             *-- Cursor placeholder (estrutura identica ao SQLEXEC)
             IF USED("TmpDistrib")
-                TABLEREVERT(.T., "TmpDistrib")
+                IF CURSORGETPROP("Buffering", "TmpDistrib") > 1
+                    TABLEREVERT(.T., "TmpDistrib")
+                ENDIF
                 USE IN TmpDistrib
             ENDIF
 
@@ -132,7 +134,9 @@ DEFINE CLASS SigPrSerBO AS BusinessBase
         TRY
             *-- Criar/recriar cursor TmpDistrib
             IF USED("TmpDistrib")
-                TABLEREVERT(.T., "TmpDistrib")
+                IF CURSORGETPROP("Buffering", "TmpDistrib") > 1
+                    TABLEREVERT(.T., "TmpDistrib")
+                ENDIF
                 USE IN TmpDistrib
             ENDIF
 

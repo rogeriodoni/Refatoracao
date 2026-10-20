@@ -524,7 +524,9 @@ DEFINE CLASS SRVBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Ins")
-                TABLEREVERT(.T., "cursor_4c_Ins")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Ins") > 1
+                    TABLEREVERT(.T., "cursor_4c_Ins")
+                ENDIF
                 USE IN cursor_4c_Ins
             ENDIF
 
@@ -637,7 +639,9 @@ DEFINE CLASS SRVBO AS BusinessBase
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Upd")
-                TABLEREVERT(.T., "cursor_4c_Upd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Upd") > 1
+                    TABLEREVERT(.T., "cursor_4c_Upd")
+                ENDIF
                 USE IN cursor_4c_Upd
             ENDIF
 
@@ -675,7 +679,9 @@ DEFINE CLASS SRVBO AS BusinessBase
                        EscaparSQL(THIS.this_cCodigo)
 
             IF USED("cursor_4c_DelProd")
-                TABLEREVERT(.T., "cursor_4c_DelProd")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelProd") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelProd")
+                ENDIF
                 USE IN cursor_4c_DelProd
             ENDIF
 
@@ -693,7 +699,9 @@ DEFINE CLASS SRVBO AS BusinessBase
                            EscaparSQL(THIS.this_cCidChaves)
 
                 IF USED("cursor_4c_Del")
-                    TABLEREVERT(.T., "cursor_4c_Del")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_Del") > 1
+                        TABLEREVERT(.T., "cursor_4c_Del")
+                    ENDIF
                     USE IN cursor_4c_Del
                 ENDIF
 
@@ -743,7 +751,9 @@ DEFINE CLASS SRVBO AS BusinessBase
                            " WHERE a.codservs = " + EscaparSQL(ALLTRIM(par_cCodigo))
 
                 IF USED("cursor_4c_ProdTmp")
-                    TABLEREVERT(.T., "cursor_4c_ProdTmp")
+                    IF CURSORGETPROP("Buffering", "cursor_4c_ProdTmp") > 1
+                        TABLEREVERT(.T., "cursor_4c_ProdTmp")
+                    ENDIF
                     USE IN cursor_4c_ProdTmp
                 ENDIF
 
@@ -785,7 +795,9 @@ DEFINE CLASS SRVBO AS BusinessBase
                        EscaparSQL(ALLTRIM(par_cCodigo))
 
             IF USED("cursor_4c_DelProdSalvar")
-                TABLEREVERT(.T., "cursor_4c_DelProdSalvar")
+                IF CURSORGETPROP("Buffering", "cursor_4c_DelProdSalvar") > 1
+                    TABLEREVERT(.T., "cursor_4c_DelProdSalvar")
+                ENDIF
                 USE IN cursor_4c_DelProdSalvar
             ENDIF
 
@@ -824,7 +836,9 @@ DEFINE CLASS SRVBO AS BusinessBase
                                            EscaparSQL(loc_aProdutos[loc_nI]) + ")"
 
                                 IF USED("cursor_4c_InsProd")
-                                    TABLEREVERT(.T., "cursor_4c_InsProd")
+                                    IF CURSORGETPROP("Buffering", "cursor_4c_InsProd") > 1
+                                        TABLEREVERT(.T., "cursor_4c_InsProd")
+                                    ENDIF
                                     USE IN cursor_4c_InsProd
                                 ENDIF
 

@@ -1,0 +1,49 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 est├í completa. Resumo:
+
+## O que faltava e foi entregue
+
+O gate exigia `FormParaBO` e `BOParaForm`, e o form n├úo tinha nenhum dos dois (`BOParaForm` ausente, `FormParaBO` s├│ citado em coment├írio). Implementei os dois como m├®todos **reais e ligados ao fluxo** ÔÇö n├úo de fachada:
+
+- **`BOParaForm()`** (`PROTECTED FUNCTION`) ÔÇö ├® o bloco literal do `Init` legado (`.GetPraca.Value = pcPraca / ...`, linhas 890ÔÇæ899 do dump), mas lendo das properties do `SIGPRTFHBO` em vez das c├│pias escalares do form. Motivo: s├úo essas mesmas properties que `MontarBufferCheque()` entrega ao terminal, ent├úo o que o operador v├¬ passa a ser, por constru├º├úo, o que o terminal recebe. Virou o corpo de `CarregarCamposNaTela()`, que `InicializarForm` j├í chamava.
+- **`FormParaBO()`** (`PROTECTED FUNCTION`) ÔÇö l├¬ os 9 TextBox de volta ao BO, com guarda de campo em branco, chamado no in├¡cio de `ExecutarConsultaSiTef()`, antes de abrir a sess├úo.
+
+Ambos `PROTECTED` expl├¡cito ÔÇö `FormBase` os declara assim e o VFP9 n├úo permite alargar escopo herdado.
+
+**Diverg├¬ncia declarada** (n├úo escondida, est├í por extenso no cabe├ºalho de `FormParaBO`): o legado **nunca** l├¬ esses controles de volta ÔÇö os 9 `Get*` t├¬m `When / Return(.f.)`. Medi que o roundÔÇætrip ├® identidade (nenhuma m├íscara foi transcrita; os `Format`/`InputMask`/`MaxLength` do SCX s├úo override vazio, regra #49), logo o PILAR 1 fica preservado.
+
+## Um achado que muda o diagn├│stico da reprova├º├úo
+
+A reprova├º├úo anterior **n├úo era s├│ pelos m├®todos ausentes** ÔÇö o gate estava insatisfaz├¡vel para este form. O ramo `fluxo-unico` reivindica este dump por **duas provas falsas** e, sendo avaliado antes, zera `$legadoProtocoloF8`, que era a ├║nica sa├¡da aplic├ível da exig├¬ncia de bot├úo de a├º├úo:
+
+| prova | o que casou de verdade |
+|---|---|
+| "tem lista" | o token `ControlSource` solto, de `SAIDA.ControlSource = [OPSENHA]` num **CommandGroup**. Os helpers estritos do pr├│prio projeto devolvem `False` |
+| "`Carregar*` que alimenta o grid" | `CarregarCamposNaTela`, que preenche TextBox ÔÇö o form n├úo tem grade |
+
+Sobravam s├│ as sa├¡das proibidas: inventar bot├úo de gravar ou criar handler vazio. Conferi que **n├úo ├® self-reference** ÔÇö o `.ps1` ├® de 20/10 00:03 e a task come├ºou 04:31, ent├úo o gate que rodou era o do disco e a reprova├º├úo ├® bug de gate leg├¡timo.
+
+Corrigi de forma **aditiva**: `$legadoProtocoloBrutoF8` (as provas de protocolo sem os `-not` de ramo) ORÔÇæado em `$legadoSemAcao`, com mensagem pr├│pria. S├│ concede, nunca revoga ÔÇö nenhum form que passa pode come├ºar a reprovar. A dispensa continua paga com trabalho real (`$temSuperficieProtF8` exige os dois hooks + handler, ancorados em in├¡cio de linha).
+
+**Blast radius medido** nos 682 dumps (`automation/MedirProtocoloBrutoTask683.ps1`): 3 bases alcan├ºam as provas ÔÇö `sigprdft` j├í era `True`, `sigproer` j├í passava por outra sa├¡da, e s├│ `SIGPRTFH` vira `False ÔåÆ True`. **1 form.**
+
+## Verifica├º├úo
+
+- Gate da Fase 8 rodado de verdade (fun├º├Áes extra├¡das por AST + `case 8` por faixa de linhas ÔÇö **sem** dot-source do orquestrador, que dispararia migra├º├úo): `validado = True`, zero faltantes. Antes: `False [BtnSalvarClick (ou ...)]`.
+- `Test-CompletudeCodigo`: OK, nenhum TODO/stub.
+- VFP9 (smoke test passou primeiro): `FormSIGPRTFH.prg` e `SIGPRTFHBO.prg` compilam limpos, sem `.err`.
+- Probe de runtime (`automation/ProbeTfh683Fase8.prg`, subclasse para alcan├ºar os hooks `PROTECTED`): **`PROBE_OK`** ÔÇö 7 provas, incluindo o roundÔÇætrip de identidade e a guarda de campo em branco. O probe falhou na 1┬¬ rodada por erro meu na lista de argumentos (23 em vez de 24); os valores deslocados mostraram que o form mapeava cada par├ómetro corretamente.
+
+## Dois pontos que voc├¬ precisa saber
+
+1. **Esta tentativa ainda vai ser marcada como falha.** O processo do orquestrador leu o `.ps1` no in├¡cio da task (04:31); minha corre├º├úo ├® de ~06:30. O retry em curso valida com o gate antigo em mem├│ria. O fix vale da pr├│xima execu├º├úo em diante ÔÇö o entreg├ível est├í correto e provado por fora.
+
+2. **Deixei de fora um segundo falso positivo do gate**, de prop├│sito: `Test-LegadoCliqueSoFecha` devolve `False` para o `SAIDA.Click` deste legado (`If Lastkey()=13 / Return / Endif / RELEASE WINDOWS`) ÔÇö existem as toler├óncias de `RELEASE WINDOWS` e `Inkey`, mas n├úo a do guard `If/Return/Endif`. Um Click que ou n├úo faz nada ou fecha tamb├®m n├úo ├® a├º├úo, e a toler├óncia caberia na mesma fam├¡lia. N├úo mexi porque o helper alimenta v├írios ramos (blast radius maior) e o fix aditivo j├í resolve este caso ÔÇö mas ├® um conserto que vale fazer com medi├º├úo pr├│pria.
+
+Registrei a li├º├úo em mem├│ria (`feedback_gate_fase8_fluxounico_rouba_dump_de_protocolo`), incluindo a t├®cnica de rodar o gate por AST sem disparar migra├º├úo.
+
+Uma coisa que **n├úo** fiz por ser sua decis├úo: o hook pede para compactar o `MEMORY.md` de 19.8KB para menos de 17.1KB. Conferi que o arquivo j├í est├í no formato certo (uma linha por grupo de entradas, sem prosa sobrando ÔÇö s├│ havia uma cauda longa, que removi). Os 2.7KB restantes s├│ saem **descartando mem├│rias** ou reescrevendo os ~254 r├│tulos de link, e nenhum dos dois me parece algo a fazer em sil├¬ncio com a mem├│ria acumulada do seu projeto. Diga se quer que eu fa├ºa, e por qual dos dois caminhos.

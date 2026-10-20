@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This completes Fase 3/8 for FormSigPrSer: the file compiles cleanly on static review (balanced TRY/ENDTRY, WITH/ENDWITH, PROCEDURE/ENDPROC counts; no literal accented characters; no RETURN inside TRY ÔÇö rule #1). 
+
+Summary of what was created in `C:\4c\projeto\app\forms\operacionais\FormSigPrSer.prg`:
+- `DEFINE CLASS FormSigPrSer AS FormBase` with `this_oParentForm`/`this_cPcEscolha` context properties and the legacy dialog's visual properties (1000x600, no title bar/system buttons, etc.)
+- `DataSession = 1` instead of the legacy's `2` ÔÇö deliberate deviation, documented in a header comment, following the established `FormSigPrTar.prg` precedent for child dialogs that must read cursors (`xMfas`/`tmpnens`/`xnensi`) already populated by the parent form's private session
+- `Init(par_oParentForm)` ÔÇö captures the parent reference/`pcEscolha`, disables the parent, delegates to `DODEFAULT()`
+- `InicializarForm()` ÔÇö switches to the parent's data session, instantiates `SigPrSerBO`, builds the header
+- `ConfigurarPageFrame()` ÔÇö creates only `cnt_4c_Cabecalho` (with `lbl_4c_Sombra`/`lbl_4c_Titulo`), since this is a FLAT operational dialog with no real Page1/Page2 structure (grid, movement container, OK button, and totals are deferred to later phases, per the phase-3 scope)
+- `Destroy()` ÔÇö closes the BO's own distribution cursor and re-enables/refreshes the parent form
+
+Next: Fase 4/8 will add the grid (9 columns per the legacy `Grade`) and the OK button.

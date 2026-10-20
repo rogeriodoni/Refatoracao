@@ -1,0 +1,86 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPATU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPATU",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPATU.DopEstq",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Select CrOpera\nGo Top\nSet Near On\nIf !Seek(This.Value)\n\tm.loLista = CreateObject('fwBuscaInt','CrOpera','Dopes',This.Value,'Operações')\n\tm.loLista.mAddColuna('Dopes','','Código')\n\tm.loLista.Show()\n\tThis.Value = Evaluate('CrOpera.dopes')\nElse\n\tThis.Value = Evaluate('CrOpera.dopes')\nEndIf\nSet Near Off\nThis.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPATU.Command1",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If Empty(ThisForm.DopEstq.Value)\n\tMessageBox('Operação Inválida !!!',48,'Campo Obrigatório')\n\tThisForm.DopEstq.SetFocus\nEndIf\nThisForm.Release\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

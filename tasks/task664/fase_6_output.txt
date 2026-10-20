@@ -1,0 +1,50 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigprpdf.prg` atualizado (1280 ÔåÆ 1562 linhas).
+
+## O que foi entregue
+
+**1. Os 4 campos restantes** (segunda metade de `cnt_4c_CtnSaida_Email`), transcritos controle a controle do dump do SCX e medidos no VFP9 ÔÇö todos conferem exatamente:
+
+| controle | medido / SCX |
+|---|---|
+| `lbl_4c_LblEmail_Assunto` "Assunto:" | T=99 L=21 W=45 H=15 |
+| `txt_4c_TxtEmail_Assunto` (TextBox) | T=95 L=68 W=404 H=23 |
+| `lbl_4c_LblEmail_Corpo` "Texto:" | T=127 L=32 W=34 H=15 |
+| `obj_4c_EdtEmail_Corpo` (EditBox) | T=125 L=68 W=404 H=53 |
+
+Painel fecha com 10 controles (5 campos + 5 labels), ├║ltimo terminando em 178 Ôëñ `Height = 185` ÔÇö nada recortado pelo pai. Label sempre criado **antes** do campo da linha (caixa `BackStyle = 0` por cima bloquearia o clique). `ScrollBars` do Corpo ficou no default 2 porque o SCX, ao contr├írio de Para/CC, **n├úo** declara a propriedade. Sem `MaxLength`/`Format`/`InputMask`: o SCX n├úo declara nenhum e o assunto n├úo vai para coluna de tabela. Valor inicial do Assunto replicado do Init legado (`Iif(Type([pcAssunto]) = [C], pcAssunto, [])`) ÔÇö medido `[Relatorio de Teste]`.
+
+**2. `SincronizarCamposParaBO()`** ÔÇö espelho TELA ÔåÆ BO. O `Cmd_GerarPDF.Click` legado l├¬ o `.Value` dos controles na hora, ent├úo o **controle ├® a fonte ├║nica**; validar contra a property sem reler a tela aprovaria o valor antigo. Medido: tipos corretos (`this_lEnviarEmail` L├│gico a partir do `CheckBox.Value = 1` num├®rico, `this_nTipoArquivo` Num├®rico 1-based).
+
+**3. `ValidarDadosEnvio()`** ÔÇö os 3 guards bloqueantes do `Cmd_GerarPDF.Click`, com a regra em fonte ├║nica no BO (`ValidarDadosConfirmacao`) e, no form, s├│ o que o BO n├úo pode fazer (ler a tela e dar o foco). Os 6 cen├írios medidos:
+
+```
+4a arquivo vazio              -> .F.  [ARQUIVO]     "Selecione um nome para o arquivo!"
+4b sem e-mail, DE/PARA vazios -> .T.
+4c e-mail, DE vazio           -> .F.  [EMAIL_DE]    "O campo 'DE:' n├úo foi preenchido."
+4d e-mail, PARA vazio         -> .F.  [EMAIL_PARA]  "O campo 'PARA:' n├úo foi preenchido."
+4e tudo preenchido            -> .T.
+4f oEMAIL cFrom/cTO/cAssunto/cAnexo saem com os valores da TELA
+```
+
+Mensagens id├¬nticas ao legado, `MsgAviso` (o legado usa ├¡cone 48) e n├úo `MsgErro`.
+
+## Lookups: zero ÔÇö e isso est├í provado, n├úo presumido
+
+O dump do SIGPRPDF tem **0** ocorr├¬ncias de `fwBuscaExt`/`fwBuscaSel`/`fwBuscaInt`/`mAddColuna`/`sigacess()`/`AcessoXxx()`, e os ├║nicos m├®todos do SCX inteiro s├úo `Init` e `Click` (zero `Valid`, `When`, `LostFocus`). Nenhum dos 5 campos referencia tabela: Assunto/Texto/CC s├úo texto livre, De vem da consulta a `SigCdEmp` (ReadOnly) e Para vem do form chamador. O ├║nico "seletor" ├® o `GetFile()` do `cmd_4c_CmdGetFile` ÔÇö di├ílogo de **arquivo** do VFP9, j├í portado na Fase 4. Criar `AbrirLookupXxx` aqui significaria inventar tabela de lookup, o que o PILAR 1 pro├¡be; por isso a entrega da fase s├úo os campos + o handler de valida├º├úo, que ├® o `Valid` que este legado escreveu dentro do `Click` do bot├úo de a├º├úo.
+
+## Verifica├º├Áes
+
+- **Compila├º├úo VFP9**: `.fxp` apagado antes, `COMPILE_OK`, `.err` vazio.
+- **Runtime**: form instancia (`VARTYPE = O`), sem nenhuma entrada no arquivo de erros al├®m dos 3 `MsgAviso` esperados. Probe em `automation\TestSigPrPdf664F6.prg`.
+- **Completude 05d**: 0 marcadores, 0 procedures vazias, 0 indicadores de pend├¬ncia ÔÇö os 4 `PENDENTE` que as fases anteriores deixaram foram substitu├¡dos (dois descreviam exatamente o que esta fase entregou; o do `Cmd_GerarPDF.Click` virou o roteiro da fase de eventos).
+- **Auditorias**: `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes` limpas.
+- **Gate Fase 6** (ramo CAPTURA) com todas as condi├º├Áes verdadeiras, incluindo o `PROCEDURE Validar*` que faltava e a paridade de campos (legado 3 TextBox, piso 2, migrado 3).
+
+Uma nota que deixei registrada no c├│digo em vez de silenciada: o legado envolve as checagens de DE/PARA num gate a mais (`Used('TmpEmpMail')`), cujo ramo negativo ├® inalcan├º├ível aqui ÔÇö sem a conta de e-mail o `InicializarForm` devolve `.F.` e a tela n├úo abre, igual ao `Return .f.` do Init legado. O aviso n├úo-bloqueante desse ramo ├® da fase de eventos, que j├í tem `ObterMensagemContaEmailIndisponivel()` pronto no BO.
+
+Fica para a fase de eventos apenas o `cmd_4c_Cmd_GerarPDF.Click`, com tudo de que precisa j├í cham├ível.

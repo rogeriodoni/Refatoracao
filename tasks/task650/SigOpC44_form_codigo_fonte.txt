@@ -1,0 +1,812 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpC44.SCX
+* Data/Hora: 17/10/2026 09:24:06
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPC44
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPC44
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPC44.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPC44.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: ShpSair
+  Parent: SIGOPC44
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape2
+  Parent: SIGOPC44
+  Class: shape
+  BaseClass: shape
+
+Objeto: txtdest
+  Parent: SIGOPC44
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGOPC44
+  Class: label
+  BaseClass: label
+
+Objeto: CmdGera
+  Parent: SIGOPC44
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CmdSair
+  Parent: SIGOPC44
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: getDtEst
+  Parent: SIGOPC44
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGOPC44
+  Class: label
+  BaseClass: label
+
+Objeto: getFinal
+  Parent: SIGOPC44
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: Label1
+  Parent: SIGOPC44
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGOPC44
+  Class: label
+  BaseClass: label
+
+Objeto: getNumParc
+  Parent: SIGOPC44
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 56
+  Left = 16
+  Width = 204
+  Height = 70
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 247
+  Width = 503
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Geração do Arquivo da CAT 44/2008"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  codidents = .F.
+  totalimposto = .F.
+  Name = "SIGOPC44"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.ShpSair
+------------------------------------------------------------
+  Top = 204
+  Left = 288
+  Height = 56
+  Width = 144
+  BackStyle = 0
+  BorderStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  Name = "ShpSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.Shape2
+------------------------------------------------------------
+  Top = 82
+  Left = 3
+  Height = 161
+  Width = 265
+  SpecialEffect = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.txtdest
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 8
+  ReadOnly = .T.
+  TabIndex = 4
+  TabStop = .F.
+  Top = 134
+  Width = 253
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 128,128,128
+  Name = "txtdest"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "O arquivo será gerado em :"
+  Height = 17
+  Left = 12
+  Top = 119
+  Width = 173
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.CmdGera
+------------------------------------------------------------
+  Top = 3
+  Left = 352
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_32.jpg
+  Caption = "\<Gera Arquivo"
+  TabIndex = 9
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdGera"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.CmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 427
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "<ESC> Sair"
+  TabIndex = 10
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.getDtEst
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "!K"
+  Height = 23
+  Left = 128
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 1
+  ToolTipText = ""
+  Top = 89
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "getDtEst"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Data do Estoque :"
+  Height = 16
+  Left = 13
+  Top = 92
+  Width = 113
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.getFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  RowSourceType = 1
+  RowSource = "1 - Normal,2 - Substitutivo Total"
+  Height = 22
+  Left = 8
+  SpecialEffect = 0
+  Style = 2
+  TabIndex = 6
+  Top = 183
+  Width = 254
+  Name = "getFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Finalidade do Arquivo"
+  Height = 17
+  Left = 12
+  Top = 167
+  Width = 173
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Nº Parcelas p/ Pagamento ICMS:"
+  Height = 16
+  Left = 10
+  Top = 217
+  Width = 202
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPC44.getNumParc
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "!K"
+  Height = 23
+  Left = 216
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 213
+  Width = 40
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "getNumParc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPC44
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE gerareg1
+------------------------------------------------------------
+PROCEDURE gerareg1
+Local lcCNPJ, lcIE
+
+Select crReg1
+
+lcCNPJ = Strtran(Strtran(Strtran(crSigCdEmp.Cgcs,[.],[]),[/],[]),[-],[])
+lcIE   = Strtran(crSigCdEmp.IEs,[.],[])
+
+Append Blank
+Replace TipoReg  With [1],;
+		CNPJ	 With lcCNPJ,;
+		InscEst  With lcIE,;
+		Razaos	 With fLimpaTexto(crSigCdEmp.Razsocs),;
+		CodFinal With Str(ThisForm.GetFinal.ListIndex,1),;
+		QtdRegT2 With Str(0,5),;
+		DtLevEst With Dtoc(ThisForm.getDtEst.Value) in crReg1  
+		
+Return
+		
+	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gerareg2
+------------------------------------------------------------
+PROCEDURE gerareg2
+Local lnAliIcm, lnUltVlrCompra
+
+Select crReg2
+
+Select cPros, Max(cGrus) as cGrus, Sum(Sqtds) as Sqtds, Max(dPros) as dPros, Max(cUnis) as cUnis, Max(ClFiscals) as ClFiscals ;
+	 from CsTemporario Where Ps = 1 AND Ps2 = 1 Having Sum(Sqtds) > 0 Group by cPros Into cursor crProds
+
+ThisForm.TotalImposto = 0
+
+pDtSaldo = fDtoSQL(ThisForm.getDtEst.Value,[23:59:59]) 
+
+Select crProds
+Scan
+	lnAliIcm = 0
+	ThisForm.poDataMgr.CursorQuery([SigCdPro],[LocalPro],[cPros],crProds.cPros,[Valors,Icms,CustoFS])	
+	ThisForm.poDataMgr.CursorQuery([SigCdClf],[LocalClf],[Codigos],crProds.ClFiscals,[IndIVAST,TpSubSt,TipoMercs])
+	
+	** Query para pegar o valor de compra da última entrada realizada
+	lnUltVlrCompra = LocalPro.CustoFS
+	lcQuery = [Select top 1 Units From SigMvItn a Inner Join SigCdOpe o on o.Dopes = a.Dopes ] + ;
+				[Inner Join SigCdTom t on t.Codigos = o.TipoOps ] + ;
+				[Where a.cPros = ']+crProds.cPros+[' and t.GerGdmis = 2 ] + ;
+				[And a.DtAlts < ?pDtSaldo Order by a.DtAlts Desc]
+	If ThisForm.poDataMgr.SQLExecute(lcQuery,[crUltVlr]) < 1 
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crUltVlr)')
+		Return .f.
+	Endif				
+	If Used([crUltVlr]) and not Eof([crUltVlr])
+		lnUltVlrCompra = ROUND(crUltVlr.Units,2)
+	Endif
+
+	** Trazer a alíquota do produto
+	Declare laCampo(2,2)
+	laCampo(1,1) = [Origems]
+	laCampo(1,2) = [SP]
+	laCampo(2,1) = [Destinos]
+	laCampo(2,2) = [SP]
+	If ThisForm.poDataMgr.CursorQuery([SigPrTri],[crSigPrTri],@laCampo) 
+		lnAliIcm = crSigPrTri.Aliquotas
+	Endif	
+	IF lnAliIcm = 0
+		laCampo(1,1) = [Codigos]
+		laCampo(1,2) = [SP]
+		laCampo(2,1) = [Destinos]
+		laCampo(2,2) = [SP]		
+		If ThisForm.poDataMgr.CursorQuery([SigCdUfd],[crSigCdUfd],@laCampo)
+			lnAliIcm = crSigCdUfd.Aliqs
+		ENDIF
+		IF lnAliIcm = 0
+			laCampo(1,1) = [Grupos]
+			laCampo(1,2) = crProds.cGrus
+			laCampo(2,1) = [Ests]
+			laCampo(2,2) = [SP]
+			If ThisForm.poDataMgr.CursorQuery([SigCdcFi],[crSigCdcFi],@laCampo)
+				lnAliIcm = crSigCdcFi.Icms
+			ENDIF
+			IF lnAliIcm = 0
+				If( LocalPro.Icms > 0 )
+					lnAliIcm = LocalPro.Icms
+				Else
+					If ThisForm.poDataMgr.CursorQuery([SigCdUfs],[crSigCdUfs],[Estados],[SP])
+						lnAliIcm = crSigCdUfs.AIcms
+					Endif
+				Endif				
+			Endif
+		Endif			
+	Endif
+	
+	lnIVAST    = LocalClf.IndIVAST
+	lnPrecoFin = LocalPro.Valors
+	If LocalClf.TpSubSt == 2
+		lnIVAST = 0
+	Else
+		lnPrecoFin = 0		
+	EndIf
+
+	** Cálculo do Imposto	
+	lnVlrImp = 0
+	If( LocalClf.TpSubSt == 2 )
+		If( crSigCdEmp.RegTribs = [01] )
+			lnVlrImp = (crProds.Sqtds*lnUltVlrCompra) * (lnAliIcm/100)
+		EndIf
+		If( crSigCdEmp.RegTribs = [04] )
+			lnVlrImp = ((crProds.Sqtds*LocalPro.Valors)-(crProds.Sqtds*lnUltVlrCompra)) * (lnAliIcm/100)
+		Endif
+	Else
+		If( crSigCdEmp.RegTribs = [01] )
+			lnVlrImp = ((crProds.Sqtds*lnUltVlrCompra) * (lnAliIcm/100)) + ((crProds.Sqtds*lnUltVlrCompra) * (lnIVAST/100) * (lnAliIcm/100))
+		EndIf
+		If( crSigCdEmp.RegTribs = [04] )
+			lnVlrImp = ((crProds.Sqtds*lnUltVlrCompra) * (lnIVAST/100) * (lnAliIcm/100))
+		EndIf	
+	Endif
+
+	ThisForm.TotalImposto = ThisForm.TotalImposto + Round(lnVlrImp,2)
+		
+	Append Blank in crReg2
+	Replace TipoReg		With [2],;
+			CodMerc		With crProds.cPros,;			
+			Qtde		With Str(crProds.Sqtds,12,3),;
+			VlrUnit		With Str(lnUltVlrCompra,12,2),;
+			VlrTot		With Str(crProds.Sqtds*lnUltVlrCompra,12,2),;
+			AliqIcms	With Str(lnAliIcm,5,2),;	
+			IVASt		With Str(lnIVAST,7,2),;
+			PrecoFin	With Str(lnPrecoFin,12,2),;	
+			ImpDev		With Str(lnVlrImp,12,2),;
+			CodTpMerc	With Transform(LocalClf.TipoMercs,'@L 99'),;
+			DescMerc	With fLimpaTexto(crProds.dPros),;
+			Unid		With crProds.cUnis in crReg2
+EndScan
+
+** Acerto da quantidade de registro do Registro 1
+Select crReg2
+Locate
+
+Replace QtdRegT2 with Str(Reccount([crReg2]),5) in crReg1
+
+Return
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gerareg3
+------------------------------------------------------------
+PROCEDURE gerareg3
+LOCAL lnNumParc 
+
+lnNumParc = ThisForm.getNumParc.Value 
+If( ThisForm.TotalImposto <= 0 )
+	lnNumParc = 0
+Endif
+
+Select crReg3
+
+Append Blank in crReg3
+Replace TipoReg 	With [3],;
+		TotSldCred	With [0,00],;
+		IcmTotDev	With Str(ThisForm.TotalImposto,12,2),;
+		IcmRecEst   With Str(ThisForm.TotalImposto,12,2),;
+		NumParcPag  With Str(lnNumParc,2) in crReg3 
+
+Return
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters lcEmp
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+	
+		If Not .poDataMgr.CursorQuery([SigCdPac], [crSigCdPac], .F., .F., [DirCat44])
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPac)')
+			Return .f.
+		EndIf
+
+		lcEmp = Iif(Type([lcEmp]) == 'C' and not Empty(lcEmp),lcEmp,_Empr)
+		=Seek(lcEmp,[crSigCdEmp],[cEmps])
+		
+		.TxtDest.Value = [C:\]
+
+		If Not Empty(crSigCdPac.DirCat44)
+			.TxtDest.Value = crSigCdPac.DirCat44
+		EndIf
+
+		.GetDtEst.Value = Date()
+		.GetNumParc.Value = 1
+	
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crReg1( ;
+TipoReg			c(1),;
+CNPJ			c(14),;
+InscEst			c(15),;
+Razaos			c(50),;
+CodFinal		c(1),;
+QtdRegT2		c(5),;
+DtLevEst		c(10))
+
+Create Cursor crReg2( ;
+TipoReg			c(1),;
+CodMerc			c(10),;
+Qtde			c(12),;
+VlrUnit			c(12),;
+VlrTot			c(14),;
+AliqIcms		c(5),;
+IVASt			c(8),;
+PrecoFin		c(12),;
+ImpDev			c(12),;
+CodTpMerc		c(2),;
+DescMerc		c(50),;
+Unid			c(3))
+
+Create Cursor crReg3( ;
+TipoReg			c(1),;
+TotSldCred		c(12),;
+IcmTotDev		c(12),;
+IcmRecEst		c(12),;
+NumParcPag		c(2))
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPC44.CmdGera
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArqDest, ldDtIni, ldDtFim
+
+If Empty(ThisForm.Txtdest.Value)
+	=MessageBox('Destino de Arquivo Inválido!!!' + Chr(13) + ;
+				'Verifique a Configuração da Empresa.', 48, 'Destino Inválido...')
+	ThisForm.CmdSair.SetFocus
+	Return .f.
+EndIf
+
+If Empty(ThisForm.getDtEst.Value)
+	=MessageBox('Data do Estoque não informada!',48,'Data do Estoque inválida...')
+	ThisForm.getDtEst.SetFocus 
+	Return(.F.)
+Endif
+
+If ThisForm.getFinal.ListIndex <= 0 
+	=MessageBox('Finalidade do arquivo não informada!',48,'Finalidade inválida...')
+	ThisForm.getFinal.SetFocus
+	Return(.F.)
+Endif 
+
+If MessageBox('Confirma a Geração do Arquivo ?', 4+32+256, 'Confirmação de Geração' ) <> 6
+	=MessageBox('Operação Cancelada Pelo Usuário!!!', 64, '')
+	Return
+EndIf 
+
+lcPoint = Set('Point')
+Set Point To [,]
+
+** Gera registro Tipo 1
+ThisForm.GeraReg1()
+
+** Gera registros Tipo 2
+ThisForm.GeraReg2()
+
+** Gera registros Tipo 3
+ThisForm.GeraReg3()
+
+lcNomFile = [CAT44]+Strtran(Dtoc(ThisForm.GetDtEst.Value),[/],[])+[.TXT] 
+
+xNmArq = ADDBS(ThisForm.TxtDest.Value) + lcNomFile
+nHandle = Fcreate(xNmArq)
+
+lnQtCampos1 = Fcount([crReg1])
+lnQtCampos2 = Fcount([crReg2])
+lnQtCampos3 = Fcount([crReg3])
+
+Select crReg1
+m.lcLinha = []
+For i = 1 To lnQtCampos1
+	lcCampo = Fields(i)
+	m.lcLinha = m.lcLinha + Iif(not Empty(m.lcLinha),[|],[]) + Alltrim(&lcCampo)
+Next i
+m.lcLinha = m.lcLinha + Chr(13) + Chr(10)
+Fwrite(nHandle,m.lcLinha)
+
+Select crReg2
+Scan
+	m.lcLinha = []
+	For i = 1 To lnQtCampos2
+		lcCampo = Fields(i)
+		m.lcLinha = m.lcLinha + Iif(not Empty(m.lcLinha),[|],[]) + Alltrim(&lcCampo)
+	Next i
+	m.lcLinha = m.lcLinha + Chr(13) + Chr(10)
+	Fwrite(nHandle,m.lcLinha)
+EndScan
+
+Select crReg3
+m.lcLinha = []
+For i = 1 To lnQtCampos3
+	lcCampo = Fields(i)
+	m.lcLinha = m.lcLinha + Iif(not Empty(m.lcLinha),[|],[]) + Alltrim(&lcCampo)
+Next i
+m.lcLinha = m.lcLinha + Chr(13) + Chr(10)
+Fwrite(nHandle,m.lcLinha)
+
+Fclose(nHandle)
+
+lcFileStr = FileToStr(xNmArq)
+
+StrToFile(lcFileStr,xNmArq,4)
+
+=MessageBox('Arquivo Gerado : ' + xNmArq, 0+64, 'Processamento Concluído!!!')
+
+Set Point To lcPoint
+
+Wait Clear
+ThisForm.CmdSair.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPC44.CmdSair
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPC44
+RESERVED3 (ClassInfo): codidents
+datfim
+datini
+estado
+podatamgr
+totalimposto
+*gerareg1 
+*gerareg2 
+*gerareg3 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

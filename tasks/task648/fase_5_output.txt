@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. **Importante**: a entrega nominal da fase (campos da Page2) **n├úo existe neste form** ÔÇö e eu n├úo fabriquei nenhum.
+
+## O invent├írio do legado j├í estava 100% coberto
+
+`SIGOPBOL.SCX` tem 8 objetos e os 8 j├í existiam: `Opt_Impressora`, `Lbl_Impressora`, `Lbl_Erro`, `cntSombra`, `lblSombra`, `lblTitulo`, `btnReport` + o pr├│prio form. O form ├® **FLAT** ÔÇö sem PageFrame, sem Page2, sem campo de dados pendente. Criar um `ConfigurarPaginaDados()`/Page2 violaria o PILAR 1 (inventar UX que o legado n├úo tem).
+
+Ent├úo a fase virou **auditoria propriedade-a-propriedade contra o dump do SCX**, que achou 4 defeitos das fases anteriores:
+
+| | defeito | efeito |
+|---|---|---|
+| **(c)** | `Closable`/`MaxButton`/`MinButton = .F.` **inventados** (o SCX n├úo os declara) | **o ├║nico com impacto real** |
+| **(d)** | faixa do cabe├ºalho com o literal `"Cadastro de Testes"` | t├¡tulo errado na tela |
+| **(a)** | `TabIndex` nunca transcrito | fidelidade apenas |
+| **(b)** | `Option1.Style = 0` n├úo transcrito | fidelidade apenas |
+
+**(c) ├® o que importa.** Medi no VFP9: `TitleBar=0` + `ControlBox=.F.` deixa `Closable`/`Max`/`Min` em **`.T.`** ÔÇö s├úo independentes. Fixar `.F.` removia o Alt+F4, que era a ├║nica forma de abortar: o ├║nico bot├úo do di├ílogo (`Encerrar`) **sempre imprime** antes do `Release`. Removidos.
+
+**Fui honesto sobre (a) no pr├│prio c├│digo**: medi as tr├¬s variantes e a navega├º├úo por Tab ├® **id├¬ntica** com e sem a transcri├º├úo (os dois ├║nicos tab-stops s├úo `Opt_Impressora` e `btnReport`, e `Opt` vem antes nos dois casos). N├úo ├® conserto de comportamento. Transcrevi s├│ onde o valor *gruda* (`Opt=2`, `btnReport=4`, `Option1=1`) e deixei fora os 2 Labels, onde o VFP renumera (1ÔåÆ3) e Label nem ├® tab-stop ÔÇö isso confirma e segue a mem├│ria `feedback_tabindex_do_scx_nao_transcrito`.
+
+## Conferido e deixado como estava
+- **`Load` legado (`=fConfigGeral()`) n├úo portado, de prop├│sito** ÔÇö `utils/fconfiggeral.prg` ├® no-op documentado que diz explicitamente que c├│digo *nosso* nunca deve cham├í-lo.
+- **`AutoSize`** ÔÇö medi: com Tahoma 8 o `AutoSize=.T.` do `Option1` d├í exatamente os 137x15 do SCX. Ia "corrigir" e a medi├º├úo me impediu de um churn que desviaria do dump.
+
+## Verifica├º├úo
+Compila sem `.err`; **instancia** (`VARTYPE=O`, 5 controles, `Release` OK), Caption/W/H/geometria batendo o SCX, faixa exibindo "Impress├úo de Boleto", `Closable/Max/Min = .T. .T. .T.`. 620 linhas, 100% ASCII. Os 2 regex reais do validador 05d d├úo 0 match; `VerificarPropriedadesInexistentes`, `VerificarFuncoesNaoDefinidas` e `VerificarMetodoProtegidoChamadoDeFora` passam.
+
+## Duas ressalvas
+1. **N├úo rodei o `config.prg` completo** ÔÇö o SQL Server 192.168.200.10 ├® inalcan├º├ível desta m├íquina, ent├úo usei bootstrap manual (`SET PROCEDURE` + `gnConnHandle = -1`). Isso exercita o Init inteiro e o ramo de erro, mas **n├úo** o caminho com impressoras reais.
+2. **Defeito no BO que eu N├âO corrigi** (├® das Fases 1/2, fora do escopo desta): em `SIGOPBOLBO.ObterImpressorasDisponiveis`, o `loc_nCImp = loc_nCImp + 1` n├úo est├í sob a guarda `loc_nPrinters > 0` como no legado. Com a esta├º├úo **sem nenhuma impressora instalada**, o legado mostra *"Sistema N├úo Apresenta Impressora(s) de Boleto Configurada(s)"* e o migrado mostra *"N├úo Existe Impressora de Boleto Configurada Nesse Computador"*. Ambos barram a impress├úo ÔÇö diverg├¬ncia s├│ no texto. Deixei para a Fase 2 decidir.
+
+Salvei o achado do `Closable` na mem├│ria (├® um fato VFP9 novo e reutiliz├ível; complementa a nota de `WindowType`, que manda transcrever essas propriedades **quando o dump as declara**).
