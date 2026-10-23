@@ -719,3 +719,78 @@ DEFINE CLASS TextBoxProdutoTrf_4c AS TextBox
         ENDIF
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaEmn_4c - celulas da grade de itens (gradei) do FormEmn
+* (Estoque Alvo / SIGCDEMN).
+*
+* O legado poe TODO o comportamento no Text1 de cada Column:
+*
+*   Col  papel  When (legado)                          Valid (legado)
+*   ---  -----  -------------------------------------  --------------------------
+*    1   EMP    cpros<>'' e Value VAZIO e edicao       fAcessoEmpresa -> picker
+*    2   QTD    cpros<>'' e edicao                     Value < 0 -> aviso e zera
+*    3   TAM    emps<>'' e cpros<>'' e lTemTam e ed.   fwBuscaExt SigCdTam
+*    4   COR    emps<>'' e cpros<>'' e lTemCor e ed.   fwBuscaExt SigCdCor
+*    5   GRU    cpros<>'' e edicao                     fAcessoContab -> picker
+*    6   CTA    cpros<>'' e edicao                     fAcessoContas -> picker
+*    7   LCL    cpros<>'' e edicao                     fwBuscaExt SigPrLcl (Tipos=3)
+*    8   QID    cpros<>'' e edicao                     Value < 0 -> aviso e zera
+*
+* Alem disso o Column7 (Local) tem LostFocus chamando ThisForm.MNovaLinha(),
+* que eh como o legado INCLUI uma linha nova na grade.
+*
+* Instalado com Column.AddObject + CurrentControl + Sparse = .F. (regra #18).
+* BINDEVENT em Valid de TextBox de Column NAO eh confiavel (regra #46 e
+* docs/grid_implementation.md), por isso os eventos moram na classe e
+* delegam para metodos PUBLIC do form.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaEmn_4c AS TextBox
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+    this_cPapel = ""        && EMP QTD TAM COR GRU CTA LCL QID
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaGradeEmnEditavel", 5)
+            RETURN THISFORM.CelulaGradeEmnEditavel(THIS.this_cPapel, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCelulaGradeEmn", 5)
+            RETURN THISFORM.ValidarCelulaGradeEmn(THIS.this_cPapel, THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *-- So a celula Local cria linha nova, como no legado (Column7.Text1.LostFocus)
+    PROCEDURE LostFocus()
+        IF THIS.this_cPapel == "LCL"
+            IF PEMSTATUS(THISFORM, "NovaLinhaGradeEmn", 5)
+                THISFORM.NovaLinhaGradeEmn()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *-- F4/F5 abrem o picker com o campo vazio ou nao (afordancia do sistema
+    *-- novo). Guard de tecla OBRIGATORIO: sem ele o picker subiria a CADA
+    *-- tecla e o usuario nao terminaria de digitar o codigo (regra #47).
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)  && F4 = 115, F5 = 116
+            IF PEMSTATUS(THISFORM, "AbrirLookupCelulaEmn", 5)
+                THISFORM.AbrirLookupCelulaEmn(THIS.this_cPapel, THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE DblClick()
+        IF PEMSTATUS(THISFORM, "AbrirLookupCelulaEmn", 5)
+            THISFORM.AbrirLookupCelulaEmn(THIS.this_cPapel, THIS)
+        ENDIF
+    ENDPROC
+ENDDEFINE

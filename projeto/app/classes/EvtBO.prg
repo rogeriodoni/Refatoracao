@@ -208,8 +208,9 @@ DEFINE CLASS EvtBO AS BusinessBase
     * Retorna cursor_4c_Dados com Cods e Descs (colunas exibidas no grid)
     *--------------------------------------------------------------------------
     PROCEDURE Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
-        loc_lSucesso = .F.
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_nAreaAnterior
+        loc_lSucesso      = .F.
+        loc_nAreaAnterior = 0
 
         TRY
             IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
@@ -228,14 +229,54 @@ DEFINE CLASS EvtBO AS BusinessBase
 
                 loc_cSQL = loc_cSQL + " ORDER BY Cods"
 
-                IF USED("cursor_4c_Dados")
-                    USE IN cursor_4c_Dados
+                *-- NAO derrubar cursor_4c_Dados: ele eh o RecordSource do grid
+                *-- da Page1. "USE IN" + SQLEXEC no MESMO alias recria o cursor e
+                *-- o grid perde o bind inteiro (ColumnCount cai para 0) - dai o
+                *-- "Unknown member COLUMN1" no CarregarLista logo em seguida.
+                *-- Recarrega com ZAP + APPEND FROM DBF(), que preserva estrutura,
+                *-- RecordSource, ControlSource e ColumnCount.
+                *-- A lista de colunas do CREATE CURSOR e a do SELECT tem de ser
+                *-- IDENTICAS: o APPEND FROM casa por NOME de campo.
+                loc_nAreaAnterior = SELECT()
+
+                IF USED("cursor_4c_DadosTmp")
+                    USE IN cursor_4c_DadosTmp
                 ENDIF
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+
+                IF !USED("cursor_4c_Dados")
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_Dados (Cods C(3), Descs C(30))
+                    SET NULL OFF
+                ENDIF
+
+                SELECT cursor_4c_Dados
+                ZAP
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+
                 IF loc_nResultado >= 0
+                    IF USED("cursor_4c_DadosTmp")
+                        IF RECCOUNT("cursor_4c_DadosTmp") > 0
+                            SELECT cursor_4c_Dados
+                            APPEND FROM DBF("cursor_4c_DadosTmp")
+                        ENDIF
+                    ENDIF
                     loc_lSucesso = .T.
                 ELSE
                     MostrarErro("Erro ao buscar eventos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                ENDIF
+
+                IF USED("cursor_4c_DadosTmp")
+                    USE IN cursor_4c_DadosTmp
+                ENDIF
+
+                IF USED("cursor_4c_Dados")
+                    SELECT cursor_4c_Dados
+                    GO TOP
+                ELSE
+                    IF loc_nAreaAnterior > 0
+                        SELECT (loc_nAreaAnterior)
+                    ENDIF
                 ENDIF
             ENDIF
 

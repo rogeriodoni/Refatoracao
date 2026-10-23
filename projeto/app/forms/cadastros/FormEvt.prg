@@ -651,10 +651,7 @@ DEFINE CLASS FormEvt AS FormBase
                 loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
                 IF VARTYPE(loc_oGrid) = "O"
-                    loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
-                    loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                    THIS.FormatarGridLista(loc_oGrid)
-                    loc_oGrid.Refresh()
+                    THIS.VincularColunasLista(loc_oGrid)
                 ENDIF
 
                 loc_lResultado = .T.
@@ -675,6 +672,32 @@ DEFINE CLASS FormEvt AS FormBase
             .FontName = "Verdana"
             .FontSize = 8
         ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VincularColunasLista - Funil unico do bind da grade da Page1.
+    * Reafirma ColumnCount/ControlSource antes de tocar em Column1: se alguma
+    * rota derrubar o alias cursor_4c_Dados (SQLEXEC direto nele), o grid volta
+    * a ColumnCount = 0 e qualquer "Column1" estoura "Unknown member COLUMN1".
+    * Width POR ULTIMO - RecordSource e fonte recalculam as larguras (regra #41).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE VincularColunasLista(par_oGrid)
+        IF par_oGrid.ColumnCount < 2 OR !(UPPER(ALLTRIM(par_oGrid.RecordSource)) == "CURSOR_4C_DADOS")
+            par_oGrid.RecordSource = "cursor_4c_Dados"
+            par_oGrid.ColumnCount  = 2
+            par_oGrid.Column1.ControlSource = "cursor_4c_Dados.Cods"
+            par_oGrid.Column2.ControlSource = "cursor_4c_Dados.Descs"
+        ENDIF
+
+        par_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+        par_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+
+        THIS.FormatarGridLista(par_oGrid)
+
+        par_oGrid.Column1.Width = 80
+        par_oGrid.Column2.Width = 856
+
+        par_oGrid.Refresh()
     ENDPROC
 
     *--------------------------------------------------------------------------

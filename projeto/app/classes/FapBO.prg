@@ -190,7 +190,10 @@ DEFINE CLASS FapBO AS BusinessBase
 				THIS.this_nProduzidos = TratarNulo(produzidos, "N")
 				THIS.this_nPesoccbs   = TratarNulo(pesoccbs, "N")
 				THIS.this_nPesoscbs   = TratarNulo(pesoscbs, "N")
-				THIS.this_lBaixas     = (TratarNulo(baixas, "N") = 1)
+				*-- Erro250: baixas eh BIT e chega ao VFP como LOGICO (medido via ODBC).
+				*-- "TratarNulo(baixas,'N') = 1" eh Logico x Numerico -> Operator/operand
+				*-- type mismatch em runtime, no Visualizar/Alterar.
+				THIS.this_lBaixas     = ConverterParaLogico(baixas)
 				THIS.this_nNumbals    = TratarNulo(numbals, "N")
 
 				*-- Descricoes (apenas disponiveis no cursor de CarregarPorCodigo com JOIN)

@@ -27,6 +27,10 @@ DEFINE CLASS FormEVE AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
 
+    *-- Guarda de reentrancia dos pickers: o dialogo eh MODAL, tira o foco e
+    *-- redispara o proprio LostFocus do campo (regra #37/#47)
+    this_lEmLookup       = .F.
+
     *--------------------------------------------------------------------------
     * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
     *--------------------------------------------------------------------------
@@ -607,7 +611,11 @@ DEFINE CLASS FormEVE AS FormBase
             .ForeColor     = RGB(90, 90, 90)
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Grupo, "KeyPress", THIS, "ValidarGrupoEve")
+        *-- O legado valida no getGrupo.Valid, ou seja ao SAIR do campo. Ligado
+        *-- a "KeyPress" sem testar a tecla, o handler rodava a CADA caractere
+        *-- digitado (regra #47). O KeyPress fica so para o F4/F5, que testa a
+        *-- tecla e por isso eh o caso legitimo.
+        BINDEVENT(loc_oPg2.txt_4c_Grupo, "LostFocus", THIS, "ValidarGrupoEve")
         BINDEVENT(loc_oPg2.txt_4c_Grupo, "KeyPress",  THIS, "GrupoKeyPress")
 
         loc_oPg2.AddObject("txt_4c_DGrupo", "TextBox")
@@ -660,7 +668,8 @@ DEFINE CLASS FormEVE AS FormBase
             .MaxLength     = 10
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPg2.txt_4c_Conta, "KeyPress", THIS, "ValidarContaEve")
+        *-- idem Grupo: o legado valida no getConta.Valid (ao sair do campo)
+        BINDEVENT(loc_oPg2.txt_4c_Conta, "LostFocus", THIS, "ValidarContaEve")
         BINDEVENT(loc_oPg2.txt_4c_Conta, "KeyPress",  THIS, "ContaKeyPress")
 
         loc_oPg2.AddObject("txt_4c_DConta", "TextBox")
@@ -1135,8 +1144,29 @@ DEFINE CLASS FormEVE AS FormBase
     * ValidarGrupoEve - LostFocus de txt_4c_Grupo: valida e popula descricao
     * Replica getGrupo.Valid: fAcessoContab('C', Grupo, ...) -> popula DGrupo
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarGrupoEve
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *--------------------------------------------------------------------------
+    * ValidarGrupoEve - getGrupo.Valid do legado (dispara ao SAIR do campo):
+    *     If !IsEmpty(This.Value)
+    *         fAcessoContab(Usuar,'C',This.Value, getGrupo, getDGrupo)
+    *     Else
+    *         getDGrupo.Value = ''
+    *     EndIf
+    * fAcessoContab com 5 argumentos eh modo LOOKUP: abre o picker quando o
+    * codigo nao casa e preenche os DOIS campos. O legado NAO avisa "nao
+    * encontrado" - quem da o retorno eh a propria lista (regra #50).
+    * Wrapper fino: libera a guarda mesmo com RETURN antecipado (regra #47).
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarGrupoEve()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarGrupoEveExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarGrupoEveExec()
         LOCAL loc_oPg2, loc_cGrupo, loc_cDesc
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
@@ -1149,9 +1179,10 @@ DEFINE CLASS FormEVE AS FormBase
         TRY
             loc_cDesc = THIS.this_oBusinessObject.ObterDescricaoGrupo(loc_cGrupo)
             IF EMPTY(loc_cDesc)
-                MsgAviso("Grupo n" + CHR(227) + "o encontrado!", "Aten" + CHR(231) + CHR(227) + "o")
+                *-- Nao casou: abre a lista com o digitado como prefixo. Sem
+                *-- MsgAviso e SEM apagar o codigo digitado (regra #50).
                 loc_oPg2.txt_4c_DGrupo.Value = ""
-                loc_oPg2.txt_4c_Grupo.SetFocus()
+                THIS.AbrirLookupGrupoEve()
             ELSE
                 loc_oPg2.txt_4c_DGrupo.Value = loc_cDesc
             ENDIF
@@ -1163,14 +1194,32 @@ DEFINE CLASS FormEVE AS FormBase
     *--------------------------------------------------------------------------
     * GrupoKeyPress - F4 em txt_4c_Grupo abre picker de Grupos (SigCdGcr)
     *--------------------------------------------------------------------------
+    *-- F4/F5 abrem o picker com o campo vazio ou nao. O 63 que estava aqui eh
+    *-- o codigo de "?", nao de F4 (115) - o picker nunca abria por tecla.
+    *-- Guarda em save/restore porque o irmao LostFocus dispara logo depois,
+    *-- quando o modal devolve o foco.
     PROCEDURE GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg2, loc_oBusca, loc_cGrupoSel
+        LOCAL loc_lAnterior
 
-        IF par_nKeyCode != 63
+        IF !INLIST(par_nKeyCode, 115, 116)
             RETURN
         ENDIF
 
-        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        loc_lAnterior       = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupGrupoEve()
+        THIS.this_lEmLookup = loc_lAnterior
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirLookupGrupoEve - picker de Grupos (SigCdGcr), funil unico
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirLookupGrupoEve()
+        LOCAL loc_oPg2, loc_oBusca, loc_cGrupoSel, loc_nAreaAnterior
+
+        *-- o USE IN do cursor do picker deixa a sessao SEM area corrente
+        loc_nAreaAnterior = SELECT()
+        loc_oPg2          = THIS.pgf_4c_Paginas.Page2
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
@@ -1199,19 +1248,42 @@ DEFINE CLASS FormEVE AS FormBase
                 USE IN cursor_4c_BuscaGrupo
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormEVE.GrupoKeyPress")
+            MsgErro(loc_oErro.Message, "FormEVE.AbrirLookupGrupoEve")
             IF USED("cursor_4c_BuscaGrupo")
                 USE IN cursor_4c_BuscaGrupo
             ENDIF
         ENDTRY
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarContaEve - LostFocus de txt_4c_Conta: valida e popula descricao
     * Replica getConta.Valid: fAcessoContas -> SQL em SigCdCli + DConta
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarContaEve
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+    *--------------------------------------------------------------------------
+    * ValidarContaEve - getConta.Valid do legado (dispara ao SAIR do campo):
+    *     Grupo = getGrupo.Value
+    *     If !IsEmpty(This.Value)
+    *         If !fAcessoContas(Usuar, Grupo, 'C', This.Value, getConta, getDConta)
+    *             MessageBox('Acesso Negado !!!'...) ...
+    * Tambem eh modo LOOKUP (6 argumentos): o picker abre quando nao casa.
+    * O 2o argumento (Grupo) eh FILTRO - a lista so traz as contas do grupo
+    * corrente; sem ele o picker abriria TODAS as contas de todos os grupos.
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarContaEve()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarContaEveExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarContaEveExec()
         LOCAL loc_oPg2, loc_cConta, loc_cDesc
         loc_oPg2   = THIS.pgf_4c_Paginas.Page2
         loc_cConta = ALLTRIM(loc_oPg2.txt_4c_Conta.Value)
@@ -1224,9 +1296,9 @@ DEFINE CLASS FormEVE AS FormBase
         TRY
             loc_cDesc = THIS.this_oBusinessObject.ObterDescricaoConta(loc_cConta)
             IF EMPTY(loc_cDesc)
-                MsgAviso("Conta n" + CHR(227) + "o encontrada!", "Aten" + CHR(231) + CHR(227) + "o")
+                *-- Nao casou: abre a lista, sem aviso e sem apagar o digitado
                 loc_oPg2.txt_4c_DConta.Value = ""
-                loc_oPg2.txt_4c_Conta.SetFocus()
+                THIS.AbrirLookupContaEve()
             ELSE
                 loc_oPg2.txt_4c_DConta.Value = loc_cDesc
             ENDIF
@@ -1238,20 +1310,43 @@ DEFINE CLASS FormEVE AS FormBase
     *--------------------------------------------------------------------------
     * ContaKeyPress - F4 em txt_4c_Conta abre picker de Contas (SigCdCli)
     *--------------------------------------------------------------------------
+    *-- F4/F5 (o 63 anterior eh "?", nao F4) - ver GrupoKeyPress
     PROCEDURE ContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg2, loc_oBusca, loc_cContaSel
+        LOCAL loc_lAnterior
 
-        IF par_nKeyCode != 63
+        IF !INLIST(par_nKeyCode, 115, 116)
             RETURN
         ENDIF
 
-        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        loc_lAnterior       = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
+        THIS.AbrirLookupContaEve()
+        THIS.this_lEmLookup = loc_lAnterior
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirLookupContaEve - picker de Contas (SigCdCli), funil unico.
+    * Filtra pelo Grupo corrente, que eh o 2o argumento do fAcessoContas legado
+    * (SigCdCli.grupos char(10) - ver a montagem do filtro em utils/functions).
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirLookupContaEve()
+        LOCAL loc_oPg2, loc_oBusca, loc_cContaSel, loc_cGrupo, loc_cFiltro
+        LOCAL loc_nAreaAnterior
+
+        loc_nAreaAnterior = SELECT()
+        loc_oPg2          = THIS.pgf_4c_Paginas.Page2
+        loc_cGrupo        = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
+        loc_cFiltro       = ""
+
+        IF !EMPTY(loc_cGrupo)
+            loc_cFiltro = "RTRIM(grupos) = " + EscaparSQL(loc_cGrupo)
+        ENDIF
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCli", "cursor_4c_BuscaConta", "Iclis", ;
                 ALLTRIM(loc_oPg2.txt_4c_Conta.Value), ;
-                "Buscar Conta")
+                "Buscar Conta", .F., .T., loc_cFiltro)
 
             IF VARTYPE(loc_oBusca) = "O"
                 IF !loc_oBusca.this_lAchouRegistro
@@ -1274,11 +1369,15 @@ DEFINE CLASS FormEVE AS FormBase
                 USE IN cursor_4c_BuscaConta
             ENDIF
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormEVE.ContaKeyPress")
+            MsgErro(loc_oErro.Message, "FormEVE.AbrirLookupContaEve")
             IF USED("cursor_4c_BuscaConta")
                 USE IN cursor_4c_BuscaConta
             ENDIF
         ENDTRY
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------

@@ -31,6 +31,13 @@ DEFINE CLASS FormEmn AS FormBase
     this_lProdutoFixo    = .F.        && .T. quando produto foi fixado externamente
     this_cEscolha        = ""         && INSERIR / ALTERAR / PROCURAR / VISUALIZAR (legado)
 
+    *-- Guarda de reentrancia dos pickers da grade: o dialogo eh MODAL, tira o
+    *-- foco e redispara Valid/LostFocus da propria celula (regra #37/#47)
+    this_lEmLookupGrade  = .F.
+
+    *-- Idem para os campos Produto/Descricao do cabecalho da Page2
+    this_lEmLookupProduto = .F.
+
     *==========================================================================
     PROCEDURE Init()
     *==========================================================================
@@ -345,7 +352,7 @@ DEFINE CLASS FormEmn AS FormBase
             .Top               = 150
             .Left              = 12
             .Width             = 939
-            .Height            = 435
+            .Height            = 470
             .FontName          = "Verdana"
             .FontSize          = 8
             .ForeColor         = RGB(90, 90, 90)
@@ -397,51 +404,8 @@ DEFINE CLASS FormEmn AS FormBase
                     IF !THIS.this_oBusinessObject.Buscar("")
                         loc_lResultado = .F.
                     ELSE
-                        *-- Configurar RecordSource + colunas
-                        loc_oGrid.RecordSource = "CrProdutos"
-
-                        loc_oGrid.Column1.ControlSource   = "CrProdutos.cpros"
-                        loc_oGrid.Column1.Width           = 100
-                        loc_oGrid.Column1.Header1.Caption = ""
-                        loc_oGrid.Column1.Header1.Alignment = 2
-                        loc_oGrid.Column1.Header1.FontName  = "Tahoma"
-                        loc_oGrid.Column1.Header1.FontSize  = 8
-                        loc_oGrid.Column1.Header1.ForeColor = RGB(90, 90, 90)
-
-                        loc_oGrid.Column2.ControlSource   = "CrProdutos.dpros"
-                        loc_oGrid.Column2.Width           = 430
-                        loc_oGrid.Column2.Header1.Caption = "Produto"
-                        loc_oGrid.Column2.Header1.Alignment = 2
-                        loc_oGrid.Column2.Header1.FontName  = "Tahoma"
-                        loc_oGrid.Column2.Header1.FontSize  = 8
-                        loc_oGrid.Column2.Header1.ForeColor = RGB(90, 90, 90)
-
-                        loc_oGrid.Column3.ControlSource   = "CrProdutos.ifors"
-                        loc_oGrid.Column3.Width           = 100
-                        loc_oGrid.Column3.Header1.Caption = ""
-                        loc_oGrid.Column3.Header1.Alignment = 2
-                        loc_oGrid.Column3.Header1.FontName  = "Tahoma"
-                        loc_oGrid.Column3.Header1.FontSize  = 8
-                        loc_oGrid.Column3.Header1.ForeColor = RGB(90, 90, 90)
-
-                        loc_oGrid.Column4.ControlSource   = "CrProdutos.reffs"
-                        loc_oGrid.Column4.Width           = 150
-                        loc_oGrid.Column4.Header1.Caption = ""
-                        loc_oGrid.Column4.Header1.Alignment = 2
-                        loc_oGrid.Column4.Header1.FontName  = "Tahoma"
-                        loc_oGrid.Column4.Header1.FontSize  = 8
-                        loc_oGrid.Column4.Header1.ForeColor = RGB(90, 90, 90)
-
-                        loc_oGrid.Column5.ControlSource   = "CrProdutos.sgrus"
-                        loc_oGrid.Column5.Width           = 140
-                        loc_oGrid.Column5.Header1.Caption = ""
-                        loc_oGrid.Column5.Header1.Alignment = 2
-                        loc_oGrid.Column5.Header1.FontName  = "Tahoma"
-                        loc_oGrid.Column5.Header1.FontSize  = 8
-                        loc_oGrid.Column5.Header1.ForeColor = RGB(90, 90, 90)
-
-                        THIS.FormatarGridLista(loc_oGrid)
-                        loc_oGrid.Refresh()
+                        *-- Bind no funil unico (reproduz o pColuna do Init legado)
+                        THIS.VincularColunasLista(loc_oGrid)
 
                         loc_lResultado = .T.
                     ENDIF
@@ -473,6 +437,12 @@ DEFINE CLASS FormEmn AS FormBase
                 THIS.CarregarLista()
             ENDIF
 
+            *-- FUNIL (regra #40): quem muda de modo tem de reavaliar os botoes
+            *-- aqui, nao so no botao que entra. Sem isto o cmd_4c_BtnExcluir
+            *-- fica com o Enabled da vez anterior - entrava em ALTERAR, voltava,
+            *-- abria em VISUALIZAR e o botao continuava habilitado.
+            THIS.AjustarBotoesPorModo()
+
             loc_lResultado = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AlternarPagina")
@@ -500,7 +470,7 @@ DEFINE CLASS FormEmn AS FormBase
                 THIS.HabilitarCampos(.T.)
             ENDIF
 
-            THIS.pgf_4c_Paginas.ActivePage = 2
+            THIS.AlternarPagina(2)
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.BtnIncluirClick")
         ENDTRY
@@ -549,7 +519,7 @@ DEFINE CLASS FormEmn AS FormBase
                     THIS.HabilitarCampos(.F.)
                 ENDIF
 
-                THIS.pgf_4c_Paginas.ActivePage = 2
+                THIS.AlternarPagina(2)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.BtnVisualizarClick")
@@ -600,7 +570,7 @@ DEFINE CLASS FormEmn AS FormBase
                     THIS.HabilitarCampos(.T.)
                 ENDIF
 
-                THIS.pgf_4c_Paginas.ActivePage = 2
+                THIS.AlternarPagina(2)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.BtnAlterarClick")
@@ -826,7 +796,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH par_oPagina.lbl_4c_Label1
             .Caption   = "Produto :"
-            .Top       = 46
+            .Top       = 118
             .Left      = 199
             .Width     = 47
             .Height    = 15
@@ -842,7 +812,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- Lookup SigCdPro por cpros (quando INSERIR); readonly em outros modos
         par_oPagina.AddObject("txt_4c_Produto", "TextBox")
         WITH par_oPagina.txt_4c_Produto
-            .Top       = 43
+            .Top       = 115
             .Left      = 251
             .Width     = 108
             .Height    = 23
@@ -857,7 +827,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- Lookup SigCdPro por dpros (quando INSERIR); readonly em outros modos
         par_oPagina.AddObject("txt_4c_Dpro", "TextBox")
         WITH par_oPagina.txt_4c_Dpro
-            .Top       = 43
+            .Top       = 115
             .Left      = 361
             .Width     = 360
             .Height    = 23
@@ -878,7 +848,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH par_oPagina.lbl_4c_Label8
             .Caption   = "Grupo :"
-            .Top       = 73
+            .Top       = 145
             .Left      = 208
             .Width     = 38
             .Height    = 15
@@ -894,7 +864,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- When=.F. -> sempre readonly (preenchido automaticamente pelo produto)
         par_oPagina.AddObject("txt_4c_Cgru", "TextBox")
         WITH par_oPagina.txt_4c_Cgru
-            .Top       = 69
+            .Top       = 141
             .Left      = 251
             .Width     = 31
             .Height    = 23
@@ -910,7 +880,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- When=.F. -> sempre readonly
         par_oPagina.AddObject("txt_4c_Dgru", "TextBox")
         WITH par_oPagina.txt_4c_Dgru
-            .Top       = 69
+            .Top       = 141
             .Left      = 284
             .Width     = 150
             .Height    = 23
@@ -926,7 +896,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label19", "Label")
         WITH par_oPagina.lbl_4c_Label19
             .Caption   = "Situa" + CHR(231) + CHR(227) + "o :"
-            .Top       = 73
+            .Top       = 145
             .Left      = 456
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -947,7 +917,7 @@ DEFINE CLASS FormEmn AS FormBase
             .Value       = 1
             .Enabled     = .F.
             .Visible     = .T.
-            .Top         = 67
+            .Top         = 139
             .Left        = 504
 
             WITH .Buttons(1)
@@ -980,7 +950,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH par_oPagina.lbl_4c_Label11
             .Caption   = "Fornecedor :"
-            .Top       = 98
+            .Top       = 170
             .Left      = 182
             .Width     = 64
             .Height    = 15
@@ -996,7 +966,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- When=PROCURAR: habilitado apenas no modo busca (ReadOnly nos demais)
         par_oPagina.AddObject("txt_4c_Ifor", "TextBox")
         WITH par_oPagina.txt_4c_Ifor
-            .Top       = 95
+            .Top       = 167
             .Left      = 251
             .Width     = 80
             .Height    = 23
@@ -1012,7 +982,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- When=.F. -> sempre readonly
         par_oPagina.AddObject("txt_4c_Dfor", "TextBox")
         WITH par_oPagina.txt_4c_Dfor
-            .Top       = 95
+            .Top       = 167
             .Left      = 333
             .Width     = 290
             .Height    = 23
@@ -1037,7 +1007,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH par_oPagina.lbl_4c_Label12
             .Caption   = "Ref. Fornecedor :"
-            .Top       = 124
+            .Top       = 196
             .Left      = 158
             .Width     = 88
             .Height    = 15
@@ -1053,7 +1023,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- When=PROCURAR: apenas no modo busca; readonly nos demais modos
         par_oPagina.AddObject("txt_4c_Refs", "TextBox")
         WITH par_oPagina.txt_4c_Refs
-            .Top       = 121
+            .Top       = 193
             .Left      = 251
             .Width     = 150
             .Height    = 23
@@ -1069,7 +1039,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("lbl_4c_Label13", "Label")
         WITH par_oPagina.lbl_4c_Label13
             .Caption   = "Qtde M" + CHR(237) + "nima :"
-            .Top       = 124
+            .Top       = 196
             .Left      = 470
             .Width     = 68
             .Height    = 15
@@ -1085,7 +1055,7 @@ DEFINE CLASS FormEmn AS FormBase
         *-- ReadOnly - calculado automaticamente pelo sistema
         par_oPagina.AddObject("txt_4c_Qmin", "TextBox")
         WITH par_oPagina.txt_4c_Qmin
-            .Top       = 121
+            .Top       = 193
             .Left      = 543
             .Width     = 80
             .Height    = 23
@@ -1104,10 +1074,10 @@ DEFINE CLASS FormEmn AS FormBase
         *--------------------------------------------------------------------------
         par_oPagina.AddObject("grd_4c_GradeI", "Grid")
         WITH par_oPagina.grd_4c_GradeI
-            .Top                = 154
+            .Top                = 226
             .Left               = 146
             .Width              = 692
-            .Height             = 436
+            .Height             = 364
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -1130,74 +1100,17 @@ DEFINE CLASS FormEmn AS FormBase
         *-- ColumnCount FORA do WITH (Problem 36 - cria Text1 imediatamente)
         par_oPagina.grd_4c_GradeI.ColumnCount = 8
 
-        *-- Configurar colunas (ControlSource sera setado em ConfigurarRecordSourceGrid)
-        WITH par_oPagina.grd_4c_GradeI
-            .Column1.Width            = 45
-            .Column1.Header1.Caption  = "Emp"
-            .Column1.Header1.Alignment = 2
-            .Column1.ReadOnly         = .F.
-            .Column1.Sparse           = .F.
+        *-- Colunas no funil unico (mesmos valores do SCX legado, inclusive ColumnOrder)
+        THIS.FormatarColunasGrade(par_oPagina.grd_4c_GradeI)
 
-            .Column2.Width            = 90
-            .Column2.Header1.Caption  = "Qtde. M" + CHR(237) + "nima"
-            .Column2.Header1.Alignment = 2
-            .Column2.ReadOnly         = .F.
-            .Column2.Sparse           = .F.
+        *-- Celulas da grade: TextBox proprio por coluna, com When/Valid/LostFocus
+        *-- embutidos (regra #46 - BINDEVENT em Valid de Column nao eh confiavel).
+        *-- Substitui os BINDEVENT "KeyPress" que existiam aqui e que nunca
+        *-- abriam a lista (o legado abre no Valid, ao SAIR da celula).
+        THIS.InstalarCelulasGrade(par_oPagina.grd_4c_GradeI)
 
-            .Column3.Width            = 70
-            .Column3.Header1.Caption  = "Tamanho"
-            .Column3.Header1.Alignment = 2
-            .Column3.ReadOnly         = .F.
-            .Column3.Sparse           = .F.
-
-            .Column4.Width            = 55
-            .Column4.Header1.Caption  = "Cor"
-            .Column4.Header1.Alignment = 2
-            .Column4.ReadOnly         = .F.
-            .Column4.Sparse           = .F.
-
-            .Column5.Width            = 85
-            .Column5.Header1.Caption  = "Grupo"
-            .Column5.Header1.Alignment = 2
-            .Column5.ReadOnly         = .F.
-            .Column5.Sparse           = .F.
-
-            .Column6.Width            = 85
-            .Column6.Header1.Caption  = "Conta"
-            .Column6.Header1.Alignment = 2
-            .Column6.ReadOnly         = .F.
-            .Column6.Sparse           = .F.
-
-            .Column7.Width            = 85
-            .Column7.Header1.Caption  = "Local"
-            .Column7.Header1.Alignment = 2
-            .Column7.ReadOnly         = .F.
-            .Column7.Sparse           = .F.
-
-            .Column8.Width            = 90
-            .Column8.Header1.Caption  = "Estoque Alvo"
-            .Column8.Header1.Alignment = 2
-            .Column8.ReadOnly         = .F.
-            .Column8.Sparse           = .F.
-        ENDWITH
-
-        *-- BINDEVENTs do grid e suas colunas
+        *-- BINDEVENT do GRID (nao de coluna) - este funciona
         BINDEVENT(par_oPagina.grd_4c_GradeI, "AfterRowColChange", THIS, "GradeIAfterRowColChange")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column1.Text1, "KeyPress",  THIS, "EmpColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column1.Text1, "KeyPress", THIS, "EmpColLostFocus")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column2.Text1, "KeyPress", THIS, "QtdeColLostFocus")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column3.Text1, "KeyPress",  THIS, "TamanhoColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column3.Text1, "DblClick",  THIS, "TamanhoColDblClick")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column4.Text1, "KeyPress",  THIS, "CorColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column4.Text1, "DblClick",  THIS, "CorColDblClick")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column5.Text1, "KeyPress",  THIS, "GrupoColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column5.Text1, "DblClick",  THIS, "GrupoColDblClick")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column6.Text1, "KeyPress",  THIS, "ContaColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column6.Text1, "DblClick",  THIS, "ContaColDblClick")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column7.Text1, "KeyPress",  THIS, "LocalColKeyPress")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column7.Text1, "DblClick",  THIS, "LocalColDblClick")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column7.Text1, "KeyPress", THIS, "LocalColLostFocus")
-        BINDEVENT(par_oPagina.grd_4c_GradeI.Column8.Text1, "KeyPress", THIS, "QIdealColLostFocus")
 
         *--------------------------------------------------------------------------
         *-- Botao Excluir linha do grid (btnExcluir: top=313+29=342, left=843, w=45, h=45)
@@ -1206,7 +1119,7 @@ DEFINE CLASS FormEmn AS FormBase
         par_oPagina.AddObject("cmd_4c_BtnExcluir", "CommandButton")
         WITH par_oPagina.cmd_4c_BtnExcluir
             .Caption         = ""
-            .Top             = 342
+            .Top             = 414
             .Left            = 843
             .Width           = 45
             .Height          = 45
@@ -1292,10 +1205,16 @@ DEFINE CLASS FormEmn AS FormBase
         ENDWITH
 
         *-- BINDEVENTs para lookup de produto (get_produto / getDpro) -- apenas em modo INSERIR
-        BINDEVENT(par_oPagina.txt_4c_Produto, "KeyPress", THIS, "ProdutoCodKeyPress")
-        BINDEVENT(par_oPagina.txt_4c_Produto, "DblClick", THIS, "ProdutoCodDblClick")
-        BINDEVENT(par_oPagina.txt_4c_Dpro,    "KeyPress", THIS, "ProdutoDescKeyPress")
-        BINDEVENT(par_oPagina.txt_4c_Dpro,    "DblClick", THIS, "ProdutoDescDblClick")
+        *-- O legado abre a lista no Valid do get_produto, ou seja ao SAIR do
+        *-- campo com qualquer valor digitado - por isso "LostFocus" (regra #47).
+        *-- O KeyPress fica so para o F4/F5, que testa a tecla e por isso eh o
+        *-- caso legitimo de KeyPress.
+        BINDEVENT(par_oPagina.txt_4c_Produto, "LostFocus", THIS, "ProdutoCodLostFocus")
+        BINDEVENT(par_oPagina.txt_4c_Produto, "KeyPress",  THIS, "ProdutoCodKeyPress")
+        BINDEVENT(par_oPagina.txt_4c_Produto, "DblClick",  THIS, "ProdutoCodDblClick")
+        BINDEVENT(par_oPagina.txt_4c_Dpro,    "LostFocus", THIS, "ProdutoDescLostFocus")
+        BINDEVENT(par_oPagina.txt_4c_Dpro,    "KeyPress",  THIS, "ProdutoDescKeyPress")
+        BINDEVENT(par_oPagina.txt_4c_Dpro,    "DblClick",  THIS, "ProdutoDescDblClick")
 
         THIS.TornarControlesVisiveis(par_oPagina)
     ENDPROC
@@ -1346,6 +1265,295 @@ DEFINE CLASS FormEmn AS FormBase
         WITH par_oGrid
             .FontName = "Tahoma"
             .FontSize = 8
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * FormatarColunasGrade - Funil unico das colunas da grade de itens (gradei)
+    * Valores transcritos do SCX legado, inclusive a ColumnOrder:
+    *   ordem visual = Emp, Qtde.Minima, Estoque Alvo, Cor, Tamanho, Grupo,
+    *   Conta, Local (Column3.ColumnOrder=5, Column5=6, Column6=7, Column7=8,
+    *   Column8=3; as demais ficam na ordem natural).
+    * As chamadas vao em ordem CRESCENTE de posicao: cada coluna ja colocada
+    * fica fixa, porque uma insercao posterior so desloca posicoes maiores.
+    *==========================================================================
+    PROTECTED PROCEDURE FormatarColunasGrade(par_oGrid)
+        WITH par_oGrid
+            THIS.FormatarColunaGrade(.Column1, "Emp",                                  44, "Courier New", "",           1)
+            THIS.FormatarColunaGrade(.Column2, "Qtde. M" + CHR(237) + "nima",         100, "Tahoma",      "999,999.99", 2)
+            THIS.FormatarColunaGrade(.Column8, "Estoque Alvo",                        100, "Courier New", "999,999.99", 3)
+            THIS.FormatarColunaGrade(.Column4, "Cor",                                  55, "Courier New", "",           4)
+            THIS.FormatarColunaGrade(.Column3, "Tamanho",                              55, "Tahoma",      "",           5)
+            THIS.FormatarColunaGrade(.Column5, "Grupo",                               100, "Courier New", "",           6)
+            THIS.FormatarColunaGrade(.Column6, "Conta",                               100, "Courier New", "",           7)
+            THIS.FormatarColunaGrade(.Column7, "Local",                               100, "Arial",       "",           8)
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * InstalarCelulasGrade - Poe um TextBoxCelulaEmn_4c como CurrentControl de
+    * cada coluna da gradei. Sem CurrentControl + Sparse = .F. o controle eh
+    * criado e NUNCA aparece / nunca recebe os eventos (regra #18).
+    * Fontes por coluna transcritas dos Text1 do SCX legado.
+    *==========================================================================
+    PROTECTED PROCEDURE InstalarCelulasGrade(par_oGrid)
+        THIS.InstalarCelulaGrade(par_oGrid.Column1, "cel_4c_Emp", "EMP", "Courier New", "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column2, "cel_4c_Qtd", "QTD", "Tahoma",      "999,999.99")
+        THIS.InstalarCelulaGrade(par_oGrid.Column3, "cel_4c_Tam", "TAM", "Tahoma",      "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column4, "cel_4c_Cor", "COR", "Courier New", "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column5, "cel_4c_Gru", "GRU", "Courier New", "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column6, "cel_4c_Cta", "CTA", "Courier New", "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column7, "cel_4c_Lcl", "LCL", "Arial",       "")
+        THIS.InstalarCelulaGrade(par_oGrid.Column8, "cel_4c_Qid", "QID", "Courier New", "999,999.99")
+    ENDPROC
+
+    *==========================================================================
+    * InstalarCelulaGrade - Instala a celula de UMA coluna (idempotente)
+    *==========================================================================
+    PROTECTED PROCEDURE InstalarCelulaGrade(par_oColuna, par_cNome, par_cPapel, ;
+                                            par_cFonte, par_cMascara)
+        IF !PEMSTATUS(par_oColuna, par_cNome, 5)
+            par_oColuna.AddObject(par_cNome, "TextBoxCelulaEmn_4c")
+        ENDIF
+
+        WITH EVALUATE("par_oColuna." + par_cNome)
+            .this_cPapel = par_cPapel
+            .FontName    = par_cFonte
+            .FontSize    = 9
+            .InputMask   = par_cMascara
+            .Visible     = .T.
+        ENDWITH
+
+        par_oColuna.CurrentControl = par_cNome
+        par_oColuna.Sparse         = .F.
+    ENDPROC
+
+    *==========================================================================
+    * CelulaGradeEmnEditavel - reproduz os When dos Text1 das colunas do legado
+    *==========================================================================
+    PROCEDURE CelulaGradeEmnEditavel(par_cPapel, par_oTxt)
+        LOCAL loc_lEdicao, loc_lTemProduto, loc_lTemEmpresa, loc_oBO
+        loc_lEdicao = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+        IF !loc_lEdicao OR !USED("CrSigCdMin") OR EOF("CrSigCdMin")
+            RETURN .F.
+        ENDIF
+
+        loc_oBO         = THIS.this_oBusinessObject
+        loc_lTemProduto = !EMPTY(ALLTRIM(CrSigCdMin.cpros))
+        loc_lTemEmpresa = !EMPTY(ALLTRIM(CrSigCdMin.emps))
+
+        DO CASE
+            *-- Empresa: so enquanto VAZIA (legado: And Empty(This.Value))
+            CASE par_cPapel == "EMP"
+                RETURN loc_lTemProduto AND !loc_lTemEmpresa
+
+            CASE par_cPapel == "TAM"
+                RETURN loc_lTemProduto AND loc_lTemEmpresa AND loc_oBO.this_lTemTam
+
+            CASE par_cPapel == "COR"
+                RETURN loc_lTemProduto AND loc_lTemEmpresa AND loc_oBO.this_lTemCor
+
+            OTHERWISE
+                RETURN loc_lTemProduto
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    * ValidarCelulaGradeEmn - reproduz os Valid dos Text1 das colunas do legado
+    * O valor digitado esta em par_oTxt.Value; o cursor so recebe DEPOIS do
+    * Valid, entao ler do cursor aqui validaria o valor ANTIGO (regra #46).
+    *==========================================================================
+    PROCEDURE ValidarCelulaGradeEmn(par_cPapel, par_oTxt)
+        LOCAL loc_lResultado
+        loc_lResultado = .T.
+
+        TRY
+            DO CASE
+                *-- Qtde. Minima e Estoque Alvo: legado so recusa negativo
+                CASE INLIST(par_cPapel, "QTD", "QID")
+                    IF VARTYPE(par_oTxt.Value) = "N" AND par_oTxt.Value < 0
+                        MsgAviso("Quantidade Inv" + CHR(225) + "lida !!!", "ERRO")
+                        par_oTxt.Value = 0
+                        loc_lResultado = .F.
+                    ENDIF
+
+                *-- Demais: com valor digitado, o legado abre a lista
+                OTHERWISE
+                    IF !EMPTY(ALLTRIM(TRANSFORM(par_oTxt.Value)))
+                        THIS.AbrirLookupCelulaEmn(par_cPapel, par_oTxt)
+                    ENDIF
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormEmn.ValidarCelulaGradeEmn")
+            loc_lResultado = .T.
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupCelulaEmn - despacha para o picker da coluna
+    * Guarda de reentrancia: o picker eh MODAL, tira o foco e pode redisparar
+    * o proprio Valid/LostFocus (regra #37/#47). Liberada por wrapper, para
+    * valer tambem quando o corpo sai por RETURN ou por excecao.
+    *==========================================================================
+    PROCEDURE AbrirLookupCelulaEmn(par_cPapel, par_oTxt)
+        IF THIS.this_lEmLookupGrade
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookupGrade = .T.
+        TRY
+            DO CASE
+                CASE par_cPapel == "EMP"
+                    THIS.AbrirLookupEmpresa(par_oTxt)
+                CASE par_cPapel == "TAM"
+                    THIS.AbrirLookupTamanho(par_oTxt)
+                CASE par_cPapel == "COR"
+                    THIS.AbrirLookupCor(par_oTxt)
+                CASE par_cPapel == "GRU"
+                    THIS.AbrirLookupGrupo(par_oTxt)
+                CASE par_cPapel == "CTA"
+                    THIS.AbrirLookupConta(par_oTxt)
+                CASE par_cPapel == "LCL"
+                    THIS.AbrirLookupLocal(par_oTxt)
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupCelulaEmn")
+        ENDTRY
+        THIS.this_lEmLookupGrade = .F.
+    ENDPROC
+
+    *==========================================================================
+    * NovaLinhaGradeEmn - LostFocus da celula Local (Column7.Text1 no legado):
+    *   If !InList(LastKey(),4,5,19,24)
+    *       ThisForm.MNovaLinha()
+    *   EndIf
+    * 4/5/19/24 = setas direita/cima/esquerda/baixo: navegar pela grade NAO
+    * cria linha; sair com Tab/Enter/clique cria.
+    *==========================================================================
+    PROCEDURE NovaLinhaGradeEmn()
+        IF INLIST(LASTKEY(), 4, 5, 19, 24)
+            RETURN
+        ENDIF
+
+        IF THIS.this_lEmLookupGrade
+            RETURN
+        ENDIF
+
+        IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
+            RETURN
+        ENDIF
+
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+
+        TRY
+            LOCAL loc_lTemVazia, loc_nRec
+            loc_lTemVazia = .F.
+            loc_nRec      = RECNO("CrSigCdMin")
+
+            *-- O legado insere sempre; aqui so quando nao ha linha em branco,
+            *-- senao cada passagem pelo Local acumula linha vazia.
+            SELECT CrSigCdMin
+            SCAN FOR !DELETED()
+                IF EMPTY(ALLTRIM(CrSigCdMin.emps))
+                    loc_lTemVazia = .T.
+                    EXIT
+                ENDIF
+            ENDSCAN
+
+            IF BETWEEN(loc_nRec, 1, RECCOUNT("CrSigCdMin"))
+                GO loc_nRec IN CrSigCdMin
+            ENDIF
+
+            IF !loc_lTemVazia
+                THIS.AdicionarLinhaGrid()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormEmn.NovaLinhaGradeEmn")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * FormatarColunaGrade - Propriedades de UMA coluna da gradei
+    * ColumnOrder antes da Width; Width eh a ULTIMA atribuicao (regra #41)
+    *==========================================================================
+    PROTECTED PROCEDURE FormatarColunaGrade(par_oColuna, par_cTitulo, par_nLargura, ;
+                                            par_cFonte, par_cMascara, par_nOrdem)
+        WITH par_oColuna
+            .Header1.Caption   = par_cTitulo
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .FontName          = par_cFonte
+            .FontSize          = 9
+            .InputMask         = par_cMascara
+            .Movable           = .F.
+            .Resizable         = .F.
+            .ReadOnly          = .F.
+            .Sparse            = .F.
+            .ColumnOrder       = par_nOrdem
+            .Width             = par_nLargura
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * VincularColunasLista - Funil unico de bind da grade da Page1
+    * Reproduz o pColuna do Init legado (sigclcnx.PRG):
+    *   pColuna('cpros','','','Produto'   ,108,.T.)
+    *   pColuna('dpros','','','Descricao' ,285,.T.)
+    *   pColuna('ifors','','','Fornecedor', 75,.T.)
+    *   pColuna('reffs','','','Referencia',150,.T.)
+    *   pColuna('sgrus','','','Sub Grp'   , 45,.F.)
+    * Ordem obrigatoria: RecordSource -> ColumnCount -> ControlSource ->
+    * fonte do GRID -> propriedades -> Width POR ULTIMO (regra #41; o SQLEXEC do
+    * BO recria o alias CrProdutos e derruba o ColumnCount)
+    *==========================================================================
+    PROTECTED PROCEDURE VincularColunasLista(par_oGrid)
+        par_oGrid.RecordSource = "CrProdutos"
+        par_oGrid.ColumnCount  = 5
+
+        par_oGrid.Column1.ControlSource = "CrProdutos.cpros"
+        par_oGrid.Column2.ControlSource = "CrProdutos.dpros"
+        par_oGrid.Column3.ControlSource = "CrProdutos.ifors"
+        par_oGrid.Column4.ControlSource = "CrProdutos.reffs"
+        par_oGrid.Column5.ControlSource = "CrProdutos.sgrus"
+
+        *-- fonte do GRID antes das colunas (senao sobrescreve a da coluna)
+        THIS.FormatarGridLista(par_oGrid)
+
+        THIS.FormatarColunaLista(par_oGrid.Column1, "Produto",    108)
+        THIS.FormatarColunaLista(par_oGrid.Column2, "Descri" + CHR(231) + CHR(227) + "o", 285)
+        THIS.FormatarColunaLista(par_oGrid.Column3, "Fornecedor",  75)
+        THIS.FormatarColunaLista(par_oGrid.Column4, "Refer" + CHR(234) + "ncia", 150)
+        THIS.FormatarColunaLista(par_oGrid.Column5, "Sub Grp",     45)
+
+        par_oGrid.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * FormatarColunaLista - Aplica a uma coluna o que o pColuna legado aplica
+    * Width eh a ULTIMA atribuicao da coluna (regra #41)
+    *==========================================================================
+    PROTECTED PROCEDURE FormatarColunaLista(par_oColuna, par_cTitulo, par_nLargura)
+        WITH par_oColuna
+            .Header1.Caption   = par_cTitulo
+            .Header1.FontName  = "Arial"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(90, 90, 90)
+            .FontName          = "Courier New"
+            .FontSize          = 9
+            .Format            = "K"
+            .SelectOnEntry     = .F.
+            .Movable           = .F.
+            .Resizable         = .F.
+            .ReadOnly          = .T.
+            .Width             = par_nLargura
         ENDWITH
     ENDPROC
 
@@ -1562,6 +1770,13 @@ DEFINE CLASS FormEmn AS FormBase
 
             loc_oGrid.RecordSource = "CrSigCdMin"
 
+            *-- ColumnCount APOS RecordSource: o SQLEXEC de BuscarItens recria o
+            *-- alias e o grid volta ao modo automatico - sem isto ele cria uma
+            *-- coluna por campo do cursor (21) e mostra os nomes crus do SELECT.
+            *-- Reduzir eh seguro aqui: nenhuma Column usa AddObject/CurrentControl,
+            *-- e os BINDEVENT estao nos Text1 das Column1..8, que sobrevivem.
+            loc_oGrid.ColumnCount = 8
+
             *-- ControlSources APOS RecordSource (Problem 48 - RecordSource reseta bindings)
             loc_oGrid.Column1.ControlSource = "CrSigCdMin.emps"
             loc_oGrid.Column2.ControlSource = "CrSigCdMin.qmins"
@@ -1572,15 +1787,13 @@ DEFINE CLASS FormEmn AS FormBase
             loc_oGrid.Column7.ControlSource = "CrSigCdMin.locals"
             loc_oGrid.Column8.ControlSource = "CrSigCdMin.qideal"
 
-            *-- Resetar headers (RecordSource pode ter limpo as captions)
-            loc_oGrid.Column1.Header1.Caption = "Emp"
-            loc_oGrid.Column2.Header1.Caption = "Qtde. M" + CHR(237) + "nima"
-            loc_oGrid.Column3.Header1.Caption = "Tamanho"
-            loc_oGrid.Column4.Header1.Caption = "Cor"
-            loc_oGrid.Column5.Header1.Caption = "Grupo"
-            loc_oGrid.Column6.Header1.Caption = "Conta"
-            loc_oGrid.Column7.Header1.Caption = "Local"
-            loc_oGrid.Column8.Header1.Caption = "Estoque Alvo"
+            *-- Captions, ColumnOrder, fontes e Width - RecordSource reseta tudo (regra #41)
+            THIS.FormatarColunasGrade(loc_oGrid)
+
+            *-- Reafirma CurrentControl/Sparse das celulas: e idempotente (nao
+            *-- recria o AddObject). Sem CurrentControl a coluna volta a desenhar
+            *-- o Text1 e os eventos de lookup somem (regra #18).
+            THIS.InstalarCelulasGrade(loc_oGrid)
 
             *-- Habilitar/desabilitar colunas Tamanho e Cor conforme flags do produto
             loc_oGrid.Column3.ReadOnly = !loc_oBO.this_lTemTam
@@ -1638,7 +1851,7 @@ DEFINE CLASS FormEmn AS FormBase
         ENDIF
 
         TRY
-            LOCAL loc_cCPros, loc_oGrid
+            LOCAL loc_cCPros, loc_oGrid, loc_nRegs, loc_nLinha
             loc_cCPros = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value)
 
             INSERT INTO CrSigCdMin ;
@@ -1652,9 +1865,15 @@ DEFINE CLASS FormEmn AS FormBase
 
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI
             SELECT CrSigCdMin
+            COUNT TO loc_nRegs FOR !DELETED()
             GO BOTTOM
             loc_oGrid.Refresh()
-            loc_oGrid.ActivateCell(RECCOUNT("CrSigCdMin"), 1)
+
+            *-- ActivateCell recebe a linha RELATIVA do grid, nao o RECNO: o
+            *-- RECCOUNT conta ate os DELETED() e estoura assim que a grade passa
+            *-- das linhas visiveis. Teto do legado (mnovalinha): > 12 -> 10.
+            loc_nLinha = IIF(loc_nRegs > 12, 10, MAX(loc_nRegs, 1))
+            loc_oGrid.ActivateCell(loc_nLinha, 1)
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AdicionarLinhaGrid")
         ENDTRY
@@ -1668,7 +1887,9 @@ DEFINE CLASS FormEmn AS FormBase
             RETURN
         ENDIF
 
-        LOCAL loc_cSQL, loc_nRes
+        LOCAL loc_cSQL, loc_nRes, loc_nAreaAnterior
+        *-- o USE IN de cursor de picker pode deixar a sessao SEM area corrente
+        loc_nAreaAnterior = SELECT()
         loc_cSQL = ""
         loc_nRes = 0
 
@@ -1686,29 +1907,64 @@ DEFINE CLASS FormEmn AS FormBase
                 SELECT cursor_4c_ProdDados
                 GO TOP
 
-                LOCAL loc_oPg2, loc_oBO, loc_nSituas
+                LOCAL loc_oPg2, loc_oBO, loc_nSituas, loc_cCod, loc_lAceito
                 loc_oPg2    = THIS.pgf_4c_Paginas.Page2
                 loc_oBO     = THIS.this_oBusinessObject
                 loc_nSituas = TratarNulo(cursor_4c_ProdDados.situas, "N")
+                loc_cCod    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cpros, "C"))
+                loc_lAceito = .T.
 
-                loc_oPg2.txt_4c_Produto.Value = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cpros, "C"))
-                loc_oPg2.txt_4c_Dpro.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dpros, "C"))
-                loc_oPg2.txt_4c_Cgru.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cgrus, "C"))
-                loc_oPg2.txt_4c_Dgru.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dgrus, "C"))
-                loc_oPg2.txt_4c_Ifor.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.ifors, "C"))
-                loc_oPg2.txt_4c_Dfor.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.rclis, "C"))
-                loc_oPg2.txt_4c_Refs.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.reffs, "C"))
-                loc_oPg2.obj_4c_Opc_situacao.Value = IIF(loc_nSituas = 1, 1, 2)
+                *-- Guardas do get_produto.Valid legado, que so valem na INCLUSAO.
+                *-- IF ANINHADO: o VFP9 nao faz curto-circuito e chamaria o
+                *-- ContarItens (um SELECT) mesmo com loc_lAceito ja em .F.
+                IF THIS.this_cModoAtual = "INCLUIR"
+                    *-- If TmpPro.situas = 2 And CrSigCdPam.gesind = 1
+                    IF loc_nSituas = 2 AND loc_oBO.ObterGesInd() = 1
+                        MsgAviso("Produto Inativo !!!", "Aten" + CHR(231) + CHR(227) + "o")
+                        loc_lAceito = .F.
+                    ENDIF
 
-                loc_oBO.this_cCPros  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cpros, "C"))
-                loc_oBO.this_cDPros  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dpros, "C"))
-                loc_oBO.this_cCGrus  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cgrus, "C"))
-                loc_oBO.this_cIFors  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.ifors, "C"))
-                loc_oBO.this_nSituas = loc_nSituas
+                    *-- AcertaGrade + If !Eof(CrSigCdMin) -> ja tem estoque alvo.
+                    *-- Sem esta guarda o CriarCursorGridVazio abaixo descarta as
+                    *-- linhas existentes e o Confirmar (DELETE + re-INSERT do
+                    *-- SalvarGrid) apagaria o que o produto ja tinha.
+                    IF loc_lAceito
+                        IF loc_oBO.ContarItens(loc_cCod) > 0
+                            MsgAviso("Produto j" + CHR(225) + " cadastrado !!!", ;
+                                "Aten" + CHR(231) + CHR(227) + "o")
+                            loc_lAceito = .F.
+                        ENDIF
+                    ENDIF
+                ENDIF
 
-                loc_oBO.BuscarFlags(ALLTRIM(par_cCPros))
-                THIS.CriarCursorGridVazio(ALLTRIM(par_cCPros))
-                THIS.ConfigurarRecordSourceGrid()
+                IF !loc_lAceito
+                    *-- Legado: This.Value = '' / GetDPro.Value = '' / Refresh
+                    loc_oPg2.txt_4c_Produto.Value = ""
+                    loc_oPg2.txt_4c_Dpro.Value    = ""
+                    loc_oPg2.txt_4c_Produto.Refresh()
+                    loc_oPg2.txt_4c_Dpro.Refresh()
+                ELSE
+
+                    loc_oPg2.txt_4c_Produto.Value = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cpros, "C"))
+                    loc_oPg2.txt_4c_Dpro.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dpros, "C"))
+                    loc_oPg2.txt_4c_Cgru.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cgrus, "C"))
+                    loc_oPg2.txt_4c_Dgru.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dgrus, "C"))
+                    loc_oPg2.txt_4c_Ifor.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.ifors, "C"))
+                    loc_oPg2.txt_4c_Dfor.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.rclis, "C"))
+                    loc_oPg2.txt_4c_Refs.Value    = ALLTRIM(TratarNulo(cursor_4c_ProdDados.reffs, "C"))
+                    loc_oPg2.obj_4c_Opc_situacao.Value = IIF(loc_nSituas = 1, 1, 2)
+
+                    loc_oBO.this_cCPros  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cpros, "C"))
+                    loc_oBO.this_cDPros  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.dpros, "C"))
+                    loc_oBO.this_cCGrus  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.cgrus, "C"))
+                    loc_oBO.this_cIFors  = ALLTRIM(TratarNulo(cursor_4c_ProdDados.ifors, "C"))
+                    loc_oBO.this_nSituas = loc_nSituas
+
+                    loc_oBO.BuscarFlags(ALLTRIM(par_cCPros))
+                    THIS.CriarCursorGridVazio(ALLTRIM(par_cCPros))
+                    THIS.ConfigurarRecordSourceGrid()
+
+                ENDIF
             ELSE
                 MsgAviso("Produto n" + CHR(227) + "o encontrado: " + ALLTRIM(par_cCPros), "Produto")
             ENDIF
@@ -1719,13 +1975,19 @@ DEFINE CLASS FormEmn AS FormBase
         IF USED("cursor_4c_ProdDados")
             USE IN cursor_4c_ProdDados
         ENDIF
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
     ENDPROC
 
     *==========================================================================
     * AbrirLookupProdutoCodigo - FormBuscaAuxiliar em SigCdPro por cpros
     *==========================================================================
     PROCEDURE AbrirLookupProdutoCodigo()
-        LOCAL loc_oBusca, loc_cCPros, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCPros, loc_cValorAtual, loc_nAreaAnterior
+        *-- o USE IN de cursor de picker pode deixar a sessao SEM area corrente
+        loc_nAreaAnterior = SELECT()
         loc_cCPros      = ""
         loc_cValorAtual = ""
 
@@ -1760,17 +2022,62 @@ DEFINE CLASS FormEmn AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupProdutoCodigo")
         ENDTRY
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
     ENDPROC
 
+    *==========================================================================
+    * ProdutoCodLostFocus - get_produto.Valid do legado:
+    *   If !Empty(This.Value) And pcEscolha = 'INSERIR' -> abre a lista
+    * Wrapper fino: libera a guarda mesmo quando o corpo sai por RETURN
+    * antecipado (regra #47).
+    *==========================================================================
+    PROCEDURE ProdutoCodLostFocus()
+        IF THIS.this_lEmLookupProduto
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookupProduto = .T.
+        THIS.ProdutoCodLostFocusExec()
+        THIS.this_lEmLookupProduto = .F.
+    ENDPROC
+
+    PROCEDURE ProdutoCodLostFocusExec()
+        IF THIS.this_cModoAtual <> "INCLUIR"
+            RETURN
+        ENDIF
+
+        IF EMPTY(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value))
+            RETURN
+        ENDIF
+
+        THIS.AbrirLookupProdutoCodigo()
+    ENDPROC
+
+    *-- F4/F5 abrem o picker mesmo com o campo VAZIO (afordancia do sistema
+    *-- novo). Guarda em save/restore porque o irmao LostFocus dispara logo
+    *-- depois, quando o modal devolve o foco.
     PROCEDURE ProdutoCodKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF THIS.this_cModoAtual = "INCLUIR" AND par_nKeyCode = 115
+        LOCAL loc_lAnterior
+
+        IF THIS.this_cModoAtual = "INCLUIR" AND INLIST(par_nKeyCode, 115, 116)
+            loc_lAnterior = THIS.this_lEmLookupProduto
+            THIS.this_lEmLookupProduto = .T.
             THIS.AbrirLookupProdutoCodigo()
+            THIS.this_lEmLookupProduto = loc_lAnterior
         ENDIF
     ENDPROC
 
     PROCEDURE ProdutoCodDblClick()
+        LOCAL loc_lAnterior
+
         IF THIS.this_cModoAtual = "INCLUIR"
+            loc_lAnterior = THIS.this_lEmLookupProduto
+            THIS.this_lEmLookupProduto = .T.
             THIS.AbrirLookupProdutoCodigo()
+            THIS.this_lEmLookupProduto = loc_lAnterior
         ENDIF
     ENDPROC
 
@@ -1778,7 +2085,9 @@ DEFINE CLASS FormEmn AS FormBase
     * AbrirLookupProdutoDescricao - FormBuscaAuxiliar em SigCdPro por dpros
     *==========================================================================
     PROCEDURE AbrirLookupProdutoDescricao()
-        LOCAL loc_oBusca, loc_cCPros, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCPros, loc_cValorAtual, loc_nAreaAnterior
+        *-- o USE IN de cursor de picker pode deixar a sessao SEM area corrente
+        loc_nAreaAnterior = SELECT()
         loc_cCPros      = ""
         loc_cValorAtual = ""
 
@@ -1813,17 +2122,62 @@ DEFINE CLASS FormEmn AS FormBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupProdutoDescricao")
         ENDTRY
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ProdutoDescLostFocus - espelho do ProdutoCodLostFocus pela DESCRICAO
+    * (o getDPro do legado eh a 2a porta de entrada do produto)
+    *==========================================================================
+    PROCEDURE ProdutoDescLostFocus()
+        IF THIS.this_lEmLookupProduto
+            RETURN
+        ENDIF
+
+        THIS.this_lEmLookupProduto = .T.
+        THIS.ProdutoDescLostFocusExec()
+        THIS.this_lEmLookupProduto = .F.
+    ENDPROC
+
+    PROCEDURE ProdutoDescLostFocusExec()
+        IF THIS.this_cModoAtual <> "INCLUIR"
+            RETURN
+        ENDIF
+
+        *-- so entra pela descricao enquanto o CODIGO estiver vazio
+        IF !EMPTY(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value))
+            RETURN
+        ENDIF
+
+        IF EMPTY(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Dpro.Value))
+            RETURN
+        ENDIF
+
+        THIS.AbrirLookupProdutoDescricao()
     ENDPROC
 
     PROCEDURE ProdutoDescKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF THIS.this_cModoAtual = "INCLUIR" AND par_nKeyCode = 115
+        LOCAL loc_lAnterior
+
+        IF THIS.this_cModoAtual = "INCLUIR" AND INLIST(par_nKeyCode, 115, 116)
+            loc_lAnterior = THIS.this_lEmLookupProduto
+            THIS.this_lEmLookupProduto = .T.
             THIS.AbrirLookupProdutoDescricao()
+            THIS.this_lEmLookupProduto = loc_lAnterior
         ENDIF
     ENDPROC
 
     PROCEDURE ProdutoDescDblClick()
+        LOCAL loc_lAnterior
+
         IF THIS.this_cModoAtual = "INCLUIR"
+            loc_lAnterior = THIS.this_lEmLookupProduto
+            THIS.this_lEmLookupProduto = .T.
             THIS.AbrirLookupProdutoDescricao()
+            THIS.this_lEmLookupProduto = loc_lAnterior
         ENDIF
     ENDPROC
 
@@ -1831,17 +2185,22 @@ DEFINE CLASS FormEmn AS FormBase
     * AbrirLookupEmpresa - FormBuscaAuxiliar em SigCdEmp por Cemps
     * Substitui fAcessoEmpresa() (funcao do framework legado nao portada)
     *==========================================================================
-    PROCEDURE AbrirLookupEmpresa()
+    PROCEDURE AbrirLookupEmpresa(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cCemps, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCemps, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cCemps      = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.emps)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdEmp", "cursor_4c_BuscaEmp", "Cemps", loc_cValorAtual, ;
@@ -1858,6 +2217,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cCemps = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaEmp")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaEmp") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaEmp")
                     USE IN cursor_4c_BuscaEmp
                 ENDIF
@@ -1867,52 +2231,48 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cCemps)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.emps WITH loc_cCemps
+                    par_oTxt.Value = loc_cCemps
+                    REPLACE emps WITH loc_cCemps IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE emps WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupEmpresa")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE EmpColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupEmpresa()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE EmpColLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-    ENDPROC
-
-    PROCEDURE QtdeColLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        TRY
-            IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                IF CrSigCdMin.qmins < 0
-                    MsgAviso("Quantidade m" + CHR(237) + "nima n" + CHR(227) + "o pode ser negativa.", "Quantidade")
-                    REPLACE CrSigCdMin.qmins WITH 0
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormEmn.QtdeColLostFocus")
-        ENDTRY
-    ENDPROC
-
     *==========================================================================
     * AbrirLookupTamanho - FormBuscaAuxiliar em SigCdTam por cods/descs
     *==========================================================================
-    PROCEDURE AbrirLookupTamanho()
+    PROCEDURE AbrirLookupTamanho(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cCods, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCods, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cCods       = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.codtams)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdTam", "cursor_4c_BuscaTam", "cods", loc_cValorAtual, ;
@@ -1929,6 +2289,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cCods = ALLTRIM(cursor_4c_BuscaTam.cods)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaTam")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaTam") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaTam")
                     USE IN cursor_4c_BuscaTam
                 ENDIF
@@ -1938,39 +2303,48 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cCods)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.codtams WITH loc_cCods
+                    par_oTxt.Value = loc_cCods
+                    REPLACE codtams WITH loc_cCods IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE codtams WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupTamanho")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE TamanhoColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupTamanho()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE TamanhoColDblClick()
-        THIS.AbrirLookupTamanho()
-    ENDPROC
-
     *==========================================================================
     * AbrirLookupCor - FormBuscaAuxiliar em SigCdCor por cods/descs
     *==========================================================================
-    PROCEDURE AbrirLookupCor()
+    PROCEDURE AbrirLookupCor(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cCods, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCods, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cCods       = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.codcores)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCor", "cursor_4c_BuscaCor", "cods", loc_cValorAtual, ;
@@ -1987,6 +2361,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cCods = ALLTRIM(cursor_4c_BuscaCor.cods)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaCor")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaCor") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaCor")
                     USE IN cursor_4c_BuscaCor
                 ENDIF
@@ -1996,40 +2375,49 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cCods)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.codcores WITH loc_cCods
+                    par_oTxt.Value = loc_cCods
+                    REPLACE codcores WITH loc_cCods IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE codcores WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupCor")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE CorColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupCor()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE CorColDblClick()
-        THIS.AbrirLookupCor()
-    ENDPROC
-
     *==========================================================================
     * AbrirLookupGrupo - FormBuscaAuxiliar em SigCdGcr por Codigos/Descrs
     * Substitui fAcessoContab() (funcao do framework legado nao portada)
     *==========================================================================
-    PROCEDURE AbrirLookupGrupo()
+    PROCEDURE AbrirLookupGrupo(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cCodigos, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCodigos, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cCodigos    = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.grupos)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGcr", "cursor_4c_BuscaGrp", "Codigos", loc_cValorAtual, ;
@@ -2046,6 +2434,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cCodigos = ALLTRIM(cursor_4c_BuscaGrp.Codigos)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaGrp")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaGrp") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaGrp")
                     USE IN cursor_4c_BuscaGrp
                 ENDIF
@@ -2055,40 +2448,49 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cCodigos)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.grupos WITH loc_cCodigos
+                    par_oTxt.Value = loc_cCodigos
+                    REPLACE grupos WITH loc_cCodigos IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE grupos WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupGrupo")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE GrupoColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupGrupo()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE GrupoColDblClick()
-        THIS.AbrirLookupGrupo()
-    ENDPROC
-
     *==========================================================================
     * AbrirLookupConta - FormBuscaAuxiliar em SigCdCli por iclis/rclis
     * Substitui fAcessoContas() (funcao do framework legado nao portada)
     *==========================================================================
-    PROCEDURE AbrirLookupConta()
+    PROCEDURE AbrirLookupConta(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cIclis, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cIclis, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cIclis      = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.contas)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCli", "cursor_4c_BuscaCli", "iclis", loc_cValorAtual, ;
@@ -2105,6 +2507,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cIclis = ALLTRIM(cursor_4c_BuscaCli.iclis)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaCli")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaCli") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaCli")
                     USE IN cursor_4c_BuscaCli
                 ENDIF
@@ -2114,39 +2521,48 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cIclis)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.contas WITH loc_cIclis
+                    par_oTxt.Value = loc_cIclis
+                    REPLACE contas WITH loc_cIclis IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE contas WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupConta")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE ContaColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupConta()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE ContaColDblClick()
-        THIS.AbrirLookupConta()
-    ENDPROC
-
     *==========================================================================
     * AbrirLookupLocal - FormBuscaAuxiliar em SigPrLcl (filtro Tipos=3)
     *==========================================================================
-    PROCEDURE AbrirLookupLocal()
+    PROCEDURE AbrirLookupLocal(par_oTxt)
         IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
             RETURN
         ENDIF
 
-        LOCAL loc_oBusca, loc_cCodigos, loc_cValorAtual
+        LOCAL loc_oBusca, loc_cCodigos, loc_cValorAtual, loc_lTinhaOpcoes, loc_nAreaAnterior
+        *-- O Grid do picker SELECIONA o proprio cursor; o USE IN abaixo fecha
+        *-- essa area e deixa a sessao SEM area corrente - dai o REPLACE sem
+        *-- IN <alias> estourar "No table is open in the current work area".
+        loc_nAreaAnterior = SELECT()
+        loc_lTinhaOpcoes = .F.
         loc_cCodigos    = ""
         loc_cValorAtual = ""
 
         TRY
-            loc_cValorAtual = ALLTRIM(CrSigCdMin.locals)
+            loc_cValorAtual = ALLTRIM(TRANSFORM(par_oTxt.Value))
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigPrLcl", "cursor_4c_BuscaLcl", "Codigos", loc_cValorAtual, ;
@@ -2163,6 +2579,11 @@ DEFINE CLASS FormEmn AS FormBase
                     loc_cCodigos = ALLTRIM(cursor_4c_BuscaLcl.Codigos)
                 ENDIF
 
+                *-- Universo VAZIO nao eh ESC do usuario: nao apagar o digitado (regra #50)
+                IF USED("cursor_4c_BuscaLcl")
+                    loc_lTinhaOpcoes = (RECCOUNT("cursor_4c_BuscaLcl") > 0)
+                ENDIF
+
                 IF USED("cursor_4c_BuscaLcl")
                     USE IN cursor_4c_BuscaLcl
                 ENDIF
@@ -2172,66 +2593,29 @@ DEFINE CLASS FormEmn AS FormBase
 
             IF !EMPTY(loc_cCodigos)
                 IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                    REPLACE CrSigCdMin.locals WITH loc_cCodigos
+                    par_oTxt.Value = loc_cCodigos
+                    REPLACE locals WITH loc_cCodigos IN CrSigCdMin
                     THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                ENDIF
+            ELSE
+                *-- Legado: If LastKey() <> 27 ... Else This.Value = '' - ESC limpa
+                IF LASTKEY() = 27 AND loc_lTinhaOpcoes
+                    par_oTxt.Value = ""
+                    IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
+                        REPLACE locals WITH "" IN CrSigCdMin
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.AbrirLookupLocal")
         ENDTRY
-    ENDPROC
 
-    PROCEDURE LocalColKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupLocal()
+        *-- repoe a area de trabalho para quem chamou
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
         ENDIF
     ENDPROC
-
-    PROCEDURE LocalColDblClick()
-        THIS.AbrirLookupLocal()
-    ENDPROC
-
-    PROCEDURE LocalColLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
-            RETURN
-        ENDIF
-
-        TRY
-            IF !EMPTY(ALLTRIM(CrSigCdMin.emps)) AND !EMPTY(ALLTRIM(CrSigCdMin.locals))
-                LOCAL loc_lTemVazia
-                loc_lTemVazia = .F.
-
-                SELECT CrSigCdMin
-                SCAN FOR !DELETED()
-                    IF EMPTY(ALLTRIM(CrSigCdMin.emps))
-                        loc_lTemVazia = .T.
-                        EXIT
-                    ENDIF
-                ENDSCAN
-
-                IF !loc_lTemVazia
-                    THIS.AdicionarLinhaGrid()
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormEmn.LocalColLostFocus")
-        ENDTRY
-    ENDPROC
-
-    PROCEDURE QIdealColLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        TRY
-            IF USED("CrSigCdMin") AND !EOF("CrSigCdMin")
-                IF CrSigCdMin.qideal < 0
-                    MsgAviso("Estoque Alvo n" + CHR(227) + "o pode ser negativo.", "Estoque Alvo")
-                    REPLACE CrSigCdMin.qideal WITH 0
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "FormEmn.QIdealColLostFocus")
-        ENDTRY
-    ENDPROC
-
     *==========================================================================
     * GradeIAfterRowColChange - Atualiza flags de coluna e OptRetiras ao mudar linha
     *==========================================================================
@@ -2258,16 +2642,37 @@ DEFINE CLASS FormEmn AS FormBase
             ENDIF
             loc_oPg2.obj_4c_OptRetiras.Value = loc_nRetiras
 
-            *-- Habilitar excluir linha apenas se empresa preenchida e modo edicao
-            loc_oPg2.cmd_4c_BtnExcluir.Enabled = ;
-                (!EMPTY(ALLTRIM(CrSigCdMin.emps)) AND THIS.this_cModoAtual <> "VISUALIZAR")
+            *-- fonte unica da condicao (o When do legado eh reavaliado a cada
+            *-- chegada de foco, por isso tambem roda aqui)
+            loc_oPg2.cmd_4c_BtnExcluir.Enabled = THIS.PodeExcluirLinhaGrade()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.GradeIAfterRowColChange")
         ENDTRY
     ENDPROC
 
     *==========================================================================
-    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo atual
+    * PodeExcluirLinhaGrade - FONTE UNICA do When do btnExcluir legado:
+    *   Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+    *          And !Empty(ThisForm.Pagina.Dados.Get_Produto.Value))
+    * Usada pelo AjustarBotoesPorModo, pelo GradeIAfterRowColChange e pelo
+    * proprio BtnExcluirLinhaClick - assim as tres nao podem divergir.
+    *==========================================================================
+    PROCEDURE PodeExcluirLinhaGrade()
+        LOCAL loc_lPode
+        loc_lPode = .F.
+
+        TRY
+            loc_lPode = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") AND ;
+                !EMPTY(ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value))
+        CATCH TO loc_oErro
+            loc_lPode = .F.
+        ENDTRY
+
+        RETURN loc_lPode
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme o modo corrente
     *==========================================================================
     PROCEDURE AjustarBotoesPorModo()
         TRY
@@ -2284,7 +2689,11 @@ DEFINE CLASS FormEmn AS FormBase
 
             loc_oPg2.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = loc_lEdicao
             loc_oPg2.cnt_4c_Salva.cmd_4c_Cancelar.Enabled  = .T.
-            loc_oPg2.cmd_4c_BtnExcluir.Visible             = loc_lEdicao
+
+            *-- btnExcluir do legado fica SEMPRE visivel; quem o inibe eh o When,
+            *-- ou seja o Enabled - nao esconder o botao.
+            loc_oPg2.cmd_4c_BtnExcluir.Visible = .T.
+            loc_oPg2.cmd_4c_BtnExcluir.Enabled = THIS.PodeExcluirLinhaGrade()
 
             THIS.HabilitarCampos(loc_lEdicao)
         CATCH TO loc_oErro
@@ -2296,26 +2705,73 @@ DEFINE CLASS FormEmn AS FormBase
     * BtnExcluirLinhaClick - Exclui a linha corrente do cursor CrSigCdMin
     *==========================================================================
     PROCEDURE BtnExcluirLinhaClick()
-        IF !USED("CrSigCdMin") OR EOF("CrSigCdMin")
+        LOCAL loc_cEmps, loc_cCPros, loc_lConfirma, loc_cPergunta, loc_nAreaAnterior
+        loc_nAreaAnterior = SELECT()
+
+        IF !USED("CrSigCdMin")
             RETURN
         ENDIF
-        IF EMPTY(ALLTRIM(CrSigCdMin.emps))
+
+        *-- Guarda da propria ACAO, nao so do Enabled: um botao que ficou
+        *-- habilitado por engano (ex.: em VISUALIZAR) nao pode custar dado.
+        IF !THIS.PodeExcluirLinhaGrade()
             RETURN
         ENDIF
 
         TRY
-            LOCAL loc_lConfirma
-            loc_lConfirma = MsgConfirma("Excluir esta linha da grade?", "Excluir Linha")
+            SELECT CrSigCdMin
+
+            *-- Legado (btnExcluir.Click): lcEmps = Space(3) e, se a linha corrente
+            *-- tem empresa, lcEmps = CrSigCdMin.emps. SEM ALLTRIM: emps eh char(3)
+            *-- e o SET EXACT ON do projeto compara com o padding.
+            loc_cEmps = SPACE(3)
+            IF !EOF("CrSigCdMin") AND !EMPTY(ALLTRIM(CrSigCdMin.emps))
+                loc_cEmps = CrSigCdMin.emps
+            ENDIF
+
+            IF EMPTY(ALLTRIM(loc_cEmps))
+                loc_cPergunta = "Excluir as linhas em branco da grade?"
+            ELSE
+                loc_cPergunta = "Excluir TODAS as linhas da empresa " + ;
+                    ALLTRIM(loc_cEmps) + " nesta grade?"
+            ENDIF
+
+            loc_lConfirma = MsgConfirma(loc_cPergunta, "Excluir Linha")
 
             IF loc_lConfirma
+                *-- Legado: Delete From CrSigCdMin Where emps = lcEmps
+                *-- Apaga o BLOCO da empresa, nao so a linha corrente.
+                *-- SEM PACK: CrSigCdMin vem de SQLEXEC (cursor REMOTO) e PACK
+                *-- estoura "Function is not supported on remote tables"; o legado
+                *-- tambem nao usa - o SET DELETED ON do config.prg ja esconde.
+                DELETE FROM CrSigCdMin WHERE emps = m.loc_cEmps
+
+                *-- Legado: se o cursor ficou vazio, repoe UMA linha em branco
                 SELECT CrSigCdMin
-                DELETE
-                PACK
-                THIS.ConfigurarRecordSourceGrid()
+                GO TOP
+                IF EOF()
+                    loc_cCPros = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Produto.Value)
+                    INSERT INTO CrSigCdMin ;
+                        (cpros,      emps, locals, qmins, codtams, codcores, ;
+                         ordems,     cidchaves, contas, grupos, qideal, ;
+                         retiras,    pideal, pmins) ;
+                        VALUES ;
+                        (loc_cCPros, "",   "",    0,     "",      "",       ;
+                         " ",        "",   "",    "",    0,       ;
+                         1,          0,    0)
+                ENDIF
+
+                SELECT CrSigCdMin
+                GO TOP
+                THIS.pgf_4c_Paginas.Page2.grd_4c_GradeI.Refresh()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEmn.BtnExcluirLinhaClick")
         ENDTRY
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
     ENDPROC
 
 ENDDEFINE

@@ -43,6 +43,9 @@ DEFINE CLASS EmnBO AS BusinessBase
     this_lTemTam    = .F.   && Produto tem variacoes de tamanho
     this_nTipoEstos = 0     && Tipo de estoque do grupo do produto
 
+    *-- gesind de SigCdPam (cache): -1 = ainda nao lido do banco
+    this_nGesInd    = -1
+
     *--------------------------------------------------------------------------
     * Controle de modo externo (form chamado por outro form)
     *--------------------------------------------------------------------------
@@ -236,6 +239,89 @@ DEFINE CLASS EmnBO AS BusinessBase
     *==========================================================================
     * BuscarFlags - Carrega flags lTemCor/lTemTam de SigCdPro x SigCdGrp
     *==========================================================================
+    *==========================================================================
+    * ObterGesInd - gesind de SigCdPam, que o legado le UMA vez no Init
+    *   ThisForm.poDataMgr.SqlExecute([Select gesind From SigCdPam],'CrSigCdPam')
+    * Usado pela guarda "Produto Inativo !!!" do get_produto.Valid.
+    * Resultado fica em cache (this_nGesInd = -1 enquanto nao lido).
+    *==========================================================================
+    FUNCTION ObterGesInd()
+        LOCAL loc_nRes, loc_nAreaAnterior
+
+        IF THIS.this_nGesInd >= 0
+            RETURN THIS.this_nGesInd
+        ENDIF
+
+        *-- O USE IN abaixo fecha a area que o SELECT deste metodo deixou
+        *-- corrente e devolveria a sessao SEM area para quem chamou
+        loc_nAreaAnterior = SELECT()
+        THIS.this_nGesInd = 0
+
+        TRY
+            loc_nRes = SQLEXEC(gnConnHandle, "SELECT gesind FROM SigCdPam", "cursor_4c_Pam")
+            IF loc_nRes > 0 AND USED("cursor_4c_Pam") AND RECCOUNT("cursor_4c_Pam") > 0
+                SELECT cursor_4c_Pam
+                GO TOP
+                THIS.this_nGesInd = TratarNulo(cursor_4c_Pam.gesind, "N")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "EmnBO.ObterGesInd")
+        ENDTRY
+
+        IF USED("cursor_4c_Pam")
+            USE IN cursor_4c_Pam
+        ENDIF
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
+
+        RETURN THIS.this_nGesInd
+    ENDFUNC
+
+    *==========================================================================
+    * ContarItens - quantas linhas de SigCdMin o produto ja tem
+    * Reproduz o teste do legado (get_produto.Valid): depois do AcertaGrade,
+    *   Select CrSigCdMin / Go Top / If !Eof() -> "Produto ja cadastrado !!!"
+    * Feito por COUNT para nao derrubar o cursor que alimenta a grade.
+    *==========================================================================
+    FUNCTION ContarItens(par_cCPros)
+        LOCAL loc_nQtd, loc_nRes, loc_nAreaAnterior
+        loc_nQtd = 0
+
+        IF EMPTY(ALLTRIM(par_cCPros))
+            RETURN 0
+        ENDIF
+
+        *-- idem ObterGesInd: repor a area de trabalho para quem chamou
+        loc_nAreaAnterior = SELECT()
+
+        TRY
+            loc_nRes = SQLEXEC(gnConnHandle, ;
+                "SELECT COUNT(*) AS qtd FROM SigCdMin WHERE cpros = " + ;
+                EscaparSQL(ALLTRIM(par_cCPros)), "cursor_4c_CntMin")
+
+            IF loc_nRes > 0 AND USED("cursor_4c_CntMin") AND RECCOUNT("cursor_4c_CntMin") > 0
+                SELECT cursor_4c_CntMin
+                GO TOP
+                loc_nQtd = TratarNulo(cursor_4c_CntMin.qtd, "N")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "EmnBO.ContarItens")
+        ENDTRY
+
+        IF USED("cursor_4c_CntMin")
+            USE IN cursor_4c_CntMin
+        ENDIF
+
+        IF loc_nAreaAnterior > 0
+            SELECT (loc_nAreaAnterior)
+        ENDIF
+
+        RETURN loc_nQtd
+    ENDFUNC
+
+    *==========================================================================
     PROCEDURE BuscarFlags(par_cCPros)
         LOCAL loc_lResultado, loc_cSQL, loc_nRes
         loc_lResultado = .F.
@@ -366,10 +452,20 @@ DEFINE CLASS EmnBO AS BusinessBase
     *              Apenas linhas com emps preenchido sao salvas
     *==========================================================================
     PROTECTED PROCEDURE SalvarGrid(par_cCPros)
-        LOCAL loc_lResultado, loc_nRes, loc_lTransacao
-        LOCAL loc_cSQL, loc_cCidChaves
+        LOCAL loc_lResultado, loc_nRes, loc_lManual
+        LOCAL loc_cSQL, loc_cInserts, loc_cCidChaves, loc_cCRLF
         loc_lResultado = .F.
-        loc_lTransacao = .F.
+        loc_cInserts   = ""
+        loc_cCRLF      = CHR(13) + CHR(10)
+
+        *-- A conexao do VFP nasce com Transactions = 2 (manual): o @@TRANCOUNT ja
+        *-- vale 1 antes de qualquer BEGIN do BO. Medido contra o banco em
+        *-- 2026-10-22: BEGIN/COMMIT soltos por SQLEXEC so ANINHAM (1 -> 2 -> 1),
+        *-- nada eh efetivado, a linha fica visivel so para a propria conexao e
+        *-- BLOQUEIA as demais ate o fim da sessao. Por isso o lote abaixo vai num
+        *-- SQLEXEC unico com SAVE TRANSACTION + THROW, e o commit de verdade sai
+        *-- do SQLCOMMIT (mesmo padrao do SIGPRCNBBO).
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         IF EMPTY(ALLTRIM(par_cCPros))
             MsgAviso("C" + CHR(243) + "digo do produto inv" + CHR(225) + "lido para SalvarGrid.")
@@ -382,83 +478,81 @@ DEFINE CLASS EmnBO AS BusinessBase
         ENDIF
 
         TRY
-            *-- Iniciar transacao
-            SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")
-            loc_lTransacao = .T.
+            *-- Monta os INSERT das linhas validas do cursor local
+            SELECT CrSigCdMin
+            GO TOP
 
-            *-- Deletar todos os registros existentes para este produto
-            loc_nRes = SQLEXEC(gnConnHandle, ;
-                "DELETE FROM SigCdMin WHERE cpros = " + EscaparSQL(ALLTRIM(par_cCPros)), ;
-                "cursor_4c_Del")
-            IF USED("cursor_4c_Del")
-                USE IN cursor_4c_Del
+            SCAN FOR !DELETED()
+                IF !EMPTY(ALLTRIM(CrSigCdMin.emps))
+                    *-- Gerar cidchaves se necessario
+                    loc_cCidChaves = ALLTRIM(CrSigCdMin.cidchaves)
+                    IF EMPTY(loc_cCidChaves)
+                        loc_cCidChaves = THIS.GerarChaveUnica()
+                    ENDIF
+
+                    *-- Decimais conforme o schema: qmins numeric(8,2), qideal
+                    *-- numeric(7,2), retiras numeric(1,0), pideal/pmins numeric(7,3)
+                    loc_cInserts = loc_cInserts + "INSERT INTO SigCdMin" + ;
+                        " (cpros, emps, locals, qmins, codtams, codcores," + ;
+                        " ordems, cidchaves, contas, grupos, qideal, retiras, pideal, pmins)" + ;
+                        " VALUES (" + ;
+                        EscaparSQL(ALLTRIM(CrSigCdMin.cpros))    + ", " + ;
+                        EscaparSQL(ALLTRIM(CrSigCdMin.emps))     + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.locals),   10)) + ", " + ;
+                        FormatarNumeroSQL(CrSigCdMin.qmins,   2) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.codtams),   4)) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.codcores),  4)) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.ordems),    1)) + ", " + ;
+                        EscaparSQL(LEFT(loc_cCidChaves,               20)) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.contas),   10)) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.grupos),   10)) + ", " + ;
+                        FormatarNumeroSQL(CrSigCdMin.qideal,  2) + ", " + ;
+                        FormatarNumeroSQL(CrSigCdMin.retiras, 0) + ", " + ;
+                        FormatarNumeroSQL(CrSigCdMin.pideal,  3) + ", " + ;
+                        FormatarNumeroSQL(CrSigCdMin.pmins,   3) + ");" + loc_cCRLF
+                ENDIF
+            ENDSCAN
+
+            *-- DELETE + INSERTs num LOTE SO, atomico no proprio SQL Server
+            loc_cSQL = "SET NOCOUNT ON;" + loc_cCRLF + ;
+                "DECLARE @nivel int = @@TRANCOUNT;" + loc_cCRLF + ;
+                "IF @nivel = 0 BEGIN TRANSACTION" + loc_cCRLF + ;
+                "ELSE SAVE TRANSACTION SvEmn4c;" + loc_cCRLF + ;
+                "BEGIN TRY" + loc_cCRLF + ;
+                "DELETE FROM SigCdMin WHERE cpros = " + EscaparSQL(ALLTRIM(par_cCPros)) + ";" + loc_cCRLF + ;
+                loc_cInserts + ;
+                "IF @nivel = 0 COMMIT TRANSACTION;" + loc_cCRLF + ;
+                "END TRY" + loc_cCRLF + ;
+                "BEGIN CATCH" + loc_cCRLF + ;
+                "IF @nivel = 0 BEGIN IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION; END" + loc_cCRLF + ;
+                "ELSE BEGIN IF XACT_STATE() = 1 ROLLBACK TRANSACTION SvEmn4c; END;" + loc_cCRLF + ;
+                "THROW;" + loc_cCRLF + ;
+                "END CATCH"
+
+            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Sav")
+            IF USED("cursor_4c_Sav")
+                USE IN cursor_4c_Sav
             ENDIF
 
             IF loc_nRes < 0
-                MsgErro("Erro ao excluir registros antigos: " + CapturarErroSQL(), "EmnBO.SalvarGrid")
+                MsgErro("Erro ao gravar o estoque alvo: " + CapturarErroSQL(), "EmnBO.SalvarGrid")
             ELSE
-                *-- Inserir linhas validas do cursor local
                 loc_lResultado = .T.
-                SELECT CrSigCdMin
-                GO TOP
-
-                SCAN FOR !DELETED()
-                    IF !EMPTY(ALLTRIM(CrSigCdMin.emps))
-                        *-- Gerar cidchaves se necessario
-                        loc_cCidChaves = ALLTRIM(CrSigCdMin.cidchaves)
-                        IF EMPTY(loc_cCidChaves)
-                            loc_cCidChaves = THIS.GerarChaveUnica()
-                        ENDIF
-
-                        loc_cSQL = "INSERT INTO SigCdMin" + ;
-                            " (cpros, emps, locals, qmins, codtams, codcores," + ;
-                            " ordems, cidchaves, contas, grupos, qideal, retiras, pideal, pmins)" + ;
-                            " VALUES (" + ;
-                            EscaparSQL(ALLTRIM(CrSigCdMin.cpros))    + ", " + ;
-                            EscaparSQL(ALLTRIM(CrSigCdMin.emps))     + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.locals),   10)) + ", " + ;
-                            FormatarNumeroSQL(CrSigCdMin.qmins)      + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.codtams),   4)) + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.codcores),  4)) + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.ordems),    1)) + ", " + ;
-                            EscaparSQL(LEFT(loc_cCidChaves,               20)) + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.contas),   10)) + ", " + ;
-                            EscaparSQL(LEFT(ALLTRIM(CrSigCdMin.grupos),   10)) + ", " + ;
-                            FormatarNumeroSQL(CrSigCdMin.qideal)     + ", " + ;
-                            FormatarNumeroSQL(CrSigCdMin.retiras)    + ", " + ;
-                            FormatarNumeroSQL(CrSigCdMin.pideal)     + ", " + ;
-                            FormatarNumeroSQL(CrSigCdMin.pmins)      + ;
-                            ")"
-
-                        loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ins")
-                        IF USED("cursor_4c_Ins")
-                            USE IN cursor_4c_Ins
-                        ENDIF
-
-                        IF loc_nRes < 0
-                            MsgErro("Erro ao inserir item: " + CapturarErroSQL(), "EmnBO.SalvarGrid")
-                            loc_lResultado = .F.
-                            EXIT
-                        ENDIF
-                    ENDIF
-                ENDSCAN
-
-                IF loc_lResultado
-                    SQLEXEC(gnConnHandle, "COMMIT TRANSACTION")
-                    loc_lTransacao = .F.
-                    THIS.RegistrarAuditoria("SAVE")
-                ELSE
-                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-                    loc_lTransacao = .F.
-                ENDIF
+                THIS.RegistrarAuditoria("SAVE")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " | Linha: " + TRANSFORM(loc_oErro.LineNo), "EmnBO.SalvarGrid")
             loc_lResultado = .F.
         ENDTRY
 
-        IF loc_lTransacao
-            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+        *-- IF aninhado, nunca "IF loc_lManual AND SQLCOMMIT(...)": o VFP9 nao faz
+        *-- curto-circuito e chamaria o SQLCOMMIT mesmo em auto-commit.
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
         ENDIF
 
         RETURN loc_lResultado
@@ -503,8 +597,12 @@ DEFINE CLASS EmnBO AS BusinessBase
     *                    Chamado via BusinessBase.Excluir()
     *==========================================================================
     PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lResultado, loc_cSQL, loc_nRes
+        LOCAL loc_lResultado, loc_cSQL, loc_nRes, loc_lManual
         loc_lResultado = .F.
+
+        *-- Conexao em transacao manual: sem SQLCOMMIT o DELETE nao efetiva e
+        *-- ainda prende lock em SigCdMin pelo resto da sessao (ver SalvarGrid)
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         TRY
             IF EMPTY(ALLTRIM(THIS.this_cCPros))
@@ -527,6 +625,14 @@ DEFINE CLASS EmnBO AS BusinessBase
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "EmnBO.ExecutarExclusao")
         ENDTRY
+
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
 
         RETURN loc_lResultado
     ENDPROC
@@ -603,11 +709,13 @@ DEFINE CLASS EmnBO AS BusinessBase
     *==========================================================================
     PROCEDURE CopiarItens(par_cEmpD)
         LOCAL loc_lResultado, loc_nRes, loc_nCopias, loc_nTotal
-        LOCAL loc_cSQL, loc_cCidChaves, loc_lTransacao
+        LOCAL loc_cSQL, loc_cCidChaves, loc_lManual
         loc_lResultado = .F.
         loc_nCopias    = 0
         loc_nTotal     = 0
-        loc_lTransacao = .F.
+
+        *-- BEGIN/COMMIT por SQLEXEC nao efetiva nada nesta conexao (ver SalvarGrid)
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         TRY
             IF !USED("CsCopia") OR RECCOUNT("CsCopia") = 0
@@ -616,8 +724,6 @@ DEFINE CLASS EmnBO AS BusinessBase
                 IF EMPTY(ALLTRIM(par_cEmpD))
                 MsgErro("Empresa Destino inv" + CHR(225) + "lida.", "EmnBO.CopiarItens")
             ELSE
-                SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")
-                loc_lTransacao = .T.
                 loc_lResultado = .T.
 
                 SELECT CsCopia
@@ -658,13 +764,8 @@ DEFINE CLASS EmnBO AS BusinessBase
                 ENDSCAN
 
                 IF loc_lResultado
-                    SQLEXEC(gnConnHandle, "COMMIT TRANSACTION")
-                    loc_lTransacao = .F.
                     MsgInfo("Foram copiados " + TRANSFORM(loc_nCopias) + " de " + ;
                         TRANSFORM(loc_nTotal) + " registros.")
-                ELSE
-                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-                    loc_lTransacao = .F.
                 ENDIF
                 ENDIF
             ENDIF
@@ -673,8 +774,12 @@ DEFINE CLASS EmnBO AS BusinessBase
             loc_lResultado = .F.
         ENDTRY
 
-        IF loc_lTransacao
-            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
         ENDIF
 
         RETURN loc_lResultado

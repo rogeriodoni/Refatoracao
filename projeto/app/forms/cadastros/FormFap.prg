@@ -415,6 +415,18 @@ DEFINE CLASS FormFap AS FormBase
 				.GridLines          = 3
 				.Visible            = .T.
 
+				*-- Erro250: a grade da LISTA eh so de leitura. O legado garante isso
+				*-- coluna a coluna no pColuna (sigclcnx.PRG:1776 .ReadOnly = .t.,
+				*-- .Movable = .f., .Resizable = .f.); o migrado nao setou nada e o
+				*-- default do Grid no VFP9 eh ReadOnly = .F., deixando o usuario
+				*-- digitar por cima dos dados exibidos.
+				*-- Grid.ReadOnly propaga para as 12 colunas ja criadas por
+				*-- ColumnCount, entao tem de vir ANTES do bloco de colunas (regra #18).
+				.ReadOnly = .T.
+				.SetAll("ReadOnly",  .T., "Column")
+				.SetAll("Movable",   .F., "Column")
+				.SetAll("Resizable", .F., "Column")
+
 				.Column1.ControlSource   = "cursor_4c_Dados.numes"
 				.Column1.Width           = 55
 				.Column1.Header1.Caption = "N" + CHR(250) + "mero"
@@ -549,17 +561,13 @@ DEFINE CLASS FormFap AS FormBase
 				.Visible     = .T.
 			ENDWITH
 
-			*-- Container saida na pagina de dados (padrao canonico)
-			loc_oPagina.AddObject("cnt_4c_Saida", "Container")
-			WITH loc_oPagina.cnt_4c_Saida
-				.Top         = 29
-				.Left        = 917
-				.Width       = 90
-				.Height      = 85
-				.BackStyle   = 0
-				.BorderWidth = 0
-				.Visible     = .T.
-			ENDWITH
+			*-- Erro250: a pagina DADOS NAO tem cnt_4c_Saida. O legado so monta aqui o
+			*-- Grupo_Salva (Confirmar + Cancelar, framework.vcx frmcadastro.Pagina.Dados),
+			*-- e 194 dos 201 cadastros do projeto fazem o mesmo (referencia: FormCor).
+			*-- O cnt_4c_Saida que existia aqui ficava em Left=917, DENTRO da faixa do
+			*-- cnt_4c_BotoesAcao (842..1002): o Encerrar caia exatamente sobre o
+			*-- Cancelar (ambos em 922..997) e, por ser criado depois, cobria o botao
+			*-- Cancelar - que ficava inalcancavel - alem de desalinhar 4px (Top 29 x 33).
 
 			*------------------------------------------------------------
 			*-- Botoes de acao: Confirmar e Cancelar
@@ -611,31 +619,6 @@ DEFINE CLASS FormFap AS FormBase
 				.Visible         = .T.
 			ENDWITH
 			BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
-
-			*-- Botao Encerrar na pagina de dados (padrao canonico)
-			loc_oPagina.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
-			WITH loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar
-				.Caption         = "Encerrar"
-				.Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-				.PicturePosition = 13
-				.Top             = 5
-				.Left            = 5
-				.Width           = 75
-				.Height          = 75
-				.BackColor       = RGB(255, 255, 255)
-				.ForeColor       = RGB(90, 90, 90)
-				.FontName        = "Tahoma"
-				.FontSize        = 8
-				.FontBold        = .T.
-				.FontItalic      = .T.
-				.Themes          = .F.
-				.SpecialEffect   = 0
-				.WordWrap        = .T.
-				.AutoSize        = .F.
-				.MousePointer    = 15
-				.Visible         = .T.
-			ENDWITH
-			BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
 
 			*------------------------------------------------------------
 			*-- Label e campo Numero/Codigo
@@ -1290,7 +1273,7 @@ DEFINE CLASS FormFap AS FormBase
 					THIS.BOParaForm()
 					THIS.HabilitarCampos(.F.)
 					THIS.AjustarBotoesPorModo()
-					THIS.AjustarPrdzReadOnly()
+					THIS.AjustarCamposDependentes()
 					THIS.pgf_4c_Paginas.ActivePage = 2
 				ENDIF
 			ENDIF
@@ -1319,7 +1302,7 @@ DEFINE CLASS FormFap AS FormBase
 					THIS.BOParaForm()
 					THIS.HabilitarCampos(.T.)
 					THIS.AjustarBotoesPorModo()
-					THIS.AjustarPrdzReadOnly()
+					THIS.AjustarCamposDependentes()
 					THIS.pgf_4c_Paginas.ActivePage = 2
 				ENDIF
 			ENDIF
@@ -1520,6 +1503,10 @@ DEFINE CLASS FormFap AS FormBase
 					loc_oPagina.cnt_4c_Container2.txt_4c_totscb.ReadOnly = !par_lHabilitar
 				ENDIF
 			ENDIF
+
+			*-- Erro249: os campos com When DINAMICO no legado (Conta, nome da
+			*-- recuperadora, Produzido) sao reavaliados pelo funil unico
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em HabilitarCampos: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -1642,7 +1629,7 @@ DEFINE CLASS FormFap AS FormBase
 				ENDIF
 
 				THIS.AjustarContainersPorTipo()
-				THIS.AjustarPrdzReadOnly()
+				THIS.AjustarCamposDependentes()
 			ENDIF
 		CATCH TO loc_oErro
 			MsgErro("Erro em BOParaForm: " + loc_oErro.Message, "Erro")
@@ -1776,9 +1763,15 @@ DEFINE CLASS FormFap AS FormBase
 			WITH par_oGrid
 				.FontName = "Tahoma"
 				.FontSize = 8
-				*-- Registros com baixas=1 aparecem em vermelho (equivalente ao legado)
+				*-- Registros com baixa aparecem em vermelho. Legado:
+				*--   SetAll('DynamicForeColor','Iif(crSigCdFea.Baixas,RGB(255,0,0),RGB(0,0,0))','Column')
+				*-- Erro250: a coluna eh BIT no SQL Server e o cursor do grid a declara
+				*-- como LOGICO (CREATE CURSOR ... baixas L). Comparar com "= 1" eh
+				*-- Logico x Numerico -> type mismatch, e o VFP recusa a expressao com
+				*-- "Expression is invalid. Use a valid expression for DYNAMICFORECOLOR
+				*-- property." a cada repintura da grade (ou seja, ao clicar nela).
 				.SetAll("DynamicForeColor", ;
-					"IIF(cursor_4c_Dados.baixas=1,RGB(255,0,0),RGB(0,0,0))", "Column")
+					"IIF(cursor_4c_Dados.baixas,RGB(255,0,0),RGB(0,0,0))", "Column")
 			ENDWITH
 		CATCH TO loc_oErro
 			MsgErro("Erro em FormatarGridLista: " + loc_oErro.Message, "Erro")
@@ -1914,9 +1907,10 @@ DEFINE CLASS FormFap AS FormBase
 	ENDPROC
 
 	PROCEDURE ValidarGrupoExec()
-		LOCAL loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca
+		LOCAL loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca, loc_nRegs
 		loc_cGrupo  = ""
 		loc_nResult = 0
+		loc_nRegs   = 0
 		loc_oBusca  = .NULL.
 
 		TRY
@@ -1947,11 +1941,26 @@ DEFINE CLASS FormFap AS FormBase
 						" WHERE BalFalPers = 1 ORDER BY Codigos", ;
 						"cursor_4c_BuscaGrupo")
 
-					IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+					*-- Erro249: abrir o picker SEMPRE que o SEEK falha, inclusive com o
+					*-- universo VAZIO. O legado faz "If Not Seek(...) / xBrox.Show()" sem
+					*-- olhar Reccount; exigir RECCOUNT > 0 fazia a tela nao reagir a nada.
+					IF loc_nResult > 0
 						SELECT cursor_4c_BuscaGrupo
-						LOCATE FOR ALLTRIM(Codigos) = ALLTRIM(loc_cGrupo)
+						loc_nRegs = RECCOUNT("cursor_4c_BuscaGrupo")
+						*-- Erro249: o legado casa por PREFIXO (Set Near On + Seek, que
+						*-- compara so o tamanho da chave digitada). "=" NAO serve aqui:
+						*-- o config.prg liga SET EXACT ON e este form roda na datasession
+						*-- 1, entao "11101" = "1" da .F. e nada era carregado. LEFT()+"=="
+						*-- reproduz o Seek e independe do SET EXACT.
+						LOCATE FOR LEFT(ALLTRIM(Codigos), LEN(ALLTRIM(loc_cGrupo))) == ALLTRIM(loc_cGrupo)
 						IF FOUND()
-							*-- Encontrou exato
+							*-- Encontrou (casa por prefixo, como o Seek do legado)
+							*-- Erro249: o legado devolve o codigo COMPLETO ao campo
+							*-- (getCdGrupo.Value = TmpGccr.Codigos); sem isto o codigo
+							*-- parcial digitado era gravado como se fosse o grupo.
+							IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
+								loc_oPagina.txt_4c_CdGrupo.Value = ALLTRIM(cursor_4c_BuscaGrupo.Codigos)
+							ENDIF
 							IF PEMSTATUS(loc_oPagina, "txt_4c_DsGrupo", 5)
 								loc_oPagina.txt_4c_DsGrupo.Value = ALLTRIM(cursor_4c_BuscaGrupo.Descrs)
 							ENDIF
@@ -1987,7 +1996,10 @@ DEFINE CLASS FormFap AS FormBase
 										loc_oPagina.txt_4c_DsConta.Value = ""
 									ENDIF
 								ELSE
-									IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
+									*-- Desistiu: o legado limpa o codigo (Iif(LastKey()==27,'',...)).
+									*-- Erro198: com a LISTA VAZIA nao ha o que escolher - apagar
+									*-- ali so impediria o usuario de digitar; mantem o valor.
+									IF loc_nRegs > 0 AND PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
 										loc_oPagina.txt_4c_CdGrupo.Value = ""
 									ENDIF
 									IF PEMSTATUS(loc_oPagina, "txt_4c_DsGrupo", 5)
@@ -2004,12 +2016,12 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						*-- Erro198: universo vazio NAO eh erro. Legado abre browse vazio e
-						*-- nunca avisa; apagar o codigo digitado impede o usuario de digitar
-						*-- (regra #37 + Pattern #114). Mantem o valor e limpa so a descricao.
+						*-- Falha de SQL (so aqui: universo vazio agora cai no picker).
+						*-- Erro198: NAO apagar o codigo digitado (regra #37 + Pattern #114).
 						IF PEMSTATUS(loc_oPagina, "txt_4c_DsGrupo", 5)
 							loc_oPagina.txt_4c_DsGrupo.Value = ""
 						ENDIF
+						MsgErro("Falha ao consultar grupos: " + CapturarErroSQL(), "Erro")
 					ENDIF
 
 					IF USED("cursor_4c_BuscaGrupo")
@@ -2017,7 +2029,7 @@ DEFINE CLASS FormFap AS FormBase
 					ENDIF
 				ENDIF
 			ENDIF
-			THIS.AjustarPrdzReadOnly()
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em ValidarGrupo: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -2042,10 +2054,11 @@ DEFINE CLASS FormFap AS FormBase
 	ENDPROC
 
 	PROCEDURE ValidarContaExec()
-		LOCAL loc_cConta, loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca
+		LOCAL loc_cConta, loc_cGrupo, loc_nResult, loc_oPagina, loc_oBusca, loc_nRegs
 		loc_cConta  = ""
 		loc_cGrupo  = ""
 		loc_nResult = 0
+		loc_nRegs   = 0
 		loc_oBusca  = .NULL.
 
 		TRY
@@ -2076,18 +2089,29 @@ DEFINE CLASS FormFap AS FormBase
 					IF USED("cursor_4c_BuscaConta")
 						USE IN cursor_4c_BuscaConta
 					ENDIF
+					*-- Erro249: o universo do legado (TmpCli) NAO eh filtrado pelo grupo
+					*-- escolhido - sao todos os clientes de grupos com BalFalPers=1
+					*-- ([Select a.IClis, a.RClis From SigCdCli a, SigCdGcr b Where
+					*--   a.Grupos = b.Codigos And b.BalFalPers = 1] no Init do SCX).
 					loc_nResult = SQLEXEC(gnConnHandle, ;
 						"SELECT a.Iclis, a.Rclis FROM SigCdCli a" + ;
 						" INNER JOIN SigCdGcr b ON b.Codigos = a.Grupos" + ;
-						" WHERE b.BalFalPers = 1 AND a.Grupos = " + EscaparSQL(loc_cGrupo) + ;
-						" ORDER BY a.Rclis", ;
+						" WHERE b.BalFalPers = 1" + ;
+						" ORDER BY a.Iclis", ;
 						"cursor_4c_BuscaConta")
 
-					IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaConta") > 0
+					*-- Erro249: picker SEMPRE que o SEEK falha, inclusive universo vazio
+					IF loc_nResult > 0
 						SELECT cursor_4c_BuscaConta
-						LOCATE FOR ALLTRIM(Iclis) = ALLTRIM(loc_cConta)
+						loc_nRegs = RECCOUNT("cursor_4c_BuscaConta")
+						*-- Erro249: prefixo, imune ao SET EXACT ON - ver ValidarGrupoExec
+						LOCATE FOR LEFT(ALLTRIM(Iclis), LEN(ALLTRIM(loc_cConta))) == ALLTRIM(loc_cConta)
 						IF FOUND()
-							*-- Encontrou exato
+							*-- Encontrou (casa por prefixo, como o Seek do legado)
+							*-- Erro249: o legado devolve o codigo COMPLETO ao campo
+							IF PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
+								loc_oPagina.txt_4c_CdConta.Value = ALLTRIM(cursor_4c_BuscaConta.Iclis)
+							ENDIF
 							IF PEMSTATUS(loc_oPagina, "txt_4c_DsConta", 5)
 								loc_oPagina.txt_4c_DsConta.Value = ALLTRIM(cursor_4c_BuscaConta.Rclis)
 							ENDIF
@@ -2110,7 +2134,8 @@ DEFINE CLASS FormFap AS FormBase
 										loc_oPagina.txt_4c_DsConta.Value = ALLTRIM(cursor_4c_BuscaConta.Rclis)
 									ENDIF
 								ELSE
-									IF PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
+									*-- Erro198/Erro249: so apaga o codigo se HAVIA lista
+									IF loc_nRegs > 0 AND PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
 										loc_oPagina.txt_4c_CdConta.Value = ""
 									ENDIF
 									IF PEMSTATUS(loc_oPagina, "txt_4c_DsConta", 5)
@@ -2121,10 +2146,11 @@ DEFINE CLASS FormFap AS FormBase
 							ENDIF
 						ENDIF
 					ELSE
-						*-- Erro198: universo vazio NAO eh erro - ver ValidarGrupoExec.
+						*-- Falha de SQL - ver ValidarGrupoExec.
 						IF PEMSTATUS(loc_oPagina, "txt_4c_DsConta", 5)
 							loc_oPagina.txt_4c_DsConta.Value = ""
 						ENDIF
+						MsgErro("Falha ao consultar contas: " + CapturarErroSQL(), "Erro")
 					ENDIF
 
 					IF USED("cursor_4c_BuscaConta")
@@ -2133,7 +2159,7 @@ DEFINE CLASS FormFap AS FormBase
 				    ENDIF
 				ENDIF
 			ENDIF
-			THIS.AjustarPrdzReadOnly()
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em ValidarConta: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -2235,6 +2261,7 @@ DEFINE CLASS FormFap AS FormBase
 					ENDIF
 				ENDIF
 			ENDIF
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em ValidarIfor: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -2339,6 +2366,7 @@ DEFINE CLASS FormFap AS FormBase
 					ENDIF
 				ENDIF
 			ENDIF
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em ValidarDfor: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -2385,12 +2413,13 @@ DEFINE CLASS FormFap AS FormBase
 						USE IN cursor_4c_BuscaTpmat
 					ENDIF
 					loc_nResult = SQLEXEC(gnConnHandle, ;
-						"SELECT Cods, Descs FROM SigOpOpt ORDER BY Cods", ;
+						"SELECT Cods, Descs FROM SigOpOpt WHERE Situas = 3 ORDER BY Cods", ;
 						"cursor_4c_BuscaTpmat")
 
 					IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaTpmat") > 0
 						SELECT cursor_4c_BuscaTpmat
-						LOCATE FOR ALLTRIM(Cods) = ALLTRIM(loc_cTpmat)
+						*-- Erro249: legado faz Seek (prefixo) - ver ValidarGrupoExec
+						LOCATE FOR LEFT(ALLTRIM(Cods), LEN(ALLTRIM(loc_cTpmat))) == ALLTRIM(loc_cTpmat)
 						IF !FOUND()
 							loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
 							IF VARTYPE(loc_oBusca) = "O"
@@ -2511,6 +2540,56 @@ DEFINE CLASS FormFap AS FormBase
 	ENDPROC
 
 	*====================================================================
+	* AjustarCamposDependentes - reavalia os When DINAMICOS do legado
+	*
+	* O When do legado eh avaliado A CADA tentativa de entrar no campo;
+	* o ReadOnly de HabilitarCampos eh calculado UMA vez, na troca de modo,
+	* e nao acompanha o que o usuario digita depois.
+	*   getCdConta.When = InList(pcEscolha,'INSERIR','ALTERAR') And ;
+	*                     Not Empty(This.Parent.getCdGrupo.Value)
+	*   get_dfor.When   = Empty(This.Parent.get_ifor.Value)
+	*
+	* Erro249: no INCLUIR o campo Conta nascia ReadOnly (Grupo ainda vazio) e
+	* NADA o reabilitava depois de o Grupo ser preenchido - ficava desabilitado
+	* ate o form ser fechado. Mesma coisa com o campo de NOME da recuperadora,
+	* que HabilitarCampos travava em .T. e deixava o ValidarDfor inalcancavel.
+	*====================================================================
+	PROTECTED PROCEDURE AjustarCamposDependentes()
+		LOCAL loc_oPagina, loc_lEdicao, loc_cGrupo, loc_cIfor
+		loc_oPagina = .NULL.
+		loc_lEdicao = .F.
+		loc_cGrupo  = ""
+		loc_cIfor   = ""
+
+		TRY
+			loc_oPagina = THIS.pgf_4c_Paginas.Page2
+			loc_lEdicao = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+			*-- Conta: editavel so em edicao E com Grupo preenchido
+			IF PEMSTATUS(loc_oPagina, "txt_4c_CdGrupo", 5)
+				loc_cGrupo = ALLTRIM(loc_oPagina.txt_4c_CdGrupo.Value)
+			ENDIF
+			IF PEMSTATUS(loc_oPagina, "txt_4c_CdConta", 5)
+				loc_oPagina.txt_4c_CdConta.ReadOnly = !loc_lEdicao OR EMPTY(loc_cGrupo)
+			ENDIF
+
+			*-- Nome da recuperadora: busca pelo NOME so enquanto o codigo esta vazio
+			IF PEMSTATUS(loc_oPagina, "cnt_4c_Container1", 5)
+				IF PEMSTATUS(loc_oPagina.cnt_4c_Container1, "txt_4c_ifor", 5)
+					loc_cIfor = ALLTRIM(loc_oPagina.cnt_4c_Container1.txt_4c_ifor.Value)
+				ENDIF
+				IF PEMSTATUS(loc_oPagina.cnt_4c_Container1, "txt_4c_dfor", 5)
+					loc_oPagina.cnt_4c_Container1.txt_4c_dfor.ReadOnly = !loc_lEdicao OR !EMPTY(loc_cIfor)
+				ENDIF
+			ENDIF
+
+			THIS.AjustarPrdzReadOnly()
+		CATCH TO loc_oErro
+			MsgErro("Erro em AjustarCamposDependentes: " + loc_oErro.Message, "Erro")
+		ENDTRY
+	ENDPROC
+
+	*====================================================================
 	* AjustarContainersPorTipo - Habilita/desabilita containers conforme tipo
 	* Tipo='F' (fundicao): Container3 ativo, Container1+2 desativados
 	* Outros tipos:        Container1+2 ativos, Container3 desativado
@@ -2588,7 +2667,9 @@ DEFINE CLASS FormFap AS FormBase
 					" WHERE BalFalPers = 1 ORDER BY Codigos", ;
 					"cursor_4c_BuscaGrupo")
 
-				IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
+				*-- Erro249: o legado abre o browse sem olhar Reccount; com universo vazio
+				*-- a tela nao reagia ao duplo-clique/F3. Picker vazio EH o feedback.
+				IF loc_nResult > 0
 					loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
 					IF VARTYPE(loc_oBusca) = "O"
 						loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGrupo"
@@ -2615,13 +2696,13 @@ DEFINE CLASS FormFap AS FormBase
 						loc_oBusca.Release()
 					ENDIF
 				ELSE
-					MsgAviso("Nenhum grupo encontrado!", "Aviso")
+					MsgErro("Falha ao consultar grupos: " + CapturarErroSQL(), "Erro")
 				ENDIF
 
 				IF USED("cursor_4c_BuscaGrupo")
 					USE IN cursor_4c_BuscaGrupo
 				ENDIF
-				THIS.AjustarPrdzReadOnly()
+				THIS.AjustarCamposDependentes()
 			    ENDIF
 			ENDIF
 		CATCH TO loc_oErro
@@ -2680,14 +2761,16 @@ DEFINE CLASS FormFap AS FormBase
 					IF USED("cursor_4c_BuscaConta")
 						USE IN cursor_4c_BuscaConta
 					ENDIF
+					*-- Erro249: universo do legado (TmpCli) - sem filtro pelo grupo escolhido
 					loc_nResult = SQLEXEC(gnConnHandle, ;
 						"SELECT a.Iclis, a.Rclis FROM SigCdCli a" + ;
 						" INNER JOIN SigCdGcr b ON b.Codigos = a.Grupos" + ;
-						" WHERE b.BalFalPers = 1 AND a.Grupos = " + EscaparSQL(loc_cGrupo) + ;
-						" ORDER BY a.Rclis", ;
+						" WHERE b.BalFalPers = 1" + ;
+						" ORDER BY a.Iclis", ;
 						"cursor_4c_BuscaConta")
 
-					IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaConta") > 0
+					*-- Erro249: picker abre mesmo com universo vazio (legado nao olha Reccount)
+					IF loc_nResult > 0
 						loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
 						IF VARTYPE(loc_oBusca) = "O"
 							loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaConta"
@@ -2708,13 +2791,13 @@ DEFINE CLASS FormFap AS FormBase
 							loc_oBusca.Release()
 						ENDIF
 					ELSE
-						MsgAviso("Nenhuma conta encontrada para o grupo!", "Aviso")
+						MsgErro("Falha ao consultar contas: " + CapturarErroSQL(), "Erro")
 					ENDIF
 
 					IF USED("cursor_4c_BuscaConta")
 						USE IN cursor_4c_BuscaConta
 					ENDIF
-					THIS.AjustarPrdzReadOnly()
+					THIS.AjustarCamposDependentes()
 				ENDIF
 			    ENDIF
 			ENDIF
@@ -2803,6 +2886,7 @@ DEFINE CLASS FormFap AS FormBase
 				ENDIF
 			    ENDIF
 			ENDIF
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em AbrirLookupIfor: " + loc_oErro.Message, "Erro")
 		ENDTRY
@@ -2855,7 +2939,7 @@ DEFINE CLASS FormFap AS FormBase
 						USE IN cursor_4c_BuscaTpmat
 					ENDIF
 					loc_nResult = SQLEXEC(gnConnHandle, ;
-						"SELECT Cods, Descs FROM SigOpOpt ORDER BY Cods", ;
+						"SELECT Cods, Descs FROM SigOpOpt WHERE Situas = 3 ORDER BY Cods", ;
 						"cursor_4c_BuscaTpmat")
 
 					IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaTpmat") > 0
@@ -2980,6 +3064,7 @@ DEFINE CLASS FormFap AS FormBase
 				ENDIF
 			    ENDIF
 			ENDIF
+			THIS.AjustarCamposDependentes()
 		CATCH TO loc_oErro
 			MsgErro("Erro em AbrirLookupDfor: " + loc_oErro.Message, "Erro")
 		ENDTRY

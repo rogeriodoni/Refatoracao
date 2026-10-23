@@ -130,31 +130,33 @@ DEFINE CLASS Formema AS FormBase
         ENDWITH
 
         loc_oPagina.cnt_4c_Sombra.AddObject("lbl_4c_Sombra", "Label")
+        *-- lblSombra do frmcadastro legado: Top=15, Left=10, 769x40, Tahoma 16 bold, preto
         WITH loc_oPagina.cnt_4c_Sombra.lbl_4c_Sombra
             .Caption   = THIS.Caption
-            .Top       = 45
-            .Left      = 12
-            .Width     = 980
-            .Height    = 30
+            .Top       = 15
+            .Left      = 10
+            .Width     = 769
+            .Height    = 40
             .AutoSize  = .F.
             .FontName  = "Tahoma"
-            .FontSize  = 18
+            .FontSize  = 16
             .FontBold  = .T.
-            .ForeColor = RGB(30, 30, 30)
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
         loc_oPagina.cnt_4c_Sombra.AddObject("lbl_4c_Titulo", "Label")
+        *-- lblTitulo do frmcadastro legado: Top=18, Left=10, 769x46, Tahoma 16 bold, branco
         WITH loc_oPagina.cnt_4c_Sombra.lbl_4c_Titulo
             .Caption   = THIS.Caption
-            .Top       = 43
+            .Top       = 18
             .Left      = 10
-            .Width     = 980
-            .Height    = 30
+            .Width     = 769
+            .Height    = 46
             .AutoSize  = .F.
             .FontName  = "Tahoma"
-            .FontSize  = 18
+            .FontSize  = 16
             .FontBold  = .T.
             .ForeColor = RGB(255, 255, 255)
             .BackStyle = 0
@@ -288,10 +290,10 @@ DEFINE CLASS Formema AS FormBase
             .AutoSize        = .F.
         ENDWITH
 
-        *-- Container botao Encerrar (canonico: L=917, Top=29)
+        *-- Container botao Encerrar (Grupo_Saida: L=917, Top=-1+29=28)
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
         WITH loc_oPagina.cnt_4c_Saida
-            .Top         = 29
+            .Top         = 28
             .Left        = 917
             .Width       = 90
             .Height      = 85
@@ -323,12 +325,12 @@ DEFINE CLASS Formema AS FormBase
             .AutoSize        = .F.
         ENDWITH
 
-        *-- Grid lista (Grade: Top=112+29=141, Left=20, Width=890, Height=470)
+        *-- Grid lista (Grade: Top=112+29=141, Left=20, Width=940, Height=470)
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         WITH loc_oPagina.grd_4c_Lista
             .Top                = 141
             .Left               = 20
-            .Width              = 890
+            .Width              = 940
             .Height             = 470
             .FontName           = "Verdana"
             .FontSize           = 8
@@ -384,31 +386,33 @@ DEFINE CLASS Formema AS FormBase
         ENDWITH
 
         loc_oPagina.cnt_4c_Sombra.AddObject("lbl_4c_Sombra", "Label")
+        *-- lblSombra do frmcadastro legado: Top=15, Left=10, 769x40, Tahoma 16 bold, preto
         WITH loc_oPagina.cnt_4c_Sombra.lbl_4c_Sombra
             .Caption   = THIS.Caption
-            .Top       = 45
-            .Left      = 12
-            .Width     = 980
-            .Height    = 30
+            .Top       = 15
+            .Left      = 10
+            .Width     = 769
+            .Height    = 40
             .AutoSize  = .F.
             .FontName  = "Tahoma"
-            .FontSize  = 18
+            .FontSize  = 16
             .FontBold  = .T.
-            .ForeColor = RGB(30, 30, 30)
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
         loc_oPagina.cnt_4c_Sombra.AddObject("lbl_4c_Titulo", "Label")
+        *-- lblTitulo do frmcadastro legado: Top=18, Left=10, 769x46, Tahoma 16 bold, branco
         WITH loc_oPagina.cnt_4c_Sombra.lbl_4c_Titulo
             .Caption   = THIS.Caption
-            .Top       = 43
+            .Top       = 18
             .Left      = 10
-            .Width     = 980
-            .Height    = 30
+            .Width     = 769
+            .Height    = 46
             .AutoSize  = .F.
             .FontName  = "Tahoma"
-            .FontSize  = 18
+            .FontSize  = 16
             .FontBold  = .T.
             .ForeColor = RGB(255, 255, 255)
             .BackStyle = 0
@@ -492,7 +496,7 @@ DEFINE CLASS Formema AS FormBase
             .FontBold  = .F.
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0        && classe say do legado: AutoSize=.T. / Alignment=0 (regra #23)
             .Visible   = .T.
         ENDWITH
 
@@ -505,6 +509,7 @@ DEFINE CLASS Formema AS FormBase
             .Width         = 339
             .Height        = 24
             .MaxLength     = 50
+            .Format        = "K"      && getCods do SCX legado
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
@@ -535,19 +540,7 @@ DEFINE CLASS Formema AS FormBase
             IF loc_lResultado AND PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
                 loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
-                *-- RecordSource e ColumnCount FORA de WITH (Problema 36/48)
-                loc_oGrid.ColumnCount = 3
-                loc_oGrid.RecordSource = "cursor_4c_Dados"
-                loc_oGrid.ColumnCount  = 1
-
-                WITH loc_oGrid
-                    .Column1.ControlSource   = "cursor_4c_Dados.Cods"
-                    .Column1.Width           = 880
-                    .Column1.Header1.Caption = "Email"
-                ENDWITH
-
-                THIS.FormatarGridLista(loc_oGrid)
-                loc_oGrid.Refresh()
+                THIS.VincularColunasGrade(loc_oGrid)
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em CarregarLista:" + CHR(13) + loc_oErro.Message, "Erro")
@@ -614,6 +607,43 @@ DEFINE CLASS Formema AS FormBase
             .FontName = "Tahoma"
             .FontSize = 8
         ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VincularColunasGrade - Funil unico de bind do grid da Lista
+    * Reproduz o pColuna do legado (sigclcnx.PRG):
+    *   .pColuna([Cods], [], [], [Email], 100, .t.)
+    *   -> celula Courier New 9, header Arial 8 centrado, coluna travada
+    * Ordem obrigatoria: RecordSource -> ControlSource -> fonte do GRID ->
+    * propriedades da coluna -> Width POR ULTIMO (a fonte do grid propaga para
+    * as colunas e recalcula as larguras - regra #41)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE VincularColunasGrade(par_oGrid)
+        *-- RecordSource e ColumnCount FORA de WITH (Problema 36/48)
+        par_oGrid.ColumnCount  = 3
+        par_oGrid.RecordSource = "cursor_4c_Dados"
+        par_oGrid.ColumnCount  = 1
+        par_oGrid.Column1.ControlSource = "cursor_4c_Dados.Cods"
+
+        *-- fonte do grid ANTES das colunas (senao sobrescreve a da coluna)
+        THIS.FormatarGridLista(par_oGrid)
+
+        WITH par_oGrid.Column1
+            .Header1.Caption   = "Email"
+            .Header1.FontName  = "Arial"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .FontName          = "Courier New"
+            .FontSize          = 9
+            .Format            = "K"
+            .SelectOnEntry     = .F.
+            .Movable           = .F.
+            .Resizable         = .F.
+            .ReadOnly          = .T.
+            .Width             = 100
+        ENDWITH
+
+        par_oGrid.Refresh()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -727,15 +757,7 @@ DEFINE CLASS Formema AS FormBase
             IF loc_lResultado AND PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
                 LOCAL loc_oGrid
                 loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-                loc_oGrid.ColumnCount = 3
-                loc_oGrid.RecordSource = "cursor_4c_Dados"
-                loc_oGrid.ColumnCount  = 1
-                WITH loc_oGrid
-                    .Column1.ControlSource   = "cursor_4c_Dados.Cods"
-                    .Column1.Width           = 880
-                    .Column1.Header1.Caption = "Email"
-                ENDWITH
-                loc_oGrid.Refresh()
+                THIS.VincularColunasGrade(loc_oGrid)
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em BtnBuscarClick:" + CHR(13) + loc_oErro.Message, "Erro")

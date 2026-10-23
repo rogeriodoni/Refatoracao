@@ -113,7 +113,10 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container cabe?alho escuro com t?tulo (cntSombra no legado)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 2
+            *-- cntSombra do SCX: Top=1; +29 da compensacao do PageFrame.Top=-29.
+            *-- Com o Top=2 que estava aqui a faixa subia 28px e o titulo saia
+            *-- cortado por cima da area visivel da pagina.
+            .Top         = 30
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -157,12 +160,14 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container bot?es CRUD lado direito (Grupo_Op no legado)
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 0
+            *-- Grupo_op do SCX: Top=-1; +29 da compensacao do PageFrame
+            .Top         = 28
             .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackStyle   = 1
-            .BackColor   = RGB(53, 53, 53)
+            *-- TRANSPARENTE: com BackStyle=1 + BackColor escuro este container
+            *-- pintava por cima da faixa cinza, que parecia terminar no x=542
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -289,10 +294,11 @@ DEFINE CLASS Formepd AS FormBase
         ENDWITH
         BINDEVENT(loc_oBotoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
 
-        *-- Container Encerrar - padr?o can?nico (Left=917, Width=90, cmd Width=75)
+        *-- Container Encerrar - padrao canonico (Left=917, Width=90, cmd Width=75)
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
         WITH loc_oPagina.cnt_4c_Saida
-            .Top         = 29
+            *-- Grupo_Saida do SCX: Top=-1 -> 28, alinhado com o cnt_4c_Botoes
+            .Top         = 28
             .Left        = 917
             .Width       = 90
             .Height      = 85
@@ -329,11 +335,13 @@ DEFINE CLASS Formepd AS FormBase
         *-- Grid principal (grd_4c_Lista) - registros de SigCdNec
         loc_oPagina.AddObject("grd_4c_Lista", "Grid")
         loc_oGrid = loc_oPagina.grd_4c_Lista
-        loc_oGrid.Top         = 88
-        loc_oGrid.Left        = 5
-        loc_oGrid.Width       = 905
-        loc_oGrid.Height      = 490
-        loc_oGrid.ColumnCount = 7
+        *-- Grade: o SCX so sobrescreve Width=940; Top/Left/Height vem da classe
+        *-- frmcadastro (Top=88, Left=26, Height=498). Top leva o +29 do PageFrame.
+        loc_oGrid.Top         = 117
+        loc_oGrid.Left        = 26
+        loc_oGrid.Width       = 940
+        loc_oGrid.Height      = 498
+        loc_oGrid.ColumnCount = 8
 
         WITH loc_oGrid
             .FontName           = "Verdana"
@@ -353,33 +361,41 @@ DEFINE CLASS Formepd AS FormBase
             .Visible            = .T.
         ENDWITH
 
+        *-- Colunas transcritas do pColuna do Init legado (sigcdepd):
+        *--   Numps 'Codigo' 70 | Datas 'Data' 73 | TotPesos 'Total de Peso' 70
+        *--   GrupoOs 70 | ContaOs 70 | GrupoDs 70 | ContaDs 70 | Usuars 70
+        *-- A coluna "Total de Peso" estava AUSENTE no migrado (eram 7 colunas).
         WITH loc_oGrid.Column1
-            .Width           = 75
+            .Width           = 70
             .Alignment       = 2
             .Header1.Caption = "C" + CHR(243) + "digo"
         ENDWITH
         WITH loc_oGrid.Column2
-            .Width           = 80
+            .Width           = 73
             .Header1.Caption = "Data"
         ENDWITH
         WITH loc_oGrid.Column3
-            .Width           = 90
-            .Header1.Caption = "Gr. Origem"
+            .Width           = 70
+            .Header1.Caption = "Total de Peso"
         ENDWITH
         WITH loc_oGrid.Column4
-            .Width           = 130
-            .Header1.Caption = "Ct. Origem"
+            .Width           = 70
+            .Header1.Caption = "Gr. Origem"
         ENDWITH
         WITH loc_oGrid.Column5
-            .Width           = 90
-            .Header1.Caption = "Gr. Destino"
+            .Width           = 70
+            .Header1.Caption = "Ct. Origem"
         ENDWITH
         WITH loc_oGrid.Column6
-            .Width           = 130
-            .Header1.Caption = "Ct. Destino"
+            .Width           = 70
+            .Header1.Caption = "Gr. Destino"
         ENDWITH
         WITH loc_oGrid.Column7
-            .Width           = 100
+            .Width           = 70
+            .Header1.Caption = "Ct. Destino"
+        ENDWITH
+        WITH loc_oGrid.Column8
+            .Width           = 70
             .Header1.Caption = "Usu" + CHR(225) + "rio"
         ENDWITH
 
@@ -446,8 +462,9 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container bot" + CHR(245) + "es Confirmar/Cancelar (Grupo_Salva no legado)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 33
-            .Left        = 842
+            *-- Grupo_Salva do SCX: Top=1, Left=839 (+29 no Top)
+            .Top         = 30
+            .Left        = 839
             .Width       = 160
             .Height      = 85
             .BackStyle   = 0
@@ -612,7 +629,7 @@ DEFINE CLASS Formepd AS FormBase
             .Width       = 571
             .Height      = 75
             .BackStyle   = 1
-            .BackColor   = RGB(236, 233, 216)
+            .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -688,7 +705,7 @@ DEFINE CLASS Formepd AS FormBase
             .Width       = 571
             .Height      = 75
             .BackStyle   = 1
-            .BackColor   = RGB(236, 233, 216)
+            .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -811,7 +828,7 @@ DEFINE CLASS Formepd AS FormBase
             .Width       = 571
             .Height      = 75
             .BackStyle   = 1
-            .BackColor   = RGB(236, 233, 216)
+            .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -934,7 +951,7 @@ DEFINE CLASS Formepd AS FormBase
             .Width       = 571
             .Height      = 75
             .BackStyle   = 1
-            .BackColor   = RGB(236, 233, 216)
+            .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -1111,7 +1128,8 @@ DEFINE CLASS Formepd AS FormBase
             IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
                 IF !USED("cursor_4c_Dados")
                     CREATE CURSOR cursor_4c_Dados (empdnps C(33), numps N(10), datas D, ;
-                        grupoos C(10), contaos C(10), grupods C(10), contads C(10), usuars C(10))
+                        totpesos N(11,3), grupoos C(10), contaos C(10), ;
+                        grupods C(10), contads C(10), usuars C(10))
                 ENDIF
                 loc_lResultado = .T.
             ELSE
@@ -1120,26 +1138,44 @@ DEFINE CLASS Formepd AS FormBase
                 ELSE
                     loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
-                    loc_oGrid.ColumnCount = 7
+                    *-- ColumnCount DEPOIS do RecordSource: o SQLEXEC do BO recria
+                    *-- o alias e o grid volta ao modo automatico (uma coluna por
+                    *-- campo do cursor)
                     loc_oGrid.RecordSource = "cursor_4c_Dados"
+                    loc_oGrid.ColumnCount  = 8
+
                     loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.numps"
                     loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.datas"
-                    loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.grupoos"
-                    loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.contaos"
-                    loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.grupods"
-                    loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.contads"
-                    loc_oGrid.Column7.ControlSource = "cursor_4c_Dados.usuars"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.totpesos"
+                    loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.grupoos"
+                    loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.contaos"
+                    loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.grupods"
+                    loc_oGrid.Column7.ControlSource = "cursor_4c_Dados.contads"
+                    loc_oGrid.Column8.ControlSource = "cursor_4c_Dados.usuars"
 
-                    *-- Reconfigurar headers ap?s RecordSource (VFP reseta ao mudar RecordSource)
+                    *-- Reconfigurar headers apos RecordSource (VFP reseta ao mudar RecordSource)
                     loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
                     loc_oGrid.Column2.Header1.Caption = "Data"
-                    loc_oGrid.Column3.Header1.Caption = "Gr. Origem"
-                    loc_oGrid.Column4.Header1.Caption = "Ct. Origem"
-                    loc_oGrid.Column5.Header1.Caption = "Gr. Destino"
-                    loc_oGrid.Column6.Header1.Caption = "Ct. Destino"
-                    loc_oGrid.Column7.Header1.Caption = "Usu" + CHR(225) + "rio"
+                    loc_oGrid.Column3.Header1.Caption = "Total de Peso"
+                    loc_oGrid.Column4.Header1.Caption = "Gr. Origem"
+                    loc_oGrid.Column5.Header1.Caption = "Ct. Origem"
+                    loc_oGrid.Column6.Header1.Caption = "Gr. Destino"
+                    loc_oGrid.Column7.Header1.Caption = "Ct. Destino"
+                    loc_oGrid.Column8.Header1.Caption = "Usu" + CHR(225) + "rio"
 
                     THIS.FormatarGridLista(loc_oGrid)
+
+                    *-- Width POR ULTIMO: RecordSource/fonte recalculam as larguras
+                    *-- para o default (regra #41). Valores do pColuna legado.
+                    loc_oGrid.Column1.Width = 70
+                    loc_oGrid.Column2.Width = 73
+                    loc_oGrid.Column3.Width = 70
+                    loc_oGrid.Column4.Width = 70
+                    loc_oGrid.Column5.Width = 70
+                    loc_oGrid.Column6.Width = 70
+                    loc_oGrid.Column7.Width = 70
+                    loc_oGrid.Column8.Width = 70
+                    loc_oGrid.Refresh()
                     loc_lResultado = .T.
                 ENDIF
             ENDIF
@@ -1370,20 +1406,50 @@ DEFINE CLASS Formepd AS FormBase
     *--------------------------------------------------------------------------
     * BtnOperacaoClick - Abre form de Movimento de Opera" + CHR(231) + CHR(227) + "o (SigOpMpd)
     *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * BtnOperacaoClick - abre o Movimento de Operacao
+    * Legado (Operacao.Click):
+    *     If (ThisForm.pcEscolha <> 'PROCURAR')
+    *         ThisForm.Enabled = .f.
+    *         Select xMfas
+    *         Set Order To
+    *         Do Form SigPdMp5 With ThisForm, ThisForm.DataSessionId
+    *     EndIf
+    * - o form e o SigPdMp5 (aqui FormSigPdMp5), nao "FormSigOpMpd", que nao
+    *   existe em lugar nenhum do projeto;
+    * - DO FORM procura um .SCX em disco e na arquitetura nova os forms sao
+    *   DEFINE CLASS em .prg: tem de ser CREATEOBJECT;
+    * - FormSigPdMp5 eh MODAL (WindowType = 1), entao o Show() fica FORA do
+    *   TRY (regra #29): dentro dele, qualquer erro de runtime da tela filha
+    *   cairia no CATCH, a referencia LOCAL morreria e a tela fecharia sozinha.
+    *--------------------------------------------------------------------------
     PROCEDURE BtnOperacaoClick()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_oForm
         loc_lResultado = .F.
+        loc_oForm      = .NULL.
 
-        IF INLIST(THIS.this_cModoAtual, "ALTERAR", "VISUALIZAR")
+        *-- When do legado: habilitado enquanto NAO eh PROCURAR (= VISUALIZAR)
+        IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             THIS.Enabled = .F.
+
+            IF USED("xMFas")
+                SELECT xMFas
+                SET ORDER TO
+            ENDIF
+
             TRY
-                DO FORM FormSigOpMpd WITH THIS
-                loc_lResultado = .T.
+                loc_oForm = CREATEOBJECT("FormSigPdMp5", THIS, THIS.DataSessionId)
             CATCH TO loc_oErro
                 MsgErro("Erro ao abrir Movimento de Opera" + CHR(231) + CHR(227) + "o:" + ;
                         CHR(13) + loc_oErro.Message, "Erro")
-                loc_lResultado = .F.
+                loc_oForm = .NULL.
             ENDTRY
+
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.Show()
+                loc_lResultado = .T.
+            ENDIF
+
             THIS.Enabled = .T.
         ENDIF
 
@@ -2384,7 +2450,8 @@ DEFINE CLASS Formepd AS FormBase
         loc_oPg2.cnt_4c_Responsavel.txt_4c_GrVends.Enabled  = par_lHabilitar
         loc_oPg2.cnt_4c_Responsavel.txt_4c_Vends.Enabled    = par_lHabilitar
         loc_oPg2.cnt_4c_Responsavel.txt_4c_NomeVends.ReadOnly = .T.
-        loc_oPg2.cmd_4c_Operacao.Enabled  = THIS.this_cModoAtual <> "INCLUIR"
+        *-- Operacao.When do legado: Return (pcEscolha <> 'PROCURAR')
+        loc_oPg2.cmd_4c_Operacao.Enabled  = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
         loc_oPg2.cmd_4c_Boleto.Enabled    = THIS.this_cModoAtual <> "INCLUIR"
         loc_oPg2.cmd_4c_Documento.Enabled = THIS.this_cModoAtual <> "INCLUIR"
     ENDPROC
@@ -2420,7 +2487,8 @@ DEFINE CLASS Formepd AS FormBase
 
         loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
         loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
-        loc_oPg2.cmd_4c_Operacao.Enabled  = THIS.this_cModoAtual <> "INCLUIR"
+        *-- Operacao.When do legado: Return (pcEscolha <> 'PROCURAR')
+        loc_oPg2.cmd_4c_Operacao.Enabled  = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
         loc_oPg2.cmd_4c_Boleto.Enabled    = THIS.this_cModoAtual <> "INCLUIR"
         loc_oPg2.cmd_4c_Documento.Enabled = THIS.this_cModoAtual <> "INCLUIR"
     ENDPROC

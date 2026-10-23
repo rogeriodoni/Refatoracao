@@ -73,8 +73,10 @@ DEFINE CLASS epdBO AS BusinessBase
             loc_cOpI     = loc_cEmpresa + THIS.this_cDopp + STR(0,          10)
             loc_cOpF     = loc_cEmpresa + THIS.this_cDopp + STR(9999999999, 10)
 
+            *-- totpesos alimenta a coluna "Total de Peso" da grade (pColuna do
+            *-- Init legado); estava faltando no SELECT e a coluna nao existia
             loc_cSQL = "SELECT a.empdnps, a.emps, a.dopps, a.numps," + ;
-                       " a.datas, a.grupoos, a.contaos, a.grupods," + ;
+                       " a.datas, a.totpesos, a.grupoos, a.contaos, a.grupods," + ;
                        " a.contads, a.grvends, a.vends, a.cidchaves," + ;
                        " a.chksubn, a.usuars, a.obss" + ;
                        " FROM SigCdNec a" + ;
@@ -120,8 +122,10 @@ DEFINE CLASS epdBO AS BusinessBase
                 USE IN cursor_4c_Carrega
             ENDIF
 
+            *-- totpesos alimenta a coluna "Total de Peso" da grade (pColuna do
+            *-- Init legado); estava faltando no SELECT e a coluna nao existia
             loc_cSQL = "SELECT a.empdnps, a.emps, a.dopps, a.numps," + ;
-                       " a.datas, a.grupoos, a.contaos, a.grupods," + ;
+                       " a.datas, a.totpesos, a.grupoos, a.contaos, a.grupods," + ;
                        " a.contads, a.grvends, a.vends, a.cidchaves," + ;
                        " a.chksubn, a.usuars, a.obss" + ;
                        " FROM SigCdNec a" + ;
@@ -184,8 +188,13 @@ DEFINE CLASS epdBO AS BusinessBase
     *====================================================================
     PROTECTED FUNCTION Inserir()
     *====================================================================
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_cCidChave
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_cCidChave, loc_lManual
         loc_lResultado = .F.
+
+        *-- A conexao do VFP nasce com Transactions = 2 (manual): sem SQLCOMMIT
+        *-- o gravado nao efetiva e ainda prende lock ate o fim da sessao.
+        *-- IF ANINHADO: o VFP9 nao faz curto-circuito.
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         TRY
             THIS.this_cEmps  = go_4c_Sistema.cCodEmpresa
@@ -240,14 +249,25 @@ DEFINE CLASS epdBO AS BusinessBase
             loc_lResultado = .F.
         ENDTRY
 
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
+
         RETURN loc_lResultado
     ENDPROC
 
     *====================================================================
     PROTECTED FUNCTION Atualizar()
     *====================================================================
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_lManual
         loc_lResultado = .F.
+
+        *-- sem SQLCOMMIT a alteracao nao efetiva (ver Inserir)
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         TRY
             loc_cSQL = "UPDATE SigCdNec SET" + ;
@@ -274,40 +294,72 @@ DEFINE CLASS epdBO AS BusinessBase
             loc_lResultado = .F.
         ENDTRY
 
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
+
         RETURN loc_lResultado
     ENDPROC
 
     *====================================================================
     PROTECTED FUNCTION ExecutarExclusao()
     *====================================================================
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_cChave, loc_cCRLF, loc_lManual
         loc_lResultado = .F.
+        loc_cCRLF      = CHR(13) + CHR(10)
+
+        *-- sem SQLCOMMIT a exclusao nao efetiva (ver Inserir)
+        loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
         TRY
-            *-- Excluir itens de SigCdNei primeiro (integridade referencial)
-            loc_cSQL    = "DELETE FROM SigCdNei WHERE empdnps = " + ;
-                          EscaparSQL(THIS.this_cEmpDNps)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            loc_cChave = EscaparSQL(THIS.this_cEmpDNps)
+
+            *-- Os DOIS DELETE num LOTE SO: em dois SQLEXEC separados, uma falha
+            *-- no segundo deixaria o pai sem itens (orfao). SAVE TRANSACTION
+            *-- porque a conexao ja chega com @@TRANCOUNT = 1; THROW devolve o
+            *-- erro real para o SQLEXEC / CapturarErroSQL.
+            loc_cSQL = "SET NOCOUNT ON;" + loc_cCRLF + ;
+                "DECLARE @nivel int = @@TRANCOUNT;" + loc_cCRLF + ;
+                "IF @nivel = 0 BEGIN TRANSACTION" + loc_cCRLF + ;
+                "ELSE SAVE TRANSACTION SvEpd4c;" + loc_cCRLF + ;
+                "BEGIN TRY" + loc_cCRLF + ;
+                "DELETE FROM SigCdNei WHERE empdnps = " + loc_cChave + ";" + loc_cCRLF + ;
+                "DELETE FROM SigCdNec WHERE empdnps = " + loc_cChave + ";" + loc_cCRLF + ;
+                "IF @nivel = 0 COMMIT TRANSACTION;" + loc_cCRLF + ;
+                "END TRY" + loc_cCRLF + ;
+                "BEGIN CATCH" + loc_cCRLF + ;
+                "IF @nivel = 0 BEGIN IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION; END" + loc_cCRLF + ;
+                "ELSE BEGIN IF XACT_STATE() = 1 ROLLBACK TRANSACTION SvEpd4c; END;" + loc_cCRLF + ;
+                "THROW;" + loc_cCRLF + ;
+                "END CATCH"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Exc")
+            IF USED("cursor_4c_Exc")
+                USE IN cursor_4c_Exc
+            ENDIF
 
             IF loc_nResult < 0
-                MsgErro("Erro ao excluir itens (SigCdNei):" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MsgErro("Erro ao excluir registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ELSE
-                *-- Excluir registro principal de SigCdNec
-                loc_cSQL    = "DELETE FROM SigCdNec WHERE empdnps = " + ;
-                              EscaparSQL(THIS.this_cEmpDNps)
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-
-                IF loc_nResult < 0
-                    MsgErro("Erro ao excluir registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ELSE
-                    THIS.RegistrarAuditoria("DELETE")
-                    loc_lResultado = .T.
-                ENDIF
+                THIS.RegistrarAuditoria("DELETE")
+                loc_lResultado = .T.
             ENDIF
         CATCH TO loException
             MsgErro(loException.Message, "Erro")
             loc_lResultado = .F.
         ENDTRY
+
+        IF loc_lManual
+            IF loc_lResultado
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
 
         RETURN loc_lResultado
     ENDPROC
