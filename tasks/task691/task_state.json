@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task691",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-10-24T09:20:29",
+    "atualizadoEm":  "2026-10-26T03:04:21",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-10-24T09:20:32",
+                                            "fim":  "2026-10-24T09:20:32",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task691\\SIGOPCGF.sct",
+                                            "baseName":  "SIGOPCGF",
+                                            "scxFile":  "C:\\4c\\tasks\\task691\\SIGOPCGF.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-10-24T09:20:32",
+                                          "fim":  "2026-10-24T09:20:37",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGOPCGF",
+                                          "txtFile":  "C:\\4c\\tasks\\task691\\SIGOPCGF_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-24T09:20:38",
+                                              "fim":  "2026-10-24T09:20:42",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task691\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-24T09:20:53",
+                                              "fim":  "2026-10-24T09:20:55",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task691\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task691\\meta_prompt.md",
+                                              "boClass":  "SIGOPCGFBO",
+                                              "formClass":  "FormSIGOPCGF",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task691\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-24T09:20:55",
+                                              "fim":  "2026-10-24T09:21:01",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task691\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-10-24T09:21:02",
+                                               "fim":  "2026-10-24T09:21:09",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task691\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSIGOPCGF_esqueleto.prg",
+                                                                "SIGOPCGFBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-24T09:21:10",
+                                       "fim":  "2026-10-24T11:31:27",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCGFBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  215.75,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGOPCGF.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  7691
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-10-24T11:31:28",
+                                                  "fim":  "2026-10-24T11:35:44",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCGFBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGOPCGF.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-10-24T11:35:50",
+                                                 "fim":  "2026-10-24T11:35:54",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-24T12:49:14",
+                                       "fim":  "2026-10-24T12:52:47",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-10-24T12:52:48",
+                                               "fim":  "2026-10-24T12:55:55",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task691\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-10-24T12:56:25",
+                                        "fim":  "2026-10-24T12:56:40",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 0 erros (limite 4), 31 diferencas visuais (limite 0), 1052 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSIGOPCGF_20261024125632.html",
+                                        "diferencas":  31,
+                                        "erros":  0,
+                                        "totalProblemas":  1083,
+                                        "avisos":  1052,
+                                        "recoveredAt":  "2026-10-26T03:04:21",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-10-24T09:20:42",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-10-24T09:20:48",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task691\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-10-24T09:20:48",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-24T09:20:53"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-10-24T11:35:44",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-10-24T11:35:48",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSIGOPCGF_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGOPCGF.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task691\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-10-24T11:35:55",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-10-24T11:35:56",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-10-24T11:35:57",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-10-24T12:46:14",
+                                          "passes":  9,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_SOMBRA, CNT_4C_BOTOES. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [CARGA-DADOS] OptionGroup \u0027opt_4c_Pagos\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_Opcao\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_CotEm\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_Cancs\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_Concs\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_Prorrogs\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_FilGrd2\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [NAVEGACAO-PAGINA] Metodo \u0027BtnCancelarClick\u0027 faz ActivePage=2 mas NAO le dados de cursor nem chama CarregarHistorico/CarregarDados. Em forms OPERACIONAL, a navegacao para Page2 DEVE carregar dados da linha selecionada no grid de Page1 (padrao legado: cmd_consulta.Click le do cursor do grid).; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027PLACEHOLDER\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, LOCALTOTA, CONTEMS, CONTAS, ICLIS, ORDHS, GRUPOS, SINIS, I, SITUAS, EMPS, EMPCCS, DTEMIS, VENCS, DATAS, DATARCS, MOEDAS, PAGOS, TITULOS, NFS, TITBANS, ESPECIENFS, IMPS, DOPCS, LNCHK, LCCPO, MANTERDADOS, NOPERS, DESCRS, DOPES, TITCANCS, ORDEM, FPUBLS, INFOS, EMPDOPNUMS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDPARAMS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, LOCALTOTA, CONTEMS, CONTAS, ICLIS, ORDHS, GRUPOS, SINIS, I, SITUAS, EMPS, EMPCCS, DTEMIS, VENCS, DATAS, DATARCS, MOEDAS, PAGOS, TITULOS, NFS, TITBANS, ESPECIENFS, IMPS, DOPCS, LNCHK, LCCPO, MANTERDADOS, NOPERS, DESCRS, DOPES, TITCANCS, ORDEM, FPUBLS, INFOS, EMPDOPNUMS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NUMES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, LOCALTOTA, CONTEMS, CONTAS, ICLIS, ORDHS, GRUPOS, SINIS, I, SITUAS, EMPS, EMPCCS, DTEMIS, VENCS, DATAS, DATARCS, MOEDAS, PAGOS, TITULOS, NFS, TITBANS, ESPECIENFS, IMPS, DOPCS, LNCHK, LCCPO, MANTERDADOS, NOPERS, DESCRS, DOPES, TITCANCS, ORDEM, FPUBLS, INFOS, EMPDOPNUMS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NUMOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, LOCALTOTA, CONTEMS, CONTAS, ICLIS, ORDHS, GRUPOS, SINIS, I, SITUAS, EMPS, EMPCCS, DTEMIS, VENCS, DATAS, DATARCS, MOEDAS, PAGOS, TITULOS, NFS, TITBANS, ESPECIENFS, IMPS, DOPCS, LNCHK, LCCPO, MANTERDADOS, NOPERS, DESCRS, DOPES, TITCANCS, ORDEM, FPUBLS, INFOS, EMPDOPNUMS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027EMPDNPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: 0, LOCALTOTA, CONTEMS, CONTAS, ICLIS, ORDHS, GRUPOS, SINIS, I, SITUAS, EMPS, EMPCCS, DTEMIS, VENCS, DATAS, DATARCS, MOEDAS, PAGOS, TITULOS, NFS, TITBANS, ESPECIENFS, IMPS, DOPCS, LNCHK, LCCPO, MANTERDADOS, NOPERS, DESCRS, DOPES, TITCANCS, ORDEM, FPUBLS, INFOS, EMPDOPNUMS; [TITULO-NAO-PROPAGADO] Form define Caption mas NAO propaga para lbl_4c_Sombra/lbl_4c_Titulo. O titulo na tela ficara incorreto (ex: \u0027Cadastro de Testes\u0027 ao inves do titulo real). CORRIGIR: No InicializarForm, APOS ConfigurarPageFrame, adicionar: THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption (e idem para lbl_4c_Titulo); [METODO-INEXISTENTE] Metodo \u0027THIS.ObterTokenSerializado()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ObterRazaoSocial()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.DataFimDiaSQL()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGOPCGF.pgfPrincipal.pgFiltros): Top original=158 vs migrado \u0027lbl_4c_Say17\u0027 Top=262 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGOPCGF.pgfPrincipal.pgFiltros): Left original=122 vs migrado \u0027lbl_4c_Say17\u0027 Left=451 (diff=329px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGOPCGF.pgfPrincipal.pgFiltros): Left original=119 vs migrado \u0027lbl_4c_Say20\u0027 Left=440 (diff=321px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027getFiltros\u0027 (parent: SIGOPCGF.pgfPrincipal.pgFiltros): Left original=190 vs migrado \u0027obj_4c_GetFiltros\u0027 Left=510 (diff=320px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027apaga\u0027 (parent: SIGOPCGF.pgfPrincipal.pgFiltros): Top original=335 vs migrado \u0027cmd_4c_ApagaG2\u0027 Top=648 (diff=313px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say25\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=594 vs migrado \u0027lbl_4c_Say25\u0027 Top=210 (diff=384px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say25\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=212 vs migrado \u0027lbl_4c_Say25\u0027 Left=456 (diff=244px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=646 vs migrado \u0027lbl_4c_Say9\u0027 Top=369 (diff=277px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=540 vs migrado \u0027lbl_4c_Say9\u0027 Left=124 (diff=416px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=648 vs migrado \u0027lbl_4c_Say8\u0027 Top=349 (diff=299px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=362 vs migrado \u0027lbl_4c_Say8\u0027 Left=109 (diff=253px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=619 vs migrado \u0027lbl_4c_Say7\u0027 Top=287 (diff=332px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=540 vs migrado \u0027lbl_4c_Say7\u0027 Left=108 (diff=432px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=621 vs migrado \u0027lbl_4c_Say6\u0027 Top=262 (diff=359px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=366 vs migrado \u0027lbl_4c_Say6\u0027 Left=90 (diff=276px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=592 vs migrado \u0027lbl_4c_Say5\u0027 Top=329 (diff=263px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=540 vs migrado \u0027lbl_4c_Say5\u0027 Left=146 (diff=394px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=594 vs migrado \u0027lbl_4c_Say3\u0027 Top=308 (diff=286px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=403 vs migrado \u0027lbl_4c_Say3\u0027 Left=123 (diff=280px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=566 vs migrado \u0027lbl_4c_Say20\u0027 Top=158 (diff=408px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=540 vs migrado \u0027lbl_4c_Say20\u0027 Left=440 (diff=100px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=568 vs migrado \u0027lbl_4c_Say17\u0027 Top=262 (diff=306px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=403 vs migrado \u0027lbl_4c_Say17\u0027 Left=451 (diff=48px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say20\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=594 vs migrado \u0027lbl_4c_Say20\u0027 Top=158 (diff=436px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say20\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=23 vs migrado \u0027lbl_4c_Say20\u0027 Left=440 (diff=417px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=621 vs migrado \u0027lbl_4c_Say13\u0027 Top=210 (diff=411px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=207 vs migrado \u0027lbl_4c_Say13\u0027 Left=145 (diff=62px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=643 vs migrado \u0027cnt_4c_Botoes\u0027 Top=1 (diff=642px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=199 vs migrado \u0027cnt_4c_Botoes\u0027 Left=1 (diff=198px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=152 vs migrado \u0027lbl_4c_Say11\u0027 Top=236 (diff=84px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=511 vs migrado \u0027lbl_4c_Say11\u0027 Left=436 (diff=75px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=648 vs migrado \u0027lbl_4c_Say10\u0027 Top=388 (diff=260px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=19 vs migrado \u0027lbl_4c_Say10\u0027 Left=118 (diff=99px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=568 vs migrado \u0027lbl_4c_Say4\u0027 Top=133 (diff=435px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=34 vs migrado \u0027lbl_4c_Say4\u0027 Left=466 (diff=432px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Top original=621 vs migrado \u0027lbl_4c_Say12\u0027 Top=184 (diff=437px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGOPCGF.pgfPrincipal.pgDados): Left original=17 vs migrado \u0027lbl_4c_Say12\u0027 Left=434 (diff=417px, tolerancia=30px)",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  55
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-10-24T12:46:15",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-10-24T12:49:12",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCGFBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGOPCGF.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-10-24T12:55:57",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-24T12:56:23",
+                                             "thresholdPx":  5,
+                                             "unmatched":  43,
+                                             "errors":  43,
+                                             "matched":  84,
+                                             "warnings":  17,
+                                             "reportFile":  "C:\\4c\\tasks\\task691\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

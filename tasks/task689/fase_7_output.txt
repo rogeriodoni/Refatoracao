@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files exist for this form. The implementation for Phase 7/8 is complete.
+
+## Summary
+
+Phase 7/8 for `Formsigopcgb` ("Pesquisa Global de C├│digo de Barras") is done. Since this is an OPERACIONAL/consultation form with **no CRUD** (no Incluir/Alterar/Excluir in the legacy ÔÇö confirmed via `comportamento.json` and the source dump), I implemented the form's actual main action-button events instead of inventing non-existent CRUD handlers:
+
+**`Formsigopcgb.prg`:**
+- `BtnEncerrarClick` ÔÇö Encerrar (`ThisForm.Release`)
+- `BtnImprimirClick`/`BtnVisualizarClick` + shared `ImprimirOuVisualizarEtiqueta` ÔÇö rebuilds the legacy `Imagem()` header cursor and product image, then guards the `REPORT FORM SigOpCgb` call behind a `FILE()` check (the FRX asset doesn't exist in the migrated acervo, so it degrades gracefully instead of crashing)
+- `BtnDocumentoClick` ÔÇö reproduces the `Do Case GradeSel` + `CongBEest`/`SigCdNec` lookup, opening the already-migrated `FormSigMvExp`/`FormSigMvPdt`
+- `BotRastroClick` ÔÇö opens `FormSigReCgr` (not yet migrated; same TRY/CATCH + MsgAviso guard pattern as `BtnLocalClick`)
+- `BotaoCorrecaoClick`/`PainelCorrecaoEncerrarClick` ÔÇö new floating `cnt_4c_Correcao` panel + `grd_4c_Correcao` grid, loading `SigEtHst`
+- `GradeHistoricoClick`, `GradeDevolucaoAfterRowColChange` ÔÇö remaining grid wiring
+- Refactored the disable/enable control list into `DesabilitarControlesPrincipais`/`ReabilitarControlesPrincipais` (was duplicated 3x)
+
+**`sigopcgbBO.prg`:** added `CarregarCorrecaoPorCodBarras`, `LocalizarDocumentoPorChave`, `ExisteNecessidadePorChave` (replacing the nonexistent `ChkRegister`), plus the new cursor aliases in `LiberarCursoresConsulta`.

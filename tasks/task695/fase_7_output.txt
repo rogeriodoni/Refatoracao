@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This all looks correct and consistent. Everything compiles cleanly and passes the project's automated checkers. Let's do a final summary for the user.
+
+## Summary
+
+I reviewed "Fase 7/8" of this OPERACIONAL consulta form (`Formsigopcgv` / SIGOPCGV) and found the literal phase instructions (`BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick`) don't apply ÔÇö this form has no cadastro CRUD; its real "eventos principais" were already delivered in earlier phases (`BtnCadastroClick`, `BtnMovimentoClick`, `BtnMudaCliClick`, `BtnMudaMovClick`, `BtnVoltarClick`). The one genuinely missing main-button block, per the file's own header note, was the **Imprime button and its two print-selection panels**, left out of phase 6.
+
+I implemented it, transcribing the legacy `Imprime.Click`, `SelecionaImpCad`/`SelecionaImpress?o` panels, and the `ImpressaoCad()`/`Impressao()` methods:
+- Copied `SIGOPCGV.frx/.frt` and `SigReGcd.frx/.frt` from the legacy source into `app/reports/`.
+- Built both popup panels (14 checkboxes + date-range sub-panel) and wired all 7 buttons via `BINDEVENT`.
+- Implemented `Impressao()`'s full `TmpRelGv` aggregation for the 9 sections whose source cursors already exist (Saldo, Limite, Cheques Pendentes/Devolvidos/Depositados, Cart├úo, Pend├¬ncias, Cheques Negociados, Estoque); the 4 sections that depend on the still-unbuilt Vendas/Opera├º├Áes Pendentes/Produ├º├úo tabs (`dbConserto`/`dbTotVendas`/`dbProduto`/`dbProduc`) are written but `USED()`-guarded, so they'll activate automatically once that dedicated phase is done ÔÇö consistent with phase 6's own documented deferral.
+- The legacy's thermal-printer path (`ImpTermica`/`ImpTermicad`, hardware fila never ported) shows a clear `MsgAviso` instead of being faked.
+
+Caught and fixed a real bug during the work: I'd initially used `|` as a statement separator in several `WITH` blocks, which isn't valid VFP9 syntax ÔÇö rewrote those to one-statement-per-line.
+
+Verified: VFP9 compiles the file clean (no `.err`), and the project's `VerificarPropriedadesInexistentes`, `VerificarLookupEmKeyPress`, `VerificarMetodoProtegidoChamadoDeFora`, and `VerificarFuncoesNaoDefinidas` checkers all pass.
+
+Next step would be the dedicated phase for Vendas/Opera├º├Áes Pendentes/Produ├º├úo (`PProduto()`), which phase 6 already flagged as needing its own pass.

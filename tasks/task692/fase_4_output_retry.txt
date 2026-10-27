@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 4 now passes. Here's what was wrong and what I changed.
+
+## Diagnosis
+
+The previous attempt had actually **written the Phase 4 code correctly** ÔÇö grid, button, and load method were all there and faithfully transcribed from the dump. It failed purely on **two naming-convention deviations** that the gate checks for.
+
+The gate picks a branch by layout. For this form (`OPERACIONAL`, legacy `SIGOPCGL` genuinely *has* a `BaseClass: grid`), the relaxed branches (DESPACHANTE/EXIBICAO/CAPTURA/ARVORE) correctly do **not** apply ÔÇö the right branch is **FLAT**, which requires three things:
+
+| Gate check | Before | Status |
+|---|---|---|
+| `AddObject("grd_4c_ÔÇª` | `grd_4c_Dados` | Ô£à passed |
+| `AddObject("cmg_4c_` or `cmd_4c_` | `obj_4c_CmdBtnForm` | ÔØî **failed** |
+| `CarregarLista\|CarregarDados\|MontaGrade` | `CarregarHistorico` | ÔØî **failed** |
+
+Both were real deviations from project convention, not gate false positives:
+- CommandGroup canonical prefix is `cmg_4c_` (the `obj_4c_` name came from the generic fallback in `mapeamento.json`).
+- CLAUDE.md's Form Types table gives `MontaGrade/CarregarDados` as the OPERACIONAL key method.
+
+## Changes
+
+`projeto/app/forms/operacionais/FormSigOpCgl.prg`
+1. `obj_4c_CmdBtnForm` ÔåÆ **`cmg_4c_Botoes`** (7 sites: AddObject, 2 `WITH`, BINDEVENT, SetFocus, comments).
+2. Form method `CarregarHistorico` ÔåÆ **`CarregarDados`**. The BO call `this_oBusinessObject.CarregarHistorico(...)` was deliberately **left intact** ÔÇö that's the BO's own public method name, and it's PUBLIC in `SigOpCglBO`, so regra #51 is satisfied.
+3. Added `.Column6.Header1.Alignment = 2` ÔÇö a genuine fidelity gap: the dump declares it for all six headers, but Column6's had been dropped.
+
+`tasks/task692/mapeamento.json`
+4. `"SIGOPCGL.cmdBtnForm"` now maps to `cmg_4c_Botoes`, so `ValidarUIFidelity` resolves the renamed object instead of reporting it missing.
+
+## Verification
+
+- **Gate simulated** with the orchestrator's exact predicates: `FASE 4 => VALIDADO (ramo: FLAT)`.
+- **Compiled in real VFP9** (`-t`, headless, with a kill-guard): both `SigOpCglBO.prg` and `FormSigOpCgl.prg` produced `.fxp`, **zero `.err` files** ÔÇö clean compile.
+- Blocks balanced: PROCEDURE/ENDPROC 9/9, FUNCTION/ENDFUNC 2/2, WITH/ENDWITH 7/7, TRY/ENDTRY 1/1, DEFINE/ENDDEFINE 1/1.
+- Rule checks all clean: no `RETURN` inside TRY (#1), no `PUBLIC FUNCTION` in DEFINE CLASS (#9.1), no `MESSAGEBOX`, no `ISEMPTY`, no `.Self` (#38), no `Controls("nome")` (#34), no accented literals (#4), no TODO/stub/`MsgAviso(...implementar)`.
+- Both referenced images (`cadastro_sair_60.jpg`, `new_background.jpg`) exist in `vbmp\` (#25).
+- Grid `ControlSource` columns match the BO's `CREATE CURSOR` exactly (`Datas/Horas/Locatus/Locnews/Usuars/Empdopnums`).
+
+## One thing worth flagging
+
+The dump declares `AutoSize = .T.` on `cmdBtnForm`, which the migration did not transcribe. I left it off deliberately: the inner button is 75├ù75 at 5,5, so AutoSize would compute exactly the 85├ù85 that the dump declares explicitly ÔÇö visually identical ÔÇö and per regra #23 adding `AutoSize = .T.` risks VFP discarding the explicit `Height`. Flagging it since it is a conscious deviation from literal transcription rather than an oversight.

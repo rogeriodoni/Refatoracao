@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da.
+
+## O que conferi antes de aceitar o estado anterior
+
+Os campos e os 6 lookups **j├í estavam constru├¡dos**. Em vez de confiar no relato, reavaliei o gate com as fun├º├Áes reais do orquestrador (extra├¡das para arquivo tempor├írio ÔÇö dot-source dispara migra├º├úo) e re-auditei o form:
+
+| Confer├¬ncia | Resultado |
+|---|---|
+| Gate Fase 6, ramo PAGINADO-N├âO-CRUD | **`True`** ÔÇö `legadoPaginadoSemDadosF6=True`, 9 campos no legado (piso 5) ├ù **9** no migrado, `temMetodoLookup=True`, `temBindEvent=True` |
+| Lookups | 6 pares `Validar*`/`AbrirBusca*`, todos Pattern A (`CREATEOBJECT` sem args + `DefinirCursor` + `Mostrar`) |
+| `COMPILE` Form + BO | `.fxp` gerados, **nenhum `.ERR`** |
+| `VerificarLookupEmKeyPress` | ERRO=0; **0** achados em `FormSigOpChi` (os 28 avisos s├úo de outros forms) |
+| `VerificarFuncoesNaoDefinidas` | nenhuma chamada ├│rf├ú ÔÇö `fAcessoContas` existe (`functions.prg:918`), `fChecaAcesso` tamb├®m |
+| `VerificarPropriedadesInexistentes` / `MetodoProtegidoChamadoDeFora` | OK |
+| Completude | 0 TODO/FIXME, 0 "n├úo implement", 0 stub; `MESSAGEBOX` s├│ dentro de coment├írio citando o legado |
+| Higiene | 0 bytes >127, 2755/2755 CRLF, 0 `RETURN` dentro de `TRY` |
+| Orquestrador | parse OK, BOM `EF BB BF`, 17039/17039 CRLF, bytes>127 **2965 = baseline do HEAD** |
+
+Tamb├®m validei duas coisas que o relato anterior afirmava mas n├úo provava:
+
+- **`fAcessoContas` com 4 argumentos** entra de fato no ramo *"Busca sem UI (apenas verifica acesso)"* (li a fun├º├úo): `SELECT` puro por `IClis`, sem auto-popular TextBox. ├ë o uso que o CLAUDE.md declara v├ílido ÔÇö a proibi├º├úo vale para o modo com `pSt1`/`pSt2`.
+- **`Format`/`InputMask` transcritos** (regra #49): o dump declara `InputMask = "XXXXXXXXXXXXXXXXXXXX"` + `MaxLength = 20` nos dois `get_Cpf` e `Column6.InputMask = "999,999,999.99"` ÔÇö os tr├¬s est├úo no migrado. `MaxLength` de Conta/Nome veio do schema (10/50), n├úo do `Width` (82/290).
+
+## Desvio deliberado do texto do prompt
+
+**N├úo criei `cnt_4c_BotoesAcao` (Salvar/Cancelar)**. Conferi no `layout.json`: o legado tem **dois** CommandButton na p├ígina Filtro ÔÇö `Ok` ("\<Processar") e `cancelar` ("Encerrar") ÔÇö mais o `Grupo_Saida` no Hist├│rico, e os tr├¬s j├í est├úo constru├¡dos com `BINDEVENT` (linhas 528-529 e 2159). Criar o par Salvar/Cancelar seria inventar superf├¡cie (PILAR 1). ├ë form de consulta, n├úo CRUD.
+
+## Uma ressalva honesta
+
+**N├úo provei em runtime que a tela abre.** S├│ compilei. Nesta m├íquina o SQL `192.168.200.10` ├® inalcan├º├ível e `InicializarForm` tem gate `gnConnHandle > 0`, ent├úo uma instancia├º├úo daria resultado inconclusivo ÔÇö n├úo a vantagem de "instanciar prova que abre". Fica como verifica├º├úo pendente para m├íquina com banco.
+
+E a observa├º├úo do relato anterior continua valendo: **corrigir o gate n├úo desbloqueia a execu├º├úo em curso** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo o loop precisa ser relan├ºado para a Fase 6 passar no pipeline.
+
+Registrei tamb├®m uma li├º├úo de ferramental que me custou duas rodadas: auditoria com `[CmdletBinding()]` cujo `param()` default usa `$PSScriptRoot` sai com **exit 1 e nenhum achado impresso** quando chamada via `powershell -File` (isolei a vari├ível no PS 5.1 ÔÇö caminho relativo/absoluto n├úo importa, `[CmdletBinding()]` importa). Isso se l├¬ facilmente como "a auditoria acusou defeito no form". Rodar com `& '<caminho absoluto>.ps1'`.

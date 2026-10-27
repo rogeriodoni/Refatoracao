@@ -1,0 +1,29 @@
+=== PROBE FormSIGOPCGF - Fase 8/8 (task691) ===
+1) CREATEOBJECT FormSIGOPCGF -> VARTYPE=O Caption=[Consulta Global Financeira]
+2) metodos Fase 8 (existe / protected):
+   BtnBuscarClick           existe=SIM protected=NAO
+   BtnCancelarClick         existe=SIM protected=NAO
+   BtnEncerrarClick         existe=SIM protected=NAO
+   CarregarLista            existe=SIM protected=NAO
+   AjustarBotoesPorModo     existe=SIM protected=NAO
+   HabilitarCampos          existe=SIM protected=NAO
+   LimparCampos             existe=SIM protected=SIM
+   FormParaBO               existe=SIM protected=SIM
+   BOParaForm               existe=SIM protected=SIM
+3) Page2 ReadOnly (When .f. do legado):
+   NFs=.T. EspecieNfs=.T. Emps=.T. Contas=.T. DContEms=.T. DContas=.T.
+   ContEms (SEM When no SCX, deve ficar .F.)=.F.
+4) AlternarPagina(2) -> ActivePage=2 Modo=[DADOS] DtEmiI.ReadOnly=.T.
+   AlternarPagina(1) -> ActivePage=1 Modo=[FILTROS] DtEmiI.ReadOnly=.F.
+5) CarregarLista com cursor VAZIO -> retorno=.T. DContEms=[] Hist2s=[] ValOcurs=0
+6) AjustarBotoesPorModo sem linha corrente -> Movimento=.F. Recebe=.F. FollowUpC=.F. Imprimir=.F.
+7) GetFiltrosLostFocus -> RestaurarFiltros (FormParaBO + BOParaForm)
+   BO : dDtEmiI=15/01/2026 dDtEmiF=31/03/2026 cTitulos=[TIT123] cCMoes=[RS] nSaldo=1234.56 cEmpresa=[001]
+        lBrancos=.T. nPagos=3 nCotEm=4 nFilGrd2=2
+   TELA: DtEmiI=15/01/2026 DtEmiF=31/03/2026 Titulos=[TIT123] CMoes=[RS] Saldo=1234.56 Empresa=[001]
+        chkBrancos=1 optPagos=3 optCotEm=4 optFilGrd2=2
+        DMoes (fora do blob, deve ser PRESERVADA)=[DESCRICAO-PRESERVADA]
+        DMoes.ReadOnly (When Empty(CMoes), CMoes preenchido)=.T.
+8) CarregarLista sem cursor_4c_Dados -> retorno=.F.
+9) BtnCancelarClick na Page1 -> VARTYPE do handle=X
+=== FIM SEM EXCECAO ===

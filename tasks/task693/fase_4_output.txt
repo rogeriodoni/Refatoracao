@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The Phase 4 deliverable is complete and verified. Summary of what was done to `C:\4c\projeto\app\forms\operacionais\Formsigopcgp.prg`:
+
+**Context**: This is an OPERACIONAL (consulta) form, not CRUD, so the generic "ConfigurarPaginaLista + AlternarPagina" phase template didn't apply. I followed the real legacy structure instead (consistent with Phase 3's own approach and documented in the file's contract header).
+
+**Added**:
+1. `cmg_4c_LimparFiltros` and `cmg_4c_Operacao` CommandGroups on Page1 ("Consulta"), replicating the legacy's exact button geometry, fonts, icons and captions (Limpar Filtros / Consultar / Encerrar).
+2. `GrpLimparFiltrosClick()`, `BtnConsultarClick()`, `BtnEncerrarClick()` ÔÇö all PUBLIC (required since `Formsigprite.prg` already calls two of these externally per the pre-existing contract) and wired via `BINDEVENT`.
+3. A generic `LimparControlesFiltro()` clear-routine (the legacy's version hardcodes ~45 fields that don't exist until Phase 5/6, so a generic VARTYPE-based clear is the only non-inventive, functional option today).
+4. The "Custo" tab's real grid (`grd_4c_Custo`, 9 columns, exact legacy headers/widths/column order) plus its placeholder cursor and `MontaGradeCusto()`.
+
+**Bug fixed**: Found and removed a pre-existing Phase 3 defect ÔÇö `PageFrame.TabStyle` is read-only at runtime in VFP9, which was silently crashing `InicializarForm` on every instantiation.
+
+**Verified for real** (not just compiled): ran the form through actual `vfp9.exe`, instantiating it, clicking all three buttons via their real `BINDEVENT`-bound Click events, confirming page switching, flag state, column order/headers, and clean `Release()`.

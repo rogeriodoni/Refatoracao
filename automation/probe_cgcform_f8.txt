@@ -1,0 +1,39 @@
+=== PROBE Formsigopcgc - Fase 8/8 (task690) ===
+1) CREATEOBJECT Formsigopcgc -> VARTYPE=O Caption=[Consulta Genérica de Compras]
+2) pgf_4c_Result existe=.T.
+   PageCount=5 Top=186 Left=59 W=701 H=417 Visible=.F.
+   Page1 Caption=[Saldo] ControlCount=11
+   Page2 Caption=[Pendências] ControlCount=4
+   Page3 Caption=[Movimentação] ControlCount=11
+   Page4 Caption=[Estoque] ControlCount=6
+   Page5 Caption=[Consertos] ControlCount=3
+3) GRADES:
+   grd_4c_Saldo      cols=1 RS=[cursor_4c_Saldo] C1=[cursor_4c_Saldo.moedas] H1=[M.] W1=31
+   grd_4c_Historico  cols=7 RS=[cursor_4c_Historico] LinkMaster=[cursor_4c_Saldo] ChildOrder=[moedata] RelExpr=[moedas]
+   grd_4c_Historico  C1=[cursor_4c_Historico.emps] H1=[Emp] Hn=[Pg]
+   txt_4c_Hists CS=[cursor_4c_Historico.hists] cmd_4c_ImprimirExtrato Pic=.T.
+   grd_4c_Pendente   cols=4 RS=[cursor_4c_Parcela] C4=[cursor_4c_Parcela.hists] H4=[Tipo] oculta.Visible=.F.
+   grd_4c_Produto    cols=10 RS=[cursor_4c_ProdFor] C10=[cursor_4c_ProdFor.reffs] W10=141 H6=[Valor Vendas]
+   grd_4c_Resumo     cols=3 RS=[cursor_4c_Resumo] C1=[cursor_4c_Resumo.dopes]
+   grd_4c_OperaProd  cols=3 RS=[cursor_4c_OperaProd] LinkMaster=[cursor_4c_ProdFor] ChildOrder=[cprosdopes]
+   obj_4c_OptSituas  Value=3 B1=[Ativo] B3=[Ambos]
+   grd_4c_EstoqueProd cols=2 RS=[cursor_4c_Estoque] img.Visible=.F.
+   grd_4c_Conserto   cols=4 RS=[cursor_4c_Conserto] H4=[Observação]
+4) CURSORES (datasession 2): cursor_4c_Saldo=OK cursor_4c_Historico=OK cursor_4c_ProdFor=OK cursor_4c_Resumo=OK cursor_4c_OperaProd=OK cursor_4c_Estoque=OK cursor_4c_Conserto=OK cursor_4c_Parcela=OK
+   tags ProdFor=[QTVEND,VLVEND,REFFS,CPROS] Historico=[MOEDATA] OperaProd=[CPROSDOPES]
+5) CarregarLista -> .T.
+   AtualizarGrades OK
+6) BtnMudaMovClick -> Result.Visible=.T. Cadastro.Visible=.F.
+   BtnMudaForClick -> Result.Visible=.F. Cadastro.Visible=.T.
+7) OptSituasChange(1 e 3) OK - filtro=[]
+   8 handlers de ordenacao OK - ORDER=[REFFS]
+8) BtnImprimirMovClick -> ImprimeOpcoes.Visible=.T. Opcao.Value=2
+   BtnSairOpcoesClick -> ImprimeOpcoes.Visible=.F. Page1.Enabled=.T.
+9) BtnCadastroClick com filtro VAZIO -> ActivePage=1 (esperado 1)
+   BtnCancelarClick (Release) OK
+
+=== PROBE CONCLUIDO SEM EXCECAO ===
+
+--- gc_4c_ArquivoErroTeste ---
+[24/10/2026 06:15:40 AM] Atenção: Grupo de Estoque Inválido !!!
+

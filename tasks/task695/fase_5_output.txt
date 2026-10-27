@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 executada.
+
+## O que foi entregue
+
+**`projeto/app/forms/operacionais/Formsigopcgv.prg`** (1.824 ÔåÆ 3.437 linhas) ÔÇö novo funil `ConfigurarPaginaDados()`, chamado por `ConfigurarPaginaResultado`, com o conte├║do de 4 abas:
+
+| aba | conte├║do |
+|---|---|
+| 2 Pend├¬ncias | grade `TmpPar` (6 colunas), grade `crTmpTipos` com CheckBox marc├ível (os 4 handlers de toggle + `FiltrarTipos`), filtro de grupo, total, bot├Áes Documento (abre `FormSigMvExp`) e Listagem (`SigReIpd`) |
+| 3 Cheques | 4 grades (aberto/follow-up/t├¡tulos/devolvidos), 7 molduras + legenda de cor, 20 r├│tulos, filtro de grupo, os 12 campos somente-leitura e os 2 `AfterRowColChange` de detalhe |
+| 4 Cart├úo | grade `TmpCart` (6 colunas) |
+| 6 Estoque | grade `dbEstoque` + filtro de grupo |
+
+**`projeto/app/classes/sigopcgvBO.prg`** (1.411 ÔåÆ 1.994 linhas) ÔÇö 8 cursores novos em `CriarCursoresLocais` (com tag de 1 coluna para o `SET KEY`, j├í que chave parcial sobre ├¡ndice composto n├úo casa com `SET EXACT ON`) e 8 m├®todos: `CarregarParametros`, `ObterCotacao`, `CarregarGruposCursor`, `CarregarPendencias`, `TotalPendencias`, `CarregarCheques`, `CarregarCartoes`, `CarregarEstoque` ÔÇö transcritos de `Processa()`/`PCartao()`/`PEstoque()`, com os guards do legado (`Nopers`/`Tipos`, `TotRes-TotPar<>0`, `Sqtds<>0`), a convers├úo de moeda e os 9 totais da aba Cheques. `SigReIpd.frx/.frt` copiado do legado para `app/reports/`.
+
+## Tr├¬s defeitos da Fase 4 que impediam a tela de abrir
+
+O form **nunca instanciava**. Encontrados em cadeia (cada conserto revelava o pr├│ximo), todos compilando limpo e com `.err` vazio:
+
+- `loc_oPage.Width` ÔÇö `Page` n├úo tem `Width`/`Height` nem para **ler** (`CLAUDE.md` #9.2 diz "read-only"; medido, ├® *is not found*). Trocado por `THIS.Width`.
+- `loc_oPage.Visible = .T.` ÔÇö `Page` n├úo tem `Visible`. Removido.
+- `pgf.SpecialEffect = 2` ÔÇö read-only em runtime. Removido.
+
+## Verifica├º├úo
+
+- compila├º├úo de BO e Form limpa (`.fxp` gerado, sem `.err`);
+- `automation/ProbeCgvFormF5.prg` (novo, entrando na *datasession* privada do form): instancia OK, 8 cursores com os tags certos, todos os controles/colunas das 4 abas presentes, CheckBox com `CurrentControl`+`Sparse=.F.` e toggle funcionando nos dois sentidos, os 14 m├®todos chamados de fora PUBLIC, os 5 funis de repintura e `AtualizarAbaResultadoAtiva` nas 6 abas sem exce├º├úo, totais espelhados com `ForeColor` vermelho no negativo, `AlternarPagina(2)/(1)` corretos ÔÇö **sem exce├º├úo**;
+- `ValidadorSQLSchema`: 23 statements, 0 coluna inv├ílida. `VerificarColunaEmpresaSQL`: ERRO=0. `VerificarFuncoesNaoDefinidas`: nenhuma chamada ├│rf├ú. `VerificarPropriedadesInexistentes`: OK. `VerificarMetodoProtegidoChamadoDeFora`: OK.
+
+**Fora do escopo desta fase** (declarado no cabe├ºalho do form): abas 5 Vendas, 7 Opera├º├Áes Pendentes, 8 Produ├º├úo, 9 H.Cheques e 10 Cr├®dito ÔÇö as cinco s├úo alimentadas por `PProduto()`/`PVenda()`/`mAtivaHCheque()`/`mAtivaCredito()`, que compartilham o mesmo bloco de cursores (`dbProduto`/`dbProdTodos`/`dbOperac`/`dbConserto`/`dbOpera`/`dbProduc`/`dbItens`) e por isso formam uma unidade; mais o wrapper `clsconta` e o bloco de impress├úo.

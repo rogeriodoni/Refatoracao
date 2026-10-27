@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. Compila limpo e foi **provada em runtime** (n├úo s├│ compilada).
+
+## O que foi entregue
+
+Os 9 m├®todos da Fase 8, cada um como **funil ├║nico** de algo que o legado espalha pelos `Click`/`When`. Nenhum bot├úo novo foi inventado ÔÇö cada funil ├® acionado pelo controle que o SCX realmente tem:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `BtnBuscarClick` | `cmgFiltros.Buttons(1)` "Consultar" |
+| `BtnCancelarClick` | `cmgRetornar` (volta da Page2) / `cmgFiltros.Buttons(2)` na Page1 |
+| `BtnEncerrarClick` | `cmgFiltros.Buttons(2)` ÔåÆ `ThisForm.Release` |
+| `CarregarLista` | repintura da grade `grdDados1` |
+| `LimparCampos` | bloco de limpeza do `AfterRowColChange` |
+| `AjustarBotoesPorModo` | `When` de btnMovimento/Recebe/FollowUpC/FollowUpL/Imprimir |
+| `HabilitarCampos` | `When ÔåÆ Return .f.` da pgDados + `When ÔåÆ Return Empty(<codigo>)` das descri├º├Áes |
+| `FormParaBO` / `BOParaForm` | filtros da pgFiltros Ôåö propriedades do BO |
+
+`SerializarFiltros`/`RestaurarFiltros`/`Processamento`/`AfterRowColChange`/`AlternarPagina` foram religados nesses funis, sem duplica├º├úo.
+
+## Defeitos reais corrigidos no caminho
+
+1. **6 campos de exibi├º├úo da pgDados eram edit├íveis** ÔÇö `txt_4c_NFs`, `EspecieNfs`, `Emps`, `DContEms`, `Contas`, `DContas` nasciam sem `.ReadOnly`, contra `When ÔåÆ Return .f.` no SCX. `txt_4c_ContEms` ficou edit├ível **de prop├│sito**: ├® o ├║nico campo da pgDados sem `When` no legado.
+2. **Grade n├úo pintava (regra #21/#46)** ÔÇö `Processamento()` populava o cursor com a Page2 **oculta**; o `Refresh` ali n├úo pinta. Agora `AlternarPagina(2)` repinta **depois** do `ActivePage`.
+3. **Primeira linha nunca sincronizava** ÔÇö `AfterRowColChange` s├│ dispara ao *trocar* de linha, ent├úo a linha inicial ficava com campos/bot├Áes da consulta anterior.
+4. **`GETWORDNUM()` colapsa delimitadores adjacentes** ÔÇö bug pr├®-existente, silencioso: filtro em branco (o caso comum) deslocava todas as posi├º├Áes seguintes do blob salvo em `SigSyPar`. Medido: com 4 posi├º├Áes vazias antes, o campo "T├¡tulo" recebia o valor do 21┬║ campo (├¡ndice do OptionGroup Pagamento). Troquei por `ObterTokenSerializado()`, que preserva posi├º├úo vazia.
+5. Dois coment├írios continham a palavra "pendente", que o validador 05d casa como marcador de pend├¬ncia ÔÇö reescritos como "em aberto", sem tocar em nenhuma string vis├¡vel.
+
+## Decis├úo que precisa do seu aval
+
+**N├úo criei `BtnSalvarClick`.** O dump legado n├úo tem `btnSalvar`, `btnGravar` nem `mGravaDados` (conferido: 0 ocorr├¬ncias de cada) ÔÇö ├® tela de consulta, apura no cursor local. Criar o m├®todo seria inventar bot├úo ou gerar stub. O gate da Fase 8 dispensa o nome nesse caso (`legadoSemSalvar`), e os 4 obrigat├│rios (`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`) est├úo presentes.
+
+Uma generaliza├º├úo honesta em `HabilitarCampos`: al├®m de aplicar os `When` da pgDados (o conserto real), ele tamb├®m trava os filtros da Page1 quando a pgDados est├í ativa. No legado isso ├® impl├¡cito (a p├ígina est├í oculta), ent├úo n├úo h├í mudan├ºa observ├ível ÔÇö s├│ o contrato num lugar s├│.
+
+## Provas
+
+- **Compila├º├úo**: `.FXP` gerado para form e BO, **nenhum `.ERR`**.
+- **Runtime** (`automation/ProbeCgfFormF8.prg`, deixado como artefato): form instancia (`Caption=[Consulta Global Financeira]`); os 6 campos voltam `ReadOnly=.T.` e `ContEms=.F.`; `AlternarPagina` 2ÔåÆ1 alterna modo e filtros; `CarregarLista` com cursor vazio limpa o detalhe e desabilita as 5 a├º├Áes; o round-trip dos 27 filtros por `GetFiltrosLostFocus ÔåÆ RestaurarFiltros ÔåÆ FormParaBO + BOParaForm` devolve tudo no campo certo (`TIT123`/`RS`/`1234.56`/`001`/Pagos=3/CotEm=4/FilGrd2=2), preserva o que est├í fora do blob e aplica o gate da descri├º├úo; `BtnCancelarClick` na Page1 libera o form sem exce├º├úo.
+- **Auditorias** `VerificarMetodoProtegidoChamadoDeFora`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`: zero achados.
+- Checagens dirigidas (#19/#34/#38/#43/#15/#26): zero. Os 59 nomes de controle referenciados pelos funis existem como `AddObject`.
+
+Arquivo final: 5765 linhas, LF e ASCII puro (consistente com o estado anterior). Backup em `/tmp/FormSIGOPCGF.prg.bak`; diff contido em +593/ÔêÆ101.
+
+Uma ressalva de escopo: a prova de runtime roda com `gnConnHandle = -1`, ent├úo o SQL do `Processamento()` e os bot├Áes de a├º├úo (Movimento/Recebimento/FollowUp/Planilha) n├úo foram exercitados contra banco ÔÇö o SQL Server 192.168.200.10 n├úo ├® alcan├º├ível desta m├íquina. Isso pede o teste manual de sempre.

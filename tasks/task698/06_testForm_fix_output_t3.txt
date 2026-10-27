@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o `FormSigOpChi.prg` e o `SigOpChiBO.prg` por completo (esta ├® a tentativa 3/10 desta task ÔÇö j├í revisados nas tentativas 1 e 2, sem achado).
+
+**N├úo ├® um bug de c├│digo.** O erro acontece na ETAPA 1B (`Connectivity error... SQL Server inexistente ou acesso negado`, c├│digo 1526), **antes** de qualquer `CREATEOBJECT` do form/BO ser executado ÔÇö ├® o pr├®-flight de conex├úo do pr├│prio harness que falha. Confirmei agora com `Test-NetConnection 192.168.200.10 -Port 1433`:
+
+```
+TcpTestSucceeded : False
+PingSucceeded    : False
+SourceAddress    : 192.168.199.113
+```
+
+A m├íquina que roda o pipeline (sub-rede `192.168.199.x`) n├úo tem rota para `192.168.200.0/24`, onde est├í o SQL Server `DB_MBAHIA`. Isso ├® uma falha de infraestrutura/rede recorrente, documentada desde 2026-08-02 em mais de 25 tasks (mem├│ria `project_sqlserver_200_10_inalcancavel_maquina_pipeline`), n├úo corrig├¡vel por edi├º├úo de `.prg`.
+
+Conferi novamente o c├│digo ├á procura de qualquer problema real:
+- `CarregarDados()` j├í guarda corretamente com `TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0` e `RETURN` fora do TRY (regra #1).
+- `FecharCursor` guarda `TABLEREVERT` pelo `Buffering` antes do `USE IN` (regra #52).
+- Ordem `ColumnCount -> RecordSource -> ControlSource -> Width -> Header1.Caption` correta nas tr├¬s grades (regra #41).
+- `FormParaBO`/`BOParaForm`/`LimparCampos` (PROTECTED) s├│ chamados via `THIS.` de dentro da classe (regra #51); `CarregarLista`/`AjustarBotoesPorModo` PUBLIC para o harness (regra #3).
+- `AlternarPagina` reabilita os bot├Áes no caminho de volta (regra #40) e repinta as grades depois de trocar `ActivePage` (regra #21/#46).
+- Chave posicional `Emps+Dopes+Str(Numes,6)` sem `ALLTRIM` nas partes (regra #42) ÔÇö correta.
+
+Nenhum achado novo. **N├úo editei os arquivos** ÔÇö fazer altera├º├úo especulativa pela 3┬¬ vez num c├│digo j├í revisado s├│ arriscaria regress├úo, sem chance de corrigir um erro que ocorre antes do form ser alcan├ºado. Atualizei a mem├│ria do projeto com esta reincid├¬ncia.
+
+Recomenda├º├úo para quem opera o pipeline: restaurar a rota de rede da m├íquina de execu├º├úo para `192.168.200.10:1433` (ou mover a etapa `06_testForm` para uma m├íquina com essa rota) ÔÇö sen├úo esta e as demais tasks da fila v├úo continuar consumindo o or├ºamento de `runtime_fix` presas neste mesmo bloqueio.

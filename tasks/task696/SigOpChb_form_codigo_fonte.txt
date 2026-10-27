@@ -1,0 +1,973 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpChb.SCX
+* Data/Hora: 25/10/2026 08:11:51
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCHB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCHB
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCHB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCHB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPCHB
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGOPCHB
+  Class: shape
+  BaseClass: shape
+
+Objeto: Banco
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Agencia
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Conta
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetBanco
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetAgencia
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetConta
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cheque
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCheque
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetVencimento
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetValor
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetControle
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetProtocolo
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPCHB
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetArquivo
+  Parent: SIGOPCHB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Procura
+  Parent: SIGOPCHB
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCancela
+  Parent: SIGOPCHB
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 250
+  Width = 500
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Procurar"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGOPCHB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Shape2
+------------------------------------------------------------
+  Top = 4
+  Left = 321
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  FillStyle = 1
+  ColorScheme = 1
+  BackColor = 192,192,192
+  BorderColor = 136,189,188
+  ZOrderSet = 2
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Shape1
+------------------------------------------------------------
+  Top = 100
+  Left = 102
+  Height = 133
+  Width = 295
+  BackStyle = 0
+  BorderStyle = 6
+  FillStyle = 1
+  ColorScheme = 1
+  BackColor = 192,192,192
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Banco
+------------------------------------------------------------
+  Caption = "Banco :"
+  Height = 15
+  Left = 127
+  Top = 110
+  Width = 38
+  TabIndex = 1
+  Name = "Banco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Agencia
+------------------------------------------------------------
+  Caption = "Agência :"
+  Height = 15
+  Left = 118
+  Top = 134
+  Width = 47
+  TabIndex = 3
+  Name = "Agencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Conta
+------------------------------------------------------------
+  Caption = "Conta :"
+  Height = 15
+  Left = 127
+  Top = 158
+  Width = 38
+  TabIndex = 5
+  Name = "Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetBanco
+------------------------------------------------------------
+  ControlSource = "_ProcBco"
+  InputMask = "999"
+  Left = 167
+  TabIndex = 2
+  Top = 107
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "GetBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetAgencia
+------------------------------------------------------------
+  ControlSource = "_ProcAge"
+  InputMask = "9999"
+  Left = 167
+  TabIndex = 4
+  Top = 131
+  Width = 40
+  ForeColor = 0,0,0
+  Name = "GetAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetConta
+------------------------------------------------------------
+  ControlSource = "_ProcCon"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 167
+  TabIndex = 6
+  Top = 155
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "GetConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Cheque
+------------------------------------------------------------
+  Caption = "Cheque :"
+  Height = 15
+  Left = 119
+  Top = 182
+  Width = 46
+  TabIndex = 7
+  Name = "Cheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetCheque
+------------------------------------------------------------
+  ControlSource = "_ProcChe"
+  Height = 23
+  InputMask = "999999"
+  Left = 167
+  TabIndex = 8
+  Top = 179
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "GetCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Say3
+------------------------------------------------------------
+  Caption = "Vencimento :"
+  Height = 15
+  Left = 243
+  Top = 110
+  Width = 64
+  TabIndex = 9
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Say4
+------------------------------------------------------------
+  Caption = "Valor :"
+  Height = 15
+  Left = 274
+  Top = 134
+  Width = 33
+  TabIndex = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetVencimento
+------------------------------------------------------------
+  ControlSource = "_ProcVen"
+  Height = 23
+  InputMask = ""
+  Left = 309
+  TabIndex = 10
+  Top = 107
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "GetVencimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetValor
+------------------------------------------------------------
+  ControlSource = "_ProcVal"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 309
+  TabIndex = 12
+  Top = 131
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "GetValor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Say1
+------------------------------------------------------------
+  Caption = "Controle :"
+  Height = 15
+  Left = 257
+  Top = 158
+  Width = 50
+  TabIndex = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetControle
+------------------------------------------------------------
+  ControlSource = "_ProcControle"
+  Height = 23
+  Left = 309
+  TabIndex = 14
+  Top = 155
+  Width = 66
+  ForeColor = 0,0,0
+  Name = "GetControle"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Say2
+------------------------------------------------------------
+  Caption = "Protocolo :"
+  Height = 15
+  Left = 253
+  Top = 182
+  Width = 54
+  TabIndex = 15
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetProtocolo
+------------------------------------------------------------
+  ControlSource = "_ProcProtocolo"
+  Height = 23
+  Left = 309
+  TabIndex = 16
+  Top = 179
+  Width = 67
+  ForeColor = 0,0,0
+  Name = "GetProtocolo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Say5
+------------------------------------------------------------
+  Caption = "Arquivo :"
+  Height = 15
+  Left = 261
+  Top = 208
+  Width = 46
+  TabIndex = 17
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.GetArquivo
+------------------------------------------------------------
+  ControlSource = "_ProcArquivo"
+  Format = ""
+  Height = 23
+  InputMask = "999999"
+  Left = 309
+  MaxLength = 6
+  TabIndex = 18
+  Top = 203
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "GetArquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.Procura
+------------------------------------------------------------
+  Top = 3
+  Left = 350
+  Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Caption = "Procurar"
+  TabIndex = 19
+  Name = "Procura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHB.btnCancela
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 20
+  Name = "btnCancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCHB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pLeCheque, pChqLido, pLeitor, pOldForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm = pOldForm
+Thisform.LeCheque = pLeCheque
+Thisform.ChqLido  = pChqLido
+Thisform.Leitor   = pLeitor
+
+Store Space(03) To _ProcBco
+Store Space(04) To _ProcAge
+Store Space(10) To _ProcCon
+Store Space(06) To _ProcChe
+Store { / / }   To _ProcVen
+Store 0 		To _ProcVal
+Store Space(08) To _ProcControle
+Store Space(08) To _ProcProtocolo
+Store Space(6)  To _ProcArquivo
+
+ThisForm.GetBanco.Value = ''
+ThisForm.GetAgencia.Value = ''
+ThisForm.GetConta.Value = ''
+ThisForm.GetCheque.Value = ''
+ThisForm.GetVencimento.Value = { / / }
+ThisForm.GetValor.Value = 0
+ThisForm.GetControle.Value = ''
+ThisForm.GetProtocolo.Value = ''
+ThisForm.GetArquivo.Value = Space(6)
+
+ThisForm.GetBanco.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetBanco
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If nKeyCode==60
+	If !Thisform.LeCheque
+		Thisform.ChqLido = ""
+	Endif
+	Thisform.LeCheque = .T.
+Endif
+If Thisform.LeCheque
+	NoDefault
+	Thisform.ChqLido = Thisform.ChqLido + CHR(nKeyCode)
+Endif
+If nKeyCode==58
+	This.Valid
+	ThisForm.LeCheque = .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local leitor, contador, tecla
+
+leitor = Iif(Thisform.LeCheque, Thisform.ChqLido, '')
+
+Thisform.leitor=.f.
+If Lastkey()=9
+	Keyboard"{CTRL+TAB}"
+Else
+	If Len(leitor) >= 33
+		Thisform.leitor=.t.
+		This.Value = Substr(leitor,2,3)
+		ThisForm.GetAgencia.Value = Substr(leitor,5,4)
+		ThisForm.GetConta.Value = Substr(leitor,23,10)
+		ThisForm.GetCheque.Value = Substr(leitor,14,6)
+		ThisForm.Procura.Click
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(ThisForm.GetProtocolo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetAgencia
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+		IsEmpty(Thisform.GetArquivo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetConta
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+		IsEmpty(Thisform.GetArquivo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetCheque
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+		IsEmpty(Thisform.GetArquivo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetVencimento
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( ThisForm.GetValor.Value ) .and. ;
+	   IsEmpty(ThisForm.GetControle.Value) .and. ;
+	   IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+	   IsEmpty(Thisform.GetArquivo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetValor
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( ThisForm.GetVencimento.Value ) .and. ;
+	   IsEmpty(ThisForm.GetControle.Value) .and. ;
+	   IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+	   IsEmpty(Thisform.GetArquivo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetControle
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;
+		IsEmpty(ThisForm.GetAgencia.Value) .and. ;
+		IsEmpty(ThisForm.GetConta.Value) .and. ;
+		IsEmpty(ThisForm.GetCheque.Value) .and. ;
+		IsEmpty(ThisForm.GetVencimento.Value) .and. ;
+		IsEmpty(ThisForm.GetValor.Value) .and. ;
+		IsEmpty(ThisForm.GetProtocolo.Value) .and. ;
+		IsEmpty(Thisform.GetArquivo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetProtocolo
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;
+		IsEmpty(ThisForm.GetAgencia.Value) .and. ;
+		IsEmpty(ThisForm.GetConta.Value) .and. ;
+		IsEmpty(ThisForm.GetCheque.Value) .and. ;
+		IsEmpty(ThisForm.GetVencimento.Value) .and. ;
+		IsEmpty(ThisForm.GetValor.Value) .and. ;
+		IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(Thisform.GetArquivo.Value) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.GetArquivo
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+This.Value = Trans(Val(This.Value),'@L 999999')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;
+		IsEmpty(ThisForm.GetAgencia.Value) .and. ;
+		IsEmpty(ThisForm.GetConta.Value) .and. ;
+		IsEmpty(ThisForm.GetCheque.Value) .and. ;
+		IsEmpty(ThisForm.GetVencimento.Value) .and. ;
+		IsEmpty(ThisForm.GetValor.Value) .and. ;
+		IsEmpty(ThisForm.GetControle.Value) .and. ;
+		IsEmpty(ThisForm.GetArquivo.Value))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.Procura
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llOk, lcWher
+Set Step On 
+llOk = .f.
+lcWher = ''
+Select crSigChe
+Set Near On
+Do Case
+	Case !IsEmpty( _ProcVen )
+		Set Order To VENC
+		_Busca = ( DTOS( _PROCVEN ) + Iif(IsEmpty(_PROCBCO),'',_ProcBco) + Iif(IsEmpty(_PROCAGE),'',_ProcAge) + Iif(IsEmpty(_PROCCON),'',_ProcCon) + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )
+		llOk = Seek( _Busca )
+		If !llOk
+			llVenc = fDtoSQL(_ProcVen)
+			lcWher = [Vencs = ?llVenc ]+Iif(!IsEmpty(_ProcBco),[And Bancos=?_ProcBco ],[])+;
+					Iif(!IsEmpty(_ProcAge),[And Agencias=?_ProcAge ],[])+Iif(!IsEmpty(_ProcCon),[And nContas=?_ProcCon ],[])+;
+					Iif(!IsEmpty(_PROCCHE),[And nCheques=?_ProcChe ],[])
+		Endif
+
+	Case !IsEmpty( _ProcVal )
+		Set Order To VALOR
+		_Busca = ( STR( _PROCVAL, 12 , 2 ) + Iif(IsEmpty(_PROCBCO),'',_ProcBco) + Iif(IsEmpty(_PROCAGE),'',_ProcAge) + Iif(IsEmpty(_PROCCON),'',_ProcCon) + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )
+		llOk = Seek( _Busca )
+		If !llOk
+			lcWher = [Valors = ?_ProcVal ]+Iif(!IsEmpty(_ProcBco),[And Bancos=?_ProcBco ],[])+;
+					Iif(!IsEmpty(_ProcAge),[And Agencias=?_ProcAge ],[])+Iif(!IsEmpty(_ProcCon),[And nContas=?_ProcCon ],[])+;
+					Iif(!IsEmpty(_PROCCHE),[And nCheques=?_ProcChe ],[])
+		Endif		
+
+	Case !IsEmpty( _ProcBco )
+		Set Order To CHEQUE
+		_Busca = ( _PROCBCO + Iif(IsEmpty(_PROCAGE),'',_ProcAge) + Iif(IsEmpty(_PROCCON),'',_ProcCon) + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )
+		llOk = Seek( _Busca )
+		If !llOk
+			lcWher = [Bancos=?_ProcBco ]+;
+					Iif(!IsEmpty(_ProcAge),[And Agencias=?_ProcAge ],[])+Iif(!IsEmpty(_ProcCon),[And nContas=?_ProcCon ],[])+;
+					Iif(!IsEmpty(_PROCCHE),[And nCheques=?_ProcChe ],[])
+		Endif		
+
+	Case !IsEmpty( _ProcAge )
+	
+		Set Order To AGENCIA
+		
+		If Empty(_PROCCON) and Not Empty(_PROCCHE)
+			Set Order To AgenciaChe
+		EndIf 
+		
+		If Empty(_PROCCHE) and Not Empty(_PROCCON)
+			Set Order To AgenciaCta
+		EndIf 
+		
+		_Busca = ( _PROCAGE + Iif(IsEmpty(_PROCCON),'',_ProcCon) + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )
+		llOk = Seek( _Busca )
+		If !llOk
+			lcWher = [Agencias=?_ProcAge ]+;
+					Iif(!IsEmpty(_ProcCon),[And nContas=?_ProcCon ],[])+;
+					Iif(!IsEmpty(_PROCCHE),[And nCheques=?_ProcChe ],[])
+		Endif
+
+	Case !IsEmpty( _ProcCon )
+		Set Order To CONTA
+		_Busca = ( _PROCCON + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )
+		llOk = Seek( _Busca )
+		If !llOk
+			lcWher = [nContas=?_ProcCon ]+;
+					Iif(!IsEmpty(_PROCCHE),[And nCheques=?_ProcChe ],[])
+		Endif
+
+	Case !IsEmpty( _ProcChe )
+		Set Order To NCHEQUE
+		_Busca = ( _ProcChe )
+		llOk = Seek( _Busca )
+		If !llOk
+			lcWher = [Ncheques = ?_ProcChe ]
+		Endif
+	Case !IsEmpty( _ProcControle )
+		Set Order To Nums
+		llOk=Seek( _PROCCONTROLE )
+		If !llOk
+			lcWher = [Nums = ?_ProcControle ]
+		EndIf
+		
+	Case !IsEmpty( _ProcProtocolo )
+		If ThisForm.Parentform.Podatamgr.CursorQuery('SigCqChm','CrChm','Protocolos',Trans(Val(_ProcProtocolo),'@L 99999999'))
+			Set Order To Nums
+			llOk=Seek( CrChm.Nums )
+			If !llOk
+				lcWher = [Nums = ']+CrChm.Nums+[']
+			Endif
+		Endif
+	Case !IsEmpty( _ProcArquivo )
+		Set Order To NUMEROS
+		llOk=Seek( Trans( _ProcArquivo, '@L 999999' ) )
+		If !llOk
+			_ProcNumero = Trans( _ProcArquivo, '@L 999999' ) 
+			lcWher = [Numeros = ?_ProcNumero ]
+		Endif
+EndCase
+Set Near Off
+
+If !llOk And !IsEmpty(lcWher)
+	lnErro = ThisForm.ParentForm.podatamgr.SqlExecute([Select * From SigChe Where ]+lcWher,'CrCheque')
+	If lnErro > 0
+		Select CrCheque
+		Scan
+			Scatter to Memvar Memo
+			Insert Into CrSigChe From Array Memvar
+		EndScan
+	Endif
+Endif
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHB.btnCancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCHB
+RESERVED3 (ClassInfo): chqlido
+lecheque
+leitor
+ordenar
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

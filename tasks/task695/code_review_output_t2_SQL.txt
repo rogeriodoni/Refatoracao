@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o ├║nico achado deste pass (`SQL-FILTRO-INVENTADO` na coluna `CMOES`) e **n├úo apliquei corre├º├úo** ÔÇö ├® falso positivo confirmado.
+
+**Onde est├í**: `sigopcgvBO.prg:1010-1013`, dentro de `ObterCotacao(par_cMoeda, par_dData)`:
+```foxpro
+loc_cSQL = "SELECT TOP 1 valos FROM SigCdCot" + ;
+    " WHERE cmoes = " + EscaparSQL(loc_cMoeda) + ;
+    " AND datas <= " + FormatarDataSQL(DTOT(loc_dData) + 86399) + ;
+    " ORDER BY datas DESC, horas DESC"
+```
+
+**Por que ├® falso positivo**: a lista de refer├¬ncia do pass vem da query principal do form (conta corrente/cheques/produtos), que nunca filtra por moeda. `ObterCotacao` ├® um m├®todo auxiliar que busca a cota├º├úo de c├ómbio ÔÇö e o pr├│prio coment├írio do m├®todo j├í documenta a origem: "Substitui fBuscarCotacao()/CarregarCambio() do Framework legado... exatamente o que o legado faz quando o Seek em crSigCdCot falha."
+
+O legado faz isso via `SEEK` em ├¡ndice composto (moeda+data), nunca com `WHERE` textual ÔÇö por isso o grep do pass nunca viu a coluna como "original":
+```foxpro
+SELECT crSigCdMoe / SET ORDER TO CMoes / SEEK loc_cMoeda
+SELECT crSigCdCot / SET ORDER TO CMoeData DESCENDING / SET NEAR ON
+SEEK loc_cMoeda + DTOS(loc_dData)
+```
+Isso ├® exatamente o padr├úo j├í catalogado no projeto (`feedback_fcarregarcambio_nao_portada.md` e variantes 3a/9a do `SQL-FILTRO-INVENTADO`): SQL Server n├úo tem `SEEK`/`NEAR`, ent├úo `WHERE cmoes = ... AND datas <= ... ORDER BY ... TOP 1` ├® a tradu├º├úo correta e obrigat├│ria desse SEEK.
+
+**Risco de "corrigir"**: remover o `WHERE cmoes` faria o m├®todo pegar a cota├º├úo mais recente de **qualquer** moeda do banco, n├úo da moeda pedida ÔÇö regress├úo grave em toda convers├úo de saldo/cheque/estoque que usa `ObterCotacao`.
+
+Documentei essa inst├óncia (46┬¬ variante) na mem├│ria do pass para que rodadas futuras n├úo repitam a investiga├º├úo sobre este mesmo m├®todo.

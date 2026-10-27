@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Esse erro **n├úo ├® um bug de c├│digo** ÔÇö ├® a mesma falha de infraestrutura j├í documentada em 100+ tasks anteriores (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa o pipeline n├úo tem rota de rede para `192.168.200.10:1433`, onde fica o SQL Server `DB_MBAHIA`.
+
+Evid├¬ncias:
+- O log mostra a falha na **ETAPA 1B** (`SQLSTRINGCONNECT`), **antes** de qualquer `CREATEOBJECT` de `Formsigopcgp`/`sigopcgpBO` ÔÇö o c├│digo do form nunca chega a ser executado.
+- `Test-NetConnection 192.168.200.10 -Port 1433` n├úo completou dentro do timeout e foi para background ÔÇö exatamente o padr├úo "sem rota" observado em todas as reincid├¬ncias anteriores.
+- Esta ├® a mesma task693/`Formsigopcgp`, que j├í estava na tentativa 8/10 presa neste mesmo bloqueio (registrado na mem├│ria do projeto), e esta ├® agora a **tentativa 9/10**.
+
+Por isso **n├úo editei** `Formsigopcgp.prg` nem `sigopcgpBO.prg`: o c├│digo j├í foi revisado integralmente 6 vezes em tentativas anteriores sem nenhum achado relacionado a este erro, e fazer uma edi├º├úo especulativa aqui s├│ arriscaria introduzir regress├úo em c├│digo correto, sem qualquer chance de resolver uma falha que ocorre antes do c├│digo ser alcan├ºado.
+
+Dois achados **n├úo relacionados** a este erro j├í est├úo registrados para revis├úo futura (quando a conex├úo SQL estiver dispon├¡vel):
+1. `BtnConsultarClick` chama `THIS.this_oBusinessObject.BuscarProdutos(...)`, mas `sigopcgpBO.prg` n├úo define esse m├®todo.
+2. `BtnSalvarClick` atribui a 14 properties do BO (`this_cCodPro`, `this_nPrecoVenda`, etc.) que n├úo est├úo declaradas em `sigopcgpBO.prg`.
+
+Atualizei a mem├│ria do projeto com esta reincid├¬ncia (tentativa 9/10). **Alerta**: resta apenas 1 tentativa antes de esgotar o or├ºamento de `runtime_fix` desta task, puramente por falta de rota de rede ÔÇö nenhuma corre├º├úo de c├│digo teria evitado isso.

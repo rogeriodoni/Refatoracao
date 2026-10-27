@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No non-ASCII characters found ÔÇö all accented text correctly uses `CHR()` codes. Fase 2 is complete.
+
+**Summary of changes to `C:\4c\projeto\app\classes\SigOpCflBO.prg`:**
+- `LimparDados()` ÔÇö reseta as propriedades da entidade
+- `InicializarValoresPadrao()` ÔÇö defaults do ramo INSERIR legado (`Datas = DATETIME()`, `Autos = .F.`)
+- `ObterChavePrimaria()` ÔÇö retorna `cidchaves`
+- `CarregarDoCursor()` ÔÇö mapeia todas as colunas de `SigCheh` usando `TratarNulo` com valor-padr├úo correto por tipo (n├úo o c├│digo de tipo "C"/"N"/"D"/"L")
+- `Inserir()` ÔÇö INSERT completo com `fUniqueIds()` para a PK, `autos` fixo em 0, e `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE s├│ do campo `hists` (espelha o ramo ALTERAR do legado, que preserva Nums/Datas/Emps/Autos), com `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` ÔÇö DELETE com a guarda do legado (bloqueia exclus├úo de hist├│rico autom├ítico preenchido), `RegistrarAuditoria("DELETE")`
+
+Os m├®todos `Inserir`/`Atualizar`/`LimparDados` ficaram sem `PROTECTED` (conforme a pr├│pria documenta├º├úo do `BusinessBase` e a regra #51 do CLAUDE.md, que evita o bug de "Property X is not found" quando o form chama esses m├®todos de fora).

@@ -1,0 +1,56 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da.
+
+## O que eu encontrei
+
+Os campos e os 6 lookups **j├í estavam constru├¡dos** ÔÇö conferi por mim mesmo em vez de aceitar o relato da tentativa anterior:
+
+| Confer├¬ncia | Resultado |
+|---|---|
+| Objetos do `layout.json` (fora de coluna de grade) | **39 legado / 39 migrado**, nome a nome |
+| Lookups do legado (`fwBuscaExt`/`fwBuscaSel`, 6 sites) | 6 pares `Validar*`/`AbrirBusca*`, Pattern A completo |
+| `BINDEVENT` "KeyPress" com guard `13/9/115` | presente nos 6 ÔÇö `VerificarLookupEmKeyPress` d├í **ERRO=0** |
+| `FormBuscaAuxiliar` 1┬║ argumento | Pattern A (`CREATEOBJECT` sem args + `DefinirCursor`) ÔÇö fora dos 48 sites acusados pela auditoria |
+| `DataSession = 2` x picker | **n├úo** ├® fronteira: `DataSession = 1` ├® a sess├úo corrente (j├í medido no projeto) |
+
+## O defeito real: a checagem de acesso tinha sido descartada
+
+O `Valid` dos tr├¬s campos de conta roda `fAcessoContas(...)` em **todo** caminho de resolu├º├úo (dump linhas 2238, 2317, 2398, 2422 no Origem; 3302, 3382, 3463 no Emitente) e, negando, exibe *Acesso Negado* e limpa os tr├¬s campos. O migrado n├úo tinha nada ÔÇö e o coment├írio admitia o descarte, citando a regra de que `fAcessoContas` n├úo serve para lookup UX.
+
+Essa regra vale para o modo **com** os TextBox (`pSt1`/`pSt2`), que auto-carrega o primeiro match parcial. Chamada **sem** eles, a fun├º├úo portada entra no ramo *"Busca sem UI (apenas verifica acesso)"* e s├│ devolve `.T.`/`.F.` ÔÇö uso que a pr├│pria regra declara v├ílido. Qualquer usu├írio consultava o hist├│rico de qualquer conta.
+
+Implementei `VerificarAcessoConta()` e pendurei no **funil** `PreencherOrigem`/`PreencherEmitente`, que ├® por onde passam os seis caminhos (hit exato, CPF, nome, picker) ÔÇö n├úo em 12 sites. Limpar campo n├úo re-verifica (espelha o `If !Empty(This.Value)` do legado).
+
+Duas decis├Áes que medi antes de tomar:
+- **Sem conex├úo devolve `.T.`** ÔÇö com `gnConnHandle = -1` o `fAcessoContas` cai com `llRet = .F.` e negaria tudo em modo de teste.
+- **Tabelas de acesso vazias liberam** (`llRst` quando `RECCOUNT(crAc3) = 0`), e as 8 tabelas que ele consulta existem no schema can├┤nico (682 tabelas, lido com `-Raw`). Ent├úo a checagem n├úo tranca ningu├®m de fora.
+
+## O gate da Fase 6 n├úo alcan├ºava este form
+
+Mesmo v├úo estrutural da Fase 5: 6 ramos, nenhum serve. O legado ├® OPERACIONAL **com** PageFrame cujas Pages s├úo `Filtro`/`Historico` ÔÇö p├íginas de dom├¡nio. PAGINADO exige `ConfigurarPaginaDados`; FLAT/VISUALIZADOR/CAPTURA exigem **aus├¬ncia** de PageFrame. As duas sa├¡das seriam inventar uma Page de Dados ou remover o PageFrame que o legado tem.
+
+Adicionei o ramo **PAGINADO-N├âO-CRUD**, reusando os helpers que a Fase 5 j├í validou e somando o requisito pr├│prio desta fase (lookup implementado; sem lookup no legado, cai para o handler de valida├º├úo ÔÇö nunca para "nada").
+
+**Delta medido**: 64 dumps com PageFrame ÔåÆ 40 s├│ com Pages de dom├¡nio ÔåÆ 11 tasks OPERACIONAL ÔåÆ 6 forms, e **5 desses 6 j├í passavam** pelo ramo PAGINADO. Delta efetivo: **1 form**. Negativo conferido: o mesmo form como `CRUD` reprova.
+
+## Verifica├º├úo
+
+| Check | Resultado |
+|---|---|
+| `COMPILE` Form + BO | `.fxp` gerado, **nenhum `.ERR`** |
+| `Test-CompletudeCodigo` (os 4 checks replicados) | 0/0/0/0 ÔÇö os 3 "TODO" s├úo a palavra *TODO/TODOS* no meio de coment├írio, fora do regex de marcador |
+| `VerificarFuncoesNaoDefinidas` | sem chamada ├│rf├ú (1046 `.prg`) |
+| `VerificarPropriedadesInexistentes` | OK |
+| `VerificarMetodoProtegidoChamadoDeFora` | OK |
+| Orquestrador: parse / BOM / bytes >127 | OK / `EF BB BF` / **2965 = baseline** |
+| Ramo novo exercitado com os helpers reais | **APROVA** (piso 5, 9 campos) |
+| CRLF do `.prg` | 2755/2755 ÔÇö preservado |
+
+Dois pontos para voc├¬ decidir:
+
+1. **N├úo criei `cnt_4c_BotoesAcao` (Salvar/Cancelar)** que o prompt pede: o legado tem **2** CommandButton ÔÇö "Processar" e "Encerrar" ÔÇö ambos j├í na p├ígina Filtro com `BINDEVENT`, mais o `Grupo_Saida` no Hist├│rico. Criar o par seria inventar superf├¡cie (PILAR 1).
+2. **Corrigir o gate n├úo desbloqueia a execu├º├úo em curso** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo o loop precisa ser relan├ºado para a Fase 6 passar. Mesma observa├º├úo da Fase 5.

@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and consistent. The fixes are complete.
+
+## Summary
+
+I reviewed all 35 flagged issues against the actual code and the legacy dump (`tasks/task690/sigopcgc_form_codigo_fonte.txt`). Here's what I found:
+
+**Fixed (9 occurrences ÔÇö real defect):**
+- **GRID-WITH**: All 9 grid-configuration blocks (`grd_4c_Historico`, `grd_4c_Saldo`, `grd_4c_Pendente`, `grd_4c_PendenteOculta`, `grd_4c_Produto`, `grd_4c_Resumo`, `grd_4c_OperaProd`, `grd_4c_EstoqueProd`, `grd_4c_Conserto`) had `.ColumnCount`/`.RecordSource` set *inside* the same `WITH` block that accesses `.ColumnN`. Moved both properties to explicit `loc_oGrd.ColumnCount = ...` / `loc_oGrd.RecordSource = ...` statements before each `WITH`, keeping everything else unchanged.
+
+**Verified as false positives (no changes made), since "fixing" them would have broken working code:**
+- **METODO-INEXISTENTE** (`ExecutarProcessamento`, `ValidarFiltrosConsulta`): both are defined as `PROTECTED FUNCTION` later in the same class.
+- **GRID-HEADER** (`Total Vendas`, `Valor Total` x2): confirmed in the legacy dump's runtime `Processa` block (lines 5126-5129) ÔÇö these are the exact legacy captions, just not present in the static SCX design-time dump the checker used.
+- **NULL-CURSOR** (all 8, in `sigopcgcBO.prg`): every `CREATE CURSOR` is followed by `INSERT INTO ... VALUES(NVL(...))` ÔÇö nulls are already defused per-column before insertion, which is why the method deliberately does `SET NULL OFF` (documented in its own header comment).
+- **OPTIONGROUP-LEFT**: `obj_4c_Opt_Analise.Buttons(2)` already has `.Left = 7` defined.
+- **LAYOUT-POSITION** (all 14): every one traced back to the checker misreading a nested `WITH .Buttons(1)` block as the parent group's position, or matching a generic legacy name (`Label1`, `Imprimir`) against the wrong migrated control while the correctly-named control (`lbl_4c_TitProdutos`, `lbl_4c_TitPendencias`, `cmd_4c_ImprimirMov`, etc.) already has the exact legacy coordinates.
+
+No other file changes were needed.

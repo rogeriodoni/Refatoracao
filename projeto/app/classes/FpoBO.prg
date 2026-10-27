@@ -117,6 +117,18 @@ DEFINE CLASS FpoBO AS BusinessBase
                        " FROM SigOpFpo " + loc_cWhere + ;
                        " ORDER BY FPags"
 
+            *-- Fechar o cursor anterior ANTES do SQLEXEC. Sem isto, se a grade
+            *-- deixou alteracao pendente no buffer, o SQLEXEC estoura com
+            *-- "Table buffer for alias CURSOR_4C_DADOS contains uncommitted
+            *-- changes". O guard testa o Buffering antes do TABLEREVERT: sem
+            *-- buffering ele nao eh no-op, dispara o erro 1586 (regra #52).
+            IF USED("cursor_4c_Dados")
+                IF CURSORGETPROP("Buffering", "cursor_4c_Dados") > 1
+                    TABLEREVERT(.T., "cursor_4c_Dados")
+                ENDIF
+                USE IN cursor_4c_Dados
+            ENDIF
+
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
             IF loc_nResultado >= 0
                 loc_lResultado = .T.
@@ -211,18 +223,27 @@ DEFINE CLASS FpoBO AS BusinessBase
     * par_cCursorDados: alias do cursor com os dados do grid (ex: crSigOpFpo)
     * Logica: valida duplicatas, gera chaves, delete+insert atomico no SQL Server
     *--------------------------------------------------------------------------
-    PROCEDURE SalvarLote(par_cDopes, par_cCursorDados)
+    PROCEDURE SalvarLote(par_cDopes, par_cCursorDados, par_cEscopoDopes)
         LOCAL loc_lResultado, loc_cSQL, loc_nResultado
         LOCAL loc_cCidChaves, loc_lTransacaoAberta, loc_lErroInsert
+        LOCAL loc_cEscopo, loc_cIn, loc_nI, loc_cItem
         loc_lResultado    = .F.
         loc_lTransacaoAberta = .F.
         loc_lErroInsert   = .F.
 
-        *-- Validacoes de entrada ANTES do TRY (retornos validos aqui)
-        IF EMPTY(ALLTRIM(par_cDopes))
-            MsgAviso("C" + CHR(243) + "digo da opera" + CHR(231) + CHR(227) + ;
-                "o n" + CHR(227) + "o informado", "")
-            RETURN .F.
+        *-- ESCOPO do DELETE. A tela aberta pelo MENU traz VARIAS operacoes na
+        *-- grade e chega aqui com par_cDopes vazio: apagar por uma operacao so
+        *-- destruiria as demais. Entao o escopo eh a UNIAO de:
+        *--   par_cDopes        - o dialogo filho, aberto para UMA operacao
+        *--   par_cEscopoDopes  - o que estava na grade quando ela carregou
+        *--                       (cobre a linha EXCLUIDA, que sumiu do cursor)
+        *--   Dopes do cursor   - cobre a linha INCLUIDA numa operacao nova
+        loc_cEscopo = ""
+        IF VARTYPE(par_cDopes) = "C" AND !EMPTY(ALLTRIM(par_cDopes))
+            loc_cEscopo = ALLTRIM(par_cDopes)
+        ENDIF
+        IF VARTYPE(par_cEscopoDopes) = "C" AND !EMPTY(ALLTRIM(par_cEscopoDopes))
+            loc_cEscopo = loc_cEscopo + IIF(EMPTY(loc_cEscopo), "", ",") + ALLTRIM(par_cEscopoDopes)
         ENDIF
 
         IF !USED(par_cCursorDados)
@@ -233,6 +254,30 @@ DEFINE CLASS FpoBO AS BusinessBase
         IF !THIS.ValidarDuplicados(par_cCursorDados)
             RETURN .F.
         ENDIF
+
+        *-- acrescenta as operacoes presentes no cursor (linhas novas)
+        SELECT (par_cCursorDados)
+        GO TOP
+        SCAN
+            loc_cItem = ALLTRIM(NVL(Dopes, ""))
+            IF !EMPTY(loc_cItem) AND !("," + UPPER(loc_cItem) + "," $ "," + UPPER(loc_cEscopo) + ",")
+                loc_cEscopo = loc_cEscopo + IIF(EMPTY(loc_cEscopo), "", ",") + loc_cItem
+            ENDIF
+        ENDSCAN
+
+        IF EMPTY(loc_cEscopo)
+            MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o a gravar.", "")
+            RETURN .F.
+        ENDIF
+
+        *-- monta o IN (...) escapando cada item
+        loc_cIn = ""
+        FOR loc_nI = 1 TO OCCURS(",", loc_cEscopo) + 1
+            loc_cItem = ALLTRIM(GETWORDNUM(loc_cEscopo, loc_nI, ","))
+            IF !EMPTY(loc_cItem)
+                loc_cIn = loc_cIn + IIF(EMPTY(loc_cIn), "", ", ") + EscaparSQL(loc_cItem)
+            ENDIF
+        ENDFOR
 
         TRY
             *-- Gerar CidChaves para linhas novas (FPags nao vazio, CidChaves vazio)
@@ -250,9 +295,8 @@ DEFINE CLASS FpoBO AS BusinessBase
             IF loc_nResultado >= 0
                 loc_lTransacaoAberta = .T.
 
-                *-- Deletar todos os registros existentes da operacao
-                loc_cSQL = "DELETE FROM SigOpFpo WHERE Dopes = " + ;
-                    EscaparSQL(ALLTRIM(par_cDopes))
+                *-- Deletar os registros das operacoes NO ESCOPO (nunca das outras)
+                loc_cSQL = "DELETE FROM SigOpFpo WHERE Dopes IN (" + loc_cIn + ")"
                 loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
                 IF loc_nResultado >= 0

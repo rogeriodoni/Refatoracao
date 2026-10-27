@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 conclu├¡da. Criei `C:\4c\projeto\app\forms\operacionais\FormSigOpChc.prg` com a estrutura base do form OPERACIONAL:
+
+- `DEFINE CLASS FormSigOpChc AS FormBase` com dimens├Áes fi├®is ao SCX legado (776x300, conforme `layout.json`) e propriedades de janela (modal, sem ControlBox/MaxButton, guard de `gb_4c_ValidandoUI`/`gb_4c_ModoTeste` para n├úo travar em teste headless ÔÇö padr├úo de `FormICD.prg`).
+- `this_oParentForm` (equivalente a `ThisForm.ParentForm`/`Lparameters pOldForm` do legado) e `this_nTaxa`.
+- `Init()` recebendo `par_oParentForm`,Õ«Üõ╣ë Caption via `CHR()` ("Hist├│rico da Carteira").
+- `InicializarForm()` criando o `SigOpChcBO` e chamando `ConfigurarPageFrame()`.
+- `ConfigurarPageFrame()` ÔåÆ `ConfigurarCabecalho()`: cria `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, nomes exatos do `mapeamento.json`, com `Width = THIS.Width` (nunca hardcoded, regra do cabe├ºalho).
+- `TornarControlesVisiveis()` recursivo e `Destroy()` liberando o BO.
+
+Importante: este form ├® **flat** (sem PageFrame Page1/Page2) porque ├® um di├ílogo OPERACIONAL ÔÇö confirmado pelo `mapeamento.json` (sem `pgf_4c_Paginas`) e pela se├º├úo "CONTEXTO DA MIGRA├ç├âO" que diz explicitamente que n├úo segue o padr├úo CRUD. Segui o padr├úo j├í estabelecido em `FormICD.prg` para esse tipo de di├ílogo.
+
+Grid, shape, campo de taxa e bot├Áes (Encerrar / Baixa Cheque) ficam para as pr├│ximas fases (4-7), conforme o escopo desta fase.

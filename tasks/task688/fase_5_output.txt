@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced as well. Both files are structurally sound.
+
+## Summary
+
+**Fase 5/8 for FormSigOpCfp**: implemented the CFOP column lookup (Column1 of the Cfops-permitidas grid), following this form's own plan noted in its Fase 3 header ("lookups de CFOP/Observacao via BINDEVENT ficam para as fases 5/6") rather than the generic CRUD "ConfigurarPaginaDados" template ÔÇö this is a FLAT operational dialog with no Page1/Page2 split.
+
+Changes:
+- **`projeto\app\classes\TextBoxGridLookup.prg`**: added `TextBoxCfopGridCfp_4c`, a `TextBox` subclass with `Valid`/`LostFocus`/`KeyPress` embedded (BINDEVENT on grid-cell events isn't reliable ÔÇö regra #46), following the exact pattern of `TextBoxProdutoLpr_4c`/`TextBoxProdutoTrf_4c` already in this file: delegates to `THISFORM.ValidarCfopGridExec`/`AbrirLookupCfopGrade`.
+- **`projeto\app\forms\operacionais\FormSigOpCfp.prg`**:
+  - Wired the new cell into `Column1` via `AddObject` + `CurrentControl` + `Sparse = .F.` + `ReadOnly = .F.` (regra #18).
+  - Added PUBLIC methods `ValidarCfopGridExec()` and `AbrirLookupCfopGrade()` reproducing the legacy `fwBuscaExt` lookup against `SigCdCfo` (Codigos/Descricaos/Operacaos), using `FormBuscaAuxiliar`'s exact-match contract (regra #37) and clearing the cell only when the picker was shown and canceled ÔÇö mirroring the legacy `Else This.Value = ''`.
+  - Updated the file header to reflect the Fase 5 scope and leave Fase 6 (Observa├º├úo columns 2ÔÇô4) explicit for next phase.
+
+Both files verified balanced (WITH/ENDWITH, IF/ENDIF, PROCEDURE/ENDPROC, DEFINE CLASS/ENDDEFINE). Next phase (6) should add the Observa├º├úo lookup for Column2/3/4 (SigCdObs) plus the `When` gate tying them to Column1 having a CFOP filled in.

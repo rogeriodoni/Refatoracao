@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö `config.prg` auto-loads all `operacionais\Form*.prg` and `classes\*BO.prg` dynamically, so no manual `SET PROCEDURE` entry is needed for this phase.
+
+## Summary
+
+Fase 3/8 complete: created `C:\4c\projeto\app\forms\operacionais\FormSigOpCgr.prg` with the base structure:
+
+- **DEFINE CLASS FormSigOpCgr AS FormBase** ÔÇö canonical 1000x600 dimensions (legado was 800x600, scaled per sibling-form convention from `Formsigopcgc.prg`/`Formsigopcgp.prg`), Caption/ControlBox/Closable/DataSession transcribed from the legado dump.
+- **Init()** ÔÇö just `RETURN DODEFAULT()` (legado's `Init` takes no parameters).
+- **ValidarParametros()** ÔÇö PUBLIC connection guard mirroring the legado's `poDataMgr.pnIdconn > 0` check, with bypass for `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`.
+- **InicializarForm()** ÔÇö creates `SigOpCgrBO`, builds the PageFrame and both pages, makes everything visible, wrapped in TRY/CATCH with the guard outside the TRY (per CLAUDE.md rule #1).
+- **ConfigurarPageFrame()** ÔÇö 2 pages (Consulta/Resultado), `Top=-29` compensation, `Tabs=.F.`.
+- **ConfigurarPaginaLista()` / `ConfigurarPaginaDados()`** ÔÇö header stripe (`cnt_4c_Cabecalho`) on both pages per rule #11 (legado only had it on page 1; new system mandates both), plus empty placeholder containers (`cnt_4c_Botoes` / `cnt_4c_BotoesAcao`) sized for the buttons that Fase 4 will add.
+- **TornarControlesVisiveis()** and **Destroy()** ÔÇö standard helpers.
+
+Verified: no forbidden TODO/stub phrases, and all `WITH/ENDWITH`, `PROCEDURE/ENDPROC`, `FOR/ENDFOR`, `TRY/ENDTRY`, `DEFINE CLASS/ENDDEFINE` blocks balance. The form will be picked up automatically by `config.prg`'s dynamic `ADIR` loader ÔÇö no manual registration needed at this phase.
+
+Next phase (4/8) will add the grid and action buttons (Processar/Encerrar on Page1; Voltar/Rastreab./the 3 checkboxes on Page2).

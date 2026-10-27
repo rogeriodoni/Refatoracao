@@ -1,0 +1,1178 @@
+{
+  "resumo": {
+    "totalMetodos": 71,
+    "metodosComSQL": 20,
+    "metodosComValidacao": 15,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fCarregarCambio", "fConfigGeral", "fChecaAcesso", "fwBuscaExt", "fAcessoEmpresa", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCGC",
+      "evento": "Procedure",
+      "linhas": 871,
+      "codigoOriginal": "Local lcGrEst,lcCdConta,lcDsConta,lnAnalise,ldDtInicial,ldDtFinal,lcMoeda,lnCotaConv\nLocal llSemDados, _totabe, _totdev,lcArquivo1\n\nPrivate lcDtInicial, lcDtFinal\n\nlcArquivo1 = Sys(2023) + '\\Temp4.jpg'\n\n*-[ Caso a consulta já esteja executada, não processa novamente ]-*\nIf !ThisForm.ConsultaExecutada\n\n\t*-[ Inicializa as variáveis de campos ]-*\n\tWith ThisForm.Fld_Principal.Pag_Consulta\n\t\tlcGrEst     = .Origem.Get_Grupo.Value\n\t\tlcCdConta   = .Origem.Get_Conta.Value\n\t\tlcDsConta   = .Origem.Get_DCon... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fCarregarCambio",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,Opt_Analise,Get_DataI,Get_DataF,Get_Empresa,Get_Moeda,Get_CodFor,Get_Nome,Get_End,Get_Bairro,Get_Cid,Get_Cep,Get_Est,Get_Tel1,Get_Tel2,Get_Fax,Get_Cgc,Get_Ie",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC",
+      "evento": "Procedure",
+      "linhas": 93,
+      "codigoOriginal": "Local lnFiltro\n\nWith ThisForm.Fld_Principal.Pag_Consulta\n\t_Fornece = 'Conta : ' + Alltrim(.Origem.Get_Grupo.Value) + ' / ' +;\n\t\t\t\tAlltrim(.Origem.Get_Conta.Value ) + ' [ ' +;\n\t\t\t\tAlltrim( .Origem.Get_DConta.Value ) + ' ] '\nEndWith\n\nlnFiltro = ThisForm.Fld_principal.Pag_resultado.Result.Movimenta.OptSituas.Value\n\n_Moeda   = ThisForm.Fld_Principal.Pag_Consulta.Get_Moeda.Value\n_Produto = dbProdFor.cpros\n\nSelect Sum(custofs * estoque) As custofs, moecusfs From dbProdFor Group by moecusfs Into Cursor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,OptSituas,Get_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "* Executa os parâmetros set iniciais\n=fConfigGeral()\n\n* Cursor de saldos do cliente\nCreate Cursor dbSaldo (grupos c(10),contas c(10),moedas c(3),saldos n(12,3))\n\n* Cursor de histórico de conta corrente\nCreate Cursor dbHistorico (emps c(3), datas d Null, valors n(12,2), opers c(1), saldos n(12,3), hists c(30),;\n\t\t\t\t\t\t\tmoedas c(3), hist2s c(40), vencs d(8) Null, valpags n(12,2), NFs c(10))\nIndex On moedas + Dtos(datas) Tag moedata\n\n* Cursor de produtos no estoque do fornecedor\nCreate Cursor dbEsto... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC",
+      "evento": "Init",
+      "linhas": 195,
+      "codigoOriginal": "LParameters _Grupo, _Conta\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPublic pcMensagem, _Fornece, _Moeda, _Produto\npcMensagem = .F.\n\nThisForm.poDataMgr = CreateObject('fSqlConector','SIGOPCGC')\n\nlStrQuery = [Select * From SigCdPam ]\nlnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery, 'CrSigCdPam')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\nSelect CrSigCdPam\nGo To... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute",
+        "controlesReferenciados": "Opt',Get_Grupo,Get_Conta,Get_Cpf,Get_DConta,Cmd_MudaMov,Cmd_MudaFor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "If !ThisForm.ConsultaExecutada\n\tThisForm.Fld_Principal.ActivePage = 1\n\tThisForm.Fld_Principal.Pag_Consulta.Grp_Operacao.Cmd_Cadastro.Click\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_Cadastro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Opt_Analise",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value = 2\n\tThisForm.Fld_Principal.Pag_Consulta.Get_DataI.Value   = {}\n\tThisForm.Fld_Principal.Pag_Consulta.Get_DataF.Value   = {}\n\tThisForm.Fld_Principal.Pag_Consulta.Get_Empresa.Value = '   '\n\tThisForm.Fld_Principal.Pag_Consulta.Get_Moeda.Value   = '   '\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DataI,Get_DataF,Get_Empresa,Get_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Opt_Analise",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Datai",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Fld_Principal.Pag_Consulta.Opt_Analise.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Analise",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Datai",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If Empty(ThisForm.Fld_Principal.Pag_Consulta.Get_DataF.Value)\n\tThisForm.Fld_Principal.Pag_Consulta.Get_DataF.Value = GoMonth(This.Value,1)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DataF",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Datai",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Dataf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Fld_Principal.Pag_Consulta.Opt_Analise.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Analise",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Dataf",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Fld_Principal.Pag_Consulta.Opt_Analise.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Analise",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Moeda",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.Show()\n\t\tm.loLista = NULL\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.cmoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Moeda",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Fld_Principal.Pag_Consulta.Opt_Analise.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Analise",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,This.Parent.Get_Empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Get_Empresa",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_grupo",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This)\n\tSelect CrSigCdGcr\n\tSet Order To Codigos\n\tSeek This.Value\n\tWith This.Parent.Parent\n\t\t.Origem.Get_DConta.Left  = Iif(CrSigCdGcr.tpcads = 1,326,177)\n\t\t.Origem.Get_DConta.Width = Iif(CrSigCdGcr.tpcads = 1,278,427)\n\t\t.Origem.Say_DConta.Left  = Iif(CrSigCdGcr.tpcads = 1,329,180)\n\t\t.Origem.Get_Cpf.Visible  = (CrSigCdGcr.tpcads = 1)\n\t\t.Origem.Say_Cpf.Visible  = (CrSigCdGcr.tpcads = 1)\n\tEndWith\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DConta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_grupo",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn(!Empty(This.Parent.Get_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_conta",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Grupo = This.Parent.Get_Grupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,This,This.Parent.Get_DConta)\n\t\tMessagebox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value                   = ''\n\t\tThis.Parent.Get_DConta.Value = ''\n\t\tThis.Parent.Get_Cpf.Value    = ''\n\t\tThis.Refresh\n\t\tThis.Parent.Get_DConta.Refresh\n\t\tThis.Parent.Get_Cpf.Refresh\n\t\tReturn 0\n\tElse\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdCli',,'iclis',This.Value)\n\t\t\tSelect CqSigCdCli\n\t\t\tIf Empty(This.Parent.Get_Grupo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_DConta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_conta",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn(!Empty(This.Parent.Get_Grupo.Value ) And ;\n\tEmpty(This.Parent.Get_Conta.Value) And Empty(This.Parent.Get_Cpf.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_dconta",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Grupo = This.Parent.Get_Grupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,This.Parent.Get_Conta,This.Parent.Get_DConta)\n\t\tMessagebox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value                  = ''\n\t\tThis.Parent.Get_Conta.Value = ''\n\t\tThis.Parent.Get_Cpf.Value   = ''\n\t\tThis.Refresh\n\t\tThis.Parent.Get_DConta.Refresh\n\t\tThis.Parent.Get_Cpf.Refresh\n\t\tReturn 0\n\tElse\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdCli',,'iclis',This.Value)\n\t\t\tSelect CqSigCdCli\n\t\t\tIf Empty(This.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_dconta",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_cpf",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "This.peantvalue = This.Value\nReturn(!Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_cpf",
+      "evento": "Valid",
+      "linhas": 46,
+      "codigoOriginal": "Local loLista\n\nGrupo = Padr(Alltrim(This.Parent.Get_Grupo.Value),10)\nIf !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdCli','CrClientes','cpfs',This.Value,'Clientes',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cpfs','','CPF')\n\t\tm.loLista.mAddColuna('iclis','','Código')\n\t\tm.loLista.mAddColuna('rclis','','Descrição')\n\t\tm.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tm.loLista.gridProc.SetAll('DynamicForeColor', [Iif(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.Origem.Get_cpf",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ConsultaExecutada = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.grp_operacao",
+      "evento": "Click",
+      "linhas": 297,
+      "codigoOriginal": "Local llRetorno, llSaldo\n\nm.llRetorno =.T.\n\nDo Case\n\tCase Empty(This.Parent.Parent.Origem.Get_Grupo.Value) Or ;\n\t\t!Seek(This.Parent.Parent.Origem.Get_Grupo.Value,'CrSigCdGcr','codigos')\n\t\tMessagebox('Grupo de Estoque Inválido !!!',16,'')\n\t\tThis.Parent.Parent.Origem.Get_Grupo.SetFocus\n\t\tm.llRetorno = .F.\n\t\t\t\n\tCase Empty(This.Parent.Parent.Origem.Get_Conta.Value) Or ;\n\t\t!(ThisForm.poDataMgr.CursorQuery('SigCdCli',,'iclis',This.Parent.Parent.Origem.Get_Conta.Value))\n\t\tMessagebox('Conta de Estoque I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DataI,Opt_Analise,Get_DataF,Get_Moeda,Cmd_MudaMov,Cmd_MudaFor,Grd_Produto,Grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.grp_operacao",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_consulta.grp_operacao",
+      "evento": "Click",
+      "linhas": 57,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno =.T.\n\nDo Case\n\tCase Empty(This.Parent.Parent.Origem.Get_Grupo.Value) Or ;\n\t\t!Seek(This.Parent.Parent.Origem.Get_Grupo.Value,'CrSigCdGcr','codigos')\n\t\tMessagebox('Grupo de Estoque Inválido !!!',16,'')\n\t\tThis.Parent.Parent.Origem.Get_Grupo.SetFocus\n\t\tllRetorno = .F.\n\t\t\t\n\tCase Empty(This.Parent.Parent.Origem.Get_Conta.Value) Or ;\n\t\t!(ThisForm.poDataMgr.CursorQuery('SigCdCli',,'iclis',This.Parent.Parent.Origem.Get_Conta.Value))\n\t\tMessagebox('Conta de Estoque Inválida !!!... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DataI,Opt_Analise,Get_DataF,Get_Moeda,Cmd_MudaFor,Cmd_MudaMov",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_codfor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_nome",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_end",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_bairro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_cid",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_cep",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_est",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_tel1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_tel2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_fax",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_cgc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cadastro.Dados.Get_ie",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Saldo.grd_saldo",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nColIndex\n\nThisForm.Fld_Principal.Pag_Resultado.Result.Saldo.Grd_Historico.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Saldo.grd_historico",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nColIndex\n\nThis.Parent.Get_Hists.Refresh\nThis.Parent.Get_Hist2s.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Hists,Get_Hist2s",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Saldo.Get_Hists",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Saldo.Get_Hist2s",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Saldo.btnImprimir",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "With This.Parent.Parent.Parent.Parent.Pag_Consulta.Origem\n\tDo Form SigReCgc With .Get_Grupo.Value,.Get_Conta.Value\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_cpros.hdr_cpros",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To Cpros Descending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_cpros.hdr_cpros",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To Cpros Ascending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_qtvend.hdr_qtvend",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To QtVend Descending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_qtvend.hdr_qtvend",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To QtVend Ascending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_vlvend.hdr_vlvend",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To VlVend Desc\nThis.Parent.Parent.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.col_vlvend.hdr_vlvend",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To VlVend Ascending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.Column10.Header1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To Reffs Descending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Grd_Produto.Column10.Header1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select dbProdFor\n_Recno = Recno()\nSet Order To Reffs Ascending\nThis.Parent.Parent.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.Imprimir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.Fld_Principal.Pag_Consulta.Enabled                = .F.\nThisForm.Fld_Principal.Pag_Resultado.Result.Enabled        = .F.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaMov.Enabled   = .F.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaFor.Enabled   = .F.\nThisForm.Fld_Principal.Pag_Resultado.Grp_Operacao.Enabled  = .F.\nThisForm.Fld_Principal.Pag_Resultado.ImprimeOpções.Visible = .T.\n\nThisForm.Fld_Principal.Pag_Resultado.ImprimeOpções.Opção.Option1.Enabled = !Empty(dbProdFor.cpros)\nThisForm.F... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_MudaMov,Cmd_MudaFor,Option1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Movimenta.OptSituas",
+      "evento": "InteractiveChange",
+      "linhas": 12,
+      "codigoOriginal": "Select dbProdFor\nIf( This.Value <> 3 ) Then\t\n\tIf( This.Value = 1 ) Then\n\t\tSet Filter To Situas = 1\n\tElse\n\t\tSet Filter To Situas = 2\n\tEndif\t\t\nElse\n\tSet Filter To \nEndIf\nGo Top in dbProdFor\nThis.Parent.grd_Produto.Refresh  ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Estoque.grd_produto",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "LParameters nColIndex\n\nLocal lcArquivo1\n\nThisForm.LockScreen = .T.\n\nlcArquivo1 = Sys(2023) + '\\Temp5.jpg'\n\nlnQueryOk = ThisFOrm.poDataMgr.SqlExecute([Select figjpgs From SigCdPro Where cpros = ']+dbEstoque.cpros+[' ],'TmpPro')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\nSelect TmpPro\nGo Top\nIf Not IsNull(TmpPro.figjpgs) And Not IsEmpty(TmpPro.figjpgs)\n\tThis.Parent.OleBcFigura.Visible = .F.\n\tThis.Parent.OleBcFigura.Refresh\n\tClear Resour... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Pendencias.Grd_Pendente.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Pendencias.Grd_Pendente.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Pendencias.Grid1.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Pendencias.Grid1.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Result.Pendencias.Grid1.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.grp_operacao",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If ThisForm.Automatico\n\tThisForm.Release\nElse\n\tThisForm.Fld_Principal.ActivePage = 1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.ImprimeOpções.Visualizar",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.ProcImp()\n\nSelect TmpRelat\n\nReport Form SIGOPCGC Preview NoConsole\nUse In TmpRelat\nUse In TmpFinal\n\nThisForm.Fld_Principal.Pag_Consulta.Enabled                = .T.\nThisForm.Fld_Principal.Pag_Resultado.Result.Enabled        = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaMov.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaFor.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Grp_Operacao.Enabled  = .T.\nThisForm.Fld_Principal.Pag_Resultado.ImprimeOpções.Visible = .F.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ProcImp",
+        "controlesReferenciados": "Cmd_MudaMov,Cmd_MudaFor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.ImprimeOpções.Imprimir",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.ProcImp()\n\nSelect TmpRelat\n\nReport Form SIGOPCGC To Print Prompt Noconsole\nUse In TmpRelat\nUse In TmpFinal\n\nThisForm.Fld_Principal.Pag_Consulta.Enabled                = .T.\nThisForm.Fld_Principal.Pag_Resultado.Result.Enabled        = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaMov.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaFor.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Grp_Operacao.Enabled  = .T.\nThisForm.Fld_Principal.Pag_Resultado.ImprimeOpções.Visible... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ProcImp",
+        "controlesReferenciados": "Cmd_MudaMov,Cmd_MudaFor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.ImprimeOpções.Sair",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.Fld_Principal.Pag_Consulta.Enabled                = .T.\nThisForm.Fld_Principal.Pag_Resultado.Result.Enabled        = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaMov.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Cmd_MudaFor.Enabled   = .T.\nThisForm.Fld_Principal.Pag_Resultado.Grp_Operacao.Enabled  = .T.\nThisForm.Fld_Principal.Pag_Resultado.ImprimeOpções.Visible = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_MudaMov,Cmd_MudaFor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cmd_MudaFor",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "pcMensagem = .T.\nThisForm.LockScreen = .T.\nWith ThisForm.Fld_Principal.Pag_Resultado\n\t.Cadastro.Visible = .T.\n\t.Cadastro.Enabled = .T.\n\t.Result.Visible   = .F.\n\t.Result.Enabled   = .F.\n\tIf fChecaAcesso('SIGOPCGC','MOVIMENTA')\n\t\t.Cmd_MudaMov.Enabled = .T.\n\t\t.Cmd_MudaMov.Visible = .T.\n\tEndIf\n\t.Cmd_MudaFor.Enabled = .F.\n\t.Cmd_MudaFor.Visible = .F.\nEndWith\nThisForm.LockScreen = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_MudaMov,Cmd_MudaFor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGC.fld_principal.pag_resultado.Cmd_MudaMov",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "pcMensagem = .F.\nThisForm.LockScreen = .T.\nWith ThisForm.Fld_Principal.Pag_Resultado\n\t.Cadastro.Visible = .F.\n\t.Cadastro.Enabled = .F.\n\t.Result.Visible   = .T.\n\t.Result.Enabled   = .T.\n\tIf fChecaAcesso('SIGOPCGC','CADASTRO')\n\t\t.Cmd_MudaFor.Enabled = .T.\n\t\t.Cmd_MudaFor.Visible = .T.\n\tEndIf\n\t.Cmd_MudaMov.Enabled = .F.\n\t.Cmd_MudaMov.Visible = .F.\nEndWith\nThisForm.LockScreen = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_MudaFor,Cmd_MudaMov",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCGC.Procedure",
+      "queryOriginal": "Select Sum(custofs * estoque) As custofs, moecusfs From dbProdFor Group by moecusfs Into Cursor... [TRUNCADO]",
+      "tabelas": "dbProdFor",
+      "colunas": "moecusfs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCGC.Init",
+      "queryOriginal": "lStrQuery = [Select * From SigCdPam ]",
+      "tabelas": "SigCdPam",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCGC.fld_principal.pag_resultado.Result.Estoque.grd_produto.Procedure",
+      "queryOriginal": "lnQueryOk = ThisFOrm.poDataMgr.SqlExecute([Select figjpgs From SigCdPro Where cpros = ']+dbEstoque.cpros+[' ],'TmpPro') If lnQueryOk < 1",
+      "tabelas": "SigCdPro",
+      "colunas": "figjpgs,cpros,cpros+[,lnQueryOk",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["dbProdFor", "SigCdPam", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,21 @@
+CK1 pre-config
+CK2 pos-config
+CK3 pos-setprocedure
+1 INSTANCIA OK BaseClass=Form ParentClass=Formsigopcfe Caption=[Pesquisa de Saldos por Funcionário]
+2 TABINDEX Grupo=1 DGrupo=2 Conta=3 DConta=4 Mat=5 DMat=6 ChkSal=7 ChkFal=8 Proc=9 Say1=10 CntMsg=11 Grade=12 Vis=13 Imp=14 Saida=15 Say2=16 Say5=17  (esperado 1..17 na ordem do SCX)
+3 INICIAL ResultadoValido=.T. Grade.Visible=.T. Vis.Enabled=.T. Imp.Enabled=.T.  (esperado .T. .T. .T. .T.)
+4 WHEN Mat vazio -> DMat.Enabled=.T.  (esperado .T.)
+5 WHEN Mat=123 -> DMat.Enabled=.F. Grupo.Enabled=.T.  (esperado .F. .T.)
+6 MESTRA .F. -> Mat.Enabled=.F. Grupo.Enabled=.F. ChkFal.Enabled=.F.  (esperado .F. .F. .F.)
+7 SEM RESULTADO Grade.Visible=.F. Vis.Enabled=.F. Imp.Enabled=.F.  (esperado .F. .F. .F.)
+8 COM RESULTADO Grade.Visible=.T. Vis.Enabled=.T.  (esperado .T. .T.)
+9 FormParaBO BO.Mat=[ABC123] BO.DescMat=[PRODUTO TESTE] BO.Grupo=[G01] BO.Conta=[C01] SemZero=.T. SemFalha=.T.
+10 BOParaForm Mat=[ZZZ999] DGrupo=[OUTRO GRUPO] ChkFal.Value=0 UltMatValidado=[ZZZ999]  (esperado ZZZ999 / OUTRO GRUPO / 0 / ZZZ999)
+11 LimparCampos Mat=[] Conta=[] ChkSal=0 BO.Mat=[] BO.Qtde=0 Saldo.Recs=0 DMat.Enabled=.T. Grade.Visible=.T.
+12 CarregarDados RecordSource=[cursor_4c_Saldo] Cols=5 H1=[Funcionário] W=80/196/80/86/83  (esperado 80/196/80/86/83)
+13 CmdProcessaClick sem material OK Mensagem.Visible=.F. Mat.Enabled=.T.  (esperado .F. .T.)
+14 LIBERADO
+--- ArquivoErroTeste ---
+[23/10/2026 19:25:31] Atenção: O Produto Deve Ser Informado!!!
+
+FIM

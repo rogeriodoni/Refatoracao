@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All block pairs balance correctly (12 PROCEDURE/ENDPROC, 29 IF/ENDIF, 6 TRY/ENDTRY, 1 FOR/ENDFOR, 1 DO CASE/ENDCASE). The file is structurally complete.
+
+Summary of what was added to `SIGOPCHRBO.prg` for Phase 2:
+- `ValidarParametros()` ÔÇö date validation (transcribed from legacy `btnReport.Click`)
+- `CriarCabecalho()` ÔÇö populates `csCabecalho` cursor (Empresa/Titulo/Subtitulo/Quebra/Nconta) exactly as the legacy `processamento` method, verified against the FRT's field references
+- `PrepararDados()` ÔÇö builds the WHERE clause from all filters (opera├º├úo, grupo, conta, tipo Geral/Pendente) and runs the `SigChe`/`SigCdOpt`/`SigCdCli` join into `CsImpressao`, matching the legacy SQL literally
+- `ExecutarReportForm()`, `Visualizar()`, `Imprimir()`, `GerarExcel()` ÔÇö canonical REPORT-BO trio + helper (locale isolation, empty-cursor guard, menu restore)
+- `ObterMensagemErro()`, `ObterChavePrimaria()`, `RegistrarAuditoria()` ÔÇö audit logging to `LogAuditoria`
+- `Destroy()` ÔÇö cursor cleanup
+
+I verified column names (`SigChe`, `SigCdOpt`, `SigCdCli`, `SigCdEmp`) against the canonical UTF-16 `docs/schema.sql`, and copied the missing `SigOpChr.frx`/`.frt` from the legacy install into `projeto/app/reports/` since the BO now references them directly. Per the task's explicit override (this is a `frmrelatorio`, not CRUD), I did **not** implement `Inserir`/`Atualizar`/`ExecutarExclusao`/`CarregarDoCursor`/`Buscar` as the meta-prompt instructed.

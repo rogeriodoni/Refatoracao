@@ -1,0 +1,16 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+DEFAULTS Oper=[] DataI=25/09/2026 DataIok=.T. DataF=25/10/2026 DataFok=.T. Tipo=1 Grupo=[] Conta=[] ImpNConta=0 TipoDataI=D
+WHEN vazio DGrupoRO=.F. DContaRO=.F.
+WHEN cheio DGrupoRO=.T. DContaRO=.T.
+CODIGOS GrupoRO=.F. ContaRO=.F. OperRO=.F.
+FORMPARABO Oper=[VENDA] Grupo=[01] Conta=[11101] DescGrupo=[DESC GRUPO] Tipo=2 ImpNConta=.T. TipoImp=L DataI=15/10/2026
+BOPARAFORM Oper=[VENDA] Grupo=[01] Tipo=2 ImpNConta=1 DataI=15/10/2026 DataIok=.T. TipoDataI=D DGrupoRO=.T.
+HAB .F. OperRO=.T. DataIRO=.T. TipoEnab=.F. ChkEnab=.F.
+HAB .T. OperRO=.F. DataIRO=.F. TipoEnab=.T. DGrupoRO_refinado=.T.
+CANCELAR Oper=[] Grupo=[] Tipo=1 ImpNConta=0 DataIok=.T. FormVivo=O
+CARREGARLISTA=.T.
+BOTOES b1=.T. b2=.T. b3=.T. b4=.T.
+ESCOPO CarregarLista prot=.F. FormParaBO prot=.T. BOParaForm prot=.T. BtnCancelarClick prot=.F. BtnSalvarClick prot=.F. BtnBuscarClick prot=.F. LimparCampos prot=.T. HabilitarCampos prot=.F. AjustarBotoes prot=.F. AlternarPagina prot=.F. AtualizarEstado prot=.F.
+RESULTADO=OK

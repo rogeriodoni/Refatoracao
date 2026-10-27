@@ -1,0 +1,3517 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpChi.SCX
+* Data/Hora: 25/10/2026 14:08:32
+* Total de registros: 87
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCHI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCHI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCHI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCHI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Pagina
+  Parent: SIGOPCHI
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntSombra
+  Parent: SIGOPCHI.Pagina.Filtro
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCHI.Pagina.Filtro.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCHI.Pagina.Filtro.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPCHI.Pagina.Filtro
+  Class: shape
+  BaseClass: shape
+
+Objeto: Origem
+  Parent: SIGOPCHI.Pagina.Filtro
+  Class: container
+  BaseClass: container
+
+Objeto: Say_dConta
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Conta
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Cpf
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_DConta
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optFiltro
+  Parent: SIGOPCHI.Pagina.Filtro.Origem
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Ok
+  Parent: SIGOPCHI.Pagina.Filtro
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cancelar
+  Parent: SIGOPCHI.Pagina.Filtro
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grupo_op
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grupo_Saida
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: GradeProrrog
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeProrrog.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeProrrog.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Cnt_periodo
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: container
+  BaseClass: container
+
+Objeto: Dt_inicial
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_periodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_periodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_periodo
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_periodo
+  Class: label
+  BaseClass: label
+
+Objeto: Cnt_Followup
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_Followup
+  Class: label
+  BaseClass: label
+
+Objeto: UltFollowup
+  Parent: SIGOPCHI.Pagina.Historico.Cnt_Followup
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GradeCheque
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column11
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column12
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeCheque.Column12
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GradeMovimenta
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Emitente
+  Parent: SIGOPCHI.Pagina.Historico
+  Class: container
+  BaseClass: container
+
+Objeto: Say_dConta
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_CPF
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Conta
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Cpf
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_DConta
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGOPCHI.Pagina.Historico.Emitente
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 11
+  Left = 33
+  Width = 737
+  Height = 445
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Histórico de Cheques"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  ZoomBox = .T.
+  Themes = .F.
+  Name = "SIGOPCHI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  ActivePage = 1
+  Top = -29
+  Left = 0
+  Width = 1003
+  Height = 635
+  TabIndex = 1
+  Name = "Pagina"
+  Page1.Caption = "Filtro"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.Name = "Filtro"
+  Page2.Caption = "Histórico"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.Enabled = .F.
+  Page2.Name = "Historico"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = -1
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 816
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem
+------------------------------------------------------------
+  Top = 277
+  Left = 230
+  Width = 539
+  Height = 50
+  BackStyle = 0
+  TabIndex = 1
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  ZOrderSet = 52
+  Name = "Origem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Left = 243
+  Top = 4
+  TabIndex = 5
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Left = 90
+  Top = 4
+  TabIndex = 3
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 5
+  Top = 4
+  TabIndex = 1
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.get_Conta
+------------------------------------------------------------
+  Left = 5
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 18
+  Width = 82
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.get_Cpf
+------------------------------------------------------------
+  InputMask = "XXXXXXXXXXXXXXXXXXXX"
+  Left = 90
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 18
+  Width = 150
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_Cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.get_DConta
+------------------------------------------------------------
+  Left = 243
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 18
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_DConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Origem.optFiltro
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 19
+  Left = 282
+  Top = -2
+  Width = 93
+  TabIndex = 7
+  Name = "optFiltro"
+  Option1.FontSize = 8
+  Option1.Caption = "\<Lista"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 45
+  Option1.AutoSize = .F.
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.Caption = "\<Filtro"
+  Option2.Height = 15
+  Option2.Left = 48
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 45
+  Option2.AutoSize = .F.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.Ok
+------------------------------------------------------------
+  Top = 4
+  Left = 849
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Filtro.cancelar
+------------------------------------------------------------
+  Top = 4
+  Left = 924
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Grupo_op
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 30
+  SpecialEffect = 1
+  Top = -2
+  Width = 610
+  BorderColor = 90,90,90
+  Themes = .F.
+  Name = "Grupo_op"
+  Command1.Top = 5
+  Command1.Left = 230
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command1.Caption = "Relatório"
+  Command1.TabIndex = 4
+  Command1.ToolTipText = "[F6] Relatório"
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Relatorio"
+  Command2.Top = 5
+  Command2.Left = 155
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Command2.Caption = "Busca"
+  Command2.TabIndex = 3
+  Command2.ToolTipText = "[F5] Busca Cheques"
+  Command2.PicturePosition = 13
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Procurar"
+  Command3.Top = 5
+  Command3.Left = 305
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_datas_60.jpg
+  Command3.Caption = "Prorrogação"
+  Command3.TabIndex = 5
+  Command3.ToolTipText = "[F7] Prorrogação"
+  Command3.PicturePosition = 13
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "Prorroga"
+  Command4.Top = 5
+  Command4.Left = 380
+  Command4.Height = 75
+  Command4.Width = 75
+  Command4.FontBold = .T.
+  Command4.FontItalic = .T.
+  Command4.FontName = "Comic Sans MS"
+  Command4.FontSize = 8
+  Command4.WordWrap = .T.
+  Command4.Picture = ..\framework\imagens\geral_contatos_60.jpg
+  Command4.Caption = "Followup Clientes"
+  Command4.TabIndex = 6
+  Command4.ToolTipText = "[F8] Followup Cliente"
+  Command4.PicturePosition = 7
+  Command4.ForeColor = 90,90,90
+  Command4.BackColor = 255,255,255
+  Command4.Themes = .F.
+  Command4.Name = "FollowUp"
+  Command5.Top = 5
+  Command5.Left = 530
+  Command5.Height = 75
+  Command5.Width = 75
+  Command5.FontBold = .T.
+  Command5.FontItalic = .T.
+  Command5.FontName = "Comic Sans MS"
+  Command5.FontSize = 8
+  Command5.Picture = ..\framework\imagens\geral_enderecos_60.jpg
+  Command5.Caption = "Carteira"
+  Command5.TabIndex = 8
+  Command5.ToolTipText = "[F11]Carteira"
+  Command5.PicturePosition = 13
+  Command5.ForeColor = 90,90,90
+  Command5.BackColor = 255,255,255
+  Command5.Themes = .F.
+  Command5.Name = "Carteira"
+  Command6.Top = 5
+  Command6.Left = 455
+  Command6.Height = 75
+  Command6.Width = 75
+  Command6.FontBold = .T.
+  Command6.FontItalic = .T.
+  Command6.FontName = "Comic Sans MS"
+  Command6.FontSize = 8
+  Command6.Picture = ..\framework\imagens\geral_pendencia_60.jpg
+  Command6.Caption = "Protocolo"
+  Command6.TabIndex = 7
+  Command6.ToolTipText = "[F9]Protocolo"
+  Command6.PicturePosition = 13
+  Command6.ForeColor = 90,90,90
+  Command6.BackColor = 255,255,255
+  Command6.Themes = .F.
+  Command6.Name = "Protocolo"
+  Command7.Top = 5
+  Command7.Left = 80
+  Command7.Height = 75
+  Command7.Width = 75
+  Command7.FontBold = .T.
+  Command7.FontItalic = .T.
+  Command7.FontName = "Comic Sans MS"
+  Command7.FontSize = 8
+  Command7.Picture = ..\framework\imagens\geral_arquivo_60.jpg
+  Command7.Caption = "Movimento"
+  Command7.TabIndex = 2
+  Command7.ToolTipText = "[F4] Movimentação"
+  Command7.PicturePosition = 13
+  Command7.ForeColor = 90,90,90
+  Command7.BackColor = 255,255,255
+  Command7.Themes = .F.
+  Command7.Name = "Documento"
+  Command8.Top = 5
+  Command8.Left = 5
+  Command8.Height = 75
+  Command8.Width = 75
+  Command8.FontBold = .T.
+  Command8.FontItalic = .T.
+  Command8.FontName = "Comic Sans MS"
+  Command8.FontSize = 8
+  Command8.WordWrap = .T.
+  Command8.Picture = ..\framework\imagens\cheque.png
+  Command8.Caption = "Followup Cheques"
+  Command8.TabIndex = 1
+  Command8.ToolTipText = "[F3] FollowUp Cheques"
+  Command8.PicturePosition = 7
+  Command8.ForeColor = 90,90,90
+  Command8.BackColor = 255,255,255
+  Command8.Themes = .F.
+  Command8.Name = "followUpChq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Grupo_Saida
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 917
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Grupo_Saida"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "<ESC> Sair"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeProrrog
+------------------------------------------------------------
+  ColumnCount = 1
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 146
+  Left = 875
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 359
+  Width = 114
+  Name = "GradeProrrog"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 83
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeProrrog.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Prorrogações"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeProrrog.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_periodo
+------------------------------------------------------------
+  Top = 8
+  Left = 647
+  Width = 230
+  Height = 67
+  BackStyle = 0
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  Name = "Cnt_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_inicial
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Left = 20
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 29
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_final
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Left = 129
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 29
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_periodo.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "até"
+  Left = 105
+  Top = 33
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_periodo.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Filtro Por Vencimento"
+  Height = 15
+  Left = 20
+  Top = 7
+  Width = 123
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_Followup
+------------------------------------------------------------
+  Top = 514
+  Left = 10
+  Width = 558
+  Height = 27
+  BackStyle = 0
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  Name = "Cnt_Followup"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_Followup.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Followup"
+  Height = 15
+  Left = 8
+  Top = 6
+  Width = 44
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Cnt_Followup.UltFollowup
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 20
+  Left = 62
+  Margin = 1
+  SpecialEffect = 1
+  Top = 3
+  Width = 492
+  BorderColor = 100,100,100
+  Name = "UltFollowup"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque
+------------------------------------------------------------
+  ColumnCount = 12
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 228
+  Left = 8
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 124
+  Width = 981
+  Name = "GradeCheque"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Alignment = 2
+  Column1.ColumnOrder = 1
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 35
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 49
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 90
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Width = 60
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.FontName = "Verdana"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.ControlSource = ""
+  Column6.Width = 115
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.InputMask = "999,999,999.99"
+  Column6.Name = "Column6"
+  Column7.FontName = "Verdana"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 8
+  Column7.ControlSource = ""
+  Column7.Width = 95
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+  Column8.FontName = "Verdana"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 7
+  Column8.ControlSource = ""
+  Column8.Width = 95
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+  Column9.FontName = "Verdana"
+  Column9.FontSize = 8
+  Column9.ColumnOrder = 9
+  Column9.ControlSource = ""
+  Column9.Width = 31
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Name = "Column9"
+  Column10.FontName = "Verdana"
+  Column10.FontSize = 8
+  Column10.ColumnOrder = 10
+  Column10.ControlSource = ""
+  Column10.Width = 58
+  Column10.Movable = .F.
+  Column10.Resizable = .F.
+  Column10.ReadOnly = .T.
+  Column10.Name = "Column10"
+  Column11.FontName = "Verdana"
+  Column11.FontSize = 8
+  Column11.Width = 150
+  Column11.Name = "Column11"
+  Column12.FontName = "Verdana"
+  Column12.FontSize = 8
+  Column12.Alignment = 2
+  Column12.Width = 80
+  Column12.Name = "Column12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Bco"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Agência"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Carteira"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column7.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Carteira"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column8.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column9.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column10.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Arquivo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column10.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column11.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Último Movimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column11.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column12.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emissão"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeCheque.Column12.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta
+------------------------------------------------------------
+  ColumnCount = 9
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 147
+  Left = 8
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 359
+  Width = 858
+  Name = "GradeMovimenta"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 157
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 40
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.ControlSource = ""
+  Column4.Width = 90
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ControlSource = ""
+  Column5.Width = 90
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.FontName = "Verdana"
+  Column6.FontSize = 8
+  Column6.ControlSource = ""
+  Column6.Width = 90
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+  Column7.FontName = "Verdana"
+  Column7.FontSize = 8
+  Column7.ControlSource = ""
+  Column7.Width = 90
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Name = "Column7"
+  Column8.FontName = "Verdana"
+  Column8.FontSize = 8
+  Column8.ControlSource = ""
+  Column8.Width = 90
+  Column8.Movable = .F.
+  Column8.Name = "Column8"
+  Column9.FontName = "Verdana"
+  Column9.FontSize = 8
+  Column9.ControlSource = ""
+  Column9.Width = 90
+  Column9.Movable = .F.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Alinea"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Entrada"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo/Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta/Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo/Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta/Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column7.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Lote"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column8.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Protocolo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column9.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente
+------------------------------------------------------------
+  Top = 543
+  Left = 10
+  Width = 558
+  Height = 53
+  BackStyle = 0
+  TabIndex = 1
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  ZOrderSet = 52
+  Name = "Emitente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.Say_dConta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome"
+  Left = 243
+  Top = 14
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_dConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta"
+  Left = 5
+  Top = 14
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.Say_CPF
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CPF / CNPJ"
+  Left = 90
+  Top = 14
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say_CPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.get_Conta
+------------------------------------------------------------
+  Left = 5
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 28
+  Width = 82
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.get_Cpf
+------------------------------------------------------------
+  InputMask = "XXXXXXXXXXXXXXXXXXXX"
+  Left = 90
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 28
+  Width = 150
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_Cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.get_DConta
+------------------------------------------------------------
+  Height = 23
+  Left = 243
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 28
+  Width = 311
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "get_DConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHI.Pagina.Historico.Emitente.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Filtro por Conta do Emitente"
+  Height = 15
+  Left = 5
+  Top = 0
+  Width = 137
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCHI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE sqldados
+------------------------------------------------------------
+PROCEDURE sqldados
+llDatai = ThisForm.Pagina.Historico.Cnt_periodo.Dt_inicial.Value
+llDataf = ThisForm.Pagina.Historico.Cnt_periodo.Dt_final.Value
+llDatai = fDtoSQL(llDatai)
+llDataf = fDtoSQL(llDataf,'23:59:59')
+
+ThisForm.Pagina.Historico.GradeCheque.RecordSource = ' '
+ThisForm.Pagina.Historico.GradeMovimenta.RecordSource = ' '
+ThisForm.Pagina.Historico.GradeProrrog.RecordSource = ' '
+
+If !Empty(ThisForm.Pagina.Filtro.Origem.get_Conta.Value)
+	lcCliente = ThisForm.Pagina.Filtro.Origem.get_Conta.Value
+	lcWherChe = [Select a.*, ' ' as Tipo From SigChe a Where a.Iclis = ?lcCliente Order By a.Vencs]
+	lcWherChP = [Select distinct b.Nums From SigChe a Left Join SigCheh b On a.Nums = b.Nums Where a.Iclis = ?lcCliente ]
+Endif
+
+IF pcAcesso = 'TOTAL'
+	lcConta = thisform.pagina.historico.emitente.get_Conta.Value
+	lcChecaC= IIF(EMPTY(lcConta),[],[ and (a.conorigs=']+lcConta +[' or a.contat=']+lcconta+[') ])  
+	lcWherChe = [Select a.*, ' ' as Tipo From SigChe a Where a.Vencs Between ?llDatai And ?llDataf &lcChecaC Order By a.Vencs]
+	lcWherChP = [Select distinct b.Nums From SigChe a Left Join SigCheh b On a.Nums = b.Nums Where a.Vencs Between ?llDatai And ?llDataf ]
+Endif
+
+IF pcAcesso = 'CARTEIRA'	&& MENA 07/05/2016 pesquisar um cheque especifico da carteira
+	lcWherChe = [Select a.*, ' ' as Tipo From SigChe a Where a.Vencs Between ?llDatai And ?llDataf ] +;
+				[and a.bancos = ?pcBancos and a.agencias = ?pcAgencias and a.ncontas = ?pcNContas and a.ncheques = ?pcNCheques ] +;
+				[Order By a.Vencs]
+	lcWherChP = [Select distinct b.Nums From SigChe a Left Join SigCheh b On a.Nums = b.Nums Where a.Vencs Between ?llDatai And ?llDataf ]
+Endif
+
+ThisForm.podatamgr.SqlExecute(lcWherChP,'LocalChP')
+Select LocalChP
+Index On Nums Tag Nums
+
+ThisForm.podatamgr.SqlExecute(lcWherChe,'CrSigChe')
+
+Select CrSigChe
+Scan
+	If Seek(CrSigChe.Nums,'LocalchP','Nums')
+		Replace Tipo With [S] in CrSigChe
+	Endif
+EndScan
+
+Index On Dtos(Vencs)+Bancos+Agencias+nContas+nCheques Tag Venc
+Index On Bancos + Agencias + nContas + ncheques Tag Cheque
+Index On Agencias + nContas + nCheques Tag Agencia
+Index On Agencias + nContas Tag AgenciaCta
+Index On Agencias +  nCheques Tag AgenciaChe
+Index On nContas + ncheques Tag Conta
+Index On Ncheques Tag NCheque
+Index On Str(Valors,12,2)+ Bancos + Agencias + nContas + ncheques Tag Valor
+Index On Numeros Tag Numeros
+Index On Nums Tag Nums
+Set Order To Venc
+Go Bottom
+lcNum = CrSigChe.Nums
+
+ThisForm.Podatamgr.Requery('CrSigCqChm')
+ThisForm.Podatamgr.Requery('CrSigChea')
+
+Select CrSigChe
+Update CrSigChe Set DtEmis = Nvl(DtEmis, Ctod([]))
+Go Top In CrSigChe 
+
+If Reccount('CrSigChe') > 0
+	With ThisForm.Pagina.Historico.GradeCheque
+		.RecordSource = "CrSigChe"
+		.Column9.ControlSource = "CrSigChe.Emps"
+		.Column1.ControlSource = "Ttod(CrSigChe.Vencs)"
+		.Column2.ControlSource = "CrSigChe.Bancos"
+		.Column3.ControlSource = "CrSigChe.Agencias"
+		.Column4.ControlSource = "CrSigChe.ncontas"
+		.Column5.ControlSource = "CrSigChe.ncheques"
+		.Column6.ControlSource = "CrSigChe.valors"
+		.Column7.ControlSource = "CrSigChe.grucarts"
+		.Column8.ControlSource = "CrSigChe.concarts"
+		.Column10.ControlSource = "CrSigChe.Numeros"
+		.Column11.ControlSource = "CrSigChe.UMovs"
+		.Column12.ControlSource = "Ttod(CrSigChe.DtEmis)"
+		.SetAll('DynamicForeColor','Iif(!IsEmpty(CrSigChe.Tipo),RGB(0,0,255),RGB(0,0,0))','Column')
+		.SetAll('DynamicBackColor','Iif(!IsEmpty(CrSigChe.Tipo),RGB(220,255,220),RGB(255,255,255))','Column')
+	EndWith
+
+	With ThisForm.Pagina.Historico.GradeMovimenta
+		.RecordSource = "CrSigCqChm"
+		.Column1.ControlSource = "CrSigCqChm.Codigos"
+		.Column2.ControlSource = "CrSigCqChm.Nalineas"
+		.Column3.ControlSource = "ttod(CrSigCqChm.dtents)"
+		.Column4.ControlSource = "CrSigCqChm.gruorigs"
+		.Column5.ControlSource = "CrSigCqChm.conorigs"
+		.Column6.ControlSource = "CrSigCqChm.grupos"
+		.Column7.ControlSource = "CrSigCqChm.contas"
+		.Column8.ControlSource = "CrSigCqChm.Numlotes"
+		.Column9.ControlSource = "CrSigCqChm.protocolos"
+	EndWith
+	
+	With ThisForm.Pagina.Historico.GradeProrrog
+		.RecordSource = "CrSigChea"
+		.Column1.ControlSource = "ttod(CrSigChea.Vencs)"
+	EndWith
+
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Local loPagina
+loPagina = ThisForm.Pagina.ActivePage
+Do Case
+	Case nKeyCode = -2 And loPagina = 2 && <F3> FollowUp Cheque
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.FollowUpChq.Click
+
+	Case nKeyCode = -3 And loPagina = 2 && <F4> Documento
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Documento.Click
+
+	Case nKeyCode = -4 And loPagina = 2  && <F5> Procurar
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Procurar.Click
+
+	Case nKeyCode = -5 And loPagina = 2 && <F6> Listar
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Relatorio.Click
+
+	Case nKeyCode = -6 And loPagina = 2 && <F7> Prorrogar
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Prorroga.Click
+
+	Case nKeyCode = -7 And loPagina = 2 && <F8> FollowUp Cliente
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.FollowUp.Click
+
+	Case nKeyCode = -8 And loPagina = 2 && <F9> Protocolo
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Protocolo.Click
+
+	Case nKeyCode = 133 And loPagina = 2 && <F11> Carteira
+		NoDefault
+		ThisForm.Pagina.Historico.Grupo_op.Carteira.Click
+
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pAcesso, lcNomeFrm1, pBancos, pAgencias, pNContas, pNCheques, pVencs
+
+PRIVATE pcBancos, pcAgencias, pcNContas, pcNCheques, pcVencs
+PUBLIC pcAcesso
+
+If Type('pAcesso')#'C'
+	pcAcesso = 'TOTAL'
+ELSE
+	pcAcesso = pAcesso
+ENDIF
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Acesso = INLIST(pcAcesso,'TOTAL','CARTEIRA')	&& MENA 07/05/2016 inclui carteira para trazer informacoes do cheque selecionado na carteira de cheques - HDG
+
+pcBancos=''
+pcAgencias=''
+pcNContas=''
+pcNCheques=''
+pcVenc = DATE()
+
+IF pcAcesso='CARTEIRA'
+	pcBancos=pBancos
+	pcAgencias=pAgencias
+	pcNContas=pNContas
+	pcNCheques=pNCheques
+	pcVencs = pVencs
+ENDIF
+
+Create Cursor TempChq ( Bancos C(3), Agencias C(4), NContas C(10), NCheques C(6), ;
+						Vencs D(8) Null, Valors N(12,2), Emps C(3), Iclis C(10), Grclis C(10), ;
+						Contas C(10), Grupos C(10), ValPags n(12,2), Nums C(8), ;
+						Protocolos C(8), Obss m(4))
+Index On Bancos + Agencias + NContas + NCheques Tag Cheque
+
+lcCliente= ' '
+lcNum    = ' '
+CidChav  = ' '
+lcQueryOper  = [Select * From SigCdOpt ]
+lcQueryGccr  = [Select Codigos, Descrs From SigCdGcr ]
+lcQueryParam = [Select EmpMasters, GrupoJuros, ContaJuros, GrupoRecs, ContaRecs, GrupoPags, ContaPags, DiaPrors From SigCdPam ]
+lcQueryEmp   = [Select * From SigCdEmp ]
+lcQueryCli   = [Select * From SigCdCli Where Iclis = ?lcCliente ]
+lcQueryChm   = [Select * From SigCqChm Where Nums = ?lcNum Order By Nums, Dtsis Desc ]
+lcQueryChea  = [Select * From SigChea Where Nums = ?lcNum ]
+lcQueryCha   = [Select * From SigChea Where Nums = ?lcNum ]
+lcQueryMccr  = [Select * From SigMvCcr Where CidChaves = ?CidChav ]
+lcQueryLanc  = [Select * From SigClLan Where CidChaves = ?Cidchav ]
+
+With ThisForm
+	.podatamgr = CreateObject('fSqlConector','SigChehi')
+	With .podatamgr
+		.AddCursor('SigCdOpt' ,'Operacaos' ,'crSigCdOpt' ,'','',lcQueryOper)
+		.AddCursor('SigCdEmp'  ,'cemps'     ,'CrSigCdEmp'  ,'','',lcQueryEmp)
+		.AddCursor('SigCdGcr','Codigos','CrSigCdGcr','','',lcQueryGccr)
+		.AddCursor('SigCdCli','Iclis','CrSigCdCli','','',lcQueryCli)
+		.AddCursor('SigCdPam','empmasters','CrSigCdPam','','',lcQueryParam)
+		.AddCursor('SigCqChm','CidChaves','CrSigCqChm','','',lcQueryChm)
+		.AddCursor('SigChea','Cidchaves','CrSigChea','','',lcQueryChea)
+		.AddCursor('SigChea','Cidchaves','CrSigChea','','',lcQueryCha)
+		.AddCursor('SigMvCcr','Cidchaves','CrSigMvCcr','','',lcQuerymccr)
+		.Addcursor('SigClLan','Cidchaves','CrSigClLan','','',lcQueryLanc)
+	EndWith
+	= DoDefault()
+	.LockScreen = .F.
+EndWith
+
+ThisForm.podatamgr.Requery('crSigCdOpt')
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+ThisForm.poDataMgr.Requery('CrSigCdGcr')
+ThisForm.poDataMgr.Requery('CrSigCdPam')
+
+Select CrSigCdGcr
+Index on Codigos Tag Codigos
+
+Select crSigCdOpt
+Index On Operacaos Tag Operacao
+
+Select CrSigCdEmp
+Index On Cemps Tag Cemps
+
+If ThisForm.Acesso
+	With ThisForm.Pagina
+		ThisForm.Filtrado = !Empty(.Filtro.Origem.Get_Conta.Value)
+		.Historico.Enabled = .t.
+		.Filtro.Enabled = .f.
+		.ActivePage = 2
+		.Historico.Grupo_op.Procurar.Enabled = !ThisForm.Filtrado
+		.Historico.Cnt_periodo.Dt_inicial.Value = IIF(pcAcesso = 'CARTEIRA',pcVencs,Date())	&& mena - 07/05/2016 - pesquisa de cheque especifico da carteira
+		.Historico.Cnt_periodo.Dt_Final.Value   = IIF(pcAcesso = 'CARTEIRA',pcVencs,CTOD('31/12/' + ALLTRIM(STR(YEAR(DATE())))))
+		*!*.Historico.Cnt_periodo.Dt_Final.Value   = Ctod(cdtfin)
+		ThisForm.SqlDados
+		.Historico.Cnt_periodo.Dt_inicial.SetFocus
+		pcAcesso = 'TOTAL'
+	EndWith
+Else
+	ThisForm.Pagina.Filtro.Origem.Get_conta.Setfocus
+Endif
+
+ThisForm.Pagina.Historico.Grupo_op.Protocolo.Enabled = fChecaAcesso('SigCheHI','PROTOCOLO')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.Origem.get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod, lfan, codcor, xobj, Grupo
+With ThisForm.Pagina.Filtro.Origem
+	If !Empty(This.Value)
+		If !fAcessoContas(Usuar, '', 'C', This.Value, This, .get_dconta.Value)
+			=MessageBox('Acesso Negado!!!', 0+48, '')
+			.get_conta.Value  = ''
+			.get_dconta.Value = ''
+			.get_cpf.Value    = ''
+			Return 0 
+		Else
+			lcCliente = This.Value
+			ThisForm.Podatamgr.Requery('CrSigCdCli')
+			Select CrSigCdCli
+			Go top
+			.get_conta.Value  = crSigCdCli.Iclis
+			.get_dconta.Value = crSigCdCli.Rclis
+			.get_cpf.Value    = crSigCdCli.Cpfs
+		Endif
+	Else
+		.Get_DConta.Value = ''
+		.get_cpf.Value  = ''
+	Endif
+	.get_cpf.Refresh
+	.get_conta.Refresh
+	.get_dconta.Refresh
+EndWith
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.Origem.get_Cpf
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcCgc
+
+With ThisForm.Pagina.Filtro.Origem
+	If !Empty(This.value)
+		Cgc = This.Value
+		Cgc = Strt( Strt( Strt( Cgc, ".", "" ), "-", "" ), "/", "" )
+		If Len(Alltrim(Cgc))<>14
+			Cgc1 = TransForm( Cgc, "@R 999.999.999-99" )
+		Else
+			Cgc1 = TransForm( Cgc, "@R 99.999.999/9999-99" )
+		EndIf
+		
+		lcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]
+
+		lnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrSigCdCli')
+		
+		If lnErro < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return 0
+		EndIf
+		Select CrSigCdCli
+		Go Top
+		If Reccount() = 0
+			m.loLista = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCli','crSigCdCli','cpfs',This.Value,'Clientes',1000)
+			If .Not.m.loLista.plAchouRegistro
+				m.loLista.mAddColuna('Cpfs' ,'', 'C.P.F. / C.N.P.J.' )
+				m.loLista.mAddColuna('Rclis',Replicate('x',50), 'Nome' )
+				m.loLista.mAddColuna('Iclis','', 'Código' )
+				m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+				m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+				m.loLista.Show()
+			EndIf
+		Endif
+
+		If !fAcessoContas(Usuar, '', 'C', crSigCdCli.Iclis, .get_conta.value, .get_dconta.value)
+			=Messagebox('Acesso Negado!!!', 0+48, '')
+			.get_conta.Value  = ''
+			.get_dconta.Value = ''
+			.get_cpf.Value    = ''
+			Return(.f.)
+		Else
+			.get_conta.value  = crSigCdCli.Iclis
+			.get_dconta.value = crSigCdCli.Rclis
+			.get_cpf.value    = crSigCdCli.Cpfs
+		Endif
+		.get_cpf.Refresh
+		.get_conta.Refresh
+		.get_dconta.Refresh
+
+		If Len(Alltrim(This.Value))=14
+			If !fValidarCPF(Alltrim(This.Value))
+				=MessageBox('CPF Inválido!!!', 0+64, 'Atenção')
+				Return(.f.)
+			Endif
+		Else
+			If !fValidarCNPJ(Alltrim(This.Value))
+				=MessageBox('CGC Inválido!!!', 0+64, 'Atenção')
+				Return(.f.)
+			Endif
+		Endif
+	Else
+		.Get_DConta.Value = ''
+	Endif
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.Origem.get_DConta
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) And ;
+	   Empty( ThisForm.Pagina.Filtro.Origem.Get_Cpf.Value )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod, lfan, codcor, xobj, grupo, lcRClis, lcDescricao
+
+lcDescricao = Alltrim(This.Value)
+With ThisForm.Pagina.Filtro.Origem
+	If .optFiltro.Value = 2  && Procura Com Filtro
+		If !Empty(This.Value)
+			If !Thisform.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Rclis',This.Value)
+				lcTmp = '%'+Alltrim(This.Value) + '%'
+				ThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')
+				Select CrSigCdCli
+				Index On Rclis Tag Rclis
+				Go Top
+				xBrow=CreateObject('fwBuscaSel','CrSigCdCli','RClis',This.value,'Seleção')
+				xBrowCol=xBrow.AddColuna('RCLIS','','Descrição',.t.,'RCLIS')
+				xBrowCol=xBrow.AddColuna('ICLIS','','Código',.F.)
+				xBrowCol=xBrow.AddColuna('CPFS','','C.P.F.',.F.)
+				xBrow.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+				xBrow.Show
+				lfan = CrSigCdCli.Rclis
+				lcod = CrSigCdCli.Iclis
+			Else
+				lfan = crSigCdCli.Rclis
+				lcod = crSigCdCli.Iclis
+			Endif
+
+			.get_conta.value  = crSigCdCli.Iclis
+			.get_dconta.value = crSigCdCli.Rclis
+			.get_cpf.value  = crSigCdCli.Cpfs
+
+			If !fAcessoContas(Usuar, '', 'D', lfan, .get_conta.value, This )
+				Messagebox('Acesso Negado !!',0+48,'')
+				.get_conta.value  = ''
+				.get_dconta.value = ''
+				.get_cpf.value  = ''
+				.get_cpf.refresh
+				.get_conta.refresh
+				.get_dconta.refresh
+				return 0 
+			Else
+				.get_cpf.refresh
+				.get_conta.refresh
+				.get_dconta.refresh
+			Endif
+		else
+			.Get_Conta.Value = ''
+			.get_cpf.value  = ''
+			.get_cpf.refresh
+			.get_conta.refresh
+		endif
+
+	Else  && Procura Com Lista (Sem o Filtro)
+
+		If !Empty(This.Value)
+			If !fAcessoContas( Usuar, '', 'D', This.Value, .get_Conta, .Get_Dconta)
+				=MessageBox('Acesso Negado!!!', 0+48, '')
+				.get_Conta.Value  = ''
+				.get_DConta.Value = ''
+				.get_Cpf.Value    = ''
+			Else
+				lcCliente = .Get_Conta.Value
+				ThisForm.PoDatamgr.Requery('CrSigCdCli')
+				Select CrSigCdCli
+				Go Top
+				.get_conta.Value  = crSigCdCli.Iclis
+				.get_dconta.Value = crSigCdCli.Rclis
+				.get_cpf.Value    = crSigCdCli.Cpfs
+			Endif
+		Else
+			.get_Conta.Value  = ''
+			.get_DConta.Value = ''
+			.get_Cpf.Value    = ''
+		Endif
+		.get_Conta.Refresh
+		.get_DConta.Refresh
+		.get_Cpf.Refresh
+	Endif
+EndWith
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.Origem.optFiltro
+* Classe: fwoption (Base: optiongroup)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) And ;
+	   Empty( ThisForm.Pagina.Filtro.Origem.Get_Cpf.Value ) And ;
+	   Empty( ThisForm.Pagina.Filtro.Origem.get_DConta.Value )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd, lcFil
+
+If !ThisForm.Acesso And Empty(ThisForm.Pagina.Filtro.Origem.Get_Conta.Value)
+	Messagebox('Conta Inválida!!!',0+48,'')
+	ThisForm.Pagina.Filtro.Origem.Get_Conta.SetFocus
+	Return 0
+Endif
+
+ThisForm.Filtrado = !Empty(ThisForm.Pagina.Filtro.Origem.Get_Conta.Value)
+
+lcCaption =  'Histórico de Cheques de: ' + Thisform.Pagina.Filtro.Origem.get_Conta.Value + ' - ' + ;
+				   AllTrim( Thisform.Pagina.Filtro.Origem.get_dConta.Value) + ' / ' + AllTrim(Thisform.Pagina.Filtro.Origem.get_Cpf.Value)
+Thisform.Caption = lcCaption
+
+ThisForm.SqlDados()
+
+With ThisForm.Pagina
+	.Historico.Cnt_periodo.Visible = .f.
+	.Historico.Enabled = .t.
+	.Filtro.Enabled = .f.
+	.ActivePage = 2
+	.Historico.Grupo_op.Procurar.Enabled = !ThisForm.Filtrado
+	.Historico.GradeCheque.SetFocus
+	.Historico.GradeCheque.Column1.Text1.SetFocus
+	.Historico.GradeCheque.Refresh
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Filtro.cancelar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Grupo_op
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Relatorio.Click
+------------------------------------------------------------
+PROCEDURE Relatorio.Click
+Do Form SigOpChr With crSigChe.GrClis, crSigChe.IClis, ThisForm
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Procurar.Click
+------------------------------------------------------------
+PROCEDURE Procurar.Click
+Do Form SigOpChb With Thisform.LeCheque, Thisform.ChqLido, Thisform.Leitor, ThisForm
+
+ThisForm.Pagina.Historico.Refresh
+ThisForm.Pagina.Historico.GradeCheque.Setfocus
+ThisForm.Pagina.Historico.GradeCheque.Column1.Text1.SetFocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Prorroga.Click
+------------------------------------------------------------
+PROCEDURE Prorroga.Click
+Select crSigChe
+Scatter Fields Vencs, Nums Memvar 
+Select crSigCdOpt
+Set Order to Operacao
+Seek crSigChe.Umovs
+
+If crSigCdOpt.Tipos = "CR" And CrSigCdOpt.Prorrogas <> 1
+	=MessageBox( "Impossível prorrogar cheques que não estejam pendentes...", 48, "ATENÇÃO!!!" )
+	Return
+Endif
+
+Do Form SigOpChp With ThisForm
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE FollowUp.Click
+------------------------------------------------------------
+PROCEDURE FollowUp.Click
+If !Empty(ThisForm.Pagina.Filtro.Origem.get_Conta.Value)
+	lcCliente = ThisForm.Pagina.Filtro.Origem.get_Conta.Value
+Else
+	lcCliente = CrSigChe.Iclis
+Endif
+do Form SigOpFlp With lcCliente, ThisForm.DatasessionId
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Carteira.Click
+------------------------------------------------------------
+PROCEDURE Carteira.Click
+do Form SigOpChc With ThisForm
+*** mena - 18/08/2016 - chama o método abaixo para atualizar a grade
+this.Parent.Parent.cnt_periodo.dt_final.Valid
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Protocolo.Click
+------------------------------------------------------------
+PROCEDURE Protocolo.Click
+Local lcCheque, lcMens, lcCaption
+
+If Not Empty(crSigChe.Protocolos)
+	lcCheque = crSigChe.Bancos + '/' + crSigChe.Agencias + '/' + crSigChe.NContas + '/' + crSigChe.NCheques
+	lcCaption = 'Impressão do Protocolo do Cheque: ' + lcCheque
+	Select TempChq
+	Zap
+		
+	Insert Into TempChq (Bancos, Agencias, NContas, NCheques, Vencs, Valors, Protocolos) ;
+			 Values (crSigChe.Bancos, crSigChe.Agencias, crSigChe.NContas, crSigChe.NCheques,;
+			 		 crSigChe.Vencs, crSigChe.Valors, crSigCqChm.Protocolos)
+
+	Do Form SigOpIbo With Thisform, 1, lcCaption
+
+else
+	Messagebox('Este lançamento não possui protocolo!',0+48,'Aviso...')    
+endif	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Documento.Click
+------------------------------------------------------------
+PROCEDURE Documento.Click
+Local lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2), laCampo4(1,2)
+
+lcEmpr = crSigChe.Emps
+lcDope = crSigCqChm.Dopes
+lnNume = crSigCqChm.NumDopes
+
+laCampo1(1,1) = 'Emps'
+laCampo1(1,2) = lcEmpr
+laCampo1(2,1) = 'Dopes'
+laCampo1(2,2) = lcDope
+laCampo1(3,1) = 'Numes'
+laCampo1(3,2) = lnNume
+
+laCampo3(1,1) = 'EmpDopNums'
+laCampo3(1,2) = lcEmpr + lcdope + Str(lnNume,6)
+
+laCampo4(1,1) = 'EmpDopNums'
+laCampo4(1,2) = CrSigCqChm.EmpDopNums
+
+Do Case
+	Case ThisForm.poDataMgr.ChkRegister('SigCdPgr',@laCampo1)
+		Do Form SigCdPgr With Left( lcDope, 1 ), .t., lcEmpr, lcDope, lnNume
+
+	Case ThisForm.poDataMgr.ChkRegister('SigMvCab',@laCampo3)
+		If WExist('FORM_')
+			MessageBox('Impossível Consultar Documento ... ' + Chr(13) + Chr(10) + ;
+					   'Feche a Movimentação de Estoque',0+48,'')
+		Else
+			Do Form SigMvExp with lcDope, 'C',lnNume, lcEmpr, .t.
+		EndIf
+
+	Case ThisForm.poDataMgr.ChkRegister('SigMvCab',@laCampo4)
+		If WExist('FORM_')
+			MessageBox('Impossível Consultar Documento ... ' + Chr(13) + Chr(10) + ;
+					   'Feche a Movimentação de Estoque',0+48,'')
+		Else
+			Do Form SigMvExp with lcDope, 'C',lnNume, CrSigCqChm.Emps, .t.
+		EndIf
+
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE followUpChq.Click
+------------------------------------------------------------
+PROCEDURE followUpChq.Click
+Do Form SigOpCfl With crSigChe.Nums, ThisForm.DatasessionId
+ThisForm.Pagina.Historico.GradeCheque.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Grupo_Saida
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Sair.Click
+------------------------------------------------------------
+PROCEDURE Sair.Click
+If !ThisForm.Acesso
+	With ThisForm.Pagina
+		.Filtro.Origem.Get_conta.Value = ''
+		.Filtro.Origem.Get_Dconta.Value = ''
+		.Filtro.Origem.Get_Cpf.Value = ''
+		.Filtro.Enabled = .t.
+		.Historico.Enabled = .f.
+		.ActivePage = 1
+		ThisForm.Pagina.Filtro.Origem.Get_Conta.SetFocus
+	EndWith
+	ThisForm.Caption = 'Histórico de Cheques'
+Else
+	ThisForm.Release
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeProrrog.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+EndIf
+ThisForm.SqlDados
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+This.Parent.Parent.GradeCheque.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Cnt_Followup.UltFollowup
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque
+* Classe: fwgrade (Base: grid)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+Local lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2), laCampo4(1,2)
+
+If ThisForm.Acesso
+	lcCliente = CrSigChe.Iclis
+	ThisForm.PoDatamgr.Requery('CrSigCdCli')
+	Select crSigCdCli
+	Go Top
+	lcCaption =  'Histórico de Cheques de: ' + crSigChe.Iclis + ' - ' + ;
+					   AllTrim( crSigCdCli.Rclis) + ' / ' + AllTrim(crSigCdCli.Cpfs)
+	Thisform.Caption = lcCaption
+Else
+	lcCaption =  'Histórico de Cheques de: ' + This.Parent.Parent.Filtro.Origem.get_Conta.Value + ' - ' + ;
+				   AllTrim( This.Parent.Parent.Filtro.Origem.get_dConta.Value) + ' / ' + AllTrim(This.Parent.Parent.Filtro.Origem.get_Cpf.Value)
+	Thisform.Caption = lcCaption
+EndIf
+
+ThisForm.Pagina.Historico.GradeMovimenta.RecordSource = " "
+ThisForm.Pagina.Historico.GradeProrrog.RecordSource = " "
+
+lcNum = CrSigChe.Nums
+ThisForm.podatamgr.Requery('CrSigCqChm')
+ThisForm.podatamgr.Requery('CrSigChea')
+
+Select CrSigCqChm
+Index On dtents Tag dtents Ascending &&Descending
+Go Top
+Select CrSigChea
+Go top
+
+With ThisForm.Pagina.Historico.GradeMovimenta
+	.RecordSource = "CrSigCqChm"
+	.ColumnCount  = 9
+	.Column1.ControlSource = "CrSigCqChm.Codigos"
+	.Column2.ControlSource = "CrSigCqChm.Nalineas"
+	.Column3.ControlSource = "CrSigCqChm.dtents"
+	.Column4.ControlSource = "CrSigCqChm.gruorigs"
+	.Column5.ControlSource = "CrSigCqChm.conorigs"
+	.Column6.ControlSource = "CrSigCqChm.grupos"
+	.Column7.ControlSource = "CrSigCqChm.contas"
+	.Column8.ControlSource = "CrSigCqChm.Numlotes"
+	.Column9.ControlSource = "CrSigCqChm.protocolos"
+EndWith
+
+With ThisForm.Pagina.Historico.GradeProrrog
+	.RecordSource = "CrSigChea"
+	.Column1.ControlSource = "ttod(CrSigChea.Vencs)"
+EndWith
+
+This.Parent.GradeMovimenta.Refresh
+This.Parent.GradeProrrog.Refresh
+
+lcEmpr = crSigChe.Emps
+lcDope = crSigCqChm.Dopes
+lnNume = crSigCqChm.NumDopes
+
+laCampo1(1,1) = 'Emps'
+laCampo1(1,2) = lcEmpr
+laCampo1(2,1) = 'Dopes'
+laCampo1(2,2) = lcDope
+laCampo1(3,1) = 'Numes'
+laCampo1(3,2) = lnNume
+
+laCampo3(1,1) = 'EmpDopNums'
+laCampo3(1,2) = lcEmpr + lcdope + Str(lnNume,6)
+
+laCampo4(1,1) = 'EmpDopNums'
+laCampo4(1,2) = CrSigCqChm.EmpdopNums
+
+lcEnabc = .f.
+Do Case
+	Case ThisForm.poDataMgr.ChkRegister('SigCdPgr',@laCampo1)
+		lcEnabc = .t.
+
+	Case ThisForm.poDataMgr.ChkRegister('SigMvCab',@laCampo3)
+		lcEnabc = .t.
+
+	Case ThisForm.poDataMgr.ChkRegister('SigMvCab',@laCampo4)
+		lcEnabc = .t.
+
+Endcase
+ThisForm.Pagina.Historico.Grupo_op.Documento.Enabled = lcEnabc
+
+lcEnab = Thisform.podatamgr.ChkRegister('SIGCCCHM','Nums',CrSigChe.Nums)
+ThisForm.Pagina.Historico.Grupo_op.Carteira.Enabled = lcEnab
+
+ThisForm.Pagina.Historico.Cnt_Followup.UltFollowup.Value = ' '
+If Thisform.Podatamgr.Cursorquery('SigCheh','CrSigCheh','Nums',CrSigChe.Nums)
+	Select CrSigCheH
+	Index On Datas Tag Datas Descending
+	Go Top
+	ThisForm.Pagina.Historico.Cnt_Followup.UltFollowup.Value = crSigCheh.Hists
+Endif
+Select crSigChe
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Header1
+* Classe: header (Base: header)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+lcOrd = 'Venc'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column1.Header1.BackColor = RGB(220,255,220)
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+lcOrd = 'Cheque'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column2.Header1.BackColor = RGB(220,255,220)
+	.Column1.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+
+lcOrd = 'Agencia'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column3.Header1.BackColor = RGB(220,255,220)
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column1.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+
+lcOrd = 'conta'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column4.Header1.BackColor = RGB(220,255,220)
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column1.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Header1
+* Classe: header (Base: header)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+
+lcOrd = 'Ncheque'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column5.Header1.BackColor = RGB(220,255,220)
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column1.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Header1
+* Classe: header (Base: header)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcOrd
+
+lcOrd = 'Valor'
+_Recno = Recno()
+Set Order to &lcOrd.
+Go _Recno
+With Thisform.Pagina.Historico.GradeCheque
+	.Column6.Header1.BackColor = RGB(220,255,220)
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column1.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeCheque.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta
+* Classe: fwgrade (Base: grid)
+* Registro: 60
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Local lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2)
+
+lcEmpr = crSigChe.Emps
+lcDope = crSigCqChm.Dopes
+lnNume = crSigCqChm.NumDopes
+
+laCampo1(1,1) = 'Emps'
+laCampo1(1,2) = lcEmpr
+laCampo1(2,1) = 'Dopes'
+laCampo1(2,2) = lcDope
+laCampo1(3,1) = 'Numes'
+laCampo1(3,2) = lnNume
+
+laCampo3(1,1) = 'EmpDopNums'
+laCampo3(1,2) = lcEmpr + lcdope + Str(lnNume,6)
+
+lcEnabc = .f.
+Do Case
+	Case ThisForm.poDataMgr.ChkRegister('SigCdPgr',@laCampo1)
+		lcEnabc = .t.
+
+	Case ThisForm.poDataMgr.ChkRegister('SigMvCab',@laCampo3)
+		lcEnabc = .t.
+Endcase
+ThisForm.Pagina.Historico.Grupo_op.Documento.Enabled = lcEnabc
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 62
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 66
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 68
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 72
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Emitente.get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 83
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod, lfan, codcor, xobj, Grupo
+With ThisForm.Pagina.historico.emitente
+	If !Empty(This.Value)
+		If !fAcessoContas(Usuar, '', 'C', This.Value, This, .get_dconta.Value)
+			=MessageBox('Acesso Negado!!!', 0+48, '')
+			.get_conta.Value  = ''
+			.get_dconta.Value = ''
+			.get_cpf.Value    = ''
+			Return 0 
+		Else
+			lcCliente = This.Value
+			ThisForm.Podatamgr.Requery('CrSigCdCli')
+			Select CrSigCdCli
+			Go top
+			.get_conta.Value  = crSigCdCli.Iclis
+			.get_dconta.Value = crSigCdCli.Rclis
+			.get_cpf.Value    = crSigCdCli.Cpfs
+		Endif
+	Else
+		.Get_DConta.Value = ''
+		.get_cpf.Value  = ''
+	Endif
+	.get_cpf.Refresh
+	.get_conta.Refresh
+	.get_dconta.Refresh
+EndWith
+
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Emitente.get_Cpf
+* Classe: fwget (Base: textbox)
+* Registro: 84
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty( ThisForm.Pagina.historico.emitente.Get_Conta.Value ) 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcCgc
+
+With ThisForm.Pagina.historico.emitente
+	If !Empty(This.value)
+		Cgc = This.Value
+		Cgc = Strt( Strt( Strt( Cgc, ".", "" ), "-", "" ), "/", "" )
+		If Len(Alltrim(Cgc))<>14
+			Cgc1 = TransForm( Cgc, "@R 999.999.999-99" )
+		Else
+			Cgc1 = TransForm( Cgc, "@R 99.999.999/9999-99" )
+		EndIf
+		
+		lcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]
+
+		lnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrSigCdCli')
+		
+		If lnErro < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return 0
+		EndIf
+		Select CrSigCdCli
+		Go Top
+		If Reccount() = 0
+			m.loLista = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCli','crSigCdCli','cpfs',This.Value,'Clientes',1000)
+			If .Not.m.loLista.plAchouRegistro
+				m.loLista.mAddColuna('Cpfs' ,'', 'C.P.F. / C.N.P.J.' )
+				m.loLista.mAddColuna('Rclis',Replicate('x',50), 'Nome' )
+				m.loLista.mAddColuna('Iclis','', 'Código' )
+				m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+				m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+				m.loLista.Show()
+			EndIf
+		Endif
+
+		If !fAcessoContas(Usuar, '', 'C', crSigCdCli.Iclis, .get_conta.value, .get_dconta.value)
+			=Messagebox('Acesso Negado!!!', 0+48, '')
+			.get_conta.Value  = ''
+			.get_dconta.Value = ''
+			.get_cpf.Value    = ''
+			Return(.f.)
+		Else
+			.get_conta.value  = crSigCdCli.Iclis
+			.get_dconta.value = crSigCdCli.Rclis
+			.get_cpf.value    = crSigCdCli.Cpfs
+		Endif
+		.get_cpf.Refresh
+		.get_conta.Refresh
+		.get_dconta.Refresh
+
+		If Len(Alltrim(This.Value))=14
+			If !fValidarCPF(Alltrim(This.Value))
+				=MessageBox('CPF Inválido!!!', 0+64, 'Atenção')
+				Return(.f.)
+			Endif
+		Else
+			If !fValidarCNPJ(Alltrim(This.Value))
+				=MessageBox('CGC Inválido!!!', 0+64, 'Atenção')
+				Return(.f.)
+			Endif
+		Endif
+	Else
+		.Get_DConta.Value = ''
+	Endif
+ENDWITH
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHI.Pagina.Historico.Emitente.get_DConta
+* Classe: fwget (Base: textbox)
+* Registro: 85
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty( ThisForm.Pagina.Historico.emitente.Get_Conta.Value ) And ;
+	   Empty( ThisForm.Pagina.Historico.emitente.Get_Cpf.Value )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod, lfan, codcor, xobj, grupo, lcRClis, lcDescricao
+
+lcDescricao = Alltrim(This.Value)
+With ThisForm.Pagina.historico.emitente
+	If !Empty(This.Value)
+		If !Thisform.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Rclis',This.Value)
+			lcTmp = '%'+Alltrim(This.Value) + '%'
+			ThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')
+			Select CrSigCdCli
+			Index On Rclis Tag Rclis
+			Go Top
+			xBrow=CreateObject('fwBuscaSel','CrSigCdCli','RClis',This.value,'Seleção')
+			xBrowCol=xBrow.AddColuna('RCLIS','','Descrição',.t.,'RCLIS')
+			xBrowCol=xBrow.AddColuna('ICLIS','','Código',.F.)
+			xBrowCol=xBrow.AddColuna('CPFS','','C.P.F.',.F.)
+			xBrow.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+			xBrow.Show
+			lfan = CrSigCdCli.Rclis
+			lcod = CrSigCdCli.Iclis
+		Else
+			lfan = crSigCdCli.Rclis
+			lcod = crSigCdCli.Iclis
+		Endif
+
+		.get_conta.value  = crSigCdCli.Iclis
+		.get_dconta.value = crSigCdCli.Rclis
+		.get_cpf.value  = crSigCdCli.Cpfs
+
+		If !fAcessoContas(Usuar, '', 'D', lfan, .get_conta.value, This )
+			Messagebox('Acesso Negado !!',0+48,'')
+			.get_conta.value  = ''
+			.get_dconta.value = ''
+			.get_cpf.value  = ''
+			.get_cpf.refresh
+			.get_conta.refresh
+			.get_dconta.refresh
+			return 0 
+		Else
+			.get_cpf.refresh
+			.get_conta.refresh
+			.get_dconta.refresh
+		Endif
+	else
+		.Get_Conta.Value = ''
+		.get_cpf.value  = ''
+		.get_cpf.refresh
+		.get_conta.refresh
+	endif
+
+EndWith
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCHI
+RESERVED3 (ClassInfo): acesso
+chqlido
+filtrado
+lecheque
+leitor
+ordenar
+podatamgr
+*acertagrade 
+*cancela 
+*sqldados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 54
+================================================================================

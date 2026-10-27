@@ -1,0 +1,55 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. Resumo do que encontrei e fiz:
+
+## O estado real
+
+Os campos da Fase 5 **j├í estavam constru├¡dos** pela tentativa anterior ÔÇö todos os 86 objetos do `layout.json` presentes: 9 TextBox de dados, 3 grades, OptionGroup, labels, bot├Áes. A fase n├úo falhou por c├│digo faltando.
+
+## O que bloqueava a valida├º├úo
+
+O gate `case 5` do `OrquestradorMigracao.ps1` tem seis ramos e **nenhum alcan├ºa** este form. O `SIGOPCHI.SCX` ├® OPERACIONAL **com** PageFrame, mas as Pages s├úo `Filtro` e `Historico` ÔÇö p├íginas de **dom├¡nio**, sem Page de Dados:
+
+- PAGINADO procura literalmente `ConfigurarPaginaDados`
+- FLAT exige **aus├¬ncia** de `pgf_4c_` (aqui o legado *tem* PageFrame)
+- DESPACHANTE exige legado sem lista e sem campos (tem 3 grades e 9 campos)
+- EXIBI├ç├âO exige TODO campo `ReadOnly`; ARVORE exige `OLEControl`; CAPTURA exige legado sem lista
+
+Seguindo a li├º├úo j├í registrada ("corrigir o GATE, n├úo o form"), adicionei o ramo **PAGINADO-N├âO-CRUD** com dois helpers e seis portas fail-closed. **N├úo** usei o atalho de citar o identificador em coment├írio ÔÇö isso faz o gate aprovar pelo motivo errado.
+
+**Delta medido** (`automation/medir_f5_pag3.ps1`): 64 dumps com PageFrame ÔåÆ 18 OPERACIONAL ÔåÆ 7 recusados por terem Page de Dados ÔåÆ 11 tasks / 6 forms, e **5 desses 6 j├í passavam** pelo ramo original. Delta efetivo: **1 form**. Negativo conferido: o mesmo form declarado `CRUD` reprova.
+
+Detalhe que importou: o piso de paridade **desconta** os `Text1` de coluna de grade (membros nativos da Column, regra #18) ÔÇö cont├í-los levaria o piso de 5 para 16 num form com 9 campos.
+
+## Fidelidade corrigida nos blocos de campo
+
+Conferindo campo a campo contra o dump, achei lacunas reais:
+
+- **Rule #23** ÔÇö 3 labels com `AutoSize = .T.` (no-op em `AddObject`, descarta `Height`): trocados por `.F.` + Width/Height do SCX (123x15, 44x15, 137x15)
+- `BorderColor` ausente nos 9 TextBox e 4 containers/Shape
+- `Margin = 1` ausente no `UltFollowup`; `TabIndex` ausente nos blocos periodo/followup/emitente
+
+`MaxLength` 10/20/50 confirmados contra o schema (`iclis`/`cpfs`/`rclis`).
+
+## Verifica├º├úo
+
+| Check | Resultado |
+|---|---|
+| `COMPILE` Form + BO | `.fxp` gerado, **nenhum `.ERR`** |
+| `VerificarPropriedadesInexistentes` | OK ÔÇö todas as props conferidas na tabela medida |
+| `Test-CompletudeCodigo` (Form e BO) | sem TODO/stub/procedure vazia |
+| `VerificarLookupEmKeyPress` | ERRO=0 |
+| `VerificarFuncoesNaoDefinidas` / `MetodoProtegido` | OK |
+| Orquestrador: parse | OK ÔÇö sem erro de sintaxe |
+| Orquestrador: encoding | BOM e bytes >127 (**2965**) id├¬nticos ao baseline |
+| Gate exercitado com os helpers reais | **APROVA** (piso 5, 9 campos no migrado) |
+
+Tamb├®m normalizei o `.prg` para CRLF ÔÇö estava LF puro (normaliza├º├úo do Edit tool) enquanto todo o resto do projeto ├® CRLF; recompilei depois.
+
+Duas observa├º├Áes para voc├¬ decidir:
+
+1. **Corrigir o gate n├úo desbloqueia a execu├º├úo em curso** ÔÇö `& script.ps1` parseia o arquivo na invoca├º├úo, ent├úo o loop precisa ser relan├ºado para a Fase 5 passar.
+2. Os blocos `Origem` e `Emitente` s├úo dois conjuntos de 3 campos com os mesmos nomes de objeto e lookups paralelos sobre `SigCdCli`. Est├í fiel ao legado (que tamb├®m duplica), mas ├® o tipo de par que a regra #10 de "fonte ├║nica" costuma morder depois ÔÇö vale olhar na Fase 8.

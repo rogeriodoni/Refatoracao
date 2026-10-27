@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All FXP artifacts cleaned (exit 2 from `ls` just means no matches found, which is expected).
+
+## Summary
+
+Fase 4/8 is complete. I built out Page1 (pgFiltros) of `FormSIGOPCGF.prg` in full, transcribing geometry/captions/icons directly from the legacy SCX dump (`tasks/task691/SIGOPCGF_form_codigo_fonte.txt`) rather than guessing:
+
+- **3 grids**: `grd_4c_Tipos` (checkbox + text, bound to `cursor_4c_Tipos`/SigOpOpe), `grd_4c_Clientes`/`grd_4c_Clientes2` (8 columns each: Grupo/NomeGrupo/Conta/Nome + 4 checkbox flags, with the legacy's non-trivial `ColumnOrder`)
+- **Row-CRUD buttons**: Inserir/Excluir/ApagaG1/G2 for both client grids, SelTudo/Apaga for the tipos grid ÔÇö each with the exact legacy icon and tooltip
+- **Named-filter CRUD** (AddFiltro/DelFiltro/RecFiltro) persisted via direct SQL against SigSyPar (replacing the un-ported Framework `poSigSyPar` object), plus a "Carregar" button that loads clients by Forma de Publicidade
+- **`AlternarPagina()`** and `CmgFiltrosClick` (Consultar validates the 4 date ranges per the legacy's literal messages; Sair closes the form)
+- **8 checkbox-toggle handler groups** (Click/MouseDown/MouseUp/KeyPress with NODEFAULT) per CLAUDE.md regra #185, since grid checkboxes don't toggle through native binding
+
+Two correctness issues were caught and fixed before finalizing:
+1. A `WITH par_oPag.&par_cNomeGrid` macro pattern that risked breaking ÔÇö replaced with `EVALUATE()` into a real object reference.
+2. SQLEXEC-into-a-grid-bound-cursor would have reset `ColumnCount` ÔÇö replaced with the documented `ZAP + APPEND FROM DBF()` pattern that preserves Grid bindings.
+
+Verified via: a clean VFP9 `COMPILE`, and a headless instantiation probe (handling the DataSession=2 private-cursor visibility gotcha) exercising grids, both checkbox toggles, insert/delete row, page navigation, date validation, and filter serialize/restore ÔÇö all passed as expected.
+
+**Not in scope for this fase** (deferred to the documented later phases): the Page2/Dados grid and query builder, and F4/lookup wiring for moeda/empresa/t├¡tulo-banco/esp├®cie fields.

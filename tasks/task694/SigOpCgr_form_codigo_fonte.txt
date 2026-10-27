@@ -1,0 +1,1537 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCgr.SCX
+* Data/Hora: 24/10/2026 19:21:37
+* Total de registros: 42
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCGR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: fld_principal
+  Parent: SIGOPCGR
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntSombra
+  Parent: SIGOPCGR.fld_principal.pag_consulta
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCGR.fld_principal.pag_consulta.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCGR.fld_principal.pag_consulta.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Origem
+  Parent: SIGOPCGR.fld_principal.pag_consulta
+  Class: container
+  BaseClass: container
+
+Objeto: Pedido
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem
+  Class: container
+  BaseClass: container
+
+Objeto: Get_Env
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Op
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Numero
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Pedido
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: say_pedido
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_Origem1
+  Parent: SIGOPCGR.fld_principal.pag_consulta.Origem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grp_operacao
+  Parent: SIGOPCGR.fld_principal.pag_consulta
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdprocessar
+  Parent: SIGOPCGR.fld_principal.pag_consulta
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grp_operacao
+  Parent: SIGOPCGR.fld_principal.pag_resultado
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Bot_Rastro
+  Parent: SIGOPCGR.fld_principal.pag_resultado
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Container1
+  Parent: SIGOPCGR.fld_principal.pag_resultado
+  Class: container
+  BaseClass: container
+
+Objeto: Chk_op
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Container1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chk_Env
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Container1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Chk_Dop
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Container1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Label1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Grd_Produto
+  Parent: SIGOPCGR.fld_principal.pag_resultado
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column7
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 135
+  Left = 128
+  Width = 442
+  Height = 205
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Pesquisa Global de Rastreabilidade"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGOPCGR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = -29
+  Width = 804
+  Height = 639
+  Name = "fld_principal"
+  Page1.Caption = "Consulta"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.BackColor = 255,255,255
+  Page1.Name = "pag_consulta"
+  Page2.Caption = "Resultado"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.BackColor = 255,255,255
+  Page2.Name = "pag_resultado"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem
+------------------------------------------------------------
+  Top = 201
+  Left = 203
+  Width = 393
+  Height = 129
+  BackStyle = 0
+  TabIndex = 1
+  BorderColor = 90,90,90
+  ZOrderSet = 52
+  Name = "Origem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido
+------------------------------------------------------------
+  Top = 33
+  Left = 22
+  Width = 348
+  Height = 72
+  BackStyle = 0
+  BorderWidth = 0
+  Visible = .T.
+  TabIndex = 5
+  BorderColor = 136,189,188
+  ZOrderSet = 11
+  Name = "Pedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Env
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  InputMask = ""
+  Left = 235
+  TabIndex = 2
+  Top = 9
+  Visible = .T.
+  Width = 85
+  ForeColor = 0,0,0
+  Name = "Get_Env"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Envelope : "
+  Left = 177
+  Top = 13
+  Visible = .T.
+  Width = 56
+  TabIndex = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Op
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  InputMask = ""
+  Left = 68
+  TabIndex = 1
+  Top = 9
+  Visible = .T.
+  Width = 85
+  ForeColor = 0,0,0
+  Name = "Get_Op"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "N. Op :"
+  Left = 29
+  Top = 13
+  Visible = .T.
+  Width = 37
+  TabIndex = 7
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Numero
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 225
+  TabIndex = 4
+  Top = 39
+  Visible = .T.
+  Width = 55
+  ForeColor = 0,0,0
+  Name = "Get_Numero"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 68
+  MaxLength = 20
+  TabIndex = 3
+  Top = 39
+  Visible = .T.
+  Width = 154
+  ForeColor = 0,0,0
+  Name = "Get_Pedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.say_pedido
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Pedido :"
+  Left = 25
+  Top = 43
+  Visible = .T.
+  Width = 41
+  TabIndex = 5
+  Name = "say_pedido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.Origem.Say_Origem1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Dados para pesquisa"
+  Height = 15
+  Left = 6
+  Top = 5
+  Width = 119
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say_Origem1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.grp_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 718
+  SpecialEffect = 1
+  Top = -1
+  Width = 85
+  TabIndex = 3
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "grp_operacao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.TabIndex = 3
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmd_cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_consulta.cmdprocessar
+------------------------------------------------------------
+  Top = 4
+  Left = 648
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "cmdprocessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.grp_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 717
+  SpecialEffect = 1
+  Top = -1
+  Width = 85
+  TabIndex = 11
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "grp_operacao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_seta_esq_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Voltar"
+  Command1.ToolTipText = ""
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmd_voltar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Bot_Rastro
+------------------------------------------------------------
+  Comment = ""
+  Top = 4
+  Left = 647
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_procura_60.jpg
+  Caption = "Rastreab."
+  TabIndex = 24
+  ToolTipText = "Rastreabilidade"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Bot_Rastro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Container1
+------------------------------------------------------------
+  Top = 46
+  Left = 35
+  Width = 168
+  Height = 101
+  BackStyle = 0
+  BorderColor = 90,90,90
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_op
+------------------------------------------------------------
+  Top = 24
+  Left = 36
+  Height = 20
+  Width = 93
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Individual"
+  Style = 1
+  ForeColor = 0,0,255
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Chk_op"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Container1.chk_Env
+------------------------------------------------------------
+  Top = 48
+  Left = 36
+  Height = 20
+  Width = 93
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Envelope"
+  Style = 1
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "chk_Env"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_Dop
+------------------------------------------------------------
+  Top = 72
+  Left = 36
+  Height = 20
+  Width = 93
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Movimentação"
+  Style = 1
+  ForeColor = 0,0,128
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Chk_Dop"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Pesquisar OP por"
+  Height = 15
+  Left = 3
+  Top = 4
+  Width = 97
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 400
+  Left = 35
+  ReadOnly = .T.
+  RowHeight = 17
+  ScrollBars = 2
+  Top = 150
+  Width = 729
+  GridLineColor = 238,238,238
+  Name = "Grd_Produto"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 70
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 65
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = ""
+  Column4.Width = 70
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ControlSource = ""
+  Column5.Width = 40
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ControlSource = ""
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ControlSource = ""
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Fase"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Dt. Entrega"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "%"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "99999%"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Header1"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Header1"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGR.fld_principal.pag_resultado.Grd_Produto.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCGR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+Local lcArquivo1
+
+lcArquivo1 = Sys(2023) + '\Temp3.jpg'
+
+* Caso a Consulta Já Esteja Executada, Não Processa Novamente
+If Not Thisform.ConsultaExecutada
+	Wait Window 'Processando...' NoWait
+
+	pcMensagem = .f.
+	
+	*-[ Limpa os Arquivos ]-*
+	Select DbProduto
+	Zap
+	
+	lnOp   = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Op.Value
+	lnEnv  = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Env.Value
+	lcPed  = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido.Value
+	lnPed  = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Numero.Value
+	lcEDN  = _Empr + lcPed + Str(lnPed,6)
+	
+	If (lnOp <> 0)
+		ThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', lnOp, 'Dopes, Numes, Qtds')
+		Select crSigOpPic
+		Scan
+			lcQuery = [Select Top 1 Nops, Nenvs, CodPds, Grupods, Contads ] + ;
+					    [From SigPdMvf ] + ;
+					   [Where Nops = ] + Str(lnOp, 10) + [ ] + ;
+					   [Order By Nops Desc, Nenvs Desc, CodPds Desc, Grupods Desc, Contads Desc]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf 1)')
+				Return 0
+			EndIf
+			Select crSigPdMvf
+			Go Top
+
+			Select DbProduto
+			Append Blank
+			Replace Nenvs   With crSigPdMvf.Nenvs, ;
+					Nops    With crSigPdMvf.Nops, ;
+					DopNums With crSigOpPic.Dopes + Str(crSigOpPic.Numes, 6), ;
+					Cpros   With crSigPdMvf.CodPds, ;
+					Qtds    With crSigOpPic.Qtds, ;
+					Grupods With crSigPdMvf.Grupods, ;
+					Contads With crSigPdMvf.Contads
+		EndScan
+	Else
+		If (lnEnv > 0)
+			lcQuery = [Select Top 1 EmpDNps ] + ;
+					    [From SigPdMvf ] + ;
+					   [Where Nenvs = ] + Str(lnEnv, 10) + [ ] + ;
+					   [Order By Nenvs Desc, EmpDNps Desc]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTopMfas') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTopMfas)')
+				Return 0
+			EndIf
+			Select crTopMfas
+			Go Top
+			If Not Eof()
+				_Chave = crTopMfas.EmpDNps
+
+				lcQuery = [Select Nenvs, Nops, CodPds, Grupods, Contads, Emps, Dopps, Numps ] + ;
+						    [From SigPdMvf ] + ;
+						   [Where EmpDNps = '] + _Chave + [' ] + ;
+						   [Order By Nenvs, Nops, CodPds, Grupods, Contads, Emps, Dopps, Numps]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf 2)')
+					Return 0
+				EndIf
+				Select crSigPdMvf
+				Scan
+					ThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', crSigPdMvf.Nops, 'Dopes, Numes, Qtds')
+					Select crSigOpPic
+					Scan
+						Select DbProduto
+						Append Blank
+						Replace Nenvs   With crSigPdMvf.Nenvs, ;
+								Nops    With crSigPdMvf.Nops, ;
+								DopNums With crSigOpPic.Dopes + Str(crSigOpPic.Numes, 6), ;
+								Cpros   With crSigPdMvf.CodPds, ;
+								Qtds    With crSigOpPic.Qtds, ;
+								Grupods With crSigPdMvf.Grupods, ;
+								Contads With crSigPdMvf.Contads
+					EndScan
+				EndScan
+			EndIf
+		Else
+			ThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'EmpDopNums', lcEDN, 'Nops, Dopes, Numes, Qtds')
+			Select crSigOpPic
+			Scan
+				lcQuery = [Select Top 1 Nops, Nenvs, CodPds, Grupods, Contads ] + ;
+						    [From SigPdMvf ] + ;
+						   [Where Nops = ] + Str(crSigOpPic.Nops, 10) + [ ] + ;
+						   [Order By Nops Desc, Nenvs Desc, CodPds Desc, Grupods Desc, Contads Desc]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf 3)')
+					Return 0
+				EndIf
+				Select crSigPdMvf
+				Go Top
+
+				Select DbProduto
+				Append Blank
+				Replace Nenvs   With crSigPdMvf.Nenvs, ;
+						Nops    With crSigPdMvf.Nops, ;
+						DopNums With crSigOpPic.Dopes + Str(crSigOpPic.Numes,6), ;
+						Cpros   With crSigPdMvf.CodPds, ;
+						Qtds    With crSigOpPic.Qtds, ;
+						Grupods With crSigPdMvf.Grupods, ;
+						Contads With crSigPdMvf.Contads
+			EndSCan
+		EndIf
+	EndIf
+
+	Thisform.ConsultaExecutada = .t.
+EndIf
+
+Wait Clear
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.fld_principal.pag_consulta.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.fld_principal.pag_consulta.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select Dopes, NDopes, Globalizas, Reservas ] + ;
+					[From SigCdOpe ] + ;
+				   [Where Globalizas In (1, 2)]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOper') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOper)')
+			Return 0
+		EndIf
+		Select TmpOper
+		Index On Dopes tag Dopes
+		Go Top
+
+		With .fld_principal.pag_consulta.Origem.Pedido
+			.get_Env.Value    = 0
+			.get_Op.Value     = 0
+			.get_Numero.Value = 0
+			.get_Pedido.Value = Space(20)
+		EndWith
+
+		.ConsultaExecutada = .f.
+
+		With .Fld_Principal.Pag_Resultado.Grd_Produto
+			.RecordSource = 'dbProduto'
+			.ColumnCount  = 7
+			.ReadOnly     = .T.
+			.Column1.ControlSource     = 'dbProduto.Nenvs'
+			.Column1.FontSize          = 8
+			.Column1.Movable           = .F.
+			.Column1.Resizable         = .F.
+			.Column1.Width			   = 68
+			.Column1.Header1.Caption   = 'Envelope'
+			.Column1.Header1.Alignment = 2
+			.Column1.Header1.FontSize  = 8
+			.Column1.Text1.FontSize    = 8
+
+			.Column2.ControlSource     = 'dbProduto.Nops'
+			.Column2.FontSize          = 8
+			.Column2.Movable           = .F.
+			.Column2.Resizable         = .F.
+			.Column2.Width			   = 68
+			.Column2.Header1.Caption   = 'Op'
+			.Column2.Header1.Alignment = 2
+			.Column2.Header1.FontSize  = 8
+			.Column2.Text1.FontSize    = 8
+
+			.Column3.ControlSource     = 'dbProduto.DopNums'
+			.Column3.Alignment         = 2
+			.Column3.FontSize          = 8
+			.Column3.Movable           = .F.
+			.Column3.Resizable         = .F.
+			.Column3.Width			   = 182
+			.Column3.Header1.Caption   = 'Operação'
+			.Column3.Header1.Alignment = 2
+			.Column3.Header1.FontSize  = 8
+			.Column3.Text1.FontSize    = 8
+
+			.Column4.ControlSource     = 'dbProduto.Cpros'
+			.Column4.FontSize          = 8
+			.Column4.Movable           = .F.
+			.Column4.Resizable         = .F.
+			.Column4.Width			   = 108
+			.Column4.Header1.Caption   = 'Produto'
+			.Column4.Header1.Alignment = 2
+			.Column4.Header1.FontSize  = 8
+			.Column4.Text1.FontSize    = 8
+
+			.Column5.ControlSource     = 'dbProduto.Qtds'
+			.Column5.FontSize          = 8
+			.Column5.Movable           = .F.
+			.Column5.Resizable         = .F.
+			.Column5.Width			   = 68
+			.Column5.Header1.Caption   = 'Qtde'
+			.Column5.Header1.Alignment = 2
+			.Column5.Header1.FontSize  = 8
+			.Column5.Text1.FontSize    = 8
+
+			.Column6.ControlSource     = 'dbProduto.Grupods'
+			.Column6.FontSize          = 8
+			.Column6.Movable           = .F.
+			.Column6.Resizable         = .F.
+			.Column6.Width			   = 80
+			.Column6.Header1.Caption   = 'Fase'
+			.Column6.Header1.Alignment = 2
+			.Column6.Header1.FontSize  = 8
+			.Column6.Text1.FontSize    = 8
+
+			.Column7.ControlSource     = 'dbProduto.Contads'
+			.Column7.FontSize          = 8
+			.Column7.Movable           = .F.
+			.Column7.Resizable         = .F.
+			.Column7.Width			   = 80
+			.Column7.Header1.Caption   = 'Conta'
+			.Column7.Header1.Alignment = 2
+			.Column7.Header1.FontSize  = 8
+			.Column7.Text1.FontSize    = 8
+		EndWith
+
+		.Fld_Principal.pag_consulta.origem.Pedido.get_Op.SetFocus
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor dbProduto(Nenvs n(10), Nops n(10), DopNums c(26), Cpros c(14), Qtds n(12,3), Grupods c(10), Contads c(10))
+Index On Nops Tag Nops
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal
+* Classe: pageframe (Base: pageframe)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE pag_consulta.Activate
+------------------------------------------------------------
+PROCEDURE pag_consulta.Activate
+*thisform.fld_principal.pag_consulta.get_nr_cpf.setfocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pag_resultado.Activate
+------------------------------------------------------------
+PROCEDURE pag_resultado.Activate
+If Not ThisForm.ConsultaExecutada
+	ThisForm.fld_principal.ActivePage = 1
+Else
+	ThisForm.fld_principal.pag_resultado.Grd_Produto.Column1.SetFocus
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Env
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Thisform.ConsultaExecutada = .f.
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Get_Pedido.Value) And Empty(This.Parent.Get_Op.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Op
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Thisform.ConsultaExecutada = .f.
+	ThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', This.Value, 'Emps')
+	If Eof('crSigOpPic')
+		=MessageBox('Op Não Cadastrada!!!', 0+48, '')
+		Return 0
+	EndIf
+
+	If (crSigOpPic.Emps <> _Empr)
+		=MessageBox('Op de Outra Empresa!!!', 0+48, '')
+		Return 0
+	EndIf
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Get_Pedido.Value) And Empty(This.Parent.Get_Env.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Numero
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(This.Parent.Get_Pedido.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	ThisForm.ConsultaExecutada = .f.
+	If Not Seek(This.Value, 'TmpOper', 'Dopes')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpOper', 'Dopes', This.Value, 'Cadastro de Operações')
+		loBrowse.AddColuna('Dopes',  '', 'Operação', .t., 'Dopes')
+		loBrowse.AddColuna('NDopes', '', 'Código')
+		loBrowse.Show
+		This.Value = TmpOper.Dopes
+	EndIf
+Else
+	This.Parent.Get_Numero.Value = 0
+	This.Parent.Get_Numero.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Get_Op.Value) And Empty(This.Parent.Get_Env.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.grp_operacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmd_cancela.Click
+------------------------------------------------------------
+PROCEDURE cmd_cancela.Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_consulta.cmdprocessar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llRetorno
+
+m.llRetorno =.t.
+
+If (Empty(This.Parent.Origem.Pedido.Get_Env.Value) And ;
+	Empty(This.Parent.Origem.Pedido.Get_Op.Value) And ;
+	Empty(This.Parent.Origem.Pedido.Get_Pedido.Value))
+	      
+	=Messagebox('Nenhum Opção de Filtro Foi Informada!!!', 16, '')
+	This.Parent.Origem.Pedido.Get_OP.SetFocus
+	m.llRetorno = .f.
+EndIf
+
+If m.llRetorno
+	m.pcMensagem = .f.
+	ThisForm.LockScreen = .t.
+	ThisForm.Processa()
+	
+	If Not Eof('DbProduto')
+		ThisForm.Fld_Principal.ActivePage = 2
+		ThisForm.Refresh()
+	Else
+		=Messagebox('Nenhum Registro Encontrado!!!', 16, '')
+	EndIf
+
+	ThisForm.LockScreen = .f.
+	
+	With This.Parent.Parent.pag_resultado.Container1
+		.Chk_op.Value  = Iif(Empty(This.Parent.Origem.Pedido.Get_Op.Value), 0, 1)
+		.Chk_Env.Value = Iif(Empty(This.Parent.Origem.Pedido.Get_Env.Value), 0, 1)
+		.Chk_Dop.Value = Iif(Empty(This.Parent.Origem.Pedido.Get_Pedido.Value), 0, 1)
+	EndWith
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_resultado.grp_operacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmd_voltar.Click
+------------------------------------------------------------
+PROCEDURE cmd_voltar.Click
+ThisForm.fld_principal.ActivePage = 1
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_resultado.Bot_Rastro
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If (This.Parent.Container1.Chk_op.Value = 1)
+	Do Form SigReCgr With 2, dbProduto.Nops, ThisForm
+Else
+	If (This.Parent.Container1.Chk_Env.Value = 1)
+		Do Form SigReCgr With 3, dbProduto.nEnvs, ThisForm && 2
+	Else
+		If (This.Parent.Container1.Chk_Dop.Value = 1)
+			Do Form SigReCgr With 4, dbProduto.DopNums, ThisForm && 3
+		EndIf
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Eof('dbProduto')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_op
+* Classe: checkbox (Base: checkbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Value = 1
+This.Parent.chk_Env.Value = 0
+This.Parent.chk_Dop.Value = 0
+This.Parent.chk_Env.Refresh
+This.Parent.chk_Dop.Refresh
+This.Parent.Parent.Grd_Produto.Column1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_resultado.Container1.chk_Env
+* Classe: checkbox (Base: checkbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Value = 1
+This.Parent.chk_op.Value = 0
+This.Parent.chk_Dop.Value = 0
+This.Parent.chk_Op.Refresh
+This.Parent.chk_Dop.Refresh
+This.Parent.Parent.Grd_Produto.Column1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_Dop
+* Classe: checkbox (Base: checkbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Value = 1
+This.Parent.chk_Env.Value = 0
+This.Parent.chk_Op.Value = 0
+This.Parent.chk_Env.Refresh
+This.Parent.chk_Op.Refresh
+This.Parent.Parent.Grd_Produto.Column1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCGR
+RESERVED3 (ClassInfo): consultaexecutada Verifica se o botão de consulta foi ativado
+podatamgr
+*processa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 21
+================================================================================

@@ -794,3 +794,257 @@ DEFINE CLASS TextBoxCelulaEmn_4c AS TextBox
         ENDIF
     ENDPROC
 ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaFollowupCfl_4c - celula "Data / Hora" (Column1) da grade de
+* followup do FormSigOpCfl (SIGOPCFL.gridFollowup).
+*
+* Legado (SIGOPCFL.gridFollowup.Column1.Text1):
+*   When  -> Return ThisForm.cmdApagaItem.cmdApagar.Visible
+*            (a celula so recebe foco quando o usuario tem acesso de EXCLUIR -
+*            eh por esse foco que o cmdApagar.Click devolve o cursor para a
+*            grade depois de apagar a linha: Column1.Text1.Setfocus)
+*   Valid -> If Empty(this.value) / MessageBox('Data Invalida!',0+64,"Atencao!")
+*            / Return 0
+*
+* BINDEVENT em evento de celula de Grid NAO eh confiavel (ver o cabecalho
+* deste arquivo e a regra #46/CLAUDE.md): a celula tem de ser uma classe com
+* os eventos EMBUTIDOS, instalada com Column.AddObject + CurrentControl +
+* Sparse = .F. (regra #18). O corpo mora no form - depende do CommandGroup de
+* acoes (cmg_4c_CmdApagaitem) e do cursor da grade - e recebe o proprio
+* TextBox: dentro do Valid o valor digitado esta em THIS.Value e AINDA NAO
+* chegou ao cursor (regra #46).
+*
+* FontName/Margin/ReadOnly espelham o Column1.Text1 do dump legado
+* (FontName "Courier New" vem do Column1, ReadOnly = .T. do proprio Text1) -
+* a grade do legado eh inteiramente somente-leitura, o When existe so para
+* gatear o FOCO da celula.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaFollowupCfl_4c AS TextBox
+    FontName    = "Courier New"
+    FontSize    = 8
+    Margin      = 0
+    BorderStyle = 0
+    Alignment   = 3
+    ReadOnly    = .T.
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaDataFollowupEditavel", 5)
+            RETURN THISFORM.CelulaDataFollowupEditavel(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCelulaDataFollowupExec", 5)
+            RETURN THISFORM.ValidarCelulaDataFollowupExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCfopGridCfp_4c - celula "CFOP" (Column1) da grade de Cfops
+* Permitidos do FormSigOpCfp (SIGOPCFP.GradeSubN.Column1.Text1).
+*
+* Legado:
+*   Valid     -> Lastkey() == 27 aborta sem lookup (ESC preserva o valor
+*                atual); senao fwBuscaExt contra SigCdCfo (Codigos/
+*                Descricaos/Operacaos) - o Init de FormBuscaAuxiliar ja
+*                tenta o match exato (regra #37); This.Value recebe o
+*                Codigos escolhido, ou '' se o usuario cancelou o picker
+*                com ESC (mesmo comportamento do legado: "Else This.Value
+*                = ''")
+*   LostFocus -> If IsEmpty(This.Value) / Thisform.cmdSair.SetFocus
+*                (linha ficou sem CFOP - foca o botao de saida em vez de
+*                deixar o foco preso na grade)
+*
+* Instalado com Column.AddObject + CurrentControl + Sparse = .F. (regra
+* #18); Valid delega para o form (regra #46) - o corpo recebe o proprio
+* TextBox, porque dentro do Valid o valor digitado esta em THIS.Value e
+* ainda nao chegou ao cursor da grade.
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCfopGridCfp_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarCfopGridExec", 5)
+            RETURN THISFORM.ValidarCfopGridExec(THIS)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE LostFocus()
+        IF EMPTY(ALLTRIM(NVL(THIS.Value, ""))) AND PEMSTATUS(THISFORM, "cmd_4c_CmdSair", 5)
+            THISFORM.cmd_4c_CmdSair.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *-- F4/F5 abrem o picker direto (afordancia do sistema novo, igual aos
+    *-- demais lookups de grade) - guard de tecla obrigatorio (regra #47),
+    *-- senao o picker subiria a cada tecla digitada.
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupCfopGrade", 5)
+                THISFORM.AbrirLookupCfopGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxObsGridCfp_4c - celula de Observacao (ObsPads/ObsInis/ObsFins -
+* Column2/Column3/Column4) da grade de Cfops Permitidos do FormSigOpCfp.
+*
+* this_cCampoObs identifica QUAL coluna a instancia representa
+* ("OBSPADS"/"OBSINIS"/"OBSFINS") - setado apos o AddObject, em
+* ConfigurarGrade() do form. Valid/KeyPress delegam para um UNICO par de
+* metodos do form (ValidarObsGridExec/AbrirLookupObsGrade - regra #46), que
+* usa this_cCampoObs para aplicar a validacao cruzada certa contra as OUTRAS
+* duas colunas da mesma linha.
+*
+* Legado (as 3 colunas repetem o mesmo padrao): Valid faz fwBuscaExt contra
+* SigCdObs quando This.Value != 0 (coluna numeric(3,0)) e, em seguida, valida
+* cruzado contra Padrao/Inicial/Final da linha corrente - "Return 0" mantem o
+* foco na celula quando a cruzada falha. When -> Not Empty(TmpCfoOp.Cfops)
+* (habilitada so depois da celula CFOP preenchida - CelulaObsGradeEditavel,
+* fase 7/8).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxObsGridCfp_4c AS TextBox
+    FontName       = "Tahoma"
+    FontSize       = 8
+    BorderStyle    = 0
+    Margin         = 0
+    ForeColor      = RGB(0, 0, 0)
+    BackColor      = RGB(255, 255, 255)
+    this_cCampoObs = ""
+
+    PROCEDURE When()
+        IF PEMSTATUS(THISFORM, "CelulaObsGradeEditavel", 5)
+            RETURN THISFORM.CelulaObsGradeEditavel()
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        IF PEMSTATUS(THISFORM, "ValidarObsGridExec", 5)
+            RETURN THISFORM.ValidarObsGridExec(THIS, THIS.this_cCampoObs)
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *-- F4/F5 abrem o picker direto (afordancia do sistema novo, igual aos
+    *-- demais lookups de grade) - guard de tecla obrigatorio (regra #47).
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            IF PEMSTATUS(THISFORM, "AbrirLookupObsGrade", 5)
+                THISFORM.AbrirLookupObsGrade(THIS)
+            ENDIF
+            NODEFAULT
+        ENDIF
+    ENDPROC
+ENDDEFINE
+
+
+*------------------------------------------------------------------------------
+* TextBoxCelulaFti_4c - celula das grades do FormFti (Grupos de Produto e
+* Custos Fixo).
+*
+* BINDEVENT em "When"/"Valid" de Column.Text1 NAO dispara de forma confiavel
+* (regra #46): os lookups de Grupo e Produto simplesmente nunca abriam. O
+* padrao certo eh TextBox subclasse com os eventos EMBUTIDOS, instalada com
+* AddObject + CurrentControl + Sparse = .F. (regra #18), delegando a metodos
+* PUBLIC do form.
+*
+* this_cCelula diz QUAL celula a instancia representa - uma classe so para as
+* seis, como no TextBoxObsGridCfp_4c:
+*   GRUPOCOD  GRUPOCOEF  GRUPOPROD  CUSTOCOD  CUSTOCOEF  CUSTOCOL4
+*
+* O Valid passa THIS para o form: dentro dele o digitado vive em .Value, e o
+* cursor so recebe depois (regra #46).
+*------------------------------------------------------------------------------
+DEFINE CLASS TextBoxCelulaFti_4c AS TextBox
+    FontName    = "Tahoma"
+    FontSize    = 8
+    BorderStyle = 0
+    Margin      = 0
+    ForeColor   = RGB(0, 0, 0)
+    BackColor   = RGB(255, 255, 255)
+
+    this_cCelula = ""
+
+    PROCEDURE When()
+        LOCAL loc_cM
+        loc_cM = THIS.MetodoWhen()
+        IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+            RETURN EVALUATE("THISFORM." + loc_cM + "()")
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Valid()
+        LOCAL loc_cM
+        loc_cM = THIS.MetodoValid()
+        IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+            RETURN EVALUATE("THISFORM." + loc_cM + "(THIS)")
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_cM
+        loc_cM = THIS.MetodoKeyPress()
+        IF !EMPTY(loc_cM) AND PEMSTATUS(THISFORM, loc_cM, 5)
+            EVALUATE("THISFORM." + loc_cM + "(par_nKeyCode, par_nShiftAltCtrl)")
+        ENDIF
+    ENDPROC
+
+    PROCEDURE MetodoWhen()
+        DO CASE
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOCOD"
+                RETURN "GradeGrupoCol1When"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOCOEF"
+                RETURN "GradeGrupoCol3When"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOPROD"
+                RETURN "GradeGrupoCol4When"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "CUSTOCOD"
+                RETURN "GradeCustoCol1When"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "CUSTOCOEF"
+                RETURN "GradeCustoCol3When"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "CUSTOCOL4"
+                RETURN "GradeCustoCol4When"
+        ENDCASE
+        RETURN ""
+    ENDPROC
+
+    PROCEDURE MetodoValid()
+        DO CASE
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOCOD"
+                RETURN "GradeGrupoCol1Valid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOPROD"
+                RETURN "GradeGrupoCol4Valid"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "CUSTOCOD"
+                RETURN "GradeCustoCol1Valid"
+        ENDCASE
+        RETURN ""
+    ENDPROC
+
+    PROCEDURE MetodoKeyPress()
+        DO CASE
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "GRUPOCOEF"
+                RETURN "GradeGrupoCol3LostFocus"
+            CASE UPPER(ALLTRIM(THIS.this_cCelula)) == "CUSTOCOEF"
+                RETURN "GradeCustoCol3LostFocus"
+        ENDCASE
+        RETURN ""
+    ENDPROC
+ENDDEFINE

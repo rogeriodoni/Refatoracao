@@ -624,7 +624,7 @@ DEFINE CLASS FormFpg AS FormBase
         *-- LostFocus em ds_grupo: valida descricao, preenche codigo
         BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "KeyPress",  THIS, "CdGrupoKeyPress")
         BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "DblClick",  THIS, "CdGrupoDblClick")
-        BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "KeyPress", THIS, "ValidarCdGrupo")
+        BINDEVENT(loc_oPagina.txt_4c__cd_grupo, "LostFocus", THIS, "ValidarCdGrupo")
         BINDEVENT(loc_oPagina.txt_4c__ds_grupo, "LostFocus", THIS, "ValidarDsGrupo")
 
         THIS.TornarControlesVisiveis(loc_oPagina)
@@ -1146,23 +1146,51 @@ DEFINE CLASS FormFpg AS FormBase
     * Campos em SigCdGcr: Codigos (PK), Descrs (descricao)
     *==========================================================================
 
+    *-- F4/Enter e DblClick abrem o picker direto. Guarda SAVE/RESTORE (regra #47):
+    *-- o picker eh MODAL, tira o foco do campo e dispara o LostFocus, que
+    *-- abriria um SEGUNDO dialogo por cima.
     PROCEDURE CdGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lEmLookupAnt
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
+            loc_lEmLookupAnt   = THIS.this_lEmLookup
+            THIS.this_lEmLookup = .T.
             THIS.AbrirLookupGrupoGcr()
+            THIS.this_lEmLookup = loc_lEmLookupAnt
         ENDIF
     ENDPROC
 
     PROCEDURE CdGrupoDblClick()
+        LOCAL loc_lEmLookupAnt
+        loc_lEmLookupAnt   = THIS.this_lEmLookup
+        THIS.this_lEmLookup = .T.
         THIS.AbrirLookupGrupoGcr()
+        THIS.this_lEmLookup = loc_lEmLookupAnt
     ENDPROC
 
     *--------------------------------------------------------------------------
     * ValidarCdGrupo - LostFocus de txt_4c__cd_grupo
     * Valida codigo em SigCdGcr e preenche descricao (equivale fAcessoContab 'C')
+    *
+    * O legado NAO para no match exato: fAcessoContab monta a lista pelo PREFIXO
+    * digitado (Between '<txt>' And '<txt>+CHR(254)') e, quando o SEEK falha,
+    * ABRE o browse com essa lista. Sem o ramo do picker, digitar "1" nao casa
+    * exato, devolve zero linhas e a tela nao faz nada.
+    *
+    * Guarda de reentrancia (regra #37/#47): o picker eh MODAL e redispara este
+    * proprio LostFocus. O corpo vive em ValidarCdGrupoExec para que a flag seja
+    * SEMPRE liberada, inclusive nos RETURN antecipados.
     *--------------------------------------------------------------------------
-    PROCEDURE ValidarCdGrupo
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oPagina, loc_cCodigo
+    PROCEDURE ValidarCdGrupo()
+        IF THIS.this_lEmLookup
+            RETURN
+        ENDIF
+        THIS.this_lEmLookup = .T.
+        THIS.ValidarCdGrupoExec()
+        THIS.this_lEmLookup = .F.
+    ENDPROC
+
+    PROCEDURE ValidarCdGrupoExec()
+        LOCAL loc_oPagina, loc_cCodigo, loc_nAchou
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c__cd_grupo.Value)
 
@@ -1173,13 +1201,22 @@ DEFINE CLASS FormFpg AS FormBase
 
         THIS.this_oBusinessObject.BuscarGrupoGcr(loc_cCodigo, "C", "cursor_4c_GcrVal")
 
-        IF USED("cursor_4c_GcrVal") AND RECCOUNT("cursor_4c_GcrVal") > 0
-            SELECT cursor_4c_GcrVal
-            loc_oPagina.txt_4c__ds_grupo.Value = ALLTRIM(cursor_4c_GcrVal.descrs)
+        loc_nAchou = 0
+        IF USED("cursor_4c_GcrVal")
+            loc_nAchou = RECCOUNT("cursor_4c_GcrVal")
+            IF loc_nAchou = 1
+                SELECT cursor_4c_GcrVal
+                loc_oPagina.txt_4c__ds_grupo.Value = ALLTRIM(cursor_4c_GcrVal.descrs)
+            ENDIF
+            USE IN cursor_4c_GcrVal
         ENDIF
 
-        IF USED("cursor_4c_GcrVal")
-            USE IN cursor_4c_GcrVal
+        *-- Codigo parcial (ou inexistente): abre o picker ja filtrado pelo que
+        *-- foi digitado - o Init do FormBuscaAuxiliar faz exato, depois
+        *-- LIKE '<valor>%' e por fim mostra tudo. O digitado NAO eh apagado
+        *-- e nao ha MsgAviso: universo vazio nao eh erro (regra #50).
+        IF loc_nAchou != 1
+            THIS.AbrirLookupGrupoGcr()
         ENDIF
     ENDPROC
 

@@ -1,0 +1,776 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCfp.SCX
+* Data/Hora: 23/10/2026 22:31:26
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCFP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCFP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCFP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCFP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeSubN
+  Parent: SIGOPCFP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCFP.GradeSubN.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFP.GradeSubN.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFP.GradeSubN.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFP.GradeSubN.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFP.GradeSubN.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFP.GradeSubN.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFP.GradeSubN.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFP.GradeSubN.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGOPCFP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGOPCFP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGOPCFP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cfop's Permitidas para Operação"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCFP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 221
+  Left = 281
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 120
+  Width = 237
+  GridLineColor = 238,238,238
+  Name = "GradeSubN"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 35
+  Column2.ReadOnly = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 35
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 35
+  Column4.Sparse = .T.
+  Column4.BackColor = 255,255,255
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "CFOP"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 2
+  Caption = "Obs"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "De"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Até"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.GradeSubN.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Height = 23
+  Left = 13
+  Margin = 0
+  Top = 21
+  Width = 100
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Inserir"
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFP.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCFP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mctrlbotoes
+------------------------------------------------------------
+PROCEDURE mctrlbotoes
+LParameters plHabilita
+
+Local lnI
+
+If Type('plHabilita') # 'L'
+	plHabilita = .F.
+Endif
+
+With Thisform.ParentForm.Pagina.Lista
+	For lnI=1 to .Grupo_Op.ButtonCount
+		If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible
+			.Grupo_Op.Buttons(lnI).Enabled = plHabilita
+		EndIf
+	EndFor	
+	.Grupo_Saida.Sair.Enabled = plHabilita
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha
+
+Local lcOperacao
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.PcEscolha  = pcEscolha
+Thisform.ParentForm.Enabled  = .F.
+lcOperacao = crSigCdOpe.Dopes
+
+With Thisform
+	.Caption = [Cfop's p/: ] + AllTrim( Proper( crSigCdOpe.Dopes ) )
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+
+	.cmdInserir.Visible = Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdInserir.Enabled = Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Visible = Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Enabled = Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Thisform.mCtrlBotoes(.F.)
+
+lcSql = [Select * From SigCdOop where Dopes=']+CrSigCdOpe.Dopes+[']
+SigCdOpe.PodataMgr.Sqlexecute(lcSql,'xCfoOp')
+
+Select * From xCfoOp Into Cursor TmpCfoOp ReadWrite
+
+Select TmpCfoOp
+Goto Top	
+With Thisform.GradeSubN
+	.RecordSource          = 'TmpCfoOp'
+	.Column1.ControlSource = 'TmpCfoOp.Cfops'
+	.Column2.ControlSource = 'TmpCfoOp.ObsPads'
+	.Column3.ControlSource = 'TmpCfoOp.ObsInis'
+	.Column4.ControlSource = 'TmpCfoOp.ObsFins'
+	.Refresh
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.GradeSubN.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcod,lfan,arqsel,xobj,xBrox,llTeclouEsc
+
+If Lastkey() == 27
+	Return
+Endif
+
+ArqSel = Select()
+
+xBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdCfo','crSigCdCfo','Codigos',This.Value,'Seleção',.t.,'Codigos')
+
+If  Not xBrox.plAchouRegistro
+	xBrox.mAddColuna('Codigos','','Código',.T.)
+	xBrox.mAddColuna('Descricaos','','Descrição',.T.)
+	xBrox.mAddColuna('Operacaos','','Operação',.F.)
+	xBrox.Show()
+EndIf 
+
+If lastkey()<>27
+	This.value = evaluate('crSigCdCfo.Codigos')
+	unlock
+	This.refresh
+Else
+	This.Value = ''
+endif
+Select int(arqsel)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.GradeSubN.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	If !SigCdOpe.podatamgr.ChkRegister( 'SigCdObs', 'Codigos', This.Value )
+		xBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')
+
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('Codigos', '999999', 'Código', .t.)
+			xBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])
+			xBrox.Show()
+		EndIf 
+
+		This.Value = Iif( Lastkey() == 27, 0, crSigCdObs.Codigos )
+		Use in crSigCdObs
+	Endif
+	This.refresh
+Endif
+
+If Not Empty(This.Value) And Not Empty(TmpCfoOp.ObsInis) And ;
+   (TmpCfoOp.ObsInis > This.Value)
+	=MessageBox('A Observação Inicial Não Pode Ser Maior do Que a Padrão!!!', 0+16, '')
+	Return 0
+EndIf
+
+If Not Empty(This.Value) And Not Empty(TmpCfoOp.ObsFins) And ;
+   (TmpCfoOp.ObsFins < This.Value)
+	=MessageBox('A Observação Final Não Pode Ser Menor do Que a Padrão!!!', 0+16, '')
+	Return 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( not Empty(TmpCfoOp.Cfops) )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.GradeSubN.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrox
+
+If Not Empty(This.Value)
+	If Not SigCdOpe.poDataMgr.ChkRegister('SigCdObs', 'Codigos', This.Value)
+		xBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')
+
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('Codigos', '999999', 'Código', .t.)
+			xBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])
+			xBrox.Show()
+		EndIf 
+		This.Value = Iif( Lastkey() == 27, 0, crSigCdObs.Codigos )
+		Use in crSigCdObs
+	Endif
+	This.refresh
+EndIf
+
+
+If Not Empty(This.Value) And Not Empty(TmpCfoOp.ObsPads) And ;
+   (This.Value > TmpCfoOp.ObsPads)
+	=MessageBox('A Observação Inicial Não Pode Ser Maior do Que a Padrão!!!', 0+16, '')
+	Return 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( not Empty(TmpCfoOp.Cfops) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.GradeSubN.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrox
+
+If Not Empty(This.Value)
+	If Not SigCdOpe.poDataMgr.ChkRegister('SigCdObs', 'Codigos', This.Value)
+		xBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')
+
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('Codigos', '999999', 'Código', .t.)
+			xBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])
+			xBrox.Show()
+		EndIf 
+		This.Value = Iif( Lastkey() == 27, 0, crSigCdObs.Codigos )
+		Use in crSigCdObs
+	Endif
+	This.refresh
+EndIf
+
+If Not Empty(This.Value) And Not Empty(TmpCfoOp.ObsPads) And ;
+   (This.Value < TmpCfoOp.ObsPads)
+	=MessageBox('A Observação Final Não Pode Ser Menor do Que a Padrão!!!', 0+16, '')
+	Return 0
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( not Empty(TmpCfoOp.Cfops) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	**If ( Thisform.lHouveExcl Or Thisform.lHouveIns )	
+	
+		Select TmpCfoOp
+		LOCATE
+		Delete For Cfops = Space(10)
+		Replace all dopes     With CrSigCdOpe.Dopes,;
+				    CidChaves With fUniqueIds() FOR EMPTY(cIdChaves)
+
+		Select Cfops, sum(1) From TmpCfoOp Group by 1 having sum(1) > 1 Into Cursor SecondKey
+		Select SecondKey
+		If Reccount() > 0
+			MessageBox('Existem Cfops em Duplicidade. Favor Acertar!!!',0+16,'Atenção')
+			Return .f.
+		EndIf
+		
+		Select CrSigCdOop
+		Zap
+		Append From Dbf('TmpCfoOp')
+		
+		lcSql = [Delete From SigCdOop Where Dopes = ']+CrSigCdOpe.dopes+[']
+
+		m.lnErro1 = SigCdOpe.poDatamgr.pnIdConn
+
+		With SigCdOpe
+			If m.lnErro1 > 0
+				m.lnErro1 = SigCdOpe.PodataMgr.Sqlexecute(lcSql,'')
+			Endif
+			If m.lnErro1>0 
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdOop'),1,-1)
+			EndIf 
+			If m.lnErro1>0 
+				m.lnErro1 = .poDataMgr.Commit()
+			EndIf 
+			If Not m.lnErro1>0 
+				.poDataMgr.RollBack()
+			EndIf 
+		EndWith 
+		If Not m.lnErro1>0 
+			= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+		EndIf 
+	**EndIf
+ENDIF
+
+Thisform.ParentForm.Enabled = .T.
+Thisform.mCtrlBotoes(.T.)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.lHouveIns = .T.
+
+Select TmpCfoOp
+Locate for Cfops = Space(10)
+If Eof()
+	Insert Into TmpCfoOp (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())
+EndIf
+
+Select TmpCfoOp
+Thisform.GradeSubN.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFP.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpCfoOp
+If Not Eof()
+	Thisform.lHouveExcl = .T.
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.GradeSubN.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCFP
+RESERVED3 (ClassInfo): lhouveexcl
+lhouveins
+parentform
+pcescolha
+podatamgr
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

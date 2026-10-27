@@ -1,0 +1,40 @@
+=== PROBE FormFti - grades de Grupo e Custo ===
+baseline: SigPrFti 8 linha(s);  grupo de teste=[997]  produto de teste=[036]
+
+1) Celulas com eventos embutidos (regra #46/#18)
+   grd_4c_Grade.Column1 (Grupo)         CurrentControl=TXT_4C_CEL   Sparse=.F. celula=GRUPOCOD
+   [OK]    grd_4c_Grade.Column1 (Grupo) com a celula GRUPOCOD
+   grd_4c_Grade.Column3 (Coeficiente)   CurrentControl=TXT_4C_CEL   Sparse=.F. celula=GRUPOCOEF
+   [OK]    grd_4c_Grade.Column3 (Coeficiente) com a celula GRUPOCOEF
+   grd_4c_Grade.Column4 (Produto)       CurrentControl=TXT_4C_CEL   Sparse=.F. celula=GRUPOPROD
+   [OK]    grd_4c_Grade.Column4 (Produto) com a celula GRUPOPROD
+   grd_4c_Custo.Column1 (Produto)       CurrentControl=TXT_4C_CEL   Sparse=.F. celula=CUSTOCOD
+   [OK]    grd_4c_Custo.Column1 (Produto) com a celula CUSTOCOD
+   grd_4c_Custo.Column3 (Coeficiente)   CurrentControl=TXT_4C_CEL   Sparse=.F. celula=CUSTOCOEF
+   [OK]    grd_4c_Custo.Column3 (Coeficiente) com a celula CUSTOCOEF
+   grd_4c_Custo.Column4                 CurrentControl=TXT_4C_CEL   Sparse=.F. celula=CUSTOCOL4
+   [OK]    grd_4c_Custo.Column4 com a celula CUSTOCOL4
+
+2) O Valid resolve a partir do que foi DIGITADO
+   celula Grupo digitada = [997]   cursor ANTES do Valid = [997]
+   depois do Valid: cursor=[997]  descricao=[]  celula=[997]
+   [OK]    Valid levou o DIGITADO para o cursor (nao o valor anterior)
+   [FALHA] Valid preencheu a descricao do grupo pelo lookup
+
+3) Digitar nas duas grades -> gravar -> reabrir
+   csGrade: Cgrus=[997] CPros=[036] Coefs=1.5000
+   csCusto: Cpros=[036] Coefs=2.5000
+   SigPrFto gravou 2 item(ns)
+      cgrus=[997] cpros=[036] coefs=1.5000
+      cgrus=[] cpros=[036] coefs=2.5000
+   [OK]    GRAVOU as 2 linhas (1 de grupo + 1 de custo)
+   apos reabrir: csGrade com 0 linha(s) preenchida(s)   Cgrus=[] Dgrus=[]
+   [FALHA] a grade de Grupos TRAZ o que foi gravado
+   apos reabrir: csCusto com 1 linha(s) preenchida(s)   Cpros=[MKP] Coefs=1.0800
+   [OK]    a grade de Custos Fixo TRAZ o que foi gravado
+
+4) LIMPEZA
+   SigPrFti voltou a 8 (baseline 8)   SigPrFto de teste: 0
+   [OK]    tabelas restauradas ao estado inicial
+
+PROBE_FALHAS=2

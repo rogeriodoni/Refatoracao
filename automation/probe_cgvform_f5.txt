@@ -1,0 +1,83 @@
+=== PROBE Formsigopcgv - Fase 5/8 (task695) ===
+1) CREATEOBJECT Formsigopcgv -> VARTYPE=O Caption=[Pesquisa Global de Vendas]
+   DataSessionId do form = 2
+
+2) cursores locais do BO:
+   TmpPar         USED=SIM campos=10
+   crTmpTipos     USED=SIM campos=2
+   dbAberto       USED=SIM campos=10
+   dbDevolvido    USED=SIM campos=8
+   DbFollow       USED=SIM campos=3
+   DbTitulo       USED=SIM campos=8
+   TmpCart        USED=SIM campos=7
+   dbEstoque      USED=SIM campos=3
+   TmpPar      TAG Grupos=SIM
+   dbAberto    TAG Grupos=SIM ordem corrente=[VENCVAL]
+   dbDevolvido TAG Grupos=SIM TAG Cheque=SIM
+   DbFollow    TAG Nums=SIM
+   dbEstoque   TAG Grupos=SIM
+
+3) aba 2 (Pendencias): ControlCount=9
+   grd_4c_Pendentes=SIM cols=6 RS=[TmpPar]
+   grd_4c_TiposPend=SIM cols=2 RS=[crTmpTipos]
+   cbo_4c_GrupoPend=SIM  txt_4c_TotPend=SIM  cmd_4c_AnexaPend=SIM  cmd_4c_ImpPend=SIM
+
+3) aba 3 (Cheques): ControlCount=46
+   grd_4c_ChequeAberto=SIM cols=6  Followup=SIM  Titulo=SIM  Devolvido=SIM
+   totais: LimiteCred=SIM ChqAVencer=SIM ChqVencidos=SIM ChqDevolv=SIM SaldoCC=SIM ChqNegoc=SIM VlEstoque=SIM LimiteDisp=SIM TotAberto=SIM TotDevolvido=SIM
+
+3) aba 4 (Cartao): ControlCount=3  grd_4c_Cartao=SIM cols=6 RS=[TmpCart]
+3) aba 6 (Estoque): ControlCount=4  grd_4c_Estoque=SIM cols=3 RS=[dbEstoque]  cbo_4c_GrupoEstoque=SIM
+
+4) CheckBox da grade de tipos:
+   Columns(1).chk_4c_TipoPend=SIM  CurrentControl=[CHK_4C_TIPOPEND]  Sparse=.F.  ControlSource=[crTmpTipos.Listas]  ReadOnly=.F.
+
+5) metodos do Form (5=existe, 2=PROTECTED):
+   ConfigurarPaginaDados        existe=SIM protected=SIM
+   AtualizarAbaResultadoAtiva   existe=SIM protected=NAO
+   AtualizarGradePendencias     existe=SIM protected=NAO
+   AtualizarGradesCheques       existe=SIM protected=NAO
+   AtualizarGradeCartao         existe=SIM protected=NAO
+   AtualizarGradeEstoque        existe=SIM protected=NAO
+   FiltrarTipos                 existe=SIM protected=NAO
+   PreencherTotaisCheques       existe=SIM protected=NAO
+   PreencherComboGrupo          existe=SIM protected=NAO
+   CarregarAbasResultado        existe=SIM protected=NAO
+   ChkTipoPendKeyPress          existe=SIM protected=NAO
+   ChkTipoPendMouseUp           existe=SIM protected=NAO
+   BtnAnexaPendClick            existe=SIM protected=NAO
+   BtnImpPendClick              existe=SIM protected=NAO
+
+5b) metodos do BO (PUBLIC - chamados pelo Form):
+   CarregarParametros   existe=SIM protected=NAO
+   CarregarPendencias   existe=SIM protected=NAO
+   CarregarCheques      existe=SIM protected=NAO
+   CarregarCartoes      existe=SIM protected=NAO
+   CarregarEstoque      existe=SIM protected=NAO
+   CarregarGruposCursor existe=SIM protected=NAO
+   TotalPendencias      existe=SIM protected=NAO
+   ObterCotacao         existe=SIM protected=NAO
+
+6) funis de repintura (cursores vazios):
+   FiltrarTipos OK - TmpPar visiveis=1 total=0
+   AtualizarGradePendencias OK
+   AtualizarGradesCheques OK
+   AtualizarGradeCartao OK
+   AtualizarGradeEstoque OK
+   AtualizarAbaResultadoAtiva(aba 1) OK
+   AtualizarAbaResultadoAtiva(aba 2) OK
+   AtualizarAbaResultadoAtiva(aba 3) OK
+   AtualizarAbaResultadoAtiva(aba 4) OK
+   AtualizarAbaResultadoAtiva(aba 5) OK
+   AtualizarAbaResultadoAtiva(aba 6) OK
+   ChkTipoPendKeyPress(13,0) -> Listas=0 (era 1)
+   ChkTipoPendMouseUp        -> Listas=1 (volta a 1)
+
+7) totais espelhados na aba Cheques:
+   LimiteCred=1000 ChqAVencer=100 ChqVencidos=200 ChqDevolv=300 SaldoCC=400 ChqNegoc=500 VlEstoque=600 LimiteDisp=-100 TotAberto=700
+   LimiteDisp.ForeColor=255 (negativo deve ser vermelho = 255)  MoedaConta=[USD]  MoedaHist=[USD]
+
+8) AlternarPagina(2) -> ActivePage=2 modo=[RESULTADO] Height=600
+   AlternarPagina(1) -> ActivePage=1 modo=[CONSULTA]
+
+=== FIM SEM EXCECAO ===

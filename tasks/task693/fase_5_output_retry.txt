@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## N├úo executei a Fase 5 ÔÇö e a raz├úo ├® um bug do pipeline, n├úo do c├│digo
+
+Comecei fazendo o trabalho pedido, mas ao validar descobri que **a task693 est├í destruindo um form j├í migrado por completo**.
+
+### O que encontrei
+
+`Formsigopcgp.prg` j├í estava **completo e commitado** no HEAD (`392f0c064`): **5006 linhas**, cobrindo as Fases 3ÔÇô8 ÔÇö 92 TextBox, 73 Label, 6 OptionGroup, 4 Grid, 2 ComboBox, 2 CheckBox, 33 `BINDEVENT`, 20 `AbrirLookup*`, 25 handlers `Txt*KeyPress`, `InicializarCursores`, `Destroy`, e `Format`/`InputMask`/`MaxLength` j├í transcritos controle a controle.
+
+As **Fases 3 e 4 deste rerun j├í o haviam sobrescrito** por um esqueleto de 1672 linhas antes desta sess├úo come├ºar. Perda de ~3300 linhas de l├│gica real, sem uma linha de log indicando perda.
+
+A Fase 5 chegou como RETRY s├│ porque o gate reprovou um detalhe de nome: o esqueleto chamava o m├®todo de campos de `ConfigurarCamposFiltroParte1`, e o gate `case 5` exige o token literal `ConfigurarPaginaDados`.
+
+### O que fiz antes de perceber (e descartei)
+
+Transcrevi `Format`/`InputMask`/`MaxLength` dos 40 campos (a Fase 4/5 havia descartado todos ÔÇö regra #49), corrigi 4 tipos de `.Value` errados (`FxPreco`, `tamps/tamas/tamcs` eram caractere, estavam 0 ÔÇö quebrariam `PADR()`/`VAL()`), acrescentei a linha "Pre├ºo de Venda" que faltava e renomeei o m├®todo. Compilava limpo. **Mas o HEAD j├í tinha tudo isso e mais** ÔÇö inclusive a linha de venda. Continuar significaria entregar uma vers├úo reduzida, o que a "REGRA FUNDAMENTAL: SEMPRE FUNCIONALIDADE COMPLETA" pro├¡be.
+
+### A├º├úo tomada
+
+Restaurei o arquivo do HEAD (`git checkout HEAD --`), `git status` limpo, recompilado com `vfp9.exe -t`: FXP de 111.333 bytes, **zero `.err`**. A vers├úo restaurada **j├í satisfaz o gate da Fase 5** (`ConfigurarPaginaDados` na linha 2576), e tamb├®m os das Fases 3, 4 e 6.
+
+Atualizei `feedback_task_rerun_sobre_form_ja_migrado.md` com esta ocorr├¬ncia, que ├® uma **variante nova**: nas 10 anteriores a SCX era um placeholder vazio (sinal barato de suspeita). Aqui a SCX ├® real e grande ÔÇö 656 objetos no `layout.json`, 414 m├®todos no `comportamento.json` ÔÇö e o rerun foi destrutivo de todo jeito. O teste confi├ível ├® `git show HEAD:<path> | wc -l` contra `wc -l <path>`.
+
+### Pend├¬ncia sua
+
+A task693 segue enfileirada: **as Fases 6ÔÇô8 v├úo sobrescrever o arquivo outra vez.** Recomendo marc├í-la COMPLETED/SKIP. Note tamb├®m que o gate da Fase 7 exige `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`, que o `SIGOPCGP` (consulta, sem CRUD no legado) legitimamente n├úo tem.

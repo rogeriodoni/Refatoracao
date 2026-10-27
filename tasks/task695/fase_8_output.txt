@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All three compile cleanly with no `.err` files produced. The implementation is complete and consistent.
+
+## Summary
+
+Fase 8/8 for `Formsigopcgv` (SIGOPCGV - Pesquisa Global de Vendas) is done. This form is OPERACIONAL/CONSULTA (not CRUD), confirmed by its own header docs since Fase 3 ÔÇö so the generic Fase 8 template's CRUD method list (BtnSalvarClick, FormParaBO/BOParaForm, HabilitarCampos, CarregarLista, etc.) doesn't apply; the real equivalents (BtnCadastroClick/BtnMovimentoClick for "buscar", BtnCancelarConsultaClick/BtnVoltarClick for "encerrar") were already delivered in earlier phases.
+
+What I did this phase:
+- **Menu integration**: added bar 161 to `popMovimentos` and the canonical `AbrirFormsigopcgv()` procedure in `menu.prg` (VARTYPE check + `Show()` outside TRY, per CLAUDE.md regra #29).
+- **Consistency audit**: cross-checked every `THIS.<method>()` call in the form and every `this_oBusinessObject.<method>()` call against their definitions ÔÇö zero missing methods on either side.
+- **Compile verification**: compiled `sigopcgvBO.prg`, `Formsigopcgv.prg`, and `menu.prg` with VFP9 ÔÇö all three clean, no `.err` output.
+- **Documentation**: added a FASE 8/8 header block explaining why the generic CRUD method names don't apply and naming their real equivalents, keeping the known gaps (Vendas/Opera├º├Áes Pendentes/Produ├º├úo tabs, needing `PProduto()`; the `clsconta` cadastral wrapper) explicitly documented rather than silently omitted.
+
+No code changes were needed in the BO or form bodies beyond the header note ÔÇö phases 1-7 already left them complete and internally consistent.

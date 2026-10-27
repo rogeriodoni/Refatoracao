@@ -5161,6 +5161,232 @@ function Test-DialogoFilhoDoChamador {
     return [bool]($TextoDump -match "(?im)^\s*(LParameters|Parameters)\b[^\r\n]*\b$nomeParam\b")
 }
 
+<#
+.SYNOPSIS
+    Decide se TODA citacao de 'Grupo_Op' no dump legado pertence ao form PAI -
+    isto e', se a barra CRUD que o dump menciona NAO e' deste form.
+.DESCRIPTION
+    'frmcadastro' e 'Grupo_Op' entram nas Fases 7 e 8 como evidencia
+    ESTRUTURAL de CRUD, avaliada ANTES de todos os ramos de excecao e sem
+    nenhum teste de DONO - o comentario do gate dizia que elas "provam a barra
+    CRUD do framework e valem sempre". Para 'frmcadastro' isso e' verdade (e'
+    a CLASSE BASE do proprio form), mas para 'Grupo_Op' nao: um dialogo FILHO
+    cita a barra do PAI justamente para DESABILITA-LA enquanto esta aberto.
+
+    O SIGOPCFP ("Cfop's Permitidas para Operacao", task688) e' esse caso. O
+    'mCtrlBotoes' dele e' integralmente:
+
+        With Thisform.ParentForm.Pagina.Lista
+            For lnI=1 to .Grupo_Op.ButtonCount
+                If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' ...
+                    .Grupo_Op.Buttons(lnI).Enabled = plHabilita
+            ...
+            .Grupo_Saida.Sair.Enabled = plHabilita
+        EndWith
+
+    As TRES citacoes sao RELATIVAS ('.Grupo_Op') dentro de um WITH cujo alvo e'
+    'Thisform.ParentForm.Pagina.Lista'. O dump nao tem 'frmcadastro', e' um
+    'form' puro, recebe o modo por parametro ('LParameters poForm, pnDataSes,
+    pcEscolha') e seus unicos botoes sao cmdInserir/cmdExcluir/cmdSair - a
+    toolbar de LINHA da grade de Cfops. Marcado como CRUD pela evidencia
+    estrutural, a Fase 7 exigia os quatro BtnXxxClick: insatisfazivel sem
+    INVENTAR botao (viola o PILAR 1) ou criar metodo vazio (proibido pela
+    regra de completude) - e, pior que nas nove excecoes anteriores, os ramos
+    de dispensa nem chegavam a ser avaliados, porque a evidencia ESTRUTURAL
+    curto-circuita todos eles antes.
+
+    Decima excecao da familia e a PRIMEIRA que olha a evidencia ESTRUTURAL em
+    vez do NOME do botao. O criterio e' o mesmo DONO que as irmas ja aplicam a
+    'pcEscolha' (Test-ModoRecebidoDoChamador) e ao '<X>.Click' em container de
+    grade: o que decide nao e' a PRESENCA do nome, e' de QUEM ele e'.
+
+    FAIL-CLOSED em tres camadas:
+      1. so devolve $true se houver ao menos UMA citacao viva de 'Grupo_Op' -
+         dump sem o nome nao tem o que dispensar;
+      2. TODA citacao viva tem de se provar do PAI; uma unica nao qualificada
+         (inclusive a declaracao do objeto na SECAO 1, que seria prova de
+         POSSE) devolve $false e preserva o veredito de hoje;
+      3. 'frmcadastro' NAO e' afetado - continua valendo sempre, e os call
+         sites so consultam esta funcao quando 'frmcadastro' esta AUSENTE.
+
+    Linha comentada ('*', '&&', '*!*') nao conta como citacao, pela mesma
+    razao de Get-ContagemPcEscolhaViva: e' codigo MORTO.
+#>
+function Test-BarraCrudEhDoFormPai {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # Mesmo vocabulario de referencia ao form PAI usado por
+    # Test-ModoRecebidoDoChamador (item d).
+    $rxPai = '(?i)(ParentForm|pForm|poForm|oForm|oFormulario|par_oForm)\s*\.'
+
+    $achou = $false
+    $pilha = New-Object System.Collections.ArrayList
+
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+
+        # Comentario do Form Designer / do VFP: codigo morto. Nao e' citacao e
+        # tambem nao abre nem fecha WITH.
+        if ($linha -match '^\s*(\*|&&)') { continue }
+
+        # Pilha de WITH, para resolver a citacao RELATIVA '.Grupo_Op'.
+        if ($linha -match '(?i)^\s*With\s+(\S.*?)\s*$') {
+            [void]$pilha.Add($Matches[1])
+        }
+        elseif ($linha -match '(?i)^\s*End\s*With\b') {
+            if ($pilha.Count -gt 0) { $pilha.RemoveAt($pilha.Count - 1) }
+        }
+
+        if ($linha -notmatch '(?i)Grupo_Op') { continue }
+
+        $achou = $true
+
+        # (a) Qualificada na PROPRIA linha: '...ParentForm.<...>.Grupo_Op'.
+        if ($linha -match ($rxPai + '[A-Za-z0-9_.\s]*Grupo_Op')) { continue }
+
+        # (b) RELATIVA ('.Grupo_Op') dentro de um WITH cujo alvo e' o PAI.
+        if ($linha -match '(?i)(^|[^A-Za-z0-9_])\.\s*Grupo_Op') {
+            if ($pilha.Count -gt 0 -and ($pilha[$pilha.Count - 1] -match $rxPai)) { continue }
+        }
+
+        # Citacao que nao se prova do PAI: mantem o veredito de hoje.
+        return $false
+    }
+
+    return $achou
+}
+
+<#
+.SYNOPSIS
+    Decide se o CommandGroup 'Grupo_Op' do PROPRIO form NAO e' a barra CRUD do
+    frmcadastro - isto e', se NENHUM botao dele tem verbo CRUD no nome nem no
+    caption.
+.DESCRIPTION
+    DECIMA-PRIMEIRA excecao da familia do gate das Fases 7/8, e a SEGUNDA que
+    olha a evidencia ESTRUTURAL 'Grupo_Op' em vez do NOME do botao.
+
+    A decima (Test-BarraCrudEhDoFormPai) resolveu o caso em que 'Grupo_Op' e'
+    do form PAI. Ela nao alcanca este, porque aqui o grupo e' mesmo DESTE
+    form - o que nao prova barra CRUD nenhuma: 'Grupo_op' e' o nome que o
+    legado Fortyus reusa para QUALQUER CommandGroup de acao sobre um 'form'
+    puro, e so no frmcadastro ele hospeda Incluir/Alterar/Visualizar/Excluir.
+
+    O SIGOPCHI ("Historico de Cheques", task698) e' esse caso. As 16 citacoes
+    sao todas 'ThisForm.Pagina.Historico.Grupo_op...' (posse, nao emprestimo),
+    e os OITO botoes do grupo sao:
+
+        Command1.Name = "Relatorio"     Command5.Name = "Carteira"
+        Command2.Name = "Procurar"      Command6.Name = "Protocolo"
+        Command3.Name = "Prorroga"      Command7.Name = "Documento"
+        Command4.Name = "FollowUp"      Command8.Name = "followUpChq"
+
+    ZERO verbo CRUD - sao acoes de dominio sobre o cheque corrente. O dump nao
+    tem 'frmcadastro' (Class/BaseClass 'form' puro), nao tem 'pcEscolha', nao
+    tem nome btn|cmd(Incluir|Alterar|Visualizar|Excluir) e nao tem
+    '<Verbo>.Click': o nome do CommandGroup e' a UNICA evidencia. Marcado como
+    CRUD, a Fase 7 exigia os quatro BtnXxxClick e a Fase 8 exigia ainda
+    BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista de um visualizador
+    somente-leitura - insatisfazivel sem INVENTAR botao (viola o PILAR 1) ou
+    criar metodo vazio (proibido pela regra de completude). E, como na decima,
+    os ramos de dispensa nem chegavam a ser avaliados: a evidencia ESTRUTURAL
+    curto-circuita todos eles antes.
+
+    O criterio sao os MESMOS quatro verbos que a fase exige como BtnXxxClick:
+    se o grupo nao tem NENHUM deles, ele nao pode justificar exigi-los.
+    'Procurar' (que a barra do frmcadastro tambem tem, como "Buscar")
+    DELIBERADAMENTE nao conta - sozinho ele nao prova barra CRUD e nenhum dos
+    quatro handlers exigidos corresponde a ele.
+
+    FAIL-CLOSED em quatro camadas:
+      1. so devolve $true se houver ao menos UMA citacao viva de 'Grupo_Op' -
+         dump sem o nome nao tem o que dispensar;
+      2. o bloco '* PROPRIEDADES DE: <...>.Grupo_Op' tem de EXISTIR e trazer
+         ao menos UM membro 'CommandN.Name/Caption'. Bloco ausente, ou grupo
+         sem membro nenhum, e' ausencia de PROVA (nao prova de ausencia) e
+         mantem o veredito de hoje - mesma regra que protege os 152 REPORT em
+         Get-ContagemBotoesLegado;
+      3. UM membro com verbo CRUD no Name OU no Caption devolve $false;
+      4. citacao viva que nomeia botao com verbo CRUD
+         ('...Grupo_Op.Excluir.Click') devolve $false - o membro pode nao
+         aparecer no bloco de propriedades quando o SCX nao sobrescreveu nada
+         nele.
+
+    Os verbos sao RADICAIS ('Inclu','Alter','Visualiz','Exclu') e nao palavras
+    exatas, para cobrir flexao no Caption ('Exclusao', 'Alteracao'): casar
+    DEMAIS aqui e' o lado SEGURO, porque devolve $false e preserva o veredito
+    de hoje.
+
+    'frmcadastro' NAO e' afetado - continua valendo sempre, e os call sites so
+    consultam esta funcao quando ele esta AUSENTE.
+
+    Linha comentada ('*', '&&', '*!*') nao conta como citacao, pela mesma
+    razao de Get-ContagemPcEscolhaViva: e' codigo MORTO. O bloco de
+    PROPRIEDADES e' excecao - ele E' um comentario por construcao do extrator.
+#>
+function Test-GrupoOpSemVerboCrud {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    $linhas = $TextoDump -split "`r?`n"
+
+    # Os MESMOS quatro verbos que a fase exige como BtnXxxClick.
+    $rxVerboCrud = '(?i)(Inclu|Alter|Visualiz|Exclu)'
+
+    # Camada 1: sem citacao VIVA de 'Grupo_Op' nao ha o que dispensar.
+    $temCitacaoViva = $false
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -match '(?i)Grupo_Op') { $temCitacaoViva = $true; break }
+    }
+    if (-not $temCitacaoViva) { return $false }
+
+    # Camada 2/3: enumerar os membros de cada objeto cujo nome contem
+    # 'Grupo_Op' - o gate casa o nome por SUBSTRING, entao a prova tem de
+    # cobrir todo objeto que ele alcancaria.
+    $nBlocos  = 0
+    $nMembros = 0
+    $dentro   = $false
+
+    foreach ($linha in $linhas) {
+
+        if ($linha -match '(?i)^\s*\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') {
+            $ultimo = ($Matches[1] -split '\.')[-1]
+            $dentro = [bool]($ultimo -match '(?i)Grupo_Op')
+            if ($dentro) { $nBlocos++ }
+            continue
+        }
+
+        # Qualquer outro cabecalho de secao do extrator encerra o bloco.
+        if ($linha -match '(?i)^\s*\*\s*(OBJETO|SECAO|METODO|EVENTO|CODIGO)\b') { $dentro = $false; continue }
+
+        if (-not $dentro) { continue }
+
+        # Membro do grupo: 'Command1.Name = "Relatorio"'.
+        if ($linha -match '(?i)^\s*(Command|Button|Botao)\d+\s*\.\s*(Name|Caption)\s*=\s*(.+?)\s*$') {
+            $nMembros++
+            if ($Matches[3] -match $rxVerboCrud) { return $false }
+        }
+    }
+
+    # Camada 2 (fail-closed): ausencia de PROVA nao e' prova de ausencia.
+    if ($nBlocos -eq 0 -or $nMembros -eq 0) { return $false }
+
+    # Camada 4: botao com verbo CRUD citado sem estar no bloco de propriedades.
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -notmatch '(?i)Grupo_Op') { continue }
+        if ($linha -match ('(?i)Grupo_Op\s*\.\s*' + $rxVerboCrud)) { return $false }
+    }
+
+    return $true
+}
+
 function Get-ContagemBotoesLegado {
     param(
         [string]$TextoDump
@@ -5431,12 +5657,32 @@ function Get-ContagemPcEscolhaViva {
     INVENTAR botao (viola o PILAR 1) ou criar metodo vazio (proibido pela regra
     de completude), mesmo com os 4 handlers reais dos 4 botoes do legado.
 
-    FAIL-CLOSED em tres camadas:
+    O REPORT FORM nao precisa estar no proprio Click: o botao pode delegar
+    para um METODO DO FORM que monta os cursores e imprime. O SIGOPCGB
+    ("Pesquisa Global de Codigo de Barras", task689) e' o par btnImprimir/
+    btnVisualizar cujos Click sao "ThisForm.Imagem('I')" e
+    "ThisForm.Imagem('V')"; o metodo 'imagem' monta CsCabecalho/CsBranco e
+    termina em "If lcTip = 'I' / Report Form SIGOPCGB To Print Prompt
+    NoConsole / Else / Report Form SIGOPCGB Preview NoConsole / EndIf". O
+    dump nao tem frmcadastro, Grupo_Op, pcEscolha nem "<X>.Click", e o form
+    e' um CONSULTOR somente-leitura. Marcado como CRUD, a fase exigia os
+    quatro BtnXxxClick - insatisfazivel sem INVENTAR botao (viola o PILAR 1)
+    ou criar metodo vazio (proibido pela regra de completude), mesmo com os
+    handlers reais de todos os botoes do legado.
+
+    FAIL-CLOSED em cinco camadas:
       1. dump vazio -> $false;
       2. nenhum match do regex de nome -> $false (nao ha o que dispensar);
-      3. verbo cujo "PROCEDURE <nome>.Click" NAO esta no dump NAO e'
-         dispensado - ausencia de prova nao e' prova de ausencia.
-    So devolve $true quando TODO nome casado tem Click PROVADO com REPORT FORM.
+      3. verbo cujo Click NAO esta no dump NAO e' dispensado - ausencia de
+         prova nao e' prova de ausencia. O corpo do Click vem de
+         Get-CorpoClickDoObjetoLegado, que cobre as DUAS formas do extrator
+         (qualificada e bare); o regex proprio que esta funcao usava antes
+         cobria so a qualificada e por isso nunca enxergava botao SOLTO;
+      4. Click sem REPORT FORM que nao delega para metodo nenhum -> $false;
+      5. metodo delegado cujo corpo nao esta no dump -> $false.
+    So devolve $true quando TODO nome casado tem REPORT FORM PROVADO, no
+    proprio Click ou no metodo do form que ele chama (UM nivel, sem
+    recursao).
 
     A evidencia ESTRUTURAL (frmcadastro / Grupo_Op / pcEscolha) e' avaliada
     ANTES no call site e faz short-circuit, entao form CRUD que tambem imprime
@@ -5472,21 +5718,43 @@ function Test-VerbosCrudSaoTodosDeRelatorio {
     foreach ($m in $achados) { $nomes[$m.Value.ToUpper()] = $m.Value }
 
     foreach ($nome in $nomes.Values) {
-        # Corpo do Click daquele objeto, aceitando caminho qualificado
-        # ("PROCEDURE cntBotoes.btnVisualizar.Click").
-        $padraoClick = '(?ims)^[ \t]*PROCEDURE[ \t]+(?:[A-Za-z0-9_]+\.)*' +
-                       [regex]::Escape($nome) +
-                       '\.Click[ \t]*\r?$(.*?)^[ \t]*ENDPROC'
-
-        $mClick = [regex]::Match(
-            $TextoDump,
-            $padraoClick,
-            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+        # Corpo do Click nas DUAS formas que o extrator produz (qualificada
+        # e bare) - FONTE UNICA com as excecoes 8 e 9. A versao anterior
+        # desta funcao tinha regex proprio que casava SO a forma
+        # qualificada e, por isso, nunca encontrava o Click de
+        # CommandButton SOLTO: num gate fail-closed isso vira "ausencia de
+        # prova" e a dispensa jamais acontecia para botao solto, sem erro e
+        # sem aviso - exatamente o alerta que o docstring de
+        # Get-CorpoClickDoObjetoLegado registra (CLAUDE.md #44, item 6:
+        # predicado duplicado nos dois call sites diverge em silencio no
+        # primeiro caso novo).
+        $corpoClick = Get-CorpoClickDoObjetoLegado -TextoDump $TextoDump -NomeObjeto $nome
 
         # Camada 3: sem o Click no dump, NAO dispensa.
-        if (-not $mClick.Success) { return $false }
+        if ($null -eq $corpoClick) { return $false }
 
-        if ($mClick.Groups[1].Value -notmatch '(?i)\bREPORT[ \t]+FORM\b') { return $false }
+        if ($corpoClick -match '(?i)\bREPORT[ \t]+FORM\b') { continue }
+
+        # Camadas 4 e 5: o REPORT FORM pode estar UM nivel adiante - o
+        # Click apenas delega para um METODO DO FORM que monta os cursores
+        # e imprime. Um Visualizar que da PREVIEW DO RELATORIO continua nao
+        # sendo a vista de um REGISTRO, esteja o REPORT FORM no proprio
+        # Click ou no metodo que ele chama.
+        #
+        # Indirecao de UM nivel so, sem recursao: o metodo chamado pelo
+        # metodo chamado nao conta. Fail-closed nos dois pontos - Click sem
+        # REPORT FORM que nao delega para metodo nenhum NAO eh dispensado,
+        # e metodo cujo corpo nao esta no dump tampouco.
+        $delegaParaRelatorio = $false
+        foreach ($mDeleg in [regex]::Matches($corpoClick, '(?i)\bThisForm\s*\.\s*([A-Za-z0-9_]+)\s*\(')) {
+            $corpoMetodo = Get-CorpoMetodoDoFormLegado -TextoDump $TextoDump -NomeMetodo $mDeleg.Groups[1].Value
+            if ($null -ne $corpoMetodo -and $corpoMetodo -match '(?i)\bREPORT[ \t]+FORM\b') {
+                $delegaParaRelatorio = $true
+                break
+            }
+        }
+
+        if (-not $delegaParaRelatorio) { return $false }
     }
 
     return $true
@@ -5550,6 +5818,49 @@ function Get-CorpoClickDoObjetoLegado {
         $ic)
     if ($mB.Success) { return $mB.Groups[1].Value }
 
+    return $null
+}
+
+<#
+.SYNOPSIS
+    Devolve o CORPO de um METODO DO FORM legado ("PROCEDURE <nome>", nome
+    nu, sem caminho), para seguir UM nivel de indirecao a partir de um
+    Click.
+
+.DESCRIPTION
+    Irma de Get-CorpoClickDoObjetoLegado, e existe pelo mesmo motivo: botao
+    do legado frequentemente nao FAZ o trabalho no proprio Click - ele
+    delega para um metodo do form ("ThisForm.Imagem('V')"). Quem olha so o
+    corpo do Click conclui "nao ha prova" e, num gate fail-closed, a
+    dispensa nunca acontece.
+
+    O dump distingue os dois casos pelo PONTO: metodo do form sai como
+    "PROCEDURE imagem" (nome nu), Click de objeto sai como
+    "PROCEDURE btnX.Click" ou como "PROCEDURE Click" dentro do bloco
+    "* OBJETO: ...". Por isso a ancora aqui exige o nome NU, sem caminho.
+
+    A linha de cabecalho do extrator ("* PROCEDURE imagem") comeca com "*"
+    e nao casa - a ancora pede PROCEDURE no inicio da linha.
+
+    Devolve $null quando nao achou o metodo - o chamador decide o que fazer
+    (num gate fail-closed, manter a exigencia).
+#>
+function Get-CorpoMetodoDoFormLegado {
+    param(
+        [string]$TextoDump,
+        [string]$NomeMetodo
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump) -or [string]::IsNullOrWhiteSpace($NomeMetodo)) {
+        return $null
+    }
+
+    $m = [regex]::Match(
+        $TextoDump,
+        '(?ims)^[ \t]*PROCEDURE[ \t]+' + [regex]::Escape($NomeMetodo) + '[ \t]*\r?$(.*?)^[ \t]*ENDPROC',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    if ($m.Success) { return $m.Groups[1].Value }
     return $null
 }
 
@@ -5677,6 +5988,139 @@ function Test-VerbosCrudSaoTodosDeLinhaDeGrade {
         )
         foreach ($padrao in $padroesPersistencia) {
             if ($corpo -match "(?i)$padrao") { return $false }
+        }
+    }
+
+    return $true
+}
+
+<#
+.SYNOPSIS
+    Diz se TODA evidencia de NOME de verbo CRUD no dump e', de fato, botao de
+    toolbar de LINHA que edita a linha por PAINEL FLUTUANTE.
+
+.DESCRIPTION
+    Nona excecao da familia "evidencia de NOME" do gate da Fase 7, e terceira
+    que olha o que o botao FAZ (o corpo do Click) em vez de quem e' o dono do
+    nome - irma de Test-VerbosCrudSaoTodosDeRelatorio (setima) e de
+    Test-VerbosCrudSaoTodosDeLinhaDeGrade (oitava).
+
+    A oitava excecao ja reconhece a toolbar de LINHA, mas exige que o Click
+    mexa na linha IN-PLACE ("Append Blank" ou "Delete" nu). Ha toolbar de linha
+    que nao faz nada disso: ela abre um PAINEL FLUTUANTE e copia a linha
+    corrente para os campos dele, deixando a gravacao para o LostFocus do
+    painel. O SIGOPCFL ("Consulta de FollowUp de Cheques", task687) e' esse
+    caso - um dialogo filho (LParameters pConta, pData) cuja barra
+    cmdApagaItem tem cmdInserir/cmdAlterar/cmdApagar/cmdListar sobre a grade de
+    followup (crSigCheh), e cujo cmdAlterar.Click e' integralmente:
+
+        ThisForm.Tipo = 'ALTERAR'
+        ThisForm.cnt_inserir.Visible = .t.
+        ThisForm.cnt_inserir.GetData.Value = CrSigCheh.Datas
+        ThisForm.cnt_inserir.GetHist.Value = CrSigCheh.Hists
+        ThisForm.cnt_inserir.Refresh
+        ThisForm.cnt_inserir.GetData.SetFocus
+
+    O dump nao tem frmcadastro, Grupo_Op nem pcEscolha (o modo e' uma property
+    propria, ThisForm.Tipo), e nao existe nenhum botao Visualizar - o quarto
+    verbo-like e' cmdListar (acesso 'LISTAR'), que no legado nao tem Click
+    algum. Marcado como CRUD, a fase exigia os quatro BtnXxxClick -
+    insatisfazivel sem INVENTAR botao (viola o PILAR 1) ou criar metodo vazio
+    (proibido pela regra de completude), mesmo com os 4 handlers reais dos 3
+    botoes que o legado de fato aciona + o de saida.
+
+    Assinatura exigida do Click, TODA ela, para cada nome casado:
+      1. ABRE um painel - "<caminho.>X.Visible = .T.";
+      2. POPULA um controle DESSE MESMO X - "<caminho.>X.<ctrl>.Value = ...".
+         Amarrar (1) e (2) ao MESMO objeto e' o que torna a assinatura precisa:
+         botao que apenas mostra/esconde algo nao passa;
+      3. NAO persiste, NAO conhece o modo do frmcadastro, NAO navega pagina e
+         NAO imprime - sem Insert Into / Update <x> / Delete From / Delete nu /
+         SqlExec(ute) / TableUpdate / Replace / pcEscolha / ActivePage /
+         REPORT FORM.
+
+    A camada 3 e' o que mantem a dispensa estreita: botao CRUD de verdade grava
+    (ou chama quem grava) e troca de pagina, e nunca passa por ela. 'ActivePage'
+    esta ali porque e' justamente como a barra do frmcadastro vai para a Page de
+    Dados - sem esse veto, um Alterar CRUD que abrisse container e preenchesse
+    campo poderia escapar.
+
+    FAIL-CLOSED em tres camadas, igual as irmas:
+      1. dump vazio -> $false;
+      2. nenhum match do regex de nome -> $false (nao ha o que dispensar);
+      3. verbo cujo Click NAO esta no dump NAO e' dispensado - ausencia de
+         prova nao e' prova de ausencia. Usa Get-CorpoClickDoObjetoLegado, que
+         le as DUAS formas (qualificada e bare).
+
+    A evidencia ESTRUTURAL (frmcadastro / Grupo_Op / pcEscolha) e' avaliada
+    ANTES no call site e faz short-circuit, entao form CRUD que tambem tenha
+    painel de linha nunca chega aqui.
+
+    Medido em 2026-10-23 nos 686 dumps de tasks\: o veredicto muda em
+    exatamente UM dump - SigOpCfl (task687) -, e so no sentido da dispensa
+    (True -> False). ZERO regressao: SIGCDCOR, sigcdcli, SIGCDCAR, SigCdMoe,
+    SIGCDSET e SigCdTam seguem CRUD, e SIGPRMDC/SIGPRCAR/SIGPRITB seguem
+    dispensados pelos ramos anteriores.
+
+.PARAMETER TextoDump
+    Conteudo do arquivo <Base>_form_codigo_fonte.txt.
+#>
+function Test-VerbosCrudSaoTodosDePainelDeLinha {
+    param([string]$TextoDump)
+
+    # Camada 1: sem dump nao ha prova - mantem a exigencia.
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # MESMO padrao do call site, IgnoreCase explicito (Matches nao herda do -match).
+    $achados = [regex]::Matches(
+        $TextoDump,
+        '(btn|cmd|Command)(Incluir|Alterar|Visualizar)(?![A-Za-z0-9_])',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+    # Camada 2: nada casou - nao ha o que dispensar.
+    if ($achados.Count -eq 0) { return $false }
+
+    $nomes = @{}
+    foreach ($m in $achados) { $nomes[$m.Value.ToUpper()] = $m.Value }
+
+    foreach ($nome in $nomes.Values) {
+        $corpo = Get-CorpoClickDoObjetoLegado -TextoDump $TextoDump -NomeObjeto $nome
+
+        # Camada 3: sem o Click no dump, NAO dispensa.
+        if ($null -eq $corpo) { return $false }
+
+        # (1) ABRE um painel: "<caminho.>X.Visible = .T.".
+        $mVis = [regex]::Match(
+            $corpo,
+            '(?im)^[ \t]*(?:[A-Za-z0-9_]+\.)*([A-Za-z0-9_]+)[ \t]*\.[ \t]*Visible[ \t]*=[ \t]*\.T\.[ \t]*\r?$',
+            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+        if (-not $mVis.Success) { return $false }
+
+        # (2) POPULA um controle DESSE MESMO painel: "<...>X.<ctrl>.Value = ...".
+        # Amarrar os dois ao mesmo objeto e' o que torna a assinatura precisa:
+        # botao que apenas mostra/esconde algo nao passa, e botao CRUD que
+        # troca de pagina tambem nao.
+        $painel = [regex]::Escape($mVis.Groups[1].Value)
+        if ($corpo -notmatch ('(?im)^[ \t]*(?:[A-Za-z0-9_]+\.)*' + $painel + '\.[A-Za-z0-9_]+[ \t]*\.[ \t]*Value[ \t]*=')) {
+            return $false
+        }
+
+        # (3) NAO persiste, nao conhece modo do frmcadastro, nao navega pagina
+        # e nao imprime. Esta camada e' o que mantem a dispensa estreita.
+        $padroesProibidos = @(
+            'Insert[ \t]+Into\b',
+            'Update[ \t]+[A-Za-z0-9_]',
+            'Delete[ \t]+From\b',
+            '\bDelete[ \t]*\r?$',
+            'SqlExec(ute)?\b',
+            'TableUpdate\b',
+            '\bReplace\b',
+            'pcEscolha',
+            'ActivePage',
+            '\bREPORT[ \t]+FORM\b'
+        )
+        foreach ($padrao in $padroesProibidos) {
+            if ($corpo -match "(?im)$padrao") { return $false }
         }
     }
 
@@ -6414,6 +6858,125 @@ function Test-LegadoSemCampoNemLista {
     if ($temAgrupadorVcx) { return $false }
 
     return $true
+}
+<#
+.SYNOPSIS
+    Legado PAGINADO cujas Pages NAO sao o par Lista/Dados do CRUD
+.DESCRIPTION
+    Usado pelo ramo PAGINADO-NAO-CRUD da Fase 5. O ramo PAGINADO original
+    daquela fase procura "ConfigurarPaginaDados" - nome que so tem referente
+    quando o PageFrame do legado tem uma Page chamada Dados. Existe form
+    OPERACIONAL cujo PageFrame organiza a tela em paginas de DOMINIO: em
+    SIGOPCHI -> FormSigOpChi (task698, "Historico de Cheques") o PageFrame
+    "Pagina" tem as Pages "Filtro" e "Historico", e nao ha Page de Dados
+    nenhuma.
+
+    Exigir ConfigurarPaginaDados desse form obrigaria a INVENTAR uma Page2 de
+    Dados que o legado nao tem (viola o PILAR 1 e a regra "NUNCA inventar") ou
+    a escrever um ConfigurarPaginaDados vazio so para casar com o regex - o
+    "stub disfarcado" proibido pela regra de completude. E os outros ramos da
+    Fase 5 tambem nao alcancam: FLAT exige AUSENCIA de pgf_4c_ (aqui o legado
+    TEM PageFrame e o migrado o reproduz); DESPACHANTE exige legado sem lista e
+    sem campos (este tem 3 grades e 9 campos); EXIBICAO exige TODO campo
+    ReadOnly (aqui so o Followup e'); ARVORE exige OLEControl com API de nos;
+    CAPTURA exige legado SEM lista (este tem grade).
+
+    O trabalho da fase continua cobrado - ver o ramo, que exige paridade
+    numerica de campos nas Pages que o legado DE FATO tem.
+
+    O teste de nome e' por SUBSTRING e cobre as duas familias: "dado" pega
+    Dados/pgDados/PagDados/pgdados, e "lista" pega Lista/pgLista. Uma unica
+    Page de Dados devolve o form ao ramo PAGINADO original - ausencia de prova
+    nao e' prova de ausencia.
+
+    Medido em 2026-10-25 nos dumps de tasks\: ver medir_f5_pag3.ps1.
+#>
+function Test-LegadoPaginadoSemPaginaDados {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    # (0) piso de sanidade - o dump foi parseado?
+    if (([regex]::Matches($TextoDump, '(?im)^\s*BaseClass:\s*(\S+)\s*$')).Count -lt 1) { return $false }
+
+    $linhas = $TextoDump -split "`r?`n"
+
+    # (1) 1a passada (SECAO 1 - arvore de objetos): nome dos objetos cujo
+    # BaseClass e' pageframe. Copiar $matches AGORA (regra #43).
+    $pgfs     = @{}
+    $objAtual = ""
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') {
+            $objAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*pageframe\s*$') {
+            if ($objAtual) { $pgfs[$objAtual.ToUpper()] = $true }
+        }
+    }
+    if ($pgfs.Count -eq 0) { return $false }
+
+    # (2) 2a passada: o nome de uma Page e' o segmento que vem DEPOIS do nome
+    # do PageFrame em qualquer caminho "Parent:" - a Page em si nao aparece
+    # como "Objeto:" no dump.
+    $paginas = @{}
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*Parent:\s*(\S+)\s*$') {
+            $segs = $matches[1] -split '\.'
+            for ($i = 0; $i -lt $segs.Count - 1; $i++) {
+                if ($pgfs.ContainsKey($segs[$i].ToUpper())) { $paginas[$segs[$i + 1].ToUpper()] = $true }
+            }
+        }
+    }
+    if ($paginas.Count -eq 0) { return $false }
+
+    # (3) qualquer Page de Dados ou de Lista devolve o form ao ramo PAGINADO
+    foreach ($p in $paginas.Keys) {
+        if ($p -match 'DADO' -or $p -match 'LISTA') { return $false }
+    }
+
+    return $true
+}
+<#
+.SYNOPSIS
+    Quantos campos de TELA o legado tem (TextBox fora de coluna de grade)
+.DESCRIPTION
+    Piso de paridade do ramo PAGINADO-NAO-CRUD da Fase 5, no mesmo criterio
+    que os ramos ARVORE e CAPTURA ja usam: "metade dos campos do legado".
+
+    A diferenca em relacao aqueles dois e' o DESCONTO das colunas de grade: o
+    Text1 de uma Column e' membro NATIVO da Column (a coluna nasce com
+    Header1 + Text1 - regra #18), nao e' campo que alguem acrescente a tela.
+    Contar esses Text1 infla o piso em proporcao ao numero de colunas das
+    grades e transformaria a paridade em exigencia de INVENTAR TextBox: no
+    dump do SIGOPCHI sao 9 campos de tela contra 22 Text1 de coluna nas tres
+    grades, ou seja o piso saltaria de 5 para 16 num form que tem 9 campos.
+
+    O Parent de um Text1 de coluna termina em ".ColumnN" - e' por ele que se
+    distingue, e nao pelo nome do objeto (todos se chamam Text1).
+#>
+function Get-ContagemCamposLegadoForaDeGrade {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return 0 }
+
+    # No dump o "Parent:" vem ANTES do "BaseClass:" do mesmo objeto, entao
+    # quando a linha de BaseClass chega o pai ja esta conhecido.
+    $n           = 0
+    $parentAtual = ""
+    foreach ($linha in ($TextoDump -split "`r?`n")) {
+        if ($linha -match '^\s*Objeto:\s*(\S+)\s*$') {
+            $parentAtual = ""
+        } elseif ($linha -match '^\s*Parent:\s*(\S+)\s*$') {
+            $parentAtual = $matches[1]
+        } elseif ($linha -match '^\s*BaseClass:\s*textbox\s*$') {
+            if ($parentAtual -notmatch '(?i)\.Column\d+$') { $n++ }
+        }
+    }
+
+    return $n
 }
 <#
 .SYNOPSIS
@@ -7951,6 +8514,75 @@ function Invoke-MigracaoFase {
                 $temLayoutCapturaF5 = ($FormType -eq "OPERACIONAL" -and
                                        $legadoCapturaF5 -and $temSuperficieCapturaF5)
 
+                # Layout PAGINADO NAO-CRUD: form OPERACIONAL cujo SCX legado
+                # TEM PageFrame, mas cujas Pages nao sao o par Lista/Dados do
+                # CRUD - sao as paginas de DOMINIO da tela. Em SIGOPCHI ->
+                # FormSigOpChi (task698, "Historico de Cheques") o PageFrame
+                # "Pagina" tem as Pages "Filtro" e "Historico", e Page de
+                # Dados nao existe.
+                #
+                # O ramo PAGINADO original procura "ConfigurarPaginaDados",
+                # nome que so tem referente quando ha uma Page chamada Dados.
+                # Exigi-lo aqui obrigaria a INVENTAR uma Page2 de Dados que o
+                # legado nao tem (viola o PILAR 1 e a regra "NUNCA inventar")
+                # ou a escrever um ConfigurarPaginaDados vazio so para casar
+                # com o regex - o "stub disfarcado" proibido pela regra de
+                # completude. E os OUTROS ramos nao alcancam: FLAT exige
+                # AUSENCIA de pgf_4c_ (aqui o legado TEM PageFrame e o migrado
+                # o reproduz); DESPACHANTE exige legado sem lista e sem campos
+                # (este tem 3 grades e 9 campos); EXIBICAO exige TODO campo
+                # ReadOnly (aqui so o Followup e'); ARVORE exige OLEControl com
+                # API de nos; CAPTURA exige legado SEM lista (este tem grade).
+                #
+                # A excecao NAO vira atalho para form com meia tela: o
+                # trabalho da fase continua cobrado onde ele de fato mora - nas
+                # Pages que o legado TEM -, com a MESMA paridade numerica dos
+                # ramos ARVORE e CAPTURA (metade dos campos do legado), so que
+                # DESCONTANDO os Text1 de coluna de grade, que sao membros
+                # nativos da Column e nao campos de tela (ver
+                # Get-ContagemCamposLegadoForaDeGrade).
+                #
+                # FAIL-CLOSED em seis portas: (1) so FormType = OPERACIONAL;
+                # (2) so com o dump PRESENTE e parseado; (3) o dump tem de
+                # provar PageFrame com Page NOMEADA; (4) nenhuma Page pode ter
+                # nome de Dados nem de Lista - uma unica pgDados devolve o form
+                # ao ramo PAGINADO original; (5) o legado tem de ter >= 1
+                # campo (zero campo e' DESPACHANTE, coberto por outro ramo);
+                # (6) do lado migrado, PageFrame construido + esqueleto da
+                # Fase 3 + metade dos campos do legado.
+                #
+                # Medido em 2026-10-25 nos dumps de tasks\ (ver
+                # automation\medir_f5_pag3.ps1): 64 dumps tem PageFrame, 18
+                # deles sao OPERACIONAL; destes, 7 tem Page de Dados/Lista e
+                # reprovam pela porta (4) - sigmvcot, sigopcgc, SIGOPCGF,
+                # SIGPGCNB e SIGPRCNB. Sobram 11 tasks = 6 forms distintos
+                # (sigopcgp, SigOpCgr, sigopcgv, SigOpChi, sigprftp,
+                # SigPrGlx), e 5 desses 6 JA passam pelo ramo PAGINADO
+                # original porque o migrado deles tem ConfigurarPaginaDados -
+                # o delta EFETIVO do carve-out e' 1 form: FormSigOpChi.
+                $legadoPaginadoSemDadosF5 = $false
+                $nCamposPagLegadoF5       = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpPagF5 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpPagF5) {
+                        $txtPagF5 = Get-Content $dumpPagF5 -Raw -ErrorAction SilentlyContinue
+                        if ($txtPagF5) {
+                            $legadoPaginadoSemDadosF5 = Test-LegadoPaginadoSemPaginaDados -TextoDump $txtPagF5
+                            $nCamposPagLegadoF5       = Get-ContagemCamposLegadoForaDeGrade -TextoDump $txtPagF5
+                        }
+                    }
+                }
+
+                $pisoCamposPagF5 = [math]::Ceiling($nCamposPagLegadoF5 / 2)
+
+                $temSuperficiePagSemDadosF5 = ($conteudo -match 'AddObject\(\s*"pgf_4c_') -and
+                                              ($conteudo -match "InicializarForm") -and
+                                              ($nCamposPagLegadoF5 -ge 1) -and
+                                              ($nCamposMigradoF5 -ge $pisoCamposPagF5)
+
+                $temLayoutPagSemDadosF5 = ($FormType -eq "OPERACIONAL" -and
+                                           $legadoPaginadoSemDadosF5 -and $temSuperficiePagSemDadosF5)
+
                 if ($temLayoutArvoreF5 -and -not ($temPaginaDados -or $temLayoutFlat)) {
                     Write-Host "  [i] Fase 5 (layout arvore): filtros do legado nao tem ControlSource (arvore montada por SQL de chave calculada) - validado por arvore + os $nCamposLegadoF5 campos do legado reproduzidos ($nCamposMigradoF5 no migrado)" -ForegroundColor Cyan
                 }
@@ -7967,12 +8599,16 @@ function Invoke-MigracaoFase {
                     Write-Host "  [i] Fase 5 (layout captura): legado sem lista e com campos de ENTRADA nao vinculados (dialogo que so coleta valores) - validado por paridade: piso de $pisoCamposF5 campos (metade dos $nCamposTbLegadoF5 do legado), $nCamposMigradoF5 no migrado" -ForegroundColor Cyan
                 }
 
-                if ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF5 -or $temLayoutExibicaoF5 -or $temLayoutArvoreF5 -or $temLayoutCapturaF5) {
+                if ($temLayoutPagSemDadosF5 -and -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF5 -or $temLayoutExibicaoF5 -or $temLayoutArvoreF5 -or $temLayoutCapturaF5)) {
+                    Write-Host "  [i] Fase 5 (layout paginado nao-CRUD): o PageFrame do legado tem Pages de DOMINIO, sem Page de Dados - validado por paridade: piso de $pisoCamposPagF5 campos (metade dos $nCamposPagLegadoF5 do legado, fora das colunas de grade), $nCamposMigradoF5 no migrado" -ForegroundColor Cyan
+                }
+
+                if ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF5 -or $temLayoutExibicaoF5 -or $temLayoutArvoreF5 -or $temLayoutCapturaF5 -or $temLayoutPagSemDadosF5) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form atualizado com campos principais: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  [!] Form nao passou na Fase 5: layout paginado exige ConfigurarPaginaDados; layout flat (OPERACIONAL, sem PageFrame) exige campos com ControlSource vinculado; layout arvore (OPERACIONAL) exige dump provando lista ActiveX de arvore + campo sem ControlSource no legado + OLEControl + paridade numerica de campos; layout despachante (OPERACIONAL) exige dump provando legado sem lista e sem campos + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista e com todos os campos ReadOnly + o campo somente-leitura reproduzido; layout captura (OPERACIONAL) exige dump provando legado sem lista (teste estrito) e com campos de ENTRADA + metade dos campos do legado reproduzidos no migrado" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 5: layout paginado exige ConfigurarPaginaDados; layout flat (OPERACIONAL, sem PageFrame) exige campos com ControlSource vinculado; layout arvore (OPERACIONAL) exige dump provando lista ActiveX de arvore + campo sem ControlSource no legado + OLEControl + paridade numerica de campos; layout despachante (OPERACIONAL) exige dump provando legado sem lista e sem campos + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista e com todos os campos ReadOnly + o campo somente-leitura reproduzido; layout captura (OPERACIONAL) exige dump provando legado sem lista (teste estrito) e com campos de ENTRADA + metade dos campos do legado reproduzidos no migrado; layout paginado nao-CRUD (OPERACIONAL) exige dump provando PageFrame com Pages de dominio (nenhuma de Dados nem de Lista) + PageFrame no migrado + metade dos campos do legado fora das colunas de grade" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O encontrado: $formFile" -ForegroundColor Red
@@ -8316,13 +8952,78 @@ function Invoke-MigracaoFase {
                     -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6 -or $temLayoutVisualizadorF6)) {
                     Write-Host "  [i] Fase 6 (layout captura): legado sem lista, sem lookup e com campos de ENTRADA nao vinculados (dialogo que so coleta valores em memoria) - nao ha ControlSource nem lookup a reproduzir; validado por paridade: piso de $pisoCamposF6 campos (metade dos $nCamposTbLegadoF6 do legado), $nCamposMigradoF6 no migrado + handler de validacao + eventos ligados" -ForegroundColor Cyan
                 }
+
+                # Layout PAGINADO-NAO-CRUD: espelho EXATO do ramo que a Fase 5
+                # ja tem (ver $temLayoutPagSemDadosF5) - form OPERACIONAL cujo
+                # legado TEM PageFrame, mas cujas Pages sao de DOMINIO, sem
+                # nenhuma Page de Dados nem de Lista (ex.: SIGOPCHI ->
+                # FormSigOpChi, task698: "Historico de Cheques", Pages "Filtro"
+                # e "Historico"; a 1a coleta a conta/CPF/nome e a 2a mostra as
+                # tres grades do historico).
+                #
+                # Nenhum dos seis ramos acima alcanca este caso: nao eh
+                # PAGINADO porque nao existe ConfigurarPaginaDados - o legado
+                # nao tem Page de Dados para reproduzir; e os ramos FLAT,
+                # VISUALIZADOR e CAPTURA exigem $semPageFrame, isto eh, a
+                # AUSENCIA de PageFrame no migrado, enquanto aqui o legado TEM
+                # PageFrame e as Fases 3/4/5 corretamente o criaram. Nao eh
+                # DESPACHANTE (tem lista e tem campos) nem EXIBICAO (os campos
+                # de conta/CPF/nome sao digitaveis e tem Valid de verdade).
+                #
+                # Sem este ramo a fase reprova um form correto e completo, e as
+                # duas unicas saidas seriam INVENTAR um ConfigurarPaginaDados
+                # para uma Page de Dados que o legado nao tem (viola o PILAR 1
+                # e a regra "NUNCA inventar") ou REMOVER o PageFrame que o
+                # legado de fato tem so para cair no ramo FLAT - que violaria o
+                # PILAR 1 na direcao oposta.
+                #
+                # FAIL-CLOSED: reusa a MESMA prova do lado legado que a Fase 5
+                # ja validou (Test-LegadoPaginadoSemPaginaDados: ha PageFrame,
+                # ha Page, e NENHUMA Page se chama Dados/Lista) e exige do lado
+                # migrado a superficie que a Fase 6 de fato entrega - PageFrame
+                # criado, eventos ligados por BINDEVENT, paridade de metade dos
+                # campos do legado (fora das colunas de grade - regra #18) e o
+                # metodo de lookup IMPLEMENTADO. Quando o legado nao tem lookup
+                # algum, o requisito de lookup cai para o handler de validacao
+                # que substitui o Valid, no mesmo criterio do ramo FLAT - nunca
+                # para "nada". Dump ausente/ilegivel mantem a exigencia
+                # original.
+                $legadoPaginadoSemDadosF6 = $false
+                $nCamposPagLegadoF6       = 0
+                if ($FormType -eq "OPERACIONAL") {
+                    $dumpPagF6 = Join-Path $TaskPath "$($BaseName)_form_codigo_fonte.txt"
+                    if (Test-Path $dumpPagF6) {
+                        $txtPagF6 = Get-Content $dumpPagF6 -Raw -ErrorAction SilentlyContinue
+                        if ($txtPagF6) {
+                            $legadoPaginadoSemDadosF6 = Test-LegadoPaginadoSemPaginaDados -TextoDump $txtPagF6
+                            $nCamposPagLegadoF6       = Get-ContagemCamposLegadoForaDeGrade -TextoDump $txtPagF6
+                        }
+                    }
+                }
+
+                $pisoCamposPagF6 = [math]::Ceiling($nCamposPagLegadoF6 / 2)
+
+                $temSuperficiePagF6 = ($nCamposPagLegadoF6 -ge 1) -and
+                                      ($nCamposMigradoF6 -ge $pisoCamposPagF6) -and
+                                      ($temMetodoLookup -or
+                                       ($legadoSemLookup -and ($conteudo -match "PROCEDURE\s+Validar\w+")))
+
+                $temLayoutPagSemDadosF6 = ($FormType -eq "OPERACIONAL" -and (-not $semPageFrame) -and
+                                           $temBindEvent -and $legadoPaginadoSemDadosF6 -and
+                                           $temSuperficiePagF6)
+
+                if ($temLayoutPagSemDadosF6 -and
+                    -not ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6 -or
+                          $temLayoutVisualizadorF6 -or $temLayoutCapturaF6)) {
+                    Write-Host "  [i] Fase 6 (layout paginado nao-CRUD): o PageFrame do legado tem Pages de DOMINIO, sem Page de Dados - validado por paridade: piso de $pisoCamposPagF6 campos (metade dos $nCamposPagLegadoF6 do legado, fora das colunas de grade), $nCamposMigradoF6 no migrado + lookup/validacao implementado + eventos ligados" -ForegroundColor Cyan
+                }
                 if ($temPaginaDados -or $temLayoutFlat -or $temLayoutDespachanteF6 -or $temLayoutExibicaoF6 -or
-                    $temLayoutVisualizadorF6 -or $temLayoutCapturaF6) {
+                    $temLayoutVisualizadorF6 -or $temLayoutCapturaF6 -or $temLayoutPagSemDadosF6) {
                     $tamanho = [math]::Round((Get-Item $formFile).Length / 1KB, 2)
                     Write-Host "  ? Form atualizado com campos restantes e lookups: $formFile ($tamanho KB)" -ForegroundColor Green
                     $validado = $true
                 } else {
-                    Write-Host "  [!] Form nao passou na Fase 6: layout paginado exige ConfigurarPaginaDados + BINDEVENT; layout flat (OPERACIONAL, sem PageFrame) exige BINDEVENT + metodo AbrirLookup*/AbrirBusca* implementado; layout despachante (OPERACIONAL) exige dump provando legado sem lista, sem campos e sem lookup + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista, sem lookup e com todos os campos ReadOnly + o campo somente-leitura reproduzido; layout visualizador (OPERACIONAL, sem PageFrame) exige dump provando legado sem lookup e com TODO campo nao-digitavel + campos somente-leitura, grade vinculada e BINDEVENT no migrado; layout captura (OPERACIONAL, sem PageFrame) exige dump provando legado sem lista, sem lookup e com campos de ENTRADA nao vinculados + os campos, o handler de validacao e os BINDEVENT no migrado" -ForegroundColor Yellow
+                    Write-Host "  [!] Form nao passou na Fase 6: layout paginado exige ConfigurarPaginaDados + BINDEVENT; layout flat (OPERACIONAL, sem PageFrame) exige BINDEVENT + metodo AbrirLookup*/AbrirBusca* implementado; layout despachante (OPERACIONAL) exige dump provando legado sem lista, sem campos e sem lookup + a superficie que o legado tem; layout exibicao (OPERACIONAL) exige dump provando legado sem lista, sem lookup e com todos os campos ReadOnly + o campo somente-leitura reproduzido; layout visualizador (OPERACIONAL, sem PageFrame) exige dump provando legado sem lookup e com TODO campo nao-digitavel + campos somente-leitura, grade vinculada e BINDEVENT no migrado; layout captura (OPERACIONAL, sem PageFrame) exige dump provando legado sem lista, sem lookup e com campos de ENTRADA nao vinculados + os campos, o handler de validacao e os BINDEVENT no migrado; layout paginado nao-CRUD (OPERACIONAL) exige dump provando PageFrame com Pages de dominio (nenhuma de Dados nem de Lista) + PageFrame no migrado, BINDEVENT, metade dos campos do legado fora das colunas de grade e o metodo de lookup implementado" -ForegroundColor Yellow
                 }
             } else {
                 Write-Host "  ? Form N�O encontrado: $formFile" -ForegroundColor Red
@@ -8369,6 +9070,49 @@ function Invoke-MigracaoFase {
                             # ESTRUTURAL: provam a barra CRUD do framework e
                             # valem sempre.
                             $temCrudLegado = ($txtLegadoF7 -match 'frmcadastro') -or ($txtLegadoF7 -match 'Grupo_Op')
+
+                            # Decima excecao da familia "evidencia de CRUD", e
+                            # a PRIMEIRA que olha a evidencia ESTRUTURAL em vez
+                            # do NOME do botao: 'Grupo_Op' citado SO atraves do
+                            # form PAI ('With Thisform.ParentForm.Pagina.Lista'
+                            # + '.Grupo_Op.Buttons(lnI).Enabled = plHabilita')
+                            # eh a barra do PAI que o dialogo FILHO desabilita
+                            # enquanto esta aberto - nao a barra DESTE form.
+                            # 'frmcadastro' segue valendo sempre (eh a CLASSE
+                            # BASE do proprio form), por isso so consulta o
+                            # helper quando ele esta AUSENTE.
+                            # Ver Test-BarraCrudEhDoFormPai (fail-closed).
+                            if ($temCrudLegado -and
+                                ($txtLegadoF7 -notmatch 'frmcadastro') -and
+                                (Test-BarraCrudEhDoFormPai -TextoDump $txtLegadoF7)) {
+                                $temCrudLegado = $false
+                            }
+
+                            # DECIMA-PRIMEIRA excecao, irma da decima: aqui o
+                            # 'Grupo_Op' e' do PROPRIO form (todas as citacoes
+                            # sao 'ThisForm...Grupo_op'), o que ainda NAO prova
+                            # barra CRUD - 'Grupo_op' e' o nome que o legado
+                            # reusa para QUALQUER CommandGroup de acao sobre um
+                            # 'form' puro, e so no frmcadastro ele hospeda
+                            # Incluir/Alterar/Visualizar/Excluir. No SIGOPCHI
+                            # ("Historico de Cheques") os OITO botoes do grupo
+                            # sao Relatorio/Procurar/Prorroga/FollowUp/
+                            # Carteira/Protocolo/Documento/followUpChq - ZERO
+                            # verbo CRUD, e o nome do grupo era a UNICA
+                            # evidencia do dump inteiro. Se o grupo nao tem
+                            # NENHUM dos quatro verbos, ele nao pode justificar
+                            # exigir os quatro BtnXxxClick - insatisfazivel sem
+                            # INVENTAR botao (viola o PILAR 1) ou criar metodo
+                            # vazio (proibido pela regra de completude).
+                            # Ver Test-GrupoOpSemVerboCrud (fail-closed em 4
+                            # camadas; 'frmcadastro' segue valendo sempre, por
+                            # isso so consulta o helper quando ele esta
+                            # AUSENTE).
+                            if ($temCrudLegado -and
+                                ($txtLegadoF7 -notmatch 'frmcadastro') -and
+                                (Test-GrupoOpSemVerboCrud -TextoDump $txtLegadoF7)) {
+                                $temCrudLegado = $false
+                            }
 
                             # O NOME do objeto eh evidencia mais FRACA: num
                             # dialogo filho, 'cmdExcluir' eh o botao que apaga a
@@ -8470,7 +9214,19 @@ function Invoke-MigracaoFase {
                                 # (fail-closed em 3 camadas - ver a funcao).
                                 $soLinhaGradeF7 = Test-VerbosCrudSaoTodosDeLinhaDeGrade -TextoDump $txtLegadoF7
 
-                                if (-not $ehDialogoFilhoF7 -and -not $soRelatorioF7 -and -not $soLinhaGradeF7) {
+                                # Nona excecao da familia do NOME, terceira que
+                                # olha o CLICK. A toolbar de LINHA tambem edita a
+                                # linha por PAINEL FLUTUANTE, nao so in-place: o
+                                # SIGOPCFL ("Consulta de FollowUp de Cheques")
+                                # tem cmdInserir/cmdAlterar/cmdApagar/cmdListar
+                                # sobre a grade de followup, e o cmdAlterar.Click
+                                # so abre o cnt_inserir e copia a linha corrente
+                                # para os campos dele. A oitava excecao nao
+                                # alcanca porque exige "Append Blank"/"Delete" nu
+                                # no proprio Click.
+                                $soPainelLinhaF7 = Test-VerbosCrudSaoTodosDePainelDeLinha -TextoDump $txtLegadoF7
+
+                                if (-not $ehDialogoFilhoF7 -and -not $soRelatorioF7 -and -not $soLinhaGradeF7 -and -not $soPainelLinhaF7) {
                                     $temCrudLegado = $true
                                 }
                             }
@@ -8743,12 +9499,31 @@ function Invoke-MigracaoFase {
                     # RECEBE do chamador sem ter modo CRUD nenhum. Tratada
                     # abaixo, com o mesmo criterio de DONO que a Fase 7 ja
                     # aplica - ver Test-ModoRecebidoDoChamador.
-                    $padroesCrudLegadoF8 = @(
-                        'frmcadastro',
-                        'Grupo_Op',
-                        '(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)',
-                        '(Incluir|Alterar|Visualizar|Excluir)\.Click'
-                    )
+                    # Mesmo criterio de DONO da Fase 7: 'Grupo_Op' citado SO
+                    # atraves do form PAI eh a barra do PAI, nao deste form.
+                    # FONTE UNICA - o predicado eh o MESMO helper que a Fase 7
+                    # consulta, para os dois call sites nao divergirem em
+                    # silencio (CLAUDE.md #44, item 6).
+                    $grupoOpEhDoPaiF8 = ($txtLegadoF8 -notmatch 'frmcadastro') -and
+                                        (Test-BarraCrudEhDoFormPai -TextoDump $txtLegadoF8)
+
+                    # DECIMA-PRIMEIRA excecao - a MESMA pergunta ESTRUTURAL, e
+                    # o MESMO helper que a Fase 7 consulta, para os dois call
+                    # sites nao divergirem em silencio (CLAUDE.md #44, item 6):
+                    # 'Grupo_Op' do PROPRIO form cujos botoes nao tem UM UNICO
+                    # verbo CRUD tambem nao e' a barra do frmcadastro.
+                    # Em variavel PROPRIA, consumida nos DOIS pontos em que
+                    # $grupoOpEhDoPaiF8 era lido - sao exatamente os pontos que
+                    # julgam o DONO/NATUREZA do 'Grupo_Op', nao os treze ramos
+                    # de excecao.
+                    $grupoOpNaoProvaCrudF8 = $grupoOpEhDoPaiF8 -or
+                                             (($txtLegadoF8 -notmatch 'frmcadastro') -and
+                                              (Test-GrupoOpSemVerboCrud -TextoDump $txtLegadoF8))
+
+                    $padroesCrudLegadoF8 = @('frmcadastro')
+                    if (-not $grupoOpNaoProvaCrudF8) { $padroesCrudLegadoF8 += 'Grupo_Op' }
+                    $padroesCrudLegadoF8 += '(btn|cmd|Command)(Incluir|Alterar|Visualizar|Excluir)'
+                    $padroesCrudLegadoF8 += '(Incluir|Alterar|Visualizar|Excluir)\.Click'
                     $semCrudLegadoF8 = -not ($padroesCrudLegadoF8 | Where-Object { $txtLegadoF8 -match $_ })
 
                     # APAGA-LINHA DE GRADE x EXCLUIR DE CRUD. O padrao de NOME
@@ -8787,9 +9562,10 @@ function Invoke-MigracaoFase {
                     #   3. TODA escrita do dump cai em cursor LOCAL que o
                     #      proprio dump cria - nada persiste em tabela.
                     $soApagaLinhaGradeF8 = $false
+                    $soRelatorioF8       = $false
                     if (-not $semCrudLegadoF8) {
                         $temCrudEstruturalF8 = ($txtLegadoF8 -match 'frmcadastro') -or
-                                               ($txtLegadoF8 -match 'Grupo_Op') -or
+                                               (($txtLegadoF8 -match 'Grupo_Op') -and -not $grupoOpNaoProvaCrudF8) -or
                                                ($txtLegadoF8 -match '(Incluir|Alterar|Visualizar|Excluir)\.Click')
                         if (-not $temCrudEstruturalF8) {
                             $verbosCrudCasadosF8 = @(
@@ -8833,9 +9609,61 @@ function Invoke-MigracaoFase {
                                 $soApagaLinhaGradeF8 = Test-VerbosCrudSaoTodosDeLinhaDeGrade `
                                     -TextoDump $txtLegadoF8 -IncluirVerboExcluir
                             }
+
+                            # TOOLBAR DE RELATORIO x BARRA CRUD - defeito GEMEO
+                            # do que a Fase 7 consertou em 2026-10-15 na mesma
+                            # familia "evidencia de NOME", e que ficou PENDENTE
+                            # aqui (CLAUDE.md #44: gate corrigido NA fase nao
+                            # vale para a fase seguinte - cada uma tem seu
+                            # proprio bloco de predicados).
+                            #
+                            # 'Visualizar' e' ambiguo: na barra do frmcadastro
+                            # ele VE UM REGISTRO, mas na toolbar de relatorio da
+                            # PREVIEW DO RELATORIO. O bloco acima nao desempata
+                            # isso - ele pergunta se o verbo e' de LINHA DE
+                            # GRADE (Append Blank/Delete + Refresh), e um
+                            # 'Visualizar' que imprime nao e' nem CRUD nem linha
+                            # de grade: cai no vao entre os dois e
+                            # $semCrudRealF8 fica $false, pondo os TREZE ramos
+                            # de excecao fora de alcance DE UMA VEZ.
+                            #
+                            # O SIGOPCGB ("Pesquisa Global de Codigo de Barras",
+                            # task689) e' esse caso: consultor somente-leitura
+                            # com 4 grades, cuja UNICA evidencia de CRUD no dump
+                            # e' o nome 'btnVisualizar' - par do 'btnImprimir'
+                            # na impressao da etiqueta (os dois Click sao
+                            # "ThisForm.Imagem('V')"/"('I')" e o metodo 'imagem'
+                            # termina em REPORT FORM). Sem esta dispensa a fase
+                            # exigia BtnCancelarClick/FormParaBO/BOParaForm/
+                            # CarregarLista de um legado que nao tem Page2, nem
+                            # modo de edicao, nem botao de Cancelar -
+                            # insatisfazivel sem INVENTAR superficie (viola o
+                            # PILAR 1) ou criar quatro metodos vazios (proibido
+                            # pela regra de completude).
+                            #
+                            # FONTE UNICA com a Fase 7: o MESMO
+                            # Test-VerbosCrudSaoTodosDeRelatorio, nao um
+                            # predicado proprio - duas copias divergiriam em
+                            # silencio no primeiro caso novo (CLAUDE.md #44,
+                            # item 6). Ele e' fail-closed em cinco camadas (dump
+                            # vazio, nenhum match, Click ausente do dump, Click
+                            # sem REPORT FORM que nao delega, metodo delegado
+                            # ausente) e so devolve $true quando TODO nome
+                            # casado tem REPORT FORM PROVADO.
+                            #
+                            # Alimenta $semCrudRealF8 (consumido SO pelo ramo
+                            # FLUXO-UNICO) e NAO $semCrudLegadoF8 - mesma
+                            # decisao deliberada do bloco de
+                            # $soApagaLinhaGradeF8 logo acima: afrouxar
+                            # $semCrudLegadoF8 alargaria os treze ramos de uma
+                            # vez.
+                            if (-not $soApagaLinhaGradeF8) {
+                                $soRelatorioF8 = Test-VerbosCrudSaoTodosDeRelatorio `
+                                    -TextoDump $txtLegadoF8
+                            }
                         }
                     }
-                    $semCrudRealF8 = $semCrudLegadoF8 -or $soApagaLinhaGradeF8
+                    $semCrudRealF8 = $semCrudLegadoF8 -or $soApagaLinhaGradeF8 -or $soRelatorioF8
 
                     # 'pcEscolha' com olhar de DONO. O gate desta fase o lia
                     # cru desde sempre, o que marcava como CRUD todo dialogo

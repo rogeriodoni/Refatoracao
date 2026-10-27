@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 is complete. I created `C:\4c\projeto\app\forms\operacionais\FormSigOpChp.prg` ÔÇö the "Prorrogar Vencimento de Cheque" dialog.
+
+Key decisions made along the way:
+
+1. **Not a CRUD form**: The legacy `SIGOPCHP.SCX` is a 500├ù200 flat modal dialog (root class `form`, no PageFrame at all) ÔÇö not a Lista/Dados cadastro. Per the project's own gate rules for Fase 3 OPERACIONAL/FLAT forms and the sibling precedent `FormSigOpChc.prg` (same `SigOpCh*` family, already migrated), I built a flat custom layout directly on the form (cabe├ºalho + 2 decorative shapes + 5 labels + 4 textboxes + 2 buttons) instead of inventing a PageFrame.
+
+2. **Found the real caller**: `FormSigOpChi.prg` (Hist├│rico de Cheques) already has `AcaoProrrogaClick()` wired up with `CREATEOBJECT("FormSigOpChp", THIS)` ÔÇö passing only the parent form, no separate Nums argument. I matched `Init()`'s signature to that exact call site, reading the cheque's `Nums` from `par_oParentForm.this_oBusinessObject.this_cNums` (equivalent to the legacy's global `CrSigChe` cursor already positioned by the caller).
+
+3. **Reused the already-migrated BO logic**: `SigOpChpBO.prg` (Fases 1-2) already implements the full `Atualizar()` (UPDATE SigChe, hist├│rico, juros em SigMvCcr, bloqueio, commit/rollback). The form only needs `Buscar()` + `CarregarDoCursor()` + `EditarRegistro()` to load the cheque, then `Salvar()` to persist ÔÇö no duplicated SQL.
+
+4. **Transcribed geometry/formulas literally** from the SCX dump (labels' Top/Left/Width, InputMasks, the `Valors * Juros/30*Dias/100` formula, button 75├ù75 sizing confirmed by the geometry itself: 350+75=425=next button's Left, 425+75=500=Form.Width).
+
+Verified both `FormSigOpChp.prg` and `SigOpChpBO.prg` compile clean in VFP9 (`COMPILE_OK`, zero errors) and removed the generated `.FXP`/`.err` artifacts afterward.

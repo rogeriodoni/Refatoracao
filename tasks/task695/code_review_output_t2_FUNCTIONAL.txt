@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and consistent with the existing codebase pattern. Both edits are in place and well-formed.
+
+## Summary
+
+I investigated all 25 flagged problems against the actual file content and the legacy source dump (`tasks\task695\sigopcgv_form_codigo_fonte.txt`) rather than trusting the automated findings at face value ÔÇö per project history (regra #39, #44), this review pass has known false-positive patterns.
+
+**24 of 25 findings were false positives**, verified concretely:
+- **5 METODO-INEXISTENTE**: all methods (`ValidarContaSelecionada`, `PodeAlterarCadastro`, `AbrirVisaoCadastral`, `AbaResultadoDisponivel`) are defined in the file; `THIS.KeyPress()` only appears inside a comment quoting legacy code (known false-positive pattern).
+- **1 BUSCA-CURSOR**: the code already uses the canonical Pattern A (`CREATEOBJECT` sem params + `DefinirCursor` + `Mostrar()`), not the broken Pattern B.
+- **1 NAVEGACAO-PAGINA**: `BtnCancelarClick` *reads* `ActivePage = 2` (a comparison) to decide whether to go back to page 1 ÔÇö it doesn't set it.
+- **11 GRID-HEADER**: every flagged caption ("O", "Bco.", "Ag.", "Cheque", "Cart├úo", "Cr├®dito", "N┬░ Cart├úo", "Qtde.") matches the legacy dump **exactly** ÔÇö the reviewer's "legado headers" list was just incomplete due to encoding mangling.
+- **5 LAYOUT-POSITION** (Saida/Visualizar/Imprimir buttons + Origem container): current values already match the legacy dump; the Saida/Visualizar/Imprimir mismatch was the reviewer cross-matching two visually-similar sibling containers (`SelecionaImpCad` vs `SelecionaImpress├úo`) that share control names.
+- **1 LAYOUT-POSITION** (Anexa/Vendas): correctly out of scope ÔÇö the Vendas aba is explicitly deferred to a future phase per the file's own header comments.
+
+**1 genuine finding, fixed**: the legacy form has a document-attachment button (`Result.Saldo.Anexa`, Top=407/Left=744/40├ù40, icon `geral_sel_pasta_26.jpg`) on the Saldo aba's historico grid that was missing entirely from the migration. I added `cmd_4c_AnexaSaldo` + `BtnAnexaSaldoClick` in `Formsigopcgv.prg`, mirroring the existing `cmd_4c_AnexaPend`/`BtnAnexaPendClick` pattern but reading `dbHistorico.dopes/numes/emps` (verified these fields exist in the BO's `CriarCursoresLocais` cursor definition).
+
+No visual properties were altered on existing controls, and no business logic was changed.

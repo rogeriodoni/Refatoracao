@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormSigOpChi.prg` finalizado em 4037 linhas (3516 ÔåÆ 4037).
+
+## O que foi entregue
+
+**Hooks de transfer├¬ncia reais** (n├úo stubs ÔÇö o bloco j├í existia no `Init` legado, espalhado pelos `AddObject`, sem esse nome):
+- `FormParaBO()` / `BOParaForm()` (PROTECTED, porque `FormBase` declara os dois PROTECTED e VFP9 n├úo permite alargar escopo herdado) ÔÇö ligam os 8 campos edit├íveis (3 de Origem + optFiltro, 3 de Emitente, 2 datas) ├ás properties do BO. Isso **ressuscitou 6 properties que o BO declarava e ningu├®m escrevia** (`this_cContaOrigem/DConta/Cpf`, `this_nTipoFiltroOrigem`, `this_cCaptionAtual`, `this_cUltimoFollowup`).
+- `CarregarLista()` (PUBLIC) ÔÇö funil ├║nico `FormParaBO ÔåÆ CarregarDados ÔåÆ Repintar`. Os 3 call sites de `CarregarDados` passaram a entrar por aqui, ent├úo agora toda recarga repinta as grades.
+- `HabilitarCampos()` / `LimparCampos()` / `AjustarBotoesPorModo()` / `BtnProcessarClick` / `BtnBuscarClick` / `BtnEncerrarClick` / `BtnCancelarClick`.
+
+**Funcionalidade do legado que faltava:**
+1. **Os 5 `PROCEDURE When`** (exclus├úo m├║tua Conta ÔåÆ CPF ÔåÆ Nome ÔåÆ optFiltro, nos dois containers) n├úo existiam. Implementados em `HabilitarCampos` via `ReadOnly`+`TabStop` (n├úo `Enabled`, para n├úo acinzentar ÔÇö PILAR 1) e disparados por `BINDEVENT InteractiveChange` num alvo par├ómetro-zero: ligar `HabilitarCampos` direto ao evento faria `par_lHabilitar` chegar `.F.` e travaria a tela inteira no primeiro caractere.
+2. **`obj_4c_OptFiltro` era criado e nunca lido.** O `get_DConta.Valid` legado ramifica em `optFiltro.Value = 2`; agora Filtro = `LIKE '%x%'`, Lista = `LIKE 'x%'`.
+3. `AlternarPagina` reabilita no caminho de **volta** (regra #40) e `Destroy` fecha os cursores antes do `DODEFAULT()`.
+
+## Verifica├º├úo
+
+Rodei 6 auditorias do projeto (lookup-em-KeyPress, TABLEREVERT sem buffering, FormBuscaAuxiliar, Format/InputMask, coluna de empresa, tabelas inexistentes) + fun├º├úo-n├úo-definida + propriedade-inexistente + m├®todo-protegido: **0 achados** para este form. Criei `automation/VerificarGateFase8Task698.ps1`, que replica os predicados do `case 8` do orquestrador ÔÇö passa com exit 0, incluindo completude (Form e BO).
+
+Dois pontos que valem registro:
+
+- **N├úo h├í `BtnSalvarClick` e n├úo deve haver**: varri o dump e o legado n├úo tem `btnSalvar`/`btnGravar`/`mGravaDados` ÔÇö ├® um visualizador, quem grava s├úo as telas de detalhe. A a├º├úo can├┤nica ├® `BtnProcessarClick`, verbo tirado do `Caption "\<Processar"` do pr├│prio bot├úo `Ok` do SCX.
+- **N├úo posso alegar compila├º├úo nem instancia├º├úo.** `vfp9.exe` lan├ºado desta sess├úo gera o `.FXP` e sai com exit 0 **sem executar** o `.prg`, ent├úo probe/compile-check n├úo provam nada aqui. O que verifiquei ├® est├ítico: balan├ºo de blocos (TRY/ENDTRY 53=53, PROCEDURE 78=78, FUNCTION 3=3, WITH 58=58), zero acentos literais, zero `RETURN` dentro de `TRY`, CRLF preservado, e os `MESSAGEBOX`/`IsEmpty` que a varredura acusa est├úo todos dentro de coment├írios citando o legado.

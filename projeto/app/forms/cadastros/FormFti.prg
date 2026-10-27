@@ -85,21 +85,39 @@ DEFINE CLASS FormFti AS FormBase
     * CriarCursoresGrade - Cria cursores csGrade e csCusto (locais, sem SQL Server)
     *==========================================================================
     PROTECTED PROCEDURE CriarCursoresGrade()
+        LOCAL loc_cSafety
+
+        *-- ESVAZIAR com ZAP, nunca fechar e recriar o alias. "USE IN" +
+        *-- "CREATE CURSOR" derruba Grid.RecordSource e as Column.ControlSource
+        *-- ligadas em ConfigurarPgPage1/2: a grade fica BRANCA e o ColumnCount
+        *-- colapsa, levando a "Unknown member COLUMN3" no Activate da 2a aba.
+        *-- O metodo eh rechamado em Incluir/Alterar/Visualizar, por isso doi.
+        *-- SAFETY eh escopado por data session e este form eh DataSession = 2:
+        *-- sem o guard, o ZAP abre o modal "Are you sure?" e CONGELA a tela.
+        loc_cSafety = SET("SAFETY")
+        SET SAFETY OFF
+
         IF USED("csGrade")
-            USE IN csGrade
+            ZAP IN csGrade
+        ELSE
+            SET NULL ON
+            CREATE CURSOR csGrade (Cgrus C(3), CPros C(14), Dgrus C(20), Coefs N(8,4), Ordem N(1,0))
+            SET NULL OFF
+            SELECT csGrade
+            INDEX ON CPros TAG CPros
         ENDIF
-        SET NULL ON
-        CREATE CURSOR csGrade (Cgrus C(3), CPros C(14), Dgrus C(20), Coefs N(8,4), Ordem N(1,0))
-        SET NULL OFF
-        SELECT csGrade
-        INDEX ON CPros TAG CPros
 
         IF USED("csCusto")
-            USE IN csCusto
+            ZAP IN csCusto
+        ELSE
+            SET NULL ON
+            CREATE CURSOR csCusto (Cpros C(14), Dpros C(40), Seqs N(5), Coefs N(8,4))
+            SET NULL OFF
         ENDIF
-        SET NULL ON
-        CREATE CURSOR csCusto (Cpros C(14), Dpros C(40), Seqs N(5), Coefs N(8,4))
-        SET NULL OFF
+
+        IF loc_cSafety = "ON"
+            SET SAFETY ON
+        ENDIF
     ENDPROC
 
     *==========================================================================
@@ -144,7 +162,7 @@ DEFINE CLASS FormFti AS FormBase
         *-- Cabecalho cinza (cntSombra: Top=1, Left=-1, Width=1008, H=80 -> comp +29)
         loc_oPagina.AddObject("cnt_4c_Sombra", "Container")
         WITH loc_oPagina.cnt_4c_Sombra
-            .Top         = 30
+            .Top         = 29
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -503,8 +521,11 @@ DEFINE CLASS FormFti AS FormBase
         *-- Container Salvar/Cancelar (Grupo_Salva: Left=818, Top=10+29=39, W=160, H=85)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 39
-            .Left        = 818
+            *-- Canonico da pagina Dados (regra #10, 98 forms): Top=33, Left=842.
+            *-- Em 39/818 os botoes desciam demais em relacao a faixa (29..109)
+            *-- e ficavam 24px a esquerda do alinhamento dos demais cadastros.
+            .Top         = 33
+            .Left        = 842
             .Width       = 160
             .Height      = 85
             .BackStyle = 1
@@ -643,7 +664,12 @@ DEFINE CLASS FormFti AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
-            .MaxLength = 4
+            *-- SigPrFti.cods eh char(2) (medido no INFORMATION_SCHEMA).
+            *-- O legado declara 3, mas la o TextBox tem ControlSource no
+            *-- cursor e a largura da coluna ja truncava. Aqui nao ha
+            *-- ControlSource: o valor cru ia para o SQL e o INSERT era
+            *-- recusado inteiro com "dados seriam truncados" (regra #19).
+            .MaxLength = 2
             .Visible   = .T.
         ENDWITH
 
@@ -676,7 +702,8 @@ DEFINE CLASS FormFti AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
-            .MaxLength = 30
+            *-- SigPrFti.descs eh char(20) (legado declara 40 - ver acima)
+            .MaxLength = 20
             .Visible   = .T.
         ENDWITH
 
@@ -1217,6 +1244,15 @@ DEFINE CLASS FormFti AS FormBase
 
         THIS.ConfigurarPgPage1()
         THIS.ConfigurarPgPage2()
+
+        *-- O pgf_4c_Configuracao (Top=291, Left=-2, W=1003) COBRE a area do
+        *-- cnt_4c_BotoesLinha (Top=390, Left=755) e eh criado DEPOIS dele,
+        *-- entao o botao Excluir da grade ficava escondido atras das abas.
+        *-- No legado a mesma sobreposicao existe e eh resolvida pelo ZOrderSet
+        *-- (Configuracao=27, cmdBotoes=28): o botao fica POR CIMA. ZOrder(0)
+        *-- traz para a frente (regra #11).
+        loc_oPagina.cnt_4c_BotoesLinha.ZOrder(0)
+
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
 
@@ -1292,12 +1328,23 @@ DEFINE CLASS FormFti AS FormBase
         ENDWITH
         loc_oPgGrupos.grd_4c_Grade.Column5.Header1.Caption = "Ordem"
         loc_oPgGrupos.grd_4c_Grade.Column2.ReadOnly = .T.
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column1.Text1, "When",      THIS, "GradeGrupoCol1When")
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column1.Text1, "Valid",     THIS, "GradeGrupoCol1Valid")
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column3.Text1, "When",      THIS, "GradeGrupoCol3When")
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column3.Text1, "KeyPress", THIS, "GradeGrupoCol3LostFocus")
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column4.Text1, "When",      THIS, "GradeGrupoCol4When")
-        BINDEVENT(loc_oPgGrupos.grd_4c_Grade.Column4.Text1, "Valid",     THIS, "GradeGrupoCol4Valid")
+        *-- Celulas com os eventos EMBUTIDOS (TextBoxCelulaFti_4c). BINDEVENT
+        *-- em When/Valid de Column.Text1 NAO dispara de forma confiavel
+        *-- (regra #46) - era por isso que os lookups de Grupo e Produto
+        *-- nunca abriam. CurrentControl + Sparse = .F. sao obrigatorios,
+        *-- senao a coluna segue desenhando o Text1 original (regra #18).
+        loc_oPgGrupos.grd_4c_Grade.Column1.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgGrupos.grd_4c_Grade.Column1.txt_4c_Cel.this_cCelula = "GRUPOCOD"
+        loc_oPgGrupos.grd_4c_Grade.Column1.CurrentControl = "txt_4c_Cel"
+        loc_oPgGrupos.grd_4c_Grade.Column1.Sparse         = .F.
+        loc_oPgGrupos.grd_4c_Grade.Column3.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgGrupos.grd_4c_Grade.Column3.txt_4c_Cel.this_cCelula = "GRUPOCOEF"
+        loc_oPgGrupos.grd_4c_Grade.Column3.CurrentControl = "txt_4c_Cel"
+        loc_oPgGrupos.grd_4c_Grade.Column3.Sparse         = .F.
+        loc_oPgGrupos.grd_4c_Grade.Column4.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgGrupos.grd_4c_Grade.Column4.txt_4c_Cel.this_cCelula = "GRUPOPROD"
+        loc_oPgGrupos.grd_4c_Grade.Column4.CurrentControl = "txt_4c_Cel"
+        loc_oPgGrupos.grd_4c_Grade.Column4.Sparse         = .F.
     ENDPROC
 
     *==========================================================================
@@ -1364,11 +1411,19 @@ DEFINE CLASS FormFti AS FormBase
         ENDWITH
         loc_oPgCusto.grd_4c_Custo.Column4.Header1.Caption = "Sequencia"
         loc_oPgCusto.grd_4c_Custo.Column4.Text1.InputMask = "99999"
-        BINDEVENT(loc_oPgCusto.grd_4c_Custo.Column1.Text1, "When",      THIS, "GradeCustoCol1When")
-        BINDEVENT(loc_oPgCusto.grd_4c_Custo.Column1.Text1, "Valid",     THIS, "GradeCustoCol1Valid")
-        BINDEVENT(loc_oPgCusto.grd_4c_Custo.Column3.Text1, "When",      THIS, "GradeCustoCol3When")
-        BINDEVENT(loc_oPgCusto.grd_4c_Custo.Column3.Text1, "KeyPress", THIS, "GradeCustoCol3LostFocus")
-        BINDEVENT(loc_oPgCusto.grd_4c_Custo.Column4.Text1, "When",      THIS, "GradeCustoCol4When")
+        *-- idem na grade de Custos Fixo (regra #46 / #18)
+        loc_oPgCusto.grd_4c_Custo.Column1.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgCusto.grd_4c_Custo.Column1.txt_4c_Cel.this_cCelula = "CUSTOCOD"
+        loc_oPgCusto.grd_4c_Custo.Column1.CurrentControl = "txt_4c_Cel"
+        loc_oPgCusto.grd_4c_Custo.Column1.Sparse         = .F.
+        loc_oPgCusto.grd_4c_Custo.Column3.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgCusto.grd_4c_Custo.Column3.txt_4c_Cel.this_cCelula = "CUSTOCOEF"
+        loc_oPgCusto.grd_4c_Custo.Column3.CurrentControl = "txt_4c_Cel"
+        loc_oPgCusto.grd_4c_Custo.Column3.Sparse         = .F.
+        loc_oPgCusto.grd_4c_Custo.Column4.AddObject("txt_4c_Cel", "TextBoxCelulaFti_4c")
+        loc_oPgCusto.grd_4c_Custo.Column4.txt_4c_Cel.this_cCelula = "CUSTOCOL4"
+        loc_oPgCusto.grd_4c_Custo.Column4.CurrentControl = "txt_4c_Cel"
+        loc_oPgCusto.grd_4c_Custo.Column4.Sparse         = .F.
         BINDEVENT(loc_oPgCusto, "Activate", THIS, "ConfigPage2Activate")
     ENDPROC
 
@@ -2230,9 +2285,14 @@ DEFINE CLASS FormFti AS FormBase
             ENDIF
         ENDIF
 
+        *-- O PEMSTATUS confirma que a GRADE existe, nao que ela tem 3 colunas:
+        *-- com o ColumnCount colapsado a linha seguinte estourava com
+        *-- "Unknown member COLUMN3" (mesma armadilha da regra #3/#34).
         IF PEMSTATUS(loc_oPg2.pgf_4c_Configuracao.Page2, "grd_4c_Custo", 5)
-            loc_oPg2.pgf_4c_Configuracao.Page2.grd_4c_Custo.Column3.Header1.Caption = loc_cCaption
-            loc_oPg2.pgf_4c_Configuracao.Page2.grd_4c_Custo.Column3.Header1.Refresh()
+            IF loc_oPg2.pgf_4c_Configuracao.Page2.grd_4c_Custo.ColumnCount >= 3
+                loc_oPg2.pgf_4c_Configuracao.Page2.grd_4c_Custo.Column3.Header1.Caption = loc_cCaption
+                loc_oPg2.pgf_4c_Configuracao.Page2.grd_4c_Custo.Column3.Header1.Refresh()
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -2249,7 +2309,10 @@ DEFINE CLASS FormFti AS FormBase
     *==========================================================================
     * GradeGrupoCol1Valid - Valid do Col1 (Cgrus): valida grupo, preenche Dgrus+Coefs
     *==========================================================================
-    PROCEDURE GradeGrupoCol1Valid()
+    PROCEDURE GradeGrupoCol1Valid(par_oTxt)
+        *-- par_oTxt: a celula que esta sendo validada. Dentro do Valid o
+        *-- digitado vive em par_oTxt.Value - o CURSOR so recebe DEPOIS,
+        *-- entao ler do cursor validava o valor ANTERIOR (regra #46).
         LOCAL loc_lResultado, loc_cCodigo, loc_cSelecionado, loc_oBusca
         loc_lResultado = .T.
 
@@ -2257,7 +2320,11 @@ DEFINE CLASS FormFti AS FormBase
             RETURN loc_lResultado
         ENDIF
 
-        loc_cCodigo = ALLTRIM(csGrade.Cgrus)
+        loc_cCodigo = IIF(VARTYPE(par_oTxt) = "O", ALLTRIM(NVL(par_oTxt.Value, "")), ALLTRIM(csGrade.Cgrus))
+        IF VARTYPE(par_oTxt) = "O"
+            SELECT csGrade
+            REPLACE Cgrus WITH loc_cCodigo
+        ENDIF
 
         IF EMPTY(loc_cCodigo) OR loc_cCodigo = THIS.this_cAntValue
             RETURN loc_lResultado
@@ -2282,6 +2349,9 @@ DEFINE CLASS FormFti AS FormBase
                         loc_cSelecionado = ALLTRIM(cursor_4c_BuscaGrp.Cgrus)
                         SELECT csGrade
                         REPLACE Cgrus WITH loc_cSelecionado
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = loc_cSelecionado
+                        ENDIF
                         IF SEEK(loc_cSelecionado, "CrSigCdGrp", "Cgrus")
                             SELECT csGrade
                             REPLACE Dgrus WITH ALLTRIM(CrSigCdGrp.Dgrus), ;
@@ -2290,6 +2360,9 @@ DEFINE CLASS FormFti AS FormBase
                     ELSE
                         SELECT csGrade
                         REPLACE Cgrus WITH "", Dgrus WITH ""
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = ""
+                        ENDIF
                     ENDIF
                     loc_oBusca.Release()
                 ENDIF
@@ -2354,7 +2427,10 @@ DEFINE CLASS FormFti AS FormBase
     *==========================================================================
     * GradeGrupoCol4Valid - Valid do Col4 (CPros): abre picker SigCdPro se nao encontrado
     *==========================================================================
-    PROCEDURE GradeGrupoCol4Valid()
+    PROCEDURE GradeGrupoCol4Valid(par_oTxt)
+        *-- par_oTxt: a celula que esta sendo validada. Dentro do Valid o
+        *-- digitado vive em par_oTxt.Value - o CURSOR so recebe DEPOIS,
+        *-- entao ler do cursor validava o valor ANTERIOR (regra #46).
         LOCAL loc_lResultado, loc_cCodigo, loc_oBusca
         loc_lResultado = .T.
 
@@ -2362,7 +2438,11 @@ DEFINE CLASS FormFti AS FormBase
             RETURN loc_lResultado
         ENDIF
 
-        loc_cCodigo = ALLTRIM(csGrade.CPros)
+        loc_cCodigo = IIF(VARTYPE(par_oTxt) = "O", ALLTRIM(NVL(par_oTxt.Value, "")), ALLTRIM(csGrade.CPros))
+        IF VARTYPE(par_oTxt) = "O"
+            SELECT csGrade
+            REPLACE CPros WITH loc_cCodigo
+        ENDIF
 
         IF EMPTY(loc_cCodigo) OR loc_cCodigo = THIS.this_cAntValue
             RETURN loc_lResultado
@@ -2381,10 +2461,16 @@ DEFINE CLASS FormFti AS FormBase
                 IF loc_oBusca.this_lSelecionou AND USED("crListaRemota")
                     SELECT csGrade
                     REPLACE CPros WITH ALLTRIM(crListaRemota.CPros)
+                    IF VARTYPE(par_oTxt) = "O"
+                        par_oTxt.Value = ALLTRIM(crListaRemota.CPros)
+                    ENDIF
                 ELSE
                     IF LASTKEY() = 27
                         SELECT csGrade
                         REPLACE CPros WITH ""
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = ""
+                        ENDIF
                     ENDIF
                 ENDIF
                 loc_oBusca.Release()
@@ -2413,7 +2499,10 @@ DEFINE CLASS FormFti AS FormBase
     *==========================================================================
     * GradeCustoCol1Valid - Valid do Col1 (Cpros): valida produto, preenche Dpros+Coefs+Seqs
     *==========================================================================
-    PROCEDURE GradeCustoCol1Valid()
+    PROCEDURE GradeCustoCol1Valid(par_oTxt)
+        *-- par_oTxt: a celula que esta sendo validada. Dentro do Valid o
+        *-- digitado vive em par_oTxt.Value - o CURSOR so recebe DEPOIS,
+        *-- entao ler do cursor validava o valor ANTERIOR (regra #46).
         LOCAL loc_lResultado, loc_cCodigo, loc_cSelecionado, loc_oBusca, loc_cFiltro
         loc_lResultado = .T.
 
@@ -2421,7 +2510,11 @@ DEFINE CLASS FormFti AS FormBase
             RETURN loc_lResultado
         ENDIF
 
-        loc_cCodigo = ALLTRIM(csCusto.Cpros)
+        loc_cCodigo = IIF(VARTYPE(par_oTxt) = "O", ALLTRIM(NVL(par_oTxt.Value, "")), ALLTRIM(csCusto.Cpros))
+        IF VARTYPE(par_oTxt) = "O"
+            SELECT csCusto
+            REPLACE Cpros WITH loc_cCodigo
+        ENDIF
 
         IF EMPTY(loc_cCodigo) OR loc_cCodigo = THIS.this_cAntValue
             RETURN loc_lResultado
@@ -2455,6 +2548,9 @@ DEFINE CLASS FormFti AS FormBase
                         loc_cSelecionado = ALLTRIM(cursor_4c_BuscaPro.Cpros)
                         SELECT csCusto
                         REPLACE Cpros WITH loc_cSelecionado
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = loc_cSelecionado
+                        ENDIF
                         IF SEEK(loc_cSelecionado, "CrSigCdPro", "Cpros")
                             SELECT csCusto
                             REPLACE Dpros WITH ALLTRIM(CrSigCdPro.Dpros), ;
@@ -2469,6 +2565,9 @@ DEFINE CLASS FormFti AS FormBase
                     ELSE
                         SELECT csCusto
                         REPLACE Cpros WITH "", Dpros WITH ""
+                        IF VARTYPE(par_oTxt) = "O"
+                            par_oTxt.Value = ""
+                        ENDIF
                     ENDIF
                     loc_oBusca.Release()
                 ENDIF

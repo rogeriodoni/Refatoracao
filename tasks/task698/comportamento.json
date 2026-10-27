@@ -1,0 +1,920 @@
+{
+  "resumo": {
+    "totalMetodos": 54,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 32,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fChecaAcesso", "fAcessoContas", "fwBuscaExt", "fwBuscaSel", "Form SigCdPgr With Left"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCHI",
+      "evento": "Procedure",
+      "linhas": 102,
+      "codigoOriginal": "llDatai = ThisForm.Pagina.Historico.Cnt_periodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Historico.Cnt_periodo.Dt_final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\n\nThisForm.Pagina.Historico.GradeCheque.RecordSource = ' '\nThisForm.Pagina.Historico.GradeMovimenta.RecordSource = ' '\nThisForm.Pagina.Historico.GradeProrrog.RecordSource = ' '\n\nIf !Empty(ThisForm.Pagina.Filtro.Origem.get_Conta.Value)\n\tlcCliente = ThisForm.Pagina.Filtro.Origem.get_Conta.Value\n\tlcWherChe = [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,Requery",
+        "controlesReferenciados": "get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\ndodefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI",
+      "evento": "KeyPress",
+      "linhas": 39,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nLocal loPagina\nloPagina = ThisForm.Pagina.ActivePage\nDo Case\n\tCase nKeyCode = -2 And loPagina = 2 && <F3> FollowUp Cheque\n\t\tNoDefault\n\t\tThisForm.Pagina.Historico.Grupo_op.FollowUpChq.Click\n\n\tCase nKeyCode = -3 And loPagina = 2 && <F4> Documento\n\t\tNoDefault\n\t\tThisForm.Pagina.Historico.Grupo_op.Documento.Click\n\n\tCase nKeyCode = -4 And loPagina = 2  && <F5> Procurar\n\t\tNoDefault\n\t\tThisForm.Pagina.Historico.Grupo_op.Procurar.Click\n\n\tCase nKeyCode = -5 And loPagina... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI",
+      "evento": "Init",
+      "linhas": 101,
+      "codigoOriginal": "LParameters pAcesso, lcNomeFrm1, pBancos, pAgencias, pNContas, pNCheques, pVencs\n\nPRIVATE pcBancos, pcAgencias, pcNContas, pcNCheques, pcVencs\nPUBLIC pcAcesso\n\nIf Type('pAcesso')#'C'\n\tpcAcesso = 'TOTAL'\nELSE\n\tpcAcesso = pAcesso\nENDIF\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Acesso = INLIST(pcAcesso,'TOTAL','CARTEIRA')\t&& MENA 07/05/2016 inclui carteira para trazer informacoes do cheque selecionado na carteira de ch... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Acesso = INLIST,Requery,Filtrado = !Empty",
+        "controlesReferenciados": "Opt',Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.get_Conta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local lcod, lfan, codcor, xobj, Grupo\nWith ThisForm.Pagina.Filtro.Origem\n\tIf !Empty(This.Value)\n\t\tIf !fAcessoContas(Usuar, '', 'C', This.Value, This, .get_dconta.Value)\n\t\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\t\t.get_conta.Value  = ''\n\t\t\t.get_dconta.Value = ''\n\t\t\t.get_cpf.Value    = ''\n\t\t\tReturn 0 \n\t\tElse\n\t\t\tlcCliente = This.Value\n\t\t\tThisForm.Podatamgr.Requery('CrSigCdCli')\n\t\t\tSelect CrSigCdCli\n\t\t\tGo top\n\t\t\t.get_conta.Value  = crSigCdCli.Iclis\n\t\t\t.get_dconta.Value = crSigCdCli.Rclis\n\t\t\t.get... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "get_dconta,get_conta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.get_Cpf",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.get_Cpf",
+      "evento": "Valid",
+      "linhas": 64,
+      "codigoOriginal": "Local lcCgc\n\nWith ThisForm.Pagina.Filtro.Origem\n\tIf !Empty(This.value)\n\t\tCgc = This.Value\n\t\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\t\tIf Len(Alltrim(Cgc))<>14\n\t\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\t\tElse\n\t\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/9999-99\" )\n\t\tEndIf\n\t\t\n\t\tlcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\t\tlnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrSigCdCli')\n\t\t\n\t\tIf lnErro < 1\n\t\t\tMessageBox('Favor reinicializar o processo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_conta,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.get_DConta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) And ;\n\t   Empty( ThisForm.Pagina.Filtro.Origem.Get_Cpf.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.get_DConta",
+      "evento": "Valid",
+      "linhas": 79,
+      "codigoOriginal": "Local lcod, lfan, codcor, xobj, grupo, lcRClis, lcDescricao\n\nlcDescricao = Alltrim(This.Value)\nWith ThisForm.Pagina.Filtro.Origem\n\tIf .optFiltro.Value = 2  && Procura Com Filtro\n\t\tIf !Empty(This.Value)\n\t\t\tIf !Thisform.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Rclis',This.Value)\n\t\t\t\tlcTmp = '%'+Alltrim(This.Value) + '%'\n\t\t\t\tThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')\n\t\t\t\tSelect CrSigCdCli\n\t\t\t\tIndex On ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaSel",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Requery",
+        "controlesReferenciados": "optFiltro,get_conta,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Origem.optFiltro",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Empty( ThisForm.Pagina.Filtro.Origem.Get_Conta.Value ) And ;\n\t   Empty( ThisForm.Pagina.Filtro.Origem.Get_Cpf.Value ) And ;\n\t   Empty( ThisForm.Pagina.Filtro.Origem.get_DConta.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_Cpf,get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.Ok",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "Local lcOrd, lcFil\n\nIf !ThisForm.Acesso And Empty(ThisForm.Pagina.Filtro.Origem.Get_Conta.Value)\n\tMessagebox('Conta Inválida!!!',0+48,'')\n\tThisForm.Pagina.Filtro.Origem.Get_Conta.SetFocus\n\tReturn 0\nEndif\n\nThisForm.Filtrado = !Empty(ThisForm.Pagina.Filtro.Origem.Get_Conta.Value)\n\nlcCaption =  'Histórico de Cheques de: ' + Thisform.Pagina.Filtro.Origem.get_Conta.Value + ' - ' + ;\n\t\t\t\t   AllTrim( Thisform.Pagina.Filtro.Origem.get_dConta.Value) + ' / ' + AllTrim(Thisform.Pagina.Filtro.Origem.get_Cpf... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Acesso And Empty,Filtrado = !Empty,SqlDados",
+        "controlesReferenciados": "Get_Conta,get_dConta,get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Filtro.cancelar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Do Form SigOpChr With crSigChe.GrClis, crSigChe.IClis, ThisForm\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Do Form SigOpChb With Thisform.LeCheque, Thisform.ChqLido, Thisform.Leitor, ThisForm\n\nThisForm.Pagina.Historico.Refresh\nThisForm.Pagina.Historico.GradeCheque.Setfocus\nThisForm.Pagina.Historico.GradeCheque.Column1.Text1.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Select crSigChe\nScatter Fields Vencs, Nums Memvar \nSelect crSigCdOpt\nSet Order to Operacao\nSeek crSigChe.Umovs\n\nIf crSigCdOpt.Tipos = \"CR\" And CrSigCdOpt.Prorrogas <> 1\n\t=MessageBox( \"Impossível prorrogar cheques que não estejam pendentes...\", 48, \"ATENÇÃO!!!\" )\n\tReturn\nEndif\n\nDo Form SigOpChp With ThisForm",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(ThisForm.Pagina.Filtro.Origem.get_Conta.Value)\n\tlcCliente = ThisForm.Pagina.Filtro.Origem.get_Conta.Value\nElse\n\tlcCliente = CrSigChe.Iclis\nEndif\ndo Form SigOpFlp With lcCliente, ThisForm.DatasessionId\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "do Form SigOpChc With ThisForm\n*** mena - 18/08/2016 - chama o método abaixo para atualizar a grade\nthis.Parent.Parent.cnt_periodo.dt_final.Valid\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Local lcCheque, lcMens, lcCaption\n\nIf Not Empty(crSigChe.Protocolos)\n\tlcCheque = crSigChe.Bancos + '/' + crSigChe.Agencias + '/' + crSigChe.NContas + '/' + crSigChe.NCheques\n\tlcCaption = 'Impressão do Protocolo do Cheque: ' + lcCheque\n\tSelect TempChq\n\tZap\n\t\t\n\tInsert Into TempChq (Bancos, Agencias, NContas, NCheques, Vencs, Valors, Protocolos) ;\n\t\t\t Values (crSigChe.Bancos, crSigChe.Agencias, crSigChe.NContas, crSigChe.NCheques,;\n\t\t\t \t\t crSigChe.Vencs, crSigChe.Valors, crSigCqChm.Protocolos)\n\n\tDo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "Local lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2), laCampo4(1,2)\n\nlcEmpr = crSigChe.Emps\nlcDope = crSigCqChm.Dopes\nlnNume = crSigCqChm.NumDopes\n\nlaCampo1(1,1) = 'Emps'\nlaCampo1(1,2) = lcEmpr\nlaCampo1(2,1) = 'Dopes'\nlaCampo1(2,2) = lcDope\nlaCampo1(3,1) = 'Numes'\nlaCampo1(3,2) = lnNume\n\nlaCampo3(1,1) = 'EmpDopNums'\nlaCampo3(1,2) = lcEmpr + lcdope + Str(lnNume,6)\n\nlaCampo4(1,1) = 'EmpDopNums'\nlaCampo4(1,2) = CrSigCqChm.EmpDopNums\n\nDo Case\n\tCase ThisForm.poDataMgr.ChkRegister('SigCdPgr',@la... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Form SigCdPgr With Left",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdPgr',ChkRegister('SigMvCab'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_op",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Do Form SigOpCfl With crSigChe.Nums, ThisForm.DatasessionId\nThisForm.Pagina.Historico.GradeCheque.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Grupo_Saida",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If !ThisForm.Acesso\n\tWith ThisForm.Pagina\n\t\t.Filtro.Origem.Get_conta.Value = ''\n\t\t.Filtro.Origem.Get_Dconta.Value = ''\n\t\t.Filtro.Origem.Get_Cpf.Value = ''\n\t\t.Filtro.Enabled = .t.\n\t\t.Historico.Enabled = .f.\n\t\t.ActivePage = 1\n\t\tThisForm.Pagina.Filtro.Origem.Get_Conta.SetFocus\n\tEndWith\n\tThisForm.Caption = 'Histórico de Cheques'\nElse\n\tThisForm.Release\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_conta,Get_Dconta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeProrrog.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Cnt_periodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.GradeCheque.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Cnt_Followup.UltFollowup",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque",
+      "evento": "Procedure",
+      "linhas": 95,
+      "codigoOriginal": "LPARAMETERS nColIndex\nLocal lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2), laCampo4(1,2)\n\nIf ThisForm.Acesso\n\tlcCliente = CrSigChe.Iclis\n\tThisForm.PoDatamgr.Requery('CrSigCdCli')\n\tSelect crSigCdCli\n\tGo Top\n\tlcCaption =  'Histórico de Cheques de: ' + crSigChe.Iclis + ' - ' + ;\n\t\t\t\t\t   AllTrim( crSigCdCli.Rclis) + ' / ' + AllTrim(crSigCdCli.Cpfs)\n\tThisform.Caption = lcCaption\nElse\n\tlcCaption =  'Histórico de Cheques de: ' + This.Parent.Parent.Filtro.Origem.get_Conta.Value + ' - ' + ;\n\t\t\t\t  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,ChkRegister,Cursorquery",
+        "controlesReferenciados": "get_Conta,get_dConta,get_Cpf,ChkRegister('SigCdPgr',ChkRegister('SigMvCab',ChkRegister('SIGCCCHM'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Local lcOrd\nlcOrd = 'Venc'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column1.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Local lcOrd\nlcOrd = 'Cheque'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column2.Header1.BackColor = RGB(220,255,220)\n\t.Column1.Header1.BackColor = RGB(192,192,192)\n\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Header1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcOrd\n\nlcOrd = 'Agencia'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column3.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t.Column1.Header1.BackColor = RGB(192,192,192)\n\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Header1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcOrd\n\nlcOrd = 'conta'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column4.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t.Column1.Header1.BackColor = RGB(192,192,192)\n\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Header1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcOrd\n\nlcOrd = 'Ncheque'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column5.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t.Column1.Header1.BackColor = RGB(192,192,192)\n\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Header1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Local lcOrd\n\nlcOrd = 'Valor'\n_Recno = Recno()\nSet Order to &lcOrd.\nGo _Recno\nWith Thisform.Pagina.Historico.GradeCheque\n\t.Column6.Header1.BackColor = RGB(220,255,220)\n\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t.Column1.Header1.BackColor = RGB(192,192,192)\n\t.Refresh\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeCheque.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nLocal lcEmpr, lcDope, lnNume, laCampo1(3,2), laCampo3(1,2)\n\nlcEmpr = crSigChe.Emps\nlcDope = crSigCqChm.Dopes\nlnNume = crSigCqChm.NumDopes\n\nlaCampo1(1,1) = 'Emps'\nlaCampo1(1,2) = lcEmpr\nlaCampo1(2,1) = 'Dopes'\nlaCampo1(2,2) = lcDope\nlaCampo1(3,1) = 'Numes'\nlaCampo1(3,2) = lnNume\n\nlaCampo3(1,1) = 'EmpDopNums'\nlaCampo3(1,2) = lcEmpr + lcdope + Str(lnNume,6)\n\nlcEnabc = .f.\nDo Case\n\tCase ThisForm.poDataMgr.ChkRegister('SigCdPgr',@laCampo1)\n\t\tlcEnabc = .t.\n\n\tCase ThisForm.poData... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdPgr',ChkRegister('SigMvCab'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.GradeMovimenta.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Emitente.get_Conta",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local lcod, lfan, codcor, xobj, Grupo\nWith ThisForm.Pagina.historico.emitente\n\tIf !Empty(This.Value)\n\t\tIf !fAcessoContas(Usuar, '', 'C', This.Value, This, .get_dconta.Value)\n\t\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\t\t.get_conta.Value  = ''\n\t\t\t.get_dconta.Value = ''\n\t\t\t.get_cpf.Value    = ''\n\t\t\tReturn 0 \n\t\tElse\n\t\t\tlcCliente = This.Value\n\t\t\tThisForm.Podatamgr.Requery('CrSigCdCli')\n\t\t\tSelect CrSigCdCli\n\t\t\tGo top\n\t\t\t.get_conta.Value  = crSigCdCli.Iclis\n\t\t\t.get_dconta.Value = crSigCdCli.Rclis\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "get_dconta,get_conta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Emitente.get_Cpf",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty( ThisForm.Pagina.historico.emitente.Get_Conta.Value ) \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Emitente.get_Cpf",
+      "evento": "Valid",
+      "linhas": 65,
+      "codigoOriginal": "Local lcCgc\n\nWith ThisForm.Pagina.historico.emitente\n\tIf !Empty(This.value)\n\t\tCgc = This.Value\n\t\tCgc = Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\t\tIf Len(Alltrim(Cgc))<>14\n\t\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\t\tElse\n\t\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/9999-99\" )\n\t\tEndIf\n\t\t\n\t\tlcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\t\tlnErro = ThisForm.podatamgr.SqlExecute(lcQuery,'CrSigCdCli')\n\t\t\n\t\tIf lnErro < 1\n\t\t\tMessageBox('Favor reinicializar o pro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_conta,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Emitente.get_DConta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Empty( ThisForm.Pagina.Historico.emitente.Get_Conta.Value ) And ;\n\t   Empty( ThisForm.Pagina.Historico.emitente.Get_Cpf.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_Cpf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHI.Pagina.Historico.Emitente.get_DConta",
+      "evento": "Valid",
+      "linhas": 52,
+      "codigoOriginal": "Local lcod, lfan, codcor, xobj, grupo, lcRClis, lcDescricao\n\nlcDescricao = Alltrim(This.Value)\nWith ThisForm.Pagina.historico.emitente\n\tIf !Empty(This.Value)\n\t\tIf !Thisform.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Rclis',This.Value)\n\t\t\tlcTmp = '%'+Alltrim(This.Value) + '%'\n\t\t\tThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')\n\t\t\tSelect CrSigCdCli\n\t\t\tIndex On Rclis Tag Rclis\n\t\t\tGo Top\n\t\t\txBrow=CreateObject('... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaSel",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_conta,get_dconta,get_cpf",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCHI.Pagina.Filtro.Origem.get_Cpf.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Cpfs,Rclis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCHI.Pagina.Filtro.Origem.get_DConta.Valid",
+      "queryOriginal": "\t\t\t\tThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,Iclis,Cpfs,Conjuges,Inativas,RtrimRClis,CrSigCdCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCHI.Pagina.Historico.Grupo_op.Click",
+      "queryOriginal": "\tInsert Into TempChq (Bancos, Agencias, NContas, NCheques, Vencs, Valors, Protocolos) ; \t\t\t Values (crSigChe.Bancos, crSigChe.Agencias, crSigChe.NContas, crSigChe.NCheques,; \t\t\t \t\t crSigChe.Vencs, crSigChe.Valors, crSigCqChm.Protocolos)",
+      "tabelas": "TempChq",
+      "colunas": "Bancos,Agencias,NContas,NCheques,Vencs,Valors,Protocolos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCHI.Pagina.Historico.Emitente.get_Cpf.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select Iclis, Cpfs, Rclis From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Cpfs,Rclis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCHI.Pagina.Historico.Emitente.get_DConta.Valid",
+      "queryOriginal": "\t\t\tThisForm.poDataMgr.SqlExecute([Select Rclis,Iclis,Cpfs,Conjuges,Inativas From SigCdCli Where Rtrim(RClis) Like ?lcTmp ], 'CrSigCdCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,Iclis,Cpfs,Conjuges,Inativas,RtrimRClis,CrSigCdCli",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli", "TempChq"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 3 complete. Created `C:\4c\projeto\app\forms\operacionais\Formsigopcgb.prg` with the base structure for this OPERACIONAL form (flat layout, no PageFrame, per `analise.json`/legacy SCX which has no PageFrame at all):
+
+- `DEFINE CLASS Formsigopcgb AS FormBase` with pixel-perfect visual props from the dump (Width=1000, Height=600, Caption, BorderStyle=2, DataSession=2, etc.)
+- `Init(par_nCodBarra)` storing the optional pre-selected barcode param before `DODEFAULT()`
+- `InicializarForm()` instantiating `sigopcgbBO` and building the header
+- `ConfigurarCabecalho()` ÔÇö the `cnt_4c_Sombra`/`lbl_4c_Sombra`/`lbl_4c_Titulo` dark-gray title band, matching the canonical pattern already used in `FormEnd.prg` for other flat OPERACIONAL forms (no PageFrame compensation needed since there's no PageFrame here)
+- `AlternarPagina()` stub (form has no tabs) and `Destroy()` releasing the BO then calling `DODEFAULT()`
+
+Deliberately left out per phase scope: grid/CRUD buttons (Fase 4), data textboxes (Fases 5-6), and event handlers (Fases 7-8).

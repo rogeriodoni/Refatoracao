@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH and PROCEDURE/ENDPROC counts match (25/25, 8/8) ÔÇö the file is structurally balanced.
+
+## Summary
+
+Completed Fase 4/8 for `FormSIGOPCHR.prg`. Since this is a REPORT form (frmrelatorio), not a CRUD form, I adapted the generic "Grid + bot├Áes CRUD" template to REPORT semantics (confirmed against other completed REPORT-type migration tasks):
+
+- **`ConfigurarBotoes()`** ÔÇö added the `cmg_4c_Botoes` CommandGroup (4 buttons: Visualizar/Imprimir/Arquivos Email/Encerrar), using the exact geometry from the legacy SCX (`btnReport` Top=-2/Left=495/Width=310) and the project's canonical icons/captions.
+- **`ConfigurarPaginaLista()`** ÔÇö added all 9 filter controls to Page1 (Opera├º├úo, Per├¡odo com datas, Grupo c├│digo+descri├º├úo, Conta c├│digo+descri├º├úo, Tipo OptionGroup, Imprime Nome da Conta checkbox), with Top values correctly offset by `-85` (PageFrame.Top) per the project's documented rule for REPORT forms, and `MaxLength` set from the real schema column widths (`SigCdOpt.operacaos` char(15), `SigCdGcr.codigos/descrs` char(10)/char(40), `SigCdCli.iclis/rclis` char(10)/char(50) ÔÇö verified directly against `docs/schema.sql`, not guessed).
+- **`AlternarPagina()`** ÔÇö added per the pipeline's contract, focusing the first filter field.
+
+Deliberately **not** done yet (per the confirmed phase split used by other REPORT tasks): lookup wiring (F4/DblClick/SQL validation for Opera├º├úo/Grupo/Conta) and the `BtnVisualizarClick`/`BtnImprimirClick`/etc. handlers ÔÇö those belong to later phases. I did not bind `cmg_4c_Botoes` clicks yet, since binding to handlers that don't exist would crash the form on `Init()`.
+
+File structure verified balanced (25 WITH/25 ENDWITH, 8 PROCEDURE/8 ENDPROC).

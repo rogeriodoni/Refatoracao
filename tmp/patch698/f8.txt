@@ -1,0 +1,13 @@
+
+                    # DECIMA-PRIMEIRA excecao - a MESMA pergunta ESTRUTURAL, e
+                    # o MESMO helper que a Fase 7 consulta, para os dois call
+                    # sites nao divergirem em silencio (CLAUDE.md #44, item 6):
+                    # 'Grupo_Op' do PROPRIO form cujos botoes nao tem UM UNICO
+                    # verbo CRUD tambem nao e' a barra do frmcadastro.
+                    # Em variavel PROPRIA, consumida nos DOIS pontos em que
+                    # $grupoOpEhDoPaiF8 era lido - sao exatamente os pontos que
+                    # julgam o DONO/NATUREZA do 'Grupo_Op', nao os treze ramos
+                    # de excecao.
+                    $grupoOpNaoProvaCrudF8 = $grupoOpEhDoPaiF8 -or
+                                             (($txtLegadoF8 -notmatch 'frmcadastro') -and
+                                              (Test-GrupoOpSemVerboCrud -TextoDump $txtLegadoF8))

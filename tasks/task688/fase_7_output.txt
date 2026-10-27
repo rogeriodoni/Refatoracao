@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file structure is intact and correct. Both files are complete and consistent.
+
+**Summary of what I implemented (Phase 7/8):**
+
+The generic phase template asked for CRUD-style `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`, but this form's legacy source (SIGOPCFP.scx) has no such pattern ÔÇö it's a grid-line editor dialog with only `cmdInserir`/`cmdExcluir`/`cmdSair`, no Alterar/Visualizar. I implemented the actual legacy behavior instead:
+
+- **`FormSigOpCfp.prg`**: added `BtnInserirClick` (adds a blank grid row, reusing an existing blank one if present), `BtnExcluirClick` (marks current row deleted), `BtnSairClick` (persists via the BO, only when Inserir/Excluir are visible ÔÇö i.e. editable mode ÔÇö and keeps the dialog open if the save fails), plus `CelulaObsGradeEditavel` (the When-gate so Observa├º├úo cells only edit after CFOP is filled). Wired the 3 buttons via `BINDEVENT`.
+- **`SigOpCfpBO.prg`**: added `SalvarGrade()` ÔÇö replaces the legacy's bulk delete+reinsert with row-level `Inserir`/`Atualizar`/`ExecutarExclusao` (diffing against a `cursor_4c_OopOriginais` snapshot taken at load time), including the same duplicate-CFOP guard and blank-row discard the legacy does.
+- **`TextBoxGridLookup.prg`**: added the `When()` override on `TextBoxObsGridCfp_4c` delegating to the new form method.
+
+Updated the file's header comments to reflect the phase 7 work for future maintainers.

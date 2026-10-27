@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is complete. Phase 2 deliverable summary:
+
+**`C:\4c\projeto\app\classes\SigOpCfpBO.prg`** completed with the full CRUD layer for `SigCdOop` (CFOPs permitidos por Opera├º├úo):
+
+- **`CarregarDoCursor()`** ÔÇö maps all 7 columns (`cidchaves`, `dopes`, `cfops`, `cgrus`, `obspads`, `obsinis`, `obsfins`) via `SELECT (alias)` + `TratarNulo`.
+- **`Inserir()`** ÔÇö full `INSERT INTO SigCdOop`, generating `cidchaves` via `fUniqueIds()` when empty, then `RegistrarAuditoria("INSERT")`.
+- **`Atualizar()`** ÔÇö full `UPDATE` keyed by `cidchaves`, then `RegistrarAuditoria("UPDATE")`.
+- **`ObterChavePrimaria()`** ÔÇö returns `cidchaves`.
+- **`ExecutarExclusao()`** ÔÇö `DELETE` keyed by `cidchaves`, then `RegistrarAuditoria("DELETE")` (needed since the legacy form supports deleting a CFOP row via `cmdExcluir`).
+- Also added **`LimparDados()`**, **`InicializarValoresPadrao()`** (generates the PK up front, mirroring the legacy `cmdInserir.Click`), and **`ValidarDados()`** (transcribes the legacy grid-column `Valid` checks: Observa├º├úo Inicial Ôëñ Padr├úo Ôëñ Final) so the inherited `Salvar()`/`Excluir()` flow from `BusinessBase` works end-to-end without stubs.
+
+Verified against `docs/schema.sql` (UTF-16, read via `Get-Content -Raw`) that all 7 columns of `SigCdOop` are `NOT NULL` and already covered ÔÇö no missing-column risk. Followed the sibling BO `SigOpCflBO.prg` (same popup-child-form family) as the canonical pattern for method shape, error handling, and auditoria calls.

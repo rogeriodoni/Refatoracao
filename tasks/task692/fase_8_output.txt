@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stale `.fxp` files to delete. The migration is complete.
+
+## Summary
+
+Phase 8/8 for `FormSigOpCgl` turned out to require no new CRUD methods ÔÇö the legado SIGOPCGL (confirmed from the full source dump, `layout.json`, and `comportamento.json`) is a read-only dialog with exactly one button ("Sair"). All generic Fase 8 template items (BtnSalvarClick, BtnCancelarClick, FormParaBO/BOParaForm, HabilitarCampos/LimparCampos, AjustarBotoesPorModo) don't apply ÔÇö inventing them would violate PILAR 1 and the no-stub rule. `CarregarLista`'s role is already fulfilled by `CarregarDados()` from Phase 4.
+
+What I actually did for this phase:
+- Added a Fase 8 documentation block to `FormSigOpCgl.prg`'s header explaining why those methods are inapplicable, mirroring the evidence-based reasoning already used in Fases 6/7.
+- Wired the menu integration (the one real gap): added BAR 157 "Hist├│rico de Locais" to `popMovimentos` in `menu.prg`, plus a new `PROCEDURE AbrirFormSigOpCgl()` that prompts for the barcode via `INPUTBOX` (since the legado form takes the code as a parameter with no search UI of its own) before instantiating the form ÔÇö following the same pattern as `AbrirFormsigreinr`.
+- Confirmed BO/Form auto-load via `config.prg`'s `ADIR()` scan (no manual `SET PROCEDURE` needed) and that no stale `.fxp` files exist.
+
+The migration of SIGOPCGL ÔåÆ FormSigOpCgl/SigOpCglBO is now complete across all 8 phases.

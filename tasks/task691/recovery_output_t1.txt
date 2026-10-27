@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da corre├º├úo
+
+**Causa raiz principal**: `FormSIGOPCGF_mapeamento.json` mapeava os labels legados `Say1`-`Say4` ("Vencimento :", "Lan├ºamento :", "Pagamento :", "T├¡tulo :") para os objetos migrados `lbl_4c_Label1`-`lbl_4c_Label4` ÔÇö que s├úo na verdade os separadores "at├®" entre os campos de intervalo (colis├úo de destino com o mapeamento de `Label1`-`Label4`). O c├│digo migrado j├í tinha os objetos corretos (`lbl_4c_Say1`..`lbl_4c_Say4`, com Caption/Left/Top/Width certos, usando `CHR()` para acentos conforme regra #4), mas o comparador de UI Fidelity estava lendo as propriedades do objeto errado. Corrigido o JSON para apontar `Say1ÔåÆlbl_4c_Say1`, `Say2ÔåÆlbl_4c_Say2`, `Say3ÔåÆlbl_4c_Say3`, `Say4ÔåÆlbl_4c_Say4` (15 das 31 diferen├ºas).
+
+**Demais diferen├ºas (16), todas em `FormSIGOPCGF.prg` ÔÇö propriedades visuais do SCX que n├úo foram transcritas**:
+- `Themes = .F.` ausente no n├¡vel do Form.
+- `pgf_4c_Paginas`: `BorderWidth = 0` ausente (explica tamb├®m o `Height` 704 vs 700 esperado).
+- `txt_4c_Filtros`, `txt_4c_NewFiltro`, `txt_4c_TitBans` (pgFiltros): `FontSize = 8` ausente.
+- `obj_4c_CmgRetornar`: `SpecialEffect = 1` ausente no CommandGroup.
+- `cnt_4c_Botoes`: `Left` errado (542 em vez de 199 do SCX).
+- `txt_4c_Botao1`-`txt_4c_Botao4`: `SpecialEffect = 1` ausente.
+- `grd_4c_Dados`: `FontName = "Tahoma"`, `FontSize = 8`, `RowHeight = 16` ausentes.
+- `obj_4c_GetFiltros`: `FontSize = 7` ausente.
+
+O BO (`SIGOPCGFBO.prg`) n├úo tinha rela├º├úo com o erro ÔÇö as 31 diferen├ºas eram exclusivamente de fidelidade visual no form e no mapeamento. Nenhuma l├│gica funcional foi alterada.

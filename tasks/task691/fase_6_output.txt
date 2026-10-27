@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+These are new untracked files (this task's pipeline hasn't committed earlier phases yet), so there's no prior diff to compare ÔÇö that's expected for an in-progress task.
+
+Both files compiled successfully with VFP9 (no `.err` output). Summary of what Phase 6 added:
+
+**SIGOPCGFBO.prg**: extended `CarregarDoCursor` with 13 new `this_Lin*` properties (GrupEms, SGrupos, SContas, GrupAges, ContAges, TitBans, EspecieNfs, ValOcurs, TitCancs, Pagos, Concs, Prorrogs) needed by the detail panel, each guarded by `TYPE()` checks consistent with the existing pattern.
+
+**FormSIGOPCGF.prg**:
+- `this_lEmLookup` reentrancy guard property.
+- 6 fully implemented Page1 lookups (Moeda Filtro, Moeda Convers├úo, Moeda do Saldo, Forma de Publicidade, Esp├®cie da NF, T├¡tulo Banco) bound on `LostFocus` per regra #47, each with its `AbrirLookup*` helper using `FormBuscaAuxiliar` per the canonical contract (regras #36/#37), no digitado-apagar-on-not-found violation (regra #50).
+- `ConfigurarCamposDados2`: the remaining ~50% of Page2 fields (Grupo Emitente/Portador, Centro de Custo, Agente Cobrador, Hist├│rico, T├¡tulo Banco, Saldo Inicial, checkbox Totais, memo de filtros, container de indicadores de status) transcribed from the SCX dump, all read-only matching the legacy `When` ÔåÆ `.F.` contract.
+- `GetFiltrosDadosClick` (expand/collapse memo, transcribed literally).
+
+Deliberately deferred to the next phase (and documented in comments): `grdDados1` grid, `AfterRowColChange`, `Processamento`/`MontaGraded`/`CalcSaldo`/`CalcSaldoCta`/`OrdenaGrade`/`Imprimir`/`Planilha` ÔÇö these are the SCX's own listed custom methods (the actual query/report engine), which need to be built as one coherent pass against a correctly-typed `cursor_4c_Dados` rather than guessed now.

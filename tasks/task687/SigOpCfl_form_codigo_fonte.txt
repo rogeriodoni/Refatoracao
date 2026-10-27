@@ -1,0 +1,1038 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCfl.SCX
+* Data/Hora: 23/10/2026 20:20:15
+* Total de registros: 34
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCFL
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCFL
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCFL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCFL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPCFL
+  Class: shape
+  BaseClass: shape
+
+Objeto: Commandgroup1
+  Parent: SIGOPCFL
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getConta
+  Parent: SIGOPCFL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGOPCFL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCFL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdApagaitem
+  Parent: SIGOPCFL
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say4
+  Parent: SIGOPCFL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGOPCFL
+  Class: shape
+  BaseClass: shape
+
+Objeto: gridFollowup
+  Parent: SIGOPCFL
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGOPCFL.gridFollowup.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFL.gridFollowup.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCFL.gridFollowup.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCFL.gridFollowup.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cnt_inserir
+  Parent: SIGOPCFL
+  Class: container
+  BaseClass: container
+
+Objeto: Say19
+  Parent: SIGOPCFL.cnt_inserir
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGOPCFL.cnt_inserir
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetData
+  Parent: SIGOPCFL.cnt_inserir
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetHist
+  Parent: SIGOPCFL.cnt_inserir
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntDadoschq
+  Parent: SIGOPCFL
+  Class: container
+  BaseClass: container
+
+Objeto: Say13
+  Parent: SIGOPCFL.cntDadoschq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGOPCFL.cntDadoschq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Agc
+  Parent: SIGOPCFL.cntDadoschq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_bco
+  Parent: SIGOPCFL.cntDadoschq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCFL.cntDadoschq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Cta
+  Parent: SIGOPCFL.cntDadoschq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCFL.cntDadoschq
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Nch
+  Parent: SIGOPCFL.cntDadoschq
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 550
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Consulta de FollowUp de Cheques"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCFL"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.Shape2
+------------------------------------------------------------
+  Top = 110
+  Left = 62
+  Height = 403
+  Width = 675
+  BackColor = 255,255,255
+  BorderColor = 90,90,90
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.Commandgroup1
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 80
+  Left = 723
+  SpecialEffect = 1
+  Top = 3
+  Width = 80
+  TabIndex = 2
+  BackColor = 255,255,255
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.AutoSize = .F.
+  Command1.Top = 1
+  Command1.Left = 2
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.getConta
+------------------------------------------------------------
+  Enabled = .F.
+  Left = 128
+  Top = 118
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.getDConta
+------------------------------------------------------------
+  Enabled = .F.
+  Left = 209
+  Top = 118
+  Width = 360
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.Say1
+------------------------------------------------------------
+  Caption = "Emissor : "
+  Left = 81
+  Top = 122
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cmdApagaitem
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 420
+  SpecialEffect = 1
+  Top = -1
+  Width = 310
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdApagaitem"
+  Command1.Top = 5
+  Command1.Left = 155
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Command1.Caption = "A\<paga Item"
+  Command1.TabIndex = 2
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdApagar"
+  Command2.Top = 5
+  Command2.Left = 230
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command2.Caption = "\<Listar"
+  Command2.TabIndex = 3
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdListar"
+  Command3.Top = 5
+  Command3.Left = 5
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Command3.Caption = "\<Incluir"
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "cmdInserir"
+  Command4.Top = 5
+  Command4.Left = 80
+  Command4.Height = 75
+  Command4.Width = 75
+  Command4.FontBold = .T.
+  Command4.FontItalic = .T.
+  Command4.FontName = "Comic Sans MS"
+  Command4.FontSize = 8
+  Command4.Picture = ..\framework\imagens\cadastro_alterar_60.jpg
+  Command4.Caption = "\<Alterar"
+  Command4.ForeColor = 90,90,90
+  Command4.BackColor = 255,255,255
+  Command4.Themes = .F.
+  Command4.Name = "cmdAlterar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Lançamento Automático"
+  Left = 350
+  Top = 495
+  Width = 117
+  TabIndex = 15
+  ZOrderSet = 27
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.Shape1
+------------------------------------------------------------
+  Top = 495
+  Left = 333
+  Height = 14
+  Width = 14
+  BackStyle = 1
+  SpecialEffect = 0
+  BackColor = 0,128,64
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.gridFollowup
+------------------------------------------------------------
+  ColumnCount = 2
+  DeleteMark = .F.
+  Height = 312
+  Left = 67
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 177
+  Width = 667
+  GridLineColor = 238,238,238
+  Name = "gridFollowup"
+  Column1.FontName = "Courier New"
+  Column1.ControlSource = ""
+  Column1.Width = 144
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.ControlSource = ""
+  Column2.Width = 490
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.gridFollowup.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data / Hora"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.gridFollowup.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  BorderStyle = 0
+  ControlSource = "SigCdClh.datas"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.gridFollowup.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Observação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.gridFollowup.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "SigCdClh.hists"
+  InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cnt_inserir
+------------------------------------------------------------
+  Top = 284
+  Left = 78
+  Width = 640
+  Height = 82
+  BackStyle = 1
+  BorderWidth = 1
+  SpecialEffect = 0
+  Visible = .F.
+  BackColor = 255,255,255
+  BorderColor = 136,189,188
+  Name = "cnt_inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cnt_inserir.Say19
+------------------------------------------------------------
+  Caption = "Observação :"
+  Left = 19
+  Top = 43
+  TabIndex = 38
+  ZOrderSet = 11
+  Name = "Say19"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cnt_inserir.Say13
+------------------------------------------------------------
+  Caption = "Data / Hora :"
+  Left = 21
+  Top = 19
+  TabIndex = 44
+  ZOrderSet = 21
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cnt_inserir.GetData
+------------------------------------------------------------
+  Format = "K!"
+  Left = 88
+  MaxLength = 20
+  TabIndex = 20
+  Top = 15
+  Width = 150
+  ForeColor = 0,0,0
+  Name = "GetData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cnt_inserir.GetHist
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 88
+  TabIndex = 22
+  Top = 40
+  Width = 540
+  ForeColor = 0,0,0
+  Name = "GetHist"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq
+------------------------------------------------------------
+  Top = 142
+  Left = 66
+  Width = 665
+  Height = 34
+  BorderWidth = 1
+  SpecialEffect = 0
+  BackColor = 255,255,255
+  Name = "cntDadoschq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Say13
+------------------------------------------------------------
+  Caption = "Banco:"
+  Left = 22
+  Top = 6
+  TabIndex = 44
+  ZOrderSet = 21
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Say9
+------------------------------------------------------------
+  Caption = "Agência:"
+  Left = 107
+  Top = 6
+  TabIndex = 45
+  ZOrderSet = 21
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Get_Agc
+------------------------------------------------------------
+  Format = "K!"
+  InputMask = ""
+  Left = 153
+  MaxLength = 20
+  ReadOnly = .T.
+  TabIndex = 19
+  Top = 3
+  Width = 38
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "Get_Agc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Get_bco
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 59
+  ReadOnly = .T.
+  TabIndex = 18
+  Top = 3
+  Width = 31
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "Get_bco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Say1
+------------------------------------------------------------
+  Caption = "Conta:"
+  Left = 208
+  Top = 6
+  TabIndex = 45
+  ZOrderSet = 21
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Get_Cta
+------------------------------------------------------------
+  Format = "K!"
+  InputMask = ""
+  Left = 245
+  MaxLength = 20
+  ReadOnly = .T.
+  TabIndex = 19
+  Top = 3
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "Get_Cta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Say2
+------------------------------------------------------------
+  Caption = "N.Cheque:"
+  Left = 336
+  Top = 6
+  TabIndex = 45
+  ZOrderSet = 21
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCFL.cntDadoschq.Get_Nch
+------------------------------------------------------------
+  Format = "K!"
+  InputMask = ""
+  Left = 392
+  MaxLength = 20
+  ReadOnly = .T.
+  TabIndex = 19
+  Top = 3
+  Width = 52
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "Get_Nch"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCFL
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pConta, pData
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+If Type('pConta')#'C'
+	pNum = Space(10)
+EndIf
+
+ThisForm.conta = pConta
+ThisForm.Tipo = ''
+lcNum = pConta
+
+lcQueryCheh  = [Select * From SigCheh Where Nums = ?lcNum ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','SigChefl')
+	With .poDataMgr
+		.AddCursor('SigCheh','CidChaves','CrSigCheh','','',lcQueryCheh)
+	EndWith
+	= DoDefault()
+EndWith
+
+=ThisForm.Podatamgr.Requery('CrSigCheh')
+
+=ThisForm.Podatamgr.Cursorquery('SigChe','CrTmpChe','Nums',lcNum)
+=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',CrTmpChe.Iclis)
+
+ThisForm.GetConta.Value  = CrTmpCli.Iclis
+ThisForm.GetdConta.Value = CrTmpCli.Rclis
+Thisform.CntDadoschq.Get_bco.Value = CrTmpChe.Bancos
+Thisform.CntDadoschq.Get_agc.Value = CrTmpChe.agencias
+Thisform.CntDadoschq.Get_cta.Value = CrTmpChe.nContas
+Thisform.CntDadoschq.Get_Nch.Value = CrTmpChe.nCheques
+
+lcPos = 5
+lcLrg = 80
+With ThisForm.cmdApagaItem
+	.cmdInserir.Visible = fChecaAcesso('SIGOPCFL','INSERIR')
+	.cmdAlterar.Visible = fChecaAcesso('SIGOPCFL','ALTERAR')
+	.cmdApagar.Visible = fChecaAcesso('SIGOPCFL','EXCLUIR')
+	.cmdListar.Visible = fChecaAcesso('SIGOPCFL','LISTAR')
+
+	If .cmdInserir.Visible
+		.cmdInserir.Left = lcPos
+		lcPos = lcPos + lcLrg
+	Endif
+	If .cmdAlterar.Visible
+		.cmdAlterar.Left = lcPos
+		lcPos = lcPos + lcLrg
+	Endif
+	If .cmdApagar.Visible
+		.cmdApagar.Left = lcPos
+		lcPos = lcPos + lcLrg
+	Endif
+
+	If .cmdListar.Visible
+		.cmdListar.Left = lcPos
+		lcPos = lcPos + lcLrg
+	Endif
+	
+	If lcPos > 5
+		.Width = lcPos + 5
+		.Refresh
+	Else
+		.Visible = .f.
+	Endif	
+EndWith
+
+Select crSigCheH
+Go Top
+
+With ThisForm.gridFollowup
+	.ColumnCount = 2
+	.DeleteMark = .f.
+	.RecordSource = 'crSigCheh'
+	.Scrollbars = 2
+	.Width = 667
+	
+	.Column1.Controlsource = 'crSigCheH.Datas'
+	.Column1.Movable = .f.
+	.Column1.Resizable = .f.
+	.Column1.Width = 144
+	.Column1.Header1.Alignment = 2
+	.Column1.Header1.Caption = 'Data / Hora'
+	
+	.Column2.InputMask = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+	.Column2.Controlsource = 'crSigCheH.Hists'
+	.Column2.Movable = .f.
+	.Column2.Resizable = .f.
+	.Column2.Width = 490
+	.Column2.Header1.Alignment = 2
+	.Column2.Header1.Caption = 'Observação'
+
+	.SetAll('DynamicForeColor','Iif(crSigCheh.Autos,RGB(0,128,64),RGB(0,0,0))','Column')
+
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFL.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Valid
+------------------------------------------------------------
+PROCEDURE Command1.Valid
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFL.cmdApagaitem
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdApagar.Click
+------------------------------------------------------------
+PROCEDURE cmdApagar.Click
+Select CrSigCheh
+If !Eof()
+	If !CrSigCheH.Autos .or. IsEmpty(CrSigCheh.Hists) Or IsEmpty(CrSigCheh.Datas)
+		pchave = CrSigCheh.CidChaves
+		lcDelete = [ Delete From SigCheh Where CidChaves = ']+pChave+[']
+		lnErro = ThisForm.poDatamgr.SqlExecute(lcDelete,'')
+		If lnErro > 0
+			ThisForm.poDatamgr.Commit()
+			Select CrSigCheh
+			Delete
+			Skip
+			Skip -1
+		Else
+			MessageBox('Favor Reiniciar o Processo !!!',0+48,'Falha na Conexão')
+		Endif
+	Else
+		MessageBox('Histórico automático !!!',0+48,'Impossível Excluir')
+	EndIf
+Endif
+Select CrSigCheH
+Thisform.GridFollowUp.Refresh
+Thisform.GridFollowUp.Column1.Text1.Setfocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdInserir.Click
+------------------------------------------------------------
+PROCEDURE cmdInserir.Click
+ThisForm.Tipo = 'INSERIR'
+ThisForm.cnt_inserir.Visible = .t.
+ThisForm.cnt_inserir.GetData.Value = DateTime()
+ThisForm.cnt_inserir.GetHist.Value = Space(50)
+ThisForm.cnt_inserir.Refresh
+ThisForm.cnt_inserir.GetData.SetFocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdAlterar.Click
+------------------------------------------------------------
+PROCEDURE cmdAlterar.Click
+ThisForm.Tipo = 'ALTERAR'
+ThisForm.cnt_inserir.Visible = .t.
+ThisForm.cnt_inserir.GetData.Value = CrSigCheh.Datas
+ThisForm.cnt_inserir.GetHist.Value = CrSigCheh.Hists
+ThisForm.cnt_inserir.Refresh
+ThisForm.cnt_inserir.GetData.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFL.gridFollowup.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.cmdApagaItem.cmdApagar.Visible
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(this.value)
+	Messagebox('Data Inválida!',0+64,"Atenção!")
+	Return 0
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFL.cnt_inserir.GetData
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCFL.cnt_inserir.GetHist
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local lcConta
+lcConta = ThisForm.Conta
+Select CrSigCheh
+
+If !Empty(This.Value)
+	If ThisForm.Tipo = 'INSERIR'
+		pChave = fUniqueIds()
+		Select CrSigCheh
+		Append Blank
+		Replace Nums      With lcConta,;
+				Datas     With This.Parent.GetData.Value ,;
+				Emps      With _Empr,;
+				CidChaves with pChave
+	Endif
+	Replace Hists  With This.Parent.GetHist.Value
+
+	ThisForm.podatamgr.Update('CrSigCheh')
+	ThisForm.podatamgr.commit()
+Endif
+ThisForm.cnt_inserir.Visible = .f.
+ThisForm.gridFollowup.Refresh
+ThisForm.GridFollowup.Column1.SetFocus
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCFL
+RESERVED3 (ClassInfo): conta
+podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

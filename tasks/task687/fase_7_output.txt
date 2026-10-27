@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Those are false positives (Portuguese words "PLACEHOLDER"/"TODO" meaning "every path", not stub markers) ÔÇö no actual stubs or TODOs remain. Fase 7/8 is complete.
+
+## Summary
+
+I implemented Fase 7/8 for `FormSigOpCfl.prg` ÔÇö the main button events of this OPERACIONAL form. Since this form has no CRUD Page1/Page2 structure (confirmed by CLAUDE.md's explicit warning about this task), I transcribed the **actual** legacy buttons instead of the generic CRUD template (which doesn't apply here ÔÇö there's no "Visualizar" button in SIGOPCFL.SCX):
+
+- **`AjustarAcoesPorAcesso()`** ÔÇö faithfully reproduces the legado's `Init()` permission-driven repositioning (`fChecaAcesso` + dynamic `Left`/`Width` recalculation) for the 4 action buttons, called from `ConfigurarAcoes()`.
+- **`BtnIncluirClick()`** ÔÇö opens the inclusion panel with `DATETIME()`/`SPACE(50)` defaults (cmdInserir.Click).
+- **`BtnAlterarClick()`** ÔÇö loads the selected grid row into the panel, with a guard against empty selection (cmdAlterar.Click).
+- **`BtnExcluirClick()`** ÔÇö delegates to `SigOpCflBO.Excluir()` (whose "hist├│rico autom├ítico" guard was already built in Fase 2), reloads the grid, and restores focus (cmdApagar.Click).
+- **`BtnEncerrarClick()`** ÔÇö `THIS.Release()` (Commandgroup1.Command1.Valid).
+- The "Listar" button intentionally got **no** Click handler ÔÇö the legacy source has zero code for it, so inventing one would violate PILAR 1.
+
+All four handlers are `BINDEVENT`-wired as `PUBLIC` methods in `ConfigurarAcoes`/`ConfigurarSaida`. Next up is Fase 8/8 (final consolidation).

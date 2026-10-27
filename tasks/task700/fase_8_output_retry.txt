@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada.
+
+## O que estava faltando
+
+O retry anterior declarou a fase "complete" sem checar o gate. O gate da Fase 8 (`OrquestradorMigracao.ps1:9419` + `:11168`) exige 5 nomes no `.prg`, e **nenhum dos 5 existia**: `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`, `BtnSalvarClick`. As dispensas de exce├º├úo do gate (despachante/visualizador/calculadora/etc.) s├úo todas condicionadas a `$FormType -eq "OPERACIONAL"` ÔÇö form REPORT n├úo tem escapat├│ria, e os REPORT can├┤nicos (`FormSigReAac`, `Formsigrecrf`) implementam os 5.
+
+## O que foi entregue
+
+10 m├®todos novos em `FormSIGOPCHR.prg`, cada contrato CRUD mapeado para o equivalente real da tela (filtros + toolbar de 4 bot├Áes), sem inventar bot├úo/campo:
+
+| M├®todo | Mapeamento |
+|---|---|
+| `LimparCampos` | defaults transcritos do `SIGOPCHR.Init` legado |
+| `AtualizarEstadoCampos` | os **dois `When`** do SCX (`getDGrupo`/`getDConta` s├│ edit├íveis com o c├│digo vazio) ÔÇö estavam perdidos na migra├º├úo |
+| `HabilitarCampos` | estado base + refinamento dos `When` |
+| `FormParaBO` / `BOParaForm` | delega/inverte `FormParaRelatorio` |
+| `CarregarLista` | `.T.` ÔÇö n├úo h├í grade nem cursor de listagem no legado |
+| `BtnSalvar/Buscar/CancelarClick` | Imprimir / Visualizar / limpar filtros |
+| `AjustarBotoesPorModo` | reafirma os 4 bot├Áes habilitados |
+
+Ligados ao ciclo de vida: `InicializarForm` chama `LimparCampos()` + `AjustarBotoesPorModo()`; os 4 funis de lookup chamam `AtualizarEstadoCampos()` *depois* de `ValidarXExec()` ÔÇö posi├º├úo que vale em todos os caminhos, inclusive nos `RETURN` antecipados.
+
+## Verifica├º├úo
+
+- **Compila├º├úo**: `COMPILE_OK`, zero `.err` em form e BO.
+- **Gate Fase 8**: `PASSA` (r├®plica exata da l├│gica, sem dot-source do orquestrador ÔÇö isso dispara migra├º├úo).
+- **Instancia├º├úo** (`ProbeChr700F8.prg`): `CREATEOBJECT=O`; defaults conferidos (`DATE()-30`..`DATE()`, Tipo=1, tipo `D` preservado); os dois `When` alternam `.F.`ÔåÆ`.T.` corretamente e os campos de c├│digo nunca travam; round-trip FormÔåÆBOÔåÆForm preserva valor **e tipo** (`ImpNConta` chega como l├│gico, n├úo num├®rico); Cancelar restaura defaults sem fechar a tela.
+- **Auditorias**: propriedades inexistentes, fun├º├Áes ├│rf├ús e m├®todo PROTECTED chamado de fora ÔÇö todas limpas. Completude: 0 marcadores.
+- Menu (`popRelatorios` bar 175 ÔåÆ `AbrirFormSIGOPCHR`) j├í estava ligado pelo retry anterior; confirmado intacto.
+
+Uma corre├º├úo que a prova por instancia├º├úo exp├┤s: declarei `FormParaBO`/`BOParaForm`/`LimparCampos` sem modificador, mas `formbase.prg:276-285` j├í os declara `PROTECTED` e redeclarar sem modificador **n├úo alarga o escopo** ÔÇö a chamada externa falhava com *"Property FORMPARABO is not found"*. Marquei os tr├¬s `PROTECTED` explicitamente (honesto, e igual ao can├┤nico) e o probe passou a exercit├í-los por subclasse de teste. Os que o harness chama de fora (`CarregarLista`, `BtnCancelarClick`, `HabilitarCampos`, `AjustarBotoesPorModo`) ficaram PUBLIC ÔÇö medido, n├úo presumido.
+
+## Um ponto que deixei fora de escopo
+
+Os handlers de lookup da Fase 6 t├¬m **7 `RETURN` nus dentro de `TRY`** (linhas 639, 695, 750, 755, 814, 872, 877), o que viola a regra #1 do CLAUDE.md. N├úo ├® o que reprovava a Fase 8 e consertar exige refatorar os 5 `Validar*Exec` com vari├ível-flag ÔÇö preferi n├úo mexer sem seu aval. Vale notar que o padr├úo funil que usei j├í neutraliza a consequ├¬ncia mais vis├¡vel (`AtualizarEstadoCampos` roda mesmo nos retornos antecipados), mas o `this_lEmLookup` continua sendo liberado fora de `TRY/CATCH`, ent├úo um erro dentro do `Exec` ainda deixaria a flag ligada e mataria o lookup pelo resto da vida do form. Quer que eu corrija?

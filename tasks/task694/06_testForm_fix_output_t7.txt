@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o `FormSigOpCgr.prg` e `SigOpCgrBO.prg` na ├¡ntegra (s├®tima vez nesta mesma task694) e **n├úo h├í bug de c├│digo a corrigir**.
+
+O log mostra claramente que a falha ocorre na `[ETAPA 1B] Conectando ao banco de dados...`, **antes** de qualquer `CREATEOBJECT` do form/BO ser alcan├ºado ÔÇö ├® o preflight `SQLSTRINGCONNECT` do harness que falha com erro 1526 (`SQL Server inexistente ou acesso negado`). Isso ├® exatamente a assinatura documentada em mem├│ria de projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde est├í o SQL Server `DB_MBAHIA` (192.168.200.10). J├í ocorreu em 100+ tasks desde 2026-08-02, inclusive em c├│digo revisado linha a linha sem nenhum achado ÔÇö nenhuma edi├º├úo de `.prg` j├í resolveu isso, porque o c├│digo do form nunca chega a ser executado.
+
+Confirmei de novo agora: `Test-NetConnection 192.168.200.10 -Port 1433` n├úo completou em 60s (foi para background), consistente com "sem rota" ÔÇö o mesmo padr├úo de sempre.
+
+Pontos j├í conferidos e corretos no form/BO (sem rela├º├úo com este erro):
+- Guard de conex├úo (`ValidarParametros`) fora do `TRY`, com bypass para `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`
+- Ordem `ColumnCount -> RecordSource -> ControlSource -> Width -> Header1.Caption` em `VincularGradeResultado` (regra #41/#48)
+- Cursor placeholder `cursor_4c_Resultado` criado antes do `Grid.ControlSource` (regra #41)
+- `FormParaBO`/`BOParaForm`/`LimparCampos` PROTECTED, chamados s├│ via `THIS.` internamente (regra #3/#51)
+- Visibilidade PUBLIC correta dos 4 m├®todos do BO chamados pelo form (`Processar`, `ValidarOperacao`, `CarregarOperacoes`, `CarregarDoCursor`)
+- Nenhum `RETURN` dentro de `TRY/CATCH`
+
+Deixei os arquivos intactos ÔÇö editar agora seria especulativo e arriscaria regress├úo em c├│digo j├í revisado 7 vezes sem achado. Registrei a reincid├¬ncia na mem├│ria de projeto. A task j├í consumiu 7 das 10 tentativas presa nesse bloqueio de infraestrutura; restam 3 antes de esgotar o or├ºamento, sem que nenhuma edi├º├úo de `.prg` tenha chance real de corrigir isso.

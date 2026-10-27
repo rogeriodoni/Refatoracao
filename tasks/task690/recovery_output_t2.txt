@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fix confirmed clean.
+
+## Causa raiz
+
+Em `ConfigurarGradesSaldo()` (`Formsigopcgc.prg`), havia uma linha esp├║ria duplicada imediatamente ap├│s cada atribui├º├úo correta de `ColumnCount`:
+
+```foxpro
+loc_oGrdH.ColumnCount  = IIF(loc_lSaldo, 8, 7)
+loc_oGrdH.ColumnCount = 3        ÔåÉ sobrescrevia com 3
+...
+loc_oGrdS.ColumnCount  = IIF(loc_lSaldo, 2, 1)
+loc_oGrdS.ColumnCount = 3        ÔåÉ sobrescrevia com 3
+```
+
+Como atribuir `ColumnCount` **recria** os objetos `Column` do Grid, a segunda atribui├º├úo (`= 3`) destru├¡a as colunas 4 a 8 criadas pela primeira. Quando `THIS.ConfigurarColunaResultado(.Column4, ...)` era chamado na sequ├¬ncia (linha 1580/1723/etc.), estourava `Property COLUMN4 is not found` ÔÇö exce├º├úo capturada pelo `TRY/CATCH` de `InicializarForm()`, que retornava `.F.`, fazendo `CREATEOBJECT` devolver um valor n├úo-objeto (confirmado em `vfp_error_details.txt` da task690: `Linha: 1582 Procedure: configurargradessaldo`).
+
+## Corre├º├úo aplicada
+
+Removidas as duas linhas `ColumnCount = 3` redundantes (linhas 1566 e 1609 originais), mantendo apenas a atribui├º├úo correta baseada em `loc_lSaldo` (8/7 colunas para Hist├│rico, 2/1 para Saldo). Nenhum outro `ColumnCount` no arquivo tinha esse padr├úo duplicado.

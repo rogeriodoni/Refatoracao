@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5 conclu├¡da. `FormSigOpChb.prg` atualizado (16.8 KB, 432 linhas).
+
+## O que foi feito
+
+**Causa da falha anterior:** o gate da Fase 5 entra pelo ramo **layout captura** (legado OPERACIONAL sem lista, 9 TextBox de entrada n├úo vinculados a cursor) e exige paridade ÔÇö `ceil(9/2) = 5` TextBoxes no migrado. A tentativa anterior entregou **4** (Banco/Ag├¬ncia/Conta/Cheque). Reprovou por 1 campo.
+
+**`ConfigurarCamposBusca1()` reescrito com a primeira metade completa (5 de 9 campos, na ordem de `TabIndex` do SCX):**
+
+| Campo | Objeto migrado | Top/Left/W/H | InputMask | .Value |
+|---|---|---|---|---|
+| Banco | `txt_4c_Banco` | 107/167/31/23 | `"999"` | `SPACE(3)` |
+| Ag├¬ncia | `txt_4c_Agencia` | 131/167/40/23 | `"9999"` | `SPACE(4)` |
+| Conta | `txt_4c_Conta` | 155/167/81/23 | `"9999999999"` | `SPACE(10)` |
+| Cheque | `txt_4c_Cheque` | 179/167/52/23 | `"999999"` | `SPACE(6)` |
+| **Vencimento** (novo) | `txt_4c_Vencimento` + `lbl_4c_Label3` | 107/309/81/23 | ÔÇö | `{}` (DATE) |
+
+Al├®m do campo que faltava, corrigi nos 4 j├í existentes defeitos da **regra #49** (`Format`/`InputMask` do SCX descartados pelo migrador):
+
+- **`InputMask` transcrito** dos 4 campos ÔÇö severidade ALTA: sem ela os campos aceitavam qualquer caractere onde o legado restringe a d├¡gitos.
+- `ForeColor = RGB(0,0,0)` e `TabIndex` transcritos do dump (o legado declara ambos).
+- `.Value` passou de `""` para `SPACE(N)`, espelhando os memvares do `ControlSource` legado (`_ProcBco = Space(03)` etc.) e casando o comprimento com a m├íscara.
+- `GetVencimento` **n├úo** recebeu `InputMask`: o dump declara `InputMask = ""` (override vazio do Form Designer ÔÇö regra #49 manda n├úo transcrever).
+
+Os 4 campos restantes (`GetValor`/`GetControle`/`GetProtocolo`/`GetArquivo`) e os `Valid`/`When`/`Procura.Click` ficam para as Fases 6ÔÇô8, como o pipeline prev├¬.
+
+## Verifica├º├úo
+
+**N├úo consegui provar compila├º├úo:** o smoke test obrigat├│rio do VFP9 falhou ÔÇö `vfp9.exe -T` retornou `exit=0` sem escrever o arquivo de sa├¡da. Nesta sess├úo o VFP compila e sai sem executar, ent├úo **n├úo afirmo COMPILE_OK**. Validei estaticamente:
+
+- bytes n├úo-ASCII = 0 (regra #4) ┬À `this_X .Value` = 0 (regra #43) ┬À `RETURN` dentro de `TRY` = 0 (regra #1)
+- `PUBLIC` em `DEFINE CLASS` = 0 (regra #9.1) ┬À `WITH`/`ENDWITH` 15/15 ┬À `PROCEDURE`/`ENDPROC` 6/6
+- TODO/stub/"n├úo implementado" = 0 ┬À nenhum `AddObject` duplicado
+- propriedades existem nas classes base (regra #33); sem sobreposi├º├úo labelÔåöcampo em nenhuma das 5 linhas (regra #28); todos os controles dentro de 500├ù250 (regra #30)
+- gate replicado em PowerShell com os regex exatos do orquestrador: `TextBox migrado = 5`, `piso = 5`, **`GATE CAPTURA = True`**
+
+## Um ponto para voc├¬ decidir
+
+`mapeamento.json` mapeia os labels do cabe├ºalho como `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, mas a Fase 3 criou `lbl_4c_Sombra`/`lbl_4c_Titulo` (nomes can├┤nicos da regra #11). Diverg├¬ncia pr├®-existente, fora do escopo da Fase 5 ÔÇö n├úo toquei, mas vai gerar falso positivo no `ValidarUIFidelity` (Problema 3 do FORMCOR_LICOES_APRENDIDAS). O conserto certo ├® no JSON, n├úo no `.prg`.

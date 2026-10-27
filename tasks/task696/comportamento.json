@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCHB",
+      "evento": "Init",
+      "linhas": 31,
+      "codigoOriginal": "LParameters pLeCheque, pChqLido, pLeitor, pOldForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = pOldForm\nThisform.LeCheque = pLeCheque\nThisform.ChqLido  = pChqLido\nThisform.Leitor   = pLeitor\n\nStore Space(03) To _ProcBco\nStore Space(04) To _ProcAge\nStore Space(10) To _ProcCon\nStore Space(06) To _ProcChe\nStore { / / }   To _ProcVen\nStore 0 \t\tTo _ProcVal\nStore Space(08) To _ProcControle\nStore Space(08) To _P... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetBanco",
+      "evento": "KeyPress",
+      "linhas": 16,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf nKeyCode==60\n\tIf !Thisform.LeCheque\n\t\tThisform.ChqLido = \"\"\n\tEndif\n\tThisform.LeCheque = .T.\nEndif\nIf Thisform.LeCheque\n\tNoDefault\n\tThisform.ChqLido = Thisform.ChqLido + CHR(nKeyCode)\nEndif\nIf nKeyCode==58\n\tThis.Valid\n\tThisForm.LeCheque = .F.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChqLido + CHR",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetBanco",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local leitor, contador, tecla\n\nleitor = Iif(Thisform.LeCheque, Thisform.ChqLido, '')\n\nThisform.leitor=.f.\nIf Lastkey()=9\n\tKeyboard\"{CTRL+TAB}\"\nElse\n\tIf Len(leitor) >= 33\n\t\tThisform.leitor=.t.\n\t\tThis.Value = Substr(leitor,2,3)\n\t\tThisForm.GetAgencia.Value = Substr(leitor,5,4)\n\t\tThisForm.GetConta.Value = Substr(leitor,23,10)\n\t\tThisForm.GetCheque.Value = Substr(leitor,14,6)\n\t\tThisForm.Procura.Click\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Substr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetBanco",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetProtocolo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetAgencia",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t\tIsEmpty(Thisform.GetArquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetConta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t\tIsEmpty(Thisform.GetArquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetCheque",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t\tIsEmpty(Thisform.GetArquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetVencimento",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return IsEmpty( ThisForm.GetValor.Value ) .and. ;\n\t   IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t   IsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t   IsEmpty(Thisform.GetArquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetValor",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return IsEmpty( ThisForm.GetVencimento.Value ) .and. ;\n\t   IsEmpty(ThisForm.GetControle.Value) .and. ;\n\t   IsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t   IsEmpty(Thisform.GetArquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetControle",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetAgencia.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetConta.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetCheque.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetVencimento.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetValor.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetProtocolo.Value) .and. ;\n\t\tIsEmpty(Thisform.GetArquivo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetProtocolo",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetAgencia.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetConta.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetCheque.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetVencimento.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetValor.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(Thisform.GetArquivo.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetArquivo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = Trans(Val(This.Value),'@L 999999')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.GetArquivo",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.GetBanco.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetAgencia.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetConta.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetCheque.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetVencimento.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetValor.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetControle.Value) .and. ;\n\t\tIsEmpty(ThisForm.GetArquivo.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.Procura",
+      "evento": "Click",
+      "linhas": 110,
+      "codigoOriginal": "Local llOk, lcWher\nSet Step On \nllOk = .f.\nlcWher = ''\nSelect crSigChe\nSet Near On\nDo Case\n\tCase !IsEmpty( _ProcVen )\n\t\tSet Order To VENC\n\t\t_Busca = ( DTOS( _PROCVEN ) + Iif(IsEmpty(_PROCBCO),'',_ProcBco) + Iif(IsEmpty(_PROCAGE),'',_ProcAge) + Iif(IsEmpty(_PROCCON),'',_ProcCon) + Iif(IsEmpty(_PROCCHE),'',_ProcChe) )\n\t\tllOk = Seek( _Busca )\n\t\tIf !llOk\n\t\t\tllVenc = fDtoSQL(_ProcVen)\n\t\t\tlcWher = [Vencs = ?llVenc ]+Iif(!IsEmpty(_ProcBco),[And Bancos=?_ProcBco ],[])+;\n\t\t\t\t\tIif(!IsEmpty(_ProcAge),[And ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHB.btnCancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

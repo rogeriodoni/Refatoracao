@@ -1,0 +1,704 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGOPCHR.SCX
+* Data/Hora: 25/10/2026 22:26:11
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCHR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Oper
+  Parent: SIGOPCHR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTipo
+  Parent: SIGOPCHR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: lbl_estoque
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getConta
+  Parent: SIGOPCHR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDataI
+  Parent: SIGOPCHR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDataF
+  Parent: SIGOPCHR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGOPCHR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGOPCHR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupo
+  Parent: SIGOPCHR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImpNConta
+  Parent: SIGOPCHR
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR
+------------------------------------------------------------
+  DataSession = 1
+  Height = 250
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relação de Cheques"
+  ControlBox = .F.
+  podatamgr = .F.
+  Name = "SIGOPCHR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 16
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 24
+  REGISTRY1.Left = 408
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Período :"
+  Height = 15
+  Left = 196
+  Top = 133
+  Width = 45
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Operação :"
+  Left = 185
+  Top = 109
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Get_Oper
+------------------------------------------------------------
+  Height = 23
+  Left = 243
+  TabIndex = 6
+  Top = 106
+  Width = 115
+  ZOrderSet = 4
+  Name = "Get_Oper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Say2
+------------------------------------------------------------
+  Caption = "à"
+  Height = 15
+  Left = 327
+  Top = 135
+  Width = 8
+  TabIndex = 2
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Tipo :"
+  Height = 15
+  Left = 212
+  Top = 208
+  Width = 29
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.GetTipo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 238
+  Top = 204
+  Width = 144
+  TabIndex = 14
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "GetTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Geral"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Pendente"
+  Option2.Height = 17
+  Option2.Left = 62
+  Option2.Top = 5
+  Option2.Width = 77
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Conta :"
+  Left = 203
+  Top = 183
+  Width = 38
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Grupo :"
+  Left = 203
+  Top = 158
+  Width = 38
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.getConta
+------------------------------------------------------------
+  Left = 243
+  TabIndex = 11
+  Top = 181
+  Width = 80
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.GetDataI
+------------------------------------------------------------
+  Left = 243
+  TabIndex = 7
+  Top = 131
+  Width = 80
+  ZOrderSet = 12
+  Name = "GetDataI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.GetDataF
+------------------------------------------------------------
+  Left = 338
+  TabIndex = 8
+  Top = 131
+  Width = 80
+  ZOrderSet = 13
+  Name = "GetDataF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.getDConta
+------------------------------------------------------------
+  Left = 325
+  TabIndex = 12
+  Top = 181
+  Width = 290
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.getGrupo
+------------------------------------------------------------
+  Left = 243
+  TabIndex = 9
+  Top = 156
+  Width = 80
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.getDGrupo
+------------------------------------------------------------
+  Left = 325
+  TabIndex = 10
+  Top = 156
+  Width = 150
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHR.ImpNConta
+------------------------------------------------------------
+  Top = 209
+  Left = 399
+  Height = 15
+  Width = 133
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprime Nome da Conta"
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "ImpNConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCHR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigOpchr Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+ldDataI = ThisForm.GetDataI.Value
+ldDataF = ThisForm.GetDataF.Value
+ldDataI = fDtoSQL(ldDataI)
+ldDataF = fDtoSQL(ldDataF,'23:59:59')
+lnTipos = ThisForm.GetTipo.Value
+lcOpera = ThisForm.Get_Oper.Value
+lcGrupo = ThisForm.getGrupo.Value
+lcConta = ThisForm.getConta.Value
+llConta = ( ThisForm.ImpNConta.Value = 1 )
+
+lcEmp = _Empr + Iif(Seek(_Empr, 'crSigCdEmp', 'Cemps'), ' - ' + Alltrim(crSigCdEmp.Razas), '')
+lcTit = 'Relação ' + Iif(lnTipos=1 , 'Geral de Cheques - ', 'de Cheques Pendentes - ') + ;
+		Iif(IsEmpty(lcOpera), 'Todas as Operações', lcOpera)
+lcSub = 'Período : ' + Dtoc(ldDataI) + ' até ' + Dtoc(ldDataF) + '     ' + ;
+		Iif(IsEmpty(lcGrupo), 'Todos os Grupos', 'Grupo : ' + lcGrupo) + '  ' + ;
+		Iif(IsEmpty(lcConta), 'Todas as Contas', 'Conta : ' + lcConta)
+llQue = IsEmpty(lcConta)
+
+Create Cursor csCabecalho (Empresa c(80), Titulo c(80), Subtitulo c(80), Quebra l(1), Nconta l)
+Insert Into csCabecalho (Empresa, Titulo, Subtitulo, Quebra, Nconta) Values (lcEmp, lcTit, lcSub, llQue, llconta )
+
+lcWhere = [Select a.Vencs, a.GrClis as Grupos, a.IClis as Contas, a.UMovs, a.Emps, ]+ ;
+	   	  [a.Bancos, a.Agencias, a.NContas, a.NCheques, a.Valors, b.Tipos, c.Rclis ]+ ;
+	   	  [From SigChe a, SigCdOpt b, SigCdCli c Where ]+ ;
+		  [a.Vencs Between ?ldDatai And ?ldDataF ]+;
+		  Iif(!IsEmpty(lcOpera), [And a.Umovs=']+lcOpera+[' ],[])+;
+		  Iif(!IsEmpty(lcGrupo), [And a.GrClis=']+lcGrupo+[' ],[])+;
+		  Iif(!IsEmpty(lcConta), [And a.IClis=']+lcConta+[' ],[])+;
+		  Iif(lnTipos=2,[And b.Tipos='DB' ],[])+;
+		  [And a.Umovs = b.Operacaos And a.Iclis = c.Iclis ]+;
+		  [Order By 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+
+lnErro = ThisForm.podatamgr.SqlExecute(lcWhere,'CsImpressao')
+If lnErro > 0
+	Select csImpressao
+	Go Top
+Else
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return 0
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pGru, pCon, pOldForm
+
+ThisForm.ParentForm = pOldForm
+ThisForm.Podatamgr  = ThisForm.ParentForm.PodataMgr
+ThisForm.get_Oper.Value = ''
+ThisForm.GetDataI.Value = Date() - 30
+ThisForm.GetDataF.Value = Date()
+ThisForm.getTipo.Value  = 1
+ThisForm.getGrupo.Value = Iif(Type('pGru') = 'C', pGru, '')
+ThisForm.getConta.Value = Iif(Type('pCon') = 'C', pCon, '')
+
+Thisform.poDataMgr.Requery('CrSigCdOpt')
+ThisForm.poDataMgr.Requery('CrSigCdGcr')
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+
+Select CrSigCdGcr
+Index on Codigos Tag Codigos
+
+Select crSigCdOpt
+Index On Descrs Tag Descrs
+Index On Operacaos Tag Operacao
+
+Select CrSigCdEmp
+Index On Cemps Tag Cemps
+
+If !IsEmpty(ThisForm.getGrupo.Value)
+	=Seek(ThisForm.getGrupo.Value, 'crSigCdGcr', 'Codigos')
+	ThisForm.getDGrupo.Value = crSigCdGcr.Descrs
+Endif
+If !IsEmpty(ThisForm.getConta.Value)
+	lcCliente = ThisForm.GetConta.Value
+	ThisForm.poDataMgr.Requery('CrSigCdCli')
+	Select CrSigCdCli
+	Go Top
+	ThisForm.getDConta.Value = crSigCdCli.RClis
+Endif
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigOpChr To Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value # 3
+	If IsEmpty(ThisForm.GetDataI.Value)
+		=MessageBox('Data Inicial Inválida!!!', 16, '')
+		ThisForm.GetDataI.SetFocus
+		Return 0
+	Endif
+
+	If IsEmpty(ThisForm.GetDataF.Value)
+		=MessageBox('Data Final Inválida!!!', 16, '')
+		ThisForm.GetDataF.SetFocus
+		Return 0
+	Endif
+
+	If (ThisForm.GetDataF.Value < ThisForm.GetDataI.Value)
+		=MessageBox('A Data Final Não Pode Ser Menor do que a Inicial!!!', 16, '')
+		ThisForm.GetDataI.SetFocus
+		Return 0
+	Endif
+Endif
+
+frmrelatorio::btnReport.Click
+**********************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHR.Get_Oper
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	Select crSigCdOpt
+	Set Order to Operacao
+	If !Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdOpt', 'Operacao', This.Value, 'Operações')
+		loBrowse.AddColuna('Operacaos', '', 'Código', .t., 'Operacao')
+		loBrowse.AddColuna('Descrs', '', 'Descrição', .t., 'Descrs')
+		loBrowse.Show
+		This.Value = crSigCdOpt.Operacaos
+	Endif
+Endif
+**********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHR.getConta
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getConta, ThisForm.getDConta)
+		=MessageBox('Acesso Negado!!!', 0+48, '')
+		This.Value=''
+		This.Refresh
+		ThisForm.getDConta.Value = ''
+		ThisForm.getDConta.Refresh
+		Return 0 
+	Endif
+Else
+	ThisForm.getDConta.Value = ''
+	ThisForm.getDConta.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHR.getDConta
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getConta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(this.Value)
+	If !fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getConta, ThisForm.getDConta)
+		=MessageBox('Acesso Negado!!!', 0+48, '')
+		This.Value=''
+		This.Refresh
+		ThisForm.getConta.Value = ''
+		ThisForm.getConta.Refresh
+		Return 0 
+	Endif
+Else
+	ThisForm.getConta.Value = ''
+	ThisForm.getConta.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHR.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)
+Else
+	ThisForm.getDGrupo.Value = ''
+	ThisForm.getDGrupo.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHR.getDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getGrupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)
+Else
+	ThisForm.getGrupo.Value = ''
+	ThisForm.getGrupo.Refresh
+Endif
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCHR
+RESERVED3 (ClassInfo): parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

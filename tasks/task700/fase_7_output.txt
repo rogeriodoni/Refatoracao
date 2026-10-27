@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is complete. I added to `FormSIGOPCHR.prg`:
+
+1. **`FormParaRelatorio()`** ÔÇö maps all 9 filter controls (Opera├º├úo, Per├¡odo, Tipo, Grupo/Descri├º├úo, Conta/Descri├º├úo, Imprime Nome Conta) to the matching `SIGOPCHRBO` properties, with the CheckBoxÔåÆlogical comparison done as `= 1` (never a direct numeric assignment, per regra #187).
+2. **Four button handlers** wired via `BINDEVENT` to `cmg_4c_Botoes.Buttons(1..4)`:
+   - `BtnVisualizarClick` ÔåÆ `Visualizar()` (preview)
+   - `BtnImprimirClick` ÔåÆ `Imprimir()` (impressora com di├ílogo)
+   - `BtnExcelClick` ÔåÆ `GerarExcel()` (bot├úo "Arquivos Email")
+   - `BtnEncerrarClick` ÔåÆ `THIS.Release()`
+
+Since `SIGOPCHRBO.Visualizar/Imprimir/GerarExcel` already display `MsgErro`/`MsgAviso` internally on every failure path, the handlers don't re-check `ObterMensagemErro()` ÔÇö that would double the dialog (the exact bug regra #122 warns about). I did not invent `BtnIncluirClick`/`BtnAlterarClick`/`BtnExcluirClick` from the generic CRUD checklist, since this is a REPORT-type form with no Incluir/Alterar/Excluir buttons in the legacy SCX ÔÇö only the 4 report action buttons exist, matching the precedent in other finished REPORT forms (`FormSIGREAUP`, `Formsigrefc1`, etc.).
+
+Verified the file is structurally balanced (23 PROCEDURE/ENDPROC, 26 WITH/ENDWITH, 10 TRY/ENDTRY, single ENDDEFINE).

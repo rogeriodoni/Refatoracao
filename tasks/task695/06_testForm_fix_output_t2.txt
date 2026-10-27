@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico
+
+Este erro **n├úo ├® um bug de c├│digo**. ├ë o problema de infraestrutura j├í documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa o pipeline n├úo tem rota de rede para `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA`. O log mostra exatamente a assinatura conhecida:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [...]DBNETLIB]SQL Server inexistente ou acesso negado.
+=== RESULTADO DO TESTE ===
+Status: ERRO AO CRIAR OBJETO
+```
+
+O preflight `SQLSTRINGCONNECT` da ETAPA 1B falha **antes** de qualquer `CREATEOBJECT` do `Formsigopcgv`/`sigopcgvBO` ÔÇö o c├│digo do form nunca chega a ser executado. Confirmei reexecutando `Test-NetConnection 192.168.200.10 -Port 1433`, que n├úo completou em 60s e foi para background ÔÇö o mesmo padr├úo de "sem rota" observado em 100+ ocorr├¬ncias anteriores (ver `[[project_sqlserver_200_10_inalcancavel_maquina_pipeline]]`), inclusive na tentativa 1/10 desta mesma task695, j├í registrada em mem├│ria com revis├úo integral do form/BO sem achado.
+
+## A├º├úo tomada
+
+Revisei novamente o `Formsigopcgv.prg` e `sigopcgvBO.prg` (c├│digo colado no prompt, id├¬ntico ao j├í revisado na tentativa 1) e n├úo encontrei nenhum problema relacionado a este erro de conectividade ÔÇö checei guard de conex├úo fora de `RETURN` dentro de `TRY` (regra #1), visibilidade `PROTECTED`/`PUBLIC` dos m├®todos (regra #51), `.Self` em `WITH` (regra #38), `EVALUATE` s├│ para leitura, cores de `OptionGroup`/`CommandGroup`/`PageFrame` (regra #33), `TTOD` vs `ConverterParaData` (regra #16) ÔÇö tudo consistente.
+
+**N├úo editei os arquivos.** Como o erro ocorre no preflight do harness antes do c├│digo do form ser alcan├ºado, uma edi├º├úo especulativa s├│ arriscaria introduzir regress├úo em c├│digo j├í revisado duas vezes sem achado real. Atualizei a mem├│ria do projeto com esta reincid├¬ncia (tentativa 2/10).
+
+**Recomenda├º├úo**: isso precisa ser resolvido restaurando a rota de rede da m├íquina do pipeline para `192.168.200.10:1433`, n├úo insistindo em `runtime_fix` ÔÇö essa task j├í consumiu 2 das 10 tentativas presa neste bloqueio puramente de infraestrutura.

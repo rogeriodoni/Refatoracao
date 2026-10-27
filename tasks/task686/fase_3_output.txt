@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stray non-ASCII characters remain. The file is intact (233 lines).
+
+Phase 3/8 delivered: `C:\4c\projeto\app\forms\operacionais\FormSIGOPCFE.prg` created with:
+- `Init()` ÔåÆ `DODEFAULT()` only
+- `InicializarForm()` ÔÇö instantiates `SIGOPCFEBO`, calls the `ConfigurarPageFrame()` orchestrator, syncs header captions, loads reference cursors (skipped under `gb_4c_ValidandoUI`), makes controls visible
+- `ConfigurarPageFrame()` ÔÇö orchestrator stub (flat OPERACIONAL layout, no real PageFrame ÔÇö matches `FormFop`/`FormDCC` precedent), delegating only to the header for now; later phases will add filters/grid/buttons here
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Sombra` + `lbl_4c_LblSombra`/`lbl_4c_LblTitulo`, named per `mapeamento.json`, full-width container (CLAUDE.md regra #11), label width narrowed to leave room for the action buttons coming in Fase 4
+- `TornarControlesVisiveis()` ÔÇö recursive, with the `cnt_4c_Mensagem` floating "Aguarde" container excluded from forced `Visible=.T.` (legado starts it hidden)
+- `Destroy()` ÔÇö closes the reference cursors and calls `DODEFAULT()` last (menu-shrink fix)
+
+Not included yet (per phase scope): grid, filter textboxes (Material/Grupo/Conta), checkboxes, and action buttons ÔÇö those land in Fases 4-6.

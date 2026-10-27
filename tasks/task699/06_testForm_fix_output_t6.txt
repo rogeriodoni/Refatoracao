@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico: isto N├âO ├® um bug de c├│digo ÔÇö ├® o bloqueio de rede j├í documentado
+
+Esta ├® a **6┬¬ tentativa consecutiva** da mesma task699/FormSigOpChp presa exatamente neste mesmo problema, j├í revisado exaustivamente nas tentativas 1-5. Confirmei de novo nesta sess├úo:
+
+- `Test-NetConnection 192.168.200.10 -Port 1433` n├úo completou e foi para background ÔÇö mesma assinatura de "sem rota" vista em 30+ reincid├¬ncias anteriores (task623, 627, 629, 630, 632, 696, 697, 698...).
+- O pr├│prio `TestFormWrapper.prg` mostra que a **ETAPA 1B** (`SQLSTRINGCONNECT` gen├®rico, linhas ~118-157) roda **antes** da **ETAPA 2** (`CREATEOBJECT(par_cFormClass)`, linha 166). O hang ocorre inteiramente dentro do c├│digo gen├®rico do harness ÔÇö nenhuma linha de `FormSigOpChp.prg` ou `SigOpChpBO.prg` chega a ser executada.
+- A variante "timeout puro" (sem a mensagem r├ípida de erro 1526) acontece quando a rede descarta o pacote em sil├¬ncio em vez de recusar a porta ÔÇö mesma causa-raiz (sem rota para `192.168.200.0/24`), s├│ que o `SQLSTRINGCONNECT` fica pendurado at├® o timeout do driver em vez de falhar r├ípido.
+
+J├í revisei novamente o `FormSigOpChp.prg` e `SigOpChpBO.prg` linha a linha contra o checklist de regras conhecidas (RETURN fora de TRY/CATCH, PROTECTED/PUBLIC corretos conforme a regra #51, BINDEVENT em LostFocus sem par├ómetros, aus├¬ncia de `.Self`, f├│rmula de juros transcrita literalmente, guarda de `AtualizarFormPai`) ÔÇö nenhum achado novo. **N├úo fiz nenhuma edi├º├úo** nos arquivos: editar especulativamente pela 6┬¬ vez um c├│digo j├í revisado 5 vezes sem defeito real s├│ arriscaria introduzir uma regress├úo, sem nenhuma chance de resolver um problema que ├® estruturalmente de rede.
+
+Registrei esta reincid├¬ncia na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`).
+
+**Alerta importante**: a task j├í consumiu 6 das 10 tentativas dispon├¡veis presa neste bloqueio de infraestrutura. Recomenda├º├úo para quem opera o pipeline, antes da pr├│xima execu├º├úo:
+1. Restaurar a rota de rede da m├íquina do pipeline para `192.168.200.10:1433`, ou
+2. Mover a etapa `06_testForm` para uma m├íquina com essa rota, ou
+3. Reduzir o timeout de conex├úo do `TestFormWrapper`/`VFP_EXECUTOR` para falhar r├ípido em vez de consumir os 300s completos a cada tentativa.
