@@ -273,6 +273,9 @@ DEFINE CLASS FpgBO AS BusinessBase
 
     *====================================================================
     * BuscarGrupoGcr - Busca grupo de conta corrente em SigCdGcr
+    * ATENCAO: a coluna de codigo de SigCdGcr eh "Codigos" (legado:
+    * AddCursor('SigCdGcr','Codigos',...)). "grupos" eh a coluna de SigCdPag,
+    * a tabela MESTRE deste form - nao espelhar o nome de uma na outra.
     * Usado pelo Form para validar/lookup do campo grupos via fAcessoContab
     * Substitui fAcessoContab(Usuar,'C',codigo,...) e
     *          fAcessoContab(Usuar,'D',descricao,...)
@@ -289,13 +292,13 @@ DEFINE CLASS FpgBO AS BusinessBase
             ELSE
                 DO CASE
                     CASE UPPER(ALLTRIM(par_cModo)) = "C"
-                        loc_cSQL = "SELECT grupos, descrs FROM SigCdGcr" + ;
-                            " WHERE grupos = " + EscaparSQL(par_cValor)
+                        loc_cSQL = "SELECT Codigos, descrs FROM SigCdGcr" + ;
+                            " WHERE Codigos = " + EscaparSQL(par_cValor)
                     CASE UPPER(ALLTRIM(par_cModo)) = "D"
-                        loc_cSQL = "SELECT grupos, descrs FROM SigCdGcr" + ;
+                        loc_cSQL = "SELECT Codigos, descrs FROM SigCdGcr" + ;
                             " WHERE UPPER(RTRIM(descrs)) LIKE UPPER(" + EscaparSQL(par_cValor + "%") + ")"
                     OTHERWISE
-                        loc_cSQL = "SELECT grupos, descrs FROM SigCdGcr ORDER BY grupos"
+                        loc_cSQL = "SELECT Codigos, descrs FROM SigCdGcr ORDER BY Codigos"
                 ENDCASE
 
                 IF USED(loc_cCursorDest)

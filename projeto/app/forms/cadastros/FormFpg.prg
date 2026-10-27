@@ -1216,7 +1216,7 @@ DEFINE CLASS FormFpg AS FormBase
         IF USED("cursor_4c_GcrDVal") AND RECCOUNT("cursor_4c_GcrDVal") > 0
             SELECT cursor_4c_GcrDVal
             IF RECCOUNT("cursor_4c_GcrDVal") = 1
-                loc_oPagina.txt_4c__cd_grupo.Value = ALLTRIM(cursor_4c_GcrDVal.grupos)
+                loc_oPagina.txt_4c__cd_grupo.Value = ALLTRIM(cursor_4c_GcrDVal.Codigos)
                 loc_oPagina.txt_4c__ds_grupo.Value = ALLTRIM(cursor_4c_GcrDVal.descrs)
             ELSE
                 THIS.AbrirLookupGrupoGcr()
@@ -1230,6 +1230,8 @@ DEFINE CLASS FormFpg AS FormBase
 
     *--------------------------------------------------------------------------
     * AbrirLookupGrupoGcr - Abre FormBuscaAuxiliar para SigCdGcr
+    * Coluna de codigo de SigCdGcr eh "Codigos" (legado: AddCursor('SigCdGcr',
+    * 'Codigos',...)). "grupos" eh de SigCdPag - nao confundir as duas.
     * Preenche txt_4c__cd_grupo e txt_4c__ds_grupo com selecao do usuario
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupGrupoGcr()
@@ -1240,17 +1242,17 @@ DEFINE CLASS FormFpg AS FormBase
 
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGcr", "cursor_4c_BuscaGcr", "Grupos", ;
+                "SigCdGcr", "cursor_4c_BuscaGcr", "Codigos", ;
                 loc_cCodigo, "Grupo de Conta Corrente")
 
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Grupos", "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
                 loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                 loc_oBusca.Show()
 
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr")
                     SELECT cursor_4c_BuscaGcr
-                    loc_oPagina.txt_4c__cd_grupo.Value = ALLTRIM(cursor_4c_BuscaGcr.Grupos)
+                    loc_oPagina.txt_4c__cd_grupo.Value = ALLTRIM(cursor_4c_BuscaGcr.Codigos)
                     loc_oPagina.txt_4c__ds_grupo.Value = ALLTRIM(cursor_4c_BuscaGcr.Descrs)
                 ENDIF
 
