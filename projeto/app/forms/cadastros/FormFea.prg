@@ -3584,7 +3584,8 @@ DEFINE CLASS FormFea AS FormBase
                                     PesoBEnts N(12,3), PesoBSais N(12,3), ;
                                     QtdeBEnts N(12,3), QtdeBSais N(12,3), ;
                                     Varias N(1,0), Agregas N(1,0), AplicFlhs N(1,0), ;
-                                    PFalha N(6,2), Falha N(12,3))
+                                    PFalha N(6,2), Falha N(12,3), ;
+                                    PFalhaE N(6,2), FalhaE N(12,3))
             INDEX ON Grupo + Conta + CMats + TpOps TAG GrConMatTp
             SET ORDER TO GrConMatTp
         ENDIF
@@ -4412,31 +4413,82 @@ DEFINE CLASS FormFea AS FormBase
                 .FontSize     = 8
                 .Visible      = .T.
             ENDWITH
+            *-- Colunas transcritas do SCX legado (ControlSource/Width/InputMask/
+            *-- ColumnOrder/fontes). Ordem visivel: Tipo, Qtde, Base Falha, F.Adm, Falha.
             WITH loc_oGrd.Column1
-                .Header1.Caption = "Tipo Opera" + CHR(231) + CHR(227) + "o"
-                .ControlSource   = "TmpOpera.TpOps"
-                .Width           = 120
+                .Header1.Caption   = "Tipo Opera" + CHR(231) + CHR(227) + "o"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.TpOps"
+                .Width             = 130
+                .FontName          = "Tahoma"
+                .FontSize          = 7
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column2
-                .Header1.Caption = "Qtde"
-                .ControlSource   = "TmpOpera.QtdeEnts"
-                .Width           = 80
+                .Header1.Caption   = "Qtde"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoEnts"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column3
-                .Header1.Caption = "F.Adm"
-                .ControlSource   = "TmpOpera.PFalha"
-                .Width           = 60
+                .Header1.Caption   = "F.Adm"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PFalhaE"
+                .Width             = 49
+                .InputMask         = "999.99"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column4
-                .Header1.Caption = "Falha"
-                .ControlSource   = "TmpOpera.Falha"
-                .Width           = 60
+                .Header1.Caption   = "Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.FalhaE"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column5
-                .Header1.Caption = "Base Falha"
-                .ControlSource   = "TmpOpera.PesoBEnts"
-                .Width           = 80
+                .Header1.Caption   = "Base Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoBEnts"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
+            *-- ColumnOrder do SCX: Col3=4, Col4=5, Col5=3 (ordem visivel:
+            *-- Tipo, Qtde, Base Falha, F.Adm, Falha). Atribuir em ordem
+            *-- CRESCENTE de destino - cada atribuicao reordena as demais.
+            loc_oGrd.Column5.ColumnOrder = 3
+            loc_oGrd.Column3.ColumnOrder = 4
+            loc_oGrd.Column4.ColumnOrder = 5
             BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GradeEntradasAfterRowColChange")
             BINDEVENT(par_oCnt.Pagina.Pages(1), "Activate", THIS, "PaginaResultadoPage1Activate")
 
@@ -4474,31 +4526,82 @@ DEFINE CLASS FormFea AS FormBase
                 .FontSize     = 8
                 .Visible      = .T.
             ENDWITH
+            *-- Colunas transcritas do SCX legado (ControlSource/Width/InputMask/
+            *-- ColumnOrder/fontes). Ordem visivel: Tipo, Qtde, Base Falha, F.Adm, Falha.
             WITH loc_oGrd.Column1
-                .Header1.Caption = "Tipo Opera" + CHR(231) + CHR(227) + "o"
-                .ControlSource   = "TmpOpera.TpOps"
-                .Width           = 120
+                .Header1.Caption   = "Tipo Opera" + CHR(231) + CHR(227) + "o"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.TpOps"
+                .Width             = 130
+                .FontName          = "Tahoma"
+                .FontSize          = 7
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column2
-                .Header1.Caption = "Qtde"
-                .ControlSource   = "TmpOpera.QtdeSais"
-                .Width           = 80
+                .Header1.Caption   = "Qtde"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoSais"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column3
-                .Header1.Caption = "F.Adm"
-                .ControlSource   = "TmpOpera.PFalha"
-                .Width           = 60
+                .Header1.Caption   = "F.Adm"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PFalha"
+                .Width             = 49
+                .InputMask         = "999.99"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column4
-                .Header1.Caption = "Falha"
-                .ControlSource   = "TmpOpera.Falha"
-                .Width           = 60
+                .Header1.Caption   = "Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.Falha"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column5
-                .Header1.Caption = "Base Falha"
-                .ControlSource   = "TmpOpera.PesoBSais"
-                .Width           = 80
+                .Header1.Caption   = "Base Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoBSais"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
+            *-- ColumnOrder do SCX: Col3=4, Col4=5, Col5=3 (ordem visivel:
+            *-- Tipo, Qtde, Base Falha, F.Adm, Falha). Atribuir em ordem
+            *-- CRESCENTE de destino - cada atribuicao reordena as demais.
+            loc_oGrd.Column5.ColumnOrder = 3
+            loc_oGrd.Column3.ColumnOrder = 4
+            loc_oGrd.Column4.ColumnOrder = 5
             BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GradeSaidasAfterRowColChange")
             BINDEVENT(par_oCnt.Pagina.Pages(2), "Activate", THIS, "PaginaResultadoPage2Activate")
 

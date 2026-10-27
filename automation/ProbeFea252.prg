@@ -17,7 +17,7 @@ gb_4c_ModoTeste = .T.
 gc_4c_ArquivoErroTeste = "C:\4c\automation\vfp_err_fea252.txt"
 #DEFINE OUT "C:\4c\automation\probe_fea252.txt"
 
-LOCAL loc_oForm, loc_cL, loc_nFalhas, loc_oE, loc_oCnt, loc_oG
+LOCAL loc_oForm, loc_cL, loc_nFalhas, loc_oE, loc_oCnt, loc_oG, loc_nI, loc_nC, loc_cNome, loc_oCol
 loc_nFalhas = 0
 STRTOFILE("=== PROBE Erro252 - FormFea ===" + CHR(13)+CHR(10), OUT)
 IF FILE(gc_4c_ArquivoErroTeste)
@@ -76,6 +76,28 @@ TRY
     loc_cL = "5) GradeMat     RecordSource=[" + loc_oG.RecordSource + "]" + ;
              " Col1=[" + loc_oG.Column1.ControlSource + "]" + CHR(13)+CHR(10)
     STRTOFILE(loc_cL, OUT, 1)
+
+    *-- 6) colunas das grades Entradas/Saidas contra o SCX legado
+    FOR loc_nC = 1 TO 2
+        loc_cNome = IIF(loc_nC = 1, "GradeEntradas", "GradeSaidas")
+        loc_oG = loc_oCnt.Pagina.Pages(loc_nC).&loc_cNome
+        STRTOFILE("6." + TRANSFORM(loc_nC) + ") " + loc_cNome + CHR(13)+CHR(10), OUT, 1)
+        FOR loc_nI = 1 TO 5
+            loc_oCol = loc_oG.Columns(loc_nI)
+            STRTOFILE("    Col" + TRANSFORM(loc_nI) + ;
+                " src="  + PADR(ALLTRIM(loc_oCol.ControlSource), 20) + ;
+                " w="    + PADR(TRANSFORM(loc_oCol.Width), 5) + ;
+                " mask=" + PADR(ALLTRIM(loc_oCol.InputMask), 12) + ;
+                " ord="  + TRANSFORM(loc_oCol.ColumnOrder) + ;
+                " hdr="  + ALLTRIM(loc_oCol.Header1.Caption) + CHR(13)+CHR(10), OUT, 1)
+        ENDFOR
+    ENDFOR
+    *-- 7) TmpOpera tem as colunas de falha de ENTRADA que o legado declara?
+    STRTOFILE("7) TmpOpera PFalhaE=" + TRANSFORM(TYPE("TmpOpera.PFalhaE") = "N") + ;
+        " FalhaE=" + TRANSFORM(TYPE("TmpOpera.FalhaE") = "N") + CHR(13)+CHR(10), OUT, 1)
+    IF TYPE("TmpOpera.PFalhaE") != "N" OR TYPE("TmpOpera.FalhaE") != "N"
+        loc_nFalhas = loc_nFalhas + 1
+    ENDIF
 
     STRTOFILE("PROBE_FALHAS=" + TRANSFORM(loc_nFalhas) + CHR(13)+CHR(10), OUT, 1)
 CATCH TO loc_oE
