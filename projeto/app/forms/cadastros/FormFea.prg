@@ -85,6 +85,9 @@ DEFINE CLASS FormFea AS FormBase
                 THIS.this_cPEmps    = ALLTRIM(go_4c_Sistema.cCodEmpresa)
                 THIS.this_cAntEmpr  = THIS.this_cPEmps
 
+                *-- Cursores de trabalho ANTES dos controles (legado: Load)
+                THIS.CriarCursoresResultado()
+
                 THIS.ConfigurarPageFrame()
                 THIS.ConfigurarPaginaLista()
                 THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
@@ -2070,52 +2073,9 @@ DEFINE CLASS FormFea AS FormBase
                                       Tipos C(1), Trabs N(12,3), CidChaves C(36), NumBals N(6,0))
         ENDIF
 
-        IF USED("TmpOpera")
-            SELECT TmpOpera
-            SET ORDER TO GrConMatTp ASCENDING
-            SET KEY TO
-            ZAP
-        ELSE
-            CREATE CURSOR TmpOpera (Grupo C(10), Conta C(10), CMats C(14), TpOps C(15), ;
-                                    PesoEnts N(12,3), PesoSais N(12,3), ;
-                                    QtdeEnts N(12,3), QtdeSais N(12,3), ;
-                                    PesoBEnts N(12,3), PesoBSais N(12,3), ;
-                                    QtdeBEnts N(12,3), QtdeBSais N(12,3), ;
-                                    Varias N(1,0), Agregas N(1,0), AplicFlhs N(1,0), ;
-                                    PFalha N(6,2), Falha N(12,3))
-            INDEX ON Grupo + Conta + CMats + TpOps TAG GrConMatTp
-            SET ORDER TO GrConMatTp
-        ENDIF
-
-        IF USED("TmpResFas")
-            SELECT TmpResFas
-            SET ORDER TO
-            ZAP
-        ELSE
-            CREATE CURSOR TmpResFas (Cmats C(14), Opers C(1), Fases C(10), OpFase C(18), ;
-                                     Qtds N(12,3), Pesos N(12,3), QtdPcs N(12,3))
-            INDEX ON Cmats + Opers + Fases TAG Fases
-            SET ORDER TO Fases
-        ENDIF
-
-        IF USED("TmpResumo")
-            SELECT TmpResumo
-            ZAP
-            SET ORDER TO GrConMat
-        ELSE
-            CREATE CURSOR TmpResumo (Grupo C(10), Conta C(10), CMats C(14), CUnis C(10), ;
-                                     PesoEnts N(12,3), PesoSais N(12,3), ;
-                                     QtdeEnts N(12,3), QtdeSais N(12,3), ;
-                                     PesoFabre N(12,3), PesoFabrs N(12,3), ;
-                                     Pesagem N(12,3), Pesagem2 N(12,3), Pesagem3 N(12,3), ;
-                                     Saldoi N(12,3), FReal N(12,3), FAdmin N(12,3), Saldof N(12,3), ;
-                                     PfTrabs N(8,2), IndProd N(8,2), ;
-                                     Varias N(1,0), Agregas N(1,0), Visivel L, ;
-                                     Flag L, Flag2 L, Flag3 L, CodCors C(4), CodTams C(4))
-            INDEX ON Grupo + Conta + CMats TAG GrConMat
-            INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMatCS
-            SET ORDER TO GrConMat
-        ENDIF
+        *-- Cursores de resultado: criados no InicializarForm (legado: Load).
+        *-- Aqui so reabrem/ZAPam para reprocessar sem derrubar os bindings do Grid.
+        THIS.CriarCursoresResultado()
 
         *-- Obter MatSec de crSigCdPac
         loc_cMatSec = ""
@@ -3600,6 +3560,65 @@ DEFINE CLASS FormFea AS FormBase
 
         RETURN .T.
     ENDFUNC
+
+    *==========================================================================
+    * CriarCursoresResultado - Cria (ou ZAPa) TmpOpera / TmpResFas / TmpResumo
+    * Legado: SigCdFea.Load cria TODOS os cursores de trabalho ANTES dos
+    * controles, e por isso o ControlSource gravado no SCX resolve. Aqui os
+    * controles sao criados por codigo, entao a chamada vem no InicializarForm
+    * antes de ConfigurarPaginaDados -> ConfigurarResultado (regra #41:
+    * ControlSource de cursor inexistente derruba o Init e a tela nao abre).
+    * Reprocessar ZAPa em vez de recriar: fechar o alias derrubaria
+    * Grid.RecordSource e as Column.ControlSource ligadas no Init.
+    *==========================================================================
+    PROTECTED PROCEDURE CriarCursoresResultado()
+        IF USED("TmpOpera")
+            SELECT TmpOpera
+            SET ORDER TO GrConMatTp ASCENDING
+            SET KEY TO
+            ZAP
+        ELSE
+            CREATE CURSOR TmpOpera (Grupo C(10), Conta C(10), CMats C(14), TpOps C(15), ;
+                                    PesoEnts N(12,3), PesoSais N(12,3), ;
+                                    QtdeEnts N(12,3), QtdeSais N(12,3), ;
+                                    PesoBEnts N(12,3), PesoBSais N(12,3), ;
+                                    QtdeBEnts N(12,3), QtdeBSais N(12,3), ;
+                                    Varias N(1,0), Agregas N(1,0), AplicFlhs N(1,0), ;
+                                    PFalha N(6,2), Falha N(12,3))
+            INDEX ON Grupo + Conta + CMats + TpOps TAG GrConMatTp
+            SET ORDER TO GrConMatTp
+        ENDIF
+
+        IF USED("TmpResFas")
+            SELECT TmpResFas
+            SET ORDER TO
+            ZAP
+        ELSE
+            CREATE CURSOR TmpResFas (Cmats C(14), Opers C(1), Fases C(10), OpFase C(18), ;
+                                     Qtds N(12,3), Pesos N(12,3), QtdPcs N(12,3))
+            INDEX ON Cmats + Opers + Fases TAG Fases
+            SET ORDER TO Fases
+        ENDIF
+
+        IF USED("TmpResumo")
+            SELECT TmpResumo
+            ZAP
+            SET ORDER TO GrConMat
+        ELSE
+            CREATE CURSOR TmpResumo (Grupo C(10), Conta C(10), CMats C(14), CUnis C(10), ;
+                                     PesoEnts N(12,3), PesoSais N(12,3), ;
+                                     QtdeEnts N(12,3), QtdeSais N(12,3), ;
+                                     PesoFabre N(12,3), PesoFabrs N(12,3), ;
+                                     Pesagem N(12,3), Pesagem2 N(12,3), Pesagem3 N(12,3), ;
+                                     Saldoi N(12,3), FReal N(12,3), FAdmin N(12,3), Saldof N(12,3), ;
+                                     PfTrabs N(8,2), IndProd N(8,2), ;
+                                     Varias N(1,0), Agregas N(1,0), Visivel L, ;
+                                     Flag L, Flag2 L, Flag3 L, CodCors C(4), CodTams C(4))
+            INDEX ON Grupo + Conta + CMats TAG GrConMat
+            INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMatCS
+            SET ORDER TO GrConMat
+        ENDIF
+    ENDPROC
 
     *==========================================================================
     * ConfigurarResultado - Popula cnt_4c_Resultado com todos os sub-controles
