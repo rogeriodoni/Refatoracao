@@ -99,6 +99,65 @@ TRY
         loc_nFalhas = loc_nFalhas + 1
     ENDIF
 
+    *-- 8) layout da pagina Dados: nenhum controle de dados pode invadir a faixa
+    *--    (cnt_4c_Cabecalho ocupa Top 29..109 - regra #11). A barra de acao do
+    *--    topo (cnt_4c_BotoesAcao) eh a excecao: fica POR CIMA da faixa.
+    LOCAL loc_oPg2, loc_oObj, loc_nMinTop, loc_cMin, loc_nFundo
+    loc_oPg2 = loc_oForm.pgf_4c_Paginas.Page2
+    loc_nMinTop = 99999
+    loc_cMin = ""
+    STRTOFILE("8) filhos diretos da Page2 (Dados):" + CHR(13)+CHR(10), OUT, 1)
+    FOR loc_nI = 1 TO loc_oPg2.ControlCount
+        loc_oObj = loc_oPg2.Controls(loc_nI)
+        STRTOFILE("    " + PADR(loc_oObj.Name, 20) + ;
+            " T=" + PADR(TRANSFORM(loc_oObj.Top), 5) + ;
+            " L=" + PADR(TRANSFORM(loc_oObj.Left), 5) + ;
+            " W=" + PADR(TRANSFORM(loc_oObj.Width), 5) + ;
+            " H=" + PADR(TRANSFORM(loc_oObj.Height), 5) + ;
+            " Vis=" + TRANSFORM(loc_oObj.Visible) + CHR(13)+CHR(10), OUT, 1)
+        IF !INLIST(UPPER(loc_oObj.Name), "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")
+            IF loc_oObj.Top < loc_nMinTop
+                loc_nMinTop = loc_oObj.Top
+                loc_cMin = loc_oObj.Name
+            ENDIF
+        ENDIF
+    ENDFOR
+    STRTOFILE("   menor Top de controle de dados = " + TRANSFORM(loc_nMinTop) + ;
+        " (" + ALLTRIM(loc_cMin) + ") - faixa termina em 109" + CHR(13)+CHR(10), OUT, 1)
+    IF loc_nMinTop < 109
+        loc_nFalhas = loc_nFalhas + 1
+    ENDIF
+    loc_nFundo = loc_oPg2.cnt_4c_Resultado.Top + loc_oPg2.cnt_4c_Resultado.Height
+    STRTOFILE("   base do cnt_4c_Resultado = " + TRANSFORM(loc_nFundo) + ;
+        " / altura util da pagina = " + TRANSFORM(loc_oForm.Height + 29) + CHR(13)+CHR(10), OUT, 1)
+    IF loc_nFundo > loc_oForm.Height + 29
+        loc_nFalhas = loc_nFalhas + 1
+    ENDIF
+
+    *-- 9) alinhamento dos botoes entre a pagina Lista e a pagina Dados:
+    *--    Encerrar da Lista e Encerrar(Cancelar) da Dados tem de cair no MESMO
+    *--    Left absoluto, e Confirmar sobre o Buscar da Lista.
+    LOCAL loc_oPg1, loc_nL1, loc_nL2, loc_nL3, loc_nL4
+    loc_oPg1 = loc_oForm.pgf_4c_Paginas.Page1
+    loc_nL1 = loc_oPg1.cnt_4c_Saida.Left  + loc_oPg1.cnt_4c_Saida.cmd_4c_Encerrar.Left
+    loc_nL2 = loc_oPg2.cnt_4c_BotoesAcao.Left + loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Left
+    loc_nL3 = loc_oPg1.cnt_4c_Botoes.Left + loc_oPg1.cnt_4c_Botoes.cmd_4c_Buscar.Left
+    loc_nL4 = loc_oPg2.cnt_4c_BotoesAcao.Left + loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Left
+    STRTOFILE("9) Encerrar  Lista=" + TRANSFORM(loc_nL1) + " Dados=" + TRANSFORM(loc_nL2) + ;
+        "   Buscar Lista=" + TRANSFORM(loc_nL3) + " / Confirmar Dados=" + TRANSFORM(loc_nL4) + CHR(13)+CHR(10), OUT, 1)
+    IF loc_nL1 != loc_nL2 OR loc_nL3 != loc_nL4
+        loc_nFalhas = loc_nFalhas + 1
+    ENDIF
+    *-- o Container RECORTA: o Cancelar tem de caber na largura de nascimento
+    STRTOFILE("   BotoesAcao T=" + TRANSFORM(loc_oPg2.cnt_4c_BotoesAcao.Top) + ;
+        " L=" + TRANSFORM(loc_oPg2.cnt_4c_BotoesAcao.Left) + ;
+        " W=" + TRANSFORM(loc_oPg2.cnt_4c_BotoesAcao.Width) + ;
+        " / Cancelar precisa de " + TRANSFORM(loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Left + ;
+             loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Width) + CHR(13)+CHR(10), OUT, 1)
+    IF loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Left + loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Width > loc_oPg2.cnt_4c_BotoesAcao.Width
+        loc_nFalhas = loc_nFalhas + 1
+    ENDIF
+
     STRTOFILE("PROBE_FALHAS=" + TRANSFORM(loc_nFalhas) + CHR(13)+CHR(10), OUT, 1)
 CATCH TO loc_oE
     STRTOFILE("EXCECAO: " + loc_oE.Message + " (linha " + TRANSFORM(loc_oE.LineNo) + ")" + CHR(13)+CHR(10), OUT, 1)
