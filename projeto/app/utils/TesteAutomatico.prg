@@ -95,17 +95,21 @@ LOCAL loc_lTodosPassaram, loc_nExitCode
 ? ""
 
 *-- Carrega config.prg para ter acesso as classes
-LOCAL loc_cCaminhoConfig, loc_cDirAtual
-loc_cCaminhoConfig = "C:\4c\projeto\app\start\config.prg"
+LOCAL loc_cCaminhoConfig, loc_cDirAtual, loc_cDirStart
+*-- Relativo a ESTE arquivo (utils\ -> start\). O caminho fixo antigo
+*-- (C:\4c\projeto\app\start) nao existe neste workspace e o teste pulava a
+*-- carga do config em silencio.
+loc_cDirStart = ADDBS(JUSTPATH(SYS(16))) + "..\start\"
+loc_cCaminhoConfig = loc_cDirStart + "config.prg"
 
 IF FILE(loc_cCaminhoConfig)
     ? "Carregando configuracao..."
     *-- Salva diretorio atual
     loc_cDirAtual = SYS(5) + CURDIR()
     *-- Muda para diretorio do config.prg (necessario para caminhos relativos)
-    CD C:\4c\projeto\app\start
+    CD (loc_cDirStart)
     DO config.prg
-    *-- CRITICO: Chamar ConfigurarAmbiente para carregar SET PROCEDURE
+    *-- Carga sob demanda: o form eh carregado pelo GarantirClasse do Instanciar
     ConfigurarAmbiente()
     *-- config.prg redefine gb_4c_ValidandoUI = .F. (linha 100). Restaurar para modo teste.
     gb_4c_ValidandoUI = .T.
@@ -289,6 +293,7 @@ DEFINE CLASS FormTester AS Custom
         ?? "  [1] Instanciacao... "
 
         TRY
+            GarantirClasse(THIS.cFormClass)
             THIS.oForm = CREATEOBJECT(THIS.cFormClass)
 
             IF VARTYPE(THIS.oForm) = "O"

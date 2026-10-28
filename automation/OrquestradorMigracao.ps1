@@ -1680,6 +1680,7 @@ PROCEDURE Abrir${formClass}()
 
     *-- O TRY cobre SO a CRIACAO. O Show() fica FORA - ver explicacao abaixo.
     TRY
+        GarantirClasse("${formClass}")   && carga sob demanda: SEMPRE antes do CREATEOBJECT
         loForm = CREATEOBJECT("${formClass}")
     CATCH TO loException
         lcMensagem = "Erro ao abrir formulario ${formClass}:" + CHR(13) + CHR(13) + ;
@@ -2868,18 +2869,20 @@ REGRA: Se `gb_4c_ValidandoUI = .T.` ou se eh CarregarParametros, usar `SQLSETPRO
 
 Apos criar os arquivos .prg, voce DEVE integra-los ao sistema:
 
-### 1. Atualizar config.prg
+### 1. config.prg: NAO MEXER
 Arquivo: **$($RaizRepo4c)\projeto\app\start\config.prg**
 
-Adicionar SET PROCEDURE na funcao ConfigurarAmbiente():
+BOs e Forms sao carregados SOB DEMANDA: **NUNCA** adicionar `SET PROCEDURE`
+de BO/Form no `ConfigurarAmbiente()` (a carga de todos custava 168 s,
+quadratica no numero de arquivos). O `GarantirClasse("${formClass}")` do
+`Abrir${formClass}()` le `start\indice_classes.txt` e carrega o Form, o BO e
+o que mais ele referenciar por nome literal. O indice eh regerado sozinho na
+abertura quando algum `.prg` fica mais novo que ele; para regerar a mao:
+`automation\GerarIndiceClasses.ps1`.
 
-```foxpro
-*-- Business Objects (adicionar apos os BOs existentes, linha ~228)
-SET PROCEDURE TO (gcCaminhoClasses + "${boClass}.prg") ADDITIVE
-
-*-- Formularios (adicionar apos os Forms existentes, linha ~242)
-SET PROCEDURE TO (gcCaminhoForms + "cadastros\${formClass}.prg") ADDITIVE
-```
+`CREATEOBJECT("X")` com nome **literal** dentro do Form/BO nao precisa de
+nada. Com o nome numa **variavel** (`CREATEOBJECT(loc_cClasse)`), chamar
+`GarantirClasse(loc_cClasse)` antes - o indice nao enxerga variavel.
 
 ### 2. Criar funcao no menu.prg
 Arquivo: **$($RaizRepo4c)\projeto\app\menu\menu.prg**
@@ -2894,7 +2897,8 @@ PROCEDURE Abrir${formClass}()
     LOCAL loForm, loException
 
     TRY
-        * Cria instancia do formulario
+        * Cria instancia do formulario (GarantirClasse: carga sob demanda)
+        GarantirClasse("${formClass}")
         loForm = CREATEOBJECT("${formClass}")
 
         IF VARTYPE(loForm) = "O"
@@ -2982,14 +2986,13 @@ ON SELECTION BAR N OF popXxx DO Abrir${formClass}
 - [ ] **Botoes alinhados**: Todos os botoes de uma mesma barra com MESMO Top (compensacao correta)
 
 ### Integracao (menu.prg + config.prg)
-- [ ] SET PROCEDURE para BO adicionado no config.prg
-- [ ] SET PROCEDURE para Form adicionado no config.prg
-- [ ] **Funcao Abrir${formClass}()**: usar VARTYPE, Show() sem parametro, SEM Release()
+- [ ] config.prg NAO alterado (carga sob demanda - nada de SET PROCEDURE de BO/Form)
+- [ ] **Funcao Abrir${formClass}()**: `GarantirClasse("${formClass}")` antes do CREATEOBJECT, usar VARTYPE, Show() sem parametro, SEM Release()
 - [ ] Item do menu adicionado no popup CORRETO: CRUD=popCadastros, REPORT=popRelatorios, OPERACIONAL=popMovimentos (DEFINE BAR + ON SELECTION)
 
 **IMPORTANTE**: So considerar completo apos:
 1. Criar AMBOS os arquivos (.prg do BO e do Form)
-2. Integrar com config.prg e menu.prg
+2. Integrar com menu.prg (Abrir${formClass} com GarantirClasse)
 3. Formulario acessivel via menu do sistema
 
 Comecar agora.
@@ -12361,7 +12364,24 @@ $(Get-Content $phaseBPromptFile -Raw)
             # Verificar se config.prg usa carregamento DINAMICO (ADIR com wildcards)
             # Se sim, os arquivos sao carregados automaticamente - nao precisa registro manual
             $usaDinamico = $false
-            if ($configContent -match 'ADIR\(.+\*BO\.prg' -and $configContent -match 'ADIR\(.+Form\*\.prg') {
+            # Carga SOB DEMANDA (2026-10-28): config.prg nao recebe SET PROCEDURE de
+            # BO/Form - o menu chama GarantirClasse e o indice resolve o resto. So
+            # regera o indice para a tela nova ja entrar nele.
+            if ($configContent -match 'gl_4c_CargaSobDemanda') {
+                $usaDinamico = $true
+                Write-Host "  [OK] config.prg usa carga SOB DEMANDA - registro nao necessario" -ForegroundColor Green
+                $geradorIndice = Join-Path $PSScriptRoot 'GerarIndiceClasses.ps1'
+                if (Test-Path $geradorIndice) {
+                    & $geradorIndice | Select-Object -First 3 | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+                }
+                # Rede de seguranca: Abrir* escrito sem GarantirClasse daria
+                # "Class ... is not found" so ao abrir a tela pelo menu
+                $garantirMenu = Join-Path $PSScriptRoot 'GarantirClasseNoMenu.ps1'
+                if (Test-Path $garantirMenu) {
+                    & $garantirMenu -SemRegerar | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+                }
+            }
+            elseif ($configContent -match 'ADIR\(.+\*BO\.prg' -and $configContent -match 'ADIR\(.+Form\*\.prg') {
                 $usaDinamico = $true
                 Write-Host "  [OK] config.prg usa carregamento DINAMICO (ADIR) - registro manual nao necessario" -ForegroundColor Green
                 Write-Host "  [OK] BO sera carregado automaticamente por: ADIR(*, *BO.prg)" -ForegroundColor DarkGray

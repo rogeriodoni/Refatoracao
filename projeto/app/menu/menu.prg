@@ -1523,6 +1523,7 @@ PROCEDURE AbrirFormCor()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormCor")
         loForm = CREATEOBJECT("FormCor")
 
         IF VARTYPE(loForm) <> "O"
@@ -1553,6 +1554,7 @@ PROCEDURE AbrirFormGpe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormGpe")
         loForm = CREATEOBJECT("FormGpe")
 
         IF VARTYPE(loForm) <> "O"
@@ -1584,6 +1586,7 @@ PROCEDURE AbrirFormCargo()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormCargo")
         loForm = CREATEOBJECT("FormCargo")
 
         IF VARTYPE(loForm) <> "O"
@@ -1615,6 +1618,7 @@ PROCEDURE AbrirFormDepartamento()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormDepartamento")
         loForm = CREATEOBJECT("FormDepartamento")
 
         IF VARTYPE(loForm) <> "O"
@@ -1647,6 +1651,7 @@ PROCEDURE AbrirFormSigReInf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReInf")
         loForm = CREATEOBJECT("FormSigReInf")
 
         IF VARTYPE(loForm) <> "O"
@@ -1677,6 +1682,7 @@ PROCEDURE AbrirFormProduto()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormProduto")
         loForm = CREATEOBJECT("FormProduto")
 
         IF VARTYPE(loForm) <> "O"
@@ -1709,6 +1715,7 @@ PROCEDURE AbrirFormTam()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTam")
         loForm = CREATEOBJECT("FormTam")
 
         IF VARTYPE(loForm) <> "O"
@@ -1772,6 +1779,7 @@ PROCEDURE AbrirRelPlanoContas()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRelPlanoContas")
         loForm = CREATEOBJECT("FormRelPlanoContas")
 
         IF VARTYPE(loForm) <> "O"
@@ -1804,8 +1812,10 @@ PROCEDURE AbrirFormsigregli(par_nOrdem, par_oParentForm)
     TRY
         * Cria instancia do formulario passando parametros opcionais
         IF PCOUNT() = 0
+            GarantirClasse("Formsigregli")
             loForm = CREATEOBJECT("Formsigregli")
         ELSE
+            GarantirClasse("Formsigregli")
             loForm = CREATEOBJECT("Formsigregli", par_nOrdem, par_oParentForm)
         ENDIF
 
@@ -1870,6 +1880,7 @@ PROCEDURE AbrirFormUsu()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormUsu")
         loForm = CREATEOBJECT("FormUsu")
 
         IF VARTYPE(loForm) <> "O"
@@ -1900,6 +1911,7 @@ PROCEDURE AbrirFormacg()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormAcg")
         loForm = CREATEOBJECT("FormAcg")
 
         IF VARTYPE(loForm) <> "O"
@@ -1931,6 +1943,7 @@ PROCEDURE AbrirFormSrv()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSER")
         loForm = CREATEOBJECT("FormSER")
 
         IF VARTYPE(loForm) <> "O"
@@ -1962,6 +1975,7 @@ PROCEDURE AbrirFormpgr()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formpgr")
         loForm = CREATEOBJECT("Formpgr")
 
         IF VARTYPE(loForm) <> "O"
@@ -1993,6 +2007,7 @@ PROCEDURE AbrirFormSIGPGCNB()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPGCNB")
         loForm = CREATEOBJECT("FormSIGPGCNB")
 
         IF VARTYPE(loForm) <> "O"
@@ -2018,6 +2033,7 @@ PROCEDURE AbrirFormSIGBLCTA()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSIGBLCTA")
         loForm = CREATEOBJECT("FormSIGBLCTA")
 
         IF VARTYPE(loForm) <> "O"
@@ -2050,6 +2066,7 @@ PROCEDURE AbrirFormsigmvcab()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigmvcab")
         loForm = CREATEOBJECT("Formsigmvcab")
 
         IF VARTYPE(loForm) <> "O"
@@ -2081,6 +2098,7 @@ PROCEDURE AbrirFormsigatcrp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigatcrp")
         loForm = CREATEOBJECT("Formsigatcrp")
 
         IF VARTYPE(loForm) <> "O"
@@ -2111,6 +2129,7 @@ PROCEDURE AbrirFormSIGREAUP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREAUP")
         loForm = CREATEOBJECT("FormSIGREAUP")
 
         IF VARTYPE(loForm) <> "O"
@@ -2141,6 +2160,7 @@ PROCEDURE AbrirFormsigopind()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigopind")
         loForm = CREATEOBJECT("Formsigopind")
 
         IF VARTYPE(loForm) <> "O"
@@ -2171,6 +2191,7 @@ PROCEDURE AbrirFormsigrepes()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrepes")
         loForm = CREATEOBJECT("Formsigrepes")
 
         IF VARTYPE(loForm) <> "O"
@@ -2201,6 +2222,7 @@ PROCEDURE AbrirFormsigmvccr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigmvccr")
         loForm = CREATEOBJECT("Formsigmvccr")
 
         IF VARTYPE(loForm) <> "O"
@@ -2231,6 +2253,7 @@ PROCEDURE AbrirFormcfo()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formcfo")
         loForm = CREATEOBJECT("Formcfo")
 
         IF VARTYPE(loForm) <> "O"
@@ -2260,6 +2283,7 @@ PROCEDURE AbrirFormccr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formccr")
         loForm = CREATEOBJECT("Formccr")
 
         IF VARTYPE(loForm) <> "O"
@@ -2289,6 +2313,7 @@ PROCEDURE AbrirFormACE()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormACE")
         loForm = CREATEOBJECT("FormACE")
 
         IF VARTYPE(loForm) <> "O"
@@ -2318,6 +2343,7 @@ PROCEDURE AbrirFormUfs()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormUfs")
         loForm = CREATEOBJECT("FormUfs")
 
         IF VARTYPE(loForm) <> "O"
@@ -2347,6 +2373,7 @@ PROCEDURE AbrirFormsigopdivDivisao()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigopdiv")
         loForm = CREATEOBJECT("Formsigopdiv", "D")
 
         IF VARTYPE(loForm) <> "O"
@@ -2378,6 +2405,7 @@ PROCEDURE AbrirFormsigopdivReinicia()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigopdiv")
         loForm = CREATEOBJECT("Formsigopdiv", "R")
 
         IF VARTYPE(loForm) <> "O"
@@ -2409,6 +2437,7 @@ PROCEDURE AbrirFormSIGMDETQ()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGMDETQ")
         loForm = CREATEOBJECT("FormSIGMDETQ")
 
         IF VARTYPE(loForm) <> "O"
@@ -2438,6 +2467,7 @@ PROCEDURE AbrirFormSigAcCcr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGACGCT")
         loForm = CREATEOBJECT("FormSIGACGCT")
 
         IF VARTYPE(loForm) <> "O"
@@ -2467,6 +2497,7 @@ PROCEDURE AbrirFormSIGREVIS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREVIS")
         loForm = CREATEOBJECT("FormSIGREVIS")
 
         IF VARTYPE(loForm) <> "O"
@@ -2496,6 +2527,7 @@ PROCEDURE AbrirFormsigrevto()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrevto")
         loForm = CREATEOBJECT("Formsigrevto")
 
         IF VARTYPE(loForm) <> "O"
@@ -2527,6 +2559,7 @@ PROCEDURE AbrirFormSigReAac()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReAac")
         loForm = CREATEOBJECT("FormSigReAac")
 
         IF VARTYPE(loForm) <> "O"
@@ -2557,6 +2590,7 @@ PROCEDURE AbrirFormSIGREADS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREADS")
         loForm = CREATEOBJECT("FormSIGREADS")
 
         IF VARTYPE(loForm) <> "O"
@@ -2589,6 +2623,7 @@ PROCEDURE AbrirFormSIGREAEG()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREAEG")
         loForm = CREATEOBJECT("FormSIGREAEG")
 
         IF VARTYPE(loForm) <> "O"
@@ -2619,6 +2654,7 @@ PROCEDURE AbrirFormSIGREAGV()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREAGV")
         loForm = CREATEOBJECT("FormSIGREAGV")
 
         IF VARTYPE(loForm) <> "O"
@@ -2649,6 +2685,7 @@ PROCEDURE AbrirFormSigReAiv()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReAiv")
         loForm = CREATEOBJECT("FormSigReAiv")
 
         IF VARTYPE(loForm) <> "O"
@@ -2679,6 +2716,7 @@ PROCEDURE AbrirFormsigreani()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreani")
         loForm = CREATEOBJECT("Formsigreani")
 
         IF VARTYPE(loForm) <> "O"
@@ -2709,6 +2747,7 @@ PROCEDURE AbrirFormsigreanr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreanr")
         loForm = CREATEOBJECT("Formsigreanr")
 
         IF VARTYPE(loForm) <> "O"
@@ -2739,6 +2778,7 @@ PROCEDURE AbrirFormsigreapp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreapp")
         loForm = CREATEOBJECT("Formsigreapp")
 
         IF VARTYPE(loForm) <> "O"
@@ -2769,6 +2809,7 @@ PROCEDURE AbrirFormSIGREAPR()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREAPR")
         loForm = CREATEOBJECT("FormSIGREAPR")
 
         IF VARTYPE(loForm) <> "O"
@@ -2801,6 +2842,7 @@ PROCEDURE AbrirFormSigReAtm()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReAtm")
         loForm = CREATEOBJECT("FormSigReAtm")
 
         IF VARTYPE(loForm) <> "O"
@@ -2831,6 +2873,7 @@ PROCEDURE AbrirFormsigreato()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreato")
         loForm = CREATEOBJECT("Formsigreato")
 
         IF VARTYPE(loForm) <> "O"
@@ -2863,6 +2906,7 @@ PROCEDURE AbrirFormsigrebal()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrebal")
         loForm = CREATEOBJECT("Formsigrebal")
 
         IF VARTYPE(loForm) <> "O"
@@ -2896,6 +2940,7 @@ PROCEDURE AbrirFormSigReCgc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReCgc")
         loForm = CREATEOBJECT("FormSigReCgc", "", "")
 
         IF VARTYPE(loForm) <> "O"
@@ -2929,8 +2974,10 @@ PROCEDURE AbrirFormsigrecgp(par_oParentForm)
 
     TRY
         IF VARTYPE(par_oParentForm) = "O"
+            GarantirClasse("Formsigrecgp")
             loForm = CREATEOBJECT("Formsigrecgp", par_oParentForm)
         ELSE
+            GarantirClasse("Formsigrecgp")
             loForm = CREATEOBJECT("Formsigrecgp")
         ENDIF
 
@@ -2964,6 +3011,7 @@ PROCEDURE AbrirFormsigreche()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreche")
         loForm = CREATEOBJECT("Formsigreche")
 
         IF VARTYPE(loForm) <> "O"
@@ -2994,6 +3042,7 @@ PROCEDURE AbrirFormsigrechp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrechp")
         loForm = CREATEOBJECT("Formsigrechp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3024,6 +3073,7 @@ PROCEDURE AbrirFormsigrecmc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecmc")
         loForm = CREATEOBJECT("Formsigrecmc")
 
         IF VARTYPE(loForm) <> "O"
@@ -3056,6 +3106,7 @@ PROCEDURE AbrirFormsigrecmm()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecmm")
         loForm = CREATEOBJECT("Formsigrecmm")
 
         IF VARTYPE(loForm) <> "O"
@@ -3085,6 +3136,7 @@ PROCEDURE AbrirFormSigReCmp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReCmp")
         loForm = CREATEOBJECT("FormSigReCmp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3117,6 +3169,7 @@ PROCEDURE AbrirFormSIGRECMV()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGRECMV")
         loForm = CREATEOBJECT("FormSIGRECMV")
 
         IF VARTYPE(loForm) <> "O"
@@ -3149,6 +3202,7 @@ PROCEDURE AbrirFormSIGRECND()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGRECND")
         loForm = CREATEOBJECT("FormSIGRECND")
 
         IF VARTYPE(loForm) <> "O"
@@ -3183,6 +3237,7 @@ PROCEDURE AbrirFormsigrecnt()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecnt")
         loForm = CREATEOBJECT("Formsigrecnt")
 
         IF VARTYPE(loForm) <> "O"
@@ -3215,6 +3270,7 @@ PROCEDURE AbrirFormsigrecrf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecrf")
         loForm = CREATEOBJECT("Formsigrecrf")
 
         IF VARTYPE(loForm) <> "O"
@@ -3247,6 +3303,7 @@ PROCEDURE AbrirFormsigrecog()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecog")
         loForm = CREATEOBJECT("Formsigrecog")
 
         IF VARTYPE(loForm) <> "O"
@@ -3279,6 +3336,7 @@ PROCEDURE AbrirFormsigrecom()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecom")
         loForm = CREATEOBJECT("Formsigrecom")
 
         IF VARTYPE(loForm) <> "O"
@@ -3309,6 +3367,7 @@ PROCEDURE AbrirFormsigrecop()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecop")
         loForm = CREATEOBJECT("Formsigrecop")
 
         IF VARTYPE(loForm) <> "O"
@@ -3339,6 +3398,7 @@ PROCEDURE AbrirFormsigrecor()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecor")
         loForm = CREATEOBJECT("Formsigrecor")
 
         IF VARTYPE(loForm) <> "O"
@@ -3371,6 +3431,7 @@ PROCEDURE AbrirFormsigrecpe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecpe")
         loForm = CREATEOBJECT("Formsigrecpe")
 
         IF VARTYPE(loForm) <> "O"
@@ -3403,6 +3464,7 @@ PROCEDURE AbrirFormSIGRECPM()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGRECPM")
         loForm = CREATEOBJECT("FormSIGRECPM")
 
         IF VARTYPE(loForm) <> "O"
@@ -3435,6 +3497,7 @@ PROCEDURE AbrirFormsigrecpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecpr")
         loForm = CREATEOBJECT("Formsigrecpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -3466,6 +3529,7 @@ PROCEDURE AbrirFormsigrecrp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecrp")
         loForm = CREATEOBJECT("Formsigrecrp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3498,6 +3562,7 @@ PROCEDURE AbrirFormsigrecrt()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecrt")
         loForm = CREATEOBJECT("Formsigrecrt")
 
         IF VARTYPE(loForm) <> "O"
@@ -3525,6 +3590,7 @@ PROCEDURE AbrirFormsigrecsm()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrecsm")
         loForm = CREATEOBJECT("Formsigrecsm")
 
         IF VARTYPE(loForm) <> "O"
@@ -3558,6 +3624,7 @@ PROCEDURE AbrirFormsigrectc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrectc")
         loForm = CREATEOBJECT("Formsigrectc")
 
         IF VARTYPE(loForm) <> "O"
@@ -3590,6 +3657,7 @@ PROCEDURE AbrirFormSIGRECTP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGRECTP")
         loForm = CREATEOBJECT("FormSIGRECTP")
 
         IF VARTYPE(loForm) <> "O"
@@ -3622,6 +3690,7 @@ PROCEDURE AbrirFormSigReDdp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReDdp")
         loForm = CREATEOBJECT("FormSigReDdp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3652,6 +3721,7 @@ PROCEDURE AbrirFormSIGREDES()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREDES")
         loForm = CREATEOBJECT("FormSIGREDES")
 
         IF VARTYPE(loForm) <> "O"
@@ -3683,6 +3753,7 @@ PROCEDURE AbrirFormSigReDif()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReDif")
         loForm = CREATEOBJECT("FormSigReDif")
 
         IF VARTYPE(loForm) <> "O"
@@ -3713,6 +3784,7 @@ PROCEDURE AbrirFormsigredoc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigredoc")
         loForm = CREATEOBJECT("Formsigredoc")
 
         IF VARTYPE(loForm) <> "O"
@@ -3742,6 +3814,7 @@ PROCEDURE AbrirFormSigReDpD()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReDpD")
         loForm = CREATEOBJECT("FormSigReDpD")
 
         IF VARTYPE(loForm) <> "O"
@@ -3773,6 +3846,7 @@ PROCEDURE AbrirFormsigredtv()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigredtv")
         loForm = CREATEOBJECT("Formsigredtv", 1)
 
         IF VARTYPE(loForm) <> "O"
@@ -3802,6 +3876,7 @@ PROCEDURE AbrirFormsigremat()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigredtv")
         loForm = CREATEOBJECT("Formsigredtv", 2)
 
         IF VARTYPE(loForm) <> "O"
@@ -3840,6 +3915,7 @@ PROCEDURE AbrirFormSIGREEGG()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREEGG")
         loForm = CREATEOBJECT("FormSIGREEGG")
 
         IF VARTYPE(loForm) <> "O"
@@ -3869,6 +3945,7 @@ PROCEDURE AbrirFormsigreegp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreegp")
         loForm = CREATEOBJECT("Formsigreegp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3898,6 +3975,7 @@ PROCEDURE AbrirFormsigreeqe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreeqe")
         loForm = CREATEOBJECT("Formsigreeqe")
 
         IF VARTYPE(loForm) <> "O"
@@ -3927,6 +4005,7 @@ PROCEDURE AbrirFormSIGREEQR()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREEQR")
         loForm = CREATEOBJECT("FormSIGREEQR")
 
         IF VARTYPE(loForm) <> "O"
@@ -3954,6 +4033,7 @@ PROCEDURE AbrirFormSigReEsp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReEsp")
         loForm = CREATEOBJECT("FormSigReEsp")
 
         IF VARTYPE(loForm) <> "O"
@@ -3983,6 +4063,7 @@ PROCEDURE AbrirFormSigReEtl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReEtl")
         loForm = CREATEOBJECT("FormSigReEtl")
 
         IF VARTYPE(loForm) <> "O"
@@ -4012,6 +4093,7 @@ PROCEDURE AbrirFormSIGREEUN()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREEUN")
         loForm = CREATEOBJECT("FormSIGREEUN")
 
         IF VARTYPE(loForm) <> "O"
@@ -4041,6 +4123,7 @@ PROCEDURE AbrirFormSigReEvd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReEvd")
         loForm = CREATEOBJECT("FormSigReEvd")
 
         IF VARTYPE(loForm) <> "O"
@@ -4070,6 +4153,7 @@ PROCEDURE AbrirFormsigrefc2()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrefc2")
         loForm = CREATEOBJECT("Formsigrefc2")
 
         IF VARTYPE(loForm) <> "O"
@@ -4099,6 +4183,7 @@ PROCEDURE AbrirFormsigrefcx()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrefcx")
         loForm = CREATEOBJECT("Formsigrefcx")
 
         IF VARTYPE(loForm) <> "O"
@@ -4128,6 +4213,7 @@ PROCEDURE AbrirFormsigrefcd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrefcd")
         loForm = CREATEOBJECT("Formsigrefcd")
 
         IF VARTYPE(loForm) <> "O"
@@ -4159,6 +4245,7 @@ PROCEDURE AbrirFormsigrefec()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrefec")
         loForm = CREATEOBJECT("Formsigrefec")
 
         IF VARTYPE(loForm) <> "O"
@@ -4188,6 +4275,7 @@ PROCEDURE AbrirFormsigreffi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreffi")
         loForm = CREATEOBJECT("Formsigreffi")
 
         IF VARTYPE(loForm) <> "O"
@@ -4217,6 +4305,7 @@ PROCEDURE AbrirFormsigreffn()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreffn")
         loForm = CREATEOBJECT("Formsigreffn")
 
         IF VARTYPE(loForm) <> "O"
@@ -4246,6 +4335,7 @@ PROCEDURE AbrirFormSIGREFUN()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREFUN")
         loForm = CREATEOBJECT("FormSIGREFUN")
 
         IF VARTYPE(loForm) <> "O"
@@ -4275,6 +4365,7 @@ PROCEDURE AbrirFormSIGREFXV()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREFXV")
         loForm = CREATEOBJECT("FormSIGREFXV")
 
         IF VARTYPE(loForm) <> "O"
@@ -4304,6 +4395,7 @@ PROCEDURE AbrirFormSIGREGDP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREGDP")
         loForm = CREATEOBJECT("FormSIGREGDP")
 
         IF VARTYPE(loForm) <> "O"
@@ -4333,6 +4425,7 @@ PROCEDURE AbrirFormsigregnf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigregnf")
         loForm = CREATEOBJECT("Formsigregnf")
 
         IF VARTYPE(loForm) <> "O"
@@ -4364,6 +4457,7 @@ PROCEDURE AbrirFormsigrehbr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrehbr")
         loForm = CREATEOBJECT("Formsigrehbr")
 
         IF VARTYPE(loForm) <> "O"
@@ -4396,6 +4490,7 @@ PROCEDURE AbrirFormSIGREHCP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREHCP")
         loForm = CREATEOBJECT("FormSIGREHCP")
 
         IF VARTYPE(loForm) <> "O"
@@ -4427,6 +4522,7 @@ PROCEDURE AbrirFormSigReHev()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReHev")
         loForm = CREATEOBJECT("FormSigReHev")
 
         IF VARTYPE(loForm) <> "O"
@@ -4457,6 +4553,7 @@ PROCEDURE AbrirFormSIGREHPE()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREHPE")
         loForm = CREATEOBJECT("FormSIGREHPE")
 
         IF VARTYPE(loForm) <> "O"
@@ -4487,6 +4584,7 @@ PROCEDURE AbrirFormsigrehpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrehpr")
         loForm = CREATEOBJECT("Formsigrehpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -4517,6 +4615,7 @@ PROCEDURE AbrirFormsigrehtc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigrehtc")
         loForm = CREATEOBJECT("Formsigrehtc")
 
         IF VARTYPE(loForm) <> "O"
@@ -4546,6 +4645,7 @@ PROCEDURE AbrirFormSIGREIDC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREIDC")
         loForm = CREATEOBJECT("FormSIGREIDC")
 
         IF VARTYPE(loForm) <> "O"
@@ -4586,6 +4686,7 @@ PROCEDURE AbrirFormSigReIdt(par_pEmp, par_pDop, par_pNum, par_pNumF, par_pDir)
     loc_cDir  = IIF(TYPE("par_pDir")  = "C", par_pDir,  "")
 
     TRY
+        GarantirClasse("FormSigReIdt")
         loForm = CREATEOBJECT("FormSigReIdt", "", loc_cEmp, loc_cDop, loc_cNum, loc_nNumF, loc_cDir)
 
         IF VARTYPE(loForm) <> "O"
@@ -4617,6 +4718,7 @@ PROCEDURE AbrirFormSigReIfp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReIfp")
         loForm = CREATEOBJECT("FormSigReIfp")
 
         IF VARTYPE(loForm) <> "O"
@@ -4648,6 +4750,7 @@ PROCEDURE AbrirFormsigreifx()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreifx")
         loForm = CREATEOBJECT("Formsigreifx", ;
             go_4c_Sistema.cCodEmpresa, "", 0, 0, .F.)
 
@@ -4683,6 +4786,7 @@ PROCEDURE AbrirFormSigReIiv(par_pEmp, par_pDop, par_nNum, par_nTpImp)
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReIiv")
         loForm = CREATEOBJECT("FormSigReIiv", par_pEmp, par_pDop, par_nNum, par_nTpImp)
 
         IF VARTYPE(loForm) <> "O"
@@ -4715,8 +4819,10 @@ PROCEDURE AbrirFormsigreimc(par_cEmp, par_cSerie, par_dEmisDe, par_dEmisAte, ;
 
     TRY
         IF PCOUNT() = 0
+            GarantirClasse("Formsigreimc")
             loForm = CREATEOBJECT("Formsigreimc")
         ELSE
+            GarantirClasse("Formsigreimc")
             loForm = CREATEOBJECT("Formsigreimc", par_cEmp, par_cSerie, ;
                         par_dEmisDe, par_dEmisAte, par_cEDNs, par_cNotaIni, par_cNotaFim)
         ENDIF
@@ -4748,6 +4854,7 @@ PROCEDURE AbrirFormsigreimp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreimp")
         loForm = CREATEOBJECT("Formsigreimp")
 
         IF VARTYPE(loForm) <> "O"
@@ -4809,6 +4916,7 @@ PROCEDURE AbrirFormsigreinr()
     ENDIF
 
     TRY
+        GarantirClasse("Formsigreinr")
         loForm = CREATEOBJECT("Formsigreinr", loc_nNumBal)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Invent" + CHR(225) + "rio" + CHR(13) + ;
@@ -4836,6 +4944,7 @@ PROCEDURE AbrirFormSigReInv()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReInv")
         loForm = CREATEOBJECT("FormSigReInv")
 
         IF VARTYPE(loForm) <> "O"
@@ -4865,6 +4974,7 @@ PROCEDURE AbrirFormsigreipe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigreipe")
         loForm = CREATEOBJECT("Formsigreipe")
 
         IF VARTYPE(loForm) <> "O"
@@ -4892,6 +5002,7 @@ PROCEDURE AbrirFormSigReIpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigReIpr")
         loForm = CREATEOBJECT("FormSigReIpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -4921,6 +5032,7 @@ PROCEDURE AbrirFormSIGREIPS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGREIPS")
         loForm = CREATEOBJECT("FormSIGREIPS")
 
         IF VARTYPE(loForm) <> "O"
@@ -4982,6 +5094,7 @@ PROCEDURE AbrirFormSigReIr1()
     ENDIF
 
     TRY
+        GarantirClasse("FormSigReIr1")
         loForm = CREATEOBJECT("FormSigReIr1", loc_nNumBal)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Balan" + CHR(231) + ;
@@ -5010,6 +5123,7 @@ PROCEDURE AbrirFormsigpdmp7()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigpdmp7")
         loForm = CREATEOBJECT("Formsigpdmp7")
 
         IF VARTYPE(loForm) <> "O"
@@ -5041,6 +5155,7 @@ PROCEDURE AbrirFormSigPdMpf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPdMpf")
         loForm = CREATEOBJECT("FormSigPdMpf")
 
         IF VARTYPE(loForm) <> "O"
@@ -5074,6 +5189,7 @@ PROCEDURE AbrirFormSIGPDPNS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPDPNS")
         loForm = CREATEOBJECT("FormSIGPDPNS", "")
 
         IF VARTYPE(loForm) <> "O"
@@ -5104,6 +5220,7 @@ PROCEDURE AbrirFormSigPrAop()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrAop")
         loForm = CREATEOBJECT("FormSigPrAop")
 
         IF VARTYPE(loForm) <> "O"
@@ -5134,6 +5251,7 @@ PROCEDURE AbrirFormSigPrApr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrApr")
         loForm = CREATEOBJECT("FormSigPrApr")
 
         IF VARTYPE(loForm) <> "O"
@@ -5163,6 +5281,7 @@ PROCEDURE AbrirFormSigPrCcc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrCcc")
         loForm = CREATEOBJECT("FormSigPrCcc")
 
         IF VARTYPE(loForm) <> "O"
@@ -5192,6 +5311,7 @@ ENDPROC
 PROCEDURE AbrirFormSigPrCcp()
     LOCAL loc_oForm, loc_oErro
     TRY
+        GarantirClasse("Formsigprccp")
         loc_oForm = CREATEOBJECT("Formsigprccp")
         IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Rec" + CHR(225) + "lculo de Pre" + CHR(231) + "os.", "Erro")
@@ -5238,6 +5358,7 @@ PROCEDURE AbrirFormSIGMVDOC()
     LOCAL loc_oForm, loc_oErro
 
     TRY
+        GarantirClasse("FormSIGMVDOC")
         loc_oForm = CREATEOBJECT("FormSIGMVDOC")
         IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Emiss" + CHR(227) + ;
@@ -5263,6 +5384,7 @@ PROCEDURE AbrirFormSigPrCfn()
     LOCAL loc_oForm, loc_oErro
 
     TRY
+        GarantirClasse("FormSigPrCfn")
         loc_oForm = CREATEOBJECT("FormSigPrCfn")
 
         IF VARTYPE(loc_oForm) <> "O"
@@ -5292,6 +5414,7 @@ ENDPROC
 PROCEDURE AbrirFormSIGPRCNB()
     LOCAL loc_oForm, loc_oErro
     TRY
+        GarantirClasse("FormSIGPRCNB")
         loc_oForm = CREATEOBJECT("FormSIGPRCNB")
         IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + ;
@@ -5318,6 +5441,7 @@ PROCEDURE AbrirFormsigprcom()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprcom")
         loForm = CREATEOBJECT("Formsigprcom")
 
         IF VARTYPE(loForm) <> "O"
@@ -5350,6 +5474,7 @@ PROCEDURE AbrirFormsigprcpd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprcpd")
         loForm = CREATEOBJECT("Formsigprcpd", "", "", DATE(), 0)
 
         IF VARTYPE(loForm) <> "O"
@@ -5410,6 +5535,7 @@ PROCEDURE AbrirFormSigPrCtr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrCtr")
         loForm = CREATEOBJECT("FormSigPrCtr")
 
         IF VARTYPE(loForm) <> "O"
@@ -5440,6 +5566,7 @@ PROCEDURE AbrirFormSigPrDsc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrDsc")
         loForm = CREATEOBJECT("FormSigPrDsc")
 
         IF VARTYPE(loForm) <> "O"
@@ -5471,6 +5598,7 @@ PROCEDURE AbrirFormsigpres2()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigpres2")
         loForm = CREATEOBJECT("Formsigpres2")
 
         IF VARTYPE(loForm) <> "O"
@@ -5502,6 +5630,7 @@ PROCEDURE AbrirFormSIGPREST()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPREST")
         loForm = CREATEOBJECT("FormSIGPREST")
 
         IF VARTYPE(loForm) <> "O"
@@ -5532,6 +5661,7 @@ PROCEDURE AbrirFormSigPrFem()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrFem")
         loForm = CREATEOBJECT("FormSigPrFem")
 
         IF VARTYPE(loForm) <> "O"
@@ -5562,6 +5692,7 @@ PROCEDURE AbrirFormSigPrEtq()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrEtq")
         loForm = CREATEOBJECT("FormSigPrEtq")
 
         IF VARTYPE(loForm) <> "O"
@@ -5592,6 +5723,7 @@ PROCEDURE AbrirFormSigPrGlo()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrGlo")
         loForm = CREATEOBJECT("FormSigPrGlo")
 
         IF VARTYPE(loForm) <> "O"
@@ -5623,6 +5755,7 @@ PROCEDURE AbrirFormSigPrGloT()
 
     TRY
         *-- par_pTipo=.T. habilita selecao de Tipo de OP (cnt_4c_TipoOp ativo)
+        GarantirClasse("FormSigPrGloT")
         loForm = CREATEOBJECT("FormSigPrGloT", .F., .F., .F., .T.)
 
         IF VARTYPE(loForm) <> "O"
@@ -5653,6 +5786,7 @@ PROCEDURE AbrirFormSigPrGlx()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrGlx")
         loForm = CREATEOBJECT("FormSigPrGlx")
 
         IF VARTYPE(loForm) <> "O"
@@ -5683,6 +5817,7 @@ PROCEDURE AbrirFormSigPrCtc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrCtc")
         loForm = CREATEOBJECT("FormSigPrCtc")
 
         IF VARTYPE(loForm) <> "O"
@@ -5712,6 +5847,7 @@ PROCEDURE AbrirFormsigprema()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprema")
         loForm = CREATEOBJECT("Formsigprema", "", .F.)
 
         IF VARTYPE(loForm) <> "O"
@@ -5774,6 +5910,7 @@ PROCEDURE AbrirFormSigPrEs1()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrEs1")
         loForm = CREATEOBJECT("FormSigPrEs1")
 
         IF VARTYPE(loForm) <> "O"
@@ -5806,6 +5943,7 @@ PROCEDURE AbrirFormsigprftp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprftp")
         loForm = CREATEOBJECT("Formsigprftp")
 
         IF VARTYPE(loForm) <> "O"
@@ -5837,6 +5975,7 @@ PROCEDURE AbrirFormSigPrGf1()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrGf1")
         loForm = CREATEOBJECT("FormSigPrGf1")
 
         IF VARTYPE(loForm) <> "O"
@@ -5869,6 +6008,7 @@ PROCEDURE AbrirFormSigPrGmi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrGmi")
         loForm = CREATEOBJECT("FormSigPrGmi")
 
         IF VARTYPE(loForm) <> "O"
@@ -5902,6 +6042,7 @@ PROCEDURE AbrirFormSigPrIbb()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrIbb")
         loForm = CREATEOBJECT("FormSigPrIbb")
 
         IF VARTYPE(loForm) <> "O"
@@ -5934,6 +6075,7 @@ PROCEDURE AbrirFormsigprico()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprico")
         loForm = CREATEOBJECT("Formsigprico")
 
         IF VARTYPE(loForm) <> "O"
@@ -5965,6 +6107,7 @@ PROCEDURE AbrirFormSigPrIct()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrIct")
         loForm = CREATEOBJECT("FormSigPrIct")
 
         IF VARTYPE(loForm) <> "O"
@@ -5996,6 +6139,7 @@ PROCEDURE AbrirFormsigprila()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprila")
         loForm = CREATEOBJECT("Formsigprila")
 
         IF VARTYPE(loForm) <> "O"
@@ -6058,6 +6202,7 @@ PROCEDURE AbrirFormSIGPRIMP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRIMP")
         loForm = CREATEOBJECT("FormSIGPRIMP")
 
         IF VARTYPE(loForm) <> "O"
@@ -6089,6 +6234,7 @@ PROCEDURE AbrirFormSIGPRINT()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRINT")
         loForm = CREATEOBJECT("FormSIGPRINT")
 
         IF VARTYPE(loForm) <> "O"
@@ -6120,6 +6266,7 @@ PROCEDURE AbrirFormSigPrItb()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrItb")
         loForm = CREATEOBJECT("FormSigPrItb")
 
         IF VARTYPE(loForm) <> "O"
@@ -6151,6 +6298,7 @@ PROCEDURE AbrirFormSIGPRLNC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRLNC")
         loForm = CREATEOBJECT("FormSIGPRLNC")
 
         IF VARTYPE(loForm) <> "O"
@@ -6181,6 +6329,7 @@ PROCEDURE AbrirFormSigPrMdc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrMdc")
         loForm = CREATEOBJECT("FormSigPrMdc")
 
         IF VARTYPE(loForm) <> "O"
@@ -6211,6 +6360,7 @@ PROCEDURE AbrirFormsigprmdp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprmdp")
         loForm = CREATEOBJECT("Formsigprmdp")
 
         IF VARTYPE(loForm) <> "O"
@@ -6241,6 +6391,7 @@ PROCEDURE AbrirFormSIGPRMEI()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRMEI")
         loForm = CREATEOBJECT("FormSIGPRMEI")
 
         IF VARTYPE(loForm) <> "O"
@@ -6271,6 +6422,7 @@ PROCEDURE AbrirFormSigPrMlu()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrMlu")
         loForm = CREATEOBJECT("FormSigPrMlu")
 
         IF VARTYPE(loForm) <> "O"
@@ -6301,6 +6453,7 @@ PROCEDURE AbrirFormSIGPRNSE()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRNSE")
         loForm = CREATEOBJECT("FormSIGPRNSE")
 
         IF VARTYPE(loForm) <> "O"
@@ -6331,6 +6484,7 @@ PROCEDURE AbrirFormsigprnfe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprnfe")
         loForm = CREATEOBJECT("Formsigprnfe")
 
         IF VARTYPE(loForm) <> "O"
@@ -6361,6 +6515,7 @@ PROCEDURE AbrirFormsigproef()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigproef")
         loForm = CREATEOBJECT("Formsigproef")
 
         IF VARTYPE(loForm) <> "O"
@@ -6391,6 +6546,7 @@ PROCEDURE AbrirFormSigPrPcp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrPcp")
         loForm = CREATEOBJECT("FormSigPrPcp")
 
         IF VARTYPE(loForm) <> "O"
@@ -6420,6 +6576,7 @@ PROCEDURE AbrirFormSigPrPpc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrPpc")
         loForm = CREATEOBJECT("FormSigPrPpc")
 
         IF VARTYPE(loForm) <> "O"
@@ -6449,6 +6606,7 @@ PROCEDURE AbrirFormsigprpre()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprpre")
         loForm = CREATEOBJECT("Formsigprpre")
 
         IF VARTYPE(loForm) <> "O"
@@ -6478,6 +6636,7 @@ PROCEDURE AbrirFormsigprrcu()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprrcu")
         loForm = CREATEOBJECT("Formsigprrcu")
 
         IF VARTYPE(loForm) <> "O"
@@ -6504,6 +6663,7 @@ PROCEDURE AbrirFormSigPrRet()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrRet")
         loForm = CREATEOBJECT("FormSigPrRet")
 
         IF VARTYPE(loForm) <> "O"
@@ -6533,6 +6693,7 @@ PROCEDURE AbrirFormSigPrRss()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigPrRss")
         loForm = CREATEOBJECT("FormSigPrRss")
 
         IF VARTYPE(loForm) <> "O"
@@ -6562,6 +6723,7 @@ PROCEDURE AbrirFormsigprsen()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigprsen")
         loForm = CREATEOBJECT("Formsigprsen")
 
         IF VARTYPE(loForm) <> "O"
@@ -6592,6 +6754,7 @@ PROCEDURE AbrirFormSIGPRTRF()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRTRF")
         loForm = CREATEOBJECT("FormSIGPRTRF")
 
         IF VARTYPE(loForm) <> "O"
@@ -6630,6 +6793,7 @@ PROCEDURE AbrirFormSIGPRVTX()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGPRVTX")
         loForm = CREATEOBJECT("FormSIGPRVTX")
 
         IF VARTYPE(loForm) <> "O"
@@ -6662,6 +6826,7 @@ PROCEDURE AbrirFormACJ()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormACJ")
         loForm = CREATEOBJECT("FormACJ")
 
         IF VARTYPE(loForm) <> "O"
@@ -6692,6 +6857,7 @@ PROCEDURE AbrirFormAli()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormAli")
         loForm = CREATEOBJECT("FormAli")
 
         IF VARTYPE(loForm) <> "O"
@@ -6722,6 +6888,7 @@ PROCEDURE AbrirFormARV()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormARV")
         loForm = CREATEOBJECT("FormARV")
 
         IF VARTYPE(loForm) <> "O"
@@ -6752,6 +6919,7 @@ PROCEDURE AbrirFormBAL()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormBAL")
         loForm = CREATEOBJECT("FormBAL")
 
         IF VARTYPE(loForm) <> "O"
@@ -6782,6 +6950,7 @@ PROCEDURE AbrirFormBCC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormBCC")
         loForm = CREATEOBJECT("FormBCC")
 
         IF VARTYPE(loForm) <> "O"
@@ -6812,6 +6981,7 @@ PROCEDURE AbrirFormBch()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormBch")
         loForm = CREATEOBJECT("FormBch")
 
         IF VARTYPE(loForm) <> "O"
@@ -6842,6 +7012,7 @@ PROCEDURE AbrirFormBlq()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormBlq")
         loForm = CREATEOBJECT("FormBlq")
 
         IF VARTYPE(loForm) <> "O"
@@ -6878,6 +7049,7 @@ PROCEDURE AbrirFormCAD(par_cTipoCads, par_nMaxCodCads)
     loc_nMaxCod = IIF(VARTYPE(par_nMaxCodCads) = "N", par_nMaxCodCads, 20)
 
     TRY
+        GarantirClasse("FormCAD")
         loForm = CREATEOBJECT("FormCAD", loc_cTipo, loc_nMaxCod)
 
         IF VARTYPE(loForm) <> "O"
@@ -6908,6 +7080,7 @@ PROCEDURE AbrirFormCAF()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCAF")
         loForm = CREATEOBJECT("FormCAF")
 
         IF VARTYPE(loForm) <> "O"
@@ -6939,6 +7112,7 @@ PROCEDURE AbrirFormCtg()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCtg")
         loForm = CREATEOBJECT("FormCtg")
 
         IF VARTYPE(loForm) <> "O"
@@ -6969,6 +7143,7 @@ PROCEDURE AbrirFormCat()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCat")
         loForm = CREATEOBJECT("FormCat")
 
         IF VARTYPE(loForm) <> "O"
@@ -6999,6 +7174,7 @@ PROCEDURE AbrirFormCCJ()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCCJ")
         loForm = CREATEOBJECT("FormCCJ")
 
         IF VARTYPE(loForm) <> "O"
@@ -7030,6 +7206,7 @@ PROCEDURE AbrirFormCco()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCco")
         loForm = CREATEOBJECT("FormCco")
 
         IF VARTYPE(loForm) <> "O"
@@ -7061,6 +7238,7 @@ PROCEDURE AbrirFormCec()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCec")
         loForm = CREATEOBJECT("FormCec")
 
         IF VARTYPE(loForm) <> "O"
@@ -7090,6 +7268,7 @@ PROCEDURE AbrirFormCeg()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCeg")
         loForm = CREATEOBJECT("FormCeg")
 
         IF VARTYPE(loForm) <> "O"
@@ -7119,6 +7298,7 @@ PROCEDURE AbrirFormCEP()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCEP")
         loForm = CREATEOBJECT("FormCEP")
 
         IF VARTYPE(loForm) <> "O"
@@ -7147,6 +7327,7 @@ PROCEDURE AbrirFormCES()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCES")
         loForm = CREATEOBJECT("FormCES")
 
         IF VARTYPE(loForm) <> "O"
@@ -7176,6 +7357,7 @@ PROCEDURE AbrirFormCfb()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCfb")
         loForm = CREATEOBJECT("FormCfb")
 
         IF VARTYPE(loForm) <> "O"
@@ -7205,6 +7387,7 @@ PROCEDURE AbrirFormcfi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formcfi")
         loForm = CREATEOBJECT("Formcfi")
 
         IF VARTYPE(loForm) <> "O"
@@ -7234,6 +7417,7 @@ PROCEDURE AbrirFormche()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formche")
         loForm = CREATEOBJECT("Formche")
 
         IF VARTYPE(loForm) <> "O"
@@ -7262,6 +7446,7 @@ PROCEDURE AbrirFormCHM()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCHM")
         loForm = CREATEOBJECT("FormCHM")
 
         IF VARTYPE(loForm) <> "O"
@@ -7292,6 +7477,7 @@ PROCEDURE AbrirFormCla()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCla")
         loForm = CREATEOBJECT("FormCla")
 
         IF VARTYPE(loForm) <> "O"
@@ -7319,6 +7505,7 @@ PROCEDURE AbrirFormCLC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCLC")
         loForm = CREATEOBJECT("FormCLC")
 
         IF VARTYPE(loForm) <> "O"
@@ -7347,6 +7534,7 @@ PROCEDURE AbrirFormClf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormClf")
         loForm = CREATEOBJECT("FormClf")
 
         IF VARTYPE(loForm) <> "O"
@@ -7377,6 +7565,7 @@ PROCEDURE AbrirFormcmp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formcmp")
         loForm = CREATEOBJECT("Formcmp")
 
         IF VARTYPE(loForm) <> "O"
@@ -7432,6 +7621,7 @@ PROCEDURE AbrirFormCliente()
         *-- Abrir para novo cadastro de cliente (INSERIR mode)
         *-- pCpf="", pGrupo="" (auto-detectado de crSigCdPam), pCep=0,
         *-- pVal=.F., pCli="" (novo), pcTpBloqCar="0", pcMudaCpfCgc="0"
+        GarantirClasse("FormCliente")
         loForm = CREATEOBJECT("FormCliente", "", "", 0, .F., "", "0", "0")
     CATCH TO loException
         lcMensagem = "Erro ao abrir Cadastro de Cliente:" + CHR(13) + CHR(13) + ;
@@ -7459,6 +7649,7 @@ PROCEDURE AbrirFormcnl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formcnl")
         loForm = CREATEOBJECT("Formcnl")
 
         IF VARTYPE(loForm) <> "O"
@@ -7484,6 +7675,7 @@ PROCEDURE AbrirFormCNF()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCNF")
         loForm = CREATEOBJECT("FormCNF")
 
         IF VARTYPE(loForm) <> "O"
@@ -7512,6 +7704,7 @@ PROCEDURE AbrirFormCNQ()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCNQ")
         loForm = CREATEOBJECT("FormCNQ")
 
         IF VARTYPE(loForm) <> "O"
@@ -7540,6 +7733,7 @@ PROCEDURE AbrirFormCOC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOCO")
         loForm = CREATEOBJECT("FormOCO")
 
         IF VARTYPE(loForm) <> "O"
@@ -7568,6 +7762,7 @@ PROCEDURE AbrirFormCol()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCol")
         loForm = CREATEOBJECT("FormCol")
 
         IF VARTYPE(loForm) <> "O"
@@ -7598,6 +7793,7 @@ PROCEDURE AbrirFormCOM()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormCOM")
         loForm = CREATEOBJECT("FormCOM")
     CATCH TO loException
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Comiss" + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
@@ -7621,6 +7817,7 @@ PROCEDURE AbrirFormCRC()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormCRC")
         loForm = CREATEOBJECT("FormCRC")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Contas" + ;
@@ -7648,6 +7845,7 @@ PROCEDURE AbrirFormcrf()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formcrf")
         loForm = CREATEOBJECT("Formcrf")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Contagem de Refer" + CHR(234) + "ncia" + ;
@@ -7675,6 +7873,7 @@ PROCEDURE AbrirFormcrp()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formcrp")
         loForm = CREATEOBJECT("Formcrp", 0)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Produtos" + ;
@@ -7702,6 +7901,7 @@ PROCEDURE AbrirFormcrpContas()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formcrp")
         loForm = CREATEOBJECT("Formcrp", 1)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Contas (CRP)" + ;
@@ -7729,6 +7929,7 @@ PROCEDURE AbrirFormcrpMovim()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formcrp")
         loForm = CREATEOBJECT("Formcrp", 2)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Movimenta" + CHR(231) + CHR(245) + "es" + ;
@@ -7754,6 +7955,7 @@ PROCEDURE AbrirFormCrt()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCrt")
         loForm = CREATEOBJECT("FormCrt")
 
         IF VARTYPE(loForm) <> "O"
@@ -7782,6 +7984,7 @@ PROCEDURE AbrirFormCsi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCsi")
         loForm = CREATEOBJECT("FormCsi")
 
         IF VARTYPE(loForm) <> "O"
@@ -7810,6 +8013,7 @@ PROCEDURE AbrirFormCst()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCst")
         loForm = CREATEOBJECT("FormCst")
 
         IF VARTYPE(loForm) <> "O"
@@ -7835,6 +8039,7 @@ PROCEDURE AbrirFormCTA()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormCTA")
         loForm = CREATEOBJECT("FormCTA")
 
         IF VARTYPE(loForm) <> "O"
@@ -7865,6 +8070,7 @@ PROCEDURE AbrirFormCVE()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormCVE")
         loForm = CREATEOBJECT("FormCVE")
     CATCH TO loException
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Comiss" + CHR(245) + "es por Cargo:" + CHR(13) + CHR(13) + ;
@@ -7888,6 +8094,7 @@ PROCEDURE AbrirFormCVI()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormCVI")
         loForm = CREATEOBJECT("FormCVI")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormCVI" + CHR(13) + ;
@@ -7913,6 +8120,7 @@ PROCEDURE AbrirFormDES()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDES")
         loForm = CREATEOBJECT("FormDES")
 
         IF VARTYPE(loForm) <> "O"
@@ -7941,6 +8149,7 @@ PROCEDURE AbrirFormDIC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDIC")
         loForm = CREATEOBJECT("FormDIC")
 
         IF VARTYPE(loForm) <> "O"
@@ -7969,6 +8178,7 @@ PROCEDURE AbrirFormDmo()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDmo")
         loForm = CREATEOBJECT("FormDmo")
 
         IF VARTYPE(loForm) <> "O"
@@ -7997,6 +8207,7 @@ PROCEDURE AbrirFormDpi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDpi")
         loForm = CREATEOBJECT("FormDpi")
 
         IF VARTYPE(loForm) <> "O"
@@ -8025,6 +8236,7 @@ PROCEDURE AbrirFormDrs()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDrs")
         loForm = CREATEOBJECT("FormDrs")
 
         IF VARTYPE(loForm) <> "O"
@@ -8060,6 +8272,7 @@ PROCEDURE AbrirFormDsp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDsp")
         loForm = CREATEOBJECT("FormDsp")
 
         IF VARTYPE(loForm) <> "O"
@@ -8088,6 +8301,7 @@ PROCEDURE AbrirFormDup()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormDup")
         loForm = CREATEOBJECT("FormDup")
 
         IF VARTYPE(loForm) <> "O"
@@ -8116,6 +8330,7 @@ PROCEDURE AbrirFormema()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formema")
         loForm = CREATEOBJECT("Formema")
 
         IF VARTYPE(loForm) <> "O"
@@ -8144,6 +8359,7 @@ PROCEDURE AbrirFormEmb()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormEmb")
         loForm = CREATEOBJECT("FormEmb")
 
         IF VARTYPE(loForm) <> "O"
@@ -8172,6 +8388,7 @@ PROCEDURE AbrirFormEmn()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormEmn")
         loForm = CREATEOBJECT("FormEmn")
 
         IF VARTYPE(loForm) <> "O"
@@ -8200,6 +8417,7 @@ PROCEDURE AbrirFormemp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formemp")
         loForm = CREATEOBJECT("Formemp")
 
         IF VARTYPE(loForm) <> "O"
@@ -8228,6 +8446,7 @@ PROCEDURE AbrirFormENR()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormENR")
         loForm = CREATEOBJECT("FormENR")
 
         IF VARTYPE(loForm) <> "O"
@@ -8255,6 +8474,7 @@ PROCEDURE AbrirFormepd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formepd")
         loForm = CREATEOBJECT("Formepd")
 
         IF VARTYPE(loForm) <> "O"
@@ -8282,6 +8502,7 @@ PROCEDURE AbrirFormEsp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormEsp")
         loForm = CREATEOBJECT("FormEsp")
 
         IF VARTYPE(loForm) <> "O"
@@ -8309,6 +8530,7 @@ PROCEDURE AbrirFormEVE()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormEVE")
         loForm = CREATEOBJECT("FormEVE")
 
         IF VARTYPE(loForm) <> "O"
@@ -8336,6 +8558,7 @@ PROCEDURE AbrirFormEvt()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormEvt")
         loForm = CREATEOBJECT("FormEvt")
 
         IF VARTYPE(loForm) <> "O"
@@ -8363,6 +8586,7 @@ PROCEDURE AbrirFormFap()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFap")
         loForm = CREATEOBJECT("FormFap")
 
         IF VARTYPE(loForm) <> "O"
@@ -8392,6 +8616,7 @@ PROCEDURE AbrirFormFBI()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFBI")
         loForm = CREATEOBJECT("FormFBI")
 
         IF VARTYPE(loForm) <> "O"
@@ -8421,6 +8646,7 @@ PROCEDURE AbrirFormFct()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFct")
         loForm = CREATEOBJECT("FormFct")
 
         IF VARTYPE(loForm) <> "O"
@@ -8448,6 +8674,7 @@ PROCEDURE AbrirFormFea()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFea")
         loForm = CREATEOBJECT("FormFea")
 
         IF VARTYPE(loForm) <> "O"
@@ -8477,6 +8704,7 @@ PROCEDURE AbrirFormFNF()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFNF")
         loForm = CREATEOBJECT("FormFNF")
 
         IF VARTYPE(loForm) <> "O"
@@ -8506,6 +8734,7 @@ PROCEDURE AbrirFormFTF()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFTF")
         loForm = CREATEOBJECT("FormFTF")
 
         IF VARTYPE(loForm) <> "O"
@@ -8535,6 +8764,7 @@ PROCEDURE AbrirFormFti()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFti")
         loForm = CREATEOBJECT("FormFti")
 
         IF VARTYPE(loForm) <> "O"
@@ -8564,6 +8794,7 @@ PROCEDURE AbrirFormFUN()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFUN")
         loForm = CREATEOBJECT("FormFUN")
 
         IF VARTYPE(loForm) <> "O"
@@ -8593,6 +8824,7 @@ PROCEDURE AbrirFormfnl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formfnl")
         loForm = CREATEOBJECT("Formfnl")
 
         IF VARTYPE(loForm) <> "O"
@@ -8620,6 +8852,7 @@ PROCEDURE AbrirFormFornecedor()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFornecedor")
         loForm = CREATEOBJECT("FormFornecedor")
 
         IF VARTYPE(loForm) <> "O"
@@ -8647,6 +8880,7 @@ PROCEDURE AbrirFormFpg()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFpg")
         loForm = CREATEOBJECT("FormFpg")
 
         IF VARTYPE(loForm) <> "O"
@@ -8677,6 +8911,7 @@ PROCEDURE AbrirFormFpo()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFpo")
         loForm = CREATEOBJECT("FormFpo")
 
         IF VARTYPE(loForm) <> "O"
@@ -8707,6 +8942,7 @@ PROCEDURE AbrirFormFpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFpr")
         loForm = CREATEOBJECT("FormFpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -8736,6 +8972,7 @@ PROCEDURE AbrirFormFre()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormFre")
         loForm = CREATEOBJECT("FormFre")
 
         IF VARTYPE(loForm) <> "O"
@@ -8765,6 +9002,7 @@ PROCEDURE AbrirFormgem()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formgem")
         loForm = CREATEOBJECT("Formgem")
 
         IF VARTYPE(loForm) <> "O"
@@ -8794,6 +9032,7 @@ PROCEDURE AbrirFormgpd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormGpd")
         loForm = CREATEOBJECT("FormGpd")
 
         IF VARTYPE(loForm) <> "O"
@@ -8823,6 +9062,7 @@ PROCEDURE AbrirFormgpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formgpr")
         loForm = CREATEOBJECT("Formgpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -8852,6 +9092,7 @@ PROCEDURE AbrirFormGr1()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormGr1")
         loForm = CREATEOBJECT("FormGr1")
 
         IF VARTYPE(loForm) <> "O"
@@ -8884,6 +9125,7 @@ PROCEDURE AbrirFormHOR()
     TRY
         *-- 1. Seleciona Fase/Setor via SigCdGcr (codigos, descrs)
         loc_cSetors = ""
+        GarantirClasse("FormBuscaAuxiliar")
         loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
             "SigCdGcr", "cursor_4c_BuscaGcr", "codigos", "", ;
             "Selecione a Fase/Setor")
@@ -8906,6 +9148,7 @@ PROCEDURE AbrirFormHOR()
 
         IF !EMPTY(loc_cSetors)
             *-- 2. Seleciona Unidade Produtiva via SigCdUpd (uniprdts)
+            GarantirClasse("FormBuscaAuxiliar")
             loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdUpd", "cursor_4c_BuscaUpd", "uniprdts", "", ;
                 "Selecione a Unidade Produtiva")
@@ -8928,6 +9171,7 @@ PROCEDURE AbrirFormHOR()
             IF !EMPTY(loc_cUniPrdts)
                 *-- 3. Cria o FormHOR com os parametros selecionados.
                 *--    O Show() dele fica FORA do TRY - ver o bloco no fim.
+                GarantirClasse("FormHOR")
                 loc_oForm = CREATEOBJECT("FormHOR", loc_cSetors, loc_cUniPrdts)
                 IF VARTYPE(loc_oForm) <> "O"
                     MsgErro("Erro ao criar formul" + CHR(225) + "rio de Carga Hor" + CHR(225) + "ria." + CHR(13) + ;
@@ -8961,6 +9205,7 @@ PROCEDURE AbrirFormICD()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormICD")
         loForm = CREATEOBJECT("FormICD")
 
         IF VARTYPE(loForm) <> "O"
@@ -8992,6 +9237,7 @@ PROCEDURE AbrirFormICM()
     loc_oErro     = .NULL.
     loc_cMensagem = ""
     TRY
+        GarantirClasse("FormICM")
         loc_oForm = CREATEOBJECT("FormICM")
     CATCH TO loc_oErro
         loc_cMensagem = "Erro ao abrir formul" + CHR(225) + "rio de " + CHR(205) + "ndices de Comiss" + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
@@ -9015,6 +9261,7 @@ PROCEDURE AbrirFormICN()
     loc_oErro     = .NULL.
     loc_cMensagem = ""
     TRY
+        GarantirClasse("FormICN")
         loc_oForm = CREATEOBJECT("FormICN")
         IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de " + CHR(205) + "cones de Acesso" + CHR(13) + ;
@@ -9042,6 +9289,7 @@ PROCEDURE AbrirFormICO()
     loc_oErro     = .NULL.
     loc_cMensagem = ""
     TRY
+        GarantirClasse("FormICO")
         loc_oForm = CREATEOBJECT("FormICO")
         IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de " + CHR(205) + "cones" + CHR(13) + ;
@@ -9069,6 +9317,7 @@ PROCEDURE AbrirFormIct()
     loc_oErro     = .NULL.
     loc_cMensagem = ""
     TRY
+        GarantirClasse("FormIct")
         loc_oForm = CREATEOBJECT("FormIct")
         IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipo de Tributa" + ;
@@ -9096,6 +9345,7 @@ PROCEDURE AbrirFormImp()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormImp")
         loForm = CREATEOBJECT("FormImp")
 
         IF VARTYPE(loForm) <> "O"
@@ -9125,6 +9375,7 @@ PROCEDURE AbrirFormInf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormInf")
         loForm = CREATEOBJECT("FormInf")
 
         IF VARTYPE(loForm) <> "O"
@@ -9155,6 +9406,7 @@ PROCEDURE AbrirFormint()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formint")
         loForm = CREATEOBJECT("Formint")
 
         IF VARTYPE(loForm) <> "O"
@@ -9184,6 +9436,7 @@ PROCEDURE AbrirFormJrn()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormJrn")
         loForm = CREATEOBJECT("FormJrn")
 
         IF VARTYPE(loForm) <> "O"
@@ -9215,6 +9468,7 @@ PROCEDURE AbrirFormJUS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormJUS")
         loForm = CREATEOBJECT("FormJUS")
 
         IF VARTYPE(loForm) <> "O"
@@ -9244,6 +9498,7 @@ PROCEDURE AbrirFormlch()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formlch")
         loForm = CREATEOBJECT("Formlch")
 
         IF VARTYPE(loForm) <> "O"
@@ -9272,6 +9527,7 @@ PROCEDURE AbrirFormlct()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formlct")
         loForm = CREATEOBJECT("Formlct")
 
         IF VARTYPE(loForm) <> "O"
@@ -9300,6 +9556,7 @@ PROCEDURE AbrirFormLGR()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormLGR")
         loForm = CREATEOBJECT("FormLGR")
 
         IF VARTYPE(loForm) <> "O"
@@ -9328,6 +9585,7 @@ PROCEDURE AbrirFormLin()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormLin")
         loForm = CREATEOBJECT("FormLin")
 
         IF VARTYPE(loForm) <> "O"
@@ -9356,6 +9614,7 @@ PROCEDURE AbrirFormLOC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormLOC")
         loForm = CREATEOBJECT("FormLOC")
 
         IF VARTYPE(loForm) <> "O"
@@ -9384,6 +9643,7 @@ PROCEDURE AbrirFormLpr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormLpr")
         loForm = CREATEOBJECT("FormLpr")
 
         IF VARTYPE(loForm) <> "O"
@@ -9413,6 +9673,7 @@ PROCEDURE AbrirFormMda()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormMda")
         loForm = CREATEOBJECT("FormMda")
 
         IF VARTYPE(loForm) <> "O"
@@ -9442,6 +9703,7 @@ PROCEDURE AbrirFormmod()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formmod")
         loForm = CREATEOBJECT("Formmod")
 
         IF VARTYPE(loForm) <> "O"
@@ -9471,6 +9733,7 @@ PROCEDURE AbrirFormMoe()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormMoe")
         loForm = CREATEOBJECT("FormMoe")
 
         IF VARTYPE(loForm) <> "O"
@@ -9500,6 +9763,7 @@ PROCEDURE AbrirFormMrc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormMrc")
         loForm = CREATEOBJECT("FormMrc")
 
         IF VARTYPE(loForm) <> "O"
@@ -9529,6 +9793,7 @@ PROCEDURE AbrirFormMPD()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormMPD")
         loForm = CREATEOBJECT("FormMPD")
 
         IF VARTYPE(loForm) <> "O"
@@ -9559,6 +9824,7 @@ PROCEDURE AbrirFormMPL()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormMPL")
         loForm = CREATEOBJECT("FormMPL")
 
         IF VARTYPE(loForm) <> "O"
@@ -9590,6 +9856,7 @@ PROCEDURE AbrirFormmpp()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formmpp")
         loForm = CREATEOBJECT("Formmpp", 0)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
@@ -9618,6 +9885,7 @@ PROCEDURE AbrirFormmppContas()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formmpp")
         loForm = CREATEOBJECT("Formmpp", 1)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
@@ -9646,6 +9914,7 @@ PROCEDURE AbrirFormmppMovim()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formmpp")
         loForm = CREATEOBJECT("Formmpp", 2)
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
@@ -9675,6 +9944,7 @@ PROCEDURE AbrirFormMtp()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormMtp")
         loForm = CREATEOBJECT("FormMtp")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o" + ;
@@ -9701,6 +9971,7 @@ PROCEDURE AbrirFormMtt()
     LOCAL loForm, loException, lcMensagem
 
     TRY
+        GarantirClasse("FormMtt")
         loForm = CREATEOBJECT("FormMtt")
 
         IF VARTYPE(loForm) <> "O"
@@ -9730,6 +10001,7 @@ PROCEDURE AbrirFormMTV()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormMTV")
         loForm = CREATEOBJECT("FormMTV")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Motivos" + ;
@@ -9758,6 +10030,7 @@ PROCEDURE AbrirFormmtz()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("Formmtz")
         loForm = CREATEOBJECT("Formmtz")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Matrizes de Saldos" + ;
@@ -9786,6 +10059,7 @@ PROCEDURE AbrirFormMun()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormMun")
         loForm = CREATEOBJECT("FormMun")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Munic" + CHR(237) + "pios" + ;
@@ -9814,6 +10088,7 @@ PROCEDURE AbrirFormNcf()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormNcf")
         loForm = CREATEOBJECT("FormNcf")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de N" + CHR(227) + "o-Conformidades" + ;
@@ -9842,6 +10117,7 @@ PROCEDURE AbrirFormObs()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormObs")
         loForm = CREATEOBJECT("FormObs")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Observa" + CHR(231) + CHR(245) + "es" + ;
@@ -9870,6 +10146,7 @@ PROCEDURE AbrirFormOcb()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormOcb")
         loForm = CREATEOBJECT("FormOcb")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Ocorr" + CHR(234) + ;
@@ -9899,6 +10176,7 @@ PROCEDURE AbrirFormOcc()
     loException = .NULL.
     lcMensagem  = ""
     TRY
+        GarantirClasse("FormOcc")
         loForm = CREATEOBJECT("FormOcc")
         IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Ocorr" + CHR(234) + ;
@@ -9926,6 +10204,7 @@ PROCEDURE AbrirFormOCS()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOCS")
         loForm = CREATEOBJECT("FormOCS")
 
         IF VARTYPE(loForm) <> "O"
@@ -9954,6 +10233,7 @@ PROCEDURE AbrirFormOET()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOET")
         loForm = CREATEOBJECT("FormOET")
 
         IF VARTYPE(loForm) <> "O"
@@ -9982,6 +10262,7 @@ PROCEDURE AbrirFormOpd()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOpd")
         loForm = CREATEOBJECT("FormOpd")
 
         IF VARTYPE(loForm) <> "O"
@@ -10011,6 +10292,7 @@ PROCEDURE AbrirFormPAT()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormPAT")
         loForm = CREATEOBJECT("FormPAT")
 
         IF VARTYPE(loForm) <> "O"
@@ -10030,6 +10312,7 @@ ENDPROC
 PROCEDURE AbrirFormROM
     LOCAL loForm
     TRY
+        GarantirClasse("FormROM")
         loForm = CREATEOBJECT("FormROM")
         IF VARTYPE(loForm) = "O"
             loForm.Show()
@@ -10049,6 +10332,7 @@ ENDPROC
 PROCEDURE AbrirFormROMRecebimento
     LOCAL loForm
     TRY
+        GarantirClasse("FormROM")
         loForm = CREATEOBJECT("FormROM", "R")
         IF VARTYPE(loForm) = "O"
             loForm.Show()
@@ -10071,6 +10355,7 @@ PROCEDURE AbrirFormOps()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOps")
         loForm = CREATEOBJECT("FormOps")
 
         IF VARTYPE(loForm) <> "O"
@@ -10096,6 +10381,7 @@ PROCEDURE AbrirFormOpt()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOpt")
         loForm = CREATEOBJECT("FormOpt")
 
         IF VARTYPE(loForm) <> "O"
@@ -10124,6 +10410,7 @@ PROCEDURE AbrirFormOrg()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOrg")
         loForm = CREATEOBJECT("FormOrg")
 
         IF VARTYPE(loForm) <> "O"
@@ -10152,6 +10439,7 @@ PROCEDURE AbrirFormOrc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOrc")
         loForm = CREATEOBJECT("FormOrc")
 
         IF VARTYPE(loForm) <> "O"
@@ -10180,6 +10468,7 @@ PROCEDURE AbrirFormorl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formorl")
         loForm = CREATEOBJECT("Formorl")
 
         IF VARTYPE(loForm) <> "O"
@@ -10205,6 +10494,7 @@ PROCEDURE AbrirFormOTI()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormOTI")
         loForm = CREATEOBJECT("FormOTI")
 
         IF VARTYPE(loForm) <> "O"
@@ -10233,6 +10523,7 @@ PROCEDURE AbrirFormpaf()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formpaf")
         loForm = CREATEOBJECT("Formpaf")
 
         IF VARTYPE(loForm) <> "O"
@@ -10261,6 +10552,7 @@ PROCEDURE AbrirFormpag()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formpag")
         loForm = CREATEOBJECT("Formpag")
 
         IF VARTYPE(loForm) <> "O"
@@ -10289,6 +10581,7 @@ ENDPROC
 PROCEDURE AbrirFormPai()
     LOCAL loForm, loException
     TRY
+        GarantirClasse("FormPai")
         loForm = CREATEOBJECT("FormPai")
 
         IF VARTYPE(loForm) <> "O"
@@ -10316,6 +10609,7 @@ ENDPROC
 PROCEDURE AbrirFormPcp()
     LOCAL loForm, loException
     TRY
+        GarantirClasse("FormPcp")
         loForm = CREATEOBJECT("FormPcp")
 
         IF VARTYPE(loForm) <> "O"
@@ -10344,6 +10638,7 @@ PROCEDURE AbrirFormprc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formprc")
         loForm = CREATEOBJECT("Formprc")
 
         IF VARTYPE(loForm) <> "O"
@@ -10372,6 +10667,7 @@ PROCEDURE AbrirFormPMC()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormPMC")
         loForm = CREATEOBJECT("FormPMC")
 
         IF VARTYPE(loForm) <> "O"
@@ -10400,6 +10696,7 @@ PROCEDURE AbrirFormPrl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormPrl")
         loForm = CREATEOBJECT("FormPrl")
 
         IF VARTYPE(loForm) <> "O"
@@ -10428,6 +10725,7 @@ PROCEDURE AbrirFormPrm()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormPrm")
         loForm = CREATEOBJECT("FormPrm")
 
         IF VARTYPE(loForm) <> "O"
@@ -10456,6 +10754,7 @@ PROCEDURE AbrirFormRop()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRop")
         loForm = CREATEOBJECT("FormRop")
 
         IF VARTYPE(loForm) <> "O"
@@ -10484,6 +10783,7 @@ PROCEDURE AbrirFormPub()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormPub")
         loForm = CREATEOBJECT("FormPub")
 
         IF VARTYPE(loForm) <> "O"
@@ -10512,6 +10812,7 @@ PROCEDURE AbrirFormRAN()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRAN")
         loForm = CREATEOBJECT("FormRAN")
 
         IF VARTYPE(loForm) <> "O"
@@ -10540,6 +10841,7 @@ PROCEDURE AbrirFormRcc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRcc")
         loForm = CREATEOBJECT("FormRcc")
 
         IF VARTYPE(loForm) <> "O"
@@ -10568,6 +10870,7 @@ PROCEDURE AbrirFormRec()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRec")
         loForm = CREATEOBJECT("FormRec")
 
         IF VARTYPE(loForm) <> "O"
@@ -10596,6 +10899,7 @@ PROCEDURE AbrirFormReg()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormReg")
         loForm = CREATEOBJECT("FormReg")
 
         IF VARTYPE(loForm) <> "O"
@@ -10625,6 +10929,7 @@ PROCEDURE AbrirFormrgr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formrgr")
         loForm = CREATEOBJECT("Formrgr")
 
         IF VARTYPE(loForm) <> "O"
@@ -10654,6 +10959,7 @@ PROCEDURE AbrirFormRPT()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRPT")
         loForm = CREATEOBJECT("FormRPT")
 
         IF VARTYPE(loForm) <> "O"
@@ -10683,6 +10989,7 @@ PROCEDURE AbrirFormRss()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormRss")
         loForm = CREATEOBJECT("FormRss")
 
         IF VARTYPE(loForm) <> "O"
@@ -10713,6 +11020,7 @@ PROCEDURE AbrirFormrst()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formrst")
         loForm = CREATEOBJECT("Formrst")
 
         IF VARTYPE(loForm) <> "O"
@@ -10742,6 +11050,7 @@ PROCEDURE AbrirFormScl()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormScl")
         loForm = CREATEOBJECT("FormScl")
 
         IF VARTYPE(loForm) <> "O"
@@ -10771,6 +11080,7 @@ PROCEDURE AbrirFormSed()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSed")
         loForm = CREATEOBJECT("FormSed")
 
         IF VARTYPE(loForm) <> "O"
@@ -10801,6 +11111,7 @@ PROCEDURE AbrirFormTBI()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormTBI")
         loForm = CREATEOBJECT("FormTBI")
 
         IF VARTYPE(loForm) <> "O"
@@ -10830,6 +11141,7 @@ PROCEDURE AbrirFormTPG()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormTPG")
         loForm = CREATEOBJECT("FormTPG")
 
         IF VARTYPE(loForm) <> "O"
@@ -10859,6 +11171,7 @@ PROCEDURE AbrirFormVca()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormVca")
         loForm = CREATEOBJECT("FormVca")
 
         IF VARTYPE(loForm) <> "O"
@@ -10889,6 +11202,7 @@ PROCEDURE AbrirFormSIGMVCMV()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGMVCMV")
         loForm = CREATEOBJECT("FormSIGMVCMV")
 
         IF VARTYPE(loForm) <> "O"
@@ -10919,6 +11233,7 @@ PROCEDURE AbrirFormsigmvcot()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigmvcot")
         loForm = CREATEOBJECT("Formsigmvcot")
 
         IF VARTYPE(loForm) <> "O"
@@ -10949,6 +11264,7 @@ PROCEDURE AbrirFormSEG()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSEG")
         loForm = CREATEOBJECT("FormSEG")
 
         IF VARTYPE(loForm) <> "O"
@@ -10979,6 +11295,7 @@ PROCEDURE AbrirFormSET()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSetor")
         loForm = CREATEOBJECT("FormSetor")
 
         IF VARTYPE(loForm) <> "O"
@@ -11009,6 +11326,7 @@ PROCEDURE AbrirFormSre()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSre")
         loForm = CREATEOBJECT("FormSre")
 
         IF VARTYPE(loForm) <> "O"
@@ -11043,6 +11361,7 @@ PROCEDURE AbrirFormSrvImpostos()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSRV")
         loForm = CREATEOBJECT("FormSRV")
 
         IF VARTYPE(loForm) <> "O"
@@ -11074,6 +11393,7 @@ PROCEDURE AbrirFormSto()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSto")
         loForm = CREATEOBJECT("FormSto")
 
         IF VARTYPE(loForm) <> "O"
@@ -11105,6 +11425,7 @@ PROCEDURE AbrirFormTAN()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTAN")
         loForm = CREATEOBJECT("FormTAN")
 
         IF VARTYPE(loForm) <> "O"
@@ -11136,6 +11457,7 @@ PROCEDURE AbrirFormTbO()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTbO")
         loForm = CREATEOBJECT("FormTbO")
 
         IF VARTYPE(loForm) <> "O"
@@ -11167,6 +11489,7 @@ PROCEDURE AbrirFormTbv()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTbv")
         loForm = CREATEOBJECT("FormTbv")
 
         IF VARTYPE(loForm) <> "O"
@@ -11198,6 +11521,7 @@ PROCEDURE AbrirFormTCL()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTCL")
         loForm = CREATEOBJECT("FormTCL")
 
         IF VARTYPE(loForm) <> "O"
@@ -11229,6 +11553,7 @@ PROCEDURE AbrirFormTfi()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTfi")
         loForm = CREATEOBJECT("FormTfi")
 
         IF VARTYPE(loForm) <> "O"
@@ -11260,6 +11585,7 @@ PROCEDURE AbrirFormTgp()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTgp")
         loForm = CREATEOBJECT("FormTgp")
 
         IF VARTYPE(loForm) <> "O"
@@ -11292,6 +11618,7 @@ PROCEDURE AbrirFormTme()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTme")
         loForm = CREATEOBJECT("FormTme")
 
         IF VARTYPE(loForm) <> "O"
@@ -11323,6 +11650,7 @@ PROCEDURE AbrirFormTml()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTml")
         loForm = CREATEOBJECT("FormTml")
 
         IF VARTYPE(loForm) <> "O"
@@ -11354,6 +11682,7 @@ PROCEDURE AbrirFormTot()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTot")
         loForm = CREATEOBJECT("FormTot")
 
         IF VARTYPE(loForm) <> "O"
@@ -11385,6 +11714,7 @@ PROCEDURE AbrirFormTpa()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTpa")
         loForm = CREATEOBJECT("FormTpa")
 
         IF VARTYPE(loForm) <> "O"
@@ -11416,6 +11746,7 @@ PROCEDURE AbrirFormTpc()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTpc")
         loForm = CREATEOBJECT("FormTpc")
 
         IF VARTYPE(loForm) <> "O"
@@ -11447,6 +11778,7 @@ PROCEDURE AbrirFormTPD()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTPD")
         loForm = CREATEOBJECT("FormTPD")
 
         IF VARTYPE(loForm) <> "O"
@@ -11478,6 +11810,7 @@ PROCEDURE AbrirFormTpe()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTpe")
         loForm = CREATEOBJECT("FormTpe")
 
         IF VARTYPE(loForm) <> "O"
@@ -11509,6 +11842,7 @@ PROCEDURE AbrirFormTPR()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTPR")
         loForm = CREATEOBJECT("FormTPR")
 
         IF VARTYPE(loForm) <> "O"
@@ -11540,6 +11874,7 @@ PROCEDURE AbrirFormTpt()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTpt")
         loForm = CREATEOBJECT("FormTpt")
 
         IF VARTYPE(loForm) <> "O"
@@ -11571,6 +11906,7 @@ PROCEDURE AbrirFormtra()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formtra")
         loForm = CREATEOBJECT("Formtra")
 
         IF VARTYPE(loForm) <> "O"
@@ -11602,6 +11938,7 @@ PROCEDURE AbrirFormTri()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormTri")
         loForm = CREATEOBJECT("FormTri")
 
         IF VARTYPE(loForm) <> "O"
@@ -11635,6 +11972,7 @@ PROCEDURE AbrirFormUep()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormUep")
         loForm = CREATEOBJECT("FormUep")
 
         IF VARTYPE(loForm) <> "O"
@@ -11668,6 +12006,7 @@ PROCEDURE AbrirFormUfd()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormUfd")
         loForm = CREATEOBJECT("FormUfd")
 
         IF VARTYPE(loForm) <> "O"
@@ -11701,6 +12040,7 @@ PROCEDURE AbrirFormuni()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formuni")
         loForm = CREATEOBJECT("Formuni")
 
         IF VARTYPE(loForm) <> "O"
@@ -11734,6 +12074,7 @@ PROCEDURE AbrirFormUpd()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormUpd")
         loForm = CREATEOBJECT("FormUpd")
 
         IF VARTYPE(loForm) <> "O"
@@ -11767,6 +12108,7 @@ PROCEDURE AbrirFormUSA()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormUSA")
         loForm = CREATEOBJECT("FormUSA")
 
         IF VARTYPE(loForm) <> "O"
@@ -11800,6 +12142,7 @@ PROCEDURE AbrirFormVEN()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormVEN")
         loForm = CREATEOBJECT("FormVEN")
 
         IF VARTYPE(loForm) <> "O"
@@ -11833,6 +12176,7 @@ PROCEDURE AbrirFormVis()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormVis")
         loForm = CREATEOBJECT("FormVis")
 
         IF VARTYPE(loForm) <> "O"
@@ -11867,6 +12211,7 @@ PROCEDURE AbrirFormsigmvdis()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigmvdis")
         loForm = CREATEOBJECT("Formsigmvdis")
 
         IF VARTYPE(loForm) <> "O"
@@ -11898,6 +12243,7 @@ PROCEDURE AbrirFormsigmvits()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigmvits")
         loForm = CREATEOBJECT("Formsigmvits")
 
         IF VARTYPE(loForm) <> "O"
@@ -11936,6 +12282,7 @@ PROCEDURE AbrirFormSIGMVMVT()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSIGMVMVT")
         loForm = CREATEOBJECT("FormSIGMVMVT")
 
         IF VARTYPE(loForm) <> "O"
@@ -11972,6 +12319,7 @@ PROCEDURE AbrirFormSIGMVTI2()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSIGMVTI2")
         loForm = CREATEOBJECT("FormSIGMVTI2")
 
         IF VARTYPE(loForm) <> "O"
@@ -12009,6 +12357,7 @@ PROCEDURE AbrirFormSigMvVde()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSigMvVde")
         loForm = CREATEOBJECT("FormSigMvVde")
 
         IF VARTYPE(loForm) <> "O"
@@ -12044,6 +12393,7 @@ PROCEDURE AbrirFormSigPrChr()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSigPrChr")
         loForm = CREATEOBJECT("FormSigPrChr")
 
         IF VARTYPE(loForm) <> "O"
@@ -12080,6 +12430,7 @@ PROCEDURE AbrirFormSIGPRIBL()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSIGPRIBL")
         loForm = CREATEOBJECT("FormSIGPRIBL")
 
         IF VARTYPE(loForm) <> "O"
@@ -12113,6 +12464,7 @@ PROCEDURE AbrirFormsigprtef()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigprtef")
         loForm = CREATEOBJECT("Formsigprtef")
 
         IF VARTYPE(loForm) <> "O"
@@ -12146,6 +12498,7 @@ PROCEDURE AbrirFormSIGOPCFE()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSIGOPCFE")
         loForm = CREATEOBJECT("FormSIGOPCFE")
 
         IF VARTYPE(loForm) <> "O"
@@ -12183,6 +12536,7 @@ PROCEDURE AbrirFormsigopcgb()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("Formsigopcgb")
         loForm = CREATEOBJECT("Formsigopcgb")
 
         IF VARTYPE(loForm) <> "O"
@@ -12232,6 +12586,7 @@ PROCEDURE AbrirFormSigOpCgl()
 
     TRY
         * Cria instancia do formulario
+        GarantirClasse("FormSigOpCgl")
         loForm = CREATEOBJECT("FormSigOpCgl", loc_nBarras)
 
         IF VARTYPE(loForm) <> "O"
@@ -12266,6 +12621,7 @@ PROCEDURE AbrirFormsigopcgc()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigopcgc")
         loForm = CREATEOBJECT("Formsigopcgc")
 
         IF VARTYPE(loForm) <> "O"
@@ -12300,6 +12656,7 @@ PROCEDURE AbrirFormSIGOPCGF()
     loForm = .NULL.
 
     TRY
+        GarantirClasse("FormSIGOPCGF")
         loForm = CREATEOBJECT("FormSIGOPCGF")
 
         IF VARTYPE(loForm) <> "O"
@@ -12333,6 +12690,7 @@ PROCEDURE AbrirFormSigOpCgr()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigOpCgr")
         loForm = CREATEOBJECT("FormSigOpCgr")
 
         IF VARTYPE(loForm) <> "O"
@@ -12367,6 +12725,7 @@ PROCEDURE AbrirFormsigopcgv()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("Formsigopcgv")
         loForm = CREATEOBJECT("Formsigopcgv")
 
         IF VARTYPE(loForm) <> "O"
@@ -12400,6 +12759,7 @@ PROCEDURE AbrirFormSigOpChi()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSigOpChi")
         loForm = CREATEOBJECT("FormSigOpChi")
 
         IF VARTYPE(loForm) <> "O"
@@ -12430,6 +12790,7 @@ PROCEDURE AbrirFormSIGOPCHR()
     LOCAL loForm, loException
 
     TRY
+        GarantirClasse("FormSIGOPCHR")
         loForm = CREATEOBJECT("FormSIGOPCHR")
 
         IF VARTYPE(loForm) <> "O"

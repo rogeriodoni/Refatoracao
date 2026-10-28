@@ -2149,6 +2149,8 @@ DEFINE CLASS FormSigPrCtr AS FormBase
         IF !EMPTY(loc_cClasseForm)
             loc_oForm = .NULL.
             TRY
+                *-- Classe em variavel: o indice da carga sob demanda nao a enxerga
+                GarantirClasse(loc_cClasseForm)
                 loc_oForm = CREATEOBJECT(loc_cClasseForm, loc_cDopes, "C", loc_nNumes, loc_cEmps, .T.)
             CATCH TO loc_oErro
                 MsgErro("Erro ao abrir movimenta" + CHR(231) + CHR(227) + "o:" + CHR(13) + loc_oErro.Message, ;
