@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o `FormSigOpCgr.prg` e o `SigOpCgrBO.prg` por completo e n├úo encontrei nenhum defeito de c├│digo relacionado a este erro.
+
+**Diagn├│stico: n├úo ├® bug de c├│digo ÔÇö ├® o bloqueio de infraestrutura j├í conhecido.**
+
+O log mostra que a falha ocorre na `[ETAPA 1B] Conectando ao banco de dados...`, **antes** de qualquer `CREATEOBJECT` do form/BO ser alcan├ºado:
+```
+Codigo: 1526
+Mensagem: Connectivity error: [...] SQL Server inexistente ou acesso negado.
+```
+Isso ├® o pr├®-flight `SQLSTRINGCONNECT` falhando ÔÇö o c├│digo do `FormSigOpCgr`/`SigOpCgrBO` nunca chega a executar. Confirmei isso de novo agora: `Test-NetConnection 192.168.200.10 -Port 1433` n├úo completou nem em 40s, consistente com "sem rota" (a m├íquina do pipeline n├úo alcan├ºa a sub-rede `192.168.200.0/24` onde est├í o `DB_MBAHIA`).
+
+Esse ├® um problema recorrente registrado h├í mais de 100 tasks (desde 2026-08-02, ainda ativo). Editar o `.prg` n├úo resolve ÔÇö j├í foi tentado em v├írias tasks anteriores sem nenhum efeito, porque o erro acontece antes do c├│digo rodar.
+
+Revis├úo do c├│digo em si (sem achados): todos os m├®todos que o form chama no BO (`Processar`, `ValidarOperacao`, `CarregarOperacoes`, `CarregarDoCursor`, `ObterChavePrimaria`) est├úo declarados com visibilidade correta; guards de conex├úo, TRY/CATCH, PROTECTED/PUBLIC ÔÇö tudo consistente com as regras do projeto.
+
+**Deixei os arquivos intactos** para n├úo arriscar regress├úo com uma corre├º├úo especulativa. Registrei essa reincid├¬ncia na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`). Recomendo escalar para quem administra a rede/VPN da m├íquina do pipeline ÔÇö nenhuma tentativa adicional de `runtime_fix` vai resolver isso.

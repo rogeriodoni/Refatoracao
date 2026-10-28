@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e **verificada executando** (n├úo s├│ compilando).
+
+## O que faltava
+
+A Fase 6 anterior entregou os campos do painel `cnt_4c__inserir` e a legenda, mas **adiou os eventos para a Fase 7** ÔÇö e o gate da fase exige, no ramo FLAT (form OPERACIONAL sem PageFrame), `BINDEVENT` + `PROCEDURE Validar*`. O form n├úo tinha nenhum dos dois. O legado **n├úo tem lookup algum** (zero `fwbuscaext`/`fwBuscaSel`/`sigacess`/`mAddColuna` no dump), ent├úo a superf├¡cie equivalente desta fase s├úo os **eventos de dados** do SCX.
+
+## Entregue
+
+**`projeto/app/classes/TextBoxGridLookup.prg`** ÔÇö nova classe `TextBoxCelulaFollowupCfl_4c`: `When`/`Valid` **embutidos** (regra #46 ÔÇö `BINDEVENT` em evento de c├®lula de Grid n├úo ├® confi├ível), delegando a m├®todos PUBLIC do form.
+
+**`projeto/app/forms/operacionais/FormSigOpCfl.prg`**
+- C├®lula da `Column1` instalada com `AddObject` + `CurrentControl` + `Sparse = .F.` (regra #18), `Column.ReadOnly` reafirmado **depois** do `Grid.ReadOnly`. Propriedades por caminho expl├¡cito, n├úo por `WITH .filho` aninhado (Erro47/Erro49).
+- `CelulaDataFollowupEditavel` ÔÇö `When` legado: `Return cmdApagaItem.cmdApagar.Visible`.
+- `ValidarCelulaDataFollowupExec` ÔÇö `Valid` legado: data vazia ÔåÆ aviso + **`RETURN 0`** (mant├®m o foco na c├®lula).
+- `BINDEVENT(txt_4c_Hist, "LostFocus", ...)` + `HistoricoLostFocus` (wrapper com guarda de reentr├óncia, liberada no wrapper) e `HistoricoLostFocusExec` ÔÇö transcri├º├úo do `GetHist.LostFocus`: `NovoRegistro`/`CancelarEdicao`+`EditarRegistro` ÔåÆ `FormParaBO` ÔåÆ `Salvar()`, e **fechar painel + recarregar + devolver foco rodam sempre**, fora do `IF` de grava├º├úo, igual ao legado.
+- `PROTECTED PROCEDURE FormParaBO` ÔÇö `_EMPR` ÔåÆ `go_4c_Sistema.cCodEmpresa`, `cidchaves` gerada pelo BO (`fUniqueIds`, nunca vazia), `DATE`ÔåÆ`DTOT` (regra #16), e em ALTERAR a chave vem da linha corrente da grade.
+
+## Verifica├º├úo
+
+Compila├º├úo limpa (Form/BO/classe, nenhum `.ERR`) e probe headless (`automation/ProbeCflFormF6.prg`) com o form **instanciado de verdade**: `CurrentControl=TXT_4C_CELULADATA`, `Sparse=.F.`, `AEVENTS` ÔåÆ `LOSTFOCUS`/`HISTORICOLOSTFOCUS`, `When` acompanha o bot├úo Apagar (.T./.F.), `Valid` devolve `0`/`N` com data vazia e `.T.`/`L` com data v├ílida, `FormParaBO` fecha o round-trip nos dois modos, guarda de reentr├óncia 0x/1x. Auditorias do projeto: `LOOKUP-KEYPRESS ERRO=0 AVISO=0`, m├®todo protegido chamado de fora = 0, fun├º├úo ├│rf├ú = 0, `TABLEREVERT` sem guard = 0, propriedade inexistente = 0.
+
+Tr├¬s corre├º├Áes nasceram do pr├│prio probe, n├úo de inspe├º├úo: `FormParaBO` ├® PROTECTED em `FormBase` e n├úo se alarga por heran├ºa; `AEVENTS` tem 2 argumentos com o evento na coluna 3; e `USED(x) AND RECCOUNT(x) > 0` estouraria com alias fechado porque VFP9 n├úo faz short-circuit ÔÇö virou `IF` aninhado.
+
+Duas coisas para registro: o `CarregarLista` da Fase 4 chama `ConfigurarGrid()` quando o cursor n├úo existe, o que re-executaria `AddObject("grd_4c_Dados")` e falharia ÔÇö n├úo toquei porque ├® pr├®-existente e inalcan├º├ível pelo caminho novo (o cursor s├│ fecha no `Destroy`). E o `.Picture` de `Buttons(2)` ("Listar") usa `geral_impressora_normal_60.jpg`, que a Fase 4 escolheu sem eu ter conferido contra o dump (regra #25) ÔÇö vale checar na Fase 8, que ├® a dona daqueles bot├Áes.

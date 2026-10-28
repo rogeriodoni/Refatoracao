@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 conclu├¡da. `FormSigOpChi.prg` passou de 999 para 1930 linhas (86 KB).
+
+## Por que a tentativa anterior reprovou
+
+O gate da Fase 4 aceita seis layouts. Com `FormType = OPERACIONAL`, o caminho aplic├ível ├® o **FLAT**, que exige tr├¬s coisas simult├óneas: `AddObject("grd_4c_ÔÇª")` + `cmg_4c_`/`cmd_4c_` + um m├®todo `CarregarLista|CarregarDados|MontaGrade`. A vers├úo anterior tinha s├│ os bot├Áes (`cmd_4c_Ok`) ÔÇö sem grade e sem m├®todo de carga, e sem `ConfigurarPaginaLista`+`AlternarPagina` do caminho PAGINADO. Todos os seis ramos davam falso.
+
+## O que foi entregue (transcrito do dump do SCX)
+
+**As tr├¬s grades da Page2** com a geometria exata do legado (+29 de compensa├º├úo do `pgf_4c_Paginas.Top = -29`): `grd_4c_Cheque` (12 colunas), `grd_4c_Movimenta` (9), `grd_4c_Prorrog` (1) ÔÇö larguras, `InputMask`, `Alignment`, `ReadOnly` e a invers├úo `Column8.ColumnOrder = 7` do dump.
+
+**As duas barras de bot├Áes**: `cmg_4c_Botoes` (Grupo_op, 8 bot├Áes) e `cmg_4c_Saida` (Encerrar), com os `Left` escalonados do dump e os ├¡cones do legado ÔÇö nenhum nome inventado (`cheque.png`, `geral_palete`-style; o probe confirma `PicOK=.T.` nos 9).
+
+**`CarregarDados`** ├® a transcri├º├úo do `SqlDados` legado: os tr├¬s ramos de consulta na ordem em que se sobrep├Áem (conta de origem ÔåÆ `pcAcesso='TOTAL'` ÔåÆ `'CARTEIRA'`), o cursor auxiliar que marca `Tipo='S'` via `SigCheh`, os 10 `INDEX ÔÇª TAG`, o scrub de `DtEmis` nulo e os `DynamicFore/BackColor`. Cada `SQLEXEC` vai para `cursor_4c_Temp` e o alias definitivo ├® recriado `READWRITE` ÔÇö nunca direto no alias da grade.
+
+**`AlternarPagina`** virou funil ├║nico (`Init`, `CmdOkClick` e o Encerrar do Hist├│rico usam o mesmo caminho), e o caminho de volta reabilita a Page1 que a ida desabilitou.
+
+## Verifica├º├Áes executadas
+
+- **Compila limpo**: `.fxp` gerado para Form e BO, zero `.ERR`.
+- **Instanciado de verdade** (`ProbeChi698F4.prg`, headless): `CREATEOBJECT` devolve objeto; grades com Top/Left/W/H conferidos um a um; `RecordMark=.T.` s├│ na `grd_4c_Movimenta`, como o dump declara; ordem de `AddObject` na Page2 com o cabe├ºalho em 1┬║ e as barras por ├║ltimo (a faixa n├úo cobre os bot├Áes); todos os m├®todos chamados de fora s├úo PUBLIC; `AlternarPagina` testada nos dois sentidos; `CarregarDados` devolve `.F.` em modo teste sem estourar. Nenhum erro gravado em `gc_4c_ArquivoErroTeste`.
+- **Completude** (regexes reais do `Test-CompletudeCodigo`): 0 problemas ÔÇö sem TODO, sem procedure vazia, sem stub com `MsgAviso`.
+- **Propriedades contra `propriedades_baseclasses.txt`**: a varredura pegou um defeito meu real ÔÇö eu havia inventado `.BorderStyle = 1` nas tr├¬s grades, e **Grid n├úo tem `BorderStyle`**. Isso derrubava o `ConfigurarGradesHistorico` no 1┬║ grid e as outras duas grades nunca eram criadas (`Unknown member GRD_4C_MOVIMENTA`). Removido; o dump nunca declarava essa propriedade. Os 2 achados restantes s├úo falsos positivos da minha heur├¡stica (s├úo `OptionButton`, que tem `BackStyle`).
+
+## O que deliberadamente n├úo entrou
+
+Os handlers de `Click` dos 8 bot├Áes de `Grupo_op` abrem os formul├írios de detalhe (`SigOpChr`, `SigOpChb`, `SigOpChp`, `SigOpFlp`, `SigOpChc`, `SigCdPgr`) ÔÇö nenhum deles migrado ainda (est├úo em `ProximasMigracoes/`). S├úo escopo da fase de a├º├Áes, e o gate dela os cobra. Criar dispatcher agora exigiria m├®todos vazios, que ├® exatamente o stub proibido. Liguei apenas o `Click` da barra de sa├¡da, cujo `Sair.Click` legado ├® autocontido.
+
+Os containers `Cnt_periodo`, `Cnt_Followup` e `Emitente` s├úo campos (fase seguinte). Para n├úo criar depend├¬ncia adiantada, `CarregarDados` l├¬ o per├¡odo de `this_dDataInicial`/`this_dDataFinal` do BO ÔÇö que o `Init` j├í inicializa transcrevendo o `Init` legado (inclusive o caso `CARTEIRA`, em que o per├¡odo colapsa no vencimento do cheque). Os TextBox de data apenas espelhar├úo essas propriedades.
+
+Um ponto de layout para a fase de campos: as grades terminam em Top 535, e o legado p├Áe `Cnt_Followup` em 543 e `Emitente` em 572+53 = 625, acima dos 600 de `Form.Height`. Pela regra #11 o excedente vira aumento de `Form.Height`.

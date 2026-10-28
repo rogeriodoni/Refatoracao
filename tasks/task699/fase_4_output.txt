@@ -1,0 +1,44 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 4 ÔÇö FormSigOpChp
+
+**Fase 4 n├úo tem estrutura a acrescentar neste form, e isso est├í correto.** A fase pede Grid + 6 bot├Áes CRUD + `AlternarPagina()`; o legado `SIGOPCHP` n├úo tem superf├¡cie de lista alguma. Medido no dump:
+
+| Superf├¡cie | Medi├º├úo |
+|---|---|
+| `BaseClass: grid \| pageframe \| listbox` | **0** |
+| `AddCursor` / `pColuna` / `Grade` / `grd` | **0** |
+| `ControlSource` | 4 ocorr├¬ncias, todas `""` (string **vazia**) |
+| `BaseClass: textbox` | 4 (3 digit├íveis + 1 `When ÔåÆ .f.`) |
+| API de n├│s (├írvore) | 0 |
+
+Criar Grid + bot├Áes CRUD seria inventar UI (viola o PILAR 1) ou escrever m├®todos vazios (stub, proibido pela regra de completude).
+
+**O gate da Fase 4 j├í passa** ÔÇö confirmei por medi├º├úo, rodando os helpers reais do orquestrador (n├úo pela leitura do c├│digo): `temListaEstritaF4=False`, `temCampoCapturaF4=True`, `DialogoExibicao=False` ÔåÆ `legadoCapturaF4=True`, `temSuperficieCaptura=True`, **`temLayoutCaptura=True`** (ramo CAPTURA). Form j├í estava completo desde a Fase 3.
+
+### O que eu mudei
+
+Auditando o form, achei **um defeito real** e corrigi (`BtnProrrogaClick`, linha 612):
+
+```foxpro
+THIS.FormParaBO()                    && retorno DESCARTADO
+```
+
+`FormParaBO()` ├® `FUNCTION` e devolve `.F.` quando os campos n├úo existem ÔÇö o pr├│prio coment├írio dela diz que existe "para o chamador poder abortar em vez de seguir com dados indefinidos". O chamador ignorava isso e seguia para `Salvar()`, que gravaria com as properties do BO indefinidas/defasadas, **em sil├¬ncio** (padr├úo Erro147). Agora aborta com `IF !THIS.FormParaBO()`, com `RETURN` fora de TRY/CATCH (regra #1).
+
+Tamb├®m verifiquei e **n├úo** h├í defeito em: ├¡cones (`geral_calendario_60.jpg`/`cadastro_cancelar_60.jpg` transcritos do dump e existentes em `vbmp\` ÔÇö regra #25), properties do BO (todas as 7 usadas existem), `this_oDataAccess.this_cCursorName` (v├ílido, sen├úo o di├ílogo nunca abriria), e o guard `ISNULL(...) OR EMPTY(...)` que reproduz fielmente o `IsEmpty` do Fortyus (regra #27).
+
+Checagens est├íticas passam: 16/16 `PROCEDURE/ENDPROC`, 1/1 `FUNCTION/ENDFUNC`, `TRY` 1/1, `WITH` 16/16, `IF` 22/22, zero acentos literais, zero `PUBLIC` em `DEFINE CLASS`.
+
+### Duas coisas que preciso sinalizar
+
+**1. N├úo consegui verificar compila├º├úo.** `vfp9.exe` lan├ºado desta sess├úo n├úo executa o `.prg` (limita├º├úo j├í medida e registrada): pendurou at├® o timeout, sem gerar `.fxp` nem `.err`. Matei o processo e limpei os tempor├írios. Ent├úo n├úo afirmo COMPILE_OK ÔÇö s├│ os checks est├íticos acima.
+
+**2. O guard de NO-OP vai for├ºar um retry opus desnecess├írio nesta fase.** Ele cobre apenas `@(5, 6, 7)` ÔÇö a **Fase 4 est├í fora**. Como a fase legitimamente n├úo altera o arquivo, exit 0 + hash igual dispara retry com opus e timeout 2x, mesmo com o gate de conte├║do passando.
+
+**Deliberadamente n├úo mexi no orquestrador**, por duas raz├Áes medidas: ele tem **857 inser├º├Áes n├úo commitadas** adicionando a 10┬¬ exce├º├úo desta mesma fam├¡lia (`Test-BarraCrudEhDoFormPai`), e h├í `RunLoop.ps1` vivo (PID 6948, de 23/10) anterior ao mtime do script (25/10 16:50) ÔÇö como `& script.ps1` parseia na invoca├º├úo, a edi├º├úo n├úo valeria para esta fase mesmo. Registrei a lacuna na mem├│ria, com o predicado correto para quem for implementar: para a Fase 4 o crit├®rio ├® "sem lista pelo teste **estrito** + n├úo-├üRVORE", **n├úo** `Test-LegadoSemCampoNemLista` (que exige aus├¬ncia de campos e devolveria `$false` aqui, pois h├í 4 TextBox).
+
+N├úo commitei ÔÇö o arquivo segue untracked, como a Fase 3 o deixou, para o pipeline commitar.

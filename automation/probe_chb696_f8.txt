@@ -1,0 +1,35 @@
+=== PROBE Fase 8 - FormSigOpChb (Procurar Cheque) ===
+1) CREATEOBJECT -> VARTYPE=O
+   BO VARTYPE=O  Caption=[Procurar]
+
+2) escopos (atributo 2 = PROTECTED):
+   FormParaBO PROTECTED       = .T.
+   BOParaForm PROTECTED       = .T.
+   CarregarLista PROTECTED    = .F.
+   BtnCancelarClick PROTECTED = .F.
+   LimparCampos PROTECTED     = .T.
+   CmdProcuraClick PROTECTED  = .F.
+
+3) estado inicial dos nove campos:
+   Bco=[] Age=[] Con=[] Che=[] Ven=[  /  /    ] Val=[0] Ctr=[] Pro=[] Arq=[      ] len=6
+   estado inicial do legado conferido = .T.
+
+4) FormParaBO (tela -> BO):
+   retorno = .T.
+   BO: Bco=[341] Age=[1234] Con=[0056789012] Che=[000777] Ven=[25/10/2026] Val=[1234,56]
+   nove criterios no BO conferem = .T.
+
+5) round-trip tela -> BO -> tela (identidade):
+   tela: Bco=[341] Age=[1234] Con=[0056789012] Che=[000777] Ven=[25/10/2026] Val=[1234,56]
+   identidade preservada = .T.
+
+6) LimparCampos:
+   nove campos de volta ao estado do Init = .T.
+
+7) CarregarLista com criterios VAZIOS:
+   retorno = .T.  cursor_4c_SigChe aberto = .F.  cursor_4c_SigCheTmp aberto = .F.
+
+8) BtnCancelarClick:
+   Visible=.F.  Controle=[]
+
+PROBE_OK

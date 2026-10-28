@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Done. Here's what I found and did.
+
+## The Phase 7 deliverable was already correct
+
+The previous run did implement Phase 7 ÔÇö the failure was not its fault. I verified the artifacts independently:
+
+- **Compiles clean**: all three files (`FormSigOpCfp.prg`, `SigOpCfpBO.prg`, `TextBoxGridLookup.prg`), `.fxp` deleted first, `sucesso: true`, zero `.err`.
+- **No stubs**: `Test-CompletudeCodigo` returns `True` for all three; no TODOs, no empty methods.
+- **Faithful to the legacy**: `BtnInserirClick`/`BtnExcluirClick`/`BtnSairClick` transcribe `cmdInserir`/`cmdExcluir`/`cmdSair`, including the `Visible` edit-mode guard and the "stay open on failure" behaviour of the legacy's `Return .f.`. `SalvarGrade` reproduces the blank-row purge, the `cidchaves` generation, the duplicate-CFOP guard with the legacy's exact message, and the delete+reinsert. `RETURN` only outside `TRY`, non-silent `CATCH`, handlers PUBLIC (regra #3), `SalvarGrade` PUBLIC with `ExecutarExclusao` PROTECTED (regra #51).
+
+## The gate had a real false positive
+
+`case 7` demanded `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick` ÔÇö buttons the legacy **does not have** (it has only `cmdInserir`/`cmdExcluir`/`cmdSair`). The trigger was `Grupo_Op`, treated as structural evidence that "vale sempre". But all three occurrences belong to the **parent** form:
+
+```foxpro
+With Thisform.ParentForm.Pagina.Lista
+    For lnI=1 to .Grupo_Op.ButtonCount
+```
+
+That's a child dialog disabling the parent's CRUD bar. Because structural evidence is evaluated *before* the nine existing exceptions, it short-circuited all of them.
+
+I added a tenth exception, `Test-BarraCrudEhDoFormPai` (fail-closed, resolves relative `.Grupo_Op` via a `With` stack), wired into **both** Phase 7 and Phase 8 via the same helper ÔÇö Phase 8 had the identical trap in two places, and a duplicated predicate would diverge silently. `frmcadastro` is untouched. Verified: BOM + CRLF preserved, 0 parse errors, delta is exactly my 4 sites.
+
+**Blast radius measured** across all 687 dumps: the predicate fires on 5, verdict changes on the same 5, always toward dispensation ÔÇö `SigOpCfp`, `SigCdFpd`, `SigCdFpo`, `SigCdGcp`, `SigCdTbO`. I checked each: all are `Class: form` (not `frmcadastro`), child dialogs with `LParameters poForm, pnDataSes`, with exactly `cmdInserir`/`cmdExcluir`/`cmdSair`. Same family, zero regression. (The `SigCd` prefix is the *parent* entity's name, not evidence the dialog is CRUD.)
+
+## One thing you need to know
+
+**This retry will still be marked as failed.** `RunLoop.ps1` (PID 6948) invokes the orchestrator in-process with `&`, once per SCX; task688's invocation started at 22:31 and is still running, holding the pre-patch gate in memory. My fix takes effect from the next task onward.
+
+I deliberately did **not** make the form satisfy the old gate ÔÇö that would have required inventing three buttons the legacy doesn't have (PILAR 1) or writing empty handlers (completeness rule). Running the gate both ways confirms the diagnosis:
+
+| gate | verdict |
+|---|---|
+| old (ran at 23:11) | REPROVA ÔÇö faltam BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick |
+| new (on disk) | **PASSA** |
+
+Worth noting the first failure was *legitimate*, not a self-reference artifact ÔÇö the `.ps1` was written 21:25:44, before the task started at 22:31. The self-reference applies only to my fix.
+
+If you want task688 to clear the gate rather than carry a false failure, restarting `RunLoop.ps1` would re-read the patched orchestrator ÔÇö but that stops a running overnight pipeline, so I left that call to you.
+
+Lesson recorded in memory as `feedback_gate_fase7_grupo_op_do_form_pai`, indexed in `MEMORY.md`. Backup of the pre-patch orchestrator is at `C:\tmp\OrquestradorMigracao.ps1.bak.task688`.

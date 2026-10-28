@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado do PASS SQL
+
+**Nenhuma altera├º├úo de c├│digo foi necess├íria.** O ├║nico achado do pass ÔÇö `WHERE cmoes = ...` em `sigopcgvBO.prg::ObterCotacao` (linha 1011) ÔÇö ├® **falso positivo** confirmado contra o dump do legado.
+
+**Evid├¬ncia:**
+- O legado carrega `SigCdCot` **inteira** sem WHERE (`Select * From SigCdCot`) e depois faz `Seek(moeda, 'CrSigCdCot')` client-side em tr├¬s pontos do mesmo form (`Seek(_MoeLim,'CrSigCdCot')`, `Seek(TmpSccr.moedas,'CrSigCdCot')`, `Seek(Moedas,'crSigCdCot')`).
+- O migrado faz exatamente a mesma busca, s├│ que server-side: `SELECT TOP 1 valos FROM SigCdCot WHERE cmoes = <moeda> AND datas <= <data> ORDER BY datas DESC, horas DESC` ÔÇö tradu├º├úo fiel de "achar a cota├º├úo da moeda na data", n├úo inven├º├úo.
+- Esse padr├úo exato (coluna `CMOES` contra `SigCdCot`) j├í havia sido confirmado como falso positivo em `Formsigopcgc.prg` (item 13a-bis da mem├│ria), um form irm├úo desta mesma fam├¡lia de telas de conta corrente.
+
+Remover o `WHERE` quebraria a fun├º├úo: o `TOP 1` passaria a devolver a cota├º├úo de uma moeda arbitr├íria em vez da moeda pedida.
+
+Atualizei a mem├│ria (`feedback_sql_filtro_inventado_locate_cursor_local.md`, 14┬¬ ocorr├¬ncia) registrando este caso para evitar reinvestiga├º├úo em futuros reruns do pass sobre esta coluna/tabela.

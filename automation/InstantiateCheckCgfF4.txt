@@ -1,0 +1,22 @@
+CK1 pre-config
+CK2 pos-config
+CK3 pos-setprocedure
+1 INSTANCIA OK BaseClass=Form Caption=[Consulta Global Financeira] ModoAtual=FILTROS
+2 GRIDS Tipos.Cols=2 Clientes.Cols=8 Clientes2.Cols=8  (esperado 2 / 8 / 8)
+3 COLUNAS Clientes Col1.CS=[cursor_4c_Clientes.Grupo] Col4.CS=[cursor_4c_Clientes.NomeGrupo] Col5.CurrentControl=[CHECK1]
+2b RecCount Tipos=0 Clientes=1  (esperado >=1 / 1)
+4 SelTudoClick Imps(1aLinha)=0  (esperado 1, se houver ao menos 1 linha com Dopes preenchido)
+5 ApagaClick Imps(1aLinha)=0  (esperado 0)
+6 Inserir/Excluir RecsAntes=1 DepoisInserir=1 DepoisExcluir=1  (grade sempre com >=1 linha em branco)
+7 ChkCliEKeyPress CheckE Antes=0 Depois=1  (esperado alternar 0<->1)
+8 AlternarPagina(2) ActivePage=2 ModoAtual=DADOS  (esperado 2 / DADOS)
+9 AlternarPagina(1) ActivePage=1 ModoAtual=FILTROS  (esperado 1 / FILTROS)
+12 CmdAddFiltroClick Filtros.Visible=.F. NewFiltro.Visible=.T.  (esperado .F. / .T.)
+10 ValidarFiltrosData com DtEmiI>DtEmiF = .F.  (esperado .F.)
+11 ValidarFiltrosData vazio = .T.  (esperado .T.)
+13 Serializar/Restaurar Titulos=[T123]  (esperado T123)
+14 LIBERADO
+--- ArquivoErroTeste ---
+[24/10/2026 10:02:42 AM] Atenção!!!: A Data de Emissão Inicial Não Pode Ser Maior Que a Final!!!
+
+FIM

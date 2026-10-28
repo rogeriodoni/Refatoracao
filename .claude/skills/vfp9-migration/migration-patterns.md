@@ -14319,3 +14319,126 @@ registrado nas DUAS listas, inclusive modo SEGURO, porque classe base que fecha
 cursor derruba toda tela que a usa) + **#91** corrigido na origem (passou a emitir o
 guard). Regra #52 do CLAUDE.md. Origem: Erro230 (`FormDup`/`DupBO` - a tela de
 Series de Duplicatas nao abria).
+
+## 248. `ColumnCount` CONDICIONAL seguido de `ColumnCount` LITERAL duas linhas depois: a segunda SOBRESCREVE a primeira e derruba o `InicializarForm` inteiro
+
+```foxpro
+* ERRADO (Formsigopcgc.prg:1565-1566, task690/Erro231)
+loc_oGrdH.ColumnCount  = IIF(loc_lSaldo, 8, 7)
+loc_oGrdH.ColumnCount = 3          && <- linha espuria, sobrescreve a de cima
+
+* CERTO - uma unica atribuicao, a condicional
+loc_oGrdH.ColumnCount  = IIF(loc_lSaldo, 8, 7)
+```
+
+A mesma grade recebe **DUAS** atribuicoes consecutivas de `ColumnCount` para a
+MESMA variavel: a primeira eh a calculada corretamente (`IIF(loc_lSaldo, 8, 7)`),
+a segunda eh um literal (`3`) que nao aparece em NENHUM outro lugar do metodo -
+sobra de outra versao do codigo que ninguem removeu. Como a segunda linha
+VENCE, a grade nasce com so 3 colunas; o codigo seguinte que configura
+`.Column4` at├® `.Column8` (via helper de configuracao de coluna) estoura
+**`Property COLUMN4 is not found`** dentro do `TRY` de `InicializarForm`, que
+devolve `.F.` -> `CREATEOBJECT(formClass)` devolve **valor logico, nao objeto**
+-> o teste "Instanciacao" falha com `CREATEOBJECT retornou valor nao-objeto`,
+sem NENHUMA pista de SQL ou grid no log (olhar o `teste_resultado.json` so diz
+isso - a causa real esta tres niveis abaixo, dentro do `CATCH` que o proprio
+form engoliu).
+
+**Nao eh caso isolado** - a MESMA assinatura (`ColumnCount` calculado seguido,
+poucas linhas depois, de `ColumnCount` literal fixo para a mesma variavel)
+apareceu tambem em `FormSigPrHpr.prg:574-575`:
+
+```foxpro
+loc_nColunas = IIF(THIS.this_oBusinessObject.this_cTipoEstoque == "3", 9, 7)
+loc_oGrid.ColumnCount  = loc_nColunas
+loc_oGrid.ColumnCount = 9           && <- mesma sobra; quando loc_nColunas=7 a grade fica com 9
+```
+
+Aqui o sintoma eh mais sutil (nao quebra o `Init`, porque 9 > 7 e colunas extra
+nao estouram `Property` not found) - mas o `this_cTipoEstoque != "3"` passa a
+exibir **2 colunas fantasmas** com `ControlSource` vazio, porque o bloco que
+monta as 7 colunas reais nunca reduziu o `ColumnCount` de volta.
+
+**Diagnostico**: procurar `<mesma_var>.ColumnCount` repetido em sequencia
+(ignorando linhas em branco/comentario entre elas) em TODO `.prg` de form -
+a condicional correta SEMPRE vem primeiro (eh a que tem `IIF`/variavel calculada)
+e o literal espurio vem depois. Nunca o inverso: se o literal viesse primeiro
+e a condicional depois, a condicional venceria e nao haveria defeito.
+
+**Causa provavel**: resíduo de uma fase anterior do pipeline multi-fase (um
+rascunho fixava `ColumnCount = 3`/`= 9` antes de a condicional de
+negocio ser conhecida, e a fase que calculou a condicional foi inserida ANTES
+da linha antiga em vez de substitui-la).
+
+Sem auto-fix neste texto - ver CorretorAutomatico **#220**. Origem: Erro231
+(2026-10-25, `task690`/`Formsigopcgc` - "Opcoes de Cheques" nunca abria).
+
+## 249. `gb_4c_ValidandoUI` no TOPO do `InicializarForm` pula TAMBEM a configuracao visual - diferencas de UI Fidelity ficam IRRECUPERAVEIS pelo ciclo de auto-fix
+
+`gb_4c_ValidandoUI` existe para o `ValidarUIFidelity.prg` instanciar o form **sem
+tocar banco** (comentario no proprio validador: *"Flag para pular queries SQL
+durante validacao"*). O padrao CORRETO (majoritario, visto em `Formsigopcgv.prg`)
+guarda SO o trecho que depende de SQL, por dentro do `TRY`, e deixa
+`ConfigurarPageFrame()`/`THIS.Picture`/cabecalho rodando SEMPRE:
+
+```foxpro
+* CERTO (Formsigopcgv.prg) - guarda so o que depende de rede
+TRY
+    IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
+        THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+    ENDIF
+    THIS.this_oBusinessObject = CREATEOBJECT("sigopcgvBO")
+    IF loc_lContinuar AND (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
+        IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+            ... && so aqui, dentro do bloco guardado, a checagem de conexao
+        ENDIF
+    ENDIF
+```
+
+```foxpro
+* ERRADO (FormSigOpChc.prg:90-106, task697/Erro232) - sai da ROTINA INTEIRA
+PROTECTED PROCEDURE InicializarForm()
+    IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+        RETURN .T.                 && <- sai ANTES do TRY; NADA do que vem
+    ENDIF                          &&    depois roda em modo de validacao
+
+    TRY
+        THIS.this_oBusinessObject = CREATEOBJECT("SigOpChcBO")
+        ...
+        THIS.ConfigurarPageFrame()   && <- so roda fora de ValidandoUI
+```
+
+`ConfigurarPageFrame()` eh quem seta `THIS.Picture = gc_4c_CaminhoFramework +
+"imagens\new_background.jpg"`. Com o `RETURN .T.` antes do `TRY`, o
+`ValidarUIFidelity` instancia o form, le `.Picture` e encontra **a string vazia
+do default da classe**, nunca o valor que o metodo monta.
+
+**Isso nao so causa o erro original - torna o AUTO-FIX do pipeline incapaz de
+corrigir.** A Etapa 7.5 (auto-correcao de ate 5 diferencas) leu o relatorio,
+identificou corretamente que faltava `.Picture`, e **escreveu a correcao no
+lugar certo** (dentro de `ConfigurarPageFrame()`). A re-validacao rodou de
+novo - e a diferenca de `Picture` **continuou identica**, porque
+`ConfigurarPageFrame()` nunca executou na passada de validacao (so o
+`BorderStyle`, que estava declarado direto no `DEFINE CLASS` e por isso
+sobrevive ao `RETURN .T.` antecipado, saiu da lista de diferencas). A task
+falhou mesmo depois do "fix" ter sido aplicado corretamente, e qualquer
+tentativa futura de auto-fix vai repetir o mesmo ciclo inutil enquanto o
+`RETURN .T.` ficar ANTES da visual.
+
+**Regra**: o bypass de `gb_4c_ValidandoUI` (e de `gb_4c_ModoTeste`) so pode
+envolver os trechos que DEPENDEM de SQL/rede (`CREATEOBJECT` do BO quando o BO
+faz query no proprio `Init`, `CarregarLista`, `CarregarCursoresReferencia`,
+checagem de `gnConnHandle`) - NUNCA a rotina inteira. `ConfigurarPageFrame()`
+e qualquer atribuicao de propriedade visual (`.Picture`, `.BackColor`,
+cabecalho, grid) tem de rodar INCONDICIONALMENTE, mesmo em modo de validacao -
+eh exatamente o que o `ValidarUIFidelity` precisa ler. Ver tambem
+`feedback_gnconnhandle_gate_falha_instanciacao_em_modoteste` (memoria) - mesma
+familia de defeito (gate colocado alto demais), sintoma diferente:
+la o `CREATEOBJECT(formClass)` falha inteiro (`gb_4c_ModoTeste`/etapa
+`06b_testeAutomatico`); aqui o form instancia e ABRE, mas com a visual
+incompleta, e quem nao sabe disso gasta ciclos de auto-fix em propriedades que
+nunca vao ser aplicadas em validacao (`gb_4c_ValidandoUI`/etapa `07_validarUI`).
+
+Sem auto-fix neste texto - ver CorretorAutomatico **#221** (WARNING-only).
+Origem: Erro232 (2026-10-25, `task697`/`FormSigOpChc` - "Cadastro de Cheques
+Compensados").

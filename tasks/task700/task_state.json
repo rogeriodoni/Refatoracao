@@ -1,0 +1,268 @@
+﻿{
+    "taskId":  "task700",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-10-25T22:25:49",
+    "atualizadoEm":  "2026-10-26T01:36:34",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-10-25T22:25:57",
+                                            "fim":  "2026-10-25T22:25:59",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task700\\SIGOPCHR.sct",
+                                            "baseName":  "SIGOPCHR",
+                                            "scxFile":  "C:\\4c\\tasks\\task700\\SIGOPCHR.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-10-25T22:26:03",
+                                          "fim":  "2026-10-25T22:26:26",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGOPCHR",
+                                          "txtFile":  "C:\\4c\\tasks\\task700\\SIGOPCHR_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-25T22:26:29",
+                                              "fim":  "2026-10-25T22:26:51",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task700\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-25T22:27:47",
+                                              "fim":  "2026-10-25T22:27:53",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task700\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task700\\meta_prompt.md",
+                                              "boClass":  "SIGOPCHRBO",
+                                              "formClass":  "FormSIGOPCHR",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task700\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-25T22:27:56",
+                                              "fim":  "2026-10-25T22:28:21",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task700\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-10-25T22:28:23",
+                                               "fim":  "2026-10-25T22:28:47",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task700\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSIGOPCHR_esqueleto.prg",
+                                                                "SIGOPCHRBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-25T22:28:52",
+                                       "fim":  "2026-10-25T23:43:19",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCHRBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  19.07,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSIGOPCHR.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  704
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-10-25T23:43:21",
+                                                  "fim":  "2026-10-25T23:45:09",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCHRBO.prg",
+                                                  "propriedadesInexistentes":  0,
+                                                  "buscaAuxiliarSemHandle":  0,
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSIGOPCHR.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-10-25T23:45:19",
+                                                 "fim":  "2026-10-25T23:45:24",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-10-25T23:59:47",
+                                       "fim":  "2026-10-26T01:32:52",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "autoSkipped":  true,
+                                       "erro":  "Teste de formulario falhou com exit code 1.",
+                                       "tentativasUsadas":  10,
+                                       "timedOut":  false
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-10-26T01:32:53",
+                                               "fim":  "2026-10-26T01:36:18",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task700\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-10-26T01:36:24",
+                                        "fim":  "2026-10-26T01:36:32",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSIGOPCHR_20261026013627.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  113,
+                                        "avisos":  113
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-10-26T01:36:33",
+                                              "fim":  "2026-10-26T01:36:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task700_SIGOPCHR.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-10-25T22:26:55",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-10-25T22:27:20",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task700\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-10-25T22:27:23",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-25T22:27:45"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-10-25T23:45:12",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-10-25T23:45:17",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSIGOPCHR_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSIGOPCHR.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task700\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-10-25T23:45:27",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-10-25T23:50:02",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-10-25T23:50:04",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-10-25T23:57:57",
+                                          "passes":  2,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CEMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: UMOVS, GRCLIS, ICLIS, TIPOS, VENCS; [LAYOUT-POSITION] Controle \u0027GetTipo\u0027 (parent: SIGOPCHR): Top original=204 vs migrado \u0027obj_4c_GetTipo\u0027 Top=5 (diff=199px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027GetTipo\u0027 (parent: SIGOPCHR): Left original=238 vs migrado \u0027obj_4c_GetTipo\u0027 Left=5 (diff=233px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_estoque\u0027 (parent: SIGOPCHR): Top original=183 vs migrado \u0027lbl_4c_Lbl_estoque\u0027 Top=98 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ImpNConta\u0027 (parent: SIGOPCHR): Top original=209 vs migrado \u0027chk_4c_ImpNConta\u0027 Top=124 (diff=85px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  5
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-10-25T23:58:00",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-10-25T23:59:44",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGOPCHRBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSIGOPCHR.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-10-26T01:36:20",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-10-26T01:36:23",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  15,
+                                             "warnings":  15,
+                                             "reportFile":  "C:\\4c\\tasks\\task700\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

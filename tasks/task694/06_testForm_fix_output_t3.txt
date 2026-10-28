@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei `FormSigOpCgr.prg` e `SigOpCgrBO.prg` linha a linha e **n├úo encontrei nenhum bug de c├│digo** relacionado ao erro reportado.
+
+O log mostra que a falha ocorre na `[ETAPA 1B] Conectando ao banco de dados`, com erro SQL 1526 (`DBNETLIB SQL Server inexistente ou acesso negado`) ÔÇö isso acontece no **preflight de conex├úo do pr├│prio harness** (`SQLSTRINGCONNECT`), **antes** de qualquer `CREATEOBJECT` do form ou do BO ser executado. Ou seja: nenhum c├│digo do `FormSigOpCgr`/`SigOpCgrBO` chegou a rodar; o teste nem alcan├ºou `ValidarParametros()`/`InicializarForm()`.
+
+Isso ├® um problema documentado e recorrente: a m├íquina que roda o pipeline n├úo tem rota de rede para a sub-rede `192.168.200.0/24` (onde fica o SQL Server `DB_MBAHIA`, host `192.168.200.10`). J├í reincidiu em **100+ tasks** desde 2026-08-02, inclusive em tasks que consumiram quase todas as 10 tentativas de `runtime_fix` sem que nenhuma edi├º├úo de `.prg` tivesse efeito ÔÇö porque o c├│digo nunca ├® alcan├ºado.
+
+Conferi especificamente neste form:
+- Guard de conex├úo (`ValidarParametros`) fica fora do `TRY`, com bypass correto para `gb_4c_ModoTeste`/`gb_4c_ValidandoUI`.
+- Cursor placeholder `cursor_4c_Resultado` criado antes do `Grid.ControlSource` (regra #41).
+- Ordem `ColumnCount -> RecordSource -> ControlSource -> Width -> Header1.Caption` em `VincularGradeResultado` (regra #41/#48).
+- `FormParaBO`/`BOParaForm`/`LimparCampos` chamados s├│ via `THIS.` internamente (regra #3/#51).
+- Todos os m├®todos do BO chamados pelo form (`Processar`, `ValidarOperacao`, `CarregarOperacoes`, `CarregarDoCursor`, `ObterChavePrimaria`) est├úo declarados com visibilidade correta.
+
+Nada disso explica ou se relaciona ao erro 1526. **Deixei os arquivos intactos** (n├úo usei o Write tool) para n├úo arriscar uma edi├º├úo especulativa/regress├úo em c├│digo que j├í foi revisado 3 vezes sem achado real ÔÇö editar aqui violaria a regra do pr├│prio prompt ("corrigir APENAS o erro indicado").
+
+Registrei essa reincid├¬ncia na mem├│ria do projeto (`project_sqlserver_200_10_inalcancavel_maquina_pipeline.md`), que j├í documentava o mesmo padr├úo em dezenas de tasks anteriores. A task694 j├í consumiu 3 das 10 tentativas presa nesse bloqueio de rede ÔÇö recomendo que algu├®m com acesso ├á infraestrutura verifique a rota/VPN para `192.168.200.10:1433` a partir da m├íquina do pipeline, j├í que isso n├úo ├® corrig├¡vel via c├│digo.

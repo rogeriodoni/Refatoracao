@@ -1,0 +1,37 @@
+=== PROBE Fase 6 - FormSigOpChc (task697) ===
+[OK] 1. INSTANCIA: BaseClass=Form Caption=[Histórico da Carteira] WxH=776x300
+
+--- 2. txt_4c_Taxa (unico campo de entrada) ---
+  Value         = [0] tipo=N (legado lnTaxa=0.00 -> N)
+  Format        = [R] (dump: R)
+  InputMask     = [999.99] (dump: 999.99)
+  SpecialEffect = 1 (dump: 1)
+  TabIndex      = 2 (dump: 2)
+  Label1.Caption= [Taxa a.m. (%) :]
+
+--- 3. BINDEVENT (AEVENTS no objeto de ORIGEM) ---
+  txt_4c_Taxa     = 1 [LOSTFOCUS -> VALIDARTAXA]
+  cmd_4c_Fwbtng1  = 1 [CLICK -> FWBTNG1CLICK]
+  cmd_4c_BtnOK    = 1 [CLICK -> BTNOKCLICK]
+
+--- 4. ValidarTaxa() (equivale ao ControlSource=lnTaxa) ---
+  4a tela=2.50 -> this_nTaxa=2.50  BO.this_nTaxa=2.50 (esperado 2.50/2.50)
+  4b LostFocus nativo tela=12.75 -> this_nTaxa=12.75  BO=12.75 (esperado 12.75/12.75)
+  4c tela=vazio -> this_nTaxa=0  Value tipo=N (esperado 0 / N)
+
+--- 5. grd_4c_Dados ---
+  ColumnCount=7  RecordSource=[cursor_4c_Historico]  ReadOnly=.T.
+   Col1 W=80   [Data          ] cursor_4c_Historico.Dtsis
+   Col2 W=80   [Grupo Dest    ] cursor_4c_Historico.Grucarts
+   Col3 W=80   [Conta Dest    ] cursor_4c_Historico.Concarts
+   Col4 W=80   [Grupo Orig    ] cursor_4c_Historico.Grupos
+   Col5 W=80   [Conta Orig    ] cursor_4c_Historico.Contas
+   Col6 W=66   [Lote          ] cursor_4c_Historico.Numlotes
+   Col7 W=110  [Operacao      ] cursor_4c_Historico.Codigos
+
+--- 6. BO.CarregarDoCursor (cursor real da grade) ---
+  campos do cursor: DTSIS GRUCARTS CONCARTS GRUPOS CONTAS NUMLOTES CODIGOS 
+  retorno=.T.  BO.this_cOperacaoCodigo=[DEV-TESTE]  BO.this_cNums=[00001234] (Nums preservado do Init: 00001234)
+
+--- DIALOGOS CAPTURADOS ---
+

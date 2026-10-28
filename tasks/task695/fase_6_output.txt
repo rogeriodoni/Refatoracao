@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 6/8
+
+Completei duas das cinco abas que faltavam na pagina Resultado (a "parte 2" dos campos), com dados reais vindos do banco ÔÇö nao UI vazia:
+
+**Aba 9 ÔÇö H.Cheques** (`ConfigurarAbaHCheques` + `CarregarHCheques`/`CarregarMovimentoCheque` no BO):
+- Grade geral de cheques da conta (`dbCheqHist`), com o vencimento exibido conforme a ultima movimentacao (CR/DB) e cor azul quando ha historico em SigCheh ÔÇö transcrito de `mativahcheque()`.
+- Grade de movimentacao e grade de prorrogacoes do cheque selecionado, recarregadas a cada troca de linha (`GradeHistChequeAfterRowColChange`, transcrito do `AfterRowColChange` legado), mais o follow-up.
+
+**Aba 10 ÔÇö Credito** (`ConfigurarAbaCredito` + `CarregarCredito` no BO):
+- Grade de lancamentos de `SigFiCp` pelo CPF/CGC pesquisado (normalizado para a mascara que a coluna grava), paineis de banco/valor/documento ligados por `ControlSource` direto, e o rotulo colorido de situacao do cliente (`SigCdCli.Situas` + `SigCdCst.Descrs`).
+
+Validei contra `docs/schema.sql` (683 tabelas, zero coluna invalida) e os checadores automaticos do projeto (propriedades inexistentes, TABLEREVERT sem guard, lookup em KeyPress, FormBuscaAuxiliar) ÔÇö todos passaram limpos. Apaguei os `.fxp` desatualizados.
+
+**Ficou de fora desta fase, documentado no cabecalho do arquivo (nao como stub):** as abas 5 (Vendas), 7 (Operacoes Pendentes) e 8 (Producao) sao alimentadas pelo `PProduto()` legado ÔÇö um unico metodo de ~700 linhas com o padrao de staging `SigTempC`/`CidQuerys` do framework Fortyus, que ja tem equivalente no projeto (`SigPrGl2BO`/`SigTempD`) mas exige uma fase dedicada para portar com fidelidade, por formar uma unidade com as outras duas abas (compartilham os mesmos cursores).

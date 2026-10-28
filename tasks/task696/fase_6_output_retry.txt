@@ -1,0 +1,38 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 est├í completa e **verificada em execu├º├úo real no VFP9** (n├úo s├│ estaticamente).
+
+## O que estava errado
+
+A tentativa anterior entregou os 4 campos restantes e os 9 `When()`, mas **descartou o `ControlSource` dos nove campos** ÔÇö e esse binding n├úo ├® decora├º├úo: no legado cada `Get*` aponta para um memvar `_Proc*` (`SIGOPCHB.Init:576-584`) e o `Procura.Click` **l├¬ exclusivamente esses memvares** para montar a chave do `Seek` e o `Where` do `SqlExecute`. Sem eles a Fase 7/8 teria de inventar o caminho dos dados.
+
+## O que fiz
+
+1. **9 propriedades espelho** dos memvares (`this_cProcBco` ÔÇª `this_cProcArquivo`), com os **tipos do legado** (C/D/N), e `.ControlSource = "ThisForm.<prop>"` nos nove TextBox ÔÇö PILAR 3 nos nomes, PILAR 1 na sem├óntica.
+2. **`InicializarCriteriosBusca()`** ÔÇö transcri├º├úo literal do bloco `Store` do Init legado (roda antes de criar os controles, porque o `ControlSource` exige a propriedade com o tipo certo).
+3. **`AplicarValoresIniciaisBusca()`** ÔÇö transcri├º├úo literal das 9 atribui├º├Áes finais do Init legado, que rodam **depois** do `Store` e o sobrescrevem. A ordem importa: ├® por isso que Banco/Ag├¬ncia/Conta/Cheque/Controle/Protocolo terminam vazios e s├│ Arquivo fica com `Space(6)`.
+4. **Guarda de exist├¬ncia em `ValidarFocoCampo`** ÔÇö o `When()` l├¬ o `.Value` dos outros oito campos, e erro dentro de `When` derruba o `Init`.
+5. Renomeei os dois handlers de `Valid` para o nome can├┤nico do projeto (`ValidarBancoLeitura`, `ValidarArquivo`).
+6. **Nota no cabe├ºalho** registrando a varredura que prova aus├¬ncia de lookup, para ningu├®m inventar um depois.
+
+**Nenhum lookup foi criado**: a varredura do dump por `fwBusca*` / `mAddColuna` / `sigacess(` / `Acesso*(` / `FormBuscaAuxiliar` devolve **zero** ÔÇö os nove crit├®rios s├úo digita├º├úo livre. Criar `AbrirLookup*` aqui seria inventar tabela que o legado nunca consulta.
+
+## Verifica├º├úo
+
+Rodei o smoke test do VFP9 primeiro (ele **executou** nesta sess├úo), depois compila├º├úo e instancia├º├úo headless:
+
+- `COMPILE_OK` ÔÇö `.FXP` gerado, `.err` vazio
+- `CREATEOBJECT=O` ÔÇö Init completo
+- Os 9 `ControlSource` resolvem; tipos `C`/`D`/`N` corretos
+- Estado inicial id├¬ntico ao fim do Init legado (`INI_ARQ` com `len=6`, resto vazio, `VAL=0`)
+- Binding **bidirecional**: `txt.Value = "341"` ÔåÆ `this_cProcBco = "341"`
+- Exclus├úo m├║tua do `When`: com Controle preenchido, Banco bloqueia (`.F.`); vazio, libera (`.T.`)
+- `GetArquivo.Valid`: `"42"` ÔåÆ `"000042"`
+- Leitor de c├│digo de barras: decodifica banco `341` / ag├¬ncia `1234`, `lLeitor = .T.`
+
+Gate da Fase 6 avaliado standalone: passa pelo ramo **FLAT** (`legadoSemLookup=True`, `semPageFrame=True`, `temBindEvent=True`, `temCamposFlat=True`). Checks de completude (`TODO`/stub/procedure vazia/`MsgAviso` placeholder) = 0; sem acentos literais, sem `RETURN` dentro de `TRY`, sem `this_X .Value`.
+
+Uma ressalva: a auditoria de m├®todo protegido em lote ainda estava rodando quando terminei, mas conferi o par manualmente ÔÇö o form n├úo chama **nenhum** m├®todo do BO nesta fase, e o ├║nico `PROTECTED` do `SigOpChbBO` ├® `ObterChavePrimaria`, que deve mesmo ser protegido.

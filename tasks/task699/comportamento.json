@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fUniqueIds", "fGerUniqueKey", "fRecalculaS"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCHP",
+      "evento": "Init",
+      "linhas": 10,
+      "codigoOriginal": "Lparameters pOldForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = pOldForm\n=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdPac','CrSigCdPac')\nThisForm.SigKey = CrSigCdPac.SigKeys\n=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.Get_Venc",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Get_Dias.Value = This.Value - Ttod(crSigChe.Vencs)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value - Ttod",
+        "controlesReferenciados": "Get_Dias",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.Get_Dias",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Get_Venc.Value = Ttod(crSigChe.Vencs) + This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Ttod",
+        "controlesReferenciados": "Get_Venc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.Get_Juros",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "_PJuros = This.Value\n_Dias   = ThisForm.Get_Dias.Value\nThisForm.Get_ValJuros.Value = crSigChe.Valors * _PJuros / 30 * _Dias / 100\nReturn 1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Dias,Get_ValJuros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.Get_ValJuros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.Prorroga",
+      "evento": "Click",
+      "linhas": 180,
+      "codigoOriginal": "LOCAL _ORDEM\n\nDeclare LaCampo4(3,2)\n\nIf IsEmpty(ThisForm.Get_Venc.Value)\n\tWait Window \"Vencimento não pode ficar em branco!\" Nowait\n\tThisForm.Get_Venc.SetFocus\n\tReturn\nEndIf\n\nllVenc = fDtoSQL(ThisForm.Get_Venc.Value)\nlDtAlt = Datetime()\nlcUpDate = [Update SigChe Set Vencs = ?llVenc, DtAlts = ?lDtAlt Where Nums = ']+CrSigChe.Nums+[']\nlnErro   = ThisForm.ParentForm.Podatamgr.SqlExecute(lcUpDate,'')\nIf lnErro < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn\nEndif\n\nSE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,fUniqueIds,fGerUniqueKey,fRecalculaS",
+        "metodosFormChamados": "SqlExecute,Value, DtAlts With Datetime,Requery,Update",
+        "controlesReferenciados": "Get_Venc,Get_ValJuros,Get_Juros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHP.btnCancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCHP.Prorroga.Click",
+      "queryOriginal": "lcUpDate = [Update SigChe Set Vencs = ?llVenc, DtAlts = ?lDtAlt Where Nums = ']+CrSigChe.Nums+['] lnErro   = ThisForm.ParentForm.Podatamgr.SqlExecute(lcUpDate,'')",
+      "tabelas": "SigChe",
+      "colunas": "Vencs,DtAlts",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigChe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

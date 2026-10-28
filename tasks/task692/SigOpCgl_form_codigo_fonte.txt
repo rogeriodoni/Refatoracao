@@ -1,0 +1,518 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpCgl.SCX
+* Data/Hora: 24/10/2026 12:56:55
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCGL
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCGL
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCGL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCGL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnForm
+  Parent: SIGOPCGL
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grdHistorico
+  Parent: SIGOPCGL
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCGL.grdHistorico.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCGL.grdHistorico.Column6
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 131
+  Left = 31
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 240
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Histórico de Locais"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGOPCGL"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.cmdBtnForm
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 720
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 24
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.TabIndex = 3
+  Command1.ToolTipText = "Sair [ESC]"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico
+------------------------------------------------------------
+  ColumnCount = 6
+  DeleteMark = .F.
+  Height = 130
+  Left = 117
+  RecordMark = .F.
+  TabIndex = 18
+  Top = 98
+  Width = 565
+  Name = "grdHistorico"
+  Column1.Width = 68
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.Width = 60
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.Width = 55
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.Width = 55
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.Width = 220
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Hora"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Atual"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Novo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCGL.grdHistorico.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCGL
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pBar
+
+=fConfigGeral()
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private lnBar
+
+If (Type('pBar')<>'N') Or Empty(pBar)
+	ThisForm.Release
+EndIf
+
+lnBar = pBar
+
+ThisForm.poDataMgr = CreateObject('fSqlConector',ThisForm.Name)
+
+lcQuery   = [Select datas,horas,locatus,locnews,usuars,empdopnums ]+;
+			[From SigCdMlc ]+;
+			[Where barras = ?lnBar ]+;
+			[Order By datas,horas,locatus,locnews,usuars,empdopnums ]
+
+If ThisForm.poDataMgr.SqlExecute(lcQuery,'CsSigMvHst') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão - (CsSigMvHst)')
+	Return 0
+EndIf
+
+With ThisForm.GrdHistorico
+	.ColumnCount  = 6
+	.DeleteMark   = .F.
+	.RecordMark   = .F.
+	.RecordSource = 'CsSigMvHst'
+	.Column1.ControlSource  = 'CsSigMvHst.datas'
+	.Column2.ControlSource  = 'CsSigMvHst.horas'
+	.Column3.ControlSource  = 'CsSigMvHst.locatus'
+	.Column4.ControlSource  = 'CsSigMvHst.locnews'
+	.Column5.ControlSource  = 'CsSigMvHst.usuars'
+	.Column6.ControlSource  = 'CsSigMvHst.empdopnums'
+	For lnCol = 1 To .ColumnCount
+		lcCol = Alltrim(Str(lnCol))
+		.Column&lcCol..Movable   = .F.
+		.Column&lcCol..Resizable = .F.
+		.Column&lcCol..ReadOnly  = .T.
+	Next
+EndWith
+
+ThisForm.CmdBtnForm.BtnSair.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCGL.cmdBtnForm
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCGL
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

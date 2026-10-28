@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Este erro **n├úo ├® um bug no c├│digo** ÔÇö ├® o bloqueio de infraestrutura j├í documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): a m├íquina que executa a etapa `06_testForm` n├úo tem rota de rede para `192.168.200.0/24`, onde vive o SQL Server `DB_MBAHIA`. O log confirma a assinatura exata:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Codigo: 1526 - DBNETLIB SQL Server inexistente ou acesso negado
+Status: ERRO AO CRIAR OBJETO
+```
+
+Isso acontece no **preflight** (`SQLSTRINGCONNECT`) antes de qualquer `CREATEOBJECT` de `FormSigOpChb`/`SigOpChbBO` ÔÇö o c├│digo do form/BO nunca chega a ser executado.
+
+Esta ├® a **tentativa 5/10** da task696 presa nesse mesmo bloqueio. Nas tentativas 1-4 j├í revisei `FormSigOpChb.prg` e `SigOpChbBO.prg` linha a linha (guards de TRY/CATCH, PROTECTED/PUBLIC corretos pela regra #51/#3, TABLEREVERT guardado pelo Buffering - regra #52, ControlSource criado ap├│s as properties - regra #41, `.Self` ausente, etc.) sem nenhum achado relacionado a conectividade. Editar especulativamente de novo s├│ arriscaria introduzir regress├úo num dialogo j├í correto.
+
+**Deixei os arquivos intactos** e registrei esta reincid├¬ncia na mem├│ria do projeto (j├í s├úo ~20+ tasks com o mesmo bloqueio desde 2026-08-02). A a├º├úo real necess├íria ├® restaurar a rota de rede da m├íquina do pipeline para `192.168.200.10:1433` ÔÇö nenhuma edi├º├úo de `.prg` resolve isso.

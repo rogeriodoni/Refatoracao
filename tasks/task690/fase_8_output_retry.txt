@@ -1,0 +1,49 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da e validada.
+
+## O que estava faltando
+
+A tentativa anterior documentou como pend├¬ncia expl├¡cita exatamente o que era o grosso da tela: o `Processa()` legado (871 linhas de agrega├º├úo) e as 5 sub-p├íginas do PageFrame `Result`. O gate reprovava por `CarregarLista` e `BtnCancelarClick` ausentes ÔÇö sintomas de que a P├ígina Resultado existia apenas com o bloco cadastral do fornecedor (**zero grades no form inteiro**).
+
+## O que foi entregue
+
+**`sigopcgcBO.prg`** (8 KB ÔåÆ 2.420 linhas) ÔÇö camada de dados do `Processa()`:
+- `InicializarCursoresDados` (os 8 cursores do `Load` legado, com os ├¡ndices dos SEEK e dos ordenadores) e `InicializarCursoresApoio` (os 9 cursores de par├ómetros do `Init`, cada um via `SELECT ... READWRITE` antes do `INDEX ON`, porque cursor pass-through nasce somente-leitura)
+- `Processar()` + 11 helpers: Saldos, Hist├│rico, Produtos, Movimenta├º├úo (o la├ºo `For _FazEst = 1 To 2` com os aninhados de `SigMvItn`/`SigCdPro`), Verifica├º├úo de Movimenta├º├úo, Estoque Atual, Estoque do Fornecedor, Consertos e Pend├¬ncias (parcelas origem/destino + conta corrente)
+- `CarregarCambio` (o `fCarregarCambio` nunca portado), `PrepararDadosImpressao`/`MontarTotaisImpressao`/`ExecutarRelatorio` (procimp + `Report Form`), fotos de fornecedor e produto
+
+**`Formsigopcgc.prg`** (78 KB ÔåÆ 3.812 linhas) ÔÇö `pgf_4c_Result` com as 5 abas na ordem de `PageOrder`, 7 grades (duas delas filhas por rela├º├úo), `ImprimeOpcoes`, `CarregarLista`/`AtualizarGrades`, `BtnCancelarClick`, os 8 ordenadores de header, `OptSituasChange`, o modo Autom├ítico do `Init(_Grupo, _Conta)` e `AplicarPermissoes`.
+
+**Tamb├®m**: `SigOpCgc.frx`/`.frt` copiados do acervo (o FRX referencia `TmpFinal.tCusto/tEstoque/tVenda` ÔÇö nomes que s├úo contrato, preservados) e item no `popMovimentos` + `AbrirFormsigopcgc`.
+
+## Defeitos pr├®-existentes que a instancia├º├úo revelou
+
+A tela **nunca teria aberto** como estava:
+- `CommandGroup.BorderWidth` em 4 sites (a classe s├│ tem `BorderStyle`) ÔÇö `Property BORDERWIDTH is not found` no `Init`
+- gate `gnConnHandle > 0` dentro do `InicializarForm` ÔÇö extra├¡do para `ValidarParametros()` com bypass de modo teste
+- `Picture`/`Caption`/fonte inventados nos 3 bot├Áes da Page1 (eram "Cadastro/Movimento/Sair" em Comic Sans; o legado ├® "Dados Cadastrais/Movimenta├º├úo/Encerrar" em Tahoma, com `geral_usuarios_60`/`geral_arquivo_60`/`cadastro_sair_60`)
+
+## Valida├º├Áes
+
+| | |
+|---|---|
+| Compila├º├úo BO + Form | limpa (`.err` ausente, `.fxp` gerado) |
+| Instancia├º├úo real (`ProbeCgcFormF8.prg`) | form abre; 5 abas, 7 grades ligadas, 8 cursores com tags corretos; 20 handlers exercitados; sem exce├º├úo |
+| Gate Fase 8 | **VEREDITO=PASSA** |
+| `ValidadorSQLSchema` | 22 statements, 0 coluna inv├ílida |
+| Completude 05d (regexes reais) | 0 problemas |
+| 8 auditorias (`VerificarPropriedadesInexistentes`, `MetodoProtegido`, `FuncoesNaoDefinidas`, `TableRevertSemBuffering`, `LookupEmKeyPress`, `FormBuscaAuxiliar`, `CamposCursorBO`, `ColunaEmpresaSQL`) | 0 achados |
+
+Nota: `VerificarPropriedadesInexistentes` falhou silenciosamente na primeira execu├º├úo (`$PSScriptRoot` vazio via `-File`) ÔÇö rodei de novo com os caminhos expl├¡citos para n├úo contar um falso negativo.
+
+## Dois pontos para sua decis├úo
+
+1. **`llSaldo` com sinal invertido.** O legado faz `llSaldo = !fChecaAcesso('SIGOPCGC','SALDO') Or llSupervis`. Transcrevi o `!` literalmente (regra #17). Como `fChecaAcesso` em `utils/functions.prg` ├® stub que devolve sempre `.T.`, o efeito pr├ítico hoje ├®: **coluna Saldo vis├¡vel s├│ para o usu├írio `4CONTROL`** (7 colunas no hist├│rico, r├│tulo "Moedas" em vez de "Saldo por Moeda"). Se a inten├º├úo do neg├│cio ├® o contr├írio, ├® uma linha em `ConfigurarGradesSaldo` ÔÇö mas inverter sem confirmar exp├Áe saldo financeiro a quem o legado esconde, ent├úo deixei como est├í e documentei no c├│digo.
+
+2. **Chave de 20 chars contra `gruconmoes char(23)`** em `CarregarPendenciasContaCorrente`: o legado monta `PADR(grupo,10)+PADR(conta,10)` e compara com uma coluna que ├® grupo+conta+**moeda**. Pelo padding ANSI, casa s├│ linhas com o segmento de moeda em branco. Transcrito literal e sinalizado em coment├írio ÔÇö ├® abrang├¬ncia de filtro (regra de neg├│cio), n├úo detalhe de migra├º├úo.
+
+N├úo comitei nada: o pipeline faz isso downstream.

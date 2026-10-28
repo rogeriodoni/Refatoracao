@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `TcpTestSucceeded=False` / `PingSucceeded=False` from this pipeline machine (SourceAddress 192.168.199.113) ÔÇö no route to the 192.168.200.0/24 subnet where the SQL Server lives.
+
+**Conclusion: this is not a code defect.** I reviewed `FormSigOpChp.prg` and `SigOpChpBO.prg` line by line (second pass ÔÇö task699 attempt 1 already did a first pass per project memory) and found no issue:
+
+- `RETURN` is always outside `TRY/CATCH`, controlled via `loc_lSucesso`/`loc_lContinuar` (regra #1)
+- All BINDEVENT targets (`ValidarVenc`/`ValidarDias`/`ValidarJuros`/`BtnProrrogarClick`/`BtnCancelarClick`) are PUBLIC (regra #3)
+- `BOParaForm`/`FormParaBO` stay PROTECTED, called only via `THIS.` internally (regra #51)
+- `Controls(N)` is always numeric (regra #34), no `.Self` anywhere (regra #38)
+- The juros formula in `ValidarJuros` is transcribed literally (regra #17)
+
+The log shows the TIMEOUT happening at `[ETAPA 1B] Conectando ao banco de dados...` ÔÇö **before** the test wrapper ever reaches `CREATEOBJECT` of the form or BO. This matches a well-documented, recurring infrastructure issue tracked in project memory (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`): the pipeline machine has had no network route to `192.168.200.10` since at least 2026-08-02, confirmed across 100+ tasks. This particular attempt is a known variant ÔÇö instead of the usual fast "erro 1526" fail, the connection silently hung until the 300s timeout (seen before in task679/SIGPRSTF), consistent with the firewall/route dropping packets rather than rejecting the port.
+
+I left both files unchanged ÔÇö editing them speculatively would risk regressing already-correct code without any chance of fixing a problem that occurs before the form is even loaded. I've logged this reincidence (task699, attempt 2/10) in the project memory for continuity.
+
+This needs to be escalated as an infrastructure/network issue (restore route from the pipeline VM to `192.168.200.0/24`, port 1433) ÔÇö no further `.prg` edits will resolve it.

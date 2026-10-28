@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado do PASS SQL ÔÇö nenhuma corre├º├úo aplicada
+
+Verifiquei as 6 condi├º├Áes `[SQL-FILTRO-INVENTADO]` contra o dump legado completo (`tasks\task686\SIGOPCFE_form_codigo_fonte.txt`), n├úo s├│ o trecho truncado do prompt, e **todas s├úo falso positivo** ÔÇö remover qualquer uma quebraria a apura├º├úo real de saldo (regra #17 do CLAUDE.md: formula/guards s├úo regra de neg├│cio).
+
+| Coluna acusada | Onde est├í no migrado | Onde est├í no legado |
+|---|---|---|
+| `GRUPODS` | `SIGOPCFEBO.prg:447` (`GrupoDs = ...`) | dump:1173 `((GrupoDs = ']+_Grupo+[' And ContaDs = ...` |
+| `OPERS` | `SIGOPCFEBO.prg:774,828` | dump:909,1467,1514+ (SELECT + `IF crSigCdOpe.Opers = 3`) |
+| `ESTORIGS` | `SIGOPCFEBO.prg:499,574,591...` | dump:909,1216,1279+ (`IF LocalOpp.EstOrigs = ...`) |
+| `ESTDESTS` | `SIGOPCFEBO.prg:503,626,643...` | dump:913,1220,1332+ (`IF LocalOpp.EstDests = ...`) |
+| `CUNIS` | `SIGOPCFEBO.prg:980` (`SELECT Cunis FROM SigCdUni WHERE Cunis = ...`) | dump:1661 `CursorQuery('SigCdUni','LocalUni','cunis',TmpPro.Cunis)` |
+| `CEMPS` | `SIGOPCFEBO.prg:1462` (`SELECT Razas FROM SigCdEmp WHERE Cemps = ...`) | dump:816 `CursorQuery('SigCdEmp','crSigCdEmp','Cemps',_Empr,'Razas')` |
+
+Causas-raiz do falso positivo no extrator do pass (tr├¬s distintas, novas):
+1. Par├¬nteses duplos aninhados fazem o extrator perder a coluna do primeiro ramo (`((GrupoDs=... And ContaDs=...) Or (GrupoOs=... And ContaOs=...))` ÔÇö s├│ pegou `ContaDs`/`ContaOs`/`GrupoOs`).
+2. `IF cursor.Coluna = valor` sobre um cursor j├í carregado **sem WHERE** (ex. `SigCdOpe`/`SigCdOpd`) ├® confundido com filtro SQL.
+3. `CursorQuery(tabela, cursor, 'coluna', valor)` do legado (helper Fortyus) n├úo ├® reconhecido como equivalente a `WHERE coluna = valor`.
+
+Nenhum arquivo foi alterado. Salvei essa li├º├úo em mem├│ria (`feedback_sql_filtro_inventado_if_cursor_e_cursorquery_helper.md`) para evitar que o mesmo falso positivo gere uma corre├º├úo destrutiva numa pr├│xima passada ÔÇö e compactei o ├¡ndice de mem├│ria, que estava perto do limite de leitura.

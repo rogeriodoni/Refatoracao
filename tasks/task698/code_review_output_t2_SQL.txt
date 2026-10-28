@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investigated all 7 flagged conditions against the actual file content ÔÇö all are false positives.
+
+**`ICL` and `RCL`**: grepped the whole file for these as standalone tokens ÔÇö zero matches. These columns don't exist anywhere in `FormSigOpChi.prg`. The finding is fabricated by the detector (likely noise from fuzzy-matching `Iclis`/`Rclis` substrings elsewhere), not an actual condition in the code.
+
+**`EMPS`, `DOPES`, `NUMES`, `EMPDOPNUMS`, `OPERACAOS`**: these are real, but they belong to a completely different part of the code than the main `SigChe` filter the reviewer's reference list was drawn from. They're the `SELECT COUNT(*)` translations of the legacy's `ChkRegister()` calls:
+
+- `SigCdPgr WHERE Emps = ... AND Dopes = ... AND Numes = ...` (lines 3032-3034, 3543-3544) ÔÇö replaces `ChkRegister('SigCdPgr', ...)`
+- `SigMvCab WHERE EmpDopNums = ...` (lines 3042, 3052, 3557, 3565) ÔÇö replaces `ChkRegister('SigMvCab', ...)`
+- `SigCdOpt WHERE Operacaos = ...` (line 3361) ÔÇö replaces the legacy's lookup on `crSigCdOpt`
+
+The code already documents this explicitly: *"ChkRegister nao existe na nova arquitetura (regra do projeto) - substituido por SELECT COUNT(*)"* (comments at lines 2980-2983, 3513-3514). Since `ChkRegister()` is a function call in the legacy source rather than literal SQL text, the automated WHERE-column extractor never saw these columns in the "original" ÔÇö hence the false "invented" flag.
+
+These conditions drive real functionality (`Documento.Enabled`, `Carteira.Enabled`, prorroga├º├úo block) ÔÇö removing them would delete working features and violate both "NAO remover funcionalidades" and the project's "FUNCIONALIDADE COMPLETA" rule.
+
+**No changes made.** All 7 reported SQL-FILTRO-INVENTADO issues are false positives; the file is left as-is.

@@ -1,0 +1,70 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCGL",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "LParameters pBar\n\n=fConfigGeral()\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate lnBar\n\nIf (Type('pBar')<>'N') Or Empty(pBar)\n\tThisForm.Release\nEndIf\n\nlnBar = pBar\n\nThisForm.poDataMgr = CreateObject('fSqlConector',ThisForm.Name)\n\nlcQuery   = [Select datas,horas,locatus,locnews,usuars,empdopnums ]+;\n\t\t\t[From SigCdMlc ]+;\n\t\t\t[Where barras = ?lnBar ]+;\n\t\t\t[Order By datas,horas,locatus,locnews,usuars,empdopnums ]\n\nIf ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGL",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGL.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

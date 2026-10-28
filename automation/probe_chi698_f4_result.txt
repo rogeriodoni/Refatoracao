@@ -1,0 +1,35 @@
+INICIO
+deps OK
+CREATEOBJECT=O
+--- GRADES ---
+grd_4c_Cheque    CC=12 T=153 L=8 W=981 H=228 RecMark=.F. Vis=.T.
+grd_4c_Movimenta CC=9 T=388 L=8 W=858 H=147 RecMark=.T. Vis=.T.
+grd_4c_Prorrog   CC=1 T=388 L=875 W=114 H=146 Vis=.T.
+--- BOTOES ---
+cmg_4c_Botoes BC=8 T=29 L=30 W=610 H=85
+  Btn1 L=230 T=5 [Relatório] PicOK=.T. En=.T. Vis=.T.
+  Btn2 L=155 T=5 [Busca] PicOK=.T. En=.T. Vis=.T.
+  Btn3 L=305 T=5 [Prorrogação] PicOK=.T. En=.T. Vis=.T.
+  Btn4 L=380 T=5 [Followup Clientes] PicOK=.T. En=.T. Vis=.T.
+  Btn5 L=530 T=5 [Carteira] PicOK=.T. En=.T. Vis=.T.
+  Btn6 L=455 T=5 [Protocolo] PicOK=.T. En=.T. Vis=.T.
+  Btn7 L=80 T=5 [Movimento] PicOK=.T. En=.T. Vis=.T.
+  Btn8 L=5 T=5 [Followup Cheques] PicOK=.T. En=.T. Vis=.T.
+cmg_4c_Saida BC=1 L=917 W=90 Btn1=[Encerrar] PicOK=.T.
+--- ORDEM AddObject Page2 ---
+  1: CNT_4C_CABECALHO
+  2: GRD_4C_CHEQUE
+  3: GRD_4C_MOVIMENTA
+  4: GRD_4C_PRORROG
+  5: CMG_4C_BOTOES
+  6: CMG_4C_SAIDA
+--- ESCOPO (.T. = PROTECTED = PROBLEMA) ---
+AlternarPagina=.F. CarregarDados=.F. AjustarBotoesHistorico=.F. RepintarGradesHistorico=.F. CmgSaidaClick=.F.
+--- ALTERNARPAGINA ---
+inicial  Active=2 P1En=.F. P2En=.T.
+apos (1) Active=1 P1En=.T. P2En=.F.
+apos (2) Active=2 P1En=.F. P2En=.T. Btn2En=.T.
+volta(1) Active=1 P1En=.T. P2En=.F.
+CarregarDados(modoteste)=.F.
+RepintarGradesHistorico OK
+=== FIM OK ===

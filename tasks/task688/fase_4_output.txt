@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files end cleanly with a single `ENDDEFINE`. Phase 4 is complete.
+
+## Summary
+
+Added to `FormSigOpCfp.prg`:
+- **`ConfigurarGrade()`** ÔÇö builds `grd_4c_Dados` (legado `GradeSubN`) with the 4 columns (CFOP/Obs/De/At├®), transcribing widths, fonts, header alignment/color and the (unusual but faithful) `Column4.Text1` override straight from the SCX dump. `RecordMark=.F.` added per the OPERACIONAL-grid rule; binding is deferred to `CarregarGrade()`.
+- **`ConfigurarBotoes()`** ÔÇö builds `cmd_4c_CmdInserir`/`cmd_4c_CmdExcluir`/`cmd_4c_CmdSair`, with Inserir/Excluir `Visible`/`Enabled` driven by `this_cEscolha` (mirrors the legado's `InList(pcEscolha,'INSERIR','ALTERAR')` guard) and `cmd_4c_CmdSair` carrying `Cancel = .T.`. Standalone buttons get `Themes = .T.` per the established sibling convention (`FormFpN`).
+- **`CarregarGrade()`** ÔÇö calls the BO to (re)load data, then binds `RecordSource`/`ControlSource`/`Header1.Caption` *after* the BO recreates its cursor (avoids losing the binding to a stale cursor).
+- Wired all three into `InicializarForm()`, with `CarregarGrade()` gated by the `gb_4c_ValidandoUI` flag.
+
+Added to `SigOpCfpBO.prg`:
+- `this_cCursorGrade` property (cursor name owned by the BO, like `FpNBO.this_cCursorOpe`).
+- `InicializarCursorGrade()` ÔÇö (re)creates the empty work cursor matching `SigCdOop`'s shape.
+- `CarregarCfopsPermitidos()` ÔÇö SQLEXECs into a temp cursor, then appends into the work cursor (never binding SQLEXEC directly to the grid's cursor), mirroring the legado's `Select * From SigCdOop where Dopes=...`.
+
+Column `Valid`/`When` lookups (phase 5/6) and button `Click` handlers (phase 7/8) are intentionally left for later phases, consistent with the file's own phase plan documented in its header comment. Both files verified structurally balanced (PROCEDURE/ENDPROC, WITH/ENDWITH, TRY/ENDTRY all match).

@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 5 executed. `FormSigOpCgl.prg` modified (440 ÔåÆ 586 lines), compiles clean, and instantiation verified in VFP9.
+
+## What Phase 5 actually was here
+
+The brief asked for "the first 50% of the Page2 fields." **This form has no data fields.** The legacy dump's object tree is 20 entries, all of them header (`cntSombra` + 2 labels), button (`cmdBtnForm` + `btnSair`), and grid (`grdHistorico` + the 6 `Header1`/`Text1` column pairs) ÔÇö zero TextBox outside the grid, zero PageFrame, zero Page2. Half of zero is zero, and inventing fields would violate PILAR 1.
+
+So I did the work the lessons prescribe for a FLAT OPERACIONAL form: **auditing the properties Phase 4 dropped when it created every control at once.** All transcribed from the dump:
+
+| Target | Added |
+|---|---|
+| `grd_4c_Dados` | 8 `fwgrade` class properties |
+| 6 ├ù `Column.Text1` | `BorderStyle`/`Margin`/`ReadOnly`/`ForeColor`/`BackColor` |
+| `cmg_4c_Botoes` | `AutoSize` |
+| both header labels | `Rotation` |
+| 3 controls | `TabIndex`, in a real `ConfigurarPaginaDados()` wired into `ConfigurarPageFrame()` after all `AddObject` ÔÇö not an orphan stub |
+
+## Two things I measured instead of assuming
+
+**`fwgrade` is Tahoma 8 with a *dark* HighlightBackColor.** I read the class out of `framework.vcx` rather than trusting `docs/framework_frmcadastro_layout.md`, which says Verdana + white highlight. Those doc values are the `Grade` *instance* override inside `frmcadastro` (a CRUD form), not the class. Copying the doc would have been wrong here.
+
+**`TabIndex` is a clamped 1..N ordinal, not a free integer.** My first pass transcribed the dump's 3/18/24 literally; the probe read back 1/2/3. Measured on a synthetic 3-child form:
+
+- no assignment at all ÔåÆ 1/2/3 (`AddObject` already numbers by creation order)
+- ascending 3ÔåÆ18ÔåÆ24 ÔåÆ 1/2/3 ÔÇö identical, a no-op
+- **descending 24ÔåÆ18ÔåÆ3 ÔåÆ grid and button swap** (grd=3, cmg=2)
+
+The dump's 18/24 are stale Form Designer ordinals; the legacy clamps them the same way, so the relative order (header ÔåÆ grid ÔåÆ button) matches. I rewrote the code to assign the ordinals VFP actually holds, with the dump values in the comments ÔÇö otherwise the file asserts a `TabIndex = 18` that never exists, and the next dump-vs-migrated audit burns time on a false defect.
+
+I appended the descending-order counter-example to the existing `feedback_tabindex_do_scx_nao_transcrito` memory rather than creating a duplicate ÔÇö it already documented the clamping, but the ascending requirement was asserted without a measured counter-example.
+
+One judgment call worth flagging: the dump declares `AutoSize = .T.` on the CommandGroup and I wrote `.AutoSize = .F.` with the explicit 85├ù85. The arithmetic is identical (5 + 75 + 5 = 85 on both axes), and regra #23 blesses fixing the designer-computed geometry to avoid `AutoSize` discarding `Width`/`Height` on `AddObject`-created controls. The probe confirms 85├ù85 survived. It's documented in-line in case you'd rather keep the literal `.T.`

@@ -1,0 +1,897 @@
+{
+  "resumo": {
+    "totalMetodos": 53,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 18,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fBuscarCotacao", "From", "fChecaAcesso", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "LOCAL loPag\n\nloPag = ThisForm\n\n*** mena - 06/10/2015 - atualiza grade de cotações ***\nlcSql = [Select cmoes, 0000.000 as valos From Sigcdcot group by cmoes ]\nlnQueryOk = ThisForm.poDataMgr.SqlExecute(lcSql,'TmpCot')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\nSelect TmpCot\nGo Top\nSCAN\n\treplace valos with fBuscarCotacao(TmpCot.cmoes, csHistorico.Datas, ThisForm.poDataMgr)\nENDSCAN\n\nSelect TmpCot\nGo Top\n\nloPag.GrdCot.Titulo.Caption = 'Cot... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.getBarras.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "Parameter pTip\n\nLocal lcTip, lcBrJpg, lcEmp, lcBar, lcCPr, lcDPr, lcFor, lcRef\n\nlcTip = pTip  && I=Imprimir; V=Visualizar\nlcEmp = CsSigCdEmp.cemps + Iif(!Empty(CsSigCdEmp.razas),' - ' + CsSigCdEmp.razas,'')\nlcBar = ThisForm.GetBarras.Value\nlcCPr = ThisForm.GetCProduto.Value\nlcDPr = ThisForm.GetDProduto.Value\nlcFor = ThisForm.GetCFornecedor.Value\nlcRef = ThisForm.GetReferencia.Value\n\nlcBrJpg = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase())) + 'BrJpg.JPG'\nIf !File(lcBrJpg)\n\tMessageBox('Está Falt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "GetDatabase",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Procedure",
+      "linhas": 326,
+      "codigoOriginal": "parameters pcProduto \n\nLocal lcArquivo, lnCodBars, lcProduto, lcColecoes\n\nlcArquivo = Sys(2023) + '\\SIGOPCGB.JPG'\nlnCodBars = ThisForm.GetBarras.Value\n\n* Filtra o Histórico Pelo Código de Barras\nWait Window 'Aguarde! Selecionando Histórico...' NoWait\nlcQryHis  = [Select codbarras,cpros,emps,dopes,numes,datas,grupos,estos,opers,codcors,codtams,qtds,Pesos,OriDopNums ]+;\n\t\t\t[From SigMvHst ]+;\n\t\t\t[Where codbarras = ]+Alltrim(Str(lnCodBars,14))+[ Order by Seqs ]\nIf ThisForm.poDataMgr.SqlExecute(lcQry... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Init",
+      "linhas": 141,
+      "codigoOriginal": "Lparameters pBar\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n=DoDefault()\n\nThisForm.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\nIf ThisForm.poDataMgr.pnIdconn <= 0\n\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\tReturn(.F.)\nEndIf\n\nIf ThisForm.poDataMgr.SqlExecute([Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ],'CsSigCdEmp') < 1\n\tMessageBox('Favor reinicializar ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute,Value      = Iif,Habvalor =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Get_Qtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Get_Grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Get_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Get_Peso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getDProduto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getCFornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getDFornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getReferencia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getCProduto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getColecoes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getPVenda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getBarras",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.peantvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getBarras",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If InList(LastKey(), 13, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 9)\n\tThisForm.Tpbusca = 1\n\tThisform.tmAux.Enabled = .T.\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getBarras",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "Local lnCodBars, lcProd \nlcProd = []\n\nIf Not Empty(This.Value) And (This.peantvalue # This.Value)\n\tlnCodBars = This.Value\n\t\n\tlStrQuery = [Select a.CPros,a.CBars, b.cbars_old ] + ;\n\t\t[From SigOpEtq a ] + ;\n\t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ;\n\t\t[Where (a.CBars = ]+Alltrim(Str(lnCodBars,14))+[ or b.cbars_old = ]+Alltrim(Str(lnCodBars,14))+[) ]\n\tIf Thisform.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1\n\t\tMessagebox('Favor reinicializar o processo !!!',16,'Fal... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdMovimento",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "LParameters nColIndex\n\nThisForm.GradeSel = 2\n\nlcArquivo = Sys(2023) + '\\SIGOPCGB.JPG'\n\nIf CsMovimento.CPros <> TmpPro.CPros\n\tlStrQuery = [Select CPros,DPros,FigJpgs From SigCdPro Where CPros = ']+CsMovimento.CPros+[' ]\n\tIf ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpProSH') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpProSH)')\n\t\tReturn(.F.)\n\tEndIf\n\t\n\tClear Resources\n\tThisForm.ImgFigJpg.Visible = .F.\n\tThisForm.ImgFigJpg.Picture = ''\n\n\tIf Not Empty(TmpProSH.FigJpg... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Picture =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdMovimento",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdHistorico",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LParameters nColIndex\n\nThisForm.GradeSel = 1\n\nlcArquivo = Sys(2023) + '\\SIGOPCGB.jpg'\n\nClear Resources\nThisForm.ImgFigJpg.Visible = .F.\nThisForm.ImgFigJpg.Picture = ''\n\nIf Not Empty(TmpPro.FigJpgs) And Not IsNull(TmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(TmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\n\tIf (StrToFile(lcFoto, lcArquivo) > 0)\n\t\tThisForm.ImgFigJpg.Picture = (lcArquivo)\n\t\tThisForm.ImgFigJpg.Visible = .T.\n\tEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Picture =,atualizacot",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdHistorico",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "This.AfterRowColChange()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdHistorico",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getLocal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnImprimir",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.grdHistorico.Column1.SetFocus\nThisForm.Imagem('I')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Imagem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnImprimir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnLocal",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "Local lnCodBars, llSts\n\nWith ThisForm\n\tlnCodBars = .GetBarras.Value\n\n\tllSts = .F.\t\n\t.GetBarras.Enabled \t\t\t= llSts\n\t.CmdBtnForm.BtnSair.Enabled = llSts\n\t.GrdMovimento.Enabled \t\t= llSts\n\t.GrdHistorico.Enabled \t\t= llSts\n\t.BtnDocumento.Enabled \t\t= llSts\n\t.BtnImprimir.Enabled \t\t= llSts\n\t.BtnVisualizar.Enabled \t\t= llSts\n\t.BtnLocal.Enabled \t\t\t= llSts\n\n\tDo Form SigOpCgl With lnCodBars\n\t\n\tllSts = .T.\n\t.GetBarras.Enabled \t\t\t= llSts\n\t.CmdBtnForm.BtnSair.Enabled = llSts\n\t.GrdMovimento.Enabled \t\t= llSts\n\t.Gr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnLocal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.GetDProSHis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.GetCProSHis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.tmAux",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.foca()\nKeyboard(Chr(3))\nThis.Enabled = .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "foca",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grddevolucao",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nColIndex\n\nThisForm.GradeSel = 3\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grddevolucao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnVisualizar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.grdHistorico.Column1.SetFocus()\nThisForm.Imagem('V')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus,Imagem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnVisualizar",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnDocumento",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Do Case\n Case thisForm.GradeSel = 2\n\tSelect CsMovimento\n Case thisForm.GradeSel = 1\t\n\tSelect CsHistorico\n Case thisForm.GradeSel = 3\n \tSelect crSigOpexi\nEndCase\n\nIf !Empty(emps) And !Empty(dopes) And !Empty(numes)\n\tlcAlias = Alias()\n\tIf ThisForm.poDataMgr.CursorQuery('SigMvCab','CongBEest','EmpDopNums',OriDopNums,'Emps,Dopes,Numes')\n\t\tIf WExist('FORM_')\n\t\t\tMessageBox('Impossível Consultar Documento !!!' + Chr(13) + Chr(10) + 'Feche a Movimentação de Estoque',0+48,'')\n\t\tElse\n\t\t\tSelect &lcAlias.\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdNec'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.btnDocumento",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Bot_Rastro",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Do Form SigReCgr With 1,ThisForm.GetBarras.Value, ThisForm\n\nIf ThisForm.GradeSel = 2\n\tThisForm.grdMovimento.Column1.SetFocus\nElse\n\tThisForm.grdHistorico.Column1.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Bot_Rastro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Botão_de_Correcao",
+      "evento": "Click",
+      "linhas": 49,
+      "codigoOriginal": "Local lnCodBars, llSts\n\nWith ThisForm\n\tlnCodBars = .GetBarras.Value\n\n\tllSts = .F.\t\n\t.GetBarras.Enabled \t\t\t= llSts\n\t.CmdBtnForm.BtnSair.Enabled = llSts\n\t.GrdMovimento.Enabled \t\t= llSts\n\t.GrdHistorico.Enabled \t\t= llSts\n\t.BtnDocumento.Enabled \t\t= llSts\n\t.BtnImprimir.Enabled \t\t= llSts\n\t.BtnVisualizar.Enabled \t\t= llSts\n\t.BtnLocal.Enabled \t\t\t= llSts\n\t\n\t.Cnt_Correcao.GrdCorrecao.RecordSource = ''\n\tIf Used('CrSigEtHst')\n\t\tUse In CrSigEtHst\n\tEndIf\n\n\tIf ThisForm.poDataMgr.SqlExecute([Select * From SigEtHs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Height / 2) -",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Botão_de_Correcao",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Return(!Empty(ThisForm.GetBarras.Value))\n\nIf ThisForm.GradeSel = 2\n\tThisForm.grdMovimento.Column1.SetFocus\nElse\n\tThisForm.grdHistorico.Column1.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.getOrigem",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.GetPrecoDe",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.GetBarra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.GetCat",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Bot_Cotações",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value \n\tthisform.atualizacot() \t&& atualiza grade de cotacao\nEndif\n\nThis.Parent.grdCot.Visible = This.Value\nThis.Parent.grdCot.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "atualizacot",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.Cnt_Correcao.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "With ThisForm\n\tllSts = .T.\t\n\t.GetBarras.Enabled \t\t\t= llSts\n\t.CmdBtnForm.BtnSair.Enabled = llSts\n\t.GrdMovimento.Enabled \t\t= llSts\n\t.GrdHistorico.Enabled \t\t= llSts\n\t.BtnDocumento.Enabled \t\t= llSts\n\t.BtnImprimir.Enabled \t\t= llSts\n\t.BtnVisualizar.Enabled \t\t= llSts\n\t.BtnLocal.Enabled \t\t\t= llSts\n\t.Cnt_Correcao.Visible       = .F.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdCot.grade_Cot.column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGB.grdCot.grade_Cot.column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCGB.Procedure",
+      "queryOriginal": "lcSql = [Select cmoes, 0000.000 as valos From Sigcdcot group by cmoes ]",
+      "tabelas": "Sigcdcot",
+      "colunas": "cmoes,000",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCGB.Init",
+      "queryOriginal": "If ThisForm.poDataMgr.SqlExecute([Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ],'CsSigCdEmp') < 1 \tMessageBox('Favor reinicializar ... [TRUNCADO]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,reinicializar",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCGB.getBarras.Valid",
+      "queryOriginal": "\tlStrQuery = [Select a.CPros,a.CBars, b.cbars_old ] + ; \t\t[From SigOpEtq a ] + ; \t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ; \t\t[Where (a.CBars = ]+Alltrim(Str(lnCodBars,14))+[ or b.cbars_old = ]+Alltrim(Str(lnCodBars,14))+[) ] \tIf Thisform.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1",
+      "tabelas": "sigopeta",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCGB.grdMovimento.Procedure",
+      "queryOriginal": "\tlStrQuery = [Select CPros,DPros,FigJpgs From SigCdPro Where CPros = ']+CsMovimento.CPros+[' ] \tIf ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpProSH') < 1",
+      "tabelas": "SigCdPro",
+      "colunas": "CPros,DPros,FigJpgs,CPros+[,SQLExecutelStrQuery,TmpProSH",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Sigcdcot", "SigCdEmp", "sigopeta", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

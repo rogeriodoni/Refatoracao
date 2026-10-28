@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Already indexed correctly. No further changes needed.
+
+## Resultado da revis├úo
+
+Analisei os dois achados do pass SQL no `Formsigopcgb.prg`/`sigopcgbBO.prg` e **nenhum procede** ÔÇö s├úo falsos positivos do mesmo padr├úo j├í catalogado em mem├│ria (`feedback_sql_filtro_inventado_locate_cursor_local.md`, item 11a):
+
+- **`DEPO`**: n├úo existe como coluna/filtro em WHERE nenhum. ├ë fragmento da palavra portuguesa "**DEPO**is" dentro de coment├írios (`Formsigopcgb.prg:152,1368,1447,1731,1733` ÔÇö "Botoes de acao DEPOIS...", "roda depois de CriarCursoresGrades" etc.). Mesmo padr├úo exato j├í visto em `FormSIGPRTFH`, agora reincidindo em outro arquivo.
+- **`X`**: tamb├®m n├úo existe em WHERE nenhum. Aparece s├│ como a letra solta num coment├írio explicando curto-circuito de `OR` (`Formsigopcgb.prg:2144`: `*-- "VARTYPE(x) = 'N' AND x > 0"...`) e em compara├º├Áes "A x B" tipo "codamss x empos" (`sigopcgbBO.prg:129,656`).
+
+Conferi todas as 14 colunas que o pass listou como "WHERE original" (`CODBARRAS, EMPDOPNUMS, OPERS, CBARS, CPROS, CODS, LPRECOS, EMPS, CEMPS, CESTOS, LNCOL, CTRLLOTES, CBARS_OLD, EMPDNPS`) contra o `sigopcgbBO.prg` real ÔÇö todas batem corretamente com os `WHERE` existentes. O extrator do pass s├│ trope├ºou nas duas letras/fragmentos soltos em coment├írios.
+
+Como n├úo h├í nenhuma condi├º├úo WHERE inventada de fato no c├│digo, n├úo fiz nenhuma altera├º├úo nos arquivos (alterar algo aqui seria inventar um "conserto" para um defeito que n├úo existe). Registrei essa reincid├¬ncia na mem├│ria do projeto para o pr├│ximo pass/revis├úo.

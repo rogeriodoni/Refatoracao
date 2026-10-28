@@ -207,15 +207,21 @@ DEFINE CLASS FtiBO AS BusinessBase
         loc_lResultado = .F.
 
         TRY
+            *-- LEFT com a largura REAL de cada coluna char (medida no
+            *-- INFORMATION_SCHEMA: cods 2, descs 20, moedas 3, mcustos 3,
+            *-- usuars 10). Sem isto o SQL Server recusa o INSERT inteiro com
+            *-- "Dados de cadeia ou binarios seriam truncados". No legado isso
+            *-- nao acontecia porque o TextBox tinha ControlSource no cursor,
+            *-- que ja truncava na largura da coluna.
             loc_cSQL = "INSERT INTO SigPrFti" + ;
                        " (cods, descs, valors, moedas, acrescs, tpftios," + ;
                        "  faixais, faixafs, perdas, lucros, divmults, tipos," + ;
                        "  aplscus, etiquetas, mcustos, vcustos, usuars, datars)" + ;
                        " VALUES (" + ;
-                       EscaparSQL(THIS.this_cCodigo)                          + ", " + ;
-                       EscaparSQL(THIS.this_cDescricao)                       + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cCodigo), 2))        + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cDescricao), 20))    + ", " + ;
                        FormatarNumeroSQL(THIS.this_nValor)                    + ", " + ;
-                       EscaparSQL(THIS.this_cMoeda)                           + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cMoeda), 3))         + ", " + ;
                        FormatarNumeroSQL(THIS.this_nAcrescimo)                + ", " + ;
                        FormatarNumeroSQL(THIS.this_nTipoFeitio)               + ", " + ;
                        FormatarNumeroSQL(THIS.this_nFaixaInicial)             + ", " + ;
@@ -226,9 +232,9 @@ DEFINE CLASS FtiBO AS BusinessBase
                        FormatarNumeroSQL(THIS.this_nTipo)                     + ", " + ;
                        FormatarNumeroSQL(THIS.this_nAplscus)                  + ", " + ;
                        FormatarNumeroSQL(THIS.this_nEtiquetas)                + ", " + ;
-                       EscaparSQL(THIS.this_cMcustos)                         + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(THIS.this_cMcustos), 3))       + ", " + ;
                        FormatarNumeroSQL(THIS.this_nVcustos)                  + ", " + ;
-                       EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado))               + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10))     + ", " + ;
                        "GETDATE()" + ;
                        ")"
 
@@ -254,9 +260,9 @@ DEFINE CLASS FtiBO AS BusinessBase
 
         TRY
             loc_cSQL = "UPDATE SigPrFti SET" + ;
-                       "  descs    = " + EscaparSQL(THIS.this_cDescricao)          + ", " + ;
+                       "  descs    = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cDescricao), 20)) + ", " + ;
                        "  valors   = " + FormatarNumeroSQL(THIS.this_nValor)        + ", " + ;
-                       "  moedas   = " + EscaparSQL(THIS.this_cMoeda)              + ", " + ;
+                       "  moedas   = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cMoeda), 3))      + ", " + ;
                        "  acrescs  = " + FormatarNumeroSQL(THIS.this_nAcrescimo)    + ", " + ;
                        "  tpftios  = " + FormatarNumeroSQL(THIS.this_nTipoFeitio)   + ", " + ;
                        "  faixais  = " + FormatarNumeroSQL(THIS.this_nFaixaInicial) + ", " + ;
@@ -267,11 +273,11 @@ DEFINE CLASS FtiBO AS BusinessBase
                        "  tipos    = " + FormatarNumeroSQL(THIS.this_nTipo)         + ", " + ;
                        "  aplscus  = " + FormatarNumeroSQL(THIS.this_nAplscus)      + ", " + ;
                        "  etiquetas= " + FormatarNumeroSQL(THIS.this_nEtiquetas)    + ", " + ;
-                       "  mcustos  = " + EscaparSQL(THIS.this_cMcustos)            + ", " + ;
+                       "  mcustos  = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cMcustos), 3))    + ", " + ;
                        "  vcustos  = " + FormatarNumeroSQL(THIS.this_nVcustos)      + ", " + ;
-                       "  usuars   = " + EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado))  + ", " + ;
+                       "  usuars   = " + EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10))  + ", " + ;
                        "  datars   = GETDATE()" + ;
-                       " WHERE cods = " + EscaparSQL(THIS.this_cCodigo)
+                       " WHERE cods = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cCodigo), 2))
 
             IF SQLEXEC(gnConnHandle, loc_cSQL) >= 0
                 THIS.RegistrarAuditoria("UPDATE")

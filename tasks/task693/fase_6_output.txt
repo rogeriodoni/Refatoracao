@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\Formsigopcgp.prg`.
+
+## O que foi entregue
+
+**Campos restantes ÔÇö p├ígina de filtros (`ConfigurarPaginaLista`)**
+- **Tamanho** (`txt_4c_Tam` / `txt_4c_DTam`) ÔÇö ver corre├º├úo abaixo
+- **Cole├º├úo** (`txt_4c_Categoria` / `txt_4c_DCategoria`, legado `getCategoria`/`getDCategoria`)
+- **Localiza├º├úo** (`txt_4c_Locals`, com `Format = "K!"` + `MaxLength = 10` transcritos do SCX ÔÇö regra #49)
+- **Cod. Macro** (`txt_4c_CodMacro`) e **chkOff** (`chk_4c_Off`), com os labels `Say30/31/32/52`
+
+**Campos restantes ÔÇö p├ígina de resultado (`ConfigurarPaginaDados`)**
+14 controles que faltavam: Descritivo (`DPro2s`), Categoria c├│d+desc, Cod. Macro, Pre├ºo De, % Desc., Dt./Usu. Inclus├úo, Dt./Vl./Moeda da ├Ültima Compra, os dois memos (`ObsCompras`, `DPro3s`) e o indicador "Produto Descontinuado" (Shape+Label, que nascem ocultos ÔÇö adicionados ├á lista de exce├º├úo do `TornarControlesVisiveis`). Todos populados em `GrdProdutosAfterRowColChange` (SQL estendido com `Categoria/CodMacro/ObsCompras/PrecoDe/dtincs/UsuIncs/UltComps/vUltComps/MUltComps` + join em `SigCdCtg`) e limpos em `LimparCamposCabecalho`. A f├│rmula do % desconto foi **transcrita literalmente** do legado (regra #17).
+
+**Lookups**
+- `AbrirLookupTamanho` e `AbrirLookupCategoria` novos, com o contrato can├┤nico (`this_lAchouRegistro` antes do `Show()`, atribui├º├úo s├│ sob `this_lSelecionou`, `USE IN`, `Release()`) e busca pelos dois lados (c├│digo e descri├º├úo), como os `Valid` do legado.
+- Os 29 handlers `KeyPress` agora passam por `DispararLookup()`: **F4 abre sempre**; **ENTER/TAB abrem s├│ com o campo preenchido**, reproduzindo o `Valid` legado ÔÇö antes s├│ F4 disparava, ent├úo digitar e sair n├úo fazia nada.
+- `cnt_4c_BotoesAcao` j├í existia; corrigi o `cmd_4c_Cancelar`, que tinha `Height = 75` dentro de um container de 52px (ficava recortado) e caption "Encerrar" duplicando o outro bot├úo.
+
+## Dois defeitos herdados que precisei corrigir para os campos funcionarem
+
+1. **`.Width = THIS.Width` em 52 controles** do container de detalhe (fase 5): `THIS` ├® o Form, ent├úo todo label e textbox nascia com 1000px e se sobrepunha. Reconstru├¡ o container em 3 colunas com larguras expl├¡citas. Ele tamb├®m estava com `Top=283 + Height=370` numa ├írea ├║til de ~566px ÔÇö o ter├ºo inferior era recortado pelo pai (regra #30); agora ├® `236`, com os memos na faixa 522..560.
+2. **Campo "Acabamento" (`SigCdAca`) inventado**: n├úo existe no dump do legado. A geometria exata daquela linha (`Left 115 W=52` / `Left 170 W=236`, `Top 255`) ├® a do **Tamanho** (`getTam`/`get_dTam`, `SigCdTam`) ÔÇö ou seja, o migrador renomeou a linha e perdeu o campo. Renomeado e religado ├á tabela certa.
+
+## Verifica├º├úo
+
+Checagens est├íticas passaram: blocos `WITH/TRY/IF` balanceados nos 89 m├®todos, nenhum `AddObject` duplicado, todo `THIS.<m├®todo>()` definido, todo controle referenciado tem `AddObject`, todo `BINDEVENT` aponta para handler existente, sem acentos literais / `ISEMPTY` / `.Self` / `Controls("nome")` / `MESSAGEBOX` / `RETURN` dentro de `TRY`, sem TODO ou stub. Auditorias do pipeline: `VerificarFuncoesNaoDefinidas` e `VerificarPropriedadesInexistentes` ÔåÆ OK; `VerificarFormBuscaAuxiliar` ÔåÆ este form n├úo aparece entre os 48 achados.
+
+**N├úo consegui compilar no VFP9**: conforme j├í medido nesta m├íquina, `vfp9.exe` lan├ºado desta sess├úo n├úo executa o script (o `.FXP` sai sem prova de execu├º├úo, e a forma `-c` pendura). Ent├úo **n├úo estou alegando COMPILE_OK** ÔÇö a valida├º├úo acima ├® est├ítica.
+
+## Pend├¬ncias que encontrei e deixei para as pr├│ximas fases
+
+- **`FormParaBO`/`BOParaForm` usam 53 nomes de property que n├úo existem no `sigopcgpBO`** (`this_cGrupoCod`, `this_cCorCod`, `this_nSituacao`, `this_dDataAltInicial`ÔÇª). Em `FormParaBO` a atribui├º├úo cria property din├ómica e **n├úo estoura**, mas o BO l├¬ as declaradas ÔÇö os filtros s├úo silenciosamente ignorados. Em `BOParaForm` h├í **leitura** de 15 props inexistentes (`this_cCodPro`, `this_nPrecoVenda`, `this_cMensagemErro`ÔÇª), que **estoura em runtime**. ├ë o padr├úo #177 do CLAUDE.md. Mapeei meus campos novos com os nomes corretos do BO, mas n├úo reescrevi os 53 nem acrescentei as 15 properties ÔÇö isso ├® trabalho das fases 1/2 e 8, que revisitam esses m├®todos.
+- **`VerificarFormatInputMask`**: faltam 35 `InputMask` (ALTA) e 35 `Format` (M├ëDIA) em campos criados nas fases 4ÔÇô5. Meus campos novos est├úo fi├®is; o resto pede um sweep pr├│prio.
+- **`CATCH` silencioso** em `GrdProdutosAfterRowColChange` (sem `MsgErro`) ÔÇö viola a regra #9, mas ├® c├│digo da fase 7.

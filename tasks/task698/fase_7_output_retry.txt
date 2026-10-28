@@ -1,0 +1,39 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 is done. The retry was not a form defect ÔÇö it was a gate false positive.
+
+## What I found
+
+The Fase 7 gate demands the four `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` names unless the dump proves there's no CRUD. For `SIGOPCHI` the *only* CRUD evidence in the entire 101 KB dump is the name of the CommandGroup `Grupo_op`, which the gate treats as structural proof of the `frmcadastro` CRUD bar ÔÇö and that evidence short-circuits all ten existing exception branches before any of them runs.
+
+But `Grupo_op` here is **this form's own** action group (all 16 citations are `ThisForm.Pagina.Historico.Grupo_op...`), and its eight buttons are `Relatorio / Procurar / Prorroga / FollowUp / Carteira / Protocolo / Documento / followUpChq` ÔÇö **zero CRUD verbs**. No `frmcadastro`, no `pcEscolha`, no `btn|cmd<verbo>`, no `<Verbo>.Click`. Satisfying the gate would have meant inventing buttons the legacy doesn't have (PILAR 1) or writing four empty methods (completeness rule). So I left the form alone.
+
+## The Fase 7 deliverable, verified externally
+
+Already correct from the prior attempt ÔÇö the 8-button dispatcher `CmgBotoesClick` maps 1-to-1 onto the legacy `Command1..Command8` order, plus `CmgSaidaClick`, `CmdOkClick`, `CmdCancelarClick`, `GradeChequeAfterRowColChange` and the 6 header-sort handlers.
+
+- Compiles clean with the `.fxp` deleted first ÔÇö zero `.ERR` for Form and BO
+- `Test-CompletudeCodigo` = `True` on both; no TODO/stub/empty procedure
+- Zero findings in this file from `VerificarLookupEmKeyPress`, `VerificarFuncoesNaoDefinidas`, `VerificarPropriedadesInexistentes`, `VerificarMetodoProtegidoChamadoDeFora`
+
+## The gate fix (11th exception in the family)
+
+`Test-GrupoOpSemVerboCrud` in `automation/OrquestradorMigracao.ps1`, wired into **both** call sites with the same helper (Fase 7, and Fase 8 via `$grupoOpNaoProvaCrudF8`) ÔÇö Fase 8 reads the same `Grupo_Op` evidence and would have blocked the identical form next, demanding `FormParaBO`/`BOParaForm`/`CarregarLista` from a read-only viewer.
+
+Criterion: the same four verbs the phase demands as handlers. If the group hosts none of them, it can't justify requiring them. Fail-closed in 4 layers; verbs matched as stems so Caption inflections ("Alteracao") also block.
+
+Measured before leaving it in place:
+- **Predicate:** 1 of 697 dumps changes (`SigOpChi`), direction `True ÔåÆ False` only. Of the 10 dumps with `Grupo_Op` and no `frmcadastro` ÔÇö the only ones where the helper decides ÔÇö exactly 1 is dispensed.
+- **Verdict:** all 15 existing `VerificarGateFase7*/Fase8*` harnesses produce byte-identical output pre/post (`IGUAIS=15 DIFEREM=0`).
+- Synthetic controls (verb injected into `CommandN.Name`, into `Caption`, a `Grupo_op.Incluir.Click` citation, properties block renamed, `Grupo_Op` removed) all return `$false`.
+
+New files: `VerificarGateFase7Task698.ps1`, `MedirDeltaGrupoOpSemVerboCrud.ps1`. Backup of the pre-patch orchestrator at `tmp/patch698/OrquestradorMigracao.ps1.PRE`. Lesson recorded in memory. I did not commit anything.
+
+## One thing you need to know
+
+**This task will still reprove Fase 7.** `RunLoop.ps1` invokes the orchestrator with `&` once per SCX, and task698's invocation started at 14:08:36 ÔÇö it already parsed the old gate into memory. My fix (16:50) only takes effect from the next task onward. The gate on disk now returns `VEREDITO=PASSA` for task698; the live run will keep returning REPROVA until it exhausts its 7 attempts.
+
+Worth noting for the diagnosis trail: the earlier reprova├º├úo was **legitimate**, not self-reference. The `.ps1` was written at 16:02:51 during this task, but that was a Fase 6 fix ÔÇö `case 7` was untouched (its comments stop at task688 / 2026-10-19), and I confirmed by replaying the pre-patch gate that it reproved on its own.

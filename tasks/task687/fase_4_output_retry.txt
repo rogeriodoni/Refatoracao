@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da e **medida** (n├úo s├│ gerada).
+
+## Causa da reprova├º├úo anterior
+
+O gate da Fase 4 (`OrquestradorMigracao.ps1`, `case 4`, ramo FLAT) exige tr├¬s termos. Medi cada um isoladamente contra o `.prg` do HEAD:
+
+| termo | antes | motivo |
+|---|---|---|
+| `temGrade` ÔÇö `AddObject("grd_4c_` | Ô£à | grade j├í criada na tentativa anterior |
+| `temBotoes` ÔÇö `AddObject("(cmg_4c_\|cmd_4c_)` | ÔØî | os dois CommandGroup sa├¡ram como `obj_4c_*` |
+| `temCarga` ÔÇö `CarregarLista\|CarregarDados\|MontaGrade` | ÔØî | n├úo existia m├®todo de carga |
+
+O `obj_4c_` veio do `mapeamento.json`, que ├® o **fallback de tipo `[Unknown]`** do gerador. O prefixo can├┤nico do projeto para CommandGroup ├® `cmg_4c_` ÔÇö ├® nele que os patterns #97/#113 do CorretorAutomatico se ancoram, e ├® o que o gerador emite quando reconhece o tipo (ex.: `FormSIGOPCAU`). Logo o conserto ├® no `.prg`/JSON, n├úo no gate.
+
+## Altera├º├Áes
+
+**`projeto/app/forms/operacionais/FormSigOpCfl.prg`** (537 ÔåÆ 640 linhas)
+- `obj_4c_CmdApagaitem` ÔåÆ **`cmg_4c_CmdApagaitem`**, `obj_4c_Commandgroup1` ÔåÆ **`cmg_4c_Commandgroup1`** (PILAR 3 + satisfaz o gate sem inventar UI).
+- **`CarregarLista()`** (PUBLIC, regra #3): transcreve o `Select * From SigCheh Where Nums = ?lcNum` do `Init` legado ÔÇö filtro aplicado **sempre**, inclusive vazio (regra #35a); `SQLEXEC` em cursor tempor├írio + `ZAP` + `APPEND FROM DBF()` para n├úo zerar o `ColumnCount` da grade; sem `TABLEREVERT` (regra #52); `RETURN` fora do `TRY` (regra #1).
+- **`RepintarGrade()`** (PUBLIC): `GO TOP` + `Grid.Refresh` num m├®todo ├║nico (regra #21a).
+- Chamada na `InicializarForm()` atr├ís do guard `gb_4c_ValidandoUI`/`gb_4c_ModoTeste`.
+- `TornarControlesVisiveis`: o `LOOP` de `cnt_4c__inserir` passou a **recursar antes** de pular ÔÇö sem isso o painel flutuante abriria vazio nas Fases 5/6 (pattern #109).
+
+**`tasks/task687/mapeamento.json`** ÔÇö os dois targets renomeados em sincronia com o `.prg`.
+
+N├úo inventei `ORDER BY` (o legado n├úo tem) nem `ConfigurarPaginaLista`/`AlternarPagina` (form ├® FLAT, sem PageFrame).
+
+## Verifica├º├úo executada
+
+VFP9 **executa** nesta sess├úo (smoke test com `STRTOFILE` gravou o arquivo), ent├úo os resultados abaixo s├úo medidos, n├úo inferidos:
+
+- `COMPILE`: `.fxp` gerado, **zero `.err`**.
+- `CREATEOBJECT("FormSigOpCfl", "00012345")`: `VARTYPE=O`, `BaseClass=Form`, 1000x600, 7 controles (= os 7 filhos diretos j├í migrados), `cnt_4c__inserir.Visible=.F.`.
+- Grade: `ColumnCount=2`, `RecordSource=cursor_4c_Dados`, headers `Data / Hora` / `Observa├º├úo`, larguras **144/490** ÔÇö exatos do dump, e preservadas ap├│s o `RecordSource` (regra #41).
+- `CarregarLista()` devolveu `.T.` no ramo sem conex├úo; `RepintarGrade` rodou; cursor segue ligado.
+- SQL gerado: `WHERE nums = '00012345'` (aspas s├│ do `EscaparSQL`).
+- `ValidadorSQLSchema.ps1`: 683 tabelas lidas (encoding UTF-16 OK), **nenhuma coluna inv├ílida**.
+- Balan├ºo TRY/WITH/PROC/IF/FOR fechado; 0 `RETURN` dentro de `TRY`; 0 acentos literais fora de coment├írio; 0 `MESSAGEBOX`/`ISEMPTY`/`TABLEREVERT`; 0 TODO/stub/m├®todo vazio.
+- Gate Fase 4 remedido: `temGrade=True`, `temBotoes=True`, `temCarga=True` ÔåÆ **`temLayoutFlat=True`**.
+
+Uma ressalva de processo: se houver `RunLoop.ps1` vivo, ele revalida com a c├│pia do orquestrador j├í em mem├│ria ÔÇö mas aqui n├úo toquei no orquestrador, s├│ no `.prg` e no JSON, ent├úo a pr├│xima valida├º├úo l├¬ o estado novo direto do disco.

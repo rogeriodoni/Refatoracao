@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo do pass SQL
+
+Investiguei a ├║nica acusa├º├úo [SQL-FILTRO-INVENTADO] (coluna `1`) e ├® **falso positivo** ÔÇö n├úo h├í nada a corrigir.
+
+**Achado**: a ├║nica condi├º├úo `WHERE` com literal `1` em `Formsigopcgp.prg` (5896 linhas, confirmado por grep exaustivo) ├® a linha 5305, dentro de `CarregarComposicaoFiltro`:
+
+```foxpro
+loc_cSQL = "Select cpros as mats, dpros as dcompos, " + ;
+  "0.00 as qtd_inicial, 0.00 as qtd_final, " + ;
+  ".F. as apenas, cgrus as Cgrus, '' as Tipos " + ;
+  "From SigCdPro Where 1=0"
+```
+
+Isso ├® o idiom padr├úo `WHERE 1=0` para clonar a estrutura de uma tabela num cursor vazio (`cursor_4c_TmpMat`, aberto e imediatamente fechado ÔÇö o coment├írio do pr├│prio m├®todo documenta que `CsMatPrima` ├® populado por outra consulta). O pr├│prio texto de refer├¬ncia do pass j├í lista o `0` companheiro dessa mesma express├úo entre as "colunas do WHERE original" (ex.: `From SigMvIts Where 0=1`, citada no bloco de refer├¬ncia).
+
+Esse exato padr├úo (coluna `1` acusada em `WHERE 1=0`/`WHERE 1=1`) j├í est├í catalogado como falso positivo recorrente na mem├│ria do projeto (3 ocorr├¬ncias anteriores em outros forms). Registrei esta 4┬¬ ocorr├¬ncia na mem├│ria para rastreabilidade.
+
+Nenhuma altera├º├úo foi feita no `Formsigopcgp.prg` nem no `sigopcgpBO.prg` ÔÇö o restante das linhas SQL/ControlSource mostradas no "CODIGO ATUAL" j├í est├í consistente com o c├│digo original de refer├¬ncia.

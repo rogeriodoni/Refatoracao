@@ -1,0 +1,30 @@
+=== PROBE FormSigOpCfl - Fase 8/8 (task687) ===
+1) CREATEOBJECT FormSigOpCfl('00001234') -> VARTYPE=O Caption=[Consulta de FollowUp de Cheques] this_cConta=[00001234]
+2) AjustarAcoesPorAcesso (fChecaAcesso sempre .T. -> 4 visiveis):
+   Buttons(1) Apagar  Visible=.T. Left=165
+   Buttons(2) Listar  Visible=.T. Left=245
+   Buttons(3) Incluir Visible=.T. Left=5
+   Buttons(4) Alterar Visible=.T. Left=85
+   Grupo Visible=.T. Width=330  (esperado .T. / 330)
+3) BtnIncluirClick:
+   this_cModoAtual=[INSERIR]  (esperado INSERIR)
+   cnt_4c__inserir.Visible=.T.  (esperado .T.)
+   txt_4c_Data.Value tipo=T  (esperado T)
+   txt_4c_Hist.Value=[                                                  ] Len=50  (esperado 50 espacos)
+4a) BtnAlterarClick com grade VAZIA:
+   this_cModoAtual=[]  (esperado vazio - guarda impediu)
+   cnt_4c__inserir.Visible=.F.  (esperado .F.)
+4b) BtnAlterarClick com 1 linha selecionada:
+   this_cModoAtual=[ALTERAR]  (esperado ALTERAR)
+   cnt_4c__inserir.Visible=.T.  (esperado .T.)
+   txt_4c_Hist.Value=[HISTORICO PARA ALTERAR]  (esperado HISTORICO PARA ALTERAR)
+5a) BtnExcluirClick com grade VAZIA -> sem excecao (guarda RETURN):
+   OK
+5b) BtnExcluirClick com 1 linha (sem gnConnHandle real) -> sem excecao:
+   OK
+6) BtnEncerrarClick -> sem excecao (Release() chamado)
+=== FIM OK ===
+--- MENSAGENS CAPTURADAS EM MODO TESTE ---
+[23/10/2026 21:43:21] Atenção: Selecione na grade o histórico que deseja alterar.
+[23/10/2026 21:43:21] Impossível: Histórico automático !!!
+

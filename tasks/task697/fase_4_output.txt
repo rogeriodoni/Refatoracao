@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Test artifacts cleaned up, no stray files left in git status from my work.
+
+Fase 4/8 is complete for `FormSigOpChc.prg`. Since this is an OPERACIONAL dialog (not a CRUD cadastro), I adapted the generic "Grid e Bot├Áes CRUD" phase to its actual flat layout:
+
+- **`ConfigurarGrid()`**: creates `grd_4c_Dados` (7 read-only columns: Data, Grupo Origem, Conta Origem, Grupo Destino, Conta Destino, Lote, Opera├º├úo), bound to a placeholder `cursor_4c_Historico` cursor matching the exact field names the BO's `Buscar()` populates.
+- **`ConfigurarBotoesAcao()`**: creates the two real legacy buttons ÔÇö `cmd_4c_BtnOK` ("Encerrar", wired to `Release()`) and `cmd_4c_Fwbtng1` ("Baixa Cheque", left unwired ÔÇö its logic opens a not-yet-migrated legacy dialog and belongs to a later phase).
+- **`CarregarLista()`** (PUBLIC): calls `BO.Buscar()` and repaints the grid.
+- `Init()` now accepts the cheque number (`par_cNums`) since the legacy read it from an ambient global cursor that doesn't exist in the new architecture.
+
+Verified by compiling and instantiating the form in VFP9 headless: it builds cleanly, all controls exist, grid is properly bound, and `CarregarLista` is correctly PUBLIC.

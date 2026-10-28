@@ -1,0 +1,32 @@
+=== PROBE FormSigOpCfl - Fase 6 (task687) ===
+1) CREATEOBJECT FormSigOpCfl -> VARTYPE=O Caption=[Consulta de FollowUp de Cheques]
+2) celula da Column1 (regra #18):
+   CurrentControl = [TXT_4C_CELULADATA]
+   Sparse         = .F.  (esperado .F.)
+   membro existe  = .T.
+   Class da celula= [Textboxcelulafollowupcfl_4c]
+   Column1.ReadOnly = .T.  (legado: .T.)
+3) BINDEVENT em txt_4c_Hist: 1 binding(s)
+   evento=[LOSTFOCUS] metodo=[HISTORICOLOSTFOCUS]  (esperado LOSTFOCUS / HISTORICOLOSTFOCUS)
+4) When da celula (legado: Return cmdApagar.Visible):
+   Apagar.Visible=.T. -> CelulaDataFollowupEditavel=.T.
+   Apagar.Visible=.F. -> CelulaDataFollowupEditavel=.F.
+5) Valid da celula (legado: Empty -> msg + Return 0):
+   data VAZIA  -> retorno=0 tipo=N  (esperado 0 / N)
+   data VALIDA -> retorno=.T. tipo=L  (esperado .T. / L)
+6) FormParaBO:
+   this_oBusinessObject=O classe=Sigopcflbo
+   INSERIR -> retorno=.T. Nums=[00001234] Hists=[TESTE DE FOLLOWUP] Datas tipo=T Emps=[01] CidChaves=[]
+   INSERIR com DATE -> this_dDatas tipo=T  (esperado T - regra #16)
+   ALTERAR com grade VAZIA -> retorno=.F.  (esperado .F. - sem chave nao faz UPDATE)
+   ALTERAR com 1 linha   -> retorno=.T. CidChaves=[CHAVE0000000000001]
+7) guarda de reentrancia (regra #47):
+   flag LIGADA   -> Exec chamado 0x  (esperado 0)
+   flag SOLTA    -> Exec chamado 1x  (esperado 1)
+   painel fechou -> cnt_4c__inserir.Visible=.F.  (legado fecha SEMPRE)
+   flag liberada -> this_lEmGravacao=.F.  (esperado .F.)
+=== FIM OK ===
+--- MENSAGENS CAPTURADAS EM MODO TESTE ---
+[23/10/2026 21:12:06] Atenção!: Data Inválida!
+[23/10/2026 21:12:06] Atenção: Selecione na grade o histórico que deseja alterar.
+

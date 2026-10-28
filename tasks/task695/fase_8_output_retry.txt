@@ -1,0 +1,48 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. Os arquivos compilam limpos, o gate da fase passa e o probe funcional em VFP9 fecha com `PROBE_OK` (11 medi├º├Áes).
+
+## O que a valida├º├úo anterior reprovava
+
+O gate da Fase 8 exige, al├®m de `BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`CarregarLista`, um m├®todo que case `PROCEDURE Btn(Salvar|Confirmar|Gravar|ÔÇª)Click` ÔÇö e s├│ dispensa essa exig├¬ncia quando o dump prova que o legado **n├úo grava**. O dump do SIGOPCGV tem `mGravaDados`: o `cmd_voltar.Click` abre com
+
+```foxpro
+IF ThisForm.pcEscolha = 'ALTERAR'
+    IF MessageBox('Deseja salvar as altera├º├Áes?',32+4,...) = 6
+        IF thisform...CntConta.mvalidaobj() < 1
+            RETURN .f.
+        endif
+        thisform...CntConta.mgravadados()
+```
+
+Esse bloco **n├úo havia sido migrado** ÔÇö o `BtnVoltarClick` sa├¡a direto. N├úo era s├│ um nome faltando no gate; era grava├º├úo perdida.
+
+## Entregue
+
+**Form** ÔÇö 10 m├®todos can├┤nicos, cada um com o bloco real do legado, e os funis das fases anteriores passando a entrar por eles:
+
+| M├®todo | Origem no legado |
+|---|---|
+| `FormParaBO` / `BOParaForm` | os 5 crit├®rios da Origem + `optFiltro` + per├¡odo; `CarregarDados`/`AtualizarCamposOrigem` entram por eles |
+| `HabilitarCampos` | a cascata de `When` (`Get_cpf`, `Get_dconta`, `GetConj`, `getTelefone`, `optFiltro`) ÔÇö em `ReadOnly`, n├úo `Enabled`, para n├úo disputar o foco no `LostFocus` |
+| `LimparCampos` | o `Space(N)` dos 5 campos do `cmd_voltar.Click` |
+| `AjustarBotoesPorModo` | os gates `fChecaAcesso` CADASTRO/MOVIMENTA/IMPRIMIR + o reposicionamento `ÔêÆ81px` do `grp_operacao` |
+| `BtnSalvarClick` | o bloco de grava├º├úo acima; `BtnVoltarClick` aborta a sa├¡da quando `mValidaObj()` recusa |
+| `CarregarLista`, `BtnBuscarClick`, `BtnCancelarClick`, `BtnEncerrarClick` | `cmd_movimenta.Click`, `cmd_cancela.Click`, ramo `Automatico` do `cmd_voltar` |
+
+**BO** ÔÇö `LimparDados()` sobrescrito. O cabe├ºalho da fase 7 j├í afirmava que ele "zera os crit├®rios de pesquisa", mas `BusinessBase.LimparDados` s├│ limpa a mensagem de erro: os totais da aba Cheques ficariam exibindo os n├║meros da conta anterior.
+
+**Dois defeitos pr├®-existentes corrigidos:** `RETURN` nu dentro de `TRY` em `ImpressaoCad` e `Impressao` (regra #1) ÔÇö o guard de par├ómetro passou para fora do `TRY`; e o atalho "conta j├í resolvida" do `ValidarContaSelecionada`, que ap├│s a introdu├º├úo do `FormParaBO` deixaria um c├│digo inexistente passar sem confer├¬ncia no banco (agora exige a descri├º├úo carregada).
+
+**Menu** j├í estava integrado (bar 161 de `popMovimentos` + `AbrirFormsigopcgv`).
+
+## Verifica├º├úo
+
+- Compila├º├úo limpa de form, BO e `menu.prg` (sem `.err`)
+- Auditores: `VerificarMetodoProtegidoChamadoDeFora` OK ┬À `VerificarFuncoesNaoDefinidas` OK ┬À `VerificarLookupEmKeyPress` ERRO=0 ┬À 11 `TABLEREVERT` todos com guard de `Buffering` (regra #52) ┬À 0 acentos literais ┬À 0 `RETURN` em `TRY` ┬À 0 `this_x .Value`
+- Probe (`automation\ProbeCgv695F8.prg`): o form instancia (1000├ù300, p├ígina Consulta); escopos corretos; a cascata de `When` aplica e reverte; `FormParaBO`/`BOParaForm` fazem o ida-e-volta dos 7 valores; `LimparCampos` zera tela **e** BO; `AjustarBotoesPorModo` preserva a geometria 769/235 do SCX e inverte o par MudaCli/MudaMov por vis├úo
+
+**Permanece fora**, como nas fases anteriores: as abas 5/7/8 (Vendas, Opera├º├Áes Pend., Produ├º├úo ÔÇö todas alimentadas pelo mesmo `PProduto()` de ~700 linhas) e o wrapper `clsconta`. Por isso o `BtnSalvarClick` chama `mValidaObj`/`mGravaDados` sob `PEMSTATUS` e, sem o wrapper, avisa que a altera├º├úo cadastral se faz pelo Cadastro de Clientes ÔÇö em vez de devolver sucesso falso.

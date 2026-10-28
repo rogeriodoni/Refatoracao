@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I checked every `WHERE` clause in the actual SQL (all live in `sigopcgbBO.prg` ÔÇö the form itself has no SQL with filters, only comments referencing the legacy queries). Here's what I found:
+
+**Both reported issues are false positives from the detector:**
+
+1. **"coluna 'DEPO'"** ÔÇö there is no `DEPO` column anywhere in the SQL. The only place the substring `DEPO` appears in the file is inside the word **DEPOIS** (line 1119, in a comment). Same pattern already documented in this session's own excerpt for the form file (`DEPOIS` at lines 56/152/1727/1729) ÔÇö pure substring-match artifact, not a WHERE condition.
+
+2. **"coluna 'X'"** ÔÇö no WHERE clause anywhere in `sigopcgbBO.prg` filters on a column literally named `X`. I walked all 20 `WHERE` sites in the BO (lines 195ÔÇô1368) and every one filters on a column from the original's valid list:
+   - `CBars`/`CBARS`, `cpros`/`CPROS`, `cods`/`CODS`, `lprecos`/`LPRECOS`, `cemps`/`CEMPS`, `cEstos`/`CESTOS`, `ctrllotes`/`CTRLLOTES`, `codbarras`/`CODBARRAS`, `empdopnums`/`EMPDOPNUMS`, `empdnps`/`EMPDNPS`, `opers`/`OPERS`
+
+   No `CBARS_OLD`, `EMPS`, or `LNCOL` appear in any WHERE either, but that's expected (not every valid column needs to be used) ÔÇö none of them were replaced by an invented `X` column.
+
+Per CLAUDE.md rule on verifying the premise before applying a "WARNING massivo" fix (and the project's own history of this exact SQL-filter detector producing substring-match false positives), I did **not** modify any file ÔÇö there's no invented filter to remove. No changes made.

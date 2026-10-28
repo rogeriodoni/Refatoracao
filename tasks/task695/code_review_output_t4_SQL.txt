@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investigated the single `SQL-FILTRO-INVENTADO` finding (coluna `CMOES`) and it's a **false positive** ÔÇö no code changed.
+
+**Where it is**: `projeto/app/classes/sigopcgvBO.prg:1011`, inside `ObterCotacao()`:
+```foxpro
+loc_cSQL = "SELECT TOP 1 valos FROM SigCdCot" + ;
+    " WHERE cmoes = " + EscaparSQL(loc_cMoeda) + ;
+    " AND datas <= " + FormatarDataSQL(DTOT(loc_dData) + 86399) + ;
+    " ORDER BY datas DESC, horas DESC"
+```
+
+**Why the WHERE column list didn't catch it**: this function substitutes the legacy global `fBuscarCotacao()`, which was never ported (same pattern as `[[feedback_fcarregarcambio_nao_portada]]`). Recovered the actual legacy source ÔÇö `origem/sigopcgv.SCT` was already deleted from the working tree by the pipeline, so I pulled it from git history (`git show c86ec3381:ProximasMigracoes/sigopcgv.SCT`) and extracted printable strings. The legacy code does:
+```foxpro
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigCdCot ],'CrSigCdCot')
+Select CrSigCdCot
+Index On cmoes + Dtos(datas) Tag CMoeData
+...
+If Seek(_MoeLim,'CrSigCdCot')
+    _CotLim = CrSigCdCot.valos
+```
+It loads the whole table unfiltered, indexes locally on `cmoes + datas`, and filters client-side with `SEEK`. The migrated `WHERE cmoes = ...` is the exact SQL-side equivalent of that SEEK ÔÇö not an invented condition. Removing it would make the `TOP 1 ... ORDER BY datas DESC` return the exchange rate of an arbitrary currency instead of the one requested, breaking the currency-conversion logic used for credit limit / stock totals elsewhere in the form.
+
+No other `CMOES`/`cmoes` references exist anywhere else in the form or BO, so this was the only site in scope.
+
+I added this as a new reincidence (4th root cause: "SEEK on a cursor indexed by the column" counts as that column's WHERE) to the existing memory note on this detector's false-positive patterns, so future SQL-pass reviews recognize it faster.

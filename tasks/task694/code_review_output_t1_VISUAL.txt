@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Conclus├úo: nenhuma altera├º├úo aplicada.**
+
+O ├║nico achado deste pass (`TITULO-NAO-PROPAGADO`) ├® falso positivo ÔÇö j├í catalogado ~20x na mem├│ria `feedback_titulo_nao_propagado_falso_positivo`. No `FormSigOpCgr.prg`:
+
+- O container real da faixa ├® `cnt_4c_Cabecalho` (n├úo `cnt_4c_Sombra`, como o path sugerido assume).
+- As duas inst├óncias (Page1 "Consulta" e Page2 "Resultado") j├í fazem `.Caption = THIS.Caption` nos dois labels (`lbl_4c_Sombra`/`lbl_4c_Titulo`) dentro do pr├│prio `WITH` de cria├º├úo (linhas 402/418 e 713/729).
+- Aplicar o path sugerido literalmente teria estourado `Property CNT_4C_SOMBRA is not found`.
+
+Registrei essa reincid├¬ncia na mem├│ria para refor├ºar que este pass de review ├® templated e n├úo confere a estrutura real do arquivo antes de gerar o achado. Nenhuma linha de `FormSigOpCgr.prg`/`SigOpCgrBO.prg` foi modificada.

@@ -1,0 +1,358 @@
+{
+  "resumo": {
+    "totalMetodos": 21,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCGR",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "Local lcArquivo1\n\nlcArquivo1 = Sys(2023) + '\\Temp3.jpg'\n\n* Caso a Consulta Já Esteja Executada, Não Processa Novamente\nIf Not Thisform.ConsultaExecutada\n\tWait Window 'Processando...' NoWait\n\n\tpcMensagem = .f.\n\t\n\t*-[ Limpa os Arquivos ]-*\n\tSelect DbProduto\n\tZap\n\t\n\tlnOp   = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Op.Value\n\tlnEnv  = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Env.Value\n\tlcPed  = ThisForm.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido.Value\n\tlnPed  = Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Op,Get_Env,Get_Pedido,Get_Numero",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR",
+      "evento": "Init",
+      "linhas": 114,
+      "codigoOriginal": "ThisForm.fld_principal.pag_consulta.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.fld_principal.pag_consulta.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQuery = [Select Dopes, NDopes, Globalizas, Reservas ] + ;\n\t\t\t\t\t[From SigCdOpe ] + ;\n\t\t\t\t   [Where Globalizas In (1, 2)]\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOper') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Proces... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_Env,get_Op,get_Numero,get_Pedido,Grd_Produto",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCGR",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor dbProduto(Nenvs n(10), Nops n(10), DopNums c(26), Cpros c(14), Qtds n(12,3), Grupods c(10), Contads c(10))\nIndex On Nops Tag Nops\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal",
+      "evento": "Activate",
+      "linhas": 1,
+      "codigoOriginal": "*thisform.fld_principal.pag_consulta.get_nr_cpf.setfocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal",
+      "evento": "Activate",
+      "linhas": 7,
+      "codigoOriginal": "If Not ThisForm.ConsultaExecutada\n\tThisForm.fld_principal.ActivePage = 1\nElse\n\tThisForm.fld_principal.pag_resultado.Grd_Produto.Column1.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Env",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThisform.ConsultaExecutada = .f.\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Env",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Pedido.Value) And Empty(This.Parent.Get_Op.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Pedido,Get_Op",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Op",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThisform.ConsultaExecutada = .f.\n\tThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', This.Value, 'Emps')\n\tIf Eof('crSigOpPic')\n\t\t=MessageBox('Op Não Cadastrada!!!', 0+48, '')\n\t\tReturn 0\n\tEndIf\n\n\tIf (crSigOpPic.Emps <> _Empr)\n\t\t=MessageBox('Op de Outra Empresa!!!', 0+48, '')\n\t\tReturn 0\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Op",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Pedido.Value) And Empty(This.Parent.Get_Env.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Pedido,Get_Env",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Numero",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Pedido.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Pedido",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThisForm.ConsultaExecutada = .f.\n\tIf Not Seek(This.Value, 'TmpOper', 'Dopes')\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpOper', 'Dopes', This.Value, 'Cadastro de Operações')\n\t\tloBrowse.AddColuna('Dopes',  '', 'Operação', .t., 'Dopes')\n\t\tloBrowse.AddColuna('NDopes', '', 'Código')\n\t\tloBrowse.Show\n\t\tThis.Value = TmpOper.Dopes\n\tEndIf\nElse\n\tThis.Parent.Get_Numero.Value = 0\n\tThis.Parent.Get_Numero.Refresh\nEndIf\n* Fim **********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Numero",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.Origem.Pedido.Get_Pedido",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Op.Value) And Empty(This.Parent.Get_Env.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Op,Get_Env",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.grp_operacao",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_consulta.cmdprocessar",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno =.t.\n\nIf (Empty(This.Parent.Origem.Pedido.Get_Env.Value) And ;\n\tEmpty(This.Parent.Origem.Pedido.Get_Op.Value) And ;\n\tEmpty(This.Parent.Origem.Pedido.Get_Pedido.Value))\n\t      \n\t=Messagebox('Nenhum Opção de Filtro Foi Informada!!!', 16, '')\n\tThis.Parent.Origem.Pedido.Get_OP.SetFocus\n\tm.llRetorno = .f.\nEndIf\n\nIf m.llRetorno\n\tm.pcMensagem = .f.\n\tThisForm.LockScreen = .t.\n\tThisForm.Processa()\n\t\n\tIf Not Eof('DbProduto')\n\t\tThisForm.Fld_Principal.ActivePage = 2\n\t\tThisForm.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa,Refresh",
+        "controlesReferenciados": "Get_Env,Get_Op,Get_Pedido,Chk_op,Chk_Env,Chk_Dop",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.grp_operacao",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.fld_principal.ActivePage = 1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.Bot_Rastro",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If (This.Parent.Container1.Chk_op.Value = 1)\n\tDo Form SigReCgr With 2, dbProduto.Nops, ThisForm\nElse\n\tIf (This.Parent.Container1.Chk_Env.Value = 1)\n\t\tDo Form SigReCgr With 3, dbProduto.nEnvs, ThisForm && 2\n\tElse\n\t\tIf (This.Parent.Container1.Chk_Dop.Value = 1)\n\t\t\tDo Form SigReCgr With 4, dbProduto.DopNums, ThisForm && 3\n\t\tEndIf\n\tEndIf\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_op,Chk_Env,Chk_Dop",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.Bot_Rastro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Eof('dbProduto')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_op",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "This.Value = 1\nThis.Parent.chk_Env.Value = 0\nThis.Parent.chk_Dop.Value = 0\nThis.Parent.chk_Env.Refresh\nThis.Parent.chk_Dop.Refresh\nThis.Parent.Parent.Grd_Produto.Column1.SetFocus\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk_Env,chk_Dop,Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.Container1.chk_Env",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "This.Value = 1\nThis.Parent.chk_op.Value = 0\nThis.Parent.chk_Dop.Value = 0\nThis.Parent.chk_Op.Refresh\nThis.Parent.chk_Dop.Refresh\nThis.Parent.Parent.Grd_Produto.Column1.SetFocus\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk_op,chk_Dop,Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCGR.fld_principal.pag_resultado.Container1.Chk_Dop",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "This.Value = 1\nThis.Parent.chk_Env.Value = 0\nThis.Parent.chk_Op.Value = 0\nThis.Parent.chk_Env.Refresh\nThis.Parent.chk_Op.Refresh\nThis.Parent.Parent.Grd_Produto.Column1.SetFocus\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk_Env,chk_Op,Grd_Produto",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

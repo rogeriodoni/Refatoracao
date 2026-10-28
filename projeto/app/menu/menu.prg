@@ -1018,6 +1018,54 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 147 OF popMovimentos DO AbrirFormsigprtef
 
+    DEFINE BAR 148 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 149 OF popMovimentos PROMPT "Pesquisa de Saldos por Funcion" + CHR(225) + "rio" ;
+           MESSAGE "Pesquisa de Saldos de Material por Funcion" + CHR(225) + "rio/Fase"
+
+    ON SELECTION BAR 149 OF popMovimentos DO AbrirFormSIGOPCFE
+
+    DEFINE BAR 150 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 151 OF popMovimentos PROMPT "Pesquisa Global de C" + CHR(243) + "digo de Barras" ;
+           MESSAGE "Pesquisa Global de C" + CHR(243) + "digo de Barras - Hist" + CHR(243) + "rico, Movimento e Devolu" + CHR(231) + CHR(227) + "o"
+
+    ON SELECTION BAR 151 OF popMovimentos DO AbrirFormsigopcgb
+
+    DEFINE BAR 152 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 153 OF popMovimentos PROMPT "Consulta Gen" + CHR(233) + "rica de Compras" ;
+           MESSAGE "Consulta Gen" + CHR(233) + "rica de Compras - Saldo, Hist" + CHR(243) + "rico, Movimenta" + CHR(231) + CHR(227) + "o, Estoque, Pend" + CHR(234) + "ncias e Consertos do fornecedor"
+
+    ON SELECTION BAR 153 OF popMovimentos DO AbrirFormsigopcgc
+
+    DEFINE BAR 154 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 155 OF popMovimentos PROMPT "Consulta Global Financeira" ;
+           MESSAGE "Consulta Global Financeira - Consulta de t" + CHR(237) + "tulos financeiros (SigMvCcr/SigCdPit) por grupo/conta, per" + CHR(237) + "odo, moeda e situa" + CHR(231) + CHR(227) + "o de pagamento"
+
+    ON SELECTION BAR 155 OF popMovimentos DO AbrirFormSIGOPCGF
+
+    DEFINE BAR 156 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 157 OF popMovimentos PROMPT "Hist" + CHR(243) + "rico de Locais" ;
+           MESSAGE "Hist" + CHR(243) + "rico de Locais - Consulta o hist" + CHR(243) + "rico de mudan" + CHR(231) + "a de local de um c" + CHR(243) + "digo de barras"
+
+    ON SELECTION BAR 157 OF popMovimentos DO AbrirFormSigOpCgl
+
+    DEFINE BAR 158 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 159 OF popMovimentos PROMPT "Pesquisa Global de Rastreabilidade" ;
+           MESSAGE "Pesquisa Global de Rastreabilidade - localiza produtos por N" + CHR(250) + "mero de Opera" + CHR(231) + CHR(227) + "o, Envelope ou Pedido (SigOpPic/SigPdMvf)"
+
+    ON SELECTION BAR 159 OF popMovimentos DO AbrirFormSigOpCgr
+
+    DEFINE BAR 160 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 161 OF popMovimentos PROMPT "Pesquisa Global de Vendas" ;
+           MESSAGE "Pesquisa Global de Vendas - saldo, cheques, cart" + CHR(245) + "es, estoque e hist" + CHR(243) + "rico de conta por Conta/CPF (SIGOPCGV)"
+
+    ON SELECTION BAR 161 OF popMovimentos DO AbrirFormsigopcgv
+
+    DEFINE BAR 162 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 163 OF popMovimentos PROMPT "Hist" + CHR(243) + "rico de Cheques" ;
+           MESSAGE "Hist" + CHR(243) + "rico de Cheques por Conta/CPF - vencimento, movimenta" + CHR(231) + CHR(227) + "o e prorroga" + CHR(231) + CHR(245) + "es (SIGOPCHI)"
+
+    ON SELECTION BAR 163 OF popMovimentos DO AbrirFormSigOpChi
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -1288,6 +1336,9 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 172 OF popRelatorios PROMPT "\-"
     DEFINE BAR 173 OF popRelatorios PROMPT "Emiss" + CHR(227) + "o do Documento" ;
            MESSAGE "Emiss" + CHR(227) + "o do Documento por faixa de Nota Fiscal (SIGMVDOC)"
+    DEFINE BAR 174 OF popRelatorios PROMPT "\-"
+    DEFINE BAR 175 OF popRelatorios PROMPT "Rela" + CHR(231) + CHR(227) + "o de Cheques (SIGOPCHR)" ;
+           MESSAGE "Rela" + CHR(231) + CHR(227) + "o de Cheques (SIGOPCHR)"
 
     ON SELECTION BAR 1  OF popRelatorios DO AbrirRelPlanoContas
     ON SELECTION BAR 3  OF popRelatorios DO AbrirFormsigrecmc
@@ -1375,6 +1426,7 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 169 OF popRelatorios DO AbrirFormSigReIr1
     ON SELECTION BAR 171 OF popRelatorios DO AbrirFormSIGPRCCR
     ON SELECTION BAR 173 OF popRelatorios DO AbrirFormSIGMVDOC
+    ON SELECTION BAR 175 OF popRelatorios DO AbrirFormSIGOPCHR
 
     * Menu Ferramentas
     ON PAD padFerramentas OF _MSYSMENU ACTIVATE POPUP popFerramentas
@@ -12423,6 +12475,323 @@ PROCEDURE AbrirFormsigprtef()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Administra" + CHR(231) + CHR(227) + "o do TEF:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGOPCFE - Abre a Pesquisa de Saldos por Funcionario
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGOPCFE()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("FormSIGOPCFE")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Pesquisa de Saldos por Funcion" + CHR(225) + "rio" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Pesquisa de Saldos por Funcion" + CHR(225) + "rio:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigopcgb - Abre o formulario de Pesquisa Global de Codigo de
+* Barras (SIGOPCGB). Padrao canonico: TRY cobre so a CRIACAO, Show() fica
+* FORA do TRY (CLAUDE.md #29 - WindowType=1 e modal, Show() bloqueia e um
+* erro de runtime durante o uso da tela abandonaria o TRY e destruiria a
+* referencia).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigopcgb()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("Formsigopcgb")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Pesquisa Global de C" + CHR(243) + "digo de Barras" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Pesquisa Global de C" + CHR(243) + "digo de Barras:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpCgl - Abre o formulario de Historico de Locais (SIGOPCGL).
+* O legado recebe o codigo de barras por parametro ("LParameters pBar"), sem
+* tela de busca propria - quem chama ja sabe o codigo. Como o menu nao tem
+* esse contexto, pede o codigo via INPUTBOX antes de instanciar (mesmo padrao
+* de AbrirFormsigreinr/AbrirFormSigReIr1 para relatorio parametrizado por
+* numero). Padrao canonico: TRY cobre so a CRIACAO, Show() fica FORA do TRY
+* (CLAUDE.md #29).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpCgl()
+    LOCAL loForm, loException, loc_cInput, loc_nBarras
+
+    loForm = .NULL.
+
+    loc_cInput = INPUTBOX("Informe o c" + CHR(243) + "digo de barras:", ;
+        "Hist" + CHR(243) + "rico de Locais", "")
+    IF EMPTY(loc_cInput)
+        RETURN
+    ENDIF
+    loc_nBarras = VAL(loc_cInput)
+    IF loc_nBarras <= 0
+        RETURN
+    ENDIF
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("FormSigOpCgl", loc_nBarras)
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Hist" + CHR(243) + "rico de Locais" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Hist" + CHR(243) + "rico de Locais:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigopcgc - Abre a Consulta Generica de Compras (SIGOPCGC)
+*   Aberto pelo menu, o form comeca na pagina de filtros (Grupo/Conta do
+*   fornecedor, periodo de analise, moeda e empresa). O Init tambem aceita
+*   (Grupo, Conta) para o modo automatico, em que a consulta ja roda na
+*   abertura - usado quando OUTRA tela abre esta com um fornecedor definido.
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigopcgc()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formsigopcgc")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Consulta Gen" + CHR(233) + "rica de Compras" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Consulta Gen" + CHR(233) + "rica de Compras:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGOPCGF - Abre a Consulta Global Financeira (SIGOPCGF)
+*   Form OPERACIONAL: abre direto na pagina de Filtros (data, titulo, moeda,
+*   publicidade, empresa e grupos/contas selecionaveis); o botao Consultar
+*   avanca para a grade de resultado (Page2).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGOPCGF()
+    LOCAL loForm, loException
+
+    loForm = .NULL.
+
+    TRY
+        loForm = CREATEOBJECT("FormSIGOPCGF")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Consulta Global Financeira" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Consulta Global Financeira:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpCgr - Abre a Pesquisa Global de Rastreabilidade (SIGOPCGR)
+*   Dialogo de consulta (sem CRUD): o usuario informa N. Op, Envelope OU
+*   Pedido/Numero, processa a pesquisa e navega para a grade de resultado,
+*   de onde pode abrir o relatorio de rastreabilidade (SigReCgr).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpCgr()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormSigOpCgr")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Pesquisa Global de Rastreabilidade" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Pesquisa Global de Rastreabilidade:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormsigopcgv - Abre a Pesquisa Global de Vendas (SIGOPCGV)
+*   Form OPERACIONAL de CONSULTA: o usuario informa Conta/Nome/CPF/Telefone/
+*   Conjuge na pagina inicial e navega para a pagina Resultado (abas Saldo,
+*   Cheque, Vendas, Estoque, Pendencias, Conserto, Cartao, Producao,
+*   H.Cheques e Credito).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormsigopcgv()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formsigopcgv")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Pesquisa Global de Vendas" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Pesquisa Global de Vendas:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSigOpChi - Abre o Historico de Cheques (SIGOPCHI)
+*   Form OPERACIONAL de CONSULTA: pagina Filtro (Conta/CPF/Nome de Origem)
+*   seguida da pagina Historico (grades Cheque, Movimentacao e Prorrogacoes,
+*   alem do Followup e da Conta do Emitente do cheque selecionado).
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSigOpChi()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormSigOpChi")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Historico de Cheques" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Historico de Cheques:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormSIGOPCHR - Abre o Relatorio de Relacao de Cheques (SIGOPCHR)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormSIGOPCHR()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormSIGOPCHR")
+
+        IF VARTYPE(loForm) <> "O"
+            MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Rela" + CHR(231) + CHR(227) + "o de Cheques" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Relat" + CHR(243) + "rio de Rela" + CHR(231) + CHR(227) + "o de Cheques:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

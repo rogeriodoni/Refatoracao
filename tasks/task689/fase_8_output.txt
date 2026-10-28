@@ -1,0 +1,43 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigopcgb.prg` ÔÇö 3016 linhas, 55 m├®todos.
+
+## O que faltava e foi feito
+
+O dump tem **53 eventos** e **quatro** n├úo tinham handler ÔÇö todos do ciclo do campo de c├│digo de barras, que ├® o cora├º├úo da tela:
+
+| legado | migrado |
+|---|---|
+| `getBarras.GotFocus` | `BarrasGotFocus` ÔÇö guarda `peantvalue` em `this_nBarrasAnterior` |
+| `getBarras.LostFocus` + `.Valid` | `BarrasLostFocus` ÔÇö pesquisa ao sair do campo + arma o timer |
+| `tmAux.Timer` (Interval 200) | `TimerFocoBarras` + objeto `tmr_4c_FocoBarras` |
+| `foca` | `FocarBarras` |
+
+O timer n├úo ├® enfeite: em VFP9 n├úo se devolve o foco a um controle de dentro do `LostFocus` **dele**, e ├® esse timer de 200 ms que faz o leitor funcionar em sequ├¬ncia (ler ÔåÆ Enter ÔåÆ campo pronto para a pr├│xima leitura). Nasce desarmado ÔÇö `Timer.Enabled` tem default `.T.` e um timer armado no `Init` roubaria o foco a cada 200 ms ÔÇö, ├® one-shot e tamb├®m ├® desarmado no `Destroy`.
+
+Tr├¬s acertos de fidelidade medidos contra o dump:
+
+1. **Guard do `Valid`** ÔÇö o legado s├│ pesquisa quando o c├│digo **mudou**; sem ele a pesquisa inteira (3 `SELECT` + 3 cursores) repetia a cada sa├¡da do campo. O funil ganhou guard de reentr├óncia em wrapper fino (`ValidarBarras` ÔåÆ `ValidarBarrasExec`), porque o corpo tem `RETURN` antecipado e flag no pr├│prio corpo travaria ligada e mataria o lookup.
+2. **Ramo "Init com `pBar`"** ÔÇö faltavam as duas linhas finais: travar o campo e levar o foco ao Encerrar. Aberta por outra tela, a consulta ├® de **um** c├│digo.
+3. **`When` das 3 grades** (`Return(!Empty(GetBarras.Value))`) entrou no `AtualizarEstadoBotoes`, que j├í cuidava dos 6 bot├Áes.
+
+N├úo portados, documentado no cabe├ºalho: `Load` (`=fConfigGeral()`, precedente de `FormSigMvExp`/`FormSigMvMen`) e `ThisForm.Tpbusca` ÔÇö escrita em tr├¬s pontos do legado e **nunca lida**, estado morto.
+
+## Gate da Fase 8 ÔÇö defeito g├¬meo do que a Fase 7 consertou
+
+O gate reprovava exigindo `BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista` de um form sem Page2 e sem modo de edi├º├úo. A ├║nica evid├¬ncia de CRUD no dump ├® o **nome** `btnVisualizar`, que aqui ├® o par do `btnImprimir` na impress├úo da etiqueta. A Fase 7 j├í consulta `Test-VerbosCrudSaoTodosDeRelatorio` para esse desempate ÔÇö e o docstring da fun├º├úo **cita o SIGOPCGB pelo nome** ÔÇö, mas cada `case` tem seu pr├│prio bloco de predicados e o `case 8` nunca o consultou. Acrescentei o call site (mesmo helper, fonte ├║nica) alimentando `$semCrudRealF8`, lido s├│ pelo ramo FLUXO-├ÜNICO, n├úo `$semCrudLegadoF8`, lido pelos treze ramos.
+
+Dois deltas medidos: o **predicado** muda em 1 dump de todos os de `tasks\`; o **veredito** muda em 1 harness ÔÇö `VerificarGateFase8Task689.ps1` (novo) d├í `PASSA` no patchado e `REPROVA` no baseline pr├®-patch, e os outros 11 `VerificarGateFase8*.ps1` d├úo sa├¡da id├¬ntica antes e depois.
+
+## Verifica├º├úo ÔÇö e o que n├úo d├í para afirmar
+
+Provado: compila├º├úo **limpa do texto final** (`FORM.FXP=.T. FORM.ERR=.F. BO.FXP=.T. BO.ERR=.F. MENU.FXP=.T. MENU.ERR=.F.`, com os `.FXP` apagados antes); `Test-CompletudeCodigo` = `True` nos dois arquivos; auditorias #13/#33/#47/#51 e `FormBuscaAuxiliar` limpas; zero acento literal, zero `RETURN` em `TRY`, zero `.Self`/`Controls("nome")`/`this_X .Value`.
+
+Instancia├º├úo real no VFP9 passou verde ÔÇö Timer existente/`Interval=200`/desarmado, os 4 `BINDEVENT` **registrados** (provado por `AEVENTS`, n├úo por `PEMSTATUS`), m├®todos novos PUBLIC, guard de reentr├óncia sempre liberado, one-shot desarmando, grades seguindo o `When`, `BtnEncerrarClick` sem exce├º├úo. **Ressalva honesta:** esse probe cobriu o texto que difere do final por **uma** mudan├ºa ÔÇö a reescrita de `AND` encadeado para `IF` aninhado no `BarrasLostFocus` (VFP9 n├úo faz short-circuit). Tentei re-rod├í-lo e o smoke test de 4 linhas passou a devolver `SEM-SAIDA`: o VFP9 voltou ao modo de compilar e sair sem executar, ent├úo n├úo houve como reprovar essa ├║ltima linha de controle de fluxo al├®m da compila├º├úo limpa.
+
+No caminho achei e corrigi um defeito meu de ferramenta: `Set-Content -Encoding utf8` do PowerShell 5.1 gravou **BOM** no `.prg` do probe, e o VFP9 leu o BOM junto com o primeiro token (`Error in line 1: Unrecognized command verb.` sobre `SET SAFETY OFF`) ÔÇö foi isso, n├úo a intermit├¬ncia, que matou uma das execu├º├Áes. Os `.prg` do projeto nunca tiveram BOM.
+
+**Esta execu├º├úo ainda vai reprovar.** O processo do orquestrador desta task iniciou 23:50:48 e o `.ps1` foi gravado 02:14 ÔÇö pela regra j├í estabelecida no projeto isso ├® self-reference, ent├úo a valida├º├úo desta pr├│pria run v├¬ o gate velho e reporta os quatro nomes. O conserto vale da pr├│xima invoca├º├úo; o entreg├ível est├í provado por fora pelo harness standalone do `case 8`.

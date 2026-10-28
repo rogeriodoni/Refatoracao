@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei a ├║nica ocorr├¬ncia listada ÔÇö `THIS.Width()`. No c├│digo real n├úo existe nenhuma chamada desse tipo: todas as 16 ocorr├¬ncias de `.Width` no form s├úo leitura/atribui├º├úo de propriedade (`.Width = THIS.Width`, `.Width = 237`, `Column1.Width + Column3.Width`, etc.), nunca invoca├º├úo como m├®todo.
+
+O "achado" ├® falso positivo do detector: ele casou a regex de chamada de m├®todo (`\w+\(`) contra o **coment├írio** da linha 215 ÔÇö
+
+```
+* valores) - cnt_4c_Sombra usa THIS.Width (regra #11, canonico); os
+```
+
+ÔÇö onde o `(` que fecha "regra #11, canonico)" est├í logo depois de `THIS.Width`, mas n├úo h├í par├¬nteses reais de chamada ali nem em nenhum outro ponto do arquivo (confirmado com `grep -n` tanto para `Width\(\)` quanto para `THIS\.Width\s*\(`).
+
+N├úo h├í nada para corrigir neste pass: nenhuma altera├º├úo foi feita em `FormSigOpCfp.prg` nem em `SigOpCfpBO.prg`, pois o ├║nico problema da lista n├úo existe de fato no c├│digo ÔÇö ├® ru├¡do de detector em texto de coment├írio, mesma classe de falso positivo j├í registrada em mem├│ria (`feedback_comentario_citando_nome_satisfaz_gate`).

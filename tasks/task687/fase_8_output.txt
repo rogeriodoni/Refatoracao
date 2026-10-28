@@ -1,0 +1,45 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 executada. Os dois arquivos est├úo completos.
+
+## O que a Fase 8 acrescentou
+
+**`FormSigOpCfl.prg`** (+491/ÔêÆ142 linhas, 1979 no total) ÔÇö os m├®todos que faltavam e o funil de estado:
+
+| M├®todo | Papel |
+|---|---|
+| `BOParaForm()` | inverso do `FormParaBO` ÔÇö leva o followup do BO para o painel (├® o que o `cmdAlterar.Click` legado fazia lendo `CrSigCheh` direto) |
+| `BtnCancelarClick()` | fecha o painel sem gravar + repinta + devolve o foco ÔÇö as 3 ├║ltimas linhas do `GetHist.LostFocus` legado |
+| `AjustarBotoesPorModo()` | **funil ├║nico** derivado de `this_cModoAtual`: visibilidade do painel, `HabilitarCampos`, reempilhamento por permiss├úo |
+| `LimparCampos()` / `HabilitarCampos()` | zera e libera/trava os dois campos do painel |
+| `TemLinhaSelecionada()` / `FocarCelulaHistorico()` / `EsvaziarCursorDados()` / `ExibirCabecalhoCheque()` | helpers extra├¡dos de blocos duplicados |
+
+**`SigOpCflBO.prg`** (+181 linhas): `ValidarDados()` (a regra `If !Empty(GetHist.Value)` do legado em fonte ├║nica, reportada pelo `BusinessBase.Salvar`), `CarregarHistorico()` e `CarregarCabecalho()` ÔÇö o SQL saiu do form (PILAR 3) e as 6 properties auxiliares que estavam declaradas sem uso passaram a ser alimentadas.
+
+## Defeitos reais que encontrei e corrigi
+
+1. **Guardas de alias quebradas** ÔÇö `BtnAlterarClick`/`BtnExcluirClick` usavam `!USED(x) OR RECCOUNT(x) = 0`; VFP9 n├úo faz short-circuit, ent├úo o `RECCOUNT` roda com o alias fechado e estoura *Alias is not found*. Virou `TemLinhaSelecionada()` com IFs aninhados.
+2. **`Format = "K!"` de 4 TextBoxes descartado** na migra├º├úo (regra #49) ÔÇö o auditor fechou em `ALTA=0 MEDIA=0 BAIXA=0`.
+3. **18 `TabIndex` do dump nunca transcritos** ÔÇö a ordem de tabula├º├úo ├® PILAR 1.
+4. **`DataSession = 2` do SCX ausente** (248 dos 471 forms migrados transcrevem). Adicionei junto com o que ela torna obrigat├│rio: `SET SAFETY` ├® escopado por sess├úo e vale `ON` na privada, ent├úo o `ZAP` abriria *"ZapÔÇª Are you sure?"* e **congelaria a tela** ÔÇö todo ZAP passa agora por `EsvaziarCursorDados()`, que salva/restaura o SAFETY.
+5. **CorretorAutomatico ia quebrar este form.** Um coment├írio da Fase 7 citava `cmg_4c_Botoes` como exemplo, e a heur├¡stica "arquivo tem esse nome em algum lugar" n├úo distingue coment├írio de c├│digo: o form OPERACIONAL era classificado como REPORT e o corretor injetava `HeaderHeight = 0`, **escondendo os cabe├ºalhos "Data / Hora" e "Observa├º├úo"**. Removi o token do coment├írio; o corretor agora n├úo muta nada.
+
+## N├úo foi feito, de prop├│sito
+
+- **Sem `BtnBuscarClick`/`BtnSalvarClick`, sem bot├úo de Cancelar na tela**: o legado grava no `LostFocus` e n├úo tem esses bot├Áes. `BtnCancelarClick` nomeia o caminho de cancelamento que o legado j├í tem (observa├º├úo em branco), sem desenhar bot├úo novo.
+- **Sem entrada em `menu.prg`**: `SIGOPCFL` ├® aberto por programa recebendo o cheque em `par_cConta` e n├úo h├í caller no acervo desta task. Pelo menu a tela abriria sem cheque e o Incluir gravaria followup ├│rf├úo em `SigCheh` ÔÇö por isso h├í guarda no `BtnIncluirClick` e em `ValidarDados`. `config.prg` n├úo precisou de nada (carrega `operacionais\Form*.prg` e `classes\*BO.prg` por `ADIR()`).
+
+## Verifica├º├úo ÔÇö e o limite dela
+
+**N├úo consegui compilar nem instanciar.** O smoke test obrigat├│rio do VFP9 (`STRTOFILE` + `QUIT`) deu **timeout sem gerar o arquivo de sa├¡da**: nesta sess├úo o `vfp9.exe` n├úo executa. N├úo afirmo COMPILE_OK nem PROBE_OK.
+
+O que passou, estaticamente: gate da Fase 8 (`metodosFaltantes: nenhum`, ramo *linha-imediata* qualificado), `ValidadorSQLSchema` (6 statements, nenhuma coluna inv├ílida, INSERT cobre todas as NOT NULL), `ValidarLayoutVsPrg` (26/26, 0 erros), completude (0 TODO/stub/procedure vazia), `VerificarFuncoesNaoDefinidas`, `VerificarMetodoProtegidoChamadoDeFora`, `VerificarPropriedadesInexistentes`, `VerificarLookupEmKeyPress`, `VerificarColunaEmpresaSQL`, `RETURN` dentro de `TRY` = 0, acentos literais = 0, blocos balanceados.
+
+Dois warnings sobreviveram, ambos verificados como falso positivo: **#168** pede `fundo_cad_1003.jpg`, mas o form tem o `Picture` que o legado declara (`new_background.jpg`, presente em `vbmp/`) e n├úo tem PageFrame; **#216** diz "0/6 InputMask" porque seu regex ├® ancorado em `^\s*\.InputMask` e n├úo v├¬ `.Column2.InputMask` ÔÇö o auditor dedicado confirma 1/1.
+
+Os 2 warnings do `ValidarLayoutVsPrg` s├úo a colis├úo de nome `Say13`, que existe nos dois containers e mapeia para o mesmo `lbl_4c_Label13`; conferi os dois no c├│digo ÔÇö Top 19 no painel e Top 6 no `cnt_4c_Dadoschq`, ambos corretos.
+
+Removi os `.fxp` obsoletos (eram de 21:42, anteriores ├ás edi├º├Áes) para o pr├│ximo COMPILE n├úo rodar c├│digo velho.

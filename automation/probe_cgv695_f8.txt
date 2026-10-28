@@ -1,0 +1,47 @@
+=== PROBE Fase 8 - Formsigopcgv (task695) ===
+0) flags: ModoTeste=.T. ValidandoUI TYPE=L valor=.T. gnConnHandle=-1
+1) CREATEOBJECT -> VARTYPE=O Width=1000 Height=300 ControlCount=1
+   pgf=.T. Origem=.T. GrpOperacao=.T. ActivePage=1 Modo=[CONSULTA]
+2) escopos (Protected=.T. significa inacessivel de fora):
+   CarregarLista        Prot=.F. esperado .F.
+   HabilitarCampos      Prot=.F. esperado .F.
+   AjustarBotoesPorModo Prot=.F. esperado .F.
+   AlternarPagina       Prot=.F. esperado .F.
+   BtnBuscarClick       Prot=.F. esperado .F.
+   BtnSalvarClick       Prot=.F. esperado .F.
+   BtnCancelarClick     Prot=.F. esperado .F.
+   BtnEncerrarClick     Prot=.F. esperado .F.
+   FormParaBO           Prot=.T. esperado .T. (FormBase)
+   BOParaForm           Prot=.T. esperado .T. (FormBase)
+   LimparCampos         Prot=.T. esperado .T. (FormBase)
+3) cascata de When:
+   a) todos vazios -> Conta=.F. Cpf=.F. DConta=.F. Conjuge=.F. Telefone=.F.  (esperado todos .F.)
+   b) Conta preenchida -> Conta=.F. Cpf=.T. DConta=.T. Conjuge=.T. Telefone=.T.  (esperado Conta .F. e os outros 4 .T.)
+   c) HabilitarCampos(.F.) -> Conta=.T. optFiltro.Enabled=.F.  (esperado .T. / .F.)
+4) FormParaBO:
+   Conta=[0000000123] Nome=[CLIENTE DE TESTE]
+   Cpf=[111.222.333-44] Conjuge=[CONJUGE DE TESTE] Telefone=[71999990000]
+   OpcaoFiltro=2 esperado 2   DtIni=01/01/2026 DtFim=31/12/2026
+5) BOParaForm:
+   Conta=[0000000999] Nome=[OUTRO CLIENTE]
+   Cpf=[999.888.777-66] Conjuge=[OUTRO CONJUGE] Telefone=[71888880000]
+   optFiltro=1   DtIni=01/03/2026 DtFim=31/03/2026
+   ReadOnly apos a volta -> Cpf=.T. (esperado .T.)
+6) LimparCampos:
+   tela -> Conta vazio=.T. Nome vazio=.T. Cpf vazio=.T. Conjuge vazio=.T. Telefone vazio=.T.
+   BO   -> Conta vazio=.T. ConsultaExecutada=.F. LimiteCredito=0 Escolha=[] OpcaoFiltro=1
+7) BtnSalvarClick com Escolha=[CONSULTAR] -> .T. esperado .T. (nao bloqueia a saida)
+   BtnSalvarClick com Escolha=[ALTERAR] e MsgConfirma=.F. -> .T. esperado .T.
+8) AjustarBotoesPorModo na pagina Consulta:
+   grp_operacao Left=769 Width=235 (esperado 769 / 235 - acesso liberado)
+   Buttons 1/2/3 Visible=.T./.T./.T.
+   Imprime.Visible=.F. Voltar.Visible=.F. (esperado .F./.F. - barra da pagina Resultado)
+9) AlternarPagina(2) na visao MOVIMENTO:
+   Modo=[RESULTADO] ModoResultado=[MOVIMENTO] ActivePage=2 Height=600
+   Imprime.Visible=.T. Voltar.Visible=.T. MudaCli.Visible=.T. MudaMov.Visible=.F. (esperado .T./.T./.T./.F.)
+10) visao CADASTRO:
+   MudaCli.Visible=.F. MudaMov.Visible=.T. Periodo.Visible=.F. (esperado .F./.T./.F.)
+11) BtnCancelarClick na pagina Resultado:
+   ActivePage=1 Modo=[CONSULTA] Escolha=[] Height=300 (esperado 1 / CONSULTA / vazio apos LimparDados / 300)
+
+PROBE_OK

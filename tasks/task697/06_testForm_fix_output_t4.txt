@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Conclus├úo: n├úo ├® bug de c├│digo ÔÇö ├® o bloqueio de infraestrutura j├í conhecido
+
+O erro n├úo ├® um defeito em `FormSigOpChc.prg`/`SigOpChcBO.prg`. O log mostra claramente:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [...] SQL Server inexistente ou acesso negado.
+```
+
+Isso acontece **antes** de qualquer `CREATEOBJECT` do form ou do BO ser executado ÔÇö ou seja, o c├│digo sob teste nunca chega a rodar. Confirmei com `Test-NetConnection 192.168.200.10 -Port 1433`: `TcpTestSucceeded=False` / `PingSucceeded=False`. Esta ├® a mesma assinatura documentada em mem├│ria h├í mais de 100 tasks desde 2026-08-02 (a m├íquina que roda o pipeline n├úo tem rota para a sub-rede `192.168.200.0/24` onde vive o SQL Server `DB_MBAHIA`).
+
+Revisei `FormSigOpChc.prg` e `SigOpChcBO.prg` linha a linha para garantir que n├úo havia um bug de c├│digo coexistindo com o problema de rede ÔÇö n├úo encontrei nenhum. A implementa├º├úo j├í segue corretamente v├írias regras do CLAUDE.md (BINDEVENT s├│ em m├®todos PUBLIC, `GO TOP`+`Refresh` ap├│s popular cursor, `Show()` fora do `TRY`, cursor placeholder criado antes do bind de colunas, lookup/valida├º├úo em `LostFocus`, nenhum m├®todo PROTECTED chamado de fora do BO).
+
+N├úo editei nem reescrevi os arquivos ÔÇö fazer isso arriscaria introduzir regress├úo em c├│digo que j├í est├í correto, sem resolver o problema real (que ├® de rede/infraestrutura, fora do alcance de qualquer edi├º├úo `.prg`). Registrei esta reincid├¬ncia (task697, tentativa 4/10) na mem├│ria do projeto para manter o hist├│rico.

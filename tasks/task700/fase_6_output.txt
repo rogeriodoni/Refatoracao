@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed successful compilation of both files. Fase 6/8 is complete.
+
+## Summary
+
+Completed **Fase 6/8** for `FormSIGOPCHR.prg` (Rela├º├úo de Cheques report form). Since this is a REPORT-type form (FLAT layout, single page), all fields were already present from Fase 5 ÔÇö this phase's job was implementing the lookups.
+
+Added:
+- `this_lEmLookup` reentrancy-guard property (regra #37/#47)
+- 5 `BINDEVENT(..., "LostFocus", ...)` registrations in `ConfigurarPaginaLista()` (never `KeyPress` without testing the key ÔÇö regra #47)
+- 5 lookup method pairs (`Validar<X>` wrapper + `Validar<X>Exec` body, so the reentrancy flag always releases even on early `RETURN`):
+  - **ValidarOper**: exact match against `SigCdOpt.Operacaos`, falls back to `FormBuscaAuxiliar` picker (no description field on this filter, matching the legacy `fwBuscaSel` usage)
+  - **ValidarGrupo/ValidarDGrupo**: bidirectional lookup on `SigCdGcr` (c├│digoÔåödescri├º├úo), replacing the legacy `fAcessoContab` calls
+  - **ValidarConta/ValidarDConta**: bidirectional lookup on `SigCdCli` (c├│digoÔåönome), filtered by the typed Grupo (`grupos = ...`), replacing `fAcessoContas` per the documented canonical pattern (direct use of `fAcessoContas` as a UX handler is prohibited ÔÇö it auto-loads the first `LIKE` match)
+
+All lookups preserve the typed code when the user cancels without selecting (never erase the digitized value ÔÇö regra #50), and clear only the paired description field.
+
+Verified both `FormSIGOPCHR.prg` and `SIGOPCHRBO.prg` compile cleanly in VFP9 (FXP generated, no `.err` file).

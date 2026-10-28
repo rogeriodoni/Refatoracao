@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resultado do pass VISUAL
+
+**[TITULO-NAO-PROPAGADO] ÔÇö FALSO POSITIVO, nao aplicado.**
+
+Conferi `FormSIGOPCGF.prg`: o container `cnt_4c_Sombra` (dentro de `Page1`, via `ConfigurarCabecalhoFiltros`) ja propaga o Caption nos dois labels, dentro do proprio `WITH` de criacao:
+
+- `lbl_4c_Sombra` (linha 296): `.Caption = THIS.Caption`
+- `lbl_4c_TituloCabecalho` (linha 313): `.Caption = THIS.Caption`
+
+O achado sugere injetar `THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption` ÔÇö mas o segundo label se chama `lbl_4c_TituloCabecalho`, nao `lbl_4c_Titulo`. Aplicar literalmente estouraria `Property LBL_4C_TITULO is not found`; mesmo corrigindo o nome, seria uma atribuicao duplicada e redundante.
+
+Esse padrao (pass VISUAL gerando `[TITULO-NAO-PROPAGADO]` templated, sem conferir a estrutura real do arquivo) ja tem **~20 reincidencias documentadas** em memoria (`feedback_titulo_nao_propagado_falso_positivo.md`), inclusive com `GATE CORRIGIDO` no `ComparadorUI.prg`. Registrei esta ocorrencia na memoria como mais um caso confirmado.
+
+Nenhuma alteracao foi feita em `FormSIGOPCGF.prg` nem em `SIGOPCGFBO.prg` ÔÇö nao havia outros problemas na lista deste pass.

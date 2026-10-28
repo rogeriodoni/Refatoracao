@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 validada. O retry falhou por **falso positivo do gate**, n├úo por c├│digo faltando.
+
+## Diagn├│stico
+
+A Fase 7 anterior j├í estava implementada e correta. O gate exigia os 4 `BtnXxxClick`, mas o `SIGOPCGB` ├® um **consultor somente-leitura** sem CRUD: zero `frmcadastro`, `Grupo_Op`, `pcEscolha` e `<X>.Click` no dump. A ├║nica evid├¬ncia era o **nome** `btnVisualizar` ÔÇö que ali ├® o par do `btnImprimir` na impress├úo da etiqueta:
+
+- `btnVisualizar.Click` ÔåÆ `ThisForm.Imagem('V')` ÔåÆ `Report Form SIGOPCGB Preview NoConsole`
+- `btnImprimir.Click` ÔåÆ `ThisForm.Imagem('I')` ÔåÆ `Report Form SIGOPCGB To Print Prompt NoConsole`
+
+├ë exatamente a 7┬¬ exce├º├úo (`Test-VerbosCrudSaoTodosDeRelatorio`), que n├úo alcan├ºava o caso por **dois** motivos: ela usava regex pr├│prio s├│ da forma *qualificada* (nunca achava o Click de CommandButton **solto**, o alerta que o docstring do `Get-CorpoClickDoObjetoLegado` j├í registrava), e o `REPORT FORM` est├í **um n├¡vel** atr├ís, num m├®todo do form.
+
+Corrigi passando-a a usar o helper compartilhado e a seguir um n├¡vel de indire├º├úo (`Get-CorpoMetodoDoFormLegado`, nova, sem recurs├úo), mantendo fail-closed em 5 camadas.
+
+**Medi├º├úo nos 688 dumps de `tasks\`: o veredicto muda em 1 dump (SIGOPCGB), 0 regress├Áes.** Todos os CRUD conhecidos seguem `True`; a su├¡te de regress├úo das Fases 7/8 passa igual ao HEAD (as 2 que "diferem" diferem s├│ em path e n├║mero de linha, deslocado +85 pelo patch). Deixei `automation/VerificarGateFase7Task689.ps1`, que recorta o `case 7` real: **PASSA** no novo, **REPROVA** no HEAD.
+
+## Fase 7 ÔÇö conte├║do
+
+Os 9 bot├Áes/checkbox do legado t├¬m handler (5 com prefixo `Btn*`, piso do gate ├® 2). Compila limpo (`.fxp` gerado, zero `.err`); auditorias de regras #1, #8, #13, #34, #38, #51, #52, propriedades inexistentes e `MESSAGEBOX` todas limpas.
+
+Corrigi um defeito real que encontrei nos handlers de Imprimir/Visualizar ÔÇö a vers├úo anterior mascarava o FRX ausente com `IF FILE()`:
+
+- **Copiei `SigOpCgb.frx`/`.frt`** do acervo legado (existiam em `C:\4install\FortyusMC\Fortyus\`).
+- **O alias do cursor ├® contrato do FRX, n├úo nome escolhido.** Lendo o `.frt`: `csCabecalho.CodBarras/.CPros/.DPros/.Fornecedor/.Referencia/.empresa`. O migrado criava `cursor_4c_Etiqueta` seguindo o PILAR 3 ÔåÆ o relat├│rio estouraria com *"Alias CSCABECALHO is not found"*. Aqui o alias ├® dado do relat├│rio, como nome de coluna (PILAR 2). Esse rename incidentalmente desfez uma **colis├úo**: o BO usa `cursor_4c_Etiqueta` para o lookup de `SigOpEtq`, que estava sendo sobrescrito.
+- **O `.jpg` tem nome fixo**: a express├úo do Image ├® `Sys(2023) + '\SigOpCgb.Jpg'`. Gravar em nome aleat├│rio (`SYS(2015)`) escrevia arquivo que o report nunca l├¬ ÔåÆ a etiqueta sairia com a **imagem do produto anterior**. Agora usa o nome fixo, grava o fundo branco (`vbmp\brjpg.jpg`) quando n├úo h├í foto ÔÇö como o legado ÔÇö e faz `CLEAR RESOURCES`.
+- Troquei o `REPORT FORM` cru pelo helper can├┤nico com isolamento de locale (`SET POINT`/`REPORTBEHAVIOR 80` ÔÇö sem isso os FRX Fortyus imprimem `*****`) e restaura├º├úo do menu.
+
+## O que deixei de fora
+
+**N├úo quantifiquei se outros FRX t├¬m o mesmo problema de alias.** Escrevi uma auditoria, mas ela comparava contra string vazia (erro de null na leitura dos fontes) e reportava 253 falsos positivos ÔÇö descartei o script em vez de entregar ferramenta ruidosa, que ├® justamente o que o CLAUDE.md pro├¡be. Fica como **suspeita aberta**: `projeto\app\reports` tem 176 `.frt` e v├írios citam `CsCabecalho`/`crCabecalho`. Vale uma investiga├º├úo dedicada, mapeando FRX ÔåÆ BO/form dono.
+
+**O ├¡ndice de mem├│ria n├úo desce a 17.1KB** como o hook pediu. Os nomes de arquivo s├úo 12.2KB dos 20KB; abreviar r├│tulos rendeu s├│ 276 bytes. Chegar l├í exige *remover* entradas ÔÇö o candidato natural s├úo as ~45 entradas de exce├º├úo de gate, j├í documentadas nos docstrings do orquestrador e cobertas por scripts de regress├úo (duplicam o repo, pelo pr├│prio crit├®rio do sistema de mem├│ria). N├úo apaguei nada: s├úo seus arquivos e a decis├úo ├® sua. O ├¡ndice est├í ├¡ntegro (0 links quebrados) e ainda abaixo do limite de leitura de 24.4KB.

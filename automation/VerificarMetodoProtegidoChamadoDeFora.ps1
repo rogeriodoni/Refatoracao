@@ -10,7 +10,13 @@
 # BO, bloqueia igual. Por isso a checagem sobe a heranca (DEFINE CLASS X AS Y)
 # ate a raiz, e nao olha so o arquivo do BO.
 #
-# Variavel -> classe vem de <var> = CREATEOBJECT("<Classe>") no proprio form.
+# Variavel -> classe vem de <var> = CREATEOBJECT("<Classe>") no proprio form,
+# MAIS os ALIASES locais dessa variavel (loc_oBO = THIS.this_oBusinessObject),
+# propagados em passe de ponto-fixo. Sem o alias, a auditoria ancorava em UMA
+# grafia e ficava SILENCIOSAMENTE PARCIAL (regra #44, item 6): o
+# SigOpCflBO.CarregarDoCursor era PROTECTED e chamado em BtnExcluirClick via
+# loc_oBO, e a auditoria devolvia "OK - nenhum form" com o defeito no lugar.
+# O padrao do alias aparece em ~90 forms do projeto.
 # BO criado por nome em variavel (CREATEOBJECT(loc_cClasse)) nao eh resolvido.
 #
 # Uso:  powershell -ExecutionPolicy Bypass -File automation\VerificarMetodoProtegidoChamadoDeFora.ps1
@@ -56,6 +62,26 @@ foreach ($arq in Get-ChildItem (Join-Path $app 'forms') -Recurse -Filter *.prg) 
             }
         }
     }
+    # Propaga ALIAS local: "loc_oBO = THIS.this_oBusinessObject" e, em geral,
+    # "<v2> = <v1>" com <v1> ja resolvido. Ponto-fixo porque o alias pode vir
+    # de outro alias; limite de 10 passes so para nao girar em caso patologico.
+    for ($passe = 0; $passe -lt 10; $passe++) {
+        $mudou = $false
+        foreach ($l in $linhas) {
+            if ($l -match '^\s*(\*|&&)') { continue }
+            $ma = [regex]::Match($l, '(?i)^\s*([A-Za-z0-9_]+)\s*=\s*(?:THIS(?:FORM)?\.)?([A-Za-z0-9_]+)\s*$')
+            if (-not $ma.Success) { continue }
+            $dst = $ma.Groups[1].Value.ToLower()
+            $src = $ma.Groups[2].Value.ToLower()
+            if ($dst -eq $src) { continue }
+            if ($mapa.ContainsKey($src) -and -not $mapa.ContainsKey($dst)) {
+                $mapa[$dst] = $mapa[$src]
+                $mudou = $true
+            }
+        }
+        if (-not $mudou) { break }
+    }
+
     if ($mapa.Count -eq 0) { continue }
     for ($i = 0; $i -lt $linhas.Count; $i++) {
         if ($linhas[$i] -match '^\s*(\*|&&)') { continue }

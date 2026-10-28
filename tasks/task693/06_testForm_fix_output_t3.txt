@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo vou editar `Formsigopcgp.prg`/`sigopcgpBO.prg`. O erro desta etapa (`06_testForm`, tentativa 3/10) ├® 100% id├¬ntico a um padr├úo j├í documentado em mem├│ria de projeto, recorrente em 100+ tasks desde 2026-08-02:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+ERRO - Falha na conexao SQL: Codigo: 1526
+Mensagem: [...] SQL Server inexistente ou acesso negado.
+```
+
+**Por que n├úo ├® bug de c├│digo**: esse erro acontece no preflight `SQLSTRINGCONNECT`, *antes* de qualquer `CREATEOBJECT` do form ou do BO ÔÇö o c├│digo do `Formsigopcgp`/`sigopcgpBO` nunca chega a ser executado. ├ë falha de rota de rede da m├íquina que roda o pipeline para a sub-rede `192.168.200.0/24` (onde fica `192.168.200.10`/`DB_MBAHIA`), n├úo algo que uma edi├º├úo de `.prg` possa corrigir ÔÇö confirmado repetidas vezes com `Test-NetConnection 192.168.200.10 -Port 1433` sempre retornando falha.
+
+Esta ├® a mesma task693, j├í na 3┬¬ tentativa com a mesma assinatura exata (tentativas 1 e 2 j├í revisaram o form/BO linha a linha sem achado relacionado). Editar especulativamente s├│ arriscaria regress├úo em c├│digo j├í revisado 2 vezes.
+
+**Achado paralelo, n├úo relacionado a este erro** (registrado na tentativa 1 e ainda sem solu├º├úo): `BtnConsultarClick` chama `THIS.this_oBusinessObject.BuscarProdutos(loc_oFiltros)`, mas `sigopcgpBO.prg` n├úo define esse m├®todo. Isso s├│ vai estourar quando a conex├úo SQL estiver dispon├¡vel de fato ÔÇö n├úo posso implement├í-lo agora sem o dump do SCX legado (regra de transcri├º├úo literal, #17), ent├úo deixei registrado em mem├│ria para uma sess├úo futura com acesso ao legado.
+
+Atualizei a mem├│ria de projeto `project_sqlserver_200_10_inalcancavel_maquina_pipeline.md` com esta 3┬¬ recorr├¬ncia. Nenhum arquivo `.prg` foi alterado.

@@ -1,0 +1,259 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 8,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "For Cfops = Space", "fUniqueIds", "From Dbf"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCFP",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\t\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = [Cfop's p/: ] + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   Thisform.ParentF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Columns,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local lcod,lfan,arqsel,xobj,xBrox,llTeclouEsc\n\nIf Lastkey() == 27\n\tReturn\nEndif\n\nArqSel = Select()\n\nxBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdCfo','crSigCdCfo','Codigos',This.Value,'Seleção',.t.,'Codigos')\n\nIf  Not xBrox.plAchouRegistro\n\txBrox.mAddColuna('Codigos','','Código',.T.)\n\txBrox.mAddColuna('Descricaos','','Descrição',.T.)\n\txBrox.mAddColuna('Operacaos','','Operação',.F.)\n\txBrox.Show()\nEndIf \n\nIf lastkey()<>27\n\tThis.value = evaluate('crSigCdCfo.Codigos')\n\tunlock\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\tIf !SigCdOpe.podatamgr.ChkRegister( 'SigCdObs', 'Codigos', This.Value )\n\t\txBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')\n\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Codigos', '999999', 'Código', .t.)\n\t\t\txBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])\n\t\t\txBrox.Show()\n\t\tEndIf \n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkRegister(",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return( not Empty(TmpCfoOp.Cfops) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local xBrox\n\nIf Not Empty(This.Value)\n\tIf Not SigCdOpe.poDataMgr.ChkRegister('SigCdObs', 'Codigos', This.Value)\n\t\txBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')\n\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Codigos', '999999', 'Código', .t.)\n\t\t\txBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])\n\t\t\txBrox.Show()\n\t\tEndIf \n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkRegister('SigCdObs'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( not Empty(TmpCfoOp.Cfops) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local xBrox\n\nIf Not Empty(This.Value)\n\tIf Not SigCdOpe.poDataMgr.ChkRegister('SigCdObs', 'Codigos', This.Value)\n\t\txBrox = CreateObject('fwBuscaExt',SigCdOpe.poDatamgr.pnIdconn,'SigCdObs','crSigCdObs','Codigos',This.Value,'Cadastro de Observações',.t.,'Codigos')\n\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Codigos', '999999', 'Código', .t.)\n\t\t\txBrox.mAddColuna('Observas', Replicate('x',40), 'Observação',.f.,[Padr( MLine( Nvl(crSigCdObs.Observas,''), 1 ), 40 )])\n\t\t\txBrox.Show()\n\t\tEndIf \n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkRegister('SigCdObs'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.GradeSubN.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( not Empty(TmpCfoOp.Cfops) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.cmdSair",
+      "evento": "Click",
+      "linhas": 47,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\t**If ( Thisform.lHouveExcl Or Thisform.lHouveIns )\t\n\t\n\t\tSelect TmpCfoOp\n\t\tLOCATE\n\t\tDelete For Cfops = Space(10)\n\t\tReplace all dopes     With CrSigCdOpe.Dopes,;\n\t\t\t\t    CidChaves With fUniqueIds() FOR EMPTY(cIdChaves)\n\n\t\tSelect Cfops, sum(1) From TmpCfoOp Group by 1 having sum(1) > 1 Into Cursor SecondKey\n\t\tSelect SecondKey\n\t\tIf Reccount() > 0\n\t\t\tMessageBox('Existem Cfops em Duplicidade. Favor Acertar!!!',0+16,'Atenção')\n\t\t\tReturn .f.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Cfops = Space,fUniqueIds,From Dbf",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect TmpCfoOp\nLocate for Cfops = Space(10)\nIf Eof()\n\tInsert Into TmpCfoOp (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\n\nSelect TmpCfoOp\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for Cfops = Space",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFP.cmdExcluir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select TmpCfoOp\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCFP.cmdSair.Click",
+      "queryOriginal": "\t\tSelect Cfops, sum(1) From TmpCfoOp Group by 1 having sum(1) > 1 Into Cursor SecondKey",
+      "tabelas": "TmpCfoOp",
+      "colunas": "Cfops",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCFP.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into TmpCfoOp (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "TmpCfoOp",
+      "colunas": "Dopes,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpCfoOp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 0,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "FOUND"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCHC",
+      "evento": "Init",
+      "linhas": 56,
+      "codigoOriginal": "Lparameters pOldForm\nThisForm.ParentForm = pOldForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n*** mena - 18/08/2016 - foi incluido o nome da operacao na grade, um campo para os juros e um botao para chamar inclusao automatica na carteira ***\nlcWher = [Select b.codigos, a.* From SigCcChm a, sigcqlcm b Where Nums = ']+CrSigChe.Nums+[' and a.numlotes = b.numlotes Order By DtSis ]\n\nThisForm.ParentForm.podatamgr.SqlExecute(lcWher... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\nPUBLIC lnTaxa\nlnTaxa = 0.00\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.GrdHistCart.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.btnOK",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHC.Fwbtng1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "*** mena - 17/08/2016 - gera baixa automatica - HDG\nSELECT crSigcdOpt\nLOCATE for operacaos = crSigccchm.codigos\nIF FOUND()\n\tIF crSigcdOpt.devolvidos = 'S'\n\t\tSELECT crSigcdOpt\n\t\tLOCATE for opants = crSigccchm.codigos\n\t\tIF FOUND()\n\t\t\tdo form sigcdche with .F.,.F.,.F.,.T.,crSigcdOpt.operacaos,crSigccchm.codigos,CrSigChe.Nums, thisform.get_taxa.value \t&& gera carteira de baixa de cheque devolvido automaticamente\n\t\t\tthisform.Init(thisform.parentform)\n\t\tENDIF\n\tENDIF\nENDIF\n\nSELECT crSigccchm\nthisform.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FOUND",
+        "metodosFormChamados": "Init",
+        "controlesReferenciados": "get_taxa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCHC.Init",
+      "queryOriginal": "lcWher = [Select b.codigos, a.* From SigCcChm a, sigcqlcm b Where Nums = ']+CrSigChe.Nums+[' and a.numlotes = b.numlotes Order By DtSis ] ",
+      "tabelas": "SigCcChm",
+      "colunas": "codigos,Nums,Nums+[,numlotes,DtSis",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCcChm"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

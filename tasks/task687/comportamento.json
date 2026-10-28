@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCFL",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL",
+      "evento": "Init",
+      "linhas": 98,
+      "codigoOriginal": "LParameters pConta, pData\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nIf Type('pConta')#'C'\n\tpNum = Space(10)\nEndIf\n\nThisForm.conta = pConta\nThisForm.Tipo = ''\nlcNum = pConta\n\nlcQueryCheh  = [Select * From SigCheh Where Nums = ?lcNum ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','SigChefl')\n\tWith .poDataMgr\n\t\t.AddCursor('SigCheh','CidChaves','CrSigCheh','','',lcQueryCheh)\n\tEndWith\n\t= DoDefault()\nEndWith\n\n=ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Requery,Cursorquery",
+        "controlesReferenciados": "Get_bco,Get_agc,Get_cta,Get_Nch",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.Commandgroup1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "Select CrSigCheh\nIf !Eof()\n\tIf !CrSigCheH.Autos .or. IsEmpty(CrSigCheh.Hists) Or IsEmpty(CrSigCheh.Datas)\n\t\tpchave = CrSigCheh.CidChaves\n\t\tlcDelete = [ Delete From SigCheh Where CidChaves = ']+pChave+[']\n\t\tlnErro = ThisForm.poDatamgr.SqlExecute(lcDelete,'')\n\t\tIf lnErro > 0\n\t\t\tThisForm.poDatamgr.Commit()\n\t\t\tSelect CrSigCheh\n\t\t\tDelete\n\t\t\tSkip\n\t\t\tSkip -1\n\t\tElse\n\t\t\tMessageBox('Favor Reiniciar o Processo !!!',0+48,'Falha na Conexão')\n\t\tEndif\n\tElse\n\t\tMessageBox('Histórico automático !!!',0+48,'Impossí... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.Tipo = 'INSERIR'\nThisForm.cnt_inserir.Visible = .t.\nThisForm.cnt_inserir.GetData.Value = DateTime()\nThisForm.cnt_inserir.GetHist.Value = Space(50)\nThisForm.cnt_inserir.Refresh\nThisForm.cnt_inserir.GetData.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = DateTime,Value = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cmdApagaitem",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.Tipo = 'ALTERAR'\nThisForm.cnt_inserir.Visible = .t.\nThisForm.cnt_inserir.GetData.Value = CrSigCheh.Datas\nThisForm.cnt_inserir.GetHist.Value = CrSigCheh.Hists\nThisForm.cnt_inserir.Refresh\nThisForm.cnt_inserir.GetData.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.gridFollowup.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.cmdApagaItem.cmdApagar.Visible",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.gridFollowup.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Empty(this.value)\n\tMessagebox('Data Inválida!',0+64,\"Atenção!\")\n\tReturn 0\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cnt_inserir.GetData",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cnt_inserir.GetHist",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCFL.cnt_inserir.GetHist",
+      "evento": "LostFocus",
+      "linhas": 22,
+      "codigoOriginal": "Local lcConta\nlcConta = ThisForm.Conta\nSelect CrSigCheh\n\nIf !Empty(This.Value)\n\tIf ThisForm.Tipo = 'INSERIR'\n\t\tpChave = fUniqueIds()\n\t\tSelect CrSigCheh\n\t\tAppend Blank\n\t\tReplace Nums      With lcConta,;\n\t\t\t\tDatas     With This.Parent.GetData.Value ,;\n\t\t\t\tEmps      With _Empr,;\n\t\t\t\tCidChaves with pChave\n\tEndif\n\tReplace Hists  With This.Parent.GetHist.Value\n\n\tThisForm.podatamgr.Update('CrSigCheh')\n\tThisForm.podatamgr.commit()\nEndif\nThisForm.cnt_inserir.Visible = .f.\nThisForm.gridFollowup.Refresh\nTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Update,commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPCFL.Init",
+      "queryOriginal": "lcQueryCheh  = [Select * From SigCheh Where Nums = ?lcNum ]",
+      "tabelas": "SigCheh",
+      "colunas": "Nums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPCFL.cmdApagaitem.Click",
+      "queryOriginal": "\t\tlcDelete = [ Delete From SigCheh Where CidChaves = ']+pChave+['] \t\tlnErro = ThisForm.poDatamgr.SqlExecute(lcDelete,'')",
+      "tabelas": "SigCheh",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCheh"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

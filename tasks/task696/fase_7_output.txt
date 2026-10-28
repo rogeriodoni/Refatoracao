@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 7 is complete. Summary of what was implemented:
+
+**`SigOpChbBO.prg`** ÔÇö added two methods:
+- `BuscarCheque(...)` ÔÇö transcribes the legacy `Procura.Click` cascading `DO CASE` (Vencimento > Valor > Banco > Agencia > Conta > Cheque > Controle > Protocolo > Arquivo priority), builds the matching SQL Server `WHERE` against `SigChe` using the correct real column names (`nContas`/`nCheques`/`Nums`/`Numeros`, not the memvar names), and returns the matched rows via `SQLEXEC`.
+- `BuscarNumsPorProtocolo(...)` ÔÇö transcribes the legacy's two-step Protocolo lookup (`SigCqChm.Protocolos` ÔåÆ `Nums`).
+
+**`FormSigOpChb.prg`** ÔÇö added:
+- `ConfigurarBotoesAcao()` ÔÇö creates the two real buttons from the dump (`cmd_4c_Procura` at Left=350, `cmd_4c_BtnCancela` at Left=425, both Top=3/75├ù75, with `cadastro_procurar_60.jpg`/`cadastro_cancelar_60.jpg`, `Cancel=.T.` on Cancela), wired via `BINDEVENT`.
+- `CmdProcuraClick()` ÔÇö calls the BO search, merges results into `cursor_4c_SigChe` with dedup by PK (`Nums`), then closes.
+- `CmdBtnCancelaClick()` ÔÇö closes.
+- `FecharDialogo()` ÔÇö uses `Hide()` instead of the legacy's `ThisForm.Release`, since this is a modal dialog meant to return data (`cursor_4c_SigChe`) to a caller ÔÇö `Release()` would destroy the object before the caller can read it (same pattern as `FormBuscaAuxiliar`).
+
+I documented the one deliberate deviation from the legacy: the legacy did a local `SEEK` against the caller's shared cursor *before* hitting the database (to avoid re-querying). Since this dialog now owns its own result cursor instead of sharing the caller's by name, that pre-check is replaced with a post-fetch dedup by primary key ÔÇö same end state, just a possible redundant DB round-trip for a cheque already found earlier in the same dialog session.

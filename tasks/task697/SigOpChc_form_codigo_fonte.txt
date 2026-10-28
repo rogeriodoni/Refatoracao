@@ -1,0 +1,712 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpChc.SCX
+* Data/Hora: 25/10/2026 11:01:58
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCHC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCHC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCHC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCHC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGOPCHC
+  Class: shape
+  BaseClass: shape
+
+Objeto: GrdHistCart
+  Parent: SIGOPCHC
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPCHC.GrdHistCart.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPCHC.GrdHistCart.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnOK
+  Parent: SIGOPCHC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Fwbtng1
+  Parent: SIGOPCHC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCHC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_taxa
+  Parent: SIGOPCHC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 1
+  Height = 300
+  Width = 776
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Histórico da Carteira"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGOPCHC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.Shape1
+------------------------------------------------------------
+  Top = 36
+  Left = 670
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart
+------------------------------------------------------------
+  ColumnCount = 7
+  Height = 112
+  Left = 66
+  Panel = 1
+  TabIndex = 1
+  Top = 96
+  Width = 643
+  Name = "GrdHistCart"
+  Column1.Width = 80
+  Column1.Name = "Column1"
+  Column2.Width = 80
+  Column2.Name = "Column2"
+  Column3.Width = 80
+  Column3.Name = "Column3"
+  Column4.Width = 80
+  Column4.Name = "Column4"
+  Column5.Width = 80
+  Column5.Name = "Column5"
+  Column6.Width = 66
+  Column6.Name = "Column6"
+  Column7.Width = 139
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Lote"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.GrdHistCart.Column7.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.btnOK
+------------------------------------------------------------
+  Top = 3
+  Left = 701
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 4
+  Name = "btnOK"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.Fwbtng1
+------------------------------------------------------------
+  Top = 216
+  Left = 630
+  Height = 46
+  Width = 80
+  Picture = 
+  Cancel = .T.
+  Caption = "Baixa Cheque"
+  TabIndex = 3
+  Name = "Fwbtng1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Taxa a.m. (%) :"
+  Height = 15
+  Left = 464
+  Top = 233
+  Width = 80
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHC.Get_taxa
+------------------------------------------------------------
+  Comment = ""
+  ControlSource = "lnTaxa"
+  Format = "R"
+  Height = 23
+  InputMask = "999.99"
+  Left = 546
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 229
+  Width = 66
+  BorderColor = 100,100,100
+  ZOrderSet = 34
+  Name = "Get_taxa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCHC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pOldForm
+ThisForm.ParentForm = pOldForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+*** mena - 18/08/2016 - foi incluido o nome da operacao na grade, um campo para os juros e um botao para chamar inclusao automatica na carteira ***
+lcWher = [Select b.codigos, a.* From SigCcChm a, sigcqlcm b Where Nums = ']+CrSigChe.Nums+[' and a.numlotes = b.numlotes Order By DtSis ]
+
+ThisForm.ParentForm.podatamgr.SqlExecute(lcWher,'CrSigCcChm')
+
+Select CrSigCcChm
+Go Top
+
+With ThisForm.GrdHistCart
+	.ColumnCount = 7
+	.ReadOnly = .t.
+	.RecordSource = 'crSigCcChm'
+	.ScrollBars = 2
+
+	.Column1.ControlSource = 'crSigCcChm.Dtsis'
+	.Column1.Width = 80
+	.Column1.Header1.Caption = 'Data'
+
+	.Column2.ControlSource = 'crSigCcChm.GruCarts'
+	.Column2.Width = 80
+	.Column2.Header1.Caption = 'Grupo Dest'
+	
+	.Column3.ControlSource = 'crSigCcChm.ConCarts'
+	.Column3.Width = 80
+	.Column3.Header1.Caption = 'Conta Dest'
+
+	.Column4.ControlSource = 'crSigCcChm.Grupos'
+	.Column4.Width = 80
+	.Column4.Header1.Caption = 'Grupo Orig'
+
+	.Column5.ControlSource = 'crSigCcChm.Contas'
+	.Column5.Width = 80
+	.Column5.Header1.Caption = 'Conta Orig'
+
+	.Column6.ControlSource = 'crSigCcChm.NumLotes'
+	.Column6.Width = 66
+	.Column6.Header1.Caption = 'Lote'
+	
+	.Column7.ControlSource = 'crSigCcChm.codigos'
+	.Column7.Width = 110
+	.Column7.Header1.Caption = 'Operacao'
+	
+	For I=1 To .ColumnCount
+		lnCol = Alltrim(Str(I))
+		.Column&lnCol..Movable = .f.
+		.Column&lnCol..ReadOnly = .t.
+		.Column&lnCol..Resizable = .f.
+		.Column&lnCol..Header1.Alignment = 2
+	Next
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+PUBLIC lnTaxa
+lnTaxa = 0.00
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.GrdHistCart.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.btnOK
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHC.Fwbtng1
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*** mena - 17/08/2016 - gera baixa automatica - HDG
+SELECT crSigcdOpt
+LOCATE for operacaos = crSigccchm.codigos
+IF FOUND()
+	IF crSigcdOpt.devolvidos = 'S'
+		SELECT crSigcdOpt
+		LOCATE for opants = crSigccchm.codigos
+		IF FOUND()
+			do form sigcdche with .F.,.F.,.F.,.T.,crSigcdOpt.operacaos,crSigccchm.codigos,CrSigChe.Nums, thisform.get_taxa.value 	&& gera carteira de baixa de cheque devolvido automaticamente
+			thisform.Init(thisform.parentform)
+		ENDIF
+	ENDIF
+ENDIF
+
+SELECT crSigccchm
+thisform.Refresh
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCHC
+RESERVED3 (ClassInfo): chqlido
+lecheque
+leitor
+ordenar
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

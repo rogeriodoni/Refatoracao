@@ -85,6 +85,9 @@ DEFINE CLASS FormFea AS FormBase
                 THIS.this_cPEmps    = ALLTRIM(go_4c_Sistema.cCodEmpresa)
                 THIS.this_cAntEmpr  = THIS.this_cPEmps
 
+                *-- Cursores de trabalho ANTES dos controles (legado: Load)
+                THIS.CriarCursoresResultado()
+
                 THIS.ConfigurarPageFrame()
                 THIS.ConfigurarPaginaLista()
                 THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
@@ -548,7 +551,9 @@ DEFINE CLASS FormFea AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
         *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
-        *-- conteudo da pagina deslocado +61 para nao ficar sob a faixa
+        *-- Bloco de campos do topo deslocado +79 alem da compensacao +29 do
+        *-- PageFrame: a faixa ocupa Top 29..109, e quem tem de ficar abaixo dela
+        *-- eh o Shape1 (a moldura), nao o primeiro TextBox (regra #11)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
             .Top           = 29
@@ -595,15 +600,19 @@ DEFINE CLASS FormFea AS FormBase
 
 
         *-- Container botoes acao - Confirmar + Cancelar (Grupo_Salva no legado)
-        *-- Top=46 = 17 (original) + 29 (compensacao)
-        *-- Width=90 inicial (Cancelar oculto); 173 quando modo INSERIR com Fechamento
+        *-- Canonico da pagina Dados (98 forms, ref. FormCor): Top=33, Left=842,
+        *-- Width=160. Com isso Confirmar cai em 847..922 e Encerrar em 922..997,
+        *-- exatamente sobre cmd_4c_Buscar e cmd_4c_Encerrar da pagina Lista.
+        *-- Width=160 ja de nascimento: o Container RECORTA os filhos, e com 90 o
+        *-- Cancelar (Left=80, W=75) ficava cortado ate AjustarBotoesPorModo rodar.
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 46
-            .Left        = 817
-            .Width       = 90
+            .Top         = 33
+            .Left        = 842
+            .Width       = 160
             .Height      = 85
             .BackStyle   = 0
+            .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
 
@@ -659,10 +668,10 @@ DEFINE CLASS FormFea AS FormBase
         BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
 
         *-- Shape de borda ao redor dos campos de entrada (Shape1 no legado)
-        *-- Top=36 = 7 (original) + 29 (compensacao)
+        *-- Top=115 = 7 (original) + 29 (PageFrame) + 79 (abaixo da faixa)
         loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
         WITH loc_oPagina.shp_4c_Shape1
-            .Top         = 36
+            .Top         = 115
             .Left        = 9
             .Width       = 662
             .Height      = 110
@@ -675,7 +684,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 114
+            .Top       = 132
             .Left      = 30
             .Width     = 42
             .Height    = 15
@@ -693,7 +702,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = 0
-            .Top           = 109
+            .Top           = 127
             .Left          = 75
             .Width         = 54
             .Height        = 25
@@ -712,7 +721,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Data :"
-            .Top       = 114
+            .Top       = 132
             .Left      = 158
             .Width     = 32
             .Height    = 15
@@ -730,7 +739,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_Data", "TextBox")
         WITH loc_oPagina.txt_4c_Data
             .Value         = {}
-            .Top           = 109
+            .Top           = 127
             .Left          = 198
             .Width         = 80
             .Height        = 25
@@ -750,7 +759,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Grupo :"
-            .Top       = 141
+            .Top       = 159
             .Left      = 34
             .Width     = 38
             .Height    = 15
@@ -767,7 +776,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value         = ""
-            .Top           = 136
+            .Top           = 154
             .Left          = 75
             .Width         = 80
             .Height        = 25
@@ -788,7 +797,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrupo", "TextBox")
         WITH loc_oPagina.txt_4c_DGrupo
             .Value         = ""
-            .Top           = 136
+            .Top           = 154
             .Left          = 157
             .Width         = 290
             .Height        = 25
@@ -809,7 +818,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Conta :"
-            .Top       = 168
+            .Top       = 186
             .Left      = 34
             .Width     = 38
             .Height    = 15
@@ -826,7 +835,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_Conta", "TextBox")
         WITH loc_oPagina.txt_4c_Conta
             .Value         = ""
-            .Top           = 163
+            .Top           = 181
             .Left          = 75
             .Width         = 80
             .Height        = 25
@@ -847,7 +856,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_DConta", "TextBox")
         WITH loc_oPagina.txt_4c_DConta
             .Value         = ""
-            .Top           = 163
+            .Top           = 181
             .Left          = 157
             .Width         = 290
             .Height        = 25
@@ -868,7 +877,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Lote :"
-            .Top       = 141
+            .Top       = 159
             .Left      = 504
             .Width     = 30
             .Height    = 15
@@ -886,7 +895,7 @@ DEFINE CLASS FormFea AS FormBase
         loc_oPagina.AddObject("txt_4c_Lote", "TextBox")
         WITH loc_oPagina.txt_4c_Lote
             .Value         = 0
-            .Top           = 136
+            .Top           = 154
             .Left          = 543
             .Width         = 54
             .Height        = 25
@@ -908,7 +917,7 @@ DEFINE CLASS FormFea AS FormBase
             .Caption         = "\<Processar"
             .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
             .PicturePosition = 13
-            .Top             = 112
+            .Top             = 130
             .Left            = 747
             .Width           = 75
             .Height          = 75
@@ -929,10 +938,10 @@ DEFINE CLASS FormFea AS FormBase
 
         *-- Container resultado (Resultado no legado)
         *-- INICIA OCULTO - torna-se visivel apos BtnProcessarClick executar
-        *-- Top=152 = 123 (original) + 29 (compensacao)
+        *-- Top=231 = 123 (original) + 29 (PageFrame) + 79 (abaixo da faixa)
         loc_oPagina.AddObject("cnt_4c_Resultado", "Container")
         WITH loc_oPagina.cnt_4c_Resultado
-            .Top         = 213
+            .Top         = 231
             .Left        = 10
             .Width       = 980
             .Height      = 460
@@ -1331,8 +1340,8 @@ DEFINE CLASS FormFea AS FormBase
             *-- Confirmar.Cancel: ativado por ESC quando nao se pode confirmar
             loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Cancel = loc_lConsultar
 
-            *-- Width do container: 90 so Confirmar / 173 Confirmar + Cancelar
-            loc_oPagina.cnt_4c_BotoesAcao.Width = IIF(loc_lConsultar, 90, 173)
+            *-- Width do container: 90 so Confirmar / 160 Confirmar + Cancelar
+            loc_oPagina.cnt_4c_BotoesAcao.Width = IIF(loc_lConsultar, 90, 160)
 
             *-- Processar: visivel somente em INSERIR
             loc_oPagina.cmd_4c_Processar.Visible = (THIS.this_cPcEscolha = "INSERIR")
@@ -1388,6 +1397,9 @@ DEFINE CLASS FormFea AS FormBase
             ENDIF
 
             *-- TmpGccr - grupos de balanco (SigCdGcr, filtrando GerBals=1)
+            *-- Filtro FIEL ao legado. Medido em DB_MBAHIA (2026-10-27): as 44
+            *-- linhas de SigCdGcr gravam GerBals = 2, entao o lookup abre vazio -
+            *-- eh DADO nao configurado, nao defeito (mesmo caso da regra #50).
             IF !USED("TmpGccr")
                 loc_cSql = "SELECT Codigos, Descrs, UnifBals, GruFals FROM SigCdGcr WHERE GerBals = 1"
                 IF SQLEXEC(gnConnHandle, loc_cSql, "TmpGccr") > 0
@@ -1400,19 +1412,31 @@ DEFINE CLASS FormFea AS FormBase
 
             *-- TmpCli - contas de balanco (clientes/contas correntes)
             IF !USED("TmpCli")
-                loc_cSql = "SELECT IClis, RClis, PagFals, RecFals, GruFals, Inativas, IClis AS BalCodigo, RClis AS BalNome " + ;
+                *-- Colunas = legado (Select IClis, RClis, Grupos, PagFals, RecFals,
+                *-- GruFals, Inativas From SigCdCli). BalCodigo/BalNome sao nomes de
+                *-- TAG de indice, NAO colunas - nao criar alias para eles.
+                *-- FILTRO: o legado usa "Where GerBals = 1". Medido em DB_MBAHIA
+                *-- (2026-10-27): as 1506 linhas de SigCdCli gravam GerBals = 0, logo
+                *-- esse Where devolve ZERO e o lookup de Conta fica vazio. Mantido o
+                *-- filtro por empresa (85 linhas em 001) ate o flag ser configurado
+                *-- no banco; trocar para GerBals = 1 eh decisao de DADO, nao de codigo.
+                loc_cSql = "SELECT IClis, RClis, Grupos, PagFals, RecFals, GruFals, Inativas " + ;
                            "FROM SigCdCli WHERE Emps = " + EscaparSQL(loc_cEmpr)
                 IF SQLEXEC(gnConnHandle, loc_cSql, "TmpCli") > 0
                     SELECT TmpCli
-                    INDEX ON BalCodigo TAG BalCodigo
-                    INDEX ON BalNome   TAG BalNome
+                    INDEX ON IClis TAG BalCodigo
+                    INDEX ON RClis TAG BalNome
                     SET ORDER TO BalCodigo
                 ENDIF
             ENDIF
 
             *-- TmpPro - produtos/materiais (SigCdPro)
             IF !USED("TmpPro")
-                loc_cSql = "SELECT CPros, CUnis, Varias, Cgrus, MatPrincs, Custofs, MoeCusfs FROM SigCdPro"
+                *-- Legado: Select CPros, DPros, CUnis, CGrus, Varias, Custofs,
+                *-- MoeCusfs, MatPrincs, cUniPs From SigCdPro. cUniPs eh lido em
+                *-- IncluirHistorico - sem ele o Processar estoura em runtime.
+                loc_cSql = "SELECT CPros, DPros, CUnis, Cgrus, Varias, Custofs, MoeCusfs, " + ;
+                           "MatPrincs, cUniPs FROM SigCdPro"
                 IF SQLEXEC(gnConnHandle, loc_cSql, "TmpPro") > 0
                     SELECT TmpPro
                     INDEX ON CPros TAG CPros
@@ -2070,52 +2094,9 @@ DEFINE CLASS FormFea AS FormBase
                                       Tipos C(1), Trabs N(12,3), CidChaves C(36), NumBals N(6,0))
         ENDIF
 
-        IF USED("TmpOpera")
-            SELECT TmpOpera
-            SET ORDER TO GrConMatTp ASCENDING
-            SET KEY TO
-            ZAP
-        ELSE
-            CREATE CURSOR TmpOpera (Grupo C(10), Conta C(10), CMats C(14), TpOps C(15), ;
-                                    PesoEnts N(12,3), PesoSais N(12,3), ;
-                                    QtdeEnts N(12,3), QtdeSais N(12,3), ;
-                                    PesoBEnts N(12,3), PesoBSais N(12,3), ;
-                                    QtdeBEnts N(12,3), QtdeBSais N(12,3), ;
-                                    Varias N(1,0), Agregas N(1,0), AplicFlhs N(1,0), ;
-                                    PFalha N(6,2), Falha N(12,3))
-            INDEX ON Grupo + Conta + CMats + TpOps TAG GrConMatTp
-            SET ORDER TO GrConMatTp
-        ENDIF
-
-        IF USED("TmpResFas")
-            SELECT TmpResFas
-            SET ORDER TO
-            ZAP
-        ELSE
-            CREATE CURSOR TmpResFas (Cmats C(14), Opers C(1), Fases C(10), OpFase C(18), ;
-                                     Qtds N(12,3), Pesos N(12,3), QtdPcs N(12,3))
-            INDEX ON Cmats + Opers + Fases TAG Fases
-            SET ORDER TO Fases
-        ENDIF
-
-        IF USED("TmpResumo")
-            SELECT TmpResumo
-            ZAP
-            SET ORDER TO GrConMat
-        ELSE
-            CREATE CURSOR TmpResumo (Grupo C(10), Conta C(10), CMats C(14), CUnis C(10), ;
-                                     PesoEnts N(12,3), PesoSais N(12,3), ;
-                                     QtdeEnts N(12,3), QtdeSais N(12,3), ;
-                                     PesoFabre N(12,3), PesoFabrs N(12,3), ;
-                                     Pesagem N(12,3), Pesagem2 N(12,3), Pesagem3 N(12,3), ;
-                                     Saldoi N(12,3), FReal N(12,3), FAdmin N(12,3), Saldof N(12,3), ;
-                                     PfTrabs N(8,2), IndProd N(8,2), ;
-                                     Varias N(1,0), Agregas N(1,0), Visivel L, ;
-                                     Flag L, Flag2 L, Flag3 L, CodCors C(4), CodTams C(4))
-            INDEX ON Grupo + Conta + CMats TAG GrConMat
-            INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMatCS
-            SET ORDER TO GrConMat
-        ENDIF
+        *-- Cursores de resultado: criados no InicializarForm (legado: Load).
+        *-- Aqui so reabrem/ZAPam para reprocessar sem derrubar os bindings do Grid.
+        THIS.CriarCursoresResultado()
 
         *-- Obter MatSec de crSigCdPac
         loc_cMatSec = ""
@@ -2134,7 +2115,10 @@ DEFINE CLASS FormFea AS FormBase
 
         *-- Garantir TmpPro / crSigOpOpt / LocalOpp / crSigCdOpe carregados
         IF !USED("TmpPro")
-            loc_cSql = "SELECT CPros, CUnis, Varias, Cgrus, MatPrincs, Custofs, MoeCusfs FROM SigCdPro"
+            *-- Mesma lista de CarregarDadosAuxiliares: cUniPs eh lido em
+            *-- IncluirHistorico, e este ramo pode ser o que cria o cursor.
+            loc_cSql = "SELECT CPros, DPros, CUnis, Cgrus, Varias, Custofs, MoeCusfs, " + ;
+                       "MatPrincs, cUniPs FROM SigCdPro"
             IF SQLEXEC(gnConnHandle, loc_cSql, "TmpPro") > 0
                 SELECT TmpPro
                 INDEX ON CPros TAG CPros
@@ -3602,6 +3586,66 @@ DEFINE CLASS FormFea AS FormBase
     ENDFUNC
 
     *==========================================================================
+    * CriarCursoresResultado - Cria (ou ZAPa) TmpOpera / TmpResFas / TmpResumo
+    * Legado: SigCdFea.Load cria TODOS os cursores de trabalho ANTES dos
+    * controles, e por isso o ControlSource gravado no SCX resolve. Aqui os
+    * controles sao criados por codigo, entao a chamada vem no InicializarForm
+    * antes de ConfigurarPaginaDados -> ConfigurarResultado (regra #41:
+    * ControlSource de cursor inexistente derruba o Init e a tela nao abre).
+    * Reprocessar ZAPa em vez de recriar: fechar o alias derrubaria
+    * Grid.RecordSource e as Column.ControlSource ligadas no Init.
+    *==========================================================================
+    PROTECTED PROCEDURE CriarCursoresResultado()
+        IF USED("TmpOpera")
+            SELECT TmpOpera
+            SET ORDER TO GrConMatTp ASCENDING
+            SET KEY TO
+            ZAP
+        ELSE
+            CREATE CURSOR TmpOpera (Grupo C(10), Conta C(10), CMats C(14), TpOps C(15), ;
+                                    PesoEnts N(12,3), PesoSais N(12,3), ;
+                                    QtdeEnts N(12,3), QtdeSais N(12,3), ;
+                                    PesoBEnts N(12,3), PesoBSais N(12,3), ;
+                                    QtdeBEnts N(12,3), QtdeBSais N(12,3), ;
+                                    Varias N(1,0), Agregas N(1,0), AplicFlhs N(1,0), ;
+                                    PFalha N(6,2), Falha N(12,3), ;
+                                    PFalhaE N(6,2), FalhaE N(12,3))
+            INDEX ON Grupo + Conta + CMats + TpOps TAG GrConMatTp
+            SET ORDER TO GrConMatTp
+        ENDIF
+
+        IF USED("TmpResFas")
+            SELECT TmpResFas
+            SET ORDER TO
+            ZAP
+        ELSE
+            CREATE CURSOR TmpResFas (Cmats C(14), Opers C(1), Fases C(10), OpFase C(18), ;
+                                     Qtds N(12,3), Pesos N(12,3), QtdPcs N(12,3))
+            INDEX ON Cmats + Opers + Fases TAG Fases
+            SET ORDER TO Fases
+        ENDIF
+
+        IF USED("TmpResumo")
+            SELECT TmpResumo
+            ZAP
+            SET ORDER TO GrConMat
+        ELSE
+            CREATE CURSOR TmpResumo (Grupo C(10), Conta C(10), CMats C(14), CUnis C(10), ;
+                                     PesoEnts N(12,3), PesoSais N(12,3), ;
+                                     QtdeEnts N(12,3), QtdeSais N(12,3), ;
+                                     PesoFabre N(12,3), PesoFabrs N(12,3), ;
+                                     Pesagem N(12,3), Pesagem2 N(12,3), Pesagem3 N(12,3), ;
+                                     Saldoi N(12,3), FReal N(12,3), FAdmin N(12,3), Saldof N(12,3), ;
+                                     PfTrabs N(8,2), IndProd N(8,2), ;
+                                     Varias N(1,0), Agregas N(1,0), Visivel L, ;
+                                     Flag L, Flag2 L, Flag3 L, CodCors C(4), CodTams C(4))
+            INDEX ON Grupo + Conta + CMats TAG GrConMat
+            INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMatCS
+            SET ORDER TO GrConMat
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
     * ConfigurarResultado - Popula cnt_4c_Resultado com todos os sub-controles
     * Chamado por ConfigurarPaginaDados() apos criar o container vazio.
     * ColumnCount e RecordSource ficam FORA de WITH (Problema 36 VFP9).
@@ -4393,31 +4437,82 @@ DEFINE CLASS FormFea AS FormBase
                 .FontSize     = 8
                 .Visible      = .T.
             ENDWITH
+            *-- Colunas transcritas do SCX legado (ControlSource/Width/InputMask/
+            *-- ColumnOrder/fontes). Ordem visivel: Tipo, Qtde, Base Falha, F.Adm, Falha.
             WITH loc_oGrd.Column1
-                .Header1.Caption = "Tipo Opera" + CHR(231) + CHR(227) + "o"
-                .ControlSource   = "TmpOpera.TpOps"
-                .Width           = 120
+                .Header1.Caption   = "Tipo Opera" + CHR(231) + CHR(227) + "o"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.TpOps"
+                .Width             = 130
+                .FontName          = "Tahoma"
+                .FontSize          = 7
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column2
-                .Header1.Caption = "Qtde"
-                .ControlSource   = "TmpOpera.QtdeEnts"
-                .Width           = 80
+                .Header1.Caption   = "Qtde"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoEnts"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column3
-                .Header1.Caption = "F.Adm"
-                .ControlSource   = "TmpOpera.PFalha"
-                .Width           = 60
+                .Header1.Caption   = "F.Adm"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PFalhaE"
+                .Width             = 49
+                .InputMask         = "999.99"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column4
-                .Header1.Caption = "Falha"
-                .ControlSource   = "TmpOpera.Falha"
-                .Width           = 60
+                .Header1.Caption   = "Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.FalhaE"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column5
-                .Header1.Caption = "Base Falha"
-                .ControlSource   = "TmpOpera.PesoBEnts"
-                .Width           = 80
+                .Header1.Caption   = "Base Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoBEnts"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
+            *-- ColumnOrder do SCX: Col3=4, Col4=5, Col5=3 (ordem visivel:
+            *-- Tipo, Qtde, Base Falha, F.Adm, Falha). Atribuir em ordem
+            *-- CRESCENTE de destino - cada atribuicao reordena as demais.
+            loc_oGrd.Column5.ColumnOrder = 3
+            loc_oGrd.Column3.ColumnOrder = 4
+            loc_oGrd.Column4.ColumnOrder = 5
             BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GradeEntradasAfterRowColChange")
             BINDEVENT(par_oCnt.Pagina.Pages(1), "Activate", THIS, "PaginaResultadoPage1Activate")
 
@@ -4455,31 +4550,82 @@ DEFINE CLASS FormFea AS FormBase
                 .FontSize     = 8
                 .Visible      = .T.
             ENDWITH
+            *-- Colunas transcritas do SCX legado (ControlSource/Width/InputMask/
+            *-- ColumnOrder/fontes). Ordem visivel: Tipo, Qtde, Base Falha, F.Adm, Falha.
             WITH loc_oGrd.Column1
-                .Header1.Caption = "Tipo Opera" + CHR(231) + CHR(227) + "o"
-                .ControlSource   = "TmpOpera.TpOps"
-                .Width           = 120
+                .Header1.Caption   = "Tipo Opera" + CHR(231) + CHR(227) + "o"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.TpOps"
+                .Width             = 130
+                .FontName          = "Tahoma"
+                .FontSize          = 7
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column2
-                .Header1.Caption = "Qtde"
-                .ControlSource   = "TmpOpera.QtdeSais"
-                .Width           = 80
+                .Header1.Caption   = "Qtde"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoSais"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column3
-                .Header1.Caption = "F.Adm"
-                .ControlSource   = "TmpOpera.PFalha"
-                .Width           = 60
+                .Header1.Caption   = "F.Adm"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PFalha"
+                .Width             = 49
+                .InputMask         = "999.99"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column4
-                .Header1.Caption = "Falha"
-                .ControlSource   = "TmpOpera.Falha"
-                .Width           = 60
+                .Header1.Caption   = "Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.Falha"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Movable           = .F.
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
             WITH loc_oGrd.Column5
-                .Header1.Caption = "Base Falha"
-                .ControlSource   = "TmpOpera.PesoBSais"
-                .Width           = 80
+                .Header1.Caption   = "Base Falha"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.Alignment = 2
+                .ControlSource     = "TmpOpera.PesoBSais"
+                .Width             = 90
+                .InputMask         = "999,999.999"
+                .FontName          = "Tahoma"
+                .FontSize          = 8
+                .Resizable         = .F.
+                .ReadOnly          = .T.
             ENDWITH
+            *-- ColumnOrder do SCX: Col3=4, Col4=5, Col5=3 (ordem visivel:
+            *-- Tipo, Qtde, Base Falha, F.Adm, Falha). Atribuir em ordem
+            *-- CRESCENTE de destino - cada atribuicao reordena as demais.
+            loc_oGrd.Column5.ColumnOrder = 3
+            loc_oGrd.Column3.ColumnOrder = 4
+            loc_oGrd.Column4.ColumnOrder = 5
             BINDEVENT(loc_oGrd, "AfterRowColChange", THIS, "GradeSaidasAfterRowColChange")
             BINDEVENT(par_oCnt.Pagina.Pages(2), "Activate", THIS, "PaginaResultadoPage2Activate")
 
@@ -4737,12 +4883,12 @@ DEFINE CLASS FormFea AS FormBase
                 loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.this_cCursorDestino = "TmpGccr"
-                    loc_oBusca.mAddColuna("BalCodigo", "", "Grupo")
+                    loc_oBusca.mAddColuna("Codigos", "", "Grupo")
                     loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND !EOF("TmpGccr")
                         IF PEMSTATUS(loc_oPagina, "txt_4c_Grupo", 5)
-                            loc_oPagina.txt_4c_Grupo.Value = ALLTRIM(TmpGccr.BalCodigo)
+                            loc_oPagina.txt_4c_Grupo.Value = ALLTRIM(TmpGccr.Codigos)
                         ENDIF
                         IF PEMSTATUS(loc_oPagina, "txt_4c_DGrupo", 5)
                             loc_oPagina.txt_4c_DGrupo.Value = ALLTRIM(TmpGccr.Descrs)
@@ -4785,12 +4931,12 @@ DEFINE CLASS FormFea AS FormBase
                 loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.this_cCursorDestino = "TmpGccr"
-                    loc_oBusca.mAddColuna("BalCodigo", "", "Grupo")
+                    loc_oBusca.mAddColuna("Codigos", "", "Grupo")
                     loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND !EOF("TmpGccr")
                         IF PEMSTATUS(loc_oPagina, "txt_4c_Grupo", 5)
-                            loc_oPagina.txt_4c_Grupo.Value = ALLTRIM(TmpGccr.BalCodigo)
+                            loc_oPagina.txt_4c_Grupo.Value = ALLTRIM(TmpGccr.Codigos)
                         ENDIF
                         IF PEMSTATUS(loc_oPagina, "txt_4c_DGrupo", 5)
                             loc_oPagina.txt_4c_DGrupo.Value = ALLTRIM(TmpGccr.Descrs)
@@ -4835,15 +4981,15 @@ DEFINE CLASS FormFea AS FormBase
                 loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.this_cCursorDestino = "TmpCli"
-                    loc_oBusca.mAddColuna("BalCodigo", "", "Conta")
-                    loc_oBusca.mAddColuna("BalNome", "", "Nome")
+                    loc_oBusca.mAddColuna("IClis", "", "Conta")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND !EOF("TmpCli")
                         IF PEMSTATUS(loc_oPagina, "txt_4c_Conta", 5)
-                            loc_oPagina.txt_4c_Conta.Value = ALLTRIM(TmpCli.BalCodigo)
+                            loc_oPagina.txt_4c_Conta.Value = ALLTRIM(TmpCli.IClis)
                         ENDIF
                         IF PEMSTATUS(loc_oPagina, "txt_4c_DConta", 5)
-                            loc_oPagina.txt_4c_DConta.Value = ALLTRIM(TmpCli.BalNome)
+                            loc_oPagina.txt_4c_DConta.Value = ALLTRIM(TmpCli.RClis)
                         ENDIF
                     ENDIF
                     loc_oBusca.Release()
@@ -4883,15 +5029,15 @@ DEFINE CLASS FormFea AS FormBase
                 loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.this_cCursorDestino = "TmpCli"
-                    loc_oBusca.mAddColuna("BalCodigo", "", "Conta")
-                    loc_oBusca.mAddColuna("BalNome", "", "Nome")
+                    loc_oBusca.mAddColuna("IClis", "", "Conta")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND !EOF("TmpCli")
                         IF PEMSTATUS(loc_oPagina, "txt_4c_Conta", 5)
-                            loc_oPagina.txt_4c_Conta.Value = ALLTRIM(TmpCli.BalCodigo)
+                            loc_oPagina.txt_4c_Conta.Value = ALLTRIM(TmpCli.IClis)
                         ENDIF
                         IF PEMSTATUS(loc_oPagina, "txt_4c_DConta", 5)
-                            loc_oPagina.txt_4c_DConta.Value = ALLTRIM(TmpCli.BalNome)
+                            loc_oPagina.txt_4c_DConta.Value = ALLTRIM(TmpCli.RClis)
                         ENDIF
                     ENDIF
                     loc_oBusca.Release()

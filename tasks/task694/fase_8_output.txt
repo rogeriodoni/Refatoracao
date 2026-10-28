@@ -1,0 +1,35 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigOpCgr.prg` (1305 ÔåÆ 1788 linhas).
+
+## M├®todos entregues (cada um transcrito de um trecho identificado do dump)
+
+| M├®todo | Origem no legado |
+|---|---|
+| `VincularGradeResultado()` | `With .Fld_Principal.Pag_Resultado.Grd_Produto` do `Init` ÔÇö virou **fonte ├║nica** do bind (`ConfigurarPaginaDados` e `CarregarLista` chamam o mesmo), com `Width`/`Header1.Caption` **depois** do `RecordSource` (regras #41/#48) |
+| `CarregarLista()` | `Go Top` + `Refresh` ÔÇö chamado em todo caminho que popula/exibe o resultado, inclusive em `AlternarPagina(2)` **depois** do `ActivePage` (regra #21/Erro192) |
+| `FormParaBO()` / `BOParaForm()` | leitura dos 4 filtros no `processa`, e o `With ...pag_resultado.Container1` que fecha o `cmdprocessar.Click` (os 3 CheckBoxes + flags `this_lRastroPor*`) |
+| `LimparCampos()` | reset dos 4 campos + `ConsultaExecutada=.f.` do `Init`, mais o `Select DbProduto / Zap` do `processa` ÔÇö passa a rodar no fim do `InicializarForm`, que n├úo reproduzia esse trecho |
+| `HabilitarCampos()` | os 4 `When` ("preencher s├│ um dos tr├¬s") |
+| `AjustarBotoesPorModo()` | funil do estado dos bot├Áes, chamado por `AlternarPagina` nas duas dire├º├Áes (regra #40) |
+
+## Dois defeitos reais corrigidos de passagem
+
+- **O guard dos `When` n├úo bloqueava nada.** `BINDEVENT` descarta o retorno do delegate, ent├úo `GetOpWhenCheck` & irm├úos (Fase 6) avaliavam e o resultado era jogado fora. `HabilitarCampos` materializa via `.Enabled`. **├ë desvio consciente do mecanismo legado** (campo bloqueado aparece esmaecido em vez de s├│ ser pulado no foco) ÔÇö registrado no cabe├ºalho; se preferir fidelidade visual exata, o caminho ├® uma subclasse de TextBox com `When` embutido.
+- **`BtnRastreabClick` podia abrir o relat├│rio com chave zerada** se o usu├írio nunca trocasse de linha na grade. O legado l├¬ `dbProduto.Nops` ao vivo; agora recarrega do cursor antes do `DO CASE`.
+
+## Verifica├º├úo executada (smoke test do VFP9 passou antes ÔÇö `vfp9.exe` executa nesta sess├úo)
+
+- **Compila├º├úo**: `BO.FXP=.T. BO.ERR=.F. FORM.FXP=.T. FORM.ERR=.F.`
+- **Instancia├º├úo headless**: form abre; grade ligada a `cursor_4c_Resultado`, `ColumnCount=7`, larguras 68/182/80 e captions sobrevivem ao bind; guard `Op=123` ÔåÆ Env/Ped/Num bloqueados; `FormParaBO`ÔåÆ`BO.this_nOps=123`; `BOParaForm`ÔåÆ`chk Op=1/Env=0/Ped=0`; `LimparCampos` zera e reabilita; nenhum erro no arquivo de modo-teste
+- **Funil de duas vias** (cursor com 2 linhas): ida ÔåÆ `ActivePage=2`, `RECNO 2ÔåÆ1` (prova que o `GO TOP` rodou **depois** da troca de p├ígina), Rastreab. habilitado, filtros bloqueados; volta ÔåÆ tudo reabilitado
+- **Auditorias**: m├®todo PROTECTED chamado de fora = OK; fun├º├Áes ├│rf├ús = OK; propriedades inexistentes = OK; `FormBuscaAuxiliar` 1┬║ arg e lookup-em-KeyPress = 0 achados neste form
+
+**Achado que o probe exp├┤s:** `FormBase` declara `FormParaBO`/`BOParaForm`/`LimparCampos` como `PROTECTED`, e VFP9 n├úo deixa a subclasse alargar escopo ÔÇö cham├í-los de fora estourava `Property FORMPARABO is not found`. Agora est├úo com `PROTECTED` expl├¡cito e documentado.
+
+**N├úo entregue, por aus├¬ncia no legado** (inventar violaria o PILAR 1): `BtnSalvarClick`/`BtnConfirmarClick` (di├ílogo ├® s├│-leitura; o bot├úo de a├º├úo ├® Processar), `BtnCancelarClick` (n├úo h├í Page2 de Dados nem edi├º├úo cancel├ível ÔÇö o "voltar" do legado j├í ├® `BtnVoltarClick`) e `BtnBuscarClick` (n├úo existe bot├úo Buscar no SCX). Cada aus├¬ncia est├í justificada no cabe├ºalho do arquivo.
+
+**Nota de ambiente:** o `TestFormWrapper.prg` oficial n├úo p├┤de ser usado ÔÇö trava em `[ETAPA 1] Carregando depend├¬ncias` dentro de `ConfigurarAmbiente()`, antes de qualquer `CREATEOBJECT`, como j├í registrado para esta m├íquina. Os probes acima carregam s├│ as depend├¬ncias do form e contornam isso.

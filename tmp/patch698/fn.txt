@@ -1,0 +1,127 @@
+<#
+.SYNOPSIS
+    Decide se o CommandGroup 'Grupo_Op' do PROPRIO form NAO e' a barra CRUD do
+    frmcadastro - isto e', se NENHUM botao dele tem verbo CRUD no nome nem no
+    caption.
+.DESCRIPTION
+    DECIMA-PRIMEIRA excecao da familia do gate das Fases 7/8, e a SEGUNDA que
+    olha a evidencia ESTRUTURAL 'Grupo_Op' em vez do NOME do botao.
+
+    A decima (Test-BarraCrudEhDoFormPai) resolveu o caso em que 'Grupo_Op' e'
+    do form PAI. Ela nao alcanca este, porque aqui o grupo e' mesmo DESTE
+    form - o que nao prova barra CRUD nenhuma: 'Grupo_op' e' o nome que o
+    legado Fortyus reusa para QUALQUER CommandGroup de acao sobre um 'form'
+    puro, e so no frmcadastro ele hospeda Incluir/Alterar/Visualizar/Excluir.
+
+    O SIGOPCHI ("Historico de Cheques", task698) e' esse caso. As 16 citacoes
+    sao todas 'ThisForm.Pagina.Historico.Grupo_op...' (posse, nao emprestimo),
+    e os OITO botoes do grupo sao:
+
+        Command1.Name = "Relatorio"     Command5.Name = "Carteira"
+        Command2.Name = "Procurar"      Command6.Name = "Protocolo"
+        Command3.Name = "Prorroga"      Command7.Name = "Documento"
+        Command4.Name = "FollowUp"      Command8.Name = "followUpChq"
+
+    ZERO verbo CRUD - sao acoes de dominio sobre o cheque corrente. O dump nao
+    tem 'frmcadastro' (Class/BaseClass 'form' puro), nao tem 'pcEscolha', nao
+    tem nome btn|cmd(Incluir|Alterar|Visualizar|Excluir) e nao tem
+    '<Verbo>.Click': o nome do CommandGroup e' a UNICA evidencia. Marcado como
+    CRUD, a Fase 7 exigia os quatro BtnXxxClick e a Fase 8 exigia ainda
+    BtnCancelarClick/FormParaBO/BOParaForm/CarregarLista de um visualizador
+    somente-leitura - insatisfazivel sem INVENTAR botao (viola o PILAR 1) ou
+    criar metodo vazio (proibido pela regra de completude). E, como na decima,
+    os ramos de dispensa nem chegavam a ser avaliados: a evidencia ESTRUTURAL
+    curto-circuita todos eles antes.
+
+    O criterio sao os MESMOS quatro verbos que a fase exige como BtnXxxClick:
+    se o grupo nao tem NENHUM deles, ele nao pode justificar exigi-los.
+    'Procurar' (que a barra do frmcadastro tambem tem, como "Buscar")
+    DELIBERADAMENTE nao conta - sozinho ele nao prova barra CRUD e nenhum dos
+    quatro handlers exigidos corresponde a ele.
+
+    FAIL-CLOSED em quatro camadas:
+      1. so devolve $true se houver ao menos UMA citacao viva de 'Grupo_Op' -
+         dump sem o nome nao tem o que dispensar;
+      2. o bloco '* PROPRIEDADES DE: <...>.Grupo_Op' tem de EXISTIR e trazer
+         ao menos UM membro 'CommandN.Name/Caption'. Bloco ausente, ou grupo
+         sem membro nenhum, e' ausencia de PROVA (nao prova de ausencia) e
+         mantem o veredito de hoje - mesma regra que protege os 152 REPORT em
+         Get-ContagemBotoesLegado;
+      3. UM membro com verbo CRUD no Name OU no Caption devolve $false;
+      4. citacao viva que nomeia botao com verbo CRUD
+         ('...Grupo_Op.Excluir.Click') devolve $false - o membro pode nao
+         aparecer no bloco de propriedades quando o SCX nao sobrescreveu nada
+         nele.
+
+    Os verbos sao RADICAIS ('Inclu','Alter','Visualiz','Exclu') e nao palavras
+    exatas, para cobrir flexao no Caption ('Exclusao', 'Alteracao'): casar
+    DEMAIS aqui e' o lado SEGURO, porque devolve $false e preserva o veredito
+    de hoje.
+
+    'frmcadastro' NAO e' afetado - continua valendo sempre, e os call sites so
+    consultam esta funcao quando ele esta AUSENTE.
+
+    Linha comentada ('*', '&&', '*!*') nao conta como citacao, pela mesma
+    razao de Get-ContagemPcEscolhaViva: e' codigo MORTO. O bloco de
+    PROPRIEDADES e' excecao - ele E' um comentario por construcao do extrator.
+#>
+function Test-GrupoOpSemVerboCrud {
+    param(
+        [string]$TextoDump
+    )
+
+    if ([string]::IsNullOrWhiteSpace($TextoDump)) { return $false }
+
+    $linhas = $TextoDump -split "`r?`n"
+
+    # Os MESMOS quatro verbos que a fase exige como BtnXxxClick.
+    $rxVerboCrud = '(?i)(Inclu|Alter|Visualiz|Exclu)'
+
+    # Camada 1: sem citacao VIVA de 'Grupo_Op' nao ha o que dispensar.
+    $temCitacaoViva = $false
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -match '(?i)Grupo_Op') { $temCitacaoViva = $true; break }
+    }
+    if (-not $temCitacaoViva) { return $false }
+
+    # Camada 2/3: enumerar os membros de cada objeto cujo nome contem
+    # 'Grupo_Op' - o gate casa o nome por SUBSTRING, entao a prova tem de
+    # cobrir todo objeto que ele alcancaria.
+    $nBlocos  = 0
+    $nMembros = 0
+    $dentro   = $false
+
+    foreach ($linha in $linhas) {
+
+        if ($linha -match '(?i)^\s*\*\s*PROPRIEDADES DE:\s*(\S+)\s*$') {
+            $ultimo = ($Matches[1] -split '\.')[-1]
+            $dentro = [bool]($ultimo -match '(?i)Grupo_Op')
+            if ($dentro) { $nBlocos++ }
+            continue
+        }
+
+        # Qualquer outro cabecalho de secao do extrator encerra o bloco.
+        if ($linha -match '(?i)^\s*\*\s*(OBJETO|SECAO|METODO|EVENTO|CODIGO)\b') { $dentro = $false; continue }
+
+        if (-not $dentro) { continue }
+
+        # Membro do grupo: 'Command1.Name = "Relatorio"'.
+        if ($linha -match '(?i)^\s*(Command|Button|Botao)\d+\s*\.\s*(Name|Caption)\s*=\s*(.+?)\s*$') {
+            $nMembros++
+            if ($Matches[3] -match $rxVerboCrud) { return $false }
+        }
+    }
+
+    # Camada 2 (fail-closed): ausencia de PROVA nao e' prova de ausencia.
+    if ($nBlocos -eq 0 -or $nMembros -eq 0) { return $false }
+
+    # Camada 4: botao com verbo CRUD citado sem estar no bloco de propriedades.
+    foreach ($linha in $linhas) {
+        if ($linha -match '^\s*(\*|&&)') { continue }
+        if ($linha -notmatch '(?i)Grupo_Op') { continue }
+        if ($linha -match ('(?i)Grupo_Op\s*\.\s*' + $rxVerboCrud)) { return $false }
+    }
+
+    return $true
+}

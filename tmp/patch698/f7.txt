@@ -1,0 +1,26 @@
+
+                            # DECIMA-PRIMEIRA excecao, irma da decima: aqui o
+                            # 'Grupo_Op' e' do PROPRIO form (todas as citacoes
+                            # sao 'ThisForm...Grupo_op'), o que ainda NAO prova
+                            # barra CRUD - 'Grupo_op' e' o nome que o legado
+                            # reusa para QUALQUER CommandGroup de acao sobre um
+                            # 'form' puro, e so no frmcadastro ele hospeda
+                            # Incluir/Alterar/Visualizar/Excluir. No SIGOPCHI
+                            # ("Historico de Cheques") os OITO botoes do grupo
+                            # sao Relatorio/Procurar/Prorroga/FollowUp/
+                            # Carteira/Protocolo/Documento/followUpChq - ZERO
+                            # verbo CRUD, e o nome do grupo era a UNICA
+                            # evidencia do dump inteiro. Se o grupo nao tem
+                            # NENHUM dos quatro verbos, ele nao pode justificar
+                            # exigir os quatro BtnXxxClick - insatisfazivel sem
+                            # INVENTAR botao (viola o PILAR 1) ou criar metodo
+                            # vazio (proibido pela regra de completude).
+                            # Ver Test-GrupoOpSemVerboCrud (fail-closed em 4
+                            # camadas; 'frmcadastro' segue valendo sempre, por
+                            # isso so consulta o helper quando ele esta
+                            # AUSENTE).
+                            if ($temCrudLegado -and
+                                ($txtLegadoF7 -notmatch 'frmcadastro') -and
+                                (Test-GrupoOpSemVerboCrud -TextoDump $txtLegadoF7)) {
+                                $temCrudLegado = $false
+                            }

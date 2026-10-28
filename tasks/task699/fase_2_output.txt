@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balanced (9 PROCEDURE/ENDPROC, 2 TRY/ENDTRY, 26 IF/ENDIF, 1 DEFINE CLASS/ENDDEFINE), and no `RETURN` statements appear inside any TRY block ÔÇö consistent with CLAUDE.md rule #1.
+
+Fase 2 is complete. `SigOpChpBO.prg` now has:
+
+- **CarregarDoCursor** ÔÇö maps `SigChe` snapshot fields (nums, vencs, valors, bancos, agencias, ncontas, ncheques, iclis, grclis) via `SELECT (alias)`.
+- **ObterChavePrimaria** ÔÇö returns `this_cNums`.
+- **ValidarDados** ÔÇö enforces the legacy's one guard ("Vencimento n├úo pode ficar em branco").
+- **Atualizar** ÔÇö transcribes `Prorroga.Click` faithfully: UPDATE `SigChe`, INSERT `SigChea` history, conditional double-entry posting to `SigMvCcr` (all 78 NOT NULL/used columns, verified against `docs/schema.sql`) with `fRecalculaS` balance recalculation, the `DiaPrors` late-postponement block into `SigClLan`, and commit/rollback around the whole operation.
+- **RegistrarAuditoria("UPDATE")** called at the end of a successful `Atualizar`.
+- **Inserir** intentionally left un-overridden (documented why ÔÇö this dialog only ever postpones an *existing* cheque, never creates a new `SigChe` row), avoiding the banned "n├úo implementado" phrasing.
+
+Helper methods (`CarregarParametrosSistema`, `GerarCidChaveMvCcr`, `AdicionarCampoSQL`, `MontarLancamentoSigMvCcr`) were added to keep the 78-column `SigMvCcr` insert verifiably aligned (column+value built together per call, confirmed by diff against the schema) rather than risking a hand-counted comma-separated SQL string.

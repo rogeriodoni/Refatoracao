@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investigated the 9 flagged `GRID-RECORDSOURCE-AUTOBIND` findings against the actual file (not just the excerpts) before editing anything.
+
+**Finding: all 9 are false positives.** The helper `ConfigurarColunaResultado` (`Formsigopcgc.prg:1633-1661`) already does exactly what the detector claims is missing:
+
+```foxpro
+PROTECTED PROCEDURE ConfigurarColunaResultado(par_oCol, par_cFonte, ;
+        par_nWidth, par_cCaption, par_nAlinhaHeader, par_cFormat, par_cMask)
+    WITH par_oCol
+        .ControlSource = par_cFonte     && <- resets ControlSource
+        .Width         = par_nWidth
+        ...
+        .Header1.Caption   = par_cCaption   && <- resets Header caption
+```
+
+And every one of the 9 flagged `.RecordSource = ...` lines is immediately followed by one `THIS.ConfigurarColunaResultado(.ColumnN, "cursor_X.campo", ...)` call per column of that grid ÔÇö verified column-by-column for all 9 grids (`grd_4c_Historico` 7/8 cols, `grd_4c_Saldo` 1/2, `grd_4c_Pendente` 4, `grd_4c_PendenteOculta` 5, `grd_4c_Produto` all 10, `grd_4c_Resumo` 3, `grd_4c_OperaProd` 3, `grd_4c_EstoqueProd` 2, `grd_4c_Conserto` 4). So `ControlSource` and `Header1.Caption` ARE redefined for every column after every `RecordSource` reassignment ÔÇö the detector's pattern-matcher just doesn't recognize the helper-function indirection (it only looks for a literal `.ControlSource =` line, not a call to a method that sets it).
+
+This matches a documented pattern already in this project's memory (`feedback_warning_massivo_verificar_premissa.md`): a detector that only reads literal syntax and misses behavior delegated through a helper method (same class of false positive as the `pColuna`/`DefinirCursor` cases already catalogued there).
+
+Since making "corrections" here would duplicate already-correct assignments or risk disturbing the documented ControlSourceÔåÆWidth ordering (comment at lines 1628-1632 explains that order is intentional to avoid the width-reset bug), I'm not modifying the file ÔÇö there's no real defect in these 9 sites.
+
+If you want, I can add a note to the grid-checker detector logic (or to the pipeline's known-false-positives list) so this pattern stops flagging `ConfigurarColunaResultado`-style call sites in future passes.

@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fwBuscaSel", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigOpchr Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "ldDataI = ThisForm.GetDataI.Value\nldDataF = ThisForm.GetDataF.Value\nldDataI = fDtoSQL(ldDataI)\nldDataF = fDtoSQL(ldDataF,'23:59:59')\nlnTipos = ThisForm.GetTipo.Value\nlcOpera = ThisForm.Get_Oper.Value\nlcGrupo = ThisForm.getGrupo.Value\nlcConta = ThisForm.getConta.Value\nllConta = ( ThisForm.ImpNConta.Value = 1 )\n\nlcEmp = _Empr + Iif(Seek(_Empr, 'crSigCdEmp', 'Cemps'), ' - ' + Alltrim(crSigCdEmp.Razas), '')\nlcTit = 'Relação ' + Iif(lnTipos=1 , 'Geral de Cheques - ', 'de Cheques Pendentes - ') + ;\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Oper",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Init",
+      "linhas": 38,
+      "codigoOriginal": "LParameters pGru, pCon, pOldForm\n\nThisForm.ParentForm = pOldForm\nThisForm.Podatamgr  = ThisForm.ParentForm.PodataMgr\nThisForm.get_Oper.Value = ''\nThisForm.GetDataI.Value = Date() - 30\nThisForm.GetDataF.Value = Date()\nThisForm.getTipo.Value  = 1\nThisForm.getGrupo.Value = Iif(Type('pGru') = 'C', pGru, '')\nThisForm.getConta.Value = Iif(Type('pCon') = 'C', pCon, '')\n\nThisform.poDataMgr.Requery('CrSigCdOpt')\nThisForm.poDataMgr.Requery('CrSigCdGcr')\nThisForm.poDataMgr.Requery('CrSigCdEmp')\n\nSelect CrS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Date,Value = Iif,Requery",
+        "controlesReferenciados": "get_Oper,Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigOpChr To Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "If This.Value # 3\n\tIf IsEmpty(ThisForm.GetDataI.Value)\n\t\t=MessageBox('Data Inicial Inválida!!!', 16, '')\n\t\tThisForm.GetDataI.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf IsEmpty(ThisForm.GetDataF.Value)\n\t\t=MessageBox('Data Final Inválida!!!', 16, '')\n\t\tThisForm.GetDataF.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf (ThisForm.GetDataF.Value < ThisForm.GetDataI.Value)\n\t\t=MessageBox('A Data Final Não Pode Ser Menor do que a Inicial!!!', 16, '')\n\t\tThisForm.GetDataI.SetFocus\n\t\tReturn 0\n\tEndif\nEndif\n\nfrmrelatorio::btnReport.Cli... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.Get_Oper",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tSelect crSigCdOpt\n\tSet Order to Operacao\n\tIf !Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdOpt', 'Operacao', This.Value, 'Operações')\n\t\tloBrowse.AddColuna('Operacaos', '', 'Código', .t., 'Operacao')\n\t\tloBrowse.AddColuna('Descrs', '', 'Descrição', .t., 'Descrs')\n\t\tloBrowse.Show\n\t\tThis.Value = crSigCdOpt.Operacaos\n\tEndif\nEndif\n**********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getConta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getConta, ThisForm.getDConta)\n\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.getDConta.Value = ''\n\t\tThisForm.getDConta.Refresh\n\t\tReturn 0 \n\tEndif\nElse\n\tThisForm.getDConta.Value = ''\n\tThisForm.getDConta.Refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getDConta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf !IsEmpty(this.Value)\n\tIf !fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getConta, ThisForm.getDConta)\n\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.getConta.Value = ''\n\t\tThisForm.getConta.Refresh\n\t\tReturn 0 \n\tEndif\nElse\n\tThisForm.getConta.Value = ''\n\tThisForm.getConta.Refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getGrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)\nElse\n\tThisForm.getDGrupo.Value = ''\n\tThisForm.getDGrupo.Refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPCHR.getDGrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)\nElse\n\tThisForm.getGrupo.Value = ''\n\tThisForm.getGrupo.Refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

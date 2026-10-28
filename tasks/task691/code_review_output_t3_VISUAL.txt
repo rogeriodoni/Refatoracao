@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Conferi o `FormSIGOPCGF.prg` contra o achado `[TITULO-NAO-PROPAGADO]`: ├® **falso positivo**, j├í catalogado na mem├│ria (`feedback_titulo_nao_propagado_falso_positivo.md`, reincid├¬ncia de hoje 2026-10-24 para este mesmo arquivo).
+
+Os dois labels j├í propagam o `Caption`:
+- `lbl_4c_Sombra` (linha 290-305): `.Caption = THIS.Caption`
+- `lbl_4c_TituloCabecalho` (linha 307-322): `.Caption = THIS.Caption`
+
+O path sugerido pelo pass (`THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption`) est├í errado: o segundo label se chama `lbl_4c_TituloCabecalho`, n├úo `lbl_4c_Titulo` ÔÇö aplicar a sugest├úo literalmente estouraria `Property LBL_4C_TITULO is not found`, al├®m de duplicar uma atribui├º├úo j├í existente.
+
+N├úo fiz nenhuma altera├º├úo no arquivo ÔÇö aplicar a "corre├º├úo" sugerida introduziria uma regress├úo, n├úo corrigiria nada. A mem├│ria j├í documenta esse padr├úo (14+ reincid├¬ncias do mesmo achado templated em outros forms), ent├úo nenhuma atualiza├º├úo adicional de mem├│ria ├® necess├íria.

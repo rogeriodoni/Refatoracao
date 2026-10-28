@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í bug de c├│digo para corrigir aqui. O erro real (log 06_testForm, etapa 1B) ├®:
+
+```
+ERRO - Falha na conexao SQL:
+       Codigo: 1526
+       Mensagem: Connectivity error: [Microsoft][ODBC SQL Server Driver][DBNETLIB]SQL Server inexistente ou acesso negado.
+```
+
+Isso acontece **antes** de qualquer `CREATEOBJECT` do `Formsigopcgp`/`sigopcgpBO` ÔÇö ├® o preflight `SQLSTRINGCONNECT` falhando porque a m├íquina que roda o pipeline n├úo tem rota para `192.168.200.0/24` (onde fica o SQL Server `DB_MBAHIA`). Confirmei de novo agora com `Test-NetConnection 192.168.200.10 -Port 1433`, que n├úo completou (foi para background sem responder) ÔÇö exatamente o padr├úo de "sem rota" j├í documentado em mem├│ria (`project_sqlserver_200_10_inalcancavel_maquina_pipeline`), reincidente em 100+ tasks desde 2026-08-02, inclusive 4 tentativas anteriores desta mesma task693.
+
+J├í revisei `Formsigopcgp.prg` e `sigopcgpBO.prg` integralmente nas tentativas 1ÔÇô4 e de novo agora: nenhum problema de c├│digo relacionado a este erro. Deixei os dois arquivos intactos ÔÇö edit├í-los seria especulativo e arriscaria introduzir regress├úo em c├│digo j├í revisado 4 vezes sem achado.
+
+├Ünico ponto separado (n├úo relacionado a este erro, j├í registrado nas tentativas anteriores): `BtnConsultarClick` chama `THIS.this_oBusinessObject.BuscarProdutos(loc_oFiltros)`, mas `sigopcgpBO.prg` n├úo define esse m├®todo. Isso s├│ estouraria se a consulta SQL de fato rodasse ÔÇö o que nunca ocorre nestes logs porque a conex├úo falha antes. Implement├í-lo exigiria o dump do legado (SIGOPCGP.SCX) para n├úo inventar regra de neg├│cio (JOINs/filtros do WHERE), ent├úo ficou fora de escopo aqui tamb├®m.
+
+Atualizei a mem├│ria do projeto com esta 5┬¬ reincid├¬ncia. Esta task j├í consumiu metade do or├ºamento de `runtime_fix` (5/10) presa num bloqueio puramente de infraestrutura ÔÇö nenhuma edi├º├úo de `.prg` resolve isso; ├® preciso que a m├íquina do pipeline ganhe rota de rede at├® `192.168.200.10:1433`.

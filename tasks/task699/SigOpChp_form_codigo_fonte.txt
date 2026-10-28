@@ -1,0 +1,696 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigOpChp.SCX
+* Data/Hora: 25/10/2026 18:48:02
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPCHP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPCHP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPCHP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPCHP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGOPCHP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGOPCHP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say3
+  Parent: SIGOPCHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Venc
+  Parent: SIGOPCHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dias
+  Parent: SIGOPCHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGOPCHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPCHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Juros
+  Parent: SIGOPCHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGOPCHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGOPCHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ValJuros
+  Parent: SIGOPCHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Prorroga
+  Parent: SIGOPCHP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCancela
+  Parent: SIGOPCHP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 1
+  Height = 200
+  Width = 500
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Prorrogar"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGOPCHP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Shape2
+------------------------------------------------------------
+  Top = 7
+  Left = 284
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BackColor = 192,192,192
+  BorderColor = 136,189,188
+  ZOrderSet = 2
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Shape1
+------------------------------------------------------------
+  Top = 97
+  Left = 101
+  Height = 82
+  Width = 298
+  BackStyle = 0
+  BackColor = 192,192,192
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Say3
+------------------------------------------------------------
+  Caption = "Vencimento :"
+  Height = 15
+  Left = 120
+  Top = 129
+  Width = 64
+  TabIndex = 1
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Get_Venc
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 186
+  TabIndex = 7
+  Top = 126
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "Get_Venc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Get_Dias
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 23
+  InputMask = "99999"
+  Left = 186
+  TabIndex = 6
+  Top = 102
+  Width = 48
+  ForeColor = 0,0,0
+  Name = "Get_Dias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Say1
+------------------------------------------------------------
+  Caption = "Prorrogar :"
+  Height = 15
+  Left = 129
+  Top = 105
+  Width = 55
+  TabIndex = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Say2
+------------------------------------------------------------
+  Caption = "dias"
+  Height = 15
+  Left = 238
+  Top = 105
+  Width = 21
+  TabIndex = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Get_Juros
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 23
+  InputMask = "999.99"
+  Left = 186
+  TabIndex = 8
+  Top = 150
+  Width = 55
+  ForeColor = 0,0,0
+  Name = "Get_Juros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Say4
+------------------------------------------------------------
+  Caption = "Tx. Juros :"
+  Height = 15
+  Left = 130
+  Top = 153
+  Width = 54
+  TabIndex = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Say5
+------------------------------------------------------------
+  Caption = "% / mês = "
+  Height = 15
+  Left = 247
+  Top = 153
+  Width = 56
+  TabIndex = 2
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Get_ValJuros
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 310
+  TabIndex = 9
+  Top = 150
+  Width = 82
+  ForeColor = 0,0,0
+  Name = "Get_ValJuros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.Prorroga
+------------------------------------------------------------
+  Top = 3
+  Left = 350
+  Picture = ..\framework\imagens\geral_calendario_60.jpg
+  Caption = "Prorrogar"
+  Name = "Prorroga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPCHP.btnCancela
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  Name = "btnCancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPCHP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pOldForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm = pOldForm
+=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdPac','CrSigCdPac')
+ThisForm.SigKey = CrSigCdPac.SigKeys
+=ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.Get_Venc
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.Get_Dias.Value = This.Value - Ttod(crSigChe.Vencs)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.Get_Dias
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.Get_Venc.Value = Ttod(crSigChe.Vencs) + This.Value
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.Get_Juros
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+_PJuros = This.Value
+_Dias   = ThisForm.Get_Dias.Value
+ThisForm.Get_ValJuros.Value = crSigChe.Valors * _PJuros / 30 * _Dias / 100
+Return 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.Get_ValJuros
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.Prorroga
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+LOCAL _ORDEM
+
+Declare LaCampo4(3,2)
+
+If IsEmpty(ThisForm.Get_Venc.Value)
+	Wait Window "Vencimento não pode ficar em branco!" Nowait
+	ThisForm.Get_Venc.SetFocus
+	Return
+EndIf
+
+llVenc = fDtoSQL(ThisForm.Get_Venc.Value)
+lDtAlt = Datetime()
+lcUpDate = [Update SigChe Set Vencs = ?llVenc, DtAlts = ?lDtAlt Where Nums = ']+CrSigChe.Nums+[']
+lnErro   = ThisForm.ParentForm.Podatamgr.SqlExecute(lcUpDate,'')
+If lnErro < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return
+Endif
+
+SELECT CrSigChe
+_OVenc = Vencs
+Replace Vencs With ThisForm.Get_Venc.Value, DtAlts With Datetime()
+
+m.Nums = Nums
+m.Vencs = _OVenc
+valjuro=ThisForm.Get_ValJuros.Value 
+perjuro=ThisForm.Get_Juros.Value
+maqusuar=SUBSTR(SYS(0),1,ATCC('#',SYS(0)))+usuar
+pCidC = fUniqueIds()
+lcNum    = ' '
+CidChav  = ' '
+
+ThisForm.ParentForm.Podatamgr.Requery('CrSigChea')
+ThisForm.ParentForm.Podatamgr.Requery('CrSigMvCcr')
+ThisForm.ParentForm.Podatamgr.Requery('CrSigClLan')
+
+Select CrSigChea
+Zap
+Select CrSigMvCcr
+Zap
+Select CrSigClLan
+Zap
+
+Insert Into CrSigChea (nums,vencs,usuars,vjuros,pjuros,datas,CidChaves) ;
+			values (m.Nums,m.Vencs,maqusuar,valjuro,perjuro,date(),fUniqueIds())
+
+ThisForm.ParentForm.podatamgr.Update('CrSigChea')
+
+Select crSigCdPam
+Go Top
+If ThisForm.Get_ValJuros.Value > 0
+	pCidC = Dtos(Datetime())+Transform(fGerUniqueKey(Dtos(Datetime())),"@L 999999")+ThisForm.sigkey 
+	Select crSigMvCcr
+	Append Blank
+	Replace nopers    with fGerUniqueKey('SigMvCcr') ;
+			emps      with _empr ;
+			datas     with datetime() ; 
+			vencs     with DATETIME() ;
+			usualts   with usuar ;
+			datalts   with datetime() ;
+			hists     with _empr + " JUROS PRORROG. CHEQUE " + crSigChe.Bancos + "/" + ;
+							crSigChe.Agencias + "/" + crSigChe.NContas + "/" + crSigChe.NCheques ;
+			opers     with "C" ;
+			sopers    with "D" ;
+			moedas    with Iif(Empty(CrSigCdPam.MoedaCheqs), [R], CrSigCdPam.MoedaCheqs) ;
+			cotacaos  with 1 ;
+			valors    with ThisForm.Get_ValJuros.Value ;
+			autos     with .t. ;
+			contas    with crSigCdPam.contajuros ;
+			grupos    with crSigCdPam.grupojuros ;
+			scontas   with crSigChe.IClis ;
+			sgrupos   with crSigChe.GrClis ;
+			smoedas   with Iif(Empty(CrSigCdPam.MoedaCheqs), [R], CrSigCdPam.MoedaCheqs) ;
+			scotacaos with 1 ;
+			svalors   with ThisForm.Get_ValJuros.Value ;
+			CidChaves With pCidc ;
+			Pagos     with '1' ;
+			GruConMoes With crSigMvCcr.grupos + crSigMvCcr.contas + crSigMvCcr.moedas
+
+	=fRecalculaS( CrSigMvCcr.Grupos, CrSigMvCcr.Contas, CrSigMvCcr.Datas, CrSigMvCcr.Moedas,,ThisForm.parentform.Podatamgr  )
+			
+	Select crSigMvCcr
+	noper  = crSigMvCcr.nopers
+	voper  = crSigMvCcr.vopers
+	oper   = crSigMvCcr.sopers
+	grupo  = crSigMvCcr.sgrupos
+	conta  = crSigMvCcr.scontas
+	moed   = crSigMvCcr.smoedas
+	cot    = crSigMvCcr.scotacaos
+	valor  = crSigMvCcr.svalors
+	soper  = crSigMvCcr.opers
+	sgrupo = crSigMvCcr.grupos
+	sconta = crSigMvCcr.contas
+	smoed  = crSigMvCcr.moedas
+	scot   = crSigMvCcr.cotacaos
+	svalor = crSigMvCcr.valors
+	nlanc  = crSigMvCcr.nlancs
+	vlanc  = crSigMvCcr.vlancs
+	data   = crSigMvCcr.datas
+	hist   = crSigMvCcr.hists
+	pCidC = Dtos(Datetime())+Transform(fGerUniqueKey(Dtos(Datetime())),"@L 999999")+ThisForm.Sigkey 
+
+	*** INSERIR CONTRA MOVIMEN//
+	select crSigMvCcr
+	append blank
+	replace vopers    with voper ;
+			nopers    with noper ;
+			nlancs    with nlanc ;
+			vlancs    with vlanc ;
+			opers     with oper  ;
+			grupos    with grupo ;
+			contas    with conta ;
+			moedas    with moed  ;
+			cotacaos  with cot   ;
+			valors    with valor ;
+			emps      with _empr ;
+			datas     with data  ;
+			usualts   with usuar ;
+			datalts   with date();
+			sgrupos   with sgrupo;
+			scontas   with sconta;
+			smoedas   with smoed ;
+			scotacaos with scot  ;
+			svalors   with svalor;
+			sopers    with soper ;
+			autos     with .t.   ;
+			hists     with hist  ;
+			vencs     with DATETIME() ;
+			CidChaves With pcidc;
+			pagos     with '1';
+			GruConMoes With crSigMvCcr.grupos + crSigMvCcr.contas + crSigMvCcr.moedas
+
+	=fRecalculaS( CrSigMvCcr.Grupos, CrSigMvCcr.Contas, CrSigMvCcr.Datas, CrSigMvCcr.Moedas,ThisForm.ParentForm.podatamgr )
+
+	ThisForm.ParentForm.podatamgr.Update('CrSigMvCcr')
+	
+EndIf
+
+_Ndia = 0
+If ThisForm.Parentform.podatamgr.CursorQuery('SigChea','CrChea','Nums',CrSigChe.Nums)
+	Select CrChea
+	Go Top
+	_Ndia = crSigChe.Vencs - crChea.Vencs
+Endif
+
+If _Ndia >= crSigCdPam.DiaPrors
+	laCampo4(1,1)='Grupos'
+	laCampo4(1,2)=CrSigChe.GrClis
+	laCampo4(2,1)='Contas'
+	laCampo4(2,2)=CrSigChe.Iclis
+	laCampo4(3,1)='Cocos'
+	laCampo4(3,2)='05'
+	If !ThisForm.parentForm.podatamgr.ChkRegister('SigClLan',@laCampo4)
+		Select CrSigClLan
+		Append Blank
+		Replace Grupos With crSigChe.GrClis,;
+				Contas With crSigChe.Iclis,;
+				Cocos  With '05',;
+				CidChaves With fUniqueIds(),;
+				GruContas With Grupos + Contas
+
+		If Not ThisForm.ParentForm.podatamgr.Update('CrSigClLan')
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return
+		Endif
+	Endif
+
+EndIf
+
+llOk = fRecalculaS( .t.,ThisForm.ParentForm.PodataMgr)
+If llOk
+	llOk = ThisForm.Parentform.podatamgr.commit() > 0
+EndIf
+If Not llOk
+	ThisForm.parentform.rollback()
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+Endif
+
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPCHP.btnCancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPCHP
+RESERVED3 (ClassInfo): parentform
+sigkey
+*recalcula 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

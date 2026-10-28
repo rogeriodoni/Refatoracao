@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8/8 conclu├¡da. `FormSigOpChb.prg` est├í completo e verificado em VFP9.
+
+## O que entrou
+
+Os quatro m├®todos que o gate da Fase 8 exige, todos com implementa├º├úo real e carregando trabalho (nenhum ├® stub):
+
+| M├®todo | Escopo | O que faz / origem no legado |
+|---|---|---|
+| `CarregarLista()` | PUBLIC | executa a busca e popula `cursor_4c_SigChe` ÔÇö o `CrSigChe` que o `Procura.Click` legado alimentava com `Scatter/Insert Into` |
+| `FormParaBO()` | PROTECTED | l├¬ os nove crit├®rios da tela para o BO (os memvares `_Proc*` do legado) |
+| `BOParaForm()` | PROTECTED | caminho inverso; fonte ├║nica do sentido BOÔåÆtela |
+| `BtnCancelarClick()` | PUBLIC | handler do `btnCancela` (Caption "Cancelar", `Cancel = .T.`), renomeado de `CmdBtnCancelaClick` para o nome can├┤nico da a├º├úo |
+
+Mais `LimparCampos()` (PROTECTED), que rep├Áe o estado do `Init` legado ÔÇö isso **fecha uma diverg├¬ncia real**: como o di├ílogo fecha com `Hide()` em vez de `Release()`, a reabertura herdava os crit├®rios digitados antes, e o `When()` de exclus├úo m├║tua travaria o foco dos campos errados. O legado nunca tinha esse problema porque constru├¡a um form novo a cada abertura.
+
+`CmdProcuraClick` e a decodifica├º├úo do leitor de c├│digo de barras (`ValidarBancoLeitura`) passaram a usar esses hooks, em vez de escrever direto nos controles ÔÇö os dois caminhos que o legado tem para disparar a busca agora compartilham o mesmo c├│digo.
+
+## O que N├âO foi criado, e por qu├¬
+
+`BtnSalvarClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `HabilitarCampos`, `AjustarBotoesPorModo` e `AlternarPagina` n├úo t├¬m referente no dump: o legado tem s├│ dois `CommandButton` (Procurar/Cancelar), nenhuma escrita em tabela (a ├║nica escrita tem como alvo o cursor local), nenhum campo `ReadOnly`/`Enabled = .F.`, nenhum `PageFrame` e nenhum modo de edi├º├úo. Invent├í-los violaria o PILAR 1; declar├í-los vazios violaria a regra de completude. A justificativa de cada um est├í no cabe├ºalho do arquivo. Tamb├®m n├úo adicionei item de menu: ├® di├ílogo FILHO (o `Init` recebe o form chamador) e os irm├úos do projeto ÔÇö `FormSigOpCcj`, `FormSigPrCar`, `FormSigOpBcb`, `FormSIGPRTFH` ÔÇö n├úo t├¬m entrada de menu.
+
+## Verifica├º├úo medida (n├úo lida do c├│digo)
+
+O smoke test de VFP9 passou nesta sess├úo, ent├úo os resultados abaixo s├úo reais, n├úo inferidos de `.FXP`/`exit=0`:
+
+- **`COMPILE_OK`** ÔÇö form e BO, sem `.err`
+- **`PROBE_OK`** (`automation\ProbeChb696Fase8.prg`, 8 verifica├º├Áes): instancia; escopos corretos; estado inicial dos nove campos id├¬ntico ao `Init` legado; `FormParaBO` e o round-trip telaÔåÆBOÔåÆtela preservam identidade; `LimparCampos` rep├Áe; `CarregarLista` com crit├®rios vazios devolve `.T.` sem consultar o banco nem criar cursor (fiel ao `Do Case` sem `Case` casado); `BtnCancelarClick` esconde e rep├Áe
+- Auditorias do projeto: zero chamada ├│rf├ú (regra #13), zero m├®todo PROTECTED de BO chamado de fora (regra #51), `ValidadorSQLSchema` PASSOU, zero acento literal, zero `this_X .Value`, zero `RETURN` dentro de `TRY`, CRLF preservado (diff de 324+/62-, n├úo reescrita do arquivo)
+- Colunas conferidas no `docs/schema.sql` lido com `Get-Content -Raw` (683 tabelas): `bancos`/`agencias`/`ncontas`/`ncheques`/`vencs`/`valors`/`nums`/`numeros`/`protocolos` existem em `SigChe` e `SigCqChm`
+
+Uma observa├º├úo sobre escopo: o probe inicialmente acusou falha ao chamar `LimparCampos()` de fora ÔÇö era bug do probe, n├úo do form. `FormBase` declara `LimparCampos`/`FormParaBO`/`BOParaForm` como PROTECTED e o VFP9 n├úo permite alargar na subclasse; deixei o `PROTECTED` expl├¡cito nos tr├¬s e o probe passou a exercit├í-los por subclasse.

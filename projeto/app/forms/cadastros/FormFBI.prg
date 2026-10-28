@@ -373,23 +373,12 @@ DEFINE CLASS FormFBI AS FormBase
             .ColumnCount          = 4
             .Visible              = .T.
         ENDWITH
-
         *-- Configurar colunas do grid apos ColumnCount
+        *-- NOTA: Width e Header1.Caption ficam em CarregarLista (RecordSource reseta ambos)
         WITH loc_oPagina.grd_4c_Lista
-            .Column1.Width              = 160
-            .Column1.Header1.Caption    = "N" + CHR(186) + " Fabrica" + CHR(231) + CHR(227) + "o"
             .Column1.Alignment          = 0
-
-            .Column2.Width              = 80
-            .Column2.Header1.Caption    = "Empresa"
             .Column2.Alignment          = 0
-
-            .Column3.Width              = 300
-            .Column3.Header1.Caption    = "Fabrica" + CHR(231) + CHR(227) + "o (Criptografado)"
             .Column3.Alignment          = 0
-
-            .Column4.Width              = 120
-            .Column4.Header1.Caption    = "Caixa"
             .Column4.Alignment          = 0
         ENDWITH
 
@@ -1390,7 +1379,7 @@ DEFINE CLASS FormFBI AS FormBase
             .BackStyle   = 0
             .BorderStyle = 0
             .Value       = 1
-            .Top         = 429
+            .Top         = 458
             .Left        = 625
             .Width       = 95
             .Height      = 22
@@ -1401,7 +1390,7 @@ DEFINE CLASS FormFBI AS FormBase
                 .Top       = 3
                 .Width     = 44
                 .Height    = 17
-                .AutoSize  = .T.
+                .AutoSize  = .F.
                 .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
             ENDWITH
@@ -1411,7 +1400,7 @@ DEFINE CLASS FormFBI AS FormBase
                 .Top       = 3
                 .Width     = 61
                 .Height    = 17
-                .AutoSize  = .T.
+                .AutoSize  = .F.
                 .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
@@ -1442,7 +1431,7 @@ DEFINE CLASS FormFBI AS FormBase
             .BackStyle   = 0
             .BorderStyle = 0
             .Value       = 1
-            .Top         = 451
+            .Top         = 480
             .Left        = 624
             .Width       = 95
             .Height      = 22
@@ -1453,7 +1442,7 @@ DEFINE CLASS FormFBI AS FormBase
                 .Top       = 3
                 .Width     = 44
                 .Height    = 17
-                .AutoSize  = .T.
+                .AutoSize  = .F.
                 .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
             ENDWITH
@@ -1463,7 +1452,7 @@ DEFINE CLASS FormFBI AS FormBase
                 .Top       = 3
                 .Width     = 61
                 .Height    = 17
-                .AutoSize  = .T.
+                .AutoSize  = .F.
                 .FontName  = "Tahoma"
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
@@ -1551,7 +1540,7 @@ DEFINE CLASS FormFBI AS FormBase
         TRY
             IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
                 IF !USED("cursor_4c_Dados")
-                    CREATE CURSOR cursor_4c_Dados (cImpFabs c(20), emps c(3), cncaixas c(3), cidchaves c(20))
+                    CREATE CURSOR cursor_4c_Dados (cImpFabs c(20), emps c(3), cncaixas c(3))
                 ENDIF
                 loc_lResultado = .T.
             ELSE
@@ -1565,11 +1554,19 @@ DEFINE CLASS FormFBI AS FormBase
                     loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cImpFabs"
                     loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.cncaixas"
 
-                    *-- Redefinir headers apos RecordSource (VFP9 reseta cabecalhos)
-                    loc_oGrid.Column1.Header1.Caption = "N" + CHR(186) + " Fabrica" + CHR(231) + CHR(227) + "o"
+                    *-- Redefinir headers e larguras APOS RecordSource (VFP9 reseta ambos)
+                    *-- Legenda e largura conforme pColuna do Init legado (SIGCDFBI)
+                    loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+                    loc_oGrid.Column1.Width           = 150
                     loc_oGrid.Column2.Header1.Caption = "Empresa"
-                    loc_oGrid.Column3.Header1.Caption = "Fabrica" + CHR(231) + CHR(227) + "o (Criptografado)"
+                    loc_oGrid.Column2.Width           = 80
+                    *-- PENDENCIA: legado exibe fCriptografar(cImpFabs) nesta coluna;
+                    *-- a funcao Fortyus nao foi portada (deve FICAR ausente), entao
+                    *-- a coluna repete o valor em claro de Column1.
+                    loc_oGrid.Column3.Header1.Caption = "Fabrica" + CHR(231) + CHR(227) + "o"
+                    loc_oGrid.Column3.Width           = 150
                     loc_oGrid.Column4.Header1.Caption = "Caixa"
+                    loc_oGrid.Column4.Width           = 150
 
                     THIS.FormatarGridLista(loc_oGrid)
                     loc_lResultado = .T.
@@ -2096,7 +2093,7 @@ DEFINE CLASS FormFBI AS FormBase
             RETURN .F.
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cImpFabs)
 
         TRY
             IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
@@ -2126,7 +2123,7 @@ DEFINE CLASS FormFBI AS FormBase
             RETURN .F.
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cImpFabs)
 
         TRY
             IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
@@ -2158,7 +2155,7 @@ DEFINE CLASS FormFBI AS FormBase
             RETURN .F.
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cImpFabs)
 
         IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
             RETURN .F.

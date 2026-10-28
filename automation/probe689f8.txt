@@ -1,0 +1,18 @@
+INSTANCIA: OK  BaseClass=Form  Caption=[Pesquisa Global de Código de Barras]
+Timer existe=.T.  BaseClass=Timer  Interval=200  Enabled=.F.
+PROTECTED? BarrasGotFocus=.F. BarrasLostFocus=.F. TimerFocoBarras=.F. FocarBarras=.F. ValidarBarrasExec=.F.
+Bindings Fase 8:
+  txt_4c_Barras.KEYPRESS -> BARRASKEYPRESS
+  txt_4c_Barras.GOTFOCUS -> BARRASGOTFOCUS
+  txt_4c_Barras.LOSTFOCUS -> BARRASLOSTFOCUS
+  tmr_4c_FocoBarras.TIMER -> TIMERFOCOBARRAS
+Sem codigo: Historico.Enabled=.F. Movimento.Enabled=.F. Devolucao.Enabled=.F. Imprimir.Enabled=.F. Barras.Enabled=.T.
+BarrasGotFocus: this_nBarrasAnterior=12345
+LostFocus (valor igual): Timer.Enabled=.F. EmPesquisa=.F.
+LostFocus (valor mudou): EmPesquisa=.F.
+ValidarBarras c/ flag ligada=.F.
+TimerFocoBarras: Timer.Enabled depois=.F.
+FocarBarras c/ campo travado: OK
+AtualizarEstadoBotoes(123): Historico.Enabled=.T. Imprimir.Enabled=.T.
+LimparGrades(): Historico.Enabled=.F. Imprimir.Enabled=.F.
+BtnEncerrarClick: OK

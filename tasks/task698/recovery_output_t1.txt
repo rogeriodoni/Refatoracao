@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo
+
+A causa raiz **n├úo estava** em `FormSigOpChi.prg` nem em `SigOpChiBO.prg` ÔÇö o layout dos dois arquivos j├í segue corretamente a compensa├º├úo `+29` do PageFrame (regra #11). O bug estava em `projeto\app\utils\mapeamentos\FormSigOpChi_mapeamento.json`, usado pelo `ValidarUIFidelity`/`ComparadorUI`:
+
+Quatro containers leg├¡timos e distintos do legado (`Origem`, `Cnt_periodo`, `Cnt_Followup`, `Emitente`) estavam todos mapeados para o mesmo target errado `cnt_4c_Cabecalho` (a faixa cinza do cabe├ºalho), em vez de seus containers reais. Isso fazia o comparador ler Top=29/Left=0/Height=80/BackColor=RGB(100,100,100) (propriedades do cabe├ºalho) e comparar contra o esperado de cada container ÔÇö gerando 16 das 21 "diferen├ºas visuais" falsas.
+
+**Corre├º├úo aplicada**: 4 linhas no `FormSigOpChi_mapeamento.json`:
+- `Pagina.Filtro.Origem` ÔåÆ `cnt_4c_Origem` (era `cnt_4c_Cabecalho`)
+- `Pagina.Historico.Cnt_periodo` ÔåÆ `cnt_4c__periodo`
+- `Pagina.Historico.Cnt_Followup` ÔåÆ `cnt_4c__Followup`
+- `Pagina.Historico.Emitente` ÔåÆ `cnt_4c_Emitente`
+
+Nenhuma linha do form/BO foi alterada (eram geometricamente corretas). As 5 diferen├ºas restantes (Width do PageFrame 1003 vs 1000, Top +29 em `cntSombra`/`Shape1`/`Ok`/`cancelar`) s├úo artefato aritm├®tico j├í catalogado do pr├│prio `ComparadorUI.prg` (n├úo soma o offset `PageFrame.Top=-29` antes de comparar Top) ÔÇö for├ºar o `.prg` a bater com esses valores quebraria a UI de verdade, ent├úo n├úo toquei nelas. Documentei a reincid├¬ncia em mem├│ria (`feedback_gerador_mapeamento_tipo_unknown_colide_target.md`) para acelerar diagn├│sticos futuros desse padr├úo.
