@@ -313,15 +313,7 @@ DEFINE CLASS SigReEspBO AS RelatorioBase
             SELECT DISTINCT Emps, Dopes, Numes FROM ResPed INTO CURSOR TmpFab
 
             * Calcula Fabricado: loop por pedido
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lScanOk1=.T.
-            *   com TotPed vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("TotPed") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lScanOk1 = .F.
-            ELSE
-                loc_lScanOk1 = .T.
-            ENDIF
+            loc_lScanOk1 = .T.
             SELECT TmpFab
             SCAN WHILE loc_lScanOk1
                 LOCAL loc_Tqtd, loc_xQtd, loc_lnQtdCanc, loc_QtdTot
@@ -563,15 +555,7 @@ DEFINE CLASS SigReEspBO AS RelatorioBase
                                     SELECT csRelatorio
                                     APPEND BLANK
                                     GATHER MEMVAR
-                                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llInseriu=.T.
-                                    *   com csRelatorio vazio faria REPORT FORM renderizar preview branco
-                                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                    IF RECCOUNT("csRelatorio") = 0
-                                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                        loc_llInseriu = .F.
-                                    ELSE
-                                        loc_llInseriu = .T.
-                                    ENDIF
+                                    loc_llInseriu = .T.
                                 ENDIF
 
                                 * Movimentacoes por tipo de operacao (quando llTpOpe ativo)

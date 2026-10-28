@@ -11169,9 +11169,14 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
 
     $rxProc     = [regex]'(?i)^\s*(?:PROTECTED\s+)?(?:PROCEDURE|FUNCTION)\s+(\w+)\b'
     $rxEndProc  = [regex]'(?i)^\s*(?:ENDPROC|ENDFUNC)\s*$'
-    $rxFlagTrue = [regex]'^(\s+)(loc_l\w+)\s*=\s*\.T\.\s*$'
+    # So flag de SUCESSO do metodo. Erro263: casar qualquer loc_l<X> envolvia
+    # flags de ERRO (loc_lErroNoScan, loc_lAbortou, loc_lFalhou) e de LACO
+    # (loc_lbFirst) - invertia a semantica e lia cursor que nem existia.
+    $rxFlagTrue = [regex]'^(\s+)(loc_l(?:Sucesso|Resultado|Retorno|Ok))\s*=\s*\.T\.\s*$'
     # Literal SELECT: `SELECT alias_name` (nao `SELECT (var)` nem `SELECT * FROM ...`)
     $rxSelectLit = [regex]'(?i)^\s*SELECT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$'
+    # SELECT por expressao: `SELECT (THIS.this_cCursorDados)` - alias nao resolvivel
+    $rxSelectExpr = [regex]'(?i)^\s*SELECT\s*\('
     # RECCOUNT check ja existente
     $rxReccount  = [regex]'(?i)\bRECCOUNT\s*\('
 
@@ -11232,19 +11237,33 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
         if ($hasReccount) { continue }
 
         # Achar cursor literal em ate 20 linhas antes (SELECT <name>)
+        # O SELECT MAIS PROXIMO decide: se for `SELECT (expr)` o alias corrente
+        # nao eh resolvivel e NAO se injeta (Erro263: pulava o SELECT (expr) e
+        # pegava um cursor auxiliar mais acima, ja fechado com USE IN).
         $cursorName = ""
+        $selIdx = -1
         for ($k = $i - 1; $k -ge [Math]::Max(0, $i - 20); $k--) {
             if ($rxProc.IsMatch($Linhas[$k])) { break }
+            if ($rxSelectExpr.IsMatch($Linhas[$k])) { break }
             $mSel = $rxSelectLit.Match($Linhas[$k])
             if ($mSel.Success) {
                 $cand = $mSel.Groups[1].Value
                 if ($cand -match '(?i)^(TOP|DISTINCT|ALL|FROM)$') { continue }
                 $cursorName = $cand
+                $selIdx = $k
                 break
             }
         }
 
         if ([string]::IsNullOrEmpty($cursorName)) { continue }
+
+        # Cursor fechado entre o SELECT e a flag -> RECCOUNT estouraria "Alias is not found"
+        $fechado = $false
+        $rxUseIn = [regex]('(?i)^\s*USE\s+IN\s+\(?\s*"?' + [regex]::Escape($cursorName) + '\b')
+        for ($k = $selIdx + 1; $k -lt $i; $k++) {
+            if ($rxUseIn.IsMatch($Linhas[$k])) { $fechado = $true; break }
+        }
+        if ($fechado) { continue }
 
         # Envolve `loc_l<flag> = .T.` em IF/ELSE: se RECCOUNT=0, seta mensagem+.F.
         # Funciona tanto dentro de DO WHILE quanto direto no TRY (nao usa EXIT)

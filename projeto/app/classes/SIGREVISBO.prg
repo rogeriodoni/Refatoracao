@@ -123,6 +123,17 @@ DEFINE CLASS SIGREVISBO AS RelatorioBase
                     " AND a.Contas = " + EscaparSQL(ALLTRIM(THIS.this_cCdRepr))
             ENDIF
 
+            *-- Filtros Venda / Pedido (legado: lnVen/lnPed = opcao, 3=Ambos -> sem filtro)
+            *   1=Sim e 2=Nao sao gravados como o proprio valor em numeric(1)
+            IF INLIST(THIS.this_nOpcaoVenda, 1, 2)
+                loc_cWhere = loc_cWhere + ;
+                    " AND a.Vendas = " + FormatarNumeroSQL(THIS.this_nOpcaoVenda, 0)
+            ENDIF
+            IF INLIST(THIS.this_nOpcaoPedido, 1, 2)
+                loc_cWhere = loc_cWhere + ;
+                    " AND a.Pedidos = " + FormatarNumeroSQL(THIS.this_nOpcaoPedido, 0)
+            ENDIF
+
             *-- Fechar cursor anterior se existir
             IF USED(THIS.this_cCursorDados)
                 USE IN (THIS.this_cCursorDados)
@@ -149,39 +160,37 @@ DEFINE CLASS SIGREVISBO AS RelatorioBase
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Erro ao buscar dados de visitas"
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Cursor de cabecalho para o relatorio (CsCabecalho)
-            loc_cEmpresa = ""
-            loc_cSQL = "SELECT Razas FROM SigCdEmp"
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpCab") > 0
-                SELECT cursor_4c_EmpCab
-                IF !EOF()
-                    loc_cEmpresa = ALLTRIM(cursor_4c_EmpCab.Razas)
-                ENDIF
-                USE IN cursor_4c_EmpCab
-            ENDIF
-
-            loc_cTitulo  = "Relat" + CHR(243) + "rio de Visitas"
-            loc_cPeriodo = "Per" + CHR(237) + "odo: " + DTOC(loc_dDtI) + ;
-                " " + CHR(150) + " " + DTOC(loc_dDtF)
-
-            IF USED("CsCabecalho")
-                USE IN CsCabecalho
-            ENDIF
-            CREATE CURSOR CsCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
-            INSERT INTO CsCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
-                VALUES (loc_cEmpresa, loc_cTitulo, loc_cPeriodo)
-
-            SELECT (THIS.this_cCursorDados)
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com cursor_4c_EmpCab vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("cursor_4c_EmpCab") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lSucesso = .F.
             ELSE
+                *-- Cursor de cabecalho para o relatorio (CsCabecalho)
+                *   Legado: CursorQuery('SigCdEmp','crSigCdEmp','cEmps',_Empr)
+                loc_cEmpresa = ""
+                loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Cemps = " + ;
+                    EscaparSQL(go_4c_Sistema.cCodEmpresa)
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpCab") > 0
+                    SELECT cursor_4c_EmpCab
+                    IF !EOF()
+                        loc_cEmpresa = ALLTRIM(cursor_4c_EmpCab.Razas)
+                    ENDIF
+                    USE IN cursor_4c_EmpCab
+                ENDIF
+
+                loc_cTitulo  = "Relat" + CHR(243) + "rio de Visitas"
+                loc_cPeriodo = "Per" + CHR(237) + "odo: " + DTOC(loc_dDtI) + ;
+                    " " + CHR(150) + " " + DTOC(loc_dDtF)
+
+                IF USED("CsCabecalho")
+                    USE IN CsCabecalho
+                ENDIF
+                CREATE CURSOR CsCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
+                INSERT INTO CsCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+                    VALUES (loc_cEmpresa, loc_cTitulo, loc_cPeriodo)
+
+                *-- Cursor vazio NAO eh falha: ExecutarReportForm do form avisa
+                *   "Nenhum registro encontrado" (Erro30). Erro263: o guard que o
+                *   CorretorAutomatico #167 injetava aqui lia cursor_4c_EmpCab,
+                *   ja fechado acima -> "Alias is not found" em Visualizar/Imprimir.
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

@@ -230,15 +230,7 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp1
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar Entradas"
-                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
-                    *   com cursor_4c_Listp1 vazio faria REPORT FORM renderizar preview branco
-                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                    IF RECCOUNT("cursor_4c_Listp1") = 0
-                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                        loc_lAbortou = .F.
-                    ELSE
-                        loc_lAbortou = .T.
-                    ENDIF
+                    loc_lAbortou = .T.
                 ENDIF
             ENDIF
 
@@ -287,15 +279,7 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp2
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar " + CHR(192) + " Receber"
-                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
-                    *   com cursor_4c_Listp2 vazio faria REPORT FORM renderizar preview branco
-                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                    IF RECCOUNT("cursor_4c_Listp2") = 0
-                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                        loc_lAbortou = .F.
-                    ELSE
-                        loc_lAbortou = .T.
-                    ENDIF
+                    loc_lAbortou = .T.
                 ENDIF
             ENDIF
 
@@ -422,15 +406,7 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp4
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar Baixados"
-                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
-                    *   com cursor_4c_Listp4 vazio faria REPORT FORM renderizar preview branco
-                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                    IF RECCOUNT("cursor_4c_Listp4") = 0
-                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                        loc_lAbortou = .F.
-                    ELSE
-                        loc_lAbortou = .T.
-                    ENDIF
+                    loc_lAbortou = .T.
                 ENDIF
             ENDIF
 

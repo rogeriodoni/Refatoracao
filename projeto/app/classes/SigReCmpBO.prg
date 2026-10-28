@@ -241,15 +241,7 @@ DEFINE CLASS SigReCmpBO AS RelatorioBase
                 GO TOP
                 LOCATE FOR Marca = 1
                 IF !EOF()
-                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llTipoSel=.T.
-                    *   com cursor_4c_TipoMov vazio faria REPORT FORM renderizar preview branco
-                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                    IF RECCOUNT("cursor_4c_TipoMov") = 0
-                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                        loc_llTipoSel = .F.
-                    ELSE
-                        loc_llTipoSel = .T.
-                    ENDIF
+                    loc_llTipoSel = .T.
                 ENDIF
             ENDIF
 

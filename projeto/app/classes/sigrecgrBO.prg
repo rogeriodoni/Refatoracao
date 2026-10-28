@@ -654,15 +654,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
 
                             SELECT TmpRastro
                             REPLACE nNumes WITH loc_cNume
-                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lRegCreate=.T.
-                            *   com TmpRastro vazio faria REPORT FORM renderizar preview branco
-                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                            IF RECCOUNT("TmpRastro") = 0
-                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                loc_lRegCreate = .F.
-                            ELSE
-                                loc_lRegCreate = .T.
-                            ENDIF
+                            loc_lRegCreate = .T.
 
                             THIS.ConsultarTabela("SigMvCab", "crSigMvCab", "EmpDopNums", ;
                                                  loc_lcEmp + loc_cDope + STR(loc_nNume, 6))
@@ -823,15 +815,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
                             LOOP
                         ENDIF
 
-                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAcumPeso=.T.
-                        *   com crSigCdNei vazio faria REPORT FORM renderizar preview branco
-                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                        IF RECCOUNT("crSigCdNei") = 0
-                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                            loc_lAcumPeso = .F.
-                        ELSE
-                            loc_lAcumPeso = .T.
-                        ENDIF
+                        loc_lAcumPeso = .T.
                         =SEEK(crSigCdNei.nLotes, "TmpLote", "Numes")
                         loc_lcEmp = ALLTRIM(TmpLote.Emps)
 

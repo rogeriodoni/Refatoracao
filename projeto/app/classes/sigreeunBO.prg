@@ -265,15 +265,7 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSaldoRu") < 1
                                 THIS.this_cMensagemErro = "Erro ao consultar SigMvEst"
-                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
-                                *   com cursor_4c_SigCdProRu vazio faria REPORT FORM renderizar preview branco
-                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                IF RECCOUNT("cursor_4c_SigCdProRu") = 0
-                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                    loc_lFalhou = .F.
-                                ELSE
-                                    loc_lFalhou = .T.
-                                ENDIF
+                                loc_lFalhou = .T.
                                 LOOP
                             ENDIF
                             SELECT cursor_4c_TmpSaldoRu
@@ -294,15 +286,7 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSaldoRu") < 1
                                 THIS.this_cMensagemErro = "Erro ao consultar SigMvHst (historico)"
-                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
-                                *   com cursor_4c_SigCdProRu vazio faria REPORT FORM renderizar preview branco
-                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                IF RECCOUNT("cursor_4c_SigCdProRu") = 0
-                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                    loc_lFalhou = .F.
-                                ELSE
-                                    loc_lFalhou = .T.
-                                ENDIF
+                                loc_lFalhou = .T.
                                 LOOP
                             ENDIF
                             SELECT cursor_4c_TmpSaldoRu
@@ -455,15 +439,7 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                                 IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpHisAll") < 1
                                     THIS.this_cMensagemErro = "Erro ao consultar historico"
-                                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
-                                    *   com cursor_4c_TmpSaldoAll vazio faria REPORT FORM renderizar preview branco
-                                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                    IF RECCOUNT("cursor_4c_TmpSaldoAll") = 0
-                                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                        loc_lFalhou = .F.
-                                    ELSE
-                                        loc_lFalhou = .T.
-                                    ENDIF
+                                    loc_lFalhou = .T.
                                     LOOP
                                 ENDIF
                                 SELECT cursor_4c_TmpHisAll
