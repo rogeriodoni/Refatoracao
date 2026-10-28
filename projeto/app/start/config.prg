@@ -274,9 +274,8 @@ ENDPROC
 * ConfigurarAmbiente - Configura ambiente Visual FoxPro
 * IMPORTANTE: Carrega arquivos DINAMICAMENTE - s?? carrega se existir
 *------------------------------------------------------------------------------
-PROCEDURE ConfigurarAmbiente()
-    LOCAL loc_cArquivo, loc_nArquivos, loc_i, loc_cPath
-    LOCAL ARRAY loc_aArquivos[1]
+PROCEDURE ConfigurarAmbiente(par_lCargaCompleta)
+    LOCAL loc_cPath
 
     * Configura path para localizar arquivos.
     *
@@ -344,6 +343,114 @@ PROCEDURE ConfigurarAmbiente()
     CarregarSeExistir(gc_4c_CaminhoFramework + "sigacess.PRG")
 
     * =========================================================================
+    * BOs, RELATORIOS E FORMS - carga SOB DEMANDA
+    *
+    * Fazer SET PROCEDURE ADDITIVE de TODOS os BOs e Forms custa QUADRATICO:
+    * o i-esimo arquivo custa proporcional a i. Medido em 2026-10-28 com 947
+    * arquivos: 168 s ate o menu. Agrupar varios arquivos num comando so nao
+    * ajuda (o custo eh por arquivo na lista, nao por comando).
+    *
+    * Agora cada classe entra quando eh criada: quem faz CREATEOBJECT("FormX")
+    * chama antes GarantirClasse("FormX") (utils\garantirclasse.prg), que le
+    * start\indice_classes.txt e carrega o arquivo mais o fecho das
+    * dependencias dele (BO, forms filhos, classe-mae). O indice eh regerado
+    * aqui sempre que algum .prg for mais novo que ele.
+    *
+    * ConfigurarAmbiente(.T.) ou indice indisponivel -> carga completa antiga.
+    * =========================================================================
+    PUBLIC gl_4c_CargaSobDemanda
+    gl_4c_CargaSobDemanda = .F.
+    IF !par_lCargaCompleta
+        gl_4c_CargaSobDemanda = IndiceClassesAtualizado()
+    ENDIF
+    IF !gl_4c_CargaSobDemanda
+        CarregarTodosBOsEForms()
+    ENDIF
+
+    * =========================================================================
+    * MENU
+    * =========================================================================
+    CarregarSeExistir(ADDBS(gcCaminhoBase) + "..\menu\menu.prg")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* IndiceClassesAtualizado - .T. se start\indice_classes.txt existe e nenhum
+* .prg das pastas indexadas eh mais novo que ele. Desatualizado, regera com
+* automation\GerarIndiceClasses.ps1 (~5 s) e confere de novo.
+*------------------------------------------------------------------------------
+FUNCTION IndiceClassesAtualizado()
+    LOCAL loc_cIndice, loc_cGerador, loc_tIndice, loc_lOk, loc_oShell, loc_oErro
+
+    loc_lOk = .F.
+    loc_cIndice  = ADDBS(gcCaminhoBase) + "indice_classes.txt"
+    loc_cGerador = FULLPATH(ADDBS(gcCaminhoBase) + "..\..\..\automation\GerarIndiceClasses.ps1")
+
+    IF FILE(loc_cIndice)
+        loc_tIndice = FDATE(loc_cIndice, 1)
+        loc_lOk = (ObterPrgMaisRecente() <= loc_tIndice)
+    ENDIF
+
+    IF !loc_lOk AND FILE(loc_cGerador)
+        WAIT WINDOW "Atualizando " + CHR(237) + "ndice de classes..." NOWAIT
+        TRY
+            loc_oShell = CREATEOBJECT("WScript.Shell")
+            loc_oShell.Run('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "' + ;
+                           loc_cGerador + '"', 0, .T.)
+        CATCH TO loc_oErro
+            STRTOFILE("[" + TTOC(DATETIME()) + "] IndiceClassesAtualizado: " + loc_oErro.Message + ;
+                      CHR(13) + CHR(10), ADDBS(gcCaminhoBase) + "carga_sobdemanda.log", 1)
+        ENDTRY
+        WAIT CLEAR
+        IF FILE(loc_cIndice)
+            loc_lOk = (ObterPrgMaisRecente() <= FDATE(loc_cIndice, 1))
+        ENDIF
+    ENDIF
+
+    IF !loc_lOk
+        STRTOFILE("[" + TTOC(DATETIME()) + "] indice de classes indisponivel - carga completa" + ;
+                  CHR(13) + CHR(10), ADDBS(gcCaminhoBase) + "carga_sobdemanda.log", 1)
+    ENDIF
+    RETURN loc_lOk
+ENDFUNC
+
+*------------------------------------------------------------------------------
+* ObterPrgMaisRecente - data/hora do .prg mais novo nas pastas que o
+* GerarIndiceClasses.ps1 varre (classes, utils, forms\*)
+*------------------------------------------------------------------------------
+FUNCTION ObterPrgMaisRecente()
+    LOCAL loc_tMaior, loc_nArquivos, loc_i, loc_nP, loc_tArq
+    LOCAL ARRAY loc_aPastas[5], loc_aArquivos[1]
+
+    loc_aPastas[1] = gcCaminhoClasses
+    loc_aPastas[2] = gcCaminhoUtils
+    loc_aPastas[3] = gcCaminhoForms + "cadastros\"
+    loc_aPastas[4] = gcCaminhoForms + "relatorios\"
+    loc_aPastas[5] = gcCaminhoForms + "operacionais\"
+
+    loc_tMaior = {^1900-01-01 00:00:00}
+    FOR loc_nP = 1 TO 5
+        loc_nArquivos = ADIR(loc_aArquivos, loc_aPastas[loc_nP] + "*.prg")
+        FOR loc_i = 1 TO loc_nArquivos
+            loc_tArq = DTOT(loc_aArquivos[loc_i, 3]) + ;
+                       VAL(LEFT(loc_aArquivos[loc_i, 4], 2)) * 3600 + ;
+                       VAL(SUBSTR(loc_aArquivos[loc_i, 4], 4, 2)) * 60 + ;
+                       VAL(RIGHT(loc_aArquivos[loc_i, 4], 2))
+            IF loc_tArq > loc_tMaior
+                loc_tMaior = loc_tArq
+            ENDIF
+        ENDFOR
+    ENDFOR
+    RETURN loc_tMaior
+ENDFUNC
+
+*------------------------------------------------------------------------------
+* CarregarTodosBOsEForms - carga COMPLETA antiga (fallback). Lenta: ~170 s.
+*------------------------------------------------------------------------------
+PROCEDURE CarregarTodosBOsEForms()
+    LOCAL loc_nArquivos, loc_i
+    LOCAL ARRAY loc_aArquivos[1]
+
+    * =========================================================================
     * BUSINESS OBJECTS - Carrega todos os *BO.prg dinamicamente
     * =========================================================================
     loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoClasses + "*BO.prg")
@@ -392,11 +499,6 @@ PROCEDURE ConfigurarAmbiente()
             SET PROCEDURE TO (gcCaminhoForms + "operacionais\" + loc_aArquivos[loc_i, 1]) ADDITIVE
         ENDFOR
     ENDIF
-
-    * =========================================================================
-    * MENU
-    * =========================================================================
-    CarregarSeExistir(ADDBS(gcCaminhoBase) + "..\menu\menu.prg")
 ENDPROC
 
 *------------------------------------------------------------------------------

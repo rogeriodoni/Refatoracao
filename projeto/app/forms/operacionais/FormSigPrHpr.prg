@@ -1670,6 +1670,8 @@ DEFINE CLASS FormSigPrHpr AS FormBase
 
         loc_oForm = .NULL.
         TRY
+            *-- Classe em variavel: o indice da carga sob demanda nao a enxerga
+            GarantirClasse(loc_cClasseForm)
             IF loc_cClasseForm == "FormSigMvExp"
                 loc_oForm = CREATEOBJECT(loc_cClasseForm, ALLTRIM(loc_cDopes), "C", loc_nNumes, ALLTRIM(loc_cEmpDoc), .T.)
             ELSE

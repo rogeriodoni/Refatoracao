@@ -238,6 +238,7 @@ LOCAL loc_lErroInit
 loc_lErroInit = .F.
 
 ON ERROR loc_lErroInit = .T.
+GarantirClasse(par_cClasseForm)
 loc_oFormMigrado = CREATEOBJECT(par_cClasseForm)
 ON ERROR
 

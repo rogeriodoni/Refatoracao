@@ -1122,15 +1122,25 @@ Auto-fix: CorretorAutomatico **#219** (envolve `TABLEREVERT` cru no guard; nas D
 
 **IMPORTANTE**: Forms chamam `this_oBusinessObject.Excluir()` (PUBLIC). BOs sobrecarregam `ExecutarExclusao()` (PROTECTED). NUNCA chamar ExecutarExclusao() de fora do BO. Metodo que o form chama de fora nunca pode ser PROTECTED em nenhum nivel da heranca (regra #51).
 
-## config.prg - Dynamic Loading
+## config.prg - Carga SOB DEMANDA (desde 2026-10-28)
 
-ADIR() loads all `*BO.prg` and `Form*.prg` automatically. No manual SET PROCEDURE needed.
+`ConfigurarAmbiente()` carrega so bases, utils, `FormBuscaAuxiliar`/`FormErro`/`fwprogressbar`, `sigclcnx`, `sigacess` e o menu. BOs e Forms entram quando sao criados: `GarantirClasse("FormX")` (`utils\garantirclasse.prg`) le `start\indice_classes.txt` e faz `SET PROCEDURE` do arquivo e do fecho de dependencias (BO, forms filhos, classe-mae). Motivo: `SET PROCEDURE ADDITIVE` de todos os ~950 arquivos eh **quadratico** (o i-esimo custa proporcional a i) - 168 s ate o menu, contra 0,9 s.
+
+| Situacao | O que fazer |
+|---|---|
+| `Abrir*` do menu | `GarantirClasse("FormX")` antes do `CREATEOBJECT("FormX")` |
+| `CREATEOBJECT("X")` literal dentro de Form/BO | nada - o indice ja traz a dependencia |
+| `CREATEOBJECT(loc_cClasse)` (nome em variavel) | `GarantirClasse(loc_cClasse)` antes - o indice nao enxerga variavel |
+| probe/teste headless | `DO config.prg` + `ConfigurarAmbiente()` + `GarantirClasse("FormX")` (~1 s). `ConfigurarAmbiente(.T.)` = carga completa antiga (~170 s) |
+| `config.prg` | **NUNCA** adicionar `SET PROCEDURE` de BO/Form |
+
+O indice eh regerado sozinho na abertura quando algum `.prg` fica mais novo que ele (`automation\GerarIndiceClasses.ps1`, ~5 s); indice indisponivel cai na carga completa. `automation\GarantirClasseNoMenu.ps1 [-Verificar]` insere/confere o `GarantirClasse` nos `Abrir*` (o Orquestrador roda os dois apos migrar).
 
 ```
 New entity checklist:
 [ ] [Entity]BO.prg in app/classes/
 [ ] Form[Entity].prg in app/forms/
-[ ] Menu item in menu.prg
+[ ] Menu item in menu.prg, Abrir* com GarantirClasse
 [ ] Delete .fxp files before testing
 ```
 
