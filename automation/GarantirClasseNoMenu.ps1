@@ -8,13 +8,25 @@
     base do VFP ou de VCX nao precisa. Linha comentada e linha precedida de
     GarantirClasse ficam como estao. Mantem a indentacao, CRLF e Windows-1252.
 
+    Regera o indice ANTES (GerarIndiceClasses.ps1): tela que acabou de chegar
+    por git pull ainda nao esta no indice e seria pulada. -SemRegerar pula
+    esse passo (o Orquestrador ja regerou logo antes).
+
     -Verificar: so lista o que falta e sai com 1 se houver pendencia.
+
+    Uso tipico depois de um git pull:
+        .\automation\GarantirClasseNoMenu.ps1
 #>
 param(
     [string]$Menu   = (Join-Path $PSScriptRoot '..\projeto\app\menu\menu.prg'),
     [string]$Indice = (Join-Path $PSScriptRoot '..\projeto\app\start\indice_classes.txt'),
-    [switch]$Verificar
+    [switch]$Verificar,
+    [switch]$SemRegerar
 )
+
+if (-not $SemRegerar) {
+    & (Join-Path $PSScriptRoot 'GerarIndiceClasses.ps1') | Select-Object -First 4
+}
 
 $enc = [Text.Encoding]::GetEncoding(1252)
 $idx = @{}

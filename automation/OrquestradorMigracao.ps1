@@ -12378,7 +12378,7 @@ $(Get-Content $phaseBPromptFile -Raw)
                 # "Class ... is not found" so ao abrir a tela pelo menu
                 $garantirMenu = Join-Path $PSScriptRoot 'GarantirClasseNoMenu.ps1'
                 if (Test-Path $garantirMenu) {
-                    & $garantirMenu | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+                    & $garantirMenu -SemRegerar | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
                 }
             }
             elseif ($configContent -match 'ADIR\(.+\*BO\.prg' -and $configContent -match 'ADIR\(.+Form\*\.prg') {
