@@ -357,15 +357,7 @@ DEFINE CLASS SigReInvBO AS RelatorioBase
             *-- Processa empresas (todas ou a especificada)
             IF EMPTY(loc_cCdEmpresa)
                 *-- Todas as empresas ativas
-                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llFirst=.T.
-                *   com TmpGccr vazio faria REPORT FORM renderizar preview branco
-                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                IF RECCOUNT("TmpGccr") = 0
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                    loc_llFirst = .F.
-                ELSE
-                    loc_llFirst = .T.
-                ENDIF
+                loc_llFirst = .T.
                 SELECT CrSigCdEmp
                 GO TOP
                 SCAN

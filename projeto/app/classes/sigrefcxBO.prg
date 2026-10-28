@@ -639,15 +639,7 @@ DEFINE CLASS sigrefcxBO AS RelatorioBase
         loc_lcNmOperacao = ""
 
         *-- Verifica se ha tipos de movimento selecionados em cs_SigCdTom
-        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llTipoSel=.T.
-        *   com TmpMccr vazio faria REPORT FORM renderizar preview branco
-        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-        IF RECCOUNT("TmpMccr") = 0
-            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-            loc_llTipoSel = .F.
-        ELSE
-            loc_llTipoSel = .T.
-        ENDIF
+        loc_llTipoSel = .T.
         SELECT cs_SigCdTom
         LOCATE FOR Marca = 1
         IF EOF()

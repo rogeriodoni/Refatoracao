@@ -313,15 +313,7 @@ DEFINE CLASS SigRePlcBO AS RelatorioBase
                                 GO TOP
                                 LOCATE FOR Coletors = 2 AND Codigos = cursor_4c_SigCdCli.Grupos
                                 IF NOT EOF()
-                                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llInb=.T.
-                                    *   com cursor_4c_GrpPads vazio faria REPORT FORM renderizar preview branco
-                                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                    IF RECCOUNT("cursor_4c_GrpPads") = 0
-                                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                        loc_llInb = .F.
-                                    ELSE
-                                        loc_llInb = .T.
-                                    ENDIF
+                                    loc_llInb = .T.
                                 ENDIF
                             ENDIF
                         ENDIF
@@ -336,15 +328,7 @@ DEFINE CLASS SigRePlcBO AS RelatorioBase
                                 GO TOP
                                 LOCATE FOR Coletors = 3 AND Codigos = cursor_4c_SigCdCli.Grupos
                                 IF NOT EOF()
-                                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llInb=.T.
-                                    *   com cursor_4c_GrpPads vazio faria REPORT FORM renderizar preview branco
-                                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                    IF RECCOUNT("cursor_4c_GrpPads") = 0
-                                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                        loc_llInb = .F.
-                                    ELSE
-                                        loc_llInb = .T.
-                                    ENDIF
+                                    loc_llInb = .T.
                                 ENDIF
                             ENDIF
                         ENDIF

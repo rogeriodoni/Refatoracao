@@ -325,15 +325,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                     loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvCab")
                     IF loc_nResult < 0
                         THIS.this_cMensagemErro = "Erro ao buscar SigMvCab"
-                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                        *   com cursor_4c_Cmm vazio faria REPORT FORM renderizar preview branco
-                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                        IF RECCOUNT("cursor_4c_Cmm") = 0
-                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                            loc_lErroNoScan = .F.
-                        ELSE
-                            loc_lErroNoScan = .T.
-                        ENDIF
+                        loc_lErroNoScan = .T.
                         EXIT
                     ENDIF
 
@@ -347,15 +339,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cli1")
                         IF loc_nResult < 0
                             THIS.this_cMensagemErro = "Erro ao buscar SigCdCli (ContaDs)"
-                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                            *   com cursor_4c_Analitico vazio faria REPORT FORM renderizar preview branco
-                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                            IF RECCOUNT("cursor_4c_Analitico") = 0
-                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                loc_lErroNoScan = .F.
-                            ELSE
-                                loc_lErroNoScan = .T.
-                            ENDIF
+                            loc_lErroNoScan = .T.
                             EXIT
                         ENDIF
                         loc_cCta = ""
@@ -371,15 +355,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cli2")
                         IF loc_nResult < 0
                             THIS.this_cMensagemErro = "Erro ao buscar SigCdCli (Contas)"
-                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                            *   com cursor_4c_Cli1 vazio faria REPORT FORM renderizar preview branco
-                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                            IF RECCOUNT("cursor_4c_Cli1") = 0
-                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                loc_lErroNoScan = .F.
-                            ELSE
-                                loc_lErroNoScan = .T.
-                            ENDIF
+                            loc_lErroNoScan = .T.
                             EXIT
                         ENDIF
                         loc_cNvends = ""
@@ -400,15 +376,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ope")
                         IF loc_nResult < 0
                             THIS.this_cMensagemErro = "Erro ao buscar SigCdOpe"
-                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                            *   com cursor_4c_Analitico vazio faria REPORT FORM renderizar preview branco
-                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                            IF RECCOUNT("cursor_4c_Analitico") = 0
-                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                loc_lErroNoScan = .F.
-                            ELSE
-                                loc_lErroNoScan = .T.
-                            ENDIF
+                            loc_lErroNoScan = .T.
                             EXIT
                         ENDIF
                         SELECT cursor_4c_Ope
@@ -595,15 +563,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                     loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Sub")
                     IF loc_nResult < 0
                         THIS.this_cMensagemErro = "Erro ao buscar SigMvPec"
-                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                        *   com cursor_4c_Analitico vazio faria REPORT FORM renderizar preview branco
-                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                        IF RECCOUNT("cursor_4c_Analitico") = 0
-                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                            loc_lErroNoScan = .F.
-                        ELSE
-                            loc_lErroNoScan = .T.
-                        ENDIF
+                        loc_lErroNoScan = .T.
                         EXIT
                     ENDIF
 
@@ -618,15 +578,7 @@ DEFINE CLASS sigrecorBO AS RelatorioBase
                         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NF")
                         IF loc_nResult < 0
                             THIS.this_cMensagemErro = "Erro ao buscar SigMvNfi"
-                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroNoScan=.T.
-                            *   com cursor_4c_Sub vazio faria REPORT FORM renderizar preview branco
-                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                            IF RECCOUNT("cursor_4c_Sub") = 0
-                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                loc_lErroNoScan = .F.
-                            ELSE
-                                loc_lErroNoScan = .T.
-                            ENDIF
+                            loc_lErroNoScan = .T.
                             USE IN cursor_4c_Sub
                             EXIT
                         ENDIF

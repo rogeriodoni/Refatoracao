@@ -362,15 +362,7 @@ DEFINE CLASS sigreffnBO AS RelatorioBase
                     loc_pRea = crSigOpOpe.RealPrevs
                     loc_pIds = SYS(2015)
                     IF crSigOpOpe.RealPrevs = 2
-                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_llPrevs=.T.
-                        *   com crSigOpOpe vazio faria REPORT FORM renderizar preview branco
-                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                        IF RECCOUNT("crSigOpOpe") = 0
-                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                            loc_llPrevs = .F.
-                        ELSE
-                            loc_llPrevs = .T.
-                        ENDIF
+                        loc_llPrevs = .T.
                     ENDIF
                     loc_lcQuery = "INSERT INTO SigTempR (Dopes, ValPres, cIdQuerys, cIdChaves) " + ;
                                   "VALUES ('" + loc_pDop + "'," + ;

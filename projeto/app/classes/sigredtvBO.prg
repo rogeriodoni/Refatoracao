@@ -1133,15 +1133,7 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
                 loc_lnRecTroca    = 0
                 loc_lnPercFirstO  = 0
                 loc_lnPercFirstR  = 0
-                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lbFirst=.T.
-                *   com crTot vazio faria REPORT FORM renderizar preview branco
-                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                IF RECCOUNT("crTot") = 0
-                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                    loc_lbFirst = .F.
-                ELSE
-                    loc_lbFirst = .T.
-                ENDIF
+                loc_lbFirst = .T.
 
                 SELECT dbRelatorio
                 GO TOP

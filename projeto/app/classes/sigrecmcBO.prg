@@ -759,15 +759,7 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 "FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_lcConta)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpCli")
                             IF loc_lnQueryOk < 1
-                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
-                                *   com TmpClaCo vazio faria REPORT FORM renderizar preview branco
-                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                IF RECCOUNT("TmpClaCo") = 0
-                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                    loc_lErroBD = .F.
-                                ELSE
-                                    loc_lErroBD = .T.
-                                ENDIF
+                                loc_lErroBD = .T.
                                 EXIT
                             ENDIF
                             SELECT TmpCli
@@ -788,15 +780,7 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                         " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                                     loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                                     IF loc_lnQueryOk < 1
-                                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
-                                        *   com TmpCli vazio faria REPORT FORM renderizar preview branco
-                                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                        IF RECCOUNT("TmpCli") = 0
-                                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                            loc_lErroBD = .F.
-                                        ELSE
-                                            loc_lErroBD = .T.
-                                        ENDIF
+                                        loc_lErroBD = .T.
                                         EXIT
                                     ENDIF
                                     SELECT TmpClaCo
@@ -1054,15 +1038,7 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                             IF loc_lnQueryOk < 1
-                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
-                                *   com TmpQuant vazio faria REPORT FORM renderizar preview branco
-                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                IF RECCOUNT("TmpQuant") = 0
-                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                    loc_lErroBD = .F.
-                                ELSE
-                                    loc_lErroBD = .T.
-                                ENDIF
+                                loc_lErroBD = .T.
                                 EXIT
                             ENDIF
 
@@ -1092,15 +1068,7 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 "FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_lcConta)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpCli")
                             IF loc_lnQueryOk < 1
-                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
-                                *   com TmpClaCo vazio faria REPORT FORM renderizar preview branco
-                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                IF RECCOUNT("TmpClaCo") = 0
-                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                    loc_lErroBD = .F.
-                                ELSE
-                                    loc_lErroBD = .T.
-                                ENDIF
+                                loc_lErroBD = .T.
                                 EXIT
                             ENDIF
                             SELECT TmpCli
@@ -1121,15 +1089,7 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                         " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                                     loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                                     IF loc_lnQueryOk < 1
-                                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
-                                        *   com TmpCli vazio faria REPORT FORM renderizar preview branco
-                                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-                                        IF RECCOUNT("TmpCli") = 0
-                                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                                            loc_lErroBD = .F.
-                                        ELSE
-                                            loc_lErroBD = .T.
-                                        ENDIF
+                                        loc_lErroBD = .T.
                                         EXIT
                                     ENDIF
                                     SELECT TmpClaCo

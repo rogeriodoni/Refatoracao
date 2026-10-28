@@ -409,15 +409,7 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
             WAIT CLEAR
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro ao Preparar Dados do Relat" + CHR(243) + "rio")
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lMostrouErro=.T.
-            *   com crImprimir vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("crImprimir") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lMostrouErro = .F.
-            ELSE
-                loc_lMostrouErro = .T.
-            ENDIF
+            loc_lMostrouErro = .T.
         ENDTRY
 
         *-- Limpa cursores temporarios
