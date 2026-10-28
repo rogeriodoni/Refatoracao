@@ -479,15 +479,7 @@ DEFINE CLASS sigrecomBO AS RelatorioBase
                 GO TOP IN crAnalitico
             ENDIF
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com crAnalitico vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("crAnalitico") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lSucesso = .F.
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
+            loc_lSucesso = .T.
 
         CATCH TO loc_oErr
             THIS.this_cMensagemErro = loc_oErr.Message

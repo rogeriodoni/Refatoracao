@@ -1204,15 +1204,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                 GO TOP
             ENDIF
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com CsRelatorio vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("CsRelatorio") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lSucesso = .F.
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
+            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

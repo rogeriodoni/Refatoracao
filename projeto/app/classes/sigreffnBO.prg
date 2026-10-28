@@ -1070,15 +1070,7 @@ DEFINE CLASS sigreffnBO AS RelatorioBase
             THIS.LimparSigTempR(loc_pKey)
             WAIT CLEAR
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com csRelatorio vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("csRelatorio") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lSucesso = .F.
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
+            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro em PrepararDados")

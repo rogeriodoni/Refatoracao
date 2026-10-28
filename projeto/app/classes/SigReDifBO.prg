@@ -117,15 +117,7 @@ DEFINE CLASS SigReDifBO AS RelatorioBase
                 LOCATE
             ENDIF
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com crGrid vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("crGrid") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
-                loc_lSucesso = .F.
-            ELSE
-                loc_lSucesso = .T.
-            ENDIF
+            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
