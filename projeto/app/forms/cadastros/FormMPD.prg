@@ -81,7 +81,7 @@ DEFINE CLASS FormMPD AS FormBase
         TRY
             loc_oPg.AddObject("cnt_4c_Cabecalho", "Container")
             WITH loc_oPg.cnt_4c_Cabecalho
-                .Top        = 31
+                .Top        = 29
                 .Left       = 0
                 .Width      = THIS.Width
                 .Height     = 80
@@ -127,8 +127,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Left       = 542
                 .Width      = 390
                 .Height     = 85
-                .BackStyle  = 1
-                .BackColor  = RGB(53,53,53)
+                .BackStyle  = 0
                 .BorderWidth = 0
                 .Visible    = .T.
             ENDWITH
@@ -153,7 +152,7 @@ DEFINE CLASS FormMPD AS FormBase
         TRY
             loc_oPg.AddObject("cnt_4c_Cabecalho", "Container")
             WITH loc_oPg.cnt_4c_Cabecalho
-                .Top        = 31
+                .Top        = 29
                 .Left       = 0
                 .Width      = THIS.Width
                 .Height     = 80
@@ -195,23 +194,20 @@ DEFINE CLASS FormMPD AS FormBase
             ENDWITH
             loc_oPg.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPg.cnt_4c_BotoesAcao
-                .Top         = 33
+                .Top         = 29
                 .Left        = 842
                 .Width       = 160
                 .Height      = 85
                 .BackStyle   = 0
                 .Visible     = .T.
             ENDWITH
-            loc_oPg.AddObject("cnt_4c_Saida", "Container")
-            WITH loc_oPg.cnt_4c_Saida
-                .Top        = 29
-                .Left       = 917
-                .Width      = 90
-                .Height     = 85
-                .BackStyle  = 0
-                .BorderWidth = 0
-                .Visible    = .T.
-            ENDWITH
+            *-- A pagina Dados NAO tem container de saida proprio. O legado so
+            *-- declara Grupo_Salva (Salva + Cancelar) em Pagina.Dados - nao ha
+            *-- Grupo_Saida ali. O cnt_4c_Saida que existia aqui punha um SEGUNDO
+            *-- botao "Encerrar" (922..997) praticamente em cima do Cancelar do
+            *-- cnt_4c_BotoesAcao (924..999), e os dois faziam coisas diferentes:
+            *-- Cancelar volta para a Lista, Encerrar dava Release() e fechava a
+            *-- tela inteira.
         CATCH TO loException
             MostrarErro(loException, "FormMPD.ConfigurarContaineresPage2")
         ENDTRY
@@ -358,7 +354,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Themes       = .F.
                 .FontName     = "Verdana"
                 .FontSize     = 8
-                .ColumnCount  = 4
+                .ColumnCount  = 2
                 .Visible      = .T.
                 .RecordMark   = .F.
             ENDWITH
@@ -378,21 +374,21 @@ DEFINE CLASS FormMPD AS FormBase
         TRY
             THIS.this_oBusinessObject.Buscar("")
             IF USED("cursor_4c_Dados")
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 3
+                *-- A grade da Lista tem as DUAS colunas do pColuna do legado
+                *-- (SIGCDMPD 6781-6782): dopps 'Descricao' 150 e ndopps
+                *-- 'No. Operacao' 80. Ordes e Hists continuam no SELECT do BO
+                *-- porque a pagina Dados os edita, mas nao sao colunas da grade -
+                *-- e o codigo ainda enderecava .Column4 com ColumnCount = 3, que
+                *-- eh o "Unknown member COLUMN4" ao abrir a tela.
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 2
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
                 WITH THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
                     .Column1.ControlSource   = "cursor_4c_Dados.Dopps"
                     .Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                    .Column1.Width           = 300
+                    .Column1.Width           = 150
                     .Column2.ControlSource   = "cursor_4c_Dados.Ndopps"
                     .Column2.Header1.Caption = "No. Opera" + CHR(231) + CHR(227) + "o"
                     .Column2.Width           = 80
-                    .Column3.ControlSource   = "cursor_4c_Dados.Ordes"
-                    .Column3.Header1.Caption = "Ordem"
-                    .Column3.Width           = 60
-                    .Column4.ControlSource   = "cursor_4c_Dados.Hists"
-                    .Column4.Header1.Caption = "Hist" + CHR(243) + "rico"
-                    .Column4.Width           = 420
                 ENDWITH
                 loc_lSucesso = .T.
             ENDIF
@@ -492,21 +488,21 @@ DEFINE CLASS FormMPD AS FormBase
                 "Busca", "")
             THIS.this_oBusinessObject.Buscar(loc_cFiltro)
             IF USED("cursor_4c_Dados")
-                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 3
+                *-- A grade da Lista tem as DUAS colunas do pColuna do legado
+                *-- (SIGCDMPD 6781-6782): dopps 'Descricao' 150 e ndopps
+                *-- 'No. Operacao' 80. Ordes e Hists continuam no SELECT do BO
+                *-- porque a pagina Dados os edita, mas nao sao colunas da grade -
+                *-- e o codigo ainda enderecava .Column4 com ColumnCount = 3, que
+                *-- eh o "Unknown member COLUMN4" ao abrir a tela.
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 2
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
                 WITH THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
                     .Column1.ControlSource   = "cursor_4c_Dados.Dopps"
                     .Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                    .Column1.Width           = 300
+                    .Column1.Width           = 150
                     .Column2.ControlSource   = "cursor_4c_Dados.Ndopps"
                     .Column2.Header1.Caption = "No. Opera" + CHR(231) + CHR(227) + "o"
                     .Column2.Width           = 80
-                    .Column3.ControlSource   = "cursor_4c_Dados.Ordes"
-                    .Column3.Header1.Caption = "Ordem"
-                    .Column3.Width           = 60
-                    .Column4.ControlSource   = "cursor_4c_Dados.Hists"
-                    .Column4.Header1.Caption = "Hist" + CHR(243) + "rico"
-                    .Column4.Width           = 420
                 ENDWITH
             ENDIF
         CATCH TO loException
@@ -571,7 +567,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oCnt.AddObject("cmd_4c_Cancelar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Cancelar
                 .Top      = 5
-                .Left     = 82
+                .Left     = 80
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Encerrar"
@@ -582,21 +578,6 @@ DEFINE CLASS FormMPD AS FormBase
                 .Visible  = .T.
             ENDWITH
             BINDEVENT(loc_oCnt.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
-            loc_oCnt = loc_oPg.cnt_4c_Saida
-            loc_oCnt.AddObject("cmd_4c_Encerrar", "CommandButton")
-            WITH loc_oCnt.cmd_4c_Encerrar
-                .Top      = 5
-                .Left     = 5
-                .Width    = 75
-                .Height   = 75
-                .Caption  = "Encerrar"
-                .Picture  = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Themes   = .F.
-                .Visible  = .T.
-            ENDWITH
-            BINDEVENT(loc_oCnt.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
             * Campos de cabecalho da aba Dados (top + 29 compensa pgf_4c_Paginas.Top=-29)
             loc_oPg.AddObject("lbl_4c_Label1", "Label")
             WITH loc_oPg.lbl_4c_Label1
