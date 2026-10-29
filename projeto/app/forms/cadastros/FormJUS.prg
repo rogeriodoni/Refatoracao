@@ -123,7 +123,7 @@ DEFINE CLASS FormJUS AS FormBase
         *-- Compensa PageFrame.Top=-29: Top_original=2 + 29 = 31
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 31
+            .Top         = 29
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -173,8 +173,7 @@ DEFINE CLASS FormJUS AS FormBase
             .Left        =  542
             .Width       = 390
             .Height      = 85
-            .BackColor   = RGB(53, 53, 53)
-            .BackStyle   = 1
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -349,7 +348,7 @@ DEFINE CLASS FormJUS AS FormBase
         loc_oGrid.Left        = 12
         loc_oGrid.Width       = 890
         loc_oGrid.Height      = 470
-        loc_oGrid.ColumnCount = 3
+        loc_oGrid.ColumnCount = 2
         WITH loc_oGrid
             .FontName           = "Verdana"
             .FontSize           = 8
@@ -371,10 +370,7 @@ DEFINE CLASS FormJUS AS FormBase
             .Alignment = 0
         ENDWITH
         WITH loc_oGrid.Column2
-            .Width = 650
-        ENDWITH
-        WITH loc_oGrid.Column3
-            .Width = 120
+            .Width = 300
         ENDWITH
 
         *-- Em modo teste: pre-vincula grid para evitar VFP9 internal error com grid sem RecordSource
@@ -384,11 +380,10 @@ DEFINE CLASS FormJUS AS FormBase
             IF !USED("cursor_4c_Dados")
                 CREATE CURSOR cursor_4c_Dados (cidchaves C(20), cods C(3), cRetrabs C(6), descrs C(30))
             ENDIF
-            loc_oGrid.ColumnCount = 3
+            loc_oGrid.ColumnCount = 2
             loc_oGrid.RecordSource          = "cursor_4c_Dados"
             loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Cods"
             loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Descrs"
-            loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cRetrabs"
         ENDIF
 
         THIS.TornarControlesVisiveis(loc_oPagina)
@@ -456,8 +451,8 @@ DEFINE CLASS FormJUS AS FormBase
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         loc_oCnt = loc_oPagina.cnt_4c_BotoesAcao
         WITH loc_oCnt
-            .Top         = 42
-            .Left        = 619
+            .Top         = 29
+            .Left        = 842
             .Width       = 160
             .Height      = 85
             .BackStyle   = 0
@@ -607,11 +602,10 @@ DEFINE CLASS FormJUS AS FormBase
                     CREATE CURSOR cursor_4c_Dados (cidchaves C(20), cods C(3), cRetrabs C(6), descrs C(30))
                 ENDIF
                 loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-                loc_oGrid.ColumnCount = 3
+                loc_oGrid.ColumnCount = 2
                 loc_oGrid.RecordSource          = "cursor_4c_Dados"
                 loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Cods"
                 loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Descrs"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cRetrabs"
                 *-- Header1.Caption omitido: em headless (-T) gera erro 2030 nao-capturavel
                 THIS.FormatarGridLista(loc_oGrid)
                 loc_lResultado = .T.
@@ -623,16 +617,21 @@ DEFINE CLASS FormJUS AS FormBase
 
                 IF THIS.this_oBusinessObject.Buscar(loc_cFiltro)
                     loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-                    loc_oGrid.ColumnCount = 3
+                    loc_oGrid.ColumnCount = 2
                     loc_oGrid.RecordSource        = "cursor_4c_Dados"
                     loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Cods"
                     loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Descrs"
-                    loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cRetrabs"
+                    *-- A FONTE vem ANTES das larguras. Medido no VFP9: trocar o
+                    *-- Grid.FontSize REcalcula a Width de toda coluna pelo conteudo
+                    *-- (80/300 voltavam a 43/214). FontName, ForeColor e
+                    *-- Header1.Caption nao resetam.
+                    THIS.FormatarGridLista(loc_oGrid)
+                    *-- Larguras do pColuna do legado: Cods 80, Descrs 300.
+                    loc_oGrid.Column1.Width = 80
+                    loc_oGrid.Column2.Width = 300
                     *-- Reconfigurar headers: RecordSource reseta captions
                     loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
                     loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                    loc_oGrid.Column3.Header1.Caption = "Retrabalho"
-                    THIS.FormatarGridLista(loc_oGrid)
                     loc_lResultado = .T.
                 ENDIF
             ENDIF
