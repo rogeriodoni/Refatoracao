@@ -207,13 +207,14 @@ DEFINE CLASS FormIct AS FormBase
         ENDWITH
 
         *-- Botao Copiar standalone (Command1 legado - abre copia como novo registro)
-        *-- Top=4+29=33; Left=430 (imediatamente antes do bloco cnt_4c_Botoes)
+        *-- Botao solto na pagina. Top = 34 = 29 do container + 5 do botao: eh a
+        *-- altura em que os botoes do cnt_4c_Botoes e do cnt_4c_Saida desenham.
         loc_oPagina.AddObject("cmd_4c_Copiar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Copiar
             .Caption         = "Copiar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
-            .Top             = 33
+            .Top             = 34
             .Left            = 430
             .Width           = 75
             .Height          = 75
@@ -230,15 +231,21 @@ DEFINE CLASS FormIct AS FormBase
             .Visible         = .T.
         ENDWITH
 
-        *-- Container botoes CRUD (grupo_op legado) Top=-1+29=28; Left=512
+        *-- Container botoes CRUD (grupo_op legado). Top = 29, igual a faixa do
+        *-- cabecalho e ao cnt_4c_Saida: com 28 o bloco comecava 1px acima e os
+        *-- botoes ficavam 1px acima do Encerrar.
+        *-- BackStyle = 0: com 1 e BackColor RGB(53,53,53) o container pintava
+        *-- um retangulo ESCURO por cima da faixa do cabecalho (que eh
+        *-- RGB(100,100,100)), e a borda dele aparecia desalinhada. O legado
+        *-- nao declara BackStyle/BackColor no grupo_op.
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 28
+            .Top         = 29
             .Left        =  542
-            .Width       = 414
+            .Width       = 385  && 5 + 5 x 75 + 5
             .Height      = 85
-            .BackColor   = RGB(53, 53, 53)
-            .BackStyle   = 1
+            .BackColor   = RGB(255, 255, 255)
+            .BackStyle   = 0    && transparente, como FormUpd/FormFti/FormFUN
             .BorderWidth = 0
             .Visible     = .T.
 
