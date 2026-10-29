@@ -11265,6 +11265,20 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
         }
         if ($fechado) { continue }
 
+        # SELECT dentro de um ramo que FECHOU antes da flag (Erro267): o cursor
+        # so existe naquele ramo. Ex.: `SELECT crProcessar` no OTHERWISE de um
+        # DO CASE e a flag depois do ENDCASE - nos outros CASE o alias nao existe.
+        # Detecta por indentacao: fim/troca de bloco MAIS EXTERNO que o SELECT.
+        $indSel = ($Linhas[$selIdx] -replace '^(\s*).*$', '$1').Replace("`t", "    ").Length
+        $rxBloco = [regex]'(?i)^\s*(ENDCASE|ENDIF|ELSE|ELSEIF|CASE\b|OTHERWISE|ENDSCAN|ENDFOR|ENDDO|ENDWITH|ENDTRY|CATCH)\b'
+        $saiuDoRamo = $false
+        for ($k = $selIdx + 1; $k -lt $i; $k++) {
+            if (-not $rxBloco.IsMatch($Linhas[$k])) { continue }
+            $indK = ($Linhas[$k] -replace '^(\s*).*$', '$1').Replace("`t", "    ").Length
+            if ($indK -lt $indSel) { $saiuDoRamo = $true; break }
+        }
+        if ($saiuDoRamo) { continue }
+
         # Envolve `loc_l<flag> = .T.` em IF/ELSE: se RECCOUNT=0, seta mensagem+.F.
         # Funciona tanto dentro de DO WHILE quanto direto no TRY (nao usa EXIT)
         $indent = $mFlag.Groups[1].Value

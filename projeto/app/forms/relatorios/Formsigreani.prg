@@ -290,9 +290,14 @@ DEFINE CLASS Formsigreani AS FormBase
     * ConfigurarPaginaLista - Filtros de periodo (unica pagina do relatorio)
     *   Posicoes em Page1 = posicao_original - PageFrame.Top(85):
     *   lbl_periodo   (Top=172) -> Page1.Top = 87, Left=333
-    *   txt_4c_DtInicial (Top=168) -> Page1.Top = 83, Left=384, Width=45
-    *   lbl_4c_LblA   (Top=172) -> Page1.Top = 87, Left=433
-    *   txt_4c_DtFinal   (Top=168) -> Page1.Top = 83, Left=444, Width=45
+    *   txt_4c_DtInicial (Top=168) -> Page1.Top = 83, Left=384, Width=80
+    *   lbl_4c_LblA   (Top=172) -> Page1.Top = 87, Left=468
+    *   txt_4c_DtFinal   (Top=168) -> Page1.Top = 83, Left=479, Width=80
+    *   Erro266: o SCX tem Width=45 com InputMask "99/99", mas o Value eh DATE e
+    *   com valor data o VFP IGNORA o InputMask e exibe dd/mm/aaaa (66 px de
+    *   texto, medido) - a caixa de 45 cortava a data. Width 80 = padrao das
+    *   datas dos relatorios; "a" e data final deslocados mantendo as folgas
+    *   do legado (4 px apos a caixa, 11 px apos o "a").
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaLista()
         LOCAL loc_oPg
@@ -318,7 +323,7 @@ DEFINE CLASS Formsigreani AS FormBase
         WITH loc_oPg.txt_4c_DtInicial
             .Top           = 83
             .Left          = 384
-            .Width         = 45
+            .Width         = 80
             .Height        = 23
             .Value         = {}
             .Format        = "K9"
@@ -343,7 +348,7 @@ DEFINE CLASS Formsigreani AS FormBase
         loc_oPg.AddObject("lbl_4c_LblA", "Label")
         WITH loc_oPg.lbl_4c_LblA
             .Top       = 87
-            .Left      = 433
+            .Left      = 468
             .AutoSize  = .T.
             .Caption   = CHR(224)
             .FontName  = "Tahoma"
@@ -357,8 +362,8 @@ DEFINE CLASS Formsigreani AS FormBase
         loc_oPg.AddObject("txt_4c_DtFinal", "TextBox")
         WITH loc_oPg.txt_4c_DtFinal
             .Top           = 83
-            .Left          = 444
-            .Width         = 45
+            .Left          = 479
+            .Width         = 80
             .Height        = 23
             .Value         = {}
             .Format        = "K9"

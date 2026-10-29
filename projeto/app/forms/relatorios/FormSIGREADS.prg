@@ -1777,8 +1777,8 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Equivale ao btnReport.Visualiza.Click do legado (PROCEDURE documento = preview)
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        loc_lContinuar = .T.
         LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
                 loc_lContinuar = .F.
@@ -1803,8 +1803,8 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Equivale ao btnReport.Imprime.Click do legado (PROCEDURE impressao)
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        loc_lContinuar = .T.
         LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
                 loc_lContinuar = .F.

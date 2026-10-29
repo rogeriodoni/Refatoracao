@@ -676,7 +676,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
 
                 SELECT a.* ;
                   FROM crDados1 a ;
-                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Cemps ;
+                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Emps ;
                  INNER JOIN cursor_4c_SigOpOpe c ON c.Dopes = a.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc d ON d.Codigos = a.Codigos ;
                  WHERE (b.Imps = 1) AND (c.Imps = 1) AND (d.Imps = 1) AND ;
@@ -684,7 +684,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
                  UNION ALL ;
                 SELECT e.* ;
                   FROM LocalPrev e ;
-                 INNER JOIN cursor_4c_SigCdEmp f ON f.cEmps = e.Cemps ;
+                 INNER JOIN cursor_4c_SigCdEmp f ON f.cEmps = e.Emps ;
                  INNER JOIN cursor_4c_SigOpOpe g ON g.Dopes = e.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc h ON h.Codigos = e.Codigos ;
                  WHERE (f.Imps = 1) AND (g.Imps = 1) AND (h.Imps = 1) AND ;
@@ -692,7 +692,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
             ELSE
                 SELECT a.* ;
                   FROM crDados1 a ;
-                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Cemps ;
+                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Emps ;
                  INNER JOIN cursor_4c_SigOpOpe c ON c.Dopes = a.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc d ON d.Codigos = a.Codigos ;
                  WHERE (b.Imps = 1) AND (c.Imps = 1) AND (d.Imps = 1) AND ;
@@ -879,10 +879,11 @@ DEFINE CLASS sigreappBO AS RelatorioBase
                     GO TOP IN crProcessar
             ENDCASE
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com crProcessar vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
-            IF RECCOUNT("crProcessar") = 0
+            *-- Cursor vazio: o cursor do relatorio depende do tipo - crRel no
+            *   Analitico/Sintetico, crProcessar no Fluxo de Caixa. Erro267: o
+            *   guard do CorretorAutomatico #167 lia SEMPRE crProcessar, que so
+            *   existe no Fluxo de Caixa -> "Alias is not found" nos outros tipos.
+            IF RECCOUNT(IIF(THIS.this_nOptAnaSi = 3, "crProcessar", "crRel")) = 0
                 THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
                 loc_lSucesso = .F.
             ELSE

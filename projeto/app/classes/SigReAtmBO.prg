@@ -266,6 +266,7 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
         LOCAL loc_cDFinP, loc_cDClass, loc_cQueryPro, loc_cLabel1, loc_cLabel2, loc_cLabel3
 
         loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
 
         TRY
             *-- Copiar filtros das propriedades
@@ -846,11 +847,16 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
             SELECT TmpRelat
             GO TOP
 
-            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
-            *   com TmpRelat vazio faria REPORT FORM renderizar preview branco
-            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+            *-- Resultado vazio: AVISAR. Erro268: o guard so preenchia
+            *   this_cMensagemErro e devolvia .F.; nem o Visualizar/Imprimir do BO
+            *   nem o form exibem - o clique terminava sem resposta nenhuma.
+            *   Falha de SQL anterior (TmpNens/TmpProd/CrSigCdPro) tem precedencia:
+            *   sem ela a mensagem viraria "Nenhum registro" e esconderia o erro.
             IF RECCOUNT("TmpRelat") = 0
-                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                IF EMPTY(THIS.this_cMensagemErro)
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+                MsgAviso(THIS.this_cMensagemErro, "Aten" + CHR(231) + CHR(227) + "o")
                 loc_lSucesso = .F.
             ELSE
                 loc_lSucesso = .T.

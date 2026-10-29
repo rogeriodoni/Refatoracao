@@ -572,6 +572,23 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * Imprimir - Prepara dados e imprime relatorio na impressora
     *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * ExibirFalhaRelatorio - Exibe a mensagem de PrepararDados/MontarCabecalho
+    *   Resultado vazio eh AVISO (mesmo texto/titulo dos demais relatorios,
+    *   Erro30); o resto eh ERRO. Erro270: vazio saia como MsgErro com titulo
+    *   tecnico e era repetido pelo form.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExibirFalhaRelatorio(par_cTitulo)
+        IF EMPTY(THIS.this_cMensagemErro)
+            RETURN
+        ENDIF
+        IF "Nenhum registro encontrado" $ THIS.this_cMensagemErro
+            MsgAviso(THIS.this_cMensagemErro, "Aten" + CHR(231) + CHR(227) + "o")
+        ELSE
+            MsgErro(THIS.this_cMensagemErro, par_cTitulo)
+        ENDIF
+    ENDPROC
+
     PROCEDURE Imprimir()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
@@ -581,9 +598,7 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
                 loc_lSucesso = THIS.ExecutarReportForm("SigReChp", "PRINTER_PROMPT", "CsRelatorio")
                 THIS.LimparCursores()
             ELSE
-                IF !EMPTY(THIS.this_cMensagemErro)
-                    MsgErro(THIS.this_cMensagemErro, "sigrechpBO.Imprimir")
-                ENDIF
+                THIS.ExibirFalhaRelatorio("sigrechpBO.Imprimir")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrechpBO.Imprimir")
@@ -603,9 +618,7 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
                 loc_lSucesso = THIS.ExecutarReportForm("SigReChp", "PREVIEW", "CsRelatorio")
                 THIS.LimparCursores()
             ELSE
-                IF !EMPTY(THIS.this_cMensagemErro)
-                    MsgErro(THIS.this_cMensagemErro, "sigrechpBO.Visualizar")
-                ENDIF
+                THIS.ExibirFalhaRelatorio("sigrechpBO.Visualizar")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrechpBO.Visualizar")
@@ -635,6 +648,15 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
                     "Aten" + CHR(231) + CHR(227) + "o")
                 RETURN .F.
             ENDIF
+        ENDIF
+
+        *-- O FRX usa campos SEM alias (iclis, nums...): o REPORT FORM os resolve
+        *   na area SELECIONADA. MontarCabecalho roda depois do PrepararDados e
+        *   deixa CsCabecalho selecionado -> "Variable 'ICLIS' is not found"
+        *   (Erro270). O legado faz "select CsRelatorio" antes do report form.
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            SELECT (par_cCursorDados)
+            GO TOP
         ENDIF
 
         LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig

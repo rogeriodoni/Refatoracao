@@ -2350,8 +2350,8 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE BtnVisualizarClick()
-        loc_lContinuar = .T.
         LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
                 loc_lContinuar = .F.

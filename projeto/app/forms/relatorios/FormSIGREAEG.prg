@@ -316,34 +316,42 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     PROTECTED PROCEDURE ConfigurarPaginaLista()
         LOCAL loc_nResult
         TRY
+            *-- Os dois cursores sao do SIGREAEGBO: o Init dele ja os carrega e
+            *   indexa (tags cemps/cgrus), e o ProcessarEmpresa faz SEEK nas tags.
+            *   Erro265: este metodo fechava e recriava cursor_4c_SigCdGrp SEM
+            *   indice -> "Index tag is not found" no Visualizar/Imprimir.
+            *   So carrega aqui se o BO nao carregou, e sempre com a tag.
+
             *-- Cursor de empresas: usado por ValidarEmpresa() via SEEK(cemps)
-            IF USED("cursor_4c_SigCdEmp")
-                USE IN cursor_4c_SigCdEmp
-            ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT cemps, razas, ativas FROM SigCdEmp ORDER BY cemps", ;
-                "cursor_4c_SigCdEmp")
-            IF loc_nResult > 0
-                SELECT cursor_4c_SigCdEmp
-                INDEX ON cemps TAG cemps ADDITIVE
-                GO TOP
-            ELSE
-                MsgAviso("Falha ao carregar empresas." + CHR(13) + ;
-                    "Valida" + CHR(231) + CHR(227) + "o de empresa usar" + ;
-                    CHR(225) + " consulta direta.", "Aviso")
+            IF !USED("cursor_4c_SigCdEmp")
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT cemps, razas, ativas FROM SigCdEmp ORDER BY cemps", ;
+                    "cursor_4c_SigCdEmp")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_SigCdEmp
+                    INDEX ON cemps TAG cemps ADDITIVE
+                    GO TOP
+                ELSE
+                    MsgAviso("Falha ao carregar empresas." + CHR(13) + ;
+                        "Valida" + CHR(231) + CHR(227) + "o de empresa usar" + ;
+                        CHR(225) + " consulta direta.", "Aviso")
+                ENDIF
             ENDIF
 
             *-- Cursor de grupos de estoque: referencia carregada no Init original
-            IF USED("cursor_4c_SigCdGrp")
-                USE IN cursor_4c_SigCdGrp
-            ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT cgrus, mercs, cestoqs FROM SigCdGrp ORDER BY cgrus", ;
-                "cursor_4c_SigCdGrp")
-            IF loc_nResult < 1
-                MsgAviso("Falha ao carregar grupos de estoque." + CHR(13) + ;
-                    "Valida" + CHR(231) + CHR(227) + "o usar" + CHR(225) + ;
-                    " consulta direta.", "Aviso")
+            IF !USED("cursor_4c_SigCdGrp")
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT cgrus, mercs, cestoqs FROM SigCdGrp ORDER BY cgrus", ;
+                    "cursor_4c_SigCdGrp")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_SigCdGrp
+                    INDEX ON cgrus TAG cgrus ADDITIVE
+                    GO TOP
+                ELSE
+                    MsgAviso("Falha ao carregar grupos de estoque." + CHR(13) + ;
+                        "Valida" + CHR(231) + CHR(227) + "o usar" + CHR(225) + ;
+                        " consulta direta.", "Aviso")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1195,8 +1203,8 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Equivale ao btnReport.Visualiza.Click do legado (PROCEDURE visualizacao)
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        loc_lContinuar = .T.
         LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
                 loc_lContinuar = .F.
