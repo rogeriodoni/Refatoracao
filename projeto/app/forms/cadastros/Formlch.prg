@@ -18,7 +18,7 @@ DEFINE CLASS Formlch AS FormBase
     ShowWindow = 1
     AutoCenter  = .T.
     ShowWindow   = 0
-    WindowType   = 0
+    WindowType   = 1
     ControlBox  = .F.
     Closable    = .F.
     MaxButton   = .F.
@@ -4649,12 +4649,22 @@ DEFINE CLASS Formlch AS FormBase
         IF VARTYPE(par_oContainer) != "O"
             RETURN
         ENDIF
+        *-- ControlCount so existe em CONTAINER (Container, Page, PageFrame,
+        *-- Grid, CommandGroup, OptionGroup, Form). Lido num Label/TextBox
+        *-- estoura "Property CONTROLCOUNT is not found" - e como a chamada
+        *-- esta dentro do TRY do InicializarForm, o Init devolvia .F., o
+        *-- CREATEOBJECT do menu devolvia .F. e a tela nao abria.
+        IF !PEMSTATUS(par_oContainer, "ControlCount", 5)
+            RETURN
+        ENDIF
 
         FOR loc_i = 1 TO par_oContainer.ControlCount
             loc_oCtrl = par_oContainer.Controls(loc_i)
             IF VARTYPE(loc_oCtrl) = "O"
-                loc_oCtrl.Visible = .T.
-                IF loc_oCtrl.ControlCount > 0
+                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                    loc_oCtrl.Visible = .T.
+                ENDIF
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5)
                     THIS.TornarControlesVisiveis(loc_oCtrl)
                 ENDIF
             ENDIF

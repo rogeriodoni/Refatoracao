@@ -41,7 +41,7 @@ DEFINE CLASS FormSigPrGlx AS FormBase
     FontSize     = 8
     *-- WindowType = 0 na classe (evita timeout em VFP9 -T/harness de teste);
     *-- producao promove para modal (1) no Init, como FormICD/FormHOR/FormGps.
-    WindowType   = 0
+    WindowType   = 1
 
     *--------------------------------------------------------------------------
     * Parametros recebidos de quem abre a previa - equivalentes ao

@@ -13,7 +13,7 @@ DEFINE CLASS Formint AS FormBase
     Caption     = ""
     AutoCenter  = .T.
     ShowWindow   = 0
-    WindowType   = 0
+    WindowType   = 1
     ShowWindow = 1
     ControlBox  = .F.
     TitleBar    = 0

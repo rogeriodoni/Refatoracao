@@ -12,7 +12,7 @@ DEFINE CLASS FormICO AS FormBase
     TitleBar     = 0
     ShowWindow = 1
     ShowWindow = 0
-    WindowType = 0
+    WindowType = 1
     ControlBox   = .F.
     MaxButton    = .F.
     MinButton    = .F.

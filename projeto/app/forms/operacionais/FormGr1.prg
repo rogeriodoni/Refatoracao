@@ -13,7 +13,7 @@ DEFINE CLASS FormGr1 AS FormBase
     ShowWindow  = 0
     ShowWindow = 1
     ControlBox  = .F.
-    WindowType  = 0
+    WindowType  = 1
     DataSession = 2
     BorderStyle = 2
     AutoCenter  = .T.

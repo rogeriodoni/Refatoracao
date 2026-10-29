@@ -15,7 +15,7 @@ DEFINE CLASS FormIct AS FormBase
     Caption      = "Tipo de Tributacao do ICMS"
     AutoCenter   = .T.
     ShowWindow   = 0
-    WindowType   = 0
+    WindowType   = 1
     ShowWindow = 1
     ControlBox   = .F.
     Closable     = .F.

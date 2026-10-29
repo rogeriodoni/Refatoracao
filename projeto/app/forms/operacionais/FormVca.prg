@@ -35,7 +35,7 @@ DEFINE CLASS FormVca AS FormBase
     FontSize    = 8
     MaxButton   = .F.
     TitleBar    = 0
-    WindowType  = 0
+    WindowType  = 1
     KeyPreview  = .T.
 
     *-- Business Object

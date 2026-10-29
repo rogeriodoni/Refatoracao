@@ -18,7 +18,7 @@ DEFINE CLASS FormICD AS FormBase
     FontSize    = 8
     MaxButton   = .F.
     TitleBar    = 0
-    WindowType  = 0
+    WindowType  = 1
     ForeColor   = RGB(36,84,155)
     Themes      = .F.
 

@@ -23,7 +23,7 @@ DEFINE CLASS FormICN AS FormBase
     BorderStyle = 2
     TitleBar    = 0
     ShowWindow = 0
-    WindowType = 0
+    WindowType = 1
     ShowWindow = 1
     ControlBox  = .F.
     MaxButton   = .F.
