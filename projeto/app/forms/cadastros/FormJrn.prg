@@ -127,7 +127,7 @@ DEFINE CLASS FormJrn AS FormBase
         *-- Cabecalho cinza (cntSombra.Top=1 -> 1+29=30)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 30
+            .Top         = 29
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -174,7 +174,7 @@ DEFINE CLASS FormJrn AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 28
+            .Top         = 29
             .Left        = 542
             .Width       = 390
             .Height      = 85
@@ -314,7 +314,7 @@ DEFINE CLASS FormJrn AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Saida", "Container")
         WITH loc_oPagina.cnt_4c_Saida
-            .Top         = 28
+            .Top         = 29
             .Left        = 917
             .Width       = 90
             .Height      = 85
@@ -355,7 +355,7 @@ DEFINE CLASS FormJrn AS FormBase
         loc_oPagina.AddObject("cmd_4c_CopiarMes", "CommandButton")
         WITH loc_oPagina.cmd_4c_CopiarMes
             .Caption         = "Copia M" + CHR(234) + "s"
-            .Top             = 33
+            .Top             = 34
             .Left            = 462
             .Width           = 75
             .Height          = 75
@@ -699,9 +699,9 @@ DEFINE CLASS FormJrn AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
-            .Top         = 42
-            .Left        = 760
-            .Width       = 165
+            .Top         = 29
+            .Left        = 842
+            .Width       = 160
             .Height      = 85
             .BackStyle = 0
             .BorderWidth = 0
@@ -736,7 +736,7 @@ DEFINE CLASS FormJrn AS FormBase
         WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar
             .Caption         = "Encerrar"
             .Top             = 5
-            .Left            = 85
+            .Left            = 80
             .Width           = 75
             .Height          = 75
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
