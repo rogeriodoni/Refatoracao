@@ -138,7 +138,7 @@ DEFINE CLASS FormImp AS FormBase
         *-- Cabecalho cinza com titulo
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 2
+            .Top         = 29   && era 2: a faixa ficava 27px ACIMA dos blocos de botao (29)
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -165,7 +165,7 @@ DEFINE CLASS FormImp AS FormBase
             .AddObject("lbl_4c_Titulo", "Label")
             WITH .lbl_4c_Titulo
                 .Caption   = THIS.Caption
-                .Top       = 12
+                .Top       = 18   && canonico (regra #11): sombra em 15, titulo em 18
                 .Left      = 8
                 .Width     = THIS.Width
                 .Height    = 46
@@ -186,8 +186,8 @@ DEFINE CLASS FormImp AS FormBase
             .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackStyle   = 1
-            .BackColor   = RGB(53, 53, 53)
+            .BackStyle   = 0    && transparente, como FormUpd/FormFti/FormFUN
+            .BackColor   = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
 
@@ -771,7 +771,7 @@ DEFINE CLASS FormImp AS FormBase
             .SpecialEffect = 1
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .Value         = ""
+            .Value         = 0    && NUMERICO: Tipos eh numeric(1,0) e o combo guarda o INDICE
             .Visible       = .T.
         ENDWITH
 
@@ -948,7 +948,7 @@ DEFINE CLASS FormImp AS FormBase
         WITH loc_oPg1.cbo_4c_Cetiquetas
             .RowSourceType    = 6
             .RowSource        = "crSigCdTpe.Cetiquetas,nTipos"
-            .BoundColumn      = 1
+            .BoundColumn      = 2    && legado: BoundColumn 2 -> grava SigCdTpe.nTipos, exibe Cetiquetas
             .ColumnCount      = 1
             .ColumnWidths     = "120"
             .FirstElement     = 1
@@ -961,7 +961,7 @@ DEFINE CLASS FormImp AS FormBase
             .SpecialEffect    = 1
             .FontName         = "Tahoma"
             .FontSize         = 8
-            .Value            = ""
+            .Value            = 0    && NUMERICO: cetiquetas eh numeric(3,0)
             .Visible          = .T.
         ENDWITH
 
@@ -2190,7 +2190,7 @@ DEFINE CLASS FormImp AS FormBase
             .this_nBarras     = loc_oPg1.txt_4c_Barras.Value
             .this_nRates      = loc_oPg1.txt_4c_Rates.Value
             .this_lGraficos   = (loc_oPg1.chk_4c_Graficos.Value = 1)
-            .this_cTipos      = ALLTRIM(loc_oPg1.cbo_4c_Tipos.Value)
+            .this_nTipos      = loc_oPg1.cbo_4c_Tipos.Value
             .this_nTpImpres   = loc_oPg1.opt_4c_TpImpres.Value
             .this_cExpds      = loc_oPg1.edt_4c_Expds.Value
             .this_cExpas      = loc_oPg1.edt_4c_Expas.Value
@@ -2200,7 +2200,7 @@ DEFINE CLASS FormImp AS FormBase
             .this_cFontemp1s  = loc_oPg1.edt_4c_Fontemp1s.Value
             .this_lChkChqf    = (loc_oPg1.chk_4c_Chqf.Value = 1)
             .this_nImpEtis    = loc_oPg1.opt_4c_ImpEtis.Value
-            .this_cCetiquetas = ALLTRIM(loc_oPg1.cbo_4c_Cetiquetas.Value)
+            .this_nCetiquetas = loc_oPg1.cbo_4c_Cetiquetas.Value
             .this_lExps       = (loc_oPg1.chk_4c_Exps.Value = 1)
             .this_nAjVerts    = loc_oPg1.spn_4c_AjVerts.Value
             .this_nAjHorzs    = loc_oPg1.spn_4c_AjHorzs.Value
@@ -2243,7 +2243,7 @@ DEFINE CLASS FormImp AS FormBase
             loc_oPg1.txt_4c_Barras.Value     = .this_nBarras
             loc_oPg1.txt_4c_Rates.Value      = .this_nRates
             loc_oPg1.chk_4c_Graficos.Value   = IIF(.this_lGraficos, 1, 0)
-            loc_oPg1.cbo_4c_Tipos.Value      = .this_cTipos
+            loc_oPg1.cbo_4c_Tipos.Value      = .this_nTipos
             loc_oPg1.opt_4c_TpImpres.Value   = IIF(.this_nTpImpres > 0, .this_nTpImpres, 1)
             loc_oPg1.edt_4c_Expds.Value      = .this_cExpds
             loc_oPg1.edt_4c_Expas.Value      = .this_cExpas
@@ -2253,7 +2253,7 @@ DEFINE CLASS FormImp AS FormBase
             loc_oPg1.edt_4c_Fontemp1s.Value  = .this_cFontemp1s
             loc_oPg1.chk_4c_Chqf.Value       = IIF(.this_lChkChqf, 1, 0)
             loc_oPg1.opt_4c_ImpEtis.Value    = IIF(.this_nImpEtis > 0, .this_nImpEtis, 1)
-            loc_oPg1.cbo_4c_Cetiquetas.Value = .this_cCetiquetas
+            loc_oPg1.cbo_4c_Cetiquetas.Value = .this_nCetiquetas
             loc_oPg1.chk_4c_Exps.Value       = IIF(.this_lExps, 1, 0)
             loc_oPg1.spn_4c_AjVerts.Value    = .this_nAjVerts
             loc_oPg1.spn_4c_AjHorzs.Value    = .this_nAjHorzs
@@ -2303,7 +2303,7 @@ DEFINE CLASS FormImp AS FormBase
         loc_oPg1.txt_4c_Barras.Value     = 0
         loc_oPg1.txt_4c_Rates.Value      = 0
         loc_oPg1.chk_4c_Graficos.Value   = 0
-        loc_oPg1.cbo_4c_Tipos.Value      = ""
+        loc_oPg1.cbo_4c_Tipos.Value      = 0
         loc_oPg1.opt_4c_TpImpres.Value   = 1
         loc_oPg1.edt_4c_Expds.Value      = ""
         loc_oPg1.edt_4c_Expas.Value      = ""
@@ -2313,7 +2313,7 @@ DEFINE CLASS FormImp AS FormBase
         loc_oPg1.edt_4c_Fontemp1s.Value  = ""
         loc_oPg1.chk_4c_Chqf.Value       = 0
         loc_oPg1.opt_4c_ImpEtis.Value    = 1
-        loc_oPg1.cbo_4c_Cetiquetas.Value = ""
+        loc_oPg1.cbo_4c_Cetiquetas.Value = 0
         loc_oPg1.chk_4c_Exps.Value       = 0
         loc_oPg1.spn_4c_AjVerts.Value    = 0
         loc_oPg1.spn_4c_AjHorzs.Value    = 0

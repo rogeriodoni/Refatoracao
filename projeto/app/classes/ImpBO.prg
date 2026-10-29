@@ -26,8 +26,8 @@ DEFINE CLASS ImpBO AS BusinessBase
     this_nImpEtis   = 0     && Tipo Etiqueta (1=Allegro, 2=Zebra ZPL, 3=Zebra EPL)
 
     *-- Tipo grafico e etiqueta padrao
-    this_cTipos         = ""    && Tipo de Grafico (C - dropdown: Epson Esc K, Epson Esc * m n, Mecaf)
-    this_cCetiquetas    = ""    && Etiqueta Padrao (C - vem de SigCdTpe.Cetiquetas)
+    this_nTipos         = 0     && Tipos numeric(1,0) - INDICE do combo (1=Epson Esc K, 2=Epson Esc * m n, 3=Mecaf)
+    this_nCetiquetas    = 0     && cetiquetas numeric(3,0) - recebe SigCdTpe.nTipos (BoundColumn 2)
 
     *-- Ajustes de etiqueta
     this_nAjVerts   = 0     && Ajuste Vertical (0-999)
@@ -111,8 +111,8 @@ DEFINE CLASS ImpBO AS BusinessBase
                 THIS.this_lChkChqf     = (TratarNulo(nchqfs,    "N") = 1)
                 THIS.this_nTpImpres    = TratarNulo(nTpImpres,  "N")
                 THIS.this_nImpEtis     = TratarNulo(ImpEtis,    "N")
-                THIS.this_cTipos       = TratarNulo(Tipos,      "C")
-                THIS.this_cCetiquetas  = TratarNulo(cetiquetas, "C")
+                THIS.this_nTipos       = TratarNulo(Tipos,      "N")
+                THIS.this_nCetiquetas  = TratarNulo(cetiquetas, "N")
                 THIS.this_nAjVerts     = TratarNulo(AjVerts,    "N")
                 THIS.this_nAjHorzs     = TratarNulo(AjHorzs,    "N")
                 THIS.this_nAjVelos     = TratarNulo(AjVelos,    "N")
@@ -231,8 +231,8 @@ DEFINE CLASS ImpBO AS BusinessBase
                 IIF(THIS.this_lChkChqf,  "1", "0") + ", " + ;
                 FormatarNumeroSQL(THIS.this_nTpImpres, 0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nImpEtis,   0) + ", " + ;
-                EscaparSQL(THIS.this_cTipos) + ", " + ;
-                EscaparSQL(THIS.this_cCetiquetas) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nTipos, 0) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nCetiquetas, 0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nAjVerts, 0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nAjHorzs, 0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nAjVelos, 0) + ", " + ;
@@ -299,8 +299,8 @@ DEFINE CLASS ImpBO AS BusinessBase
                 " nchqfs   = " + IIF(THIS.this_lChkChqf,  "1", "0") + "," + ;
                 " nTpImpres = " + FormatarNumeroSQL(THIS.this_nTpImpres, 0) + "," + ;
                 " ImpEtis  = " + FormatarNumeroSQL(THIS.this_nImpEtis,   0) + "," + ;
-                " Tipos    = " + EscaparSQL(THIS.this_cTipos) + "," + ;
-                " cetiquetas = " + EscaparSQL(THIS.this_cCetiquetas) + "," + ;
+                " Tipos    = " + FormatarNumeroSQL(THIS.this_nTipos, 0) + "," + ;
+                " cetiquetas = " + FormatarNumeroSQL(THIS.this_nCetiquetas, 0) + "," + ;
                 " AjVerts  = " + FormatarNumeroSQL(THIS.this_nAjVerts, 0) + "," + ;
                 " AjHorzs  = " + FormatarNumeroSQL(THIS.this_nAjHorzs, 0) + "," + ;
                 " AjVelos  = " + FormatarNumeroSQL(THIS.this_nAjVelos, 0) + "," + ;
