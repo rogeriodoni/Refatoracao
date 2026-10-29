@@ -257,7 +257,7 @@ ENDPROC
 * par_cCursor: nome do cursor local com os dados (Emps, PercEmps)
 *------------------------------------------------------------------------------
 PROCEDURE SalvarEmpresas(par_cInfos, par_cCursor)
-    LOCAL loc_cSQLDel, loc_cSQLIns, loc_nRes, loc_lSucesso, loc_lErroInsert
+    LOCAL loc_cSQLDel, loc_cSQLIns, loc_nRes, loc_lSucesso, loc_lErroInsert, loc_cMsgErro
     LOCAL loc_cEmps, loc_nPercEmps
     loc_lSucesso = .F.
 
@@ -272,23 +272,32 @@ PROCEDURE SalvarEmpresas(par_cInfos, par_cCursor)
         loc_nRes = SQLEXEC(gnConnHandle, loc_cSQLDel)
 
         IF loc_nRes < 0
+            *-- CapturarErroSQL ANTES do ROLLBACK: o SQLEXEC do rollback tem
+            *-- SUCESSO e limpa o AERROR, deixando so "Erro desconhecido".
+            loc_cMsgErro = CapturarErroSQL()
             SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-            MostrarErro("Erro ao limpar empresas:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            MostrarErro("Erro ao limpar empresas:" + CHR(13) + loc_cMsgErro, "Erro SQL")
         ELSE
             loc_lErroInsert = .F.
+            loc_cMsgErro    = ""
             SELECT (par_cCursor)
             GO TOP
             DO WHILE !EOF() AND !loc_lErroInsert
                 loc_cEmps     = ALLTRIM(Emps)
                 loc_nPercEmps = PercEmps
                 IF !EMPTY(loc_cEmps)
+                    *-- pkChave eh char(20) e fUniqueIds() devolve exatamente 20
+                    *-- (empresa 3 + RIGHT(SYS(2015),9) + 8). O CONVERT(VARCHAR(36),
+                    *-- NEWID()) da migracao gera 36 e o SQL Server recusava o INSERT
+                    *-- por truncamento. O legado grava "pkChave With fUniqueIds()".
                     loc_cSQLIns = "INSERT INTO SigEmInf (Infos, Emps, PercEmps, pkChave)" + ;
                                   " VALUES (" + EscaparSQL(par_cInfos) + ;
                                   ", " + EscaparSQL(loc_cEmps) + ;
                                   ", " + FormatarNumeroSQL(loc_nPercEmps) + ;
-                                  ", CONVERT(VARCHAR(36), NEWID()))"
+                                  ", " + EscaparSQL(fUniqueIds()) + ")"
                     loc_nRes = SQLEXEC(gnConnHandle, loc_cSQLIns)
                     IF loc_nRes < 0
+                        loc_cMsgErro    = CapturarErroSQL()
                         loc_lErroInsert = .T.
                     ENDIF
                 ENDIF
@@ -297,7 +306,7 @@ PROCEDURE SalvarEmpresas(par_cInfos, par_cCursor)
 
             IF loc_lErroInsert
                 SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-                MostrarErro("Erro ao inserir empresa:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MostrarErro("Erro ao inserir empresa:" + CHR(13) + loc_cMsgErro, "Erro SQL")
             ELSE
                 SQLEXEC(gnConnHandle, "COMMIT TRANSACTION")
                 loc_lSucesso = .T.
