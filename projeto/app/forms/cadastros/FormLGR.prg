@@ -108,7 +108,7 @@ DEFINE CLASS FormLGR AS FormBase
         *-- Cabecalho cinza escuro com titulo (Top original=2, +29comp=31)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 31
+            .Top         = 29
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -154,8 +154,7 @@ DEFINE CLASS FormLGR AS FormBase
             .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackStyle   = 1
-            .BackColor   = RGB(53, 53, 53)
+            .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
@@ -501,7 +500,7 @@ DEFINE CLASS FormLGR AS FormBase
         *-- Container botoes Confirmar/Cancelar (grupo_salva canonico)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 33
+            .Top         = 29
             .Left        = 842
             .Width       = 160
             .Height      = 85
@@ -910,53 +909,53 @@ DEFINE CLASS FormLGR AS FormBase
 
                 IF THIS.this_oBusinessObject.Buscar(loc_cSerifab, loc_dDtini, loc_dDtfim)
                     *-- RecordSource e ColumnCount FORA do WITH para garantir criacao das colunas
+                    *-- As colunas sao as CINCO do pColuna do legado (SIGCDLGR 666-670),
+                    *-- nesta ordem: Data 75, Tipo 30, Marca 150, Modelo 150, COO 50.
+                    *-- A migracao inventou 8 - Serie, Hora e Inc.Man. nao existem na
+                    *-- grade do legado - e ainda ligava "Tipo" em ctipos, quando o
+                    *-- legado usa cDoctos, que eh a coluna editada na pagina Dados.
                     loc_oGrid.ColumnCount = 3
                     loc_oGrid.RecordSource = "cursor_4c_Dados"
-                    loc_oGrid.ColumnCount  = 8
+                    loc_oGrid.ColumnCount  = 5
+
+                    *-- A FONTE vem antes das larguras: trocar Grid.FontSize
+                    *-- re-autodimensiona toda Column.Width pelo conteudo (medido no VFP9).
+                    THIS.FormatarGridLista(loc_oGrid)
 
                     WITH loc_oGrid
-                        .Column1.ControlSource    = "cursor_4c_Dados.cserifab"
-                        .Column1.Width            = 120
-                        .Column1.Header1.Caption  = "S" + CHR(233) + "rie"
+                        *-- Data: o legado monta a coluna tdtData a partir de cDatas
+                        *-- (replace ALL tdtdata WITH CTOD(LEFT/SUBSTR/RIGHT), linha 678).
+                        *-- Aqui a formatacao eh so de EXIBICAO, por expressao: nao usa
+                        *-- funcao de data, entao nao depende de SET DATE nem estoura com
+                        *-- conteudo invalido.
+                        .Column1.ControlSource    = "IIF(LEN(ALLTRIM(cursor_4c_Dados.cdatas)) = 8, " + ;
+                                                    "SUBSTR(cursor_4c_Dados.cdatas,1,2) + '/' + " + ;
+                                                    "SUBSTR(cursor_4c_Dados.cdatas,3,2) + '/' + " + ;
+                                                    "SUBSTR(cursor_4c_Dados.cdatas,5,4), '')"
+                        .Column1.Width            = 75
+                        .Column1.Header1.Caption  = "Data"
                         .Column1.ReadOnly         = .T.
 
-                        .Column2.ControlSource    = "cursor_4c_Dados.cmarcas"
-                        .Column2.Width            = 120
-                        .Column2.Header1.Caption  = "Marca"
+                        .Column2.ControlSource    = "cursor_4c_Dados.cdoctos"
+                        .Column2.Width            = 30
+                        .Column2.Header1.Caption  = "Tipo"
                         .Column2.ReadOnly         = .T.
 
-                        .Column3.ControlSource    = "cursor_4c_Dados.cmodelos"
-                        .Column3.Width            = 100
-                        .Column3.Header1.Caption  = "Modelo"
+                        .Column3.ControlSource    = "cursor_4c_Dados.cmarcas"
+                        .Column3.Width            = 150
+                        .Column3.Header1.Caption  = "Marca"
                         .Column3.ReadOnly         = .T.
 
-                        .Column4.ControlSource    = "cursor_4c_Dados.ccoos"
-                        .Column4.Width            = 60
-                        .Column4.Header1.Caption  = "COO"
+                        .Column4.ControlSource    = "cursor_4c_Dados.cmodelos"
+                        .Column4.Width            = 150
+                        .Column4.Header1.Caption  = "Modelo"
                         .Column4.ReadOnly         = .T.
 
-                        .Column5.ControlSource    = "cursor_4c_Dados.cdatas"
-                        .Column5.Width            = 80
-                        .Column5.Header1.Caption  = "Data"
+                        .Column5.ControlSource    = "cursor_4c_Dados.ccoos"
+                        .Column5.Width            = 50
+                        .Column5.Header1.Caption  = "COO"
                         .Column5.ReadOnly         = .T.
-
-                        .Column6.ControlSource    = "cursor_4c_Dados.choras"
-                        .Column6.Width            = 60
-                        .Column6.Header1.Caption  = "Hora"
-                        .Column6.ReadOnly         = .T.
-
-                        .Column7.ControlSource    = "cursor_4c_Dados.ctipos"
-                        .Column7.Width            = 60
-                        .Column7.Header1.Caption  = "Tipo"
-                        .Column7.ReadOnly         = .T.
-
-                        .Column8.ControlSource    = "cursor_4c_Dados.cincmans"
-                        .Column8.Width            = 60
-                        .Column8.Header1.Caption  = "Inc.Man."
-                        .Column8.ReadOnly         = .T.
                     ENDWITH
-
-                    THIS.FormatarGridLista(loc_oGrid)
                     loc_oGrid.Refresh()
                     loc_lResultado = .T.
                 ENDIF
@@ -1170,9 +1169,16 @@ DEFINE CLASS FormLGR AS FormBase
             .this_cCrzs    = ALLTRIM(loc_oPg2.txt_4c_Rz.Value)
             .this_cDoctos  = ALLTRIM(loc_oPg2.txt_4c_Tipo.Value)
 
-            *-- Data: TextBox.Value eh Date -> converter para string YYYYMMDD
+            *-- Data: cdatas eh DDMMAAAA, nao AAAAMMDD. O legado grava
+            *--   Replace cDatas WITH STRTRAN(DTOC(tdtData), [/], [])    (linha 862)
+            *-- e o proprio LGRBO.Buscar ja filtra com STRTRAN(DTOC(...),"/","").
+            *-- Com DTOS() o form gravava AAAAMMDD e o BETWEEN do filtro nunca
+            *-- casava: a Lista voltava vazia mesmo com registros na tabela.
+            *-- Montado por partes para nao depender de SET DATE.
             IF VARTYPE(loc_oPg2.txt_4c_Dtmov.Value) = "D" AND !EMPTY(loc_oPg2.txt_4c_Dtmov.Value)
-                .this_cDatas = DTOS(loc_oPg2.txt_4c_Dtmov.Value)
+                .this_cDatas = PADL(DAY(loc_oPg2.txt_4c_Dtmov.Value),   2, "0") + ;
+                               PADL(MONTH(loc_oPg2.txt_4c_Dtmov.Value), 2, "0") + ;
+                               PADL(YEAR(loc_oPg2.txt_4c_Dtmov.Value),  4, "0")
             ELSE
                 .this_cDatas = ""
             ENDIF
@@ -1207,10 +1213,14 @@ DEFINE CLASS FormLGR AS FormBase
             loc_oPg2.txt_4c_Rz.Value     = .this_cCrzs
             loc_oPg2.txt_4c_Tipo.Value   = .this_cDoctos
 
-            *-- Data: string YYYYMMDD -> Date (via STOD)
+            *-- Data: string DDMMAAAA -> Date. STOD() NAO EXISTE no VFP9 (eh do
+            *-- Clipper): Visualizar/Alterar estourava "File 'stod.prg' does not
+            *-- exist" em runtime. DATE(ano,mes,dia) nao depende de SET DATE.
             loc_cDatas = ALLTRIM(.this_cDatas)
-            IF LEN(loc_cDatas) = 8
-                loc_oPg2.txt_4c_Dtmov.Value = STOD(loc_cDatas)
+            IF LEN(loc_cDatas) = 8 AND ISDIGIT(loc_cDatas)
+                loc_oPg2.txt_4c_Dtmov.Value = DATE(VAL(SUBSTR(loc_cDatas, 5, 4)), ;
+                                                   VAL(SUBSTR(loc_cDatas, 3, 2)), ;
+                                                   VAL(SUBSTR(loc_cDatas, 1, 2)))
             ELSE
                 loc_oPg2.txt_4c_Dtmov.Value = {}
             ENDIF
