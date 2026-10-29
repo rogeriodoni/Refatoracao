@@ -250,7 +250,7 @@ DEFINE CLASS sigrebalBO AS RelatorioBase
         LOCAL loc_lnCot1, loc_lnCot2, loc_lnValors, loc_lnSaldos
         LOCAL loc_lnNivels, loc_lnConta1, loc_lcClasse2
         LOCAL loc_cContas, loc_cDcontas, loc_cOrds, loc_cPs, loc_cIps
-        LOCAL loc_lcGrupos, loc_lcContas, loc_lcNopers
+        LOCAL loc_lcGrupos, loc_lcContas, loc_lnNopers
         LOCAL loc_nResult, loc_lcQuery, loc_lcDtSQL
         LOCAL ARRAY loc_laOrd(5), loc_laStrArea(5)
         LOCAL ARRAY loc_aFlds(1)
@@ -475,10 +475,13 @@ DEFINE CLASS sigrebalBO AS RelatorioBase
                                     ENDIF
                                 ENDFOR
                                 *-- Registrar no cursor de analise de consistencia
-                                loc_lcNopers = ALLTRIM(cursor_4c_BalMvcr.Nopers)
+                                *   Nopers eh numeric(7,0) e a tag Nopers eh numerica: o
+                                *   legado faz Seek crSigMvCcr.Nopers direto. ALLTRIM()
+                                *   num numero estourava "Function argument value..." (Erro269).
+                                loc_lnNopers = cursor_4c_BalMvcr.Nopers
                                 SELECT cursor_4c_BalTmpMccr
                                 SET ORDER TO Nopers
-                                IF !SEEK(loc_lcNopers)
+                                IF !SEEK(loc_lnNopers)
                                     INSERT INTO cursor_4c_BalTmpMccr ;
                                         (Emps, Datas, Opers, Grupos, Contas, Valors, Moedas, ;
                                          SValors, SMoedas, Cotacaos, Nopers, Saldos, cIdChaves, ;
