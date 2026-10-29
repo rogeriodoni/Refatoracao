@@ -773,7 +773,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container1", "Container")
         WITH loc_oPagina.cnt_4c_Container1
-            .Top         = 44
+            .Top         = 125   && legado 15 + 110 (compensacao usada nos demais containers)
             .Left        = 320
             .Width       = 348
             .Height      = 72
@@ -2875,6 +2875,18 @@ DEFINE CLASS FormFUN AS FormBase
             .DeleteMark   = .F.
         ENDWITH
 
+        *-- Shape1 do legado (cntTotal): moldura do botao Retornar.
+        *-- BackStyle = 0 -> so a borda. A migracao tinha perdido o controle.
+        loc_oCnt.AddObject("shp_4c_MolduraRetornar", "Shape")
+        WITH loc_oCnt.shp_4c_MolduraRetornar
+            .Top         = 6
+            .Left        = 409
+            .Width       = 90
+            .Height      = 110
+            .BackStyle   = 0
+            .BorderColor = RGB(136, 189, 188)
+        ENDWITH
+
         loc_oCnt.AddObject("cmd_4c_Retornar", "CommandButton")
         WITH loc_oCnt.cmd_4c_Retornar
             .Caption         = "Retornar"
@@ -2953,7 +2965,7 @@ DEFINE CLASS FormFUN AS FormBase
             .Caption         = "Total Metal"
             .Picture         = gc_4c_CaminhoIcones + "geral_arvore_ouro_60.jpg"
             .PicturePosition = 13
-            .Top             = 41
+            .Top             = 122   && legado 12 + 110
             .Left            = 718
             .Width           = 80
             .Height          = 100
