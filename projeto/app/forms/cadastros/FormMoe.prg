@@ -116,7 +116,7 @@ DEFINE CLASS FormMoe AS FormBase
         *-- Original: cntSombra.Top=1. Com compensacao PageFrame +29: Top=30
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 30
+            .Top         = 29
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
@@ -466,12 +466,11 @@ DEFINE CLASS FormMoe AS FormBase
         *-- Left canonico do framework: 842 (form Width=1000)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
-            .Top         = 45
+            .Top         = 29
             .Left        = 842
             .Width       = 160
             .Height      = 85
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+            .BackStyle   = 0
             .Visible     = .T.
         ENDWITH
 
@@ -1392,6 +1391,13 @@ DEFINE CLASS FormMoe AS FormBase
     PROCEDURE BtnSalvarClick()
         LOCAL loc_oPg2, loc_cCodigo, loc_nOrdem, loc_lSucesso, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- loc_lProsseguir TEM de nascer .T.: ela so era atribuida dentro do
+        *-- IF this_cModoAtual = "INCLUIR", e o IF que envolve a gravacao esta
+        *-- FORA dele. Em ALTERAR a LOCAL ficava no default do VFP9 (.F. -
+        *-- medido) e o bloco inteiro era pulado: nao gravava, nao trocava de
+        *-- pagina e nao avisava nada.
+        loc_lProsseguir = .T.
 
         *-- Validacoes ANTES do TRY (RETURN fora de TRY e correto)
         IF THIS.this_cModoAtual = "INCLUIR"
