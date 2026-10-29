@@ -94,51 +94,62 @@ DEFINE CLASS ImpBO AS BusinessBase
     * REGRA CRITICA: SELECT (par_cAliasCursor) ANTES de acessar campos
     *====================================================================
     PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+    *====================================================================
+    * TratarNulo(valor, PADRAO): o 2o argumento eh o VALOR devolvido
+    * quando o 1o eh NULL - nao eh um indicador de tipo. Com "N"/"C" ali,
+    * coluna NULL devolvia a STRING "N"/"C" para dentro de uma property.
+    *
+    * E exps/graficos sao BIT: chegam do SQL Server como LOGICO, entao
+    * TratarNulo(.F., "N") caia no ramo do EMPTY e devolvia "N" - dai o
+    * "Operator/operand type mismatch" de "N" = 1 ao clicar em Alterar.
+    * Com .T. o erro tambem acontece (.T. = 1). Usar ConverterParaLogico,
+    * que trata L, N e C (regra #13).
+    *====================================================================
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
             IF USED(par_cAliasCursor)
                 SELECT (par_cAliasCursor)
-                THIS.this_cImpres      = TratarNulo(impres,     "C")
-                THIS.this_cIdChaves    = TratarNulo(cIdChaves,  "C")
-                THIS.this_nRates       = TratarNulo(rates,      "N")
-                THIS.this_nTitulos     = TratarNulo(titulos,    "N")
-                THIS.this_nBarras      = TratarNulo(barras,     "N")
-                THIS.this_nMaxcols     = TratarNulo(maxcols,    "N")
-                THIS.this_lExps        = (TratarNulo(exps,      "N") = 1)
-                THIS.this_lGraficos    = (TratarNulo(graficos,  "N") = 1)
-                THIS.this_lChkChqf     = (TratarNulo(nchqfs,    "N") = 1)
-                THIS.this_nTpImpres    = TratarNulo(nTpImpres,  "N")
-                THIS.this_nImpEtis     = TratarNulo(ImpEtis,    "N")
-                THIS.this_nTipos       = TratarNulo(Tipos,      "N")
-                THIS.this_nCetiquetas  = TratarNulo(cetiquetas, "N")
-                THIS.this_nAjVerts     = TratarNulo(AjVerts,    "N")
-                THIS.this_nAjHorzs     = TratarNulo(AjHorzs,    "N")
-                THIS.this_nAjVelos     = TratarNulo(AjVelos,    "N")
-                THIS.this_nAjDens      = TratarNulo(AjDens,     "N")
-                THIS.this_cExpds       = TratarNulo(expds,      "C")
-                THIS.this_cExpas       = TratarNulo(expas,      "C")
-                THIS.this_cBarcmds     = TratarNulo(barcmds,    "C")
-                THIS.this_cFontes      = TratarNulo(fontes,     "C")
-                THIS.this_cFonte2s     = TratarNulo(fonte2s,    "C")
-                THIS.this_cFontemp1s   = TratarNulo(fontemp1s,  "C")
-                THIS.this_nNlivl1s     = TratarNulo(nlivl1s,    "N")
-                THIS.this_nNclvl1s     = TratarNulo(nclvl1s,    "N")
-                THIS.this_nNlivext1s   = TratarNulo(nlivext1s,  "N")
-                THIS.this_nNclvext1s   = TratarNulo(nclvext1s,  "N")
-                THIS.this_nNlivext2s   = TratarNulo(nlivext2s,  "N")
-                THIS.this_nNclvext2s   = TratarNulo(nclvext2s,  "N")
-                THIS.this_nNlinom1s    = TratarNulo(nlinom1s,   "N")
-                THIS.this_nNclnom1s    = TratarNulo(nclnom1s,   "N")
-                THIS.this_nNlicid1s    = TratarNulo(nlicid1s,   "N")
-                THIS.this_nNclcid1s    = TratarNulo(nclcid1s,   "N")
-                THIS.this_nNlidia1s    = TratarNulo(nlidia1s,   "N")
-                THIS.this_nNcldia1s    = TratarNulo(ncldia1s,   "N")
-                THIS.this_nNlimes1s    = TratarNulo(nlimes1s,   "N")
-                THIS.this_nNclmes1s    = TratarNulo(nclmes1s,   "N")
-                THIS.this_nNliano1s    = TratarNulo(nliano1s,   "N")
-                THIS.this_nNclano1s    = TratarNulo(nclano1s,   "N")
+                THIS.this_cImpres      = TratarNulo(impres,     "")
+                THIS.this_cIdChaves    = TratarNulo(cIdChaves,  "")
+                THIS.this_nRates       = TratarNulo(rates,      0  )
+                THIS.this_nTitulos     = TratarNulo(titulos,    0  )
+                THIS.this_nBarras      = TratarNulo(barras,     0  )
+                THIS.this_nMaxcols     = TratarNulo(maxcols,    0  )
+                THIS.this_lExps        = ConverterParaLogico(exps)
+                THIS.this_lGraficos    = ConverterParaLogico(graficos)
+                THIS.this_lChkChqf     = ConverterParaLogico(nchqfs)
+                THIS.this_nTpImpres    = TratarNulo(nTpImpres,  0  )
+                THIS.this_nImpEtis     = TratarNulo(ImpEtis,    0  )
+                THIS.this_nTipos       = TratarNulo(Tipos,      0  )
+                THIS.this_nCetiquetas  = TratarNulo(cetiquetas, 0  )
+                THIS.this_nAjVerts     = TratarNulo(AjVerts,    0  )
+                THIS.this_nAjHorzs     = TratarNulo(AjHorzs,    0  )
+                THIS.this_nAjVelos     = TratarNulo(AjVelos,    0  )
+                THIS.this_nAjDens      = TratarNulo(AjDens,     0  )
+                THIS.this_cExpds       = TratarNulo(expds,      "")
+                THIS.this_cExpas       = TratarNulo(expas,      "")
+                THIS.this_cBarcmds     = TratarNulo(barcmds,    "")
+                THIS.this_cFontes      = TratarNulo(fontes,     "")
+                THIS.this_cFonte2s     = TratarNulo(fonte2s,    "")
+                THIS.this_cFontemp1s   = TratarNulo(fontemp1s,  "")
+                THIS.this_nNlivl1s     = TratarNulo(nlivl1s,    0  )
+                THIS.this_nNclvl1s     = TratarNulo(nclvl1s,    0  )
+                THIS.this_nNlivext1s   = TratarNulo(nlivext1s,  0  )
+                THIS.this_nNclvext1s   = TratarNulo(nclvext1s,  0  )
+                THIS.this_nNlivext2s   = TratarNulo(nlivext2s,  0  )
+                THIS.this_nNclvext2s   = TratarNulo(nclvext2s,  0  )
+                THIS.this_nNlinom1s    = TratarNulo(nlinom1s,   0  )
+                THIS.this_nNclnom1s    = TratarNulo(nclnom1s,   0  )
+                THIS.this_nNlicid1s    = TratarNulo(nlicid1s,   0  )
+                THIS.this_nNclcid1s    = TratarNulo(nclcid1s,   0  )
+                THIS.this_nNlidia1s    = TratarNulo(nlidia1s,   0  )
+                THIS.this_nNcldia1s    = TratarNulo(ncldia1s,   0  )
+                THIS.this_nNlimes1s    = TratarNulo(nlimes1s,   0  )
+                THIS.this_nNclmes1s    = TratarNulo(nclmes1s,   0  )
+                THIS.this_nNliano1s    = TratarNulo(nliano1s,   0  )
+                THIS.this_nNclano1s    = TratarNulo(nclano1s,   0  )
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loException
