@@ -2450,6 +2450,15 @@ DEFINE CLASS FormFti AS FormBase
         IF USED("TmpBranco")
             USE IN TmpBranco
         ENDIF
+        *-- "USE IN" do cursor que esta na area CORRENTE deixa a area VAZIA, e
+        *-- a proxima operacao da grade estoura "No table is open in the current
+        *-- work area" (erro 52, medido no VFP9 em 2026-10-29). O SELECT ... INTO
+        *-- CURSOR acima torna o TmpBranco corrente, e o SELECT do cursor da grade
+        *-- so roda em um dos ramos. O legado nem fecha o TmpBranco; aqui fechamos
+        *-- e devolvemos a area de trabalho para o cursor da grade.
+        IF USED("csGrade")
+            SELECT csGrade
+        ENDIF
     ENDPROC
 
     *==========================================================================
@@ -2654,6 +2663,15 @@ DEFINE CLASS FormFti AS FormBase
 
         IF USED("TmpBranco")
             USE IN TmpBranco
+        ENDIF
+        *-- "USE IN" do cursor que esta na area CORRENTE deixa a area VAZIA, e
+        *-- a proxima operacao da grade estoura "No table is open in the current
+        *-- work area" (erro 52, medido no VFP9 em 2026-10-29). O SELECT ... INTO
+        *-- CURSOR acima torna o TmpBranco corrente, e o SELECT do cursor da grade
+        *-- so roda em um dos ramos. O legado nem fecha o TmpBranco; aqui fechamos
+        *-- e devolvemos a area de trabalho para o cursor da grade.
+        IF USED("csCusto")
+            SELECT csCusto
         ENDIF
     ENDPROC
 

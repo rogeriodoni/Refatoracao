@@ -545,7 +545,12 @@ DEFINE CLASS FtiBO AS BusinessBase
                 USE IN CsDuplica
             ENDIF
 
-            loc_lResultado = .T.
+            *-- "USE IN" do cursor corrente deixa a area de trabalho VAZIA e a
+            *-- proxima operacao estoura erro 52 (medido no VFP9, 2026-10-29).
+            IF USED("csGrade")
+                SELECT csGrade
+            ENDIF
+
         CATCH TO loException
             MsgErro("Erro em FtiBO.ValidarDuplicidade:" + CHR(13) + loException.Message, "Erro")
             loc_lResultado = .F.
@@ -613,6 +618,12 @@ DEFINE CLASS FtiBO AS BusinessBase
 
                 IF USED("ChkDados")
                     USE IN ChkDados
+                ENDIF
+
+                *-- "USE IN" do cursor corrente deixa a area de trabalho VAZIA e a
+                *-- proxima operacao estoura erro 52 (medido no VFP9, 2026-10-29).
+                IF USED("csGrade")
+                    SELECT csGrade
                 ENDIF
             ENDIF
         CATCH TO loException
