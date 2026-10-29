@@ -319,6 +319,14 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
             ENDIF
         ENDIF
 
+        *-- O FRX usa campos SEM alias: o REPORT FORM os resolve na area
+        *   SELECIONADA, e o MontarCabecalho (roda depois do PrepararDados)
+        *   deixa CsCabecalho selecionado. Mesmo defeito do sigrechpBO (Erro270).
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            SELECT (par_cCursorDados)
+            GO TOP
+        ENDIF
+
         *-- Isolamento de locale + modo de renderizacao (Erro28)
         LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
         loc_cPointOrig    = SET("POINT")

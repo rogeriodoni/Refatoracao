@@ -410,11 +410,9 @@ DEFINE CLASS Formsigrechp AS FormBase
             RETURN
         ENDIF
         THIS.FormParaRelatorio()
-        IF !THIS.this_oRelatorio.Visualizar()
-            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigrechp")
-            ENDIF
-        ENDIF
+        *-- O BO ja exibe a falha (ELSE e CATCH do Visualizar): repetir aqui
+        *   mostrava o MESMO dialogo duas vezes (Erro270)
+        THIS.this_oRelatorio.Visualizar()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -427,11 +425,9 @@ DEFINE CLASS Formsigrechp AS FormBase
             RETURN
         ENDIF
         THIS.FormParaRelatorio()
-        IF !THIS.this_oRelatorio.Imprimir()
-            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigrechp")
-            ENDIF
-        ENDIF
+        *-- O BO ja exibe a falha (ELSE e CATCH do Imprimir): repetir aqui
+        *   mostrava o MESMO dialogo duas vezes (Erro270)
+        THIS.this_oRelatorio.Imprimir()
     ENDPROC
 
     *--------------------------------------------------------------------------
