@@ -940,9 +940,16 @@ DEFINE CLASS FormFUN AS FormBase
                 loc_cDtIniSQL = "'" + STUFF(STUFF(DTOS(loc_dDtIni), 5, 0, "-"), 8, 0, "-") + " 00:00:00'"
                 loc_cDtFimSQL = "'" + STUFF(STUFF(DTOS(loc_dDtFim), 5, 0, "-"), 8, 0, "-") + " 23:59:59'"
 
-                loc_cFiltro = "a.emps = " + EscaparSQL(loc_cEmps) + ;
-                    " AND a.datas >= " + loc_cDtIniSQL + ;
-                    " AND a.datas <= " + loc_cDtFimSQL
+                *-- Colunas SEM prefixo de alias: este filtro eh concatenado no
+                *-- WHERE do FUNBO.Buscar, cujo FROM eh "SIGCDFUN f" - tabela
+                *-- unica. Prefixar com "a." (alias que so existe em OUTRA query
+                *-- deste form) fazia o SQL Server recusar com "O identificador de
+                *-- varias partes a.emps nao pode ser associado" na ABERTURA da
+                *-- tela. O legado tambem nao usa alias aqui:
+                *--   Select * From SigCdFun Where Emps = ?pEmp And Datas BetWeen ?pDtI And ?pDtF
+                loc_cFiltro = "emps = " + EscaparSQL(loc_cEmps) + ;
+                    " AND datas >= " + loc_cDtIniSQL + ;
+                    " AND datas <= " + loc_cDtFimSQL
 
                 loc_lSucesso = THIS.this_oBusinessObject.Buscar(loc_cFiltro)
 
