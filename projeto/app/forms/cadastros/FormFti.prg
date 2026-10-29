@@ -51,6 +51,13 @@ DEFINE CLASS FormFti AS FormBase
         loc_lResultado = .F.
 
         TRY
+            *-- DataSession = 2 nasce com os SET no default do VFP e o
+            *-- FormBase.Init() so repoe DATE/CENTURY (regra #9.4). Sem
+            *-- SET DELETED ON o DELETE do BtnExcluirLinhaClick marca a linha
+            *-- mas ela CONTINUA aparecendo na grade - e o SCAN do
+            *-- FtiBO.SalvarItens torna a ver a linha e a REGRAVA.
+            SET DELETED ON
+
             THIS.this_oBusinessObject = CREATEOBJECT("FtiBO")
             IF VARTYPE(THIS.this_oBusinessObject) = "O"
                 THIS.CriarCursoresGrade()
@@ -1682,8 +1689,18 @@ DEFINE CLASS FormFti AS FormBase
                 IF MsgConfirma("Deseja excluir esta opera" + CHR(231) + CHR(227) + "o?", "Excluir Linha")
                     SELECT (loc_cCursor)
                     GO (loc_nPos)
+                    *-- So DELETE, como no legado (cmdExcluir.Click). O PACK
+                    *-- que a migracao acrescentou estoura "Invalid operation
+                    *-- for the cursor" (erro 1115, medido no VFP9 em
+                    *-- 2026-10-29) - vale para CREATE CURSOR e tambem para
+                    *-- SELECT ... INTO CURSOR READWRITE. Quem some com a
+                    *-- linha eh o SET DELETED ON reposto no InicializarForm.
                     DELETE
-                    PACK
+                    IF loc_oPgConf.ActivePage = 1
+                        loc_oPgConf.Page1.grd_4c_Grade.Refresh()
+                    ELSE
+                        loc_oPgConf.Page2.grd_4c_Custo.Refresh()
+                    ENDIF
                 ENDIF
             ELSE
                 MsgAviso("N" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + "vel excluir o " + ;
